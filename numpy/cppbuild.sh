@@ -78,7 +78,7 @@ case $PLATFORM in
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
-        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" CFLAGS="-O2" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-ppc64le)
@@ -94,6 +94,7 @@ case $PLATFORM in
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
+        sedinplace 's/-std=c99/-w/g' numpy/distutils/ccompiler.py
         ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f; done
