@@ -33,8 +33,6 @@ public class CvPoint3D32f extends AbstractCvPoint3D32f {
     public CvPoint3D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvPoint3D32f(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/) { super((Pointer)null); allocate(_x, _y, _z); }
-    private native void allocate(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/);
 // #endif
 // #ifdef __cplusplus
 // #endif

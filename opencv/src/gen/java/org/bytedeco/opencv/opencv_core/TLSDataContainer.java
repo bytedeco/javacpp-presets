@@ -11,14 +11,19 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.opencv.global.opencv_core.*;
 
-// #endif
 
-// TLS interface
+/** TLS container base implementation
+ *
+ * Don't use directly.
+ *
+ * @see TLSData, TLSDataAccumulator templates
+ */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class TLSDataContainer extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TLSDataContainer(Pointer p) { super(p); }
 
-    public native void cleanup(); /** Release created TLS data container objects. It is similar to release() call, but it keeps TLS container valid. */
+    /** Release created TLS data container objects. It is similar to release() call, but it keeps TLS container valid. */
+    public native void cleanup();
 }

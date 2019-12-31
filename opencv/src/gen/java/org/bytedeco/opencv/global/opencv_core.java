@@ -346,6 +346,10 @@ public static final int CV_HAL_GEMM_3_T = 4;
 /** \addtogroup core_utils
  *  \{ */
 
+// #ifdef OPENCV_INCLUDE_PORT_FILE  // User-provided header file with custom platform configuration
+// #include OPENCV_INCLUDE_PORT_FILE
+// #endif
+
 // #if !defined CV_DOXYGEN && !defined CV_IGNORE_DEBUG_BUILD_GUARD
 // #if (defined(_MSC_VER) && (defined(DEBUG) || defined(_DEBUG))) ||
 //     (defined(_GLIBCXX_DEBUG) || defined(_GLIBCXX_DEBUG_PEDANTIC))
@@ -874,7 +878,11 @@ public static final int CV_STATIC_ANALYSIS = 1;
 // #elif defined __GNUC__ || defined __clang__
 // #elif defined _MSC_VER && !defined RC_INVOKED
 // #else
-   
+//   #ifdef OPENCV_FORCE_UNSAFE_XADD
+    
+//   #else
+//     #error "OpenCV: can't define safe CV_XADD macro for current platform (unsupported). Define CV_XADD macro through custom port header (see OPENCV_INCLUDE_PORT_FILE)"
+//   #endif
 // #endif
 
 
@@ -1810,8 +1818,6 @@ public static native int cvIsInf( float value );
  the floating-point value is first rounded to the nearest integer and then clipped if needed (when
  the target type is 8- or 16-bit).
  <p>
- This operation is used in the simplest or most complex image processing functions in OpenCV.
- <p>
  @param v Function parameter.
  @see add, subtract, multiply, divide, Mat::convertTo
  */
@@ -1911,8 +1917,8 @@ public static native int cvIsInf( float value );
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    4;
-public static final int CV_VERSION_MINOR =    1;
-public static final int CV_VERSION_REVISION = 2;
+public static final int CV_VERSION_MINOR =    2;
+public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -2637,11 +2643,6 @@ double memory deallocation.
 // #include <mutex>  // std::mutex, std::lock_guard
 // #endif
 
-// #ifdef CV_COLLECT_IMPL_DATA
-// #else
-// #define CV_IMPL_ADD(impl)
-// #endif
-
 /** \addtogroup core_utils
  *  \{
 <p>
@@ -2909,6 +2910,17 @@ Use this function instead of {@code ceil((float)a / b) * b} expressions.
 /** \overload */
 @Namespace("cv") public static native @Cast("size_t") long roundUp(@Cast("size_t") long a, @Cast("unsigned int") int b);
 
+/** \brief Alignment check of passed values
+<p>
+Usage: {@code isAligned<sizeof(int)>(...)}
+<p>
+\note Alignment(N) must be a power of 2 (2**k, 2^k)
+*/
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
+
 /** \brief Enables or disables the optimized code.
 <p>
 The function can be used to dynamically turn on and off optimized dispatched code (code that uses SSE4.2, AVX/AVX2,
@@ -2952,11 +2964,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 /////////////////////////// Synchronization Primitives ///////////////////////////////
 
 // #if !defined(_M_CEE)
-// Targeting ../opencv_core/TLSDataContainer.java
-
-
-// Targeting ../opencv_core/NodeDataTlsData.java
-
+// #endif
 
 
 /** \brief Designed for command line parsing
@@ -3064,50 +3072,6 @@ For the described keys:
 
 
 
-// Instrumentation external interface
-
-// #if !defined OPENCV_ABI_CHECK
-
-/** enum cv::instr::TYPE */
-public static final int
-    TYPE_GENERAL = 0,   // OpenCV API function, e.g. exported function
-    TYPE_MARKER = 1,        // Information marker
-    TYPE_WRAPPER = 2,       // Wrapper function for implementation
-    TYPE_FUN = 3;           // Simple function call
-
-/** enum cv::instr::IMPL */
-public static final int
-    IMPL_PLAIN = 0,
-    IMPL_IPP = 1,
-    IMPL_OPENCL = 2;
-// Targeting ../opencv_core/NodeDataTls.java
-
-
-// Targeting ../opencv_core/NodeData.java
-
-
-@Namespace("cv::instr") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef NodeData lhs, @Const @ByRef NodeData rhs);
-
-@Namespace("cv::instr") public static native InstrNode getTrace();
-
-// #endif // !defined OPENCV_ABI_CHECK
-
-
-@Namespace("cv::instr") public static native @Cast("bool") boolean useInstrumentation();
-@Namespace("cv::instr") public static native void setUseInstrumentation(@Cast("bool") boolean flag);
-@Namespace("cv::instr") public static native void resetTrace();
-
-/** enum cv::instr::FLAGS */
-public static final int
-    FLAGS_NONE              = 0,
-    FLAGS_MAPPING           = 0x01,
-    FLAGS_EXPAND_SAME_NAMES = 0x02;
-
-@Namespace("cv::instr") public static native void setFlags(@Cast("cv::instr::FLAGS") int modeFlags);
-@Namespace("cv::instr") public static native @Cast("cv::instr::FLAGS") int getFlags();
-
- // namespace instr
-
 /** \addtogroup core_utils_samples */
 // This section describes utility functions for OpenCV samples.
 //
@@ -3177,7 +3141,113 @@ Passed subdirectories are used in LIFO order.
 
  //namespace cv
 
+// #ifdef CV_COLLECT_IMPL_DATA
+// #else
+/** Collect implementation data on OpenCV function call. Requires ENABLE_IMPL_COLLECTION build option. */
+// #define CV_IMPL_ADD(impl)
+// #endif
+
 // #endif //OPENCV_CORE_UTILITY_H
+
+
+// Parsed from <opencv2/core/utils/instrumentation.hpp>
+
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
+// #ifndef OPENCV_UTILS_INSTR_HPP
+// #define OPENCV_UTILS_INSTR_HPP
+
+// #include <opencv2/core/utility.hpp>
+// #include <opencv2/core/utils/tls.hpp>
+
+/** \addtogroup core_utils
+ *  \{ */
+
+// #ifdef CV_COLLECT_IMPL_DATA
+// #endif
+
+// Instrumentation external interface
+
+// #if !defined OPENCV_ABI_CHECK
+
+/** enum cv::instr::TYPE */
+public static final int
+    TYPE_GENERAL = 0,   // OpenCV API function, e.g. exported function
+    TYPE_MARKER = 1,        // Information marker
+    TYPE_WRAPPER = 2,       // Wrapper function for implementation
+    TYPE_FUN = 3;           // Simple function call
+
+/** enum cv::instr::IMPL */
+public static final int
+    IMPL_PLAIN = 0,
+    IMPL_IPP = 1,
+    IMPL_OPENCL = 2;
+// Targeting ../opencv_core/NodeDataTls.java
+
+
+// Targeting ../opencv_core/NodeData.java
+
+
+@Namespace("cv::instr") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef NodeData lhs, @Const @ByRef NodeData rhs);
+
+@Namespace("cv::instr") public static native InstrNode getTrace();
+
+// #endif // !defined OPENCV_ABI_CHECK
+
+
+@Namespace("cv::instr") public static native @Cast("bool") boolean useInstrumentation();
+@Namespace("cv::instr") public static native void setUseInstrumentation(@Cast("bool") boolean flag);
+@Namespace("cv::instr") public static native void resetTrace();
+
+/** enum cv::instr::FLAGS */
+public static final int
+    FLAGS_NONE              = 0,
+    FLAGS_MAPPING           = 0x01,
+    FLAGS_EXPAND_SAME_NAMES = 0x02;
+
+@Namespace("cv::instr") public static native void setFlags(@Cast("cv::instr::FLAGS") int modeFlags);
+@Namespace("cv::instr") public static native @Cast("cv::instr::FLAGS") int getFlags();
+
+ // namespace instr
+
+/** \} */
+
+ // namespace
+
+// #endif // OPENCV_UTILS_TLS_HPP
+
+
+// Parsed from <opencv2/core/utils/tls.hpp>
+
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
+// #ifndef OPENCV_UTILS_TLS_HPP
+// #define OPENCV_UTILS_TLS_HPP
+
+// #include <opencv2/core/utility.hpp>
+// Targeting ../opencv_core/TlsStorage.java
+
+ 
+// Targeting ../opencv_core/TLSDataContainer.java
+
+
+// Targeting ../opencv_core/NodeDataTlsData.java
+
+
+
+
+/** TLS data accumulator with gathering methods */
+
+
+/** \} */
+
+ // namespace
+
+// #endif // OPENCV_UTILS_TLS_HPP
 
 
 // Parsed from <opencv2/core/types_c.h>
@@ -3228,8 +3298,10 @@ Passed subdirectories are used in LIFO order.
 // #ifndef OPENCV_CORE_TYPES_H
 // #define OPENCV_CORE_TYPES_H
 
-// #if !defined(__OPENCV_BUILD) && !defined(CV__DISABLE_C_API_CTORS)
-// #define CV__ENABLE_C_API_CTORS // enable C API ctors (must be removed)
+// #ifdef CV__ENABLE_C_API_CTORS  // invalid C API ctors (must be removed)
+// #if defined(_WIN32) && !defined(CV__SKIP_MESSAGE_MALFORMED_C_API_CTORS)
+// #error "C API ctors don't work on Win32: https://github.com/opencv/opencv/issues/15990"
+// #endif
 // #endif
 
 //#define CV__VALIDATE_UNUNITIALIZED_VARS 1  // C++11 & GCC only

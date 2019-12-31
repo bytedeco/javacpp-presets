@@ -55,6 +55,8 @@ public class FileNodeIterator extends Pointer {
     public FileNodeIterator(@Const @ByRef FileNodeIterator it) { super((Pointer)null); allocate(it); }
     private native void allocate(@Const @ByRef FileNodeIterator it);
 
+    public native @ByRef @Name("operator =") FileNodeIterator put(@Const @ByRef FileNodeIterator it);
+
     /** returns the currently observed element */
     public native @ByVal @Name("operator *") FileNode multiply();
 

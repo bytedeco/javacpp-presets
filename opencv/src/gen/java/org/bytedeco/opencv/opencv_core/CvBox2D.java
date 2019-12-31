@@ -15,13 +15,16 @@ import static org.bytedeco.opencv.global.opencv_core.*;
 
 /** @see RotatedRect
  */
-@NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class CvBox2D extends AbstractCvBox2D {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvBox2D(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public CvBox2D() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public CvBox2D(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvBox2D(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public CvBox2D position(long position) {
         return (CvBox2D)super.position(position);
@@ -36,16 +39,6 @@ public class CvBox2D extends AbstractCvBox2D {
     public native float angle(); public native CvBox2D angle(float setter);
 
 // #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/) { super((Pointer)null); allocate(c, s, a); }
-    private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
-    public CvBox2D() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") FloatBuffer c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/) { super((Pointer)null); allocate(c, s, a); }
-    private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") FloatBuffer c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
-    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") float[] c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/) { super((Pointer)null); allocate(c, s, a); }
-    private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") float[] c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
-    public CvBox2D(@Const @ByRef RotatedRect rr) { super((Pointer)null); allocate(rr); }
-    private native void allocate(@Const @ByRef RotatedRect rr);
 // #endif
 // #ifdef __cplusplus
     public native @ByVal @Name("operator cv::RotatedRect") RotatedRect asRotatedRect();

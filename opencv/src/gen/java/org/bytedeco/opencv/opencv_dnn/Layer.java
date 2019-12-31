@@ -132,6 +132,15 @@ public class Layer extends Algorithm {
          * it helps prevent some memory management issues (if something wrong,
          * Halide tests will be failed).
          */
+
+        /**
+         * \brief Returns a CUDA backend node
+         *
+         * @param   context  void pointer to CSLContext object
+         * @param   inputs   layer inputs
+         * @param   outputs  layer outputs
+         */
+
        /**
         * \brief Automatic Halide scheduling based on layer hyper-parameters.
         * @param node [in] Backend node with Halide functions.

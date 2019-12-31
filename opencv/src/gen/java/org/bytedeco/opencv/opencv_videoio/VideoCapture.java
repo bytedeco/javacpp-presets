@@ -16,7 +16,8 @@ import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 
 import static org.bytedeco.opencv.global.opencv_videoio.*;
 
-
+/** \endcond IGNORED
+<p>
 /** \brief Class for video capturing from video files, image sequences or cameras.
 <p>
 The class provides C++ API for capturing video from cameras or for reading video files and image sequences.
@@ -249,4 +250,41 @@ public class VideoCapture extends Pointer {
 
     /** query if exception mode is active */
     public native @Cast("bool") boolean getExceptionMode();
+
+
+    /** \brief Wait for ready frames from VideoCapture.
+    <p>
+    @param streams input video streams
+    @param readyIndex stream indexes with grabbed frames (ready to use .retrieve() to fetch actual frame)
+    @param timeoutNs number of nanoseconds (0 - infinite)
+    @return {@code true} if streamReady is not empty
+    <p>
+    @throws Exception %Exception on stream errors (check .isOpened() to filter out malformed streams) or VideoCapture type is not supported
+    <p>
+    The primary use of the function is in multi-camera environments.
+    The method fills the ready state vector, grabbs video frame, if camera is ready.
+    <p>
+    After this call use VideoCapture::retrieve() to decode and fetch frame data.
+    */
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector IntPointer readyIndex,
+                @Cast("int64") long timeoutNs/*=0*/);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector IntPointer readyIndex);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector IntBuffer readyIndex,
+                @Cast("int64") long timeoutNs/*=0*/);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector IntBuffer readyIndex);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector int[] readyIndex,
+                @Cast("int64") long timeoutNs/*=0*/);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector int[] readyIndex);
 }

@@ -24,13 +24,16 @@ CV_MAT_ELEM(matrix, type, i, j\*nchannels + channel_idx).
 <p>
 @deprecated CvMat is now obsolete; consider using Mat instead.
  */
-@NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class CvMat extends AbstractCvMat {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvMat(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public CvMat() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public CvMat(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvMat(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public CvMat position(long position) {
         return (CvMat)super.position(position);
@@ -58,9 +61,5 @@ public class CvMat extends AbstractCvMat {
 // #endif
 
 // #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvMat() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public CvMat(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
-    private native void allocate(@Const @ByRef Mat m);
 // #endif
 }

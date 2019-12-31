@@ -34,8 +34,6 @@ public class CvSize extends AbstractCvSize {
     public CvSize() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvSize(int w/*=0*/, int h/*=0*/) { super((Pointer)null); allocate(w, h); }
-    private native void allocate(int w/*=0*/, int h/*=0*/);
 // #endif
 // #ifdef __cplusplus
 // #endif

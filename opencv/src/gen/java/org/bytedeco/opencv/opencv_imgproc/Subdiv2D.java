@@ -167,11 +167,11 @@ public class Subdiv2D extends Pointer {
      */
     public native void getTriangleList(@ByRef Vec6fVector triangleList);
 
-    /** \brief Returns a list of all Voroni facets.
+    /** \brief Returns a list of all Voronoi facets.
     <p>
     @param idx Vector of vertices IDs to consider. For all vertices you can pass empty vector.
-    @param facetList Output vector of the Voroni facets.
-    @param facetCenters Output vector of the Voroni facets center points.
+    @param facetList Output vector of the Voronoi facets.
+    @param facetCenters Output vector of the Voronoi facets center points.
      <p>
      */
     public native void getVoronoiFacetList(@StdVector IntPointer idx, @ByRef Point2fVectorVector facetList,

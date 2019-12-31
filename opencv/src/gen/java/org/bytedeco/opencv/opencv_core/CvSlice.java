@@ -32,10 +32,5 @@ public class CvSlice extends Pointer {
     private native void allocate();
 // #endif
 // #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus) && !defined(__CUDACC__)
-    public CvSlice(int start/*=0*/, int end/*=0*/) { super((Pointer)null); allocate(start, end); }
-    private native void allocate(int start/*=0*/, int end/*=0*/);
-    public CvSlice(@Const @ByRef Range r) { super((Pointer)null); allocate(r); }
-    private native void allocate(@Const @ByRef Range r);
-    public native @ByVal @Name("operator cv::Range") Range asRange();
 // #endif
 }

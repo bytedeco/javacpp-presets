@@ -58,7 +58,7 @@ public class FacemarkKazemi extends Facemark {
         public native @Cast("unsigned long") long tree_depth(); public native Params tree_depth(long setter);
         /** num_trees_per_cascade_level This stores number of trees fit per cascade level. */
         public native @Cast("unsigned long") long num_trees_per_cascade_level(); public native Params num_trees_per_cascade_level(long setter);
-        /** learning_rate stores the learning rate in gradient boosting, also reffered as shrinkage. */
+        /** learning_rate stores the learning rate in gradient boosting, also referred as shrinkage. */
         public native float learning_rate(); public native Params learning_rate(float setter);
         /** oversampling_amount stores number of initialisations used to create training samples. */
         public native @Cast("unsigned long") long oversampling_amount(); public native Params oversampling_amount(long setter);

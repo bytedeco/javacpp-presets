@@ -35,14 +35,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_objdetect.class, opencv_optflow.class},
     value = {
-        @Platform(not = "ios", include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.4.1",
-            preload = {"opencv_cuda@.4.1", "opencv_cudacodec@.4.1", "opencv_cudaarithm@.4.1", "opencv_cudafilters@.4.1",
-                "opencv_cudaimgproc@.4.1", "opencv_cudafeatures2d@.4.1", "opencv_cudalegacy@.4.1",
-                "opencv_cudaoptflow@.4.1", "opencv_cudawarping@.4.1"}),
-        @Platform(value = "windows", link = "opencv_superres412",
-            preload = {"opencv_cuda412", "opencv_cudacodec412", "opencv_cudaarithm412", "opencv_cudafilters412",
-                "opencv_cudaimgproc412", "opencv_cudafeatures2d412", "opencv_cudalegacy412",
-                "opencv_cudaoptflow412", "opencv_cudawarping412"})},
+        @Platform(not = "ios", include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.4.2",
+            preload = {"opencv_cuda@.4.2", "opencv_cudacodec@.4.2", "opencv_cudaarithm@.4.2", "opencv_cudafilters@.4.2",
+                "opencv_cudaimgproc@.4.2", "opencv_cudafeatures2d@.4.2", "opencv_cudalegacy@.4.2",
+                "opencv_cudaoptflow@.4.2", "opencv_cudawarping@.4.2"}),
+        @Platform(value = "windows", link = "opencv_superres420",
+            preload = {"opencv_cuda420", "opencv_cudacodec420", "opencv_cudaarithm420", "opencv_cudafilters420",
+                "opencv_cudaimgproc420", "opencv_cudafeatures2d420", "opencv_cudalegacy420",
+                "opencv_cudaoptflow420", "opencv_cudawarping420"})},
     target = "org.bytedeco.opencv.opencv_superres",
     global = "org.bytedeco.opencv.global.opencv_superres"
 )

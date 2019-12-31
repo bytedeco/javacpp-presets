@@ -2677,7 +2677,10 @@ public static final int
     CC_STAT_HEIGHT = 3,
     /** The total area (in pixels) of the connected component */
     CC_STAT_AREA   = 4,
+// #ifndef CV_DOXYGEN
+    /** Max enumeration value. Used internally only for memory allocation */
     CC_STAT_MAX    = 5;
+// #endif
 
 /** connected components algorithm */
 /** enum cv::ConnectedComponentsAlgorithmsTypes */
@@ -7171,7 +7174,23 @@ without self-intersections. Otherwise, the function output is undefined.
 @Namespace("cv") public static native @Cast("bool") boolean isContourConvex( @ByVal UMat contour );
 @Namespace("cv") public static native @Cast("bool") boolean isContourConvex( @ByVal GpuMat contour );
 
-/** finds intersection of two convex polygons */
+/** \example samples/cpp/intersectExample.cpp
+Examples of how intersectConvexConvex works
+*/
+
+/** \brief Finds intersection of two convex polygons
+<p>
+@param _p1 First polygon
+@param _p2 Second polygon
+@param _p12 Output polygon describing the intersecting area
+@param handleNested When true, an intersection is found if one of the polygons is fully enclosed in the other.
+When false, no intersection is found. If the polygons share a side or the vertex of one polygon lies on an edge
+of the other, they are not considered nested and an intersection will be found regardless of the value of handleNested.
+<p>
+@return Absolute value of area of intersecting polygon
+<p>
+\note intersectConvexConvex doesn't confirm that both polygons are convex and will return invalid results if they aren't.
+ */
 @Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat _p1, @ByVal Mat _p2,
                                           @ByVal Mat _p12, @Cast("bool") boolean handleNested/*=true*/ );
 @Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat _p1, @ByVal Mat _p2,

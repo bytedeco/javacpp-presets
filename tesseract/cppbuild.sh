@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=4.1.0
+TESSERACT_VERSION=4.1.1
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -51,6 +51,10 @@ LEPTONICA_PATH="${LEPTONICA_PATH//\\//}"
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../tesseract-android.patch
+        sedinplace 's/avx=true/avx=false/g' configure
+        sedinplace 's/avx2=true/avx2=false/g' configure
+        sedinplace 's/fma=true/fma=false/g' configure
+        sedinplace 's/sse41=true/sse41=false/g' configure
         PKG_CONFIG_PATH= ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
         # Disable what Autoconf tries to do but that fails for Android
         sedinplace '/predep_objects=/d' libtool
@@ -64,6 +68,10 @@ case $PLATFORM in
         ;;
     android-arm64)
         patch -Np1 < ../../../tesseract-android.patch
+        sedinplace 's/avx=true/avx=false/g' configure
+        sedinplace 's/avx2=true/avx2=false/g' configure
+        sedinplace 's/fma=true/fma=false/g' configure
+        sedinplace 's/sse41=true/sse41=false/g' configure
         PKG_CONFIG_PATH= ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
         # Disable what Autoconf tries to do but that fails for Android
         sedinplace '/predep_objects=/d' libtool

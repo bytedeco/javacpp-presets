@@ -129,7 +129,7 @@ i.e. algorithms which somehow takes into account pixel affinities in natural ima
     Run length encoded images are stored in standard opencv images. Images have a single column of cv::Point3i elements. The number of rows is the number of run + 1. The first row contains
     the size of the original (not encoded) image.  For the runs the following mapping is used (x: column begin, y: column end (last column), z: row).
     <p>
-    The size of the original image is required for compatiblity with the imgproc functions when the boundary handling requires that pixel outside the image boundary are
+    The size of the original image is required for compatibility with the imgproc functions when the boundary handling requires that pixel outside the image boundary are
     "on".
     <p>
     \}
@@ -906,7 +906,14 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
 EdgeAwareInterpolator.
 */
 @Namespace("cv::ximgproc") public static native @Ptr EdgeAwareInterpolator createEdgeAwareInterpolator();
+// Targeting ../opencv_ximgproc/RICInterpolator.java
 
+
+
+/** \brief Factory method that creates an instance of the
+RICInterpolator.
+*/
+@Namespace("cv::ximgproc") public static native @Ptr RICInterpolator createRICInterpolator();
 /** \} */
 
 

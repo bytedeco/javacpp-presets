@@ -14,13 +14,16 @@ import static org.bytedeco.opencv.global.opencv_core.*;
 
 /** @see TermCriteria
  */
-@NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class CvTermCriteria extends Pointer {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvTermCriteria(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public CvTermCriteria() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public CvTermCriteria(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvTermCriteria(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public CvTermCriteria position(long position) {
         return (CvTermCriteria)super.position(position);
@@ -33,12 +36,6 @@ public class CvTermCriteria extends Pointer {
     public native int max_iter(); public native CvTermCriteria max_iter(int setter);
     public native double epsilon(); public native CvTermCriteria epsilon(double setter);
 // #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvTermCriteria(int _type/*=0*/, int _iter/*=0*/, double _eps/*=0*/) { super((Pointer)null); allocate(_type, _iter, _eps); }
-    private native void allocate(int _type/*=0*/, int _iter/*=0*/, double _eps/*=0*/);
-    public CvTermCriteria() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public CvTermCriteria(@Const @ByRef TermCriteria t) { super((Pointer)null); allocate(t); }
-    private native void allocate(@Const @ByRef TermCriteria t);
 // #endif
 // #ifdef __cplusplus
     public native @ByVal @Name("operator cv::TermCriteria") TermCriteria asTermCriteria();

@@ -16,6 +16,13 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
 
 
+    /** \brief Element wise operation on inputs
+    <p>
+    Extra optional parameters:
+    - "operation" as string. Values are "sum" (default), "prod", "max", "div"
+    - "coeff" as float array. Specify weights of inputs for SUM operation
+    - "output_channels_mode" as string. Values are "same" (default, all input must have the same layout), "input_0", "input_0_truncate", "max_input_channels"
+    */
     @Namespace("cv::dnn") @Properties(inherit = org.bytedeco.opencv.presets.opencv_dnn.class)
 public class EltwiseLayer extends Layer {
         static { Loader.load(); }

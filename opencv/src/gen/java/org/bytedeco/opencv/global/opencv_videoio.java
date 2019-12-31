@@ -182,7 +182,8 @@ public static final int
        CAP_PROP_FOURCC         = 6,
        /** Number of frames in the video file. */
        CAP_PROP_FRAME_COUNT    = 7,
-       /** Format of the %Mat objects returned by VideoCapture::retrieve(). */
+       /** Format of the %Mat objects (see Mat::type()) returned by VideoCapture::retrieve().
+ *  Set value -1 to fetch undecoded RAW video streams (as Mat 8UC1). */
        CAP_PROP_FORMAT         = 8,
        /** Backend-specific value indicating the current capture mode. */
        CAP_PROP_MODE           = 9,
@@ -238,8 +239,10 @@ public static final int
        CAP_PROP_AUTO_WB       = 44,
        /** white-balance color temperature */
        CAP_PROP_WB_TEMPERATURE = 45,
+       /** (read-only) codec's pixel format. 4-character code - see VideoWriter::fourcc . Subset of [AV_PIX_FMT_*](https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/raw.c) or -1 if unknown */
+       CAP_PROP_CODEC_PIXEL_FORMAT = 46,
 // #ifndef CV_DOXYGEN
-       CV__CAP_PROP_LATEST = 46;
+       CV__CAP_PROP_LATEST = 47;
 // #endif
 
 /** \brief %VideoWriter generic properties identifier.
@@ -845,6 +848,9 @@ public static final int CAP_PROP_IMAGES_BASE = 18000,
 // Targeting ../opencv_videoio/IVideoCapture.java
 
 
+// Targeting ../opencv_videoio/VideoCapturePrivateAccessor.java
+
+ 
 // Targeting ../opencv_videoio/VideoCapture.java
 
 
