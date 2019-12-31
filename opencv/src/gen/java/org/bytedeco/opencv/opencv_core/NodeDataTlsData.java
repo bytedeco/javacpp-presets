@@ -12,7 +12,11 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 
 
-// Main TLS data class
+
+/** \brief Simple TLS data class
+ *
+ * @see TLSDataAccumulator
+ */
 @Name("cv::TLSData<cv::instr::NodeDataTls>") @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class NodeDataTlsData extends Pointer {
     static { Loader.load(); }
@@ -26,12 +30,13 @@ public class NodeDataTlsData extends Pointer {
     }
 
     public NodeDataTlsData() { super((Pointer)null); allocate(); }
-    private native void allocate(); // Release key and delete associated data
-    public native NodeDataTls get(); // Get data associated with key
-    public native @ByRef NodeDataTls getRef(); // Get data associated with key
+    private native void allocate();
 
-    // Get data from all threads
-    public native void gather(@ByRef NodeDataTlsVector data);
+    /** Get data associated with key */
+    public native NodeDataTls get();
+    /** Get data associated with key */
+    public native @ByRef NodeDataTls getRef();
 
+    /** Release associated thread data */
     public native void cleanup();
 }

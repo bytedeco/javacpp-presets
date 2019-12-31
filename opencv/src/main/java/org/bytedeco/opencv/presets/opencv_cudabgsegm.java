@@ -33,12 +33,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudabgsegm.hpp>",
-            link = "opencv_cudabgsegm@.4.1",
+            link = "opencv_cudabgsegm@.4.2",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudabgsegm412",
+            link = "opencv_cudabgsegm420",
             extension = "-gpu"
         )
     },

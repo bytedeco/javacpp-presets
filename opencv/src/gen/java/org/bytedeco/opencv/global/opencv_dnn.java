@@ -125,7 +125,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20190902;
+public static final int OPENCV_DNN_API_VERSION = 20191202;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)
@@ -329,6 +329,12 @@ public static final int OPENCV_DNN_API_VERSION = 20190902;
 // Targeting ../opencv_dnn/TanHLayer.java
 
 
+// Targeting ../opencv_dnn/SwishLayer.java
+
+
+// Targeting ../opencv_dnn/MishLayer.java
+
+
 // Targeting ../opencv_dnn/SigmoidLayer.java
 
 
@@ -461,10 +467,14 @@ public static final int OPENCV_DNN_API_VERSION = 20190902;
          *  DNN_BACKEND_OPENCV otherwise. */
         DNN_BACKEND_DEFAULT = 0,
         DNN_BACKEND_HALIDE = 1,
-        /** Intel's Inference Engine computational backend. */
+        /** Intel's Inference Engine computational backend
+ *  @see setInferenceEngineBackendType */
         DNN_BACKEND_INFERENCE_ENGINE = 2,
         DNN_BACKEND_OPENCV = 3,
-        DNN_BACKEND_VKCOM = 4;
+        DNN_BACKEND_VKCOM = 4,
+        DNN_BACKEND_CUDA = 5;
+// #ifdef __OPENCV_BUILD
+// #endif
 
     /**
      * \brief Enum of target devices for computations.
@@ -478,7 +488,9 @@ public static final int OPENCV_DNN_API_VERSION = 20190902;
         DNN_TARGET_MYRIAD = 3,
         DNN_TARGET_VULKAN = 4,
         /** FPGA device with CPU fallbacks using Inference Engine's Heterogeneous plugin. */
-        DNN_TARGET_FPGA = 5;
+        DNN_TARGET_FPGA = 5,
+        DNN_TARGET_CUDA = 6,
+        DNN_TARGET_CUDA_FP16 = 7;
 
     @Namespace("cv::dnn") public static native @ByVal @Cast("std::vector<std::pair<cv::dnn::Backend,cv::dnn::Target> >*") IntIntPairVector getAvailableBackends();
     @Namespace("cv::dnn") public static native @Cast("cv::dnn::Target*") @StdVector IntPointer getAvailableTargets(@Cast("cv::dnn::Backend") int be);
@@ -715,6 +727,32 @@ public static final int OPENCV_DNN_API_VERSION = 20190902;
      */
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str BytePointer xml, @Str BytePointer bin);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str String xml, @Str String bin);
+
+    /** \brief Load a network from Intel's Model Optimizer intermediate representation.
+     *  @param bufferModelConfig [in] Buffer contains XML configuration with network's topology.
+     *  @param bufferWeights [in] Buffer contains binary data with trained weights.
+     *  @return Net object.
+     *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
+     *  backend.
+     */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Cast("uchar*") @StdVector ByteBuffer bufferModelConfig, @Cast("uchar*") @StdVector ByteBuffer bufferWeights);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Cast("uchar*") @StdVector byte[] bufferModelConfig, @Cast("uchar*") @StdVector byte[] bufferWeights);
+
+    /** \brief Load a network from Intel's Model Optimizer intermediate representation.
+     *  @param bufferModelConfigPtr [in] Pointer to buffer which contains XML configuration with network's topology.
+     *  @param bufferModelConfigSize [in] Binary size of XML configuration data.
+     *  @param bufferWeightsPtr [in] Pointer to buffer which contains binary data with trained weights.
+     *  @param bufferWeightsSize [in] Binary size of trained weights data.
+     *  @return Net object.
+     *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
+     *  backend.
+     */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Cast("const uchar*") BytePointer bufferModelConfigPtr, @Cast("size_t") long bufferModelConfigSize,
+                                               @Cast("const uchar*") BytePointer bufferWeightsPtr, @Cast("size_t") long bufferWeightsSize);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Cast("const uchar*") ByteBuffer bufferModelConfigPtr, @Cast("size_t") long bufferModelConfigSize,
+                                               @Cast("const uchar*") ByteBuffer bufferWeightsPtr, @Cast("size_t") long bufferWeightsSize);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Cast("const uchar*") byte[] bufferModelConfigPtr, @Cast("size_t") long bufferModelConfigSize,
+                                               @Cast("const uchar*") byte[] bufferWeightsPtr, @Cast("size_t") long bufferWeightsSize);
 
     /** \brief Reads a network model <a href="https://onnx.ai/">ONNX</a>.
      *  @param onnxFile path to the .onnx file with text description of the network architecture.
@@ -996,6 +1034,9 @@ public static final int OPENCV_DNN_API_VERSION = 20190902;
 
 
 // Targeting ../opencv_dnn/ClassificationModel.java
+
+
+// Targeting ../opencv_dnn/KeypointsModel.java
 
 
 // Targeting ../opencv_dnn/SegmentationModel.java

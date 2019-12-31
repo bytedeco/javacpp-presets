@@ -58,19 +58,54 @@ public class AffineWarper extends DetailPlaneWarper {
     public AffineWarper() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
-    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R);
-    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R);
-    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
-    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
-    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
-    public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R,
+    /** \brief Projects the image point.
+    <p>
+    @param pt Source point
+    @param K Camera intrinsic parameters
+    @param H Camera extrinsic parameters
+    @return Projected point
+     */
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat H);
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat H);
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat H);
+
+    /** \brief Builds the projection maps according to the given camera data.
+    <p>
+    @param src_size Source image size
+    @param K Camera intrinsic parameters
+    @param H Camera extrinsic parameters
+    @param xmap Projection map for the x axis
+    @param ymap Projection map for the y axis
+    @return Projected image minimum bounding box
+     */
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat H, @ByVal Mat xmap, @ByVal Mat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat H, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat H, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
+
+    /** \brief Projects the image.
+    <p>
+    @param src Source image
+    @param K Camera intrinsic parameters
+    @param H Camera extrinsic parameters
+    @param interp_mode Interpolation mode
+    @param border_mode Border extrapolation mode
+    @param dst Projected image
+    @return Project image top-left corner
+     */
+    public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat H,
                    int interp_mode, int border_mode, @ByVal Mat dst);
-    public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R,
+    public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat H,
                    int interp_mode, int border_mode, @ByVal UMat dst);
-    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R,
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat H,
                    int interp_mode, int border_mode, @ByVal GpuMat dst);
-    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
-    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);
-    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R);
+
+    /**
+    @param src_size Source image bounding box
+    @param K Camera intrinsic parameters
+    @param H Camera extrinsic parameters
+    @return Projected image minimum bounding box
+     */
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat H);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat H);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat H);
 }

@@ -15,13 +15,16 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 
 /** Spatial and central moments */
-@NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_imgproc.class)
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_imgproc.class)
 public class CvMoments extends AbstractCvMoments {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvMoments(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public CvMoments() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public CvMoments(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvMoments(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public CvMoments position(long position) {
         return (CvMoments)super.position(position);
@@ -50,10 +53,5 @@ public class CvMoments extends AbstractCvMoments {
     public native double inv_sqrt_m00(); public native CvMoments inv_sqrt_m00(double setter);
 
 // #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvMoments() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public CvMoments(@Const @ByRef Moments m) { super((Pointer)null); allocate(m); }
-    private native void allocate(@Const @ByRef Moments m);
-    public native @ByVal @Name("operator cv::Moments") Moments asMoments();
 // #endif
 }

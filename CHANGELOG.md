@@ -6,7 +6,7 @@
  * Add `opencv_python3` module and corresponding loader class with sample code to the presets for OpenCV
  * Bundle OpenSSL in the presets for CPython for consistency across platforms ([issue #796](https://github.com/bytedeco/javacpp-presets/issues/796))
  * Add presets for Arrow 0.15.1, SciPy 1.4.1 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747))
- * Upgrade presets for HDF5 1.10.6, CPython 3.7.6, NumPy 1.18.0, CUDA 10.2, cuDNN 7.6.5, NCCL 2.5.6, TensorRT 7.0, ALE 0.6.1, ONNX Runtime 1.0.0, Qt 5.14.0, Skia 1.68.1
+ * Upgrade presets for OpenCV 4.2.0, HDF5 1.10.6, CPython 3.7.6, NumPy 1.18.0, CUDA 10.2, cuDNN 7.6.5, NCCL 2.5.6, TensorRT 7.0, ALE 0.6.1, DNNL 1.1.2, Tesseract 4.1.1, ONNX Runtime 1.1.0, Qt 5.14.0, Skia 1.68.1
 
 ### November 5, 2019 version 1.5.2
  * Add presets for the `cudacodec`, `cudafeatures2d`, `cudastereo`, and `cudabgsegm` modules of OpenCV ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))

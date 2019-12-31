@@ -43,7 +43,7 @@ public class Net extends Pointer {
         public Net() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** \brief Create a network from Intel's Model Optimizer intermediate representation.
+        /** \brief Create a network from Intel's Model Optimizer intermediate representation (IR).
          *  @param xml [in] XML configuration file with network's topology.
          *  @param bin [in] Binary file with trained weights.
          *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
@@ -51,6 +51,28 @@ public class Net extends Pointer {
          */
         public static native @ByVal Net readFromModelOptimizer(@Str BytePointer xml, @Str BytePointer bin);
         public static native @ByVal Net readFromModelOptimizer(@Str String xml, @Str String bin);
+
+        /** \brief Create a network from Intel's Model Optimizer in-memory buffers with intermediate representation (IR).
+         *  @param bufferModelConfig [in] buffer with model's configuration.
+         *  @param bufferWeights [in] buffer with model's trained weights.
+         *  @return Net object.
+         */
+        public static native @ByVal Net readFromModelOptimizer(@Cast("uchar*") @StdVector ByteBuffer bufferModelConfig, @Cast("uchar*") @StdVector ByteBuffer bufferWeights);
+        public static native @ByVal Net readFromModelOptimizer(@Cast("uchar*") @StdVector byte[] bufferModelConfig, @Cast("uchar*") @StdVector byte[] bufferWeights);
+
+        /** \brief Create a network from Intel's Model Optimizer in-memory buffers with intermediate representation (IR).
+         *  @param bufferModelConfigPtr [in] buffer pointer of model's configuration.
+         *  @param bufferModelConfigSize [in] buffer size of model's configuration.
+         *  @param bufferWeightsPtr [in] buffer pointer of model's trained weights.
+         *  @param bufferWeightsSize [in] buffer size of model's trained weights.
+         *  @return Net object.
+         */
+        public static native @ByVal Net readFromModelOptimizer(@Cast("const uchar*") BytePointer bufferModelConfigPtr, @Cast("size_t") long bufferModelConfigSize,
+                                                    @Cast("const uchar*") BytePointer bufferWeightsPtr, @Cast("size_t") long bufferWeightsSize);
+        public static native @ByVal Net readFromModelOptimizer(@Cast("const uchar*") ByteBuffer bufferModelConfigPtr, @Cast("size_t") long bufferModelConfigSize,
+                                                    @Cast("const uchar*") ByteBuffer bufferWeightsPtr, @Cast("size_t") long bufferWeightsSize);
+        public static native @ByVal Net readFromModelOptimizer(@Cast("const uchar*") byte[] bufferModelConfigPtr, @Cast("size_t") long bufferModelConfigSize,
+                                                    @Cast("const uchar*") byte[] bufferWeightsPtr, @Cast("size_t") long bufferWeightsSize);
 
         /** Returns true if there are no layers in the network. */
         public native @Cast("bool") boolean empty();
@@ -209,13 +231,15 @@ public class Net extends Pointer {
          * @see Target
          *
          * List of supported combinations backend / target:
-         * |                        | DNN_BACKEND_OPENCV | DNN_BACKEND_INFERENCE_ENGINE | DNN_BACKEND_HALIDE |
-         * |------------------------|--------------------|------------------------------|--------------------|
-         * | DNN_TARGET_CPU         |                  + |                            + |                  + |
-         * | DNN_TARGET_OPENCL      |                  + |                            + |                  + |
-         * | DNN_TARGET_OPENCL_FP16 |                  + |                            + |                    |
-         * | DNN_TARGET_MYRIAD      |                    |                            + |                    |
-         * | DNN_TARGET_FPGA        |                    |                            + |                    |
+         * |                        | DNN_BACKEND_OPENCV | DNN_BACKEND_INFERENCE_ENGINE | DNN_BACKEND_HALIDE |  DNN_BACKEND_CUDA |
+         * |------------------------|--------------------|------------------------------|--------------------|-------------------|
+         * | DNN_TARGET_CPU         |                  + |                            + |                  + |                   |
+         * | DNN_TARGET_OPENCL      |                  + |                            + |                  + |                   |
+         * | DNN_TARGET_OPENCL_FP16 |                  + |                            + |                    |                   |
+         * | DNN_TARGET_MYRIAD      |                    |                            + |                    |                   |
+         * | DNN_TARGET_FPGA        |                    |                            + |                    |                   |
+         * | DNN_TARGET_CUDA        |                    |                              |                    |                 + |
+         * | DNN_TARGET_CUDA_FP16   |                    |                              |                    |                 + |
          */
         public native void setPreferableTarget(int targetId);
 

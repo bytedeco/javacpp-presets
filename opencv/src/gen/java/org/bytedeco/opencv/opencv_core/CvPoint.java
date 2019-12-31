@@ -35,8 +35,6 @@ public class CvPoint extends AbstractCvPoint {
     public CvPoint() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvPoint(int _x/*=0*/, int _y/*=0*/) { super((Pointer)null); allocate(_x, _y); }
-    private native void allocate(int _x/*=0*/, int _y/*=0*/);
 // #endif
 // #ifdef __cplusplus
 // #endif

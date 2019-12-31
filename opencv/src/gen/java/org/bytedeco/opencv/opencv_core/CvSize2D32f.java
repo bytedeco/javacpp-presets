@@ -32,8 +32,6 @@ public class CvSize2D32f extends AbstractCvSize2D32f {
     public CvSize2D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvSize2D32f(float w/*=0*/, float h/*=0*/) { super((Pointer)null); allocate(w, h); }
-    private native void allocate(float w/*=0*/, float h/*=0*/);
 // #endif
 // #ifdef __cplusplus
 // #endif

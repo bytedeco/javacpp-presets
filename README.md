@@ -106,7 +106,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.1.2  https://opencv.org/releases.html
+ * OpenCV 4.2.0  https://opencv.org/releases.html
  * FFmpeg 4.2.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  http://www.ptgrey.com/flycapture-sdk
  * Spinnaker 1.19.x https://www.ptgrey.com/spinnaker-sdk
@@ -135,7 +135,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LLVM 9.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
- * Tesseract 4.1.0  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
@@ -146,7 +146,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.6.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.0.0  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.1.0  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.14.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.x  https://github.com/mono/skia

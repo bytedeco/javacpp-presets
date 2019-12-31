@@ -61,7 +61,7 @@ public class OCRBeamSearchDecoder extends BaseOCR {
     This way it hides the feature extractor and the classifier itself, so developers can write
     their own OCR code.
     <p>
-    The default character classifier and feature extractor can be loaded using the utility funtion
+    The default character classifier and feature extractor can be loaded using the utility function
     loadOCRBeamSearchClassifierCNN with all its parameters provided in
     <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/OCRBeamSearch_CNN_model_data.xml.gz>.
      */

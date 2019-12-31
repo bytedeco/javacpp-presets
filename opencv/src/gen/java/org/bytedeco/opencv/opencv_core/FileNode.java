@@ -88,6 +88,8 @@ public class FileNode extends Pointer {
     public FileNode(@Const @ByRef FileNode node) { super((Pointer)null); allocate(node); }
     private native void allocate(@Const @ByRef FileNode node);
 
+    public native @ByRef @Name("operator =") FileNode put(@Const @ByRef FileNode node);
+
     /** \brief Returns element of a mapping node or a sequence node.
      @param nodename Name of an element in the mapping node.
      @return Returns the element with the given identifier.

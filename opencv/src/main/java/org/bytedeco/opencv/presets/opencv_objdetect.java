@@ -36,9 +36,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_calib3d.class,
     value = {
         @Platform(include = {/*"<opencv2/objdetect/objdetect_c.h>",*/ "<opencv2/objdetect.hpp>",
-            "<opencv2/objdetect/detection_based_tracker.hpp>"}, link = "opencv_objdetect@.4.1"),
+            "<opencv2/objdetect/detection_based_tracker.hpp>"}, link = "opencv_objdetect@.4.2"),
         @Platform(value = "ios", preload = "libopencv_objdetect"),
-        @Platform(value = "windows", link = "opencv_objdetect412")},
+        @Platform(value = "windows", link = "opencv_objdetect420")},
     target = "org.bytedeco.opencv.opencv_objdetect",
     global = "org.bytedeco.opencv.global.opencv_objdetect"
 )

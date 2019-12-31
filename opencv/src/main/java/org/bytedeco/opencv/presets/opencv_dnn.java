@@ -37,9 +37,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/version.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
             "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
-            link = "opencv_dnn@.4.1"),
+            link = "opencv_dnn@.4.2"),
         @Platform(value = "ios", preload = "libopencv_dnn"),
-        @Platform(value = "windows", link = "opencv_dnn412")},
+        @Platform(value = "windows", link = "opencv_dnn420")},
     target = "org.bytedeco.opencv.opencv_dnn",
     global = "org.bytedeco.opencv.global.opencv_dnn"
 )
@@ -66,8 +66,8 @@ public class opencv_dnn implements InfoMapper {
                              "cv::dnn::BatchNormLayer", "cv::dnn::MaxUnpoolLayer", "cv::dnn::ScaleLayer", "cv::dnn::ShiftLayer",
                              "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer", "cv::dnn::ProposalLayer",
                              "cv::dnn::ReLU6Layer", "cv::dnn::ReorgLayer", "cv::dnn::RegionLayer", "cv::dnn::ResizeNearestNeighborLayer",
-                             "cv::dnn::CropAndResizeLayer", "cv::dnn::InterpLayer", "cv::dnn::ResizeLayer",
-                             "cv::dnn::ShuffleChannelLayer", "cv::dnn::experimental_dnn_v5::ShuffleChannelLayer").purify())
+                             "cv::dnn::CropAndResizeLayer", "cv::dnn::InterpLayer", "cv::dnn::ResizeLayer", "cv::dnn::ShuffleChannelLayer",
+                             "cv::dnn::experimental_dnn_v5::ShuffleChannelLayer", "cv::dnn::SwishLayer", "cv::dnn::MishLayer").purify())
                .put(new Info("cv::dnn::Net::forward(cv::dnn::Net::LayerId, cv::dnn::Net::LayerId)",
                              "cv::dnn::Net::forward(cv::dnn::Net::LayerId*, cv::dnn::Net::LayerId*)",
                              "cv::dnn::Net::forwardOpt(cv::dnn::Net::LayerId)",

@@ -44,8 +44,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "onnxruntime/core/session/onnxruntime_c_api.h",
 //                "onnxruntime/core/session/onnxruntime_cxx_api.h"
             },
-            link = "onnxruntime@.1.0.0",
-            preload = {"iomp5", "mklml", "mklml_intel", "mkldnn@.1"},
+            link = "onnxruntime@.1.1.0",
+            preload = {"iomp5", "mklml", "mklml_intel", "dnnl@.1"},
             preloadresource = "/org/bytedeco/mkldnn/"
         ),
     },

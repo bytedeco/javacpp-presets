@@ -16,13 +16,16 @@ import static org.bytedeco.opencv.global.opencv_core.*;
 /**
   @deprecated consider using cv::Mat instead
   */
-@NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class CvMatND extends AbstractCvMatND {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvMatND(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public CvMatND() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public CvMatND(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvMatND(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public CvMatND position(long position) {
         return (CvMatND)super.position(position);
@@ -44,9 +47,5 @@ public class CvMatND extends AbstractCvMatND {
         @Name({"dim", ".step"}) public native int dim_step(int i); public native CvMatND dim_step(int i, int setter);
 
 // #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public CvMatND() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public CvMatND(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
-    private native void allocate(@Const @ByRef Mat m);
 // #endif
 }

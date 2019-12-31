@@ -69,7 +69,7 @@ public static final int ORT_API_VERSION = 1;
 // #ifdef _WIN32
 // #define ORT_TSTR(X) L##X
 // #else
-// #define ORT_TSTR(X) (X)
+// #define ORT_TSTR(X) X
 // #endif
 // #endif
 
@@ -99,12 +99,12 @@ public static final int
   ONNX_TENSOR_ELEMENT_DATA_TYPE_STRING = 8,  // maps to c++ type std::string
   ONNX_TENSOR_ELEMENT_DATA_TYPE_BOOL = 9,
   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT16 = 10,
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_DOUBLE = 11,      // maps to c type double
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT32 = 12,      // maps to c type uint32_t
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT64 = 13,      // maps to c type uint64_t
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX64 = 14,   // complex with float32 real and imaginary components
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX128 = 15,  // complex with float64 real and imaginary components
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_BFLOAT16 = 16;    // Non-IEEE floating-point format based on IEEE754 single-precision
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_DOUBLE = 11,          // maps to c type double
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT32 = 12,          // maps to c type uint32_t
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT64 = 13,          // maps to c type uint64_t
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX64 = 14,       // complex with float32 real and imaginary components
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX128 = 15,      // complex with float64 real and imaginary components
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_BFLOAT16 = 16;        // Non-IEEE floating-point format based on IEEE754 single-precision
 
 // Synced with onnx TypeProto oneof
 /** enum ONNXType */

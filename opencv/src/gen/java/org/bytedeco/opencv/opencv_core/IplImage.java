@@ -21,13 +21,16 @@ that the image size or ROI size of all source and destination images match exact
 hand, the Intel Image Processing Library processes the area of intersection between the source and
 destination images (or ROIs), allowing them to vary independently.
 */
-@NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class IplImage extends AbstractIplImage {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IplImage(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public IplImage() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public IplImage(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IplImage(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public IplImage position(long position) {
         return (IplImage)super.position(position);
@@ -91,9 +94,5 @@ public class IplImage extends AbstractIplImage {
     public native @Cast("char*") BytePointer imageDataOrigin(); public native IplImage imageDataOrigin(BytePointer setter);
 
 // #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
-    public IplImage() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public IplImage(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
-    private native void allocate(@Const @ByRef Mat m);
 // #endif
 }
