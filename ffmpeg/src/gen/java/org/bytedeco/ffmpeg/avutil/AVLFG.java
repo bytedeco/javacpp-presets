@@ -9,6 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.ffmpeg.global.avutil.*;
 
 
+/**
+ * Context structure for the Lagged Fibonacci PRNG.
+ * The exact layout, types and content of this struct may change and should
+ * not be accessed directly. Only its sizeof() is guranteed to stay the same
+ * to allow easy instanciation.
+ */
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVLFG extends Pointer {
     static { Loader.load(); }

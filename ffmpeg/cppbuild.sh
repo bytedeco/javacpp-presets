@@ -24,12 +24,12 @@ VO_AMRWBENC=vo-amrwbenc-0.1.3
 OPENSSL=openssl-1.1.1d
 OPENH264_VERSION=2.0.0
 X265=3.1.2
-VPX_VERSION=1.8.1
-ALSA_VERSION=1.1.9
+VPX_VERSION=1.8.2
+ALSA_VERSION=1.2.1.2
 FREETYPE_VERSION=2.10.1
 MFX_VERSION=1.25
-NVCODEC_VERSION=9.0.18.1
-FFMPEG_VERSION=4.2.1
+NVCODEC_VERSION=9.1.23.1
+FFMPEG_VERSION=4.2.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
