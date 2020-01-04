@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2019 Samuel Audet
+ * Copyright (C) 2014-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -28,9 +28,11 @@ import org.bytedeco.javacpp.tools.*;
 
 @Properties(target = "org.bytedeco.llvm.LLVM", global = "org.bytedeco.llvm.global.LLVM", value = {@Platform(
     value = {"linux", "macosx", "windows"}, define = {"__STDC_LIMIT_MACROS", "__STDC_CONSTANT_MACROS"},
-    include = {"<llvm-c/Types.h>", "<llvm-c/Support.h>", "<llvm-c/Core.h>", "<llvm-c/Analysis.h>", "<llvm-c/BitReader.h>", "<llvm-c/BitWriter.h>",
+    include = {"<llvm-c/DataTypes.h>", "<llvm-c/Types.h>", "<llvm-c/Support.h>", "<llvm-c/Core.h>", "<llvm-c/Analysis.h>", "<llvm-c/BitReader.h>", "<llvm-c/BitWriter.h>",
                "<llvm-c/DisassemblerTypes.h>", "<llvm-c/Disassembler.h>", "<llvm-c/Initialization.h>", "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>", "<llvm-c/LinkTimeOptimizer.h>",
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
+               "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/OrcBindings.h>", "<llvm-c/Remarks.h>",
+               "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>"},
     compiler = "cpp11", link = {"LLVM-9", "LTO@.9"}, preload = "LLVM-C"), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
 public class LLVM implements InfoMapper {
@@ -61,6 +63,15 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaqueGenericValue").pointerTypes("LLVMGenericValueRef"))
                .put(new Info("LLVMOpaqueExecutionEngine").pointerTypes("LLVMExecutionEngineRef"))
                .put(new Info("LLVMOpaqueMCJITMemoryManager").pointerTypes("LLVMMCJITMemoryManagerRef"))
+               .put(new Info("LLVMComdat").pointerTypes("LLVMComdatRef"))
+               .put(new Info("LLVMOpaqueDIBuilder").pointerTypes("LLVMDIBuilderRef"))
+               .put(new Info("LLVMOpaqueError").pointerTypes("LLVMErrorRef"))
+               .put(new Info("LLVMOrcOpaqueJITStack").pointerTypes("LLVMOrcJITStackRef"))
+               .put(new Info("LLVMRemarkOpaqueString").pointerTypes("LLVMRemarkStringRef"))
+               .put(new Info("LLVMRemarkOpaqueDebugLoc").pointerTypes("LLVMRemarkDebugLocRef"))
+               .put(new Info("LLVMRemarkOpaqueArg").pointerTypes("LLVMRemarkArgRef"))
+               .put(new Info("LLVMRemarkOpaqueEntry").pointerTypes("LLVMRemarkEntryRef"))
+               .put(new Info("LLVMRemarkOpaqueParser").pointerTypes("LLVMRemarkParserRef"))
                .put(new Info("LLVMOpaqueLTOModule").pointerTypes("lto_module_t"))
                .put(new Info("LLVMOpaqueLTOCodeGenerator").pointerTypes("lto_code_gen_t"))
                .put(new Info("LLVMOpaqueThinLTOCodeGenerator").pointerTypes("thinlto_code_gen_t"))
@@ -95,6 +106,15 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMGenericValueRef").valueTypes("LLVMGenericValueRef").pointerTypes("@ByPtrPtr LLVMGenericValueRef", "@Cast(\"LLVMGenericValueRef*\") PointerPointer"))
                .put(new Info("LLVMExecutionEngineRef").valueTypes("LLVMExecutionEngineRef").pointerTypes("@ByPtrPtr LLVMExecutionEngineRef", "@Cast(\"LLVMExecutionEngineRef*\") PointerPointer"))
                .put(new Info("LLVMMCJITMemoryManagerRef").valueTypes("LLVMMCJITMemoryManagerRef").pointerTypes("@ByPtrPtr LLVMMCJITMemoryManagerRef", "@Cast(\"LLVMMCJITMemoryManagerRef*\") PointerPointer"))
+               .put(new Info("LLVMComdatRef").valueTypes("LLVMComdatRef").pointerTypes("@ByPtrPtr LLVMComdatRef", "@Cast(\"LLVMComdatRef*\") PointerPointer"))
+               .put(new Info("LLVMDIBuilderRef").valueTypes("LLVMDIBuilderRef").pointerTypes("@ByPtrPtr LLVMDIBuilderRef", "@Cast(\"LLVMDIBuilderRef*\") PointerPointer"))
+               .put(new Info("LLVMErrorRef").valueTypes("LLVMErrorRef").pointerTypes("@ByPtrPtr LLVMErrorRef", "@Cast(\"LLVMErrorRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcJITStackRef").valueTypes("LLVMOrcJITStackRef").pointerTypes("@ByPtrPtr LLVMOrcJITStackRef", "@Cast(\"LLVMOrcJITStackRef*\") PointerPointer"))
+               .put(new Info("LLVMRemarkStringRef").valueTypes("LLVMRemarkStringRef").pointerTypes("@ByPtrPtr LLVMRemarkStringRef", "@Cast(\"LLVMRemarkStringRef*\") PointerPointer"))
+               .put(new Info("LLVMRemarkDebugLocRef").valueTypes("LLVMRemarkDebugLocRef").pointerTypes("@ByPtrPtr LLVMRemarkDebugLocRef", "@Cast(\"LLVMRemarkDebugLocRef*\") PointerPointer"))
+               .put(new Info("LLVMRemarkArgRef").valueTypes("LLVMRemarkArgRef").pointerTypes("@ByPtrPtr LLVMRemarkArgRef", "@Cast(\"LLVMRemarkArgRef*\") PointerPointer"))
+               .put(new Info("LLVMRemarkEntryRef").valueTypes("LLVMRemarkEntryRef").pointerTypes("@ByPtrPtr LLVMRemarkEntryRef", "@Cast(\"LLVMRemarkEntryRef*\") PointerPointer"))
+               .put(new Info("LLVMRemarkParserRef").valueTypes("LLVMRemarkParserRef").pointerTypes("@ByPtrPtr LLVMRemarkParserRef", "@Cast(\"LLVMRemarkParserRef*\") PointerPointer"))
                .put(new Info("lto_module_t").valueTypes("lto_module_t").pointerTypes("@ByPtrPtr lto_module_t", "@Cast(\"lto_module_t*\") PointerPointer"))
                .put(new Info("lto_code_gen_t").valueTypes("lto_code_gen_t").pointerTypes("@ByPtrPtr lto_code_gen_t", "@Cast(\"lto_code_gen_t*\") PointerPointer"))
                .put(new Info("thinlto_code_gen_t").valueTypes("thinlto_code_gen_t").pointerTypes("@ByPtrPtr thinlto_code_gen_t", "@Cast(\"thinlto_code_gen_t*\") PointerPointer"))
@@ -105,6 +125,9 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMRelocationIteratorRef").valueTypes("LLVMRelocationIteratorRef").pointerTypes("@ByPtrPtr LLVMRelocationIteratorRef", "@Cast(\"LLVMRelocationIteratorRef*\") PointerPointer"))
                .put(new Info("LLVMPassManagerBuilderRef").valueTypes("LLVMPassManagerBuilderRef").pointerTypes("@ByPtrPtr LLVMPassManagerBuilderRef", "@Cast(\"LLVMPassManagerBuilderRef*\") PointerPointer"))
 
+               .put(new Info("INT64_MIN").cppTypes("long").translate())
+               .put(new Info("HUGE_VALF").cppTypes("float").translate(false))
+               .put(new Info("LLVMErrorTypeId").annotations("@Const").valueTypes("LLVMErrorTypeId"))
                .put(new Info("defined(_MSC_VER) && !defined(inline)").define(false))
                .put(new Info("LLVMDumpType", "LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMCreateOprofileJITEventListener",
                              "llvm_optimize_modules", "llvm_destroy_optimizer", "llvm_read_object_file", "llvm_create_optimizer").skip());
