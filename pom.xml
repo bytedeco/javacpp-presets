@@ -600,6 +600,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1083,6 +1084,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1136,6 +1138,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1188,6 +1191,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1246,6 +1250,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1312,6 +1317,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1383,6 +1389,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1453,6 +1460,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1516,6 +1524,7 @@
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
+        <module>gym</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>

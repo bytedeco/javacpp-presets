@@ -41,6 +41,7 @@
     <module>../cpython/platform</module>
     <module>../numpy/platform</module>
     <module>../scipy/platform</module>
+    <module>../gym/platform</module>
     <module>../llvm/platform</module>
     <module>../libpostal/platform</module>
     <module>../leptonica/platform</module>
@@ -197,6 +198,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
       <version>1.4.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>gym-platform</artifactId>
+      <version>0.15.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
