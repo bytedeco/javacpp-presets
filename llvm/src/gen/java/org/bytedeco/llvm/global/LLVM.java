@@ -9843,7 +9843,7 @@ public static native void LLVMRemarkParserDispose(LLVMRemarkParserRef Parser);
  *
  * @since REMARKS_API_VERSION=0
  */
-public static native @Cast("uint32_t") int LLVMRemarkVersion();
+
 
 /**
  * \} // endgoup LLVMCREMARKS
