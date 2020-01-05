@@ -22,7 +22,7 @@ environment:
       OS: windows-x86
     - PROJ: "arpack-ng,cminpack,fftw,gsl"
       OS: windows-x86
-    - PROJ: "cpython,numpy,scipy"
+    - PROJ: "cpython,numpy,scipy,gym"
       OS: windows-x86
     - PROJ: "llvm"
       OS: windows-x86
@@ -53,7 +53,7 @@ environment:
       OS: windows-x86_64
     - PROJ: "arpack-ng,cminpack,fftw,gsl"
       OS: windows-x86_64
-    - PROJ: "cpython,numpy,scipy"
+    - PROJ: "cpython,numpy,scipy,gym"
       OS: windows-x86_64
     - PROJ: "llvm"
       OS: windows-x86_64
