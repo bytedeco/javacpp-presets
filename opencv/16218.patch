@@ -1,0 +1,807 @@
+From ac470873e2f92c6f817e3284e53516fcd422e418 Mon Sep 17 00:00:00 2001
+From: Julien Maille <julien.maille@data-pixel.com>
+Date: Sat, 21 Dec 2019 02:07:57 +0100
+Subject: [PATCH 1/3] Enable cuda4dnn on hardware without support for half (ie.
+ compute capability < 5.3)
+
+Update CMakeLists.txt
+
+Lowered minimum CC to 3.0
+---
+ modules/dnn/CMakeLists.txt              |  4 ++--
+ modules/dnn/src/cuda/activations.cu     | 22 +++++++++++++++++++
+ modules/dnn/src/cuda/atomics.hpp        |  2 +-
+ modules/dnn/src/cuda/bias_activation.cu | 14 +++++++++++++
+ modules/dnn/src/cuda/concat.cu          |  2 ++
+ modules/dnn/src/cuda/crop_and_resize.cu |  2 ++
+ modules/dnn/src/cuda/eltwise_ops.cu     | 10 +++++++++
+ modules/dnn/src/cuda/fill_copy.cu       |  2 ++
+ modules/dnn/src/cuda/limits.hpp         |  2 ++
+ modules/dnn/src/cuda/math.hpp           | 28 +++++++++++++++++++++++++
+ modules/dnn/src/cuda/max_unpooling.cu   |  4 ++++
+ modules/dnn/src/cuda/normalize.cu       |  2 ++
+ modules/dnn/src/cuda/padding.cu         |  2 ++
+ modules/dnn/src/cuda/permute.cu         |  2 ++
+ modules/dnn/src/cuda/prior_box.cu       |  2 ++
+ modules/dnn/src/cuda/region.cu          |  2 ++
+ modules/dnn/src/cuda/resize.cu          |  4 ++++
+ modules/dnn/src/cuda/roi_pooling.cu     |  2 ++
+ modules/dnn/src/cuda/scale_shift.cu     | 12 +++++++++++
+ modules/dnn/src/cuda/slice.cu           |  2 ++
+ modules/dnn/src/cuda4dnn/csl/fp16.hpp   |  2 ++
+ 21 files changed, 121 insertions(+), 3 deletions(-)
+
+diff --git a/modules/dnn/CMakeLists.txt b/modules/dnn/CMakeLists.txt
+index 3fa7fd69c34..13c77a80645 100644
+--- a/modules/dnn/CMakeLists.txt
++++ b/modules/dnn/CMakeLists.txt
+@@ -95,8 +95,8 @@ if(OPENCV_DNN_CUDA AND HAVE_CUDA AND HAVE_CUBLAS AND HAVE_CUDNN)
+   set(CC_LIST ${CUDA_ARCH_BIN})
+   separate_arguments(CC_LIST)
+   foreach(cc ${CC_LIST})
+-    if(cc VERSION_LESS 5.3)
+-      message(FATAL_ERROR "CUDA backend for DNN module requires CC 5.3 or higher. Please remove unsupported architectures from CUDA_ARCH_BIN option.")
++    if(cc VERSION_LESS 3.0)
++      message(FATAL_ERROR "CUDA backend for DNN module requires CC 3.0 or higher. Please remove unsupported architectures from CUDA_ARCH_BIN option.")
+     endif()
+   endforeach()
+   unset(CC_LIST)
+diff --git a/modules/dnn/src/cuda/activations.cu b/modules/dnn/src/cuda/activations.cu
+index dfba54e9332..143361c1f3c 100644
+--- a/modules/dnn/src/cuda/activations.cu
++++ b/modules/dnn/src/cuda/activations.cu
+@@ -248,7 +248,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void abs<__half>(const Stream& stream, Span<__half> output, View<__half> input);
++#endif
+     template void abs<float>(const Stream& stream, Span<float> output, View<float> input);
+ 
+     template <class T, std::size_t N>
+@@ -274,7 +276,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void tanh<__half>(const Stream&, Span<__half>, View<__half>);
++#endif
+     template void tanh<float>(const Stream&, Span<float>, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -300,7 +304,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void swish<__half>(const Stream&, Span<__half>, View<__half>);
++#endif
+     template void swish<float>(const Stream&, Span<float>, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -326,7 +332,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void mish<__half>(const Stream&, Span<__half>, View<__half>);
++#endif
+     template void mish<float>(const Stream&, Span<float>, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -352,7 +360,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void sigmoid<__half>(const Stream&, Span<__half>, View<__half>);
++#endif
+     template void sigmoid<float>(const Stream&, Span<float>, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -378,7 +388,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void bnll<__half>(const Stream&, Span<__half>, View<__half>);
++#endif
+     template void bnll<float>(const Stream&, Span<float>, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -404,7 +416,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void elu<__half>(const Stream&, Span<__half>, View<__half>);
++#endif
+     template void elu<float>(const Stream&, Span<float>, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -430,7 +444,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void relu<__half>(const Stream&, Span<__half>, View<__half>, __half);
++#endif
+     template void relu<float>(const Stream&, Span<float>, View<float>, float);
+ 
+     template <class T, std::size_t N>
+@@ -457,7 +473,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void clipped_relu<__half>(const Stream&, Span<__half>, View<__half>, __half, __half);
++#endif
+     template void clipped_relu<float>(const Stream&, Span<float>, View<float>, float, float);
+ 
+     template <class T, std::size_t N>
+@@ -484,7 +502,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void axiswise_relu<__half>(const Stream&, Span<__half>, View<__half>, std::size_t, View<__half>);
++#endif
+     template void axiswise_relu<float>(const Stream&, Span<float>, View<float>, std::size_t, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -515,7 +535,9 @@ namespace cv { namespace dnn { namespace cuda4dnn  { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void power<__half>(const Stream&, Span<__half>, View<__half>, __half, __half, __half);
++#endif
+     template void power<float>(const Stream&, Span<float>, View<float>, float, float, float);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/atomics.hpp b/modules/dnn/src/cuda/atomics.hpp
+index 034522d8285..2a7db426d31 100644
+--- a/modules/dnn/src/cuda/atomics.hpp
++++ b/modules/dnn/src/cuda/atomics.hpp
+@@ -8,7 +8,7 @@
+ #include <cuda_runtime.h>
+ #include <cuda_fp16.h>
+ 
+-#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 700
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 700 || __CUDA_ARCH__ < 530
+ #else
+ inline __device__ void atomicAdd(__half* address, __half val) {
+     unsigned int* address_as_ui = (unsigned int *)((char *)address - ((size_t)address & 2));
+diff --git a/modules/dnn/src/cuda/bias_activation.cu b/modules/dnn/src/cuda/bias_activation.cu
+index 42161362ee8..6a5229c6604 100644
+--- a/modules/dnn/src/cuda/bias_activation.cu
++++ b/modules/dnn/src/cuda/bias_activation.cu
+@@ -186,7 +186,9 @@ void biasN_relu_inplace(const Stream& stream, Span<T> inplace_output, std::size_
+     }
+ }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+ template void biasN_relu_inplace<__half>(const Stream&, Span<__half>, std::size_t, View<__half>, __half);
++#endif
+ template void biasN_relu_inplace<float>(const Stream&, Span<float>, std::size_t, View<float>, float);
+ 
+ template <class T, std::size_t N> static
+@@ -210,7 +212,9 @@ void biasN_clipped_relu_inplace(const Stream& stream, Span<T> inplace_output, st
+     }
+ }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+ template void biasN_clipped_relu_inplace<__half>(const Stream&, Span<__half>, std::size_t, View<__half>, __half, __half);
++#endif
+ template void biasN_clipped_relu_inplace<float>(const Stream&, Span<float>, std::size_t, View<float>, float, float);
+ 
+ template <class T, std::size_t N> static
+@@ -234,7 +238,9 @@ void biasN_power_inplace(const Stream& stream, Span<T> inplace_output, std::size
+     }
+ }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+ template void biasN_power_inplace<__half>(const Stream&, Span<__half>, std::size_t, View<__half>, __half);
++#endif
+ template void biasN_power_inplace<float>(const Stream&, Span<float>, std::size_t, View<float>, float);
+ 
+ template <class T, std::size_t N> static
+@@ -258,7 +264,9 @@ void biasN_tanh_inplace(const Stream& stream, Span<T> inplace_output, std::size_
+     }
+ }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+ template void biasN_tanh_inplace<__half>(const Stream&, Span<__half>, std::size_t, View<__half>);
++#endif
+ template void biasN_tanh_inplace<float>(const Stream&, Span<float>, std::size_t, View<float>);
+ 
+ template <class T, std::size_t N> static
+@@ -282,7 +290,9 @@ void biasN_sigmoid_inplace(const Stream& stream, Span<T> inplace_output, std::si
+     }
+ }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+ template void biasN_sigmoid_inplace<__half>(const Stream&, Span<__half>, std::size_t, View<__half>);
++#endif
+ template void biasN_sigmoid_inplace<float>(const Stream&, Span<float>, std::size_t, View<float>);
+ 
+ template <class T, std::size_t N> static
+@@ -306,7 +316,9 @@ void biasN_swish_inplace(const Stream& stream, Span<T> inplace_output, std::size
+     }
+ }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+ template void biasN_swish_inplace<__half>(const Stream&, Span<__half>, std::size_t, View<__half>);
++#endif
+ template void biasN_swish_inplace<float>(const Stream&, Span<float>, std::size_t, View<float>);
+ 
+ template <class T, std::size_t N> static
+@@ -330,7 +342,9 @@ void biasN_mish_inplace(const Stream& stream, Span<T> inplace_output, std::size_
+     }
+ }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+ template void biasN_mish_inplace<__half>(const Stream&, Span<__half>, std::size_t, View<__half>);
++#endif
+ template void biasN_mish_inplace<float>(const Stream&, Span<float>, std::size_t, View<float>);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/concat.cu b/modules/dnn/src/cuda/concat.cu
+index 87e72e1a87b..7d5955c6a21 100644
+--- a/modules/dnn/src/cuda/concat.cu
++++ b/modules/dnn/src/cuda/concat.cu
+@@ -132,7 +132,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void concat<__half>(const Stream&, TensorSpan<__half>, std::size_t, TensorView<__half>, std::size_t);
++#endif
+     template void concat<float>(const Stream&, TensorSpan<float>, std::size_t, TensorView<float>,  std::size_t);
+ 
+     template <class T, std::size_t Rank> static
+diff --git a/modules/dnn/src/cuda/crop_and_resize.cu b/modules/dnn/src/cuda/crop_and_resize.cu
+index c7e95104da7..4e597b64178 100644
+--- a/modules/dnn/src/cuda/crop_and_resize.cu
++++ b/modules/dnn/src/cuda/crop_and_resize.cu
+@@ -162,7 +162,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void crop_and_resize<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>, View<__half> boxes);
++#endif
+     template void crop_and_resize<float>(const Stream&, TensorSpan<float>, TensorView<float>, View<float> boxes);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/eltwise_ops.cu b/modules/dnn/src/cuda/eltwise_ops.cu
+index 21ab8bb3ccd..521bb4351bc 100644
+--- a/modules/dnn/src/cuda/eltwise_ops.cu
++++ b/modules/dnn/src/cuda/eltwise_ops.cu
+@@ -149,7 +149,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void eltwise_max_2(const Stream& stream, Span<__half> output, View<__half> x, View<__half> y);
++#endif
+     template void eltwise_max_2(const Stream& stream, Span<float> output, View<float> x, View<float> y);
+ 
+     template <class T, std::size_t N>
+@@ -177,7 +179,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void eltwise_sum_2(const Stream& stream, Span<__half> output, View<__half> x, View<__half> y);
++#endif
+     template void eltwise_sum_2(const Stream& stream, Span<float> output, View<float> x, View<float> y);
+ 
+     template <class T, std::size_t N>
+@@ -210,7 +214,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void eltwise_sum_coeff_2(const Stream&, Span<__half>, __half, View<__half>, __half, View<__half>);
++#endif
+     template void eltwise_sum_coeff_2(const Stream&, Span<float>, float, View<float>, float, View<float>);
+ 
+     template <class T, std::size_t N>
+@@ -238,7 +244,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void eltwise_prod_2(const Stream& stream, Span<__half> output, View<__half> x, View<__half> y);
++#endif
+     template void eltwise_prod_2(const Stream& stream, Span<float> output, View<float> x, View<float> y);
+ 
+     template <class T, std::size_t N>
+@@ -266,7 +274,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void eltwise_div_2(const Stream& stream, Span<__half> output, View<__half> x, View<__half> y);
++#endif
+     template void eltwise_div_2(const Stream& stream, Span<float> output, View<float> x, View<float> y);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/fill_copy.cu b/modules/dnn/src/cuda/fill_copy.cu
+index 2304e423460..a056d08ca14 100644
+--- a/modules/dnn/src/cuda/fill_copy.cu
++++ b/modules/dnn/src/cuda/fill_copy.cu
+@@ -63,7 +63,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void fill(const Stream&, Span<__half>, __half);
++#endif
+     template void fill(const Stream&, Span<float>, float);
+ 
+     template <class T, std::size_t N> static
+diff --git a/modules/dnn/src/cuda/limits.hpp b/modules/dnn/src/cuda/limits.hpp
+index fec65e6fc23..7b7656a2c04 100644
+--- a/modules/dnn/src/cuda/limits.hpp
++++ b/modules/dnn/src/cuda/limits.hpp
+@@ -15,12 +15,14 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace csl { namespace de
+     template <class T>
+     struct numeric_limits;
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <>
+     struct numeric_limits<__half> {
+         __device__ static __half min() { return 0.0000610; }
+         __device__ static __half max() { return 65504.0; }
+         __device__ static __half lowest() { return -65504.0; }
+     };
++#endif
+ 
+     template <>
+     struct numeric_limits<float> {
+diff --git a/modules/dnn/src/cuda/math.hpp b/modules/dnn/src/cuda/math.hpp
+index 875d17855bd..99be13c3766 100644
+--- a/modules/dnn/src/cuda/math.hpp
++++ b/modules/dnn/src/cuda/math.hpp
+@@ -11,50 +11,63 @@
+ namespace cv { namespace dnn { namespace cuda4dnn { namespace csl { namespace device {
+ 
+     template <class T> __device__ T abs(T val) { return (val < T(0) ? -val : val); }
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half2 abs(__half2 val) {
+         val.x = abs(val.x);
+         val.y = abs(val.y);
+         return val;
+     }
++#endif
+     template <> inline __device__ float abs(float val) { return fabsf(val); }
+     template <> inline __device__ double abs(double val) { return fabs(val); }
+ 
+     template <class T> __device__ T exp(T val);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half exp(__half val) { return hexp(val); }
+     template <> inline __device__ __half2 exp(__half2 val) { return h2exp(val); }
++#endif
+     template <> inline __device__ float exp(float val) { return expf(val); }
+     template <> inline __device__ double exp(double val) { return ::exp(val); }
+ 
+     template <class T> __device__ T expm1(T val);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half expm1(__half val) { return hexp(val) - __half(1); }
+     template <> inline __device__ __half2 expm1(__half2 val) { return h2exp(val) - __half2(1, 1); }
++#endif
+     template <> inline __device__ float expm1(float val) { return expm1f(val); }
+     template <> inline __device__ double expm1(double val) { return ::expm1(val); }
+ 
+     template <class T> __device__ T max(T x, T y) { return (x > y ? x : y); }
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half2 max(__half2 a, __half2 b) {
+         a.x = max(a.x, a.x);
+         a.y = max(a.y, b.y);
+         return a;
+     }
++#endif
+     template <> inline __device__ float max(float x, float y) { return fmaxf(x, y); }
+     template <> inline __device__ double max(double x, double y) { return fmax(x, y); }
+ 
+     template <class T> __device__ T min(T x, T y) { return (x > y ? y : x); }
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half2 min(__half2 a, __half2 b) {
+         a.x = min(a.x, a.x);
+         a.y = min(a.y, b.y);
+         return a;
+     }
++#endif
+     template <> inline __device__ float min(float x, float y) { return fminf(x, y); }
+     template <> inline __device__ double min(double x, double y) { return fmin(x, y); }
+ 
+     template <class T> __device__ T log1p(T val);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half log1p(__half val) { return hlog(__half(1) + val); }
+     template <> inline __device__ __half2 log1p(__half2 val) { return h2log(__half2(1, 1) + val); }
++#endif
+     template <> inline __device__ float log1p(float val) { return log1pf(val); }
+ 
+     template <class T> __device__ T log1pexp(T val);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half log1pexp(__half val) {
+         if (val <= __half(-4.0))
+             return exp(val);
+@@ -70,6 +83,7 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace csl { namespace de
+         val.y = log1pexp(val.y);
+         return val;
+     }
++#endif
+     template <> inline __device__ float log1pexp(float val) {
+         if (val <= -20)
+             return expf(val);
+@@ -92,45 +106,59 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace csl { namespace de
+     }
+ 
+     template <class T> __device__ T tanh(T val);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half tanh(__half val) { return tanhf(val); }
+     template <> inline __device__ __half2 tanh(__half2 val) { return __half2(tanh(val.x), tanh(val.y)); }
++#endif
+     template <> inline __device__ float tanh(float val) { return tanhf(val); }
+     template <> inline __device__ double tanh(double val) { return ::tanh(val); }
+ 
+     template <class T> __device__ T pow(T val, T exp);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half pow(__half val, __half exp) { return powf(val, exp); }
+     template <> inline __device__ __half2 pow(__half2 val, __half2 exp) { return __half2(pow(val.x, exp.x), pow(val.y, exp.y)); }
++#endif
+     template <> inline __device__ float pow(float val, float exp) { return powf(val, exp); }
+     template <> inline __device__ double pow(double val, double exp) { return ::pow(val, exp); }
+ 
+     template <class T> __device__ T sqrt(T val);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half sqrt(__half val) { return hsqrt(val); }
+     template <> inline __device__ __half2 sqrt(__half2 val) { return h2sqrt(val); }
++#endif
+     template <> inline __device__ float sqrt(float val) { return sqrtf(val); }
+     template <> inline __device__ double sqrt(double val) { return ::sqrt(val); }
+ 
+     template <class T> __device__ T rsqrt(T val);
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half rsqrt(__half val) { return hrsqrt(val); }
+     template <> inline __device__ __half2 rsqrt(__half2 val) { return h2rsqrt(val); }
+     template <> inline __device__ float rsqrt(float val) { return rsqrtf(val); }
++#endif
+     template <> inline __device__ double rsqrt(double val) { return ::rsqrt(val); }
+ 
+     template <class T> __device__ T sigmoid(T val) { return T(1) / (T(1) + exp(-val)); }
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half2 sigmoid(__half2 val) { return __half2(1, 1) / (__half2(1, 1) + exp(__hneg2(val))); }
++#endif
+ 
+     template <class T> __device__ T clamp(T value, T lower, T upper) { return min(max(value, lower), upper); }
+ 
+     template <class T> __device__ T round(T value);
+     template <> inline __device__ double round(double value) { return ::round(value); }
+     template <> inline __device__ float round(float value) { return roundf(value); }
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half round(__half value) { return hrint(value); }
+     template <> inline __device__ __half2 round(__half2 value) { return h2rint(value); }
++#endif
+ 
+     template <class T> __device__ T ceil(T value);
+     template <> inline __device__ double ceil(double value) { return ::ceil(value); }
+     template <> inline __device__ float ceil(float value) { return ceilf(value); }
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <> inline __device__ __half ceil(__half value) { return hceil(value); }
+     template <> inline __device__ __half2 ceil(__half2 value) { return h2ceil(value); }
++#endif
+ 
+ }}}}} /* namespace cv::dnn::cuda4dnn::csl::device */
+ 
+diff --git a/modules/dnn/src/cuda/max_unpooling.cu b/modules/dnn/src/cuda/max_unpooling.cu
+index ed3aa70ddae..fbfb5ae432a 100644
+--- a/modules/dnn/src/cuda/max_unpooling.cu
++++ b/modules/dnn/src/cuda/max_unpooling.cu
+@@ -218,10 +218,12 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void max_pooling_with_indices(const Stream&,
+         TensorSpan<__half>, TensorSpan<__half>, TensorView<__half>,
+         const std::vector<std::size_t>&, const std::vector<std::size_t>&,
+         const std::vector<std::size_t>&);
++#endif
+ 
+     template void max_pooling_with_indices(const Stream&,
+         TensorSpan<float>, TensorSpan<float>, TensorView<float>,
+@@ -294,10 +296,12 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void max_unpooling(const Stream&,
+         TensorSpan<__half>, TensorView<__half>, TensorView<__half>,
+         const std::vector<std::size_t>&, const std::vector<std::size_t>&,
+         const std::vector<std::size_t>&);
++#endif
+ 
+     template void max_unpooling(const Stream&,
+         TensorSpan<float>, TensorView<float>, TensorView<float>,
+diff --git a/modules/dnn/src/cuda/normalize.cu b/modules/dnn/src/cuda/normalize.cu
+index 326a9ae2d9b..0d40c124a41 100644
+--- a/modules/dnn/src/cuda/normalize.cu
++++ b/modules/dnn/src/cuda/normalize.cu
+@@ -115,7 +115,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         launch_kernel(scale_kernel, policy, output, input, mid_size * inner_size, inner_size, sums);
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void normalize(const Stream&, Span<__half>, View<__half>, std::size_t, std::size_t, std::size_t, std::size_t, __half, Span<__half>);
++#endif
+     template void normalize(const Stream&, Span<float>, View<float>, std::size_t, std::size_t, std::size_t, std::size_t, float, Span<float>);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/padding.cu b/modules/dnn/src/cuda/padding.cu
+index ed73b045773..fc55ce0633b 100644
+--- a/modules/dnn/src/cuda/padding.cu
++++ b/modules/dnn/src/cuda/padding.cu
+@@ -193,7 +193,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         copy_with_reflection101_dispatcher<T, 1, CSL_MAX_TENSOR_RANK>(rank, stream, output, outStride, input, inStride, ranges);
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void copy_with_reflection101(const Stream&, TensorSpan<__half>, TensorView<__half>, std::vector<std::pair<std::size_t, std::size_t>> ranges);
++#endif
+     template void copy_with_reflection101(const Stream&, TensorSpan<float>, TensorView<float>, std::vector<std::pair<std::size_t, std::size_t>> ranges);
+ 
+ }}}} /* namespace namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/permute.cu b/modules/dnn/src/cuda/permute.cu
+index db04e9d2c30..e79087eb67e 100644
+--- a/modules/dnn/src/cuda/permute.cu
++++ b/modules/dnn/src/cuda/permute.cu
+@@ -303,7 +303,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void permute(const Stream&, TensorSpan<__half>, TensorView<__half>, std::vector<std::size_t>);
++#endif
+     template void permute(const Stream&, TensorSpan<float>, TensorView<float>, std::vector<std::size_t>);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/prior_box.cu b/modules/dnn/src/cuda/prior_box.cu
+index 313fefcae4e..7042ccd8267 100644
+--- a/modules/dnn/src/cuda/prior_box.cu
++++ b/modules/dnn/src/cuda/prior_box.cu
+@@ -165,8 +165,10 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void generate_prior_boxes(const Stream&, Span<__half>, View<float>, View<float>, View<float>, View<float>, float, float,
+         std::vector<float>, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, bool, bool);
++#endif
+ 
+     template void generate_prior_boxes(const Stream&, Span<float>, View<float>, View<float>, View<float>, View<float>, float, float,
+         std::vector<float>, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, bool, bool);
+diff --git a/modules/dnn/src/cuda/region.cu b/modules/dnn/src/cuda/region.cu
+index 00c1cbea03d..b90a13fff67 100644
+--- a/modules/dnn/src/cuda/region.cu
++++ b/modules/dnn/src/cuda/region.cu
+@@ -168,8 +168,10 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void region(const Stream&, Span<__half>, View<__half>, View<__half>,
+         __half, __half, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, bool);
++#endif
+ 
+     template void region(const Stream&, Span<float>, View<float>, View<float>,
+         float, float, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, bool);
+diff --git a/modules/dnn/src/cuda/resize.cu b/modules/dnn/src/cuda/resize.cu
+index 306325ec3c2..c34790f74c4 100644
+--- a/modules/dnn/src/cuda/resize.cu
++++ b/modules/dnn/src/cuda/resize.cu
+@@ -189,7 +189,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void resize_nn<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>);
++#endif
+     template void resize_nn<float>(const Stream&, TensorSpan<float>, TensorView<float>);
+ 
+     template <class T, std::size_t CHANNELS_PER_ITER> static
+@@ -227,7 +229,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void resize_bilinear<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>, float, float);
++#endif
+     template void resize_bilinear<float>(const Stream&, TensorSpan<float>, TensorView<float>, float, float);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/roi_pooling.cu b/modules/dnn/src/cuda/roi_pooling.cu
+index 78beea024ba..1f286b2172d 100644
+--- a/modules/dnn/src/cuda/roi_pooling.cu
++++ b/modules/dnn/src/cuda/roi_pooling.cu
+@@ -115,7 +115,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         launch_kernel(kernel, policy, output, pooled_height, pooled_width, input, in_height, in_width, rois, num_channels, spatial_scale);
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void roi_pooling(const Stream& stream, TensorSpan<__half> output, TensorView<__half> input, View<__half> rois, __half spatial_scale);
++#endif
+     template void roi_pooling(const Stream& stream, TensorSpan<float> output, TensorView<float> input, View<float> rois, float spatial_scale);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/scale_shift.cu b/modules/dnn/src/cuda/scale_shift.cu
+index 05f43743569..31fa471b53c 100644
+--- a/modules/dnn/src/cuda/scale_shift.cu
++++ b/modules/dnn/src/cuda/scale_shift.cu
+@@ -156,7 +156,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void bias1<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>, __half);
++#endif
+     template void bias1<float>(const Stream&, TensorSpan<float>, TensorView<float>, float);
+ 
+     template <class T, std::size_t N> static
+@@ -188,7 +190,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void biasN<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>, std::size_t, TensorView<__half>);
++#endif
+     template void biasN<float>(const Stream&, TensorSpan<float>, TensorView<float>, std::size_t, TensorView<float>);
+ 
+     template <class T, std::size_t N> static
+@@ -214,7 +218,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void scale1<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>, __half);
++#endif
+     template void scale1<float>(const Stream&, TensorSpan<float>, TensorView<float>, float);
+ 
+     template <class T, std::size_t N> static
+@@ -246,7 +252,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void scaleN<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>, std::size_t, TensorView<__half>);
++#endif
+     template void scaleN<float>(const Stream&, TensorSpan<float>, TensorView<float>, std::size_t, TensorView<float>);
+ 
+     template <class T, std::size_t N> static
+@@ -272,7 +280,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void scale1_with_bias1<__half>(const Stream&, Span<__half>, View<__half>, __half, __half);
++#endif
+     template void scale1_with_bias1<float>(const Stream&, Span<float>, View<float>, float, float);
+ 
+     template <class T, std::size_t N> static
+@@ -305,7 +315,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void scaleN_with_biasN<__half>(const Stream&, TensorSpan<__half>, TensorView<__half>, std::size_t, TensorView<__half>, TensorView<__half>);
++#endif
+     template void scaleN_with_biasN<float>(const Stream&, TensorSpan<float>, TensorView<float>, std::size_t, TensorView<float>, TensorView<float>);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda/slice.cu b/modules/dnn/src/cuda/slice.cu
+index df45efd7195..5375345bd89 100644
+--- a/modules/dnn/src/cuda/slice.cu
++++ b/modules/dnn/src/cuda/slice.cu
+@@ -163,7 +163,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         slice_dispatcher<T, 1, CSL_MAX_TENSOR_RANK>(rank, stream, output, outStride, input, inStride, offsets);
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void slice(const Stream&, TensorSpan<__half>, TensorView<__half>, std::vector<std::size_t>);
++#endif
+     template void slice(const Stream&, TensorSpan<float>, TensorView<float>, std::vector<std::size_t>);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+diff --git a/modules/dnn/src/cuda4dnn/csl/fp16.hpp b/modules/dnn/src/cuda4dnn/csl/fp16.hpp
+index c76de4574b2..375cd46866e 100644
+--- a/modules/dnn/src/cuda4dnn/csl/fp16.hpp
++++ b/modules/dnn/src/cuda4dnn/csl/fp16.hpp
+@@ -31,6 +31,7 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace csl {
+     CUDA4DNN_HOST bool operator>=(half lhs, half rhs) noexcept { return static_cast<float>(lhs) >= static_cast<float>(rhs); }
+     */
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template <class T> CUDA4DNN_HOST
+     typename std::enable_if<detail::is_half_convertible<T>::value, bool>
+     ::type operator==(half lhs, T rhs) noexcept { return static_cast<float>(lhs) == static_cast<float>(rhs); }
+@@ -78,6 +79,7 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace csl {
+     template <class T> CUDA4DNN_HOST
+     typename std::enable_if<detail::is_half_convertible<T>::value, bool>
+     ::type operator>=(T lhs, half rhs) noexcept { return static_cast<float>(lhs) >= static_cast<float>(rhs); }
++#endif
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::csl */
+ 
+
+From 349278e19c3e7649656ca6c874c2a16597aef5f7 Mon Sep 17 00:00:00 2001
+From: Julien Maille <julien.maille@data-pixel.com>
+Date: Sun, 29 Dec 2019 11:41:47 +0100
+Subject: [PATCH 2/3] UPD: added ifdef on new copy kernel
+
+---
+ modules/dnn/src/cuda/fill_copy.cu | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/modules/dnn/src/cuda/fill_copy.cu b/modules/dnn/src/cuda/fill_copy.cu
+index a056d08ca14..5a04307bfbe 100644
+--- a/modules/dnn/src/cuda/fill_copy.cu
++++ b/modules/dnn/src/cuda/fill_copy.cu
+@@ -89,7 +89,9 @@ namespace cv { namespace dnn { namespace cuda4dnn { namespace kernels {
+         }
+     }
+ 
++#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 530)
+     template void copy(const Stream&, Span<__half>, View<__half>);
++#endif
+     template void copy(const Stream&, Span<float>, View<float>);
+ 
+ }}}} /* namespace cv::dnn::cuda4dnn::kernels */
+
+From c8419ffd7c77267775d169399e3b45b89abf9311 Mon Sep 17 00:00:00 2001
+From: Julien Maille <julien.maille@data-pixel.com>
+Date: Sun, 29 Dec 2019 21:49:29 +0100
+Subject: [PATCH 3/3] added fp16 support detection at runtime
+
+---
+ modules/dnn/src/dnn.cpp | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/modules/dnn/src/dnn.cpp b/modules/dnn/src/dnn.cpp
+index 4cc4c8e2281..6f43906e7b6 100644
+--- a/modules/dnn/src/dnn.cpp
++++ b/modules/dnn/src/dnn.cpp
+@@ -135,6 +135,20 @@ class BackendRegistry
+     }
+ #endif
+ 
++    static inline bool deviceSupportsFp16() {
++#ifdef HAVE_CUDA
++        const int devId = cv::cuda::getDevice();
++        cv::cuda::DeviceInfo dev_info(devId);
++        if( !dev_info.isCompatible() )
++            return false;
++        int version = dev_info.majorVersion() * 10 + dev_info.minorVersion();
++        if( version < 53 )
++            return false;
++        return true;
++#endif
++        return false;
++    }
++
+ private:
+     BackendRegistry()
+     {
+@@ -198,7 +212,8 @@ class BackendRegistry
+ #ifdef HAVE_CUDA
+         if (haveCUDA()) {
+             backends.push_back(std::make_pair(DNN_BACKEND_CUDA, DNN_TARGET_CUDA));
+-            backends.push_back(std::make_pair(DNN_BACKEND_CUDA, DNN_TARGET_CUDA_FP16));
++            if (deviceSupportsFp16())
++                backends.push_back(std::make_pair(DNN_BACKEND_CUDA, DNN_TARGET_CUDA_FP16));
+         }
+ #endif
+     }

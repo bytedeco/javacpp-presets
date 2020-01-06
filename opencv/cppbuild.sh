@@ -74,6 +74,10 @@ cd ../opencv-$OPENCV_VERSION
 patch -Np1 < ../../../opencv.patch
 patch -Np1 < ../../../opencv-linux-ppc64le.patch
 
+# Remove the following two lines when PR 16218 has been merged with master
+patch -Np1 < ../../../16bc505d26860b5d055deec9f0df5a4e6d59b622.patch # required for #16218
+patch -Np1 < ../../../16218.patch # https://github.com/opencv/opencv/pull/16218
+
 # work around the toolchain for Android not supporting Clang with libc++ properly
 sedinplace '/include_directories/d' platforms/android/android.toolchain.cmake
 sedinplace "s/<LINK_LIBRARIES>/<LINK_LIBRARIES> ${ANDROID_LIBS:-}/g" platforms/android/android.toolchain.cmake
@@ -121,7 +125,7 @@ BUILD_CONTRIB_X="-DBUILD_opencv_stereo=OFF -DBUILD_opencv_plot=ON -DBUILD_opencv
 
 GPU_FLAGS="-DWITH_CUDA=OFF"
 if [[ "$EXTENSION" == *gpu ]]; then
-    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=OFF -DCUDA_VERSION=10.2 -DCUDA_ARCH_BIN='3.0' -DCUDA_ARCH_PTX='3.0' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=10.2 -DCUDA_ARCH_BIN='3.0' -DCUDA_ARCH_PTX='3.0' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
 fi
 
 case $PLATFORM in
