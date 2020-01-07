@@ -135,7 +135,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Gym 0.15.4  https://github.com/openai/gym
  * LLVM 9.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.78.0  http://www.leptonica.org/download.html
+ * Leptonica 1.79.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
