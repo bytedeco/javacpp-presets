@@ -47,7 +47,7 @@ public class nvonnxparser implements InfoMapper {
                .put(new Info("std::vector<size_t>").annotations("@StdVector").pointerTypes("SizeTPointer"))
                .put(new Info("nvonnxparser::IPluginFactory").pointerTypes("OnnxPluginFactory"))
                .put(new Info("nvonnxparser::IPluginFactoryExt").pointerTypes("OnnxPluginFactoryExt"))
-               .put(new Info("nvonnxparser::ErrorCode").valueTypes("org.bytedeco.tensorrt.global.nvonnxparser.ErrorCode"))
+               .put(new Info("nvonnxparser::ErrorCode").valueTypes("org.bytedeco.tensorrt.global.nvonnxparser.ErrorCode").enumerate())
                .put(new Info("nvonnxparser::EnumMax<nvonnxparser::ErrorCode>", "nvonnxparser::EnumMax<ErrorCode>").javaNames("ErrorCodeEnumMax"));
     }
 }
