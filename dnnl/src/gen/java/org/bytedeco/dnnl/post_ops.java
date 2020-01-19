@@ -47,7 +47,7 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
-    public native @ByVal primitive.kind kind(int index);
+    public native primitive.kind kind(int index);
 
     /** Appends accumulation (sum) post operation. Prior to accumulating the
      *  result, the previous value would be multiplied by \p scale.

@@ -4201,7 +4201,7 @@ public static native @Cast("dnnl_status_t") int dnnl_gemm_s8s8s32(@Cast("char") 
 
 
 
-@Namespace("dnnl") public static native @Cast("dnnl_primitive_kind_t") int convert_to_c(@ByVal primitive.kind akind);
+@Namespace("dnnl") public static native @Cast("dnnl_primitive_kind_t") int convert_to_c(primitive.kind akind);
 
 
 /** \}
@@ -4667,28 +4667,28 @@ public static native @Cast("dnnl_status_t") int dnnl_gemm_s8s8s32(@Cast("char") 
 
 
 
-@Namespace("dnnl") public static native @ByVal @Name("operator |") stream.flags or(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+@Namespace("dnnl") public static native @Name("operator |") stream.flags or(stream.flags lhs, stream.flags rhs);
 
-@Namespace("dnnl") public static native @ByVal @Name("operator &") stream.flags and(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+@Namespace("dnnl") public static native @Name("operator &") stream.flags and(stream.flags lhs, stream.flags rhs);
 
-@Namespace("dnnl") public static native @ByVal @Name("operator ^") stream.flags xor(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+@Namespace("dnnl") public static native @Name("operator ^") stream.flags xor(stream.flags lhs, stream.flags rhs);
 
 
 ///
-@Namespace("dnnl") public static native @ByVal @Name("operator ~") stream.flags not(@ByVal stream.flags rhs);
+@Namespace("dnnl") public static native @Name("operator ~") stream.flags not(stream.flags rhs);
 // Targeting ../memory.java
 
 
 
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("dnnl_data_type_t") int a, @ByVal memory.data_type b);
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("dnnl_data_type_t") int a, @ByVal memory.data_type b);
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(@ByVal memory.data_type a, @Cast("dnnl_data_type_t") int b);
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal memory.data_type a, @Cast("dnnl_data_type_t") int b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("dnnl_data_type_t") int a, memory.data_type b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("dnnl_data_type_t") int a, memory.data_type b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(memory.data_type a, @Cast("dnnl_data_type_t") int b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(memory.data_type a, @Cast("dnnl_data_type_t") int b);
 
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("dnnl_format_tag_t") int a, @ByVal memory.format_tag b);
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("dnnl_format_tag_t") int a, @ByVal memory.format_tag b);
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(@ByVal memory.format_tag a, @Cast("dnnl_format_tag_t") int b);
-@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal memory.format_tag a, @Cast("dnnl_format_tag_t") int b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("dnnl_format_tag_t") int a, memory.format_tag b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("dnnl_format_tag_t") int a, memory.format_tag b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator ==") boolean equals(memory.format_tag a, @Cast("dnnl_format_tag_t") int b);
+@Namespace("dnnl") public static native @Cast("bool") @Name("operator !=") boolean notEquals(memory.format_tag a, @Cast("dnnl_format_tag_t") int b);
 // Targeting ../primitive_desc_base.java
 
 

@@ -100,7 +100,7 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
  *
  * \brief the type of parser error
  */
-@Name("nvonnxparser::ErrorCode") public enum ErrorCode {
+@Namespace("nvonnxparser") public enum ErrorCode {
     kSUCCESS(0),
     kINTERNAL_ERROR(1),
     kMEM_ALLOC_FAILED(2),

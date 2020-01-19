@@ -53,8 +53,8 @@ public class stream extends dnnl_stream_handle {
     }
 
     /** Constructs a stream. */
-    public stream(@Const @ByRef engine aengine, @ByVal(nullValue = "dnnl::stream::flags::default_flags") flags aflags) { super((Pointer)null); allocate(aengine, aflags); }
-    private native void allocate(@Const @ByRef engine aengine, @ByVal(nullValue = "dnnl::stream::flags::default_flags") flags aflags);
+    public stream(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/) { super((Pointer)null); allocate(aengine, aflags); }
+    private native void allocate(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/);
     public stream(@Const @ByRef engine aengine) { super((Pointer)null); allocate(aengine); }
     private native void allocate(@Const @ByRef engine aengine);
 

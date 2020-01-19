@@ -89,10 +89,10 @@ public class dnnl implements InfoMapper {
 //               .put(new Info("std::vector<dnnl::primitive::at>").pointerTypes("primitive_at_vector").define())
 //               .put(new Info("std::vector<dnnl::memory::primitive_desc>").pointerTypes("memory_primitive_desc_vector").define())
 
-               .put(new Info("dnnl::memory::data_type").pointerTypes("memory.data_type"))
-               .put(new Info("dnnl::memory::format_tag").pointerTypes("memory.format_tag"))
-               .put(new Info("dnnl::stream::flags").pointerTypes("stream.flags"))
-               .put(new Info("dnnl::primitive::kind").pointerTypes("primitive.kind"))
+               .put(new Info("dnnl::memory::data_type").valueTypes("memory.data_type").enumerate())
+               .put(new Info("dnnl::memory::format_tag").valueTypes("memory.format_tag").enumerate())
+               .put(new Info("dnnl::stream::flags").valueTypes("stream.flags").enumerate())
+               .put(new Info("dnnl::primitive::kind").valueTypes("primitive.kind").enumerate())
 
                .put(new Info("dnnl::handle_traits", "dnnl::primitive_attr(dnnl_primitive_attr_t)",
                              "dnnl::reorder::primitive_desc(dnnl_primitive_desc_t)",

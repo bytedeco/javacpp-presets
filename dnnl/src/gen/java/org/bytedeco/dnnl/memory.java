@@ -429,12 +429,12 @@ public class memory extends dnnl_memory_handle {
          *  @param aformat_tag Data layout format tag. */
         
         ///
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag);
 
         /** Constructs a memory descriptor by strides.
          * 
@@ -443,12 +443,12 @@ public class memory extends dnnl_memory_handle {
          *  @param astrides The strides for dimensions. */
         
         ///
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer astrides);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer astrides);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] astrides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer astrides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer astrides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] astrides);
 
         /** Constructs a memory descriptor from a C API data structure.
          * 
@@ -553,6 +553,6 @@ public class memory extends dnnl_memory_handle {
 // #endif
 
     // Must go away or be private:
-    public static native @Cast("dnnl_data_type_t") int convert_to_c(@ByVal data_type adata_type);
-    public static native @Cast("dnnl_format_tag_t") int convert_to_c(@ByVal format_tag aformat);
+    public static native @Cast("dnnl_data_type_t") int convert_to_c(data_type adata_type);
+    public static native @Cast("dnnl_format_tag_t") int convert_to_c(format_tag aformat);
 }
