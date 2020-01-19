@@ -126,9 +126,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "pyfpe.h",
             },
             link = "python3.7m@.1.0!",
-            preload = {"ffi@.6", "ffi@.5"},
+            preload = {"ffi@.6", "ffi@.5", "libcrypto-1_1", "libssl-1_1"/*, "sqlite3", "tcl86t", "tk86t"*/},
             resource = {"include", "lib", "libs", "bin", "share"}
         ),
+        @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
+        @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
+        @Platform(value = "linux-arm64",  preloadpath = {"/usr/aarch64-linux-gnu/lib/", "/usr/lib/aarch64-linux-gnu/"}),
+        @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
+        @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
+        @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
         @Platform(
             value = "macosx",
             link = "python3.7m!"
