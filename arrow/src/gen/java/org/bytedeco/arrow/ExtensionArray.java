@@ -19,17 +19,17 @@ public class ExtensionArray extends Array {
   /** \brief Construct an ExtensionArray from an ArrayData.
    * 
    *  The ArrayData must have the right ExtensionType. */
-  public ExtensionArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public ExtensionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   /** \brief Construct an ExtensionArray from a type and the underlying storage. */
   public ExtensionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                   @Const @SharedPtr @ByRef Array storage) { super((Pointer)null); allocate(type, storage); }
+                   @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array storage) { super((Pointer)null); allocate(type, storage); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                   @Const @SharedPtr @ByRef Array storage);
+                   @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array storage);
 
   public native @Const ExtensionType extension_type();
 
   /** \brief The physical storage for the extension array */
-  public native @SharedPtr @ByVal Array storage();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array storage();
 }

@@ -23,10 +23,10 @@ public class Table extends Pointer {
    *  @param schema The table schema (column types)
    *  @param columns The table's columns as chunked arrays
    *  @param num_rows number of rows in table, -1 (default) to infer from columns */
-  public static native @SharedPtr @ByVal Table Make(
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(
         @SharedPtr Schema schema,
         @Const @ByRef ChunkedArrayVector columns, @Cast("int64_t") long num_rows/*=-1*/);
-  public static native @SharedPtr @ByVal Table Make(
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(
         @SharedPtr Schema schema,
         @Const @ByRef ChunkedArrayVector columns);
 
@@ -36,10 +36,10 @@ public class Table extends Pointer {
    *  @param num_rows number of rows in table, -1 (default) to infer from columns */
   
   ///
-  public static native @SharedPtr @ByVal Table Make(@SharedPtr Schema schema,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@SharedPtr Schema schema,
                                        @Const @ByRef ArrayVector arrays,
                                        @Cast("int64_t") long num_rows/*=-1*/);
-  public static native @SharedPtr @ByVal Table Make(@SharedPtr Schema schema,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@SharedPtr Schema schema,
                                        @Const @ByRef ArrayVector arrays);
 
   /** \brief Construct a Table from RecordBatches, using schema supplied by the first
@@ -74,14 +74,14 @@ public class Table extends Pointer {
    *  @param array [in] a chunked StructArray
    *  @param table [out] the returned table
    *  @return Status */
-  public static native @ByVal Status FromChunkedStructArray(@Const @SharedPtr @ByRef ChunkedArray array,
+  public static native @ByVal Status FromChunkedStructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray array,
                                          @SharedPtr Table table);
 
   /** Return the table schema */
   public native @SharedPtr Schema schema();
 
   /** Return a column by index */
-  public native @SharedPtr @ByVal ChunkedArray column(int i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column(int i);
 
   /** Return a column's field by index */
   
@@ -98,28 +98,28 @@ public class Table extends Pointer {
    *  rows in the table, the length will be adjusted accordingly
    * 
    *  @return a new object wrapped in std::shared_ptr<Table> */
-  public native @SharedPtr @ByVal Table Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
 
   /** \brief Slice from first row at offset until end of the table */
-  public native @SharedPtr @ByVal Table Slice(@Cast("int64_t") long offset);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Slice(@Cast("int64_t") long offset);
 
   /** \brief Return a column by name
    *  @param name [in] field name
    *  @return an Array or null if no field was found */
-  public native @SharedPtr @ByVal ChunkedArray GetColumnByName(@StdString String name);
-  public native @SharedPtr @ByVal ChunkedArray GetColumnByName(@StdString BytePointer name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray GetColumnByName(@StdString String name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray GetColumnByName(@StdString BytePointer name);
 
   /** \brief Remove column from the table, producing a new Table */
   public native @ByVal Status RemoveColumn(int i, @SharedPtr Table out);
 
   /** \brief Add column to the table, producing a new Table */
   public native @ByVal Status AddColumn(int i, @SharedPtr @ByVal Field field_arg,
-                             @SharedPtr @ByVal ChunkedArray column,
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column,
                              @SharedPtr Table out);
 
   /** \brief Replace a column in the table, producing a new Table */
   public native @ByVal Status SetColumn(int i, @SharedPtr @ByVal Field field_arg,
-                             @SharedPtr @ByVal ChunkedArray column,
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column,
                              @SharedPtr Table out);
 
   /** \brief Return names of all columns */
@@ -138,7 +138,7 @@ public class Table extends Pointer {
    *  @return new Table */
   
   ///
-  public native @SharedPtr @ByVal Table ReplaceSchemaMetadata(
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table ReplaceSchemaMetadata(
         @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata);
 
   /** \brief Flatten the table, producing a new Table.  Any column with a

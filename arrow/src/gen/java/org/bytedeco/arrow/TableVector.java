@@ -13,8 +13,8 @@ public class TableVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TableVector(Pointer p) { super(p); }
-    public TableVector(Table value) { this(1); put(0, value); }
-    public TableVector(Table ... array) { this(array.length); put(array); }
+    public TableVector(@Cast({"", "std::shared_ptr<arrow::Table>"}) Table value) { this(1); put(0, value); }
+    public TableVector(@Cast({"", "std::shared_ptr<arrow::Table>"}) Table ... array) { this(array.length); put(array); }
     public TableVector()       { allocate();  }
     public TableVector(long n) { allocate(n); }
     private native void allocate();
@@ -26,10 +26,10 @@ public class TableVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr Table get(@Cast("size_t") long i);
+    @Index(function = "at") public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table get(@Cast("size_t") long i);
     public native TableVector put(@Cast("size_t") long i, Table value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Table value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -39,7 +39,7 @@ public class TableVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const Table get();
+        public native @Name("operator*") @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table get();
     }
 
     public Table[] get() {

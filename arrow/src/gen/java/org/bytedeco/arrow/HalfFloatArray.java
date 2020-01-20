@@ -15,8 +15,8 @@ public class HalfFloatArray extends PrimitiveArray {
     public HalfFloatArray(Pointer p) { super(p); }
 
 
-  public HalfFloatArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public HalfFloatArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   // Only enable this constructor without a type argument for types without additional
   // metadata

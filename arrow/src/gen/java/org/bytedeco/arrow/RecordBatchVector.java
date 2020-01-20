@@ -13,8 +13,8 @@ public class RecordBatchVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RecordBatchVector(Pointer p) { super(p); }
-    public RecordBatchVector(RecordBatch value) { this(1); put(0, value); }
-    public RecordBatchVector(RecordBatch ... array) { this(array.length); put(array); }
+    public RecordBatchVector(@Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch value) { this(1); put(0, value); }
+    public RecordBatchVector(@Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch ... array) { this(array.length); put(array); }
     public RecordBatchVector()       { allocate();  }
     public RecordBatchVector(long n) { allocate(n); }
     private native void allocate();
@@ -26,10 +26,10 @@ public class RecordBatchVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr RecordBatch get(@Cast("size_t") long i);
+    @Index(function = "at") public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch get(@Cast("size_t") long i);
     public native RecordBatchVector put(@Cast("size_t") long i, RecordBatch value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr RecordBatch value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -39,7 +39,7 @@ public class RecordBatchVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const RecordBatch get();
+        public native @Name("operator*") @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch get();
     }
 
     public RecordBatch[] get() {

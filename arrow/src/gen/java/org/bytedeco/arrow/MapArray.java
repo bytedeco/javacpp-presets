@@ -22,48 +22,48 @@ public class MapArray extends ListArray {
     public MapArray(Pointer p) { super(p); }
 
 
-  public MapArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public MapArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   public MapArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array keys, @Const @SharedPtr @ByRef Array items,
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items,
              @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
              @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, value_offsets, keys, items, null_bitmap, null_count, offset); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array keys, @Const @SharedPtr @ByRef Array items,
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items,
              @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
              @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public MapArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array keys, @Const @SharedPtr @ByRef Array items) { super((Pointer)null); allocate(type, length, value_offsets, keys, items); }
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items) { super((Pointer)null); allocate(type, length, value_offsets, keys, items); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array keys, @Const @SharedPtr @ByRef Array items);
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items);
 
   public MapArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array values,
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
              @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
              @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, value_offsets, values, null_bitmap, null_count, offset); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array values,
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
              @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
              @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public MapArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array values) { super((Pointer)null); allocate(type, length, value_offsets, values); }
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values) { super((Pointer)null); allocate(type, length, value_offsets, values); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
              @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
-             @Const @SharedPtr @ByRef Array values);
+             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values);
 
   public native @Const MapType map_type();
 
   /** \brief Return array object containing all map keys */
-  public native @SharedPtr @ByVal Array keys();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys();
 
   /** \brief Return array object containing all mapped items */
-  public native @SharedPtr @ByVal Array items();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items();
 }

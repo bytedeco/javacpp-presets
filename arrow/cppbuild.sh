@@ -7,57 +7,199 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+LLVM_VERSION=7.1.0
+OPENSSL_VERSION=1.1.1d
+ZLIB_VERSION=1.2.11
+PROTO_VERSION=3.7.1
 ARROW_VERSION=0.15.1
+download https://releases.llvm.org/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
+download https://releases.llvm.org/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
+download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
+download https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz openssl-$OPENSSL_VERSION.tar.gz
+download http://zlib.net/zlib-$ZLIB_VERSION.tar.gz zlib-$ZLIB_VERSION.tar.gz
+download https://github.com/google/protobuf/releases/download/v$PROTO_VERSION/protobuf-cpp-$PROTO_VERSION.tar.gz protobuf-$PROTO_VERSION.tar.gz
 download https://www.apache.org/dist/arrow/arrow-$ARROW_VERSION/apache-arrow-$ARROW_VERSION.tar.gz apache-arrow-$ARROW_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-echo "Decompressing archives..."
+echo "Decompressing archives... (ignore any symlink errors)"
 tar --totals -xzf ../apache-arrow-$ARROW_VERSION.tar.gz
-cd apache-arrow-$ARROW_VERSION/cpp
+tar --totals -xzf ../protobuf-$PROTO_VERSION.tar.gz
+tar --totals -xzf ../zlib-$ZLIB_VERSION.tar.gz
+tar --totals -xzf ../openssl-$OPENSSL_VERSION.tar.gz
+tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
+cd llvm-$LLVM_VERSION.src
+mkdir -p build tools
+cd tools
+tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz
+rm -Rf clang
+mv cfe-$LLVM_VERSION.src clang
+cd ../build
+
+sedinplace 's/BOOST_VERSION=1.67.0/BOOST_VERSION=1.70.0/g' ../../apache-arrow-$ARROW_VERSION/cpp/thirdparty/versions.txt
+
+COMPONENTS="-DARROW_FLIGHT=ON -DARROW_GANDIVA=ON -DARROW_ORC=ON -DARROW_PARQUET=ON -DARROW_PLASMA=ON -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
 
 case $PLATFORM in
     linux-armhf)
-        CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++ -std=c++11" "$CMAKE" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
+        mkdir -p ../tblgen
+        cd ../tblgen
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_DEFAULT_TARGET_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_TARGET_ARCH=ARM -DLLVM_TARGETS_TO_BUILD=ARM -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ llvm-tblgen clang-tblgen
+        TBLGEN=`pwd`
+        mkdir -p ../build
+        cd ../build
+        export CC="arm-linux-gnueabihf-gcc"
+        export CXX="arm-linux-gnueabihf-g++ -std=c++11"
+        "$CMAKE" -DCMAKE_EXE_LINKER_FLAGS="-ldl" -DCMAKE_SHARED_LINKER_FLAGS="-ldl" -DLLVM_CCACHE_BUILD=ON -DCMAKE_CROSSCOMPILING=True -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLLVM_TABLEGEN="$TBLGEN/bin/llvm-tblgen" -DCLANG_TABLEGEN="$TBLGEN/bin/clang-tblgen" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_DEFAULT_TARGET_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_TARGET_ARCH=ARM -DLLVM_TARGETS_TO_BUILD=ARM -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ../../openssl-$OPENSSL_VERSION
+        ./Configure linux-generic32 -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=arm-linux-gnueabihf-
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../apache-arrow-$ARROW_VERSION/cpp
+        "$CMAKE" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-arm64)
-        CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++ -std=c++11" "$CMAKE" -DCMAKE_C_FLAGS="-mabi=lp64" -DCMAKE_CXX_FLAGS="-std=c++11 -mabi=lp64" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
+        mkdir -p ../tblgen
+        cd ../tblgen
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_TARGET_ARCH=AArch64 -DLLVM_TARGETS_TO_BUILD=AArch64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ llvm-tblgen clang-tblgen
+        TBLGEN=`pwd`
+        mkdir -p ../build
+        cd ../build
+        export CC="aarch64-linux-gnu-gcc"
+        export CXX="aarch64-linux-gnu-g++ -std=c++11"
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_CROSSCOMPILING=True -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLLVM_TABLEGEN="$TBLGEN/bin/llvm-tblgen" -DCLANG_TABLEGEN="$TBLGEN/bin/clang-tblgen" -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_TARGET_ARCH=AArch64 -DLLVM_TARGETS_TO_BUILD=AArch64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ../../openssl-$OPENSSL_VERSION
+        ./Configure linux-aarch64 -march=armv8-a+crypto -mcpu=cortex-a57+crypto -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu-
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../apache-arrow-$ARROW_VERSION/cpp
+        "$CMAKE" -DCMAKE_C_FLAGS="-mabi=lp64" -DCMAKE_CXX_FLAGS="-std=c++11 -mabi=lp64" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-ppc64le)
-        CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-gcc++ -std=c++11" "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
+        mkdir -p ../tblgen
+        cd ../tblgen
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_TARGET_ARCH=PowerPC -DLLVM_TARGETS_TO_BUILD=PowerPC -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ llvm-tblgen clang-tblgen
+        TBLGEN=`pwd`
+        mkdir -p ../build
+        cd ../build
+        export CC="powerpc64le-linux-gnu-gcc"
+        export CXX="powerpc64le-linux-gnu-g++ -std=c++11"
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_CROSSCOMPILING=True -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLLVM_TABLEGEN="$TBLGEN/bin/llvm-tblgen" -DCLANG_TABLEGEN="$TBLGEN/bin/clang-tblgen" -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_TARGET_ARCH=PowerPC -DLLVM_TARGETS_TO_BUILD=PowerPC -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ../../openssl-$OPENSSL_VERSION
+        ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=powerpc64le-linux-gnu-
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../apache-arrow-$ARROW_VERSION/cpp
+        "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-x86)
-        CC="gcc -m32" CXX="g++ -std=c++11 -m32" "$CMAKE" -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-std=c++11 -m32" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
+        export CC="gcc -m32"
+        export CXX="g++ -std=c++11 -m32"
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ../../openssl-$OPENSSL_VERSION
+        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../apache-arrow-$ARROW_VERSION/cpp
+        "$CMAKE" -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-std=c++11 -m32" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-x86_64)
-        CC="gcc -m64" CXX="g++ -std=c++11 -m64" "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
+        export CC="gcc -m64"
+        export CXX="g++ -std=c++11 -m64"
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ../../openssl-$OPENSSL_VERSION
+        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../apache-arrow-$ARROW_VERSION/cpp
+        "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-*)
-        CC="clang" CXX="clang++" "$CMAKE" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
+        export CC="clang"
+        export CXX="clang++"
+        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ../../openssl-$OPENSSL_VERSION
+        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../apache-arrow-$ARROW_VERSION/cpp
+        sedinplace 's/"cxxflags=-fPIC"/"toolset=clang" "cxxflags=-fPIC"/g' cmake_modules/ThirdpartyToolchain.cmake
+        "$CMAKE" -DCLANG_EXECUTABLE="/usr/bin/clang" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     windows-x86)
-        cd ../..
-        "$CMAKE" -G "Visual Studio 15 2017" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF apache-arrow-$ARROW_VERSION/cpp
+        "$CMAKE" -G "Visual Studio 15 2017" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        cd ../..
+        unzip -o ../cpython-bin-deps-openssl-bin.zip
+        cd cpython-bin-deps-openssl-bin/
+        cp -r win32/include/* ../include
+        cp win32/*.dll ../bin
+        cp win32/*.lib ../lib
+        cd ../zlib-$ZLIB_VERSION
+        nmake -f win32/Makefile.msc zlib.lib
+        cp *.h ../include
+        cp zlib.lib ../lib
+        cd ../protobuf-$PROTO_VERSION
+        "$CMAKE" -G "Visual Studio 15 2017" -Dprotobuf_MSVC_STATIC_RUNTIME=OFF -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_LIB="$INSTALL_PATH/lib" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF cmake
+        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        cd ..
+        sedinplace 's/PROTOBUF_USE_DLLS/DISABLE_PROTOBUF_USE_DLLS/g' include/google/protobuf/*.h include/google/protobuf/*.inc include/google/protobuf/stubs/*
+        sedinplace 's/bin\/grpc_cpp_plugin/bin\/grpc_cpp_plugin.exe/g' apache-arrow-$ARROW_VERSION/cpp/cmake_modules/ThirdpartyToolchain.cmake
+        sedinplace "s:Ws2_32.lib:../../../lib/zlib Ws2_32.lib:g" apache-arrow-$ARROW_VERSION/cpp/src/arrow/flight/CMakeLists.txt
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" apache-arrow-$ARROW_VERSION/cpp
+        PATH="/c/Python27/:$PATH" MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd apache-arrow-$ARROW_VERSION/cpp
         ;;
     windows-x86_64)
-        cd ../..
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF apache-arrow-$ARROW_VERSION/cpp
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        cd ../..
+        unzip -o ../cpython-bin-deps-openssl-bin.zip
+        cd cpython-bin-deps-openssl-bin/
+        cp -r amd64/include/* ../include
+        cp amd64/*.dll ../bin
+        cp amd64/*.lib ../lib
+        cd ../zlib-$ZLIB_VERSION
+        nmake -f win32/Makefile.msc zlib.lib
+        cp *.h ../include
+        cp zlib.lib ../lib
+        cd ../protobuf-$PROTO_VERSION
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" -Dprotobuf_MSVC_STATIC_RUNTIME=OFF -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_LIB="$INSTALL_PATH/lib" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF cmake
+        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        cd ..
+        sedinplace 's/PROTOBUF_USE_DLLS/DISABLE_PROTOBUF_USE_DLLS/g' include/google/protobuf/*.h include/google/protobuf/*.inc include/google/protobuf/stubs/*
+        sedinplace 's/bin\/grpc_cpp_plugin/bin\/grpc_cpp_plugin.exe/g' apache-arrow-$ARROW_VERSION/cpp/cmake_modules/ThirdpartyToolchain.cmake
+        sedinplace "s:Ws2_32.lib:../../../lib/zlib Ws2_32.lib:g" apache-arrow-$ARROW_VERSION/cpp/src/arrow/flight/CMakeLists.txt
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" apache-arrow-$ARROW_VERSION/cpp
+        PATH="/c/Python27/:$PATH" MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd apache-arrow-$ARROW_VERSION/cpp
         ;;
     *)

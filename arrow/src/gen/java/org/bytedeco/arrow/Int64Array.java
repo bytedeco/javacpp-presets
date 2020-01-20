@@ -15,8 +15,8 @@ public class Int64Array extends PrimitiveArray {
     public Int64Array(Pointer p) { super(p); }
 
 
-  public Int64Array(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public Int64Array(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   // Only enable this constructor without a type argument for types without additional
   // metadata

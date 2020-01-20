@@ -43,7 +43,7 @@ public class ExtensionType extends DataType {
 
   /** \brief Wrap built-in Array type in a user-defined ExtensionArray instance
    *  @param data [in] the physical storage for the extension type */
-  public native @SharedPtr @ByVal Array MakeArray(@SharedPtr @ByVal ArrayData data);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array MakeArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   /** \brief Create an instance of the ExtensionType given the actual storage
    *  type and the serialized representation

@@ -17,8 +17,8 @@ public class BooleanArray extends PrimitiveArray {
     public BooleanArray(Pointer p) { super(p); }
 
 
-  public BooleanArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public BooleanArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   public BooleanArray(@Cast("int64_t") long length, @Const @SharedPtr @ByRef ArrowBuffer data,
                  @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,

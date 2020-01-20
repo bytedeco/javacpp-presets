@@ -20,8 +20,8 @@ public class UnionArray extends Array {
     public UnionArray(Pointer p) { super(p); }
 
 
-  public UnionArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public UnionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   
   ///
@@ -259,5 +259,5 @@ public class UnionArray extends Array {
   // For sparse unions, the returned array has its offset, length and null
   // count adjusted.
   // For dense unions, the returned array is unchanged.
-  public native @SharedPtr @ByVal Array child(int pos);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array child(int pos);
 }

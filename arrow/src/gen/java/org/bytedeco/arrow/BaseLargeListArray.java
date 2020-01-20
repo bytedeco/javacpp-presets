@@ -27,7 +27,7 @@ public class BaseLargeListArray extends Array {
   public native @Cast("const arrow::BaseListArray<arrow::LargeListType>::TypeClass*") LargeListType list_type();
 
   /** \brief Return array object containing the list's values */
-  public native @SharedPtr @ByVal Array values();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values();
 
   /** Note that this buffer does not account for any slice offset */
   public native @SharedPtr @ByVal ArrowBuffer value_offsets();
@@ -40,5 +40,5 @@ public class BaseLargeListArray extends Array {
   // The following functions will not perform boundschecking
   public native @Cast("arrow::BaseListArray<arrow::LargeListType>::offset_type") long value_offset(@Cast("int64_t") long i);
   public native @Cast("arrow::BaseListArray<arrow::LargeListType>::offset_type") long value_length(@Cast("int64_t") long i);
-  public native @SharedPtr @ByVal Array value_slice(@Cast("int64_t") long i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value_slice(@Cast("int64_t") long i);
 }

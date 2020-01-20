@@ -16,8 +16,8 @@ public class LargeBinaryArray extends BaseLargeBinaryArray {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LargeBinaryArray(Pointer p) { super(p); }
 
-  public LargeBinaryArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public LargeBinaryArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   public LargeBinaryArray(@Cast("int64_t") long length, @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
                      @Const @SharedPtr @ByRef ArrowBuffer data,

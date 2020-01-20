@@ -20,8 +20,8 @@ public class StructArray extends Array {
     public StructArray(Pointer p) { super(p); }
 
 
-  public StructArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public StructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   
   ///
@@ -72,13 +72,13 @@ public class StructArray extends Array {
   // Return a shared pointer in case the requestor desires to share ownership
   // with this array.  The returned array has its offset, length and null
   // count adjusted.
-  public native @SharedPtr @ByVal Array field(int pos);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array field(int pos);
 
   /** Returns null if name not found */
   
   ///
-  public native @SharedPtr @ByVal Array GetFieldByName(@StdString String name);
-  public native @SharedPtr @ByVal Array GetFieldByName(@StdString BytePointer name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array GetFieldByName(@StdString String name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array GetFieldByName(@StdString BytePointer name);
 
   /** \brief Flatten this array as a vector of arrays, one for each field
    * 
