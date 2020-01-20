@@ -17,8 +17,8 @@ public class DictionaryMemoTable extends Pointer {
 
   public DictionaryMemoTable(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-  public DictionaryMemoTable(@Const @SharedPtr @ByRef Array dictionary) { super((Pointer)null); allocate(dictionary); }
-  private native void allocate(@Const @SharedPtr @ByRef Array dictionary);
+  public DictionaryMemoTable(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary) { super((Pointer)null); allocate(dictionary); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary);
 
   public native int GetOrInsert(@Cast("const bool") boolean value);
   public native int GetOrInsert(byte value);

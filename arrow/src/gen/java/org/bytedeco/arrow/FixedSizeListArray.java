@@ -20,26 +20,26 @@ public class FixedSizeListArray extends Array {
     public FixedSizeListArray(Pointer p) { super(p); }
 
 
-  public FixedSizeListArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public FixedSizeListArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   public FixedSizeListArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                       @Const @SharedPtr @ByRef Array values,
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
                        @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
                        @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, values, null_bitmap, null_count, offset); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                       @Const @SharedPtr @ByRef Array values,
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
                        @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
                        @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public FixedSizeListArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                       @Const @SharedPtr @ByRef Array values) { super((Pointer)null); allocate(type, length, values); }
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values) { super((Pointer)null); allocate(type, length, values); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                       @Const @SharedPtr @ByRef Array values);
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values);
 
   public native @Const FixedSizeListType list_type();
 
   /** \brief Return array object containing the list's values */
-  public native @SharedPtr @ByVal Array values();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values();
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type();
 
@@ -47,5 +47,5 @@ public class FixedSizeListArray extends Array {
   public native int value_offset(@Cast("int64_t") long i);
   public native int value_length(@Cast("int64_t") long i/*=0*/);
   public native int value_length();
-  public native @SharedPtr @ByVal Array value_slice(@Cast("int64_t") long i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value_slice(@Cast("int64_t") long i);
 }

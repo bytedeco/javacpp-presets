@@ -35,23 +35,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>javacpp-${javacpp.platform}</id>
-            <phase>package</phase>
-            <configuration>
-              <excludes>
-                <exclude>org/bytedeco/arrow/${javacpp.platform}/*.exp</exclude>
-                <exclude>org/bytedeco/arrow/${javacpp.platform}/*.lib</exclude>
-                <exclude>org/bytedeco/arrow/${javacpp.platform}/*.obj</exclude>
-                <exclude>org/bytedeco/arrow/${javacpp.platform}/lib/libarrow*</exclude>
-                <exclude>org/bytedeco/arrow/${javacpp.platform}/lib/*static.lib</exclude>
-                <exclude>${javacpp.platform.library.path}/lib/libarrow*</exclude>
-                <exclude>${javacpp.platform.library.path}/lib/*static.lib</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.moditect</groupId>

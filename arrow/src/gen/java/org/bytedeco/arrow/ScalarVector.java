@@ -13,8 +13,8 @@ public class ScalarVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScalarVector(Pointer p) { super(p); }
-    public ScalarVector(Scalar value) { this(1); put(0, value); }
-    public ScalarVector(Scalar ... array) { this(array.length); put(array); }
+    public ScalarVector(@Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value) { this(1); put(0, value); }
+    public ScalarVector(@Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar ... array) { this(array.length); put(array); }
     public ScalarVector()       { allocate();  }
     public ScalarVector(long n) { allocate(n); }
     private native void allocate();
@@ -26,10 +26,10 @@ public class ScalarVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr Scalar get(@Cast("size_t") long i);
+    @Index(function = "at") public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar get(@Cast("size_t") long i);
     public native ScalarVector put(@Cast("size_t") long i, Scalar value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Scalar value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -39,7 +39,7 @@ public class ScalarVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const Scalar get();
+        public native @Name("operator*") @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar get();
     }
 
     public Scalar[] get() {

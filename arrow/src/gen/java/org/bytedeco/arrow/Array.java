@@ -82,9 +82,9 @@ public class Array extends Pointer {
   /** Approximate equality comparison with another array
    * 
    *  epsilon is only used if this is FloatArray or DoubleArray */
-  public native @Cast("bool") boolean ApproxEquals(@Const @SharedPtr @ByRef Array arr,
+  public native @Cast("bool") boolean ApproxEquals(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array arr,
                       @Const @ByRef(nullValue = "arrow::EqualOptions::Defaults()") EqualOptions arg1);
-  public native @Cast("bool") boolean ApproxEquals(@Const @SharedPtr @ByRef Array arr);
+  public native @Cast("bool") boolean ApproxEquals(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array arr);
 
   /** Compare if the range of slots specified are equal for the given array and
    *  this array.  end_idx exclusive.  This methods does not bounds check. */
@@ -117,12 +117,12 @@ public class Array extends Pointer {
    *  elements in the array, the length will be adjusted accordingly
    * 
    *  @return a new object wrapped in std::shared_ptr<Array> */
-  public native @SharedPtr @ByVal Array Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
 
   /** Slice from offset until end of the array */
-  public native @SharedPtr @ByVal Array Slice(@Cast("int64_t") long offset);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array Slice(@Cast("int64_t") long offset);
 
-  public native @SharedPtr @ByVal ArrayData data();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data();
 
   public native int num_fields();
 

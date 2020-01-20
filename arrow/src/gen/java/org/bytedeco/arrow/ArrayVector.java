@@ -13,8 +13,8 @@ public class ArrayVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ArrayVector(Pointer p) { super(p); }
-    public ArrayVector(Array value) { this(1); put(0, value); }
-    public ArrayVector(Array ... array) { this(array.length); put(array); }
+    public ArrayVector(@Cast({"", "std::shared_ptr<arrow::Array>"}) Array value) { this(1); put(0, value); }
+    public ArrayVector(@Cast({"", "std::shared_ptr<arrow::Array>"}) Array ... array) { this(array.length); put(array); }
     public ArrayVector()       { allocate();  }
     public ArrayVector(long n) { allocate(n); }
     private native void allocate();
@@ -26,10 +26,10 @@ public class ArrayVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr Array get(@Cast("size_t") long i);
+    @Index(function = "at") public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array get(@Cast("size_t") long i);
     public native ArrayVector put(@Cast("size_t") long i, Array value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Array value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -39,7 +39,7 @@ public class ArrayVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const Array get();
+        public native @Name("operator*") @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array get();
     }
 
     public Array[] get() {

@@ -17,8 +17,8 @@ public class NullArray extends FlatArray {
     public NullArray(Pointer p) { super(p); }
 
 
-  public NullArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public NullArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
   public NullArray(@Cast("int64_t") long length) { super((Pointer)null); allocate(length); }
   private native void allocate(@Cast("int64_t") long length);
 }

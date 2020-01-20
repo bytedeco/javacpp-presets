@@ -17,8 +17,8 @@ public class LargeStringArray extends LargeBinaryArray {
     public LargeStringArray(Pointer p) { super(p); }
 
 
-  public LargeStringArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public LargeStringArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   public LargeStringArray(@Cast("int64_t") long length, @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
                      @Const @SharedPtr @ByRef ArrowBuffer data,

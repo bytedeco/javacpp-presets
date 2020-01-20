@@ -20,8 +20,8 @@ public class FixedSizeBinaryArray extends PrimitiveArray {
     public FixedSizeBinaryArray(Pointer p) { super(p); }
 
 
-  public FixedSizeBinaryArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public FixedSizeBinaryArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   public FixedSizeBinaryArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                          @Const @SharedPtr @ByRef ArrowBuffer data,

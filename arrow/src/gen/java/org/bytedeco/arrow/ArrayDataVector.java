@@ -13,8 +13,8 @@ public class ArrayDataVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ArrayDataVector(Pointer p) { super(p); }
-    public ArrayDataVector(ArrayData value) { this(1); put(0, value); }
-    public ArrayDataVector(ArrayData ... array) { this(array.length); put(array); }
+    public ArrayDataVector(@Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData value) { this(1); put(0, value); }
+    public ArrayDataVector(@Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData ... array) { this(array.length); put(array); }
     public ArrayDataVector()       { allocate();  }
     public ArrayDataVector(long n) { allocate(n); }
     private native void allocate();
@@ -26,10 +26,10 @@ public class ArrayDataVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr ArrayData get(@Cast("size_t") long i);
+    @Index(function = "at") public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData get(@Cast("size_t") long i);
     public native ArrayDataVector put(@Cast("size_t") long i, ArrayData value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr ArrayData value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -39,7 +39,7 @@ public class ArrayDataVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const ArrayData get();
+        public native @Name("operator*") @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData get();
     }
 
     public ArrayData[] get() {

@@ -37,18 +37,18 @@ public class DictionaryArray extends Array {
     public DictionaryArray(Pointer p) { super(p); }
 
 
-  public DictionaryArray(@Const @SharedPtr @ByRef ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrayData data);
+  public DictionaryArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
 
   
   ///
   ///
   public DictionaryArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                    @Const @SharedPtr @ByRef Array indices,
-                    @Const @SharedPtr @ByRef Array dictionary) { super((Pointer)null); allocate(type, indices, dictionary); }
+                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array indices,
+                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary) { super((Pointer)null); allocate(type, indices, dictionary); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                    @Const @SharedPtr @ByRef Array indices,
-                    @Const @SharedPtr @ByRef Array dictionary);
+                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array indices,
+                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary);
 
   /** \brief Construct DictionaryArray from dictionary and indices
    *  array and validate
@@ -66,8 +66,8 @@ public class DictionaryArray extends Array {
   ///
   ///
   public static native @ByVal Status FromArrays(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                             @Const @SharedPtr @ByRef Array indices,
-                             @Const @SharedPtr @ByRef Array dictionary,
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array indices,
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary,
                              @SharedPtr Array out);
 
   /** \brief Transpose this DictionaryArray
@@ -84,13 +84,13 @@ public class DictionaryArray extends Array {
    *  into the target array's indices
    *  @param out [out] the resulting DictionaryArray instance */
   public native @ByVal Status Transpose(MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                     @Const @SharedPtr @ByRef Array dictionary, @Const IntPointer transpose_map,
+                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary, @Const IntPointer transpose_map,
                      @SharedPtr Array out);
   public native @ByVal Status Transpose(MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                     @Const @SharedPtr @ByRef Array dictionary, @Const IntBuffer transpose_map,
+                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary, @Const IntBuffer transpose_map,
                      @SharedPtr Array out);
   public native @ByVal Status Transpose(MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                     @Const @SharedPtr @ByRef Array dictionary, @Const int[] transpose_map,
+                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary, @Const int[] transpose_map,
                      @SharedPtr Array out);
 
   /** \brief Determine whether dictionary arrays may be compared without unification */
@@ -98,8 +98,8 @@ public class DictionaryArray extends Array {
 
   /** \brief Return the dictionary for this array, which is stored as
    *  a member of the ArrayData internal structure */
-  public native @SharedPtr @ByVal Array dictionary();
-  public native @SharedPtr @ByVal Array indices();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array indices();
 
   public native @Const DictionaryType dict_type();
 }

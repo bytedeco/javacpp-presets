@@ -91,30 +91,30 @@ public class ArrayData extends Pointer {
               @Const @ByRef ArrowBufferVector buffers,
               @Const @ByRef ArrayDataVector child_data);
 
-  public static native @SharedPtr @ByVal ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                                            @Cast("int64_t") long length,
                                            @ByVal ArrowBufferVector buffers,
                                            @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/,
                                            @Cast("int64_t") long offset/*=0*/);
-  public static native @SharedPtr @ByVal ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                                            @Cast("int64_t") long length,
                                            @ByVal ArrowBufferVector buffers);
 
-  public static native @SharedPtr @ByVal ArrayData Make(
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
         @Const @ByRef ArrowBufferVector buffers,
         @Const @ByRef ArrayDataVector child_data,
         @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
-  public static native @SharedPtr @ByVal ArrayData Make(
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
         @Const @ByRef ArrowBufferVector buffers,
         @Const @ByRef ArrayDataVector child_data);
 
-  public static native @SharedPtr @ByVal ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                                            @Cast("int64_t") long length,
                                            @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/,
                                            @Cast("int64_t") long offset/*=0*/);
-  public static native @SharedPtr @ByVal ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                                            @Cast("int64_t") long length);
 
   // Move constructor
@@ -128,7 +128,7 @@ public class ArrayData extends Pointer {
 
   // Copy assignment
 
-  public native @SharedPtr @ByVal ArrayData Copy();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Copy();
 
   // Access a buffer's data as a typed C pointer
   public native @Const @Name("GetValues<jbyte>") BytePointer GetValuesByte(int i, @Cast("int64_t") long absolute_offset);
@@ -172,5 +172,5 @@ public class ArrayData extends Pointer {
 
   // The dictionary for this Array, if any. Only used for dictionary
   // type
-  public native @SharedPtr @ByRef Array dictionary(); public native ArrayData dictionary(Array setter);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary(); public native ArrayData dictionary(Array setter);
 }

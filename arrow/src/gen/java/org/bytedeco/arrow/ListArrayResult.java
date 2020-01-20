@@ -7,60 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-  // namespace internal
 
-// A class for representing either a usable value, or an error.
-/**
- *  A Result object either contains a value of type {@code T} or a Status object
- *  explaining why such a value is not present. The type {@code T} must be
- *  copy-constructible and/or move-constructible.
- * 
- *  The state of a Result object may be determined by calling ok() or
- *  status(). The ok() method returns true if the object contains a valid value.
- *  The status() method returns the internal Status object. A Result object
- *  that contains a valid value will return an OK Status for a call to status().
- * 
- *  A value of type {@code T} may be extracted from a Result object through a call
- *  to ValueOrDie(). This function should only be called if a call to ok()
- *  returns true. Sample usage:
- * 
- *  <pre>{@code
- *    arrow::Result<Foo> result = CalculateFoo();
- *    if (result.ok()) {
- *      Foo foo = result.ValueOrDie();
- *      foo.DoSomethingCool();
- *    } else {
- *      ARROW_LOG(ERROR) << result.status();
- *   }
- *  }</pre>
- * 
- *  If {@code T} is a move-only type, like {@code std::unique_ptr<>}, then the value should
- *  only be extracted after invoking {@code std::move()} on the Result object.
- *  Sample usage:
- * 
- *  <pre>{@code
- *    arrow::Result<std::unique_ptr<Foo>> result = CalculateFoo();
- *    if (result.ok()) {
- *      std::unique_ptr<Foo> foo = std::move(result).ValueOrDie();
- *      foo->DoSomethingCool();
- *    } else {
- *      ARROW_LOG(ERROR) << result.status();
- *    }
- *  }</pre>
- * 
- *  Result is provided for the convenience of implementing functions that
- *  return some value but may fail during execution. For instance, consider a
- *  function with the following signature:
- * 
- *  <pre>{@code
- *    arrow::Status CalculateFoo(int *output);
- *  }</pre>
- * 
- *  This function may instead be written as:
- * 
- *  <pre>{@code
- *    arrow::Result<int> CalculateFoo();
- *  }</pre> */
 @Name("arrow::Result<std::shared_ptr<arrow::ListArray> >") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class ListArrayResult extends Pointer {
     static { Loader.load(); }

@@ -28,8 +28,8 @@ public class ChunkedArray extends Pointer {
   /** \brief Construct a chunked array from a single Array */
   
   ///
-  public ChunkedArray(@Const @SharedPtr @ByRef Array chunk) { super((Pointer)null); allocate(chunk); }
-  private native void allocate(@Const @SharedPtr @ByRef Array chunk);
+  public ChunkedArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array chunk) { super((Pointer)null); allocate(chunk); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array chunk);
 
   /** \brief Construct a chunked array from a vector of arrays and a data type
    * 
@@ -46,7 +46,7 @@ public class ChunkedArray extends Pointer {
   public native int num_chunks();
 
   /** @return chunk a particular chunk from the chunked array */
-  public native @SharedPtr @ByVal Array chunk(int i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array chunk(int i);
 
   
   ///
@@ -62,12 +62,12 @@ public class ChunkedArray extends Pointer {
    *  elements in the chunked array, the length will be adjusted accordingly
    * 
    *  @return a new object wrapped in std::shared_ptr<ChunkedArray> */
-  public native @SharedPtr @ByVal ChunkedArray Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
 
   /** \brief Slice from offset until end of the chunked array */
   
   ///
-  public native @SharedPtr @ByVal ChunkedArray Slice(@Cast("int64_t") long offset);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray Slice(@Cast("int64_t") long offset);
 
   /** \brief Flatten this chunked array as a vector of chunked arrays, one
    *  for each struct field

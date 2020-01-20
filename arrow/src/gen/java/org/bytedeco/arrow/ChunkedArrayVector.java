@@ -13,8 +13,8 @@ public class ChunkedArrayVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ChunkedArrayVector(Pointer p) { super(p); }
-    public ChunkedArrayVector(ChunkedArray value) { this(1); put(0, value); }
-    public ChunkedArrayVector(ChunkedArray ... array) { this(array.length); put(array); }
+    public ChunkedArrayVector(@Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray value) { this(1); put(0, value); }
+    public ChunkedArrayVector(@Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray ... array) { this(array.length); put(array); }
     public ChunkedArrayVector()       { allocate();  }
     public ChunkedArrayVector(long n) { allocate(n); }
     private native void allocate();
@@ -26,10 +26,10 @@ public class ChunkedArrayVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr ChunkedArray get(@Cast("size_t") long i);
+    @Index(function = "at") public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray get(@Cast("size_t") long i);
     public native ChunkedArrayVector put(@Cast("size_t") long i, ChunkedArray value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr ChunkedArray value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -39,7 +39,7 @@ public class ChunkedArrayVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const ChunkedArray get();
+        public native @Name("operator*") @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray get();
     }
 
     public ChunkedArray[] get() {

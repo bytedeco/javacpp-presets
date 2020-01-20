@@ -25,7 +25,7 @@ public class RecordBatch extends Pointer {
    *  @param num_rows [in] length of fields in the record batch. Each array
    *  should have the same length as num_rows
    *  @param columns [in] the record batch fields as vector of arrays */
-  public static native @SharedPtr @ByVal RecordBatch Make(
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch Make(
         @SharedPtr Schema schema, @Cast("int64_t") long num_rows,
         @Const @ByRef ArrayVector columns);
 
@@ -41,14 +41,14 @@ public class RecordBatch extends Pointer {
    *  @param num_rows the number of semantic rows in the record batch. This
    *  should be equal to the length of each field
    *  @param columns the data for the batch's columns */
-  public static native @SharedPtr @ByVal RecordBatch Make(
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch Make(
         @SharedPtr Schema schema, @Cast("int64_t") long num_rows,
         @ByVal ArrayDataVector columns);
 
   /** \brief Construct record batch by copying vector of array data
    *  @since 0.5.0 */
 
-  public static native @ByVal Status FromStructArray(@Const @SharedPtr @ByRef Array array,
+  public static native @ByVal Status FromStructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array array,
                                   @SharedPtr RecordBatch out);
 
   /** \brief Determine if two record batches are exactly equal
@@ -65,20 +65,20 @@ public class RecordBatch extends Pointer {
   /** \brief Retrieve an array from the record batch
    *  @param i [in] field index, does not boundscheck
    *  @return an Array object */
-  public native @SharedPtr @ByVal Array column(int i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column(int i);
 
   /** \brief Retrieve an array from the record batch
    *  @param name [in] field name
    *  @return an Array or null if no field was found */
-  public native @SharedPtr @ByVal Array GetColumnByName(@StdString String name);
-  public native @SharedPtr @ByVal Array GetColumnByName(@StdString BytePointer name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array GetColumnByName(@StdString String name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array GetColumnByName(@StdString BytePointer name);
 
   /** \brief Retrieve an array's internaldata from the record batch
    *  @param i [in] field index, does not boundscheck
    *  @return an internal ArrayData object */
   
   ///
-  public native @SharedPtr @ByVal ArrayData column_data(int i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData column_data(int i);
 
   /** \brief Add column to the record batch, producing a new RecordBatch
    * 
@@ -90,7 +90,7 @@ public class RecordBatch extends Pointer {
   ///
   ///
   public native @ByVal Status AddColumn(int i, @Const @SharedPtr @ByRef Field field,
-                             @Const @SharedPtr @ByRef Array column,
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column,
                              @SharedPtr RecordBatch out);
 
   /** \brief Add new nullable column to the record batch, producing a new
@@ -105,10 +105,10 @@ public class RecordBatch extends Pointer {
   
   ///
   public native @ByVal Status AddColumn(int i, @StdString String field_name,
-                             @Const @SharedPtr @ByRef Array column,
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column,
                              @SharedPtr RecordBatch out);
   public native @ByVal Status AddColumn(int i, @StdString BytePointer field_name,
-                             @Const @SharedPtr @ByRef Array column,
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column,
                              @SharedPtr RecordBatch out);
 
   /** \brief Remove column from the record batch, producing a new RecordBatch
@@ -117,7 +117,7 @@ public class RecordBatch extends Pointer {
    *  @param out [out] record batch with column removed */
   public native @ByVal Status RemoveColumn(int i, @SharedPtr RecordBatch out);
 
-  public native @SharedPtr @ByVal RecordBatch ReplaceSchemaMetadata(
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch ReplaceSchemaMetadata(
         @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata);
 
   /** \brief Name in i-th column */
@@ -132,13 +132,13 @@ public class RecordBatch extends Pointer {
   /** \brief Slice each of the arrays in the record batch
    *  @param offset [in] the starting offset to slice, through end of batch
    *  @return new record batch */
-  public native @SharedPtr @ByVal RecordBatch Slice(@Cast("int64_t") long offset);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch Slice(@Cast("int64_t") long offset);
 
   /** \brief Slice each of the arrays in the record batch
    *  @param offset [in] the starting offset to slice
    *  @param length [in] the number of elements to slice from offset
    *  @return new record batch */
-  public native @SharedPtr @ByVal RecordBatch Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
 
   /** \brief Check for schema or length inconsistencies
    *  @return Status */
