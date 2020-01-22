@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Spinnaker 1.19.0.22  https://www.ptgrey.com/spinnaker-sdk
+ * Spinnaker 1.27.0.48  https://www.ptgrey.com/spinnaker-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>spinnaker-platform</artifactId>
-            <version>1.19.0.22-1.5.2</version>
+            <version>1.27.0.48-1.5.2</version>
         </dependency>
     </dependencies>
     <build>
