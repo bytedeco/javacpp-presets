@@ -121,15 +121,14 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi 
   if [[ "$PROJ" =~ spinnaker ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
-        PACKAGE_NAME=spinnaker-1.27.0.48-Ubuntu16.04-amd64
-        if [[ $(find $HOME/downloads/$PACKAGE_NAME-pkg.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+        if [[ $(find $HOME/downloads/spinnaker-1.27.0.48-Ubuntu16.04-amd64-pkg.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found spinnaker in cache and size seems ok"
         else
           echo "Downloading spinnaker as not found in cache or too small"
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1DiI8mG1fyewEGWxW7keg-dqXk0rLwmAK $HOME/downloads/$PACKAGE_NAME-pkg.tar.gz
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1DiI8mG1fyewEGWxW7keg-dqXk0rLwmAK $HOME/downloads/spinnaker-1.27.0.48-Ubuntu16.04-amd64-pkg.tar.gz
         fi
-        tar xzvf $HOME/downloads/$PACKAGE_NAME-pkg.tar.gz -C $TRAVIS_BUILD_DIR/../
-        ls $TRAVIS_BUILD_DIR/../$PACKAGE_NAME/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
+        tar xzvf $HOME/downloads/spinnaker-1.27.0.48-Ubuntu16.04-amd64-pkg.tar.gz -C $TRAVIS_BUILD_DIR/../
+        ls $TRAVIS_BUILD_DIR/../spinnaker-1.27.0.48-amd64/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
         ln -s libSpinnaker_C.so.1.27.0.48 usr/lib/libSpinnaker_C.so.1
         ln -s libSpinnaker.so.1.27.0.48 usr/lib/libSpinnaker.so.1
         cp -a usr $TRAVIS_BUILD_DIR/../
