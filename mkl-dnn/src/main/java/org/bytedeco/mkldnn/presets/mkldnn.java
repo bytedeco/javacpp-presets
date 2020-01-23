@@ -106,6 +106,7 @@ public class mkldnn implements InfoMapper {
 
                .put(new Info("mkldnn_stream_kind_t::mkldnn_any_stream").javaNames("mkldnn_any_stream"))
                .put(new Info("mkldnn_stream_kind_t::mkldnn_eager").javaNames("mkldnn_eager"))
-               .put(new Info("mkldnn_stream_kind_t::mkldnn_lazy").javaNames("mkldnn_lazy"));
+               .put(new Info("mkldnn_stream_kind_t::mkldnn_lazy").javaNames("mkldnn_lazy"))
+               .put(new Info("mkldnn_stream_kind_t::mkldnn_eager_nostore").javaNames("mkldnn_eager_nostore"));
     }
 }
