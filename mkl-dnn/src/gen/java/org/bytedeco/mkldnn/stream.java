@@ -42,7 +42,8 @@ public class stream extends mkldnn_stream_handle {
     /** enum mkldnn::stream::kind */
     public static final int any = mkldnn_any_stream,
         eager = mkldnn_eager,
-        lazy = mkldnn_lazy;
+        lazy = mkldnn_lazy,
+        eager_nostore = mkldnn_eager_nostore;
 
     public static native @Cast("mkldnn_stream_kind_t") int convert_to_c(@Cast("mkldnn::stream::kind") int akind);
     /** Constructs a stream. */

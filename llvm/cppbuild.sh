@@ -7,9 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=9.0.0
-download https://releases.llvm.org/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
-download https://releases.llvm.org/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
+LLVM_VERSION=9.0.1
+download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
+download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang-$LLVM_VERSION.src.tar.xz clang-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -19,9 +19,9 @@ tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$L
 cd llvm-$LLVM_VERSION.src
 mkdir -p build tools
 cd tools
-tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz
+tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz
 rm -Rf clang
-mv cfe-$LLVM_VERSION.src clang
+mv clang-$LLVM_VERSION.src clang
 sedinplace '/Generating libLLVM is not supported on MSVC/d' llvm-shlib/CMakeLists.txt
 cd ../build
 

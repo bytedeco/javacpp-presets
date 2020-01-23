@@ -121,7 +121,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * Arrow 0.15.x  https://arrow.apache.org/install/
  * HDF5 1.10.6  https://www.hdfgroup.org/downloads/
- * MKL 2019.5  https://software.intel.com/intel-mkl
+ * MKL 2020.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
  * DNNL 1.1.x  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.7  http://www.openblas.net/
@@ -133,7 +133,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.18.x  https://github.com/numpy/numpy
  * SciPy 1.4.x  https://github.com/scipy/scipy
  * Gym 0.15.4  https://github.com/openai/gym
- * LLVM 9.0.0  http://llvm.org/releases/download.html
+ * LLVM 9.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.79.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract

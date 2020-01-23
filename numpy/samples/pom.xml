@@ -10,14 +10,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.18.0-1.5.3-SNAPSHOT</version>
+            <version>1.18.1-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2019.5-1.5.3-SNAPSHOT</version>
+            <version>2020.0-1.5.3-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
