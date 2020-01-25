@@ -108,8 +108,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
 
  * OpenCV 4.2.0  https://opencv.org/releases.html
  * FFmpeg 4.2.x  http://ffmpeg.org/download.html
- * FlyCapture 2.13.x  http://www.ptgrey.com/flycapture-sdk
- * Spinnaker 1.19.x https://www.ptgrey.com/spinnaker-sdk
+ * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
+ * Spinnaker 1.27.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
