@@ -909,7 +909,10 @@ public static final int
     /** Eager stream. */
     mkldnn_eager = 1,
     /** Lazy stream. */
-    mkldnn_lazy = 2;
+    mkldnn_lazy = 2,
+    /** An eager stream that doesn't hold primitives inside it.
+     * Call to mkldnn_stream_rerun() always returns mkldnn_invalid_arguments. */
+    mkldnn_eager_nostore = 3;
 // Targeting ../mkldnn_stream.java
 
 
