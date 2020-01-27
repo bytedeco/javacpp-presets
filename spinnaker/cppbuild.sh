@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SPINNAKER_VERSION=1.19.0.22
+SPINNAKER_VERSION=1.27.0.48
 
 case $PLATFORM in
     linux-arm*)

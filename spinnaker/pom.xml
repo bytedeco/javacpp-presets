@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>spinnaker</artifactId>
-  <version>1.19.0.22-${project.parent.version}</version>
+  <version>1.27.0.48-${project.parent.version}</version>
   <name>JavaCPP Presets for Spinnaker</name>
 
   <dependencies>
