@@ -5,11 +5,11 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Spinnaker 1.19.0.22  https://www.ptgrey.com/spinnaker-sdk
+ * Spinnaker 1.27.0.48  https://www.flir.com/products/spinnaker-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
-The [Spinnaker SDK](https://www.ptgrey.com/spinnaker-sdk) is FLIR's next generation GenICam3 API library built for machine vision developers. The [Spinnaker SDK](https://www.ptgrey.com/spinnaker-sdk) is compatible with Oryx, Blackfly S, and all USB3 Vision camera models.
+The [Spinnaker SDK](https://www.flir.com/products/spinnaker-sdk) is FLIR's next generation GenICam3 API library built for machine vision developers. It is compatible with Oryx, Blackfly S, and all USB3 Vision camera models.
 
 
 Documentation
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.spinnaker</groupId>
     <artifactId>acquisition_c</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Acquisition_C</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>spinnaker-platform</artifactId>
-            <version>1.19.0.22-1.5.2</version>
+            <version>1.27.0.48-1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
