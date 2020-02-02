@@ -1,6 +1,6 @@
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc
---- tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc	2019-09-15 14:13:09.999915447 +0900
+diff -ruN tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc
+--- tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_graphdef.cc	2020-01-29 22:26:46.168800847 +0900
 @@ -221,7 +221,7 @@
    AttrValue index_attr;
    index_attr.set_i(index);
@@ -37,9 +37,9 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/ex
  }
  
  }  // namespace tensorflow
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc
---- tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc	2019-09-14 10:13:09.212318588 +0900
+diff -ruN tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc
+--- tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/translate/export_tf_dialect_op.cc	2020-01-29 22:26:46.169800843 +0900
 @@ -95,7 +95,7 @@
      return errors::Internal("Falied to populate derived attrs: " +
                              status.ToString());
@@ -49,9 +49,9 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/ex
  }
  
  }  // namespace tensorflow
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc
---- tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc	2019-09-15 18:14:16.753897176 +0900
+diff -ruN tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc
+--- tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/translate/import_model.cc	2020-01-29 22:26:46.169800843 +0900
 @@ -1548,7 +1548,7 @@
  
    TF_RETURN_IF_ERROR(importer.ImporterBase::Convert(
@@ -61,9 +61,9 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/translate/im
  }
  
  StatusOr<mlir::FunctionType> GraphDefImporter::InferMainFunctionType(
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc
---- tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc	2019-09-15 17:05:45.257118018 +0900
+diff -ruN tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc
+--- tensorflow-1.15.2/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/compiler/mlir/tensorflow/utils/export_utils.cc	2020-01-29 22:26:46.170800838 +0900
 @@ -221,7 +221,7 @@
    if (node_def->op() == "If") UpdateCompositeIfOp(node_def.get());
    if (node_def->op() == "While") UpdateCompositeWhileOp(node_def.get());
@@ -73,9 +73,9 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/compiler/mlir/tensorflow/utils/export
  }
  
  Status ConvertAttributes(const llvm::ArrayRef<mlir::NamedAttribute> attrs,
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc tensorflow-1.15.0-rc0-cuda/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc
---- tensorflow-1.15.0-rc0/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc	2019-09-11 11:15:18.067174795 +0900
+diff -ruN tensorflow-1.15.2/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc tensorflow-1.15.2-cuda/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc
+--- tensorflow-1.15.2/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc	2020-01-29 22:26:46.170800838 +0900
 @@ -43,8 +43,11 @@
  __global__ void SolveForSizeOneOrTwoKernel(const int m, const Scalar* diags,
                                             const Scalar* rhs, const int num_rhs,
@@ -100,9 +100,9 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/core/kernels/tridiagonal_solve_op_gpu
        *not_invertible = true;
        return;
      }
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc tensorflow-1.15.0-rc0-cuda/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc
---- tensorflow-1.15.0-rc0/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc	2019-09-12 22:58:12.186709986 +0900
+diff -ruN tensorflow-1.15.2/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc tensorflow-1.15.2-cuda/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc
+--- tensorflow-1.15.2/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/stream_executor/cuda/cuda_gpu_executor.cc	2020-01-29 22:26:46.170800838 +0900
 @@ -195,7 +195,7 @@
    _NSGetExecutablePath(nullptr, &buffer_size);
    char unresolved_path[buffer_size];
@@ -112,10 +112,10 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/stream_executor/cuda/cuda_gpu_executo
  #else
  #if defined(PLATFORM_WINDOWS)
    HMODULE hModule = GetModuleHandle(NULL);
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.15.0-rc0-cuda/tensorflow/tensorflow.bzl
---- tensorflow-1.15.0-rc0/tensorflow/tensorflow.bzl	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/tensorflow.bzl	2019-09-11 11:15:18.070174799 +0900
-@@ -363,7 +363,7 @@
+diff -ruN tensorflow-1.15.2/tensorflow/tensorflow.bzl tensorflow-1.15.2-cuda/tensorflow/tensorflow.bzl
+--- tensorflow-1.15.2/tensorflow/tensorflow.bzl	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/tensorflow.bzl	2020-01-29 22:26:46.171800833 +0900
+@@ -365,7 +365,7 @@
          )
  
  def _make_search_paths(prefix, levels_to_root):
@@ -124,10 +124,10 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.15.0-rc0-
          [
              "-rpath,%s/%s" % (prefix, "/".join([".."] * search_level))
              for search_level in range(levels_to_root + 1)
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/tools/pip_package/BUILD tensorflow-1.15.0-rc0-cuda/tensorflow/tools/pip_package/BUILD
---- tensorflow-1.15.0-rc0/tensorflow/tools/pip_package/BUILD	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/tools/pip_package/BUILD	2019-09-11 11:15:18.071174799 +0900
-@@ -232,7 +232,6 @@
+diff -ruN tensorflow-1.15.2/tensorflow/tools/pip_package/BUILD tensorflow-1.15.2-cuda/tensorflow/tools/pip_package/BUILD
+--- tensorflow-1.15.2/tensorflow/tools/pip_package/BUILD	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/tools/pip_package/BUILD	2020-01-29 22:26:46.171800833 +0900
+@@ -200,7 +200,6 @@
          "//conditions:default": [],
      }) + if_cuda([
          "@cub_archive//:LICENSE.TXT",
@@ -135,10 +135,10 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/tools/pip_package/BUILD tensorflow-1.
      ]) + if_mkl([
          "//third_party/mkl:LICENSE",
          "//third_party/mkl_dnn:LICENSE",
-diff -ruN tensorflow-1.15.0-rc0/tensorflow/workspace.bzl tensorflow-1.15.0-rc0-cuda/tensorflow/workspace.bzl
---- tensorflow-1.15.0-rc0/tensorflow/workspace.bzl	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/tensorflow/workspace.bzl	2019-09-11 11:38:17.787753483 +0900
-@@ -159,6 +159,7 @@
+diff -ruN tensorflow-1.15.2/tensorflow/workspace.bzl tensorflow-1.15.2-cuda/tensorflow/workspace.bzl
+--- tensorflow-1.15.2/tensorflow/workspace.bzl	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/tensorflow/workspace.bzl	2020-01-29 22:26:46.172800829 +0900
+@@ -157,6 +157,7 @@
      tf_http_archive(
          name = "com_google_absl",
          build_file = clean_dep("//third_party:com_google_absl.BUILD"),
@@ -146,9 +146,9 @@ diff -ruN tensorflow-1.15.0-rc0/tensorflow/workspace.bzl tensorflow-1.15.0-rc0-c
          sha256 = "acd93f6baaedc4414ebd08b33bebca7c7a46888916101d8c0b8083573526d070",
          strip_prefix = "abseil-cpp-43ef2148c0936ebf7cb4be6b19927a9d9d145b8f",
          urls = [
-diff -ruN tensorflow-1.15.0-rc0/third_party/absl.patch tensorflow-1.15.0-rc0-cuda/third_party/absl.patch
---- tensorflow-1.15.0-rc0/third_party/absl.patch	1970-01-01 09:00:00.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/third_party/absl.patch	2019-09-11 11:15:18.073174802 +0900
+diff -ruN tensorflow-1.15.2/third_party/absl.patch tensorflow-1.15.2-cuda/third_party/absl.patch
+--- tensorflow-1.15.2/third_party/absl.patch	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.15.2-cuda/third_party/absl.patch	2019-09-11 11:15:18.073174802 +0900
 @@ -0,0 +1,22 @@
 +diff -ruN abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89/absl/container/internal/compressed_tuple.h abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89-patch/absl/container/internal/compressed_tuple.h
 +--- abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89/absl/container/internal/compressed_tuple.h	2019-05-17 04:48:51.000000000 +0900
@@ -172,13 +172,13 @@ diff -ruN tensorflow-1.15.0-rc0/third_party/absl.patch tensorflow-1.15.0-rc0-cud
 +   }
 + };
 + 
-diff -ruN tensorflow-1.15.0-rc0/third_party/eigen3/gpu_packet_math.patch tensorflow-1.15.0-rc0-cuda/third_party/eigen3/gpu_packet_math.patch
---- tensorflow-1.15.0-rc0/third_party/eigen3/gpu_packet_math.patch	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/third_party/eigen3/gpu_packet_math.patch	2019-09-11 11:15:18.073174802 +0900
-@@ -22,3 +22,14 @@
-      return res;
-    }
-  };
+diff -ruN tensorflow-1.15.2/third_party/eigen3/gpu_packet_math.patch tensorflow-1.15.2-cuda/third_party/eigen3/gpu_packet_math.patch
+--- tensorflow-1.15.2/third_party/eigen3/gpu_packet_math.patch	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/third_party/eigen3/gpu_packet_math.patch	2020-01-29 22:26:59.093742824 +0900
+@@ -150,3 +150,14 @@
+ +}  // end namespace Eigen
+ +
+ +#endif  // HIP_VECTOR_COMPATIBILITY_H
 +--- a/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h
 ++++ b/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h
 +@@ -15,7 +15,7 @@
@@ -190,9 +190,9 @@ diff -ruN tensorflow-1.15.0-rc0/third_party/eigen3/gpu_packet_math.patch tensorf
 + #if defined(EIGEN_GPU_COMPILE_PHASE)
 +   // We don't support 3d kernels since we currently only use 1 and
 +   // 2d kernels.
-diff -ruN tensorflow-1.15.0-rc0/third_party/protobuf/protobuf.patch tensorflow-1.15.0-rc0-cuda/third_party/protobuf/protobuf.patch
---- tensorflow-1.15.0-rc0/third_party/protobuf/protobuf.patch	2019-09-09 05:24:52.000000000 +0900
-+++ tensorflow-1.15.0-rc0-cuda/third_party/protobuf/protobuf.patch	2019-09-11 11:41:22.839965175 +0900
+diff -ruN tensorflow-1.15.2/third_party/protobuf/protobuf.patch tensorflow-1.15.2-cuda/third_party/protobuf/protobuf.patch
+--- tensorflow-1.15.2/third_party/protobuf/protobuf.patch	2020-01-26 12:57:51.000000000 +0900
++++ tensorflow-1.15.2-cuda/third_party/protobuf/protobuf.patch	2020-01-29 22:26:46.172800829 +0900
 @@ -20,3 +20,38 @@
       includes = ["src/"],
       visibility = ["//visibility:public"],

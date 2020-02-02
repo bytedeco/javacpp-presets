@@ -10,22 +10,22 @@ fi
 export PYTHON_BIN_PATH=$(which python3)
 export USE_DEFAULT_PYTHON_LIB_PATH=1
 export CC_OPT_FLAGS=-O3
-export TF_NEED_MKL=0
-export TF_NEED_VERBS=0
-export TF_NEED_JEMALLOC=0
+#export TF_NEED_MKL=0
+#export TF_NEED_VERBS=0
+#export TF_NEED_JEMALLOC=0
+#export TF_NEED_AWS=0
+#export TF_NEED_GCP=0
+#export TF_NEED_HDFS=0
+#export TF_NEED_KAFKA=0
+#export TF_NEED_S3=0
+#export TF_NEED_OPENCL=0
+#export TF_NEED_GDR=0
+#export TF_NEED_TENSORRT=0
+#export TF_NEED_NGRAPH=0
+#export TF_NEED_IGNITE=0
 export TF_NEED_CUDA=0
-export TF_NEED_AWS=0
-export TF_NEED_GCP=0
-export TF_NEED_HDFS=0
-export TF_NEED_KAFKA=0
-export TF_NEED_S3=0
-export TF_NEED_OPENCL=0
 export TF_NEED_OPENCL_SYCL=0
 export TF_NEED_MPI=0
-export TF_NEED_GDR=0
-export TF_NEED_TENSORRT=0
-export TF_NEED_NGRAPH=0
-export TF_NEED_IGNITE=0
 export TF_NEED_ROCM=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
@@ -42,10 +42,9 @@ export NCCL_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TENSORRT_INSTALL_PATH=/usr/local/tensorrt
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
-export TF_IGNORE_MAX_BAZEL_VERSION=1
-export TF_CONFIGURE_IOS=0
+#export TF_IGNORE_MAX_BAZEL_VERSION=1
 
-TENSORFLOW_VERSION=1.15.0
+TENSORFLOW_VERSION=1.15.2
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -131,12 +130,12 @@ sedinplace 's/NvInferRTSafe.h/NvInferRuntimeCommon.h/g' third_party/tensorrt/ten
 sedinplace 's/NvInferRTExt.h/NvInferRuntime.h/g' third_party/tensorrt/tensorrt_configure.bzl
 
 export GPU_FLAGS=
-export CMAKE_GPU_FLAGS=
+#export CMAKE_GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
     export TF_NEED_CUDA=1
     export TF_NEED_TENSORRT=1
     export GPU_FLAGS="--config=cuda"
-    export CMAKE_GPU_FLAGS="-Dtensorflow_ENABLE_GPU=ON -Dtensorflow_CUDA_VERSION=$TF_CUDA_VERSION -Dtensorflow_CUDNN_VERSION=$TF_CUDNN_VERSION"
+    #export CMAKE_GPU_FLAGS="-Dtensorflow_ENABLE_GPU=ON -Dtensorflow_CUDA_VERSION=$TF_CUDA_VERSION -Dtensorflow_CUDNN_VERSION=$TF_CUDNN_VERSION"
 fi
 
 if [[ "$TF_NEED_CUDA" == 0 ]] || [[ ! -d "$TENSORRT_INSTALL_PATH" ]]; then
@@ -193,7 +192,7 @@ case $PLATFORM in
         ;;
     linux-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch
-        export TF_NEED_MKL=1
+        #export TF_NEED_MKL=1
         export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --action_env LD_LIBRARY_PATH --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
@@ -213,7 +212,8 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-java.patch
         # allows us to use ccache with Bazel
         export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
-        export TF_NEED_MKL=1
+        export TF_CONFIGURE_IOS=0
+        #export TF_NEED_MKL=1
         export BUILDFLAGS="--config=mkl --config=nonccl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
@@ -238,7 +238,7 @@ case $PLATFORM in
         export NO_WHOLE_ARCHIVE_OPTION=1
         # disable __forceinline for Eigen to speed up the build
         export TF_OVERRIDE_EIGEN_STRONG_INLINE=1
-        export TF_NEED_MKL=1
+        #export TF_NEED_MKL=1
         export BUILDTARGETS="///tensorflow:tensorflow_static ///tensorflow/java:tensorflow"
         export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//machine:x64 --linkopt=//machine:x64"
         export CUDA_TOOLKIT_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
@@ -250,6 +250,7 @@ case $PLATFORM in
             OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
             export BUILDTARGETS="///tensorflow/tools/pip_package:build_pip_package ///tensorflow/java:tensorflow"
             export PATH="$CPYTHON_PATH:$MKLDNN_PATH:$OPENBLAS_PATH:$PATH"
+            unset LD_LIBRARY_PATH
         fi
 # old hacks for the now obsolete CMake build
 #        # help cmake's findCuda-method to find the right cuda version
@@ -290,12 +291,12 @@ if [[ "$EXTENSION" =~ python ]]; then
 fi
 
 # prevent Bazel from exceeding maximum command line length on Windows
-unset BUILD_PATH
-unset ORIGINAL_PATH
-unset PLATFORM_ARTIFACTS
-unset PLATFORM_INCLUDEPATH
-unset PLATFORM_LINKPATH
-unset PLATFORM_PRELOADPATH
+while read -r l; do
+    if [[ $l == ANDROID_* ]] || [[ $l == APPVEYOR_* ]] || [[ $l == BUILD_* ]] || [[ $l == MAVEN_* ]] || [[ $l == ORIGINAL_* ]] || [[ $l == PLATFORM_* ]]; then
+        unset ${l%%=*}
+    fi
+done < <(env)
+unset PSModulePath
 unset __VSCMD_PREINIT_PATH
 
 bash configure
