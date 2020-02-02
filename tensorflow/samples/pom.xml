@@ -12,14 +12,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.15.0-1.5.3-SNAPSHOT</version>
+            <version>1.15.2-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-gpu</artifactId>
-            <version>1.15.0-1.5.3-SNAPSHOT</version>
+            <version>1.15.2-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
@@ -33,12 +33,12 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python</artifactId>
-            <version>1.15.0-1.5.3-SNAPSHOT</version>
+            <version>1.15.2-1.5.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python-gpu</artifactId>
-            <version>1.15.0-1.5.3-SNAPSHOT</version>
+            <version>1.15.2-1.5.3-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
