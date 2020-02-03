@@ -9,9 +9,9 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \}
+/** \} dnnl_api_attributes
  <p>
- *  \addtogroup c_api_types_primitive Primitive
+ *  \addtogroup dnnl_api_primitives_common
  *  \{
  <p>
  *  \struct dnnl_primitive

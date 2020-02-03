@@ -20,43 +20,86 @@ public class dnnl_post_ops_handle extends Pointer {
         return (dnnl_post_ops_handle)super.position(position);
     }
 
-    /** Empty constructor.
-     * 
-     *  Allows declaring an object before actual initialization
-     *  (mostly for convenience).
+    /** Constructs an empty handle object.
      * 
      *  \warning
-     *      Uninitialized object cannot be used in any library calls.
-     *      Any attempt to use its methods or passing it to the other library
-     *      function will lead to a thrown exception. */
+     *      Uninitialized object cannot be used in most library calls and is
+     *      equivalent to a null pointer. Any attempt to use its methods, or
+     *      passing it to the other library function, will cause an exception
+     *      to be thrown. */
     public dnnl_post_ops_handle() { super((Pointer)null); allocate(); }
     private native void allocate();
+
+    /** Copy constructor. */
     public dnnl_post_ops_handle(@Const @ByRef dnnl_post_ops_handle arg0) { super((Pointer)null); allocate(arg0); }
     private native void allocate(@Const @ByRef dnnl_post_ops_handle arg0);
-    public native @ByRef @Name("operator =") dnnl_post_ops_handle put(@ByVal dnnl_post_ops_handle arg0);
+    /** Assignment operator. */
+    public native @ByRef @Name("operator =") dnnl_post_ops_handle put(@Const @ByRef dnnl_post_ops_handle arg0);
+    /** Move constructor. */
+    /** Move assignment operator. */
 
-    /** Constructs a C handle wrapper from a C handle.
-     *  @param t The C handle to wrap.
-     *  @param weak A flag to specify whether to construct a weak wrapper. */
+    /** Constructs a handle wrapper object from a C API handle.
+     * 
+     *  @param t The C API handle to wrap.
+     *  @param weak A flag specifying whether to construct a weak wrapper;
+     *      defaults to \c false. */
+    
+    ///
     public dnnl_post_ops_handle(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
     private native void allocate(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/);
     public dnnl_post_ops_handle(dnnl_post_ops t) { super((Pointer)null); allocate(t); }
     private native void allocate(dnnl_post_ops t);
 
-    /** Resets the value of a C handle.
-     *  @param t The new value of the C handle.
-     *  @param weak A flag to specify whether the wrapper should be weak. */
+    /** Resets the handle wrapper objects to wrap a new C API handle.
+     * 
+     *  @param t The new value of the C API handle.
+     *  @param weak A flag specifying whether the wrapper should be weak;
+     *      defaults to \c false. */
+    
+    ///
     public native void reset(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/);
     public native void reset(dnnl_post_ops t);
 
-    /** Returns the value of the underlying C handle. */
-    public native dnnl_post_ops get(@Cast("bool") boolean allow_emtpy/*=false*/);
+    /** Returns the underlying C API handle.
+     * 
+     *  @param allow_empty A flag signifying whether the method is allowed to
+     *      return an empty (null) object without throwing an exception.
+     *  @return The underlying C API handle. */
+    
+    ///
+    public native dnnl_post_ops get(@Cast("bool") boolean allow_empty/*=false*/);
     public native dnnl_post_ops get();
 
+    /** Converts a handle to the underlying C API handle type. Does not throw
+     *  and returns {@code nullptr} if the object is empty.
+     * 
+     *  @return The underlying C API handle. */
+    
+    ///
     public native @Name("operator dnnl_post_ops_t") dnnl_post_ops asDnnl_post_ops();
 
+    /** Checks whether the object is empty.
+     * 
+     *  @return Whether the object is empty. */
+    
+    ///
     public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 
+    /** Equality operator.
+     * 
+     *  @param other Another handle wrapper.
+     *  @return \c true if this and the other handle wrapper manage the same
+     *      underlying C API handle, and \c false otherwise. Empty handle
+     *      objects are considered to be equal. */
+    
+    ///
     public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef dnnl_post_ops_handle other);
+
+    /** Inequality operator.
+     * 
+     *  @param other Another handle wrapper.
+     *  @return \c true if this and the other handle wrapper manage different
+     *      underlying C API handles, and \c false otherwise. Empty handle
+     *      objects are considered to be equal. */
     public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef dnnl_post_ops_handle other);
 }

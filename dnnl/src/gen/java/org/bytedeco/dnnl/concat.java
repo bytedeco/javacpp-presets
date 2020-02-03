@@ -10,13 +10,7 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 /** \endcond
  <p>
- *  Implements primitive descriptor and primitive for concat.
- * 
- *  Creates an out-of-place primitive descriptor for concatenation of \p n
- *  inputs by \p concat_dimension with resulting \p output_desc memory
- *  descriptor. \p output_desc can be NULL or specified with the
- *  #dnnl::memory::format_tag::any format kind--in this case, the appropriate memory
- *  format would be chosen automatically. */
+ *  Tensor concatenation (concat) primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class concat extends primitive {
     static { Loader.load(); }
@@ -29,19 +23,13 @@ public class concat extends primitive {
         return (concat)super.position(position);
     }
 
+    /** Primitive descriptor for a concat primitive. */
     public static class primitive_desc extends primitive_desc_base {
         static { Loader.load(); }
     
             
-                
-                    public primitive_desc() { super((Pointer)null); allocate(); }
-                    private native void allocate();
-                    public primitive_desc(@Const @ByRef primitive_desc arg0) { super((Pointer)null); allocate(arg0); }
-                    private native void allocate(@Const @ByRef primitive_desc arg0);
-                    public primitive_desc(dnnl_primitive_desc t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
-                    private native void allocate(dnnl_primitive_desc t, @Cast("bool") boolean weak/*=false*/);
-                    public primitive_desc(dnnl_primitive_desc t) { super((Pointer)null); allocate(t); }
-                    private native void allocate(dnnl_primitive_desc t);
+                public primitive_desc() { super((Pointer)null); allocate(); }
+                private native void allocate();
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -52,39 +40,86 @@ public class concat extends primitive {
         }
     
 
-        public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(dst, concat_dimension, srcs, aengine, aattr); }
-        private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr aattr);
-        public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, concat_dimension, srcs, aengine); }
-        private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
+        /** Default constructor. Produces an empty object. */
 
-        public primitive_desc(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(concat_dimension, srcs, aengine, aattr); }
-        private native void allocate(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr aattr);
-        public primitive_desc(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(concat_dimension, srcs, aengine); }
-        private native void allocate(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
+        /** Constructs a primitive descriptor for an out-of-place concatenation
+         *  primitive.
+         * 
+         *  Inputs:
+         *   - src\[0\] (#dnnl::primitive_desc_base::src_desc (0))
+         *   - src\[1\] (#dnnl::primitive_desc_base::src_desc (1))
+         *   - ...
+         *   - src\[\p n - 1\] (#dnnl_query_src_md, \p n - 1)
+         * 
+         *  Outputs:
+         *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
+         * 
+         *  @param dst Destination memory descriptor.
+         *  @param concat_dimension Source tensors will be concatenated over
+         *      dimension with this index. Note that order of dimensions does
+         *      not depend on memory format.
+         *  @param srcs Vector of source memory descriptors.
+         *  @param engine Engine to perform the operation on.
+         *  @param attr Primitive attributes to use (optional). */
+        
+        ///
+        ///
+        public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, concat_dimension, srcs, engine, attr); }
+        private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
+        public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(dst, concat_dimension, srcs, engine); }
+        private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
 
-        /** Initializes a primitive descriptor for concat from a C primitive
-         *  descriptor \p pd. */
+        /** Constructs a primitive descriptor for an out-of-place concatenation
+         *  primitive.
+         * 
+         *  This version derives the destination memory descriptor
+         *  automatically.
+         * 
+         *  @param concat_dimension Source tensors will be concatenated over
+         *      dimension with this index. Note that order of dimensions does
+         *      not depend on memory format.
+         *  @param srcs Vector of source memory descriptors.
+         *  @param engine Engine to perform the operation on.
+         *  @param attr Primitive attributes to use (optional). */
+        
+        ///
+        public primitive_desc(int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(concat_dimension, srcs, engine, attr); }
+        private native void allocate(int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
+        public primitive_desc(int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(concat_dimension, srcs, engine); }
+        private native void allocate(int concat_dimension,
+                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+
+        /** Constructs a primitive descriptor for concat primitive from a C
+         *  API primitive descriptor which must have a matching kind.
+         * 
+         *  @param pd C API primitive descriptor for concat primitive. */
         
 
-        /** Queries destination memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::src_desc(int)const */
+        public native @ByVal memory.desc src_desc(int idx/*=0*/);
+        public native @ByVal memory.desc src_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
         public native @ByVal memory.desc dst_desc();
     }
 
+    /** Default constructor. Produces an empty object. */
     public concat() { super((Pointer)null); allocate(); }
     private native void allocate();
 
+    /** Constructs a concatenation primitive.
+     *  @param pd Primitive descriptor for concatenation primitive. */
     public concat(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 }

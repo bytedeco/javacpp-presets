@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a Local Response Normalization (LRN) operation. */
+/** \} dnnl_api_pooling
+ <p>
+ *  \addtogroup dnnl_api_lrn
+ *  \{
+ <p>
+ *  A descriptor of a Local Response Normalization (LRN) operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_lrn_desc_t extends Pointer {
     static { Loader.load(); }

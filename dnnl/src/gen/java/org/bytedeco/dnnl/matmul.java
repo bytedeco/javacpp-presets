@@ -9,67 +9,85 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_shuffle
+/** \} dnnl_api_binary
  <p>
- *  \addtogroup dnnl_api_binary Binary
+ *  \addtogroup dnnl_api_matmul Matrix Multiplication
  * 
- *  A primitive to perform tensor operations over two tensors.
+ *  A primitive to perform matrix-matrix multiplication. The batched mode
+ *  is supported with 3D tensors.
  * 
- *  @see \ref dev_guide_binary in developer guide
+ *  @see \ref dev_guide_matmul in developer guide
+ * 
  * 
  *  \{
  <p>
- *  Elementwise binary operator primitive. */
+ *  Matrix multiplication (matmul) primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
-public class binary extends primitive {
+public class matmul extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public binary(Pointer p) { super(p); }
+    public matmul(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public binary(long size) { super((Pointer)null); allocateArray(size); }
+    public matmul(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public binary position(long position) {
-        return (binary)super.position(position);
+    @Override public matmul position(long position) {
+        return (matmul)super.position(position);
     }
 
-    /** Descriptor for an elementwise binary operator primitive. */
+    /** Descriptor for a matmul primitive. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
-        /** Underlying C operation descriptor. */
         
         ///
         ///
         ///
-        public native @ByRef dnnl_binary_desc_t data(); public native desc data(dnnl_binary_desc_t setter);
+        public native @ByRef dnnl_matmul_desc_t data(); public native desc data(dnnl_matmul_desc_t setter);
 
-        /** Constructs a descriptor for an elementwise binary operator
-         *  primitive.
+        /** Constructs a descriptor for a matmul primitive.
          * 
          *  Inputs:
-         *   - src0 (#dnnl::primitive_desc_base::src_desc (0))
-         *   - src1 (#dnnl::primitive_desc_base::src_desc (1))
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - weights (#dnnl::primitive_desc_base::weights_desc (0))
          * 
          *  Outputs:
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          * 
-         *  @param algorithm Elementwise algorithm.
-         *  @param src0 Memory descriptor for source tensor #0.
-         *  @param src1 Memory descriptor for source tensor #1.
-         *  @param dst Memory descriptor for destination tensor. */
-        public desc(algorithm algorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst) { super((Pointer)null); allocate(algorithm, src0, src1, dst); }
-        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst);
-        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst) { super((Pointer)null); allocate(algorithm, src0, src1, dst); }
-        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst);
+         *  @param src_desc Memory descriptor for source (matrix A).
+         *  @param weights_desc Memory descriptor for weights (matrix B).
+         *  @param dst_desc Memory descriptor for destination (matrix C). */
+        
+        ///
+        ///
+        ///
+        public desc(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(src_desc, weights_desc, dst_desc); }
+        private native void allocate(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc);
+
+        /** Constructs a descriptor for a matmul primitive.
+         * 
+         *  Inputs:
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - weights (#dnnl::primitive_desc_base::weights_desc (0))
+         *   - bias (#dnnl::primitive_desc_base::weights_desc (1))
+         * 
+         *  Outputs:
+         *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
+         * 
+         *  @param src_desc Memory descriptor for source (matrix A).
+         *  @param weights_desc Memory descriptor for weights (matrix B).
+         *  @param dst_desc Memory descriptor for destination (matrix C).
+         *  @param bias_desc Memory descriptor for bias. */
+        public desc(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc, @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(src_desc, weights_desc, bias_desc, dst_desc); }
+        private native void allocate(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc, @Const @ByRef memory.desc dst_desc);
     }
 
-    /** Primitive descriptor for an elementwise binary operator primitive. */
+    /** Primitive descriptor for a matmul primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -87,10 +105,9 @@ public class binary extends primitive {
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a primitive descriptor for an elementwise binary operator
-         *  primitive.
+        /** Constructs a primitive descriptor for a matmul primitive.
          * 
-         *  @param desc Descriptor for an elementwise binary operator primitive.
+         *  @param desc Descriptor for a matmul primitive.
          *  @param engine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
@@ -105,12 +122,11 @@ public class binary extends primitive {
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, engine); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine);
 
-        /** Constructs a primitive descriptor for an elementwise binary operator
-         *  primitive.
+        /** Constructs a primitive descriptor for a matmul primitive.
          * 
-         *  @param desc Descriptor for an elementwise binary operator primitive.
-         *  @param engine Engine to use.
+         *  @param desc Descriptor for a matmul primitive.
          *  @param attr Primitive attributes to use.
+         *  @param engine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
@@ -126,34 +142,32 @@ public class binary extends primitive {
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine engine);
 
-        /** Constructs a primitive descriptor for a binary primitive from a C
+        /** Constructs a primitive descriptor for a matmul primitive from a C
          *  API primitive descriptor that must have a matching kind.
          * 
-         *  @param pd C API primitive descriptor for a binary primitve. */
+         *  @param pd C API primitive descriptor for a matmul primitive. */
         public primitive_desc(dnnl_primitive_desc pd) { super((Pointer)null); allocate(pd); }
         private native void allocate(dnnl_primitive_desc pd);
 
-        /** \copydoc dnnl::primitive_desc_base::src_desc(int)const */
-        public native @ByVal memory.desc src_desc(int idx/*=0*/);
+        /** \copydoc dnnl::primitive_desc_base::src_desc()const */
         public native @ByVal memory.desc src_desc();
 
-        /** Returns the memory descriptor for source #0. */
-        public native @ByVal memory.desc src0_desc();
+        /** \copydoc dnnl::primitive_desc_base::weights_desc()const */
+        public native @ByVal memory.desc weights_desc();
 
-        /** Returns the memory descriptor for source #1. */
-        public native @ByVal memory.desc src1_desc();
+        /** \copydoc dnnl::convolution_forward::primitive_desc::bias_desc()const */
+        public native @ByVal memory.desc bias_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
         public native @ByVal memory.desc dst_desc();
     }
 
     /** Default constructor. Produces an empty object. */
-    public binary() { super((Pointer)null); allocate(); }
+    public matmul() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** Constructs an elementwise binary operation primitive.
-     *  @param pd Primitive descriptor for an elementwise binary operation
-     *      primitive. */
-    public binary(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    /** Constructs a matmul primitive.
+     *  @param pd Primitive descriptor for a matmul primitive. */
+    public matmul(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 }

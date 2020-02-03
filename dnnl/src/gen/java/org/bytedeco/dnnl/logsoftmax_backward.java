@@ -9,20 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** Softmax backward propagation primitive. */
+/** Logsoftmax backward propagation primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
-public class softmax_backward extends primitive {
+public class logsoftmax_backward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public softmax_backward(Pointer p) { super(p); }
+    public logsoftmax_backward(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public softmax_backward(long size) { super((Pointer)null); allocateArray(size); }
+    public logsoftmax_backward(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public softmax_backward position(long position) {
-        return (softmax_backward)super.position(position);
+    @Override public logsoftmax_backward position(long position) {
+        return (logsoftmax_backward)super.position(position);
     }
 
-    /** Descriptor for a softmax backward propagation primitive. */
+    /** Descriptor for a logsoftmax backward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -34,7 +34,7 @@ public class softmax_backward extends primitive {
             return (desc)super.position(position);
         }
     
-        public native @ByRef dnnl_softmax_desc_t data(); public native desc data(dnnl_softmax_desc_t setter);
+        public native @ByRef @Cast("dnnl_logsoftmax_desc_t*") dnnl_softmax_desc_t data(); public native desc data(dnnl_softmax_desc_t setter);
 
         /** Default constructor. Produces an empty object. */
         
@@ -44,7 +44,7 @@ public class softmax_backward extends primitive {
         public desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a descriptor for a softmax backward propagation
+        /** Constructs a descriptor for a logsoftmax backward propagation
          *  primitive.
          * 
          *  Inputs:
@@ -54,16 +54,17 @@ public class softmax_backward extends primitive {
          *  Outputs:
          *   - diff_src (#dnnl::primitive_desc_base::diff_src_desc (0))
          * 
-         *  @param diff_data_desc Diff source and diff destination memory descriptor.
+         *  @param diff_data_desc Diff source and diff destination memory
+         *      descriptors.
          *  @param data_desc Destination memory descriptor.
-         *  @param softmax_axis Axis over which softmax is computed. */
+         *  @param logsoftmax_axis Axis over which softmax is computed. */
         public desc(@Const @ByRef memory.desc diff_data_desc, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis) { super((Pointer)null); allocate(diff_data_desc, data_desc, softmax_axis); }
+                        int logsoftmax_axis) { super((Pointer)null); allocate(diff_data_desc, data_desc, logsoftmax_axis); }
         private native void allocate(@Const @ByRef memory.desc diff_data_desc, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis);
+                        int logsoftmax_axis);
     }
 
-    /** Primitive descriptor for a softmax backward propagation primitive. */
+    /** Primitive descriptor for a logsoftmax backward propagation primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -81,13 +82,13 @@ public class softmax_backward extends primitive {
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a primitive descriptor for a softmax backward
+        /** Constructs a primitive descriptor for a logsoftmax backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a softmax backward propagation
+         *  @param desc Descriptor for a logsoftmax backward propagation
          *      primitive.
          *  @param engine Engine to use.
-         *  @param hint_fwd_pd Primitive descriptor for a softmax forward
+         *  @param hint_fwd_pd Primitive descriptor for a logsoftmax forward
          *      propagation primitive. It is used as a hint for deciding which
          *      memory format to use.
          *  @param allow_empty A flag signifying whether construction is
@@ -97,24 +98,24 @@ public class softmax_backward extends primitive {
         
         ///
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd, allow_empty); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd);
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd);
 
-        /** Constructs a primitive descriptor for a softmax backward
+        /** Constructs a primitive descriptor for a logsoftmax backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a softmax backward propagation
+         *  @param desc Descriptor for a logsoftmax backward propagation
          *      primitive.
          *  @param attr Primitive attributes to use.
          *  @param engine Engine to use.
-         *  @param hint_fwd_pd Primitive descriptor for a softmax forward
+         *  @param hint_fwd_pd Primitive descriptor for a logsoftmax forward
          *      propagation primitive. It is used as a hint for deciding which
          *      memory format to use.
          *  @param allow_empty A flag signifying whether construction is
@@ -125,24 +126,24 @@ public class softmax_backward extends primitive {
         ///
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine engine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd);
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd);
 
-        /** Constructs a primitive descriptor for a softmax backward
+        /** Constructs a primitive descriptor for a logsoftmax backward
          *  propagation primitive from a C API primitive descriptor that must
          *  have a matching kind.
          * 
-         *  @param pd C API primitive descriptor for a softmax backward
+         *  @param pd C API primitive descriptor for a logsoftmax backward
          *      propagation primitive. */
         public primitive_desc(dnnl_primitive_desc pd) { super((Pointer)null); allocate(pd); }
         private native void allocate(dnnl_primitive_desc pd);
@@ -158,12 +159,12 @@ public class softmax_backward extends primitive {
     }
 
     /** Default constructor. Produces an empty object. */
-    public softmax_backward() { super((Pointer)null); allocate(); }
+    public logsoftmax_backward() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** Constructs a softmax backward propagation primitive.
-     *  @param pd Primitive descriptor for a softmax backward propagation
+    /** Constructs a logsoftmax backward propagation primitive.
+     *  @param pd Primitive descriptor for a logsoftmax backward propagation
      *      primitive. */
-    public softmax_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    public logsoftmax_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 }

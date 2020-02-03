@@ -9,8 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** Inner product for backward propagation with respect to weights.  Implements
- *  descriptor, primitive descriptor, and primitive. */
+/** Inner product weights gradient primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class inner_product_backward_weights extends primitive {
     static { Loader.load(); }
@@ -23,18 +22,43 @@ public class inner_product_backward_weights extends primitive {
         return (inner_product_backward_weights)super.position(position);
     }
 
-
-    /** Initializes an inner product descriptor for backward propagation with
-     *  respect to weights using memory descriptors.
-     * 
-     *  \note Memory descriptors are allowed to be initialized with
-     *        #dnnl::memory::format_tag::any value of \p format_kind. */
+    /** Descriptor for an inner product weights gradient primitive. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
+        
+        ///
+        ///
+        ///
+        ///
         public native @ByRef dnnl_inner_product_desc_t data(); public native desc data(dnnl_inner_product_desc_t setter);
+
+        /** Constructs a descriptor for an inner product descriptor weights
+         *  update primitive with bias.
+         * 
+         *  \note
+         *      Memory descriptors are allowed to be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  Inputs:
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         * 
+         *  Outputs:
+         *   - diff_weights (#dnnl::primitive_desc_base::diff_weights_desc (0))
+         *   - diff_bias (#dnnl::primitive_desc_base::diff_weights_desc (1))
+         * 
+         *  @param src_desc Memory descriptor for src.
+         *  @param diff_weights_desc Memory descriptor for diff weights.
+         *  @param diff_bias_desc Memory descriptor for diff bias.
+         *  @param diff_dst_desc Memory descriptor for diff dst. */
+        
+        ///
+        ///
+        ///
+        ///
         public desc(@Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
@@ -43,6 +67,24 @@ public class inner_product_backward_weights extends primitive {
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc);
+
+        /** Constructs a descriptor for an inner product descriptor weights
+         *  update primitive without bias.
+         * 
+         *  \note
+         *      Memory descriptors are allowed to be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  Inputs:
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         * 
+         *  Outputs:
+         *   - diff_weights (#dnnl::primitive_desc_base::diff_weights_desc (0))
+         * 
+         *  @param src_desc Memory descriptor for src.
+         *  @param diff_weights_desc Memory descriptor for diff weights.
+         *  @param diff_dst_desc Memory descriptor for diff dst. */
         public desc(@Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(src_desc, diff_weights_desc, diff_dst_desc); }
@@ -51,8 +93,7 @@ public class inner_product_backward_weights extends primitive {
                         @Const @ByRef memory.desc diff_dst_desc);
     }
 
-    /** Primitive descriptor for inner product backward propagation with
-     *  respect to weights. */
+    /** Primitive descriptor for an inner product weights gradient primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -64,56 +105,98 @@ public class inner_product_backward_weights extends primitive {
             return (primitive_desc)super.position(position);
         }
     
+        /** Default constructor. Produces an empty object. */
+        
+        ///
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+        /** Constructs a primitive descriptor for an inner product weights
+         *  update primitive.
+         * 
+         *  @param desc Descriptor for an inner product weights gradient
+         *      primitive.
+         *  @param engine Engine to use.
+         *  @param hint_fwd_pd Primitive descriptor for an inner product
+         *      forward propagation primitive. It is used as a hint for
+         *      deciding which memory format to use.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
+        
+        ///
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, e, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
-                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd);
 
+        /** Constructs a primitive descriptor for an inner product weights
+         *  update primitive.
+         * 
+         *  @param desc Descriptor for an inner product weights gradient
+         *      primitive.
+         *  @param attr Primitive attributes to use.
+         *  @param engine Engine to use.
+         *  @param hint_fwd_pd Primitive descriptor for an inner product
+         *      forward propagation primitive. It is used as a hint for
+         *      deciding which memory format to use.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
+        
+        ///
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+                        @Const @ByRef engine engine,
                         @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd, allow_empty); }
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+                        @Const @ByRef engine engine,
                         @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
-                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+                        @Const @ByRef engine engine,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+                        @Const @ByRef engine engine,
                         @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd);
 
-        /** Initializes a primitive descriptor for inner product weights
-         *  update from a C primitive descriptor \p cpd. */
-        public primitive_desc(dnnl_primitive_desc cpd) { super((Pointer)null); allocate(cpd); }
-        private native void allocate(dnnl_primitive_desc cpd);
+        /** Constructs a primitive descriptor for an inner product weights
+         *  update primitive from a C API primitive descriptor that must
+         *  have a matching kind.
+         * 
+         *  @param pd C API primitive descriptor for an inner product weights
+         *      gradient primitive. */
+        public primitive_desc(dnnl_primitive_desc pd) { super((Pointer)null); allocate(pd); }
+        private native void allocate(dnnl_primitive_desc pd);
 
-        /** Queries source memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::src_desc()const */
         public native @ByVal memory.desc src_desc();
 
-        /** Queries diff weights memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::diff_weights_desc()const */
         public native @ByVal memory.desc diff_weights_desc();
 
-        /** Queries diff bias memory descriptor. */
-        public native @ByVal memory.desc diff_bias_desc();
-
-        /** Queries diff destination memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::diff_dst_desc()const */
         public native @ByVal memory.desc diff_dst_desc();
+
+        /** \copydoc dnnl::convolution_backward_weights::primitive_desc::diff_bias_desc()const */
+        public native @ByVal memory.desc diff_bias_desc();
     }
 
+    /** Default constructor. Produces an empty object. */
     public inner_product_backward_weights() { super((Pointer)null); allocate(); }
     private native void allocate();
 
+    /** Constructs an inner product weights gradient primitive.
+     *  @param pd Primitive descriptor for an inner product weights gradient
+     *      primitive. */
     public inner_product_backward_weights(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 }

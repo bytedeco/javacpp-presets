@@ -9,14 +9,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \}
- <p>
- *  An auxiliary structure to specify primitive's inputs/outputs at execution
- * 
- *  \warning
- *       With this API it's impossible to preserve constness of memory, so all
- *       memories are passed w/o const qualifier. However only memories with
- *       output semantics might be changed during the execution */
+/** A structure that contains an index and a memory object, and is used to pass
+ *  arguments to dnnl_primitive_execute(). */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_exec_arg_t extends Pointer {
     static { Loader.load(); }

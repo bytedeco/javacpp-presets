@@ -123,7 +123,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.10.6  https://www.hdfgroup.org/downloads/
  * MKL 2020.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
- * DNNL 1.1.x  https://github.com/intel/mkl-dnn
+ * DNNL 1.2.x  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.7  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -132,7 +132,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.7.6  https://www.python.org/downloads/
  * NumPy 1.18.x  https://github.com/numpy/numpy
  * SciPy 1.4.x  https://github.com/scipy/scipy
- * Gym 0.15.4  https://github.com/openai/gym
+ * Gym 0.15.x  https://github.com/openai/gym
  * LLVM 9.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.79.0  http://www.leptonica.org/download.html
@@ -147,7 +147,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.6.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.1.0  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.1.x  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.14.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.x  https://github.com/mono/skia

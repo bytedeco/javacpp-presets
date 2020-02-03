@@ -15,14 +15,17 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 public class stream extends dnnl_stream_handle {
     static { Loader.load(); }
 
-    public stream() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public stream(@Const @ByRef stream arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(@Const @ByRef stream arg0);
-    public stream(dnnl_stream t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
-    private native void allocate(dnnl_stream t, @Cast("bool") boolean weak/*=false*/);
-    public stream(dnnl_stream t) { super((Pointer)null); allocate(t); }
-    private native void allocate(dnnl_stream t);
+    
+        public stream() { super((Pointer)null); allocate(); }
+        private native void allocate();
+        public stream(@Const @ByRef stream arg0) { super((Pointer)null); allocate(arg0); }
+        private native void allocate(@Const @ByRef stream arg0);
+        
+        ///
+        public stream(dnnl_stream t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+        private native void allocate(dnnl_stream t, @Cast("bool") boolean weak/*=false*/);
+        public stream(dnnl_stream t) { super((Pointer)null); allocate(t); }
+        private native void allocate(dnnl_stream t);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public stream(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -33,7 +36,7 @@ public class stream extends dnnl_stream_handle {
     }
 
 
-    /** \brief Stream flags. */
+    /** Stream flags. Can be combined using the bitwise OR operator. */
     public enum flags {
         /** Default order execution. Either in-order or out-of-order depending
          *  on the engine runtime */
@@ -52,15 +55,23 @@ public class stream extends dnnl_stream_handle {
         @Override public String toString() { return intern().name(); }
     }
 
-    /** Constructs a stream. */
-    public stream(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/) { super((Pointer)null); allocate(aengine, aflags); }
-    private native void allocate(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/);
-    public stream(@Const @ByRef engine aengine) { super((Pointer)null); allocate(aengine); }
-    private native void allocate(@Const @ByRef engine aengine);
+    /** Constructs an empty stream. An empty stream cannot be used in any
+     *  operations. */
+
+    /** Constructs a stream for the specified engine and with behavior
+     *  controlled by the specified flags.
+     * 
+     *  @param engine Engine to create the stream on.
+     *  @param flags Flags controlling stream behavior. */
+    public stream(@Const @ByRef engine engine, flags flags/*=dnnl::stream::flags::default_flags*/) { super((Pointer)null); allocate(engine, flags); }
+    private native void allocate(@Const @ByRef engine engine, flags flags/*=dnnl::stream::flags::default_flags*/);
+    public stream(@Const @ByRef engine engine) { super((Pointer)null); allocate(engine); }
+    private native void allocate(@Const @ByRef engine engine);
 
 // #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
 // #endif
 
-    /** Waits for all primitives in the stream to finish. */
+    /** Waits for all primitives executing in the stream to finish.
+     *  @return The stream itself. */
     public native @ByRef @Name("wait") stream _wait();
 }

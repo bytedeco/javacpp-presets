@@ -224,6 +224,7 @@ public class Qt5Core extends QtInfoMapper {
     macros.put("uint", "unsigned int");
     macros.put("ulong", "unsigned long");
     macros.put("qreal", "double");
+    macros.put("milliseconds", "long long");
 
     // Macros
     macros.put("Q_ALWAYS_INLINE", "inline");

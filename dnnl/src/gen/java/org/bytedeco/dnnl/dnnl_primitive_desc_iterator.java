@@ -11,9 +11,11 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 // #if 0
 // #endif
 
-/** \}
+/** \} dnnl_api_engine
  <p>
- *  \addtogroup c_api_primitive_desc_iterators Primitive descriptor iterators
+ *  \addtogroup dnnl_api_primitives
+ *  \{
+ *  \addtogroup dnnl_api_primitives_common
  *  \{
  <p>
  *  \struct dnnl_primitive_desc_iterator

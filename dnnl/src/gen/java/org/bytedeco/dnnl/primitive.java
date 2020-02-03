@@ -9,12 +9,40 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** Base class for all computational primitives. */
+/** \addtogroup dnnl_api_primitives Primitives
+ *  Compute primitives
+ *  @see \ref dev_guide_basic_concepts
+ *  \{
+ <p>
+ *  \addtogroup dnnl_api_primitives_common Common
+ *  Common operations to create, destroy and inspect primitives
+ *  \{
+ <p>
+ *  Base class for all computational primitives. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class primitive extends dnnl_primitive_handle {
     static { Loader.load(); }
+
+
+    
+        public primitive() { super((Pointer)null); allocate(); }
+        private native void allocate();
+        public primitive(@Const @ByRef primitive arg0) { super((Pointer)null); allocate(arg0); }
+        private native void allocate(@Const @ByRef primitive arg0);
+        
+        ///
+        public primitive(dnnl_primitive t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+        private native void allocate(dnnl_primitive t, @Cast("bool") boolean weak/*=false*/);
+        public primitive(dnnl_primitive t) { super((Pointer)null); allocate(t); }
+        private native void allocate(dnnl_primitive t);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public primitive(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public primitive(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public primitive position(long position) {
+        return (primitive)super.position(position);
+    }
 
     /** Kinds of primitives. Used to implement a way to extend the library with
      *  new primitives without changing the ABI. */
@@ -25,9 +53,9 @@ public class primitive extends dnnl_primitive_handle {
         reorder(dnnl_reorder),
         /** A shuffle primitive. */
         shuffle(dnnl_shuffle),
-        /** A (out-of-place) concat primitive. */
+        /** A (out-of-place) tensor concatenation primitive. */
         concat(dnnl_concat),
-        /** A sum primitive. */
+        /** A summation primitive. */
         sum(dnnl_sum),
         /** A convolution primitive. */
         convolution(dnnl_convolution),
@@ -50,7 +78,13 @@ public class primitive extends dnnl_primitive_handle {
         /** A rnn primitive. */
         rnn(dnnl_rnn),
         /** A binary primitive. */
-        binary(dnnl_binary);
+        binary(dnnl_binary),
+        /** A logsoftmax primitive. */
+        logsoftmax(dnnl_logsoftmax),
+        /** A matmul (matrix multiplication) primitive. */
+        matmul(dnnl_matmul),
+        /** A resampling primitive. */
+        resampling(dnnl_resampling);
 
         public final int value;
         private kind(int v) { this.value = v; }
@@ -59,15 +93,52 @@ public class primitive extends dnnl_primitive_handle {
         @Override public String toString() { return intern().name(); }
     }
 
+    /** Default constructor. Constructs an empty object. */
+
+    /** Constructs a primitive from a C API primitive descriptor.
+     * 
+     *  @param c_pd C API primitive descriptor. */
+    
+    ///
     public primitive(@Const dnnl_primitive_desc c_pd) { super((Pointer)null); allocate(c_pd); }
     private native void allocate(@Const dnnl_primitive_desc c_pd);
+
+    /** Constructs a primitive from a primitive descriptor.
+     * 
+     *  @param pd Primitive descriptor. */
+    
+    ///
     public primitive(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd);
 
-    /** Returns the descriptor of the underlying C API primitive. */
+    /** Returns the C API primitive descriptor of the underlying C API
+     *  primitive.
+     * 
+     *  @return The underlying C API primitive descriptor. */
+    
+    ///
     public native @Name("get_primitive_desc") @Const dnnl_primitive_desc get_dnnl_primitive_desc();
-    // TODO: use the C++ API wrapper structure.
 
+    /** Returns the kind of the primitive.
+     * 
+     *  @return The primitive kind. */
+    
+    ///
+    ///
+    public native kind get_kind();
+
+    /** Executes computations specified by the primitive in a specified stream.
+     * 
+     *  Arguments are passed via an arguments map containing <index,
+     *  memory object> pairs. The index must be one of the {@code DNNL_ARG_*} values
+     *  such as {@code DNNL_ARG_SRC}, and the memory must have a memory descriptor
+     *  matching the one returned by
+     *  primitive_desc::query_md(#query::exec_arg_md, index) unless using
+     *  dynamic shapes (see DNNL_RUNTIME_DIM_VAL).
+     * 
+     *  @param stream Stream object. The stream must belong to the same engine
+     *      as the primitive.
+     *  @param args Arguments map. */
     public native void execute(
-                @ByRef stream astream, @Const @ByRef IntMemoryMap args);
+                @ByRef stream stream, @Const @ByRef IntMemoryMap args);
 }

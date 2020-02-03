@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a element-wise operation. */
+/** \} dnnl_api_shuffle
+ <p>
+ *  \addtogroup dnnl_api_eltwise
+ *  \{
+ <p>
+ *  A descriptor of a element-wise operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_eltwise_desc_t extends Pointer {
     static { Loader.load(); }
@@ -35,8 +40,8 @@ public class dnnl_eltwise_desc_t extends Pointer {
      *  #dnnl_eltwise_tanh, #dnnl_eltwise_elu, #dnnl_eltwise_square,
      *  #dnnl_eltwise_abs, #dnnl_eltwise_sqrt, #dnnl_eltwise_linear,
      *  #dnnl_eltwise_bounded_relu, #dnnl_eltwise_soft_relu,
-     *  #dnnl_eltwise_swish, #dnnl_eltwise_logistic and
-     *  #dnnl_eltwise_exp. */
+     *  #dnnl_eltwise_logistic, #dnnl_eltwise_exp, #dnnl_eltwise_gelu,
+     *  #dnnl_eltwise_swish, #dnnl_eltwise_log, #dnnl_eltwise_clip. */
     public native @Cast("dnnl_alg_kind_t") int alg_kind(); public native dnnl_eltwise_desc_t alg_kind(int setter);
     /** Source and destination memory descriptor. */
     public native @ByRef dnnl_memory_desc_t data_desc(); public native dnnl_eltwise_desc_t data_desc(dnnl_memory_desc_t setter);
@@ -51,11 +56,14 @@ public class dnnl_eltwise_desc_t extends Pointer {
      *   - #dnnl_eltwise_abs: \p alpha and \p beta ignored
      *   - #dnnl_eltwise_sqrt: \p alpha and \p beta ignored
      *   - #dnnl_eltwise_linear: \p alpha -- scale, \p beta -- shift
-     *   - #dnnl_eltwise_swish: \p alpha -- sigmoid arg scaling, \p beta ignored
      *   - #dnnl_eltwise_bounded_relu: \p alpha -- upper bound, \p beta ignored
      *   - #dnnl_eltwise_soft_relu: \p alpha and \p beta ignored
      *   - #dnnl_eltwise_logistic: \p alpha and \p beta ignored
-     *   - #dnnl_eltwise_exp: \p alpha and \p beta ignored */
+     *   - #dnnl_eltwise_exp: \p alpha and \p beta ignored
+     *   - #dnnl_eltwise_gelu: \p alpha and \p beta ignored
+     *   - #dnnl_eltwise_swish: \p alpha -- sigmoid arg scaling, \p beta ignored
+     *   - #dnnl_eltwise_log: \p alpha and \p beta ignored
+     *   - #dnnl_eltwise_clip: \p alpha -- lower bound, \p beta -- upper bound */
     public native float alpha(); public native dnnl_eltwise_desc_t alpha(float setter);
     public native float beta(); public native dnnl_eltwise_desc_t beta(float setter);
 }

@@ -1,30 +1,41 @@
-diff -ruN mkl-dnn-1.1.2/include/dnnl.hpp mkl-dnn-1.1.2-patch/include/dnnl.hpp
---- mkl-dnn-1.1.2/include/dnnl.hpp	2019-12-25 05:15:53.000000000 +0900
-+++ mkl-dnn-1.1.2-patch/include/dnnl.hpp	2019-12-29 06:31:43.471504436 +0900
-@@ -71,6 +71,8 @@
+diff -ruN mkl-dnn-1.2/include/dnnl.hpp mkl-dnn-1.2-patch/include/dnnl.hpp
+--- mkl-dnn-1.2/include/dnnl.hpp	2020-01-25 06:54:36.000000000 +0900
++++ mkl-dnn-1.2-patch/include/dnnl.hpp	2020-02-03 12:04:59.085778234 +0900
+@@ -106,6 +106,8 @@
      static void wrap_c_api(dnnl_status_t status, const char *message) {
-         if (status != dnnl_success) throw error(status, message);
+         if (status != dnnl_success) DNNL_THROW_ERROR(status, message);
      }
 +
 +    const std::string& toStdString() { return std::string(message).append(": status = ").append(std::to_string(status)); }
  };
  
- /// A class that provides the destructor for an DNNL C handle
-diff -ruN mkl-dnn-1.1.2/src/CMakeLists.txt mkl-dnn-1.1.2-patch/src/CMakeLists.txt
---- mkl-dnn-1.1.2/src/CMakeLists.txt	2019-12-25 05:15:53.000000000 +0900
-+++ mkl-dnn-1.1.2-patch/src/CMakeLists.txt	2019-12-29 06:32:03.355477876 +0900
-@@ -131,37 +131,6 @@
+ /// A class that provides the destructor for a DNNL C API handle.
+diff -ruN mkl-dnn-1.2/src/CMakeLists.txt mkl-dnn-1.2-patch/src/CMakeLists.txt
+--- mkl-dnn-1.2/src/CMakeLists.txt	2020-01-25 06:54:36.000000000 +0900
++++ mkl-dnn-1.2-patch/src/CMakeLists.txt	2020-02-03 12:05:40.463770968 +0900
+@@ -136,48 +136,6 @@
      -DDIR=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake
      -P ${PROJECT_SOURCE_DIR}/cmake/gen_mkldnn_compat_cmakes.cmake)")
  
 -# MKL-DNN compat libraries
 -if (WIN32)
+-    if (NOT MINGW)
+-        set(prefix "")
+-        set(ext "lib")
+-    else()
+-        set(prefix "lib")
+-        if (DNNL_LIBRARY_TYPE STREQUAL "SHARED")
+-            set(ext "dll.a")
+-        else()
+-            set(ext "a")
+-        endif()
+-    endif()
 -    add_custom_target(compat_libs ALL
 -        ${CMAKE_COMMAND} -E copy
--        $<TARGET_FILE_DIR:${LIB_NAME}>/dnnl.lib
--        $<TARGET_FILE_DIR:${LIB_NAME}>/mkldnn.lib
+-        $<TARGET_FILE_DIR:${LIB_NAME}>/${prefix}dnnl.${ext}
+-        $<TARGET_FILE_DIR:${LIB_NAME}>/${prefix}mkldnn.${ext}
 -        DEPENDS ${LIB_NAME})
--    install(FILES $<TARGET_FILE_DIR:${LIB_NAME}>/mkldnn.lib
+-    install(FILES $<TARGET_FILE_DIR:${LIB_NAME}>/${prefix}mkldnn.${ext}
 -        DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
 -else()
 -    if(DNNL_LIBRARY_TYPE STREQUAL "SHARED")
@@ -49,12 +60,18 @@ diff -ruN mkl-dnn-1.1.2/src/CMakeLists.txt mkl-dnn-1.1.2-patch/src/CMakeLists.tx
 -endif()
 -
  # Install custom find modules for transitive dependencies
+ set(LIB_CONFIG_INSTALL_DIR_COMPAT "${CMAKE_INSTALL_LIBDIR}/cmake/mkldnn")
  if(DNNL_CPU_RUNTIME STREQUAL "TBB")
-     if(WIN32)
-diff -ruN mkl-dnn-1.1.2/src/cpu/cpu_engine.cpp mkl-dnn-1.1.2-patch/src/cpu/cpu_engine.cpp
---- mkl-dnn-1.1.2/src/cpu/cpu_engine.cpp	2019-12-25 05:15:53.000000000 +0900
-+++ mkl-dnn-1.1.2-patch/src/cpu/cpu_engine.cpp	2019-12-29 06:31:47.854498581 +0900
-@@ -78,6 +78,23 @@
+diff -ruN mkl-dnn-1.2/src/cpu/cpu_engine.cpp mkl-dnn-1.2-patch/src/cpu/cpu_engine.cpp
+--- mkl-dnn-1.2/src/cpu/cpu_engine.cpp	2020-01-25 06:54:36.000000000 +0900
++++ mkl-dnn-1.2-patch/src/cpu/cpu_engine.cpp	2020-02-03 12:18:10.721768939 +0900
+@@ -23,10 +23,29 @@
+ #include "cpu_stream.hpp"
+ #include "memory.hpp"
+ 
++#include "jit_uni_dw_conv_kernel_utils.hpp"
++
+ namespace dnnl {
  namespace impl {
  namespace cpu {
  
@@ -77,10 +94,10 @@ diff -ruN mkl-dnn-1.1.2/src/cpu/cpu_engine.cpp mkl-dnn-1.1.2-patch/src/cpu/cpu_e
 +
  status_t cpu_engine_t::create_memory_storage(
          memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
-     return safe_ptr_assign<memory_storage_t>(
-diff -ruN mkl-dnn-1.1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.1.2-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
---- mkl-dnn-1.1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-12-25 05:15:53.000000000 +0900
-+++ mkl-dnn-1.1.2-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-12-29 06:31:47.855498580 +0900
+     auto _storage = new cpu_memory_storage_t(this);
+diff -ruN mkl-dnn-1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.2-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
+--- mkl-dnn-1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2020-01-25 06:54:36.000000000 +0900
++++ mkl-dnn-1.2-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2020-02-03 12:05:04.333777313 +0900
 @@ -192,11 +192,6 @@
          scratchpad.book(key_conv_padded_bias, sizeof(float) * jcp.oc);
  }
@@ -93,7 +110,7 @@ diff -ruN mkl-dnn-1.1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.1.2-p
  template <cpu_isa_t isa, data_type_t kernel_dt>
  struct jit_uni_dw_conv_bwd_data_kernel {
  
-@@ -324,11 +319,6 @@
+@@ -326,11 +321,6 @@
      UNUSED(jcp);
  }
  
@@ -105,7 +122,7 @@ diff -ruN mkl-dnn-1.1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.1.2-p
  template <cpu_isa_t isa, data_type_t kernel_dt>
  struct jit_uni_dw_conv_bwd_weights_kernel {
  
-@@ -505,12 +495,6 @@
+@@ -507,12 +497,6 @@
      jcp.nthr = jcp.nthr_g * jcp.nthr_mb;
  }
  
