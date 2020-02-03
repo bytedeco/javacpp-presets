@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a Softmax operation. */
+/** \} dnnl_api_eltwise
+ <p>
+ *  \addtogroup dnnl_api_softmax
+ *  \{
+ <p>
+ *  A descriptor of a Softmax operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_softmax_desc_t extends Pointer {
     static { Loader.load(); }

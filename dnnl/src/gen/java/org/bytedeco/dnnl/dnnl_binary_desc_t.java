@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a binary operation. */
+/** \} dnnl_api_rnn
+ <p>
+ *  \addtogroup dnnl_api_binary
+ *  \{
+ <p>
+ *  A descriptor of a binary operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_binary_desc_t extends Pointer {
     static { Loader.load(); }

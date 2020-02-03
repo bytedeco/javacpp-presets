@@ -9,18 +9,102 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \}
+/** \} dnnl_api_stream
  <p>
- *  \addtogroup cpp_api_memory_related Memory and memory related operations
- *  \{
- <p>
- *  \addtogroup cpp_api_memory Memory
- *  A primitive to describe and store data.
+ *  \addtogroup dnnl_api_memory Memory
  * 
- *  For more information, refer to \ref c_api_memory in \ref c_api.
+ *  A container that describes and stores data. Memory objects can contain
+ *  data of various data types and formats. There are two levels of
+ *  abstraction:
+ * 
+ *  1. **Memory descriptor** -- engine-agnostic logical description of data
+ *      (number of dimensions, dimension sizes, and data type), and,
+ *      optionally, the information about the physical format of data in
+ *      memory. If this information is not known yet, a memory descriptor can
+ *      be created with #dnnl_format_tag_any. This allows compute-intensive
+ *      primitives to chose the most appropriate format for the computations.
+ *      The user is then responsible for reordering their data into the new
+ *      format if the formats do not match.
+ * 
+ *      A memory descriptor can be initialized either by calling
+ *      dnnl_memory_desc_init_by_tag() or dnnl_memory_desc_init_by_strides()
+ *      functions, or by directly setting the values in the dnnl_memory_desc_t
+ *      structure.
+ * 
+ *      \warning
+ *          The latter approach requires deep knowledge of how the physical
+ *          data representation is mapped to the structure and is discouraged.
+ *          The \ref dev_guide_understanding_memory_formats topic should shed
+ *          some light on that.
+ * 
+ *      User can query amount of memory required by a memory descriptor using
+ *      the dnnl_memory_desc_get_size() function. As described in \ref
+ *      dev_guide_understanding_memory_formats, the size of data in general
+ *      cannot be computed as the product of dimensions multiplied by the size
+ *      of the data type. So users are required to use this function for
+ *      better code portability.
+ * 
+ *      Two memory descriptors can be compared with dnnl_memory_desc_equal().
+ *      The comparison is especially useful when checking whether it is
+ *      necessary to reorder data from the user's data format to a primitive's
+ *      format.
+ * 
+ *  2. **Memory object** -- an engine-specific object that handles the data
+ *      and its description (a memory descriptor). For the CPU engine, the
+ *      data handle is simply a pointer to \c void. The data handle can be
+ *      queried using dnnl_memory_get_data_handle() and set using
+ *      dnnl_memory_set_data_handle(). The latter function always sets the
+ *      memory in the padding region to zero, which is the invariant
+ *      maintained by all the primitives in DNNL.  See \ref
+ *      dev_guide_understanding_memory_formats for more details. A memory
+ *      object can be created using dnnl_memory_create() function. A memory
+ *      object can also be queried for the underlying memory descriptor and
+ *      for its engine using dnnl_memory_get_memory_desc() and
+ *      dnnl_memory_get_engine() functions.
+ * 
+ *  Along with ordinary memory with all dimensions being positive, Intel DNNL
+ *  supports *zero-volume* (or just *zero*) memory with one or more dimensions
+ *  set to zero.  This is to support the NumPy\* convention.  If a zero memory
+ *  is passed to a primitive, the primitive does not perform any computations
+ *  on this memory. For example:
+ * 
+ *  - A convolution primitive with {@code (0 batch, 3 input channels, 13 height,
+ *  13 width)} source and {@code (16 output channels, 3 input channels, 3 height, 3
+ *  width)} weights would produce {@code (0 batch, 16 output channels,
+ *  11 height, 11 width)} destination (assuming strides are {@code 1} and paddings
+ *  are zero) and perform zero multiply-add operations.
+ * 
+ *  - A concat primitive of three memories of shapes {@code (3, 4, 13, 13)},
+ *  {@code (3, 0, 13, 13)}, and {@code (3, 1, 13, 13)} along the second axis would
+ *  produce the output of the shape {@code (3, 5, 13, 13)}, effectively ignoring
+ *  the second input (however, if the user created a concatenation
+ *  primitive descriptor with three inputs they should also provide all
+ *  three memories to the concatenation primitive, including the one with
+ *  zero second dimension).
+ * 
+ *  - However, DNNL would return an error when attempting to create a
+ *  convolution with zero memory passed for weights because such a
+ *  convolution is not well-defined:
+ *  ~~~
+ *  dst(1, 16, 11, 11) <-- src(1, 0, 13, 13) (*) weights(16, 0, 3, 3)
+ *  ~~~
+ *  It is not clear whether the values in the destination be zeroes or
+ *  just not accessed at all. Moreover, computations for weights gradient
+ *  primitives are not well defined in such cases.
+ * 
+ *  Data handle of *zero-volume* memory is never accessed and hence can be
+ *  unset (NULL in case of CPU engine).
+ * 
+ *  @see \ref dev_guide_understanding_memory_formats
+ * 
  *  \{
  <p>
- *  Memory that describes the data. */
+ *  Memory object.
+ * 
+ *  A memory object encapsulates a handle to a memory buffer allocated on a
+ *  specific engine, tensor dimensions, data type, and memory format, which is
+ *  the way tensor indices map to offsets in linear memory space. Memory
+ *  objects are passed to primitives during execution. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class memory extends dnnl_memory_handle {
     static { Loader.load(); }
@@ -33,14 +117,25 @@ public class memory extends dnnl_memory_handle {
         return (memory)super.position(position);
     }
 
+    /** Integer type for representing dimension sizes and indices. */
+    /** Vector of dimensions. Implementations are free to force a limit on the
+     *  vector's length. */
+    
+    ///
+
+    /** Helper function that validates that an {@code std::vector} of dimensions can
+     *  be safely converted to the C API array ::dnnl_dims_t. Throws if
+     *  validation fails.
+     * 
+     *  @param v Vector of dimensions. */
 
     /** Data type specification */
     public enum data_type {
-        /** Undefined data type, used for empty memory descriptors. */
+        /** Undefined data type (used for empty memory descriptors). */
         undef(dnnl_data_type_undef),
         /** 16-bit/half-precision floating point. */
         f16(dnnl_f16),
-        /** non-standard 16-bit (bfloat16 w/ 7 bit mantissa) floating point. */
+        /** non-standard 16-bit floating point with 7-bit mantissa. */
         bf16(dnnl_bf16),
         /** 32-bit/single-precision floating point. */
         f32(dnnl_f32),
@@ -69,9 +164,9 @@ public class memory extends dnnl_memory_handle {
          *  values in each dimension. See \ref dnnl_blocking_desc_t for more
          *  information. */
         blocked(dnnl_blocked),
-        /** Weights format used in 8bit Winograd convolution */
+        /** Weights format used in 8bit Winograd convolution. */
         wino(dnnl_format_kind_wino),
-        /** Packed weights format used in RNN */
+        /** Packed weights format used in RNN. */
         packed(dnnl_format_kind_rnn_packed);
 
         public final int value;
@@ -81,72 +176,221 @@ public class memory extends dnnl_memory_handle {
         @Override public String toString() { return intern().name(); }
     }
 
-    /** Memory format tag specification. See \ref dnnl_format_tag_t for a
-     *  detailed description. */
+    /** Memory format tag specification.
+     * 
+     *  Memory format tags can be further divided into two categories:
+     * 
+     *   - Domain-agnostic names, i.e. names that do not depend on the tensor
+     *     usage in the specific primitive. These names use letters from {@code a}
+     *     to {@code l} to denote logical dimensions and form the order in which the
+     *     dimensions are laid in memory. For example,
+     *     #dnnl::memory::format_tag::ab is used to denote a 2D tensor where the
+     *     second logical dimension (denoted as {@code b}) is the innermost, i.e.
+     *     has stride = 1, and the first logical dimension ({@code a}) is laid out in
+     *     memory with stride equal to the size of the second dimension. On the
+     *     other hand, #dnnl::memory::format_tag::ba is the transposed version
+     *     of the same tensor: the outermost dimension ({@code a}) becomes the
+     *     innermost one.
+     * 
+     *   - Domain-specific names, i.e. names that make sense only in the
+     *     context of a certain domain, such as CNN. These names are
+     *     aliases to the corresponding domain-agnostic tags and used mostly
+     *     for convenience. For example, #dnnl::memory::format_tag::nc
+     *     is used to denote 2D CNN activations tensor memory format, where
+     *     the channels dimension is the innermost one and the batch dimension
+     *     is the outermost one. Moreover, #dnnl::memory::format_tag::nc is
+     *     an alias for #dnnl::memory::format_tag::ab, because for DNNL
+     *     CNN primitives the logical dimensions of activations tensors come
+     *     in order: batch, channels, spatial.  In other words, batch
+     *     corresponds to the first logical dimension ({@code a}), and channels
+     *     correspond to the second one ({@code b}).
+     * 
+     *  The following domain-specific notation applies to memory format tags:
+     *   - \c 'n' denotes the mini-batch dimension
+     *   - \c 'c' denotes a channels dimension
+     *   - When there are multiple channel dimensions (for example,
+     *     in convolution weights tensor), \c 'i' and \c 'o' denote dimensions
+     *     of input and output channels
+     *   - \c 'c' denotes a groups dimension for convolution weights
+     *   - \c 'd', \c 'h', and \c 'w' denote spatial depth, height, and width
+     *     respectively
+     * 
+     *  See \ref dnnl_format_tag_t for a detailed description. */
     public enum format_tag {
         /** Undefined memory format tag */
         undef(dnnl_format_tag_undef),
-        /** Placeholder memory format tag. The primitive selects a format
-         *  automatically. */
+        /** Placeholder memory format tag. Used to instruct the primitive to
+         *  select a format automatically. */
         any(dnnl_format_tag_any),
-
-        // Semantic agnostic section
-        // The physical order of dimensions is defined by the permutation of the
-        // characters, assuming that ab..z defines the natural order.
-
-        // Plain formats
 
         /** plain 1D tensor */
         a(dnnl_a),
+
         /** plain 2D tensor */
         ab(dnnl_ab),
-        /** plain 3D tensor */
-        abc(dnnl_abc),
-        /** plain 4D tensor */
-        abcd(dnnl_abcd),
-        /** plain 5D tensor */
-        abcde(dnnl_abcde),
-        /** plain 6D tensor */
-        abcdef(dnnl_abcdef),
-
-        // Permuted plain formats
-
-        /** permuted 5D tensor */
-        abdec(dnnl_abdec),
-        /** permuted 3D tensor */
-        acb(dnnl_acb),
-        /** permuted 5D tensor */
-        acbde(dnnl_acbde),
-        /** permuted 4D tensor */
-        acdb(dnnl_acdb),
-        /** permuted 5D tensor */
-        acdeb(dnnl_acdeb),
         /** permuted 2D tensor */
         ba(dnnl_ba),
+
+        /** plain 3D tensor */
+        abc(dnnl_abc),
+        /** permuted 3D tensor */
+        acb(dnnl_acb),
         /** permuted 3D tensor */
         bac(dnnl_bac),
+        /** permuted 3D tensor */
+        bca(dnnl_bca),
+        /** permuted 3D tensor */
+        cba(dnnl_cba),
+
+        /** plain 4D tensor */
+        abcd(dnnl_abcd),
+        /** permuted 4D tensor */
+        acdb(dnnl_acdb),
         /** permuted 4D tensor */
         bacd(dnnl_bacd),
         /** permuted 4D tensor */
         bcda(dnnl_bcda),
-        /** permuted 3D tensor */
-        cba(dnnl_cba),
         /** permuted 4D tensor */
         cdba(dnnl_cdba),
+
+        /** plain 5D tensor */
+        abcde(dnnl_abcde),
+        /** permuted 5D tensor */
+        abdec(dnnl_abdec),
+        /** permuted 5D tensor */
+        acbde(dnnl_acbde),
+        /** permuted 5D tensor */
+        acdeb(dnnl_acdeb),
+        /** permuted 5D tensor */
+        bcdea(dnnl_bcdea),
         /** permuted 5D tensor */
         cdeba(dnnl_cdeba),
         /** permuted 5D tensor */
         decab(dnnl_decab),
+        /** plain 6D tensor */
+        abcdef(dnnl_abcdef),
+        /** plain 6D tensor */
+        acbdef(dnnl_acbdef),
+        /** plain 6D tensor */
+        defcab(dnnl_defcab),
+
+        /** 1D tensor; an alias for #dnnl::memory::format_tag::a */
+        x(a),
+        /** 2D CNN activations tensor; an alias for #dnnl::memory::format_tag::ab */
+        nc(ab),
+        /** 2D CNN activations tensor; an alias for #dnnl::memory::format_tag::ba */
+        cn(ba),
+        /** 2D RNN statistics tensor; an alias for #dnnl::memory::format_tag::ab */
+        tn(ab),
+        /** 2D RNN statistics tensor; an alias for #dnnl::memory::format_tag::ba */
+        nt(ba),
+        /** 3D CNN activations tensor; an alias for #dnnl::memory::format_tag::abc */
+        ncw(abc),
+        /** 3D CNN activations tensor; an alias for #dnnl::memory::format_tag::acb */
+        nwc(acb),
+        /** 4D CNN activations tensor; an alias for #dnnl::memory::format_tag::abcd */
+        nchw(abcd),
+        /** 4D CNN activations tensor; an alias for #dnnl::memory::format_tag::acdb */
+        nhwc(acdb),
+        /** 4D CNN activations tensor; an alias for #dnnl::memory::format_tag::bcda */
+        chwn(bcda),
+        /** 5D CNN activations tensor; an alias for #dnnl::memory::format_tag::abcde */
+        ncdhw(abcde),
+        /** 5D CNN activations tensor; an alias for #dnnl::memory::format_tag::acdeb */
+        ndhwc(acdeb),
+
+        /** 2D CNN weights tensor; an alias for #dnnl::memory::format_tag::ab */
+        oi(ab),
+        /** 2D CNN weights tensor; an alias for #dnnl::memory::format_tag::ba */
+        io(ba),
+        /** 3D CNN weights tensor; an alias for #dnnl::memory::format_tag::abc */
+        oiw(abc),
+        /** 3D CNN weights tensor; an alias for #dnnl::memory::format_tag::acb */
+        owi(acb),
+        /** 3D CNN weights tensor; an alias for #dnnl::memory::format_tag::cba */
+        wio(cba),
+        /** 3D CNN weights tensor; an alias for #dnnl::memory::format_tag::bca */
+        iwo(bca),
+        /** 4D CNN weights tensor; an alias for #dnnl::memory::format_tag::abcd */
+        oihw(abcd),
+        /** 4D CNN weights tensor; an alias for #dnnl::memory::format_tag::cdba */
+        hwio(cdba),
+        /** 4D CNN weights tensor; an alias for #dnnl::memory::format_tag::acdb */
+        ohwi(acdb),
+        /** 4D CNN weights tensor; an alias for #dnnl::memory::format_tag::bcda */
+        ihwo(bcda),
+        /** 4D CNN weights tensor; an alias for #dnnl::memory::format_tag::bacd */
+        iohw(bacd),
+        /** 5D CNN weights tensor; an alias for #dnnl::memory::format_tag::abcde */
+        oidhw(abcde),
+        /** 5D CNN weights tensor; an alias for #dnnl::memory::format_tag::cdeba */
+        dhwio(cdeba),
+        /** 5D CNN weights tensor; an alias for #dnnl::memory::format_tag::acdeb */
+        odhwi(acdeb),
+        /** 5D CNN weights tensor; an alias for #dnnl::memory::format_tag::bcdea */
+        idhwo(bcdea),
+
+        /** 4D CNN weights tensor with groups; an alias for #dnnl::memory::format_tag::abcd */
+        goiw(abcd),
+        /** 5D CNN weights tensor with groups; an alias for #dnnl::memory::format_tag::abcde */
+        goihw(abcde),
+        /** 5D CNN weights tensor with groups; an alias for #dnnl::memory::format_tag::decab */
+        hwigo(decab),
+        /** 5D CNN weights tensor with groups; an alias for #dnnl::memory::format_tag::acbde */
+        giohw(acbde),
+        /** 6D CNN weights tensor with groups; an alias for #dnnl::memory::format_tag::abcdef */
+        goidhw(abcdef),
+        /** 6D CNN weights tensor with groups; an alias for #dnnl::memory::format_tag::abcdef */
+        giodhw(acbdef),
+        /** 6D CNN weights tensor with groups; an alias for #dnnl::memory::format_tag::defcab */
+        dhwigo(defcab),
+
+        /** 3D RNN data tensor in the format (seq_length, batch, input channels). */
+        tnc(abc),
+        /** 3D RNN data tensor in the format (batch, seq_length, input channels). */
+        ntc(bac),
+        /** 4D RNN states tensor in the format (num_layers, num_directions,
+         *  batch, state channels). */
+        
+///
+        ldnc(abcd),
+        /** 5D RNN weights tensor in the format (num_layers, num_directions,
+         *   input_channels, num_gates, output_channels).
+         * 
+         *   - For LSTM cells, the gates order is input, forget, candidate
+         *     and output gate.
+         *   - For GRU cells, the gates order is update, reset and output gate. */
+        
+///
+        ldigo(abcde),
+        /** 5D RNN weights tensor in the format (num_layers, num_directions,
+         *  num_gates, output_channels, input_channels).
+         * 
+         *   - For LSTM cells, the gates order is input, forget, candidate
+         *     and output gate.
+         *   - For GRU cells, the gates order is update, reset and output gate. */
+        
+///
+        ldgoi(abdec),
+        /** 4D RNN bias tensor in the format (num_layers, num_directions,
+         *  num_gates, output_channels).
+         * 
+         *   - For LSTM cells, the gates order is input, forget, candidate
+         *     and output gate.
+         *   - For GRU cells, the gates order is update, reset and output gate. */
+        ldgo(abcd),
 
         // Opaque blocked formats
 
         Abc16a(dnnl_Abc16a),
         ABc16a16b(dnnl_ABc16a16b),
+        ABc4a4b(dnnl_ABc4a4b),
         aBc16b(dnnl_aBc16b),
         ABc16b16a(dnnl_ABc16b16a),
         Abc4a(dnnl_Abc4a),
         aBc4b(dnnl_aBc4b),
         ABc4b16a4b(dnnl_ABc4b16a4b),
+        ABc2b8a4b(dnnl_ABc2b8a4b),
         ABc4b4a(dnnl_ABc4b4a),
         ABc8a16b2a(dnnl_ABc8a16b2a),
         ABc8a8b(dnnl_ABc8a8b),
@@ -162,9 +406,13 @@ public class memory extends dnnl_memory_handle {
         Abcd4a(dnnl_Abcd4a),
         aBcd4b(dnnl_aBcd4b),
         ABcd4b16a4b(dnnl_ABcd4b16a4b),
+        ABcd2b8a4b(dnnl_ABcd2b8a4b),
         ABcd4b4a(dnnl_ABcd4b4a),
+        ABcd4a4b(dnnl_ABcd4a4b),
         aBCd4c16b4c(dnnl_aBCd4c16b4c),
+        aBCd2c8b4c(dnnl_aBCd2c8b4c),
         aBCd4c4b(dnnl_aBCd4c4b),
+        aBCd4b4c(dnnl_aBCd4b4c),
         ABcd8a16b2a(dnnl_ABcd8a16b2a),
         ABcd8a8b(dnnl_ABcd8a8b),
         /** 4D tensor blocked by 2nd dimension with block size 8 */
@@ -186,6 +434,7 @@ public class memory extends dnnl_memory_handle {
         Abcde4a(dnnl_Abcde4a),
         aBcde4b(dnnl_aBcde4b),
         ABcde4b4a(dnnl_ABcde4b4a),
+        ABcde4a4b(dnnl_ABcde4a4b),
         aBCde4b4c(dnnl_aBCde4b4c),
         aBCde4c16b4c(dnnl_aBCde4c16b4c),
         aBCde4c4b(dnnl_aBCde4c4b),
@@ -193,6 +442,8 @@ public class memory extends dnnl_memory_handle {
         ABcde8a8b(dnnl_ABcde8a8b),
         aBcde8b(dnnl_aBcde8b),
         ABcde8b16a2b(dnnl_ABcde8b16a2b),
+        ABcde4b16a4b(dnnl_ABcde4b16a4b),
+        ABcde2b8a4b(dnnl_ABcde2b8a4b),
         aBCde8b16c2b(dnnl_aBCde8b16c2b),
         ABcde8b8a(dnnl_ABcde8b8a),
         aBCde8b8c(dnnl_aBCde8b8c),
@@ -207,8 +458,10 @@ public class memory extends dnnl_memory_handle {
         aBCdef16c16b(dnnl_aBCdef16c16b),
         aBcdef4b(dnnl_aBcdef4b),
         aBCdef4c4b(dnnl_aBCdef4c4b),
+        aBCdef4b4c(dnnl_aBCdef4b4c),
         aBCdef8b8c(dnnl_aBCdef8b8c),
         aBCdef8c16b2c(dnnl_aBCdef8c16b2c),
+        aBCdef4c16b4c(dnnl_aBCdef4c16b4c),
         aBCdef8c8b(dnnl_aBCdef8c8b),
         aBdc16b(dnnl_aBdc16b),
         aBdc4b(dnnl_aBdc4b),
@@ -244,47 +497,6 @@ public class memory extends dnnl_memory_handle {
         Acdb32a(dnnl_Acdb32a),
         format_tag_last(dnnl_format_tag_last),
 
-        x(dnnl_x),
-        /** 2D CNN activations tensor,
-         *  an alias to #dnnl::memory::format_tag::ab */
-        nc(dnnl_nc),
-        cn(dnnl_cn),
-        tn(dnnl_tn),
-        nt(dnnl_nt),
-        ncw(dnnl_ncw),
-        nwc(dnnl_nwc),
-        /** 4D CNN activations tensor,
-         *  an alias to #dnnl::memory::format_tag::abcd */
-        nchw(dnnl_nchw),
-        /** 4D CNN activations tensor,
-         *  an alias to #dnnl::memory::format_tag::acdb */
-        nhwc(dnnl_nhwc),
-        /** 4D CNN activations tensor,
-         *  an alias to #dnnl::memory::format_tag::bcda */
-        chwn(dnnl_chwn),
-        ncdhw(dnnl_ncdhw),
-        ndhwc(dnnl_ndhwc),
-        oi(dnnl_oi),
-        io(dnnl_io),
-        oiw(dnnl_oiw),
-        wio(dnnl_wio),
-        oihw(dnnl_oihw),
-        hwio(dnnl_hwio),
-        ihwo(dnnl_ihwo),
-        iohw(dnnl_iohw),
-        oidhw(dnnl_oidhw),
-        dhwio(dnnl_dhwio),
-        goiw(dnnl_goiw),
-        goihw(dnnl_goihw),
-        hwigo(dnnl_hwigo),
-        giohw(dnnl_giohw),
-        goidhw(dnnl_goidhw),
-        tnc(dnnl_tnc),
-        ntc(dnnl_ntc),
-        ldnc(dnnl_ldnc),
-        ldigo(dnnl_ldigo),
-        ldgoi(dnnl_ldgoi),
-        ldgo(dnnl_ldgo),
         nCdhw16c(dnnl_nCdhw16c),
         nCdhw4c(dnnl_nCdhw4c),
         nCdhw8c(dnnl_nCdhw8c),
@@ -311,17 +523,21 @@ public class memory extends dnnl_memory_handle {
         OIw16o16i(dnnl_OIw16o16i),
         Oiw16o(dnnl_Oiw16o),
         OIw4i16o4i(dnnl_OIw4i16o4i),
+        OIw2i8o4i(dnnl_OIw2i8o4i),
         OIw4i4o(dnnl_OIw4i4o),
+        OIw4o4i(dnnl_OIw4o4i),
         Oiw4o(dnnl_Oiw4o),
         OIw8i16o2i(dnnl_OIw8i16o2i),
         OIw8i8o(dnnl_OIw8i8o),
         OIw8o16i2o(dnnl_OIw8o16i2o),
         OIw8o8i(dnnl_OIw8o8i),
         Owi16o(dnnl_Owi16o),
+        OwI16o2i(dnnl_OwI16o2i),
         Owi4o(dnnl_Owi4o),
         Owi8o(dnnl_Owi8o),
         IOhw16o16i(dnnl_IOhw16o16i),
         Ohwi16o(dnnl_Ohwi16o),
+        OhwI16o2i(dnnl_OhwI16o2i),
         Ohwi4o(dnnl_Ohwi4o),
         Ohwi8o(dnnl_Ohwi8o),
         OIhw16i16o(dnnl_OIhw16i16o),
@@ -329,20 +545,26 @@ public class memory extends dnnl_memory_handle {
         Oihw16o(dnnl_Oihw16o),
         OIhw4i16o4i(dnnl_OIhw4i16o4i),
         OIhw4i4o(dnnl_OIhw4i4o),
+        OIhw4o4i(dnnl_OIhw4o4i),
         Oihw4o(dnnl_Oihw4o),
         OIhw8i16o2i(dnnl_OIhw8i16o2i),
         OIhw8i8o(dnnl_OIhw8i8o),
         OIhw8o16i2o(dnnl_OIhw8o16i2o),
         OIhw8o8i(dnnl_OIhw8o8i),
+        OIhw2i8o4i(dnnl_OIhw2i8o4i),
         Odhwi16o(dnnl_Odhwi16o),
+        OdhwI16o2i(dnnl_OdhwI16o2i),
         Odhwi4o(dnnl_Odhwi4o),
         Odhwi8o(dnnl_Odhwi8o),
         OIdhw16i16o(dnnl_OIdhw16i16o),
         OIdhw16o16i(dnnl_OIdhw16o16i),
         Oidhw16o(dnnl_Oidhw16o),
         OIdhw4i4o(dnnl_OIdhw4i4o),
+        OIdhw4o4i(dnnl_OIdhw4o4i),
         Oidhw4o(dnnl_Oidhw4o),
         OIdhw8i16o2i(dnnl_OIdhw8i16o2i),
+        OIdhw4i16o4i(dnnl_OIdhw4i16o4i),
+        OIdhw2i8o4i(dnnl_OIdhw2i8o4i),
         OIdhw8i8o(dnnl_OIdhw8i8o),
         OIdhw8o8i(dnnl_OIdhw8o8i),
         gIOw16o16i(dnnl_gIOw16o16i),
@@ -350,25 +572,31 @@ public class memory extends dnnl_memory_handle {
         gOIw16o16i(dnnl_gOIw16o16i),
         gOiw16o(dnnl_gOiw16o),
         gOIw4i16o4i(dnnl_gOIw4i16o4i),
+        gOIw2i8o4i(dnnl_gOIw2i8o4i),
         gOIw4i4o(dnnl_gOIw4i4o),
+        gOIw4o4i(dnnl_gOIw4o4i),
         gOiw4o(dnnl_gOiw4o),
         gOIw8i16o2i(dnnl_gOIw8i16o2i),
         gOIw8i8o(dnnl_gOIw8i8o),
         gOIw8o16i2o(dnnl_gOIw8o16i2o),
         gOIw8o8i(dnnl_gOIw8o8i),
         gOwi16o(dnnl_gOwi16o),
+        gOwI16o2i(dnnl_gOwI16o2i),
         gOwi4o(dnnl_gOwi4o),
         gOwi8o(dnnl_gOwi8o),
+        Goiw8g(dnnl_Goiw8g),
+        Goiw16g(dnnl_Goiw16g),
         gIOhw16o16i(dnnl_gIOhw16o16i),
         gOhwi16o(dnnl_gOhwi16o),
+        gOhwI16o2i(dnnl_gOhwI16o2i),
         gOhwi4o(dnnl_gOhwi4o),
         gOhwi8o(dnnl_gOhwi8o),
         Goihw16g(dnnl_Goihw16g),
         gOIhw16i16o(dnnl_gOIhw16i16o),
         gOIhw16o16i(dnnl_gOIhw16o16i),
         gOihw16o(dnnl_gOihw16o),
-        gOIhw2i8o4i(dnnl_gOIhw2i8o4i),
         gOIhw4i16o4i(dnnl_gOIhw4i16o4i),
+        gOIhw2i8o4i(dnnl_gOIhw2i8o4i),
         gOIhw4i4o(dnnl_gOIhw4i4o),
         gOIhw4o4i(dnnl_gOIhw4o4i),
         gOihw4o(dnnl_gOihw4o),
@@ -383,14 +611,18 @@ public class memory extends dnnl_memory_handle {
         gOIhw8o8i(dnnl_gOIhw8o8i),
         gIOdhw16i16o(dnnl_gIOdhw16i16o),
         gOdhwi16o(dnnl_gOdhwi16o),
+        gOdhwI16o2i(dnnl_gOdhwI16o2i),
         gOdhwi4o(dnnl_gOdhwi4o),
         gOdhwi8o(dnnl_gOdhwi8o),
         gOIdhw16i16o(dnnl_gOIdhw16i16o),
         gOIdhw16o16i(dnnl_gOIdhw16o16i),
         gOidhw16o(dnnl_gOidhw16o),
         gOIdhw4i4o(dnnl_gOIdhw4i4o),
+        gOIdhw4o4i(dnnl_gOIdhw4o4i),
         gOidhw4o(dnnl_gOidhw4o),
         gOIdhw8i16o2i(dnnl_gOIdhw8i16o2i),
+        gOIdhw4i16o4i(dnnl_gOIdhw4i16o4i),
+        gOIdhw2i8o4i(dnnl_gOIdhw2i8o4i),
         gOIdhw8i8o(dnnl_gOIdhw8i8o),
         gOIdhw8o8i(dnnl_gOIdhw8o8i);
 
@@ -416,107 +648,183 @@ public class memory extends dnnl_memory_handle {
         /** The underlying C API data structure. */
         public native @ByRef dnnl_memory_desc_t data(); public native desc data(dnnl_memory_desc_t setter);
 
-        /** Constructs a zero memory descriptor */
+        /** Constructs a zero (empty) memory descriptor. Such a memory
+         *  descriptor can be used to indicate absence of an argument. */
         
+        ///
         ///
         public desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /** Constructs a memory descriptor.
          * 
-         *  @param adims Data dimensions
-         *  @param adata_type Data precision/type.
-         *  @param aformat_tag Data layout format tag. */
+         *  \note
+         *      As always, the logical order of dimensions corresponds to the
+         *      {@code abc...} format tag, and the physical meaning of the
+         *      dimensions depends on both the primitive that consumes the
+         *      memory and the context of that consumption.
+         * 
+         *  @param dims Tensor dimensions.
+         *  @param data_type Data precision/type.
+         *  @param format_tag Memory format tag. */
         
         ///
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag);
+        ///
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        format_tag format_tag) { super((Pointer)null); allocate(dims, data_type, format_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        format_tag format_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        format_tag format_tag) { super((Pointer)null); allocate(dims, data_type, format_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        format_tag format_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        format_tag format_tag) { super((Pointer)null); allocate(dims, data_type, format_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        format_tag format_tag);
 
         /** Constructs a memory descriptor by strides.
          * 
-         *  @param adims Data dimensions
-         *  @param adata_type Data precision/type.
-         *  @param astrides The strides for dimensions. */
+         *  \note
+         *      As always, the logical order of dimensions corresponds to the
+         *      {@code abc...} format tag, and the physical meaning of the
+         *      dimensions depends on both the primitive that consumes the
+         *      memory and the context of that consumption.
+         * 
+         *  @param dims Tensor dimensions.
+         *  @param data_type Data precision/type.
+         *  @param strides The strides for each dimension. */
         
         ///
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer astrides);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer astrides);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] astrides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides) { super((Pointer)null); allocate(dims, data_type, strides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides) { super((Pointer)null); allocate(dims, data_type, strides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides) { super((Pointer)null); allocate(dims, data_type, strides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides);
 
         /** Constructs a memory descriptor from a C API data structure.
          * 
-         *  @param adata A C API #dnnl_memory_desc_t structure. */
-        public desc(@Const @ByRef dnnl_memory_desc_t adata) { super((Pointer)null); allocate(adata); }
-        private native void allocate(@Const @ByRef dnnl_memory_desc_t adata);
+         *  @param data A C API ::dnnl_memory_desc_t structure. */
+        public desc(@Const @ByRef dnnl_memory_desc_t data) { super((Pointer)null); allocate(data); }
+        private native void allocate(@Const @ByRef dnnl_memory_desc_t data);
 
-        /** Constructs a sub-memory descriptor. */
+        /** Constructs a memory descriptor for a region inside an area
+         *  described by this memory descriptor. */
         //
-        /** @param adims Sizes of a sub-memory
-        /** @param offsets Offsets of a sub-memory */
-        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer offsets);
-        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer offsets);
-        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] offsets);
+        /** @param dims Sizes of the region.
+        /** @param offsets Offsets to the region from the encompassing
+        /**     memory object in each dimension.
+        /** @return A memory descriptor for the region. */
+        public native @ByVal desc submemory_desc(
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer offsets);
+        public native @ByVal desc submemory_desc(
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer offsets);
+        public native @ByVal desc submemory_desc(
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] offsets);
 
         /** Constructs a memory descriptor by reshaping existing one. */
-        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims);
-        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims);
-        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims);
+        //
+        /** @param dims New dimensions. The product of dimensions must
+        /** remain constant.
+        /** @return A new memory descriptor with new dimensions. */
+        
+        ///
+        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims);
+        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims);
+        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims);
 
-        /** Returns the number of bytes required to allocate the memory
-         *  described including the padding area. */
+        /** Returns dimensions of the memory descriptor.
+         * 
+         *  Potentially expensive due to the data copy involved.
+         *  @return A copy of the dimensions vector. */
+        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer dims();
+
+        /** Returns the data type of the memory descriptor.
+         *  @return The data type. */
+        public native data_type data_type();
+
+        /** Returns size of the memory descriptor in bytes.
+         *  @return The number of bytes required to allocate a memory buffer
+         *      for the memory object described by this memory descriptor
+         *      including the padding area. */
         public native @Cast("size_t") long get_size();
 
-        /** Returns true if the memory descriptor describes an empty memory */
+        /** Checks whether the memory descriptor is zero (empty).
+         *  @return \c true if the memory descriptor describes an empty
+         *      memory and \c false otherwise. */
         public native @Cast("bool") boolean is_zero();
 
+        /** An equality operator.
+         *  @param other Another memory descriptor.
+         *  @return Whether this and the other memory descriptors have
+         *      the same format tag, dimensions, strides, blocking, etc. */
         public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef desc other);
 
+        /** An inequality operator.
+         *  @param other Another memory descriptor.
+         *  @return Whether this and the other memory descriptors describe
+         *      different memory. */
         public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef desc other);
     }
 
+    // Default constructor.
+    //
+    // Constructs an empty memory object, which can be used to indicate absence
+    // of a parameter.
     
     ///
     public memory() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** Constructs a memory.
+    /** Constructs a memory object.
      * 
      *  @param md Memory descriptor.
-     *  @param aengine Engine.
-     *  @param ahandle handle. */
+     *  @param engine Engine to store the data on.
+     *  @param handle Handle of the memory buffer to use as an underlying
+     *      storage. On CPU this is a pointer. */
     
     ///
-    public memory(@Const @ByRef desc md, @Const @ByRef engine aengine, Pointer ahandle) { super((Pointer)null); allocate(md, aengine, ahandle); }
-    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine aengine, Pointer ahandle);
+    ///
+    public memory(@Const @ByRef desc md, @Const @ByRef engine engine, Pointer handle) { super((Pointer)null); allocate(md, engine, handle); }
+    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine engine, Pointer handle);
 
-    /** Constructs a memory.
+    /** Constructs a memory object.
+     * 
+     *  The underlying storage for the memory will be allocated by the library.
      * 
      *  @param md Memory descriptor.
-     *  @param aengine Engine. */
-    public memory(@Const @ByRef desc md, @Const @ByRef engine aengine) { super((Pointer)null); allocate(md, aengine); }
-    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine aengine);
+     *  @param engine Engine to store the data on. */
+    public memory(@Const @ByRef desc md, @Const @ByRef engine engine) { super((Pointer)null); allocate(md, engine); }
+    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine engine);
 
-    /** Returns the descriptor of the memory. */
+    /** Returns the associated memory descriptor. */
     public native @ByVal desc get_desc();
 
-    /** Returns the engine of the memory. */
+    /** Returns the associated engine. */
     
     ///
     public native @ByVal engine get_engine();
 
-    /** Returns a handle of the data contained in the memory.
+    /** Returns the underlying memory buffer.
      * 
-     *  On the CPU engine, this is a pointer to the allocated memory. */
+     *  On the CPU engine this is a pointer to the allocated memory. */
+    
+    ///
     public native Pointer get_data_handle();
 
+    /** Sets memory buffer.
+     * 
+     *  @param handle Memory buffer to use as the underlying storage. It must
+     *      have at least get_desc().get_size() bytes allocated. */
     
+    ///
     ///
     ///
     ///
@@ -530,14 +838,18 @@ public class memory extends dnnl_memory_handle {
      * 
      *  Mapping is an exclusive operation - a memory object cannot be used in
      *  other operations until this memory object is unmapped.
-     *  \tparam T Type of the pointer to be mapped.
      * 
-     *  \note Any primitives working with the memory should be completed before
-     *        mapping. Use stream::wait() to synchronize the corresponding
-     *        execution stream.
+     *  \note
+     *      Any primitives working with the memory should be completed before
+     *      mapping. Use stream::wait() to synchronize the corresponding
+     *      execution stream.
      * 
-     *  \note Map/unmap API is provided mainly for debug/testing purposes and
-     *        its performance may be suboptimal. */
+     *  \note
+     *      Map/unmap API is provided mainly for debug/testing purposes and
+     *      its performance may be suboptimal.
+     * 
+     *  \tparam T Data type to return a pointer to.
+     *  @return Pointer to the mapped memory. */
 
     /** Unmaps the previously mapped data for the memory.
      * 
@@ -545,14 +857,16 @@ public class memory extends dnnl_memory_handle {
      *  after the call is complete. The mapped pointer must be
      *  obtained through a map_data() call.
      * 
-     *  \note Map/unmap API is provided mainly for debug/testing purposes and
-     *        its performance may be suboptimal. */
+     *  \note
+     *      Map/unmap API is provided mainly for debug/testing purposes and
+     *      its performance may be suboptimal.
+     * 
+     *  @param mapped_ptr A pointer previously returned by map_data(). */
     public native void unmap_data(Pointer mapped_ptr);
 
 // #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
 // #endif
 
-    // Must go away or be private:
-    public static native @Cast("dnnl_data_type_t") int convert_to_c(data_type adata_type);
-    public static native @Cast("dnnl_format_tag_t") int convert_to_c(format_tag aformat);
+    public static native @Cast("dnnl_data_type_t") int convert_to_c(data_type data_type);
+    public static native @Cast("dnnl_format_tag_t") int convert_to_c(format_tag format);
 }

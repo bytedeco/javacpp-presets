@@ -13,7 +13,7 @@ if [[ $PLATFORM == windows* ]]; then
     exit 1
 fi
 
-ONNXRUNTIME=1.1.0
+ONNXRUNTIME=1.1.1
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"

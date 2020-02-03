@@ -9,10 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** Convolution weight update.
- * 
- *  Implements descriptor, primitive descriptor, and primitive for the
- *  convolution weight update. */
+/** Convolution weights gradient primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class convolution_backward_weights extends primitive {
     static { Loader.load(); }
@@ -25,8 +22,7 @@ public class convolution_backward_weights extends primitive {
         return (convolution_backward_weights)super.position(position);
     }
 
-
-    /** Descriptor for convolution weight update. */
+    /** Descriptor for a convolution weights gradient primitive. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -34,284 +30,386 @@ public class convolution_backward_weights extends primitive {
     
         
         ///
+        ///
+        ///
+        ///
         public native @ByRef dnnl_convolution_desc_t data(); public native desc data(dnnl_convolution_desc_t setter);
 
-        /** Initializes a descriptor for convolution weight update with bias
-         *  using \p aalgorithm, memory descriptors, \p strides, \p padding_l,
-         *  and \p padding_r.
+        /** Constructs a descriptor for a convolution weights gradient primitive
+         *  with bias.
          * 
-         *  \note Memory descriptors are allowed to be initialized with
-         *        #dnnl::memory::format_tag::any value of \p format_kind. */
+         *  \note
+         *      Memory descriptors are allowed to be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  Inputs:
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         * 
+         *  Outputs:
+         *   - diff_weights (#dnnl::primitive_desc_base::diff_weights_desc (0))
+         *   - diff_bias (#dnnl::primitive_desc_base::diff_weights_desc (1))
+         * 
+         *  @param algorithm Convolution algorithm. Possible values are
+         *      #dnnl::algorithm::convolution_direct,
+         *      #dnnl::algorithm::convolution_winograd, and
+         *      #dnnl::algorithm::convolution_auto.
+         *  @param src_desc Source memory descriptor.
+         *  @param diff_weights_desc Diff weights memory descriptor.
+         *  @param diff_bias_desc Diff bias memory descriptor. Passing zero
+         *      memory descriptor disables the bias term.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param strides Strides for each spatial dimension.
+         *  @param padding_l Vector of padding values for low indices for each
+         *      spatial dimension (front, top, left).
+         *  @param padding_r Vector of padding values for high indices for
+         *      each spatial dimension (back, bottom, right). */
         
         ///
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        ///
+        ///
+        ///
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
 
-        /** Initializes a descriptor for convolution weight update without
-         *  bias using \p aalgorithm, memory descriptors, \p strides, \p
-         *  padding_l, and \p padding_r.
+        /** Constructs a descriptor for a convolution weights gradient primitive
+         *  without bias.
          * 
-         *  \note Memory descriptors are allowed to be initialized with
-         *        #dnnl::memory::format_tag::any value of \p format_kind. */
+         *  \note
+         *      Memory descriptors are allowed to be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  Inputs:
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         * 
+         *  Outputs:
+         *   - diff_weights (#dnnl::primitive_desc_base::diff_weights_desc (0))
+         * 
+         *  @param algorithm Convolution algorithm. Possible values are
+         *      #dnnl::algorithm::convolution_direct,
+         *      #dnnl::algorithm::convolution_winograd, and
+         *      #dnnl::algorithm::convolution_auto.
+         *  @param src_desc Source memory descriptor.
+         *  @param diff_weights_desc Diff weights memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param strides Strides for each spatial dimension.
+         *  @param padding_l Vector of padding values for low indices for each
+         *      spatial dimension (front, top, left).
+         *  @param padding_r Vector of padding values for high indices for
+         *      each spatial dimension (back, bottom, right). */
         
         ///
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        ///
+        ///
+        ///
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
 
-        /** Initializes a descriptor for dilated convolution weight update
-         *  with bias using \p aalgorithm, memory descriptors, \p strides,
-         *  \p dilates \p padding_l, and \p padding_r.
+        /** Constructs a descriptor for a dilated convolution weights gradient
+         *  primitive with bias.
          * 
-         *  \note Memory descriptors are allowed to be initialized with
-         *        #dnnl::memory::format_tag::any value of \p format_kind. */
+         *  \note
+         *      Memory descriptors are allowed to be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  Inputs:
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         * 
+         *  Outputs:
+         *   - diff_weights (#dnnl::primitive_desc_base::diff_weights_desc (0))
+         *   - diff_bias (#dnnl::primitive_desc_base::diff_weights_desc (1))
+         * 
+         *  @param algorithm Convolution algorithm. Possible values are
+         *      #dnnl::algorithm::convolution_direct,
+         *      #dnnl::algorithm::convolution_winograd, and
+         *      #dnnl::algorithm::convolution_auto.
+         *  @param src_desc Source memory descriptor.
+         *  @param diff_weights_desc Diff weights memory descriptor.
+         *  @param diff_bias_desc Diff bias memory descriptor. Passing zero
+         *      memory descriptor disables the bias term.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param strides Strides for each spatial dimension.
+         *  @param dilates Dilations for each spatial dimension. A zero value
+         *      means no dilation in the corresponding dimension.
+         *  @param padding_l Vector of padding values for low indices for each
+         *      spatial dimension (front, top, left).
+         *  @param padding_r Vector of padding values for high indices for
+         *      each spatial dimension (back, bottom, right). */
         
         ///
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        ///
+        ///
+        ///
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_bias_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
 
-        /** Initializes a descriptor for dilated convolution weight update
-         *  without bias using \p aalgorithm, memory descriptors, \p strides,
-         *  \p dilates \p padding_l, and \p padding_r.
+        /** Constructs a descriptor for a dilated convolution weights gradient
+         *  primitive without bias.
          * 
-         *  \note Memory descriptors are allowed to be initialized with
-         *        #dnnl::memory::format_tag::any value of \p format_kind. */
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+         *  \note
+         *      Memory descriptors are allowed to be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  Inputs:
+         *   - src (#dnnl::primitive_desc_base::src_desc (0))
+         *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         * 
+         *  Outputs:
+         *   - diff_weights (#dnnl::primitive_desc_base::diff_weights_desc (0))
+         * 
+         *  @param algorithm Convolution algorithm. Possible values are
+         *      #dnnl::algorithm::convolution_direct,
+         *      #dnnl::algorithm::convolution_winograd, and
+         *      #dnnl::algorithm::convolution_auto.
+         *  @param src_desc Source memory descriptor.
+         *  @param diff_weights_desc Diff weights memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param strides Strides for each spatial dimension.
+         *  @param dilates Dilations for each spatial dimension. A zero value
+         *      means no dilation in the corresponding dimension.
+         *  @param padding_l Vector of padding values for low indices for each
+         *      spatial dimension (front, top, left).
+         *  @param padding_r Vector of padding values for high indices for
+         *      each spatial dimension (back, bottom, right). */
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, src_desc, diff_weights_desc, diff_dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dilates, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
     }
 
-    /** Primitive descriptor for convolution weight update. */
+    /** Primitive descriptor for a convolution weights gradient primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -323,61 +421,99 @@ public class convolution_backward_weights extends primitive {
             return (primitive_desc)super.position(position);
         }
     
+        /** Default constructor. Produces an empty object. */
+        
+        ///
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Initializes a primitive descriptor for convolution weight update. */
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+        /** Constructs a primitive descriptor for a convolution weights gradient
+         *  primitive.
+         * 
+         *  @param desc Descriptor for a convolution weights gradient primitive.
+         *  @param engine Engine to use.
+         *  @param hint_fwd_pd Primitive descriptor for a convolution forward
+         *      propagation primitive. It is used as a hint for deciding which
+         *      memory format to use.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case
+         *      an empty object will be produced. This flag is optional and
+         *      defaults to false. */
+        
+        ///
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, e, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd);
-
-        /** Initializes a primitive descriptor for convolution weight update
-         *  with attributes defined by \p attr. */
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd);
 
-        /** Initializes a primitive descriptor for convolution weights
-         *  update from a C primitive descriptor \p pd. */
+        /** Constructs a primitive descriptor for a convolution weights gradient
+         *  primitive.
+         * 
+         *  @param desc Descriptor for a convolution weights gradient primitive.
+         *  @param attr Primitive attributes to use.
+         *  @param engine Engine to use.
+         *  @param hint_fwd_pd Primitive descriptor for a convolution forward
+         *      propagation primitive. It is used as a hint for deciding which
+         *      memory format to use.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case
+         *      an empty object will be produced. This flag is optional and
+         *      defaults to false. */
+        
+        ///
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine engine,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine engine,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine engine,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine engine,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd);
+
+        /** Constructs a primitive descriptor for a convolution weights gradient
+         *  primitive from a C API primitive descriptor that must have a
+         *  matching kind.
+         * 
+         *  @param pd C API primitive descriptor for a convolution weights
+         *      gradient primitive. */
         public primitive_desc(dnnl_primitive_desc pd) { super((Pointer)null); allocate(pd); }
         private native void allocate(dnnl_primitive_desc pd);
 
-        /** Queries source memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::src_desc()const */
         public native @ByVal memory.desc src_desc();
 
-        /** Queries diff weights memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::diff_weights_desc()const */
         public native @ByVal memory.desc diff_weights_desc();
 
-        /** Queries diff bias memory descriptor. */
-        public native @ByVal memory.desc diff_bias_desc();
-
-        /** Queries diff destination memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::diff_dst_desc()const */
         public native @ByVal memory.desc diff_dst_desc();
+
+        /** Returns the diff bias memory descriptor.
+         *  @return The diff bias memory descriptor.
+         *  @return A zero memory descriptor of the primitive does not have a
+         *           diff bias parameter. */
+        public native @ByVal memory.desc diff_bias_desc();
     }
 
+    /** Default constructor. Produces an empty object. */
     public convolution_backward_weights() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** Creates convolution weight update primitive from corresponding
-     *  primitive descriptor. */
+    /** Constructs a convolution weights gradient primitive.
+     *  @param pd Primitive descriptor for a convolution weights gradient
+     *      primitive. */
     public convolution_backward_weights(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 }

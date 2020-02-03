@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
-            include = {"dnnl_config.h", "dnnl_types.h", /*"dnnl_debug.h",*/ "dnnl_version.h", "dnnl.h", "dnnl.hpp"},
+            include = {"dnnl_types.h", "dnnl_config.h", /*"dnnl_debug.h",*/ "dnnl_version.h", "dnnl.h", "dnnl.hpp"},
             link = "dnnl@.1", preload = {"gomp@.1", "iomp5"}),
         @Platform(
             value = "macosx-x86_64",
@@ -53,11 +53,13 @@ public class dnnl implements InfoMapper {
         infoMap.put(new Info().enumerate())
                .put(new Info("DNNL_HELPER_DLL_IMPORT", "DNNL_HELPER_DLL_EXPORT", "DNNL_API",
                              "DNNL_MEMORY_NONE", "DNNL_MEMORY_ALLOCATE").cppTypes().annotations())
-               .put(new Info("DNNL_VERSION_HASH").translate(false))
+               .put(new Info("DNNL_VERSION_HASH", "DNNL_RUNTIME_F32_VAL").translate(false))
+               .put(new Info("DNNL_RUNTIME_DIM_VAL").cppTypes("long long").translate(false))
                .put(new Info("DNNL_DEPRECATED").cppText("#define DNNL_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
                .put(new Info("DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL").define(false))
+               .put(new Info("DNNL_RUNTIME_F32_VAL_REP").skip())
 
                .put(new Info("dnnl_dims_t").cppTypes("int64_t* const"))
                .put(new Info("dnnl_memory_t").valueTypes("dnnl_memory").pointerTypes("@ByPtrPtr dnnl_memory", "@Cast(\"dnnl_memory_t*\") PointerPointer"))
@@ -113,15 +115,6 @@ public class dnnl implements InfoMapper {
                              "dnnl::batch_normalization_forward::desc<float>",
                              "dnnl::batch_normalization_backward::desc<float>").javaNames("desc").skipDefaults())
 
-               .put(new Info("dnnl::handle::handle").javaText(
-                         "public stream() { super((Pointer)null); allocate(); }\n"
-                       + "private native void allocate();\n"
-                       + "public stream(@Const @ByRef stream arg0) { super((Pointer)null); allocate(arg0); }\n"
-                       + "private native void allocate(@Const @ByRef stream arg0);\n"
-                       + "public stream(dnnl_stream t, @Cast(\"bool\") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }\n"
-                       + "private native void allocate(dnnl_stream t, @Cast(\"bool\") boolean weak/*=false*/);\n"
-                       + "public stream(dnnl_stream t) { super((Pointer)null); allocate(t); }\n"
-                       + "private native void allocate(dnnl_stream t);\n"))
                .put(new Info("dnnl::rnn_cell::desc::operator const dnnl_rnn_cell_desc_t*()").javaText(
                          "public native @Name(\"operator const dnnl_rnn_cell_desc_t*\") @Const dnnl_rnn_cell_desc_t as_dnnl_rnn_cell_desc_t();\n"))
 

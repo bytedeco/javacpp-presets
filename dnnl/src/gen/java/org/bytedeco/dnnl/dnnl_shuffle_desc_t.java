@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a shuffle operation. */
+/** \} dnnl_api_deconvolution
+ <p>
+ *  \addtogroup dnnl_api_shuffle
+ *  \{
+ <p>
+ *  A descriptor of a shuffle operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_shuffle_desc_t extends Pointer {
     static { Loader.load(); }
@@ -26,7 +31,7 @@ public class dnnl_shuffle_desc_t extends Pointer {
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
-     *  descriptor. Must be #dnnl_convolution. */
+     *  descriptor. Must be #dnnl_shuffle. */
     public native @Cast("dnnl_primitive_kind_t") int primitive_kind(); public native dnnl_shuffle_desc_t primitive_kind(int setter);
     /** The kind of propagation. Possible values: #dnnl_forward_training,
      *  #dnnl_forward_inference, and #dnnl_backward_data. */
@@ -34,8 +39,8 @@ public class dnnl_shuffle_desc_t extends Pointer {
     /** Source and destination memory descriptor,
      *  and source and destination gradient memory descriptor. */
     public native @ByRef dnnl_memory_desc_t data_desc(); public native dnnl_shuffle_desc_t data_desc(dnnl_memory_desc_t setter);
-    /** axis for shuffling. */
+    /** Axis for shuffling. */
     public native int axis(); public native dnnl_shuffle_desc_t axis(int setter);
-    /** number of groups in group convolution */
+    /** Number of groups. */
     public native @Cast("dnnl_dim_t") long group_size(); public native dnnl_shuffle_desc_t group_size(long setter);
 }

@@ -9,9 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \}
+/** \} dnnl_api_memory
  <p>
- *  \addtogroup c_api_types_op_descs Operation descriptors
+ *  \addtogroup dnnl_api_primitives
+ *  \{
+ *  \addtogroup dnnl_api_primitives_common
  *  \{
  <p>
  *  A pointer to any of the operation descriptors. */

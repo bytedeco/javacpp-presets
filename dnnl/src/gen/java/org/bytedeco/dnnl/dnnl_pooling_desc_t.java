@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a pooling operation. */
+/** \} dnnl_api_logsoftmax
+ <p>
+ *  \addtogroup dnnl_api_pooling
+ *  \{
+ <p>
+ *  A descriptor of a pooling operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_pooling_desc_t extends Pointer {
     static { Loader.load(); }

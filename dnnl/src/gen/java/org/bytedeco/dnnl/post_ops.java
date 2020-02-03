@@ -10,22 +10,16 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 /** \endcond
  <p>
- *  Post operations
+ *  Post-ops.
  * 
- *  @see \ref dev_guide_attributes_post_ops */
+ *  Post-ops are computations executed after the main primitive computations
+ *  and are attached to the primitive via primitive attributes.
+ * 
+ *  @see \ref dev_guide_attributes_post_ops
+ *  */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class post_ops extends dnnl_post_ops_handle {
     static { Loader.load(); }
-
-    
-        public post_ops() { super((Pointer)null); allocate(); }
-        private native void allocate();
-        public post_ops(@Const @ByRef post_ops arg0) { super((Pointer)null); allocate(arg0); }
-        private native void allocate(@Const @ByRef post_ops arg0);
-        public post_ops(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
-        private native void allocate(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/);
-        public post_ops(dnnl_post_ops t) { super((Pointer)null); allocate(t); }
-        private native void allocate(dnnl_post_ops t);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public post_ops(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -36,67 +30,99 @@ public class post_ops extends dnnl_post_ops_handle {
     }
 
 
-    /** Creates an empty sequence of post operations. */
+    /** Constructs an empty sequence of post-ops. */
+    public post_ops() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
-    /** Returns the length of post operations */
+    /** Returns the number of post-ops entries. */
     public native int len();
 
-    /** Returns the kind of post operation with index \p index. */
+    /** Returns the primitive kind of post-op at entry with a certain index.
+     *  @param index Index of the post-op to return the kind for.
+     *  @return Primitive kind of the post-op at the specified index. */
     
+    ///
+    ///
     ///
     ///
     ///
     ///
     public native primitive.kind kind(int index);
 
-    /** Appends accumulation (sum) post operation. Prior to accumulating the
-     *  result, the previous value would be multiplied by \p scale.
+    /** Appends an accumulation (sum) post-op. Prior to accumulating the
+     *  result, the previous value would be multiplied by a scaling factor
+     *  \p scale.
      * 
-     *  The kind of this post operation is #dnnl_sum.
+     *  The kind of this post-op is #dnnl::primitive::kind::sum.
      * 
-     *  This feature might improve performance for cases like residual learning
-     *  blocks, where the result of convolution is accumulated to the previously
-     *  computed activations. The parameter \p scale might be extreme for the
-     *  integer-based computations when the result and previous activations have
-     *  different logical scaling factors.
+     *  This feature may improve performance for cases like residual learning
+     *  blocks, where the result of convolution is accumulated to the
+     *  previously computed activations. The parameter \p scale may be used
+     *  for the integer-based computations when the result and previous
+     *  activations have different logical scaling factors.
      * 
-     *  In the simplest case when the accumulation is the only post operation,
+     *  In the simplest case when the accumulation is the only post-op,
      *  the computations would be:
-     *  dst[] <- scale * dst[] + op(...) // instead of dst[] <- op(...)
+     * 
+     *      dst[:] <- scale * dst[:] + op(...) // instead of dst[:] <- op(...)
      * 
      *  \note
-     *      This post operation (as well as all the others) disregards the
-     *      original layout of the destination; that is, the layout of the
-     *      original destination is expected to be the same as the layout of the
-     *      stored destination. */
+     *      This post-op executes in-place and does not change the
+     *      destination layout.
+     * 
+     *  @param scale Scaling factor. */
+    
+    ///
     public native void append_sum(float scale/*=1.*/);
     public native void append_sum();
 
-    /** Gets the parameters of the accumulation (sum) post operation with index
-     *  \p index. */
+    /** Returns the parameters of an accumulation (sum) post-op.
+     * 
+     *  @param index Index of the sum post-op.
+     *  @param scale Scaling factor of the sum post-op. */
     
+    ///
+    ///
+    ///
     ///
     ///
     public native void get_params_sum(int index, @ByRef FloatPointer scale);
     public native void get_params_sum(int index, @ByRef FloatBuffer scale);
     public native void get_params_sum(int index, @ByRef float[] scale);
 
-    /** Appends eltwise post operation.
+    /** Appends an elementwise post-op.
      * 
-     *  The kind of this post operation is #dnnl_eltwise.
+     *  The kind of this post-op is #dnnl::primitive::kind::eltwise.
      * 
-     *  In the simplest case when the eltwise is the only post operation, the
+     *  In the simplest case when the elementwise is the only post-op, the
      *  computations would be:
-     *  dst[] <- scale * eltwise_op ( op(...) ) // instead of dst[] <- op(...)
-     *  where eltwise_op is configured with the given parameters. */
-    public native void append_eltwise(float scale, algorithm alg, float alpha, float beta);
-    public native void append_eltwise(float scale, @Cast("dnnl::algorithm") int alg, float alpha, float beta);
+     * 
+     *      dst[:] <- scale * eltwise_op (op(...)) // instead of dst[:] <- op(...)
+     * 
+     *  where eltwise_op is configured with the given parameters.
+     * 
+     *  @param scale Scaling factor.
+     *  @param algorithm Elementwise algorithm.
+     *  @param alpha Alpha parameter for the elementwise algorithm.
+     *  @param beta Beta parameter for the elementwise algorithm. */
+    
+    ///
+    public native void append_eltwise(
+                float scale, algorithm algorithm, float alpha, float beta);
+    public native void append_eltwise(
+                float scale, @Cast("dnnl::algorithm") int algorithm, float alpha, float beta);
 
-    /** Gets the eltwise parameters of the post operation with index \p index. */
-    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("dnnl::algorithm*") IntPointer alg,
+    /** Returns parameters of an elementwise post-up.
+     * 
+     *  @param index Index of the post-op.
+     *  @param scale Output scaling factor.
+     *  @param algorithm Output elementwise algorithm kind.
+     *  @param alpha Output alpha parameter for the elementwise algorithm.
+     *  @param beta Output beta parameter for the elementwise algorithm. */
+    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("dnnl::algorithm*") IntPointer algorithm,
                 @ByRef FloatPointer alpha, @ByRef FloatPointer beta);
-    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("dnnl::algorithm*") IntBuffer alg,
+    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("dnnl::algorithm*") IntBuffer algorithm,
                 @ByRef FloatBuffer alpha, @ByRef FloatBuffer beta);
-    public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("dnnl::algorithm*") int[] alg,
+    public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("dnnl::algorithm*") int[] algorithm,
                 @ByRef float[] alpha, @ByRef float[] beta);
 }

@@ -9,12 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \}
- <p>
- *  \addtogroup c_api_primitive_descs Primitive descriptors
- *  \{
- <p>
- *  \struct dnnl_primitive_desc
+/** \struct dnnl_primitive_desc
  *  \brief An opaque structure to describe a primitive descriptor. */
 @Opaque @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_primitive_desc extends Pointer {

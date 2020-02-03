@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a Batch Normalization operation. */
+/** \} dnnl_api_lrn
+ <p>
+ *  \addtogroup dnnl_api_batch_normalization
+ *  \{
+ <p>
+ *  A descriptor of a Batch Normalization operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_batch_normalization_desc_t extends Pointer {
     static { Loader.load(); }

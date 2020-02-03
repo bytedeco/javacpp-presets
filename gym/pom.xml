@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>gym</artifactId>
-  <version>0.15.4-${project.parent.version}</version>
+  <version>0.15.5-${project.parent.version}</version>
   <name>JavaCPP Presets for Gym</name>
 
   <properties>

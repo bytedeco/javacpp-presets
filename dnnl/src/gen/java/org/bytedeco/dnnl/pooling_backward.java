@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
+/** Pooling backward propagation primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class pooling_backward extends primitive {
     static { Loader.load(); }
@@ -21,69 +22,94 @@ public class pooling_backward extends primitive {
         return (pooling_backward)super.position(position);
     }
 
-
-    /** Descriptor for pooling backward propagation. */
+    /** Descriptor for a pooling backward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
+        
+        ///
+        ///
+        ///
         public native @ByRef dnnl_pooling_desc_t data(); public native desc data(dnnl_pooling_desc_t setter);
 
-        /** Initializes a pooling descriptor for backward propagation using \p
-         *  aalgorithm, memory descriptors, and pooling parameters in the spatial
-         *  domain: \p strides, \p kernel sizes, \p padding_l, and \p padding_r. */
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+        /** Constructs a descriptor for pooling backward propagation primitive.
+         * 
+         *  Inputs:
+         *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         *   - workspace (#dnnl::primitive_desc_base::workspace_desc (0)),
+         *      if \p alg_kind = #dnnl_pooling_max; must be queried for using
+         *      \ref dnnl_primitive_desc_query_md() after a corresponding
+         *      primitive descriptor is created
+         * 
+         *  Outputs:
+         *   - diff_src (#dnnl::primitive_desc_base::diff_src_desc (0))
+         * 
+         *  @param algorithm Pooling algorithm kind: either
+         *      #dnnl::algorithm::pooling_max,
+         *      #dnnl::algorithm::pooling_avg_include_padding,
+         *      or #dnnl::algorithm::pooling_avg (same as
+         *      #dnnl::algorithm::pooling_avg_exclude_padding).
+         *  @param diff_src_desc Diff source memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param strides Vector of strides for spatial dimension.
+         *  @param kernel Vector of kernel spatial dimensions.
+         *  @param padding_l Vector of padding values for low indices for each
+         *      spatial dimension (front, top, left).
+         *  @param padding_r Vector of padding values for high indices for
+         *      each spatial dimension (back, bottom, right). */
+        public desc(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+        public desc(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
     }
 
-    /** Primitive descriptor for pooling backward propagation. */
+    /** Primitive descriptor for a pooling backward propagation primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -95,57 +121,93 @@ public class pooling_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
     
+        /** Default constructor. Produces an empty object. */
+        
+        ///
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+        /** Constructs a primitive descriptor for a pooling backward
+         *  propagation primitive.
+         * 
+         *  @param desc Descriptor for a pooling backward propagation primitive.
+         *  @param engine Engine to use.
+         *  @param hint_fwd_pd Primitive descriptor for a pooling forward
+         *      propagation primitive. It is used as a hint for deciding which
+         *      memory format to use.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
+        
+        ///
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, e, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
-                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
+                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
                         @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd);
 
+        /** Constructs a primitive descriptor for a pooling backward
+         *  propagation primitive.
+         * 
+         *  @param desc Descriptor for a pooling backward propagation primitive.
+         *  @param attr Primitive attributes to use.
+         *  @param engine Engine to use.
+         *  @param hint_fwd_pd Primitive descriptor for a pooling forward
+         *      propagation primitive. It is used as a hint for deciding which
+         *      memory format to use.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
+        
+        ///
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+                        @Const @ByRef engine engine,
                         @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd, allow_empty); }
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+                        @Const @ByRef engine engine,
                         @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
-                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+                        @Const @ByRef engine engine,
+                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine e,
+                        @Const @ByRef engine engine,
                         @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd);
 
-        /** Initializes a primitive descriptor for pooling backward
-         *  propagation from a C primitive descriptor \p pd. */
+        /** Constructs a primitive descriptor for a pooling backward
+         *  propagation primitive from a C API primitive descriptor that must
+         *  have a matching kind.
+         * 
+         *  @param pd C API primitive descriptor for a pooling backward
+         *      propagation primitive. */
         public primitive_desc(dnnl_primitive_desc pd) { super((Pointer)null); allocate(pd); }
         private native void allocate(dnnl_primitive_desc pd);
 
-        /** Queries diff source memory descriptor. */
+        /** \copydoc dnnl::primitive_desc_base::src_desc()const */
         public native @ByVal memory.desc diff_src_desc();
 
-        /** Queries diff destination memory descriptor. */
-        
-        ///
+        /** \copydoc dnnl::primitive_desc_base::diff_dst_desc()const */
         public native @ByVal memory.desc diff_dst_desc();
 
-        /** Queries workspace memory descriptor.
-         * 
-         *  Returns a zero_md if no worspace is required. */
+        /** \copydoc dnnl::primitive_desc_base::workspace_desc()const */
         public native @ByVal memory.desc workspace_desc();
     }
 
+    /** Default constructor. Produces an empty object. */
     public pooling_backward() { super((Pointer)null); allocate(); }
     private native void allocate();
 
+    /** Constructs a pooling backward propagation primitive.
+     *  @param pd Primitive descriptor for a pooling backward propagation
+     *      primitive. */
     public pooling_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 }

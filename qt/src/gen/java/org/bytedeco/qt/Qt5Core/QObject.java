@@ -50,7 +50,9 @@ public class QObject extends Pointer {
 
     public native int startTimer(int interval, @Cast("Qt::TimerType") int timerType/*=Qt::CoarseTimer*/);
     public native int startTimer(int interval);
-// #if QT_HAS_INCLUDE(<chrono>)
+// #if __has_include(<chrono>)
+    public native int startTimer(@ByVal long time, @Cast("Qt::TimerType") int timerType/*=Qt::CoarseTimer*/);
+    public native int startTimer(@ByVal long time);
 // #endif
     public native void killTimer(int id);
 

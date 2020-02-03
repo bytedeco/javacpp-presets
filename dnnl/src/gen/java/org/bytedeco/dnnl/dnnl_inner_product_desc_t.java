@@ -9,7 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of an inner product operation. */
+/** \} dnnl_api_layer_normalization
+ <p>
+ *  \addtogroup dnnl_api_inner_product
+ *  \{
+ <p>
+ *  A descriptor of an inner product operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_inner_product_desc_t extends Pointer {
     static { Loader.load(); }

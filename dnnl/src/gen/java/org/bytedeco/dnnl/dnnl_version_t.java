@@ -8,18 +8,9 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
-/** \endcond
- <p>
- *  \addtogroup c_api C API
- *  \{
- * 
- *  \addtogroup c_api_types Types
- *  \{
- * 
- *  \addtogroup c_api_types_generic Generic
- *  \{
- <p>
- *  Version type */
+
+/** Structure containing version information as per [Semantic
+ *  Versioning](https://semver.org) */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_version_t extends Pointer {
     static { Loader.load(); }
@@ -35,8 +26,16 @@ public class dnnl_version_t extends Pointer {
         return (dnnl_version_t)super.position(position);
     }
 
+    /** Major version */
     public native int major(); public native dnnl_version_t major(int setter);
+    /** Minor version */
     public native int minor(); public native dnnl_version_t minor(int setter);
+    /** Patch version */
     public native int patch(); public native dnnl_version_t patch(int setter);
+    /** Git hash of the sources (may be absent) */
     public native @Cast("const char*") BytePointer hash(); public native dnnl_version_t hash(BytePointer setter);
+    /** CPU runtime */
+    public native @Cast("unsigned") int cpu_runtime(); public native dnnl_version_t cpu_runtime(int setter);
+    /** GPU runtime */
+    public native @Cast("unsigned") int gpu_runtime(); public native dnnl_version_t gpu_runtime(int setter);
 }

@@ -9,7 +9,16 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** A descriptor of a convolution operation. */
+/** \} dnnl_api_primitives_common
+ *  \} dnnl_api_primitives
+ <p>
+ *  \addtogroup dnnl_api_primitives
+ *  \{
+ <p>
+ *  \addtogroup dnnl_api_convolution
+ *  \{
+ <p>
+ *  A descriptor of a convolution operation. */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_convolution_desc_t extends Pointer {
     static { Loader.load(); }
