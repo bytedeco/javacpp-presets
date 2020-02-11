@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mxnet-platform</artifactId>
-  <version>1.5.1-${project.parent.version}</version>
+  <version>1.6.0.rc2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MXNet</name>
 
   <properties>
