@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2019 Samuel Audet
+ * Copyright (C) 2016-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -42,15 +42,15 @@ import org.bytedeco.opencv.presets.*;
  */
 @Properties(inherit = {openblas.class, opencv_imgcodecs.class, opencv_highgui.class}, target = "org.bytedeco.mxnet", global = "org.bytedeco.mxnet.global.mxnet", value = {
     @Platform(value = {"linux", "macosx", "windows"}, compiler = {"cpp11", "fastfpu"},
-        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 0", "MSHADOW_USE_F16C 0"},
+        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 0", "MSHADOW_USE_F16C 0", "MXNET_USE_TVM_OP 0"},
         include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
                    "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/
                    "org_apache_mxnet_init_native_c_api.cc", "org_apache_mxnet_native_c_api.cc"},
-        link = "mxnet", preload = {"mkldnn@.0", "libmxnet"}, /*resource = {"include", "lib"},*/
+        link = "mxnet", preload = {"mkldnn@.1", "libmxnet", "mxnet_61"}, /*resource = {"include", "lib"},*/
         includepath = {"/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}),
     @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
-        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0"},
-        link = {"cudart@.10.2#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.0", "libmxnet"},
+        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0", "MXNET_USE_TVM_OP 0"},
+        link = {"cudart@.10.2#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.1", "libmxnet", "mxnet_61"},
         includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/"},
         linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/"},
         preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin/"}, extension = "-gpu") })
@@ -104,6 +104,9 @@ public class mxnet implements LoadEnabled, InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("org_apache_mxnet_init_native_c_api.cc", "org_apache_mxnet_native_c_api.cc").skip())
                .put(new Info("MXNET_EXTERN_C", "MXNET_DLL").cppTypes().annotations())
+               .put(new Info("MSHADOW_USE_F16C", "MXNET_USE_TVM_OP").define(false))
+               .put(new Info("MXNDArrayCreateSparseEx64", "MXNDArrayGetAuxNDArray64", "MXNDArrayGetAuxType64",
+                             "MXNDArrayGetShape64", "MXSymbolInferShape64", "MXSymbolInferShapePartial64").skip())
                .put(new Info("NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
                .put(new Info("const NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("@Cast(\"NDArrayHandle*\") PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
                .put(new Info("FunctionHandle").annotations("@Const").valueTypes("FunctionHandle").pointerTypes("PointerPointer", "@Cast(\"FunctionHandle*\") @ByPtrPtr FunctionHandle"))

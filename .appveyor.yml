@@ -65,6 +65,7 @@ environment:
       OS: windows-x86_64
     - PROJ: "mxnet"
       OS: windows-x86_64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - PROJ: "tensorflow"
       OS: windows-x86_64
     - PROJ: "ale"
@@ -80,6 +81,7 @@ environment:
     - PROJ: "mxnet"
       OS: windows-x86_64
       EXT: -gpu
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 #    - PROJ: "tensorflow"
 #      OS: windows-x86_64
 #      EXT: -gpu

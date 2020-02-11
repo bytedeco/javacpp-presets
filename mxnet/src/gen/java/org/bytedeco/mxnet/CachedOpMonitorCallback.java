@@ -20,11 +20,15 @@ import static org.bytedeco.opencv.global.opencv_highgui.*;
 
 import static org.bytedeco.mxnet.global.mxnet.*;
 
-/** \brief handle to rtc cuda module*/
-@Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.mxnet.presets.mxnet.class)
-public class CudaModuleHandle extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CudaModuleHandle() { super((Pointer)null); }
+/** \brief Monitor callback called at operator level for cached op */
+@Properties(inherit = org.bytedeco.mxnet.presets.mxnet.class)
+public class CachedOpMonitorCallback extends FunctionPointer {
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CudaModuleHandle(Pointer p) { super(p); }
+    public    CachedOpMonitorCallback(Pointer p) { super(p); }
+    protected CachedOpMonitorCallback() { allocate(); }
+    private native void allocate();
+    public native void call(@Cast("const char*") BytePointer arg0,
+                                        @Cast("const char*") BytePointer arg1,
+                                        NDArrayHandle arg2);
 }
