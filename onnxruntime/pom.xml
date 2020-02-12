@@ -16,15 +16,15 @@
 
   <properties>
     <javacpp.nativeRequires>
-      requires org.bytedeco.mkldnn.${javacpp.platform.module};
+      requires org.bytedeco.dnnl.${javacpp.platform.module};
     </javacpp.nativeRequires>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>mkl-dnn</artifactId>
-      <version>0.21.3-${project.parent.version}</version>
+      <artifactId>dnnl</artifactId>
+      <version>1.2.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -55,7 +55,6 @@
                 <exclude>org/bytedeco/ngraph/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
                 <exclude>org/bytedeco/ngraph/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
                 <exclude>org/bytedeco/ngraph/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
-                <exclude>org/bytedeco/ngraph/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
                 <exclude>org/bytedeco/ngraph/${javacpp.platform}${javacpp.platform.extension}/*omp*</exclude>
               </excludes>
             </configuration>
