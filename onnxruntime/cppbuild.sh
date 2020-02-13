@@ -56,7 +56,7 @@ sedinplace '/s_api/d' include/onnxruntime/core/session/onnxruntime_cxx_api.h
 
 sedinplace 's/std::string&&/std::string/g' include/onnxruntime/core/session/onnxruntime_cxx_api.h
 
-sedinplace '/inline Unowned<TensorTypeAndShapeInfo> TypeInfo/,+4d' include/onnxruntime/core/session/onnxruntime_cxx_inline.h
+sedinplace '/inline Unowned<TensorTypeAndShapeInfo> TypeInfo/{N;N;N;N;d;}' include/onnxruntime/core/session/onnxruntime_cxx_inline.h
 
 cp -r include/* ../include
 cp -r build/Linux/Release/lib* build/Linux/Release/dnnl/install/lib*/libdnnl* ../lib
