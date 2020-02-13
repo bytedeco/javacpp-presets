@@ -30,7 +30,7 @@ git submodule update --init --recursive --jobs $MAKEJ
 git submodule foreach --recursive git reset --hard
 patch -p1 < ../../../onnxruntime.patch
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-#MAKEFLAGS="-j $MAKEJ" bash build.sh --cmake_path "$CMAKE" --ctest_path "$CTEST" --config Release --use_dnnl --build_shared_lib
+MAKEFLAGS="-j $MAKEJ" bash build.sh --cmake_path "$CMAKE" --ctest_path "$CTEST" --config Release --use_dnnl --build_shared_lib
 sedinplace '/std::nullptr_t/d' include/onnxruntime/core/session/onnxruntime_cxx_api.h
 
 
