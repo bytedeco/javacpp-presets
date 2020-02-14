@@ -46,11 +46,11 @@ import org.bytedeco.opencv.presets.*;
         include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
                    "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/
                    "org_apache_mxnet_init_native_c_api.cc", "org_apache_mxnet_native_c_api.cc"},
-        link = "mxnet", preload = {"mkldnn@.1", "libmxnet", "mxnet_61"}, /*resource = {"include", "lib"},*/
+        link = "mxnet", preload = {"mkldnn@.1", "libmxnet"}, /*resource = {"include", "lib"},*/
         includepath = {"/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}),
     @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
         define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0", "MXNET_USE_TVM_OP 0"},
-        link = {"cudart@.10.2#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.1", "libmxnet", "mxnet_61"},
+        link = {"cudart@.10.2#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.1", "libmxnet", "mxnet_30"},
         includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/"},
         linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/"},
         preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin/"}, extension = "-gpu") })

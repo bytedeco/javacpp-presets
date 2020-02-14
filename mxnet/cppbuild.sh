@@ -125,7 +125,7 @@ case $PLATFORM in
         # configure the build
         mkdir -p ../build
         cd ../build
-        USE_X="-DCUDA_ARCH_LIST=3.0+PTX -DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
+        USE_X="-DMXNET_CUDA_ARCH=3.0+PTX -DCUDA_ARCH_LIST=3.0+PTX -DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
         OPENCV="-DOpenCV_DIR=$OPENCV_PATH/ -DOpenCV_CONFIG_PATH=$OPENCV_PATH/"
         OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/lib/openblas.lib"
         "$CMAKE" -G "Visual Studio 16 2019" $USE_X $OPENCV $OPENBLAS ../incubator-mxnet
@@ -141,6 +141,7 @@ case $PLATFORM in
         # copy library files
         mkdir -p ../lib
         cp -f Release/libmxnet.lib ../lib/mxnet.lib
+        cp -f Release/mxnet_??.lib ../lib/mxnet.lib || true
 
         # finish
         cd ../incubator-mxnet
