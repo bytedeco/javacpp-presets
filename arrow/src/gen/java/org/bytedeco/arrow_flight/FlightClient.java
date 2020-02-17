@@ -127,10 +127,10 @@ public class FlightClient extends Pointer {
    *  @param reader [out] a reader for application metadata from the server
    *  @return Status */
   public native @ByVal Status DoPut(@Const @ByRef FlightCallOptions options, @Const @ByRef FlightDescriptor descriptor,
-                 @SharedPtr Schema schema,
+                 @Const @SharedPtr @ByRef Schema schema,
                  @UniquePtr FlightStreamWriter stream,
                  @UniquePtr FlightMetadataReader reader);
-  public native @ByVal Status DoPut(@Const @ByRef FlightDescriptor descriptor, @SharedPtr Schema schema,
+  public native @ByVal Status DoPut(@Const @ByRef FlightDescriptor descriptor, @Const @SharedPtr @ByRef Schema schema,
                  @UniquePtr FlightStreamWriter stream,
                  @UniquePtr FlightMetadataReader reader);
 }

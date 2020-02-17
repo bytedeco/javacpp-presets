@@ -59,8 +59,8 @@ public class ArrowBuffer extends Pointer {
    *  This method makes no assertions about alignment or padding of the buffer but
    *  in general we expected buffers to be aligned and padded to 64 bytes.  In the future
    *  we might add utility methods to help determine if a buffer satisfies this contract. */
-  public ArrowBuffer(@Const @SharedPtr @ByRef ArrowBuffer parent, @Cast("const int64_t") long offset, @Cast("const int64_t") long size) { super((Pointer)null); allocate(parent, offset, size); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer parent, @Cast("const int64_t") long offset, @Cast("const int64_t") long size);
+  public ArrowBuffer(@SharedPtr ArrowBuffer parent, @Cast("const int64_t") long offset, @Cast("const int64_t") long size) { super((Pointer)null); allocate(parent, offset, size); }
+  private native void allocate(@SharedPtr ArrowBuffer parent, @Cast("const int64_t") long offset, @Cast("const int64_t") long size);
 
   public native @Cast("uint8_t") @Name("operator []") byte get(@Cast("std::size_t") long i);
 
@@ -79,11 +79,11 @@ public class ArrowBuffer extends Pointer {
 
   /** Copy a section of the buffer into a new Buffer. */
   public native @ByVal Status Copy(@Cast("const int64_t") long start, @Cast("const int64_t") long nbytes, MemoryPool pool,
-                @SharedPtr ArrowBuffer out);
+                @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   /** Copy a section of the buffer using the default memory pool into a new Buffer. */
   public native @ByVal Status Copy(@Cast("const int64_t") long start, @Cast("const int64_t") long nbytes,
-                @SharedPtr ArrowBuffer out);
+                @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   /** Zero bytes in padding, i.e. bytes between size_ and capacity_. */
   
@@ -99,14 +99,14 @@ public class ArrowBuffer extends Pointer {
    * 
    *  @return Status message */
   public static native @ByVal Status FromString(@StdString String data, MemoryPool pool,
-                             @SharedPtr ArrowBuffer out);
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
   public static native @ByVal Status FromString(@StdString BytePointer data, MemoryPool pool,
-                             @SharedPtr ArrowBuffer out);
+                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   /** \brief Construct a new buffer that owns its memory from a std::string
    *  using the default memory pool */
-  public static native @ByVal Status FromString(@StdString String data, @SharedPtr ArrowBuffer out);
-  public static native @ByVal Status FromString(@StdString BytePointer data, @SharedPtr ArrowBuffer out);
+  public static native @ByVal Status FromString(@StdString String data, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
+  public static native @ByVal Status FromString(@StdString BytePointer data, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   /** \brief Construct an immutable buffer that takes ownership of the contents
    *  of an std::string
@@ -135,6 +135,9 @@ public class ArrowBuffer extends Pointer {
   /** \brief View buffer contents as a util::string_view
    *  @return util::string_view */
 
+  /** \brief View buffer contents as a util::bytes_view
+   *  @return util::bytes_view */
+
   /** \brief Return a pointer to the buffer's data */
   
   ///
@@ -151,5 +154,5 @@ public class ArrowBuffer extends Pointer {
   /** \brief Return the buffer's capacity (number of allocated bytes) */
   public native @Cast("int64_t") @Name("capacity") long _capacity();
 
-  public native @SharedPtr @ByVal ArrowBuffer parent();
+  public native @SharedPtr ArrowBuffer parent();
 }

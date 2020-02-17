@@ -71,13 +71,28 @@ public class HadoopFileSystem extends IOFileSystem {
   public native @ByVal Status GetUsed(@Cast("int64_t*") LongBuffer nbytes);
   public native @ByVal Status GetUsed(@Cast("int64_t*") long[] nbytes);
 
+  
+  ///
   public native @ByVal Status GetChildren(@StdString String path, StringVector listing);
   public native @ByVal Status GetChildren(@StdString BytePointer path, StringVector listing);
 
+  /** List directory contents
+   * 
+   *  If path is a relative path, returned values will be absolute paths or URIs
+   *  starting from the current working directory. */
   
   ///
   public native @ByVal Status ListDirectory(@StdString String path, @StdVector HdfsPathInfo listing);
   public native @ByVal Status ListDirectory(@StdString BytePointer path, @StdVector HdfsPathInfo listing);
+
+  /** Return the filesystem's current working directory.
+   * 
+   *  The working directory is the base path for all relative paths given to
+   *  other APIs.
+   *  NOTE: this actually returns a URI. */
+  
+  ///
+  public native @ByVal Status GetWorkingDirectory(@StdString @Cast({"char*", "std::string*"}) BytePointer out);
 
   /** Change
    * 

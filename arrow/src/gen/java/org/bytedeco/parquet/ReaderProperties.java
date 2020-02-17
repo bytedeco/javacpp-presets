@@ -43,4 +43,8 @@ public class ReaderProperties extends Pointer {
   public native void set_buffer_size(@Cast("int64_t") long buf_size);
 
   public native @Cast("int64_t") long buffer_size();
+
+  public native void file_decryption_properties(@SharedPtr FileDecryptionProperties decryption);
+
+  public native FileDecryptionProperties file_decryption_properties();
 }

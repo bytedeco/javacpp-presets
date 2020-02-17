@@ -18,10 +18,18 @@ public class TableReader extends Pointer {
 
 
   /** Read the entire CSV file and convert it to a Arrow Table */
-  public native @ByVal Status Read(@SharedPtr Table out);
+  public native @ByVal TableResult Read();
+
+  public native @Deprecated @ByVal Status Read(@SharedPtr Table out);
 
   /** Create a TableReader instance */
-  public static native @ByVal Status Make(MemoryPool pool, @SharedPtr InputStream input,
+  public static native @ByVal TableReaderResult Make(MemoryPool pool,
+                                                     @SharedPtr InputStream input,
+                                                     @Const @ByRef ReadOptions arg2,
+                                                     @Const @ByRef CsvParseOptions arg3,
+                                                     @Const @ByRef ConvertOptions arg4);
+
+  public static native @Deprecated @ByVal Status Make(MemoryPool pool, @SharedPtr InputStream input,
                        @Const @ByRef ReadOptions arg2, @Const @ByRef CsvParseOptions arg3, @Const @ByRef ConvertOptions arg4,
                        @SharedPtr TableReader out);
 }

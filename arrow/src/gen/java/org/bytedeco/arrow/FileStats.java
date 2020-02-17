@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief EXPERIMENTAL: FileSystem entry stats */
+/** \brief FileSystem entry stats */
 @Namespace("arrow::fs") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class FileStats extends Pointer {
     static { Loader.load(); }
@@ -62,5 +62,29 @@ public class FileStats extends Pointer {
   public native @Cast("bool") boolean IsFile();
   public native @Cast("bool") boolean IsDirectory();
 
-  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FileStats other);
+  public native @Cast("bool") boolean Equals(@Const @ByRef FileStats other);
+
+  public native @StdString String ToString();
+
+  /** Function object implementing less-than comparison and hashing
+   *  by path, to support sorting stats, using them as keys, and other
+   *  interactions with the STL. */
+  public static class ByPath extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public ByPath() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public ByPath(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public ByPath(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public ByPath position(long position) {
+          return (ByPath)super.position(position);
+      }
+  
+    public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef FileStats l, @Const @ByRef FileStats r);
+
+    public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef FileStats s);
+  }
 }

@@ -29,7 +29,7 @@ public class JsonParseOptions extends Pointer {
   /** Optional explicit schema (disables type inference on those fields) */
   
   ///
-  public native @SharedPtr Schema explicit_schema(); public native JsonParseOptions explicit_schema(Schema setter);
+  public native @SharedPtr @ByRef Schema explicit_schema(); public native JsonParseOptions explicit_schema(Schema setter);
 
   /** Whether objects may be printed across multiple lines (for example pretty-printed)
    * 

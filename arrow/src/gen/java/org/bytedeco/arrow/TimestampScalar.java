@@ -9,17 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class TimestampScalar extends PrimitiveScalar {
+@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class TimestampScalar extends BaseTimestampScalar {
     static { Loader.load(); }
+
+  
+    
+    
+      public TimestampScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  
+  
+    public TimestampScalar(@Cast("arrow::TemporalScalar<arrow::TimestampType>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
+    private native void allocate(@Cast("arrow::TemporalScalar<arrow::TimestampType>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TimestampScalar(Pointer p) { super(p); }
 
-  public native @Cast("int64_t") long value(); public native TimestampScalar value(long setter);
-  public TimestampScalar(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                    @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, type, is_valid); }
-  private native void allocate(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                    @Cast("bool") boolean is_valid/*=true*/);
-  public TimestampScalar(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
-  private native void allocate(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 }

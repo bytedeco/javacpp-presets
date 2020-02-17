@@ -83,15 +83,18 @@ public class Schema extends Fingerprintable {
    * 
    *  @param metadata [in] new KeyValueMetadata
    *  @return new Schema */
-  public native @SharedPtr Schema WithMetadata(
+  public native @SharedPtr @ByVal Schema WithMetadata(
         @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata);
 
-  public native @SharedPtr Schema AddMetadata(
+  public native @Deprecated @SharedPtr @ByVal Schema AddMetadata(
         @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata);
 
   /** \brief Return copy of Schema without the KeyValueMetadata */
-  public native @SharedPtr Schema RemoveMetadata();
+  public native @SharedPtr @ByVal Schema RemoveMetadata();
 
-  /** \brief Indicates that Schema has non-empty KevValueMetadata */
+  /** \brief Indicate that the Schema has non-empty KevValueMetadata */
   public native @Cast("bool") boolean HasMetadata();
+
+  /** \brief Indicate that the Schema has distinct field names. */
+  public native @Cast("bool") boolean HasDistinctFieldNames();
 }

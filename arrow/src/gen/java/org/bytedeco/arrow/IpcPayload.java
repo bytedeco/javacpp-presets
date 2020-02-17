@@ -29,7 +29,7 @@ public class IpcPayload extends Pointer {
     }
 
   public native Message.Type type(); public native IpcPayload type(Message.Type setter);
-  public native @SharedPtr @ByRef ArrowBuffer metadata(); public native IpcPayload metadata(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer metadata(); public native IpcPayload metadata(ArrowBuffer setter);
   public native @ByRef ArrowBufferVector body_buffers(); public native IpcPayload body_buffers(ArrowBufferVector setter);
   public native @Cast("int64_t") long body_length(); public native IpcPayload body_length(long setter);
 }

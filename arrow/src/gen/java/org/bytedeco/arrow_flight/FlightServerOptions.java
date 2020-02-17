@@ -25,11 +25,24 @@ public class FlightServerOptions extends Pointer {
    *  Use port 0 to bind to an available port. */
   public native @ByRef Location location(); public native FlightServerOptions location(Location setter);
   /** \brief The authentication handler to use. */
-  public native @UniquePtr ServerAuthHandler auth_handler(); public native FlightServerOptions auth_handler(ServerAuthHandler setter);
+  public native @SharedPtr ServerAuthHandler auth_handler(); public native FlightServerOptions auth_handler(ServerAuthHandler setter);
   /** \brief A list of TLS certificate+key pairs to use. */
+  
+  ///
   public native @StdVector CertKeyPair tls_certificates(); public native FlightServerOptions tls_certificates(CertKeyPair setter);
+
+  /** \brief A list of server middleware to apply, along with a key to
+   *  identify them by.
+   * 
+   *  Middleware are always applied in the order provided. Duplicate
+   *  keys are an error. */
+  
+  ///
+  public native @ByRef ServerMiddlewareFactoryStringPairVector middleware(); public native FlightServerOptions middleware(ServerMiddlewareFactoryStringPairVector setter);
+
   /** \brief A Flight implementation-specific callback to customize
    *  transport-specific options.
+   * 
    *  Not guaranteed to be called. The type of the parameter is
    *  specific to the Flight implementation. Users should take care to
    *  link to the same transport implementation as Flight to avoid

@@ -26,22 +26,16 @@ public class ParquetInputWrapper extends RandomAccessFile {
 
   // FileInterface
   public native @ByVal Status Close();
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
   public native @Cast("bool") boolean closed();
 
   // Seekable
   public native @ByVal Status Seek(@Cast("int64_t") long _position);
 
   // InputStream / RandomAccessFile
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("parquet::Buffer*") @SharedPtr ArrowBuffer out);
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes,
-                           @Cast("parquet::Buffer*") @SharedPtr ArrowBuffer out);
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongPointer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongBuffer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") long[] size);
+  public native @ByVal LongResult Read(@Cast("int64_t") long nbytes, Pointer out);
+  public native @ByVal BufferResult Read(@Cast("int64_t") long nbytes);
+  public native @ByVal BufferResult ReadAt(@Cast("int64_t") long _position,
+                                                    @Cast("int64_t") long nbytes);
+  public native @ByVal LongResult GetSize();
 }

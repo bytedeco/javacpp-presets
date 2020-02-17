@@ -28,30 +28,29 @@ public class UnionArray extends Array {
   ///
   public UnionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                @Const @ByRef ArrayVector children,
-               @Const @SharedPtr @ByRef ArrowBuffer type_ids,
-               @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer value_offsets,
-               @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+               @SharedPtr ArrowBuffer type_ids,
+               @SharedPtr ArrowBuffer value_offsets/*=nullptr*/,
+               @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
                @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, children, type_ids, value_offsets, null_bitmap, null_count, offset); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                @Const @ByRef ArrayVector children,
-               @Const @SharedPtr @ByRef ArrowBuffer type_ids,
-               @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer value_offsets,
-               @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+               @SharedPtr ArrowBuffer type_ids,
+               @SharedPtr ArrowBuffer value_offsets/*=nullptr*/,
+               @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
                @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public UnionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                @Const @ByRef ArrayVector children,
-               @Const @SharedPtr @ByRef ArrowBuffer type_ids) { super((Pointer)null); allocate(type, length, children, type_ids); }
+               @SharedPtr ArrowBuffer type_ids) { super((Pointer)null); allocate(type, length, children, type_ids); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                @Const @ByRef ArrayVector children,
-               @Const @SharedPtr @ByRef ArrowBuffer type_ids);
+               @SharedPtr ArrowBuffer type_ids);
 
   /** \brief Construct Dense UnionArray from types_ids, value_offsets and children
    * 
    *  This function does the bare minimum of validation of the offsets and
    *  input types. The value_offsets are assumed to be well-formed.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param value_offsets [in] An array of signed int32 values indicating the
    *  relative offset into the respective child array for the type in a given slot.
    *  The respective offsets for each child value array must be in order / increasing.
@@ -65,17 +64,17 @@ public class UnionArray extends Array {
   public static native @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
                             @Const @ByRef ArrayVector children,
                             @Const @ByRef StringVector field_names,
-                            @Cast("uint8_t*") @StdVector BytePointer type_codes,
+                            @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
                             @SharedPtr Array out);
   public static native @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
                             @Const @ByRef ArrayVector children,
                             @Const @ByRef StringVector field_names,
-                            @Cast("uint8_t*") @StdVector ByteBuffer type_codes,
+                            @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
                             @SharedPtr Array out);
   public static native @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
                             @Const @ByRef ArrayVector children,
                             @Const @ByRef StringVector field_names,
-                            @Cast("uint8_t*") @StdVector byte[] type_codes,
+                            @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
                             @SharedPtr Array out);
 
   /** \brief Construct Dense UnionArray from types_ids, value_offsets and children
@@ -83,8 +82,7 @@ public class UnionArray extends Array {
    *  This function does the bare minimum of validation of the offsets and
    *  input types. The value_offsets are assumed to be well-formed.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param value_offsets [in] An array of signed int32 values indicating the
    *  relative offset into the respective child array for the type in a given slot.
    *  The respective offsets for each child value array must be in order / increasing.
@@ -104,8 +102,7 @@ public class UnionArray extends Array {
    *  This function does the bare minimum of validation of the offsets and
    *  input types. The value_offsets are assumed to be well-formed.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param value_offsets [in] An array of signed int32 values indicating the
    *  relative offset into the respective child array for the type in a given slot.
    *  The respective offsets for each child value array must be in order / increasing.
@@ -118,15 +115,15 @@ public class UnionArray extends Array {
   ///
   public static native @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
                             @Const @ByRef ArrayVector children,
-                            @Cast("uint8_t*") @StdVector BytePointer type_codes,
+                            @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
                             @SharedPtr Array out);
   public static native @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
                             @Const @ByRef ArrayVector children,
-                            @Cast("uint8_t*") @StdVector ByteBuffer type_codes,
+                            @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
                             @SharedPtr Array out);
   public static native @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
                             @Const @ByRef ArrayVector children,
-                            @Cast("uint8_t*") @StdVector byte[] type_codes,
+                            @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
                             @SharedPtr Array out);
 
   /** \brief Construct Dense UnionArray from types_ids, value_offsets and children
@@ -136,8 +133,7 @@ public class UnionArray extends Array {
    * 
    *  The name of each field is filled by the index of the field.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param value_offsets [in] An array of signed int32 values indicating the
    *  relative offset into the respective child array for the type in a given slot.
    *  The respective offsets for each child value array must be in order / increasing.
@@ -155,8 +151,7 @@ public class UnionArray extends Array {
    *  This function does the bare minimum of validation of the offsets and
    *  input types.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param children [in] Vector of children Arrays containing the data for each type.
    *  @param field_names [in] Vector of strings containing the name of each field.
    *  @param type_codes [in] Vector of type codes.
@@ -167,17 +162,17 @@ public class UnionArray extends Array {
   public static native @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
                              @Const @ByRef ArrayVector children,
                              @Const @ByRef StringVector field_names,
-                             @Cast("uint8_t*") @StdVector BytePointer type_codes,
+                             @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
                              @SharedPtr Array out);
   public static native @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
                              @Const @ByRef ArrayVector children,
                              @Const @ByRef StringVector field_names,
-                             @Cast("uint8_t*") @StdVector ByteBuffer type_codes,
+                             @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
                              @SharedPtr Array out);
   public static native @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
                              @Const @ByRef ArrayVector children,
                              @Const @ByRef StringVector field_names,
-                             @Cast("uint8_t*") @StdVector byte[] type_codes,
+                             @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
                              @SharedPtr Array out);
 
   /** \brief Construct Sparse UnionArray from type_ids and children
@@ -185,8 +180,7 @@ public class UnionArray extends Array {
    *  This function does the bare minimum of validation of the offsets and
    *  input types.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param children [in] Vector of children Arrays containing the data for each type.
    *  @param field_names [in] Vector of strings containing the name of each field.
    *  @param out [out] Will have length equal to type_ids.length() */
@@ -203,8 +197,7 @@ public class UnionArray extends Array {
    *  This function does the bare minimum of validation of the offsets and
    *  input types.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param children [in] Vector of children Arrays containing the data for each type.
    *  @param type_codes [in] Vector of type codes.
    *  @param out [out] Will have length equal to type_ids.length() */
@@ -214,15 +207,15 @@ public class UnionArray extends Array {
   ///
   public static native @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
                              @Const @ByRef ArrayVector children,
-                             @Cast("uint8_t*") @StdVector BytePointer type_codes,
+                             @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
                              @SharedPtr Array out);
   public static native @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
                              @Const @ByRef ArrayVector children,
-                             @Cast("uint8_t*") @StdVector ByteBuffer type_codes,
+                             @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
                              @SharedPtr Array out);
   public static native @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
                              @Const @ByRef ArrayVector children,
-                             @Cast("uint8_t*") @StdVector byte[] type_codes,
+                             @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
                              @SharedPtr Array out);
 
   /** \brief Construct Sparse UnionArray from type_ids and children
@@ -232,8 +225,7 @@ public class UnionArray extends Array {
    * 
    *  The name of each field is filled by the index of the field.
    * 
-   *  @param type_ids [in] An array of 8-bit signed integers, enumerated from
-   *  0 corresponding to each type.
+   *  @param type_ids [in] An array of logical type ids for the union type
    *  @param children [in] Vector of children Arrays containing the data for each type.
    *  @param out [out] Will have length equal to type_ids.length() */
   public static native @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
@@ -241,14 +233,25 @@ public class UnionArray extends Array {
                              @SharedPtr Array out);
 
   /** Note that this buffer does not account for any slice offset */
-  public native @SharedPtr @ByVal ArrowBuffer type_ids();
+  public native @SharedPtr ArrowBuffer type_codes();
 
-  /** Note that this buffer does not account for any slice offset */
-  public native @SharedPtr @ByVal ArrowBuffer value_offsets();
+  public native @Cast("const arrow::UnionArray::type_code_t*") BytePointer raw_type_codes();
 
+  public native @Deprecated @SharedPtr ArrowBuffer type_ids();
+
+  public native @Cast("const arrow::UnionArray::type_code_t*") @Deprecated BytePointer raw_type_ids();
+
+  /** The physical child id containing value at index. */
+  public native int child_id(@Cast("int64_t") long i);
+
+  /** For dense arrays only.
+   *  Note that this buffer does not account for any slice offset */
+  public native @SharedPtr ArrowBuffer value_offsets();
+
+  /** For dense arrays only. */
   public native int value_offset(@Cast("int64_t") long i);
 
-  public native @Cast("const arrow::UnionArray::type_id_t*") BytePointer raw_type_ids();
+  /** For dense arrays only. */
   public native @Const IntPointer raw_value_offsets();
 
   public native @Const UnionType union_type();

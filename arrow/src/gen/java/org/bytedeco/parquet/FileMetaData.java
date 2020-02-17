@@ -19,12 +19,27 @@ public class FileMetaData extends Pointer {
     public FileMetaData(Pointer p) { super(p); }
 
   // API convenience to get a MetaData accessor
-  public static native @SharedPtr FileMetaData Make(@Const Pointer serialized_metadata,
-                                              @Cast("uint32_t*") IntPointer metadata_len);
-  public static native @SharedPtr FileMetaData Make(@Const Pointer serialized_metadata,
-                                              @Cast("uint32_t*") IntBuffer metadata_len);
-  public static native @SharedPtr FileMetaData Make(@Const Pointer serialized_metadata,
-                                              @Cast("uint32_t*") int[] metadata_len);
+
+  public static native @SharedPtr FileMetaData Make(
+        @Const Pointer serialized_metadata, @Cast("uint32_t*") IntPointer inout_metadata_len,
+        @SharedPtr InternalFileDecryptor file_decryptor/*=nullptr*/);
+  public static native @SharedPtr FileMetaData Make(
+        @Const Pointer serialized_metadata, @Cast("uint32_t*") IntPointer inout_metadata_len);
+  public static native @SharedPtr FileMetaData Make(
+        @Const Pointer serialized_metadata, @Cast("uint32_t*") IntBuffer inout_metadata_len,
+        @SharedPtr InternalFileDecryptor file_decryptor/*=nullptr*/);
+  public static native @SharedPtr FileMetaData Make(
+        @Const Pointer serialized_metadata, @Cast("uint32_t*") IntBuffer inout_metadata_len);
+  public static native @SharedPtr FileMetaData Make(
+        @Const Pointer serialized_metadata, @Cast("uint32_t*") int[] inout_metadata_len,
+        @SharedPtr InternalFileDecryptor file_decryptor/*=nullptr*/);
+  public static native @SharedPtr FileMetaData Make(
+        @Const Pointer serialized_metadata, @Cast("uint32_t*") int[] inout_metadata_len);
+
+  /** Verify signature of FileMetadata when file is encrypted but footer is not encrypted
+   *  (plaintext footer).
+   *  Signature is 28 bytes (12 byte nonce and 16 byte tags) when encrypting FileMetadata */
+  public native @Cast("bool") boolean VerifySignature(@Const Pointer signature);
 
   // file metadata
   public native @Cast("uint32_t") int size();
@@ -38,10 +53,19 @@ public class FileMetaData extends Pointer {
   public native @StdString String created_by();
   public native int num_schema_elements();
   public native @UniquePtr RowGroupMetaData RowGroup(int i);
-
   public native @Const @ByRef ApplicationVersion writer_version();
+  // Indicate if all of the FileMetadata's RowGroups can be decompressed.
+  public native @Cast("bool") boolean can_decompress();
 
-  public native void WriteTo(org.bytedeco.arrow.OutputStream dst);
+  public native @Cast("bool") boolean is_encryption_algorithm_set();
+  public native @ByVal EncryptionAlgorithm encryption_algorithm();
+  public native @StdString String footer_signing_key_metadata();
+
+  public native void WriteTo(OutputStream dst);
+
+  /** \brief Return Thrift-serialized representation of the metadata as a
+   *  string */
+  public native @StdString String SerializeToString();
 
   // Return const-pointer to make it clear that this object is not to be copied
   public native @Const SchemaDescriptor schema();

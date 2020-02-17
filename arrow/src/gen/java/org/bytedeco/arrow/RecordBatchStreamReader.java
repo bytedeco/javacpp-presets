@@ -45,7 +45,7 @@ public class RecordBatchStreamReader extends RecordBatchReader {
    *  @return Status */
 
   /** \brief Returns the schema read from the stream */
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 
   public native @ByVal Status ReadNext(@SharedPtr RecordBatch batch);
 }

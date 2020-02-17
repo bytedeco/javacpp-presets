@@ -33,7 +33,7 @@ public class Projector extends Pointer {
    *  @param projector [out] the returned projector object */
   
   ///
-  public static native @ByVal Status Make(@SharedPtr Schema schema, @SharedPtr Expression exprs,
+  public static native @ByVal Status Make(@SharedPtr @ByVal Schema schema, @SharedPtr Expression exprs,
                        @SharedPtr Projector projector);
 
   /** Build a projector for the given schema to evaluate the vector of expressions.
@@ -45,7 +45,7 @@ public class Projector extends Pointer {
    *  @param projector [out] the returned projector object */
   
   ///
-  public static native @ByVal Status Make(@SharedPtr Schema schema, @SharedPtr Expression exprs,
+  public static native @ByVal Status Make(@SharedPtr @ByVal Schema schema, @SharedPtr Expression exprs,
                        @SharedPtr Configuration configuration,
                        @SharedPtr Projector projector);
 
@@ -59,11 +59,11 @@ public class Projector extends Pointer {
    *  @param projector [out] the returned projector object */
   
   ///
-  public static native @ByVal Status Make(@SharedPtr Schema schema, @SharedPtr Expression exprs,
+  public static native @ByVal Status Make(@SharedPtr @ByVal Schema schema, @SharedPtr Expression exprs,
                        SelectionVector.Mode selection_vector_mode,
                        @SharedPtr Configuration configuration,
                        @SharedPtr Projector projector);
-  public static native @ByVal Status Make(@SharedPtr Schema schema, @SharedPtr Expression exprs,
+  public static native @ByVal Status Make(@SharedPtr @ByVal Schema schema, @SharedPtr Expression exprs,
                        @Cast("gandiva::SelectionVector::Mode") int selection_vector_mode,
                        @SharedPtr Configuration configuration,
                        @SharedPtr Projector projector);
@@ -95,7 +95,7 @@ public class Projector extends Pointer {
    *  to the vector 'output'.
    * 
    *  @param batch [in] the record batch. schema should be the same as the one in 'Make'
-   *  @param selection_vector [in] selection vector which has filtered row posisitons.
+   *  @param selection_vector [in] selection vector which has filtered row positions.
    *  @param pool [in] memory pool used to allocate output arrays (if required).
    *  @param output [out] the vector of allocated/populated arrays. */
   
@@ -108,7 +108,7 @@ public class Projector extends Pointer {
    *  positions. The output arrays of sufficient capacity must be allocated by the caller.
    * 
    *  @param batch [in] the record batch. schema should be the same as the one in 'Make'
-   *  @param selection_vector [in] selection vector which has the filtered row posisitons
+   *  @param selection_vector [in] selection vector which has the filtered row positions
    *  @param output [in,out] vector of arrays, the arrays are allocated by the caller and
    *                  populated by Evaluate. */
   public native @ByVal Status Evaluate(@Const @ByRef RecordBatch batch,

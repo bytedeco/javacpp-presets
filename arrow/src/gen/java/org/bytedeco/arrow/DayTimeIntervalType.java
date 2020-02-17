@@ -40,6 +40,7 @@ public class DayTimeIntervalType extends IntervalType {
     public native int milliseconds(); public native DayMilliseconds milliseconds(int setter);
     public native @Cast("bool") @Name("operator ==") boolean equals(@ByVal DayMilliseconds other);
     public native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal DayMilliseconds other);
+    public native @Cast("bool") @Name("operator <") boolean lessThan(@ByVal DayMilliseconds other);
   }
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();

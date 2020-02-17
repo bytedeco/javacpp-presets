@@ -22,6 +22,7 @@ public class FileSource extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileSource(Pointer p) { super(p); }
 
+  // NOTE(kszucs): it'd be better to separate the BufferSource from FileSource
   public enum SourceType { PATH(0), BUFFER(1);
 
       public final int value;
@@ -44,16 +45,16 @@ public class FileSource extends Pointer {
   public FileSource(@StdString BytePointer path, FileSystem filesystem) { super((Pointer)null); allocate(path, filesystem); }
   private native void allocate(@StdString BytePointer path, FileSystem filesystem);
 
-  public FileSource(@SharedPtr @ByVal ArrowBuffer buffer,
-               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
-  private native void allocate(@SharedPtr @ByVal ArrowBuffer buffer,
-               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/);
-  public FileSource(@SharedPtr @ByVal ArrowBuffer buffer) { super((Pointer)null); allocate(buffer); }
-  private native void allocate(@SharedPtr @ByVal ArrowBuffer buffer);
-  public FileSource(@SharedPtr @ByVal ArrowBuffer buffer,
-               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
-  private native void allocate(@SharedPtr @ByVal ArrowBuffer buffer,
-               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
+  public FileSource(@SharedPtr ArrowBuffer buffer,
+                        Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
+  private native void allocate(@SharedPtr ArrowBuffer buffer,
+                        Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/);
+  public FileSource(@SharedPtr ArrowBuffer buffer) { super((Pointer)null); allocate(buffer); }
+  private native void allocate(@SharedPtr ArrowBuffer buffer);
+  public FileSource(@SharedPtr ArrowBuffer buffer,
+                        @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
+  private native void allocate(@SharedPtr ArrowBuffer buffer,
+                        @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FileSource other);
 
@@ -68,14 +69,14 @@ public class FileSource extends Pointer {
    *  type is PATH */
   public native @StdString String path();
 
-  /** \brief Return the filesystem, if any. Only valid when file
+  /** \brief Return the filesystem, if any. Only non null when file
    *  source type is PATH */
   public native FileSystem filesystem();
 
   /** \brief Return the buffer containing the file, if any. Only value
    *  when file source type is BUFFER */
-  public native @SharedPtr @ByVal ArrowBuffer buffer();
+  public native @SharedPtr ArrowBuffer buffer();
 
   /** \brief Get a RandomAccessFile which views this file source */
-  public native @ByVal Status Open(@SharedPtr RandomAccessFile out);
+  public native @ByVal RandomAccessFileResult Open();
 }

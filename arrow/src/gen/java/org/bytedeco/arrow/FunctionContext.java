@@ -31,7 +31,7 @@ public class FunctionContext extends Pointer {
   /** \brief Allocate buffer from the context's memory pool */
   
   ///
-  public native @ByVal Status Allocate(@Cast("const int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+  public native @ByVal Status Allocate(@Cast("const int64_t") long nbytes, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   /** \brief Indicate that an error has occurred, to be checked by a parent caller
    *  @param status [in] a Status instance

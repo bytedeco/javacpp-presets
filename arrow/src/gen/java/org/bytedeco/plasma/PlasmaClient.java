@@ -86,17 +86,17 @@ public class PlasmaClient extends Pointer {
   
   ///
   public native @ByVal Status Create(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @Cast("int64_t") long data_size, @Cast("const uint8_t*") BytePointer metadata,
-                  @Cast("int64_t") long metadata_size, @SharedPtr ArrowBuffer data, int device_num/*=0*/);
+                  @Cast("int64_t") long metadata_size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer data, int device_num/*=0*/);
   public native @ByVal Status Create(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @Cast("int64_t") long data_size, @Cast("const uint8_t*") BytePointer metadata,
-                  @Cast("int64_t") long metadata_size, @SharedPtr ArrowBuffer data);
+                  @Cast("int64_t") long metadata_size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer data);
   public native @ByVal Status Create(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @Cast("int64_t") long data_size, @Cast("const uint8_t*") ByteBuffer metadata,
-                  @Cast("int64_t") long metadata_size, @SharedPtr ArrowBuffer data, int device_num/*=0*/);
+                  @Cast("int64_t") long metadata_size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer data, int device_num/*=0*/);
   public native @ByVal Status Create(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @Cast("int64_t") long data_size, @Cast("const uint8_t*") ByteBuffer metadata,
-                  @Cast("int64_t") long metadata_size, @SharedPtr ArrowBuffer data);
+                  @Cast("int64_t") long metadata_size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer data);
   public native @ByVal Status Create(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @Cast("int64_t") long data_size, @Cast("const uint8_t*") byte[] metadata,
-                  @Cast("int64_t") long metadata_size, @SharedPtr ArrowBuffer data, int device_num/*=0*/);
+                  @Cast("int64_t") long metadata_size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer data, int device_num/*=0*/);
   public native @ByVal Status Create(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @Cast("int64_t") long data_size, @Cast("const uint8_t*") byte[] metadata,
-                  @Cast("int64_t") long metadata_size, @SharedPtr ArrowBuffer data);
+                  @Cast("int64_t") long metadata_size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer data);
 
   /** Create and seal an object in the object store. This is an optimization
    *  which allows small objects to be created quickly with fewer messages to
@@ -108,11 +108,24 @@ public class PlasmaClient extends Pointer {
    *  @return The return status. */
   
   ///
-  ///
   public native @ByVal Status CreateAndSeal(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @StdString String data,
                          @StdString String metadata);
   public native @ByVal Status CreateAndSeal(@Cast("const plasma::ObjectID*") @ByRef UniqueID object_id, @StdString BytePointer data,
                          @StdString BytePointer metadata);
+
+  /** Create and seal multiple objects in the object store. This is an optimization
+   *  of CreateAndSeal to eliminate the cost of IPC per object.
+   * 
+   *  @param object_ids The vector of IDs of the objects to create.
+   *  @param data The vector of data for the objects to create.
+   *  @param metadata The vector of metadata for the objects to create.
+   *  @return The return status. */
+  
+  ///
+  ///
+  public native @ByVal Status CreateAndSealBatch(@Cast("plasma::ObjectID*") @StdVector UniqueID object_ids,
+                              @Const @ByRef StringVector data,
+                              @Const @ByRef StringVector metadata);
 
   /** Get some objects from the Plasma Store. This function will block until the
    *  objects have all been created and sealed in the Plasma Store or the
@@ -250,6 +263,15 @@ public class PlasmaClient extends Pointer {
   public native @ByVal Status Evict(@Cast("int64_t") long num_bytes, @Cast("int64_t*") @ByRef LongBuffer num_bytes_evicted);
   public native @ByVal Status Evict(@Cast("int64_t") long num_bytes, @Cast("int64_t*") @ByRef long[] num_bytes_evicted);
 
+  /** Bump objects up in the LRU cache, i.e. treat them as recently accessed.
+   *  Objects that do not exist in the store will be ignored.
+   * 
+   *  @param object_ids The IDs of the objects to bump.
+   *  @return The return status. */
+  
+  ///
+  public native @ByVal Status Refresh(@Cast("plasma::ObjectID*") @StdVector UniqueID object_ids);
+
   /** Compute the hash of an object in the object store.
    * 
    *  @param object_id The ID of the object we want to hash.
@@ -292,12 +314,15 @@ public class PlasmaClient extends Pointer {
 
   
   ///
-  public native @ByVal Status DecodeNotification(@Cast("const uint8_t*") BytePointer buffer, @Cast("plasma::ObjectID*") UniqueID object_id,
-                              @Cast("int64_t*") LongPointer data_size, @Cast("int64_t*") LongPointer metadata_size);
-  public native @ByVal Status DecodeNotification(@Cast("const uint8_t*") ByteBuffer buffer, @Cast("plasma::ObjectID*") UniqueID object_id,
-                              @Cast("int64_t*") LongBuffer data_size, @Cast("int64_t*") LongBuffer metadata_size);
-  public native @ByVal Status DecodeNotification(@Cast("const uint8_t*") byte[] buffer, @Cast("plasma::ObjectID*") UniqueID object_id,
-                              @Cast("int64_t*") long[] data_size, @Cast("int64_t*") long[] metadata_size);
+  public native @ByVal Status DecodeNotifications(@Cast("const uint8_t*") BytePointer buffer, @Cast("plasma::ObjectID*") @StdVector UniqueID object_ids,
+                               @Cast("int64_t*") @StdVector LongPointer data_sizes,
+                               @Cast("int64_t*") @StdVector LongPointer metadata_sizes);
+  public native @ByVal Status DecodeNotifications(@Cast("const uint8_t*") ByteBuffer buffer, @Cast("plasma::ObjectID*") @StdVector UniqueID object_ids,
+                               @Cast("int64_t*") @StdVector LongBuffer data_sizes,
+                               @Cast("int64_t*") @StdVector LongBuffer metadata_sizes);
+  public native @ByVal Status DecodeNotifications(@Cast("const uint8_t*") byte[] buffer, @Cast("plasma::ObjectID*") @StdVector UniqueID object_ids,
+                               @Cast("int64_t*") @StdVector long[] data_sizes,
+                               @Cast("int64_t*") @StdVector long[] metadata_sizes);
 
   /** Disconnect from the local plasma instance, including the local store and
    *  manager.

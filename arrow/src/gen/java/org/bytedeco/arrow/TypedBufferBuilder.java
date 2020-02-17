@@ -22,8 +22,8 @@ public class TypedBufferBuilder extends Pointer {
         return (TypedBufferBuilder)super.position(position);
     }
 
-  public TypedBufferBuilder(MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(pool); }
-  private native void allocate(MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public TypedBufferBuilder(MemoryPool pool/*ARROW_MEMORY_POOL_DEFAULT*/) { super((Pointer)null); allocate(pool); }
+  private native void allocate(MemoryPool pool/*ARROW_MEMORY_POOL_DEFAULT*/);
   public TypedBufferBuilder() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -50,8 +50,8 @@ public class TypedBufferBuilder extends Pointer {
 
   public native @ByVal Status Advance(@Cast("const int64_t") long length);
 
-  public native @ByVal Status Finish(@SharedPtr ArrowBuffer out, @Cast("bool") boolean shrink_to_fit/*=true*/);
-  public native @ByVal Status Finish(@SharedPtr ArrowBuffer out);
+  public native @ByVal Status Finish(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out, @Cast("bool") boolean shrink_to_fit/*=true*/);
+  public native @ByVal Status Finish(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   public native void Reset();
 

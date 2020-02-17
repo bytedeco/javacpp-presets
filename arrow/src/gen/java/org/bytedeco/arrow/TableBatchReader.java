@@ -23,7 +23,7 @@ public class TableBatchReader extends RecordBatchReader {
   public TableBatchReader(@Const @ByRef Table table) { super((Pointer)null); allocate(table); }
   private native void allocate(@Const @ByRef Table table);
 
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 
   
   ///

@@ -9,23 +9,25 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Name("arrow::NumericScalar<arrow::Date64Type>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BaseDate64Scalar extends PrimitiveScalar {
+@Name("arrow::DateScalar<arrow::Date64Type>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class BaseDate64Scalar extends BaseBaseDate64Scalar {
     static { Loader.load(); }
+
+  
+    
+    
+      public BaseDate64Scalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  
+  
+    public BaseDate64Scalar(@Cast("arrow::TemporalScalar<arrow::Date64Type>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
+    private native void allocate(@Cast("arrow::TemporalScalar<arrow::Date64Type>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseDate64Scalar(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BaseDate64Scalar(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public BaseDate64Scalar position(long position) {
-        return (BaseDate64Scalar)super.position(position);
-    }
 
-  public native @Cast("arrow::NumericScalar<arrow::Date64Type>::T") long value(); public native BaseDate64Scalar value(long setter);
 
-  public BaseDate64Scalar(@Cast("arrow::NumericScalar<arrow::Date64Type>::T") long value, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, is_valid); }
-  private native void allocate(@Cast("arrow::NumericScalar<arrow::Date64Type>::T") long value, @Cast("bool") boolean is_valid/*=true*/);
-
+  public BaseDate64Scalar(@Cast("arrow::DateScalar<arrow::Date64Type>::ValueType") long value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@Cast("arrow::DateScalar<arrow::Date64Type>::ValueType") long value);
   public BaseDate64Scalar() { super((Pointer)null); allocate(); }
   private native void allocate();
 }

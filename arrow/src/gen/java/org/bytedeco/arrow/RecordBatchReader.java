@@ -20,7 +20,7 @@ public class RecordBatchReader extends Pointer {
   /** @return the shared schema of the record batches in the stream */
   
   ///
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 
   /** \brief Read the next record batch in the stream. Return null for batch
    *  when reaching end of stream
@@ -29,7 +29,8 @@ public class RecordBatchReader extends Pointer {
    *  @return Status */
   public native @ByVal Status ReadNext(@SharedPtr RecordBatch batch);
 
-  public native @ByVal Status Next(@SharedPtr RecordBatch batch);
+  /** \brief Iterator interface */
+  public native @ByVal RecordBatchResult Next();
 
   /** \brief Consume entire stream as a vector of record batches */
   public native @ByVal Status ReadAll(RecordBatchVector batches);

@@ -12,21 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Date64Scalar extends BaseDate64Scalar {
     static { Loader.load(); }
-
-  
-  
-    public Date64Scalar(@Cast("arrow::NumericScalar<arrow::Date64Type>::T") long value, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, is_valid); }
-    private native void allocate(@Cast("arrow::NumericScalar<arrow::Date64Type>::T") long value, @Cast("bool") boolean is_valid/*=true*/);
-  
-    public Date64Scalar() { super((Pointer)null); allocate(); }
-    private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Date64Scalar(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Date64Scalar(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Date64Scalar position(long position) {
-        return (Date64Scalar)super.position(position);
-    }
 
 }

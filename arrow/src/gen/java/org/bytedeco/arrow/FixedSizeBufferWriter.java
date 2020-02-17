@@ -17,15 +17,13 @@ public class FixedSizeBufferWriter extends WritableFile {
     public FixedSizeBufferWriter(Pointer p) { super(p); }
 
   /** Input buffer must be mutable, will abort if not */
-  public FixedSizeBufferWriter(@Const @SharedPtr @ByRef ArrowBuffer buffer) { super((Pointer)null); allocate(buffer); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer buffer);
+  public FixedSizeBufferWriter(@SharedPtr ArrowBuffer buffer) { super((Pointer)null); allocate(buffer); }
+  private native void allocate(@SharedPtr ArrowBuffer buffer);
 
   public native @ByVal Status Close();
   public native @Cast("bool") boolean closed();
   public native @ByVal Status Seek(@Cast("int64_t") long _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
   public native @ByVal Status Write(@Const Pointer data, @Cast("int64_t") long nbytes);
   /** \cond FALSE */
   /** \endcond */

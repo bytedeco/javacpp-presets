@@ -14,18 +14,19 @@ public class ListScalar extends BaseListScalar {
     static { Loader.load(); }
 
   
+    
+    
+      public ListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
   
-    public ListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
-                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, type, is_valid); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
-                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/);
+  
     public ListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
                      @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
     private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
                      @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
   
-    public ListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value, @Cast("bool") boolean is_valid) { super((Pointer)null); allocate(value, is_valid); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value, @Cast("bool") boolean is_valid);
+    public ListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value) { super((Pointer)null); allocate(value); }
+    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ListScalar(Pointer p) { super(p); }
 

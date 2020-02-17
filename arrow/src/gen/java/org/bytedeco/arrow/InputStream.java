@@ -34,10 +34,15 @@ public class InputStream extends FileInterface {
    * 
    *  May return NotImplemented on streams that don't support it.
    * 
-   *  @param nbytes [in] the maximum number of bytes to see
-   *  @param out [out] the returned arrow::util::string_view
-   *  @return Status */
+   *  @param nbytes [in] the maximum number of bytes to see */
+  
+  ///
+  public native @ByVal StringViewResult Peek(@Cast("int64_t") long nbytes);
 
-  /** \brief Return true if InputStream is capable of zero copy Buffer reads */
+  /** \brief Return true if InputStream is capable of zero copy Buffer reads
+   * 
+   *  Zero copy reads imply the use of Buffer-returning Read() overloads. */
   public native @Cast("bool") boolean supports_zero_copy();
+
+  // Deprecated APIs
 }

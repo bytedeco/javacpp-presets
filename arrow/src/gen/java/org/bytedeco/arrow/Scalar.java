@@ -25,4 +25,9 @@ public class Scalar extends Pointer {
   public native @Cast("bool") boolean is_valid(); public native Scalar is_valid(boolean setter);
 
   public native @Cast("bool") boolean Equals(@Const @ByRef Scalar other);
+
+  public native @StdString String ToString();
+
+  // TODO(bkietz) add compute::CastOptions
+  public native @ByVal ScalarResult CastTo(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to);
 }

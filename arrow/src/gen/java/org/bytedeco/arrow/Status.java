@@ -50,14 +50,14 @@ public class Status extends Pointer {
 
   // Move the specified status.
 
+  public native @Cast("bool") boolean Equals(@Const @ByRef Status s);
+
   // AND the statuses.
   public native @ByVal @Name("operator &") @NoException Status and(@Const @ByRef Status s);
   public native @ByRef @Name("operator &=") @NoException Status andPut(@Const @ByRef Status s);
 
   /** Return a success status */
   public static native @ByVal Status OK();
-
-  /** Return a success status with a specific message */
 
   /** Return an error status for out-of-memory conditions */
 
@@ -138,8 +138,6 @@ public class Status extends Pointer {
 
   /** \brief Return a new Status with changed message, copying the
    *  existing status code and detail. */
-  public native @ByVal Status WithMessage(@StdString String message);
-  public native @ByVal Status WithMessage(@StdString BytePointer message);
 
   public native void Abort(@StdString String message);
   public native void Abort(@StdString BytePointer message);

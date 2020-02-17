@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Audet
+ * Copyright (C) 2016-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.annotation.Properties;
         include = {"openblas_config.h", "cblas.h"}),
     @Platform(
         value = {"linux", "macosx", "windows"},
-        include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapacke.h", "lapacke_utils.h"})})
+        include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"})})
 @NoException
 public class openblas extends openblas_nolapack {
 

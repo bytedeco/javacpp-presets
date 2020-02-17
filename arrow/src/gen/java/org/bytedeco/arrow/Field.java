@@ -62,10 +62,70 @@ public class Field extends Fingerprintable {
   public native @SharedPtr @ByVal Field WithName(@StdString String name);
   public native @SharedPtr @ByVal Field WithName(@StdString BytePointer name);
 
+  /** \brief Return a copy of this field with the replaced nullability. */
+  public native @SharedPtr @ByVal Field WithNullable(@Cast("bool") boolean nullable);
+
+  /** \brief Options that control the behavior of {@code MergeWith}.
+   *  Options are to be added to allow type conversions, including integer
+   *  widening, promotion from integer to float, or conversion to or from boolean. */
+  public static class MergeOptions extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public MergeOptions() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public MergeOptions(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public MergeOptions(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public MergeOptions position(long position) {
+          return (MergeOptions)super.position(position);
+      }
+  
+    /** If true, a Field of NullType can be unified with a Field of another type.
+     *  The unified field will be of the other type and become nullable.
+     *  Nullability will be promoted to the looser option (nullable if one is not
+     *  nullable). */
+    public native @Cast("bool") boolean promote_nullability(); public native MergeOptions promote_nullability(boolean setter);
+
+    public static native @ByVal MergeOptions Defaults();
+  }
+
+  /** \brief Merge the current field with a field of the same name.
+   * 
+   *  The two fields must be compatible, i.e:
+   *    - have the same name
+   *    - have the same type, or of compatible types according to {@code options}.
+   * 
+   * 
+   *  The metadata of the current field is preserved; the metadata of the other
+   *  field is discarded. */
+  public native @ByVal FieldResult MergeWith(
+        @Const @ByRef Field other, @ByVal(nullValue = "arrow::Field::MergeOptions::Defaults()") MergeOptions options);
+  public native @ByVal FieldResult MergeWith(
+        @Const @ByRef Field other);
+
+  
+  ///
+  ///
   public native @ByVal FieldVector Flatten();
 
+  /** \brief Indicate if fields are equals.
+   * 
+   *  @param other [in] field to check equality with.
+   *  @param check_metadata [in] controls if it should check for metadata
+   *             equality.
+   * 
+   *  @return true if fields are equal, false otherwise. */
   public native @Cast("bool") boolean Equals(@Const @ByRef Field other, @Cast("bool") boolean check_metadata/*=true*/);
   public native @Cast("bool") boolean Equals(@Const @ByRef Field other);
+
+  /** \brief Indicate if fields are compatibles.
+   * 
+   *  See the criteria of MergeWith.
+   * 
+   *  @return true if fields are compatible, false otherwise. */
+  public native @Cast("bool") boolean IsCompatibleWith(@Const @ByRef Field other);
 
   /** \brief Return a string representation ot the field */
   public native @StdString String ToString();

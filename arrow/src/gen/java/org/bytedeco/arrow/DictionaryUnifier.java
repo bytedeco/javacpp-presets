@@ -34,7 +34,7 @@ public class DictionaryUnifier extends Pointer {
    *  each slot corresponds to the new index value for each original index
    *  for a DictionaryArray with the old dictionary */
   public native @ByVal Status Unify(@Const @ByRef Array dictionary,
-                         @SharedPtr ArrowBuffer out_transpose);
+                         @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out_transpose);
 
   /** \brief Return a result DictionaryType with the smallest possible index
    *  type to accommodate the unified dictionary. The unifier cannot be used

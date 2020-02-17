@@ -26,9 +26,9 @@ public class MutableBuffer extends ArrowBuffer {
   public MutableBuffer(@Cast("uint8_t*") byte[] data, @Cast("const int64_t") long size) { super((Pointer)null); allocate(data, size); }
   private native void allocate(@Cast("uint8_t*") byte[] data, @Cast("const int64_t") long size);
 
-  public MutableBuffer(@Const @SharedPtr @ByRef ArrowBuffer parent, @Cast("const int64_t") long offset,
+  public MutableBuffer(@SharedPtr ArrowBuffer parent, @Cast("const int64_t") long offset,
                   @Cast("const int64_t") long size) { super((Pointer)null); allocate(parent, offset, size); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer parent, @Cast("const int64_t") long offset,
+  private native void allocate(@SharedPtr ArrowBuffer parent, @Cast("const int64_t") long offset,
                   @Cast("const int64_t") long size);
 
   /** \brief Create buffer referencing typed memory with some length

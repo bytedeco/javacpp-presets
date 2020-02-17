@@ -29,36 +29,53 @@ public class RandomAccessFile extends InputStream {
   public static native @SharedPtr InputStream GetStream(@SharedPtr RandomAccessFile file,
                                                   @Cast("int64_t") long file_offset, @Cast("int64_t") long nbytes);
 
+  /** Return the total file size in bytes. */
   
   ///
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongPointer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongBuffer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") long[] size);
+  ///
+  ///
+  ///
+  public native @ByVal LongResult GetSize();
 
-  /** \brief Read nbytes at position, provide default implementations using
-   *  Read(...), but can be overridden. The default implementation is
-   *  thread-safe. It is unspecified whether this method updates the file
-   *  position or not.
+  /** \brief Read data from given file position.
+   * 
+   *  At most {@code nbytes} bytes are read.  The number of bytes read is returned
+   *  (it can be less than {@code nbytes} if EOF is reached).
+   * 
+   *  This method can be safely called from multiple threads concurrently.
+   *  It is unspecified whether this method updates the file position or not.
+   * 
+   *  The default RandomAccessFile-provided implementation uses Seek() and Read(),
+   *  but subclasses may override it with a more efficient implementation
+   *  that doesn't depend on implicit file positioning.
    * 
    *  @param position [in] Where to read bytes from
    *  @param nbytes [in] The number of bytes to read
-   *  @param bytes_read [out] The number of bytes read
    *  @param out [out] The buffer to read bytes into
-   *  @return Status */
+   *  @return The number of bytes read, or an error */
   
   ///
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+  ///
+  public native @ByVal LongResult ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, Pointer out);
 
-  /** \brief Read nbytes at position, provide default implementations using
-   *  Read(...), but can be overridden. The default implementation is
-   *  thread-safe. It is unspecified whether this method updates the file
-   *  position or not.
+  /** \brief Read data from given file position.
+   * 
+   *  At most {@code nbytes} bytes are read, but it can be less if EOF is reached.
    * 
    *  @param position [in] Where to read bytes from
    *  @param nbytes [in] The number of bytes to read
-   *  @param out [out] The buffer to read bytes into. The number of bytes read can be
-   *  retrieved by calling Buffer::size(). */
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+   *  @return A buffer containing the bytes read, or an error */
+  public native @ByVal BufferResult ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes);
+
+  // Deprecated APIs
+
+  public native @Deprecated @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
+  public native @Deprecated @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
+  public native @Deprecated @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+
+  public native @Deprecated @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
+
+  public native @Deprecated @ByVal Status GetSize(@Cast("int64_t*") LongPointer size);
+  public native @Deprecated @ByVal Status GetSize(@Cast("int64_t*") LongBuffer size);
+  public native @Deprecated @ByVal Status GetSize(@Cast("int64_t*") long[] size);
 }

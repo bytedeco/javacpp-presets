@@ -18,20 +18,69 @@ public class Compressor extends Pointer {
     public Compressor(Pointer p) { super(p); }
 
 
+  public static class CompressResult extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public CompressResult() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public CompressResult(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public CompressResult(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public CompressResult position(long position) {
+          return (CompressResult)super.position(position);
+      }
+  
+    public native @Cast("int64_t") long bytes_read(); public native CompressResult bytes_read(long setter);
+    public native @Cast("int64_t") long bytes_written(); public native CompressResult bytes_written(long setter);
+  }
+  public static class FlushResult extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public FlushResult() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public FlushResult(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public FlushResult(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public FlushResult position(long position) {
+          return (FlushResult)super.position(position);
+      }
+  
+    public native @Cast("int64_t") long bytes_written(); public native FlushResult bytes_written(long setter);
+    public native @Cast("bool") boolean should_retry(); public native FlushResult should_retry(boolean setter);
+  }
+  public static class EndResult extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public EndResult() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public EndResult(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public EndResult(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public EndResult position(long position) {
+          return (EndResult)super.position(position);
+      }
+  
+    public native @Cast("int64_t") long bytes_written(); public native EndResult bytes_written(long setter);
+    public native @Cast("bool") boolean should_retry(); public native EndResult should_retry(boolean setter);
+  }
+
   /** \brief Compress some input.
    * 
    *  If bytes_read is 0 on return, then a larger output buffer should be supplied. */
   
   ///
-  public native @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input, @Cast("int64_t") long output_len,
-                            @Cast("uint8_t*") BytePointer output, @Cast("int64_t*") LongPointer bytes_read,
-                            @Cast("int64_t*") LongPointer bytes_written);
-  public native @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input, @Cast("int64_t") long output_len,
-                            @Cast("uint8_t*") ByteBuffer output, @Cast("int64_t*") LongBuffer bytes_read,
-                            @Cast("int64_t*") LongBuffer bytes_written);
-  public native @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input, @Cast("int64_t") long output_len,
-                            @Cast("uint8_t*") byte[] output, @Cast("int64_t*") long[] bytes_read,
-                            @Cast("int64_t*") long[] bytes_written);
+  public native @ByVal CompressResultResult Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input,
+                                            @Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output);
+  public native @ByVal CompressResultResult Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input,
+                                            @Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output);
+  public native @ByVal CompressResultResult Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input,
+                                            @Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output);
 
   /** \brief Flush part of the compressed output.
    * 
@@ -40,18 +89,9 @@ public class Compressor extends Pointer {
   
   ///
   ///
-  public native @ByVal Status Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output, @Cast("int64_t*") LongPointer bytes_written,
-                         @Cast("bool*") BoolPointer should_retry);
-  public native @ByVal Status Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output, @Cast("int64_t*") LongBuffer bytes_written,
-                         @Cast("bool*") boolean[] should_retry);
-  public native @ByVal Status Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output, @Cast("int64_t*") long[] bytes_written,
-                         @Cast("bool*") BoolPointer should_retry);
-  public native @ByVal Status Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output, @Cast("int64_t*") LongPointer bytes_written,
-                         @Cast("bool*") boolean[] should_retry);
-  public native @ByVal Status Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output, @Cast("int64_t*") LongBuffer bytes_written,
-                         @Cast("bool*") BoolPointer should_retry);
-  public native @ByVal Status Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output, @Cast("int64_t*") long[] bytes_written,
-                         @Cast("bool*") boolean[] should_retry);
+  public native @ByVal FlushResultResult Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output);
+  public native @ByVal FlushResultResult Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output);
+  public native @ByVal FlushResultResult Flush(@Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output);
 
   /** \brief End compressing, doing whatever is necessary to end the stream.
    * 
@@ -59,18 +99,9 @@ public class Compressor extends Pointer {
    *  with a larger buffer.  Otherwise, the Compressor should not be used anymore.
    * 
    *  End() implies Flush(). */
-  public native @ByVal Status End(@Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output, @Cast("int64_t*") LongPointer bytes_written,
-                       @Cast("bool*") BoolPointer should_retry);
-  public native @ByVal Status End(@Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output, @Cast("int64_t*") LongBuffer bytes_written,
-                       @Cast("bool*") boolean[] should_retry);
-  public native @ByVal Status End(@Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output, @Cast("int64_t*") long[] bytes_written,
-                       @Cast("bool*") BoolPointer should_retry);
-  public native @ByVal Status End(@Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output, @Cast("int64_t*") LongPointer bytes_written,
-                       @Cast("bool*") boolean[] should_retry);
-  public native @ByVal Status End(@Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output, @Cast("int64_t*") LongBuffer bytes_written,
-                       @Cast("bool*") BoolPointer should_retry);
-  public native @ByVal Status End(@Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output, @Cast("int64_t*") long[] bytes_written,
-                       @Cast("bool*") boolean[] should_retry);
+  public native @ByVal EndResultResult End(@Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output);
+  public native @ByVal EndResultResult End(@Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output);
+  public native @ByVal EndResultResult End(@Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output);
 
   // XXX add methods for buffer size heuristics?
 }

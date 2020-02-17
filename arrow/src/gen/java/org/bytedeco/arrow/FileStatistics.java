@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
+/** DEPRECATED.  Use the FileSystem API in arrow::fs instead. */
 @Namespace("arrow::io") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class FileStatistics extends Pointer {
     static { Loader.load(); }

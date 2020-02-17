@@ -22,5 +22,5 @@ public class FlightMetadataReader extends Pointer {
     public FlightMetadataReader(Pointer p) { super(p); }
 
   /** \brief Read a message from the server. */
-  public native @ByVal Status ReadMetadata(@SharedPtr ArrowBuffer out);
+  public native @ByVal Status ReadMetadata(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 }

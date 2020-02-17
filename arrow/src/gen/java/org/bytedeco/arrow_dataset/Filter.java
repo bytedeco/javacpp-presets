@@ -14,16 +14,10 @@ import static org.bytedeco.arrow.global.parquet.*;
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 
-@Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
+@Namespace("arrow::dataset") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class Filter extends Pointer {
-    static { Loader.load(); }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Filter() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Filter(Pointer p) { super(p); }
-
-  public Filter(FilterType.type type) { super((Pointer)null); allocate(type); }
-  private native void allocate(FilterType.type type);
-  public Filter(@Cast("arrow::dataset::FilterType::type") int type) { super((Pointer)null); allocate(type); }
-  private native void allocate(@Cast("arrow::dataset::FilterType::type") int type);
-
-  public native FilterType.type type();
 }

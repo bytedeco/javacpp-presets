@@ -21,7 +21,7 @@ public class FlightDataStream extends Pointer {
     public FlightDataStream(Pointer p) { super(p); }
 
 
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 
   /** \brief Compute FlightPayload containing serialized RecordBatch schema */
   public native @ByVal Status GetSchemaPayload(FlightPayload payload);

@@ -17,8 +17,8 @@ public class BufferReader extends BufferReaderRandomAccessFileConcurrencyWrapper
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BufferReader(Pointer p) { super(p); }
 
-  public BufferReader(@Const @SharedPtr @ByRef ArrowBuffer buffer) { super((Pointer)null); allocate(buffer); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer buffer);
+  public BufferReader(@SharedPtr ArrowBuffer buffer) { super((Pointer)null); allocate(buffer); }
+  private native void allocate(@SharedPtr ArrowBuffer buffer);
   public BufferReader(@Cast("const uint8_t*") BytePointer data, @Cast("int64_t") long size) { super((Pointer)null); allocate(data, size); }
   private native void allocate(@Cast("const uint8_t*") BytePointer data, @Cast("int64_t") long size);
   public BufferReader(@Cast("const uint8_t*") ByteBuffer data, @Cast("int64_t") long size) { super((Pointer)null); allocate(data, size); }
@@ -33,5 +33,5 @@ public class BufferReader extends BufferReaderRandomAccessFileConcurrencyWrapper
 
   public native @Cast("bool") boolean supports_zero_copy();
 
-  public native @SharedPtr @ByVal ArrowBuffer buffer();
+  public native @SharedPtr ArrowBuffer buffer();
 }

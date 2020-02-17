@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2019 Samuel Audet
+ * Copyright (C) 2016-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -115,10 +115,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
     }
 
     @Override public void map(InfoMap infoMap) {
-        // skip LAPACK 3.7.0 and 3.8.0 until fully supported by MKL, at least
-        infoMap.put(new Info("lapacke.h").linePatterns(".*LAPACKE_ssysv_aa\\(.*", ".*LAPACK_.*",
-                                                       ".*LAPACK_ssysv_aa\\(.*",  ".*LAPACKE_get_nancheck.*",
-                                                       ".*LAPACK_GLOBAL.*").skip())
+        infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
                              "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "lapack_int", "lapack_logical").cppTypes().annotations())
                .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT",
@@ -143,6 +140,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_cimatcopy", "cblas_comatcopy", "cblas_dgeadd", "cblas_dimatcopy", "cblas_domatcopy", "cblas_sgeadd",
             "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
             "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
+            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "lapack_make_complex_double", "lapack_make_complex_float",
             // deprecated
             "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
             "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",

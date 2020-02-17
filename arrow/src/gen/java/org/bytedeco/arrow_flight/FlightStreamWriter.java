@@ -24,7 +24,7 @@ public class FlightStreamWriter extends RecordBatchWriter {
   
   ///
   public native @ByVal Status WriteWithMetadata(@Const @ByRef RecordBatch batch,
-                                     @SharedPtr @ByVal ArrowBuffer app_metadata);
+                                     @SharedPtr ArrowBuffer app_metadata);
   /** \brief Indicate that the application is done writing to this stream.
    * 
    *  The application may not write to this stream after calling

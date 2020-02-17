@@ -17,6 +17,9 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // Targeting ../../parquet/IntList.java
 
 
+// Targeting ../../parquet/ColumnDecryptionPropertiesStringMap.java
+
+
 // Targeting ../../parquet/NodeVector.java
 
 
@@ -372,7 +375,13 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 
 @Namespace("parquet") public static native @UniquePtr Codec GetCodec(Compression.type codec, int compression_level);
 @Namespace("parquet") public static native @UniquePtr Codec GetCodec(@Cast("arrow::Compression::type") int codec, int compression_level);
-// Targeting ../../parquet/Encryption.java
+// Targeting ../../parquet/ParquetCipher.java
+
+
+// Targeting ../../parquet/AadMetadata.java
+
+
+// Targeting ../../parquet/EncryptionAlgorithm.java
 
 
 // Targeting ../../parquet/PageType.java
@@ -504,9 +513,6 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // Targeting ../../parquet/RandomAccessSource.java
 
 
-// Targeting ../../parquet/OutputStream.java
-
-
 // Targeting ../../parquet/ParquetInputWrapper.java
 
 
@@ -542,14 +548,17 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // #include <exception>
 // #include <sstream>
 // #include <string>
+// #include <utility>
 
-// #include "arrow/status.h"
+// #include "arrow/type_fwd.h"
 // #include "parquet/platform.h"
 
 // PARQUET-1085
 // #if !defined(ARROW_UNUSED)
 // #define ARROW_UNUSED(x) UNUSED(x)
 // #endif
+
+// Parquet exception to Arrow Status
 
 // #define PARQUET_CATCH_NOT_OK(s)
 //   try {
@@ -558,22 +567,44 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 //     return ::arrow::Status::IOError(e.what());
 //   }
 
+// #define PARQUET_CATCH_AND_RETURN(s)
+//   try {
+//     return (s);
+//   } catch (const ::parquet::ParquetException& e) {
+//     return ::arrow::Status::IOError(e.what());
+//   }
+
+// Arrow Status to Parquet exception
+
 // #define PARQUET_IGNORE_NOT_OK(s)
 //   do {
-//     ::arrow::Status _s = (s);
+//     ::arrow::Status _s = ::arrow::internal::GenericToStatus(s);
 //     ARROW_UNUSED(_s);
 //   } while (0)
 
 // #define PARQUET_THROW_NOT_OK(s)
 //   do {
-//     ::arrow::Status _s = (s);
+//     ::arrow::Status _s = ::arrow::internal::GenericToStatus(s);
 //     if (!_s.ok()) {
-//       std::stringstream ss;
-//       ss << "Arrow error: " << _s.ToString();
-//       throw ::parquet::ParquetException(ss.str());
+//       throw ::parquet::ParquetStatusException(std::move(_s));
 //     }
 //   } while (0)
+
+// #define PARQUET_ASSIGN_OR_THROW_IMPL(status_name, lhs, rexpr)
+//   auto status_name = (rexpr);
+//   PARQUET_THROW_NOT_OK(status_name.status());
+//   lhs = std::move(status_name).ValueOrDie();
+
+// #define PARQUET_ASSIGN_OR_THROW(lhs, rexpr)
+//   PARQUET_ASSIGN_OR_THROW_IMPL(ARROW_ASSIGN_OR_RAISE_NAME(_error_or_value, __COUNTER__),
+//                                lhs, rexpr);
 // Targeting ../../parquet/ParquetException.java
+
+
+// Targeting ../../parquet/ParquetStatusException.java
+
+
+// Targeting ../../parquet/ParquetInvalidOrCorruptedFileException.java
 
 
 
@@ -612,6 +643,7 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // #include <ostream>
 // #include <string>
 // #include <unordered_map>
+// #include <utility>
 // #include <vector>
 
 // #include "parquet/platform.h"
@@ -716,6 +748,7 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 
 // #include <cstdint>
 // #include <memory>
+// #include <utility>
 // #include <vector>
 
 // #include "parquet/exception.h"
@@ -732,6 +765,9 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
   // namespace util
 
 
+// Targeting ../../parquet/Decryptor.java
+
+
 // Targeting ../../parquet/Page.java
 
 
@@ -744,6 +780,9 @@ public static final int kDefaultMaxPageHeaderSize = kDefaultMaxPageHeaderSize();
 @Namespace("parquet") @MemberGetter public static native @Cast("const uint32_t") int kDefaultPageHeaderSize();
 public static final int kDefaultPageHeaderSize = kDefaultPageHeaderSize();
 // Targeting ../../parquet/LevelDecoder.java
+
+
+// Targeting ../../parquet/CryptoContext.java
 
 
 // Targeting ../../parquet/PageReader.java
@@ -810,10 +849,12 @@ public static final int kDefaultPageHeaderSize = kDefaultPageHeaderSize();
 // #define PARQUET_COLUMN_SCANNER_H
 
 // #include <stdio.h>
+
 // #include <cstdint>
 // #include <memory>
 // #include <ostream>
 // #include <string>
+// #include <utility>
 // #include <vector>
 
 // #include "parquet/column_reader.h"
@@ -941,6 +982,88 @@ public static final int WRITE_BATCH_SIZE = WRITE_BATCH_SIZE();
   // namespace parquet
 
 
+// Parsed from parquet/encryption.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #ifndef PARQUET_ENCRYPTION_H
+// #define PARQUET_ENCRYPTION_H
+
+// #include <map>
+// #include <memory>
+// #include <string>
+// #include <unordered_map>
+// #include <utility>
+
+// #include "parquet/exception.h"
+// #include "parquet/schema.h"
+// #include "parquet/types.h"
+
+@Namespace("parquet") @MemberGetter public static native ParquetCipher.type kDefaultEncryptionAlgorithm();
+@Namespace("parquet") @MemberGetter public static native int kMaximalAadMetadataLength();
+public static final int kMaximalAadMetadataLength = kMaximalAadMetadataLength();
+@Namespace("parquet") @MemberGetter public static native @Cast("const bool") boolean kDefaultEncryptedFooter();
+public static final boolean kDefaultEncryptedFooter = kDefaultEncryptedFooter();
+@Namespace("parquet") @MemberGetter public static native @Cast("const bool") boolean kDefaultCheckSignature();
+public static final boolean kDefaultCheckSignature = kDefaultCheckSignature();
+@Namespace("parquet") @MemberGetter public static native @Cast("const bool") boolean kDefaultAllowPlaintextFiles();
+public static final boolean kDefaultAllowPlaintextFiles = kDefaultAllowPlaintextFiles();
+@Namespace("parquet") @MemberGetter public static native int kAadFileUniqueLength();
+public static final int kAadFileUniqueLength = kAadFileUniqueLength();
+// Targeting ../../parquet/DecryptionKeyRetriever.java
+
+
+// Targeting ../../parquet/IntegerKeyIdRetriever.java
+
+
+// Targeting ../../parquet/StringKeyIdRetriever.java
+
+
+// Targeting ../../parquet/HiddenColumnException.java
+
+
+// Targeting ../../parquet/KeyAccessDeniedException.java
+
+
+
+@Namespace("parquet") public static native @Cast("const uint8_t*") BytePointer str2bytes(@StdString String str);
+@Namespace("parquet") public static native @Cast("const uint8_t*") ByteBuffer str2bytes(@StdString BytePointer str);
+// Targeting ../../parquet/ColumnEncryptionProperties.java
+
+
+// Targeting ../../parquet/ColumnDecryptionProperties.java
+
+
+// Targeting ../../parquet/AADPrefixVerifier.java
+
+
+// Targeting ../../parquet/FileDecryptionProperties.java
+
+
+// Targeting ../../parquet/FileEncryptionProperties.java
+
+
+
+  // namespace parquet
+
+// #endif  // PARQUET_ENCRYPTION_H
+
+
 // Parsed from parquet/properties.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -967,10 +1090,11 @@ public static final int WRITE_BATCH_SIZE = WRITE_BATCH_SIZE();
 // #include <string>
 // #include <unordered_map>
 // #include <unordered_set>
+// #include <utility>
 
 // #include "arrow/type.h"
 // #include "arrow/util/compression.h"
-
+// #include "parquet/encryption.h"
 // #include "parquet/exception.h"
 // #include "parquet/parquet_version.h"
 // #include "parquet/platform.h"
@@ -1068,18 +1192,25 @@ public static final long kArrowDefaultBatchSize = kArrowDefaultBatchSize();
 // #define PARQUET_FILE_METADATA_H
 
 // #include <cstdint>
+// #include <map>
 // #include <memory>
 // #include <string>
 // #include <vector>
 
 // #include "arrow/util/key_value_metadata.h"
-
 // #include "parquet/platform.h"
 // #include "parquet/properties.h"
+// #include "parquet/schema.h"
 // #include "parquet/types.h"
+// Targeting ../../parquet/InternalFileDecryptor.java
+
+
 
   // namespace schema
 // Targeting ../../parquet/ApplicationVersion.java
+
+
+// Targeting ../../parquet/ColumnCryptoMetaData.java
 
 
 // Targeting ../../parquet/ColumnChunkMetaData.java
@@ -1089,6 +1220,9 @@ public static final long kArrowDefaultBatchSize = kArrowDefaultBatchSize();
 
 
 // Targeting ../../parquet/FileMetaData.java
+
+
+// Targeting ../../parquet/FileCryptoMetaData.java
 
 
 // Targeting ../../parquet/ColumnChunkMetaDataBuilder.java
@@ -1190,22 +1324,31 @@ public static final long kArrowDefaultBatchSize = kArrowDefaultBatchSize();
 
 // #include <cstdint>
 // #include <memory>
+// #include <utility>
 
 // #include "parquet/metadata.h"
 // #include "parquet/platform.h"
 // #include "parquet/properties.h"
 // #include "parquet/schema.h"
+
+// FIXME: copied from reader-internal.cc
+@Namespace("parquet") @MemberGetter public static native @Cast("const uint8_t") byte kParquetMagic(int i);
+@Namespace("parquet") @MemberGetter public static native @Cast("const uint8_t*") BytePointer kParquetMagic();
+@Namespace("parquet") @MemberGetter public static native @Cast("const uint8_t") byte kParquetEMagic(int i);
+@Namespace("parquet") @MemberGetter public static native @Cast("const uint8_t*") BytePointer kParquetEMagic();
 // Targeting ../../parquet/RowGroupWriter.java
 
 
 
-@Namespace("parquet") public static native @Deprecated void WriteFileMetaData(@Const @ByRef FileMetaData file_metadata, org.bytedeco.parquet.OutputStream sink);
-
 @Namespace("parquet") public static native void WriteFileMetaData(@Const @ByRef FileMetaData file_metadata,
-                       org.bytedeco.arrow.OutputStream sink);
+                       OutputStream sink);
 
 @Namespace("parquet") public static native void WriteMetaDataFile(@Const @ByRef FileMetaData file_metadata,
-                       org.bytedeco.arrow.OutputStream sink);
+                       OutputStream sink);
+@Namespace("parquet") public static native void WriteEncryptedFileMetadata(@Const @ByRef FileMetaData file_metadata,
+                                OutputStream sink);
+@Namespace("parquet") public static native void WriteFileCryptoMetaData(@Const @ByRef FileCryptoMetaData crypto_metadata,
+                             OutputStream sink);
 // Targeting ../../parquet/ParquetFileWriter.java
 
 
@@ -1276,6 +1419,7 @@ public static final long kArrowDefaultBatchSize = kArrowDefaultBatchSize();
 // #include <cstdint>
 // #include <memory>
 // #include <string>
+// #include <utility>
 
 // #include "parquet/platform.h"
 // #include "parquet/types.h"

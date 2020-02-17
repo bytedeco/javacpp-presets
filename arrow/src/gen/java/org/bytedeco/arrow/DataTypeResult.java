@@ -7,60 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-  // namespace internal
 
-// A class for representing either a usable value, or an error.
-/**
- *  A Result object either contains a value of type {@code T} or a Status object
- *  explaining why such a value is not present. The type {@code T} must be
- *  copy-constructible and/or move-constructible.
- * 
- *  The state of a Result object may be determined by calling ok() or
- *  status(). The ok() method returns true if the object contains a valid value.
- *  The status() method returns the internal Status object. A Result object
- *  that contains a valid value will return an OK Status for a call to status().
- * 
- *  A value of type {@code T} may be extracted from a Result object through a call
- *  to ValueOrDie(). This function should only be called if a call to ok()
- *  returns true. Sample usage:
- * 
- *  <pre>{@code
- *    arrow::Result<Foo> result = CalculateFoo();
- *    if (result.ok()) {
- *      Foo foo = result.ValueOrDie();
- *      foo.DoSomethingCool();
- *    } else {
- *      ARROW_LOG(ERROR) << result.status();
- *   }
- *  }</pre>
- * 
- *  If {@code T} is a move-only type, like {@code std::unique_ptr<>}, then the value should
- *  only be extracted after invoking {@code std::move()} on the Result object.
- *  Sample usage:
- * 
- *  <pre>{@code
- *    arrow::Result<std::unique_ptr<Foo>> result = CalculateFoo();
- *    if (result.ok()) {
- *      std::unique_ptr<Foo> foo = std::move(result).ValueOrDie();
- *      foo->DoSomethingCool();
- *    } else {
- *      ARROW_LOG(ERROR) << result.status();
- *    }
- *  }</pre>
- * 
- *  Result is provided for the convenience of implementing functions that
- *  return some value but may fail during execution. For instance, consider a
- *  function with the following signature:
- * 
- *  <pre>{@code
- *    arrow::Status CalculateFoo(int *output);
- *  }</pre>
- * 
- *  This function may instead be written as:
- * 
- *  <pre>{@code
- *    arrow::Result<int> CalculateFoo();
- *  }</pre> */
 @Name("arrow::Result<std::shared_ptr<arrow::DataType> >") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class DataTypeResult extends Pointer {
     static { Loader.load(); }
@@ -72,6 +19,9 @@ public class DataTypeResult extends Pointer {
     @Override public DataTypeResult position(long position) {
         return (DataTypeResult)super.position(position);
     }
+
+  
+  ///
 
   /** Constructs a Result object that contains a non-OK status.
    * 
@@ -92,7 +42,7 @@ public class DataTypeResult extends Pointer {
    *  implicitly converted to the appropriate return type as a matter of
    *  convenience.
    * 
-   *  @param status The non-OK Status object to initalize to. */
+   *  @param status The non-OK Status object to initialize to. */
   
   ///
   ///
@@ -119,6 +69,23 @@ public class DataTypeResult extends Pointer {
    *  additional details.
    * 
    *  @param value The value to initialize to. */
+
+  /** Constructs a Result object that contains {@code value}. The resulting object
+   *  is considered to have an OK status. The wrapped element can be accessed
+   *  with ValueOrDie().
+   * 
+   *  This constructor is made implicit so that a function with a return type of
+   *  {@code Result<T>} can return an object of type {@code T}, implicitly converting
+   *  it to a {@code Result<T>} object.
+   * 
+   *  @param value The value to initialize to. */
+  // NOTE `Result(U&& value)` above should be sufficient, but some compilers
+  // fail matching it.
+  
+  ///
+  ///
+  public DataTypeResult(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value);
 
   /** Copy constructor.
    * 
@@ -167,6 +134,11 @@ public class DataTypeResult extends Pointer {
    *  @param other The Result object to assign from and set to a non-OK
    *  status. */
 
+  /** Compare to another Result. */
+  
+  ///
+  public native @Cast("bool") boolean Equals(@Const @ByRef DataTypeResult other);
+
   /** Indicates whether the object contains a {@code T} value.  Generally instead
    *  of accessing this directly you will want to use ASSIGN_OR_RAISE defined
    *  below.
@@ -178,7 +150,7 @@ public class DataTypeResult extends Pointer {
   ///
   public native @Cast("bool") boolean ok();
 
-  /** \brief Equivelant to ok(). */
+  /** \brief Equivalent to ok(). */
   // operator bool() const { return ok(); }
 
   /** Gets the stored status object, or an OK status if a {@code T} value is stored.
@@ -217,4 +189,28 @@ public class DataTypeResult extends Pointer {
    *  contain a non-OK status.
    * 
    *  @return The stored {@code T} value. */
+  
+  
+
+  /** Helper method for implementing Status returning functions in terms of semantically
+   *  equivalent Result returning functions. For example:
+   * 
+   *  Status GetInt(int *out) { return GetInt().Value(out); } */
+  
+
+  /** Move and return the internally stored value or alternative if an error is stored. */
+  
+
+  /** Retrieve the value if ok(), falling back to an alternative generated by the provided
+   *  factory */
+  
+
+  /** Apply a function to the internally stored value to produce a new result or propagate
+   *  the stored error. */
+  
+
+  /** Apply a function to the internally stored value to produce a new result or propagate
+   *  the stored error. */
+  // Assignment is disabled by default so we need to destruct/reconstruct
+  // the value.
 }

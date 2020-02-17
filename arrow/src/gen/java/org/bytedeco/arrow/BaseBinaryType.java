@@ -15,7 +15,5 @@ public class BaseBinaryType extends DataType {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseBinaryType(Pointer p) { super(p); }
-    public NoExtraMeta asNoExtraMeta() { return asNoExtraMeta(this); }
-    @Namespace public static native @Name("static_cast<arrow::NoExtraMeta*>") NoExtraMeta asNoExtraMeta(BaseBinaryType pointer);
 
 }

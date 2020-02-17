@@ -32,5 +32,5 @@ public class Action extends Pointer {
   public native @StdString String type(); public native Action type(String setter);
 
   /** The action content as a Buffer */
-  public native @SharedPtr @ByRef ArrowBuffer body(); public native Action body(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer body(); public native Action body(ArrowBuffer setter);
 }

@@ -23,15 +23,15 @@ public class PageReader extends Pointer {
 
   public static native @UniquePtr PageReader Open(
         @Cast("parquet::ArrowInputStream*") @SharedPtr InputStream stream, @Cast("int64_t") long total_num_rows,
-        Compression.type codec,
-        MemoryPool pool/*=arrow::default_memory_pool()*/);
+        Compression.type codec, MemoryPool pool/*=arrow::default_memory_pool()*/,
+        @Const CryptoContext ctx/*=nullptr*/);
   public static native @UniquePtr PageReader Open(
         @Cast("parquet::ArrowInputStream*") @SharedPtr InputStream stream, @Cast("int64_t") long total_num_rows,
         Compression.type codec);
   public static native @UniquePtr PageReader Open(
         @Cast("parquet::ArrowInputStream*") @SharedPtr InputStream stream, @Cast("int64_t") long total_num_rows,
-        @Cast("arrow::Compression::type") int codec,
-        MemoryPool pool/*=arrow::default_memory_pool()*/);
+        @Cast("arrow::Compression::type") int codec, MemoryPool pool/*=arrow::default_memory_pool()*/,
+        @Const CryptoContext ctx/*=nullptr*/);
   public static native @UniquePtr PageReader Open(
         @Cast("parquet::ArrowInputStream*") @SharedPtr InputStream stream, @Cast("int64_t") long total_num_rows,
         @Cast("arrow::Compression::type") int codec);

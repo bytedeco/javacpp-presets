@@ -24,54 +24,64 @@ public class MemoryMappedFile extends ReadWriteFileInterface {
 
 
   /** Create new file with indicated size, return in read/write mode */
-  public static native @ByVal Status Create(@StdString String path, @Cast("int64_t") long size,
+  public static native @ByVal MemoryMappedFileResult Create(@StdString String path,
+                                                            @Cast("int64_t") long size);
+  public static native @ByVal MemoryMappedFileResult Create(@StdString BytePointer path,
+                                                            @Cast("int64_t") long size);
+
+  public static native @Deprecated @ByVal Status Create(@StdString String path, @Cast("int64_t") long size,
                          @SharedPtr MemoryMappedFile out);
-  public static native @ByVal Status Create(@StdString BytePointer path, @Cast("int64_t") long size,
+  public static native @Deprecated @ByVal Status Create(@StdString BytePointer path, @Cast("int64_t") long size,
                          @SharedPtr MemoryMappedFile out);
 
   // mmap() with whole file
-  public static native @ByVal Status Open(@StdString String path, FileMode.type mode,
+  public static native @ByVal MemoryMappedFileResult Open(@StdString String path,
+                                                          FileMode.type mode);
+  public static native @ByVal MemoryMappedFileResult Open(@StdString BytePointer path,
+                                                          @Cast("arrow::io::FileMode::type") int mode);
+
+  public static native @Deprecated @ByVal Status Open(@StdString String path, FileMode.type mode,
                        @SharedPtr MemoryMappedFile out);
-  public static native @ByVal Status Open(@StdString BytePointer path, @Cast("arrow::io::FileMode::type") int mode,
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, @Cast("arrow::io::FileMode::type") int mode,
                        @SharedPtr MemoryMappedFile out);
 
   // mmap() with a region of file, the offset must be a multiple of the page size
-  public static native @ByVal Status Open(@StdString String path, FileMode.type mode, @Cast("const int64_t") long offset,
+  public static native @ByVal MemoryMappedFileResult Open(@StdString String path,
+                                                          FileMode.type mode,
+                                                          @Cast("const int64_t") long offset,
+                                                          @Cast("const int64_t") long length);
+  public static native @ByVal MemoryMappedFileResult Open(@StdString BytePointer path,
+                                                          @Cast("arrow::io::FileMode::type") int mode,
+                                                          @Cast("const int64_t") long offset,
+                                                          @Cast("const int64_t") long length);
+
+  public static native @Deprecated @ByVal Status Open(@StdString String path, FileMode.type mode, @Cast("const int64_t") long offset,
                        @Cast("const int64_t") long length, @SharedPtr MemoryMappedFile out);
-  public static native @ByVal Status Open(@StdString BytePointer path, @Cast("arrow::io::FileMode::type") int mode, @Cast("const int64_t") long offset,
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, @Cast("arrow::io::FileMode::type") int mode, @Cast("const int64_t") long offset,
                        @Cast("const int64_t") long length, @SharedPtr MemoryMappedFile out);
 
   public native @ByVal Status Close();
 
   public native @Cast("bool") boolean closed();
 
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
 
   public native @ByVal Status Seek(@Cast("int64_t") long _position);
 
   // Required by RandomAccessFile, copies memory into out. Not thread-safe
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+  public native @ByVal LongResult Read(@Cast("int64_t") long nbytes, Pointer out);
 
   // Zero copy read, moves position pointer. Not thread-safe
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+  public native @ByVal BufferResult Read(@Cast("int64_t") long nbytes);
 
   // Zero-copy read, leaves position unchanged. Acquires a reader lock
   // for the duration of slice creation (typically very short). Is thread-safe.
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+  public native @ByVal BufferResult ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes);
 
   // Raw copy of the memory at specified position. Thread-safe, but
   // locks out other readers for the duration of memcpy. Prefer the
   // zero copy method
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read,
-                  Pointer out);
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read,
-                  Pointer out);
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read,
-                  Pointer out);
+  public native @ByVal LongResult ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, Pointer out);
 
   public native @Cast("bool") boolean supports_zero_copy();
 
@@ -86,12 +96,7 @@ public class MemoryMappedFile extends ReadWriteFileInterface {
   /** Write data at a particular position in the file. Thread-safe */
   public native @ByVal Status WriteAt(@Cast("int64_t") long _position, @Const Pointer data, @Cast("int64_t") long nbytes);
 
-  // @return: the size in bytes of the memory source
-
-  // @return: the size in bytes of the memory source
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongPointer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongBuffer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") long[] size);
+  public native @ByVal LongResult GetSize();
 
   public native int file_descriptor();
 }

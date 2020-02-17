@@ -15,5 +15,6 @@ public class StructScalar extends Scalar {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StructScalar(Pointer p) { super(p); }
 
+
   public native @ByRef ScalarVector value(); public native StructScalar value(ScalarVector setter);
 }

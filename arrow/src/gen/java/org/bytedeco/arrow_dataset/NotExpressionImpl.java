@@ -13,8 +13,6 @@ import static org.bytedeco.arrow.global.parquet.*;
 
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
-
-/** Helper class which implements Copy and forwards construction */
 @Name("arrow::dataset::ExpressionImpl<arrow::dataset::UnaryExpression,arrow::dataset::NotExpression,arrow::dataset::ExpressionType::NOT>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class NotExpressionImpl extends UnaryExpression {
     static { Loader.load(); }
@@ -32,5 +30,5 @@ public class NotExpressionImpl extends UnaryExpression {
 
   @MemberGetter public static native ExpressionType.type expression_type();
 
-  public native @SharedPtr Expression Copy();
+  public native @SharedPtr @ByVal Expression Copy();
 }

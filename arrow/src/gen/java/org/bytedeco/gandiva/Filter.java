@@ -22,9 +22,9 @@ public class Filter extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Filter(Pointer p) { super(p); }
 
-  public Filter(@UniquePtr LLVMGenerator llvm_generator, @SharedPtr Schema schema,
+  public Filter(@UniquePtr LLVMGenerator llvm_generator, @SharedPtr @ByVal Schema schema,
            @SharedPtr Configuration config) { super((Pointer)null); allocate(llvm_generator, schema, config); }
-  private native void allocate(@UniquePtr LLVMGenerator llvm_generator, @SharedPtr Schema schema,
+  private native void allocate(@UniquePtr LLVMGenerator llvm_generator, @SharedPtr @ByVal Schema schema,
            @SharedPtr Configuration config);
 
   // Inline dtor will attempt to resolve the destructor for
@@ -37,7 +37,7 @@ public class Filter extends Pointer {
    *  @param filter [out] the returned filter object */
   
   ///
-  public static native @ByVal Status Make(@SharedPtr Schema schema, @SharedPtr Condition condition,
+  public static native @ByVal Status Make(@SharedPtr @ByVal Schema schema, @SharedPtr Condition condition,
                        @SharedPtr Filter filter);
 
   /** \brief Build a filter for the given schema and condition.
@@ -49,7 +49,7 @@ public class Filter extends Pointer {
    *  @param filter [out] the returned filter object */
   
   ///
-  public static native @ByVal Status Make(@SharedPtr Schema schema, @SharedPtr Condition condition,
+  public static native @ByVal Status Make(@SharedPtr @ByVal Schema schema, @SharedPtr Condition condition,
                        @SharedPtr Configuration config,
                        @SharedPtr Filter filter);
 

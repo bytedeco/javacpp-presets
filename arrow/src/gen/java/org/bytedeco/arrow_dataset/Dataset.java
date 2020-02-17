@@ -22,21 +22,18 @@ public class Dataset extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dataset(Pointer p) { super(p); }
 
-  /** WARNING, this constructor is not recommend, use Dataset::Make instead.
-   *  @param sources [in] one or more input data sources
-   *  @param schema [in] a known schema to conform to, may be nullptr */
-  public Dataset(@ByVal DataSourceVector sources,
-                     @SharedPtr Schema schema) { super((Pointer)null); allocate(sources, schema); }
-  private native void allocate(@ByVal DataSourceVector sources,
-                     @SharedPtr Schema schema);
-
-  public static native @ByVal Status Make(@ByVal DataSourceVector sourcs,
-                       @SharedPtr Schema schema, @SharedPtr Dataset out);
+  /** \brief Build a Dataset from uniform sources. */
+  //
+  /** @param sources [in] one or more input sources
+  /** @param schema [in] a known schema to conform to */
+  public static native @ByVal DatasetResult Make(@SharedPtr @ByVal Source sources,
+                                                 @SharedPtr @ByVal Schema schema);
 
   /** \brief Begin to build a new Scan operation against this Dataset */
-  public native @ByVal Status NewScan(@UniquePtr ScannerBuilder out);
+  public native @ByVal ScannerBuilderResult NewScan(@SharedPtr ScanContext context);
+  public native @ByVal ScannerBuilderResult NewScan();
 
-  public native @Const @ByRef DataSourceVector sources();
+  public native @Const @SharedPtr @ByRef Source sources();
 
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 }

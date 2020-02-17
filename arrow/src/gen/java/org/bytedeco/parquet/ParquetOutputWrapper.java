@@ -13,19 +13,24 @@ import static org.bytedeco.arrow.global.parquet.*;
 
 
 @Namespace("parquet") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.parquet.class)
-public class ParquetOutputWrapper extends org.bytedeco.arrow.OutputStream {
+public class ParquetOutputWrapper extends OutputStream {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public ParquetOutputWrapper() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ParquetOutputWrapper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParquetOutputWrapper(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public ParquetOutputWrapper position(long position) {
+        return (ParquetOutputWrapper)super.position(position);
+    }
 
-  public ParquetOutputWrapper(@SharedPtr org.bytedeco.parquet.OutputStream sink) { super((Pointer)null); allocate(sink); }
-  private native void allocate(@SharedPtr org.bytedeco.parquet.OutputStream sink);
 
   // FileInterface
   public native @ByVal Status Close();
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
   public native @Cast("bool") boolean closed();
 
   // Writable

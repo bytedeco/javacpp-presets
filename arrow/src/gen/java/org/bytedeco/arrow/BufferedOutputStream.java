@@ -20,9 +20,11 @@ public class BufferedOutputStream extends OutputStream {
    *  @param buffer_size [in] the size of the temporary write buffer
    *  @param pool [in] a MemoryPool to use for allocations
    *  @param raw [in] another OutputStream
-   *  @param out [out] the created BufferedOutputStream
-   *  @return Status */
-  public static native @ByVal Status Create(@Cast("int64_t") long buffer_size, MemoryPool pool,
+   *  @return the created BufferedOutputStream */
+  public static native @ByVal BufferedOutputStreamResult Create(
+        @Cast("int64_t") long buffer_size, MemoryPool pool, @SharedPtr OutputStream raw);
+
+  public static native @Deprecated @ByVal Status Create(@Cast("int64_t") long buffer_size, MemoryPool pool,
                          @SharedPtr OutputStream raw,
                          @SharedPtr BufferedOutputStream out);
 
@@ -40,9 +42,10 @@ public class BufferedOutputStream extends OutputStream {
 
   /** \brief Flush any buffered writes and release the raw
    *  OutputStream. Further operations on this object are invalid
-   *  @param raw [out] the underlying OutputStream
-   *  @return Status */
-  public native @ByVal Status Detach(@SharedPtr OutputStream raw);
+   *  @return the underlying OutputStream */
+  public native @ByVal OutputStreamResult Detach();
+
+  public native @Deprecated @ByVal Status Detach(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::OutputStream>*"}) OutputStream raw);
 
   // OutputStream interface
 
@@ -52,12 +55,10 @@ public class BufferedOutputStream extends OutputStream {
   public native @ByVal Status Abort();
   public native @Cast("bool") boolean closed();
 
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
   // Write bytes to the stream. Thread-safe
   public native @ByVal Status Write(@Const Pointer data, @Cast("int64_t") long nbytes);
-  public native @ByVal Status Write(@Const @SharedPtr @ByRef ArrowBuffer data);
+  public native @ByVal Status Write(@SharedPtr ArrowBuffer data);
 
   public native @ByVal Status Flush();
 

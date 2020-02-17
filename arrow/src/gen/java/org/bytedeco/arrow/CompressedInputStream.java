@@ -17,9 +17,15 @@ public class CompressedInputStream extends CompressedInputStreamConcurrencyWrapp
 
 
   /** \brief Create a compressed input stream wrapping the given input stream. */
-  public static native @ByVal Status Make(Codec codec, @SharedPtr InputStream raw,
+  public static native @ByVal CompressedInputStreamResult Make(
+        Codec codec, @SharedPtr InputStream raw,
+        MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public static native @ByVal CompressedInputStreamResult Make(
+        Codec codec, @SharedPtr InputStream raw);
+
+  public static native @Deprecated @ByVal Status Make(Codec codec, @SharedPtr InputStream raw,
                        @SharedPtr CompressedInputStream out);
-  public static native @ByVal Status Make(MemoryPool pool, Codec codec,
+  public static native @Deprecated @ByVal Status Make(MemoryPool pool, Codec codec,
                        @SharedPtr InputStream raw,
                        @SharedPtr CompressedInputStream out);
 

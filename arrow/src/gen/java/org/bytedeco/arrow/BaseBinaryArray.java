@@ -41,10 +41,10 @@ public class BaseBinaryArray extends FlatArray {
   public native @StdString String GetString(@Cast("int64_t") long i);
 
   /** Note that this buffer does not account for any slice offset */
-  public native @SharedPtr @ByVal ArrowBuffer value_offsets();
+  public native @SharedPtr ArrowBuffer value_offsets();
 
   /** Note that this buffer does not account for any slice offset */
-  public native @SharedPtr @ByVal ArrowBuffer value_data();
+  public native @SharedPtr ArrowBuffer value_data();
 
   public native @Cast("const arrow::BaseBinaryArray<arrow::BinaryType>::offset_type*") IntPointer raw_value_offsets();
 

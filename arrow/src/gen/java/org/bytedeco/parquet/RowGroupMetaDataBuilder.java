@@ -31,5 +31,6 @@ public class RowGroupMetaDataBuilder extends Pointer {
   public native void set_num_rows(@Cast("int64_t") long num_rows);
 
   // commit the metadata
+  public native void Finish(@Cast("int64_t") long total_bytes_written, short row_group_ordinal/*=-1*/);
   public native void Finish(@Cast("int64_t") long total_bytes_written);
 }

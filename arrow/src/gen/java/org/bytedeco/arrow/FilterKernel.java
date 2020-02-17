@@ -38,6 +38,6 @@ public class FilterKernel extends BinaryKernel {
 
   /** \brief single-array implementation */
   public native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef Array values,
-                          @Const @ByRef BooleanArray filter, @Cast("int64_t") long length,
+                          @Const @ByRef BooleanArray filter, @Cast("int64_t") long out_length,
                           @SharedPtr Array out);
 }

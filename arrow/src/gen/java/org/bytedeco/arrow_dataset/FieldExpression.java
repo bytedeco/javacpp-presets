@@ -35,8 +35,5 @@ public class FieldExpression extends Expression {
 
   public native @ByVal DataTypeResult Validate(@Const @ByRef Schema schema);
 
-  public native @ByVal DatumResult Evaluate(FunctionContext ctx,
-                                    @Const @ByRef RecordBatch batch);
-
-  public native @SharedPtr Expression Copy();
+  public native @SharedPtr @ByVal Expression Copy();
 }

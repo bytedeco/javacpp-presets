@@ -21,7 +21,7 @@ public class MetadataRecordBatchReader extends Pointer {
 
 
   /** \brief Get the schema for this stream. */
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
   /** \brief Get the next message from Flight. If the stream is
    *  finished, then the members of \a FlightStreamChunk will be
    *  nullptr. */

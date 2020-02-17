@@ -152,6 +152,9 @@ public class WriterProperties extends Pointer {
     public native Builder compression_level(@SharedPtr ColumnPath path,
                                    int compression_level);
 
+    public native Builder encryption(
+            @SharedPtr FileEncryptionProperties file_encryption_properties);
+
     public native Builder enable_statistics();
 
     public native Builder disable_statistics();
@@ -201,4 +204,11 @@ public class WriterProperties extends Pointer {
   public native @Cast("bool") boolean statistics_enabled(@SharedPtr ColumnPath path);
 
   public native @Cast("size_t") long max_statistics_size(@SharedPtr ColumnPath path);
+
+  public native FileEncryptionProperties file_encryption_properties();
+
+  public native @SharedPtr ColumnEncryptionProperties column_encryption_properties(
+        @StdString String path);
+  public native @SharedPtr ColumnEncryptionProperties column_encryption_properties(
+        @StdString BytePointer path);
 }

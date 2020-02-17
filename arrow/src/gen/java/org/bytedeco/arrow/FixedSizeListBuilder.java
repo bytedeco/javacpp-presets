@@ -75,7 +75,7 @@ public class FixedSizeListBuilder extends ArrayBuilder {
 
   /** \brief Append a null fixed length list.
    * 
-   *  The child array builder will have the approriate number of nulls appended
+   *  The child array builder will have the appropriate number of nulls appended
    *  automatically. */
   
   ///
@@ -83,7 +83,7 @@ public class FixedSizeListBuilder extends ArrayBuilder {
 
   /** \brief Append length null fixed length lists.
    * 
-   *  The child array builder will have the approriate number of nulls appended
+   *  The child array builder will have the appropriate number of nulls appended
    *  automatically. */
   public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
 

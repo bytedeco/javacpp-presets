@@ -23,20 +23,20 @@ public class LargeListArray extends BaseLargeListArray {
   ///
   ///
   public LargeListArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                   @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
+                   @SharedPtr ArrowBuffer value_offsets,
                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-                   @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+                   @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
                    @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, value_offsets, values, null_bitmap, null_count, offset); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                   @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
+                   @SharedPtr ArrowBuffer value_offsets,
                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-                   @Const @SharedPtr @ByRef(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+                   @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
                    @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public LargeListArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                   @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
+                   @SharedPtr ArrowBuffer value_offsets,
                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values) { super((Pointer)null); allocate(type, length, value_offsets, values); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                   @Const @SharedPtr @ByRef ArrowBuffer value_offsets,
+                   @SharedPtr ArrowBuffer value_offsets,
                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values);
 
   /** \brief Construct LargeListArray from array of offsets and child value array
@@ -52,6 +52,17 @@ public class LargeListArray extends BaseLargeListArray {
    *  @param pool [in] MemoryPool in case new offsets array needs to be
    *  allocated because of null values
    *  @param out [out] Will have length equal to offsets.length() - 1 */
+  
+  ///
   public static native @ByVal Status FromArrays(@Const @ByRef Array offsets, @Const @ByRef Array values, MemoryPool pool,
                              @SharedPtr Array out);
+
+  /** \brief Return an Array that is a concatenation of the lists in this array.
+   * 
+   *  Note that it's different from {@code values()} in that it takes into
+   *  consideration of this array's offsets as well as null elements backed
+   *  by non-empty lists (they are skipped, thus copying may be needed). */
+  public native @ByVal ArrayResult Flatten(
+        MemoryPool memory_pool/*=arrow::default_memory_pool()*/);
+  public native @ByVal ArrayResult Flatten();
 }

@@ -24,10 +24,10 @@ public class Table extends Pointer {
    *  @param columns The table's columns as chunked arrays
    *  @param num_rows number of rows in table, -1 (default) to infer from columns */
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(
-        @SharedPtr Schema schema,
+        @Const @SharedPtr @ByRef Schema schema,
         @Const @ByRef ChunkedArrayVector columns, @Cast("int64_t") long num_rows/*=-1*/);
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(
-        @SharedPtr Schema schema,
+        @Const @SharedPtr @ByRef Schema schema,
         @Const @ByRef ChunkedArrayVector columns);
 
   /** \brief Construct a Table from schema and arrays
@@ -36,10 +36,10 @@ public class Table extends Pointer {
    *  @param num_rows number of rows in table, -1 (default) to infer from columns */
   
   ///
-  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@SharedPtr Schema schema,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@Const @SharedPtr @ByRef Schema schema,
                                        @Const @ByRef ArrayVector arrays,
                                        @Cast("int64_t") long num_rows/*=-1*/);
-  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@SharedPtr Schema schema,
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@Const @SharedPtr @ByRef Schema schema,
                                        @Const @ByRef ArrayVector arrays);
 
   /** \brief Construct a Table from RecordBatches, using schema supplied by the first
@@ -64,7 +64,7 @@ public class Table extends Pointer {
   
   ///
   public static native @ByVal Status FromRecordBatches(
-        @SharedPtr Schema schema,
+        @Const @SharedPtr @ByRef Schema schema,
         @Const @ByRef RecordBatchVector batches,
         @SharedPtr Table table);
 
@@ -77,17 +77,23 @@ public class Table extends Pointer {
   public static native @ByVal Status FromChunkedStructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray array,
                                          @SharedPtr Table table);
 
-  /** Return the table schema */
-  public native @SharedPtr Schema schema();
+  /** \brief Return the table schema */
+  public native @SharedPtr @ByVal Schema schema();
 
-  /** Return a column by index */
+  /** \brief Return a column by index */
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column(int i);
 
+  /** \brief Return vector of all columns for table */
+  public native @ByVal ChunkedArrayVector columns();
+
   /** Return a column's field by index */
+  public native @SharedPtr @ByVal Field field(int i);
+
+  /** \brief Return vector of all fields for table */
   
   ///
   ///
-  public native @SharedPtr @ByVal Field field(int i);
+  public native @ByVal FieldVector fields();
 
   /** \brief Construct a zero-copy slice of the table with the
    *  indicated offset and length
@@ -146,10 +152,31 @@ public class Table extends Pointer {
    * 
    *  @param pool [in] The pool for buffer allocations, if any
    *  @param out [out] The returned table */
+  
+  ///
+  ///
   public native @ByVal Status Flatten(MemoryPool pool, @SharedPtr Table out);
 
-  /** \brief Perform any checks to validate the input arguments */
+  /** \brief Perform cheap validation checks to determine obvious inconsistencies
+   *  within the table's schema and internal data.
+   * 
+   *  This is O(k*m) where k is the total number of field descendents,
+   *  and m is the number of chunks.
+   * 
+   *  @return Status */
+  
+  ///
+  ///
   public native @ByVal Status Validate();
+
+  /** \brief Perform extensive validation checks to determine inconsistencies
+   *  within the table's schema and internal data.
+   * 
+   *  This is O(k*n) where k is the total number of field descendents,
+   *  and n is the number of rows.
+   * 
+   *  @return Status */
+  public native @ByVal Status ValidateFull();
 
   /** \brief Return the number of columns in the table */
   public native int num_columns();

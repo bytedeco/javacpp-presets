@@ -65,21 +65,12 @@ public class ParquetFileWriter extends Pointer {
   private native void allocate();
 
   public static native @UniquePtr ParquetFileWriter Open(
-        @SharedPtr org.bytedeco.arrow.OutputStream sink,
+        @SharedPtr OutputStream sink,
         @SharedPtr GroupNode schema,
         @SharedPtr WriterProperties properties/*=parquet::default_writer_properties()*/,
         @Const @SharedPtr KeyValueMetadata key_value_metadata/*=nullptr*/);
   public static native @UniquePtr ParquetFileWriter Open(
-        @SharedPtr org.bytedeco.arrow.OutputStream sink,
-        @SharedPtr GroupNode schema);
-
-  public static native @UniquePtr ParquetFileWriter Open(
-        @SharedPtr org.bytedeco.parquet.OutputStream sink,
-        @SharedPtr GroupNode schema,
-        @SharedPtr WriterProperties properties/*=parquet::default_writer_properties()*/,
-        @Const @SharedPtr KeyValueMetadata key_value_metadata/*=nullptr*/);
-  public static native @UniquePtr ParquetFileWriter Open(
-        @SharedPtr org.bytedeco.parquet.OutputStream sink,
+        @SharedPtr OutputStream sink,
         @SharedPtr GroupNode schema);
 
   public native void Open(@UniquePtr Contents contents);

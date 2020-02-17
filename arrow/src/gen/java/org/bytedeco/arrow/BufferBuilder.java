@@ -29,8 +29,8 @@ public class BufferBuilder extends Pointer {
 
   
   ///
-  public BufferBuilder(MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(pool); }
-  private native void allocate(MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public BufferBuilder(MemoryPool pool/*ARROW_MEMORY_POOL_DEFAULT*/) { super((Pointer)null); allocate(pool); }
+  private native void allocate(MemoryPool pool/*ARROW_MEMORY_POOL_DEFAULT*/);
   public BufferBuilder() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -93,8 +93,8 @@ public class BufferBuilder extends Pointer {
    *  reallocate to fit more tightly in memory. Set to false to avoid
    *  a reallocation, at the expense of potentially more memory consumption.
    *  @return Status */
-  public native @ByVal Status Finish(@SharedPtr ArrowBuffer out, @Cast("bool") boolean shrink_to_fit/*=true*/);
-  public native @ByVal Status Finish(@SharedPtr ArrowBuffer out);
+  public native @ByVal Status Finish(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out, @Cast("bool") boolean shrink_to_fit/*=true*/);
+  public native @ByVal Status Finish(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   public native void Reset();
 

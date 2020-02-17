@@ -20,11 +20,13 @@ public class MockFileSystem extends FileSystem {
   public MockFileSystem(@ByVal @Cast("arrow::fs::TimePoint*") Pointer current_time) { super((Pointer)null); allocate(current_time); }
   private native void allocate(@ByVal @Cast("arrow::fs::TimePoint*") Pointer current_time);
 
+  public native @StdString String type_name();
+
   // XXX It's not very practical to have to explicitly declare inheritance
   // of default overrides.
-  public native @ByVal Status GetTargetStats(@StdString String path, FileStats out);
-  public native @ByVal Status GetTargetStats(@StdString BytePointer path, FileStats out);
-  public native @ByVal Status GetTargetStats(@Const @ByRef Selector select, @StdVector FileStats out);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString String path);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString BytePointer path);
+  public native @ByVal FileStatsVectorResult GetTargetStats(@Const @ByRef FileSelector select);
 
   public native @ByVal Status CreateDir(@StdString String path, @Cast("bool") boolean recursive/*=true*/);
   public native @ByVal Status CreateDir(@StdString String path);
@@ -45,30 +47,40 @@ public class MockFileSystem extends FileSystem {
   public native @ByVal Status CopyFile(@StdString String src, @StdString String dest);
   public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer dest);
 
-  public native @ByVal Status OpenInputStream(@StdString String path,
-                           @SharedPtr InputStream out);
-  public native @ByVal Status OpenInputStream(@StdString BytePointer path,
-                           @SharedPtr InputStream out);
-
-  public native @ByVal Status OpenInputFile(@StdString String path,
-                         @SharedPtr RandomAccessFile out);
-  public native @ByVal Status OpenInputFile(@StdString BytePointer path,
-                         @SharedPtr RandomAccessFile out);
-
-  public native @ByVal Status OpenOutputStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenOutputStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
-
-  public native @ByVal Status OpenAppendStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenAppendStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString String path);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString BytePointer path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString String path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString BytePointer path);
 
   // Contents-dumping helpers to ease testing.
   // Output is lexicographically-ordered by full path.
   public native @StdVector DirInfo AllDirs();
   public native @StdVector FileInfo AllFiles();
+
+  // Create a File with a content from a string.
+  public native @ByVal Status CreateFile(@StdString String path, @StdString String content,
+                      @Cast("bool") boolean recursive/*=true*/);
+  public native @ByVal Status CreateFile(@StdString String path, @StdString String content);
+  public native @ByVal Status CreateFile(@StdString BytePointer path, @StdString BytePointer content,
+                      @Cast("bool") boolean recursive/*=true*/);
+  public native @ByVal Status CreateFile(@StdString BytePointer path, @StdString BytePointer content);
+
+  // Create a MockFileSystem out of (empty) FileStats. The content of every
+  // file is empty and of size 0. All directories will be created recursively.
+  public static native @ByVal FileSystemResult Make(@ByVal @Cast("arrow::fs::TimePoint*") Pointer current_time,
+                                                    @Const @ByRef FileStatsVector stats);
 
   @Opaque public static class Impl extends Pointer {
       /** Empty constructor. Calls {@code super((Pointer)null)}. */

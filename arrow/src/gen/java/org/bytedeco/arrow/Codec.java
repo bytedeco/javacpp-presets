@@ -26,21 +26,26 @@ public class Codec extends Pointer {
   public static native @StdString BytePointer GetCodecAsString(@Cast("arrow::Compression::type") int t);
 
   /** \brief Create a codec for the given compression algorithm */
-  public static native @ByVal Status Create(Compression.type codec, @UniquePtr Codec out);
-  public static native @ByVal Status Create(@Cast("arrow::Compression::type") int codec, @UniquePtr Codec out);
+  public static native @ByVal CodecResult Create(
+        Compression.type codec, int compression_level/*=arrow::util::kUseDefaultCompressionLevel*/);
+  public static native @ByVal CodecResult Create(
+        Compression.type codec);
+  public static native @ByVal CodecResult Create(
+        @Cast("arrow::Compression::type") int codec, int compression_level/*=arrow::util::kUseDefaultCompressionLevel*/);
+  public static native @ByVal CodecResult Create(
+        @Cast("arrow::Compression::type") int codec);
 
-  /** \brief Create a codec for the given compression algorithm and level */
+  /** \brief Return true if support for indicated codec has been enabled */
   
   ///
   ///
-  public static native @ByVal Status Create(Compression.type codec, int compression_level,
-                         @UniquePtr Codec out);
-  public static native @ByVal Status Create(@Cast("arrow::Compression::type") int codec, int compression_level,
-                         @UniquePtr Codec out);
+  public static native @Cast("bool") boolean IsAvailable(Compression.type codec);
+  public static native @Cast("bool") boolean IsAvailable(@Cast("arrow::Compression::type") int codec);
 
   /** \brief One-shot decompression function
    * 
    *  output_buffer_len must be correct and therefore be obtained in advance.
+   *  The actual decompressed length is returned.
    * 
    *  \note One-shot decompression is not always compatible with streaming
    *  compression.  Depending on the codec (e.g. LZ4), different formats may
@@ -48,67 +53,74 @@ public class Codec extends Pointer {
   
   ///
   ///
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input,
-                              @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") BytePointer output_buffer);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input,
-                              @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") ByteBuffer output_buffer);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input,
-                              @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") byte[] output_buffer);
-
-  /** \brief One-shot decompression function that also returns the
-   *  actual decompressed size.
-   * 
-   *  @param input_len [in] the number of bytes of compressed data.
-   *  @param input [in] the compressed data.
-   *  @param output_buffer_len [in] the number of bytes of buffer for
-   *  decompressed data.
-   *  @param output_buffer [in] the buffer for decompressed data.
-   *  @param output_len [out] the actual decompressed size.
-   * 
-   *  \note One-shot decompression is not always compatible with streaming
-   *  compression.  Depending on the codec (e.g. LZ4), different formats may
-   *  be used. */
-  
-  ///
-  ///
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input,
-                              @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") BytePointer output_buffer,
-                              @Cast("int64_t*") LongPointer output_len);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input,
-                              @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") ByteBuffer output_buffer,
-                              @Cast("int64_t*") LongBuffer output_len);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input,
-                              @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") byte[] output_buffer,
-                              @Cast("int64_t*") long[] output_len);
+  public native @ByVal LongResult Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input,
+                                       @Cast("int64_t") long output_buffer_len,
+                                       @Cast("uint8_t*") BytePointer output_buffer);
+  public native @ByVal LongResult Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input,
+                                       @Cast("int64_t") long output_buffer_len,
+                                       @Cast("uint8_t*") ByteBuffer output_buffer);
+  public native @ByVal LongResult Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input,
+                                       @Cast("int64_t") long output_buffer_len,
+                                       @Cast("uint8_t*") byte[] output_buffer);
 
   /** \brief One-shot compression function
    * 
    *  output_buffer_len must first have been computed using MaxCompressedLen().
+   *  The actual compressed length is returned.
    * 
    *  \note One-shot compression is not always compatible with streaming
    *  decompression.  Depending on the codec (e.g. LZ4), different formats may
    *  be used. */
-  public native @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input,
-                            @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") BytePointer output_buffer,
-                            @Cast("int64_t*") LongPointer output_len);
-  public native @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input,
-                            @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") ByteBuffer output_buffer,
-                            @Cast("int64_t*") LongBuffer output_len);
-  public native @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input,
-                            @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") byte[] output_buffer,
-                            @Cast("int64_t*") long[] output_len);
+  public native @ByVal LongResult Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input,
+                                     @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") BytePointer output_buffer);
+  public native @ByVal LongResult Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input,
+                                     @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") ByteBuffer output_buffer);
+  public native @ByVal LongResult Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input,
+                                     @Cast("int64_t") long output_buffer_len, @Cast("uint8_t*") byte[] output_buffer);
 
   public native @Cast("int64_t") long MaxCompressedLen(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input);
   public native @Cast("int64_t") long MaxCompressedLen(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input);
   public native @Cast("int64_t") long MaxCompressedLen(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input);
 
-  // XXX Should be able to choose compression level, or presets? ("fast", etc.)
+  /** \brief Create a streaming compressor instance */
+  public native @ByVal CompressorResult MakeCompressor();
 
   /** \brief Create a streaming compressor instance */
-  public native @ByVal Status MakeCompressor(@SharedPtr Compressor out);
-
-  /** \brief Create a streaming decompressor instance */
-  public native @ByVal Status MakeDecompressor(@SharedPtr Decompressor out);
+  public native @ByVal DecompressorResult MakeDecompressor();
 
   public native String name();
+
+  // Deprecated APIs
+
+  /** \brief Create a codec for the given compression algorithm */
+  public static native @Deprecated @ByVal Status Create(Compression.type codec, @UniquePtr Codec out);
+  public static native @Deprecated @ByVal Status Create(@Cast("arrow::Compression::type") int codec, @UniquePtr Codec out);
+
+  /** \brief Create a codec for the given compression algorithm and level */
+  public static native @Deprecated @ByVal Status Create(Compression.type codec, int compression_level,
+                         @UniquePtr Codec out);
+  public static native @Deprecated @ByVal Status Create(@Cast("arrow::Compression::type") int codec, int compression_level,
+                         @UniquePtr Codec out);
+
+  /** \brief One-shot decompression function */
+  public native @Deprecated @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input, @Cast("int64_t") long output_buffer_len,
+                      @Cast("uint8_t*") BytePointer output_buffer, @Cast("int64_t*") LongPointer output_len);
+  public native @Deprecated @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input, @Cast("int64_t") long output_buffer_len,
+                      @Cast("uint8_t*") ByteBuffer output_buffer, @Cast("int64_t*") LongBuffer output_len);
+  public native @Deprecated @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input, @Cast("int64_t") long output_buffer_len,
+                      @Cast("uint8_t*") byte[] output_buffer, @Cast("int64_t*") long[] output_len);
+
+  /** \brief One-shot compression function */
+  public native @Deprecated @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input, @Cast("int64_t") long output_buffer_len,
+                    @Cast("uint8_t*") BytePointer output_buffer, @Cast("int64_t*") LongPointer output_len);
+  public native @Deprecated @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input, @Cast("int64_t") long output_buffer_len,
+                    @Cast("uint8_t*") ByteBuffer output_buffer, @Cast("int64_t*") LongBuffer output_len);
+  public native @Deprecated @ByVal Status Compress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input, @Cast("int64_t") long output_buffer_len,
+                    @Cast("uint8_t*") byte[] output_buffer, @Cast("int64_t*") long[] output_len);
+
+  /** \brief Create a streaming compressor instance */
+  public native @Deprecated @ByVal Status MakeCompressor(@SharedPtr Compressor out);
+
+  /** \brief Create a streaming decompressor instance */
+  public native @Deprecated @ByVal Status MakeDecompressor(@SharedPtr Decompressor out);
 }

@@ -29,7 +29,7 @@ public class RecordBatchStream extends FlightDataStream {
   public RecordBatchStream(@SharedPtr RecordBatchReader reader) { super((Pointer)null); allocate(reader); }
   private native void allocate(@SharedPtr RecordBatchReader reader);
 
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
   public native @ByVal Status GetSchemaPayload(FlightPayload payload);
   public native @ByVal Status Next(FlightPayload payload);
 }

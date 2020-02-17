@@ -10,8 +10,14 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class LargeBinaryScalar extends BaseLargeBinaryScalar {
+public class LargeBinaryScalar extends BaseBinaryScalar {
     static { Loader.load(); }
+
+  
+    
+    
+      public LargeBinaryScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LargeBinaryScalar(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -21,10 +27,14 @@ public class LargeBinaryScalar extends BaseLargeBinaryScalar {
         return (LargeBinaryScalar)super.position(position);
     }
 
-  public LargeBinaryScalar(@Const @SharedPtr @ByRef ArrowBuffer value, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, is_valid); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value, @Cast("bool") boolean is_valid/*=true*/);
-  public LargeBinaryScalar(@Const @SharedPtr @ByRef ArrowBuffer value) { super((Pointer)null); allocate(value); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value);
+
+  public LargeBinaryScalar(@SharedPtr ArrowBuffer value,
+                      @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
+  private native void allocate(@SharedPtr ArrowBuffer value,
+                      @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+
+  public LargeBinaryScalar(@SharedPtr ArrowBuffer value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@SharedPtr ArrowBuffer value);
 
   public LargeBinaryScalar() { super((Pointer)null); allocate(); }
   private native void allocate();

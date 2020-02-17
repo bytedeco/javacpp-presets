@@ -39,7 +39,7 @@ public class ArrowBufferVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const ArrowBuffer get();
+        public native @Name("operator*") @SharedPtr ArrowBuffer get();
     }
 
     public ArrowBuffer[] get() {

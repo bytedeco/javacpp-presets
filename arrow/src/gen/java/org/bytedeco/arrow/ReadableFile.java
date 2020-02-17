@@ -23,43 +23,40 @@ public class ReadableFile extends ReadableFileRandomAccessFileConcurrencyWrapper
 
   /** \brief Open a local file for reading
    *  @param path [in] with UTF8 encoding
-   *  @param file [out] ReadableFile instance
-   *  Open file, allocate memory (if needed) from default memory pool */
-  public static native @ByVal Status Open(@StdString String path, @SharedPtr ReadableFile file);
-  public static native @ByVal Status Open(@StdString BytePointer path, @SharedPtr ReadableFile file);
-
-  /** \brief Open a local file for reading
-   *  @param path [in] with UTF8 encoding
    *  @param pool [in] a MemoryPool for memory allocations
-   *  @param file [out] ReadableFile instance
-   *  Open file with one's own memory pool for memory allocations */
+   *  @return ReadableFile instance */
+  public static native @ByVal ReadableFileResult Open(
+        @StdString String path, MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public static native @ByVal ReadableFileResult Open(
+        @StdString String path);
+  public static native @ByVal ReadableFileResult Open(
+        @StdString BytePointer path, MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public static native @ByVal ReadableFileResult Open(
+        @StdString BytePointer path);
+
+  public static native @Deprecated @ByVal Status Open(@StdString String path, @SharedPtr ReadableFile file);
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, @SharedPtr ReadableFile file);
   
   ///
-  public static native @ByVal Status Open(@StdString String path, MemoryPool pool,
+  public static native @Deprecated @ByVal Status Open(@StdString String path, MemoryPool pool,
                        @SharedPtr ReadableFile file);
-  public static native @ByVal Status Open(@StdString BytePointer path, MemoryPool pool,
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, MemoryPool pool,
                        @SharedPtr ReadableFile file);
 
   /** \brief Open a local file for reading
    *  @param fd [in] file descriptor
-   *  @param file [out] ReadableFile instance
-   *  Open file with one's own memory pool for memory allocations
-   * 
-   *  The file descriptor becomes owned by the ReadableFile, and will be closed
-   *  on Close() or destruction. */
-  
-  ///
-  public static native @ByVal Status Open(int fd, @SharedPtr ReadableFile file);
-
-  /** \brief Open a local file for reading
-   *  @param fd [in] file descriptor
    *  @param pool [in] a MemoryPool for memory allocations
-   *  @param file [out] ReadableFile instance
-   *  Open file with one's own memory pool for memory allocations
+   *  @return ReadableFile instance
    * 
    *  The file descriptor becomes owned by the ReadableFile, and will be closed
    *  on Close() or destruction. */
-  public static native @ByVal Status Open(int fd, MemoryPool pool, @SharedPtr ReadableFile file);
+  public static native @ByVal ReadableFileResult Open(
+        int fd, MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public static native @ByVal ReadableFileResult Open(
+        int fd);
+
+  public static native @Deprecated @ByVal Status Open(int fd, @SharedPtr ReadableFile file);
+  public static native @Deprecated @ByVal Status Open(int fd, MemoryPool pool, @SharedPtr ReadableFile file);
 
   public native @Cast("bool") boolean closed();
 

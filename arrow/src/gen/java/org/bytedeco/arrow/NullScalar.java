@@ -22,6 +22,7 @@ public class NullScalar extends Scalar {
         return (NullScalar)super.position(position);
     }
 
+
   public NullScalar() { super((Pointer)null); allocate(); }
   private native void allocate();
 }
