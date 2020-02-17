@@ -27,7 +27,17 @@ public class ScalarVisitor extends Pointer {
 
   public native @ByVal Status Visit(@Const @ByRef NullScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef BooleanScalar scalar);
-  public native @ByVal Status Visit(@Cast("const arrow::Int8Scalar*") @ByRef BaseDate32Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef Int8Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef Int16Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef Int32Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef Int64Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef UInt8Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef UInt16Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef UInt32Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef UInt64Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef HalfFloatScalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef FloatScalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef DoubleScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef StringScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef BinaryScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef LargeStringScalar scalar);

@@ -9,34 +9,10 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** Concrete type class for boolean data */
-@Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BooleanType extends FixedWidthType {
-    static { Loader.load(); }
+@Namespace("arrow") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class BooleanType extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public BooleanType() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BooleanType(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BooleanType(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public BooleanType position(long position) {
-        return (BooleanType)super.position(position);
-    }
-    public NoExtraMeta asNoExtraMeta() { return asNoExtraMeta(this); }
-    @Namespace public static native @Name("static_cast<arrow::NoExtraMeta*>") NoExtraMeta asNoExtraMeta(BooleanType pointer);
-
-  @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
-  public static final int type_id = type_id();
-
-  public static native String type_name();
-
-  public BooleanType() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public native @StdString String ToString();
-
-  public native @ByVal DataTypeLayout layout();
-
-  public native int bit_width();
-
-  public native @StdString String name();
 }

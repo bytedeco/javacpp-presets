@@ -9,14 +9,13 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief EXPERIMENTAL: a FileSystem implementation accessing files
- *  on the local machine.
+/** \brief A FileSystem implementation accessing files on the local machine.
  * 
  *  This class handles only {@code /}-separated paths.  If desired, conversion
  *  from Windows backslash-separated paths should be done by the caller.
  *  Details such as symlinks are abstracted away (symlinks are always
  *  followed, except when deleting an entry). */
-@Namespace("arrow::fs") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+@Namespace("arrow::fs") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class LocalFileSystem extends FileSystem {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -30,12 +29,16 @@ public class LocalFileSystem extends FileSystem {
 
   public LocalFileSystem() { super((Pointer)null); allocate(); }
   private native void allocate();
+  public LocalFileSystem(@Const @ByRef LocalFileSystemOptions arg0) { super((Pointer)null); allocate(arg0); }
+  private native void allocate(@Const @ByRef LocalFileSystemOptions arg0);
+
+  public native @StdString String type_name();
 
   /** \cond FALSE */
   /** \endcond */
-  public native @ByVal Status GetTargetStats(@StdString String path, FileStats out);
-  public native @ByVal Status GetTargetStats(@StdString BytePointer path, FileStats out);
-  public native @ByVal Status GetTargetStats(@Const @ByRef Selector select, @StdVector FileStats out);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString String path);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString BytePointer path);
+  public native @ByVal FileStatsVectorResult GetTargetStats(@Const @ByRef FileSelector select);
 
   public native @ByVal Status CreateDir(@StdString String path, @Cast("bool") boolean recursive/*=true*/);
   public native @ByVal Status CreateDir(@StdString String path);
@@ -56,23 +59,20 @@ public class LocalFileSystem extends FileSystem {
   public native @ByVal Status CopyFile(@StdString String src, @StdString String dest);
   public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer dest);
 
-  public native @ByVal Status OpenInputStream(@StdString String path,
-                           @SharedPtr InputStream out);
-  public native @ByVal Status OpenInputStream(@StdString BytePointer path,
-                           @SharedPtr InputStream out);
-
-  public native @ByVal Status OpenInputFile(@StdString String path,
-                         @SharedPtr RandomAccessFile out);
-  public native @ByVal Status OpenInputFile(@StdString BytePointer path,
-                         @SharedPtr RandomAccessFile out);
-
-  public native @ByVal Status OpenOutputStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenOutputStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
-
-  public native @ByVal Status OpenAppendStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenAppendStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString String path);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString BytePointer path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString String path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString BytePointer path);
 }

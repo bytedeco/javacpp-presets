@@ -32,4 +32,6 @@ public class FlightClientOptions extends Pointer {
   public native @StdString String tls_root_certs(); public native FlightClientOptions tls_root_certs(String setter);
   /** \brief Override the hostname checked by TLS. Use with caution. */
   public native @StdString String override_hostname(); public native FlightClientOptions override_hostname(String setter);
+  /** \brief A list of client middleware to apply. */
+  public native @ByRef ClientMiddlewareFactoryVector middleware(); public native FlightClientOptions middleware(ClientMiddlewareFactoryVector setter);
 }

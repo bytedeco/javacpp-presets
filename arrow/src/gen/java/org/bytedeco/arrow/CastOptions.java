@@ -33,6 +33,7 @@ public class CastOptions extends Pointer {
 
   public native @Cast("bool") boolean allow_int_overflow(); public native CastOptions allow_int_overflow(boolean setter);
   public native @Cast("bool") boolean allow_time_truncate(); public native CastOptions allow_time_truncate(boolean setter);
+  public native @Cast("bool") boolean allow_time_overflow(); public native CastOptions allow_time_overflow(boolean setter);
   public native @Cast("bool") boolean allow_float_truncate(); public native CastOptions allow_float_truncate(boolean setter);
   // Indicate if conversions from Binary/FixedSizeBinary to string must
   // validate the utf8 payload.

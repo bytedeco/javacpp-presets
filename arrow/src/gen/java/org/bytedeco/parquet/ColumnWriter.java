@@ -36,7 +36,7 @@ public class ColumnWriter extends Pointer {
   public native @Cast("int64_t") long rows_written();
 
   /** \brief The total size of the compressed pages + page headers. Some values
-   *  might be still buffered an not written to a page yet */
+   *  might be still buffered and not written to a page yet */
   public native @Cast("int64_t") long total_compressed_bytes();
 
   /** \brief The total number of bytes written as serialized data and

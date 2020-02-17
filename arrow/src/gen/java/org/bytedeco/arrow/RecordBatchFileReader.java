@@ -58,7 +58,7 @@ public class RecordBatchFileReader extends Pointer {
    *  @return Status */
 
   /** \brief The schema read from the file */
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 
   /** \brief Returns the number of record batches in the file */
   public native int num_record_batches();

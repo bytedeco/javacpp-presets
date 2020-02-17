@@ -21,7 +21,7 @@ public class UnaryExpression extends Expression {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UnaryExpression(Pointer p) { super(p); }
 
-  public native @SharedPtr Expression operand();
+  public native @Const @SharedPtr @ByRef Expression operand();
 
   public native @Cast("bool") boolean Equals(@Const @ByRef Expression other);
 }

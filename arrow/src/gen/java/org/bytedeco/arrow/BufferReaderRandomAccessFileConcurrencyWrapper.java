@@ -19,21 +19,17 @@ public class BufferReaderRandomAccessFileConcurrencyWrapper extends RandomAccess
 
   public native @ByVal Status Abort();
 
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
 
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+  public native @ByVal LongResult Read(@Cast("int64_t") long nbytes, Pointer out);
 
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+  public native @ByVal BufferResult Read(@Cast("int64_t") long nbytes);
+
+  public native @ByVal StringViewResult Peek(@Cast("int64_t") long nbytes);
 
   public native @ByVal Status Seek(@Cast("int64_t") long _position);
 
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongPointer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") LongBuffer size);
-  public native @ByVal Status GetSize(@Cast("int64_t*") long[] size);
+  public native @ByVal LongResult GetSize();
 
   // NOTE: ReadAt doesn't use stream pointer, but it is allowed to update it
   // (it's the case on Windows when using ReadFileEx).
@@ -41,9 +37,7 @@ public class BufferReaderRandomAccessFileConcurrencyWrapper extends RandomAccess
   // update it, such as Peek) cannot run in parallel with ReadAt and has
   // to use the exclusive_guard.
 
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+  public native @ByVal LongResult ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, Pointer out);
 
-  public native @ByVal Status ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+  public native @ByVal BufferResult ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes);
 }

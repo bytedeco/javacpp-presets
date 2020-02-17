@@ -17,9 +17,15 @@ public class CompressedOutputStream extends OutputStream {
 
 
   /** \brief Create a compressed output stream wrapping the given output stream. */
-  public static native @ByVal Status Make(Codec codec, @SharedPtr OutputStream raw,
+  public static native @ByVal CompressedOutputStreamResult Make(
+        Codec codec, @SharedPtr OutputStream raw,
+        MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public static native @ByVal CompressedOutputStreamResult Make(
+        Codec codec, @SharedPtr OutputStream raw);
+
+  public static native @Deprecated @ByVal Status Make(Codec codec, @SharedPtr OutputStream raw,
                        @SharedPtr CompressedOutputStream out);
-  public static native @ByVal Status Make(MemoryPool pool, Codec codec,
+  public static native @Deprecated @ByVal Status Make(MemoryPool pool, Codec codec,
                        @SharedPtr OutputStream raw,
                        @SharedPtr CompressedOutputStream out);
 
@@ -31,9 +37,7 @@ public class CompressedOutputStream extends OutputStream {
   public native @ByVal Status Abort();
   public native @Cast("bool") boolean closed();
 
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
 
   public native @ByVal Status Write(@Const Pointer data, @Cast("int64_t") long nbytes);
   /** \cond FALSE */

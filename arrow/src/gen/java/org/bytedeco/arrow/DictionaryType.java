@@ -35,6 +35,14 @@ public class DictionaryType extends FixedWidthType {
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType index_type,
                    @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type);
 
+  // A constructor variant that validates its input parameters
+  public static native @ByVal DataTypeResult Make(
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType index_type,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type, @Cast("bool") boolean ordered/*=false*/);
+  public static native @ByVal DataTypeResult Make(
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType index_type,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type);
+
   public native @StdString String ToString();
   public native @StdString String name();
 

@@ -23,15 +23,15 @@ public class ColumnDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColumnDescriptor(Pointer p) { super(p); }
 
-  public ColumnDescriptor(@Const @SharedPtr @ByRef Node node, short max_definition_level,
+  public ColumnDescriptor(@SharedPtr @ByVal Node node, short max_definition_level,
                      short max_repetition_level,
                      @Const SchemaDescriptor schema_descr/*=nullptr*/) { super((Pointer)null); allocate(node, max_definition_level, max_repetition_level, schema_descr); }
-  private native void allocate(@Const @SharedPtr @ByRef Node node, short max_definition_level,
+  private native void allocate(@SharedPtr @ByVal Node node, short max_definition_level,
                      short max_repetition_level,
                      @Const SchemaDescriptor schema_descr/*=nullptr*/);
-  public ColumnDescriptor(@Const @SharedPtr @ByRef Node node, short max_definition_level,
+  public ColumnDescriptor(@SharedPtr @ByVal Node node, short max_definition_level,
                      short max_repetition_level) { super((Pointer)null); allocate(node, max_definition_level, max_repetition_level); }
-  private native void allocate(@Const @SharedPtr @ByRef Node node, short max_definition_level,
+  private native void allocate(@SharedPtr @ByVal Node node, short max_definition_level,
                      short max_repetition_level);
 
   public native @Cast("bool") boolean Equals(@Const @ByRef ColumnDescriptor other);

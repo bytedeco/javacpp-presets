@@ -15,22 +15,37 @@ import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 
 /** \brief Scanner is a materialized scan operation with context and options
- *  bound. A scanner is the class that glues ScanTask, DataFragment,
- *  and DataSource. In python pseudo code, it performs the following:
+ *  bound. A scanner is the class that glues ScanTask, Fragment,
+ *  and Source. In python pseudo code, it performs the following:
  * 
  *   def Scan():
  *     for source in this.sources_:
  *       for fragment in source.GetFragments(this.options_):
  *         for scan_task in fragment.Scan(this.context_):
  *           yield scan_task */
-@Namespace("arrow::dataset") @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
+@Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class Scanner extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Scanner(Pointer p) { super(p); }
 
+  public Scanner(@SharedPtr @ByVal Source sources, @SharedPtr ScanOptions options,
+            @SharedPtr ScanContext context) { super((Pointer)null); allocate(sources, options, context); }
+  private native void allocate(@SharedPtr @ByVal Source sources, @SharedPtr ScanOptions options,
+            @SharedPtr ScanContext context);
+
   /** \brief The Scan operator returns a stream of ScanTask. The caller is
    *  responsible to dispatch/schedule said tasks. Tasks should be safe to run
    *  in a concurrent fashion and outlive the iterator. */
-  public native @ByVal ScanTaskIterator Scan();
+  
+  ///
+  public native @ByVal ScanTaskIteratorResult Scan();
+
+  /** \brief Convert a Scanner into a Table.
+   * 
+   *  Use this convenience utility with care. This will serially materialize the
+   *  Scan result in memory before creating the Table. */
+  public native @ByVal TableResult ToTable();
+
+  public native @SharedPtr @ByVal Schema schema();
 }

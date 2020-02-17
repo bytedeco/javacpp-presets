@@ -39,12 +39,15 @@ public class FileInterface extends Pointer {
   public native @ByVal Status Abort();
 
   /** \brief Return the position in this stream */
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
 
   /** \brief Return whether the stream is closed */
   public native @Cast("bool") boolean closed();
 
   public native FileMode.type mode();
+
+  // Deprecated APIs
+  public native @Deprecated @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
+  public native @Deprecated @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
+  public native @Deprecated @ByVal Status Tell(@Cast("int64_t*") long[] _position);
 }

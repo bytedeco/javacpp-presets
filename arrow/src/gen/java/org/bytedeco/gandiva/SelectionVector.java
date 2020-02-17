@@ -88,7 +88,7 @@ public class SelectionVector extends Pointer {
    *  @param max_slots [in] max number of slots
    *  @param buffer [in] buffer sized to accomodate max_slots
    *  @param selection_vector [out] selection vector backed by 'buffer' */
-  public static native @ByVal Status MakeInt16(@Cast("int64_t") long max_slots, @SharedPtr @ByVal ArrowBuffer buffer,
+  public static native @ByVal Status MakeInt16(@Cast("int64_t") long max_slots, @SharedPtr ArrowBuffer buffer,
                             @SharedPtr SelectionVector selection_vector);
 
   /** @param max_slots [in] max number of slots
@@ -108,7 +108,7 @@ public class SelectionVector extends Pointer {
   
   ///
   public static native @ByVal Status MakeImmutableInt16(@Cast("int64_t") long num_slots,
-                                     @SharedPtr @ByVal ArrowBuffer buffer,
+                                     @SharedPtr ArrowBuffer buffer,
                                      @SharedPtr SelectionVector selection_vector);
 
   /** \brief make selection vector with int32 type records.
@@ -118,7 +118,7 @@ public class SelectionVector extends Pointer {
    *  @param selection_vector [out] selection vector backed by 'buffer' */
   
   ///
-  public static native @ByVal Status MakeInt32(@Cast("int64_t") long max_slots, @SharedPtr @ByVal ArrowBuffer buffer,
+  public static native @ByVal Status MakeInt32(@Cast("int64_t") long max_slots, @SharedPtr ArrowBuffer buffer,
                             @SharedPtr SelectionVector selection_vector);
 
   /** \brief make selection vector with int32 type records.
@@ -140,7 +140,7 @@ public class SelectionVector extends Pointer {
   
   ///
   public static native @ByVal Status MakeImmutableInt32(@Cast("int64_t") long num_slots,
-                                     @SharedPtr @ByVal ArrowBuffer buffer,
+                                     @SharedPtr ArrowBuffer buffer,
                                      @SharedPtr SelectionVector selection_vector);
 
   /** \brief make selection vector with int64 type records.
@@ -150,7 +150,7 @@ public class SelectionVector extends Pointer {
    *  @param selection_vector [out] selection vector backed by 'buffer' */
   
   ///
-  public static native @ByVal Status MakeInt64(@Cast("int64_t") long max_slots, @SharedPtr @ByVal ArrowBuffer buffer,
+  public static native @ByVal Status MakeInt64(@Cast("int64_t") long max_slots, @SharedPtr ArrowBuffer buffer,
                             @SharedPtr SelectionVector selection_vector);
 
   /** \brief make selection vector with int64 type records.

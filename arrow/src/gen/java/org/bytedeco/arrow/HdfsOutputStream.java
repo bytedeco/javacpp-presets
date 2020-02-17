@@ -28,7 +28,5 @@ public class HdfsOutputStream extends OutputStream {
 
   public native @ByVal Status Flush();
 
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
 }

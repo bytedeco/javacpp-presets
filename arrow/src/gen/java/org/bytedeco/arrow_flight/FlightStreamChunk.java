@@ -29,5 +29,5 @@ public class FlightStreamChunk extends Pointer {
     }
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch data(); public native FlightStreamChunk data(RecordBatch setter);
-  public native @SharedPtr @ByRef ArrowBuffer app_metadata(); public native FlightStreamChunk app_metadata(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer app_metadata(); public native FlightStreamChunk app_metadata(ArrowBuffer setter);
 }

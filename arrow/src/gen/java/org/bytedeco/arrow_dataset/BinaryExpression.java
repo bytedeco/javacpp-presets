@@ -21,9 +21,9 @@ public class BinaryExpression extends Expression {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BinaryExpression(Pointer p) { super(p); }
 
-  public native @SharedPtr Expression left_operand();
+  public native @Const @SharedPtr @ByRef Expression left_operand();
 
-  public native @SharedPtr Expression right_operand();
+  public native @Const @SharedPtr @ByRef Expression right_operand();
 
   public native @Cast("bool") boolean Equals(@Const @ByRef Expression other);
 }

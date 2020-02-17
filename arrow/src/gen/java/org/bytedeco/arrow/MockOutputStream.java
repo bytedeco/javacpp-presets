@@ -32,9 +32,7 @@ public class MockOutputStream extends OutputStream {
   // Implement the OutputStream interface
   public native @ByVal Status Close();
   public native @Cast("bool") boolean closed();
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
   public native @ByVal Status Write(@Const Pointer data, @Cast("int64_t") long nbytes);
   /** \cond FALSE */
   /** \endcond */

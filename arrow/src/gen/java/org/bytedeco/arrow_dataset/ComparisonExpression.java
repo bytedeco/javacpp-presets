@@ -21,28 +21,25 @@ public class ComparisonExpression extends ComparisonExpressionImpl {
     public ComparisonExpression(Pointer p) { super(p); }
 
   public ComparisonExpression(CompareOperator op,
-                         @SharedPtr Expression left_operand,
-                         @SharedPtr Expression right_operand) { super((Pointer)null); allocate(op, left_operand, right_operand); }
+                         @SharedPtr @ByVal Expression left_operand,
+                         @SharedPtr @ByVal Expression right_operand) { super((Pointer)null); allocate(op, left_operand, right_operand); }
   private native void allocate(CompareOperator op,
-                         @SharedPtr Expression left_operand,
-                         @SharedPtr Expression right_operand);
+                         @SharedPtr @ByVal Expression left_operand,
+                         @SharedPtr @ByVal Expression right_operand);
   public ComparisonExpression(@Cast("arrow::compute::CompareOperator") int op,
-                         @SharedPtr Expression left_operand,
-                         @SharedPtr Expression right_operand) { super((Pointer)null); allocate(op, left_operand, right_operand); }
+                         @SharedPtr @ByVal Expression left_operand,
+                         @SharedPtr @ByVal Expression right_operand) { super((Pointer)null); allocate(op, left_operand, right_operand); }
   private native void allocate(@Cast("arrow::compute::CompareOperator") int op,
-                         @SharedPtr Expression left_operand,
-                         @SharedPtr Expression right_operand);
+                         @SharedPtr @ByVal Expression left_operand,
+                         @SharedPtr @ByVal Expression right_operand);
 
   public native @StdString String ToString();
 
   public native @Cast("bool") boolean Equals(@Const @ByRef Expression other);
 
-  public native @ByVal ExpressionResult Assume(@Const @ByRef Expression given);
+  public native @SharedPtr @ByVal Expression Assume(@Const @ByRef Expression given);
 
   public native CompareOperator op();
-
-  public native @ByVal DatumResult Evaluate(FunctionContext ctx,
-                                    @Const @ByRef RecordBatch batch);
 
   public native @ByVal DataTypeResult Validate(@Const @ByRef Schema schema);
 }

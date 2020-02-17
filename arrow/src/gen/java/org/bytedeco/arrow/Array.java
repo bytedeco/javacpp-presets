@@ -61,7 +61,7 @@ public class Array extends Pointer {
    *  This buffer does not account for any slice offset */
   
   ///
-  public native @SharedPtr @ByVal ArrowBuffer null_bitmap();
+  public native @SharedPtr ArrowBuffer null_bitmap();
 
   /** Raw pointer to the null bitmap.
    * 
@@ -132,11 +132,23 @@ public class Array extends Pointer {
   ///
   public native @StdString String ToString();
 
-  /** \brief Perform any validation checks to determine obvious inconsistencies
+  /** \brief Perform cheap validation checks to determine obvious inconsistencies
    *  within the array's internal data.
    * 
-   *  This can be an expensive check, potentially O(length).
+   *  This is O(k) where k is the number of descendents.
    * 
    *  @return Status */
+  
+  ///
+  ///
   public native @ByVal Status Validate();
+
+  /** \brief Perform extensive validation checks to determine inconsistencies
+   *  within the array's internal data.
+   * 
+   *  This is potentially O(k*n) where k is the number of descendents and n
+   *  is the array length.
+   * 
+   *  @return Status */
+  public native @ByVal Status ValidateFull();
 }

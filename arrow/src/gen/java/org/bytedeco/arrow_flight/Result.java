@@ -28,5 +28,5 @@ public class Result extends Pointer {
         return (Result)super.position(position);
     }
 
-  public native @SharedPtr @ByRef ArrowBuffer body(); public native Result body(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer body(); public native Result body(ArrowBuffer setter);
 }

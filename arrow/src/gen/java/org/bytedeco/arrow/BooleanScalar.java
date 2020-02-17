@@ -9,23 +9,19 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
   // namespace internal
 
-@Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BooleanScalar extends PrimitiveScalar {
+@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class BooleanScalar extends Scalar {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BooleanScalar(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public BooleanScalar() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public BooleanScalar(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BooleanScalar(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public BooleanScalar position(long position) {
         return (BooleanScalar)super.position(position);
     }
 
-  public native @Cast("bool") boolean value(); public native BooleanScalar value(boolean setter);
-  public BooleanScalar(@Cast("bool") boolean value, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, is_valid); }
-  private native void allocate(@Cast("bool") boolean value, @Cast("bool") boolean is_valid/*=true*/);
-  public BooleanScalar(@Cast("bool") boolean value) { super((Pointer)null); allocate(value); }
-  private native void allocate(@Cast("bool") boolean value);
-  public BooleanScalar() { super((Pointer)null); allocate(); }
-  private native void allocate();
 }

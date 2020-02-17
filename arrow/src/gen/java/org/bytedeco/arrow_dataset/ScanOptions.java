@@ -19,32 +19,42 @@ public class ScanOptions extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScanOptions(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ScanOptions(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ScanOptions position(long position) {
-        return (ScanOptions)super.position(position);
-    }
 
-  public ScanOptions() { super((Pointer)null); allocate(); }
-  private native void allocate();
 
-  public ScanOptions(@SharedPtr DataSelector selector, @SharedPtr Schema schema,
-                @ByVal(nullValue = "std::vector<std::shared_ptr<arrow::dataset::FileScanOptions> >({})") FileScanOptionsVector options) { super((Pointer)null); allocate(selector, schema, options); }
-  private native void allocate(@SharedPtr DataSelector selector, @SharedPtr Schema schema,
-                @ByVal(nullValue = "std::vector<std::shared_ptr<arrow::dataset::FileScanOptions> >({})") FileScanOptionsVector options);
-  public ScanOptions(@SharedPtr DataSelector selector, @SharedPtr Schema schema) { super((Pointer)null); allocate(selector, schema); }
-  private native void allocate(@SharedPtr DataSelector selector, @SharedPtr Schema schema);
+  public static native @SharedPtr ScanOptions Make(@SharedPtr @ByVal Schema schema);
 
-  public native MemoryPool pool();
+  // Construct a copy of these options with a different schema.
+  public native @SharedPtr ScanOptions ReplaceSchema(@SharedPtr @ByVal Schema schema);
 
-  // Filters
-  public native @SharedPtr DataSelector selector(); public native ScanOptions selector(DataSelector setter);
+  // Indicate if the Scanner should make use of the ThreadPool found in the
+  // ScanContext.
+  public native @Cast("bool") boolean use_threads(); public native ScanOptions use_threads(boolean setter);
+
+  // Filter
+  public native @SharedPtr @ByRef Expression filter(); public native ScanOptions filter(Expression setter);
+
+  // Evaluator for Filter
+  public native @SharedPtr ExpressionEvaluator evaluator(); public native ScanOptions evaluator(ExpressionEvaluator setter);
 
   // Schema to which record batches will be reconciled
-  public native @SharedPtr Schema schema(); public native ScanOptions schema(Schema setter);
+  public native @Const @SharedPtr @ByRef Schema schema();
 
-  public native MemoryPool pool_(); public native ScanOptions pool_(MemoryPool setter);
+  // Projector for reconciling the final RecordBatch to the requested schema.
+  public native @ByRef RecordBatchProjector projector(); public native ScanOptions projector(RecordBatchProjector setter);
 
-  public native @ByRef FileScanOptionsVector options(); public native ScanOptions options(FileScanOptionsVector setter);
+  // Return a vector of fields that requires materialization.
+  //
+  // This is usually the union of the fields referenced in the projection and the
+  // filter expression. Examples:
+  //
+  // - `SELECT a, b WHERE a < 2 && c > 1` => ["a", "b", "a", "c"]
+  // - `SELECT a + b < 3 WHERE a > 1` => ["a", "b"]
+  //
+  // This is needed for expression where a field may not be directly
+  // used in the final projection but is still required to evaluate the
+  // expression.
+  //
+  // This is used by Fragments implementation to apply the column
+  // sub-selection optimization.
+  public native @ByVal StringVector MaterializedFields();
 }

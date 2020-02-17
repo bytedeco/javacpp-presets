@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>openblas</artifactId>
-  <version>0.3.7-${project.parent.version}</version>
+  <version>0.3.8-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenBLAS</name>
 
   <properties>
@@ -122,7 +122,7 @@
 
   <profiles>
     <profile>
-      <id>mingw</id>
+      <id>msvc</id>
       <activation>
         <os><family>windows</family></os>
       </activation>
@@ -132,35 +132,14 @@
             <groupId>org.bytedeco</groupId>
             <artifactId>javacpp</artifactId>
             <configuration>
-              <properties>${javacpp.platform}-mingw</properties>
+              <properties>${javacpp.platform}</properties>
               <compilerOptions>
-                <compilerOption>${javacpp.compiler.option}</compilerOption>
-                <compilerOption>-static-libgcc</compilerOption>
-                <compilerOption>-static-libstdc++</compilerOption>
-                <compilerOption>-Wl,-Bstatic</compilerOption>
-                <compilerOption>-lstdc++</compilerOption>
-                <compilerOption>-lgcc</compilerOption>
-                <compilerOption>-lgcc_eh</compilerOption>
-                <compilerOption>-lpthread</compilerOption>
-                <compilerOption>-Wl,-Bdynamic</compilerOption>
+                <compilerOption>/MT</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>
         </plugins>
       </build>
-    </profile>
-    <profile>
-      <id>mingw-x86</id>
-      <activation>
-        <property>
-          <name>javacpp.platform</name>
-          <value>windows-x86</value>
-        </property>
-      </activation>
-      <properties>
-        <!-- Disable optimization for 32-bit builds as GCC runs out of memory -->
-        <javacpp.compiler.option>-O0</javacpp.compiler.option>
-      </properties>
     </profile>
   </profiles>
 
