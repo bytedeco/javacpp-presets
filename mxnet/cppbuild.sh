@@ -26,8 +26,8 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA_PATH="/usr/local/cuda"
 fi
 
-MXNET_VERSION=1.5.1
-download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
+MXNET_VERSION=1.6.0.rc2
+#download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -57,10 +57,20 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-echo "Decompressing archives... (ignore any errors)"
-tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
+#echo "Decompressing archives... (ignore any errors)"
+#tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 
-cd apache-mxnet-src-$MXNET_VERSION-incubating
+#cd apache-mxnet-src-$MXNET_VERSION-incubating
+
+# use git to download source since archives are no longer available
+if [[ ! -d incubator-mxnet ]]; then
+    git clone https://github.com/apache/incubator-mxnet
+fi
+cd incubator-mxnet
+git reset --hard
+git checkout $MXNET_VERSION
+git submodule update --init --recursive --jobs $MAKEJ
+git submodule foreach --recursive git reset --hard
 
 # upgrade MKL-DNN
 #sedinplace 's/0.18.1/0.19/g' 3rdparty/mkldnn/CMakeLists.txt
@@ -118,7 +128,7 @@ case $PLATFORM in
         USE_X="-DCUDA_ARCH_LIST=3.0+PTX -DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
         OPENCV="-DOpenCV_DIR=$OPENCV_PATH/ -DOpenCV_CONFIG_PATH=$OPENCV_PATH/"
         OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/lib/openblas.lib"
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
+        "$CMAKE" -G "Visual Studio 16 2019" $USE_X $OPENCV $OPENBLAS ../incubator-mxnet
 
         # try to rebuild the project without compiler parallelism to avoid "out of heap space"
         MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ || \
@@ -133,7 +143,7 @@ case $PLATFORM in
         cp -f Release/libmxnet.lib ../lib/mxnet.lib
 
         # finish
-        cd ../apache-mxnet-src-$MXNET_VERSION-incubating
+        cd ../incubator-mxnet
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
