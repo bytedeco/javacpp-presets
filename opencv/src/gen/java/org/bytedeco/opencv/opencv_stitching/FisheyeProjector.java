@@ -39,7 +39,7 @@ import static org.bytedeco.opencv.global.opencv_stitching.*;
 
 
 @Namespace("cv::detail") @Properties(inherit = org.bytedeco.opencv.presets.opencv_stitching.class)
-public class FisheyeProjector extends Pointer {
+public class FisheyeProjector extends ProjectorBase {
     static { Loader.load(); }
     /** Default native constructor. */
     public FisheyeProjector() { super((Pointer)null); allocate(); }

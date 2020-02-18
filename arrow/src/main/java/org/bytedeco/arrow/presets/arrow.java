@@ -207,7 +207,7 @@ public class arrow implements LoadEnabled, InfoMapper {
                .put(new Info("arrow::util::bytes_view", "arrow::util::string_view", "arrow::internal::Bitmap", "std::atomic<int64_t>").skip())
                .put(new Info("arrow::Buffer").pointerTypes("ArrowBuffer"))
                .put(new Info("arrow::EqualOptions::nans_equal", "arrow::EqualOptions::atol", "arrow::EqualOptions::diff_sink").annotations("@Function"))
-               .put(new Info("arrow::detail::CTypeImpl", "arrow::detail::IntegerTypeImpl", "arrow::util::internal::non_null_filler", "arrow::TypeTraits").skip())
+               .put(new Info("arrow::detail::CTypeImpl", "arrow::detail::IntegerTypeImpl", "arrow::internal::IsOneOf", "arrow::util::internal::non_null_filler", "arrow::TypeTraits").skip())
 
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
                .put(new Info("const char").valueTypes("byte").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))

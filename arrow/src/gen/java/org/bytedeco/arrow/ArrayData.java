@@ -148,7 +148,7 @@ public class ArrayData extends Pointer {
   public native @Const @Name("GetValues<jint>") IntPointer GetValuesInt(int i, @Cast("int64_t") long absolute_offset);
   public native @Const @Name("GetValues<float>") FloatPointer GetValuesFloat(int i, @Cast("int64_t") long absolute_offset);
   public native @Const @Name("GetValues<double>") DoublePointer GetValuesDouble(int i, @Cast("int64_t") long absolute_offset);
-  public native @Const @Name("GetValues<jboolean>") BoolPointer GetValuesBoolean(int i, @Cast("int64_t") long absolute_offset);
+  public native @Const @Name("GetValues<jboolean>") BooleanPointer GetValuesBoolean(int i, @Cast("int64_t") long absolute_offset);
   public native @Const @Name("GetValues<jchar>") CharPointer GetValuesChar(int i, @Cast("int64_t") long absolute_offset);
 
   public native @Const @Name("GetValues<jbyte>") BytePointer GetValuesByte(int i);
@@ -161,7 +161,7 @@ public class ArrayData extends Pointer {
 
   public native @Const @Name("GetValues<double>") DoublePointer GetValuesDouble(int i);
 
-  public native @Const @Name("GetValues<jboolean>") BoolPointer GetValuesBoolean(int i);
+  public native @Const @Name("GetValues<jboolean>") BooleanPointer GetValuesBoolean(int i);
 
   public native @Const @Name("GetValues<jchar>") CharPointer GetValuesChar(int i);
 

@@ -35,7 +35,7 @@ import static org.bytedeco.opencv.global.opencv_tracking.*;
 
 
 @Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
-public class CvLBPFeatureParams extends Pointer {
+public class CvLBPFeatureParams extends CvFeatureParams {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLBPFeatureParams(Pointer p) { super(p); }

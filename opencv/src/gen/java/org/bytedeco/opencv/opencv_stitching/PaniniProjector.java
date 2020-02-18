@@ -39,7 +39,7 @@ import static org.bytedeco.opencv.global.opencv_stitching.*;
 
 
 @Namespace("cv::detail") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_stitching.class)
-public class PaniniProjector extends Pointer {
+public class PaniniProjector extends ProjectorBase {
     static { Loader.load(); }
     /** Default native constructor. */
     public PaniniProjector() { super((Pointer)null); allocate(); }
