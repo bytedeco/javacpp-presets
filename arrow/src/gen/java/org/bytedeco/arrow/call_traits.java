@@ -10,8 +10,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 /** Helper struct for examining lambdas and other callables.
- *  TODO(bkietz) support function pointers
- *  TODO(bkietz) provide return_type accessor */
+ *  TODO(bkietz) support function pointers */
 @Namespace("arrow::internal") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class call_traits extends Pointer {
     static { Loader.load(); }

@@ -21,7 +21,9 @@ public class ColumnChunkMetaData extends Pointer {
   // API convenience to get a MetaData accessor
   public static native @UniquePtr ColumnChunkMetaData Make(
         @Const Pointer metadata, @Const ColumnDescriptor descr,
-        @Const ApplicationVersion writer_version/*=nullptr*/);
+        @Const ApplicationVersion writer_version/*=nullptr*/, short row_group_ordinal/*=-1*/,
+        short column_ordinal/*=-1*/,
+        @SharedPtr InternalFileDecryptor file_decryptor/*=nullptr*/);
   public static native @UniquePtr ColumnChunkMetaData Make(
         @Const Pointer metadata, @Const ColumnDescriptor descr);
 
@@ -32,12 +34,18 @@ public class ColumnChunkMetaData extends Pointer {
   public native @StdString String file_path();
 
   // column metadata
+  public native @Cast("bool") boolean is_metadata_set();
   public native org.bytedeco.parquet.Type.type type();
   public native @Cast("int64_t") long num_values();
   public native @SharedPtr ColumnPath path_in_schema();
   public native @Cast("bool") boolean is_stats_set();
   public native @SharedPtr Statistics statistics();
+
   public native Compression.type compression();
+  // Indicate if the ColumnChunk compression is supported by the current
+  // compiled parquet library.
+  public native @Cast("bool") boolean can_decompress();
+
   public native @StdVector @Cast("parquet::Encoding::type*") IntPointer encodings();
   public native @Cast("bool") boolean has_dictionary_page();
   public native @Cast("int64_t") long dictionary_page_offset();
@@ -46,4 +54,5 @@ public class ColumnChunkMetaData extends Pointer {
   public native @Cast("int64_t") long index_page_offset();
   public native @Cast("int64_t") long total_compressed_size();
   public native @Cast("int64_t") long total_uncompressed_size();
+  public native @UniquePtr ColumnCryptoMetaData crypto_metadata();
 }

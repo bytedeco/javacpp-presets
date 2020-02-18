@@ -33,8 +33,8 @@ public class Message extends Pointer {
   /** \brief Construct message, but do not validate
    * 
    *  Use at your own risk; Message::Open has more metadata validation */
-  public Message(@Const @SharedPtr @ByRef ArrowBuffer metadata, @Const @SharedPtr @ByRef ArrowBuffer body) { super((Pointer)null); allocate(metadata, body); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer metadata, @Const @SharedPtr @ByRef ArrowBuffer body);
+  public Message(@SharedPtr ArrowBuffer metadata, @SharedPtr ArrowBuffer body) { super((Pointer)null); allocate(metadata, body); }
+  private native void allocate(@SharedPtr ArrowBuffer metadata, @SharedPtr ArrowBuffer body);
 
   /** \brief Create and validate a Message instance from two buffers
    * 
@@ -44,8 +44,8 @@ public class Message extends Pointer {
    *  @return Status */
   
   ///
-  public static native @ByVal Status Open(@Const @SharedPtr @ByRef ArrowBuffer metadata,
-                       @Const @SharedPtr @ByRef ArrowBuffer body, @UniquePtr Message out);
+  public static native @ByVal Status Open(@SharedPtr ArrowBuffer metadata,
+                       @SharedPtr ArrowBuffer body, @UniquePtr Message out);
 
   /** \brief Read message body and create Message given Flatbuffer metadata
    *  @param metadata [in] containing a serialized Message flatbuffer
@@ -56,7 +56,7 @@ public class Message extends Pointer {
    *  \note If stream supports zero-copy, this is zero-copy */
   
   ///
-  public static native @ByVal Status ReadFrom(@SharedPtr @ByVal ArrowBuffer metadata, InputStream stream,
+  public static native @ByVal Status ReadFrom(@SharedPtr ArrowBuffer metadata, InputStream stream,
                            @UniquePtr Message out);
 
   /** \brief Read message body from position in file, and create Message given
@@ -70,7 +70,7 @@ public class Message extends Pointer {
    *  \note If file supports zero-copy, this is zero-copy */
   
   ///
-  public static native @ByVal Status ReadFrom(@Cast("const int64_t") long offset, @SharedPtr @ByVal ArrowBuffer metadata,
+  public static native @ByVal Status ReadFrom(@Cast("const int64_t") long offset, @SharedPtr ArrowBuffer metadata,
                            RandomAccessFile file, @UniquePtr Message out);
 
   /** \brief Return true if message type and contents are equal
@@ -86,12 +86,12 @@ public class Message extends Pointer {
    *  @return buffer */
   
   ///
-  public native @SharedPtr @ByVal ArrowBuffer metadata();
+  public native @SharedPtr ArrowBuffer metadata();
 
   /** \brief the Message body, if any
    * 
    *  @return buffer is null if no body */
-  public native @SharedPtr @ByVal ArrowBuffer body();
+  public native @SharedPtr ArrowBuffer body();
 
   /** \brief The expected body length according to the metadata, for
    *  verification purposes */

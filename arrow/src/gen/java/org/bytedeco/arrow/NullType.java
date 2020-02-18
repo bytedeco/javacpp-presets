@@ -21,8 +21,6 @@ public class NullType extends DataType {
     @Override public NullType position(long position) {
         return (NullType)super.position(position);
     }
-    public NoExtraMeta asNoExtraMeta() { return asNoExtraMeta(this); }
-    @Namespace public static native @Name("static_cast<arrow::NoExtraMeta*>") NoExtraMeta asNoExtraMeta(NullType pointer);
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();

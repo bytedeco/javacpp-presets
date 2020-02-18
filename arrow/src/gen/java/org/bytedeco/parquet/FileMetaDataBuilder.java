@@ -30,4 +30,7 @@ public class FileMetaDataBuilder extends Pointer {
 
   // Complete the Thrift structure
   public native @UniquePtr FileMetaData Finish();
+
+  // crypto metadata
+  public native @UniquePtr FileCryptoMetaData GetCryptoMetaData();
 }

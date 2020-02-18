@@ -39,7 +39,7 @@ import static org.bytedeco.opencv.global.opencv_stitching.*;
 
 
 @Namespace("cv::detail") @Properties(inherit = org.bytedeco.opencv.presets.opencv_stitching.class)
-public class SphericalProjector extends Pointer {
+public class SphericalProjector extends ProjectorBase {
     static { Loader.load(); }
     /** Default native constructor. */
     public SphericalProjector() { super((Pointer)null); allocate(); }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -595,6 +595,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define(true))
                .put(new Info("TENSORFLOW_USE_SYCL", "defined(PLATFORM_GOOGLE)", "defined(TENSORFLOW_PROTOBUF_USES_CORD)", "GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER").define(false))
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
+               .put(new Info("GenericNumTraits<tensorflow::bfloat16>").pointerTypes("Pointer"))
                .put(new Info("Eigen::NumTraits<tensorflow::bfloat16>").pointerTypes("bfloat16NumTraits"))
                .put(new Info("Eigen::QInt8", "Eigen::QUInt8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte..."))
                .put(new Info("Eigen::QInt16", "Eigen::QUInt16", "uint16", "tensorflow::uint16", "Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
@@ -1055,6 +1056,11 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "TFE_MonitoringStringGauge0", "TFE_MonitoringStringGauge1", "TFE_MonitoringStringGauge2",
                              "TFE_MonitoringBoolGauge0", "TFE_MonitoringBoolGauge1", "TFE_MonitoringBoolGauge2",
                              "TFE_MonitoringSampler0", "TFE_MonitoringSampler1", "TFE_MonitoringSampler2").purify())
+               .put(new Info("TFE_MonitoringCounter<0>", "TFE_MonitoringCounter<1>", "TFE_MonitoringCounter<2>",
+                             "TFE_MonitoringGauge<bool,0>", "TFE_MonitoringGauge<bool,1>", "TFE_MonitoringGauge<bool,2>",
+                             "TFE_MonitoringGauge<tensorflow::int64,0>", "TFE_MonitoringGauge<tensorflow::int64,1>", "TFE_MonitoringGauge<tensorflow::int64,2>",
+                             "TFE_MonitoringGauge<tensorflow::string,0>", "TFE_MonitoringGauge<tensorflow::string,1>", "TFE_MonitoringGauge<tensorflow::string,2>",
+                             "TFE_MonitoringSampler<0>", "TFE_MonitoringSampler<1>", "TFE_MonitoringSampler<2>").pointerTypes("Pointer"))
                .put(new Info("TF_Operation::node").javaText("public native @MemberGetter @ByRef Node node();"))
                .put(new Info("TFE_MonitoringCounterCell::cell").javaText("public native @MemberGetter @ByRef CounterCell cell();"))
                .put(new Info("TFE_MonitoringSamplerCell::cell").javaText("public native @MemberGetter @ByRef SamplerCell cell();"))

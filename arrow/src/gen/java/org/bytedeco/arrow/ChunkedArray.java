@@ -93,6 +93,24 @@ public class ChunkedArray extends Pointer {
   public native @Cast("bool") boolean Equals(@Const @ByRef ChunkedArray other);
   /** \brief Determine if two chunked arrays are equal. */
 
-  /** \brief Check that all chunks have the same data type */
+  /** \brief Perform cheap validation checks to determine obvious inconsistencies
+   *  within the chunk array's internal data.
+   * 
+   *  This is O(k*m) where k is the number of array descendents,
+   *  and m is the number of chunks.
+   * 
+   *  @return Status */
+  
+  ///
+  ///
   public native @ByVal Status Validate();
+
+  /** \brief Perform extensive validation checks to determine inconsistencies
+   *  within the chunk array's internal data.
+   * 
+   *  This is O(k*n) where k is the number of array descendents,
+   *  and n is the length in elements.
+   * 
+   *  @return Status */
+  public native @ByVal Status ValidateFull();
 }

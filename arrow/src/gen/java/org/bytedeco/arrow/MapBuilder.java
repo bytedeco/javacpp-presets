@@ -77,15 +77,36 @@ public class MapBuilder extends ArrayBuilder {
   /** \brief Start a new variable-length map slot
    * 
    *  This function should be called before beginning to append elements to the
-   *  key and value builders */
+   *  key and item builders */
   public native @ByVal Status Append();
 
   public native @ByVal Status AppendNull();
 
+  
+  ///
   public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
 
+  /** \brief Get builder to append keys.
+   * 
+   *  Append a key with this builder should be followed by appending
+   *  an item or null value with item_builder(). */
+  
+  ///
   public native ArrayBuilder key_builder();
+
+  /** \brief Get builder to append items
+   * 
+   *  Appending an item with this builder should have been preceded
+   *  by appending a key with key_builder(). */
+  
+  ///
   public native ArrayBuilder item_builder();
+
+  /** \brief Get builder to add Map entries as struct values.
+   * 
+   *  This is used instead of key_builder()/item_builder() and allows
+   *  the Map to be built as a list of struct values. */
+  public native ArrayBuilder value_builder();
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type();
 }

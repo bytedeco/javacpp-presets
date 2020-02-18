@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.7
+OPENBLAS_VERSION=0.3.8
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -22,6 +22,9 @@ tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz --strip-components=1 -C O
 
 cd OpenBLAS-$OPENBLAS_VERSION
 cp lapack-netlib/LAPACKE/include/*.h ../include
+
+# remove broken cross-compiler workaround on Mac
+sedinplace '/if (($os eq "Darwin")/,/}/d' c_check ../OpenBLAS-$OPENBLAS_VERSION-nolapack/c_check
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export CROSS_SUFFIX=
@@ -236,6 +239,7 @@ unset LDFLAGS
 if [[ -f ../lib/libopenblas.dll.a ]]; then
     # bundle the import library for Windows under a friendly name for MSVC
     cp ../lib/libopenblas.dll.a ../lib/openblas.lib
+    cp ../lib/libopenblas_nolapack.dll.a ../lib/openblas_nolapack.lib
 fi
 
 cd ../..

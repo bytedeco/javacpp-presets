@@ -50,6 +50,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/column_reader.h",
                 "parquet/column_scanner.h",
                 "parquet/column_writer.h",
+                "parquet/encryption.h",
                 "parquet/properties.h",
                 "parquet/metadata.h",
                 "parquet/file_reader.h",
@@ -57,7 +58,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/printer.h",
                 "parquet/statistics.h",
             },
-            link = "parquet@.15"
+            link = "parquet@.16"
         ),
     },
     target = "org.bytedeco.parquet",
@@ -75,13 +76,15 @@ public class parquet implements InfoMapper {
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("Compression::type").valueTypes("Compression.type", "@Cast(\"arrow::Compression::type\") int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
-               .put(new Info("arrow::io::OutputStream").pointerTypes("org.bytedeco.arrow.OutputStream"))
-               .put(new Info("parquet::OutputStream").pointerTypes("org.bytedeco.parquet.OutputStream"))
                .put(new Info("parquet::Type").pointerTypes("org.bytedeco.parquet.Type"))
                .put(new Info("std::list<int>").pointerTypes("IntList").define())
+               .put(new Info("std::shared_ptr<parquet::ColumnDecryptionProperties>").annotations("@SharedPtr").pointerTypes("ColumnDecryptionProperties"))
                .put(new Info("std::shared_ptr<const parquet::LogicalType>").annotations("@Cast(\"const parquet::LogicalType*\") @SharedPtr").pointerTypes("LogicalType"))
                .put(new Info("std::shared_ptr<parquet::schema::Node>").annotations("@SharedPtr").pointerTypes("Node"))
                .put(new Info("std::vector<std::shared_ptr<parquet::schema::Node> >").pointerTypes("NodeVector").define())
+               .put(new Info("std::map<std::string,std::shared_ptr<parquet::ColumnDecryptionProperties> >").pointerTypes("ColumnDecryptionPropertiesStringMap").define())
+               .put(new Info("arrow::Result<std::shared_ptr<parquet::Buffer> >").pointerTypes("BufferResult"))
+               .put(new Info("parquet::Encryptor", "parquet::FooterSigningEncryptor", "parquet::OutputStream").skip())
         ;
     }
 }

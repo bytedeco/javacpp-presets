@@ -18,31 +18,38 @@ public class Decompressor extends Pointer {
     public Decompressor(Pointer p) { super(p); }
 
 
+  public static class DecompressResult extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public DecompressResult() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public DecompressResult(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public DecompressResult(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public DecompressResult position(long position) {
+          return (DecompressResult)super.position(position);
+      }
+  
+    // XXX is need_more_output necessary? (Brotli?)
+    public native @Cast("int64_t") long bytes_read(); public native DecompressResult bytes_read(long setter);
+    public native @Cast("int64_t") long bytes_written(); public native DecompressResult bytes_written(long setter);
+    public native @Cast("bool") boolean need_more_output(); public native DecompressResult need_more_output(boolean setter);
+  }
+
   /** \brief Decompress some input.
    * 
    *  If need_more_output is true on return, a larger output buffer needs
-   *  to be supplied.
-   *  XXX is need_more_output necessary? (Brotli?) */
+   *  to be supplied. */
   
   ///
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input, @Cast("int64_t") long output_len,
-                              @Cast("uint8_t*") BytePointer output, @Cast("int64_t*") LongPointer bytes_read, @Cast("int64_t*") LongPointer bytes_written,
-                              @Cast("bool*") BoolPointer need_more_output);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input, @Cast("int64_t") long output_len,
-                              @Cast("uint8_t*") ByteBuffer output, @Cast("int64_t*") LongBuffer bytes_read, @Cast("int64_t*") LongBuffer bytes_written,
-                              @Cast("bool*") boolean[] need_more_output);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input, @Cast("int64_t") long output_len,
-                              @Cast("uint8_t*") byte[] output, @Cast("int64_t*") long[] bytes_read, @Cast("int64_t*") long[] bytes_written,
-                              @Cast("bool*") BoolPointer need_more_output);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input, @Cast("int64_t") long output_len,
-                              @Cast("uint8_t*") BytePointer output, @Cast("int64_t*") LongPointer bytes_read, @Cast("int64_t*") LongPointer bytes_written,
-                              @Cast("bool*") boolean[] need_more_output);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input, @Cast("int64_t") long output_len,
-                              @Cast("uint8_t*") ByteBuffer output, @Cast("int64_t*") LongBuffer bytes_read, @Cast("int64_t*") LongBuffer bytes_written,
-                              @Cast("bool*") BoolPointer need_more_output);
-  public native @ByVal Status Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input, @Cast("int64_t") long output_len,
-                              @Cast("uint8_t*") byte[] output, @Cast("int64_t*") long[] bytes_read, @Cast("int64_t*") long[] bytes_written,
-                              @Cast("bool*") boolean[] need_more_output);
+  public native @ByVal DecompressResultResult Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") BytePointer input,
+                                                @Cast("int64_t") long output_len, @Cast("uint8_t*") BytePointer output);
+  public native @ByVal DecompressResultResult Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") ByteBuffer input,
+                                                @Cast("int64_t") long output_len, @Cast("uint8_t*") ByteBuffer output);
+  public native @ByVal DecompressResultResult Decompress(@Cast("int64_t") long input_len, @Cast("const uint8_t*") byte[] input,
+                                                @Cast("int64_t") long output_len, @Cast("uint8_t*") byte[] output);
 
   /** \brief Return whether the compressed stream is finished.
    * 

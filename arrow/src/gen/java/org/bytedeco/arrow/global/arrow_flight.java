@@ -14,6 +14,15 @@ import static org.bytedeco.arrow.global.arrow.*;
 public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
     static { Loader.load(); }
 
+// Targeting ../../arrow_flight/ClientMiddlewareFactoryVector.java
+
+
+// Targeting ../../arrow_flight/ServerMiddlewareFactoryStringPairVector.java
+
+
+// Targeting ../../arrow_flight/ServerMiddlewareFactoryStringPair.java
+
+
 // Parsed from arrow/flight/api.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -37,8 +46,11 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 
 // #include "arrow/flight/client.h"
 // #include "arrow/flight/client_auth.h"
+// #include "arrow/flight/client_middleware.h"
+// #include "arrow/flight/middleware.h"
 // #include "arrow/flight/server.h"
 // #include "arrow/flight/server_auth.h"
+// #include "arrow/flight/server_middleware.h"
 // #include "arrow/flight/types.h"
 
 
@@ -147,7 +159,9 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
   /** We do not have permission to make this request. */
   Unauthorized((byte)4),
   /** The remote service cannot handle this request at the moment. */
-  Unavailable((byte)5);
+  Unavailable((byte)5),
+  /** A request failed for some other reason */
+  Failed((byte)6);
 
     public final byte value;
     private FlightStatusCode(byte v) { this.value = v; }
@@ -311,6 +325,7 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include <chrono>
 // #include <memory>
 // #include <string>
+// #include <utility>
 // #include <vector>
 
 // #include "arrow/ipc/reader.h"
@@ -319,6 +334,12 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 
 // #include "arrow/flight/types.h"  // IWYU pragma: keep
 // #include "arrow/flight/visibility.h"
+// Targeting ../../arrow_flight/ClientMiddleware.java
+
+
+// Targeting ../../arrow_flight/ClientMiddlewareFactory.java
+
+
 
 /** \brief A duration type for Flight call timeouts. */
 // Targeting ../../arrow_flight/FlightCallOptions.java
@@ -424,6 +445,7 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include <functional>
 // #include <memory>
 // #include <string>
+// #include <utility>
 // #include <vector>
 
 // #include "arrow/flight/server_auth.h"
@@ -432,6 +454,12 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include "arrow/ipc/dictionary.h"
 // #include "arrow/memory_pool.h"
 // #include "arrow/record_batch.h"
+// Targeting ../../arrow_flight/ServerMiddleware.java
+
+
+// Targeting ../../arrow_flight/ServerMiddlewareFactory.java
+
+
 // Targeting ../../arrow_flight/FlightDataStream.java
 
 

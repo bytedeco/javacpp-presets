@@ -119,12 +119,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
- * Arrow 0.15.x  https://arrow.apache.org/install/
+ * Arrow 0.16.x  https://arrow.apache.org/install/
  * HDF5 1.10.6  https://www.hdfgroup.org/downloads/
  * MKL 2020.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
  * DNNL 1.2.x  https://github.com/intel/mkl-dnn
- * OpenBLAS 0.3.7  http://www.openblas.net/
+ * OpenBLAS 0.3.8  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
@@ -141,7 +141,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
    * NCCL 2.5.x  https://developer.nvidia.com/nccl
- * MXNet 1.5.1  https://github.com/dmlc/mxnet
+ * MXNet 1.6.0.rc2  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.2  https://github.com/tensorflow/tensorflow
  * TensorRT 7.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment

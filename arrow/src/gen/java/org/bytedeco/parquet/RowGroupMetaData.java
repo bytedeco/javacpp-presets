@@ -21,7 +21,8 @@ public class RowGroupMetaData extends Pointer {
   // API convenience to get a MetaData accessor
   public static native @UniquePtr RowGroupMetaData Make(
         @Const Pointer metadata, @Const SchemaDescriptor schema,
-        @Const ApplicationVersion writer_version/*=nullptr*/);
+        @Const ApplicationVersion writer_version/*=nullptr*/,
+        @SharedPtr InternalFileDecryptor file_decryptor/*=nullptr*/);
   public static native @UniquePtr RowGroupMetaData Make(
         @Const Pointer metadata, @Const SchemaDescriptor schema);
 
@@ -31,5 +32,8 @@ public class RowGroupMetaData extends Pointer {
   public native @Cast("int64_t") long total_byte_size();
   // Return const-pointer to make it clear that this object is not to be copied
   public native @Const SchemaDescriptor schema();
+  // Indicate if all of the RowGroup's ColumnChunks can be decompressed.
+  public native @Cast("bool") boolean can_decompress();
+
   public native @UniquePtr ColumnChunkMetaData ColumnChunk(int i);
 }

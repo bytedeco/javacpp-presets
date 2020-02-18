@@ -105,7 +105,7 @@ public class BasicDecimal128 extends Pointer {
   public native void ToBytes(@Cast("uint8_t*") ByteBuffer out);
   public native void ToBytes(@Cast("uint8_t*") byte[] out);
 
-  /** \brief seperate the integer and fractional parts for the given scale. */
+  /** \brief separate the integer and fractional parts for the given scale. */
   public native void GetWholeAndFraction(int scale, BasicDecimal128 whole,
                              BasicDecimal128 fraction);
 

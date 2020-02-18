@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief EXPERIMENTAL: abstract file system API */
+/** \brief Abstract file system API */
 @Namespace("arrow::fs") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class FileSystem extends Pointer {
     static { Loader.load(); }
@@ -17,27 +17,31 @@ public class FileSystem extends Pointer {
     public FileSystem(Pointer p) { super(p); }
 
 
+  
+  ///
+  public native @StdString String type_name();
+
   /** Get statistics for the given target.
    * 
    *  Any symlink is automatically dereferenced, recursively.
    *  A non-existing or unreachable file returns an Ok status and
    *  has a FileType of value NonExistent.  An error status indicates
    *  a truly exceptional condition (low-level I/O error, etc.). */
-  public native @ByVal Status GetTargetStats(@StdString String path, FileStats out);
-  public native @ByVal Status GetTargetStats(@StdString BytePointer path, FileStats out);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString String path);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString BytePointer path);
   /** Same, for many targets at once. */
   
   ///
-  public native @ByVal Status GetTargetStats(@Const @ByRef StringVector paths,
-                                  @StdVector FileStats out);
+  public native @ByVal FileStatsVectorResult GetTargetStats(
+        @Const @ByRef StringVector paths);
   /** Same, according to a selector.
    * 
    *  The selector's base directory will not be part of the results, even if
    *  it exists.
-   *  If it doesn't exist, see {@code Selector::allow_non_existent}. */
+   *  If it doesn't exist, see {@code FileSelector::allow_non_existent}. */
   
   ///
-  public native @ByVal Status GetTargetStats(@Const @ByRef Selector select, @StdVector FileStats out);
+  public native @ByVal FileStatsVectorResult GetTargetStats(@Const @ByRef FileSelector select);
 
   /** Create a directory and subdirectories.
    * 
@@ -91,34 +95,34 @@ public class FileSystem extends Pointer {
   public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer dest);
 
   /** Open an input stream for sequential reading. */
-  public native @ByVal Status OpenInputStream(@StdString String path,
-                                   @SharedPtr InputStream out);
-  public native @ByVal Status OpenInputStream(@StdString BytePointer path,
-                                   @SharedPtr InputStream out);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString String path);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString BytePointer path);
 
   /** Open an input file for random access reading. */
   
   ///
-  public native @ByVal Status OpenInputFile(@StdString String path,
-                                 @SharedPtr RandomAccessFile out);
-  public native @ByVal Status OpenInputFile(@StdString BytePointer path,
-                                 @SharedPtr RandomAccessFile out);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString String path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString BytePointer path);
 
   /** Open an output stream for sequential writing.
    * 
    *  If the target already exists, existing data is truncated. */
   
   ///
-  public native @ByVal Status OpenOutputStream(@StdString String path,
-                                    @SharedPtr OutputStream out);
-  public native @ByVal Status OpenOutputStream(@StdString BytePointer path,
-                                    @SharedPtr OutputStream out);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString BytePointer path);
 
   /** Open an output stream for appending.
    * 
    *  If the target doesn't exist, a new empty file is created. */
-  public native @ByVal Status OpenAppendStream(@StdString String path,
-                                    @SharedPtr OutputStream out);
-  public native @ByVal Status OpenAppendStream(@StdString BytePointer path,
-                                    @SharedPtr OutputStream out);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString BytePointer path);
 }

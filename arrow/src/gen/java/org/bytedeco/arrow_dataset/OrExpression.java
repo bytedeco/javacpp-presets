@@ -32,10 +32,7 @@ public class OrExpression extends OrExpressionImpl {
 
   public native @StdString String ToString();
 
-  public native @ByVal ExpressionResult Assume(@Const @ByRef Expression given);
-
-  public native @ByVal DatumResult Evaluate(FunctionContext ctx,
-                                    @Const @ByRef RecordBatch batch);
+  public native @SharedPtr @ByVal Expression Assume(@Const @ByRef Expression given);
 
   public native @ByVal DataTypeResult Validate(@Const @ByRef Schema schema);
 }

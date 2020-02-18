@@ -42,7 +42,18 @@ public class ConvertOptions extends Pointer {
    * 
    *  If true, then strings in "null_values" are considered null for string columns.
    *  If false, then all strings are valid string values. */
+  
+  ///
   public native @Cast("bool") boolean strings_can_be_null(); public native ConvertOptions strings_can_be_null(boolean setter);
+
+  /** Whether to try to automatically dict-encode string / binary data.
+   *  If true, then when type inference detects a string or binary column,
+   *  it it dict-encoded up to {@code auto_dict_max_cardinality} distinct values
+   *  (per chunk), after which it switches to regular encoding.
+   * 
+   *  This setting is ignored for non-inferred columns (those in {@code column_types}). */
+  public native @Cast("bool") boolean auto_dict_encode(); public native ConvertOptions auto_dict_encode(boolean setter);
+  public native int auto_dict_max_cardinality(); public native ConvertOptions auto_dict_max_cardinality(int setter);
 
   // XXX Should we have a separate FilterOptions?
 

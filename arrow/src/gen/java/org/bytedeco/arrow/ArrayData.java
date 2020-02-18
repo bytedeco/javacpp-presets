@@ -110,6 +110,18 @@ public class ArrayData extends Pointer {
         @Const @ByRef ArrowBufferVector buffers,
         @Const @ByRef ArrayDataVector child_data);
 
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
+        @Const @ByRef ArrowBufferVector buffers,
+        @Const @ByRef ArrayDataVector child_data,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary, @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/,
+        @Cast("int64_t") long offset/*=0*/);
+  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
+        @Const @ByRef ArrowBufferVector buffers,
+        @Const @ByRef ArrayDataVector child_data,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary);
+
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                                            @Cast("int64_t") long length,
                                            @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/,
@@ -136,7 +148,7 @@ public class ArrayData extends Pointer {
   public native @Const @Name("GetValues<jint>") IntPointer GetValuesInt(int i, @Cast("int64_t") long absolute_offset);
   public native @Const @Name("GetValues<float>") FloatPointer GetValuesFloat(int i, @Cast("int64_t") long absolute_offset);
   public native @Const @Name("GetValues<double>") DoublePointer GetValuesDouble(int i, @Cast("int64_t") long absolute_offset);
-  public native @Const @Name("GetValues<jboolean>") BoolPointer GetValuesBoolean(int i, @Cast("int64_t") long absolute_offset);
+  public native @Const @Name("GetValues<jboolean>") BooleanPointer GetValuesBoolean(int i, @Cast("int64_t") long absolute_offset);
   public native @Const @Name("GetValues<jchar>") CharPointer GetValuesChar(int i, @Cast("int64_t") long absolute_offset);
 
   public native @Const @Name("GetValues<jbyte>") BytePointer GetValuesByte(int i);
@@ -149,7 +161,7 @@ public class ArrayData extends Pointer {
 
   public native @Const @Name("GetValues<double>") DoublePointer GetValuesDouble(int i);
 
-  public native @Const @Name("GetValues<jboolean>") BoolPointer GetValuesBoolean(int i);
+  public native @Const @Name("GetValues<jboolean>") BooleanPointer GetValuesBoolean(int i);
 
   public native @Const @Name("GetValues<jchar>") CharPointer GetValuesChar(int i);
 
@@ -158,12 +170,13 @@ public class ArrayData extends Pointer {
   // Construct a zero-copy slice of the data with the indicated offset and length
   public native @ByVal ArrayData Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
 
+  public native void SetNullCount(@Cast("int64_t") long v);
+
   /** \brief Return null count, or compute and set it if it's not known */
   public native @Cast("int64_t") long GetNullCount();
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type(); public native ArrayData type(DataType setter);
   public native @Cast("int64_t") long length(); public native ArrayData length(long setter);
-  public native @Cast("int64_t") long null_count(); public native ArrayData null_count(long setter);
   // The logical start point into the physical buffers (in values, not bytes).
   // Note that, for child data, this must be *added* to the child data's own offset.
   public native @Cast("int64_t") long offset(); public native ArrayData offset(long setter);

@@ -22,7 +22,7 @@ public class RecordBatchBuilder extends Pointer {
    *  @param schema [in] The schema for the record batch
    *  @param pool [in] A MemoryPool to use for allocations
    *  @param builder [in] the created builder instance */
-  public static native @ByVal Status Make(@SharedPtr Schema schema, MemoryPool pool,
+  public static native @ByVal Status Make(@Const @SharedPtr @ByRef Schema schema, MemoryPool pool,
                        @UniquePtr RecordBatchBuilder builder);
 
   /** \brief Create an initialize a RecordBatchBuilder
@@ -30,7 +30,7 @@ public class RecordBatchBuilder extends Pointer {
    *  @param pool [in] A MemoryPool to use for allocations
    *  @param initial_capacity [in] The initial capacity for the builders
    *  @param builder [in] the created builder instance */
-  public static native @ByVal Status Make(@SharedPtr Schema schema, MemoryPool pool,
+  public static native @ByVal Status Make(@Const @SharedPtr @ByRef Schema schema, MemoryPool pool,
                        @Cast("int64_t") long initial_capacity,
                        @UniquePtr RecordBatchBuilder builder);
 
@@ -64,5 +64,5 @@ public class RecordBatchBuilder extends Pointer {
   public native int num_fields();
 
   /** \brief The number of fields in the schema */
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 }

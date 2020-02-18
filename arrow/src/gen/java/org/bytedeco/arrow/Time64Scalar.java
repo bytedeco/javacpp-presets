@@ -9,17 +9,21 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class Time64Scalar extends PrimitiveScalar {
+@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class Time64Scalar extends BaseTime64Scalar {
     static { Loader.load(); }
+
+  
+    
+      
+      
+        public Time64Scalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+        private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+    
+    
+      public Time64Scalar(@Cast("arrow::TemporalScalar<arrow::Time64Type>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
+      private native void allocate(@Cast("arrow::TemporalScalar<arrow::Time64Type>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Time64Scalar(Pointer p) { super(p); }
 
-  public native @Cast("int64_t") long value(); public native Time64Scalar value(long setter);
-  public Time64Scalar(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                 @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, type, is_valid); }
-  private native void allocate(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                 @Cast("bool") boolean is_valid/*=true*/);
-  public Time64Scalar(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
-  private native void allocate(@Cast("int64_t") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 }

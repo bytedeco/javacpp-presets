@@ -27,11 +27,11 @@ public class StructArray extends Array {
   ///
   public StructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                 @Const @ByRef ArrayVector children,
-                @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+                @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
                 @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, children, null_bitmap, null_count, offset); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                 @Const @ByRef ArrayVector children,
-                @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+                @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
                 @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public StructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                 @Const @ByRef ArrayVector children) { super((Pointer)null); allocate(type, length, children); }
@@ -47,7 +47,7 @@ public class StructArray extends Array {
   public static native @ByVal StructArrayResult Make(
         @Const @ByRef ArrayVector children,
         @Const @ByRef StringVector field_names,
-        @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+        @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
         @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public static native @ByVal StructArrayResult Make(
         @Const @ByRef ArrayVector children,
@@ -61,7 +61,7 @@ public class StructArray extends Array {
   public static native @ByVal StructArrayResult Make(
         @Const @ByRef ArrayVector children,
         @Const @ByRef FieldVector fields,
-        @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Buffer>(nullptr)") ArrowBuffer null_bitmap,
+        @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
         @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public static native @ByVal StructArrayResult Make(
         @Const @ByRef ArrayVector children,

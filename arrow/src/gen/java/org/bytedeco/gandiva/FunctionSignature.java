@@ -31,7 +31,7 @@ public class FunctionSignature extends Pointer {
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FunctionSignature other);
 
-  /** calculated based on base_name, datatpype id of parameters and datatype id
+  /** calculated based on base_name, datatype id of parameters and datatype id
    *  of return type. */
   public native @Cast("std::size_t") long Hash();
 

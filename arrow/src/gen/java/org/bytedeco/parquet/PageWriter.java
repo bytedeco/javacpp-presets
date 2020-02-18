@@ -20,20 +20,10 @@ public class PageWriter extends Pointer {
 
 
   public static native @UniquePtr PageWriter Open(
-        @Cast("parquet::ArrowOutputStream*") @SharedPtr org.bytedeco.arrow.OutputStream sink, Compression.type codec,
-        int compression_level, ColumnChunkMetaDataBuilder metadata,
-        MemoryPool pool/*=arrow::default_memory_pool()*/,
-        @Cast("bool") boolean buffered_row_group/*=false*/);
-  public static native @UniquePtr PageWriter Open(
-        @Cast("parquet::ArrowOutputStream*") @SharedPtr org.bytedeco.arrow.OutputStream sink, Compression.type codec,
+        @Cast("parquet::ArrowOutputStream*") @SharedPtr OutputStream sink, Compression.type codec,
         int compression_level, ColumnChunkMetaDataBuilder metadata);
   public static native @UniquePtr PageWriter Open(
-        @Cast("parquet::ArrowOutputStream*") @SharedPtr org.bytedeco.arrow.OutputStream sink, @Cast("arrow::Compression::type") int codec,
-        int compression_level, ColumnChunkMetaDataBuilder metadata,
-        MemoryPool pool/*=arrow::default_memory_pool()*/,
-        @Cast("bool") boolean buffered_row_group/*=false*/);
-  public static native @UniquePtr PageWriter Open(
-        @Cast("parquet::ArrowOutputStream*") @SharedPtr org.bytedeco.arrow.OutputStream sink, @Cast("arrow::Compression::type") int codec,
+        @Cast("parquet::ArrowOutputStream*") @SharedPtr OutputStream sink, @Cast("arrow::Compression::type") int codec,
         int compression_level, ColumnChunkMetaDataBuilder metadata);
 
   // The Column Writer decides if dictionary encoding is used if set and

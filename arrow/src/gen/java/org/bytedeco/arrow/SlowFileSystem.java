@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief EXPERIMENTAL: a FileSystem implementation that delegates to another
+/** \brief A FileSystem implementation that delegates to another
  *  implementation but inserts latencies at various points. */
 @Namespace("arrow::fs") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class SlowFileSystem extends FileSystem {
@@ -27,9 +27,11 @@ public class SlowFileSystem extends FileSystem {
                    int seed) { super((Pointer)null); allocate(base_fs, average_latency, seed); }
   private native void allocate(@SharedPtr FileSystem base_fs, double average_latency,
                    int seed);
-  public native @ByVal Status GetTargetStats(@StdString String path, FileStats out);
-  public native @ByVal Status GetTargetStats(@StdString BytePointer path, FileStats out);
-  public native @ByVal Status GetTargetStats(@Const @ByRef Selector select, @StdVector FileStats out);
+
+  public native @StdString String type_name();
+  public native @ByVal FileStatsResult GetTargetStats(@StdString String path);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString BytePointer path);
+  public native @ByVal FileStatsVectorResult GetTargetStats(@Const @ByRef FileSelector select);
 
   public native @ByVal Status CreateDir(@StdString String path, @Cast("bool") boolean recursive/*=true*/);
   public native @ByVal Status CreateDir(@StdString String path);
@@ -50,23 +52,20 @@ public class SlowFileSystem extends FileSystem {
   public native @ByVal Status CopyFile(@StdString String src, @StdString String dest);
   public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer dest);
 
-  public native @ByVal Status OpenInputStream(@StdString String path,
-                           @SharedPtr InputStream out);
-  public native @ByVal Status OpenInputStream(@StdString BytePointer path,
-                           @SharedPtr InputStream out);
-
-  public native @ByVal Status OpenInputFile(@StdString String path,
-                         @SharedPtr RandomAccessFile out);
-  public native @ByVal Status OpenInputFile(@StdString BytePointer path,
-                         @SharedPtr RandomAccessFile out);
-
-  public native @ByVal Status OpenOutputStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenOutputStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
-
-  public native @ByVal Status OpenAppendStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenAppendStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString String path);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString BytePointer path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString String path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString BytePointer path);
 }

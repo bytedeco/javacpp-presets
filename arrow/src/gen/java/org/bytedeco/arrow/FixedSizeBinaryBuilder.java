@@ -20,9 +20,9 @@ public class FixedSizeBinaryBuilder extends ArrayBuilder {
 
 
   public FixedSizeBinaryBuilder(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                           MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(type, pool); }
+                                    MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(type, pool); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                           MemoryPool pool/*=arrow::default_memory_pool()*/);
+                                    MemoryPool pool/*=arrow::default_memory_pool()*/);
   public FixedSizeBinaryBuilder(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
