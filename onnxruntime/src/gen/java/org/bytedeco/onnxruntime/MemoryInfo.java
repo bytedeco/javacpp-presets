@@ -10,13 +10,12 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class MemoryInfo extends BasedMemoryInfo {
+public class MemoryInfo extends BaseMemoryInfo {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MemoryInfo(Pointer p) { super(p); }
 
   public static native @ByVal MemoryInfo CreateCpu(@Cast("OrtAllocatorType") int type, @Cast("OrtMemType") int mem_type1);
-
   public MemoryInfo(@Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type) { super((Pointer)null); allocate(name, type, id, mem_type); }
   private native void allocate(@Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type);
   public MemoryInfo(String name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type) { super((Pointer)null); allocate(name, type, id, mem_type); }

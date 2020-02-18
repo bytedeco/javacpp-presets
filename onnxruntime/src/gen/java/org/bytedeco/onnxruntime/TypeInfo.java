@@ -10,7 +10,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class TypeInfo extends BasedTypeInfo {
+public class TypeInfo extends BaseTypeInfo {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TypeInfo(Pointer p) { super(p); }
@@ -18,6 +18,6 @@ public class TypeInfo extends BasedTypeInfo {
   public TypeInfo(OrtTypeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtTypeInfo p);
 
-  
+  public native @ByVal TensorTypeAndShapeInfo GetTensorTypeAndShapeInfo();
   public native @Cast("ONNXType") int GetONNXType();
 }

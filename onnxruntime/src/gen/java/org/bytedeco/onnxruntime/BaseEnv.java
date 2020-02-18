@@ -9,20 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 @Name("Ort::Base<OrtEnv>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BasedEnv extends Pointer {
+public class BaseEnv extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BasedEnv(Pointer p) { super(p); }
+    public BaseEnv(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BasedEnv(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseEnv(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BasedEnv position(long position) {
-        return (BasedEnv)super.position(position);
+    @Override public BaseEnv position(long position) {
+        return (BaseEnv)super.position(position);
     }
 
-  public BasedEnv() { super((Pointer)null); allocate(); }
+  public BaseEnv() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BasedEnv(OrtEnv p) { super((Pointer)null); allocate(p); }
+  public BaseEnv(OrtEnv p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtEnv p);
 
   public native @Name("operator OrtEnv*") OrtEnv asOrtEnv();

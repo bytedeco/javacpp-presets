@@ -9,20 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 @Name("Ort::Base<OrtRunOptions>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BasedRunOptions extends Pointer {
+public class BaseRunOptions extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BasedRunOptions(Pointer p) { super(p); }
+    public BaseRunOptions(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BasedRunOptions(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseRunOptions(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BasedRunOptions position(long position) {
-        return (BasedRunOptions)super.position(position);
+    @Override public BaseRunOptions position(long position) {
+        return (BaseRunOptions)super.position(position);
     }
 
-  public BasedRunOptions() { super((Pointer)null); allocate(); }
+  public BaseRunOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BasedRunOptions(OrtRunOptions p) { super((Pointer)null); allocate(p); }
+  public BaseRunOptions(OrtRunOptions p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtRunOptions p);
 
   public native @Name("operator OrtRunOptions*") OrtRunOptions asOrtRunOptions();

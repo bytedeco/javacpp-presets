@@ -16,10 +16,10 @@ public class OrtException extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OrtException(Pointer p) { super(p); }
 
-  public OrtException(@StdString BytePointer string, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(string, code); }
-  private native void allocate(@StdString BytePointer string, @Cast("OrtErrorCode") int code);
-  public OrtException(@StdString String string, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(string, code); }
-  private native void allocate(@StdString String string, @Cast("OrtErrorCode") int code);
+  public OrtException(@Cast({"char*", "std::string&&"}) @StdString BytePointer string, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(string, code); }
+  private native void allocate(@Cast({"char*", "std::string&&"}) @StdString BytePointer string, @Cast("OrtErrorCode") int code);
+  public OrtException(@Cast({"char*", "std::string&&"}) @StdString String string, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(string, code); }
+  private native void allocate(@Cast({"char*", "std::string&&"}) @StdString String string, @Cast("OrtErrorCode") int code);
 
   public native @Cast("OrtErrorCode") int GetOrtErrorCode();
   public native @NoException @Cast("const char*") BytePointer what();

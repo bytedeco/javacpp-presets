@@ -10,7 +10,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class Session extends BasedSession {
+public class Session extends BaseSession {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Session(Pointer p) { super(p); }

@@ -10,7 +10,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class RunOptions extends BasedRunOptions {
+public class RunOptions extends BaseRunOptions {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RunOptions(Pointer p) { super(p); }

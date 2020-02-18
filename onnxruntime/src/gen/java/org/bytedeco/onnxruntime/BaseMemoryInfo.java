@@ -8,21 +8,23 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
+
+// This is used internally by the C++ API. This is the common base class used by the wrapper objects.
 @Name("Ort::Base<OrtMemoryInfo>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BasedMemoryInfo extends Pointer {
+public class BaseMemoryInfo extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BasedMemoryInfo(Pointer p) { super(p); }
+    public BaseMemoryInfo(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BasedMemoryInfo(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseMemoryInfo(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BasedMemoryInfo position(long position) {
-        return (BasedMemoryInfo)super.position(position);
+    @Override public BaseMemoryInfo position(long position) {
+        return (BaseMemoryInfo)super.position(position);
     }
 
-  public BasedMemoryInfo() { super((Pointer)null); allocate(); }
+  public BaseMemoryInfo() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BasedMemoryInfo(OrtMemoryInfo p) { super((Pointer)null); allocate(p); }
+  public BaseMemoryInfo(OrtMemoryInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtMemoryInfo p);
 
   public native @Name("operator OrtMemoryInfo*") OrtMemoryInfo asOrtMemoryInfo();

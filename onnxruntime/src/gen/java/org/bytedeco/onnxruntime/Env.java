@@ -10,7 +10,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class Env extends BasedEnv {
+public class Env extends BaseEnv {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Env(Pointer p) { super(p); }
@@ -37,4 +37,5 @@ public class Env extends BasedEnv {
   public native @ByRef Env EnableTelemetryEvents();
   public native @ByRef Env DisableTelemetryEvents();
 
+  
 }

@@ -9,20 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 @Name("Ort::Base<OrtSession>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BasedSession extends Pointer {
+public class BaseSession extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BasedSession(Pointer p) { super(p); }
+    public BaseSession(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BasedSession(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseSession(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BasedSession position(long position) {
-        return (BasedSession)super.position(position);
+    @Override public BaseSession position(long position) {
+        return (BaseSession)super.position(position);
     }
 
-  public BasedSession() { super((Pointer)null); allocate(); }
+  public BaseSession() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BasedSession(OrtSession p) { super((Pointer)null); allocate(p); }
+  public BaseSession(OrtSession p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtSession p);
 
   public native @Name("operator OrtSession*") OrtSession asOrtSession();

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 //
 
-import java.nio.file.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.indexer.*;
 import org.bytedeco.onnxruntime.*;
@@ -43,6 +42,7 @@ public class CApiSample {
       // Optionally add more execution providers via session_options
       // E.g. for CUDA include cuda_provider_factory.h and uncomment the following line:
       // OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);
+      OrtSessionOptionsAppendExecutionProvider_Dnnl(session_options, 1);
 
       //*************************************************************************
       // create session and load model into memory

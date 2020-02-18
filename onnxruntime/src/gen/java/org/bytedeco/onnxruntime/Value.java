@@ -10,23 +10,74 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class Value extends BasedValue {
+public class Value extends BaseValue {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Value(Pointer p) { super(p); }
 
+  public static native @ByVal @Name("CreateTensor<jbyte>") Value CreateTensorByte(@Const OrtMemoryInfo info, BytePointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jbyte>") Value CreateTensorByte(@Const OrtMemoryInfo info, ByteBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jbyte>") Value CreateTensorByte(@Const OrtMemoryInfo info, byte[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jshort>") Value CreateTensorShort(@Const OrtMemoryInfo info, ShortPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jshort>") Value CreateTensorShort(@Const OrtMemoryInfo info, ShortBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jshort>") Value CreateTensorShort(@Const OrtMemoryInfo info, short[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jint>") Value CreateTensorInt(@Const OrtMemoryInfo info, IntPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jint>") Value CreateTensorInt(@Const OrtMemoryInfo info, IntBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jint>") Value CreateTensorInt(@Const OrtMemoryInfo info, int[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<float>") Value CreateTensorFloat(@Const OrtMemoryInfo info, FloatPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<float>") Value CreateTensorFloat(@Const OrtMemoryInfo info, FloatBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<float>") Value CreateTensorFloat(@Const OrtMemoryInfo info, float[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<double>") Value CreateTensorDouble(@Const OrtMemoryInfo info, DoublePointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<double>") Value CreateTensorDouble(@Const OrtMemoryInfo info, DoubleBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<double>") Value CreateTensorDouble(@Const OrtMemoryInfo info, double[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(@Const OrtMemoryInfo info, BooleanPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(@Const OrtMemoryInfo info, boolean[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(@Const OrtMemoryInfo info, BooleanPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(@Const OrtMemoryInfo info, boolean[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(@Const OrtMemoryInfo info, BooleanPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(@Const OrtMemoryInfo info, boolean[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(@Const OrtMemoryInfo info, CharPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(@Const OrtMemoryInfo info, char[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(@Const OrtMemoryInfo info, CharPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(@Const OrtMemoryInfo info, char[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(@Const OrtMemoryInfo info, CharPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(@Const OrtMemoryInfo info, char[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
   public static native @ByVal Value CreateTensor(@Const OrtMemoryInfo info, Pointer p_data, @Cast("size_t") long p_data_byte_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len,
                               @Cast("ONNXTensorElementDataType") int type);
   public static native @ByVal Value CreateTensor(@Const OrtMemoryInfo info, Pointer p_data, @Cast("size_t") long p_data_byte_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len,
                               @Cast("ONNXTensorElementDataType") int type);
   public static native @ByVal Value CreateTensor(@Const OrtMemoryInfo info, Pointer p_data, @Cast("size_t") long p_data_byte_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len,
                               @Cast("ONNXTensorElementDataType") int type);
+  public static native @ByVal @Name("CreateTensor<jbyte>") Value CreateTensorByte(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jbyte>") Value CreateTensorByte(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jbyte>") Value CreateTensorByte(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jshort>") Value CreateTensorShort(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jshort>") Value CreateTensorShort(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jshort>") Value CreateTensorShort(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jint>") Value CreateTensorInt(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jint>") Value CreateTensorInt(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jint>") Value CreateTensorInt(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<float>") Value CreateTensorFloat(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<float>") Value CreateTensorFloat(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<float>") Value CreateTensorFloat(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<double>") Value CreateTensorDouble(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<double>") Value CreateTensorDouble(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<double>") Value CreateTensorDouble(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jboolean>") Value CreateTensorBoolean(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
+  public static native @ByVal @Name("CreateTensor<jchar>") Value CreateTensorChar(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
   public static native @ByVal Value CreateTensor(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type);
   public static native @ByVal Value CreateTensor(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type);
   public static native @ByVal Value CreateTensor(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type);
 
   public static native @ByVal Value CreateMap(@ByRef Value keys, @ByRef Value values);
   public static native @ByVal Value CreateSequence(@ByRef ValueVector values);
+  public Value(OrtValue p) { super((Pointer)null); allocate(p); }
+  private native void allocate(OrtValue p);
+  
   
 
   public native @Cast("bool") boolean IsTensor();
@@ -36,7 +87,19 @@ public class Value extends BasedValue {
   public native @Cast("size_t") long GetStringTensorDataLength();
   public native void GetStringTensorContent(Pointer buffer, @Cast("size_t") long buffer_length, @Cast("size_t*") SizeTPointer offsets, @Cast("size_t") long offsets_count);
 
+  public native @Name("GetTensorMutableData<jbyte>") BytePointer GetTensorMutableDataByte();
+
+  public native @Name("GetTensorMutableData<jshort>") ShortPointer GetTensorMutableDataShort();
+
+  public native @Name("GetTensorMutableData<jint>") IntPointer GetTensorMutableDataInt();
+
   public native @Name("GetTensorMutableData<float>") FloatPointer GetTensorMutableDataFloat();
+
+  public native @Name("GetTensorMutableData<double>") DoublePointer GetTensorMutableDataDouble();
+
+  public native @Name("GetTensorMutableData<jboolean>") BooleanPointer GetTensorMutableDataBoolean();
+
+  public native @Name("GetTensorMutableData<jchar>") CharPointer GetTensorMutableDataChar();
 
   public native @ByVal TypeInfo GetTypeInfo();
   public native @ByVal TensorTypeAndShapeInfo GetTensorTypeAndShapeInfo();

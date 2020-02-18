@@ -9,20 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 @Name("Ort::Base<OrtCustomOpDomain>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BasedCustomOpDomain extends Pointer {
+public class BaseCustomOpDomain extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BasedCustomOpDomain(Pointer p) { super(p); }
+    public BaseCustomOpDomain(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BasedCustomOpDomain(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseCustomOpDomain(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BasedCustomOpDomain position(long position) {
-        return (BasedCustomOpDomain)super.position(position);
+    @Override public BaseCustomOpDomain position(long position) {
+        return (BaseCustomOpDomain)super.position(position);
     }
 
-  public BasedCustomOpDomain() { super((Pointer)null); allocate(); }
+  public BaseCustomOpDomain() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BasedCustomOpDomain(OrtCustomOpDomain p) { super((Pointer)null); allocate(p); }
+  public BaseCustomOpDomain(OrtCustomOpDomain p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtCustomOpDomain p);
 
   public native @Name("operator OrtCustomOpDomain*") OrtCustomOpDomain asOrtCustomOpDomain();

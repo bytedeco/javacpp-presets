@@ -9,20 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 @Name("Ort::Base<OrtTypeInfo>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BasedTypeInfo extends Pointer {
+public class BaseTypeInfo extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BasedTypeInfo(Pointer p) { super(p); }
+    public BaseTypeInfo(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BasedTypeInfo(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseTypeInfo(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BasedTypeInfo position(long position) {
-        return (BasedTypeInfo)super.position(position);
+    @Override public BaseTypeInfo position(long position) {
+        return (BaseTypeInfo)super.position(position);
     }
 
-  public BasedTypeInfo() { super((Pointer)null); allocate(); }
+  public BaseTypeInfo() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BasedTypeInfo(OrtTypeInfo p) { super((Pointer)null); allocate(p); }
+  public BaseTypeInfo(OrtTypeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtTypeInfo p);
 
   public native @Name("operator OrtTypeInfo*") OrtTypeInfo asOrtTypeInfo();

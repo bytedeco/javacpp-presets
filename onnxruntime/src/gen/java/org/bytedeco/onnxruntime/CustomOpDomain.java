@@ -10,7 +10,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class CustomOpDomain extends BasedCustomOpDomain {
+public class CustomOpDomain extends BaseCustomOpDomain {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CustomOpDomain(Pointer p) { super(p); }
