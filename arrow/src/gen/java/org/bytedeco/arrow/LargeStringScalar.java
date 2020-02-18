@@ -12,6 +12,25 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class LargeStringScalar extends LargeBinaryScalar {
     static { Loader.load(); }
+
+  
+    
+      
+      
+        public LargeStringScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+        private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  
+  
+    public LargeStringScalar(@SharedPtr ArrowBuffer value,
+                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
+    private native void allocate(@SharedPtr ArrowBuffer value,
+                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  
+    public LargeStringScalar(@SharedPtr ArrowBuffer value) { super((Pointer)null); allocate(value); }
+    private native void allocate(@SharedPtr ArrowBuffer value);
+  
+    public LargeStringScalar() { super((Pointer)null); allocate(); }
+    private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LargeStringScalar(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -21,11 +40,4 @@ public class LargeStringScalar extends LargeBinaryScalar {
         return (LargeStringScalar)super.position(position);
     }
 
-  public LargeStringScalar(@Const @SharedPtr @ByRef ArrowBuffer value, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, is_valid); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value, @Cast("bool") boolean is_valid/*=true*/);
-  public LargeStringScalar(@Const @SharedPtr @ByRef ArrowBuffer value) { super((Pointer)null); allocate(value); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value);
-
-  public LargeStringScalar() { super((Pointer)null); allocate(); }
-  private native void allocate();
 }

@@ -46,7 +46,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/flight/server_auth.h",
                 "arrow/flight/server.h",
             },
-            link = "arrow_flight@.15",
+            link = "arrow_flight@.16",
             preload = {"libcrypto-1_1", "libssl-1_1"}
         ),
     },
@@ -59,6 +59,11 @@ public class arrow_flight implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ARROW_FLIGHT_EXPORT").cppTypes().annotations())
                .put(new Info("arrow::flight::TimeoutDuration", "std::function<void(void*)>").cast().pointerTypes("Pointer"))
+               .put(new Info("std::shared_ptr<arrow::flight::ClientMiddlewareFactory>").annotations("@SharedPtr").pointerTypes("ClientMiddlewareFactory"))
+               .put(new Info("std::shared_ptr<arrow::flight::ServerMiddlewareFactory>").annotations("@SharedPtr").pointerTypes("ServerMiddlewareFactory"))
+               .put(new Info("std::pair<std::string,std::shared_ptr<arrow::flight::ServerMiddlewareFactory> >").pointerTypes("ServerMiddlewareFactoryStringPair").define())
+               .put(new Info("std::vector<std::shared_ptr<arrow::flight::ClientMiddlewareFactory> >").pointerTypes("ClientMiddlewareFactoryVector").define())
+               .put(new Info("std::vector<std::pair<std::string,std::shared_ptr<arrow::flight::ServerMiddlewareFactory> > >").pointerTypes("ServerMiddlewareFactoryStringPairVector").define())
                .put(new Info("arrow::flight::kSchemeGrpc").javaText("@Namespace(\"arrow::flight\") @MemberGetter public static native String kSchemeGrpc();"))
                .put(new Info("arrow::flight::kSchemeGrpcTcp").javaText("@Namespace(\"arrow::flight\") @MemberGetter public static native String kSchemeGrpcTcp();"))
                .put(new Info("arrow::flight::kSchemeGrpcUnix").javaText("@Namespace(\"arrow::flight\") @MemberGetter public static native String kSchemeGrpcUnix();"))

@@ -11,7 +11,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 /** \brief Represents a some number of months.
  * 
- *  Type representing a number of months.  Corresponeds to YearMonth type
+ *  Type representing a number of months.  Corresponds to YearMonth type
  *  in Schema.fbs (Years are defined as 12 months). */
 @Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class MonthIntervalType extends IntervalType {

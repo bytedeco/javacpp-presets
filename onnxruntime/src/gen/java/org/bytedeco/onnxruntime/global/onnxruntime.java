@@ -297,6 +297,15 @@ public static native @Const OrtApiBase OrtGetApiBase();
 
 // #ifdef EXCLUDE_REFERENCE_TO_ORT_DLL
 
+
+// #else
+
+// #endif
+
+
+// This returns a reference to the OrtApi interface in use, in case someone wants to use the C API functions
+@Namespace("Ort") public static native @Const @ByRef OrtApi GetApi();
+
 // This is used internally by the C++ API. This macro is to make it easy to generate overloaded methods for all of the various OrtRelease* functions for every Ort* type
 // This can't be done in the C API since C doesn't have function overloading.
 // #define ORT_DEFINE_RELEASE(NAME)
@@ -311,31 +320,31 @@ public static native @Const OrtApiBase OrtGetApiBase();
 @Namespace("Ort") public static native void OrtRelease(OrtTensorTypeAndShapeInfo ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtTypeInfo ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtValue ptr);
-// Targeting ../BasedValue.java
+// Targeting ../BaseMemoryInfo.java
 
 
-// Targeting ../BasedMemoryInfo.java
+// Targeting ../BaseCustomOpDomain.java
 
 
-// Targeting ../BasedEnv.java
+// Targeting ../BaseEnv.java
 
 
-// Targeting ../BasedCustomOpDomain.java
+// Targeting ../BaseRunOptions.java
 
 
-// Targeting ../BasedRunOptions.java
+// Targeting ../BaseSession.java
 
 
-// Targeting ../BasedSession.java
+// Targeting ../BaseSessionOptions.java
 
 
-// Targeting ../BasedSessionOptions.java
+// Targeting ../BaseTensorTypeAndShapeInfo.java
 
 
-// Targeting ../BasedTensorTypeAndShapeInfo.java
+// Targeting ../BaseTypeInfo.java
 
 
-// Targeting ../BasedTypeInfo.java
+// Targeting ../BaseValue.java
 
 
 // Targeting ../Env.java
@@ -382,7 +391,7 @@ public static native @Const OrtApiBase OrtGetApiBase();
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-// #include "onnxruntime/core/session/onnxruntime_c_api.h"
+// #include "onnxruntime_c_api.h"
 
 // #ifdef __cplusplus
 // #endif

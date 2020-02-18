@@ -19,70 +19,49 @@ public class FileOutputStream extends OutputStream {
 
   /** \brief Open a local file for writing, truncating any existing file
    *  @param path [in] with UTF8 encoding
-   *  @param out [out] a base interface OutputStream instance
+   *  @param append [in] append to existing file, otherwise truncate to 0 bytes
+   *  @return an open FileOutputStream
    * 
    *  When opening a new file, any existing file with the indicated path is
    *  truncated to 0 bytes, deleting any existing data */
-  public static native @ByVal Status Open(@StdString String path, @SharedPtr OutputStream out);
-  public static native @ByVal Status Open(@StdString BytePointer path, @SharedPtr OutputStream out);
+  public static native @ByVal FileOutputStreamResult Open(@StdString String path,
+                                                          @Cast("bool") boolean append/*=false*/);
+  public static native @ByVal FileOutputStreamResult Open(@StdString String path);
+  public static native @ByVal FileOutputStreamResult Open(@StdString BytePointer path,
+                                                          @Cast("bool") boolean append/*=false*/);
+  public static native @ByVal FileOutputStreamResult Open(@StdString BytePointer path);
 
-  /** \brief Open a local file for writing
-   *  @param path [in] with UTF8 encoding
-   *  @param append [in] append to existing file, otherwise truncate to 0 bytes
-   *  @param out [out] a base interface OutputStream instance */
+  public static native @Deprecated @ByVal Status Open(@StdString String path, @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::OutputStream>*"}) OutputStream out);
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::OutputStream>*"}) OutputStream out);
+  public static native @Deprecated @ByVal Status Open(@StdString String path, @Cast("bool") boolean append,
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::OutputStream>*"}) OutputStream out);
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, @Cast("bool") boolean append,
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::OutputStream>*"}) OutputStream out);
+  public static native @Deprecated @ByVal Status Open(@StdString String path, @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::FileOutputStream>*"}) FileOutputStream file);
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::FileOutputStream>*"}) FileOutputStream file);
   
   ///
-  public static native @ByVal Status Open(@StdString String path, @Cast("bool") boolean append,
-                       @SharedPtr OutputStream out);
-  public static native @ByVal Status Open(@StdString BytePointer path, @Cast("bool") boolean append,
-                       @SharedPtr OutputStream out);
+  public static native @Deprecated @ByVal Status Open(@StdString String path, @Cast("bool") boolean append,
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::FileOutputStream>*"}) FileOutputStream file);
+  public static native @Deprecated @ByVal Status Open(@StdString BytePointer path, @Cast("bool") boolean append,
+                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::FileOutputStream>*"}) FileOutputStream file);
 
   /** \brief Open a file descriptor for writing.  The underlying file isn't
    *  truncated.
    *  @param fd [in] file descriptor
-   *  @param out [out] a base interface OutputStream instance
+   *  @return an open FileOutputStream
    * 
    *  The file descriptor becomes owned by the OutputStream, and will be closed
    *  on Close() or destruction. */
-  
-  ///
-  public static native @ByVal Status Open(int fd, @SharedPtr OutputStream out);
+  public static native @ByVal FileOutputStreamResult Open(int fd);
 
-  /** \brief Open a local file for writing, truncating any existing file
-   *  @param path [in] with UTF8 encoding
-   *  @param file [out] a FileOutputStream instance
-   * 
-   *  When opening a new file, any existing file with the indicated path is
-   *  truncated to 0 bytes, deleting any existing data */
-  public static native @ByVal Status Open(@StdString String path, @SharedPtr FileOutputStream file);
-  public static native @ByVal Status Open(@StdString BytePointer path, @SharedPtr FileOutputStream file);
-
-  /** \brief Open a local file for writing
-   *  @param path [in] with UTF8 encoding
-   *  @param append [in] append to existing file, otherwise truncate to 0 bytes
-   *  @param file [out] a FileOutputStream instance */
-  
-  ///
-  public static native @ByVal Status Open(@StdString String path, @Cast("bool") boolean append,
-                       @SharedPtr FileOutputStream file);
-  public static native @ByVal Status Open(@StdString BytePointer path, @Cast("bool") boolean append,
-                       @SharedPtr FileOutputStream file);
-
-  /** \brief Open a file descriptor for writing.  The underlying file isn't
-   *  truncated.
-   *  @param fd [in] file descriptor
-   *  @param out [out] a FileOutputStream instance
-   * 
-   *  The file descriptor becomes owned by the OutputStream, and will be closed
-   *  on Close() or destruction. */
-  public static native @ByVal Status Open(int fd, @SharedPtr FileOutputStream out);
+  public static native @Deprecated @ByVal Status Open(int fd, @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::OutputStream>*"}) OutputStream out);
+  public static native @Deprecated @ByVal Status Open(int fd, @SharedPtr @Cast({"", "std::shared_ptr<arrow::io::FileOutputStream>*"}) FileOutputStream out);
 
   // OutputStream interface
   public native @ByVal Status Close();
   public native @Cast("bool") boolean closed();
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
 
   // Write bytes to the stream. Thread-safe
   public native @ByVal Status Write(@Const Pointer data, @Cast("int64_t") long nbytes);

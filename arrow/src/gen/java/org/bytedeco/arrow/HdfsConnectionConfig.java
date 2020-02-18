@@ -9,16 +9,13 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Namespace("arrow::io") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+@Namespace("arrow::io") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class HdfsConnectionConfig extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public HdfsConnectionConfig() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public HdfsConnectionConfig(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HdfsConnectionConfig(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public HdfsConnectionConfig(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public HdfsConnectionConfig position(long position) {
         return (HdfsConnectionConfig)super.position(position);
@@ -30,4 +27,7 @@ public class HdfsConnectionConfig extends Pointer {
   public native @StdString String kerb_ticket(); public native HdfsConnectionConfig kerb_ticket(String setter);
   public native @ByRef StringStringMap extra_conf(); public native HdfsConnectionConfig extra_conf(StringStringMap setter);
   public native HdfsDriver driver(); public native HdfsConnectionConfig driver(HdfsDriver setter);
+
+  public HdfsConnectionConfig() { super((Pointer)null); allocate(); }
+  private native void allocate();
 }

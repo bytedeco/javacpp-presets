@@ -12,7 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 ///////////////////////////////////////////////////////////////////////
 // Helper tracking memory statistics
 
-@Namespace("arrow::internal") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+@Namespace("arrow::internal") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class MemoryPoolStats extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

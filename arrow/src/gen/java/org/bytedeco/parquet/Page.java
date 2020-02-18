@@ -10,7 +10,6 @@ import org.bytedeco.arrow.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 import static org.bytedeco.arrow.global.parquet.*;
-  // namespace arrow
 
 @Namespace("parquet") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.parquet.class)
 public class Page extends Pointer {

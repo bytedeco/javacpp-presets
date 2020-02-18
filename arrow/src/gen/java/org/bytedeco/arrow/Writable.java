@@ -31,7 +31,7 @@ public class Writable extends Pointer {
    * 
    *  Since the Buffer owns its memory, this method can avoid a copy if
    *  buffering is required.  See Write(const void*, int64_t) for details. */
-  public native @ByVal Status Write(@Const @SharedPtr @ByRef ArrowBuffer data);
+  public native @ByVal Status Write(@SharedPtr ArrowBuffer data);
 
   /** \brief Flush buffered bytes, if any */
   public native @ByVal Status Flush();

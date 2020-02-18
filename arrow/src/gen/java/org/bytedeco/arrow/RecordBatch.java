@@ -26,7 +26,7 @@ public class RecordBatch extends Pointer {
    *  should have the same length as num_rows
    *  @param columns [in] the record batch fields as vector of arrays */
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch Make(
-        @SharedPtr Schema schema, @Cast("int64_t") long num_rows,
+        @Const @SharedPtr @ByRef Schema schema, @Cast("int64_t") long num_rows,
         @Const @ByRef ArrayVector columns);
 
   /** \brief Move-based constructor for a vector of Array instances */
@@ -42,7 +42,7 @@ public class RecordBatch extends Pointer {
    *  should be equal to the length of each field
    *  @param columns the data for the batch's columns */
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch Make(
-        @SharedPtr Schema schema, @Cast("int64_t") long num_rows,
+        @Const @SharedPtr @ByRef Schema schema, @Cast("int64_t") long num_rows,
         @ByVal ArrayDataVector columns);
 
   /** \brief Construct record batch by copying vector of array data
@@ -60,7 +60,7 @@ public class RecordBatch extends Pointer {
 
   // \return the table's schema
   /** @return true if batches are equal */
-  public native @SharedPtr Schema schema();
+  public native @SharedPtr @ByVal Schema schema();
 
   /** \brief Retrieve an array from the record batch
    *  @param i [in] field index, does not boundscheck
@@ -138,9 +138,27 @@ public class RecordBatch extends Pointer {
    *  @param offset [in] the starting offset to slice
    *  @param length [in] the number of elements to slice from offset
    *  @return new record batch */
+  
+  ///
+  ///
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
 
-  /** \brief Check for schema or length inconsistencies
+  /** \brief Perform cheap validation checks to determine obvious inconsistencies
+   *  within the record batch's schema and internal data.
+   * 
+   *  This is O(k) where k is the total number of fields and array descendents.
+   * 
    *  @return Status */
+  
+  ///
+  ///
   public native @ByVal Status Validate();
+
+  /** \brief Perform extensive validation checks to determine inconsistencies
+   *  within the record batch's schema and internal data.
+   * 
+   *  This is potentially O(k*n) where n is the number of rows.
+   * 
+   *  @return Status */
+  public native @ByVal Status ValidateFull();
 }

@@ -34,7 +34,7 @@ public class FlightServerBase extends Pointer {
   /** \brief Initialize a Flight server listening at the given location.
    *  This method must be called before any other method.
    *  @param options [in] The configuration for this server. */
-  public native @ByVal Status Init(@ByRef FlightServerOptions options);
+  public native @ByVal Status Init(@Const @ByRef FlightServerOptions options);
 
   /** \brief Get the port that the Flight server is listening on.
    *  This method must only be called after Init().  Will return a

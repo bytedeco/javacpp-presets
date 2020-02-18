@@ -9,25 +9,10 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class FixedSizeListScalar extends Scalar {
+@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class FixedSizeListScalar extends BaseListScalar {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FixedSizeListScalar(Pointer p) { super(p); }
 
-  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value(); public native FixedSizeListScalar value(Array setter);
-
-  public FixedSizeListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
-                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, type, is_valid); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
-                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/);
-  public FixedSizeListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
-                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
-                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
-  public FixedSizeListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, is_valid); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value, @Cast("bool") boolean is_valid/*=true*/);
-  public FixedSizeListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value) { super((Pointer)null); allocate(value); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value);
 }

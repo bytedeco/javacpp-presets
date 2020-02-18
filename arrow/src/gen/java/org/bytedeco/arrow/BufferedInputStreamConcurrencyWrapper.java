@@ -28,13 +28,11 @@ public class BufferedInputStreamConcurrencyWrapper extends InputStream {
 
   public native @ByVal Status Abort();
 
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
 
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+  public native @ByVal LongResult Read(@Cast("int64_t") long nbytes, Pointer out);
 
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+  public native @ByVal BufferResult Read(@Cast("int64_t") long nbytes);
+
+  public native @ByVal StringViewResult Peek(@Cast("int64_t") long nbytes);
 }

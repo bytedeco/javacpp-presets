@@ -35,8 +35,11 @@ public class ColumnChunkMetaDataBuilder extends Pointer {
   public native void SetStatistics(@Const @ByRef EncodedStatistics stats);
   // get the column descriptor
   public native @Const ColumnDescriptor descr();
+
+  public native @Cast("int64_t") long total_compressed_size();
   // commit the metadata
-  public native void Finish(@Cast("int64_t") long num_values, @Cast("int64_t") long dictonary_page_offset,
+
+  public native void Finish(@Cast("int64_t") long num_values, @Cast("int64_t") long dictionary_page_offset,
                 @Cast("int64_t") long index_page_offset, @Cast("int64_t") long data_page_offset,
                 @Cast("int64_t") long compressed_size, @Cast("int64_t") long uncompressed_size, @Cast("bool") boolean has_dictionary,
                 @Cast("bool") boolean dictionary_fallback);
@@ -45,5 +48,5 @@ public class ColumnChunkMetaDataBuilder extends Pointer {
   public native @Const Pointer contents();
 
   // For writing metadata at end of column chunk
-  public native void WriteTo(org.bytedeco.arrow.OutputStream sink);
+  public native void WriteTo(OutputStream sink);
 }

@@ -15,12 +15,12 @@ public class FixedSizeBinaryScalar extends BinaryScalar {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FixedSizeBinaryScalar(Pointer p) { super(p); }
 
-  public FixedSizeBinaryScalar(@Const @SharedPtr @ByRef ArrowBuffer value,
-                          @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, type, is_valid); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value,
-                          @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/);
-  public FixedSizeBinaryScalar(@Const @SharedPtr @ByRef ArrowBuffer value,
+
+  public FixedSizeBinaryScalar(@SharedPtr ArrowBuffer value,
                           @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value,
+  private native void allocate(@SharedPtr ArrowBuffer value,
                           @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+
+  public FixedSizeBinaryScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 }

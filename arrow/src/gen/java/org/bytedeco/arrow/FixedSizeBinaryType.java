@@ -20,6 +20,8 @@ public class FixedSizeBinaryType extends FixedWidthType {
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();
+  @MemberGetter public static native @Cast("const bool") boolean is_utf8();
+  public static final boolean is_utf8 = is_utf8();
 
   public static native String type_name();
 

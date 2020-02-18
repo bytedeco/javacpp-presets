@@ -30,5 +30,5 @@ public class AndExpressionImpl extends BinaryExpression {
 
   @MemberGetter public static native ExpressionType.type expression_type();
 
-  public native @SharedPtr Expression Copy();
+  public native @SharedPtr @ByVal Expression Copy();
 }

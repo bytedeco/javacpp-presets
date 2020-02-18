@@ -88,9 +88,11 @@ public class Datum extends Pointer {
 
   public native @Cast("bool") boolean is_arraylike();
 
+  public native @Cast("bool") boolean is_scalar();
+
   
   ///
-  public native @Cast("bool") boolean is_scalar();
+  public native @Cast("bool") boolean is_collection();
 
   /** \brief The value type of the variant, if any
    * 

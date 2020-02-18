@@ -9,11 +9,13 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief EXPERIMENTAL: a FileSystem implementation that delegates to another
+/** \brief A FileSystem implementation that delegates to another
  *  implementation after prepending a fixed base path.
  * 
  *  This is useful to expose a logical view of a subtree of a filesystem,
  *  for example a directory in a LocalFileSystem.
+ *  This works on abstract paths, i.e. paths using forward slashes and
+ *  and a single root "/".  Windows paths are not guaranteed to work.
  *  This makes no security guarantee.  For example, symlinks may allow to
  *  "escape" the subtree and access other parts of the underlying filesystem. */
 @Namespace("arrow::fs") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
@@ -31,11 +33,13 @@ public class SubTreeFileSystem extends FileSystem {
   private native void allocate(@StdString BytePointer base_path,
                                @SharedPtr FileSystem base_fs);
 
+  public native @StdString String type_name();
+
   /** \cond FALSE */
   /** \endcond */
-  public native @ByVal Status GetTargetStats(@StdString String path, FileStats out);
-  public native @ByVal Status GetTargetStats(@StdString BytePointer path, FileStats out);
-  public native @ByVal Status GetTargetStats(@Const @ByRef Selector select, @StdVector FileStats out);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString String path);
+  public native @ByVal FileStatsResult GetTargetStats(@StdString BytePointer path);
+  public native @ByVal FileStatsVectorResult GetTargetStats(@Const @ByRef FileSelector select);
 
   public native @ByVal Status CreateDir(@StdString String path, @Cast("bool") boolean recursive/*=true*/);
   public native @ByVal Status CreateDir(@StdString String path);
@@ -56,23 +60,20 @@ public class SubTreeFileSystem extends FileSystem {
   public native @ByVal Status CopyFile(@StdString String src, @StdString String dest);
   public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer dest);
 
-  public native @ByVal Status OpenInputStream(@StdString String path,
-                           @SharedPtr InputStream out);
-  public native @ByVal Status OpenInputStream(@StdString BytePointer path,
-                           @SharedPtr InputStream out);
-
-  public native @ByVal Status OpenInputFile(@StdString String path,
-                         @SharedPtr RandomAccessFile out);
-  public native @ByVal Status OpenInputFile(@StdString BytePointer path,
-                         @SharedPtr RandomAccessFile out);
-
-  public native @ByVal Status OpenOutputStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenOutputStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
-
-  public native @ByVal Status OpenAppendStream(@StdString String path,
-                            @SharedPtr OutputStream out);
-  public native @ByVal Status OpenAppendStream(@StdString BytePointer path,
-                            @SharedPtr OutputStream out);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString String path);
+  public native @ByVal InputStreamResult OpenInputStream(
+        @StdString BytePointer path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString String path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenOutputStream(
+        @StdString BytePointer path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString String path);
+  public native @ByVal OutputStreamResult OpenAppendStream(
+        @StdString BytePointer path);
 }

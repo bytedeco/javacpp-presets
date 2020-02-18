@@ -29,9 +29,9 @@ public class ObjectBuffer extends Pointer {
     }
 
   /** The data buffer. */
-  public native @SharedPtr @ByRef ArrowBuffer data(); public native ObjectBuffer data(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer data(); public native ObjectBuffer data(ArrowBuffer setter);
   /** The metadata buffer. */
-  public native @SharedPtr @ByRef ArrowBuffer metadata(); public native ObjectBuffer metadata(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer metadata(); public native ObjectBuffer metadata(ArrowBuffer setter);
   /** The device number. */
   public native int device_num(); public native ObjectBuffer device_num(int setter);
 }

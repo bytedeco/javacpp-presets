@@ -30,7 +30,7 @@ public class FlightPayload extends Pointer {
         return (FlightPayload)super.position(position);
     }
 
-  public native @SharedPtr @ByRef ArrowBuffer descriptor(); public native FlightPayload descriptor(ArrowBuffer setter);
-  public native @SharedPtr @ByRef ArrowBuffer app_metadata(); public native FlightPayload app_metadata(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer descriptor(); public native FlightPayload descriptor(ArrowBuffer setter);
+  public native @SharedPtr ArrowBuffer app_metadata(); public native FlightPayload app_metadata(ArrowBuffer setter);
   public native @ByRef IpcPayload ipc_message(); public native FlightPayload ipc_message(IpcPayload setter);
 }

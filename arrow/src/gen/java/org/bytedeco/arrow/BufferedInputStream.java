@@ -24,15 +24,21 @@ public class BufferedInputStream extends BufferedInputStreamConcurrencyWrapper {
    *  @param buffer_size [in] the size of the temporary read buffer
    *  @param pool [in] a MemoryPool to use for allocations
    *  @param raw [in] a raw InputStream
-   *  @param out [out] the created BufferedInputStream
    *  @param raw_read_bound [in] a bound on the maximum number of bytes
    *  to read from the raw input stream. The default -1 indicates that
-   *  it is unbounded */
-  public static native @ByVal Status Create(@Cast("int64_t") long buffer_size, MemoryPool pool,
+   *  it is unbounded
+   *  @return the created BufferedInputStream */
+  public static native @ByVal BufferedInputStreamResult Create(
+        @Cast("int64_t") long buffer_size, MemoryPool pool, @SharedPtr InputStream raw,
+        @Cast("int64_t") long raw_read_bound/*=-1*/);
+  public static native @ByVal BufferedInputStreamResult Create(
+        @Cast("int64_t") long buffer_size, MemoryPool pool, @SharedPtr InputStream raw);
+
+  public static native @Deprecated @ByVal Status Create(@Cast("int64_t") long buffer_size, MemoryPool pool,
                          @SharedPtr InputStream raw,
                          @SharedPtr BufferedInputStream out,
                          @Cast("int64_t") long raw_read_bound/*=-1*/);
-  public static native @ByVal Status Create(@Cast("int64_t") long buffer_size, MemoryPool pool,
+  public static native @Deprecated @ByVal Status Create(@Cast("int64_t") long buffer_size, MemoryPool pool,
                          @SharedPtr InputStream raw,
                          @SharedPtr BufferedInputStream out);
 

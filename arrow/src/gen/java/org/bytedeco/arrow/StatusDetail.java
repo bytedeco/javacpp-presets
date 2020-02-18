@@ -23,4 +23,6 @@ public class StatusDetail extends Pointer {
   public native String type_id();
   /** \brief Produce a human-readable description of this status. */
   public native @StdString String ToString();
+
+  public native @Cast("bool") @Name("operator ==") @NoException boolean equals(@Const @ByRef StatusDetail other);
 }

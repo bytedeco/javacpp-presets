@@ -22,20 +22,21 @@ public class FileFormat extends Pointer {
     public FileFormat(Pointer p) { super(p); }
 
 
-  public native @StdString String name();
+  /** \brief The name identifying the kind of file format */
+  public native @StdString String type_name();
 
-  /** \brief Return true if the given file extension */
-  public native @Cast("bool") boolean IsKnownExtension(@StdString String ext);
-  public native @Cast("bool") boolean IsKnownExtension(@StdString BytePointer ext);
+  /** \brief Indicate if the FileSource is supported/readable by this format. */
+  public native @ByVal BoolResult IsSupported(@Const @ByRef FileSource source);
+
+  /** \brief Return the schema of the file if possible. */
+  public native @ByVal SchemaResult Inspect(@Const @ByRef FileSource source);
 
   /** \brief Open a file for scanning */
-  public native @ByVal Status ScanFile(@Const @ByRef FileSource source,
-                            @SharedPtr ScanOptions scan_options,
-                            @SharedPtr ScanContext scan_context,
-                            ScanTaskIterator out);
+  public native @ByVal ScanTaskIteratorResult ScanFile(
+        @Const @ByRef FileSource source, @SharedPtr ScanOptions options,
+        @SharedPtr ScanContext context);
 
   /** \brief Open a fragment */
-  public native @ByVal Status MakeFragment(@Const @ByRef FileSource location,
-                                @SharedPtr ScanOptions opts,
-                                @UniquePtr DataFragment out);
+  public native @ByVal FragmentResult MakeFragment(
+        @Const @ByRef FileSource location, @SharedPtr ScanOptions options);
 }

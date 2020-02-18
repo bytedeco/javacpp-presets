@@ -12,6 +12,12 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BinaryScalar extends BaseBinaryScalar {
     static { Loader.load(); }
+
+  
+    
+    
+      public BinaryScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BinaryScalar(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -21,10 +27,14 @@ public class BinaryScalar extends BaseBinaryScalar {
         return (BinaryScalar)super.position(position);
     }
 
-  public BinaryScalar(@Const @SharedPtr @ByRef ArrowBuffer value, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(value, is_valid); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value, @Cast("bool") boolean is_valid/*=true*/);
-  public BinaryScalar(@Const @SharedPtr @ByRef ArrowBuffer value) { super((Pointer)null); allocate(value); }
-  private native void allocate(@Const @SharedPtr @ByRef ArrowBuffer value);
+
+  public BinaryScalar(@SharedPtr ArrowBuffer value,
+                 @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
+  private native void allocate(@SharedPtr ArrowBuffer value,
+                 @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+
+  public BinaryScalar(@SharedPtr ArrowBuffer value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@SharedPtr ArrowBuffer value);
 
   public BinaryScalar() { super((Pointer)null); allocate(); }
   private native void allocate();

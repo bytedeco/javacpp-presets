@@ -30,20 +30,7 @@ public class ScalarExpression extends Expression {
 
   public native @Cast("bool") boolean Equals(@Const @ByRef Expression other);
 
-  public static native @SharedPtr ScalarExpression Make(@Cast("bool") boolean value);
-
-  public static native @SharedPtr ScalarExpression Make(@StdString String value);
-  public static native @SharedPtr ScalarExpression Make(@StdString BytePointer value);
-
-  public static native @SharedPtr ScalarExpression Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value);
-
-  public static native @SharedPtr ScalarExpression MakeNull(
-        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
   public native @ByVal DataTypeResult Validate(@Const @ByRef Schema schema);
 
-  public native @ByVal DatumResult Evaluate(FunctionContext ctx,
-                                    @Const @ByRef RecordBatch batch);
-
-  public native @SharedPtr Expression Copy();
+  public native @SharedPtr @ByVal Expression Copy();
 }

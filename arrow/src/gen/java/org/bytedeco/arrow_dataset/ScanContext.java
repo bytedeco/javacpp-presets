@@ -31,4 +31,5 @@ public class ScanContext extends Pointer {
     }
 
   public native MemoryPool pool(); public native ScanContext pool(MemoryPool setter);
+  public native ThreadPool thread_pool(); public native ScanContext thread_pool(ThreadPool setter);
 }

@@ -35,7 +35,7 @@ public class BaseListArray extends Array {
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values();
 
   /** Note that this buffer does not account for any slice offset */
-  public native @SharedPtr @ByVal ArrowBuffer value_offsets();
+  public native @SharedPtr ArrowBuffer value_offsets();
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type();
 

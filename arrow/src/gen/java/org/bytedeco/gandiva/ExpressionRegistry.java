@@ -13,7 +13,7 @@ import static org.bytedeco.arrow.global.gandiva.*;
 
 /** \brief Exports types supported by Gandiva for processing.
  * 
- *  Has helper methods for clients to programatically discover
+ *  Has helper methods for clients to programmatically discover
  *  data types and functions supported by Gandiva. */
 @Namespace("gandiva") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.gandiva.class)
 public class ExpressionRegistry extends Pointer {

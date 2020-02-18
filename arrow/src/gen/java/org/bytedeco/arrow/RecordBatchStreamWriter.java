@@ -28,7 +28,7 @@ public class RecordBatchStreamWriter extends RecordBatchWriter {
    *  @return Status */
   
   ///
-  public static native @ByVal Status Open(OutputStream sink, @SharedPtr Schema schema,
+  public static native @ByVal Status Open(OutputStream sink, @Const @SharedPtr @ByRef Schema schema,
                        @SharedPtr RecordBatchWriter out);
 
   /** Create a new writer from stream sink and schema. User is responsible for
@@ -38,11 +38,11 @@ public class RecordBatchStreamWriter extends RecordBatchWriter {
    *  @param schema [in] the schema of the record batches to be written
    *  @return Result<std::shared_ptr<RecordBatchWriter>> */
   public static native @ByVal RecordBatchWriterSharedResult Open(
-        OutputStream sink, @SharedPtr Schema schema);
+        OutputStream sink, @Const @SharedPtr @ByRef Schema schema);
   
   ///
   public static native @ByVal RecordBatchWriterSharedResult Open(
-        OutputStream sink, @SharedPtr Schema schema,
+        OutputStream sink, @Const @SharedPtr @ByRef Schema schema,
         @Const @ByRef IpcOptions options);
 
   /** \brief Write a record batch to the stream

@@ -47,6 +47,9 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // Targeting ../ChunkedArrayVector.java
 
 
+// Targeting ../SchemaVector.java
+
+
 // Targeting ../TableVector.java
 
 
@@ -54,6 +57,12 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 
 
 // Targeting ../DatumVector.java
+
+
+// Targeting ../FileStatsVector.java
+
+
+// Targeting ../Decimal128Pair.java
 
 
 // Targeting ../StringStringMap.java
@@ -131,11 +140,13 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // under the License.
 
 public static final int ARROW_VERSION_MAJOR = 0;
-public static final int ARROW_VERSION_MINOR = 15;
-public static final int ARROW_VERSION_PATCH = 1;
+public static final int ARROW_VERSION_MINOR = 16;
+public static final int ARROW_VERSION_PATCH = 0;
 public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VERSION_MINOR) * 1000 + ARROW_VERSION_PATCH;
 
-/* #undef DOUBLE_CONVERSION_HAS_CASE_INSENSIBILITY */
+public static final String ARROW_SO_VERSION = "16";
+public static final String ARROW_FULL_SO_VERSION = "16.0.0";
+
 // #define GRPCPP_PP_INCLUDE
 
 
@@ -204,7 +215,13 @@ public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VE
 //   void operator=(const TypeName&) = delete
 // #endif
 
-// #define ARROW_UNUSED(x) (void)x
+// #ifndef ARROW_DEFAULT_MOVE_AND_ASSIGN
+// #define ARROW_DEFAULT_MOVE_AND_ASSIGN(TypeName)
+//   TypeName(TypeName&&) = default;
+//   TypeName& operator=(TypeName&&) = default
+// #endif
+
+// #define ARROW_UNUSED(x) (void)(x)
 // #define ARROW_ARG_UNUSED(x)
 //
 // GCC can be told that a certain branch is not likely to be taken (for
@@ -362,9 +379,8 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 // #define ARROW_UTIL_TYPE_TRAITS_H
 
 // #include <type_traits>
-// Targeting ../IsOneOf.java
 
-  /** Base case: nothing has matched */
+/** \brief Metafunction to allow checking if a type matches any of another set of types */  /** Base case: nothing has matched */
 
 /** \brief Shorthand for using IsOneOf + std::enable_if */
 
@@ -454,6 +470,8 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 // #include <memory>
 // #include <string>
 
+// #include "arrow/status.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../Compression.java
 
@@ -498,6 +516,7 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 // #pragma once
 
 // #include <tuple>
+// #include <type_traits>
 
 // #include "arrow/util/macros.h"
 // Targeting ../call_traits.java
@@ -529,32 +548,59 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 
 // #pragma once
 
+// #include <cassert>
+// #include <functional>
 // #include <memory>
+// #include <tuple>
 // #include <type_traits>
 // #include <utility>
 // #include <vector>
 
+// #include "arrow/result.h"
 // #include "arrow/status.h"
+// #include "arrow/util/compare.h"
 // #include "arrow/util/functional.h"
 // #include "arrow/util/macros.h"
+// #include "arrow/util/optional.h"
 // #include "arrow/util/visibility.h"
+// Targeting ../BufferIterator.java
 
-/** \brief A generic Iterator that can return errors */
 
-/** \brief Construct an Iterator which dereferences a (possibly smart) pointer
- *  to invoke its Next function */
+// Targeting ../RecordBatchIterator.java
+
+
 
 /** \brief Construct an Iterator which invokes a callable on Next() */
 
 /** \brief Simple iterator which yields the elements of a std::vector */
 
+/** \brief Simple iterator which yields the elements of a std::vector<T> as optional<T>.
+ *  This is provided to support T where IterationTraits<T>::End is not specialized */
+
 /** \brief MapIterator takes ownership of an iterator and a function to apply
  *  on every element. The mapped function is not allowed to fail. */
 
-/** \brief Like MapIterator, but where the function can fail. */
+/** \brief MapIterator takes ownership of an iterator and a function to apply
+ *  on every element. The mapped function is not allowed to fail. */
+// Targeting ../FilterIterator.java
+
+
+
+/** \brief Like MapIterator, but where the function can fail or reject elements. */
 
 /** \brief FlattenIterator takes an iterator generating iterators and yields a
  *  unified iterator that flattens/concatenates in a single stream. */
+// Targeting ../ReadaheadPromise.java
+
+
+// Targeting ../ReadaheadQueue.java
+
+
+
+  // namespace detail
+
+/** \brief Readahead iterator that iterates on the underlying iterator in a
+ *  separate thread, getting up to N values in advance. */
 
   // namespace arrow
 
@@ -647,14 +693,14 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// #ifndef ARROW_UTIL_BIT_UTIL_H
-// #define ARROW_UTIL_BIT_UTIL_H
+
+// #pragma once
 
 // #ifdef _WIN32
 public static native @MemberGetter int ARROW_LITTLE_ENDIAN();
 public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #else
-// #ifdef __APPLE__
+// #if defined(__APPLE__) || defined(__FreeBSD__)
 // #include <machine/endian.h>
 // #else
 // #include <endian.h>
@@ -684,15 +730,27 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #define ARROW_BYTE_SWAP32 __builtin_bswap32
 // #endif
 
+// #include <algorithm>
+// #include <array>
+// #include <bitset>
+// #include <cassert>
 // #include <cmath>
 // #include <cstdint>
 // #include <cstring>
 // #include <limits>
 // #include <memory>
+// #include <string>
 // #include <type_traits>
+// #include <utility>
 // #include <vector>
 
+// #include "arrow/buffer.h"
+// #include "arrow/result.h"
+// #include "arrow/util/compare.h"
+// #include "arrow/util/functional.h"
 // #include "arrow/util/macros.h"
+// #include "arrow/util/string_builder.h"
+// #include "arrow/util/string_view.h"
 // #include "arrow/util/type_traits.h"
 // #include "arrow/util/visibility.h"
 
@@ -777,7 +835,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // Byte-swap 16-bit, 32-bit and 64-bit values
 //
 
-// Swap the byte order (i.e. endianess)
+// Swap the byte order (i.e. endianness)
 @Namespace("arrow::BitUtil") public static native @Cast("int64_t") long ByteSwap(@Cast("int64_t") long value);
 @Namespace("arrow::BitUtil") public static native int ByteSwap(int value);
 @Namespace("arrow::BitUtil") public static native short ByteSwap(short value);
@@ -846,9 +904,15 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
                              @Cast("bool") boolean bits_are_set);
 
 /** \brief Convert vector of bytes to bitmap buffer */
-@Namespace("arrow::BitUtil") public static native @ByVal Status BytesToBits(@Cast("uint8_t*") @StdVector BytePointer arg0, MemoryPool arg1, @SharedPtr ArrowBuffer arg2);
-@Namespace("arrow::BitUtil") public static native @ByVal Status BytesToBits(@Cast("uint8_t*") @StdVector ByteBuffer arg0, MemoryPool arg1, @SharedPtr ArrowBuffer arg2);
-@Namespace("arrow::BitUtil") public static native @ByVal Status BytesToBits(@Cast("uint8_t*") @StdVector byte[] arg0, MemoryPool arg1, @SharedPtr ArrowBuffer arg2);
+@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector BytePointer arg0,
+                                            MemoryPool pool/*=default_memory_pool()*/);
+@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector BytePointer arg0);
+@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector ByteBuffer arg0,
+                                            MemoryPool pool/*=default_memory_pool()*/);
+@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector ByteBuffer arg0);
+@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector byte[] arg0,
+                                            MemoryPool pool/*=default_memory_pool()*/);
+@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector byte[] arg0);
 
 
 // Targeting ../BitmapReader.java
@@ -882,17 +946,16 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  *  @param bitmap [in] source data
  *  @param offset [in] bit offset into the source data
  *  @param length [in] number of bits to copy
- *  @param out [out] the resulting copy
  * 
  *  @return Status message */
 
 ///
-@Namespace("arrow::internal") public static native @ByVal Status CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") BytePointer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length,
-                  @SharedPtr ArrowBuffer out);
-@Namespace("arrow::internal") public static native @ByVal Status CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length,
-                  @SharedPtr ArrowBuffer out);
-@Namespace("arrow::internal") public static native @ByVal Status CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") byte[] bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length,
-                  @SharedPtr ArrowBuffer out);
+@Namespace("arrow::internal") public static native @ByVal BufferResult CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") BytePointer bitmap,
+                                           @Cast("int64_t") long offset, @Cast("int64_t") long length);
+@Namespace("arrow::internal") public static native @ByVal BufferResult CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer bitmap,
+                                           @Cast("int64_t") long offset, @Cast("int64_t") long length);
+@Namespace("arrow::internal") public static native @ByVal BufferResult CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") byte[] bitmap,
+                                           @Cast("int64_t") long offset, @Cast("int64_t") long length);
 
 /** Copy a bit range of an existing bitmap into an existing bitmap
  * 
@@ -927,14 +990,6 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  *  @param dest [out] the destination buffer, must have at least space for
  *  (offset + length) bits */
 
-///
-///
-@Namespace("arrow::internal") public static native void InvertBitmap(@Cast("const uint8_t*") BytePointer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") BytePointer dest,
-                  @Cast("int64_t") long dest_offset);
-@Namespace("arrow::internal") public static native void InvertBitmap(@Cast("const uint8_t*") ByteBuffer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") ByteBuffer dest,
-                  @Cast("int64_t") long dest_offset);
-@Namespace("arrow::internal") public static native void InvertBitmap(@Cast("const uint8_t*") byte[] bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") byte[] dest,
-                  @Cast("int64_t") long dest_offset);
 
 /** Invert a bit range of an existing bitmap
  * 
@@ -942,18 +997,9 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  *  @param bitmap [in] source data
  *  @param offset [in] bit offset into the source data
  *  @param length [in] number of bits to copy
- *  @param out [out] the resulting copy
  * 
  *  @return Status message */
 
-///
-///
-@Namespace("arrow::internal") public static native @ByVal Status InvertBitmap(MemoryPool pool, @Cast("const uint8_t*") BytePointer bitmap, @Cast("int64_t") long offset,
-                    @Cast("int64_t") long length, @SharedPtr ArrowBuffer out);
-@Namespace("arrow::internal") public static native @ByVal Status InvertBitmap(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer bitmap, @Cast("int64_t") long offset,
-                    @Cast("int64_t") long length, @SharedPtr ArrowBuffer out);
-@Namespace("arrow::internal") public static native @ByVal Status InvertBitmap(MemoryPool pool, @Cast("const uint8_t*") byte[] bitmap, @Cast("int64_t") long offset,
-                    @Cast("int64_t") long length, @SharedPtr ArrowBuffer out);
 
 /** Compute the number of 1's in the given data array
  * 
@@ -982,15 +1028,18 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  * 
  *  out_buffer will be allocated and initialized to zeros using pool before
  *  the operation. */
-@Namespace("arrow::internal") public static native @ByVal Status BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") BytePointer left, @Cast("int64_t") long left_offset,
-                 @Cast("const uint8_t*") BytePointer right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                 @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
-@Namespace("arrow::internal") public static native @ByVal Status BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left, @Cast("int64_t") long left_offset,
-                 @Cast("const uint8_t*") ByteBuffer right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                 @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
-@Namespace("arrow::internal") public static native @ByVal Status BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") byte[] left, @Cast("int64_t") long left_offset,
-                 @Cast("const uint8_t*") byte[] right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                 @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") BytePointer left,
+                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
+                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                          @Cast("int64_t") long out_offset);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left,
+                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
+                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                          @Cast("int64_t") long out_offset);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") byte[] left,
+                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
+                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                          @Cast("int64_t") long out_offset);
 
 /** \brief Do a "bitmap and" on right and left buffers starting at
  *  their respective bit-offsets for the given bit-length and put
@@ -1010,15 +1059,18 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  * 
  *  out_buffer will be allocated and initialized to zeros using pool before
  *  the operation. */
-@Namespace("arrow::internal") public static native @ByVal Status BitmapOr(MemoryPool pool, @Cast("const uint8_t*") BytePointer left, @Cast("int64_t") long left_offset,
-                @Cast("const uint8_t*") BytePointer right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
-@Namespace("arrow::internal") public static native @ByVal Status BitmapOr(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left, @Cast("int64_t") long left_offset,
-                @Cast("const uint8_t*") ByteBuffer right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
-@Namespace("arrow::internal") public static native @ByVal Status BitmapOr(MemoryPool pool, @Cast("const uint8_t*") byte[] left, @Cast("int64_t") long left_offset,
-                @Cast("const uint8_t*") byte[] right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapOr(MemoryPool pool, @Cast("const uint8_t*") BytePointer left,
+                                         @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
+                                         @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                         @Cast("int64_t") long out_offset);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapOr(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left,
+                                         @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
+                                         @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                         @Cast("int64_t") long out_offset);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapOr(MemoryPool pool, @Cast("const uint8_t*") byte[] left,
+                                         @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
+                                         @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                         @Cast("int64_t") long out_offset);
 
 /** \brief Do a "bitmap or" for the given bit length on right and left buffers
  *  starting at their respective bit-offsets and put the results in out
@@ -1038,15 +1090,18 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  * 
  *  out_buffer will be allocated and initialized to zeros using pool before
  *  the operation. */
-@Namespace("arrow::internal") public static native @ByVal Status BitmapXor(MemoryPool pool, @Cast("const uint8_t*") BytePointer left, @Cast("int64_t") long left_offset,
-                 @Cast("const uint8_t*") BytePointer right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                 @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
-@Namespace("arrow::internal") public static native @ByVal Status BitmapXor(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left, @Cast("int64_t") long left_offset,
-                 @Cast("const uint8_t*") ByteBuffer right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                 @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
-@Namespace("arrow::internal") public static native @ByVal Status BitmapXor(MemoryPool pool, @Cast("const uint8_t*") byte[] left, @Cast("int64_t") long left_offset,
-                 @Cast("const uint8_t*") byte[] right, @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                 @Cast("int64_t") long out_offset, @SharedPtr ArrowBuffer out_buffer);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapXor(MemoryPool pool, @Cast("const uint8_t*") BytePointer left,
+                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
+                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                          @Cast("int64_t") long out_offset);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapXor(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left,
+                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
+                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                          @Cast("int64_t") long out_offset);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapXor(MemoryPool pool, @Cast("const uint8_t*") byte[] left,
+                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
+                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
+                                          @Cast("int64_t") long out_offset);
 
 /** \brief Do a "bitmap xor" for the given bit-length on right and left
  *  buffers starting at their respective bit-offsets and put the results in
@@ -1060,18 +1115,16 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 /** \brief Generate Bitmap with all position to {@code value} except for one found
  *  at {@code straggler_pos}. */
-@Namespace("arrow::internal") public static native @ByVal Status BitmapAllButOne(MemoryPool pool, @Cast("int64_t") long length, @Cast("int64_t") long straggler_pos,
-                       @SharedPtr ArrowBuffer output, @Cast("bool") boolean value/*=true*/);
-@Namespace("arrow::internal") public static native @ByVal Status BitmapAllButOne(MemoryPool pool, @Cast("int64_t") long length, @Cast("int64_t") long straggler_pos,
-                       @SharedPtr ArrowBuffer output);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAllButOne(MemoryPool pool, @Cast("int64_t") long length,
+                                                @Cast("int64_t") long straggler_pos, @Cast("bool") boolean value/*=true*/);
+@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAllButOne(MemoryPool pool, @Cast("int64_t") long length,
+                                                @Cast("int64_t") long straggler_pos);
 // Targeting ../BitsetStack.java
 
 
 
   // namespace internal
   // namespace arrow
-
-// #endif  // ARROW_UTIL_BIT_UTIL_H
 
 
 // Parsed from arrow/util/ubsan.h
@@ -1099,6 +1152,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 // #include <cstring>
 // #include <memory>
+// #include <type_traits>
 
 // #include "arrow/util/macros.h"
 
@@ -1109,11 +1163,12 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 /** \brief Returns maybe_null if not null or a non-null pointer to an arbitrary memory
  *  that shouldn't be dereferenced.
  * 
- *  Memset/Memcpy are undefinfed when a nullptr is passed as an argument use this utility
+ *  Memset/Memcpy are undefined when a nullptr is passed as an argument use this utility
  *  method to wrap locations where this could happen.
  * 
  *  Note: Flatbuffers has UBSan warnings if a zero length vector is passed.
- *  https://github.com/google/flatbuffers/pull/5355 is trying to resolve them. */
+ *  https://github.com/google/flatbuffers/pull/5355 is trying to resolve
+ *  them. */
 
   // namespace util
   // namespace arrow
@@ -1207,6 +1262,8 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
   // namespace detail
 
+/** CRTP helper for declaring string representation. Defines operator<< */
+
   // namespace util
   // namespace arrow
 
@@ -1229,8 +1286,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 // Adapted from Apache Kudu, TensorFlow
 
-// #ifndef ARROW_STATUS_H_
-// #define ARROW_STATUS_H_
+// #pragma once
 
 // #include <cstring>
 // #include <iosfwd>
@@ -1238,6 +1294,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #include <string>
 // #include <utility>
 
+// #include "arrow/util/compare.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/string_builder.h"
 // #include "arrow/util/visibility.h"
@@ -1261,13 +1318,13 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 /** \brief Propagate any non-successful Status to the caller */
 // #define ARROW_RETURN_NOT_OK(status)
 //   do {
-//     ::arrow::Status __s = (status);
+//     ::arrow::Status __s = ::arrow::internal::GenericToStatus(status);
 //     ARROW_RETURN_IF_(!__s.ok(), __s, ARROW_STRINGIFY(status));
 //   } while (false)
 
 // #define RETURN_NOT_OK_ELSE(s, else_)
 //   do {
-//     ::arrow::Status _s = (s);
+//     ::arrow::Status _s = ::arrow::internal::GenericToStatus(s);
 //     if (!_s.ok()) {
 //       else_;
 //       return _s;
@@ -1315,7 +1372,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 
 
-@Namespace("arrow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef Status x);
+
 
 
 
@@ -1339,9 +1396,13 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 /** \endcond */
 
-  // namespace arrow
+// Extract Status from Status or Result<T>
+// Useful for the status check macros such as RETURN_NOT_OK.
+@Namespace("arrow::internal") public static native @ByVal Status GenericToStatus(@Const @ByRef Status st);
 
-// #endif  // ARROW_STATUS_H_
+  // namespace internal
+
+  // namespace arrow
 
 
 // Parsed from arrow/memory_pool.h
@@ -1372,6 +1433,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #include <string>
 
 // #include "arrow/status.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../MemoryPoolStats.java
 
@@ -1387,9 +1449,6 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // Targeting ../ProxyMemoryPool.java
 
 
-
-/** Return the process-wide default memory pool. */
-@Namespace("arrow") public static native MemoryPool default_memory_pool();
 
 /** Return a process-wide memory pool based on the system allocator. */
 
@@ -1419,10 +1478,6 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  *  May return NotImplemented if mimalloc is not available. */
 @Namespace("arrow") public static native @ByVal Status mimalloc_memory_pool(@Cast("arrow::MemoryPool**") PointerPointer out);
 @Namespace("arrow") public static native @ByVal Status mimalloc_memory_pool(@ByPtrPtr MemoryPool out);
-
-// #ifndef ARROW_MEMORY_POOL_DEFAULT
-// #define ARROW_MEMORY_POOL_DEFAULT = default_memory_pool()
-// #endif
 
   // namespace arrow
 
@@ -1458,8 +1513,8 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #include <type_traits>
 // #include <vector>
 
-// #include "arrow/memory_pool.h"
 // #include "arrow/status.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/string_view.h"
 // #include "arrow/util/visibility.h"
@@ -1480,7 +1535,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  *  This function cannot fail and does not check for errors (except in debug builds) */
 
 ///
-@Namespace("arrow") public static native @SharedPtr @ByVal ArrowBuffer SliceBuffer(@Const @SharedPtr @ByRef ArrowBuffer buffer,
+@Namespace("arrow") public static native @SharedPtr ArrowBuffer SliceBuffer(@SharedPtr ArrowBuffer buffer,
                                                   @Cast("const int64_t") long offset,
                                                   @Cast("const int64_t") long length);
 
@@ -1489,7 +1544,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  *  This function cannot fail and does not check for errors (except in debug builds) */
 
 ///
-@Namespace("arrow") public static native @SharedPtr @ByVal ArrowBuffer SliceBuffer(@Const @SharedPtr @ByRef ArrowBuffer buffer,
+@Namespace("arrow") public static native @SharedPtr ArrowBuffer SliceBuffer(@SharedPtr ArrowBuffer buffer,
                                                   @Cast("const int64_t") long offset);
 
 /** \brief Like SliceBuffer, but construct a mutable buffer slice.
@@ -1498,15 +1553,15 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  *  in debug builds). */
 
 ///
-@Namespace("arrow") public static native @SharedPtr @ByVal ArrowBuffer SliceMutableBuffer(@Const @SharedPtr @ByRef ArrowBuffer buffer,
+@Namespace("arrow") public static native @SharedPtr ArrowBuffer SliceMutableBuffer(@SharedPtr ArrowBuffer buffer,
                                            @Cast("const int64_t") long offset, @Cast("const int64_t") long length);
 
 /** \brief Like SliceBuffer, but construct a mutable buffer slice.
  * 
  *  If the parent buffer is not mutable, behavior is undefined (it may abort
  *  in debug builds). */
-@Namespace("arrow") public static native @SharedPtr @ByVal ArrowBuffer SliceMutableBuffer(
-    @Const @SharedPtr @ByRef ArrowBuffer buffer, @Cast("const int64_t") long offset);
+@Namespace("arrow") public static native @SharedPtr ArrowBuffer SliceMutableBuffer(
+    @SharedPtr ArrowBuffer buffer, @Cast("const int64_t") long offset);
 // Targeting ../MutableBuffer.java
 
 
@@ -1528,7 +1583,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 ///
 ///
-@Namespace("arrow") public static native @ByVal Status AllocateBuffer(MemoryPool pool, @Cast("const int64_t") long size, @SharedPtr ArrowBuffer out);
+@Namespace("arrow") public static native @ByVal Status AllocateBuffer(MemoryPool pool, @Cast("const int64_t") long size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Allocate a fixed size mutable buffer from a memory pool, zero its padding.
  * 
@@ -1547,7 +1602,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 ///
 ///
-@Namespace("arrow") public static native @ByVal Status AllocateBuffer(@Cast("const int64_t") long size, @SharedPtr ArrowBuffer out);
+@Namespace("arrow") public static native @ByVal Status AllocateBuffer(@Cast("const int64_t") long size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Allocate a fixed-size mutable buffer from the default memory pool
  * 
@@ -1606,7 +1661,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 ///
 ///
-@Namespace("arrow") public static native @ByVal Status AllocateBitmap(MemoryPool pool, @Cast("int64_t") long length, @SharedPtr ArrowBuffer out);
+@Namespace("arrow") public static native @ByVal Status AllocateBitmap(MemoryPool pool, @Cast("int64_t") long length, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Allocate a zero-initialized bitmap buffer from a memory pool
  * 
@@ -1619,7 +1674,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 ///
 ///
 @Namespace("arrow") public static native @ByVal Status AllocateEmptyBitmap(MemoryPool pool, @Cast("int64_t") long length,
-                           @SharedPtr ArrowBuffer out);
+                           @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Allocate a zero-initialized bitmap buffer from the default memory pool
  * 
@@ -1630,7 +1685,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 
 ///
 ///
-@Namespace("arrow") public static native @ByVal Status AllocateEmptyBitmap(@Cast("int64_t") long length, @SharedPtr ArrowBuffer out);
+@Namespace("arrow") public static native @ByVal Status AllocateEmptyBitmap(@Cast("int64_t") long length, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Concatenate multiple buffers into a single buffer
  * 
@@ -1640,7 +1695,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  * 
  *  @return Status */
 @Namespace("arrow") public static native @ByVal Status ConcatenateBuffers(@Cast("const arrow::BufferVector*") @ByRef ArrowBufferVector buffers, MemoryPool pool,
-                          @SharedPtr ArrowBuffer out);
+                          @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \} */
 
@@ -1805,6 +1860,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <utility>
 
 // #include "arrow/status.h"
+// #include "arrow/util/compare.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/variant.h"
 
@@ -1812,7 +1868,34 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow::internal") public static native void DieWithMessage(@StdString BytePointer msg);
 
 
+// Targeting ../BoolResult.java
+
+
+// Targeting ../LongResult.java
+
+
+// Targeting ../SizeTResult.java
+
+
+// Targeting ../Decimal128Result.java
+
+
+// Targeting ../Decimal128PairResult.java
+
+
+// Targeting ../StringViewResult.java
+
+
+// Targeting ../ArrayResult.java
+
+
+// Targeting ../BufferResult.java
+
+
 // Targeting ../DataTypeResult.java
+
+
+// Targeting ../FieldResult.java
 
 
 // Targeting ../ListArrayResult.java
@@ -1824,7 +1907,94 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../StructArrayResult.java
 
 
+// Targeting ../RecordBatchResult.java
+
+
+// Targeting ../ScalarResult.java
+
+
+// Targeting ../SchemaResult.java
+
+
+// Targeting ../SparseTensorResult.java
+
+
+// Targeting ../TableResult.java
+
+
+// Targeting ../TensorResult.java
+
+
+// Targeting ../InputStreamResult.java
+
+
+// Targeting ../OutputStreamResult.java
+
+
+// Targeting ../MemoryMappedFileResult.java
+
+
+// Targeting ../ReadableFileResult.java
+
+
+// Targeting ../RandomAccessFileResult.java
+
+
+// Targeting ../FileOutputStreamResult.java
+
+
+// Targeting ../BufferOutputStreamResult.java
+
+
+// Targeting ../BufferedInputStreamResult.java
+
+
+// Targeting ../BufferedOutputStreamResult.java
+
+
+// Targeting ../CompressedInputStreamResult.java
+
+
+// Targeting ../CompressedOutputStreamResult.java
+
+
+// Targeting ../TableReaderResult.java
+
+
 // Targeting ../DatumResult.java
+
+
+// Targeting ../FileStatsResult.java
+
+
+// Targeting ../PathForestResult.java
+
+
+// Targeting ../FileStatsVectorResult.java
+
+
+// Targeting ../SchemaVectorResult.java
+
+
+// Targeting ../FileSystemResult.java
+
+
+// Targeting ../CompressorResult.java
+
+
+// Targeting ../DecompressorResult.java
+
+
+// Targeting ../CompressResultResult.java
+
+
+// Targeting ../EndResultResult.java
+
+
+// Targeting ../FlushResultResult.java
+
+
+// Targeting ../DecompressResultResult.java
 
 
 // Targeting ../RecordBatchWriterSharedResult.java
@@ -1833,26 +2003,46 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../RecordBatchWriterUniqueResult.java
 
 
+// Targeting ../CodecResult.java
 
-// #define ARROW_ASSIGN_OR_RAISE_IMPL(status_name, lhs, rexpr)
-//   auto status_name = (rexpr);
-//   ARROW_RETURN_NOT_OK(status_name.status());
-//   lhs = std::move(status_name).ValueOrDie();
 
+// Targeting ../BufferIteratorResult.java
+
+
+// Targeting ../RecordBatchIteratorResult.java
+
+
+
+// #define ARROW_ASSIGN_OR_RAISE_IMPL(result_name, lhs, rexpr)
+//   auto result_name = (rexpr);
+//   ARROW_RETURN_NOT_OK((result_name).status());
+//   lhs = std::move(result_name).ValueOrDie();
+
+
+///
+///
+///
 // #define ARROW_ASSIGN_OR_RAISE_NAME(x, y) ARROW_CONCAT(x, y)
 
-// Executes an expression that returns a Result, extracting its value
-// into the variable defined by lhs (or returning on error).
-//
-// Example: Assigning to an existing value
-//   ValueType value;
-//   ARROW_ASSIGN_OR_RAISE(value, MaybeGetValue(arg));
-//
-// WARNING: ASSIGN_OR_RAISE expands into multiple statements; it cannot be used
-//  in a single statement (e.g. as the body of an if statement without {})!
+/** \brief Execute an expression that returns a Result, extracting its value
+ *  into the variable defined by {@code lhs} (or returning a Status on error).
+ * 
+ *  Example: Assigning to a new value:
+ *    ARROW_ASSIGN_OR_RAISE(auto value, MaybeGetValue(arg));
+ * 
+ *  Example: Assigning to an existing value:
+ *    ValueType value;
+ *    ARROW_ASSIGN_OR_RAISE(value, MaybeGetValue(arg));
+ * 
+ *  WARNING: ARROW_ASSIGN_OR_RAISE expands into multiple statements;
+ *  it cannot be used in a single statement (e.g. as the body of an if
+ *  statement without {})! */
 // #define ARROW_ASSIGN_OR_RAISE(lhs, rexpr)
 //   ARROW_ASSIGN_OR_RAISE_IMPL(ARROW_ASSIGN_OR_RAISE_NAME(_error_or_value, __COUNTER__),
 //                              lhs, rexpr);
+
+  // namespace internal
+
   // namespace arrow
 
 
@@ -1881,10 +2071,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <memory>
 
 // #include "arrow/util/visibility.h"
-// Targeting ../DictionaryScalar.java
-
-
-// Targeting ../UnionScalar.java
+// Targeting ../BooleanType.java
 
 
 
@@ -1892,7 +2079,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 //   class KLASS##Type;
 //   using KLASS##Array = NumericArray<KLASS##Type>;
 //   using KLASS##Builder = NumericBuilder<KLASS##Type>;
-//   using KLASS##Scalar = NumericScalar<KLASS##Type>;
+//   struct KLASS##Scalar;
 //   using KLASS##Tensor = NumericTensor<KLASS##Type>;
 // Targeting ../Int8Type.java
 
@@ -1929,9 +2116,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // #undef _NUMERIC_TYPE_DECL
-// Targeting ../ExtensionScalar.java
-
-
 
 // ----------------------------------------------------------------------
 // (parameter-free) Factory functions
@@ -1981,7 +2165,14 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 /** \brief Return a Date64Type instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType date64();
 
-/** \} */
+/** \}
+ <p>
+ *  Return the process-wide default memory pool. */
+@Namespace("arrow") public static native MemoryPool default_memory_pool();
+
+// #ifndef ARROW_MEMORY_POOL_DEFAULT
+// #define ARROW_MEMORY_POOL_DEFAULT = default_memory_pool()
+// #endif
 
   // namespace arrow
 
@@ -2057,33 +2248,40 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Useful type predicates
 //
 
-// The partial specialization will match if T has the ATTR_NAME member
-// #define GET_ATTR(ATTR_NAME, DEFAULT)
-//   template <typename T, typename Enable = void>
-//   struct GetAttr_##ATTR_NAME {
-//     using type = DEFAULT;
-//   };
-// 
-//   template <typename T>
-//   struct GetAttr_##ATTR_NAME<T, void_t<typename T::ATTR_NAME>> {
-//     using type = typename T::ATTR_NAME;
-//   };
+// only in C++14
 
-// #undef GET_ATTR
+// Note this will also include HalfFloatType which is represented by a
+// non-floating point primitive (uint16_t).
 
-  // namespace internal
+// Half floats are special in that they behave physically like an unsigned
+// integer.
 
-// #define PRIMITIVE_TRAITS(T)
-//   using TypeClass =
-//       typename std::conditional<std::is_base_of<DataType, T>::value, T,
-//                                 typename internal::GetAttr_TypeClass<T>::type>::type;
-//   using c_type = typename internal::GetAttr_c_type<TypeClass>::type
+// Binary Types
+
+// Base binary refers to Binary/LargeBinary/String/LargeString
+
+// Any binary excludes string from Base binary
+
+// Note that this also includes DecimalType
+
+// Nested Types
+
+// TemporalTypes
+
+// Attribute differentiation
+
+// Physical representation quirks
+
+// Like is_floating_type but excluding half-floats which don't have a
+// float-like c type.
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_integer(@Cast("arrow::Type::type") int type_id);
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_floating(@Cast("arrow::Type::type") int type_id);
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_primitive(@Cast("arrow::Type::type") int type_id);
+
+@Namespace("arrow") public static native @Cast("bool") boolean is_base_binary_like(@Cast("arrow::Type::type") int type_id);
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_binary_like(@Cast("arrow::Type::type") int type_id);
 
@@ -2194,7 +2392,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <limits>
 // #include <string>
 // #include <type_traits>
+// #include <utility>
 
+// #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/util/basic_decimal.h"
 // #include "arrow/util/string_view.h"
@@ -2202,6 +2402,38 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 
+  // namespace arrow
+
+
+// Parsed from arrow/util/sort.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <algorithm>
+// #include <cstdint>
+// #include <functional>
+// #include <numeric>
+// #include <utility>
+// #include <vector>
+
+  // namespace internal
   // namespace arrow
 
 
@@ -2235,8 +2467,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <string>
 // #include <vector>
 
-// #include "arrow/result.h"
-// #include "arrow/status.h"
 // #include "arrow/type_fwd.h"  // IWYU pragma: export
 // #include "arrow/util/checked_cast.h"
 // #include "arrow/util/macros.h"
@@ -2279,9 +2509,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../NestedType.java
 
 
-// Targeting ../NoExtraMeta.java
-
-
 // Targeting ../Field.java
 
 
@@ -2290,9 +2517,8 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../NullType.java
 
 
-// Targeting ../BooleanType.java
 
-
+/** Concrete type class for boolean data */
 
 /** Concrete type class for unsigned 8-bit integer data */
 
@@ -2466,15 +2692,15 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 /** \brief Create a FixedSizeListType instance from its child DataType */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType fixed_size_list(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type,
                                           int list_size);
-/** \brief Return an Duration instance (naming use _type to avoid namespace conflict with
+/** \brief Return a Duration instance (naming use _type to avoid namespace conflict with
  *  built in time clases). */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType duration(TimeUnit.type unit);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType duration(@Cast("arrow::TimeUnit::type") int unit);
 
-/** \brief Return an DayTimeIntervalType instance */
+/** \brief Return a DayTimeIntervalType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType day_time_interval();
 
-/** \brief Return an MonthIntervalType instance */
+/** \brief Return a MonthIntervalType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType month_interval();
 
 /** \brief Create a TimestampType instance from its unit */
@@ -2506,52 +2732,61 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** \brief Create a UnionType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector BytePointer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+       @StdVector BytePointer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector BytePointer type_codes);
+       @StdVector BytePointer type_codes);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector ByteBuffer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+       @StdVector ByteBuffer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector ByteBuffer type_codes);
+       @StdVector ByteBuffer type_codes);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector byte[] type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+       @StdVector byte[] type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector byte[] type_codes);
+       @StdVector byte[] type_codes);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector BytePointer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+       @StdVector BytePointer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector ByteBuffer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+       @StdVector ByteBuffer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("uint8_t*") @StdVector byte[] type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+       @StdVector byte[] type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+
+/** \brief Create a UnionType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+
+/** \brief Create a UnionType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_();
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 
 /** \brief Create a UnionType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector BytePointer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+       @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes,
+       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector BytePointer type_codes);
+       @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector ByteBuffer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+       @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes,
+       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector ByteBuffer type_codes);
+       @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector byte[] type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+       @Const @ByRef StringVector field_names, @StdVector byte[] type_codes,
+       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector byte[] type_codes);
+       @Const @ByRef StringVector field_names, @StdVector byte[] type_codes);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector BytePointer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+       @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes,
+       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector ByteBuffer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
+       @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes,
+       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("uint8_t*") @StdVector byte[] type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
+       @Const @ByRef StringVector field_names, @StdVector byte[] type_codes,
+       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 
 /** \brief Create a UnionType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
@@ -2618,10 +2853,10 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  @return schema shared_ptr to Schema */
 
 ///
-@Namespace("arrow") public static native @SharedPtr Schema schema(
+@Namespace("arrow") public static native @SharedPtr @ByVal Schema schema(
     @Const @ByRef FieldVector fields,
     @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef(nullValue = "std::shared_ptr<const arrow::KeyValueMetadata>(nullptr)") KeyValueMetadata metadata);
-@Namespace("arrow") public static native @SharedPtr Schema schema(
+@Namespace("arrow") public static native @SharedPtr @ByVal Schema schema(
     @Const @ByRef FieldVector fields);
 
 /** \brief Create a Schema instance
@@ -2629,8 +2864,30 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  @param fields the schema's fields (rvalue reference)
  *  @param metadata any custom key-value metadata, default null
  *  @return schema shared_ptr to Schema */
+// Targeting ../SchemaBuilder.java
 
-/** \} */
+
+
+/** \brief Unifies schemas by merging fields by name.
+ * 
+ *  The behavior of field merging can be controlled via {@code Field::MergeOptions}.
+ * 
+ *  The resulting schema will contain the union of fields from all schemas.
+ *  Fields with the same name will be merged. See {@code Field::MergeOptions}.
+ *  - They are expected to be mergeable under provided {@code field_merge_options}.
+ *  - The unified field will inherit the metadata from the schema where
+ *    that field is first defined.
+ *  - The first N fields in the schema will be ordered the same as the
+ *    N fields in the first schema.
+ *  The resulting schema will inherit its metadata from the first input schema.
+ *  Returns an error if:
+ *  - Any input schema contains fields with duplicate names.
+ *  - Fields of the same name are not mergeable. */
+@Namespace("arrow") public static native @ByVal SchemaResult UnifySchemas(
+    @Const @ByRef SchemaVector schemas,
+    @ByVal(nullValue = "arrow::Field::MergeOptions::Defaults()") Field.MergeOptions field_merge_options);
+@Namespace("arrow") public static native @ByVal SchemaResult UnifySchemas(
+    @Const @ByRef SchemaVector schemas);
 
   // namespace arrow
 
@@ -2665,12 +2922,19 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #pragma once
 
 // #include <memory>
+// #include <string>
+// #include <utility>
 // #include <vector>
 
+// #include "arrow/result.h"
+// #include "arrow/status.h"
 // #include "arrow/type.h"
 // #include "arrow/type_fwd.h"
 // #include "arrow/type_traits.h"
+// #include "arrow/util/compare.h"
 // #include "arrow/util/decimal.h"
+// #include "arrow/util/logging.h"
+// #include "arrow/util/string_view.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../Scalar.java
 
@@ -2678,24 +2942,78 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../NullScalar.java
 
 
-// Targeting ../PrimitiveScalar.java
-
-
 
 
 // Targeting ../BooleanScalar.java
 
 
-// Targeting ../BaseDate32Scalar.java
+// Targeting ../BaseInt8Type.java
 
 
-// Targeting ../BaseDate64Scalar.java
+// Targeting ../BaseInt16Type.java
+
+
+// Targeting ../BaseInt32Type.java
+
+
+// Targeting ../BaseInt64Type.java
+
+
+// Targeting ../BaseUInt8Type.java
+
+
+// Targeting ../BaseUInt16Type.java
+
+
+// Targeting ../BaseUInt32Type.java
+
+
+// Targeting ../BaseUInt64Type.java
+
+
+// Targeting ../BaseHalfFloatScalar.java
+
+
+// Targeting ../BaseFloatScalar.java
+
+
+// Targeting ../BaseDoubleScalar.java
+
+
+// Targeting ../Int8Scalar.java
+
+
+// Targeting ../Int16Scalar.java
+
+
+// Targeting ../Int32Scalar.java
+
+
+// Targeting ../Int64Scalar.java
+
+
+// Targeting ../UInt8Scalar.java
+
+
+// Targeting ../UInt16Scalar.java
+
+
+// Targeting ../UInt32Scalar.java
+
+
+// Targeting ../UInt64Scalar.java
+
+
+// Targeting ../HalfFloatScalar.java
+
+
+// Targeting ../FloatScalar.java
+
+
+// Targeting ../DoubleScalar.java
 
 
 // Targeting ../BaseBinaryScalar.java
-
-
-// Targeting ../BaseLargeBinaryScalar.java
 
 
 // Targeting ../BinaryScalar.java
@@ -2713,10 +3031,46 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../FixedSizeBinaryScalar.java
 
 
+// Targeting ../BaseBaseDate32Scalar.java
+
+
+// Targeting ../BaseBaseDate64Scalar.java
+
+
+// Targeting ../BaseDurationScalar.java
+
+
+// Targeting ../BaseBaseDayTimeIntervalScalar.java
+
+
+// Targeting ../BaseBaseMonthIntervalType.java
+
+
+// Targeting ../BaseTimestampScalar.java
+
+
+// Targeting ../BaseBaseTime32Scalar.java
+
+
+// Targeting ../BaseBaseTime64Scalar.java
+
+
+// Targeting ../BaseDate32Scalar.java
+
+
+// Targeting ../BaseDate64Scalar.java
+
+
 // Targeting ../Date32Scalar.java
 
 
 // Targeting ../Date64Scalar.java
+
+
+// Targeting ../BaseTime32Scalar.java
+
+
+// Targeting ../BaseTime64Scalar.java
 
 
 // Targeting ../Time32Scalar.java
@@ -2728,13 +3082,19 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../TimestampScalar.java
 
 
-// Targeting ../DurationScalar.java
+// Targeting ../BaseDayTimeIntervalScalar.java
+
+
+// Targeting ../BaseMonthIntervalScalar.java
 
 
 // Targeting ../MonthIntervalScalar.java
 
 
 // Targeting ../DayTimeIntervalScalar.java
+
+
+// Targeting ../DurationScalar.java
 
 
 // Targeting ../Decimal128Scalar.java
@@ -2758,12 +3118,29 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../StructScalar.java
 
 
+// Targeting ../UnionScalar.java
 
-/** @param type [in] the type of scalar to produce
- *  @param null [out] output scalar with is_valid=false
- *  @return Status */
-@Namespace("arrow") public static native @ByVal Status MakeNullScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                      @SharedPtr Scalar _null);
+
+// Targeting ../DictionaryScalar.java
+
+
+// Targeting ../ExtensionScalar.java
+
+
+
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeNullScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+
+@Namespace("arrow::internal") public static native @ByVal Status CheckBufferLength();
+
+@Namespace("arrow::internal") public static native @ByVal Status CheckBufferLength(@Const FixedSizeBinaryType t,
+                                      @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer b);
+
+  // namespace internal
+
+/** \brief type inferring scalar factory */
+
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeScalar(@StdString String value);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeScalar(@StdString BytePointer value);
 
   // namespace arrow
 
@@ -2829,6 +3206,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #pragma once
 
+// #include <atomic>
 // #include <cstdint>
 // #include <iosfwd>
 // #include <memory>
@@ -2837,10 +3215,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <utility>
 // #include <vector>
 
-// #include "arrow/buffer.h"
 // #include "arrow/compare.h"
-// #include "arrow/result.h"
 // #include "arrow/type.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/type_traits.h"
 // #include "arrow/util/bit_util.h"
 // #include "arrow/util/checked_cast.h"
@@ -3030,12 +3407,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../DictionaryArray.java
 
 
-
-/** \brief Alias of Array::Validate().
- * 
- *  @param array an Array instance
- *  @return Status */
-@Namespace("arrow") public static native @Deprecated @ByVal Status ValidateArray(@Const @ByRef Array array);
 
   // namespace arrow
 
@@ -3734,6 +4105,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <string>
 // #include <vector>
 
+// #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
@@ -3754,7 +4126,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  @return Status */
 @Namespace("arrow") public static native @ByVal Status MakeRecordBatchReader(
     @Const @ByRef RecordBatchVector batches,
-    @SharedPtr Schema schema, @SharedPtr RecordBatchReader out);
+    @SharedPtr @ByVal Schema schema, @SharedPtr RecordBatchReader out);
 
   // namespace arrow
 
@@ -3778,17 +4150,16 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // specific language governing permissions and limitations
 // under the License.
 
-// #ifndef ARROW_TABLE_H
-// #define ARROW_TABLE_H
+// #pragma once
 
 // #include <cstdint>
 // #include <memory>
 // #include <string>
 // #include <vector>
 
-// #include "arrow/array.h"
 // #include "arrow/record_batch.h"
 // #include "arrow/type.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../ChunkedArray.java
@@ -3800,18 +4171,43 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../TableBatchReader.java
 
 
+// Targeting ../ConcatenateTablesOptions.java
 
-/** \brief Construct table from multiple input tables.
+
+
+/** \brief Construct table from multiple input tables. */
+
+///
+///
+@Namespace("arrow") public static native @ByVal TableResult ConcatenateTables(
+    @Const @ByRef TableVector tables,
+    @ByVal(nullValue = "arrow::ConcatenateTablesOptions::Defaults()") ConcatenateTablesOptions options,
+    MemoryPool memory_pool/*=arrow::default_memory_pool()*/);
+@Namespace("arrow") public static native @ByVal TableResult ConcatenateTables(
+    @Const @ByRef TableVector tables);
+
+/** \brief Promotes a table to conform to the given schema.
  * 
- *  The tables are concatenated vertically.  Therefore, all tables should
- *  have the same schema.  Each column in the output table is the result
- *  of concatenating the corresponding columns in all input tables. */
-@Namespace("arrow") public static native @ByVal Status ConcatenateTables(@Const @ByRef TableVector tables,
-                         @SharedPtr Table table);
+ *  If a field in the schema does not have a corresponding column in the
+ *  table, a column of nulls will be added to the resulting table.
+ *  If the corresponding column is of type Null, it will be promoted to
+ *  the type specified by schema, with null values filled.
+ *  Returns an error:
+ *  - if the corresponding column's type is not compatible with the
+ *    schema.
+ *  - if there is a column in the table that does not exist in the schema.
+ * 
+ *  @param table [in] the input Table
+ *  @param schema [in] the target schema to promote to
+ *  @param pool [in] The memory pool to be used if null-filled arrays need to
+ *  be created. */
+@Namespace("arrow") public static native @ByVal TableResult PromoteTableToSchema(
+    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table table, @Const @SharedPtr @ByRef Schema schema,
+    MemoryPool pool/*=arrow::default_memory_pool()*/);
+@Namespace("arrow") public static native @ByVal TableResult PromoteTableToSchema(
+    @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table table, @Const @SharedPtr @ByRef Schema schema);
 
   // namespace arrow
-
-// #endif  // ARROW_TABLE_H
 
 
 // Parsed from arrow/table_builder.h
@@ -3882,14 +4278,42 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <string>
 // #include <vector>
 
-// #include "arrow/buffer.h"
 // #include "arrow/compare.h"
 // #include "arrow/type.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/type_traits.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_tensor_supported(@Cast("arrow::Type::type") int type_id);
+
+@Namespace("arrow::internal") public static native @Cast("bool") boolean IsTensorStridesContiguous(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+                               @Cast("int64_t*") @StdVector LongPointer shape,
+                               @Cast("int64_t*") @StdVector LongPointer strides);
+@Namespace("arrow::internal") public static native @Cast("bool") boolean IsTensorStridesContiguous(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+                               @Cast("int64_t*") @StdVector LongBuffer shape,
+                               @Cast("int64_t*") @StdVector LongBuffer strides);
+@Namespace("arrow::internal") public static native @Cast("bool") boolean IsTensorStridesContiguous(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+                               @Cast("int64_t*") @StdVector long[] shape,
+                               @Cast("int64_t*") @StdVector long[] strides);
+
+@Namespace("arrow::internal") public static native @ByVal Status ValidateTensorParameters(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+                                @SharedPtr ArrowBuffer data,
+                                @Cast("int64_t*") @StdVector LongPointer shape,
+                                @Cast("int64_t*") @StdVector LongPointer strides,
+                                @Const @ByRef StringVector dim_names);
+@Namespace("arrow::internal") public static native @ByVal Status ValidateTensorParameters(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+                                @SharedPtr ArrowBuffer data,
+                                @Cast("int64_t*") @StdVector LongBuffer shape,
+                                @Cast("int64_t*") @StdVector LongBuffer strides,
+                                @Const @ByRef StringVector dim_names);
+@Namespace("arrow::internal") public static native @ByVal Status ValidateTensorParameters(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+                                @SharedPtr ArrowBuffer data,
+                                @Cast("int64_t*") @StdVector long[] shape,
+                                @Cast("int64_t*") @StdVector long[] strides,
+                                @Const @ByRef StringVector dim_names);
+
+
 // Targeting ../Tensor.java
 
 
@@ -3950,14 +4374,14 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // specific language governing permissions and limitations
 // under the License.
 
-// #ifndef ARROW_IO_INTERFACES_H
-// #define ARROW_IO_INTERFACES_H
+// #pragma once
 
 // #include <cstdint>
 // #include <memory>
 // #include <string>
 // #include <vector>
 
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/string_view.h"
 // #include "arrow/util/visibility.h"
@@ -4001,10 +4425,17 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 
+/** \brief Return an iterator on an input stream
+ * 
+ *  The iterator yields a fixed-size block on each Next() call, except the
+ *  last block in the stream which may be smaller.
+ *  Once the end of stream is reached, Next() returns nullptr
+ *  (unlike InputStream::Read() which returns an empty buffer). */
+@Namespace("arrow::io") public static native @ByVal BufferIteratorResult MakeInputStreamIterator(
+    @SharedPtr InputStream stream, @Cast("int64_t") long block_size);
+
   // namespace io
   // namespace arrow
-
-// #endif  // ARROW_IO_INTERFACES_H
 
 
 // Parsed from arrow/io/concurrency.h
@@ -4031,6 +4462,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <memory>
 
 // #include "arrow/io/interfaces.h"
+// #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/util/checked_cast.h"
 // #include "arrow/util/macros.h"
@@ -4289,10 +4721,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <cstdint>
 // #include <memory>
 
-// #include "arrow/buffer.h"
 // #include "arrow/io/concurrency.h"
 // #include "arrow/io/interfaces.h"
-// #include "arrow/memory_pool.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/string_view.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../BufferOutputStream.java
@@ -4384,6 +4815,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #define ARROW_FILESYSTEM_API_H
 
 // #include "arrow/filesystem/filesystem.h"  // IWYU pragma: export
+// #include "arrow/filesystem/hdfs.h"        // IWYU pragma: export
 // #include "arrow/filesystem/localfs.h"     // IWYU pragma: export
 // #include "arrow/filesystem/mockfs.h"      // IWYU pragma: export
 // #include "arrow/filesystem/s3fs.h"        // IWYU pragma: export
@@ -4417,9 +4849,12 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <iosfwd>
 // #include <memory>
 // #include <string>
+// #include <utility>
 // #include <vector>
 
-// #include "arrow/status.h"
+// #include "arrow/type_fwd.h"
+// #include "arrow/util/compare.h"
+// #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 
 // The Windows API defines macros from *File resolving to either
@@ -4438,7 +4873,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // A system clock time point expressed as a 64-bit (or more) number of
 // nanoseconds since the epoch.
 
-/** \brief EXPERIMENTAL: FileSystem entry type */
+/** \brief FileSystem entry type */
 @Namespace("arrow::fs") public enum FileType {
   /** Entry does not exist */
   
@@ -4475,7 +4910,7 @@ public static final long kNoSize = kNoSize();
 
 
 @Namespace("arrow::fs") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef FileStats arg1);
-// Targeting ../Selector.java
+// Targeting ../FileSelector.java
 
 
 // Targeting ../FileSystem.java
@@ -4486,6 +4921,33 @@ public static final long kNoSize = kNoSize();
 
 // Targeting ../SlowFileSystem.java
 
+
+
+/** \defgroup filesystem-factories Functions for creating FileSystem instances
+ * 
+ *  \{
+ <p>
+ *  \brief Create a new FileSystem by URI
+ * 
+ *  A scheme-less URI is considered a local filesystem path.
+ *  Recognized schemes are "file", "mock" and "hdfs".
+ * 
+ *  @param uri [in] a URI-based path, ex: file:///some/local/path
+ *  @param out_path [out] (optional) Path inside the filesystem.
+ *  @return out_fs FileSystem instance. */
+
+
+/** \}
+ <p>
+ *  \brief Create a new FileSystem by URI
+ * 
+ *  A scheme-less URI is considered a local filesystem path.
+ *  Recognized schemes are "file", "mock" and "hdfs".
+ * 
+ *  @param uri [in] a URI-based path, ex: file:///some/local/path
+ *  @param out_fs [out] FileSystem instance.
+ *  @param out_path [out] (optional) Path inside the filesystem.
+ *  @return Status */
 
 
   // namespace fs
@@ -4518,6 +4980,9 @@ public static final long kNoSize = kNoSize();
 // #include <vector>
 
 // #include "arrow/filesystem/filesystem.h"
+// Targeting ../LocalFileSystemOptions.java
+
+
 // Targeting ../LocalFileSystem.java
 
 
@@ -4564,6 +5029,51 @@ public static final long kNoSize = kNoSize();
 
 
   // namespace internal
+  // namespace fs
+  // namespace arrow
+
+
+// Parsed from arrow/filesystem/path_forest.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include "arrow/filesystem/filesystem.h"
+
+// #include <algorithm>
+// #include <iosfwd>
+// #include <memory>
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/util/compare.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/sort.h"
+// Targeting ../PathForest.java
+
+
+
+@Namespace("arrow::fs") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef PathForest tree);
+
   // namespace fs
   // namespace arrow
 
@@ -4663,13 +5173,13 @@ public static final long kNoSize = kNoSize();
 // specific language governing permissions and limitations
 // under the License.
 
-// #ifndef ARROW_CSV_READER_H
-// #define ARROW_CSV_READER_H
+// #pragma once
 
 // #include <memory>
 
 // #include "arrow/csv/options.h"  // IWYU pragma: keep
-// #include "arrow/status.h"
+// #include "arrow/result.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/visibility.h"
   // namespace io
 // Targeting ../TableReader.java
@@ -4678,8 +5188,6 @@ public static final long kNoSize = kNoSize();
 
   // namespace csv
   // namespace arrow
-
-// #endif  // ARROW_CSV_READER_H
 
 
 // Parsed from arrow/json/options.h
@@ -4763,7 +5271,7 @@ public static final long kNoSize = kNoSize();
  * 
  *  The file is expected to consist of individual line-separated JSON objects */
 
-@Namespace("arrow::json") public static native @ByVal Status ParseOne(@ByVal JsonParseOptions options, @SharedPtr @ByVal ArrowBuffer json,
+@Namespace("arrow::json") public static native @ByVal Status ParseOne(@ByVal JsonParseOptions options, @SharedPtr ArrowBuffer json,
                              @SharedPtr RecordBatch out);
 
 /** \brief convert an Array produced by BlockParser into an Array of out_type */
@@ -4956,9 +5464,12 @@ public static final long kNoSize = kNoSize();
  *  \note API not yet finalized */
 
 ///
+///
 @Namespace("arrow::compute") public static native @ByVal Status Invert(FunctionContext context, @Const @ByRef Datum value, Datum out);
 
-/** \brief Element-wise AND of two boolean datums
+/** \brief Element-wise AND of two boolean datums which always propagates nulls
+ *  (null and false is null).
+ * 
  *  @param context [in] the FunctionContext
  *  @param left [in] left operand (array)
  *  @param right [in] right operand (array)
@@ -4967,10 +5478,29 @@ public static final long kNoSize = kNoSize();
  *  @since 0.11.0
  *  \note API not yet finalized */
 
+///
 ///
 @Namespace("arrow::compute") public static native @ByVal Status And(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right, Datum out);
 
-/** \brief Element-wise OR of two boolean datums
+/** \brief Element-wise AND of two boolean datums with a Kleene truth table
+ *  (null and false is false).
+ * 
+ *  @param context [in] the FunctionContext
+ *  @param left [in] left operand (array)
+ *  @param right [in] right operand (array)
+ *  @param out [out] resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status KleeneAnd(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right,
+                 Datum out);
+
+/** \brief Element-wise OR of two boolean datums which always propagates nulls
+ *  (null and true is null).
+ * 
  *  @param context [in] the FunctionContext
  *  @param left [in] left operand (array)
  *  @param right [in] right operand (array)
@@ -4980,7 +5510,23 @@ public static final long kNoSize = kNoSize();
  *  \note API not yet finalized */
 
 ///
+///
 @Namespace("arrow::compute") public static native @ByVal Status Or(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right, Datum out);
+
+/** \brief Element-wise OR of two boolean datums with a Kleene truth table
+ *  (null or true is true).
+ * 
+ *  @param context [in] the FunctionContext
+ *  @param left [in] left operand (array)
+ *  @param right [in] right operand (array)
+ *  @param out [out] resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+@Namespace("arrow::compute") public static native @ByVal Status KleeneOr(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right,
+                Datum out);
 
 /** \brief Element-wise XOR of two boolean datums
  *  @param context [in] the FunctionContext
@@ -5017,8 +5563,7 @@ public static final long kNoSize = kNoSize();
 // specific language governing permissions and limitations
 // under the License.
 
-// #ifndef ARROW_COMPUTE_KERNELS_CAST_H
-// #define ARROW_COMPUTE_KERNELS_CAST_H
+// #pragma once
 
 // #include <memory>
 
@@ -5065,8 +5610,6 @@ public static final long kNoSize = kNoSize();
   // namespace compute
   // namespace arrow
 
-// #endif  // ARROW_COMPUTE_KERNELS_CAST_H
-
 
 // Parsed from arrow/compute/kernels/compare.h
 
@@ -5093,12 +5636,6 @@ public static final long kNoSize = kNoSize();
 
 // #include "arrow/compute/kernel.h"
 // #include "arrow/util/visibility.h"
-// Targeting ../CompareFunction.java
-
-
-// Targeting ../CompareBinaryKernel.java
-
-
 
 @Namespace("arrow::compute") public enum CompareOperator {
   EQUAL(0),
@@ -5118,21 +5655,8 @@ public static final long kNoSize = kNoSize();
 
 
 
-/** \brief Return a Compare CompareFunction
- * 
- *  @param context [in] FunctionContext passing context information
- *  @param type [in] required to specialize the kernel
- *  @param options [in] required to specify the compare operator
- * 
- *  @since 0.14.0
- *  \note API not yet finalized */
+/** \brief BinaryKernel bound implementing comparison */
 
-///
-///
-///
-@Namespace("arrow::compute") public static native @SharedPtr CompareFunction MakeCompareFunction(FunctionContext context,
-                                                     @Const @ByRef DataType type,
-                                                     @ByVal CompareOptions options);
 
 /** \brief Compare a numeric array with a scalar.
  * 
@@ -5247,6 +5771,7 @@ public static final long kNoSize = kNoSize();
 // #include <memory>
 
 // #include "arrow/compute/kernel.h"
+// #include "arrow/record_batch.h"
 // #include "arrow/status.h"
 // #include "arrow/util/visibility.h"
 
@@ -5266,8 +5791,103 @@ public static final long kNoSize = kNoSize();
  *  @param out [out] resulting array */
 
 ///
+///
+///
 @Namespace("arrow::compute") public static native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef Array values, @Const @ByRef Array filter,
               @SharedPtr Array out);
+
+/** \brief Filter a chunked array with a boolean selection filter
+ * 
+ *  The output chunked array will be populated with values from the input at positions
+ *  where the selection filter is not 0. Nulls in the filter will result in nulls
+ *  in the output.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"] and
+ *  filter = [0, 1, 1, 0, null, 1], the output will be
+ *  = ["b", "c", null, "f"]
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param values [in] chunked array to filter
+ *  @param filter [in] indicates which values should be filtered out
+ *  @param out [out] resulting chunked array
+ *  NOTE: Experimental API */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef ChunkedArray values, @Const @ByRef Array filter,
+              @SharedPtr ChunkedArray out);
+
+/** \brief Filter a chunked array with a boolean selection filter
+ * 
+ *  The output chunked array will be populated with values from the input at positions
+ *  where the selection filter is not 0. Nulls in the filter will result in nulls
+ *  in the output.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"] and
+ *  filter = [0, 1, 1, 0, null, 1], the output will be
+ *  = ["b", "c", null, "f"]
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param values [in] chunked array to filter
+ *  @param filter [in] indicates which values should be filtered out
+ *  @param out [out] resulting chunked array
+ *  NOTE: Experimental API */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef ChunkedArray values,
+              @Const @ByRef ChunkedArray filter, @SharedPtr ChunkedArray out);
+
+/** \brief Filter a record batch with a boolean selection filter
+ * 
+ *  The output record batch's columns will be populated with values from corresponding
+ *  columns of the input at positions where the selection filter is not 0. Nulls in the
+ *  filter will result in nulls in the output.
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param batch [in] record batch to filter
+ *  @param filter [in] indicates which values should be filtered out
+ *  @param out [out] resulting record batch
+ *  NOTE: Experimental API */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef RecordBatch batch, @Const @ByRef Array filter,
+              @SharedPtr RecordBatch out);
+
+/** \brief Filter a table with a boolean selection filter
+ * 
+ *  The output table's columns will be populated with values from corresponding
+ *  columns of the input at positions where the selection filter is not 0. Nulls in the
+ *  filter will result in nulls in each column of the output.
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param table [in] table to filter
+ *  @param filter [in] indicates which values should be filtered out
+ *  @param out [out] resulting table
+ *  NOTE: Experimental API */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef Table table, @Const @ByRef Array filter,
+              @SharedPtr Table out);
+
+/** \brief Filter a table with a boolean selection filter
+ * 
+ *  The output record batch's columns will be populated with values from corresponding
+ *  columns of the input at positions where the selection filter is not 0. Nulls in the
+ *  filter will result in nulls in the output.
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param table [in] record batch to filter
+ *  @param filter [in] indicates which values should be filtered out
+ *  @param out [out] resulting record batch
+ *  NOTE: Experimental API */
+
+///
+@Namespace("arrow::compute") public static native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef Table table, @Const @ByRef ChunkedArray filter,
+              @SharedPtr Table out);
 
 /** \brief Filter an array with a boolean selection filter
  * 
@@ -5659,8 +6279,136 @@ public static final long kNoSize = kNoSize();
  *  @param out [out] resulting array */
 
 ///
+///
+///
 @Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Array values, @Const @ByRef Array indices,
             @Const @ByRef TakeOptions options, @SharedPtr Array out);
+
+/** \brief Take from a chunked array of values at indices in another array
+ * 
+ *  The output chunked array will be of the same type as the input values
+ *  array, with elements taken from the values array at the given
+ *  indices. If an index is null then the taken element will be null.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"] and
+ *  indices = [2, 1, null, 3], the output will be
+ *  = [values[2], values[1], null, values[3]]
+ *  = ["c", "b", null, null]
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param values [in] chunked array from which to take
+ *  @param indices [in] which values to take
+ *  @param options [in] options
+ *  @param out [out] resulting chunked array
+ *  NOTE: Experimental API */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef ChunkedArray values, @Const @ByRef Array indices,
+            @Const @ByRef TakeOptions options, @SharedPtr ChunkedArray out);
+
+/** \brief Take from a chunked array of values at indices in a chunked array
+ * 
+ *  The output chunked array will be of the same type as the input values
+ *  array, with elements taken from the values array at the given
+ *  indices. If an index is null then the taken element will be null.
+ *  The chunks in the output array will align with the chunks in the indices.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"] and
+ *  indices = [2, 1, null, 3], the output will be
+ *  = [values[2], values[1], null, values[3]]
+ *  = ["c", "b", null, null]
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param values [in] chunked array from which to take
+ *  @param indices [in] which values to take
+ *  @param options [in] options
+ *  @param out [out] resulting chunked array
+ *  NOTE: Experimental API */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef ChunkedArray values, @Const @ByRef ChunkedArray indices,
+            @Const @ByRef TakeOptions options, @SharedPtr ChunkedArray out);
+
+/** \brief Take from an array of values at indices in a chunked array
+ * 
+ *  The output chunked array will be of the same type as the input values
+ *  array, with elements taken from the values array at the given
+ *  indices. If an index is null then the taken element will be null.
+ *  The chunks in the output array will align with the chunks in the indices.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"] and
+ *  indices = [2, 1, null, 3], the output will be
+ *  = [values[2], values[1], null, values[3]]
+ *  = ["c", "b", null, null]
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param values [in] array from which to take
+ *  @param indices [in] which values to take
+ *  @param options [in] options
+ *  @param out [out] resulting chunked array
+ *  NOTE: Experimental API */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Array values, @Const @ByRef ChunkedArray indices,
+            @Const @ByRef TakeOptions options, @SharedPtr ChunkedArray out);
+
+/** \brief Take from a record batch at indices in another array
+ * 
+ *  The output batch will have the same schema as the input batch,
+ *  with rows taken from the columns in the batch at the given
+ *  indices. If an index is null then the taken element will be null.
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param batch [in] record batch from which to take
+ *  @param indices [in] which values to take
+ *  @param options [in] options
+ *  @param out [out] resulting record batch
+ *  NOTE: Experimental API */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef RecordBatch batch, @Const @ByRef Array indices,
+            @Const @ByRef TakeOptions options, @SharedPtr RecordBatch out);
+
+/** \brief Take from a table at indices in an array
+ * 
+ *  The output table will have the same schema as the input table,
+ *  with rows taken from the columns in the table at the given
+ *  indices. If an index is null then the taken element will be null.
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param table [in] table from which to take
+ *  @param indices [in] which values to take
+ *  @param options [in] options
+ *  @param out [out] resulting table
+ *  NOTE: Experimental API */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Table table, @Const @ByRef Array indices,
+            @Const @ByRef TakeOptions options, @SharedPtr Table out);
+
+/** \brief Take from a table at indices in a chunked array
+ * 
+ *  The output table will have the same schema as the input table,
+ *  with rows taken from the values array at the given
+ *  indices. If an index is null then the taken element will be null.
+ * 
+ *  @param ctx [in] the FunctionContext
+ *  @param table [in] table from which to take
+ *  @param indices [in] which values to take
+ *  @param options [in] options
+ *  @param out [out] resulting table
+ *  NOTE: Experimental API */
+
+///
+@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Table table, @Const @ByRef ChunkedArray indices,
+            @Const @ByRef TakeOptions options, @SharedPtr Table out);
 
 /** \brief Take from an array of values at indices in another array
  * 
@@ -6053,8 +6801,7 @@ public static final int kFeatherVersion = kFeatherVersion();
 
 // Read Arrow files and streams
 
-// #ifndef ARROW_IPC_READER_H
-// #define ARROW_IPC_READER_H
+// #pragma once
 
 // #include <cstdint>
 // #include <memory>
@@ -6062,7 +6809,9 @@ public static final int kFeatherVersion = kFeatherVersion();
 // #include "arrow/ipc/dictionary.h"
 // #include "arrow/ipc/message.h"
 // #include "arrow/ipc/options.h"
+// #include "arrow/ipc/writer.h"
 // #include "arrow/record_batch.h"
+// #include "arrow/sparse_tensor.h"
 // #include "arrow/util/visibility.h"
 
   // namespace io
@@ -6118,7 +6867,7 @@ public static final int kFeatherVersion = kFeatherVersion();
  *  @return Status */
 
 ///
-@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@SharedPtr Schema schema,
+@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@Const @SharedPtr @ByRef Schema schema,
                        @Const DictionaryMemo dictionary_memo, InputStream stream,
                        @SharedPtr RecordBatch out);
 
@@ -6134,7 +6883,7 @@ public static final int kFeatherVersion = kFeatherVersion();
  *  @return Status */
 
 ///
-@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@Const @ByRef ArrowBuffer metadata, @SharedPtr Schema schema,
+@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@Const @ByRef ArrowBuffer metadata, @Const @SharedPtr @ByRef Schema schema,
                        @Const DictionaryMemo dictionary_memo, RandomAccessFile file,
                        @SharedPtr RecordBatch out);
 
@@ -6149,7 +6898,7 @@ public static final int kFeatherVersion = kFeatherVersion();
  *  @return Status */
 
 ///
-@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@Const @ByRef Message message, @SharedPtr Schema schema,
+@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@Const @ByRef Message message, @Const @SharedPtr @ByRef Schema schema,
                        @Const DictionaryMemo dictionary_memo,
                        @SharedPtr RecordBatch out);
 
@@ -6166,46 +6915,62 @@ public static final int kFeatherVersion = kFeatherVersion();
  *  @return Status */
 
 ///
-@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@Const @ByRef ArrowBuffer metadata, @SharedPtr Schema schema,
+@Namespace("arrow::ipc") public static native @ByVal Status ReadRecordBatch(@Const @ByRef ArrowBuffer metadata, @Const @SharedPtr @ByRef Schema schema,
                        @Const DictionaryMemo dictionary_memo, @Const @ByRef IpcOptions options,
                        RandomAccessFile file, @SharedPtr RecordBatch out);
 
 /** \brief Read arrow::Tensor as encapsulated IPC message in file
  * 
  *  @param file [in] an InputStream pointed at the start of the message
- *  @param out [out] the read tensor
- *  @return Status */
+ *  @return the read tensor */
 
 ///
-@Namespace("arrow::ipc") public static native @ByVal Status ReadTensor(InputStream file, @SharedPtr Tensor out);
+@Namespace("arrow::ipc") public static native @ByVal TensorResult ReadTensor(InputStream file);
 
 /** \brief EXPERIMENTAL: Read arrow::Tensor from IPC message
  * 
  *  @param message [in] a Message containing the tensor metadata and body
- *  @param out [out] the read tensor
- *  @return Status */
+ *  @return the read tensor */
 
 ///
-@Namespace("arrow::ipc") public static native @ByVal Status ReadTensor(@Const @ByRef Message message, @SharedPtr Tensor out);
+@Namespace("arrow::ipc") public static native @ByVal TensorResult ReadTensor(@Const @ByRef Message message);
 
-/** \brief EXPERIMETNAL: Read arrow::SparseTensor as encapsulated IPC message in file
+/** \brief EXPERIMENTAL: Read arrow::SparseTensor as encapsulated IPC message in file
  * 
  *  @param file [in] an InputStream pointed at the start of the message
- *  @param out [out] the read sparse tensor
- *  @return Status */
+ *  @return the read sparse tensor */
 
 
 /** \brief EXPERIMENTAL: Read arrow::SparseTensor from IPC message
  * 
  *  @param message [in] a Message containing the tensor metadata and body
- *  @param out [out] the read sparse tensor
- *  @return Status */
+ *  @return the read sparse tensor */
 
+
+// These internal APIs may change without warning or deprecation
+
+/** \brief EXPERIMENTAL: Read arrow::SparseTensorFormat::type from a metadata
+ *  @param metadata [in] a Buffer containing the sparse tensor metadata
+ *  @return the count of the body buffers */
+@Namespace("arrow::ipc::internal") public static native @ByVal SizeTResult ReadSparseTensorBodyBufferCount(@Const @ByRef ArrowBuffer metadata);
+
+/** \brief EXPERIMENTAL: Read arrow::SparseTensor from an IpcPayload
+ *  @param payload [in] a IpcPayload contains a serialized SparseTensor
+ *  @return the read sparse tensor */
+@Namespace("arrow::ipc::internal") public static native @ByVal SparseTensorResult ReadSparseTensorPayload(@Const @ByRef IpcPayload payload);
+
+// For fuzzing targets
+@Namespace("arrow::ipc::internal") public static native @ByVal Status FuzzIpcStream(@Cast("const uint8_t*") BytePointer data, @Cast("int64_t") long size);
+@Namespace("arrow::ipc::internal") public static native @ByVal Status FuzzIpcStream(@Cast("const uint8_t*") ByteBuffer data, @Cast("int64_t") long size);
+@Namespace("arrow::ipc::internal") public static native @ByVal Status FuzzIpcStream(@Cast("const uint8_t*") byte[] data, @Cast("int64_t") long size);
+@Namespace("arrow::ipc::internal") public static native @ByVal Status FuzzIpcFile(@Cast("const uint8_t*") BytePointer data, @Cast("int64_t") long size);
+@Namespace("arrow::ipc::internal") public static native @ByVal Status FuzzIpcFile(@Cast("const uint8_t*") ByteBuffer data, @Cast("int64_t") long size);
+@Namespace("arrow::ipc::internal") public static native @ByVal Status FuzzIpcFile(@Cast("const uint8_t*") byte[] data, @Cast("int64_t") long size);
+
+  // namespace internal
 
   // namespace ipc
   // namespace arrow
-
-// #endif  // ARROW_IPC_READER_H
 
 
 // Parsed from arrow/ipc/writer.h
@@ -6229,8 +6994,7 @@ public static final int kFeatherVersion = kFeatherVersion();
 
 // Implement Arrow streaming binary format
 
-// #ifndef ARROW_IPC_WRITER_H
-// #define ARROW_IPC_WRITER_H
+// #pragma once
 
 // #include <cstdint>
 // #include <memory>
@@ -6239,7 +7003,7 @@ public static final int kFeatherVersion = kFeatherVersion();
 // #include "arrow/ipc/dictionary.h"  // IWYU pragma: export
 // #include "arrow/ipc/message.h"
 // #include "arrow/ipc/options.h"
-// #include "arrow/result.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/visibility.h"
 
   // namespace io
@@ -6292,7 +7056,7 @@ public static final int kFeatherVersion = kFeatherVersion();
 ///
 ///
 @Namespace("arrow::ipc") public static native @ByVal Status SerializeRecordBatch(@Const @ByRef RecordBatch batch, MemoryPool pool,
-                            @SharedPtr ArrowBuffer out);
+                            @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Write record batch to OutputStream
  * 
@@ -6316,7 +7080,7 @@ public static final int kFeatherVersion = kFeatherVersion();
  *  @param out [out] the serialized schema
  *  @return Status */
 @Namespace("arrow::ipc") public static native @ByVal Status SerializeSchema(@Const @ByRef Schema schema, DictionaryMemo dictionary_memo,
-                       MemoryPool pool, @SharedPtr ArrowBuffer out);
+                       MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Write multiple record batches to OutputStream, including schema
  *  @param batches [in] a vector of batches. Must all have same schema
@@ -6341,7 +7105,7 @@ public static final int kFeatherVersion = kFeatherVersion();
 
 /** \brief Compute the number of bytes needed to write a tensor including metadata
  * 
- *  @param tensor [in] the tenseor to write
+ *  @param tensor [in] the tensor to write
  *  @param size [out] the size of the complete encapsulated message
  *  @return Status */
 
@@ -6378,8 +7142,11 @@ public static final int kFeatherVersion = kFeatherVersion();
  *  @param tensor [in] the Tensor to write
  *  @param dst [in] the OutputStream to write to
  *  @param metadata_length [out] the actual metadata length, including padding
- *  @param body_length [out] the acutal message body length
+ *  @param body_length [out] the actual message body length
  *  @return Status */
+
+///
+///
 @Namespace("arrow::ipc") public static native @ByVal Status WriteTensor(@Const @ByRef Tensor tensor, OutputStream dst, IntPointer metadata_length,
                    @Cast("int64_t*") LongPointer body_length);
 @Namespace("arrow::ipc") public static native @ByVal Status WriteTensor(@Const @ByRef Tensor tensor, OutputStream dst, IntBuffer metadata_length,
@@ -6387,24 +7154,39 @@ public static final int kFeatherVersion = kFeatherVersion();
 @Namespace("arrow::ipc") public static native @ByVal Status WriteTensor(@Const @ByRef Tensor tensor, OutputStream dst, int[] metadata_length,
                    @Cast("int64_t*") long[] body_length);
 
-// \brief EXPERIMENTAL: Write arrow::SparseTensor as a contiguous mesasge. The metadata,
-// sparse index, and body are written assuming 64-byte alignment. It is the
-// user's responsibility to ensure that the OutputStream has been aligned
-// to a 64-byte multiple before writing the message.
-//
-// \param[in] tensor the SparseTensor to write
-// \param[in] dst the OutputStream to write to
-// \param[out] metadata_length the actual metadata length, including padding
-// \param[out] body_length the actual message body length
+/** \brief EXPERIMENTAL: Convert arrow::SparseTensor to a Message with minimal memory
+ *  allocation
+ * 
+ *  The message is written out as followed:
+ *  <pre>{@code
+ *  <metadata size> <metadata> <sparse index> <sparse tensor body>
+ *  }</pre>
+ * 
+ *  @param sparse_tensor [in] the SparseTensor to write
+ *  @param pool [in] MemoryPool to allocate space for metadata
+ *  @param out [out] the resulting Message
+ *  @return Status */
+
+///
+@Namespace("arrow::ipc") public static native @ByVal Status GetSparseTensorMessage(@Const @ByRef SparseTensor sparse_tensor, MemoryPool pool,
+                              @UniquePtr Message out);
+
+/** \brief EXPERIMENTAL: Write arrow::SparseTensor as a contiguous message. The metadata,
+ *  sparse index, and body are written assuming 64-byte alignment. It is the
+ *  user's responsibility to ensure that the OutputStream has been aligned
+ *  to a 64-byte multiple before writing the message.
+ * 
+ *  @param sparse_tensor [in] the SparseTensor to write
+ *  @param dst [in] the OutputStream to write to
+ *  @param metadata_length [out] the actual metadata length, including padding
+ *  @param body_length [out] the actual message body length
+ *  @return Status */
 @Namespace("arrow::ipc") public static native @ByVal Status WriteSparseTensor(@Const @ByRef SparseTensor sparse_tensor, OutputStream dst,
-                         IntPointer metadata_length, @Cast("int64_t*") LongPointer body_length,
-                         MemoryPool pool);
+                         IntPointer metadata_length, @Cast("int64_t*") LongPointer body_length);
 @Namespace("arrow::ipc") public static native @ByVal Status WriteSparseTensor(@Const @ByRef SparseTensor sparse_tensor, OutputStream dst,
-                         IntBuffer metadata_length, @Cast("int64_t*") LongBuffer body_length,
-                         MemoryPool pool);
+                         IntBuffer metadata_length, @Cast("int64_t*") LongBuffer body_length);
 @Namespace("arrow::ipc") public static native @ByVal Status WriteSparseTensor(@Const @ByRef SparseTensor sparse_tensor, OutputStream dst,
-                         int[] metadata_length, @Cast("int64_t*") long[] body_length,
-                         MemoryPool pool);
+                         int[] metadata_length, @Cast("int64_t*") long[] body_length);
 // Targeting ../IpcPayload.java
 
 
@@ -6421,7 +7203,7 @@ public static final int kFeatherVersion = kFeatherVersion();
 
 ///
 @Namespace("arrow::ipc::internal") public static native @ByVal Status OpenRecordBatchWriter(@UniquePtr IpcPayloadWriter sink,
-                             @SharedPtr Schema schema,
+                             @Const @SharedPtr @ByRef Schema schema,
                              @UniquePtr RecordBatchWriter out);
 
 /** Create a new RecordBatchWriter from IpcPayloadWriter and schema.
@@ -6431,7 +7213,7 @@ public static final int kFeatherVersion = kFeatherVersion();
  *  @param options [in] options for serialization
  *  @return Result<std::unique_ptr<RecordBatchWriter>> */
 @Namespace("arrow::ipc::internal") public static native @ByVal RecordBatchWriterUniqueResult OpenRecordBatchWriter(
-    @UniquePtr IpcPayloadWriter sink, @SharedPtr Schema schema,
+    @UniquePtr IpcPayloadWriter sink, @Const @SharedPtr @ByRef Schema schema,
     @Const @ByRef IpcOptions options);
 
 /** \brief Compute IpcPayload for the given schema
@@ -6469,12 +7251,18 @@ public static final int kFeatherVersion = kFeatherVersion();
 @Namespace("arrow::ipc::internal") public static native @ByVal Status WriteIpcPayload(@Const @ByRef IpcPayload payload, @Const @ByRef IpcOptions options,
                        OutputStream dst, int[] metadata_length);
 
+/** \brief Compute IpcPayload for the given sparse tensor
+ *  @param sparse_tensor [in] the SparseTensor that is being serialized
+ *  @param pool [in,out] for any required temporary memory allocations
+ *  @param out [out] the returned IpcPayload
+ *  @return Status */
+@Namespace("arrow::ipc::internal") public static native @ByVal Status GetSparseTensorPayload(@Const @ByRef SparseTensor sparse_tensor, MemoryPool pool,
+                              IpcPayload out);
+
   // namespace internal
 
   // namespace ipc
   // namespace arrow
-
-// #endif  // ARROW_IPC_WRITER_H
 
 
 }

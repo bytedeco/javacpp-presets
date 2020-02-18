@@ -24,8 +24,13 @@ public class BufferOutputStream extends OutputStream {
    *  @param initial_capacity [in] the initial allocated internal capacity of
    *  the OutputStream
    *  @param pool [in,out] a MemoryPool to use for allocations
-   *  @param out [out] the created stream */
-  public static native @ByVal Status Create(@Cast("int64_t") long initial_capacity, MemoryPool pool,
+   *  @return the created stream */
+  public static native @ByVal BufferOutputStreamResult Create(
+        @Cast("int64_t") long initial_capacity, MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public static native @ByVal BufferOutputStreamResult Create(
+        @Cast("int64_t") long initial_capacity);
+
+  public static native @Deprecated @ByVal Status Create(@Cast("int64_t") long initial_capacity, MemoryPool pool,
                          @SharedPtr BufferOutputStream out);
 
   // Implement the OutputStream interface
@@ -33,16 +38,16 @@ public class BufferOutputStream extends OutputStream {
   /** Close the stream, preserving the buffer (retrieve it with Finish()). */
   public native @ByVal Status Close();
   public native @Cast("bool") boolean closed();
-  public native @ByVal Status Tell(@Cast("int64_t*") LongPointer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") LongBuffer _position);
-  public native @ByVal Status Tell(@Cast("int64_t*") long[] _position);
+  public native @ByVal LongResult Tell();
   public native @ByVal Status Write(@Const Pointer data, @Cast("int64_t") long nbytes);
 
   /** \cond FALSE */
   /** \endcond
    <p>
    *  Close the stream and return the buffer */
-  public native @ByVal Status Finish(@SharedPtr ArrowBuffer result);
+  public native @ByVal BufferResult Finish();
+
+  public native @Deprecated @ByVal Status Finish(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer result);
 
   /** \brief Initialize state of OutputStream with newly allocated memory and
    *  set position to 0

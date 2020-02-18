@@ -13,6 +13,8 @@ import static org.bytedeco.arrow.global.parquet.*;
 
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
+
+/** \brief A generic Iterator that can return errors */
 @Name("arrow::Iterator<std::unique_ptr<arrow::dataset::ScanTask> >") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class ScanTaskIterator extends Pointer {
     static { Loader.load(); }
@@ -43,13 +45,43 @@ public class ScanTaskIterator extends Pointer {
   /** \brief Return the next element of the sequence, IterationTraits<T>::End() when the
    *  iteration is completed. Calling this on a default constructed Iterator
    *  will result in undefined behavior. */
-  public native @ByVal Status Next(@UniquePtr ScanTask out);
+  public native @ByVal ScanTaskResult Next();
 
   /** Pass each element of the sequence to a visitor. Will return any error status
    *  returned by the visitor, terminating iteration. */
 
-  /** Iterators will only compare equal if they are both null */
-  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ScanTaskIterator other);
+  /** Iterators will only compare equal if they are both null.
+   *  Equality comparability is required to make an Iterator of Iterators
+   *  (to check for the end condition). */
+  public native @Cast("bool") boolean Equals(@Const @ByRef ScanTaskIterator other);
 
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
+
+  @NoOffset public static class RangeIterator extends Pointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public RangeIterator(Pointer p) { super(p); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public RangeIterator(long size) { super((Pointer)null); allocateArray(size); }
+      private native void allocateArray(long size);
+      @Override public RangeIterator position(long position) {
+          return (RangeIterator)super.position(position);
+      }
+  
+    public RangeIterator() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public RangeIterator(@ByVal ScanTaskIterator i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@ByVal ScanTaskIterator i);
+
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef RangeIterator other);
+
+    public native @ByRef @Name("operator ++") RangeIterator increment();
+
+    public native @ByVal @Name("operator *") ScanTaskResult multiply();
+  }
+
+  public native @ByVal RangeIterator begin();
+
+  public native @ByVal RangeIterator end();
 }

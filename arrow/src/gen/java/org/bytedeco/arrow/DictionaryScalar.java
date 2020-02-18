@@ -8,10 +8,16 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
 
-@Namespace("arrow") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class DictionaryScalar extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public DictionaryScalar() { super((Pointer)null); }
+
+@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class DictionaryScalar extends Scalar {
+    static { Loader.load(); }
+
+  
+  
+    public DictionaryScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DictionaryScalar(Pointer p) { super(p); }
+
 }

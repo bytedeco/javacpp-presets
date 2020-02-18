@@ -33,7 +33,7 @@ public class ExpressionType extends Pointer {
     /** a reference to a column within a record batch, will evaluate to an array */
     FIELD(0),
 
-    /** a literal singular value encapuslated in a Scalar */
+    /** a literal singular value encapsulated in a Scalar */
     SCALAR(1),
 
     /** a literal Array */
@@ -43,23 +43,29 @@ public class ExpressionType extends Pointer {
     NOT(2),
 
     /** cast an expression to a given DataType */
-    // TODO(bkietz) CAST,
+    CAST(3),
 
     /** a conjunction of multiple expressions (true if all operands are true) */
-    AND(3),
+    AND(4),
 
     /** a disjunction of multiple expressions (true if any operand is true) */
-    OR(4),
+    OR(5),
 
     /** a comparison of two other expressions */
-    COMPARISON(5);
+    COMPARISON(6),
 
     /** replace nulls with other expressions
      *  currently only boolean expressions may be coalesced */
     // TODO(bkietz) COALESCE,
 
     /** extract validity as a boolean expression */
-    // TODO(bkietz) IS_VALID,
+    IS_VALID(7),
+
+    /** check each element for membership in a set */
+    IN(8),
+
+    /** custom user defined expression */
+    CUSTOM(9);
 
       public final int value;
       private type(int v) { this.value = v; }

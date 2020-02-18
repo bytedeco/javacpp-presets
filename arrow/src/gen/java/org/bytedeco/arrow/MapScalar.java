@@ -9,28 +9,25 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class MapScalar extends Scalar {
+@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class MapScalar extends BaseListScalar {
     static { Loader.load(); }
+
+  
+    
+    
+      public MapScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  
+  
+    public MapScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
+                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
+    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value,
+                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  
+    public MapScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value) { super((Pointer)null); allocate(value); }
+    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MapScalar(Pointer p) { super(p); }
 
-  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys(); public native MapScalar keys(Array setter);
-  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items(); public native MapScalar items(Array setter);
-
-  public MapScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(keys, values, type, is_valid); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean is_valid/*=true*/);
-  public MapScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(keys, values, type); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
-  public MapScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-              @Cast("bool") boolean is_valid/*=true*/) { super((Pointer)null); allocate(keys, values, is_valid); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
-              @Cast("bool") boolean is_valid/*=true*/);
-  public MapScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values) { super((Pointer)null); allocate(keys, values); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values);
 }

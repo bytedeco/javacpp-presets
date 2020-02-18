@@ -16,10 +16,29 @@ public class Readable extends Pointer {
     public Readable(Pointer p) { super(p); }
 
 
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+  /** \brief Read data from current file position.
+   * 
+   *  Read at most {@code nbytes} from the current file position into {@code out}.
+   *  The number of bytes read is returned. */
+  
+  ///
+  ///
+  public native @ByVal LongResult Read(@Cast("int64_t") long nbytes, Pointer out);
 
-  // Does not copy if not necessary
-  public native @ByVal Status Read(@Cast("int64_t") long nbytes, @SharedPtr ArrowBuffer out);
+  /** \brief Read data from current file position.
+   * 
+   *  Read at most {@code nbytes} from the current file position. Less bytes may
+   *  be read if EOF is reached. This method updates the current file position.
+   * 
+   *  In some cases (e.g. a memory-mapped file), this method may avoid a
+   *  memory copy. */
+  public native @ByVal BufferResult Read(@Cast("int64_t") long nbytes);
+
+  // Deprecated APIs
+
+  public native @Deprecated @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongPointer bytes_read, Pointer out);
+  public native @Deprecated @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") LongBuffer bytes_read, Pointer out);
+  public native @Deprecated @ByVal Status Read(@Cast("int64_t") long nbytes, @Cast("int64_t*") long[] bytes_read, Pointer out);
+
+  public native @Deprecated @ByVal Status Read(@Cast("int64_t") long nbytes, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 }

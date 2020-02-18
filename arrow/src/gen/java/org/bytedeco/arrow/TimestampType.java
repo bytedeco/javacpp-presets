@@ -55,6 +55,7 @@ public class TimestampType extends TemporalType {
     public ParametricType asParametricType() { return asParametricType(this); }
     @Namespace public static native @Name("static_cast<arrow::ParametricType*>") ParametricType asParametricType(TimestampType pointer);
 
+
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();
 

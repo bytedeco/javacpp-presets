@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Samuel Audet
+ * Copyright (C) 2019-2020 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             include = {
                 "onnxruntime/core/session/onnxruntime_c_api.h",
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
-		"onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
-	    },
-            link = "onnxruntime@.1.1.0",
-            preload = {"iomp5", "dnnl@.1"},
+                "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
+            },
+            link = "onnxruntime@.1.1.1",
+            preload = {"gomp@.1##", "iomp5##", "dnnl@.1##"},
             preloadresource = "/org/bytedeco/dnnl/"
         ),
     },
@@ -58,28 +58,34 @@ public class onnxruntime implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ORTCHAR_T", "ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
-	.put(new Info("TypeInfo::GetTensorTypeAndShapeInfo()", "std::string&&", "Ort::Value::put").skip())
-	.put(new Info("Ort::Value").purify(true).base("BasedValue"))
-	.put(new Info("Ort::Env").base("BasedEnv"))
-	.put(new Info("Ort::CustomOpDomain").base("BasedCustomOpDomain"))
-	.put(new Info("Ort::RunOptions").base("BasedRunOptions"))
-	.put(new Info("Ort::Session").base("BasedSession"))
-	.put(new Info("Ort::SessionOptions").base("BasedSessionOptions"))
-	.put(new Info("Ort::TypeInfo").base("BasedTypeInfo"))
-	.put(new Info("Ort::MemoryInfo").base("BasedMemoryInfo"))
-	.put(new Info("Ort::TensorTypeAndShapeInfo").base("BasedTensorTypeAndShapeInfo"))
-	.put(new Info("Ort::Value::operator =").skip())
-	.put(new Info("Ort::Base<OrtValue>", "Base<OrtValue>").pointerTypes("BasedValue"))
-	.put(new Info("Ort::Base<OrtMemoryInfo>", "Base<OrtMemoryInfo>").pointerTypes("BasedMemoryInfo"))
-	.put(new Info("Ort::Base<OrtEnv>", "Base<OrtEnv>").pointerTypes("BasedEnv"))
-	.put(new Info("Ort::Base<OrtCustomOpDomain>", "Base<OrtCustomOpDomain>").pointerTypes("BasedCustomOpDomain"))
-	.put(new Info("Ort::Base<OrtRunOptions>", "Base<OrtRunOptions>").pointerTypes("BasedRunOptions"))
-	.put(new Info("Ort::Base<OrtSession>", "Base<OrtSession>").pointerTypes("BasedSession"))
-	.put(new Info("Ort::Base<OrtSessionOptions>", "Base<OrtSessionOptions>").pointerTypes("BasedSessionOptions"))
-	.put(new Info("Ort::Base<OrtTensorTypeAndShapeInfo>", "Base<OrtTensorTypeAndShapeInfo>").pointerTypes("BasedTensorTypeAndShapeInfo"))
-	.put(new Info("Ort::Base<OrtTypeInfo>", "Base<OrtTypeInfo>").pointerTypes("BasedTypeInfo"))
-	.put(new Info("Ort::Value::GetTensorMutableData<float>").javaNames("GetTensorMutableDataFloat"))
-	.put(new Info("const std::vector<Ort::Value>", "std::vector<Ort::Value>").pointerTypes("ValueVector").define())
-        .put(new Info("Ort::Exception").javaNames("OrtException"));
+               .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api").skip())
+               .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
+               .put(new Info("const std::vector<Ort::Value>", "std::vector<Ort::Value>").pointerTypes("ValueVector").define())
+               .put(new Info("Ort::Exception").pointerTypes("OrtException"))
+               .put(new Info("Ort::Value(Ort::Value)", "Ort::Value::operator =(Ort::Value)").skip())
+               .put(new Info("Ort::Value::CreateTensor<jbyte>").javaNames("CreateTensorByte"))
+               .put(new Info("Ort::Value::CreateTensor<jshort>").javaNames("CreateTensorShort"))
+               .put(new Info("Ort::Value::CreateTensor<jint>").javaNames("CreateTensorInt"))
+               .put(new Info("Ort::Value::CreateTensor<float>").javaNames("CreateTensorFloat"))
+               .put(new Info("Ort::Value::CreateTensor<double>").javaNames("CreateTensorDouble"))
+               .put(new Info("Ort::Value::CreateTensor<jboolean>").javaNames("CreateTensorBoolean"))
+               .put(new Info("Ort::Value::CreateTensor<jchar>").javaNames("CreateTensorChar"))
+               .put(new Info("Ort::Value::GetTensorMutableData<jbyte>").javaNames("GetTensorMutableDataByte"))
+               .put(new Info("Ort::Value::GetTensorMutableData<jshort>").javaNames("GetTensorMutableDataShort"))
+               .put(new Info("Ort::Value::GetTensorMutableData<jint>").javaNames("GetTensorMutableDataInt"))
+               .put(new Info("Ort::Value::GetTensorMutableData<float>").javaNames("GetTensorMutableDataFloat"))
+               .put(new Info("Ort::Value::GetTensorMutableData<double>").javaNames("GetTensorMutableDataDouble"))
+               .put(new Info("Ort::Value::GetTensorMutableData<jboolean>").javaNames("GetTensorMutableDataBoolean"))
+               .put(new Info("Ort::Value::GetTensorMutableData<jchar>").javaNames("GetTensorMutableDataChar"))
+               .put(new Info("Ort::TensorTypeAndShapeInfo", "Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("TensorTypeAndShapeInfo"))
+               .put(new Info("Ort::Base<OrtMemoryInfo>").pointerTypes("BaseMemoryInfo"))
+               .put(new Info("Ort::Base<OrtCustomOpDomain>").pointerTypes("BaseCustomOpDomain"))
+               .put(new Info("Ort::Base<OrtEnv>").pointerTypes("BaseEnv"))
+               .put(new Info("Ort::Base<OrtRunOptions>").pointerTypes("BaseRunOptions"))
+               .put(new Info("Ort::Base<OrtSession>").pointerTypes("BaseSession"))
+               .put(new Info("Ort::Base<OrtSessionOptions>").pointerTypes("BaseSessionOptions"))
+               .put(new Info("Ort::Base<OrtTensorTypeAndShapeInfo>").pointerTypes("BaseTensorTypeAndShapeInfo"))
+               .put(new Info("Ort::Base<OrtTypeInfo>").pointerTypes("BaseTypeInfo"))
+               .put(new Info("Ort::Base<OrtValue>").pointerTypes("BaseValue"));
     }
 }
