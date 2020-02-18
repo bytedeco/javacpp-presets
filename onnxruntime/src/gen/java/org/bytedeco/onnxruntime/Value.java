@@ -93,6 +93,8 @@ public class Value extends BaseValue {
 
   public native @Name("GetTensorMutableData<jint>") IntPointer GetTensorMutableDataInt();
 
+  public native @Name("GetTensorMutableData<jlong>") LongPointer GetTensorMutableDataLong();
+
   public native @Name("GetTensorMutableData<float>") FloatPointer GetTensorMutableDataFloat();
 
   public native @Name("GetTensorMutableData<double>") DoublePointer GetTensorMutableDataDouble();

@@ -73,6 +73,7 @@ public class onnxruntime implements InfoMapper {
                .put(new Info("Ort::Value::GetTensorMutableData<jbyte>").javaNames("GetTensorMutableDataByte"))
                .put(new Info("Ort::Value::GetTensorMutableData<jshort>").javaNames("GetTensorMutableDataShort"))
                .put(new Info("Ort::Value::GetTensorMutableData<jint>").javaNames("GetTensorMutableDataInt"))
+               .put(new Info("Ort::Value::GetTensorMutableData<jlong>").javaNames("GetTensorMutableDataLong"))
                .put(new Info("Ort::Value::GetTensorMutableData<float>").javaNames("GetTensorMutableDataFloat"))
                .put(new Info("Ort::Value::GetTensorMutableData<double>").javaNames("GetTensorMutableDataDouble"))
                .put(new Info("Ort::Value::GetTensorMutableData<jboolean>").javaNames("GetTensorMutableDataBoolean"))
