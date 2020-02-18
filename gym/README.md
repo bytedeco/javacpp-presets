@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/gym/apidocs/
 
-&lowast; Call `Py_SetPath(cachePackages())` before calling `Py_Initialize()`.
+&lowast; Call `Py_AddPath(cachePackages())` before calling `Py_Initialize()`.
 
 
 Sample Usage
@@ -74,7 +74,7 @@ public class ListEnvs {
         /* try to use MKL when available */
         System.setProperty("org.bytedeco.openblas.load", "mkl");
 
-        Py_SetPath(org.bytedeco.gym.presets.gym.cachePackages());
+        Py_AddPath(org.bytedeco.gym.presets.gym.cachePackages());
         Py_Initialize();
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");

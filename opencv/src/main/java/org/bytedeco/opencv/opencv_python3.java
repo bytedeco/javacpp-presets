@@ -35,7 +35,7 @@ import org.bytedeco.opencv.presets.*;
 /**
  * This is only a placeholder to facilitate loading the {@code opencv_python3} module with JavaCPP.
  * <p>
- * Call {@code Py_SetPath(opencv_python3.cachePackages())} before calling {@code Py_Initialize()}.
+ * Call {@code Py_AddPath(opencv_python3.cachePackages())} before calling {@code Py_Initialize()}.
  *
  * @author Samuel Audet
  */
