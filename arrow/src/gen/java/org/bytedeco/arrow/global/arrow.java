@@ -379,9 +379,8 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 // #define ARROW_UTIL_TYPE_TRAITS_H
 
 // #include <type_traits>
-// Targeting ../IsOneOf.java
 
-  /** Base case: nothing has matched */
+/** \brief Metafunction to allow checking if a type matches any of another set of types */  /** Base case: nothing has matched */
 
 /** \brief Shorthand for using IsOneOf + std::enable_if */
 
