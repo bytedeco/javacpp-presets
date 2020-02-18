@@ -1,4 +1,5 @@
 
+ * Add convenient `Py_AddPath()` helper method to presets for CPython
  * Include `OrcBindings.h` and other missing header files for LLVM ([issue #833](https://github.com/bytedeco/javacpp-presets/issues/833))
  * Fix `-platform` artifacts on JPMS by commenting out requires to Android modules ([issue #814](https://github.com/bytedeco/javacpp-presets/issues/814) and [pull #831](https://github.com/bytedeco/javacpp-presets/pull/831))
  * Include `timecode.h`, among other missing header files, in the `avutil` module of FFmpeg ([issue #822](https://github.com/bytedeco/javacpp-presets/issues/822))

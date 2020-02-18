@@ -17,7 +17,7 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/opencv/apidocs/
 
 &lowast; Call `Loader.load(opencv_java.class)` before using the API in the `org.opencv` namespace.  
-&lowast; Call `Py_SetPath(opencv_python3.cachePackages())` before calling `Py_Initialize()`.
+&lowast; Call `Py_AddPath(opencv_python3.cachePackages())` before calling `Py_Initialize()`.
 
 
 Sample Usage

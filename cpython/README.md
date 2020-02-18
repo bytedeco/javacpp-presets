@@ -21,7 +21,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/cpython/apidocs/
 
-&lowast; Call `Py_SetPath(cachePackages())` before calling `Py_Initialize()`.
+&lowast; Call `Py_AddPath(cachePackages())` before calling `Py_Initialize()`.
 
 
 Sample Usage
@@ -66,7 +66,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 public class Simple {
     public static void main(String[] args) throws Exception {
-        Py_SetPath(cachePackages());
+        Py_AddPath(cachePackages());
 
         Pointer program = Py_DecodeLocale(Simple.class.getSimpleName(), null);
         if (program == null) {

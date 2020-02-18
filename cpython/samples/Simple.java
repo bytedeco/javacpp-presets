@@ -4,7 +4,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 public class Simple {
     public static void main(String[] args) throws Exception {
-        Py_SetPath(cachePackages());
+        Py_AddPath(cachePackages());
 
         Pointer program = Py_DecodeLocale(Simple.class.getSimpleName(), null);
         if (program == null) {
