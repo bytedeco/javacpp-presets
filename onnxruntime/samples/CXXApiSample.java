@@ -19,9 +19,6 @@ public class CXXApiSample {
       SessionOptions session_options = new SessionOptions();
       session_options.SetIntraOpNumThreads(1);
 
-      // Sets graph optimization level
-      session_options.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);
-
       // If onnxruntime.dll is built with CUDA enabled, we can uncomment out this line to use CUDA for this
       // session (we also need to include cuda_provider_factory.h above which defines it)
       // #include "cuda_provider_factory.h"
@@ -131,7 +128,6 @@ public class CXXApiSample {
       // Score for class[2] = 0.000125
       // Score for class[3] = 0.001180
       // Score for class[4] = 0.001317
-
       System.out.println("Done!");
       System.exit(0);
     }
