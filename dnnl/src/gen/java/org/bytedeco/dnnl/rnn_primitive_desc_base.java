@@ -26,8 +26,17 @@ public class rnn_primitive_desc_base extends org.bytedeco.dnnl.primitive_desc {
 
     
         
-            public rnn_primitive_desc_base() { super((Pointer)null); allocate(); }
-            private native void allocate();
+            
+                public rnn_primitive_desc_base() { super((Pointer)null); allocate(); }
+                private native void allocate();
+                public rnn_primitive_desc_base(@Const @ByRef rnn_primitive_desc_base arg0) { super((Pointer)null); allocate(arg0); }
+                private native void allocate(@Const @ByRef rnn_primitive_desc_base arg0);
+                
+                ///
+                public rnn_primitive_desc_base(dnnl_primitive_desc t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+                private native void allocate(dnnl_primitive_desc t, @Cast("bool") boolean weak/*=false*/);
+                public rnn_primitive_desc_base(dnnl_primitive_desc t) { super((Pointer)null); allocate(t); }
+                private native void allocate(dnnl_primitive_desc t);
     
         
         ///

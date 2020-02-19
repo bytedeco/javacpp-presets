@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2018-2020 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@
 
 package org.bytedeco.dnnl.presets;
 
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -39,16 +42,61 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             compiler = "cpp11",
             define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
             include = {"dnnl_types.h", "dnnl_config.h", /*"dnnl_debug.h",*/ "dnnl_version.h", "dnnl.h", "dnnl.hpp"},
-            link = "dnnl@.1", preload = {"gomp@.1", "iomp5"}),
+            link = "dnnl@.1", preload = {"gomp@.1", "iomp5"}
+        ),
         @Platform(
-            value = "macosx-x86_64",
-            preload = {"gcc_s@.1", "gomp@.1", "stdc++@.6", "iomp5"},
-            preloadpath = {"/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
+            value = "windows",
+            preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
+                       "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
+                       "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
+                       "api-ms-win-core-string-l1-1-0", "api-ms-win-core-errorhandling-l1-1-0", "api-ms-win-core-timezone-l1-1-0", "api-ms-win-core-file-l1-1-0",
+                       "api-ms-win-core-namedpipe-l1-1-0", "api-ms-win-core-handle-l1-1-0", "api-ms-win-core-file-l2-1-0", "api-ms-win-core-heap-l1-1-0",
+                       "api-ms-win-core-libraryloader-l1-1-0", "api-ms-win-core-synch-l1-1-0", "api-ms-win-core-processthreads-l1-1-0",
+                       "api-ms-win-core-processenvironment-l1-1-0", "api-ms-win-core-datetime-l1-1-0", "api-ms-win-core-localization-l1-2-0",
+                       "api-ms-win-core-sysinfo-l1-1-0", "api-ms-win-core-synch-l1-2-0", "api-ms-win-core-console-l1-1-0", "api-ms-win-core-debug-l1-1-0",
+                       "api-ms-win-core-rtlsupport-l1-1-0", "api-ms-win-core-processthreads-l1-1-1", "api-ms-win-core-file-l1-2-0", "api-ms-win-core-profile-l1-1-0",
+                       "api-ms-win-core-memory-l1-1-0", "api-ms-win-core-util-l1-1-0", "api-ms-win-core-interlocked-l1-1-0", "ucrtbase",
+                       "vcruntime140", "msvcp140", "concrt140", "vcomp140"}
+        ),
+        @Platform(
+            value = "windows-x86",
+            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
+                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
+                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}
+        ),
         @Platform(
             value = "windows-x86_64",
-            preload = {"libwinpthread-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "libiomp5md", "libdnnl"})},
-    target = "org.bytedeco.dnnl", global = "org.bytedeco.dnnl.global.dnnl")
-public class dnnl implements InfoMapper {
+            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
+                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}
+        ),
+    },
+    target = "org.bytedeco.dnnl",
+    global = "org.bytedeco.dnnl.global.dnnl"
+)
+public class dnnl implements LoadEnabled, InfoMapper {
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
+                    break;
+                default:
+                    // not Windows
+            }
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
                .put(new Info("DNNL_HELPER_DLL_IMPORT", "DNNL_HELPER_DLL_EXPORT", "DNNL_API",

@@ -30,9 +30,9 @@ git submodule update --init --recursive --jobs $MAKEJ
 git submodule foreach --recursive git reset --hard
 patch -p1 < ../../../onnxruntime.patch
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-MAKEFLAGS="-j $MAKEJ" bash build.sh --cmake_path "$CMAKE" --ctest_path "$CTEST" --config Release --use_dnnl --use_mklml --build_shared_lib
+MAKEFLAGS="-j $MAKEJ" bash build.sh --cmake_path "$CMAKE" --ctest_path "$CTEST" --config Release --use_dnnl --build_shared_lib
 
 cp -r include/* ../include
-cp -r build/Linux/Release/lib* build/Linux/Release/dnnl/install/lib*/libdnnl* ../lib
+cp -r build/Linux/Release/lib* ../lib
 
 cd ../..
