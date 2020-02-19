@@ -33,6 +33,8 @@ public class OrtApiBase extends Pointer {
       public native @Const OrtApi call(@Cast("uint32_t") int version);
   }
   public native GetApi_int GetApi(); public native OrtApiBase GetApi(GetApi_int setter);  // Pass in ORT_API_VERSION
+  // nullptr will be returned if the version is unsupported, for example when using a runtime older than this header file
+
   public static class BytePointer_GetVersionString extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

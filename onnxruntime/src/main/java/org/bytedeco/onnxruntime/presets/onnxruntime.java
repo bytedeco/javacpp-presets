@@ -87,6 +87,7 @@ public class onnxruntime implements InfoMapper {
                .put(new Info("Ort::Value::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
                .put(new Info("Ort::TensorTypeAndShapeInfo", "Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("TensorTypeAndShapeInfo"))
                .put(new Info("Ort::Base<OrtMemoryInfo>").pointerTypes("BaseMemoryInfo"))
+	       .put(new Info("Ort::Base<OrtModelMetadata>").pointerTypes("BaseModelMetadata"))
                .put(new Info("Ort::Base<OrtCustomOpDomain>").pointerTypes("BaseCustomOpDomain"))
                .put(new Info("Ort::Base<OrtEnv>").pointerTypes("BaseEnv"))
                .put(new Info("Ort::Base<OrtRunOptions>").pointerTypes("BaseRunOptions"))
