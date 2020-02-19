@@ -1,58 +1,3 @@
-JavaCPP Presets for ONNX Runtime
-================================
-
-Introduction
-------------
-This directory contains the JavaCPP Presets module for:
-
- * ONNX Runtime 1.1.1  https://github.com/microsoft/onnxruntime
-
-Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
-
-
-Documentation
--------------
-Java API documentation is available here:
-
- * http://bytedeco.org/javacpp-presets/onnxruntime/apidocs/
-
-
-Sample Usage
-------------
-Here is a simple example of ONNX Runtime ported to Java from this C++ source file:
-
- * https://github.com/microsoft/onnxruntime/blob/v1.0.0/csharp/test/Microsoft.ML.OnnxRuntime.EndToEndTests.Capi/CXX_Api_Sample.cpp
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `CXXApiSample.java` source files below, simply execute on the command line:
-```bash
- $ mvn compile exec:java
-```
-
-### The `pom.xml` build file
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.onnxruntime</groupId>
-    <artifactId>cxxapisample</artifactId>
-    <version>1.5.3-SNAPSHOT</version>
-    <properties>
-        <exec.mainClass>CXXApiSample</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>onnxruntime-platform</artifactId>
-            <version>1.1.1-1.5.3-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-    </build>
-</project>
-```
-
-### The `CXXApiSample.java` source file
-```java
 // Copyright(c) Microsoft Corporation.All rights reserved.
 // Licensed under the MIT License.
 //
@@ -187,4 +132,3 @@ public class CXXApiSample {
       System.exit(0);
     }
 }
-```

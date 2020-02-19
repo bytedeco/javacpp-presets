@@ -1,10 +1,10 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnxruntime</groupId>
-    <artifactId>capisample</artifactId>
+    <artifactId>cxxapisample</artifactId>
     <version>1.5.3-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>CApiSample</exec.mainClass>
+        <exec.mainClass>CXXApiSample</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>

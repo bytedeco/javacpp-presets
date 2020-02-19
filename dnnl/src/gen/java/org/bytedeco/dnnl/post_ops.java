@@ -20,6 +20,18 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class post_ops extends dnnl_post_ops_handle {
     static { Loader.load(); }
+
+    
+        public post_ops() { super((Pointer)null); allocate(); }
+        private native void allocate();
+        public post_ops(@Const @ByRef post_ops arg0) { super((Pointer)null); allocate(arg0); }
+        private native void allocate(@Const @ByRef post_ops arg0);
+        
+        ///
+        public post_ops(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+        private native void allocate(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/);
+        public post_ops(dnnl_post_ops t) { super((Pointer)null); allocate(t); }
+        private native void allocate(dnnl_post_ops t);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public post_ops(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -31,8 +43,6 @@ public class post_ops extends dnnl_post_ops_handle {
 
 
     /** Constructs an empty sequence of post-ops. */
-    public post_ops() { super((Pointer)null); allocate(); }
-    private native void allocate();
 
     /** Returns the number of post-ops entries. */
     public native int len();

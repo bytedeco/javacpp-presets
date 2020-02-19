@@ -16,6 +16,18 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class primitive_attr extends dnnl_primitive_attr_handle {
     static { Loader.load(); }
+
+    
+        public primitive_attr() { super((Pointer)null); allocate(); }
+        private native void allocate();
+        public primitive_attr(@Const @ByRef primitive_attr arg0) { super((Pointer)null); allocate(arg0); }
+        private native void allocate(@Const @ByRef primitive_attr arg0);
+        
+        ///
+        public primitive_attr(dnnl_primitive_attr t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+        private native void allocate(dnnl_primitive_attr t, @Cast("bool") boolean weak/*=false*/);
+        public primitive_attr(dnnl_primitive_attr t) { super((Pointer)null); allocate(t); }
+        private native void allocate(dnnl_primitive_attr t);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public primitive_attr(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -27,10 +39,6 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
 
 
     /** Constructs default (empty) primitive attributes. */
-    
-    ///
-    public primitive_attr() { super((Pointer)null); allocate(); }
-    private native void allocate();
 
     /** Creates primitive attributes from a C API ::dnnl_primitive_attr_t
      *  handle. The resulting handle is not weak and the C handle will be

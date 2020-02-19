@@ -38,8 +38,17 @@ public class reorder extends primitive {
         static { Loader.load(); }
     
             
-                public primitive_desc() { super((Pointer)null); allocate(); }
-                private native void allocate();
+                
+                    public primitive_desc() { super((Pointer)null); allocate(); }
+                    private native void allocate();
+                    public primitive_desc(@Const @ByRef primitive_desc arg0) { super((Pointer)null); allocate(arg0); }
+                    private native void allocate(@Const @ByRef primitive_desc arg0);
+                    
+                    ///
+                    public primitive_desc(dnnl_primitive_desc t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+                    private native void allocate(dnnl_primitive_desc t, @Cast("bool") boolean weak/*=false*/);
+                    public primitive_desc(dnnl_primitive_desc t) { super((Pointer)null); allocate(t); }
+                    private native void allocate(dnnl_primitive_desc t);
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(long)}. */

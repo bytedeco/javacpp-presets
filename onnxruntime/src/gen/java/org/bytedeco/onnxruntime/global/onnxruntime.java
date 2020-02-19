@@ -11,6 +11,9 @@ import org.bytedeco.javacpp.annotation.*;
 public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
     static { Loader.load(); }
 
+// Targeting ../ValueVector.java
+
+
 // Parsed from onnxruntime/core/session/onnxruntime_c_api.h
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -254,6 +257,149 @@ public static native @Const OrtApiBase OrtGetApiBase();
 /*
  * END EXPERIMENTAL
 */
+
+// #ifdef __cplusplus
+// #endif
+
+
+// Parsed from onnxruntime/core/session/onnxruntime_cxx_api.h
+
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// Summary: The Ort C++ API is a header only wrapper around the Ort C API.
+//
+// The C++ API simplifies usage by returning values directly instead of error codes, throwing exceptions on errors
+// and automatically releasing resources in the destructors.
+//
+// Each of the C++ wrapper classes holds only a pointer to the C internal object. Treat them like smart pointers.
+// To create an empty object, pass 'nullptr' to the constructor (for example, Env e{nullptr};).
+//
+// Only move assignment between objects is allowed, there are no copy constructors. Some objects have explicit 'Clone'
+// methods for this purpose.
+
+// #pragma once
+// #include "onnxruntime_c_api.h"
+// #include <cstddef>
+// #include <array>
+// #include <memory>
+// #include <stdexcept>
+// #include <string>
+// #include <vector>
+// #include <utility>
+// #include <type_traits>
+// Targeting ../OrtException.java
+
+
+
+// This is used internally by the C++ API. This class holds the global variable that points to the OrtApi, it's in a template so that we can define a global variable in a header and make
+// it transparent to the users of the API.
+
+// #ifdef EXCLUDE_REFERENCE_TO_ORT_DLL
+
+
+// #else
+
+// #endif
+
+
+// This returns a reference to the OrtApi interface in use, in case someone wants to use the C API functions
+@Namespace("Ort") public static native @Const @ByRef OrtApi GetApi();
+
+// This is used internally by the C++ API. This macro is to make it easy to generate overloaded methods for all of the various OrtRelease* functions for every Ort* type
+// This can't be done in the C API since C doesn't have function overloading.
+// #define ORT_DEFINE_RELEASE(NAME)
+//   inline void OrtRelease(Ort##NAME* ptr) { Global<void>::api_.Release##NAME(ptr); }
+
+@Namespace("Ort") public static native void OrtRelease(OrtMemoryInfo ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtCustomOpDomain ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtEnv ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtRunOptions ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtSession ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtSessionOptions ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtTensorTypeAndShapeInfo ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtTypeInfo ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtValue ptr);
+// Targeting ../BaseMemoryInfo.java
+
+
+// Targeting ../BaseCustomOpDomain.java
+
+
+// Targeting ../BaseEnv.java
+
+
+// Targeting ../BaseRunOptions.java
+
+
+// Targeting ../BaseSession.java
+
+
+// Targeting ../BaseSessionOptions.java
+
+
+// Targeting ../BaseTensorTypeAndShapeInfo.java
+
+
+// Targeting ../BaseTypeInfo.java
+
+
+// Targeting ../BaseValue.java
+
+
+// Targeting ../Env.java
+
+
+// Targeting ../CustomOpDomain.java
+
+
+// Targeting ../RunOptions.java
+
+
+// Targeting ../SessionOptions.java
+
+
+// Targeting ../Session.java
+
+
+// Targeting ../TensorTypeAndShapeInfo.java
+
+
+// Targeting ../TypeInfo.java
+
+
+// Targeting ../Value.java
+
+
+// Targeting ../AllocatorWithDefaultOptions.java
+
+
+// Targeting ../MemoryInfo.java
+
+
+// Targeting ../CustomOpApi.java
+
+
+
+  // namespace Ort
+
+// #include "onnxruntime_cxx_inline.h"
+
+
+// Parsed from onnxruntime/core/providers/dnnl/dnnl_provider_factory.h
+
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// #include "onnxruntime_c_api.h"
+
+// #ifdef __cplusplus
+// #endif
+
+/**
+ * @param use_arena zero: false. non-zero: true.
+ */
+public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( OrtSessionOptions options, int use_arena);
 
 // #ifdef __cplusplus
 // #endif
