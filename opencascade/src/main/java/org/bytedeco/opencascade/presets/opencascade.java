@@ -8345,7 +8345,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     },
     target = "org.bytedeco.opencascade",
     global = "org.bytedeco.opencascade.global.opencascade")
-public class ale implements InfoMapper {
+public class opencascade implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "opencascade"); }
 
     public void map(InfoMap infoMap) {
