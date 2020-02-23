@@ -6,6 +6,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import org.bytedeco.dnnl.*;
+import static org.bytedeco.dnnl.global.dnnl.*;
+
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
@@ -15,10 +18,8 @@ public class Session extends BaseSession {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Session(Pointer p) { super(p); }
 
-  public Session(@ByRef Env env, @Cast("const char*") BytePointer model_path, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_path, options); }
-  private native void allocate(@ByRef Env env, @Cast("const char*") BytePointer model_path, @Const @ByRef SessionOptions options);
-  public Session(@ByRef Env env, String model_path, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_path, options); }
-  private native void allocate(@ByRef Env env, String model_path, @Const @ByRef SessionOptions options);
+  public Session(@ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_path, options); }
+  private native void allocate(@ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options);
   public Session(@ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_data, model_data_length, options); }
   private native void allocate(@ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options);
 

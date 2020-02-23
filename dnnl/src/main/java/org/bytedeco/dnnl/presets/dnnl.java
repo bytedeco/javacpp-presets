@@ -42,7 +42,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             compiler = "cpp11",
             define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
             include = {"dnnl_types.h", "dnnl_config.h", /*"dnnl_debug.h",*/ "dnnl_version.h", "dnnl.h", "dnnl.hpp"},
-            link = "dnnl@.1", preload = {"gomp@.1", "iomp5"}
+            link = "dnnl@.1", preload = {"gomp@.1", "iomp5"}, resource = {"include", "lib"}
         ),
         @Platform(
             value = "windows",

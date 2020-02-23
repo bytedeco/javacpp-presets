@@ -6,6 +6,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import org.bytedeco.dnnl.*;
+import static org.bytedeco.dnnl.global.dnnl.*;
+
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
@@ -35,11 +38,9 @@ public class SessionOptions extends BaseSessionOptions {
   public native @ByRef SessionOptions EnableCpuMemArena();
   public native @ByRef SessionOptions DisableCpuMemArena();
 
-  public native @ByRef SessionOptions SetOptimizedModelFilePath(@Cast("const char*") BytePointer optimized_model_file);
-  public native @ByRef SessionOptions SetOptimizedModelFilePath(String optimized_model_file);
+  public native @ByRef SessionOptions SetOptimizedModelFilePath(@Cast("const ORTCHAR_T*") Pointer optimized_model_file);
 
-  public native @ByRef SessionOptions EnableProfiling(@Cast("const char*") BytePointer profile_file_prefix);
-  public native @ByRef SessionOptions EnableProfiling(String profile_file_prefix);
+  public native @ByRef SessionOptions EnableProfiling(@Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
   public native @ByRef SessionOptions DisableProfiling();
 
   public native @ByRef SessionOptions EnableMemPattern();

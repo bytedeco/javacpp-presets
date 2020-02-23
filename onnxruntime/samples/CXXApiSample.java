@@ -37,7 +37,8 @@ public class CXXApiSample {
       // create session and load model into memory
       // using squeezenet version 1.3
       // URL = https://github.com/onnx/models/tree/master/squeezenet
-      String model_path = args.length > 0 ? args[0] : "squeezenet.onnx";
+      String s = args.length > 0 ? args[0] : "squeezenet.onnx";
+      Pointer model_path = Loader.getPlatform().startsWith("windows") ? new CharPointer(s) : new BytePointer(s);
 
       System.out.println("Using Onnxruntime C++ API");
       Session session = new Session(env, model_path, session_options);

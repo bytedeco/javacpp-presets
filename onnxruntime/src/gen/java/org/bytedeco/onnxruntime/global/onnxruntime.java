@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import org.bytedeco.dnnl.*;
+import static org.bytedeco.dnnl.global.dnnl.*;
+
 public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
     static { Loader.load(); }
 
