@@ -6,6 +6,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import org.bytedeco.dnnl.*;
+import static org.bytedeco.dnnl.global.dnnl.*;
+
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
   // nullptr for Status* indicates success
 @Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)

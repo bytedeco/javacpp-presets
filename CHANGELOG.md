@@ -1,5 +1,5 @@
 
- * Map the C++ API of ONNX Runtime and refine support for DNNL ([pull #841](https://github.com/bytedeco/javacpp-presets/pull/841))
+ * Add Windows build for ONNX Runtime, map the C++ API, and refine support for DNNL ([pull #841](https://github.com/bytedeco/javacpp-presets/pull/841))
  * Add convenient `Py_AddPath()` helper method to presets for CPython
  * Include `OrcBindings.h` and other missing header files for LLVM ([issue #833](https://github.com/bytedeco/javacpp-presets/issues/833))
  * Fix `-platform` artifacts on JPMS by commenting out requires to Android modules ([issue #814](https://github.com/bytedeco/javacpp-presets/issues/814) and [pull #831](https://github.com/bytedeco/javacpp-presets/pull/831))

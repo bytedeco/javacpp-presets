@@ -21,9 +21,6 @@
  */
 package org.bytedeco.onnxruntime.presets;
 
-import java.util.List;
-import org.bytedeco.javacpp.ClassProperties;
-import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -31,23 +28,24 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import org.bytedeco.dnnl.presets.*;
+
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
+    inherit = dnnl.class,
     value = {
         @Platform(
-            value = {"linux", "macosx"},
+            value = {"linux", "macosx", "windows"},
             compiler = "cpp11",
             include = {
                 "onnxruntime/core/session/onnxruntime_c_api.h",
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
             },
-            link = "onnxruntime@.1.1.1",
-            preload = {"gomp@.1##", "iomp5##", "dnnl@.1##"},
-            preloadresource = "/org/bytedeco/dnnl/"
+            link = "onnxruntime@.1.1.1"
         ),
     },
     target = "org.bytedeco.onnxruntime",
@@ -57,12 +55,13 @@ public class onnxruntime implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "onnxruntime"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("ORTCHAR_T", "ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
+        infoMap.put(new Info("ORTCHAR_T").cppText("").cppTypes().cast().pointerTypes("Pointer"))
+               .put(new Info("ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api").skip())
                .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("const std::vector<Ort::Value>", "std::vector<Ort::Value>").pointerTypes("ValueVector").define())
                .put(new Info("Ort::Exception").pointerTypes("OrtException"))
-               .put(new Info("Ort::Value(Ort::Value)", "Ort::Value::operator =(Ort::Value)").skip())
+               .put(new Info("Ort::Value(Ort::Value)", "Ort::Value::operator =(Ort::Value)", "Ort::RunOptions::GetRunLogSeverityLevel").skip())
                .put(new Info("Ort::Value::CreateTensor<float>").javaNames("CreateTensorFloat"))
                .put(new Info("Ort::Value::CreateTensor<double>").javaNames("CreateTensorDouble"))
                .put(new Info("Ort::Value::CreateTensor<int8_t>").javaNames("CreateTensorByte"))
