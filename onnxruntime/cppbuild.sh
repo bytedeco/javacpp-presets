@@ -27,7 +27,7 @@ cd onnxruntime
 git reset --hard
 git checkout v$ONNXRUNTIME
 git submodule update --init --recursive --jobs $MAKEJ
-git submodule foreach --recursive git reset --hard
+git submodule foreach --recursive 'git reset --hard'
 patch -p1 < ../../../onnxruntime.patch
 sedinplace 's/CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
