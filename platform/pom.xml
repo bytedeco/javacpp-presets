@@ -237,7 +237,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.6.0.rc2-${project.version}</version>
+      <version>1.6.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
