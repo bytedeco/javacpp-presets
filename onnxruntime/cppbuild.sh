@@ -13,7 +13,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-ONNXRUNTIME=1.1.1
+ONNXRUNTIME=1.1.2
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
