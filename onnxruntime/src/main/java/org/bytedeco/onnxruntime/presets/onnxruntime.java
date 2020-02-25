@@ -45,7 +45,7 @@ import org.bytedeco.dnnl.presets.*;
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
             },
-            link = "onnxruntime@.1.1.1"
+            link = "onnxruntime@.1.1.2"
         ),
     },
     target = "org.bytedeco.onnxruntime",
