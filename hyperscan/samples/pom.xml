@@ -1,0 +1,16 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.hyperscan</groupId>
+    <artifactId>HyperscanTest</artifactId>
+    <version>1.5.3-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>HyperscanTest</exec.mainClass>
+    </properties>
+    <dependencies>
+      <dependency>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>hyperscan-platform</artifactId>
+        <version>5.2.1-1.5.3-SNAPSHOT</version>
+      </dependency>
+    </dependencies>
+</project>
