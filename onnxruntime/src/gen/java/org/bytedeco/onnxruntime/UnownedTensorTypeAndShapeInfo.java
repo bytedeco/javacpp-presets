@@ -12,15 +12,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-@Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class TypeInfo extends BaseTypeInfo {
+@Name("Ort::Unowned<Ort::TensorTypeAndShapeInfo>") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
+public class UnownedTensorTypeAndShapeInfo extends TensorTypeAndShapeInfo {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TypeInfo(Pointer p) { super(p); }
+    public UnownedTensorTypeAndShapeInfo(Pointer p) { super(p); }
 
-  public TypeInfo(OrtTypeInfo p) { super((Pointer)null); allocate(p); }
-  private native void allocate(OrtTypeInfo p);
-
-  public native @ByVal UnownedTensorTypeAndShapeInfo GetTensorTypeAndShapeInfo();
-  public native @Cast("ONNXType") int GetONNXType();
 }
