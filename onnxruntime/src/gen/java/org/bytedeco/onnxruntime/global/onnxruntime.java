@@ -350,6 +350,9 @@ public static native @Const OrtApiBase OrtGetApiBase();
 // Targeting ../BaseValue.java
 
 
+// Targeting ../UnownedTensorTypeAndShapeInfo.java
+
+
 // Targeting ../Env.java
 
 
