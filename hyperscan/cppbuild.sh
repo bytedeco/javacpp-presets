@@ -14,6 +14,8 @@ download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boos
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
+mkdir -p include lib
+mkdir -p include/hs
 echo "Decompressing archives..."
 tar -xzvf ../hyperscan-$HYPERSCAN_VERSION.tar.gz
 tar --totals -xf ../boost_$BOOST.tar.gz
@@ -39,9 +41,10 @@ case $PLATFORM in
         make install/strip
         ;;
     windows-x86_64)
-        "$CMAKE" -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' .
-        make -j $MAKEJ
-        make install/strip
+        CXXFLAGS="/Wv:17" "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' .
+        MSBuild.exe hyperscan.sln //p:Configuration=Release //p:Platform=x64
+        cp -r src/* $INSTALL_PATH/include/hs/
+        cp lib/*.lib $INSTALL_PATH/lib
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
