@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ONNX Runtime 1.1.2  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.1.2  https://microsoft.github.io/onnxruntime/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
