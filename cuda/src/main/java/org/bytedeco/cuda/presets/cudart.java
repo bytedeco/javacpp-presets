@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
               exclude = "<crt/host_defines.h>",
               includepath = "/usr/local/cuda-10.0/include/", link = {"cudart@.10.0", "cuda@.1#"}, linkpath = "/usr/local/cuda-10.0/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.0/lib64/"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le", "linux-arm64"}, linkpath = "/usr/local/cuda-10.0/lib64/"),
     @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.0/include/",
                                            linkpath = {"/Developer/NVIDIA/CUDA-10.0/lib/", "/usr/local/cuda/lib/"}),
     @Platform(value = "windows-x86_64",     preload = "cudart64_100",
