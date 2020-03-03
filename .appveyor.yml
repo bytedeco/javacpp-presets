@@ -97,6 +97,9 @@ environment:
 #    - PROJ: "tensorflow"
 #      OS: windows-x86_64
 #      EXT: -python-gpu
+    - PROJ: "onnxruntime"
+      OS: windows-x86_64
+      EXT: -gpu
 
 for:
 -
