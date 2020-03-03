@@ -1,4 +1,5 @@
 
+ * Add CUDA-enabled build for ONNX Runtime via `-gpu` extension
  * Fix presets for LLVM 9.0 where libclang would fail to load on Windows ([issue #830](https://github.com/bytedeco/javacpp-presets/issues/830))
  * Add Windows build for ONNX Runtime, map the C++ API, and refine support for DNNL ([pull #841](https://github.com/bytedeco/javacpp-presets/pull/841))
  * Add convenient `Py_AddPath()` helper method to presets for CPython

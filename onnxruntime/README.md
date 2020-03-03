@@ -44,6 +44,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <artifactId>onnxruntime-platform</artifactId>
             <version>1.1.2-1.5.3-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>onnxruntime-platform-gpu</artifactId>
+            <version>1.1.2-1.5.3-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform-redist</artifactId>
+            <version>10.2-7.6-1.5.3-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>

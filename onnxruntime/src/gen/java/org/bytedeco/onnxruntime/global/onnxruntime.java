@@ -392,6 +392,25 @@ public static native @Const OrtApiBase OrtGetApiBase();
 // #include "onnxruntime_cxx_inline.h"
 
 
+// Parsed from onnxruntime/core/providers/cuda/cuda_provider_factory.h
+
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// #include "onnxruntime_c_api.h"
+
+// #ifdef __cplusplus
+// #endif
+
+/**
+ * @param device_id cuda device id, starts from zero.
+ */
+public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppendExecutionProvider_CUDA( OrtSessionOptions options, int device_id);
+
+// #ifdef __cplusplus
+// #endif
+
+
 // Parsed from onnxruntime/core/providers/dnnl/dnnl_provider_factory.h
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
