@@ -49,7 +49,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-7 python27 rh-git29"
-  if [[ "mxnet tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "mxnet hyperscan tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="devtoolset-7 rh-git218"
   fi
@@ -58,7 +58,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum repolist"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y repolist"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel ragel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
