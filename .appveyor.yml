@@ -99,6 +99,9 @@ environment:
 #    - PROJ: "tensorflow"
 #      OS: windows-x86_64
 #      EXT: -python-gpu
+#    - PROJ: "onnxruntime"
+#      OS: windows-x86_64
+#      EXT: -gpu
 
 for:
 -
@@ -111,6 +114,8 @@ for:
 init:
 # uncomment this if you need to enable RDP for this build run
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    - 'fsutil fsinfo drives'
+    - 'fsutil volume diskfree c:'
     - wmic computersystem set AutomaticManagedPagefile=False
     - wmic pagefile list /format:list
 #    - wmic pagefileset create name="C:\pagefile.sys"
@@ -136,6 +141,7 @@ test_script:
 on_finish:
     - 'fsutil fsinfo drives'
     - 'fsutil volume diskfree c:'
+    - wmic pagefile list /format:list
 #    uncomment this for the RDP session to remain active after the build ends
 #    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
