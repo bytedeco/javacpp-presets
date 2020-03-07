@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package org.bytedeco.ale.presets;
+package org.bytedeco.opencascade.presets;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
