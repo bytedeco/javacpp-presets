@@ -8351,5 +8351,6 @@ public class opencascade implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("DEFINE_STANDARD_ALLOC", "DEFINE_STANDARD_ALLOC_ARRAY", "DEFINE_STANDARD_ALLOC_PLACEMENT", "STANDARD_ALIGNED", "WORKAROUND_SUNPRO_NEW_PLACEMENT", "Standard_EXPORT").cppTypes().annotations());
         infoMap.put(new Info("__QNX__").define(false));
+        infoMap.put(new Info("defined (__alpha) || defined(DECOSF1)").define(false));
     }
 }
