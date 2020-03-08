@@ -86,19 +86,19 @@ environment:
       OS: windows-x86_64
       EXT: -gpu
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -gpu
+#      PARTIAL_CPPBUILD: "1"
     - PROJ: "tensorflow"
       OS: windows-x86_64
       EXT: -gpu
-      PARTIAL_CPPBUILD: "1"
-    - PROJ: "tensorflow"
-      OS: windows-x86_64
-      EXT: -gpu
-    - PROJ: "tensorflow"
-      OS: windows-x86_64
-      EXT: -python
-    - PROJ: "tensorflow"
-      OS: windows-x86_64
-      EXT: -python-gpu
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -python
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -python-gpu
     - PROJ: "onnxruntime"
       OS: windows-x86_64
       EXT: -gpu
