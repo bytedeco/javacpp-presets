@@ -31,38 +31,81 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import org.bytedeco.dnnl.presets.*;
+
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
+    inherit = dnnl.class,
     value = {
         @Platform(
-            value = {"linux", "macosx"},
+            value = {"linux", "macosx", "windows"},
             compiler = "cpp11",
+            define = {"GENERIC_EXCEPTION_CLASS Ort::Exception", "GENERIC_EXCEPTION_TOSTRING what()"},
             include = {
                 "onnxruntime/core/session/onnxruntime_c_api.h",
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
+                "onnxruntime/core/providers/cuda/cuda_provider_factory.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
             },
-            link = "onnxruntime@.1.1.1",
-            preload = {"gomp@.1##", "iomp5##", "dnnl@.1##"},
-            preloadresource = "/org/bytedeco/dnnl/"
+            link = "onnxruntime@.1.1.2"
+        ),
+        @Platform(
+            value = {"linux", "macosx", "windows"},
+            extension = "-gpu"
         ),
     },
     target = "org.bytedeco.onnxruntime",
     global = "org.bytedeco.onnxruntime.global.onnxruntime"
 )
-public class onnxruntime implements InfoMapper {
+public class onnxruntime implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "onnxruntime"); }
 
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        String extension = properties.getProperty("platform.extension");
+        List<String> preloads = properties.get("platform.preload");
+        List<String> resources = properties.get("platform.preloadresource");
+
+        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
+            return;
+        }
+        int i = 0;
+        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn"};
+        for (String lib : libs) {
+            switch (platform) {
+                case "linux-arm64":
+                case "linux-ppc64le":
+                case "linux-x86_64":
+                case "macosx-x86_64":
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.2" : "@.10";
+                    break;
+                case "windows-x86_64":
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_102" : "64_10";
+                    break;
+                default:
+                    continue; // no CUDA
+            }
+            if (!preloads.contains(lib)) {
+                preloads.add(i++, lib);
+            }
+        }
+        if (i > 0) {
+            resources.add("/org/bytedeco/cuda/");
+        }
+    }
+
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("ORTCHAR_T", "ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
+        infoMap.put(new Info("ORTCHAR_T").cppText("").cppTypes().cast().pointerTypes("Pointer"))
+               .put(new Info("ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api").skip())
                .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("const std::vector<Ort::Value>", "std::vector<Ort::Value>").pointerTypes("ValueVector").define())
                .put(new Info("Ort::Exception").pointerTypes("OrtException"))
-               .put(new Info("Ort::Value(Ort::Value)", "Ort::Value::operator =(Ort::Value)").skip())
+               .put(new Info("Ort::Value(Ort::Value)", "Ort::Value::operator =(Ort::Value)", "Ort::RunOptions::GetRunLogSeverityLevel").skip())
                .put(new Info("Ort::Value::CreateTensor<float>").javaNames("CreateTensorFloat"))
                .put(new Info("Ort::Value::CreateTensor<double>").javaNames("CreateTensorDouble"))
                .put(new Info("Ort::Value::CreateTensor<int8_t>").javaNames("CreateTensorByte"))
@@ -85,7 +128,7 @@ public class onnxruntime implements InfoMapper {
                .put(new Info("Ort::Value::GetTensorMutableData<uint32_t>").javaNames("GetTensorMutableDataUInt"))
                .put(new Info("Ort::Value::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
                .put(new Info("Ort::Value::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
-               .put(new Info("Ort::TensorTypeAndShapeInfo", "Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("TensorTypeAndShapeInfo"))
+               .put(new Info("Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
                .put(new Info("Ort::Base<OrtMemoryInfo>").pointerTypes("BaseMemoryInfo"))
 	       .put(new Info("Ort::Base<OrtModelMetadata>").pointerTypes("BaseModelMetadata"))
                .put(new Info("Ort::Base<OrtCustomOpDomain>").pointerTypes("BaseCustomOpDomain"))
@@ -95,6 +138,7 @@ public class onnxruntime implements InfoMapper {
                .put(new Info("Ort::Base<OrtSessionOptions>").pointerTypes("BaseSessionOptions"))
                .put(new Info("Ort::Base<OrtTensorTypeAndShapeInfo>").pointerTypes("BaseTensorTypeAndShapeInfo"))
                .put(new Info("Ort::Base<OrtTypeInfo>").pointerTypes("BaseTypeInfo"))
-               .put(new Info("Ort::Base<OrtValue>").pointerTypes("BaseValue"));
+               .put(new Info("Ort::Base<OrtValue>").pointerTypes("BaseValue"))
+               .put(new Info("OrtSessionOptionsAppendExecutionProvider_CUDA").annotations("@Platform(extension=\"-gpu\")").javaNames("OrtSessionOptionsAppendExecutionProvider_CUDA"));
     }
 }

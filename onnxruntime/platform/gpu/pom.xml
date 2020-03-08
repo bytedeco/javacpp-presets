@@ -7,19 +7,25 @@
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
     <version>1.5.3-SNAPSHOT</version>
-    <relativePath>../../</relativePath>
+    <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
-  <artifactId>dnnl-platform</artifactId>
-  <version>1.2.1-${project.parent.version}</version>
-  <name>JavaCPP Presets Platform for DNNL</name>
+  <artifactId>onnxruntime-platform-gpu</artifactId>
+  <version>1.1.2-${project.parent.version}</version>
+  <name>JavaCPP Presets Platform GPU for ONNX Runtime</name>
 
   <properties>
-    <javacpp.moduleId>dnnl</javacpp.moduleId>
+    <javacpp.moduleId>onnxruntime</javacpp.moduleId>
+    <javacpp.platform.extension>-gpu</javacpp.platform.extension>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>dnnl-platform</artifactId>
+      <version>1.2.1-${project.parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -55,7 +61,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64-gpu.jar ${javacpp.moduleId}-macosx-x86_64-gpu.jar ${javacpp.moduleId}-windows-x86_64-gpu.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -100,9 +106,9 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
-                      requires org.bytedeco.${javacpp.moduleId}.linux.x86_64;
-                      requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
-                      requires org.bytedeco.${javacpp.moduleId}.windows.x86_64;
+                      requires org.bytedeco.${javacpp.moduleId}.linux.x86_64.gpu;
+                      requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64.gpu;
+                      requires org.bytedeco.${javacpp.moduleId}.windows.x86_64.gpu;
                     }
                   </moduleInfoSource>
                 </module>
