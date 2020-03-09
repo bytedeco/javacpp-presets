@@ -7,8 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.hdf5.global.hdf5.*;
-
-// #endif
+		/* Datatypes				*/
 
 /* Information struct for attribute (for H5Aget_info/H5Aget_info_by_idx) */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)

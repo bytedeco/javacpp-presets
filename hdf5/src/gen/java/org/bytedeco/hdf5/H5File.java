@@ -82,9 +82,18 @@ public class H5File extends Group {
         // Returns the file size of the HDF5 file.
         public native @Cast("hsize_t") long getFileSize();
 
+        // Returns the 'file number' of the HDF5 file.
+        public native @Cast("unsigned long") long getFileNum();
+
         // Determines if a file, specified by its name, is in HDF5 format
         public static native @Cast("bool") boolean isHdf5(@Cast("const char*") BytePointer name);
         public static native @Cast("bool") boolean isHdf5(String name);
+
+        // Determines if a file, specified by its name, can be accessed as HDF5
+        public static native @Cast("bool") boolean isAccessible(@Cast("const char*") BytePointer name, @Const @ByRef(nullValue = "H5::FileAccPropList::DEFAULT") FileAccPropList access_plist);
+        public static native @Cast("bool") boolean isAccessible(@Cast("const char*") BytePointer name);
+        public static native @Cast("bool") boolean isAccessible(String name, @Const @ByRef(nullValue = "H5::FileAccPropList::DEFAULT") FileAccPropList access_plist);
+        public static native @Cast("bool") boolean isAccessible(String name);
 
         // Reopens this file.
         public native void reOpen();  // added for better name

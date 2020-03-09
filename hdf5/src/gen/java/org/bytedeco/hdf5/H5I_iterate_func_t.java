@@ -9,14 +9,13 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.hdf5.global.hdf5.*;
 
 
-/* Callback during link traversal */
+/* Type of the H5Iiterate callback function */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
-public class H5L_traverse_0_func_t extends FunctionPointer {
+public class H5I_iterate_func_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    H5L_traverse_0_func_t(Pointer p) { super(p); }
-    protected H5L_traverse_0_func_t() { allocate(); }
+    public    H5I_iterate_func_t(Pointer p) { super(p); }
+    protected H5I_iterate_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("hid_t") long call(@Cast("const char*") BytePointer link_name, @Cast("hid_t") long cur_group,
-    @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size, @Cast("hid_t") long lapl_id);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long id, Pointer udata);
 }

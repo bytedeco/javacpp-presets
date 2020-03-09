@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.hdf5.global.hdf5.*;
 
 
-// Define the operator function pointer for H5Ovisit2().
+// Define the operator function pointer for H5Ovisit3().
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class visit_operator_t extends FunctionPointer {
     static { Loader.load(); }
@@ -19,6 +19,6 @@ public class visit_operator_t extends FunctionPointer {
     private native void allocate();
     public native int call(@ByRef H5Object obj,
                                  @Cast({"", "std::string", "std::string&"}) @Adapter("StringAdapter<char>") BytePointer attr_name,
-                                 @Const H5O_info_t oinfo,
+                                 @Const H5O_info2_t oinfo,
                                  Pointer operator_data);
 }

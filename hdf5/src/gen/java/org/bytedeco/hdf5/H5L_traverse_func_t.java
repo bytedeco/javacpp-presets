@@ -8,6 +8,8 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.hdf5.global.hdf5.*;
 
+
+/* Callback during link traversal */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5L_traverse_func_t extends FunctionPointer {
     static { Loader.load(); }

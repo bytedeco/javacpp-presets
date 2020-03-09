@@ -9,14 +9,14 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.hdf5.global.hdf5.*;
 
 
-/* Prototype for H5Ovisit/H5Ovisit_by_name() operator */
+/* Prototype for H5Ovisit/H5Ovisit_by_name() operator (version 3) */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
-public class H5O_iterate_t extends FunctionPointer {
+public class H5O_iterate2_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    H5O_iterate_t(Pointer p) { super(p); }
-    protected H5O_iterate_t() { allocate(); }
+    public    H5O_iterate2_t(Pointer p) { super(p); }
+    protected H5O_iterate2_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") long obj, @Cast("const char*") BytePointer name, @Const H5O_info_t info,
+    public native @Cast("herr_t") int call(@Cast("hid_t") long obj, @Cast("const char*") BytePointer name, @Const H5O_info2_t info,
     Pointer op_data);
 }

@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 ZLIB=zlib-1.2.11
-HDF5_VERSION=1.10.6
+HDF5_VERSION=1.12.0
 download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
 download "https://s3.amazonaws.com/hdf-wordpress-1/wp-content/uploads/manual/HDF5/HDF5_${HDF5_VERSION//./_}/source/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2
 
@@ -21,6 +21,7 @@ cd hdf5-$HDF5_VERSION
 
 sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
 sedinplace 's/# *cmakedefine/#cmakedefine/g' config/cmake/H5pubconf.h.in
+sedinplace 's/COMPATIBILITY SameMinorVersion/COMPATIBILITY AnyNewerVersion/g' CMakeInstallation.cmake
 
 case $PLATFORM in
 # HDF5 does not currently support cross-compiling:
