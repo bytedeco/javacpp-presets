@@ -8,15 +8,12 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.hdf5.global.hdf5.*;
 
-
-/* Prototype for H5Literate/H5Literate_by_name() operator */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
-public class H5L_iterate_t extends FunctionPointer {
+public class H5P_prp_encode_func_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    H5L_iterate_t(Pointer p) { super(p); }
-    protected H5L_iterate_t() { allocate(); }
+    public    H5P_prp_encode_func_t(Pointer p) { super(p); }
+    protected H5P_prp_encode_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") long group, @Cast("const char*") BytePointer name, @Const H5L_info_t info,
-    Pointer op_data);
+    public native @Cast("herr_t") int call(@Const Pointer value, @Cast("void**") @ByPtrPtr Pointer buf, @Cast("size_t*") SizeTPointer size);
 }

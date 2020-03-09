@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2019 Samuel Audet
+ * Copyright (C) 2016-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5OcreatProp.h", "H5DcreatProp.h", "H5LaccProp.h", "H5DaccProp.h", "H5LcreatProp.h", "H5Location.h", "H5Object.h", "H5CommonFG.h", "H5DataType.h", "H5DxferProp.h",
         "H5FaccProp.h", "H5FcreatProp.h", "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h",
         "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
-            link = {"hdf5@.103", "hdf5_cpp@.103", "hdf5_hl@.100", "hdf5_hl_cpp@.100"}, resource = {"include", "lib"}),
+            link = {"hdf5@.200", "hdf5_cpp@.200", "hdf5_hl@.200", "hdf5_hl_cpp@.200"}, resource = {"include", "lib"}),
     @Platform(value = "windows", link = {"zlibstatic", "libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp"}, preload = {
         "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
         "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
@@ -90,9 +90,9 @@ public class hdf5 implements LoadEnabled, InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("H5_DLL", "H5_DLLVAR", "H5_HLDLL", "H5_DLLCPP", "H5CHECK", "H5OPEN", "H5E_ERR_CLS", "H5E_BEGIN_TRY", "H5E_END_TRY",
-                             "H5G_link_t", "H5std_string").cppTypes().annotations())
+                             "H5G_link_t", "H5std_string", "H5O_TOKEN_UNDEF").cppTypes().annotations())
                .put(new Info("((__GNUC__ * 100) + __GNUC_MINOR__) >= 406", "H5_HAVE_PARALLEL", "NEW_HYPERSLAB_API", "H5_HAVE_DIRECT",
-                             "BOOL_NOTDEFINED", "H5_NO_STD").define(false))
+                             "BOOL_NOTDEFINED", "H5_NO_STD", "H5_HAVE_MAP_API").define(false))
                .put(new Info("H5_NO_DEPRECATED_SYMBOLS", "H5_HAVE_STDBOOL_H", "H5_SIZEOF_UINT32_T>=4", "H5_SIZEOF_INT64_T>=8", "H5_SIZEOF_UINT64_T>=8").define(true))
                .put(new Info("HSIZE_UNDEF", "HADDR_UNDEF", "HADDR_AS_MPI_TYPE", "H5L_MAX_LINK_NAME_LEN", "H5L_SAME_LOC", "H5O_SHMESG_SDSPACE_FLAG",
                              "H5O_SHMESG_DTYPE_FLAG", "H5O_SHMESG_FILL_FLAG", "H5O_SHMESG_PLINE_FLAG", "H5O_SHMESG_ATTR_FLAG", "H5T_VARIABLE",
@@ -125,7 +125,7 @@ public class hdf5 implements LoadEnabled, InfoMapper {
                      + "    private native void allocate();\n"
                      + "    public native int call(@ByRef H5Object obj,\n"
                      + "                                 @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter<char>\") BytePointer attr_name,\n"
-                     + "                                 @Const H5O_info_t oinfo,\n"
+                     + "                                 @Const H5O_info2_t oinfo,\n"
                      + "                                 Pointer operator_data);\n"
                      + "}\n"))
 
