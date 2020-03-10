@@ -152,7 +152,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.21.3-${project.version}</version>
+      <version>0.21.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -162,7 +162,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.8-${project.version}</version>
+      <version>0.3.9-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -202,7 +202,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.16.0-${project.version}</version>
+      <version>0.17.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
