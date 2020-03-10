@@ -24,7 +24,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.1.2
+ONNXRUNTIME=1.2.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -35,8 +35,8 @@ if [[ ! -d onnxruntime ]]; then
     git clone https://github.com/microsoft/onnxruntime
 fi
 cd onnxruntime
-#git reset --hard
-#git checkout v$ONNXRUNTIME
+git reset --hard
+git checkout v$ONNXRUNTIME
 git submodule update --init --recursive --jobs $MAKEJ
 git submodule foreach --recursive 'git reset --hard'
 

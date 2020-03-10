@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ONNX Runtime 1.1.2  https://microsoft.github.io/onnxruntime/
+ * ONNX Runtime 1.2.0  https://microsoft.github.io/onnxruntime/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,14 +42,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>1.1.2-1.5.3-SNAPSHOT</version>
+            <version>1.2.0-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform-gpu</artifactId>
-            <version>1.1.2-1.5.3-SNAPSHOT</version>
+            <version>1.2.0-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
