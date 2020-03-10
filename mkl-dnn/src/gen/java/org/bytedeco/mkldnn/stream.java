@@ -28,13 +28,14 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
 public class stream extends mkldnn_stream_handle {
     static { Loader.load(); }
 
-    public stream(mkldnn_stream t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
-    private native void allocate(mkldnn_stream t, @Cast("bool") boolean weak/*=false*/);
-    public stream() { super((Pointer)null); allocate(); }
-    private native void allocate();
     
-    public stream(@Const @ByRef stream other) { super((Pointer)null); allocate(other); }
-    private native void allocate(@Const @ByRef stream other);
+        public stream(mkldnn_stream t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+        private native void allocate(mkldnn_stream t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+        public stream() { super((Pointer)null); allocate(); }
+        private native void allocate();
+    
+        public stream(@Const @ByRef stream other) { super((Pointer)null); allocate(other); }
+        private native void allocate(@Const @ByRef stream other);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public stream(Pointer p) { super(p); }
 

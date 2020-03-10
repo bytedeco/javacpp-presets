@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>gym</artifactId>
-  <version>0.16.0-${project.parent.version}</version>
+  <version>0.17.1-${project.parent.version}</version>
   <name>JavaCPP Presets for Gym</name>
 
   <properties>
@@ -71,7 +71,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.8-${project.parent.version}</version>
+            <version>0.3.9-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -96,7 +96,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.8-${project.parent.version}</version>
+            <version>0.3.9-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>

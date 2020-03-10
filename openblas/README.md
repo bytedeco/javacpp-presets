@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenBLAS 0.3.8  http://www.openblas.net/
+ * OpenBLAS 0.3.9  http://www.openblas.net/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.8-1.5.3-SNAPSHOT</version>
+            <version>0.3.9-1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

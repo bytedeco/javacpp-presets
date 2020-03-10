@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-MKLDNN_VERSION=0.21.3
+MKLDNN_VERSION=0.21.4
 MKLDNN_VERSION2=0.21
 MKLML_VERSION=2019.0.5.20190502
 download https://github.com/intel/mkl-dnn/archive/v$MKLDNN_VERSION.tar.gz mkl-dnn-$MKLDNN_VERSION.tar.bz2

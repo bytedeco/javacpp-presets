@@ -1,6 +1,6 @@
-diff -ruN OpenBLAS-0.3.7/exports/Makefile OpenBLAS-0.3.7-macosx/exports/Makefile
---- OpenBLAS-0.3.7/exports/Makefile	2019-08-12 06:23:27.000000000 +0900
-+++ OpenBLAS-0.3.7-macosx/exports/Makefile	2019-08-19 12:02:28.812536795 +0900
+diff -ruN OpenBLAS-0.3.9/exports/Makefile OpenBLAS-0.3.9-macosx/exports/Makefile
+--- OpenBLAS-0.3.9/exports/Makefile	2020-03-02 08:10:20.000000000 +0900
++++ OpenBLAS-0.3.9-macosx/exports/Makefile	2020-03-10 16:18:55.098795543 +0900
 @@ -116,12 +116,7 @@
  	$(OBJCONV) @objconv.def ../$(LIBNAME) ../$(LIBNAME).osx.renamed
  $(LIBDYNNAME) : ../$(LIBNAME).osx.renamed osx.def
@@ -15,15 +15,15 @@ diff -ruN OpenBLAS-0.3.7/exports/Makefile OpenBLAS-0.3.7-macosx/exports/Makefile
  
  dllinit.$(SUFFIX) : dllinit.c
  	$(CC) $(CFLAGS) -c -o $(@F) -s $<
-diff -ruN OpenBLAS-0.3.7/Makefile.install OpenBLAS-0.3.7-macosx/Makefile.install
---- OpenBLAS-0.3.7/Makefile.install	2019-08-12 06:23:27.000000000 +0900
-+++ OpenBLAS-0.3.7-macosx/Makefile.install	2019-08-19 12:02:25.362535289 +0900
-@@ -81,7 +81,7 @@
+diff -ruN OpenBLAS-0.3.9/Makefile.install OpenBLAS-0.3.9-macosx/Makefile.install
+--- OpenBLAS-0.3.9/Makefile.install	2020-03-02 08:10:20.000000000 +0900
++++ OpenBLAS-0.3.9-macosx/Makefile.install	2020-03-10 16:22:43.003900956 +0900
+@@ -82,7 +82,7 @@
  endif
  ifeq ($(OSNAME), Darwin)
  	@-cp $(LIBDYNNAME) "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)"
--	@-install_name_tool -id "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)/$(LIBDYNNAME)" "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)/$(LIBDYNNAME)"
-+	@-install_name_tool -id "@rpath/$(LIBPREFIX).dylib" "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)/$(LIBDYNNAME)"
+-	@-install_name_tool -id "$(OPENBLAS_LIBRARY_DIR)/$(LIBPREFIX).$(MAJOR_VERSION).dylib" "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)/$(LIBDYNNAME)"
++	@-install_name_tool -id "@rpath/$(LIBPREFIX).$(MAJOR_VERSION).dylib" "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)/$(LIBDYNNAME)"
  	@cd "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)" ; \
  	ln -fs $(LIBDYNNAME) $(LIBPREFIX).dylib ; \
  	ln -fs $(LIBDYNNAME) $(LIBPREFIX).$(MAJOR_VERSION).dylib
