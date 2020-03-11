@@ -407,9 +407,6 @@ public static native @Const OrtApiBase OrtGetApiBase();
 
 // #include "onnxruntime_cxx_inline.h"
 
-<<<<<<< HEAD
-=======
-
 // Parsed from onnxruntime/core/providers/cuda/cuda_provider_factory.h
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -429,7 +426,6 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // #endif
 
 
->>>>>>> 3f003e38bf0721a7e23e12a1c6819fb8145ca5e6
 // Parsed from onnxruntime/core/providers/dnnl/dnnl_provider_factory.h
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
