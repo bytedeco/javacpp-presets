@@ -120,7 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * Arrow 0.16.x  https://arrow.apache.org/install/
- * HDF5 1.10.6  https://www.hdfgroup.org/downloads/
+ * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * MKL 2020.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
  * DNNL 1.2.x  https://github.com/intel/mkl-dnn

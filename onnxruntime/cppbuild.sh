@@ -13,9 +13,11 @@ export CUDNN_HOME="/usr/local/cuda"
 export MAKEFLAGS="-j $MAKEJ"
 export PYTHON_BIN_PATH=$(which python3)
 if [[ $PLATFORM == windows* ]]; then
-    export CUDACXX="$CUDA_PATH/bin/nvcc"
-    export CUDA_HOME="$CUDA_PATH"
-    export CUDNN_HOME="$CUDA_PATH"
+    if [[ -n "${CUDA_PATH:-}" ]]; then
+        export CUDACXX="$CUDA_PATH/bin/nvcc"
+        export CUDA_HOME="$CUDA_PATH"
+        export CUDNN_HOME="$CUDA_PATH"
+    fi
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
