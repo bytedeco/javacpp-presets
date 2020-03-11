@@ -8,7 +8,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.hdf5.global.hdf5.*;
 
-// #endif
 
 /* Define the operator function pointer for H5Diterate() */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)

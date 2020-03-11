@@ -6,6 +6,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import org.bytedeco.dnnl.*;
+import static org.bytedeco.dnnl.global.dnnl.*;
+
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
@@ -115,16 +118,16 @@ public class OrtApi extends Pointer {
   // execution of OrtCreateSession, or does the OrtSession retain a handle to the file/directory
   // and continue to access throughout the OrtSession lifetime?
   //  What sort of access is needed to model_path : read or read/write?
-  public static class CreateSession_OrtEnv_BytePointer_OrtSessionOptions_PointerPointer extends FunctionPointer {
+  public static class CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSession_OrtEnv_BytePointer_OrtSessionOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateSession_OrtEnv_BytePointer_OrtSessionOptions_PointerPointer() { allocate(); }
+      public    CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer(Pointer p) { super(p); }
+      protected CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer() { allocate(); }
       private native void allocate();
-      public native OrtStatus call(@Const OrtEnv env, @Cast("const char*") BytePointer model_path,
+      public native OrtStatus call(@Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
                                             @Const OrtSessionOptions options, @Cast("OrtSession**") PointerPointer out);
   }
-  public native CreateSession_OrtEnv_BytePointer_OrtSessionOptions_PointerPointer CreateSession(); public native OrtApi CreateSession(CreateSession_OrtEnv_BytePointer_OrtSessionOptions_PointerPointer setter);
+  public native CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer CreateSession(); public native OrtApi CreateSession(CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer setter);
 
   public static class CreateSessionFromArray_OrtEnv_Pointer_long_OrtSessionOptions_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -164,15 +167,15 @@ public class OrtApi extends Pointer {
   public native CreateSessionOptions_PointerPointer CreateSessionOptions(); public native OrtApi CreateSessionOptions(CreateSessionOptions_PointerPointer setter);
 
   // Set filepath to save optimized model after graph level transformations.
-  public static class SetOptimizedModelFilePath_OrtSessionOptions_BytePointer extends FunctionPointer {
+  public static class SetOptimizedModelFilePath_OrtSessionOptions_Pointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetOptimizedModelFilePath_OrtSessionOptions_BytePointer(Pointer p) { super(p); }
-      protected SetOptimizedModelFilePath_OrtSessionOptions_BytePointer() { allocate(); }
+      public    SetOptimizedModelFilePath_OrtSessionOptions_Pointer(Pointer p) { super(p); }
+      protected SetOptimizedModelFilePath_OrtSessionOptions_Pointer() { allocate(); }
       private native void allocate();
-      public native OrtStatus call(OrtSessionOptions options, @Cast("const char*") BytePointer optimized_model_filepath);
+      public native OrtStatus call(OrtSessionOptions options, @Cast("const ORTCHAR_T*") Pointer optimized_model_filepath);
   }
-  public native SetOptimizedModelFilePath_OrtSessionOptions_BytePointer SetOptimizedModelFilePath(); public native OrtApi SetOptimizedModelFilePath(SetOptimizedModelFilePath_OrtSessionOptions_BytePointer setter);
+  public native SetOptimizedModelFilePath_OrtSessionOptions_Pointer SetOptimizedModelFilePath(); public native OrtApi SetOptimizedModelFilePath(SetOptimizedModelFilePath_OrtSessionOptions_Pointer setter);
 
   // create a copy of an existing OrtSessionOptions
   public static class CloneSessionOptions_OrtSessionOptions_PointerPointer extends FunctionPointer {
@@ -199,15 +202,15 @@ public class OrtApi extends Pointer {
   public native SetSessionExecutionMode_OrtSessionOptions_int SetSessionExecutionMode(); public native OrtApi SetSessionExecutionMode(SetSessionExecutionMode_OrtSessionOptions_int setter);
 
   // Enable profiling for this session.
-  public static class EnableProfiling_OrtSessionOptions_BytePointer extends FunctionPointer {
+  public static class EnableProfiling_OrtSessionOptions_Pointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    EnableProfiling_OrtSessionOptions_BytePointer(Pointer p) { super(p); }
-      protected EnableProfiling_OrtSessionOptions_BytePointer() { allocate(); }
+      public    EnableProfiling_OrtSessionOptions_Pointer(Pointer p) { super(p); }
+      protected EnableProfiling_OrtSessionOptions_Pointer() { allocate(); }
       private native void allocate();
-      public native OrtStatus call(OrtSessionOptions options, @Cast("const char*") BytePointer profile_file_prefix);
+      public native OrtStatus call(OrtSessionOptions options, @Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
   }
-  public native EnableProfiling_OrtSessionOptions_BytePointer EnableProfiling(); public native OrtApi EnableProfiling(EnableProfiling_OrtSessionOptions_BytePointer setter);
+  public native EnableProfiling_OrtSessionOptions_Pointer EnableProfiling(); public native OrtApi EnableProfiling(EnableProfiling_OrtSessionOptions_Pointer setter);
   public static class DisableProfiling_OrtSessionOptions extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

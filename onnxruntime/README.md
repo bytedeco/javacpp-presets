@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ONNX Runtime 1.1.1  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.1.2  https://microsoft.github.io/onnxruntime/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,8 +42,23 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>1.1.1-1.5.3-SNAPSHOT</version>
+            <version>1.1.2-1.5.3-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>onnxruntime-platform-gpu</artifactId>
+            <version>1.1.2-1.5.3-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform-redist</artifactId>
+            <version>10.2-7.6-1.5.3-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>
@@ -92,7 +107,8 @@ public class CXXApiSample {
       // create session and load model into memory
       // using squeezenet version 1.3
       // URL = https://github.com/onnx/models/tree/master/squeezenet
-      String model_path = args.length > 0 ? args[0] : "squeezenet.onnx";
+      String s = args.length > 0 ? args[0] : "squeezenet.onnx";
+      Pointer model_path = Loader.getPlatform().startsWith("windows") ? new CharPointer(s) : new BytePointer(s);
 
       System.out.println("Using Onnxruntime C++ API");
       Session session = new Session(env, model_path, session_options);

@@ -32,6 +32,7 @@ echo Extension: $EXT
 echo Branch: $APPVEYOR_REPO_BRANCH
 
 bash --version
+git --version
 g++ --version
 java -version
 mvn --version
@@ -139,8 +140,10 @@ if [ "$PROJ" == "tensorflow" ]; then
        fi
 fi
 
-# copy Python 3.6 back to default installation directory
+# copy Python 3.x back to default installation directory
 cp -a "/c/Python36-x64" "/C/Program Files/Python36"
+cp -a "/c/Python37-x64" "/C/Program Files/Python37"
+cp -a "/c/Python38-x64" "/C/Program Files/Python38"
 
 # install an older less buggy version of GCC
 curl -L -o mingw-w64-i686-gcc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-7.3.0-2-any.pkg.tar.xz

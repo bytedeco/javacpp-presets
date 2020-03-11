@@ -134,10 +134,10 @@ public class H5Location extends IdComponent {
         public native @ByVal DataSet openDataSet(String name, @Const @ByRef(nullValue = "H5::DSetAccPropList::DEFAULT") DSetAccPropList dapl);
         public native @ByVal DataSet openDataSet(String name);
 
-        public native @ByVal H5L_info_t getLinkInfo(@Cast("const char*") BytePointer link_name, @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
-        public native @ByVal H5L_info_t getLinkInfo(@Cast("const char*") BytePointer link_name);
-        public native @ByVal H5L_info_t getLinkInfo(String link_name, @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
-        public native @ByVal H5L_info_t getLinkInfo(String link_name);
+        public native @ByVal H5L_info2_t getLinkInfo(@Cast("const char*") BytePointer link_name, @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
+        public native @ByVal H5L_info2_t getLinkInfo(@Cast("const char*") BytePointer link_name);
+        public native @ByVal H5L_info2_t getLinkInfo(String link_name, @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
+        public native @ByVal H5L_info2_t getLinkInfo(String link_name);
 
         // Returns the value of a symbolic link.
         public native @StdString BytePointer getLinkval(@Cast("const char*") BytePointer link_name, @Cast("size_t") long size/*=0*/);
@@ -170,32 +170,60 @@ public class H5Location extends IdComponent {
         public native @Cast("unsigned") int childObjVersion(String objname);
 
         // Retrieves information about an HDF5 object.
-        public native void getObjinfo(@ByRef H5O_info_t objinfo, @Cast("unsigned") int fields/*=H5O_INFO_BASIC*/);
-        public native void getObjinfo(@ByRef H5O_info_t objinfo);
+        public native void getObjinfo(@ByRef H5O_info2_t objinfo, @Cast("unsigned") int fields/*=H5O_INFO_BASIC*/);
+        public native void getObjinfo(@ByRef H5O_info2_t objinfo);
 
         // Retrieves information about an HDF5 object, given its name.
-        public native void getObjinfo(@Cast("const char*") BytePointer name, @ByRef H5O_info_t objinfo,
+        public native void getObjinfo(@Cast("const char*") BytePointer name, @ByRef H5O_info2_t objinfo,
                         @Cast("unsigned") int fields/*=H5O_INFO_BASIC*/,
                         @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
-        public native void getObjinfo(@Cast("const char*") BytePointer name, @ByRef H5O_info_t objinfo);
-        public native void getObjinfo(String name, @ByRef H5O_info_t objinfo,
+        public native void getObjinfo(@Cast("const char*") BytePointer name, @ByRef H5O_info2_t objinfo);
+        public native void getObjinfo(String name, @ByRef H5O_info2_t objinfo,
                         @Cast("unsigned") int fields/*=H5O_INFO_BASIC*/,
                         @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
-        public native void getObjinfo(String name, @ByRef H5O_info_t objinfo);
+        public native void getObjinfo(String name, @ByRef H5O_info2_t objinfo);
 
         // Retrieves information about an HDF5 object, given its index.
         public native void getObjinfo(@Cast("const char*") BytePointer grp_name, @Cast("H5_index_t") int idx_type,
-                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info_t objinfo,
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info2_t objinfo,
                         @Cast("unsigned") int fields/*=H5O_INFO_BASIC*/,
                         @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
         public native void getObjinfo(@Cast("const char*") BytePointer grp_name, @Cast("H5_index_t") int idx_type,
-                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info_t objinfo);
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info2_t objinfo);
         public native void getObjinfo(String grp_name, @Cast("H5_index_t") int idx_type,
-                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info_t objinfo,
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info2_t objinfo,
                         @Cast("unsigned") int fields/*=H5O_INFO_BASIC*/,
                         @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
         public native void getObjinfo(String grp_name, @Cast("H5_index_t") int idx_type,
-                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info_t objinfo);
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_info2_t objinfo);
+
+        // Retrieves native native information about an HDF5 object.
+        public native void getNativeObjinfo(@ByRef H5O_native_info_t objinfo, @Cast("unsigned") int fields/*=H5O_NATIVE_INFO_HDR*/);
+        public native void getNativeObjinfo(@ByRef H5O_native_info_t objinfo);
+
+        // Retrieves native information about an HDF5 object, given its name.
+        public native void getNativeObjinfo(@Cast("const char*") BytePointer name, @ByRef H5O_native_info_t objinfo,
+                        @Cast("unsigned") int fields/*=H5O_NATIVE_INFO_HDR*/,
+                        @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
+        public native void getNativeObjinfo(@Cast("const char*") BytePointer name, @ByRef H5O_native_info_t objinfo);
+        public native void getNativeObjinfo(String name, @ByRef H5O_native_info_t objinfo,
+                        @Cast("unsigned") int fields/*=H5O_NATIVE_INFO_HDR*/,
+                        @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
+        public native void getNativeObjinfo(String name, @ByRef H5O_native_info_t objinfo);
+
+        // Retrieves native information about an HDF5 object, given its index.
+        public native void getNativeObjinfo(@Cast("const char*") BytePointer grp_name, @Cast("H5_index_t") int idx_type,
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_native_info_t objinfo,
+                        @Cast("unsigned") int fields/*=H5O_NATIVE_INFO_HDR*/,
+                        @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
+        public native void getNativeObjinfo(@Cast("const char*") BytePointer grp_name, @Cast("H5_index_t") int idx_type,
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_native_info_t objinfo);
+        public native void getNativeObjinfo(String grp_name, @Cast("H5_index_t") int idx_type,
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_native_info_t objinfo,
+                        @Cast("unsigned") int fields/*=H5O_NATIVE_INFO_HDR*/,
+                        @Const @ByRef(nullValue = "H5::LinkAccPropList::DEFAULT") LinkAccPropList lapl);
+        public native void getNativeObjinfo(String grp_name, @Cast("H5_index_t") int idx_type,
+                        @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long idx, @ByRef H5O_native_info_t objinfo);
 
 // #ifndef H5_NO_DEPRECATED_SYMBOLS
 // #endif /* H5_NO_DEPRECATED_SYMBOLS */

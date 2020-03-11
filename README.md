@@ -120,7 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * Arrow 0.16.x  https://arrow.apache.org/install/
- * HDF5 1.10.6  https://www.hdfgroup.org/downloads/
+ * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * MKL 2020.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
  * DNNL 1.2.x  https://github.com/intel/mkl-dnn
@@ -132,7 +132,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.7.6  https://www.python.org/downloads/
  * NumPy 1.18.x  https://github.com/numpy/numpy
  * SciPy 1.4.x  https://github.com/scipy/scipy
- * Gym 0.15.x  https://github.com/openai/gym
+ * Gym 0.16.x  https://github.com/openai/gym
  * LLVM 9.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.79.0  http://www.leptonica.org/download.html
@@ -141,7 +141,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
    * NCCL 2.5.x  https://developer.nvidia.com/nccl
- * MXNet 1.6.0.rc2  https://github.com/apache/incubator-mxnet
+ * MXNet 1.6.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.2  https://github.com/tensorflow/tensorflow
  * TensorRT 7.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment

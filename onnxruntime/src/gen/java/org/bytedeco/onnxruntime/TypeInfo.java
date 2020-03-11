@@ -6,6 +6,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import org.bytedeco.dnnl.*;
+import static org.bytedeco.dnnl.global.dnnl.*;
+
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
@@ -18,6 +21,6 @@ public class TypeInfo extends BaseTypeInfo {
   public TypeInfo(OrtTypeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtTypeInfo p);
 
-  public native @ByVal TensorTypeAndShapeInfo GetTensorTypeAndShapeInfo();
+  public native @ByVal UnownedTensorTypeAndShapeInfo GetTensorTypeAndShapeInfo();
   public native @Cast("ONNXType") int GetONNXType();
 }
