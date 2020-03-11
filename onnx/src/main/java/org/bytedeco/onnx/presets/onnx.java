@@ -120,7 +120,7 @@ public class onnx implements InfoMapper {
                              "google::protobuf::internal::MergePartialFromImpl", "google::protobuf::internal::UnknownFieldParse", "google::protobuf::internal::WriteLengthDelimited",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "onnx::_TypeProto_default_instance_",
                              "onnx::_TypeProto_Map_default_instance_", "onnx::_TypeProto_Sequence_default_instance_", "onnx::_SparseTensorProto_default_instance_",
-                             "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_",
+                             "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_", "onnx::_TrainingInfoProto_default_instance_",
                              "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",
                              "onnx::_TensorShapeProto_default_instance_", "onnx::_TensorProto_Segment_default_instance_","onnx::_TensorProto_default_instance_",
                              "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_FunctionProto_default_instance_",
@@ -142,6 +142,8 @@ public class onnx implements InfoMapper {
                .put(new Info("std::unordered_map<std::string,const onnx::TensorProto*>",
                              "std::unordered_map<std::string,onnx::TensorProto*>").pointerTypes("StringTensorProtoMap").define())
                .put(new Info("std::unordered_map<std::string,const onnx::AttributeProto*>",
+		             "std::unordered_map<std::string,AttributeProto*>",
+                             "std::unordered_map<std::string,const AttributeProto*>",
                              "std::unordered_map<std::string,onnx::AttributeProto*>").pointerTypes("StringAttributeProtoMap").define())
                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("StringIntIntPairMap").define())
                .put(new Info("std::unordered_map<int,int>").pointerTypes("IntIntMap").define())
@@ -153,7 +155,7 @@ public class onnx implements InfoMapper {
                .put(new Info("onnx::TensorShapeProto").pointerTypes("TensorShapeProto"))
                .put(new Info("std::vector<const onnx::TensorShapeProto*>").pointerTypes("TensorShapeProtoVector").define())
 
-               .put(new Info("onnx::OpSchema::GetTypeAndShapeInferenceFunction", "onnx::RegisterSchema", "onnx::ReplaceAll").skip())
+               .put(new Info("onnx::OpSchema::GetTypeAndShapeInferenceFunction", "onnx::OpSchema::SetContextDependentFunctionBodyBuilder", "onnx::RegisterSchema", "onnx::ReplaceAll").skip())
 
                .put(new Info("onnx::RetrieveValues<int64_t>").javaNames("RetrieveValuesLong"))
                .put(new Info("onnx::RetrieveValues<std::string>").javaNames("RetrieveValuesString"))

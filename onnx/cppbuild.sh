@@ -15,9 +15,9 @@ fi
 
 export ONNX=1.6.0
 export PROTO=3.7.1
-export PYBIND=2.4.2
+export PYBIND=2.4.3
 
-download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz
+download https://github.com/onnx/onnx/archive/master.tar.gz onnx-master.tar.gz
 download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
 download https://github.com/pybind/pybind11/archive/v$PYBIND.tar.gz pybind11-$PYBIND.tar.gz
 
@@ -26,7 +26,7 @@ cd "$PLATFORM"
 INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
-tar --totals -xf ../onnx-$ONNX.tar.gz
+tar --totals -xf ../onnx-master.tar.gz
 tar --totals -xf ../protobuf-$PROTO.tar.gz
 tar --totals -xf ../pybind11-$PYBIND.tar.gz
 
@@ -40,7 +40,7 @@ cd protobuf-$PROTO
 make -j $MAKEJ V=0
 make install
 
-cd ../onnx-$ONNX
+cd ../onnx-master
 rm -df third_party/pybind11
 ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
 # work around issue in Xcode's version of Clang
