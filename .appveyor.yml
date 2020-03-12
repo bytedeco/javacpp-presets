@@ -45,6 +45,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "hdf5"
       OS: windows-x86_64
+    - PROJ: "hyperscan"
+      OS: windows-x86_64
     - PROJ: "mkl"
       OS: windows-x86_64
     - PROJ: "mkl-dnn,dnnl"

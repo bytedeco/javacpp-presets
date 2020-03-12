@@ -377,6 +377,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=hyperscan OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=mkl OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -484,6 +488,11 @@ matrix:
       - os: osx
         osx_image: xcode9.3
         env: PROJ=hdf5 OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode9.3
+        env: PROJ=hyperscan OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
