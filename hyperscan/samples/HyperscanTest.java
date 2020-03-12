@@ -1,4 +1,3 @@
-
 import org.bytedeco.hyperscan.global.hyperscan;
 import org.bytedeco.hyperscan.hs_compile_error_t;
 import org.bytedeco.hyperscan.hs_database_t;
@@ -14,28 +13,25 @@ import org.bytedeco.javacpp.annotation.Cast;
 import static org.bytedeco.hyperscan.global.hyperscan.HS_FLAG_SINGLEMATCH;
 import static org.bytedeco.hyperscan.global.hyperscan.HS_MODE_BLOCK;
 
-
 public class HyperscanTest {
 
     public static void main(String[] args) {
-
         Loader.load(hyperscan.class);
-        
+
         String[] patterns = { "abc1", "asa", "dab" };
         hs_database_t database_t = null;
         match_event_handler matchEventHandler = null;
         hs_scratch_t scratchSpace = new hs_scratch_t();
         hs_compile_error_t compile_error_t;
-       
-        try(PointerPointer<hs_database_t> database_t_p = new PointerPointer<>(1);
-            PointerPointer<hs_compile_error_t> compile_error_t_p = new PointerPointer<>(1);
+
+        try(PointerPointer<hs_database_t> database_t_p = new PointerPointer<hs_database_t>(1);
+            PointerPointer<hs_compile_error_t> compile_error_t_p = new PointerPointer<hs_compile_error_t>(1);
             IntPointer compileFlags = new IntPointer(HS_FLAG_SINGLEMATCH, HS_FLAG_SINGLEMATCH, HS_FLAG_SINGLEMATCH);
             IntPointer patternIds = new IntPointer(1, 1, 1);
             PointerPointer expressionsPointer = new PointerPointer<BytePointer>(patterns)
         ) {
-            
-            matchEventHandler = new match_event_handler() {
 
+            matchEventHandler = new match_event_handler() {
                 @Override
                 public int call(@Cast("unsigned int") int id,
                         @Cast("unsigned long long") long from,
@@ -75,5 +71,4 @@ public class HyperscanTest {
             }
         }
     }
-    
 }
