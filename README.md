@@ -121,6 +121,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * Arrow 0.16.x  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
+ * Hyperscan 5.2.x  https://github.com/intel/hyperscan
  * MKL 2020.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
  * DNNL 1.2.x  https://github.com/intel/mkl-dnn

@@ -590,6 +590,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>hyperscan</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1307,6 +1308,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>hyperscan</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1379,6 +1381,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>hyperscan</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1514,6 +1517,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>hyperscan</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
