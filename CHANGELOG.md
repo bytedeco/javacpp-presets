@@ -10,8 +10,8 @@
  * Make sure `clone()` actually returns new `PIX`, `FPIX`, or `DPIX` objects with presets for Leptonica
  * Add `opencv_python3` module and corresponding loader class with sample code to the presets for OpenCV
  * Bundle OpenSSL in the presets for CPython for consistency across platforms ([issue #796](https://github.com/bytedeco/javacpp-presets/issues/796))
- * Add presets for Arrow 0.16.0, SciPy 1.4.1 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747)), Gym 0.16.0
- * Upgrade presets for OpenCV 4.2.0, FFmpeg 4.2.2, Spinnaker 1.27.0.48, HDF5 1.10.6, MKL 2020.0, MKL-DNN 0.21.3, DNNL 1.2.1, OpenBLAS 0.3.8, CPython 3.7.6, NumPy 1.18.1, LLVM 9.0.1, CUDA 10.2, cuDNN 7.6.5, NCCL 2.5.6, MXNet 1.6.0, TensorFlow 1.15.2, TensorRT 7.0, ALE 0.6.1, Leptonica 1.79.0, Tesseract 4.1.1, ONNX Runtime 1.1.2, Qt 5.14.1, Skia 1.68.1, and their dependencies
+ * Add presets for Arrow 0.16.0, SciPy 1.4.1 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747)), Gym 0.17.1
+ * Upgrade presets for OpenCV 4.2.0, FFmpeg 4.2.2, Spinnaker 1.27.0.48, HDF5 1.12.0, MKL 2020.0, MKL-DNN 0.21.4, DNNL 1.2.1, OpenBLAS 0.3.9, CPython 3.7.6, NumPy 1.18.1, LLVM 9.0.1, CUDA 10.2, cuDNN 7.6.5, NCCL 2.5.6, MXNet 1.6.0, TensorFlow 1.15.2, TensorRT 7.0, ALE 0.6.1, Leptonica 1.79.0, Tesseract 4.1.1, ONNX Runtime 1.1.2, Qt 5.14.1, Skia 1.68.1, and their dependencies
 
 ### November 5, 2019 version 1.5.2
  * Add presets for the `cudacodec`, `cudafeatures2d`, `cudastereo`, and `cudabgsegm` modules of OpenCV ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))

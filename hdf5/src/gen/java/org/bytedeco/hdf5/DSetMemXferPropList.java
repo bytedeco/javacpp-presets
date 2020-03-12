@@ -75,7 +75,7 @@ public class DSetMemXferPropList extends PropList {
         public native void getTypeConvCB(@ByPtrPtr H5T_conv_except_func_t op, @Cast("void**") @ByPtrPtr Pointer user_data);
 
         // Sets the memory manager for variable-length datatype
-        // allocation in H5Dread and H5Dvlen_reclaim.
+        // allocation in H5Dread and H5Treclaim.
         public native void setVlenMemManager(H5MM_allocate_t alloc, Pointer alloc_info,
                                        H5MM_free_t _free, Pointer free_info);
 
@@ -84,7 +84,7 @@ public class DSetMemXferPropList extends PropList {
         public native void setVlenMemManager();
 
         // Gets the memory manager for variable-length datatype
-        // allocation in H5Dread and H5Tvlen_reclaim.
+        // allocation in H5Dread and H5Treclaim.
         public native void getVlenMemManager(@ByPtrRef H5MM_allocate_t alloc, @Cast("void**") PointerPointer alloc_info,
                                        @ByPtrRef H5MM_free_t _free, @Cast("void**") PointerPointer free_info);
         public native void getVlenMemManager(@ByPtrRef H5MM_allocate_t alloc, @Cast("void**") @ByPtrPtr Pointer alloc_info,
