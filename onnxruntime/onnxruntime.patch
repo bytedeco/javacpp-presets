@@ -1,3 +1,14 @@
+diff --git a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
+--- a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
++++ b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
+@@ -2,6 +2,7 @@
+ // Licensed under the MIT License.
+ 
+ #pragma once
++#include <cmath>
+ #include "dnnl_types.h"
+ #include "core/framework/op_kernel.h"
+ #include "core/providers/dnnl/dnnl_fwd.h"
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
 index 5de48bfc..5a6698c3 100644
 --- a/cmake/CMakeLists.txt
@@ -17,18 +28,18 @@ diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
 index 66bbc6c4..1a3f2467 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -37,9 +37,9 @@ endif()
+@@ -52,9 +52,9 @@
  
  if(UNIX)
    if (APPLE)
--    set(ONNXRUNTIME_SO_LINK_FLAG "-Xlinker -dead_strip")
+-    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker -dead_strip")
 +    set(ONNXRUNTIME_SO_LINK_FLAG "")
    else()
--    set(ONNXRUNTIME_SO_LINK_FLAG "-Xlinker --version-script=${SYMBOL_FILE} -Xlinker --no-undefined -Xlinker --gc-sections")
+-    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker --version-script=${SYMBOL_FILE} -Xlinker --no-undefined -Xlinker --gc-sections -z noexecstack")
 +    set(ONNXRUNTIME_SO_LINK_FLAG "-Xlinker --no-undefined -Xlinker -z -Xlinker noexecstack")
    endif()
  else()
-   set(ONNXRUNTIME_SO_LINK_FLAG "-DEF:${SYMBOL_FILE}")
+   set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/include/onnxruntime/core/session/onnxruntime_c_api.h b/include/onnxruntime/core/session/onnxruntime_c_api.h
 index 3df205f1..cd674ffd 100644
 --- a/include/onnxruntime/core/session/onnxruntime_c_api.h

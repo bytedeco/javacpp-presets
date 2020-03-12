@@ -49,6 +49,8 @@ public class Session extends BaseSession {
   public native @Cast("char*") BytePointer GetInputName(@Cast("size_t") long index, OrtAllocator allocator);
   public native @Cast("char*") BytePointer GetOutputName(@Cast("size_t") long index, OrtAllocator allocator);
   public native @Cast("char*") BytePointer GetOverridableInitializerName(@Cast("size_t") long index, OrtAllocator allocator);
+  public native @Cast("char*") BytePointer EndProfiling(OrtAllocator allocator);
+  public native @ByVal ModelMetadata GetModelMetadata();
 
   public native @ByVal TypeInfo GetInputTypeInfo(@Cast("size_t") long index);
   public native @ByVal TypeInfo GetOutputTypeInfo(@Cast("size_t") long index);
