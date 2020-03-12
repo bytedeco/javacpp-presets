@@ -65,8 +65,8 @@ public class OrtApi extends Pointer {
   public native GetErrorMessage_OrtStatus GetErrorMessage(); public native OrtApi GetErrorMessage(GetErrorMessage_OrtStatus setter);
 
   /**
-	 * @param out Should be freed by {@code OrtReleaseEnv} after use
-	 */
+     * @param out Should be freed by {@code OrtReleaseEnv} after use
+     */
   public static class CreateEnv_int_BytePointer_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -78,8 +78,8 @@ public class OrtApi extends Pointer {
   public native CreateEnv_int_BytePointer_PointerPointer CreateEnv(); public native OrtApi CreateEnv(CreateEnv_int_BytePointer_PointerPointer setter);
 
   /**
-	 * @param out Should be freed by {@code OrtReleaseEnv} after use
-	 */
+   * @param out Should be freed by {@code OrtReleaseEnv} after use
+   */
   public static class CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -115,7 +115,7 @@ public class OrtApi extends Pointer {
 
   // TODO: document the path separator convention? '/' vs '\'
   // TODO: should specify the access characteristics of model_path. Is this read only during the
-  // execution of OrtCreateSession, or does the OrtSession retain a handle to the file/directory
+  // execution of CreateSession, or does the OrtSession retain a handle to the file/directory
   // and continue to access throughout the OrtSession lifetime?
   //  What sort of access is needed to model_path : read or read/write?
   public static class CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer extends FunctionPointer {
@@ -154,8 +154,8 @@ public class OrtApi extends Pointer {
   public native Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer Run(); public native OrtApi Run(Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer setter);
 
   /**
-	* @return A pointer of the newly created object. The pointer should be freed by OrtReleaseSessionOptions after use
-	*/
+    * @return A pointer of the newly created object. The pointer should be freed by OrtReleaseSessionOptions after use
+    */
   public static class CreateSessionOptions_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -347,9 +347,9 @@ public class OrtApi extends Pointer {
   public native CreateCustomOpDomain_BytePointer_PointerPointer CreateCustomOpDomain(); public native OrtApi CreateCustomOpDomain(CreateCustomOpDomain_BytePointer_PointerPointer setter);
 
   /*
-	 * Add custom ops to the OrtCustomOpDomain
-	 *  Note: The OrtCustomOp* pointer must remain valid until the OrtCustomOpDomain using it is released
-	*/
+     * Add custom ops to the OrtCustomOpDomain
+     *  Note: The OrtCustomOp* pointer must remain valid until the OrtCustomOpDomain using it is released
+    */
   public static class CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -361,9 +361,9 @@ public class OrtApi extends Pointer {
   public native CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp CustomOpDomain_Add(); public native OrtApi CustomOpDomain_Add(CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp setter);
 
   /*
-	 * Add a custom op domain to the OrtSessionOptions
-	 *  Note: The OrtCustomOpDomain* must not be deleted until the sessions using it are released
-	*/
+     * Add a custom op domain to the OrtSessionOptions
+     *  Note: The OrtCustomOpDomain* must not be deleted until the sessions using it are released
+    */
   public static class AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -375,11 +375,11 @@ public class OrtApi extends Pointer {
   public native AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain AddCustomOpDomain(); public native OrtApi AddCustomOpDomain(AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain setter);
 
   /*
-	 * Loads a DLL named 'library_path' and looks for this entry point:
-	 *		OrtStatus* RegisterCustomOps(OrtSessionOptions * options, const OrtApiBase* api);
-	 * It then passes in the provided session options to this function along with the api base.
-	 * The handle to the loaded library is returned in library_handle. It can be freed by the caller after all sessions using the passed in
-	 * session options are destroyed, or if an error occurs and it is non null.
+     * Loads a DLL named 'library_path' and looks for this entry point:
+     *		OrtStatus* RegisterCustomOps(OrtSessionOptions * options, const OrtApiBase* api);
+     * It then passes in the provided session options to this function along with the api base.
+     * The handle to the loaded library is returned in library_handle. It can be freed by the caller after all sessions using the passed in
+     * session options are destroyed, or if an error occurs and it is non null.
   */
   public static class RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -392,15 +392,15 @@ public class OrtApi extends Pointer {
   public native RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer RegisterCustomOpsLibrary(); public native OrtApi RegisterCustomOpsLibrary(RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer setter);
 
   /**
-	* To use additional providers, you must build ORT with the extra providers enabled. Then call one of these
-	* functions to enable them in the session:
-	*   OrtSessionOptionsAppendExecutionProvider_CPU
-	*   OrtSessionOptionsAppendExecutionProvider_CUDA
-	*   OrtSessionOptionsAppendExecutionProvider_<remaining providers...>
-	* The order they care called indicates the preference order as well. In other words call this method
-	* on your most preferred execution provider first followed by the less preferred ones.
-	* If none are called Ort will use its internal CPU execution provider.
-	*/
+    * To use additional providers, you must build ORT with the extra providers enabled. Then call one of these
+    * functions to enable them in the session:
+    *   OrtSessionOptionsAppendExecutionProvider_CPU
+    *   OrtSessionOptionsAppendExecutionProvider_CUDA
+    *   OrtSessionOptionsAppendExecutionProvider_<remaining providers...>
+    * The order they care called indicates the preference order as well. In other words call this method
+    * on your most preferred execution provider first followed by the less preferred ones.
+    * If none are called Ort will use its internal CPU execution provider.
+    */
 
   public static class SessionGetInputCount_OrtSession_SizeTPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -470,7 +470,7 @@ public class OrtApi extends Pointer {
   public native SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer SessionGetOverridableInitializerTypeInfo(); public native OrtApi SessionGetOverridableInitializerTypeInfo(SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer setter);
 
   /**
-   * @param value  is set to a null terminated string allocated using 'allocator'. The caller is responsible in freeing it.
+   * @param value  is set to a null terminated string allocated using 'allocator'. The caller is responsible for freeing it.
    */
   public static class SessionGetInputName_OrtSession_long_OrtAllocator_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -654,10 +654,10 @@ public class OrtApi extends Pointer {
   public native GetTensorMutableData_OrtValue_PointerPointer GetTensorMutableData(); public native OrtApi GetTensorMutableData(GetTensorMutableData_OrtValue_PointerPointer setter);
 
   /**
-	 * @param value A tensor created from OrtCreateTensor... function.
-	 * @param s each A string array. Each string in this array must be null terminated.
-	 * @param s_len length of s
-	 */
+     * @param value A tensor created from OrtCreateTensor... function.
+     * @param s each A string array. Each string in this array must be null terminated.
+     * @param s_len length of s
+     */
   public static class FillStringTensor_OrtValue_PointerPointer_long extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -669,9 +669,9 @@ public class OrtApi extends Pointer {
   public native FillStringTensor_OrtValue_PointerPointer_long FillStringTensor(); public native OrtApi FillStringTensor(FillStringTensor_OrtValue_PointerPointer_long setter);
 
   /**
-	 * @param value A tensor created from OrtCreateTensor... function.
-	 * @param len total data length, not including the trailing '\0' chars.
-	 */
+     * @param value A tensor created from OrtCreateTensor... function.
+     * @param len total data length, not including the trailing '\0' chars.
+     */
   public static class GetStringTensorDataLength_OrtValue_SizeTPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -683,10 +683,10 @@ public class OrtApi extends Pointer {
   public native GetStringTensorDataLength_OrtValue_SizeTPointer GetStringTensorDataLength(); public native OrtApi GetStringTensorDataLength(GetStringTensorDataLength_OrtValue_SizeTPointer setter);
 
   /**
-	 * @param s string contents. Each string is NOT null-terminated.
-	 * @param value A tensor created from OrtCreateTensor... function.
-	 * @param s_len total data length, get it from OrtGetStringTensorDataLength
-	 */
+     * @param s string contents. Each string is NOT null-terminated.
+     * @param value A tensor created from OrtCreateTensor... function.
+     * @param s_len total data length, get it from OrtGetStringTensorDataLength
+     */
   public static class GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -699,8 +699,8 @@ public class OrtApi extends Pointer {
   public native GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long GetStringTensorContent(); public native OrtApi GetStringTensorContent(GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long setter);
 
   /**
-	 * Don't free the 'out' value
-	 */
+     * Don't free the 'out' value
+     */
   public static class CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -712,8 +712,8 @@ public class OrtApi extends Pointer {
   public native CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer CastTypeInfoToTensorInfo(); public native OrtApi CastTypeInfoToTensorInfo(CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer setter);
 
   /**
-	 * Return OnnxType from OrtTypeInfo
-	 */
+     * Return OnnxType from OrtTypeInfo
+     */
   public static class GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -725,8 +725,8 @@ public class OrtApi extends Pointer {
   public native GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer GetOnnxTypeFromTypeInfo(); public native OrtApi GetOnnxTypeFromTypeInfo(GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer setter);
 
   /**
-	 * The 'out' value should be released by calling OrtReleaseTensorTypeAndShapeInfo
-	 */
+     * The 'out' value should be released by calling OrtReleaseTensorTypeAndShapeInfo
+     */
   public static class CreateTensorTypeAndShapeInfo_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -748,7 +748,7 @@ public class OrtApi extends Pointer {
   public native SetTensorElementType_OrtTensorTypeAndShapeInfo_int SetTensorElementType(); public native OrtApi SetTensorElementType(SetTensorElementType_OrtTensorTypeAndShapeInfo_int setter);
 
   /**
- * @param info Created from OrtCreateTensorTypeAndShapeInfo() function
+ * @param info Created from CreateTensorTypeAndShapeInfo() function
  * @param dim_values An array with length of {@code dim_count}. Its elements can contain negative values.
  * @param dim_count length of dim_values
  */
@@ -1060,24 +1060,24 @@ public class OrtApi extends Pointer {
   public native CreateValue_PointerPointer_long_int_PointerPointer CreateValue(); public native OrtApi CreateValue(CreateValue_PointerPointer_long_int_PointerPointer setter);
 
   /**
-	 * Construct OrtValue that contains a value of non-standard type created for
-	 * experiments or while awaiting standardization. OrtValue in this case would contain
-	 * an internal representation of the Opaque type. Opaque types are distinguished between
-	 * each other by two strings 1) domain and 2) type name. The combination of the two
-	 * must be unique, so the type representation is properly identified internally. The combination
-	 * must be properly registered from within ORT at both compile/run time or by another API.
-	 *
-	 * To construct the OrtValue pass domain and type names, also a pointer to a data container
-	 * the type of which must be know to both ORT and the client program. That data container may or may
-	 * not match the internal representation of the Opaque type. The sizeof(data_container) is passed for
-	 * verification purposes.
-	 *
-	 * \domain_name - domain name for the Opaque type, null terminated.
-	 * \type_name   - type name for the Opaque type, null terminated.
-	 * \data_contianer - data to populate OrtValue
-	 * \data_container_size - sizeof() of the data container. Must match the sizeof() of the expected
-	 *                    data_container size internally.
-	 */
+     * Construct OrtValue that contains a value of non-standard type created for
+     * experiments or while awaiting standardization. OrtValue in this case would contain
+     * an internal representation of the Opaque type. Opaque types are distinguished between
+     * each other by two strings 1) domain and 2) type name. The combination of the two
+     * must be unique, so the type representation is properly identified internally. The combination
+     * must be properly registered from within ORT at both compile/run time or by another API.
+     *
+     * To construct the OrtValue pass domain and type names, also a pointer to a data container
+     * the type of which must be know to both ORT and the client program. That data container may or may
+     * not match the internal representation of the Opaque type. The sizeof(data_container) is passed for
+     * verification purposes.
+     *
+     * \domain_name - domain name for the Opaque type, null terminated.
+     * \type_name   - type name for the Opaque type, null terminated.
+     * \data_contianer - data to populate OrtValue
+     * \data_container_size - sizeof() of the data container. Must match the sizeof() of the expected
+     *                    data_container size internally.
+     */
   public static class CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1090,14 +1090,14 @@ public class OrtApi extends Pointer {
   public native CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer CreateOpaqueValue(); public native OrtApi CreateOpaqueValue(CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer setter);
 
   /**
-	 * Fetch data from an OrtValue that contains a value of non-standard type created for
-	 * experiments or while awaiting standardization.
-	 * \domain_name - domain name for the Opaque type, null terminated.
-	 * \type_name   - type name for the Opaque type, null terminated.
-	 * \data_contianer - data to populate OrtValue
-	 * \data_container_size - sizeof() of the data container. Must match the sizeof() of the expected
-	 *                    data_container size internally.
-	 */
+     * Fetch data from an OrtValue that contains a value of non-standard type created for
+     * experiments or while awaiting standardization.
+     * \domain_name - domain name for the Opaque type, null terminated.
+     * \type_name   - type name for the Opaque type, null terminated.
+     * \data_contianer - data to populate OrtValue
+     * \data_container_size - sizeof() of the data container. Must match the sizeof() of the expected
+     *                    data_container size internally.
+     */
 
   public static class GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long extends FunctionPointer {
       static { Loader.load(); }
@@ -1265,4 +1265,236 @@ public class OrtApi extends Pointer {
       public native void call(OrtCustomOpDomain input);
   }
   public native ReleaseCustomOpDomain_OrtCustomOpDomain ReleaseCustomOpDomain(); public native OrtApi ReleaseCustomOpDomain(ReleaseCustomOpDomain_OrtCustomOpDomain setter);
+
+  // End of Version 1 - DO NOT MODIFY ABOVE (see above text for more information)
+
+  // Version 2 - In development, feel free to add/remove/rearrange here
+
+  /**
+    * GetDenotationFromTypeInfo
+	 * This api augments OrtTypeInfo to return denotations on the type.
+	 * This is used by WinML to determine if an input/output is intended to be an Image or a Tensor.
+    */
+  public static class GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer(Pointer p) { super(p); }
+      protected GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtTypeInfo arg0, @Cast("const char**const") PointerPointer denotation, @Cast("size_t*") SizeTPointer len);
+  }
+  public native GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer GetDenotationFromTypeInfo(); public native OrtApi GetDenotationFromTypeInfo(GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer setter);
+
+  // OrtTypeInfo Casting methods
+
+  /**
+    * CastTypeInfoToMapTypeInfo
+	 * This api augments OrtTypeInfo to return an OrtMapTypeInfo when the type is a map.
+	 * The OrtMapTypeInfo has additional information about the map's key type and value type.
+	 * This is used by WinML to support model reflection APIs.
+	 *
+	 * Don't free the 'out' value
+    */
+  public static class CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer(Pointer p) { super(p); }
+      protected CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtTypeInfo type_info, @Cast("const OrtMapTypeInfo**") PointerPointer out);
+  }
+  public native CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer CastTypeInfoToMapTypeInfo(); public native OrtApi CastTypeInfoToMapTypeInfo(CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer setter);
+
+  /**
+    * CastTypeInfoToSequenceTypeInfo
+	 * This api augments OrtTypeInfo to return an OrtSequenceTypeInfo when the type is a sequence.
+	 * The OrtSequenceTypeInfo has additional information about the sequence's element type.
+    * This is used by WinML to support model reflection APIs.
+	 *
+	 * Don't free the 'out' value
+    */
+  public static class CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer(Pointer p) { super(p); }
+      protected CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtTypeInfo type_info, @Cast("const OrtSequenceTypeInfo**") PointerPointer out);
+  }
+  public native CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer CastTypeInfoToSequenceTypeInfo(); public native OrtApi CastTypeInfoToSequenceTypeInfo(CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer setter);
+
+  // OrtMapTypeInfo Accessors
+
+  /**
+    * GetMapKeyType
+	 * This api augments get the key type of a map. Key types are restricted to being scalar types and use ONNXTensorElementDataType.
+	 * This is used by WinML to support model reflection APIs.
+    */
+  public static class GetMapKeyType_OrtMapTypeInfo_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetMapKeyType_OrtMapTypeInfo_IntPointer(Pointer p) { super(p); }
+      protected GetMapKeyType_OrtMapTypeInfo_IntPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtMapTypeInfo map_type_info, @Cast("ONNXTensorElementDataType*") IntPointer out);
+  }
+  public native GetMapKeyType_OrtMapTypeInfo_IntPointer GetMapKeyType(); public native OrtApi GetMapKeyType(GetMapKeyType_OrtMapTypeInfo_IntPointer setter);
+
+  /**
+    * GetMapValueType
+	 * This api augments get the value type of a map.
+    */
+  public static class GetMapValueType_OrtMapTypeInfo_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetMapValueType_OrtMapTypeInfo_PointerPointer(Pointer p) { super(p); }
+      protected GetMapValueType_OrtMapTypeInfo_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtMapTypeInfo map_type_info, @Cast("OrtTypeInfo**") PointerPointer type_info);
+  }
+  public native GetMapValueType_OrtMapTypeInfo_PointerPointer GetMapValueType(); public native OrtApi GetMapValueType(GetMapValueType_OrtMapTypeInfo_PointerPointer setter);
+
+  // OrtSequenceTypeInfo Accessors
+
+  /**
+    * GetSequenceElementType
+	 * This api augments get the element type of a sequence.
+	 * This is used by WinML to support model reflection APIs.
+    */
+  public static class GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer(Pointer p) { super(p); }
+      protected GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtSequenceTypeInfo sequence_type_info, @Cast("OrtTypeInfo**") PointerPointer type_info);
+  }
+  public native GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer GetSequenceElementType(); public native OrtApi GetSequenceElementType(GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer setter);
+
+  public static class ReleaseMapTypeInfo_OrtMapTypeInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseMapTypeInfo_OrtMapTypeInfo(Pointer p) { super(p); }
+      protected ReleaseMapTypeInfo_OrtMapTypeInfo() { allocate(); }
+      private native void allocate();
+      public native void call(OrtMapTypeInfo input);
+  }
+  public native ReleaseMapTypeInfo_OrtMapTypeInfo ReleaseMapTypeInfo(); public native OrtApi ReleaseMapTypeInfo(ReleaseMapTypeInfo_OrtMapTypeInfo setter);
+  public static class ReleaseSequenceTypeInfo_OrtSequenceTypeInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseSequenceTypeInfo_OrtSequenceTypeInfo(Pointer p) { super(p); }
+      protected ReleaseSequenceTypeInfo_OrtSequenceTypeInfo() { allocate(); }
+      private native void allocate();
+      public native void call(OrtSequenceTypeInfo input);
+  }
+  public native ReleaseSequenceTypeInfo_OrtSequenceTypeInfo ReleaseSequenceTypeInfo(); public native OrtApi ReleaseSequenceTypeInfo(ReleaseSequenceTypeInfo_OrtSequenceTypeInfo setter);
+
+  /**
+   * @param out is set to a null terminated string allocated using 'allocator'. The caller is responsible for freeing it.
+   * Profiling is turned ON automatically if enabled for the particular session by invoking EnableProfiling() 
+   * on the SessionOptions instance used to create the session.  
+   */
+  public static class SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer(Pointer p) { super(p); }
+      protected SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(OrtSession sess, OrtAllocator allocator,
+                                                  @Cast("char**") PointerPointer out);
+  }
+  public native SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer SessionEndProfiling(); public native OrtApi SessionEndProfiling(SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer setter);
+
+  /**
+   * @param out is a pointer to the newly created object. The pointer should be freed by calling ReleaseModelMetadata after use.
+   */
+  public static class SessionGetModelMetadata_OrtSession_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SessionGetModelMetadata_OrtSession_PointerPointer(Pointer p) { super(p); }
+      protected SessionGetModelMetadata_OrtSession_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtSession sess,
+                                                      @Cast("OrtModelMetadata**") PointerPointer out);
+  }
+  public native SessionGetModelMetadata_OrtSession_PointerPointer SessionGetModelMetadata(); public native OrtApi SessionGetModelMetadata(SessionGetModelMetadata_OrtSession_PointerPointer setter);
+
+  /**
+   * @param value  is set to a null terminated string allocated using 'allocator'. The caller is responsible for freeing it.
+   */
+  public static class ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
+      protected ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtModelMetadata model_metadata,
+                                                           OrtAllocator allocator, @Cast("char**") PointerPointer value);
+  }
+  public native ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetProducerName(); public native OrtApi ModelMetadataGetProducerName(ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer setter);
+  public static class ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
+      protected ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtModelMetadata model_metadata,
+                                                        OrtAllocator allocator, @Cast("char**") PointerPointer value);
+  }
+  public native ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetGraphName(); public native OrtApi ModelMetadataGetGraphName(ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer setter);
+  public static class ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
+      protected ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtModelMetadata model_metadata,
+                                                     OrtAllocator allocator, @Cast("char**") PointerPointer value);
+  }
+  public native ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetDomain(); public native OrtApi ModelMetadataGetDomain(ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer setter);
+  public static class ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
+      protected ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtModelMetadata model_metadata,
+                                                          OrtAllocator allocator, @Cast("char**") PointerPointer value);
+  }
+  public native ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetDescription(); public native OrtApi ModelMetadataGetDescription(ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer setter);
+  /**
+   * @param value  is set to a null terminated string allocated using 'allocator'. The caller is responsible for freeing it.
+   * 'value' will be a nullptr if the given key is not found in the custom metadata map.
+   */
+  public static class ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer(Pointer p) { super(p); }
+      protected ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtModelMetadata model_metadata, OrtAllocator allocator,
+                                                                   @Cast("const char*") BytePointer key, @Cast("char**") PointerPointer value);
+  }
+  public native ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer ModelMetadataLookupCustomMetadataMap(); public native OrtApi ModelMetadataLookupCustomMetadataMap(ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer setter);
+
+  public static class ModelMetadataGetVersion_OrtModelMetadata_LongPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ModelMetadataGetVersion_OrtModelMetadata_LongPointer(Pointer p) { super(p); }
+      protected ModelMetadataGetVersion_OrtModelMetadata_LongPointer() { allocate(); }
+      private native void allocate();
+      public native OrtStatus call(@Const OrtModelMetadata model_metadata, @Cast("int64_t*") LongPointer value);
+  }
+  public native ModelMetadataGetVersion_OrtModelMetadata_LongPointer ModelMetadataGetVersion(); public native OrtApi ModelMetadataGetVersion(ModelMetadataGetVersion_OrtModelMetadata_LongPointer setter);
+
+  public static class ReleaseModelMetadata_OrtModelMetadata extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseModelMetadata_OrtModelMetadata(Pointer p) { super(p); }
+      protected ReleaseModelMetadata_OrtModelMetadata() { allocate(); }
+      private native void allocate();
+      public native void call(OrtModelMetadata input);
+  }
+  public native ReleaseModelMetadata_OrtModelMetadata ReleaseModelMetadata(); public native OrtApi ReleaseModelMetadata(ReleaseModelMetadata_OrtModelMetadata setter);
 }
