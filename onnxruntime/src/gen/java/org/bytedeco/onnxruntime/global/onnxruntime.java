@@ -27,8 +27,8 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // #include <stdint.h>
 // #include <string.h>
 
-// This value is used in structures passed to ORT so that a newer version of ORT will still work with
-public static final int ORT_API_VERSION = 1;
+// This value is used in structures passed to ORT so that a newer version of ORT will still work with them
+public static final int ORT_API_VERSION = 2;
 
 // #ifdef __cplusplus
 // #endif
@@ -105,12 +105,12 @@ public static final int
   ONNX_TENSOR_ELEMENT_DATA_TYPE_STRING = 8,  // maps to c++ type std::string
   ONNX_TENSOR_ELEMENT_DATA_TYPE_BOOL = 9,
   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT16 = 10,
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_DOUBLE = 11,          // maps to c type double
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT32 = 12,          // maps to c type uint32_t
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT64 = 13,          // maps to c type uint64_t
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX64 = 14,       // complex with float32 real and imaginary components
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX128 = 15,      // complex with float64 real and imaginary components
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_BFLOAT16 = 16;        // Non-IEEE floating-point format based on IEEE754 single-precision
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_DOUBLE = 11,      // maps to c type double
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT32 = 12,      // maps to c type uint32_t
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT64 = 13,      // maps to c type uint64_t
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX64 = 14,   // complex with float32 real and imaginary components
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX128 = 15,  // complex with float64 real and imaginary components
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_BFLOAT16 = 16;     // Non-IEEE floating-point format based on IEEE754 single-precision
 
 // Synced with onnx TypeProto oneof
 /** enum ONNXType */
@@ -194,6 +194,15 @@ public static final int
 // Targeting ../OrtCustomOpDomain.java
 
 
+// Targeting ../OrtMapTypeInfo.java
+
+
+// Targeting ../OrtSequenceTypeInfo.java
+
+
+// Targeting ../OrtModelMetadata.java
+
+
 // Targeting ../OrtAllocator.java
 
 
@@ -224,6 +233,7 @@ public static final int
 
 /** enum OrtAllocatorType */
 public static final int
+  Invalid = -1,
   OrtDeviceAllocator = 0,
   OrtArenaAllocator = 1;
 
@@ -305,7 +315,6 @@ public static native @Const OrtApiBase OrtGetApiBase();
 
 // #endif
 
-
 // This returns a reference to the OrtApi interface in use, in case someone wants to use the C API functions
 @Namespace("Ort") public static native @Const @ByRef OrtApi GetApi();
 
@@ -323,7 +332,11 @@ public static native @Const OrtApiBase OrtGetApiBase();
 @Namespace("Ort") public static native void OrtRelease(OrtTensorTypeAndShapeInfo ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtTypeInfo ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtValue ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtModelMetadata ptr);
 // Targeting ../BaseMemoryInfo.java
+
+
+// Targeting ../BaseModelMetadata.java
 
 
 // Targeting ../BaseCustomOpDomain.java
@@ -365,6 +378,9 @@ public static native @Const OrtApiBase OrtGetApiBase();
 // Targeting ../SessionOptions.java
 
 
+// Targeting ../ModelMetadata.java
+
+
 // Targeting ../Session.java
 
 
@@ -390,7 +406,6 @@ public static native @Const OrtApiBase OrtGetApiBase();
   // namespace Ort
 
 // #include "onnxruntime_cxx_inline.h"
-
 
 // Parsed from onnxruntime/core/providers/cuda/cuda_provider_factory.h
 

@@ -30,6 +30,7 @@
     <module>../flandmark/platform</module>
     <module>../arrow/platform</module>
     <module>../hdf5/platform</module>
+    <module>../hyperscan/platform</module>
     <module>../mkl/platform</module>
     <module>../mkl-dnn/platform</module>
     <module>../dnnl/platform</module>
@@ -146,13 +147,18 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>hyperscan-platform</artifactId>
+      <version>5.2.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>mkl-platform</artifactId>
       <version>2020.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.21.3-${project.version}</version>
+      <version>0.21.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -162,7 +168,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.8-${project.version}</version>
+      <version>0.3.9-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -202,7 +208,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.16.0-${project.version}</version>
+      <version>0.17.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -267,7 +273,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.1.2-${project.version}</version>
+      <version>1.2.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
