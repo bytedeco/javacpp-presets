@@ -130,7 +130,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.7.6  https://www.python.org/downloads/
+ * CPython 3.7.7  https://www.python.org/downloads/
  * NumPy 1.18.x  https://github.com/numpy/numpy
  * SciPy 1.4.x  https://github.com/scipy/scipy
  * Gym 0.17.x  https://github.com/openai/gym
