@@ -10,7 +10,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CPython 3.7.6  https://www.python.org/
+ * CPython 3.7.7  https://www.python.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -41,7 +41,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.cpython</groupId>
     <artifactId>simple</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Simple</exec.mainClass>
     </properties>
@@ -49,7 +49,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.7.6-1.5.2</version>
+            <version>3.7.7-1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
