@@ -51,6 +51,9 @@ sedinplace 's/HOST_NAME_MAX/sysconf(_SC_HOST_NAME_MAX)/g' onnxruntime/core/provi
 sedinplace 's/-gencode=arch=compute_30,code=sm_30/-arch=sm_30/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt
 
+# provide a default constructor to Ort::Value to make it more usable with std::vector
+sedinplace 's/Value(std::nullptr_t)/Value(std::nullptr_t = nullptr)/g' include/onnxruntime/core/session/onnxruntime_cxx_api.h
+
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib --use_dnnl --use_openmp $GPU_FLAGS
 

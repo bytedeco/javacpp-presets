@@ -24,13 +24,13 @@ public class Session extends BaseSession {
   private native void allocate(@ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options);
 
   // Run that will allocate the output values
-  public native @ByVal ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") PointerPointer input_names, @Const Value input_values, @Cast("size_t") long input_count,
+  public native @StdMove ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") PointerPointer input_names, @Const Value input_values, @Cast("size_t") long input_count,
                            @Cast("const char*const*") PointerPointer output_names, @Cast("size_t") long output_count);
-  public native @ByVal ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr BytePointer input_names, @Const Value input_values, @Cast("size_t") long input_count,
+  public native @StdMove ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr BytePointer input_names, @Const Value input_values, @Cast("size_t") long input_count,
                            @Cast("const char*const*") @ByPtrPtr BytePointer output_names, @Cast("size_t") long output_count);
-  public native @ByVal ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr ByteBuffer input_names, @Const Value input_values, @Cast("size_t") long input_count,
+  public native @StdMove ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr ByteBuffer input_names, @Const Value input_values, @Cast("size_t") long input_count,
                            @Cast("const char*const*") @ByPtrPtr ByteBuffer output_names, @Cast("size_t") long output_count);
-  public native @ByVal ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr byte[] input_names, @Const Value input_values, @Cast("size_t") long input_count,
+  public native @StdMove ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr byte[] input_names, @Const Value input_values, @Cast("size_t") long input_count,
                            @Cast("const char*const*") @ByPtrPtr byte[] output_names, @Cast("size_t") long output_count);
   // Run for when there is a list of prealloated outputs
   public native void Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") PointerPointer input_names, @Const Value input_values, @Cast("size_t") long input_count,
