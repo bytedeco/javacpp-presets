@@ -107,7 +107,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             if (platform.startsWith("linux")) {
                 preloads.add(i, lib + "#" + className + "@.0");
             } else if (platform.startsWith("macosx")) {
-                preloads.add(i, lib + "#" + className);
+                preloads.add(i, lib + "#" + className + ".0");
             } else if (platform.startsWith("windows")) {
                 preloads.add(i, lib + "#lib" + className);
             }
