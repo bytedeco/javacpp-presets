@@ -31,7 +31,7 @@ ONNXRUNTIME=1.2.0
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
-mkdir -p build include lib bin
+mkdir -p build include lib bin java
 
 if [[ ! -d onnxruntime ]]; then
     git clone https://github.com/microsoft/onnxruntime
@@ -54,11 +54,31 @@ sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt
 # provide a default constructor to Ort::Value to make it more usable with std::vector
 sedinplace 's/Value(std::nullptr_t)/Value(std::nullptr_t = nullptr)/g' include/onnxruntime/core/session/onnxruntime_cxx_api.h
 
+# hack manually written JNI code and its loader to work with JavaCPP, and C++ in general
+for f in java/src/main/native/*.c; do cp $f ${f}pp; done
+for f in java/src/main/native/ai_onnxruntime_*.cpp; do sedinplace 's/#include "ai_onnxruntime_.*.h"/extern "C" {/g' $f; echo "}" >> $f; done
+sedinplace 's/(\*jniEnv)->\(.*\)(jniEnv,/jniEnv->\1(/g' java/src/main/native/*.cpp
+sedinplace 's/(javaStrings/((jstring)javaStrings/g' java/src/main/native/*.cpp
+sedinplace 's/(javaInputStrings/((jstring)javaInputStrings/g' java/src/main/native/*.cpp
+sedinplace 's/(javaOutputStrings/((jstring)javaOutputStrings/g' java/src/main/native/*.cpp
+sedinplace 's/return output/return (jstring)output/g' java/src/main/native/ai_onnxruntime_OnnxTensor.cpp
+sedinplace 's/, carrier)/, (jobjectArray)carrier)/g' java/src/main/native/ai_onnxruntime_OnnxTensor.cpp
+sedinplace 's/, dataObj)/, (jarray)dataObj)/g' java/src/main/native/ai_onnxruntime_OnnxTensor.cpp
+sedinplace 's/copy = malloc/copy = (char*)malloc/g' java/src/main/native/OrtJniUtil.cpp
+sedinplace 's/floatArr = malloc/floatArr = (float*)malloc/g' java/src/main/native/OrtJniUtil.cpp
+sedinplace 's/Throw(javaException)/Throw((jthrowable)javaException)/g' java/src/main/native/OrtJniUtil.cpp
+sedinplace '/jint JNI_OnLoad/,/}/d' java/src/main/native/OrtJniUtil.cpp
+sedinplace '/static synchronized void init() throws IOException {/a\
+loaded = org.bytedeco.javacpp.Loader.load(org.bytedeco.onnxruntime.presets.onnxruntime.class) != null;\
+ortApiHandle = initialiseAPIBase(ORT_API_VERSION_1);\
+' java/src/main/java/ai/onnxruntime/OnnxRuntime.java
+
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib --use_dnnl --use_openmp $GPU_FLAGS
 
 # install headers and libraries in standard directories
 cp -r include/* ../include
+cp -r java/src/main/java/* ../java
 cp ../build/Release/lib* ../lib || true
 cp ../build/Release/Release/onnxruntime.dll ../bin || true
 cp ../build/Release/Release/onnxruntime.lib ../lib || true

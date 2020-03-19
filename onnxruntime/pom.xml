@@ -15,6 +15,7 @@
   <name>JavaCPP Presets for ONNX Runtime</name>
 
   <properties>
+    <onnxruntime.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/onnxruntime</onnxruntime.path>
     <javacpp.nativeRequires>
       requires org.bytedeco.dnnl.${javacpp.platform.module};
     </javacpp.nativeRequires>
@@ -39,6 +40,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
@@ -60,6 +65,7 @@
             <includePath>${basedir}/../dnnl/src/main/resources/org/bytedeco/openblas/include/</includePath>
             <includePath>${basedir}/../dnnl/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/onnxruntime/core/session/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/onnxruntime/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
           </includePaths>
@@ -86,11 +92,31 @@
             <linkResource>/org/bytedeco/dnnl/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/dnnl/${javacpp.platform}/lib/</linkResource>
           </linkResources>
+          <compilerOptions>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OnnxMap.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OnnxRuntime.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OnnxSequence.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OnnxTensor.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OrtAllocator.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OrtEnvironment.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OrtSession.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp</compilerOption>
+            <compilerOption>${onnxruntime.path}/java/src/main/native/OrtJniUtil.cpp</compilerOption>
+          </compilerOptions>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
+          <execution>
+            <id>default-jar</id>
+            <configuration>
+              <includes>
+                <include>ai/onnxruntime/**</include>
+                <include>org/bytedeco/onnxruntime/**</include>
+              </includes>
+            </configuration>
+          </execution>
           <execution>
             <id>javacpp-${javacpp.platform}${javacpp.platform.extension}</id>
             <phase>package</phase>
