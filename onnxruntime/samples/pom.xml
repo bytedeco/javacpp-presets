@@ -5,6 +5,8 @@
     <version>1.5.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>CXXApiSample</exec.mainClass>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
     <dependencies>
         <dependency>
