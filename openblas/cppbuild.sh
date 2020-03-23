@@ -27,6 +27,7 @@ cp lapack-netlib/LAPACKE/include/*.h ../include
 sedinplace '/if (($os eq "Darwin")/,/}/d' c_check ../OpenBLAS-$OPENBLAS_VERSION-nolapack/c_check
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
+export FEXTRALIB="-lgfortran"
 export CROSS_SUFFIX=
 export HOSTCC=gcc
 export NO_LAPACK=0
@@ -203,16 +204,18 @@ case $PLATFORM in
     windows-x86)
         export CC="gcc -m32"
         export FC="gfortran -m32"
+        export FEXTRALIB="-lgfortran -lquadmath"
         export BINARY=32
         export DYNAMIC_ARCH=1
-        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
+        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lquadmath -lgcc -lgcc_eh -lpthread"
         ;;
     windows-x86_64)
         export CC="gcc -m64"
         export FC="gfortran -m64"
+        export FEXTRALIB="-lgfortran -lquadmath"
         export BINARY=64
         export DYNAMIC_ARCH=1
-        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
+        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lquadmath -lgcc -lgcc_eh -lpthread"
         export NO_AVX512=1
         ;;
     *)
@@ -221,7 +224,7 @@ case $PLATFORM in
         ;;
 esac
 
-make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN USE_OPENMP=0 NUM_THREADS=$NUM_THREADS
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS
 make install "PREFIX=$INSTALL_PATH"
 
 unset DYNAMIC_ARCH
@@ -229,7 +232,7 @@ if [[ -z ${TARGET:-} ]]; then
     export TARGET=GENERIC
 fi
 cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
-make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_LAPACK=1 LIBNAMESUFFIX=nolapack
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_LAPACK=1 LIBNAMESUFFIX=nolapack
 make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=nolapack
 
 unset CC

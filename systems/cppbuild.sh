@@ -18,7 +18,7 @@ fi
 
 case $PLATFORM in
     linux-armhf)
-        CROSS_INCLUDE_PATH=$(echo | arm-linux-gnueabihf-g++ -E -v - 2>&1 | grep -o ' .*/usr/include' | tail -1 | xargs)
+        CROSS_INCLUDE_PATH=$(echo | arm-linux-gnueabihf-g++ -E -v - 2>&1 | grep -o '^ .*/usr/include' | tail -1 | xargs)
         if [[ -d "$CROSS_INCLUDE_PATH" ]]; then
             INCLUDE_PATH="$CROSS_INCLUDE_PATH"
         fi

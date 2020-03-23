@@ -177,9 +177,11 @@ if [ "$OS" == "linux-armhf" ]; then
     mkdir -p $HOME/tools $HOME/userland
     tar xzf $HOME/tools-master.tar.gz --strip-components=1 -C $HOME/tools
     tar xzf $HOME/userland-master.tar.gz --strip-components=1 -C $HOME/userland
-    export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
+    ln -s $HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-gfortran $HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/
+    ln -s $HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/libgfortran* $HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/
+    export PATH=$PATH:$HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/
     export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
-    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/
+    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/
     pushd $HOME/userland
     # https://github.com/raspberrypi/userland/issues/603
     sed -i -e 's/"${INSTALL_TARGETS} vcilcs"/${INSTALL_TARGETS} vcilcs/g' interface/vmcs_host/CMakeLists.txt
