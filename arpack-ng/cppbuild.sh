@@ -53,7 +53,7 @@ case $PLATFORM in
         if echo "int main() { }" | gcc -x c - -lgfortran_nonshared; then
             LIBS="-lgfortran_nonshared"
         fi
-        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32 $LIBS" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32 $LIBS" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
         make -j $MAKEJ
         make install-strip
         ;;
@@ -62,23 +62,23 @@ case $PLATFORM in
         if echo "int main() { }" | gcc -x c - -lgfortran_nonshared; then
             LIBS="-lgfortran_nonshared"
         fi
-        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64 $LIBS" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64 $LIBS" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
         make -j $MAKEJ
         make install-strip
         ;;
     linux-armhf)
-        CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" FC="arm-linux-gnueabihf-gfortran" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --host=arm-linux-gnueabihf
+        CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" FC="arm-linux-gnueabihf-gfortran" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install-strip
         ;;
     linux-arm64)
-        CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" FC="aarch64-linux-gnu-gfortran" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --host=aarch64-linux-gnu
+        CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" FC="aarch64-linux-gnu-gfortran" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install-strip
         ;;
     linux-ppc64le)
         sed -i s/elf64ppc/elf64lppc/ configure
-        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" FC="powerpc64le-linux-gnu-gfortran -m64" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --host=powerpc64le-linux-gnu --build=ppc64le-linux
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" FC="powerpc64le-linux-gnu-gfortran -m64" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --host=powerpc64le-linux-gnu --build=ppc64le-linux
         make -j $MAKEJ
         make install-strip
         ;;
@@ -88,17 +88,18 @@ case $PLATFORM in
         export CXX="$(ls -1 /usr/local/bin/g++-? | head -n 1)"
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1) -nodefaultlibs -lSystem -static-libgcc -static-libgfortran -lgcc -lgfortran $(ls -1 /usr/local/lib/gcc/?/libquadmath.a | head -n 1)"
         export F77="$FC"
+        export FLIBS="-lgfortran"
         ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86)
-        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=i686-w64-mingw32
+        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=i686-w64-mingw32
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
-        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=x86_64-w64-mingw32
+        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=x86_64-w64-mingw32
         make -j $MAKEJ
         make install-strip
         ;;

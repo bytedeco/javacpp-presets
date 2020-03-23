@@ -755,7 +755,7 @@ EOF
     linux-armhf)
         tar --totals -xjf ../alsa-lib-$ALSA_VERSION.tar.bz2
 
-        export CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard"
+        export CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard -I$INSTALL_PATH/include -L$INSTALL_PATH/lib"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         HOST_ARCH="$(uname -m)"
@@ -908,7 +908,7 @@ EOF
     linux-arm64)
         tar --totals -xjf ../alsa-lib-$ALSA_VERSION.tar.bz2
 
-        export CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
+        export CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto -I$INSTALL_PATH/include -L$INSTALL_PATH/lib"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         HOST_ARCH="$(uname -m)"
