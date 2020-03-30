@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Samuel Audet, Jarek Sacha
+ * Copyright (C) 2014-2020 Samuel Audet, Jarek Sacha
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ package org.bytedeco.spinnaker.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -35,7 +36,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Jarek Sacha
  */
-@Properties(target = "org.bytedeco.spinnaker.Spinnaker_C",
+@Properties(inherit = javacpp.class,
+            target = "org.bytedeco.spinnaker.Spinnaker_C",
             global = "org.bytedeco.spinnaker.global.Spinnaker_C", value = {
         @Platform(value = {"linux-x86_64", "linux-arm64", "windows"},
                 include = {"<SpinnakerPlatformC.h>",

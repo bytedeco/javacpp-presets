@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2016 Samuel Audet
+ * Copyright (C) 2013-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -38,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target = "org.bytedeco.libdc1394", global = "org.bytedeco.libdc1394.global.dc1394", value = {
+@Properties(inherit = javacpp.class, target = "org.bytedeco.libdc1394", global = "org.bytedeco.libdc1394.global.dc1394", value = {
     @Platform(not = "android", include = {"<poll.h>", "<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
         "<dc1394/camera.h>", "<dc1394/control.h>", "<dc1394/capture.h>", "<dc1394/conversions.h>", "<dc1394/format7.h>",
         "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link = "dc1394@.25"),

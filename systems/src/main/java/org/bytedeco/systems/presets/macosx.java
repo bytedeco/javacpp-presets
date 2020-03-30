@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Samuel Audet
+ * Copyright (C) 2017-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.BuildEnabled;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
@@ -36,7 +37,7 @@ import org.bytedeco.javacpp.tools.Logger;
  *
  * @author Samuel Audet
  */
-@Properties(value = {@Platform(value = "macosx-x86",
+@Properties(inherit = javacpp.class, value = {@Platform(value = "macosx-x86", define = "__STDC_WANT_LIB_EXT1__ 1",
     include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "_locale.h", "langinfo.h", "locale.h",
                "sys/uio.h", "sys/_types/_iovec_t.h", "sys/socket.h", "sys/errno.h", "string.h", "stdlib.h", /*"sys/types.h",*/
                "sys/_types/_timespec.h", "sys/_types/_timeval.h", "sys/time.h", "time.h", "utime.h",

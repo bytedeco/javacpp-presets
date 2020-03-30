@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Alexander Merritt, Samuel Audet
+ * Copyright (C) 2018-2020 Alexander Merritt, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -23,12 +23,13 @@
 package org.bytedeco.onnx.presets;
 
 import org.bytedeco.javacpp.annotation.*;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.*;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 
-@Properties(target = "org.bytedeco.onnx", global = "org.bytedeco.onnx.global.onnx", value = {@Platform(
+@Properties(inherit = javacpp.class, target = "org.bytedeco.onnx", global = "org.bytedeco.onnx.global.onnx", value = {@Platform(
     value = {"linux", "macosx"},
     define = {"ONNX_NAMESPACE onnx", "ONNX_USE_LITE_PROTO", "ONNX_ML 1", "SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
     compiler = "cpp11",

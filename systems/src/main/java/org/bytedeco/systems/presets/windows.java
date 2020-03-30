@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Audet
+ * Copyright (C) 2017-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.BuildEnabled;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
@@ -36,7 +37,7 @@ import org.bytedeco.javacpp.tools.Logger;
  *
  * @author Samuel Audet
  */
-@Properties(value = {@Platform(value = "windows-x86", define = {"WINVER 0x0601", "_WIN32_WINNT 0x0601"},
+@Properties(inherit = javacpp.class, value = {@Platform(value = "windows-x86", define = {"WINVER 0x0601", "_WIN32_WINNT 0x0601"},
     include = {"minwindef.h", "guiddef.h", "winnt.h", "minwinbase.h", "processenv.h", "fileapi.h", "debugapi.h", "utilapiset.h",
                "handleapi.h", "errhandlingapi.h", "fibersapi.h", "namedpipeapi.h", "profileapi.h", "heapapi.h", "ioapiset.h",
                "synchapi.h", "interlockedapi.h", "processthreadsapi.h", "sysinfoapi.h", "memoryapi.h", "threadpoollegacyapiset.h",

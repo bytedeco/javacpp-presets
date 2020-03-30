@@ -65,7 +65,7 @@ public class mxnet implements LoadEnabled, InfoMapper {
 
         // Only apply this at load time since we don't want to copy the MKL or CUDA libraries here
         if (Loader.isLoadLibraries()) {
-            List<String> l = Arrays.asList("iomp5", "libiomp5md", "mklml", "mklml_intel");
+            List<String> l = Arrays.asList("gomp@.1", "iomp5", "libiomp5md", "mklml", "mklml_intel");
             if (!preloads.containsAll(l)) {
                 preloads.addAll(0, l);
             }

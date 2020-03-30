@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Samuel Audet
+ * Copyright (C) 2018-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -25,12 +25,11 @@ package org.bytedeco.cpython.presets;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import org.bytedeco.javacpp.ClassProperties;
-import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -40,6 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(
+    inherit = javacpp.class,
     value = {
         @Platform(
             cinclude = {
@@ -135,44 +135,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(
-            value = "macosx",
-            link = "python3.7m!"
-        ),
-        @Platform(
-            value = "windows",
-            link = "python37",
-            preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
-                       "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-                       "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
-                       "api-ms-win-core-string-l1-1-0", "api-ms-win-core-errorhandling-l1-1-0", "api-ms-win-core-timezone-l1-1-0", "api-ms-win-core-file-l1-1-0",
-                       "api-ms-win-core-namedpipe-l1-1-0", "api-ms-win-core-handle-l1-1-0", "api-ms-win-core-file-l2-1-0", "api-ms-win-core-heap-l1-1-0",
-                       "api-ms-win-core-libraryloader-l1-1-0", "api-ms-win-core-synch-l1-1-0", "api-ms-win-core-processthreads-l1-1-0",
-                       "api-ms-win-core-processenvironment-l1-1-0", "api-ms-win-core-datetime-l1-1-0", "api-ms-win-core-localization-l1-2-0",
-                       "api-ms-win-core-sysinfo-l1-1-0", "api-ms-win-core-synch-l1-2-0", "api-ms-win-core-console-l1-1-0", "api-ms-win-core-debug-l1-1-0",
-                       "api-ms-win-core-rtlsupport-l1-1-0", "api-ms-win-core-processthreads-l1-1-1", "api-ms-win-core-file-l1-2-0", "api-ms-win-core-profile-l1-1-0",
-                       "api-ms-win-core-memory-l1-1-0", "api-ms-win-core-util-l1-1-0", "api-ms-win-core-interlocked-l1-1-0", "ucrtbase",
-                       "vcruntime140", "msvcp140", "concrt140", "vcomp140", "python3"}
-        ),
-        @Platform(
-            value = "windows-x86",
-            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
-                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
-                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}
-        ),
-        @Platform(
-            value = "windows-x86_64",
-            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
-                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
-                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}
-        ),
+        @Platform(value = "macosx",  link = "python3.7m!"),
+        @Platform(value = "windows", link = "python37"),
     },
     target = "org.bytedeco.cpython",
     global = "org.bytedeco.cpython.global.python",
     helper = "org.bytedeco.cpython.helper.python"
 )
 @NoException
-public class python implements LoadEnabled, InfoMapper {
+public class python implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "cpython"); }
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/")}. */
@@ -184,27 +155,6 @@ public class python implements LoadEnabled, InfoMapper {
     public static File[] cachePackages() throws IOException {
         File f = cachePackage();
         return new File[] {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")};
-    }
-
-    @Override public void init(ClassProperties properties) {
-        String platform = properties.getProperty("platform");
-        List<String> preloadpaths = properties.get("platform.preloadpath");
-
-        String vcredistdir = System.getenv("VCToolsRedistDir");
-        if (vcredistdir != null && vcredistdir.length() > 0) {
-            switch (platform) {
-                case "windows-x86":
-                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
-                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
-                    break;
-                case "windows-x86_64":
-                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
-                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
-                    break;
-                default:
-                    // not Windows
-            }
-        }
     }
 
     public void map(InfoMap infoMap) {

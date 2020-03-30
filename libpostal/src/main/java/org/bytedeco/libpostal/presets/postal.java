@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Maurice Betzel, Samuel Audet
+ * Copyright (C) 2018-2020 Maurice Betzel, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ package org.bytedeco.libpostal.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -33,6 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Maurice Betzel, Samuel Audet
  */
 @Properties(
+    inherit = javacpp.class,
     value = {
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
@@ -52,5 +54,4 @@ public class postal implements InfoMapper {
                .put(new Info("libpostal_normalized_tokens").skip())
                .put(new Info("char").cast().valueTypes("byte").pointerTypes("BytePointer", "String"));
     }
-
 }
