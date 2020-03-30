@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 case $PLATFORM in
-    linux-x86*|linux-ppc*)
+    linux-*)
         if [[ ! -d "/usr/local/cuda/" ]]; then
             echo "Please install CUDA under the default installation directory"
             exit 1

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -34,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(global = "org.bytedeco.fftw.global.fftw3", value = {
+@Properties(inherit = javacpp.class, global = "org.bytedeco.fftw.global.fftw3", value = {
     @Platform(include = "<fftw3.h>", link = {"fftw3@.3", "fftw3f@.3"}),
     @Platform(value = "android", link = {"fftw3", "fftw3f"}),
     @Platform(value = "windows", preload = {"libfftw3-3", "libfftw3f-3"}) })

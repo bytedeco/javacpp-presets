@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Samuel Audet
+ * Copyright (C) 2017-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.BuildEnabled;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
@@ -40,7 +41,7 @@ import org.bytedeco.javacpp.tools.Logger;
  *
  * @author Samuel Audet
  */
-@Properties(value = {@Platform(value = "linux",
+@Properties(inherit = javacpp.class, value = {@Platform(value = "linux",
     exclude = {"bits/locale.h", "bits/socket.h", "bits/siginfo.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h",
                "bits/sched.h", "bits/confname.h", "bits/resource.h"},
     include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "bits/locale.h", "langinfo.h", "locale.h",
