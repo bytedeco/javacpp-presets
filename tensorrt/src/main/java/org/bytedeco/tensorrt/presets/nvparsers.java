@@ -34,11 +34,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(
     inherit = nvinfer.class,
-    value = @Platform(
-        include = {"NvCaffeParser.h", "NvUffParser.h"},
-        link = "nvparsers@.7"),
+    value = {
+		@Platform(
+			include = {"NvCaffeParser.h", "NvUffParser.h"},
+			link = "nvparsers"
+		),
+		@Platform(
+			value = "windows-x86_64",
+			preload = "nvparsers"
+		)
+	},
     target = "org.bytedeco.tensorrt.nvparsers",
-    global = "org.bytedeco.tensorrt.global.nvparsers")
+    global = "org.bytedeco.tensorrt.global.nvparsers"
+)
 public class nvparsers implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("nvuffparser::IPluginFactory").pointerTypes("IUffPluginFactory"))

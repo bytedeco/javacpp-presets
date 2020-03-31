@@ -43,16 +43,29 @@ import org.bytedeco.cuda.presets.nvrtc;
  */
 @Properties(
     inherit = {cublas.class, cudnn.class, nvrtc.class},
-    value = @Platform(
-        value = "linux-x86_64",
-        compiler = "cpp11",
-        include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
-        includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
-        link = "nvinfer@.7",
-        preload = "myelin@.1",
-        linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}),
+    value = {
+		@Platform(
+			value = "linux-x86_64",
+			compiler = "cpp11",
+			include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
+			includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
+			link = "nvinfer@.7",
+			preload = "myelin@.1",
+			linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}
+		),
+		@Platform(
+			value = "windows-x86_64",
+			compiler = "cpp11",
+			include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
+			includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/include",
+			link = "nvinfer",
+			preload = "myelin64_1",
+			linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/lib/"
+		)
+	},
     target = "org.bytedeco.tensorrt.nvinfer",
-    global = "org.bytedeco.tensorrt.global.nvinfer")
+    global = "org.bytedeco.tensorrt.global.nvinfer"
+)
 public class nvinfer implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tensorrt"); }
 
@@ -62,7 +75,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
         List<String> resources = properties.get("platform.preloadresource");
 
         // Only apply this at load time since we don't want to copy the CUDA libraries here
-        if (!Loader.isLoadLibraries() || !platform.equals("linux-x86_64")) {
+        if (!Loader.isLoadLibraries() || !(platform.equals("linux-x86_64") || platform.equals("windows-x86_64"))) {
             return;
         }
         int i = 0;

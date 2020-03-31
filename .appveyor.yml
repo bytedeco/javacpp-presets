@@ -93,6 +93,9 @@ environment:
     - PROJ: "tensorflow"
       OS: windows-x86_64
       EXT: -gpu
+    - PROJ: "tensorrt"
+      OS: windows-x86_64
+      EXT: -gpu
 #    - PROJ: "tensorflow"
 #      OS: windows-x86_64
 #      EXT: -python
