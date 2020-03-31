@@ -44,25 +44,25 @@ import org.bytedeco.cuda.presets.nvrtc;
 @Properties(
     inherit = {cublas.class, cudnn.class, nvrtc.class},
     value = {
-		@Platform(
-			value = "linux-x86_64",
-			compiler = "cpp11",
-			include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
-			includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
-			link = "nvinfer@.7",
-			preload = "myelin@.1",
-			linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}
-		),
-		@Platform(
-			value = "windows-x86_64",
-			compiler = "cpp11",
-			include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
-			includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/include",
-			link = "nvinfer",
-			preload = "myelin64_1",
-			linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/lib/"
-		)
-	},
+        @Platform(
+            value = "linux-x86_64",
+            compiler = "cpp11",
+            include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
+            includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
+            link = "nvinfer@.7",
+            preload = "myelin@.1",
+            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}
+        ),
+        @Platform(
+            value = "windows-x86_64",
+            compiler = "cpp11",
+            include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
+            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/include",
+            link = "nvinfer",
+            preload = "myelin64_1",
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/lib/"
+        )
+    },
     target = "org.bytedeco.tensorrt.nvinfer",
     global = "org.bytedeco.tensorrt.global.nvinfer"
 )

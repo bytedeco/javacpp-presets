@@ -35,15 +35,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = nvinfer.class,
     value = {
-		@Platform(
-			include = {"NvCaffeParser.h", "NvUffParser.h"},
-			link = "nvparsers"
-		),
-		@Platform(
-			value = "windows-x86_64",
-			preload = "nvparsers"
-		)
-	},
+        @Platform(
+            include = {"NvCaffeParser.h", "NvUffParser.h"},
+            link = "nvparsers"
+        ),
+        @Platform(
+            value = "windows-x86_64",
+            preload = "nvparsers"
+        )
+    },
     target = "org.bytedeco.tensorrt.nvparsers",
     global = "org.bytedeco.tensorrt.global.nvparsers"
 )
