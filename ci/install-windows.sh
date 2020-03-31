@@ -130,13 +130,11 @@ fi
 
 if [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing tensorrt 
-	   # TensorRT-7.0.0.11
-	   /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1MqoSNUEnbZPn4HNdJX3uic-Ej5ZejCaV /c/Downloads/tensorrt.zip
-       unzip /c/Downloads/tensorrt.zip
-	   mkdir -p /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT-7.0.0.11/
-       mv ./TensorRT-7.0.0.11/* /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT-7.0.0.11/
+       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1MqoSNUEnbZPn4HNdJX3uic-Ej5ZejCaV /c/Downloads/tensorrt.zip
+       unzip -o /c/Downloads/tensorrt.zip -d /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/
+       ln -sf /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT* /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT
        echo Finished tensorrt install
-fi 
+fi
 
 if [ "$PROJ" == "tensorflow" ]; then
        curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip

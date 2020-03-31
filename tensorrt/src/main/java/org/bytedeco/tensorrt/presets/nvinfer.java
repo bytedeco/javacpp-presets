@@ -45,22 +45,22 @@ import org.bytedeco.cuda.presets.nvrtc;
     inherit = {cublas.class, cudnn.class, nvrtc.class},
     value = {
         @Platform(
-            value = "linux-x86_64",
+            value = {"linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
+            link = "nvinfer@.7"
+        ),
+        @Platform(
+            value = "linux-x86_64",
             includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
-            link = "nvinfer@.7",
-            preload = "myelin@.1",
-            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}
+            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"},
+            preload = "myelin@.1"
         ),
         @Platform(
             value = "windows-x86_64",
-            compiler = "cpp11",
-            include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
-            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/include",
-            link = "nvinfer",
-            preload = "myelin64_1",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/lib/"
+            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include",
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/",
+            preload = "myelin64_1"
         )
     },
     target = "org.bytedeco.tensorrt.nvinfer",
@@ -75,13 +75,22 @@ public class nvinfer implements LoadEnabled, InfoMapper {
         List<String> resources = properties.get("platform.preloadresource");
 
         // Only apply this at load time since we don't want to copy the CUDA libraries here
-        if (!Loader.isLoadLibraries() || !(platform.equals("linux-x86_64") || platform.equals("windows-x86_64"))) {
+        if (!Loader.isLoadLibraries()) {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc"};
         for (String lib : libs) {
-            lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.2" : "@.10";
+            switch (platform) {
+                case "linux-x86_64":
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.2" : lib.equals("nvrtc") ? "@.10.2" : "@.10";
+                    break;
+                case "windows-x86_64":
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_102" : lib.equals("nvrtc") ? "64_102_0" : "64_10";
+                    break;
+                default:
+                    continue; // no CUDA
+            }
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);
             }

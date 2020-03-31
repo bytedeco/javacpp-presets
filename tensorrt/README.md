@@ -56,15 +56,13 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
+            <artifactId>cuda-platform-redist</artifactId>
             <version>10.2-7.6-1.5.3-SNAPSHOT</version>
-            <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>tensorrt</artifactId>
+            <artifactId>tensorrt-platform-redist</artifactId>
             <version>7.0-1.5.3-SNAPSHOT</version>
-            <classifier>linux-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>

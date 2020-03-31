@@ -15,8 +15,8 @@ case $PLATFORM in
         fi
         ;;
     windows-x86_64)
-        if [[ ! -f "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/include/NvInfer.h" ]] && [[ ! -d "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/" ]]; then
-            echo "Please install TensorRT under the default installation directory or in C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT-7.0.0.11/"
+        if [[ ! -f "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include/NvInfer.h" ]]; then
+            echo "Please install TensorRT in C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/"
             exit 1
         fi
         ;;

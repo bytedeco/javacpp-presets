@@ -34,19 +34,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(
     inherit = nvinfer_plugin.class,
-    value = {
-        @Platform(
-            include = "NvOnnxParser.h",
-            link = "nvonnxparser@.7"
-        ),
-        @Platform(
-            value = "windows-x86_64",
-            preload = "nvonnxparser"
-        )
-    },
+    value = @Platform(
+        include = "NvOnnxParser.h",
+        link = "nvonnxparser@.7"),
     target = "org.bytedeco.tensorrt.nvonnxparser",
-    global = "org.bytedeco.tensorrt.global.nvonnxparser"
-)
+    global = "org.bytedeco.tensorrt.global.nvonnxparser")
 public class nvonnxparser implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("SWIG").define(false))
