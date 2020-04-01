@@ -1,15 +1,12 @@
 import org.bytedeco.cuda.cudart.*;
 import static org.bytedeco.cuda.global.cudart.*;
 import org.bytedeco.cudf.column;
-import org.bytedeco.cudf.column.contents;
 import org.bytedeco.cudf.column_view;
 import org.bytedeco.cudf.data_type;
 import org.bytedeco.cudf.global.cudf;
 import org.bytedeco.javacpp.BoolPointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.javacpp.Loader;
-
-import java.nio.FloatBuffer;
 
 public class cudfSample {
 
@@ -51,7 +48,7 @@ public class cudfSample {
   }
 
   public static void main(String[] args) {
-    Loader.load(contents.class);
+    Loader.load(column_view.class);
     // initialize host data
     try (FloatPointer fp = new FloatPointer(new float[]{Float.NaN, 3.224f})) {
       // pointer to hold the device pointer
