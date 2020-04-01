@@ -195,7 +195,20 @@ public class cudf implements InfoMapper {
         .put(new Info("std::vector<std::unique_ptr<cudf::column> >").skip())
         .put(new Info("CUDA_HOST_DEVICE_CALLABLE").cppTypes().annotations())
         .put(new Info("CUDA_DEVICE_CALLABLE").cppTypes().annotations())
-        .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
+        .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"));
+
+        String qualifier = "cudf::detail::column_view_base::";
+        String[] functionTemplates = {"head","data", "begin", "end"};
+
+        for (String function: functionTemplates) {
+            infoMap
+            .put(new Info(qualifier + function + "<bool>").javaNames(function + "Boolean"))
+            .put(new Info(qualifier + function + "<int32_t>").javaNames(function + "Int"))
+            .put(new Info(qualifier + function + "<int64_t>").javaNames(function + "Long"))
+            .put(new Info(qualifier + function + "<float>").javaNames(function + "Float"))
+            .put(new Info(qualifier + function + "<double>").javaNames(function + "Double"));
+        }
+
         ;
     }
 

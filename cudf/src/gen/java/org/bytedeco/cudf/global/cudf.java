@@ -252,12 +252,12 @@ public static final int UNKNOWN_NULL_COUNT = UNKNOWN_NULL_COUNT();
  *---------------------------------------------------------------------------**/
 @Namespace("cudf") public enum order {
   /** Elements ordered from small to large */
-  ASCENDING(0),
+  ASCENDING(0 != 0),
   /** Elements ordered from large to small */
-  DESCENDING(1);
+  DESCENDING(1 != 0);
 
-    public final int value;
-    private order(int v) { this.value = v; }
+    public final boolean value;
+    private order(boolean v) { this.value = v; }
     private order(order e) { this.value = e.value; }
     public order intern() { for (order e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
@@ -267,11 +267,11 @@ public static final int UNKNOWN_NULL_COUNT = UNKNOWN_NULL_COUNT();
  * \brief Enum to specify whether to include nulls or exclude nulls
  */
 @Namespace("cudf") public enum include_nulls {
-  NO(0),
-  YES(1);
+  NO(0 != 0),
+  YES(1 != 0);
 
-    public final int value;
-    private include_nulls(int v) { this.value = v; }
+    public final boolean value;
+    private include_nulls(boolean v) { this.value = v; }
     private include_nulls(include_nulls e) { this.value = e.value; }
     public include_nulls intern() { for (include_nulls e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
@@ -282,12 +282,12 @@ public static final int UNKNOWN_NULL_COUNT = UNKNOWN_NULL_COUNT();
  *---------------------------------------------------------------------------**/
 @Namespace("cudf") public enum null_order {
   /** NULL values ordered *after* all other values */
-  AFTER(0),
+  AFTER(0 != 0),
   /** NULL values ordered *before* all other values */
-  BEFORE(1);
+  BEFORE(1 != 0);
 
-    public final int value;
-    private null_order(int v) { this.value = v; }
+    public final boolean value;
+    private null_order(boolean v) { this.value = v; }
     private null_order(null_order e) { this.value = e.value; }
     public null_order intern() { for (null_order e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
@@ -297,11 +297,11 @@ public static final int UNKNOWN_NULL_COUNT = UNKNOWN_NULL_COUNT();
  * \brief Indicates whether a collection of values is known to be sorted.
  *---------------------------------------------------------------------------**/
 @Namespace("cudf") public enum sorted {
-    NO(0),
-    YES(1);
+    NO(0 != 0),
+    YES(1 != 0);
 
-    public final int value;
-    private sorted(int v) { this.value = v; }
+    public final boolean value;
+    private sorted(boolean v) { this.value = v; }
     private sorted(sorted e) { this.value = e.value; }
     public sorted intern() { for (sorted e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }

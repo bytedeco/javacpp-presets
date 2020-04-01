@@ -46,6 +46,11 @@ public class column_view_base extends Pointer {
    * \tparam The type to cast to
    * @return T const* Typed pointer to underlying data
    *---------------------------------------------------------------------------**/
+  public native @Cast("const bool*") @Name("head<bool>") @NoException BoolPointer headBoolean();
+  public native @Const @Name("head<int32_t>") @NoException IntPointer headInt();
+  public native @Cast("const int64_t*") @Name("head<int64_t>") @NoException LongPointer headLong();
+  public native @Const @Name("head<float>") @NoException FloatPointer headFloat();
+  public native @Const @Name("head<double>") @NoException DoublePointer headDouble();
 
   /**---------------------------------------------------------------------------*
    * \brief Returns the underlying data casted to the specified type, plus the
@@ -58,6 +63,11 @@ public class column_view_base extends Pointer {
    * \tparam T The type to cast to
    * @return T const* Typed pointer to underlying data, including the offset
    *---------------------------------------------------------------------------**/
+  public native @Cast("const bool*") @Name("data<bool>") @NoException BoolPointer dataBoolean();
+  public native @Const @Name("data<int32_t>") @NoException IntPointer dataInt();
+  public native @Cast("const int64_t*") @Name("data<int64_t>") @NoException LongPointer dataLong();
+  public native @Const @Name("data<float>") @NoException FloatPointer dataFloat();
+  public native @Const @Name("data<double>") @NoException DoublePointer dataDouble();
 
   /**---------------------------------------------------------------------------*
    * \brief Return first element (accounting for offset) after underlying data
@@ -66,6 +76,11 @@ public class column_view_base extends Pointer {
    * \tparam T The desired type
    * @return T const* Pointer to the first element after casting
    *---------------------------------------------------------------------------**/
+  public native @Cast("const bool*") @Name("begin<bool>") @NoException BoolPointer beginBoolean();
+  public native @Const @Name("begin<int32_t>") @NoException IntPointer beginInt();
+  public native @Cast("const int64_t*") @Name("begin<int64_t>") @NoException LongPointer beginLong();
+  public native @Const @Name("begin<float>") @NoException FloatPointer beginFloat();
+  public native @Const @Name("begin<double>") @NoException DoublePointer beginDouble();
 
   /**---------------------------------------------------------------------------*
    * \brief Return one past the last element after underlying data is casted to
@@ -74,6 +89,11 @@ public class column_view_base extends Pointer {
    * \tparam T The desired type
    * @return T const* Pointer to one past the last element after casting
    *---------------------------------------------------------------------------**/
+  public native @Cast("const bool*") @Name("end<bool>") @NoException BoolPointer endBoolean();
+  public native @Const @Name("end<int32_t>") @NoException IntPointer endInt();
+  public native @Cast("const int64_t*") @Name("end<int64_t>") @NoException LongPointer endLong();
+  public native @Const @Name("end<float>") @NoException FloatPointer endFloat();
+  public native @Const @Name("end<double>") @NoException DoublePointer endDouble();
 
   /**---------------------------------------------------------------------------*
    * \brief Returns the number of elements in the column

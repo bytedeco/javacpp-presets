@@ -12,25 +12,18 @@
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cudf</artifactId>
+            <artifactId>javacpp-platform</artifactId>
+            <version>1.5.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cudf-platform</artifactId>
             <version>0.13-1.0-1.5.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cudf</artifactId>
-            <version>0.13-1.0-1.5.3-SNAPSHOT</version>
-            <classifier>linux-x86_64</classifier>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.bytedeco</groupId>-->
-<!--            <artifactId>javacpp</artifactId>-->
-<!--            <version>1.5.3-SNAPSHOT</version>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
+            <artifactId>cuda-platform</artifactId>
             <version>10.0-7.4-1.5</version>
-            <classifier>linux-x86_64</classifier>
         </dependency>
     </dependencies>
     <build>
