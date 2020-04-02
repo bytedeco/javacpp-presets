@@ -122,7 +122,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Arrow 0.16.x  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.2.x  https://github.com/intel/hyperscan
- * MKL 2020.0  https://software.intel.com/intel-mkl
+ * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
  * DNNL 1.2.x  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.9  http://www.openblas.net/
