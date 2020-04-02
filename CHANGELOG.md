@@ -1,4 +1,5 @@
 
+ * Add support for Windows to presets for TensorRT ([pull #860](https://github.com/bytedeco/javacpp-presets/pull/860))
  * Add dependency on presets for `jnijavacpp` and `javacpp-platform` artifact to fix issues at load time ([issue bytedeco/javacv#1305](https://github.com/bytedeco/javacv/issues/1305))
  * Bundle the official Java API of ONNX Runtime via the `jnionnxruntime` library
  * Add CUDA-enabled build for ONNX Runtime via `-gpu` extension

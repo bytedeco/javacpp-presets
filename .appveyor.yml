@@ -70,6 +70,8 @@ environment:
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - PROJ: "tensorflow"
       OS: windows-x86_64
+    - PROJ: "tensorrt"
+      OS: windows-x86_64
     - PROJ: "ale"
       OS: windows-x86_64
     - PROJ: "onnxruntime"

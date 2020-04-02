@@ -1537,6 +1537,7 @@
         <module>cuda</module>
         <module>mxnet</module>
         <module>tensorflow</module>
+        <module>tensorrt</module>
         <module>ale</module>
         <module>onnxruntime</module>
         <module>liquidfun</module>
