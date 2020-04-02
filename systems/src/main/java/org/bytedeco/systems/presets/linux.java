@@ -127,8 +127,9 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                              "__WAIT_STATUS", "__WAIT_STATUS_DEFN", "sched_priority", "sigcontext_struct",
                              "sigev_notify_function", "sigev_notify_attributes", "sv_onstack", "__FUNCTION__").annotations().cppTypes())
 
-               .put(new Info("_POSIX2_VERSION", "_POSIX2_C_VERSION", "_POSIX2_C_BIND",
+               .put(new Info("_POSIX2_VERSION", "_POSIX2_C_BIND",
                              "_POSIX2_C_DEV", "_POSIX2_SW_DEV", "_POSIX2_LOCALEDEF").cppTypes("long"))
+               .put(new Info("_POSIX2_C_VERSION").skip())
 
                .put(new Info("__u16", "__uint16_t")
                        .cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
