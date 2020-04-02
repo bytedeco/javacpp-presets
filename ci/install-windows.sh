@@ -115,7 +115,7 @@ if [ "$PROJ" == "mkl" ]; then
        echo Finished mkl 
 fi
 
-if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
+if [ "$PROJ" == "cuda" ] || [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_10.2.89_441.22_windows.exe "http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_441.22_windows.exe"
        curl -L -o cudnn-10.2-windows7-x64-v7.6.5.32.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.5/cudnn-10.2-windows7-x64-v7.6.5.32.zip"
