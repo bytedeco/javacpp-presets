@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/OrcBindings.h>", "<llvm-c/Remarks.h>",
                "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>"},
-    compiler = "cpp11", link = {"LLVM-9", "LTO@.9"}), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
+    compiler = "cpp11", link = {"LLVM-10", "LTO@.10"}), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
 
@@ -126,6 +126,8 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMRelocationIteratorRef").valueTypes("LLVMRelocationIteratorRef").pointerTypes("@ByPtrPtr LLVMRelocationIteratorRef", "@Cast(\"LLVMRelocationIteratorRef*\") PointerPointer"))
                .put(new Info("LLVMPassManagerBuilderRef").valueTypes("LLVMPassManagerBuilderRef").pointerTypes("@ByPtrPtr LLVMPassManagerBuilderRef", "@Cast(\"LLVMPassManagerBuilderRef*\") PointerPointer"))
 
+               .put(new Info("LLVM_C_EXTERN_C_BEGIN").cppText("#define LLVM_C_EXTERN_C_BEGIN").cppTypes())
+               .put(new Info("LLVM_C_EXTERN_C_END").cppText("#define LLVM_C_EXTERN_C_END").cppTypes())
                .put(new Info("INT64_MIN").cppTypes("long").translate())
                .put(new Info("HUGE_VALF").cppTypes("float").translate(false))
                .put(new Info("LLVMErrorTypeId").annotations("@Const").valueTypes("LLVMErrorTypeId"))

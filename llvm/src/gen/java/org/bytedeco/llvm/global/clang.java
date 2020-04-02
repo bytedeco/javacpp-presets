@@ -8,6 +8,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
 
@@ -32,8 +33,7 @@ public class clang extends org.bytedeco.llvm.presets.clang {
 // #ifndef LLVM_CLANG_C_PLATFORM_H
 // #define LLVM_CLANG_C_PLATFORM_H
 
-// #ifdef __cplusplus
-// #endif
+// #include "clang-c/ExternC.h"
 
 /* MSVC DLL import/export. */
 // #ifdef _MSC_VER
@@ -56,8 +56,6 @@ public class clang extends org.bytedeco.llvm.presets.clang {
 //   #endif
 // #endif
 
-// #ifdef __cplusplus
-// #endif
 // #endif
 
 
@@ -79,10 +77,8 @@ public class clang extends org.bytedeco.llvm.presets.clang {
 // #ifndef LLVM_CLANG_C_CXERRORCODE_H
 // #define LLVM_CLANG_C_CXERRORCODE_H
 
+// #include "clang-c/ExternC.h"
 // #include "clang-c/Platform.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * Error codes returned by libclang routines.
@@ -121,8 +117,6 @@ public static final int
    */
   CXError_ASTReadError = 4;
 
-// #ifdef __cplusplus
-// #endif
 // #endif
 
 
@@ -145,9 +139,8 @@ public static final int
 // #ifndef LLVM_CLANG_C_CXSTRING_H
 // #define LLVM_CLANG_C_CXSTRING_H
 
+// #include "clang-c/ExternC.h"
 // #include "clang-c/Platform.h"
-
-// #ifdef __cplusplus
 // Targeting ../clang/CXString.java
 
 
@@ -174,8 +167,6 @@ public static native void clang_disposeStringSet(CXStringSet set);
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
 // #endif
 
 
@@ -199,10 +190,9 @@ public static native void clang_disposeStringSet(CXStringSet set);
 // #ifndef LLVM_CLANG_C_CXCOMPILATIONDATABASE_H
 // #define LLVM_CLANG_C_CXCOMPILATIONDATABASE_H
 
-// #include "clang-c/Platform.h"
 // #include "clang-c/CXString.h"
-
-// #ifdef __cplusplus
+// #include "clang-c/ExternC.h"
+// #include "clang-c/Platform.h"
 // Targeting ../clang/CXCompilationDatabase.java
 
 
@@ -327,8 +317,6 @@ public static native @ByVal CXString clang_CompileCommand_getMappedSourceContent
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
 // #endif
 
 
@@ -351,12 +339,10 @@ public static native @ByVal CXString clang_CompileCommand_getMappedSourceContent
 // #ifndef LLVM_CLANG_C_BUILDSYSTEM_H
 // #define LLVM_CLANG_C_BUILDSYSTEM_H
 
-// #include "clang-c/Platform.h"
 // #include "clang-c/CXErrorCode.h"
 // #include "clang-c/CXString.h"
-
-// #ifdef __cplusplus
-// #endif
+// #include "clang-c/ExternC.h"
+// #include "clang-c/Platform.h"
 
 /**
  * \defgroup BUILD_SYSTEM Build system utilities
@@ -496,9 +482,6 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif /* CLANG_C_BUILD_SYSTEM_H */
 
 
@@ -525,10 +508,11 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
 
 // #include <time.h>
 
-// #include "clang-c/Platform.h"
+// #include "clang-c/BuildSystem.h"
 // #include "clang-c/CXErrorCode.h"
 // #include "clang-c/CXString.h"
-// #include "clang-c/BuildSystem.h"
+// #include "clang-c/ExternC.h"
+// #include "clang-c/Platform.h"
 
 /**
  * The version constants for the libclang API.
@@ -556,8 +540,6 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
 // #define CINDEX_VERSION_STRING CINDEX_VERSION_STRINGIZE(
 //     CINDEX_VERSION_MAJOR,
 //     CINDEX_VERSION_MINOR)
-
-// #ifdef __cplusplus
 // Targeting ../clang/CXIndex.java
 
 
@@ -1834,7 +1816,12 @@ public static final int
    * the case where these warnings are not of interest, as for an IDE for
    * example, which typically shows only the diagnostics in the main file.
    */
-  CXTranslationUnit_IgnoreNonErrorsFromIncludedFiles = 0x4000;
+  CXTranslationUnit_IgnoreNonErrorsFromIncludedFiles = 0x4000,
+
+  /**
+   * Tells the preprocessor not to skip excluded conditional blocks.
+   */
+  CXTranslationUnit_RetainExcludedConditionalBlocks = 0x8000;
 
 /**
  * Returns the set of flags that is suitable for parsing a translation
@@ -3129,7 +3116,27 @@ public static final int
    */
   CXCursor_BuiltinBitCastExpr = 280,
 
-  CXCursor_LastStmt = CXCursor_BuiltinBitCastExpr,
+  /** OpenMP master taskloop directive.
+   */
+  CXCursor_OMPMasterTaskLoopDirective = 281,
+
+  /** OpenMP parallel master taskloop directive.
+   */
+  CXCursor_OMPParallelMasterTaskLoopDirective = 282,
+
+  /** OpenMP master taskloop simd directive.
+   */
+  CXCursor_OMPMasterTaskLoopSimdDirective      = 283,
+
+  /** OpenMP parallel master taskloop simd directive.
+   */
+  CXCursor_OMPParallelMasterTaskLoopSimdDirective      = 284,
+
+  /** OpenMP parallel master directive.
+   */
+  CXCursor_OMPParallelMasterDirective      = 285,
+
+  CXCursor_LastStmt = CXCursor_OMPParallelMasterDirective,
 
   /**
    * Cursor that represents the translation unit itself.
@@ -7058,8 +7065,6 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
 // #endif
 
 
@@ -7082,9 +7087,8 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
 // #ifndef LLVM_CLANG_C_DOCUMENTATION_H
 // #define LLVM_CLANG_C_DOCUMENTATION_H
 
+// #include "clang-c/ExternC.h"
 // #include "clang-c/Index.h"
-
-// #ifdef __cplusplus
 // Targeting ../clang/CXComment.java
 
 
@@ -7233,7 +7237,12 @@ public static final int
    * Command argument should be rendered emphasized (typically italic
    * font).
    */
-  CXCommentInlineCommandRenderKind_Emphasized = 3;
+  CXCommentInlineCommandRenderKind_Emphasized = 3,
+
+  /**
+   * Command argument should not be rendered (since it only defines an anchor).
+   */
+  CXCommentInlineCommandRenderKind_Anchor = 4;
 
 /**
  * Describes parameter passing direction for \param or \arg command.
@@ -7571,10 +7580,6 @@ public static native @ByVal CXString clang_FullComment_getAsXML(@ByVal CXComment
 /**
  * \}
  */
-
-
-// #ifdef __cplusplus
-// #endif
 
 // #endif /* CLANG_C_DOCUMENTATION_H */
 

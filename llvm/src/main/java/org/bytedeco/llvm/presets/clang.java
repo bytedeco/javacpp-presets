@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -29,10 +29,12 @@ import org.bytedeco.javacpp.tools.*;
     value = {"linux", "macosx", "windows"},
     include = {"<clang-c/Platform.h>", "<clang-c/CXErrorCode.h>", "<clang-c/CXString.h>", "<clang-c/CXCompilationDatabase.h>",
                "<clang-c/BuildSystem.h>", "<clang-c/Index.h>", "<clang-c/Documentation.h>"},
-    compiler = "cpp11", link = "clang@.9"), @Platform(value = "windows", link = "libclang") })
+    compiler = "cpp11", link = "clang@.10"), @Platform(value = "windows", link = "libclang") })
 public class clang implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("CINDEX_LINKAGE", "CINDEX_VERSION_STRING").cppTypes().annotations())
+        infoMap.put(new Info("LLVM_CLANG_C_EXTERN_C_BEGIN").cppText("#define LLVM_CLANG_C_EXTERN_C_BEGIN").cppTypes())
+               .put(new Info("LLVM_CLANG_C_EXTERN_C_END").cppText("#define LLVM_CLANG_C_EXTERN_C_END").cppTypes())
+               .put(new Info("CINDEX_LINKAGE", "CINDEX_VERSION_STRING").cppTypes().annotations())
                .put(new Info("CINDEX_DEPRECATED").cppTypes().annotations("@Deprecated"))
                .put(new Info("CINDEX_VERSION").cppTypes("int").translate(false))
                .put(new Info("__has_feature(blocks)").define(false))

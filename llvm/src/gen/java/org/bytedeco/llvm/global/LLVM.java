@@ -8,6 +8,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 public class LLVM extends org.bytedeco.llvm.presets.LLVM {
     static { Loader.load(); }
 
@@ -123,9 +125,7 @@ public static final float HUGE_VALF = HUGE_VALF();
 // #define LLVM_C_TYPES_H
 
 // #include "llvm-c/DataTypes.h"
-
-// #ifdef __cplusplus
-// #endif
+// #include "llvm-c/ExternC.h"
 
 /**
  * \defgroup LLVMCSupportTypes Types and Enumerations
@@ -200,9 +200,6 @@ public static final float HUGE_VALF = HUGE_VALF();
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -225,10 +222,8 @@ public static final float HUGE_VALF = HUGE_VALF();
 // #define LLVM_C_SUPPORT_H
 
 // #include "llvm-c/DataTypes.h"
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * This function permanently loads the dynamic library at the given path.
@@ -282,9 +277,6 @@ public static native Pointer LLVMSearchForAddressOfSymbol(String symbolName);
 public static native void LLVMAddSymbol(@Cast("const char*") BytePointer symbolName, Pointer symbolValue);
 public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -308,10 +300,8 @@ public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
 // #define LLVM_C_CORE_H
 
 // #include "llvm-c/ErrorHandling.h"
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMC LLVM-C: C interface to LLVM
@@ -419,6 +409,7 @@ public static final int
   LLVMShuffleVector  = 52,
   LLVMExtractValue   = 53,
   LLVMInsertValue    = 54,
+  LLVMFreeze         = 68,
 
   /* Atomic operators */
   LLVMFence          = 55,
@@ -749,9 +740,15 @@ public static final int
                              the old one */
     LLVMAtomicRMWBinOpUMax = 9,
     /** Sets the value if it's greater than the
-                             original using an unsigned comparison  and return
-                             the old one */
-    LLVMAtomicRMWBinOpUMin = 10;
+                              original using an unsigned comparison and return
+                              the old one */
+    LLVMAtomicRMWBinOpUMin = 10,
+    /** Add a floating point value and return the
+                              old one */
+    LLVMAtomicRMWBinOpFAdd = 11,
+    /** Subtract a floating point value and return the
+                             old one */
+    LLVMAtomicRMWBinOpFSub = 12;
 
 /** enum LLVMDiagnosticSeverity */
 public static final int
@@ -1987,6 +1984,7 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //           macro(GlobalVariable)
 //       macro(UndefValue)
 //     macro(Instruction)
+//       macro(UnaryOperator)
 //       macro(BinaryOperator)
 //       macro(CallInst)
 //         macro(IntrinsicInst)
@@ -2019,6 +2017,8 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //       macro(ResumeInst)
 //       macro(CleanupReturnInst)
 //       macro(CatchReturnInst)
+//       macro(CatchSwitchInst)
+//       macro(CallBrInst)
 //       macro(FuncletPadInst)
 //         macro(CatchPadInst)
 //         macro(CleanupPadInst)
@@ -2041,6 +2041,10 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //         macro(ExtractValueInst)
 //         macro(LoadInst)
 //         macro(VAArgInst)
+//         macro(FreezeInst)
+//       macro(AtomicCmpXchgInst)
+//       macro(AtomicRMWInst)
+//       macro(FenceInst)
 
 /**
  * \defgroup LLVMCCoreValueGeneral General APIs
@@ -2152,6 +2156,7 @@ public static native LLVMValueRef LLVMIsAArgument(LLVMValueRef Val);
           public static native LLVMValueRef LLVMIsAGlobalVariable(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAUndefValue(LLVMValueRef Val);
     public static native LLVMValueRef LLVMIsAInstruction(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAUnaryOperator(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsABinaryOperator(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsACallInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsAIntrinsicInst(LLVMValueRef Val);
@@ -2184,6 +2189,8 @@ public static native LLVMValueRef LLVMIsAArgument(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAResumeInst(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsACleanupReturnInst(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsACatchReturnInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsACatchSwitchInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsACallBrInst(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAFuncletPadInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsACatchPadInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsACleanupPadInst(LLVMValueRef Val);
@@ -2206,6 +2213,10 @@ public static native LLVMValueRef LLVMIsAArgument(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsAExtractValueInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsALoadInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsAVAArgInst(LLVMValueRef Val);
+        public static native LLVMValueRef LLVMIsAFreezeInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAAtomicCmpXchgInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAAtomicRMWInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAFenceInst(LLVMValueRef Val);
 
 public static native LLVMValueRef LLVMIsAMDNode(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAMDString(LLVMValueRef Val);
@@ -4569,8 +4580,12 @@ public static native LLVMValueRef LLVMBuildGlobalStringPtr(LLVMBuilderRef B, Str
                                       String Name);
 public static native @Cast("LLVMBool") int LLVMGetVolatile(LLVMValueRef MemoryAccessInst);
 public static native void LLVMSetVolatile(LLVMValueRef MemoryAccessInst, @Cast("LLVMBool") int IsVolatile);
+public static native @Cast("LLVMBool") int LLVMGetWeak(LLVMValueRef CmpXchgInst);
+public static native void LLVMSetWeak(LLVMValueRef CmpXchgInst, @Cast("LLVMBool") int IsWeak);
 public static native @Cast("LLVMAtomicOrdering") int LLVMGetOrdering(LLVMValueRef MemoryAccessInst);
 public static native void LLVMSetOrdering(LLVMValueRef MemoryAccessInst, @Cast("LLVMAtomicOrdering") int Ordering);
+public static native @Cast("LLVMAtomicRMWBinOp") int LLVMGetAtomicRMWBinOp(LLVMValueRef AtomicRMWInst);
+public static native void LLVMSetAtomicRMWBinOp(LLVMValueRef AtomicRMWInst, @Cast("LLVMAtomicRMWBinOp") int BinOp);
 
 /* Casts */
 public static native LLVMValueRef LLVMBuildTrunc(LLVMBuilderRef arg0, LLVMValueRef Val,
@@ -4729,6 +4744,10 @@ public static native LLVMValueRef LLVMBuildInsertValue(LLVMBuilderRef arg0, LLVM
 public static native LLVMValueRef LLVMBuildInsertValue(LLVMBuilderRef arg0, LLVMValueRef AggVal,
                                   LLVMValueRef EltVal, @Cast("unsigned") int Index,
                                   String Name);
+public static native LLVMValueRef LLVMBuildFreeze(LLVMBuilderRef arg0, LLVMValueRef Val,
+                             @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildFreeze(LLVMBuilderRef arg0, LLVMValueRef Val,
+                             String Name);
 
 public static native LLVMValueRef LLVMBuildIsNull(LLVMBuilderRef arg0, LLVMValueRef Val,
                              @Cast("const char*") BytePointer Name);
@@ -4952,9 +4971,6 @@ public static native @Cast("LLVMBool") int LLVMIsMultithreaded();
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif /* LLVM_C_CORE_H */
 
 
@@ -4981,10 +4997,8 @@ public static native @Cast("LLVMBool") int LLVMIsMultithreaded();
 // #ifndef LLVM_C_ANALYSIS_H
 // #define LLVM_C_ANALYSIS_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCAnalysis Analysis
@@ -5025,9 +5039,6 @@ public static native void LLVMViewFunctionCFGOnly(LLVMValueRef Fn);
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -5054,10 +5065,8 @@ public static native void LLVMViewFunctionCFGOnly(LLVMValueRef Fn);
 // #ifndef LLVM_C_BITREADER_H
 // #define LLVM_C_BITREADER_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCBitReader Bit Reader
@@ -5181,9 +5190,6 @@ public static native @Cast("LLVMBool") int LLVMGetBitcodeModule2(LLVMMemoryBuffe
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -5210,10 +5216,8 @@ public static native @Cast("LLVMBool") int LLVMGetBitcodeModule2(LLVMMemoryBuffe
 // #ifndef LLVM_C_BITWRITER_H
 // #define LLVM_C_BITWRITER_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCBitWriter Bit Writer
@@ -5242,9 +5246,6 @@ public static native LLVMMemoryBufferRef LLVMWriteBitcodeToMemoryBuffer(LLVMModu
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif
 
 // #endif
 
@@ -5370,6 +5371,7 @@ public static final int LLVMDisassembler_ReferenceType_DeMangled_Name = 9;
 // #define LLVM_C_DISASSEMBLER_H
 
 // #include "llvm-c/DisassemblerTypes.h"
+// #include "llvm-c/ExternC.h"
 
 /**
  * \defgroup LLVMCDisassembler Disassembler
@@ -5377,9 +5379,6 @@ public static final int LLVMDisassembler_ReferenceType_DeMangled_Name = 9;
  *
  * \{
  */
-
-// #ifdef __cplusplus
-// #endif /* !defined(__cplusplus) */
 
 /**
  * Create a disassembler for the TripleName.  Symbolic disassembly is supported
@@ -5475,9 +5474,6 @@ public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContex
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif /* !defined(__cplusplus) */
-
 // #endif /* LLVM_C_DISASSEMBLER_H */
 
 
@@ -5501,10 +5497,8 @@ public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContex
 // #ifndef LLVM_C_INITIALIZATION_H
 // #define LLVM_C_INITIALIZATION_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCInitialization Initialization Routines
@@ -5531,9 +5525,6 @@ public static native void LLVMInitializeTarget(LLVMPassRegistryRef R);
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -5555,10 +5546,8 @@ public static native void LLVMInitializeTarget(LLVMPassRegistryRef R);
 // #ifndef LLVM_C_IRREADER_H
 // #define LLVM_C_IRREADER_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * Read LLVM IR from a memory buffer and convert it into an in-memory Module
@@ -5591,9 +5580,6 @@ public static native @Cast("LLVMBool") int LLVMParseIRInContext(LLVMContextRef C
                               LLVMMemoryBufferRef MemBuf, @Cast("LLVMModuleRef*") PointerPointer OutM,
                               @Cast("char**") @ByPtrPtr byte[] OutMessage);
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -5615,10 +5601,8 @@ public static native @Cast("LLVMBool") int LLVMParseIRInContext(LLVMContextRef C
 // #ifndef LLVM_C_LINKER_H
 // #define LLVM_C_LINKER_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /* This enum is provided for backwards-compatibility only. It has no effect. */
 /** enum LLVMLinkerMode */
@@ -5633,9 +5617,6 @@ public static final int
  * Use the diagnostic handler to get any diagnostic message.
 */
 public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, LLVMModuleRef Src);
-
-// #ifdef __cplusplus
-// #endif
 
 // #endif
 
@@ -5659,7 +5640,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, 
 // #ifndef LLVM_C_LINKTIMEOPTIMIZER_H
 // #define LLVM_C_LINKTIMEOPTIMIZER_H
 
-// #ifdef __cplusplus
+// #include "llvm-c/ExternC.h"
 // Targeting ../LLVM/llvm_lto_t.java
 
 
@@ -5694,10 +5675,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, 
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
-// #endif
+  // #endif
 
 
 // Parsed from <llvm-c/lto.h>
@@ -5719,6 +5697,8 @@ public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, 
 
 // #ifndef LLVM_C_LTO_H
 // #define LLVM_C_LTO_H
+
+// #include "llvm-c/ExternC.h"
 
 // #ifdef __cplusplus
 // #include <cstddef>
@@ -5745,7 +5725,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, 
  * \{
  */
 
-public static final int LTO_API_VERSION = 24;
+public static final int LTO_API_VERSION = 26;
 
 /**
  * @since prior to LTO_API_VERSION=3
@@ -5798,9 +5778,6 @@ public static final int
 // Targeting ../LLVM/thinlto_code_gen_t.java
 
 
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * Returns a printable string.
@@ -6197,10 +6174,29 @@ public static native @Cast("unsigned int") int lto_api_version();
 /**
  * Sets options to help debug codegen bugs.
  *
+ * This function takes one or more options separated by spaces.
+ * Warning: passing file paths through this function may confuse the argument
+ * parser if the paths contain spaces.
+ *
  * @since prior to LTO_API_VERSION=3
  */
 public static native void lto_codegen_debug_options(lto_code_gen_t cg, @Cast("const char*") BytePointer arg1);
 public static native void lto_codegen_debug_options(lto_code_gen_t cg, String arg1);
+
+/**
+ * Same as the previous function, but takes every option separately through an
+ * array.
+ *
+ * @since prior to LTO_API_VERSION=26
+ */
+public static native void lto_codegen_debug_options_array(lto_code_gen_t cg,
+                                            @Cast("const char*const*") PointerPointer arg1, int number);
+public static native void lto_codegen_debug_options_array(lto_code_gen_t cg,
+                                            @Cast("const char*const*") @ByPtrPtr BytePointer arg1, int number);
+public static native void lto_codegen_debug_options_array(lto_code_gen_t cg,
+                                            @Cast("const char*const*") @ByPtrPtr ByteBuffer arg1, int number);
+public static native void lto_codegen_debug_options_array(lto_code_gen_t cg,
+                                            @Cast("const char*const*") @ByPtrPtr byte[] arg1, int number);
 
 /**
  * Initializes LLVM disassemblers.
@@ -6229,6 +6225,59 @@ public static native void lto_codegen_set_should_internalize(lto_code_gen_t cg,
  */
 public static native void lto_codegen_set_should_embed_uselists(lto_code_gen_t cg,
                                       @Cast("lto_bool_t") boolean ShouldEmbedUselists);
+// Targeting ../LLVM/lto_input_t.java
+
+
+
+/**
+  * Creates an LTO input file from a buffer. The path
+  * argument is used for diagnotics as this function
+  * otherwise does not know which file the given buffer
+  * is associated with.
+  *
+  * @since LTO_API_VERSION=24
+  */
+public static native lto_input_t lto_input_create(@Const Pointer buffer,
+                                    @Cast("size_t") long buffer_size,
+                                    @Cast("const char*") BytePointer path);
+public static native lto_input_t lto_input_create(@Const Pointer buffer,
+                                    @Cast("size_t") long buffer_size,
+                                    String path);
+
+/**
+  * Frees all memory internally allocated by the LTO input file.
+  * Upon return the lto_module_t is no longer valid.
+  *
+  * @since LTO_API_VERSION=24
+  */
+public static native void lto_input_dispose(lto_input_t input);
+
+/**
+  * Returns the number of dependent library specifiers
+  * for the given LTO input file.
+  *
+  * @since LTO_API_VERSION=24
+  */
+public static native @Cast("unsigned") int lto_input_get_num_dependent_libraries(lto_input_t input);
+
+/**
+  * Returns the ith dependent library specifier
+  * for the given LTO input file. The returned
+  * string is not null-terminated.
+  *
+  * @since LTO_API_VERSION=24
+  */
+public static native @Cast("const char*") BytePointer lto_input_get_dependent_library(lto_input_t input,
+                                                    @Cast("size_t") long index,
+                                                    @Cast("size_t*") SizeTPointer size);
+
+/**
+ * Returns the list of libcall symbols that can be generated by LTO
+ * that might not be visible from the symbol table of bitcode files.
+ *
+ * @since prior to LTO_API_VERSION=25
+ */
+public static native @Cast("const char*const*") PointerPointer lto_runtime_lib_symbols_list(@Cast("size_t*") SizeTPointer size);
 // Targeting ../LLVM/LTOObjectBuffer.java
 
 
@@ -6528,58 +6577,10 @@ public static native void thinlto_codegen_set_cache_size_megabytes(thinlto_code_
  */
 public static native void thinlto_codegen_set_cache_size_files(thinlto_code_gen_t cg,
                                                  @Cast("unsigned") int max_size_files);
-// Targeting ../LLVM/lto_input_t.java
-
-
-
-/**
-  * Creates an LTO input file from a buffer. The path
-  * argument is used for diagnotics as this function
-  * otherwise does not know which file the given buffer
-  * is associated with.
-  *
-  * @since LTO_API_VERSION=24
-  */
-public static native lto_input_t lto_input_create(@Const Pointer buffer,
-                                    @Cast("size_t") long buffer_size,
-                                    @Cast("const char*") BytePointer path);
-public static native lto_input_t lto_input_create(@Const Pointer buffer,
-                                    @Cast("size_t") long buffer_size,
-                                    String path);
-
-/**
-  * Frees all memory internally allocated by the LTO input file.
-  * Upon return the lto_module_t is no longer valid.
-  *
-  * @since LTO_API_VERSION=24
-  */
-public static native void lto_input_dispose(lto_input_t input);
-
-/**
-  * Returns the number of dependent library specifiers
-  * for the given LTO input file.
-  *
-  * @since LTO_API_VERSION=24
-  */
-public static native @Cast("unsigned") int lto_input_get_num_dependent_libraries(lto_input_t input);
-
-/**
-  * Returns the ith dependent library specifier
-  * for the given LTO input file. The returned
-  * string is not null-terminated.
-  *
-  * @since LTO_API_VERSION=24
-  */
-public static native @Cast("const char*") BytePointer lto_input_get_dependent_library(lto_input_t input,
-                                                    @Cast("size_t") long index,
-                                                    @Cast("size_t*") SizeTPointer size);
 
 /**
  * \} // endgroup LLVMCTLTO_CACHING
  */
-
-// #ifdef __cplusplus
-// #endif
 
 // #endif /* LLVM_C_LTO_H */
 
@@ -6607,10 +6608,9 @@ public static native @Cast("const char*") BytePointer lto_input_get_dependent_li
 // #ifndef LLVM_C_OBJECT_H
 // #define LLVM_C_OBJECT_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
 // #include "llvm/Config/llvm-config.h"
-
-// #ifdef __cplusplus
 // Targeting ../LLVM/LLVMSectionIteratorRef.java
 
 
@@ -6857,9 +6857,6 @@ public static native @Cast("LLVMBool") int LLVMIsSymbolIteratorAtEnd(LLVMObjectF
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
-
 // #endif
 
 
@@ -6886,11 +6883,9 @@ public static native @Cast("LLVMBool") int LLVMIsSymbolIteratorAtEnd(LLVMObjectF
 // #ifndef LLVM_C_TARGET_H
 // #define LLVM_C_TARGET_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
 // #include "llvm/Config/llvm-config.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTarget Target information
@@ -7103,9 +7098,6 @@ public static native @Cast("unsigned long long") long LLVMOffsetOfElement(LLVMTa
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
-
 // #endif
 
 
@@ -7132,10 +7124,9 @@ public static native @Cast("unsigned long long") long LLVMOffsetOfElement(LLVMTa
 // #ifndef LLVM_C_TARGETMACHINE_H
 // #define LLVM_C_TARGETMACHINE_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Target.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
 // Targeting ../LLVM/LLVMTargetMachineRef.java
 
 
@@ -7306,9 +7297,6 @@ public static native @Cast("char*") BytePointer LLVMGetHostCPUFeatures();
 /** Adds the target-specific analysis passes to the pass manager. */
 public static native void LLVMAddAnalysisPasses(LLVMTargetMachineRef T, LLVMPassManagerRef PM);
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -7335,12 +7323,10 @@ public static native void LLVMAddAnalysisPasses(LLVMTargetMachineRef T, LLVMPass
 // #ifndef LLVM_C_EXECUTIONENGINE_H
 // #define LLVM_C_EXECUTIONENGINE_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Target.h"
 // #include "llvm-c/TargetMachine.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCExecutionEngine Execution Engine
@@ -7619,9 +7605,6 @@ public static native LLVMJITEventListenerRef LLVMCreatePerfJITEventListener();
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
-
 // #endif
 
 
@@ -7643,10 +7626,8 @@ public static native LLVMJITEventListenerRef LLVMCreatePerfJITEventListener();
 // #ifndef LLVM_C_COMDAT_H
 // #define LLVM_C_COMDAT_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /** enum LLVMComdatSelectionKind */
 public static final int
@@ -7702,9 +7683,6 @@ public static native @Cast("LLVMComdatSelectionKind") int LLVMGetComdatSelection
  */
 public static native void LLVMSetComdatSelectionKind(LLVMComdatRef C, @Cast("LLVMComdatSelectionKind") int Kind);
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -7729,9 +7707,7 @@ public static native void LLVMSetComdatSelectionKind(LLVMComdatRef C, @Cast("LLV
 // #define LLVM_C_DEBUGINFO_H
 
 // #include "llvm-c/Core.h"
-
-// #ifdef __cplusplus
-// #endif
+// #include "llvm-c/ExternC.h"
 
 /**
  * Debug info flags.
@@ -7744,7 +7720,7 @@ public static final int
   LLVMDIFlagPublic = 3,
   LLVMDIFlagFwdDecl = 1 << 2,
   LLVMDIFlagAppleBlock = 1 << 3,
-  LLVMDIFlagBlockByrefStruct = 1 << 4,
+  LLVMDIFlagReservedBit4 = 1 << 4,
   LLVMDIFlagVirtual = 1 << 5,
   LLVMDIFlagArtificial = 1 << 6,
   LLVMDIFlagExplicit = 1 << 7,
@@ -7879,6 +7855,19 @@ public static final int
  */
 
 /**
+ * Describes the kind of macro declaration used for LLVMDIBuilderCreateMacro.
+ * @see llvm::dwarf::MacinfoRecordType
+ * \note Values are from DW_MACINFO_* constants in the DWARF specification.
+ */
+/** enum LLVMDWARFMacinfoRecordType */
+public static final int
+  LLVMDWARFMacinfoRecordTypeDefine = 0x01,
+  LLVMDWARFMacinfoRecordTypeMacro = 0x02,
+  LLVMDWARFMacinfoRecordTypeStartFile = 0x03,
+  LLVMDWARFMacinfoRecordTypeEndFile = 0x04,
+  LLVMDWARFMacinfoRecordTypeVendorExt = 0xff;
+
+/**
  * The current debug metadata version number.
  */
 public static native @Cast("unsigned") int LLVMDebugMetadataVersion();
@@ -7989,19 +7978,19 @@ public static native LLVMMetadataRef LLVMDIBuilderCreateFile(LLVMDIBuilderRef Bu
  * @param ConfigMacrosLen The length of the C string passed to \c ConfigMacros.
  * @param IncludePath     The path to the module map file.
  * @param IncludePathLen  The length of the C string passed to \c IncludePath.
- * @param ISysRoot        The Clang system root (value of -isysroot).
- * @param ISysRootLen     The length of the C string passed to \c ISysRoot.
+ * @param SysRoot         The Clang system root (value of -isysroot).
+ * @param SysRootLen      The length of the C string passed to \c SysRoot.
  */
 public static native LLVMMetadataRef LLVMDIBuilderCreateModule(LLVMDIBuilderRef Builder, LLVMMetadataRef ParentScope,
                           @Cast("const char*") BytePointer Name, @Cast("size_t") long NameLen,
                           @Cast("const char*") BytePointer ConfigMacros, @Cast("size_t") long ConfigMacrosLen,
                           @Cast("const char*") BytePointer IncludePath, @Cast("size_t") long IncludePathLen,
-                          @Cast("const char*") BytePointer ISysRoot, @Cast("size_t") long ISysRootLen);
+                          @Cast("const char*") BytePointer SysRoot, @Cast("size_t") long SysRootLen);
 public static native LLVMMetadataRef LLVMDIBuilderCreateModule(LLVMDIBuilderRef Builder, LLVMMetadataRef ParentScope,
                           String Name, @Cast("size_t") long NameLen,
                           String ConfigMacros, @Cast("size_t") long ConfigMacrosLen,
                           String IncludePath, @Cast("size_t") long IncludePathLen,
-                          String ISysRoot, @Cast("size_t") long ISysRootLen);
+                          String SysRoot, @Cast("size_t") long SysRootLen);
 
 /**
  * Creates a new descriptor for a namespace with the specified parent scope.
@@ -8264,6 +8253,43 @@ public static native LLVMMetadataRef LLVMDIBuilderCreateSubroutineType(LLVMDIBui
                                   @Cast("LLVMMetadataRef*") PointerPointer ParameterTypes,
                                   @Cast("unsigned") int NumParameterTypes,
                                   @Cast("LLVMDIFlags") int Flags);
+
+/**
+ * Create debugging information entry for a macro.
+ * @param Builder         The DIBuilder.
+ * @param ParentMacroFile Macro parent (could be NULL).
+ * @param Line            Source line number where the macro is defined.
+ * @param RecordType      DW_MACINFO_define or DW_MACINFO_undef.
+ * @param Name            Macro name.
+ * @param NameLen         Macro name length.
+ * @param Value           Macro value.
+ * @param ValueLen        Macro value length.
+ */
+public static native LLVMMetadataRef LLVMDIBuilderCreateMacro(LLVMDIBuilderRef Builder,
+                                         LLVMMetadataRef ParentMacroFile,
+                                         @Cast("unsigned") int Line,
+                                         @Cast("LLVMDWARFMacinfoRecordType") int RecordType,
+                                         @Cast("const char*") BytePointer Name, @Cast("size_t") long NameLen,
+                                         @Cast("const char*") BytePointer Value, @Cast("size_t") long ValueLen);
+public static native LLVMMetadataRef LLVMDIBuilderCreateMacro(LLVMDIBuilderRef Builder,
+                                         LLVMMetadataRef ParentMacroFile,
+                                         @Cast("unsigned") int Line,
+                                         @Cast("LLVMDWARFMacinfoRecordType") int RecordType,
+                                         String Name, @Cast("size_t") long NameLen,
+                                         String Value, @Cast("size_t") long ValueLen);
+
+/**
+ * Create debugging information temporary entry for a macro file.
+ * List of macro node direct children will be calculated by DIBuilder,
+ * using the \p ParentMacroFile relationship.
+ * @param Builder         The DIBuilder.
+ * @param ParentMacroFile Macro parent (could be NULL).
+ * @param Line            Source line number where the macro file is included.
+ * @param File            File descriptor containing the name of the macro file.
+ */
+public static native LLVMMetadataRef LLVMDIBuilderCreateTempMacroFile(LLVMDIBuilderRef Builder,
+                                 LLVMMetadataRef ParentMacroFile, @Cast("unsigned") int Line,
+                                 LLVMMetadataRef File);
 
 /**
  * Create debugging information entry for an enumerator.
@@ -8624,11 +8650,11 @@ public static native LLVMMetadataRef LLVMDIBuilderCreateNullPtrType(LLVMDIBuilde
 public static native LLVMMetadataRef LLVMDIBuilderCreateTypedef(LLVMDIBuilderRef Builder, LLVMMetadataRef Type,
                            @Cast("const char*") BytePointer Name, @Cast("size_t") long NameLen,
                            LLVMMetadataRef File, @Cast("unsigned") int LineNo,
-                           LLVMMetadataRef Scope);
+                           LLVMMetadataRef Scope, @Cast("uint32_t") int AlignInBits);
 public static native LLVMMetadataRef LLVMDIBuilderCreateTypedef(LLVMDIBuilderRef Builder, LLVMMetadataRef Type,
                            String Name, @Cast("size_t") long NameLen,
                            LLVMMetadataRef File, @Cast("unsigned") int LineNo,
-                           LLVMMetadataRef Scope);
+                           LLVMMetadataRef Scope, @Cast("uint32_t") int AlignInBits);
 
 /**
  * Create debugging information entry to establish inheritance relationship
@@ -9155,9 +9181,6 @@ public static native void LLVMInstructionSetDebugLoc(LLVMValueRef Inst, LLVMMeta
  */
 public static native @Cast("LLVMMetadataKind") int LLVMGetMetadataKind(LLVMMetadataRef Metadata);
 
-// #ifdef __cplusplus /* end extern "C" */
-// #endif
-
 // #endif
 
 
@@ -9179,8 +9202,7 @@ public static native @Cast("LLVMMetadataKind") int LLVMGetMetadataKind(LLVMMetad
 // #ifndef LLVM_C_ERROR_H
 // #define LLVM_C_ERROR_H
 
-// #ifdef __cplusplus
-// #endif
+// #include "llvm-c/ExternC.h"
 
 public static final int LLVMErrorSuccess = 0;
 // Targeting ../LLVM/LLVMErrorRef.java
@@ -9224,9 +9246,6 @@ public static native void LLVMDisposeErrorMessage(@Cast("char*") byte[] ErrMsg);
  */
 public static native @Const LLVMErrorTypeId LLVMGetStringErrorTypeId();
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -9248,7 +9267,7 @@ public static native @Const LLVMErrorTypeId LLVMGetStringErrorTypeId();
 // #ifndef LLVM_C_ERROR_HANDLING_H
 // #define LLVM_C_ERROR_HANDLING_H
 
-// #ifdef __cplusplus
+// #include "llvm-c/ExternC.h"
 // Targeting ../LLVM/LLVMFatalErrorHandler.java
 
 
@@ -9274,9 +9293,6 @@ public static native void LLVMResetFatalErrorHandler();
  * crash.
  */
 public static native void LLVMEnablePrettyStackTrace();
-
-// #ifdef __cplusplus
-// #endif
 
 // #endif
 
@@ -9308,10 +9324,9 @@ public static native void LLVMEnablePrettyStackTrace();
 // #define LLVM_C_ORCBINDINGS_H
 
 // #include "llvm-c/Error.h"
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Object.h"
 // #include "llvm-c/TargetMachine.h"
-
-// #ifdef __cplusplus
 // Targeting ../LLVM/LLVMOrcJITStackRef.java
 
 
@@ -9541,9 +9556,6 @@ public static native void LLVMOrcRegisterJITEventListener(LLVMOrcJITStackRef JIT
  */
 public static native void LLVMOrcUnregisterJITEventListener(LLVMOrcJITStackRef JITStack, LLVMJITEventListenerRef L);
 
-// #ifdef __cplusplus
-// #endif /* extern "C" */
-
 // #endif /* LLVM_C_ORCBINDINGS_H */
 
 
@@ -9566,6 +9578,7 @@ public static native void LLVMOrcUnregisterJITEventListener(LLVMOrcJITStackRef J
 // #ifndef LLVM_C_REMARKS_H
 // #define LLVM_C_REMARKS_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
 // #ifdef __cplusplus
 // #include <cstddef>
@@ -9580,7 +9593,8 @@ public static native void LLVMOrcUnregisterJITEventListener(LLVMOrcJITStackRef J
  * \{
  */
 
-public static final int REMARKS_API_VERSION = 0;
+// 0 -> 1: Bitstream remarks support.
+public static final int REMARKS_API_VERSION = 1;
 
 /**
  * The type of the emitted remark.
@@ -9768,6 +9782,20 @@ public static native LLVMRemarkParserRef LLVMRemarkParserCreateYAML(@Const Point
                                                       @Cast("uint64_t") long Size);
 
 /**
+ * Creates a remark parser that can be used to parse the buffer located in \p
+ * Buf of size \p Size bytes.
+ *
+ * \p Buf cannot be {@code NULL}.
+ *
+ * This function should be paired with LLVMRemarkParserDispose() to avoid
+ * leaking resources.
+ *
+ * @since REMARKS_API_VERSION=1
+ */
+public static native LLVMRemarkParserRef LLVMRemarkParserCreateBitstream(@Const Pointer Buf,
+                                                           @Cast("uint64_t") long Size);
+
+/**
  * Returns the next remark in the file.
  *
  * The value pointed to by the return value needs to be disposed using a call to
@@ -9849,9 +9877,6 @@ public static native void LLVMRemarkParserDispose(LLVMRemarkParserRef Parser);
  * \} // endgoup LLVMCREMARKS
  */
 
-// #ifdef __cplusplus
-// #endif /* !defined(__cplusplus) */
-
 // #endif /* LLVM_C_REMARKS_H */
 
 
@@ -9874,10 +9899,8 @@ public static native void LLVMRemarkParserDispose(LLVMRemarkParserRef Parser);
 // #ifndef LLVM_C_TRANSFORMS_AGGRESSIVEINSTCOMBINE_H
 // #define LLVM_C_TRANSFORMS_AGGRESSIVEINSTCOMBINE_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsAggressiveInstCombine Aggressive Instruction Combining transformations
@@ -9892,9 +9915,6 @@ public static native void LLVMAddAggressiveInstCombinerPass(LLVMPassManagerRef P
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
 
 // #endif
 
@@ -9923,10 +9943,8 @@ public static native void LLVMAddAggressiveInstCombinerPass(LLVMPassManagerRef P
 // #ifndef LLVM_C_TRANSFORMS_COROUTINES_H
 // #define LLVM_C_TRANSFORMS_COROUTINES_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsCoroutines Coroutine transformations
@@ -9935,24 +9953,21 @@ public static native void LLVMAddAggressiveInstCombinerPass(LLVMPassManagerRef P
  * \{
  */
 
-/** See llvm::createCoroEarlyPass function. */
+/** See llvm::createCoroEarlyLegacyPass function. */
 public static native void LLVMAddCoroEarlyPass(LLVMPassManagerRef PM);
 
-/** See llvm::createCoroSplitPass function. */
+/** See llvm::createCoroSplitLegacyPass function. */
 public static native void LLVMAddCoroSplitPass(LLVMPassManagerRef PM);
 
-/** See llvm::createCoroElidePass function. */
+/** See llvm::createCoroElideLegacyPass function. */
 public static native void LLVMAddCoroElidePass(LLVMPassManagerRef PM);
 
-/** See llvm::createCoroCleanupPass function. */
+/** See llvm::createCoroCleanupLegacyPass function. */
 public static native void LLVMAddCoroCleanupPass(LLVMPassManagerRef PM);
 
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
 
 // #endif
 
@@ -9976,10 +9991,8 @@ public static native void LLVMAddCoroCleanupPass(LLVMPassManagerRef PM);
 // #ifndef LLVM_C_TRANSFORMS_INSTCOMBINE_H
 // #define LLVM_C_TRANSFORMS_INSTCOMBINE_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsInstCombine Instruction Combining transformations
@@ -9994,9 +10007,6 @@ public static native void LLVMAddInstructionCombiningPass(LLVMPassManagerRef PM)
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
 
 // #endif
 
@@ -10021,10 +10031,8 @@ public static native void LLVMAddInstructionCombiningPass(LLVMPassManagerRef PM)
 // #ifndef LLVM_C_TRANSFORMS_IPO_H
 // #define LLVM_C_TRANSFORMS_IPO_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsIPO Interprocedural transformations
@@ -10038,6 +10046,9 @@ public static native void LLVMAddArgumentPromotionPass(LLVMPassManagerRef PM);
 
 /** See llvm::createConstantMergePass function. */
 public static native void LLVMAddConstantMergePass(LLVMPassManagerRef PM);
+
+/** See llvm::createMergeFunctionsPass function. */
+public static native void LLVMAddMergeFunctionsPass(LLVMPassManagerRef PM);
 
 /** See llvm::createCalledValuePropagationPass function. */
 public static native void LLVMAddCalledValuePropagationPass(LLVMPassManagerRef PM);
@@ -10071,6 +10082,13 @@ public static native void LLVMAddIPSCCPPass(LLVMPassManagerRef PM);
 
 /** See llvm::createInternalizePass function. */
 public static native void LLVMAddInternalizePass(LLVMPassManagerRef arg0, @Cast("unsigned") int AllButMain);
+// Targeting ../LLVM/MustPreserve_LLVMValueRef_Pointer.java
+
+
+public static native void LLVMAddInternalizePassWithMustPreservePredicate(
+    LLVMPassManagerRef PM,
+    Pointer Context,
+    MustPreserve_LLVMValueRef_Pointer MustPreserve);
 
 /** See llvm::createStripDeadPrototypesPass function. */
 public static native void LLVMAddStripDeadPrototypesPass(LLVMPassManagerRef PM);
@@ -10081,9 +10099,6 @@ public static native void LLVMAddStripSymbolsPass(LLVMPassManagerRef PM);
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
 
 // #endif
 
@@ -10106,13 +10121,11 @@ public static native void LLVMAddStripSymbolsPass(LLVMPassManagerRef PM);
 // #ifndef LLVM_C_TRANSFORMS_PASSMANAGERBUILDER_H
 // #define LLVM_C_TRANSFORMS_PASSMANAGERBUILDER_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
 // Targeting ../LLVM/LLVMPassManagerBuilderRef.java
 
 
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsPassManagerBuilder Pass manager builder
@@ -10167,9 +10180,6 @@ public static native void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassM
  * \}
  */
 
-// #ifdef __cplusplus
-// #endif
-
 // #endif
 
 
@@ -10196,10 +10206,8 @@ public static native void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassM
 // #ifndef LLVM_C_TRANSFORMS_SCALAR_H
 // #define LLVM_C_TRANSFORMS_SCALAR_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsScalar Scalar transformations
@@ -10210,6 +10218,9 @@ public static native void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassM
 
 /** See llvm::createAggressiveDCEPass function. */
 public static native void LLVMAddAggressiveDCEPass(LLVMPassManagerRef PM);
+
+/** See llvm::createDeadCodeEliminationPass function. */
+public static native void LLVMAddDCEPass(LLVMPassManagerRef PM);
 
 /** See llvm::createBitTrackingDCEPass function. */
 public static native void LLVMAddBitTrackingDCEPass(LLVMPassManagerRef PM);
@@ -10319,6 +10330,9 @@ public static native void LLVMAddEarlyCSEMemSSAPass(LLVMPassManagerRef PM);
 /** See llvm::createLowerExpectIntrinsicPass function */
 public static native void LLVMAddLowerExpectIntrinsicPass(LLVMPassManagerRef PM);
 
+/** See llvm::createLowerConstantIntrinsicsPass function */
+public static native void LLVMAddLowerConstantIntrinsicsPass(LLVMPassManagerRef PM);
+
 /** See llvm::createTypeBasedAliasAnalysisPass function */
 public static native void LLVMAddTypeBasedAliasAnalysisPass(LLVMPassManagerRef PM);
 
@@ -10334,9 +10348,6 @@ public static native void LLVMAddUnifyFunctionExitNodesPass(LLVMPassManagerRef P
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
 
 // #endif
 
@@ -10364,10 +10375,8 @@ public static native void LLVMAddUnifyFunctionExitNodesPass(LLVMPassManagerRef P
 // #ifndef LLVM_C_TRANSFORMS_UTILS_H
 // #define LLVM_C_TRANSFORMS_UTILS_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsUtils Transformation Utilities
@@ -10388,9 +10397,6 @@ public static native void LLVMAddAddDiscriminatorsPass(LLVMPassManagerRef PM);
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
 
 // #endif
 
@@ -10420,10 +10426,8 @@ public static native void LLVMAddAddDiscriminatorsPass(LLVMPassManagerRef PM);
 // #ifndef LLVM_C_TRANSFORMS_VECTORIZE_H
 // #define LLVM_C_TRANSFORMS_VECTORIZE_H
 
+// #include "llvm-c/ExternC.h"
 // #include "llvm-c/Types.h"
-
-// #ifdef __cplusplus
-// #endif
 
 /**
  * \defgroup LLVMCTransformsVectorize Vectorization transformations
@@ -10441,9 +10445,6 @@ public static native void LLVMAddSLPVectorizePass(LLVMPassManagerRef PM);
 /**
  * \}
  */
-
-// #ifdef __cplusplus
-// #endif /* defined(__cplusplus) */
 
 // #endif
 
