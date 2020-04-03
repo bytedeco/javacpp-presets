@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(
-    inherit = opencv_dnn.class,
+    inherit = {opencv_dnn.class, opencv_quality.class},
     value = {
         @Platform(include = "<opencv2/dnn_superres.hpp>", link = "opencv_dnn_superres@.4.2"),
         @Platform(value = "ios", preload = "libopencv_dnn_superres"),
