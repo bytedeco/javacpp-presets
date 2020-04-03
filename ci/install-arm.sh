@@ -41,24 +41,31 @@ else
     MAVEN_RELEASE="-Dmaven.javadoc.skip=true"
 fi
 
-export BUILD_COMPILER=-Djavacpp.platform.compiler=aarch64-linux-gnu-g++
-export BUILD_OPTIONS=-Djava.library.path=/usr/aarch64-linux-gnu/lib/:/usr/lib/aarch64-linux-gnu/
+if [ "$OS" == "linux-armhf" ]; then
+    export ARM=armhf
+    export PREFIX=arm-linux-gnueabihf
+elif [ "$OS" == "linux-arm64" ]; then
+    export ARM=arm64
+    export PREFIX=aarch64-linux-gnu
+fi
+export BUILD_COMPILER=-Djavacpp.platform.compiler=$PREFIX-g++
+export BUILD_OPTIONS=-Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/
 
 echo "Starting docker for arm cross compile"
 docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build ubuntu:xenial /bin/bash
 DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
 echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg --add-architecture arm64"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse" >> /etc/apt/sources.list'
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse" >> /etc/apt/sources.list'
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse" >> /etc/apt/sources.list'
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse" >> /etc/apt/sources.list'
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main" >> /etc/apt/sources.list'
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg --add-architecture $ARM"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo deb [arch=$ARM] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse >> /etc/apt/sources.list"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo deb [arch=$ARM] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse >> /etc/apt/sources.list"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo deb [arch=$ARM] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse >> /etc/apt/sources.list"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo deb [arch=$ARM] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse >> /etc/apt/sources.list"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main >> /etc/apt/sources.list"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:arm64 libasound2-dev:arm64 libusb-dev:arm64 libusb-1.0-0-dev:arm64 libffi-dev:arm64 zlib1g-dev:arm64 libxcb1-dev:arm64"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gfortran-aarch64-linux-gnu linux-libc-dev-arm64-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool bison flex perl nasm yasm curl cmake libffi-dev zlib1g-dev"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:$ARM libasound2-dev:$ARM libusb-dev:$ARM libusb-1.0-0-dev:$ARM libffi-dev:$ARM zlib1g-dev:$ARM libxcb1-dev:$ARM"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARM-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool bison flex perl nasm yasm curl cmake libffi-dev zlib1g-dev"
 
 if [ "$OS" == "linux-arm64" ]; then
     if [[ "$PROJ" =~ flycapture ]]; then
@@ -72,7 +79,7 @@ if [ "$OS" == "linux-arm64" ]; then
    fi
 fi
 
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "aarch64-linux-gnu-gcc --version"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$PREFIX-gcc --version"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
 
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.m2 /root/.m2"
