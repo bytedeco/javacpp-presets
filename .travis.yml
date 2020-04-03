@@ -191,7 +191,7 @@ matrix:
       - os: linux
         env: PROJ=llvm OS=linux-armhf
         install: true
-        script: ./ci/install-travis.sh
+        script: ./ci/install-arm.sh
       - os: linux
         env: PROJ=leptonica,tesseract OS=linux-armhf
         install: true
