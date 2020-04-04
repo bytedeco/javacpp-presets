@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -49,7 +51,7 @@ public class inner_product_forward extends primitive {
          *  primitive with bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -89,7 +91,7 @@ public class inner_product_forward extends primitive {
          *  primitive without bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:

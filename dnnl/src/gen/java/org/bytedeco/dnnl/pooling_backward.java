@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -39,9 +41,9 @@ public class pooling_backward extends primitive {
          *  Inputs:
          *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
          *   - workspace (#dnnl::primitive_desc_base::workspace_desc (0)),
-         *      if \p alg_kind = #dnnl_pooling_max; must be queried for using
-         *      \ref dnnl_primitive_desc_query_md() after a corresponding
-         *      primitive descriptor is created
+         *      if \p alg_kind = #dnnl::algorithm::pooling_max; must be
+         *      queried for using \ref dnnl::primitive_desc_base::query_md()
+         *      after a corresponding primitive descriptor is created
          * 
          *  Outputs:
          *   - diff_src (#dnnl::primitive_desc_base::diff_src_desc (0))

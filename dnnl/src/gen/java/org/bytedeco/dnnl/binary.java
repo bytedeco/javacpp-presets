@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -37,13 +39,23 @@ public class binary extends primitive {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public desc position(long position) {
+            return (desc)super.position(position);
+        }
     
         /** Underlying C operation descriptor. */
+        public native @ByRef dnnl_binary_desc_t data(); public native desc data(dnnl_binary_desc_t setter);
+
+        /** Default constructor. Produces an empty object. */
         
         ///
         ///
         ///
-        public native @ByRef dnnl_binary_desc_t data(); public native desc data(dnnl_binary_desc_t setter);
+        public desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
 
         /** Constructs a descriptor for an elementwise binary operator
          *  primitive.

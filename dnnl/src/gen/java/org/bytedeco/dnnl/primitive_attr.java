@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 /** \endcond
@@ -200,7 +202,6 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      zero_points vector. The set i-th bit indicates that a dedicated
      *      zero point is used for each index along that dimension. Set the
      *      mask to 0 to use a common zero point for the whole output tensor.
-     *  @param zero_points Constant vector of zero points.
      *  @param zero_points Constant vector of zero points. If the zero points
      *      are known at the time of this call, the following equality must
      *      hold:

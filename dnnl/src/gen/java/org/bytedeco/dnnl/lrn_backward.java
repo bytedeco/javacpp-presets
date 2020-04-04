@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -50,7 +52,8 @@ public class lrn_backward extends primitive {
          *  @param algorithm LRN algorithm kind: either
          *      #dnnl::algorithm::lrn_across_channels, or
          *      #dnnl::algorithm::lrn_within_channel.
-         *  @param diff_data_desc Diff source and diff destination memory descriptor.
+         *  @param diff_data_desc Diff source and diff destination memory
+         *      descriptor.
          *  @param data_desc Source memory descriptor.
          *  @param local_size Regularization local size.
          *  @param alpha The alpha regularization parameter.

@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -64,20 +66,25 @@ public class layer_normalization_forward extends primitive {
          *  Inputs:
          *   - src (#dnnl::primitive_desc_base::src_desc (0))
          *   - mean (#dnnl::primitive_desc_base::src_desc (1)),
-         *      if #dnnl_use_global_stats bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      set in \p flags
          *   - variance (#dnnl::primitive_desc_base::src_desc (2)),
-         *      if #dnnl_use_global_stats bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      set in \p flags
          *   - scale_and_shift (#dnnl::primitive_desc_base::weights_desc (0)),
-         *      if #dnnl_use_scaleshift bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::use_scale_shift bit-flag is set
+         *      in \p flags
          * 
          *  Outputs:
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          *   - mean (#dnnl::primitive_desc_base::dst_desc (1)),
-         *      if #dnnl_use_global_stats bit-flags is not set in \p flags
-         *      \p prop_kind = #dnnl_forward_training
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      not set in \p flags and \p prop_kind =
+         *      #dnnl::prop_kind::forward_training
          *   - variance (#dnnl::primitive_desc_base::dst_desc (2)),
-         *      if #dnnl_use_global_stats bit-flags is not set in \p flags
-         *      and \p prop_kind = #dnnl_forward_training
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      not set in \p flags and \p prop_kind =
+         *      #dnnl::prop_kind::forward_training
          * 
          *  @param prop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
@@ -110,20 +117,25 @@ public class layer_normalization_forward extends primitive {
          *  Inputs:
          *   - src (#dnnl::primitive_desc_base::src_desc (0))
          *   - mean (#dnnl::primitive_desc_base::src_desc (1)),
-         *      if #dnnl_use_global_stats bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      set in \p flags
          *   - variance (#dnnl::primitive_desc_base::src_desc (2)),
-         *      if #dnnl_use_global_stats bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      set in \p flags
          *   - scale_and_shift (#dnnl::primitive_desc_base::weights_desc (0)),
-         *      if #dnnl_use_scaleshift bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::use_scale_shift bit-flag is set
+         *      in \p flags
          * 
          *  Outputs:
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          *   - mean (#dnnl::primitive_desc_base::dst_desc (1)),
-         *      if #dnnl_use_global_stats bit-flags is not set in \p flags
-         *      \p prop_kind = #dnnl_forward_training
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      not set in \p flags and \p prop_kind =
+         *      #dnnl::prop_kind::forward_training
          *   - variance (#dnnl::primitive_desc_base::dst_desc (2)),
-         *      if #dnnl_use_global_stats bit-flags is not set in \p flags
-         *      and \p prop_kind = #dnnl_forward_training
+         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
+         *      not set in \p flags and \p prop_kind =
+         *      #dnnl::prop_kind::forward_training
          * 
          *  @param prop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and

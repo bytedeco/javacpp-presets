@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 @Name("dnnl::handle<dnnl_memory_t>") @NoOffset @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)

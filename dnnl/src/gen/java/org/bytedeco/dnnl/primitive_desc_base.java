@@ -6,13 +6,12 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_memory
- <p>
- *  \addtogroup dnnl_api_primitives
- *  \{
+/** \} dnnl_api_attributes
  <p>
  *  \addtogroup dnnl_api_primitives_common
  *  \{
@@ -45,13 +44,17 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
 
     /** Default constructor. Produces an empty object. */
 
-    /** Returns the engine of the primitive descriptor. */
+    /** Returns the engine of the primitive descriptor.
+     *  @return The engine of the primitive descriptor. */
     public native @ByVal engine get_engine();
 
-    /** Returns implementation name. */
+    /** Returns implementation name.
+     *  @return The implementation name. */
     public native @Cast("const char*") BytePointer impl_info_str();
 
-    /** Returns a memory::dim value (same as int64_t). */
+    /** Returns a memory::dim value (same as int64_t).
+     *  @param what The value to query.
+     *  @return The result of the query. */
     
     ///
     ///

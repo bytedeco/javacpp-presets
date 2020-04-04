@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -24,10 +26,9 @@ import static org.bytedeco.dnnl.global.dnnl.*;
  *  \warning
  *      Because the original source data is required for backward propagation,
  *      in-place forward propagation is not generally supported in the
- *      training mode.  However, for namely ReLU with the alpha parameter set
- *      to 0, either dst or src can be used for the backward propagation,
- *      which makes it possible to get performance benefit even in the
- *      training mode.
+ *      training mode.  However, for algorithms supporting destination as input
+ *      memory, dst can be used for the backward propagation, which makes it
+ *      possible to get performance benefit even in the training mode.
  * 
  *  @see \ref dev_guide_eltwise in developer guide
  * 

@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -100,6 +102,10 @@ public class rnn_primitive_desc_base extends org.bytedeco.dnnl.primitive_desc {
      *  @return Weights iteration memory descriptor. */
     public native @ByVal memory.desc weights_iter_desc();
 
+    /** Returns weights peephole memory descriptor.
+     *  @return Weights peephole memory descriptor. */
+    public native @ByVal memory.desc weights_peephole_desc();
+
     /** Returns bias memory descriptor.
      *  @return Bias memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
@@ -141,6 +147,10 @@ public class rnn_primitive_desc_base extends org.bytedeco.dnnl.primitive_desc {
     /** Returns diff weights iteration memory descriptor.
      *  @return Diff weights iteration memory descriptor. */
     public native @ByVal memory.desc diff_weights_iter_desc();
+
+    /** Returns diff weights peephole memory descriptor.
+     *  @return Diff weights peephole memory descriptor. */
+    public native @ByVal memory.desc diff_weights_peephole_desc();
 
     /** Returns diff bias memory descriptor.
      *  @return Diff bias memory descriptor.
