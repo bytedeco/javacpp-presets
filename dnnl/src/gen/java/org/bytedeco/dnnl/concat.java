@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 /** \endcond
@@ -58,7 +60,7 @@ public class concat extends primitive {
          *   - src\[0\] (#dnnl::primitive_desc_base::src_desc (0))
          *   - src\[1\] (#dnnl::primitive_desc_base::src_desc (1))
          *   - ...
-         *   - src\[\p n - 1\] (#dnnl_query_src_md, \p n - 1)
+         *   - src\[\p n - 1\] (#dnnl::primitive_desc_base::src_desc (\p n - 1))
          * 
          *  Outputs:
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))

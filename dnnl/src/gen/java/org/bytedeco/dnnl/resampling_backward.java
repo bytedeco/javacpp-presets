@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -135,7 +137,8 @@ public class resampling_backward extends primitive {
         /** Constructs a primitive descriptor for a resampling backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a resampling backward propagation primitive.
+         *  @param desc Descriptor for a resampling backward propagation
+         *      primitive.
          *  @param engine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a resampling forward
          *      propagation primitive. It is used as a hint for deciding which
@@ -160,7 +163,8 @@ public class resampling_backward extends primitive {
         /** Constructs a primitive descriptor for a resampling backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a resampling backward propagation primitive.
+         *  @param desc Descriptor for a resampling backward propagation
+         *      primitive.
          *  @param attr Primitive attributes to use.
          *  @param engine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a resampling forward

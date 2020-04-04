@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 @Name("std::vector<dnnl_primitive_desc_t>") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)

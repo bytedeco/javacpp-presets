@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -47,7 +49,7 @@ public class vanilla_rnn_backward extends primitive {
          *  should use zero values instead.
          * 
          *  \note
-         *      All memory descriptors are allowed to be initialized with
+         *      All memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:

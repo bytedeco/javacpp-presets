@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -43,16 +45,18 @@ public class batch_normalization_backward extends primitive {
          *   - variance (#dnnl::primitive_desc_base::src_desc (2))
          *   - diff_dst (#dnnl::primitive_desc_base::diff_dst_desc (0))
          *   - scale_and_shift (#dnnl::primitive_desc_base::weights_desc (0)),
-         *      if #dnnl_use_scaleshift bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::use_scale_shift bit-flag is
+         *      set in \p flags
          *   - workspace (#dnnl::primitive_desc_base::workspace_desc (0)),
-         *      if #dnnl_fuse_norm_relu bit-flags is set in \p flags
+         *      if #dnnl::normalization_flags::fuse_norm_relu bit-flag is set
+         *      in \p flags
          * 
          *  Outputs:
          *   - diff_src (#dnnl::primitive_desc_base::diff_src_desc (0))
          *   - diff_scale_and_shift
          *      (#dnnl::primitive_desc_base::diff_weights_desc (0)),
-         *      if #dnnl_use_scaleshift bit-flags is set in \p flags
-         *      and \p prop_kind = #dnnl_backward
+         *      if #dnnl::normalization_flags::use_scale_shift bit-flag is
+         *      set in \p flags and \p prop_kind = #dnnl::prop_kind::backward
          * 
          *  @param prop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::backward_data and #dnnl::prop_kind::backward

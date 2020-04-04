@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -234,7 +236,8 @@ public class resampling_forward extends primitive {
         /** Constructs a primitive descriptor for a resampling forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a resampling forward propagation primitive.
+         *  @param desc Descriptor for a resampling forward propagation
+         *      primitive.
          *  @param engine Engine to use.
          *  @param attr Primitive attributes to use.
          *  @param allow_empty A flag signifying whether construction is

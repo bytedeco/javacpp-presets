@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -54,9 +56,12 @@ public class dnnl_rnn_desc_t extends Pointer {
     public native @ByRef dnnl_memory_desc_t dst_iter_desc(); public native dnnl_rnn_desc_t dst_iter_desc(dnnl_memory_desc_t setter);
     /** Destination iter memory descriptor for cell state. */
     public native @ByRef dnnl_memory_desc_t dst_iter_c_desc(); public native dnnl_rnn_desc_t dst_iter_c_desc(dnnl_memory_desc_t setter);
+    /** Weights peephole memory descriptor
+     *  This memory descriptor is equal to zero memory descriptor in case of
+     *  non-peephole LSTMs and other non-LSTM RNNs. */
+    public native @ByRef dnnl_memory_desc_t weights_peephole_desc(); public native dnnl_rnn_desc_t weights_peephole_desc(dnnl_memory_desc_t setter);
     /** Placeholders */
     public native @ByRef dnnl_memory_desc_t placeholder_desc(); public native dnnl_rnn_desc_t placeholder_desc(dnnl_memory_desc_t setter);
-    public native @ByRef dnnl_memory_desc_t placeholder2_desc(); public native dnnl_rnn_desc_t placeholder2_desc(dnnl_memory_desc_t setter);
 
     /** Source gradient layer memory descriptor. */
     public native @ByRef dnnl_memory_desc_t diff_src_layer_desc(); public native dnnl_rnn_desc_t diff_src_layer_desc(dnnl_memory_desc_t setter);
@@ -76,9 +81,12 @@ public class dnnl_rnn_desc_t extends Pointer {
     public native @ByRef dnnl_memory_desc_t diff_dst_iter_desc(); public native dnnl_rnn_desc_t diff_dst_iter_desc(dnnl_memory_desc_t setter);
     /** Destination gradient iteration memory descriptor for cell state. */
     public native @ByRef dnnl_memory_desc_t diff_dst_iter_c_desc(); public native dnnl_rnn_desc_t diff_dst_iter_c_desc(dnnl_memory_desc_t setter);
+    /** Weights gradient peephole memory descriptor
+     *  This memory descriptor is equal to zero memory descriptor in case of
+     *  non-peephole LSTMs and other non-LSTM RNNs. */
+    public native @ByRef dnnl_memory_desc_t diff_weights_peephole_desc(); public native dnnl_rnn_desc_t diff_weights_peephole_desc(dnnl_memory_desc_t setter);
     /** Placeholders */
     public native @ByRef dnnl_memory_desc_t diff_placeholder_desc(); public native dnnl_rnn_desc_t diff_placeholder_desc(dnnl_memory_desc_t setter);
-    public native @ByRef dnnl_memory_desc_t diff_placeholder2_desc(); public native dnnl_rnn_desc_t diff_placeholder2_desc(dnnl_memory_desc_t setter);
 
     /** RNN cell flags */
     public native @Cast("unsigned int") int flags(); public native dnnl_rnn_desc_t flags(int setter);

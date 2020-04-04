@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -44,8 +46,8 @@ public class primitive extends dnnl_primitive_handle {
         return (primitive)super.position(position);
     }
 
-    /** Kinds of primitives. Used to implement a way to extend the library with
-     *  new primitives without changing the ABI. */
+
+    /** Kinds of primitives supported by the library. */
     public enum kind {
         /** Undefined primitive */
         undef(dnnl_undefined_primitive),

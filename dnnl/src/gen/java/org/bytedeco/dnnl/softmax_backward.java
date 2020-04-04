@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -54,7 +56,8 @@ public class softmax_backward extends primitive {
          *  Outputs:
          *   - diff_src (#dnnl::primitive_desc_base::diff_src_desc (0))
          * 
-         *  @param diff_data_desc Diff source and diff destination memory descriptor.
+         *  @param diff_data_desc Diff source and diff destination memory
+         *      descriptor.
          *  @param data_desc Destination memory descriptor.
          *  @param softmax_axis Axis over which softmax is computed. */
         public desc(@Const @ByRef memory.desc diff_data_desc, @Const @ByRef memory.desc data_desc,

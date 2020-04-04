@@ -124,7 +124,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.2.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
- * DNNL 1.2.x  https://github.com/intel/mkl-dnn
+ * DNNL 1.3.x  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.9  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -141,7 +141,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.5.x  https://developer.nvidia.com/nccl
+   * NCCL 2.6.x  https://developer.nvidia.com/nccl
  * MXNet 1.6.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.2  https://github.com/tensorflow/tensorflow
  * TensorRT 7.0  https://developer.nvidia.com/tensorrt

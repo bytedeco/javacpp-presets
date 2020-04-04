@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -36,6 +38,285 @@ public class lstm_backward extends primitive {
         ///
         public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
 
+        /** Constructs an LSTM (with or without peephole) descriptor for
+         *  backward propagation using \p prop_kind, \p direction, and memory
+         *  descriptors.
+         * 
+         *  The \p src_iter_desc together with \p diff_iter_desc, \p
+         *  src_iter_c_desc together with \p src_iter_c_desc, \p
+         *  weights_peephole_desc together with \p diff_weights_peephole_desc,
+         *  \p bias_desc together with \p diff_bias_desc, \p dst_iter_desc
+         *  together with \p diff_dst_iter_desc, and \p dst_iter_c_desc
+         *  together with \p diff_dst_iter_c_desc, may point to a zero memory
+         *  descriptor. This would then indicate that the LSTM backward
+         *  propagation primitive should not use them and should default to
+         *  zero values instead.
+         * 
+         *  \note
+         *      All memory descriptors can be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  Inputs:
+         *   - src_layer (#dnnl::primitive_desc_base::src_desc (0))
+         *   - src_iter (#dnnl::primitive_desc_base::src_desc (1)), if used
+         *   - src_iter_c (#dnnl::primitive_desc_base::src_desc (2)), if used
+         *   - weights_layer (#dnnl::primitive_desc_base::weights_desc (0))
+         *   - weights_iter (#dnnl::primitive_desc_base::weights_desc (1))
+         *   - weights_peephole (#dnnl::primitive_desc_base::weights_desc (2)),
+         *     if used
+         *   - bias (#dnnl::primitive_desc_base::weights_desc (2)), if used and
+         *     LSTM is without peephole
+         *   - bias (#dnnl::primitive_desc_base::weights_desc (3)), if used and
+         *     LSTM is with peephole
+         *   - dst_layer (#dnnl::primitive_desc_base::dst_desc (0))
+         *   - dst_iter (#dnnl::primitive_desc_base::dst_desc (1)), if used
+         *   - dst_iter_c (#dnnl::primitive_desc_base::dst_desc (2)), if used
+         *   - diff_dst_layer (#dnnl::primitive_desc_base::diff_dst_desc (0))
+         *   - diff_dst_iter
+         *      (#dnnl::primitive_desc_base::diff_dst_desc (1)), if used
+         *   - diff_dst_iter_c
+         *      (#dnnl::primitive_desc_base::diff_dst_desc (2)), if used
+         *   - workspace (#dnnl::primitive_desc_base::workspace_desc (0))
+         * 
+         *  Outputs:
+         *   - diff_src_layer (#dnnl::primitive_desc_base::diff_src_desc (0))
+         *   - diff_src_iter
+         *      (#dnnl::primitive_desc_base::diff_src_desc (1)), if used
+         *   - diff_src_iter_c
+         *      (#dnnl::primitive_desc_base::diff_src_desc (2)), if used
+         *   - diff_weights_layer
+         *      (#dnnl::primitive_desc_base::diff_weights_desc (0))
+         *   - diff_weights_iter
+         *      (#dnnl::primitive_desc_base::diff_weights_desc (1))
+         *   - diff_weights_peephole
+         *     (#dnnl::primitive_desc_base::diff_weights_desc (2)), if used
+         *   - diff_bias (#dnnl::primitive_desc_base::diff_weights_desc (2)),
+         *     if used and LSTM is without peephole
+         *   - diff_bias (#dnnl::primitive_desc_base::diff_weights_desc (3)),
+         *     if used and LSTM is with peephole
+         * 
+         *  @param prop_kind Propagation kind. Must be
+         *      #dnnl::prop_kind::backward.
+         *  @param direction RNN direction. See \ref dnnl::rnn_direction for
+         *      more info.
+         *  @param src_layer_desc Memory descriptor for the input vector.
+         *  @param src_iter_desc Memory descriptor for the input recurrent
+         *      hidden state vector.
+         *  @param src_iter_c_desc Memory descriptor for the input recurrent
+         *      cell state vector.
+         *  @param weights_layer_desc Memory descriptor for the weights
+         *      applied to the layer input.
+         *  @param weights_iter_desc Memory descriptor for the weights applied
+         *      to the recurrent input.
+         *  @param weights_peephole_desc Memory descriptor for the weights
+         *      applied to the cell states (according to the Peephole LSTM
+         *      formula).
+         *  @param bias_desc Bias memory descriptor.
+         *  @param dst_layer_desc Memory descriptor for the output vector.
+         *  @param dst_iter_desc Memory descriptor for the output recurrent
+         *      hidden state vector.
+         *  @param dst_iter_c_desc Memory descriptor for the output recurrent
+         *      cell state vector.
+         *  @param diff_src_layer_desc Memory descriptor for the diff of input
+         *      vector.
+         *  @param diff_src_iter_desc Memory descriptor for the diff of input
+         *      recurrent hidden state vector.
+         *  @param diff_src_iter_c_desc Memory descriptor for the diff of
+         *      input recurrent cell state vector.
+         *  @param diff_weights_layer_desc Memory descriptor for the diff of
+         *      weights applied to the layer input.
+         *  @param diff_weights_iter_desc Memory descriptor for the diff of
+         *      weights applied to the recurrent input.
+         *  @param diff_weights_peephole_desc Memory descriptor for the diff of
+         *      weights applied to the cell states (according to the Peephole
+         *      LSTM formula).
+         *  @param diff_bias_desc Diff bias memory descriptor.
+         *  @param diff_dst_layer_desc Memory descriptor for the diff of
+         *      output vector.
+         *  @param diff_dst_iter_desc Memory descriptor for the diff of output
+         *      recurrent hidden state vector.
+         *  @param diff_dst_iter_c_desc Memory descriptor for the diff of
+         *      output recurrent cell state vector.
+         *  @param flags Unused. */
+        
+        ///
+        ///
+        ///
+        ///
+        ///
+        public desc(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc,
+                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc,
+                        rnn_flags flags/*=dnnl::rnn_flags::undef*/);
+        public desc(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc);
+        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc,
+                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc,
+                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
+        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc src_layer_desc,
+                        @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc src_iter_c_desc,
+                        @Const @ByRef memory.desc weights_layer_desc,
+                        @Const @ByRef memory.desc weights_iter_desc,
+                        @Const @ByRef memory.desc weights_peephole_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_layer_desc,
+                        @Const @ByRef memory.desc dst_iter_desc,
+                        @Const @ByRef memory.desc dst_iter_c_desc,
+                        @Const @ByRef memory.desc diff_src_layer_desc,
+                        @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_src_iter_c_desc,
+                        @Const @ByRef memory.desc diff_weights_layer_desc,
+                        @Const @ByRef memory.desc diff_weights_iter_desc,
+                        @Const @ByRef memory.desc diff_weights_peephole_desc,
+                        @Const @ByRef memory.desc diff_bias_desc,
+                        @Const @ByRef memory.desc diff_dst_layer_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_desc,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc);
+
         /** Constructs an LSTM descriptor for backward propagation using \p
          *  prop_kind, \p direction, and memory descriptors.
          * 
@@ -48,7 +329,7 @@ public class lstm_backward extends primitive {
          *  should not use them and should default to zero values instead.
          * 
          *  \note
-         *      All memory descriptors are allowed to be initialized with
+         *      All memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -373,6 +654,9 @@ public class lstm_backward extends primitive {
         /** \copydoc dnnl::rnn_primitive_desc_base::weights_iter_desc()const */
         public native @ByVal memory.desc weights_iter_desc();
 
+        /** \copydoc dnnl::rnn_primitive_desc_base::weights_peephole_desc()const */
+        public native @ByVal memory.desc weights_peephole_desc();
+
         /** \copydoc dnnl::rnn_primitive_desc_base::bias_desc()const */
         public native @ByVal memory.desc bias_desc();
 
@@ -402,6 +686,9 @@ public class lstm_backward extends primitive {
 
         /** \copydoc dnnl::rnn_primitive_desc_base::diff_weights_iter_desc()const */
         public native @ByVal memory.desc diff_weights_iter_desc();
+
+        /** \copydoc dnnl::rnn_primitive_desc_base::diff_weights_peephole_desc()const */
+        public native @ByVal memory.desc diff_weights_peephole_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::diff_bias_desc()const */
         public native @ByVal memory.desc diff_bias_desc();

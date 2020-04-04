@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -49,7 +51,7 @@ public class deconvolution_forward extends primitive {
          *  primitive with bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -61,7 +63,8 @@ public class deconvolution_forward extends primitive {
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          * 
          *  @param prop_kind Propagation kind. Possible values are
-         *      #dnnl_forward_training, and #dnnl_forward_inference.
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
          *  @param algorithm Deconvolution algorithm:
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.
@@ -145,7 +148,7 @@ public class deconvolution_forward extends primitive {
          *  primitive without bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -156,7 +159,8 @@ public class deconvolution_forward extends primitive {
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          * 
          *  @param prop_kind Propagation kind. Possible values are
-         *      #dnnl_forward_training, and #dnnl_forward_inference.
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
          *  @param algorithm Deconvolution algorithm:
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.
@@ -226,7 +230,7 @@ public class deconvolution_forward extends primitive {
          *  propagation primitive with bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -238,7 +242,8 @@ public class deconvolution_forward extends primitive {
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          * 
          *  @param prop_kind Propagation kind. Possible values are
-         *      #dnnl_forward_training, and #dnnl_forward_inference.
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
          *  @param algorithm Deconvolution algorithm:
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.
@@ -324,7 +329,7 @@ public class deconvolution_forward extends primitive {
          *  propagation primitive without bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -335,7 +340,8 @@ public class deconvolution_forward extends primitive {
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          * 
          *  @param prop_kind Propagation kind. Possible values are
-         *      #dnnl_forward_training, and #dnnl_forward_inference.
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
          *  @param algorithm Deconvolution algorithm:
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.

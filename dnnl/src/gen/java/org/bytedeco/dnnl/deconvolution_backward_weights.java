@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -35,11 +37,11 @@ public class deconvolution_backward_weights extends primitive {
         ///
         public native @ByRef @Cast("dnnl_deconvolution_desc_t*") dnnl_convolution_desc_t data(); public native desc data(dnnl_convolution_desc_t setter);
 
-        /** Constructs a descriptor for a deconvolution weights gradient primitive
-         *  with bias.
+        /** Constructs a descriptor for a deconvolution weights gradient
+         *  primitive with bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -133,7 +135,7 @@ public class deconvolution_backward_weights extends primitive {
          *  without bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -212,7 +214,7 @@ public class deconvolution_backward_weights extends primitive {
          *  primitive with bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -320,7 +322,7 @@ public class deconvolution_backward_weights extends primitive {
          *  primitive without bias.
          * 
          *  \note
-         *      Memory descriptors are allowed to be initialized with
+         *      Memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
          *  Inputs:
@@ -426,7 +428,8 @@ public class deconvolution_backward_weights extends primitive {
         /** Constructs a primitive descriptor for a deconvolution weights
          *  update primitive.
          * 
-         *  @param desc descriptor for a deconvolution weights gradient primitive.
+         *  @param desc descriptor for a deconvolution weights gradient
+         *      primitive.
          *  @param engine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a deconvolution forward
          *      propagation primitive. It is used as a hint for deciding which
@@ -451,7 +454,8 @@ public class deconvolution_backward_weights extends primitive {
         /** Constructs a primitive descriptor for a deconvolution weights
          *  update primitive.
          * 
-         *  @param desc descriptor for a deconvolution weights gradient primitive.
+         *  @param desc descriptor for a deconvolution weights gradient
+         *      primitive.
          *  @param attr Primitive attributes to use.
          *  @param engine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a deconvolution forward
@@ -478,9 +482,9 @@ public class deconvolution_backward_weights extends primitive {
                         @Const @ByRef engine engine,
                         @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd);
 
-        /** Constructs a primitive descriptor for a deconvolution weights gradient
-         *  primitive from a C API primitive descriptor that must have a
-         *  matching kind.
+        /** Constructs a primitive descriptor for a deconvolution weights
+         *  gradient primitive from a C API primitive descriptor that must
+         *  have a matching kind.
          * 
          *  @param pd C API primitive descriptor for a deconvolution weights
          *      gradient primitive. */

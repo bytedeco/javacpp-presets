@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -59,9 +61,10 @@ public class gru_forward extends primitive {
          *   - dst_layer (#dnnl::primitive_desc_base::dst_desc (0))
          *   - dst_iter (#dnnl::primitive_desc_base::dst_desc (1)), if used
          *   - workspace (#dnnl::primitive_desc_base::workspace_desc (0)),
-         *      if \p prop_kind equals #dnnl_forward_training; must be
-         *      queried for using \ref dnnl_primitive_desc_query_md() after a
-         *      corresponding primitive descriptor is created
+         *      if \p prop_kind equals #dnnl::prop_kind::forward_training;
+         *      must be queried for using \ref
+         *      dnnl::primitive_desc_base::query_md() after a corresponding
+         *      primitive descriptor is created
          * 
          *  @param prop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and

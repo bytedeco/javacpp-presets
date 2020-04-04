@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -40,8 +42,14 @@ public class dnnl_eltwise_desc_t extends Pointer {
      *  #dnnl_eltwise_tanh, #dnnl_eltwise_elu, #dnnl_eltwise_square,
      *  #dnnl_eltwise_abs, #dnnl_eltwise_sqrt, #dnnl_eltwise_linear,
      *  #dnnl_eltwise_bounded_relu, #dnnl_eltwise_soft_relu,
-     *  #dnnl_eltwise_logistic, #dnnl_eltwise_exp, #dnnl_eltwise_gelu,
-     *  #dnnl_eltwise_swish, #dnnl_eltwise_log, #dnnl_eltwise_clip. */
+     *  #dnnl_eltwise_logistic, #dnnl_eltwise_exp, #dnnl_eltwise_gelu_tanh,
+     *  #dnnl_eltwise_swish, #dnnl_eltwise_log, #dnnl_eltwise_clip,
+     *  #dnnl_eltwise_pow, #dnnl_eltwise_gelu_erf.
+     *  Possible values for passing destination memory on backward:
+     *  #dnnl_eltwise_relu_use_dst_for_bwd, #dnnl_eltwise_tanh_use_dst_for_bwd,
+     *  #dnnl_eltwise_elu_use_dst_for_bwd, #dnnl_eltwise_sqrt_use_dst_for_bwd,
+     *  #dnnl_eltwise_logistic_use_dst_for_bwd,
+     *  #dnnl_eltwise_exp_use_dst_for_bwd. */
     public native @Cast("dnnl_alg_kind_t") int alg_kind(); public native dnnl_eltwise_desc_t alg_kind(int setter);
     /** Source and destination memory descriptor. */
     public native @ByRef dnnl_memory_desc_t data_desc(); public native dnnl_eltwise_desc_t data_desc(dnnl_memory_desc_t setter);
@@ -60,10 +68,12 @@ public class dnnl_eltwise_desc_t extends Pointer {
      *   - #dnnl_eltwise_soft_relu: \p alpha and \p beta ignored
      *   - #dnnl_eltwise_logistic: \p alpha and \p beta ignored
      *   - #dnnl_eltwise_exp: \p alpha and \p beta ignored
-     *   - #dnnl_eltwise_gelu: \p alpha and \p beta ignored
+     *   - #dnnl_eltwise_gelu_tanh: \p alpha and \p beta ignored
      *   - #dnnl_eltwise_swish: \p alpha -- sigmoid arg scaling, \p beta ignored
      *   - #dnnl_eltwise_log: \p alpha and \p beta ignored
-     *   - #dnnl_eltwise_clip: \p alpha -- lower bound, \p beta -- upper bound */
+     *   - #dnnl_eltwise_clip: \p alpha -- lower bound, \p beta -- upper bound
+     *   - #dnnl_eltwise_pow: \p alpha -- scale, \p beta -- exponent
+     *   - #dnnl_eltwise_gelu_erf: \p alpha and \p beta ignored */
     public native float alpha(); public native dnnl_eltwise_desc_t alpha(float setter);
     public native float beta(); public native dnnl_eltwise_desc_t beta(float setter);
 }

@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -14,88 +16,64 @@ import static org.bytedeco.dnnl.global.dnnl.*;
  *  \addtogroup dnnl_api_memory Memory
  * 
  *  A container that describes and stores data. Memory objects can contain
- *  data of various data types and formats. There are two levels of
- *  abstraction:
+ *  data of various types and formats. There are two levels of abstraction:
  * 
  *  1. **Memory descriptor** -- engine-agnostic logical description of data
  *      (number of dimensions, dimension sizes, and data type), and,
  *      optionally, the information about the physical format of data in
  *      memory. If this information is not known yet, a memory descriptor can
- *      be created with #dnnl_format_tag_any. This allows compute-intensive
- *      primitives to chose the most appropriate format for the computations.
- *      The user is then responsible for reordering their data into the new
- *      format if the formats do not match.
+ *      be created with #dnnl::memory::format_tag::any. This allows
+ *      compute-intensive primitives to choose the best format for
+ *      computation. The user is responsible for reordering the data into the
+ *      chosen format when formats do not match.
  * 
- *      A memory descriptor can be initialized either by calling
- *      dnnl_memory_desc_init_by_tag() or dnnl_memory_desc_init_by_strides()
- *      functions, or by directly setting the values in the dnnl_memory_desc_t
- *      structure.
+ *      A memory descriptor can be initialized either by specifying dimensions
+ *      and a memory format tag or strides for each of them, or by
+ *      manipulating the dnnl_memory_desc_t structure directly.
  * 
  *      \warning
- *          The latter approach requires deep knowledge of how the physical
- *          data representation is mapped to the structure and is discouraged.
- *          The \ref dev_guide_understanding_memory_formats topic should shed
- *          some light on that.
+ *          The latter approach requires understanding how the physical data
+ *          representation is mapped to the structure and is discouraged. This
+ *          topic is discussed in \ref dev_guide_understanding_memory_formats.
  * 
- *      User can query amount of memory required by a memory descriptor using
- *      the dnnl_memory_desc_get_size() function. As described in \ref
- *      dev_guide_understanding_memory_formats, the size of data in general
- *      cannot be computed as the product of dimensions multiplied by the size
- *      of the data type. So users are required to use this function for
- *      better code portability.
+ *      The user can query the amount of memory required by a memory
+ *      descriptor using the #dnnl::memory::desc::get_size() function. The
+ *      size of data in general cannot be computed as the product of
+ *      dimensions multiplied by the size of the data type. So users are
+ *      required to use this function for better code portability.
  * 
- *      Two memory descriptors can be compared with dnnl_memory_desc_equal().
- *      The comparison is especially useful when checking whether it is
- *      necessary to reorder data from the user's data format to a primitive's
- *      format.
+ *      Two memory descriptors can be compared using the equality and
+ *      inequality operators.  The comparison is especially useful when
+ *      checking whether it is necessary to reorder data from the user's data
+ *      format to a primitive's format.
  * 
  *  2. **Memory object** -- an engine-specific object that handles the data
  *      and its description (a memory descriptor). For the CPU engine, the
  *      data handle is simply a pointer to \c void. The data handle can be
- *      queried using dnnl_memory_get_data_handle() and set using
- *      dnnl_memory_set_data_handle(). The latter function always sets the
- *      memory in the padding region to zero, which is the invariant
- *      maintained by all the primitives in DNNL.  See \ref
- *      dev_guide_understanding_memory_formats for more details. A memory
- *      object can be created using dnnl_memory_create() function. A memory
- *      object can also be queried for the underlying memory descriptor and
- *      for its engine using dnnl_memory_get_memory_desc() and
- *      dnnl_memory_get_engine() functions.
+ *      queried using #dnnl::memory::get_data_handle() and set using
+ *      #dnnl::memory::set_data_handle(). A memory object can also be
+ *      queried for the underlying memory descriptor and for its engine using
+ *      #dnnl::memory::get_desc() and dnnl::memory::get_engine().
  * 
- *  Along with ordinary memory with all dimensions being positive, Intel DNNL
- *  supports *zero-volume* (or just *zero*) memory with one or more dimensions
- *  set to zero.  This is to support the NumPy\* convention.  If a zero memory
- *  is passed to a primitive, the primitive does not perform any computations
- *  on this memory. For example:
+ *  Along with ordinary memory descriptors with all dimensions being positive,
+ *  the library supports *zero-volume*  memory descriptors with one or more
+ *  dimensions set to zero. This is used to support the NumPy\* convention.
+ *  If a zero-volume memory is passed to a primitive, the primitive typically
+ *  does not perform any computations with this memory. For example:
  * 
- *  - A convolution primitive with {@code (0 batch, 3 input channels, 13 height,
- *  13 width)} source and {@code (16 output channels, 3 input channels, 3 height, 3
- *  width)} weights would produce {@code (0 batch, 16 output channels,
- *  11 height, 11 width)} destination (assuming strides are {@code 1} and paddings
- *  are zero) and perform zero multiply-add operations.
+ *  - A concatenation primitive would ignore all memory object with zeroes in
+ *    the concat dimension / axis.
  * 
- *  - A concat primitive of three memories of shapes {@code (3, 4, 13, 13)},
- *  {@code (3, 0, 13, 13)}, and {@code (3, 1, 13, 13)} along the second axis would
- *  produce the output of the shape {@code (3, 5, 13, 13)}, effectively ignoring
- *  the second input (however, if the user created a concatenation
- *  primitive descriptor with three inputs they should also provide all
- *  three memories to the concatenation primitive, including the one with
- *  zero second dimension).
+ *  - A forward convolution with a source memory object with zero in the
+ *    minibatch dimension would always produce a destination memory object
+ *    with a zero in the minibatch dimension and perform no computations.
  * 
- *  - However, DNNL would return an error when attempting to create a
- *  convolution with zero memory passed for weights because such a
- *  convolution is not well-defined:
- *  ~~~
- *  dst(1, 16, 11, 11) <-- src(1, 0, 13, 13) (*) weights(16, 0, 3, 3)
- *  ~~~
- *  It is not clear whether the values in the destination be zeroes or
- *  just not accessed at all. Moreover, computations for weights gradient
- *  primitives are not well defined in such cases.
+ *  - However, a forward convolution with a zero in one of the weights
+ *    dimensions is ill-defined and is considered to be an error by the
+ *    library because there is no clear definition of what the output values
+ *    should be.
  * 
- *  Data handle of *zero-volume* memory is never accessed and hence can be
- *  unset (NULL in case of CPU engine).
- * 
- *  @see \ref dev_guide_understanding_memory_formats
+ *  Data handle of a zero-volume memory is never accessed.
  * 
  *  \{
  <p>
@@ -127,9 +105,10 @@ public class memory extends dnnl_memory_handle {
      *  be safely converted to the C API array ::dnnl_dims_t. Throws if
      *  validation fails.
      * 
-     *  @param v Vector of dimensions. */
+     *  @param v Vector of dimensions.
+     *  @param min_size Minimum expected size of the vector. */
 
-    /** Data type specification */
+    /** Data type specification. */
     public enum data_type {
         /** Undefined data type (used for empty memory descriptors). */
         undef(dnnl_data_type_undef),
@@ -199,7 +178,7 @@ public class memory extends dnnl_memory_handle {
      *     is used to denote 2D CNN activations tensor memory format, where
      *     the channels dimension is the innermost one and the batch dimension
      *     is the outermost one. Moreover, #dnnl::memory::format_tag::nc is
-     *     an alias for #dnnl::memory::format_tag::ab, because for DNNL
+     *     an alias for #dnnl::memory::format_tag::ab, because for
      *     CNN primitives the logical dimensions of activations tensors come
      *     in order: batch, channels, spatial.  In other words, batch
      *     corresponds to the first logical dimension ({@code a}), and channels
@@ -211,7 +190,7 @@ public class memory extends dnnl_memory_handle {
      *   - When there are multiple channel dimensions (for example,
      *     in convolution weights tensor), \c 'i' and \c 'o' denote dimensions
      *     of input and output channels
-     *   - \c 'c' denotes a groups dimension for convolution weights
+     *   - \c 'g' denotes a groups dimension for convolution weights
      *   - \c 'd', \c 'h', and \c 'w' denote spatial depth, height, and width
      *     respectively
      * 
@@ -471,6 +450,7 @@ public class memory extends dnnl_memory_handle {
         aBdec8b(dnnl_aBdec8b),
         aBdefc16b(dnnl_aBdefc16b),
         aCBdef16c16b(dnnl_aCBdef16c16b),
+        aCBdef16b16c(dnnl_aCBdef16b16c),
         aBdefc4b(dnnl_aBdefc4b),
         aBdefc8b(dnnl_aBdefc8b),
         Acb16a(dnnl_Acb16a),
@@ -491,7 +471,8 @@ public class memory extends dnnl_memory_handle {
         BAcd16a16b(dnnl_BAcd16a16b),
         BAcd16b16a(dnnl_BAcd16b16a),
         ABcd32a32b(dnnl_ABcd32a32b),
-        BAcde16b16(dnnl_BAcde16b16a),
+        BAcde16b16a(dnnl_BAcde16b16a),
+        BAcde16a16b(dnnl_BAcde16a16b),
         aBdec32b(dnnl_aBdec32b),
         Abcdef16a(dnnl_Abcdef16a),
         Acdb32a(dnnl_Acdb32a),
@@ -552,6 +533,7 @@ public class memory extends dnnl_memory_handle {
         OIhw8o16i2o(dnnl_OIhw8o16i2o),
         OIhw8o8i(dnnl_OIhw8o8i),
         OIhw2i8o4i(dnnl_OIhw2i8o4i),
+        IOdhw16o16i(dnnl_IOdhw16o16i),
         Odhwi16o(dnnl_Odhwi16o),
         OdhwI16o2i(dnnl_OdhwI16o2i),
         Odhwi4o(dnnl_Odhwi4o),
@@ -610,6 +592,7 @@ public class memory extends dnnl_memory_handle {
         gOIhw2o8i8o2i(dnnl_gOIhw2o8i8o2i),
         gOIhw8o8i(dnnl_gOIhw8o8i),
         gIOdhw16i16o(dnnl_gIOdhw16i16o),
+        gIOdhw16o16i(dnnl_gIOdhw16o16i),
         gOdhwi16o(dnnl_gOdhwi16o),
         gOdhwI16o2i(dnnl_gOdhwI16o2i),
         gOdhwi4o(dnnl_gOdhwi4o),
@@ -659,25 +642,40 @@ public class memory extends dnnl_memory_handle {
         /** Constructs a memory descriptor.
          * 
          *  \note
-         *      As always, the logical order of dimensions corresponds to the
-         *      {@code abc...} format tag, and the physical meaning of the
-         *      dimensions depends on both the primitive that consumes the
-         *      memory and the context of that consumption.
+         *      The logical order of dimensions corresponds to the {@code abc...}
+         *      format tag, and the interpretation of the dimensions depends
+         *      on the primitive that consumes the memory.
          * 
          *  @param dims Tensor dimensions.
          *  @param data_type Data precision/type.
-         *  @param format_tag Memory format tag. */
+         *  @param format_tag Memory format tag.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case a
+         *      zero memory descriptor will be constructed. This flag is
+         *      optional and defaults to false. */
         
         ///
         ///
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        format_tag format_tag, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(dims, data_type, format_tag, allow_empty); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        format_tag format_tag, @Cast("bool") boolean allow_empty/*=false*/);
         public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
                         format_tag format_tag) { super((Pointer)null); allocate(dims, data_type, format_tag); }
         private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
                         format_tag format_tag);
         public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        format_tag format_tag, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(dims, data_type, format_tag, allow_empty); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        format_tag format_tag, @Cast("bool") boolean allow_empty/*=false*/);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
                         format_tag format_tag) { super((Pointer)null); allocate(dims, data_type, format_tag); }
         private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
                         format_tag format_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        format_tag format_tag, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(dims, data_type, format_tag, allow_empty); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        format_tag format_tag, @Cast("bool") boolean allow_empty/*=false*/);
         public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
                         format_tag format_tag) { super((Pointer)null); allocate(dims, data_type, format_tag); }
         private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
@@ -686,24 +684,39 @@ public class memory extends dnnl_memory_handle {
         /** Constructs a memory descriptor by strides.
          * 
          *  \note
-         *      As always, the logical order of dimensions corresponds to the
-         *      {@code abc...} format tag, and the physical meaning of the
-         *      dimensions depends on both the primitive that consumes the
-         *      memory and the context of that consumption.
+         *      The logical order of dimensions corresponds to the {@code abc...}
+         *      format tag, and the interpretation of the dimensions depends
+         *      on the primitive that consumes the memory.
          * 
          *  @param dims Tensor dimensions.
          *  @param data_type Data precision/type.
-         *  @param strides The strides for each dimension. */
+         *  @param strides Strides for each dimension.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case a
+         *      zero memory descriptor will be constructed. This flag is
+         *      optional and defaults to false. */
         
         ///
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(dims, data_type, strides, allow_empty); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides, @Cast("bool") boolean allow_empty/*=false*/);
         public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides) { super((Pointer)null); allocate(dims, data_type, strides); }
         private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, data_type data_type,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides);
         public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(dims, data_type, strides, allow_empty); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides, @Cast("bool") boolean allow_empty/*=false*/);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides) { super((Pointer)null); allocate(dims, data_type, strides); }
         private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, data_type data_type,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(dims, data_type, strides, allow_empty); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides, @Cast("bool") boolean allow_empty/*=false*/);
         public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides) { super((Pointer)null); allocate(dims, data_type, strides); }
         private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, data_type data_type,
@@ -721,24 +734,134 @@ public class memory extends dnnl_memory_handle {
         /** @param dims Sizes of the region.
         /** @param offsets Offsets to the region from the encompassing
         /**     memory object in each dimension.
+        /** @param allow_empty A flag signifying whether construction is
+        /**     allowed to fail without throwing an exception. In this case a
+        /**     zero memory descriptor will be returned. This flag is optional
+        /**     and defaults to false.
         /** @return A memory descriptor for the region. */
-        public native @ByVal desc submemory_desc(
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer offsets);
-        public native @ByVal desc submemory_desc(
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer offsets);
-        public native @ByVal desc submemory_desc(
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] offsets);
-
-        /** Constructs a memory descriptor by reshaping existing one. */
-        //
-        /** @param dims New dimensions. The product of dimensions must
-        /** remain constant.
-        /** @return A new memory descriptor with new dimensions. */
         
         ///
+        ///
+        ///
+        ///
+        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer offsets, @Cast("bool") boolean allow_empty/*=false*/);
+        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer offsets);
+        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer offsets, @Cast("bool") boolean allow_empty/*=false*/);
+        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer offsets);
+        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] offsets, @Cast("bool") boolean allow_empty/*=false*/);
+        public native @ByVal desc submemory_desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] offsets);
+
+        /** Constructs a memory descriptor by reshaping an existing one. The
+         *  new memory descriptor inherits the data type. This operation is
+         *  valid only for memory descriptors that have format_kind set to
+         *  #dnnl::memory::format_kind::blocked or
+         *  #dnnl::memory::format_kind::any.
+         * 
+         *  The operation ensures that the transformation of the physical memory
+         *  format corresponds to the transformation of the logical dimensions.
+         *  If such transformation is impossible, the function either throws an
+         *  exception (default) or returns a zero memory descriptor depending on
+         *  the {@code allow_empty} flag.
+         * 
+         *  The reshape operation can be described as a combination of the
+         *  following basic operations:
+         *  1. Add a dimension of size {@code 1}. This is always possible.
+         *  2. Remove a dimension of size {@code 1}. This is possible only if the
+         *     dimension has no padding (i.e.
+         *     {@code padded_dims[dim] == dims[dim] && dims[dim] == 1}).
+         *  3. Split a dimension into multiple ones. This is possible only if
+         *     the size of the dimension is exactly equal to the product of the
+         *     split ones and the dimension does not have padding (i.e.
+         *     {@code padded_dims[dim] = dims[dim]}).
+         *  4. Joining multiple consecutive dimensions into a single one. As in
+         *     the cases above, this requires that the dimensions do not have
+         *     padding and that the memory format is such that in physical
+         *     memory these dimensions are dense and have the same order as
+         *     their logical counterparts. This also assumes that these
+         *     dimensions are not blocked.
+         *     - Here, dense means:
+         *       {@code stride for dim[i] == (stride for dim[i + 1]) * dim[i + 1]};
+         *     - And same order means:
+         *       {@code i < j <=> stride for dim[i] < stride for dim[j]}.
+         * 
+         *  \warning
+         *      Some combinations of physical memory layout and/or offsets or
+         *      dimensions may result in a failure to make a reshape.
+         * 
+         *  @param dims New dimensions. The product of dimensions must
+         *      remain constant.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case a
+         *      zero memory descriptor will be returned. This flag is optional
+         *      and defaults to false.
+         *  @return A new memory descriptor with new dimensions. */
+        
+        ///
+        ///
+        ///
+        ///
+        ///
+        ///
+        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims, @Cast("bool") boolean allow_empty/*=false*/);
         public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer dims);
+        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims, @Cast("bool") boolean allow_empty/*=false*/);
         public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer dims);
+        public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims, @Cast("bool") boolean allow_empty/*=false*/);
         public native @ByVal desc reshape(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] dims);
+
+        /** Constructs a memory descriptor by permuting axes in an existing
+         *  one.
+         * 
+         *  The physical memory layout representation is adjusted accordingly
+         *  to maintain the consistency between the logical and physical parts
+         *  of the memory descriptor.
+         * 
+         *  The new memory descriptor inherits the data type. This operation is
+         *  valid only for memory descriptors that have format_kind set to
+         *  #dnnl::memory::format_kind::blocked or
+         *  #dnnl::memory::format_kind::any.
+         * 
+         *  The logical axes will be permuted in the following manner:
+         *  <pre>{@code
+         *  for (i: 0 .. ndims())
+         *      new_desc.dims()[permutation[i]] = dims()[i];
+         *  }</pre>
+         * 
+         *  Example:
+         *  <pre>{@code
+         *      std::vector<int> permutation = {1, 0}; // swap the first and
+         *                                             // the second axes
+         *      dnnl::memory::desc in_md(
+         *              {2, 3}, data_type, memory::format_tag::ab);
+         *      dnnl::memory::desc expect_out_md(
+         *              {3, 2}, data_type, memory::format_tag::ba);
+         * 
+         *      assert(in_md.permute_axes(permutation) == expect_out_md);
+         *  }</pre>
+         * 
+         *  @param permutation Axes permutation.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case a
+         *      zero memory descriptor will be returned. This flag is optional
+         *      and defaults to false.
+         *  @return A new memory descriptor with new dimensions. */
+        
+        ///
+        public native @ByVal desc permute_axes(@StdVector IntPointer permutation,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public native @ByVal desc permute_axes(@StdVector IntPointer permutation);
+        public native @ByVal desc permute_axes(@StdVector IntBuffer permutation,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public native @ByVal desc permute_axes(@StdVector IntBuffer permutation);
+        public native @ByVal desc permute_axes(@StdVector int[] permutation,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public native @ByVal desc permute_axes(@StdVector int[] permutation);
 
         /** Returns dimensions of the memory descriptor.
          * 
@@ -780,15 +903,30 @@ public class memory extends dnnl_memory_handle {
     // of a parameter.
     
     ///
+    ///
+    ///
     public memory() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** Constructs a memory object.
      * 
+     *  Unless \p handle is equal to DNNL_MEMORY_NONE, the constructed memory
+     *  object will have the underlying buffer set. In this case, the buffer
+     *  will be initialized as if memory::set_data_handle() had been called.
+     * 
+     *  @see memory::set_data_handle()
+     * 
      *  @param md Memory descriptor.
      *  @param engine Engine to store the data on.
      *  @param handle Handle of the memory buffer to use as an underlying
-     *      storage. On CPU this is a pointer. */
+     *      storage.
+     *      - A pointer to the user-allocated buffer. In this case the library
+     *        doesn't own the buffer.
+     *      - The DNNL_MEMORY_ALLOCATE special value. Instructs the library to
+     *        allocate the buffer for the memory object. In this case the
+     *        library owns the buffer.
+     *      - DNNL_MEMORY_NONE to create dnnl_memory without an underlying
+     *        buffer. */
     
     ///
     ///
@@ -817,12 +955,38 @@ public class memory extends dnnl_memory_handle {
      *  On the CPU engine this is a pointer to the allocated memory. */
     
     ///
+    ///
+    ///
+    ///
+    ///
     public native Pointer get_data_handle();
 
     /** Sets memory buffer.
      * 
-     *  @param handle Memory buffer to use as the underlying storage. It must
-     *      have at least get_desc().get_size() bytes allocated. */
+     *  This function may write zeroes to the specified data \p handle if the
+     *  memory object has padding to maintain data consistency.
+     * 
+     *  \note
+     *      The padding is performed for memory objects created with blocked
+     *      memory format tags like #dnnl_aBcd8b when any of the dimensions is
+     *      not a multiple of a corresponding block size. The padding is
+     *      performed only for memory objects created with plain memory format
+     *      tags like #dnnl_nchw or #dnnl_nhwc if requested explicitly. More
+     *      information is available in \ref
+     *      dev_guide_understanding_memory_formats.
+     * 
+     *  The write can be time consuming and happens each time the function is
+     *  called. Furthermore, it is performed using an internal service stream
+     *  in a blocking manner.
+     * 
+     *  \warning
+     *      Even if the memory object is used to hold values that stay constant
+     *      (e.g., pre-packed weights during inference), the function will still
+     *      write zeroes to the padding area if it exists. Hence, the \p
+     *      handle parameter cannot and does not have a const qualifier.
+     * 
+     *  @param handle Output data handle. For the CPU engine, the data handle
+     *      is a pointer to the actual data. For OpenCL it is a cl_mem. */
     
     ///
     ///
@@ -833,7 +997,7 @@ public class memory extends dnnl_memory_handle {
 
     /** Maps the data of the memory.
      * 
-     *  Mapping allows to read/write directly from/to the memory contents for
+     *  Mapping enables read/write directly from/to the memory contents for
      *  engines that do not support direct memory access.
      * 
      *  Mapping is an exclusive operation - a memory object cannot be used in
@@ -841,11 +1005,11 @@ public class memory extends dnnl_memory_handle {
      * 
      *  \note
      *      Any primitives working with the memory should be completed before
-     *      mapping. Use stream::wait() to synchronize the corresponding
-     *      execution stream.
+     *      the memory is mapped. Use stream::wait() to synchronize the
+     *      corresponding execution stream.
      * 
      *  \note
-     *      Map/unmap API is provided mainly for debug/testing purposes and
+     *      The map/unmap API is provided mainly for debug/testing purposes and
      *      its performance may be suboptimal.
      * 
      *  \tparam T Data type to return a pointer to.
@@ -858,7 +1022,7 @@ public class memory extends dnnl_memory_handle {
      *  obtained through a map_data() call.
      * 
      *  \note
-     *      Map/unmap API is provided mainly for debug/testing purposes and
+     *      The map/unmap API is provided mainly for debug/testing purposes and
      *      its performance may be suboptimal.
      * 
      *  @param mapped_ptr A pointer previously returned by map_data(). */

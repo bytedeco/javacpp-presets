@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
@@ -53,10 +55,10 @@ public class lrn_forward extends primitive {
          *  Outputs:
          *   - dst (#dnnl::primitive_desc_base::dst_desc (0))
          *   - workspace (#dnnl::primitive_desc_base::workspace_desc (0)),
-         *      if \p alg_kind = #dnnl_pooling_max and \p prop_kind =
-         *      #dnnl_forward_training; must be queried for using \ref
-         *      dnnl_primitive_desc_query_md() after a corresponding
-         *      primitive descriptor is created
+         *      if \p alg_kind = #dnnl::algorithm::pooling_max and \p
+         *      prop_kind = #dnnl::prop_kind::forward_training; must be
+         *      queried for using \ref dnnl::primitive_desc_base::query_md()
+         *      after a corresponding primitive descriptor is created
          * 
          *  @param prop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
