@@ -10,13 +10,18 @@ import static org.bytedeco.llvm.global.LLVM.*;
 /**
  * Matrix multiply benchmark.
  *
- * To run this sample run this command.
- * mvn compile exec:java
+ * To run this sample, execute this command:
+ * mvn clean compile exec:java -Djavacpp.platform.host
  *
- * If you enable usePollyParallel, maybe you have to modify the file name of LLVMLoadLibraryPermanently().
+ * If you set usePollyParallel, you may have to modify the file name of LLVMLoadLibraryPermanently().
  *
- * Warning: This code is slower than this.
+ * Warning: Because it does not optimize for AVX, etc, this code is slower than this:
  * clang -O3 -march=native -mllvm -polly -mllvm -polly-vectorizer=stripmine
+ *
+ * Note: Instead of JNA, to obtain maximum performance, FunctionPointer should be used as shown here:
+ * https://github.com/bytedeco/javacpp/blob/master/src/test/java/org/bytedeco/javacpp/PointerTest.java
+ *
+ * @author Yu Kobayashi
  */
 public class MatMulBenchmark {
     static final int M = 2000, N = 2000, K = 2000;
@@ -45,7 +50,7 @@ public class MatMulBenchmark {
         assert b.length == K * N;
         assert c.length == M * N;
 
-        System.out.println("Now starting pure Java benchmark. This takes a few minutes.");
+        System.out.println("Now starting pure Java benchmark: This may take a minute.");
         long start = System.nanoTime();
         for (int m = 0; m < M; m++) {
             for (int n = 0; n < N; n++) {
