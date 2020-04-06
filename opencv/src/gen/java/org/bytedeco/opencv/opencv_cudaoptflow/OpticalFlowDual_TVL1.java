@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -48,8 +49,8 @@ import static org.bytedeco.opencv.global.opencv_cudaoptflow.*;
 
 /** \brief Implementation of the Zach, Pock and Bischof Dual TV-L1 Optical Flow method.
  *
- * @see C. Zach, T. Pock and H. Bischof, "A Duality Based Approach for Realtime TV-L1 Optical Flow".
- * @see Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flow Estimation".
+ * \note C. Zach, T. Pock and H. Bischof, "A Duality Based Approach for Realtime TV-L1 Optical Flow".
+ * \note Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flow Estimation".
  */
 @Namespace("cv::cuda") @Properties(inherit = org.bytedeco.opencv.presets.opencv_cudaoptflow.class)
 public class OpticalFlowDual_TVL1 extends DenseOpticalFlow {

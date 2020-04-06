@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
@@ -22,7 +23,7 @@ public class Point3fVector extends Pointer {
     public Point3fVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef Point3fVector put(@ByRef Point3fVector x);
+    public native @Name("operator =") @ByRef Point3fVector put(@ByRef Point3fVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -40,9 +41,9 @@ public class Point3fVector extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef @Const Point3f get();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *") @ByRef @Const Point3f get();
     }
 
     public Point3f[] get() {

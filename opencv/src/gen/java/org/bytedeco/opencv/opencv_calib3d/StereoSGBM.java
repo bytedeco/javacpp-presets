@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -84,8 +85,8 @@ public class StereoSGBM extends StereoMatcher {
     the smoother the disparity is. P1 is the penalty on the disparity change by plus or minus 1
     between neighbor pixels. P2 is the penalty on the disparity change by more than 1 between neighbor
     pixels. The algorithm requires P2 \> P1 . See stereo_match.cpp sample where some reasonably good
-    P1 and P2 values are shown (like 8\*number_of_image_channels\*SADWindowSize\*SADWindowSize and
-    32\*number_of_image_channels\*SADWindowSize\*SADWindowSize , respectively).
+    P1 and P2 values are shown (like 8\*number_of_image_channels\*blockSize\*blockSize and
+    32\*number_of_image_channels\*blockSize\*blockSize , respectively).
     @param disp12MaxDiff Maximum allowed difference (in integer pixel units) in the left-right
     disparity check. Set it to a non-positive value to disable the check.
     @param preFilterCap Truncation value for the prefiltered image pixels. The algorithm first

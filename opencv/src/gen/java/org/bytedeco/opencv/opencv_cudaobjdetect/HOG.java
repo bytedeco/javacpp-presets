@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -145,37 +146,49 @@ public class HOG extends Algorithm {
      */
     public native void detect(@ByVal Mat img,
                             @ByRef PointVector found_locations,
-                            @StdVector DoublePointer confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoublePointer confidences/*=NULL*/);
     public native void detect(@ByVal Mat img,
                             @ByRef PointVector found_locations);
     public native void detect(@ByVal Mat img,
                             @ByRef PointVector found_locations,
-                            @StdVector DoubleBuffer confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoubleBuffer confidences/*=NULL*/);
     public native void detect(@ByVal Mat img,
                             @ByRef PointVector found_locations,
-                            @StdVector double[] confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") double[] confidences/*=NULL*/);
     public native void detect(@ByVal UMat img,
                             @ByRef PointVector found_locations,
-                            @StdVector DoublePointer confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoublePointer confidences/*=NULL*/);
     public native void detect(@ByVal UMat img,
                             @ByRef PointVector found_locations);
     public native void detect(@ByVal UMat img,
                             @ByRef PointVector found_locations,
-                            @StdVector DoubleBuffer confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoubleBuffer confidences/*=NULL*/);
     public native void detect(@ByVal UMat img,
                             @ByRef PointVector found_locations,
-                            @StdVector double[] confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") double[] confidences/*=NULL*/);
     public native void detect(@ByVal GpuMat img,
                             @ByRef PointVector found_locations,
-                            @StdVector DoublePointer confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoublePointer confidences/*=NULL*/);
     public native void detect(@ByVal GpuMat img,
                             @ByRef PointVector found_locations);
     public native void detect(@ByVal GpuMat img,
                             @ByRef PointVector found_locations,
-                            @StdVector DoubleBuffer confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoubleBuffer confidences/*=NULL*/);
     public native void detect(@ByVal GpuMat img,
                             @ByRef PointVector found_locations,
-                            @StdVector double[] confidences/*=NULL*/);
+                            @Cast({"double*", "std::vector<double>*"}) @StdVector("double") double[] confidences/*=NULL*/);
+
+    /** \brief Performs object detection without a multi-scale window.
+    <p>
+    @param img Source image. CV_8UC1 and CV_8UC4 types are supported for now.
+    @param found_locations Left-top corner points of detected objects boundaries.
+     */
+    public native void detectWithoutConf(@ByVal Mat img,
+            @ByRef PointVector found_locations);
+    public native void detectWithoutConf(@ByVal UMat img,
+            @ByRef PointVector found_locations);
+    public native void detectWithoutConf(@ByVal GpuMat img,
+            @ByRef PointVector found_locations);
 
     /** \brief Performs object detection with a multi-scale window.
     <p>
@@ -185,37 +198,49 @@ public class HOG extends Algorithm {
      */
     public native void detectMultiScale(@ByVal Mat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector DoublePointer confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoublePointer confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal Mat img,
                                       @ByRef RectVector found_locations);
     public native void detectMultiScale(@ByVal Mat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector DoubleBuffer confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoubleBuffer confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal Mat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector double[] confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") double[] confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal UMat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector DoublePointer confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoublePointer confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal UMat img,
                                       @ByRef RectVector found_locations);
     public native void detectMultiScale(@ByVal UMat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector DoubleBuffer confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoubleBuffer confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal UMat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector double[] confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") double[] confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal GpuMat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector DoublePointer confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoublePointer confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal GpuMat img,
                                       @ByRef RectVector found_locations);
     public native void detectMultiScale(@ByVal GpuMat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector DoubleBuffer confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") DoubleBuffer confidences/*=NULL*/);
     public native void detectMultiScale(@ByVal GpuMat img,
                                       @ByRef RectVector found_locations,
-                                      @StdVector double[] confidences/*=NULL*/);
+                                      @Cast({"double*", "std::vector<double>*"}) @StdVector("double") double[] confidences/*=NULL*/);
+
+    /** \brief Performs object detection with a multi-scale window.
+    <p>
+    @param img Source image. See cuda::HOGDescriptor::detect for type limitations.
+    @param found_locations Detected objects boundaries.
+     */
+    public native void detectMultiScaleWithoutConf(@ByVal Mat img,
+            @ByRef RectVector found_locations);
+    public native void detectMultiScaleWithoutConf(@ByVal UMat img,
+            @ByRef RectVector found_locations);
+    public native void detectMultiScaleWithoutConf(@ByVal GpuMat img,
+            @ByRef RectVector found_locations);
 
     /** \brief Returns block descriptors computed for the whole image.
     <p>

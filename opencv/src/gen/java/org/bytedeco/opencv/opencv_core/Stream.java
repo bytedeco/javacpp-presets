@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
@@ -99,6 +100,9 @@ public class Stream extends Pointer {
 
     /** returns true if stream object is not default (!= 0) */
     
+
+    /** return Pointer to CUDA stream */
+    public native Pointer cudaPtr();
 
     @Opaque public static class Impl extends Pointer {
         /** Empty constructor. Calls {@code super((Pointer)null)}. */

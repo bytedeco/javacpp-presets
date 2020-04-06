@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -149,6 +150,11 @@ public class Net extends Pointer {
          * As any other layer, this layer can label its outputs and this function provides an easy way to do this.
          */
         public native void setInputsNames(@Const @ByRef StringVector inputBlobNames);
+
+        /** \brief Specify shape of network input.
+         */
+        public native void setInputShape(@Str BytePointer inputName, @Const @StdVector @ByRef IntPointer shape);
+        public native void setInputShape(@Str String inputName, @Const @StdVector @ByRef IntPointer shape);
 
         /** \brief Runs forward pass to compute output of layer with name \p outputName.
          *  @param outputName name for layer which output is needed to get

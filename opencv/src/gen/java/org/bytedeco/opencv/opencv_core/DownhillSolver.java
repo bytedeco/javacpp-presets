@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
@@ -60,7 +61,7 @@ public class DownhillSolver extends MinProblemSolver {
 
     /** \brief Sets the initial step that will be used in downhill simplex algorithm.
     <p>
-    Step, together with initial point (givin in DownhillSolver::minimize) are two {@code n}-dimensional
+    Step, together with initial point (given in DownhillSolver::minimize) are two {@code n}-dimensional
     vectors that are used to determine the shape of initial simplex. Roughly said, initial point
     determines the position of a simplex (it will become simplex's centroid), while step determines the
     spread (size in each dimension) of a simplex. To be more precise, if {@code s,x_0\in\mathbb{R}^n} are

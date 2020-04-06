@@ -8,6 +8,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -98,6 +99,9 @@ This section describes the following matching strategies:
 <p>
 \}
 */
+// Targeting ../opencv_xfeatures2d/SIFT.java
+
+
 // Targeting ../opencv_xfeatures2d/FREAK.java
 
 
@@ -275,9 +279,6 @@ Detects corners using the FAST algorithm by \cite Rosten06 .
 // #define __OPENCV_XFEATURES2D_FEATURES_2D_HPP__
 
 // #include "opencv2/features2d.hpp"
-// Targeting ../opencv_xfeatures2d/SIFT.java
-
-
 // Targeting ../opencv_xfeatures2d/SURF.java
 
 

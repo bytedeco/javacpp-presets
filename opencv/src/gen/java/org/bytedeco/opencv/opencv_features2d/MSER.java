@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -45,7 +46,7 @@ public class MSER extends Feature2D {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSER(Pointer p) { super(p); }
 
-    /** \brief Full consturctor for %MSER detector
+    /** \brief Full constructor for %MSER detector
     <p>
     @param _delta it compares {@code (size_{i}-size_{i-delta})/size_{i-delta}}
     @param _min_area prune the area which smaller than minArea

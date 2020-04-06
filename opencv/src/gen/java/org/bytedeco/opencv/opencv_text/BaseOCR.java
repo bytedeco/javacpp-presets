@@ -7,6 +7,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -38,11 +39,11 @@ public class BaseOCR extends Pointer {
     public BaseOCR(Pointer p) { super(p); }
 
     public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, FloatVector component_confidences/*=NULL*/,
+                         StringVector component_texts/*=NULL*/, FloatVector component_confidences/*=NULL*/,
                          int component_level/*=0*/);
     public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text);
     public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, FloatVector component_confidences/*=NULL*/,
+                         StringVector component_texts/*=NULL*/, FloatVector component_confidences/*=NULL*/,
                          int component_level/*=0*/);
     public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text);
 }

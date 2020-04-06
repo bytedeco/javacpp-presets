@@ -7,6 +7,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -43,7 +44,7 @@ public class ConfidenceMap extends Pointer {
     public ConfidenceMap(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef ConfidenceMap put(@ByRef ConfidenceMap x);
+    public native @Name("operator =") @ByRef ConfidenceMap put(@ByRef ConfidenceMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();

@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -101,7 +102,7 @@ public class LogisticRegression extends StatModel {
 
     /** \brief This function returns the trained parameters arranged across rows.
     <p>
-    For a two class classifcation problem, it returns a row matrix. It returns learnt parameters of
+    For a two class classification problem, it returns a row matrix. It returns learnt parameters of
     the Logistic Regression as a matrix of type CV_32F.
      */
     public native @ByVal Mat get_learnt_thetas();

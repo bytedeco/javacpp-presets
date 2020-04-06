@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -34,7 +35,9 @@ public class PoolingLayer extends Layer {
         public native @Deprecated int pad_t(); public native PoolingLayer pad_t(int setter);
         public native @Deprecated int pad_r(); public native PoolingLayer pad_r(int setter);
         public native @Deprecated int pad_b(); public native PoolingLayer pad_b(int setter);
+        /** Flag is true if at least one of the axes is global pooled. */
         public native @Cast("bool") boolean globalPooling(); public native PoolingLayer globalPooling(boolean setter);
+        public native @Cast("bool*") @StdVector BoolPointer isGlobalPooling(); public native PoolingLayer isGlobalPooling(BoolPointer setter);
         public native @Cast("bool") boolean computeMaxIdx(); public native PoolingLayer computeMaxIdx(boolean setter);
         public native @Str BytePointer padMode(); public native PoolingLayer padMode(BytePointer setter);
         public native @Cast("bool") boolean ceilMode(); public native PoolingLayer ceilMode(boolean setter);

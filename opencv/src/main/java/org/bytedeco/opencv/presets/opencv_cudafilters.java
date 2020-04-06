@@ -36,12 +36,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudafilters.hpp>",
-            link = "opencv_cudafilters@.4.2",
+            link = "opencv_cudafilters@.4.3",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudafilters420",
+            link = "opencv_cudafilters430",
             extension = "-gpu"
         )
     },

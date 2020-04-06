@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -81,7 +82,7 @@ public class opencv_imgcodecs extends org.bytedeco.opencv.helper.opencv_imgcodec
  *  Imread flags */
 /** enum cv::ImreadModes */
 public static final int
-       /** If set, return the loaded image as is (with alpha channel, otherwise it gets cropped). */
+       /** If set, return the loaded image as is (with alpha channel, otherwise it gets cropped). Ignore EXIF orientation. */
        IMREAD_UNCHANGED            = -1,
        /** If set, always convert image to the single channel grayscale image (codec internal conversion). */
        IMREAD_GRAYSCALE            = 0,
@@ -228,8 +229,9 @@ Currently, the following file formats are supported:
     then the [GDAL](http://www.gdal.org) driver will be used in order to decode the image, supporting
     the following formats: [Raster](http://www.gdal.org/formats_list.html),
     [Vector](http://www.gdal.org/ogr_formats.html).
--   If EXIF information are embedded in the image file, the EXIF orientation will be taken into account
-    and thus the image will be rotated accordingly except if the flag \ref IMREAD_IGNORE_ORIENTATION is passed.
+-   If EXIF information is embedded in the image file, the EXIF orientation will be taken into account
+    and thus the image will be rotated accordingly except if the flags \ref IMREAD_IGNORE_ORIENTATION
+    or \ref IMREAD_UNCHANGED are passed.
 -   Use the IMREAD_UNCHANGED flag to keep the floating point values from PFM image.
 -   By default number of pixels must be less than 2^30. Limit can be set using system
     variable OPENCV_IO_MAX_IMAGE_PIXELS

@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -302,12 +303,12 @@ public class Retina extends Algorithm {
     @param reductionFactor only usefull if param useRetinaLogSampling=true, specifies the reduction
     factor of the output frame (as the center (fovea) is high resolution and corners can be
     underscaled, then a reduction of the output is allowed without precision leak
-    @param samplingStrenght only usefull if param useRetinaLogSampling=true, specifies the strenght of
+    @param samplingStrength only usefull if param useRetinaLogSampling=true, specifies the strength of
     the log scale that is applied
      */
     public static native @Ptr Retina create(@ByVal Size inputSize, @Cast("const bool") boolean colorMode,
                                                int colorSamplingMethod/*=cv::bioinspired::RETINA_COLOR_BAYER*/,
                                                @Cast("const bool") boolean useRetinaLogSampling/*=false*/,
-                                               float reductionFactor/*=1.0f*/, float samplingStrenght/*=10.0f*/);
+                                               float reductionFactor/*=1.0f*/, float samplingStrength/*=10.0f*/);
     public static native @Ptr Retina create(@ByVal Size inputSize, @Cast("const bool") boolean colorMode);
 }

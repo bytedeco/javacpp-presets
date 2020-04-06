@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
@@ -21,7 +22,7 @@ public class IntVectorVector extends Pointer {
     public IntVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef IntVectorVector put(@ByRef IntVectorVector x);
+    public native @Name("operator =") @ByRef IntVectorVector put(@ByRef IntVectorVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();

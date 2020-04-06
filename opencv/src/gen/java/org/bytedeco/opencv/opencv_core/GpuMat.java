@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
@@ -324,6 +325,9 @@ public class GpuMat extends Pointer {
 
     /** returns true if GpuMat data is NULL */
     public native @Cast("bool") boolean empty();
+
+    // returns pointer to cuda memory
+    public native Pointer cudaPtr();
 
     /** internal use method: updates the continuity flag */
     public native void updateContinuityFlag();
