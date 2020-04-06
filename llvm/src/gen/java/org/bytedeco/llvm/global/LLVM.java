@@ -10449,4 +10449,88 @@ public static native void LLVMAddSLPVectorizePass(LLVMPassManagerRef PM);
 // #endif
 
 
+// Parsed from <polly/LinkAllPasses.h>
+
+//===- polly/LinkAllPasses.h ----------- Reference All Passes ---*- C++ -*-===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+//
+// This header file pulls in all transformation and analysis passes for tools
+// like opt and bugpoint that need this functionality.
+//
+//===----------------------------------------------------------------------===//
+
+// #ifndef POLLY_LINKALLPASSES_H
+// #define POLLY_LINKALLPASSES_H
+
+// #include "polly/CodeGen/PPCGCodeGeneration.h"
+// #include "polly/Config/config.h"
+// #include "polly/PruneUnprofitable.h"
+// #include "polly/Simplify.h"
+// #include "polly/Support/DumpModulePass.h"
+// #include "llvm/ADT/StringRef.h"
+// #include <cstdlib>
+// Targeting ../LLVM/Pass.java
+
+
+// Targeting ../LLVM/PassRegistry.java
+
+
+ // namespace llvm
+@Namespace("polly") public static native Pass createCodePreparationPass();
+@Namespace("polly") public static native Pass createScopInlinerPass();
+@Namespace("polly") public static native Pass createDeadCodeElimPass();
+@Namespace("polly") public static native Pass createDependenceInfoPass();
+@Namespace("polly") public static native Pass createDependenceInfoWrapperPassPass();
+@Namespace("polly") public static native Pass createDOTOnlyPrinterPass();
+@Namespace("polly") public static native Pass createDOTOnlyViewerPass();
+@Namespace("polly") public static native Pass createDOTPrinterPass();
+@Namespace("polly") public static native Pass createDOTViewerPass();
+@Namespace("polly") public static native Pass createJSONExporterPass();
+@Namespace("polly") public static native Pass createJSONImporterPass();
+@Namespace("polly") public static native Pass createPollyCanonicalizePass();
+@Namespace("polly") public static native Pass createPolyhedralInfoPass();
+@Namespace("polly") public static native Pass createScopDetectionWrapperPassPass();
+@Namespace("polly") public static native Pass createScopInfoRegionPassPass();
+@Namespace("polly") public static native Pass createScopInfoWrapperPassPass();
+@Namespace("polly") public static native Pass createRewriteByrefParamsPass();
+@Namespace("polly") public static native Pass createIslAstInfoWrapperPassPass();
+@Namespace("polly") public static native Pass createCodeGenerationPass();
+// #ifdef GPU_CODEGEN
+// #endif
+@Namespace("polly") public static native Pass createIslScheduleOptimizerPass();
+@Namespace("polly") public static native Pass createFlattenSchedulePass();
+@Namespace("polly") public static native Pass createDeLICMPass();
+@Namespace("polly") public static native Pass createMaximalStaticExpansionPass();
+
+@Namespace("polly") public static native @Cast("char*") @ByRef BytePointer CodePreparationID(); public static native void CodePreparationID(BytePointer setter);
+
+// Targeting ../LLVM/PollyForcePassLinking.java
+
+ // Force link by creating a global definition.
+ // namespace
+@Namespace("llvm") public static native void initializeCodePreparationPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeScopInlinerPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeDeadCodeElimPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeJSONExporterPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeJSONImporterPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeIslAstInfoWrapperPassPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeCodeGenerationPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeRewriteByrefParamsPass(@ByRef PassRegistry arg0);
+// #ifdef GPU_CODEGEN
+// #endif
+@Namespace("llvm") public static native void initializeIslScheduleOptimizerPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeMaximalStaticExpanderPass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializePollyCanonicalizePass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeFlattenSchedulePass(@ByRef PassRegistry arg0);
+@Namespace("llvm") public static native void initializeDeLICMPass(@ByRef PassRegistry arg0);
+ // namespace llvm
+
+// #endif
+
+
 }

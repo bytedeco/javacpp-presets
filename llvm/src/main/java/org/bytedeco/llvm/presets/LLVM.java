@@ -34,8 +34,10 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
                "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/OrcBindings.h>", "<llvm-c/Remarks.h>",
                "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
-               "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>"},
-    compiler = "cpp11", link = {"LLVM-10", "LTO@.10"}), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
+               "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
+               "<polly/LinkAllPasses.h>"},
+    compiler = "cpp14", link = {"LLVM-10", "LTO@.10", "LLVMPolly"}),
+        @Platform(value = {"macosx", "windows"}, link = {"LLVM", "LTO", "Polly", "PollyISL", "PollyPPCG"})})
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
 
@@ -132,6 +134,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("HUGE_VALF").cppTypes("float").translate(false))
                .put(new Info("LLVMErrorTypeId").annotations("@Const").valueTypes("LLVMErrorTypeId"))
                .put(new Info("defined(_MSC_VER) && !defined(inline)").define(false))
+               .put(new Info("GPU_CODEGEN").define(false))
                .put(new Info("LLVMDumpType", "LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMCreateOprofileJITEventListener",
                              "llvm_optimize_modules", "llvm_destroy_optimizer", "llvm_read_object_file", "llvm_create_optimizer", "LLVMRemarkVersion").skip());
     }
