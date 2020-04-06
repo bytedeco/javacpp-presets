@@ -8,6 +8,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -199,7 +200,8 @@ public static final int
        CAP_PROP_GAIN          = 14,
        /** Exposure (only for those cameras that support). */
        CAP_PROP_EXPOSURE      = 15,
-       /** Boolean flags indicating whether images should be converted to RGB. */
+       /** Boolean flags indicating whether images should be converted to RGB. <br/>
+ *  *GStreamer note*: The flag is ignored in case if custom pipeline is used. It's user responsibility to interpret pipeline output. */
        CAP_PROP_CONVERT_RGB   = 16,
        /** Currently unsupported. */
        CAP_PROP_WHITE_BALANCE_BLUE_U = 17,
@@ -241,8 +243,10 @@ public static final int
        CAP_PROP_WB_TEMPERATURE = 45,
        /** (read-only) codec's pixel format. 4-character code - see VideoWriter::fourcc . Subset of [AV_PIX_FMT_*](https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/raw.c) or -1 if unknown */
        CAP_PROP_CODEC_PIXEL_FORMAT = 46,
+       /** (read-only) Video bitrate in kbits/s */
+       CAP_PROP_BITRATE       = 47,
 // #ifndef CV_DOXYGEN
-       CV__CAP_PROP_LATEST = 47;
+       CV__CAP_PROP_LATEST = 48;
 // #endif
 
 /** \brief %VideoWriter generic properties identifier.
@@ -740,6 +744,17 @@ public static final int /** Change image resolution by binning or skipping. */
        CAP_PROP_XI_SENSOR_FEATURE_VALUE                         = 586;
 
 /** \} XIMEA
+<p>
+/** \name XIMEA Camera API
+*  \{
+*/
+
+/** Properties of cameras available through ARAVIS backend */
+/** enum cv:: */
+public static final int /** Automatically trigger frame capture if camera is configured with software trigger */
+ CAP_PROP_ARAVIS_AUTOTRIGGER                              = 600;
+
+/** \} ARAVIS
 <p>
 /** \name AVFoundation framework for iOS
     OS X Lion will have the same API

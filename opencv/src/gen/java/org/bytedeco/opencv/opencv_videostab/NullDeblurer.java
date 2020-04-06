@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -52,5 +53,5 @@ public class NullDeblurer extends DeblurerBase {
         return (NullDeblurer)super.position(position);
     }
 
-    public native void deblur(int arg0, @ByRef Mat arg1);
+    public native void deblur(int arg0, @ByRef Mat arg1, @Const @ByRef Range arg2);
 }

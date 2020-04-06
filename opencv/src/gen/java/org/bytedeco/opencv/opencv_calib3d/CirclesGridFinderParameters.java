@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -60,6 +61,6 @@ public class CirclesGridFinderParameters extends Pointer {
 
     /** Distance between two adjacent points. Used by CALIB_CB_CLUSTERING. */
     public native float squareSize(); public native CirclesGridFinderParameters squareSize(float setter);
-    /** Max deviation from predicion. Used by CALIB_CB_CLUSTERING. */
+    /** Max deviation from prediction. Used by CALIB_CB_CLUSTERING. */
     public native float maxRectifiedDistance(); public native CirclesGridFinderParameters maxRectifiedDistance(float setter);
 }

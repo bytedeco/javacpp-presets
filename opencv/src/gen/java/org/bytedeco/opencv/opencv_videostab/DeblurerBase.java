@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -47,7 +48,7 @@ public class DeblurerBase extends Pointer {
     public native void setRadius(int val);
     public native int radius();
 
-    public native void deblur(int idx, @ByRef Mat frame);
+    public native void deblur(int idx, @ByRef Mat frame, @Const @ByRef Range range);
 
 
     // data from stabilizer

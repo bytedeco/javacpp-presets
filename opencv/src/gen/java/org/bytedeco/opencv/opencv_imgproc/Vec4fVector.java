@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -24,7 +25,7 @@ public class Vec4fVector extends Pointer {
     public Vec4fVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef Vec4fVector put(@ByRef Vec4fVector x);
+    public native @Name("operator =") @ByRef Vec4fVector put(@ByRef Vec4fVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -42,9 +43,9 @@ public class Vec4fVector extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @Cast("cv::Vec4f*") @ByRef @Const Scalar4f get();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *") @Cast("cv::Vec4f*") @ByRef @Const Scalar4f get();
     }
 
     public Scalar4f[] get() {

@@ -8,6 +8,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -707,10 +708,10 @@ You need to set the OPENCV_ENABLE_NONFREE option in cmake to use those. Use them
 @param contrast resulting contrast on logarithmic scale, i. e. log(max / min), where max and min
 are maximum and minimum luminance values of the resulting image.
 @param saturation saturation enhancement value. See createTonemapDrago
-@param sigma_space bilateral filter sigma in color space
-@param sigma_color bilateral filter sigma in coordinate space
+@param sigma_color bilateral filter sigma in color space
+@param sigma_space bilateral filter sigma in coordinate space
  */
-@Namespace("cv::xphoto") public static native @Ptr TonemapDurand createTonemapDurand(float gamma/*=1.0f*/, float contrast/*=4.0f*/, float saturation/*=1.0f*/, float sigma_space/*=2.0f*/, float sigma_color/*=2.0f*/);
+@Namespace("cv::xphoto") public static native @Ptr TonemapDurand createTonemapDurand(float gamma/*=1.0f*/, float contrast/*=4.0f*/, float saturation/*=1.0f*/, float sigma_color/*=2.0f*/, float sigma_space/*=2.0f*/);
 @Namespace("cv::xphoto") public static native @Ptr TonemapDurand createTonemapDurand();
 
  // namespace

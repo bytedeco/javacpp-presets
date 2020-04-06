@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -45,9 +46,9 @@ public class MotionFilterBase extends IMotionStabilizer {
 
 
     public native @ByVal Mat stabilize(
-                int idx, @Const @ByRef MatVector motions, @ByVal IntIntPair range);
+                int idx, @Const @ByRef MatVector motions, @Const @ByRef Range range);
 
     public native void stabilize(
-                int size, @Const @ByRef MatVector motions, @ByVal IntIntPair range,
+                int size, @Const @ByRef MatVector motions, @Const @ByRef Range range,
                 Mat stabilizationMotions);
 }

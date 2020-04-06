@@ -40,14 +40,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudaobjdetect.hpp>",
-            link = "opencv_cudaobjdetect@.4.2",
-            preload = "opencv_cudalegacy@.4.2",
+            link = "opencv_cudaobjdetect@.4.3",
+            preload = "opencv_cudalegacy@.4.3",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudaobjdetect420",
-            preload = "opencv_cudalegacy420",
+            link = "opencv_cudaobjdetect430",
+            preload = "opencv_cudalegacy430",
             extension = "-gpu"
         )
     },
@@ -58,6 +58,7 @@ public class opencv_cudaobjdetect implements InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::cuda::CascadeClassifier").pointerTypes("CudaCascadeClassifier"));
+        infoMap.put(new Info("std::vector<double>").annotations("@Cast({\"double*\", \"std::vector<double>*\"}) @StdVector(\"double\")").pointerTypes("DoublePointer", "DoubleBuffer", "double[]"))
+               .put(new Info("cv::cuda::CascadeClassifier").pointerTypes("CudaCascadeClassifier"));
     }
 }

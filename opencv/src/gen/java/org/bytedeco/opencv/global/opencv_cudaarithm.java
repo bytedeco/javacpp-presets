@@ -8,6 +8,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -376,6 +377,13 @@ destination array to be changed. The mask can be used only with single channel i
 @Namespace("cv::cuda") public static native void rshift(@ByVal GpuMat src, @ByVal Scalar4i val, @ByVal GpuMat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void rshift(@ByVal GpuMat src, @ByVal Scalar4i val, @ByVal GpuMat dst);
 
+@Namespace("cv::cuda") public static native void rshift(@ByVal Mat src, @ByVal Scalar val, @ByVal Mat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void rshift(@ByVal Mat src, @ByVal Scalar val, @ByVal Mat dst);
+@Namespace("cv::cuda") public static native void rshift(@ByVal UMat src, @ByVal Scalar val, @ByVal UMat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void rshift(@ByVal UMat src, @ByVal Scalar val, @ByVal UMat dst);
+@Namespace("cv::cuda") public static native void rshift(@ByVal GpuMat src, @ByVal Scalar val, @ByVal GpuMat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void rshift(@ByVal GpuMat src, @ByVal Scalar val, @ByVal GpuMat dst);
+
 /** \brief Performs pixel by pixel right left of an image by a constant value.
 <p>
 @param src Source matrix. Supports 1, 3 and 4 channels images with CV_8U , CV_16U or CV_32S
@@ -390,6 +398,13 @@ depth.
 @Namespace("cv::cuda") public static native void lshift(@ByVal UMat src, @ByVal Scalar4i val, @ByVal UMat dst);
 @Namespace("cv::cuda") public static native void lshift(@ByVal GpuMat src, @ByVal Scalar4i val, @ByVal GpuMat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void lshift(@ByVal GpuMat src, @ByVal Scalar4i val, @ByVal GpuMat dst);
+
+@Namespace("cv::cuda") public static native void lshift(@ByVal Mat src, @ByVal Scalar val, @ByVal Mat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void lshift(@ByVal Mat src, @ByVal Scalar val, @ByVal Mat dst);
+@Namespace("cv::cuda") public static native void lshift(@ByVal UMat src, @ByVal Scalar val, @ByVal UMat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void lshift(@ByVal UMat src, @ByVal Scalar val, @ByVal UMat dst);
+@Namespace("cv::cuda") public static native void lshift(@ByVal GpuMat src, @ByVal Scalar val, @ByVal GpuMat dst, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void lshift(@ByVal GpuMat src, @ByVal Scalar val, @ByVal GpuMat dst);
 
 /** \brief Computes the per-element minimum of two matrices (or a matrix and a scalar).
 <p>

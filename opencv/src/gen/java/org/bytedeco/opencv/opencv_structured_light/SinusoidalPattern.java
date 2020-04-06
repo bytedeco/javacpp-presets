@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -149,67 +150,25 @@ public class SinusoidalPattern extends StructuredLightPattern {
      * @param camSize Resolution of the camera.
      * @param shadowMask Mask used to discard shadow regions.
      */
-    public native void unwrapPhaseMap( @ByVal MatVector wrappedPhaseMap,
+    public native void unwrapPhaseMap( @ByVal Mat wrappedPhaseMap,
                                      @ByVal Mat unwrappedPhaseMap,
                                      @ByVal Size camSize,
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat shadowMask );
-    public native void unwrapPhaseMap( @ByVal MatVector wrappedPhaseMap,
+    public native void unwrapPhaseMap( @ByVal Mat wrappedPhaseMap,
                                      @ByVal Mat unwrappedPhaseMap,
                                      @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal UMatVector wrappedPhaseMap,
-                                     @ByVal Mat unwrappedPhaseMap,
-                                     @ByVal Size camSize,
-                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat shadowMask );
-    public native void unwrapPhaseMap( @ByVal UMatVector wrappedPhaseMap,
-                                     @ByVal Mat unwrappedPhaseMap,
-                                     @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal GpuMatVector wrappedPhaseMap,
-                                     @ByVal Mat unwrappedPhaseMap,
-                                     @ByVal Size camSize,
-                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat shadowMask );
-    public native void unwrapPhaseMap( @ByVal GpuMatVector wrappedPhaseMap,
-                                     @ByVal Mat unwrappedPhaseMap,
-                                     @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal MatVector wrappedPhaseMap,
+    public native void unwrapPhaseMap( @ByVal UMat wrappedPhaseMap,
                                      @ByVal UMat unwrappedPhaseMap,
                                      @ByVal Size camSize,
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat shadowMask );
-    public native void unwrapPhaseMap( @ByVal MatVector wrappedPhaseMap,
+    public native void unwrapPhaseMap( @ByVal UMat wrappedPhaseMap,
                                      @ByVal UMat unwrappedPhaseMap,
                                      @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal UMatVector wrappedPhaseMap,
-                                     @ByVal UMat unwrappedPhaseMap,
-                                     @ByVal Size camSize,
-                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat shadowMask );
-    public native void unwrapPhaseMap( @ByVal UMatVector wrappedPhaseMap,
-                                     @ByVal UMat unwrappedPhaseMap,
-                                     @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal GpuMatVector wrappedPhaseMap,
-                                     @ByVal UMat unwrappedPhaseMap,
-                                     @ByVal Size camSize,
-                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat shadowMask );
-    public native void unwrapPhaseMap( @ByVal GpuMatVector wrappedPhaseMap,
-                                     @ByVal UMat unwrappedPhaseMap,
-                                     @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal MatVector wrappedPhaseMap,
+    public native void unwrapPhaseMap( @ByVal GpuMat wrappedPhaseMap,
                                      @ByVal GpuMat unwrappedPhaseMap,
                                      @ByVal Size camSize,
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat shadowMask );
-    public native void unwrapPhaseMap( @ByVal MatVector wrappedPhaseMap,
-                                     @ByVal GpuMat unwrappedPhaseMap,
-                                     @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal UMatVector wrappedPhaseMap,
-                                     @ByVal GpuMat unwrappedPhaseMap,
-                                     @ByVal Size camSize,
-                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat shadowMask );
-    public native void unwrapPhaseMap( @ByVal UMatVector wrappedPhaseMap,
-                                     @ByVal GpuMat unwrappedPhaseMap,
-                                     @ByVal Size camSize );
-    public native void unwrapPhaseMap( @ByVal GpuMatVector wrappedPhaseMap,
-                                     @ByVal GpuMat unwrappedPhaseMap,
-                                     @ByVal Size camSize,
-                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat shadowMask );
-    public native void unwrapPhaseMap( @ByVal GpuMatVector wrappedPhaseMap,
+    public native void unwrapPhaseMap( @ByVal GpuMat wrappedPhaseMap,
                                      @ByVal GpuMat unwrappedPhaseMap,
                                      @ByVal Size camSize );
     /**

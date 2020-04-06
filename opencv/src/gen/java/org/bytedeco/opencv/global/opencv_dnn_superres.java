@@ -8,6 +8,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -16,6 +17,10 @@ import org.bytedeco.opencv.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_ml.*;
+import static org.bytedeco.opencv.global.opencv_ml.*;
+import org.bytedeco.opencv.opencv_quality.*;
+import static org.bytedeco.opencv.global.opencv_quality.*;
 
 public class opencv_dnn_superres extends org.bytedeco.opencv.presets.opencv_dnn_superres {
     static { Loader.load(); }

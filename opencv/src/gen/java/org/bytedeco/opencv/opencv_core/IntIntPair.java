@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
@@ -19,7 +20,7 @@ public class IntIntPair extends Pointer {
     public IntIntPair(int firstValue, int secondValue) { this(); put(firstValue, secondValue); }
     public IntIntPair()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef IntIntPair put(@ByRef IntIntPair x);
+    public native @Name("operator =") @ByRef IntIntPair put(@ByRef IntIntPair x);
 
 
     @MemberGetter public native int first(); public native IntIntPair first(int first);

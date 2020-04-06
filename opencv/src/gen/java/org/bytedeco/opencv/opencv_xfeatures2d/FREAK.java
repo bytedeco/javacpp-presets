@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -29,6 +30,7 @@ import org.bytedeco.opencv.opencv_shape.*;
 import static org.bytedeco.opencv.global.opencv_shape.*;
 
 import static org.bytedeco.opencv.global.opencv_xfeatures2d.*;
+
 
 
 /** \addtogroup xfeatures2d_experiment

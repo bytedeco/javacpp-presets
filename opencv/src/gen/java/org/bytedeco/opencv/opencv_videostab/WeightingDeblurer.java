@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -55,5 +56,5 @@ public class WeightingDeblurer extends DeblurerBase {
     public native void setSensitivity(float val);
     public native float sensitivity();
 
-    public native void deblur(int idx, @ByRef Mat frame);
+    public native void deblur(int idx, @ByRef Mat frame, @Const @ByRef Range range);
 }

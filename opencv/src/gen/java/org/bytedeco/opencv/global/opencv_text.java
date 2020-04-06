@@ -9,6 +9,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
@@ -48,9 +49,6 @@ public class opencv_text extends org.bytedeco.opencv.presets.opencv_text {
 
 
 // Targeting ../opencv_text/DoubleVector.java
-
-
-// Targeting ../opencv_text/StdStringVector.java
 
 
 // Parsed from <opencv2/text.hpp>
@@ -847,9 +845,9 @@ at each window location.
  *    -   (C++) An alternative would be to load the default generic language transition table provided in the text module samples folder (created from ispell 42869 english words list) :
  *            <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/OCRHMM_transitions_table.xml>
  **/
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal UMat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal GpuMat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StringVector lexicon, @ByVal Mat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StringVector lexicon, @ByVal UMat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StringVector lexicon, @ByVal GpuMat transition_probabilities_table);
 
 @Namespace("cv::text") public static native @ByVal Mat createOCRHMMTransitionsTable(@Str BytePointer vocabulary, @ByRef StringVector lexicon);
 @Namespace("cv::text") public static native @ByVal Mat createOCRHMMTransitionsTable(@Str String vocabulary, @ByRef StringVector lexicon);
