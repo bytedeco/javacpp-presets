@@ -15,9 +15,6 @@ import static org.bytedeco.llvm.global.LLVM.*;
  *
  * If you set usePollyParallel, you may have to modify the file name of LLVMLoadLibraryPermanently().
  *
- * Warning: Because it does not optimize for AVX, etc, this code is slower than this:
- * clang -O3 -march=native -mllvm -polly -mllvm -polly-vectorizer=stripmine
- *
  * Note: Instead of JNA, to obtain maximum performance, FunctionPointer should be used as shown here:
  * https://github.com/bytedeco/javacpp/blob/master/src/test/java/org/bytedeco/javacpp/PointerTest.java
  *
@@ -29,6 +26,7 @@ public class MatMulBenchmark {
     static final boolean usePollyParallel = false;
     static final boolean printResult = false;
 
+    static final BytePointer cpu = LLVMGetHostCPUName();
     static LLVMTypeRef llvmVoidType;
     static LLVMTypeRef llvmInt32Type;
     static LLVMTypeRef llvmFloatType;
@@ -101,8 +99,8 @@ public class MatMulBenchmark {
         LLVMExecutionEngineRef engine = new LLVMExecutionEngineRef();
         try {
             LLVMModuleRef module = build();
-            optimize(module);
             verify(module, false);
+            optimize(module);
             jitCompile(engine, module);
 
             long fnAddr = LLVMGetFunctionAddress(engine, "matmul");
@@ -237,15 +235,14 @@ public class MatMulBenchmark {
     }
 
     static void optimize(LLVMModuleRef module) {
-        LLVMPassManagerBuilderRef pmb = LLVMPassManagerBuilderCreate();
-        LLVMPassManagerBuilderSetOptLevel(pmb, 3);
-        LLVMPassManagerRef pass = LLVMCreatePassManager();
-        LLVMPassManagerBuilderPopulateModulePassManager(pmb, pass);
-
-        LLVMRunPassManager(pass, module);
-
-        LLVMDisposePassManager(pass);
-        LLVMPassManagerBuilderDispose(pmb);
+        BytePointer error = new BytePointer((Pointer) null);
+        try {
+            if (JavaCPPLLVMOptimizeModule(module, cpu, 3, 0, error) != 0) {
+                throw new RuntimeException(error.getString());
+            }
+        } finally {
+            LLVMDisposeMessage(error);
+        }
     }
 
     static void verify(LLVMModuleRef module, boolean dumpModule) {
@@ -254,7 +251,7 @@ public class MatMulBenchmark {
             if (dumpModule) {
                 LLVMDumpModule(module);
             }
-            if (LLVMVerifyModule(module, LLVMAbortProcessAction, error) != 0) {
+            if (LLVMVerifyModule(module, LLVMPrintMessageAction, error) != 0) {
                 throw new RuntimeException(error.getString());
             }
         } finally {
@@ -265,7 +262,7 @@ public class MatMulBenchmark {
     static void jitCompile(LLVMExecutionEngineRef engine, LLVMModuleRef module) {
         BytePointer error = new BytePointer((Pointer) null);
         try {
-            if (LLVMCreateJITCompilerForModule(engine, module, 3, error) != 0) {
+            if (JavaCPPLLVMCreateOptimizedJITCompilerForModule(engine, module, cpu, 3, error) != 0) {
                 throw new RuntimeException(error.getString());
             }
         } finally {
