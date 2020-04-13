@@ -16,7 +16,7 @@ public class UseTypeIntPair extends Pointer {
     public UseTypeIntPair(int firstValue, int secondValue) { this(); put(firstValue, secondValue); }
     public UseTypeIntPair()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef UseTypeIntPair put(@ByRef UseTypeIntPair x);
+    public native @Name("operator =") @ByRef UseTypeIntPair put(@ByRef UseTypeIntPair x);
 
 
     @MemberGetter public native int first(); public native UseTypeIntPair first(int first);

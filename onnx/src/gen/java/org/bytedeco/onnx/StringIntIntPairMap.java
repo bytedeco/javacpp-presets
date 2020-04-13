@@ -15,7 +15,7 @@ public class StringIntIntPairMap extends Pointer {
     public StringIntIntPairMap(Pointer p) { super(p); }
     public StringIntIntPairMap()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef StringIntIntPairMap put(@ByRef StringIntIntPairMap x);
+    public native @Name("operator =") @ByRef StringIntIntPairMap put(@ByRef StringIntIntPairMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();

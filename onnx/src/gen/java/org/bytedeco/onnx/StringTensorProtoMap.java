@@ -15,7 +15,7 @@ public class StringTensorProtoMap extends Pointer {
     public StringTensorProtoMap(Pointer p) { super(p); }
     public StringTensorProtoMap()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef StringTensorProtoMap put(@ByRef StringTensorProtoMap x);
+    public native @Name("operator =") @ByRef StringTensorProtoMap put(@ByRef StringTensorProtoMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -29,10 +29,10 @@ public class StringTensorProtoMap extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @Const TensorProto second();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator *().second") @MemberGetter @Const TensorProto second();
     }
 }
 

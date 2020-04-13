@@ -36,6 +36,7 @@ import org.bytedeco.javacpp.Pointer;
         "onnx/defs/schema.h",
         "onnx/defs/operator_sets.h",
         "onnx/defs/operator_sets-ml.h",
+	"onnx/defs/operator_sets-training.h",
         "onnx/defs/data_type_utils.h",
         "onnx/defs/shape_inference.h",
         "onnx/onnx-operators-ml.pb.h",

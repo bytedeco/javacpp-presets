@@ -28,10 +28,10 @@ public class StringAttributeMap extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef @Const OpSchema.Attribute second();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator *().second") @MemberGetter @ByRef @Const OpSchema.Attribute second();
     }
 }
 

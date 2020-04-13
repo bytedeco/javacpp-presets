@@ -18,7 +18,7 @@ public class LongVector extends Pointer {
     public LongVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef LongVector put(@ByRef LongVector x);
+    public native @Name("operator =") @ByRef LongVector put(@ByRef LongVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -36,9 +36,9 @@ public class LongVector extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @Cast("int64_t") long get();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *") @Cast("int64_t") long get();
     }
 
     public long[] get() {

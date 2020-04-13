@@ -16,7 +16,7 @@ public class LongLongPair extends Pointer {
     public LongLongPair(long firstValue, long secondValue) { this(); put(firstValue, secondValue); }
     public LongLongPair()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef LongLongPair put(@ByRef LongLongPair x);
+    public native @Name("operator =") @ByRef LongLongPair put(@ByRef LongLongPair x);
 
 
     @MemberGetter public native @Cast("google::protobuf::uint64") long first(); public native LongLongPair first(long first);

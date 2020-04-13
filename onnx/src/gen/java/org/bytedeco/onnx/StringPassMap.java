@@ -15,7 +15,7 @@ public class StringPassMap extends Pointer {
     public StringPassMap(Pointer p) { super(p); }
     public StringPassMap()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef StringPassMap put(@ByRef StringPassMap x);
+    public native @Name("operator =") @ByRef StringPassMap put(@ByRef StringPassMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -29,10 +29,10 @@ public class StringPassMap extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @SharedPtr @Const Pass second();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator *().second") @MemberGetter @SharedPtr @Const Pass second();
     }
 }
 

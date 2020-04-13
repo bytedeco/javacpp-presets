@@ -28,9 +28,9 @@ public class TypeConstraintParamVector extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef @Const OpSchema.TypeConstraintParam get();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *") @ByRef @Const OpSchema.TypeConstraintParam get();
     }
 }
 

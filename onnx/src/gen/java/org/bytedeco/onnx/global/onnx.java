@@ -1160,6 +1160,9 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // Targeting ../SoftmaxCrossEntropyLoss_Onnx_ver12.java
 
 
+// Targeting ../Pow_Onnx_ver12.java
+
+
 // Targeting ../OpSet_Onnx_ver12.java
 
 
@@ -1248,6 +1251,35 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 
 // #endif
 
+
+// Parsed from onnx/defs/operator_sets-training.h
+
+// Copyright (c) ONNX Project Contributors.
+// Licensed under the MIT license.
+
+// #pragma once
+
+// #include "onnx/defs/schema.h"
+// Targeting ../Gradient_OnnxTraining_ver1.java
+
+
+// Targeting ../GraphCall_OnnxTraining_ver1.java
+
+
+// Targeting ../Momentum_OnnxTraining_ver1.java
+
+
+// Targeting ../Adagrad_OnnxTraining_ver1.java
+
+
+// Targeting ../OpSet_OnnxTraining_ver1.java
+
+
+
+// Register training operators.
+@Namespace("onnx") public static native void RegisterOnnxTrainingOperatorSetSchema();
+
+ // namespace ONNX_NAMESPACE
 
 // Parsed from onnx/defs/data_type_utils.h
 

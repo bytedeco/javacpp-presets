@@ -15,7 +15,7 @@ public class StringIntMap extends Pointer {
     public StringIntMap(Pointer p) { super(p); }
     public StringIntMap()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef StringIntMap put(@ByRef StringIntMap x);
+    public native @Name("operator =") @ByRef StringIntMap put(@ByRef StringIntMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -29,10 +29,10 @@ public class StringIntMap extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter int second();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator *().second") @MemberGetter int second();
     }
 }
 

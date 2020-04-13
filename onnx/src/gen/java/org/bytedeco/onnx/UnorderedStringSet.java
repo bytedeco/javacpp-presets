@@ -15,7 +15,7 @@ public class UnorderedStringSet extends Pointer {
     public UnorderedStringSet(Pointer p) { super(p); }
     public UnorderedStringSet()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef UnorderedStringSet put(@ByRef UnorderedStringSet x);
+    public native @Name("operator =") @ByRef UnorderedStringSet put(@ByRef UnorderedStringSet x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -28,9 +28,9 @@ public class UnorderedStringSet extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @StdString BytePointer get();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *") @StdString BytePointer get();
     }
 }
 

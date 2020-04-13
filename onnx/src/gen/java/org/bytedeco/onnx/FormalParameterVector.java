@@ -19,7 +19,7 @@ public class FormalParameterVector extends Pointer {
     public FormalParameterVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef FormalParameterVector put(@ByRef FormalParameterVector x);
+    public native @Name("operator =") @ByRef FormalParameterVector put(@ByRef FormalParameterVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -37,9 +37,9 @@ public class FormalParameterVector extends Pointer {
         public Iterator(Pointer p) { super(p); }
         public Iterator() { }
 
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef @Const OpSchema.FormalParameter get();
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *") @ByRef @Const OpSchema.FormalParameter get();
     }
 
     public OpSchema.FormalParameter[] get() {
