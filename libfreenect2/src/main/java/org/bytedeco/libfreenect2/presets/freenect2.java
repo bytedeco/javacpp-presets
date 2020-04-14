@@ -21,7 +21,6 @@
  */
 package org.bytedeco.libfreenect2.presets;
 
-import java.util.List;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -39,7 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<libfreenect2/frame_listener.hpp>", "<libfreenect2/frame_listener_impl.h>", "<libfreenect2/logger.h>",
                 "<libfreenect2/packet_pipeline.h>", "<libfreenect2/registration.h>", "<libfreenect2/config.h>"},
             link = "freenect2@.0.2"),
-    @Platform(value = "macosx-x86_64", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/") })
+    @Platform(value = "macosx-x86_64", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
+    @Platform(value = "windows-x86_64", preload = {"libusb-1.0", "glfw3", "turbojpeg", "freenect2-openni2"}) })
 public class freenect2 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "libfreenect2"); }
 

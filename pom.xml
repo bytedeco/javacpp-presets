@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5.3-SNAPSHOT</version>
+  <version>1.5.3</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -477,7 +477,7 @@
         <configuration>
           <serverId>sonatype-nexus-staging</serverId>
           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <skipLocalStaging>true</skipLocalStaging>
+<!--          <skipLocalStaging>true</skipLocalStaging> -->
           <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
         </configuration>
       </plugin>

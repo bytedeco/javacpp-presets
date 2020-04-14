@@ -24,27 +24,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.2</version>
+    <version>${moduleVersion}-1.5.3</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.2'
+    compile group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.3'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.2")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.3")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.2"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.3"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
@@ -102,7 +102,7 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.2  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.3  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
@@ -123,8 +123,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.2.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
- * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
- * DNNL 1.3.x  https://github.com/intel/mkl-dnn
+ * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 1.3.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.9  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -134,7 +134,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.18.x  https://github.com/numpy/numpy
  * SciPy 1.4.x  https://github.com/scipy/scipy
  * Gym 0.17.x  https://github.com/openai/gym
- * LLVM 9.0.x  http://llvm.org/releases/download.html
+ * LLVM 10.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.79.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
