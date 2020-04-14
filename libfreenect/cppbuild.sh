@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 LIBFREENECT_VERSION=0.5.7
-LIBUSB_VERSION=1.0.21
+LIBUSB_VERSION=1.0.22
 download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.tar.gz libfreenect-$LIBFREENECT_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 

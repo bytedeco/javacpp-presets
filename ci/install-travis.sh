@@ -205,7 +205,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
    echo "performing brew update and install of dependencies, please wait.."
    brew update
-   brew upgrade cmake maven
+   brew upgrade cmake
    brew install ccache swig autoconf-archive libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
 
    # Try to use ccache to speed up the build

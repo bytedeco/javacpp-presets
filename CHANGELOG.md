@@ -1,4 +1,5 @@
 
+### April 14, 2020 version 1.5.3
  * Add presets for the new `intensity_transform` and `rapid` modules of OpenCV
  * Add support for Polly optimizer to presets for LLVM ([pull #864](https://github.com/bytedeco/javacpp-presets/pull/864))
  * Fix loading issue with `opencv_dnn_superres` ([issue bytedeco/javacv#1396](https://github.com/bytedeco/javacv/issues/1396))
