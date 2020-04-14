@@ -1,0 +1,8 @@
+org.bytedeco.arrow
+org.bytedeco.arrow.global
+org.bytedeco.arrow.presets
+org.bytedeco.arrow_dataset
+org.bytedeco.arrow_flight
+org.bytedeco.gandiva
+org.bytedeco.parquet
+org.bytedeco.plasma

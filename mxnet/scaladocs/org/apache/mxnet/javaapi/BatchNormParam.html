@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BatchNormParam - JavaCPP Presets for MXNet 1.5.1-1.5.2 API - org.apache.mxnet.javaapi.BatchNormParam</title>
-          <meta name="description" content="BatchNormParam - JavaCPP Presets for MXNet 1.5.1 - 1.5.2 API - org.apache.mxnet.javaapi.BatchNormParam" />
-          <meta name="keywords" content="BatchNormParam JavaCPP Presets for MXNet 1.5.1 1.5.2 API org.apache.mxnet.javaapi.BatchNormParam" />
+          <title>BatchNormParam - JavaCPP Presets for MXNet 1.6.0-1.5.3 API - org.apache.mxnet.javaapi.BatchNormParam</title>
+          <meta name="description" content="BatchNormParam - JavaCPP Presets for MXNet 1.6.0 - 1.5.3 API - org.apache.mxnet.javaapi.BatchNormParam" />
+          <meta name="keywords" content="BatchNormParam JavaCPP Presets for MXNet 1.6.0 1.5.3 API org.apache.mxnet.javaapi.BatchNormParam" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -398,6 +398,40 @@
       </a>
     </span>
       
+    </li><li name="org.apache.mxnet.javaapi.BatchNormParam#getMax_calib_range" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getMax_calib_range():Float"></a>
+      <a id="getMax_calib_range():Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getMax_calib_range</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Float">Float</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.BatchNormParam@getMax_calib_range():Float" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.javaapi.BatchNormParam#getMin_calib_range" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getMin_calib_range():Float"></a>
+      <a id="getMin_calib_range():Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getMin_calib_range</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Float">Float</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.BatchNormParam@getMin_calib_range():Float" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.apache.mxnet.javaapi.BatchNormParam#getMomentum" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getMomentum():Float"></a>
       <a id="getMomentum():Float"></a>
@@ -653,6 +687,40 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">fix_gamma</dt><dd class="cmt"><p>Fix gamma while training</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.javaapi.BatchNormParam#setMax_calib_range" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setMax_calib_range(max_calib_range:Float):org.apache.mxnet.javaapi.BatchNormParam"></a>
+      <a id="setMax_calib_range(Float):BatchNormParam"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setMax_calib_range</span><span class="params">(<span name="max_calib_range">max_calib_range: <span class="extype" name="java.lang.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.javaapi.BatchNormParam">BatchNormParam</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.BatchNormParam@setMax_calib_range(max_calib_range:Float):org.apache.mxnet.javaapi.BatchNormParam" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">max_calib_range</dt><dd class="cmt"><p>The maximum scalar value in the form of float32 obtained through calibration. If present, it will be used to by quantized batch norm op to calculate primitive scale.Note: this calib_range is to calib bn output.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.javaapi.BatchNormParam#setMin_calib_range" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setMin_calib_range(min_calib_range:Float):org.apache.mxnet.javaapi.BatchNormParam"></a>
+      <a id="setMin_calib_range(Float):BatchNormParam"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setMin_calib_range</span><span class="params">(<span name="min_calib_range">min_calib_range: <span class="extype" name="java.lang.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.javaapi.BatchNormParam">BatchNormParam</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.BatchNormParam@setMin_calib_range(min_calib_range:Float):org.apache.mxnet.javaapi.BatchNormParam" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">min_calib_range</dt><dd class="cmt"><p>The minimum scalar value in the form of float32 obtained through calibration. If present, it will be used to by quantized batch norm op to calculate primitive scale.Note: this calib_range is to calib bn output.</p></dd></dl></div>
     </li><li name="org.apache.mxnet.javaapi.BatchNormParam#setMomentum" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setMomentum(momentum:Float):org.apache.mxnet.javaapi.BatchNormParam"></a>
       <a id="setMomentum(Float):BatchNormParam"></a>

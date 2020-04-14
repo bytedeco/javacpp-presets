@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>softmaxParam - JavaCPP Presets for MXNet 1.5.1-1.5.2 API - org.apache.mxnet.javaapi.softmaxParam</title>
-          <meta name="description" content="softmaxParam - JavaCPP Presets for MXNet 1.5.1 - 1.5.2 API - org.apache.mxnet.javaapi.softmaxParam" />
-          <meta name="keywords" content="softmaxParam JavaCPP Presets for MXNet 1.5.1 1.5.2 API org.apache.mxnet.javaapi.softmaxParam" />
+          <title>softmaxParam - JavaCPP Presets for MXNet 1.6.0-1.5.3 API - org.apache.mxnet.javaapi.softmaxParam</title>
+          <meta name="description" content="softmaxParam - JavaCPP Presets for MXNet 1.6.0 - 1.5.3 API - org.apache.mxnet.javaapi.softmaxParam" />
+          <meta name="keywords" content="softmaxParam JavaCPP Presets for MXNet 1.6.0 1.5.3 API org.apache.mxnet.javaapi.softmaxParam" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.apache.mxnet.javaapi.softmaxParam#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(data:org.apache.mxnet.javaapi.NDArray):org.apache.mxnet.javaapi.softmaxParam"></a>
+      <a id="&lt;init&gt;(data:org.apache.mxnet.javaapi.NDArray,length:org.apache.mxnet.javaapi.NDArray):org.apache.mxnet.javaapi.softmaxParam"></a>
       <a id="&lt;init&gt;:softmaxParam"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,14 +97,14 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">softmaxParam</span><span class="params">(<span name="data">data: <a href="NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">NDArray</a></span>)</span>
+        <span class="name">softmaxParam</span><span class="params">(<span name="data">data: <a href="NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">NDArray</a></span>, <span name="length">length: <a href="NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">NDArray</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.apache.mxnet.javaapi.softmaxParam@&lt;init&gt;(data:org.apache.mxnet.javaapi.NDArray):org.apache.mxnet.javaapi.softmaxParam" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.softmaxParam@&lt;init&gt;(data:org.apache.mxnet.javaapi.NDArray,length:org.apache.mxnet.javaapi.NDArray):org.apache.mxnet.javaapi.softmaxParam" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The input array.</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The input array.</p></dd><dt class="param">length</dt><dd class="cmt"><p>The length array.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -330,6 +330,23 @@
       </a>
     </span>
       
+    </li><li name="org.apache.mxnet.javaapi.softmaxParam#getLength" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getLength():org.apache.mxnet.javaapi.NDArray"></a>
+      <a id="getLength():NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getLength</span><span class="params">()</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.softmaxParam@getLength():org.apache.mxnet.javaapi.NDArray" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.apache.mxnet.javaapi.softmaxParam#getOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getOut():org.apache.mxnet.NDArray"></a>
       <a id="getOut():mxnet.NDArray"></a>
@@ -360,6 +377,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#org.apache.mxnet.javaapi.softmaxParam@getTemperature():Double" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.javaapi.softmaxParam#getUse_length" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getUse_length():Boolean"></a>
+      <a id="getUse_length():Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getUse_length</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.softmaxParam@getUse_length():Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -517,6 +551,23 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">temperature</dt><dd class="cmt"><p>Temperature parameter in softmax</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.javaapi.softmaxParam#setUse_length" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setUse_length(use_length:Boolean):org.apache.mxnet.javaapi.softmaxParam"></a>
+      <a id="setUse_length(Boolean):softmaxParam"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setUse_length</span><span class="params">(<span name="use_length">use_length: <span class="extype" name="java.lang.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.javaapi.softmaxParam">softmaxParam</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.javaapi.softmaxParam@setUse_length(use_length:Boolean):org.apache.mxnet.javaapi.softmaxParam" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">use_length</dt><dd class="cmt"><p>Whether to use the length input as a mask over the data input.</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

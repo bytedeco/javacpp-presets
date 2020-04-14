@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>NDArray - JavaCPP Presets for MXNet 1.5.1-1.5.2 API - org.apache.mxnet.NDArray</title>
-          <meta name="description" content="NDArray - JavaCPP Presets for MXNet 1.5.1 - 1.5.2 API - org.apache.mxnet.NDArray" />
-          <meta name="keywords" content="NDArray JavaCPP Presets for MXNet 1.5.1 1.5.2 API org.apache.mxnet.NDArray" />
+          <title>NDArray - JavaCPP Presets for MXNet 1.6.0-1.5.3 API - org.apache.mxnet.NDArray</title>
+          <meta name="description" content="NDArray - JavaCPP Presets for MXNet 1.6.0 - 1.5.3 API - org.apache.mxnet.NDArray" />
+          <meta name="keywords" content="NDArray JavaCPP Presets for MXNet 1.6.0 1.5.3 API org.apache.mxnet.NDArray" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -62,7 +62,10 @@ by calling dispose manually. Failure to do this will result in leaking native me
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="org.apache.mxnet.NativeResource">NativeResource</span>, <a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a>, <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="SparseNDArray.html" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -1166,6 +1169,23 @@ Note that a, b's dependencies will not be disposed either.</p></div><dl class="p
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#isSparse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSparse:Boolean"></a>
+      <a id="isSparse:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSparse</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@isSparse:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">check if NDArray is SparseNDArray</p><div class="fullcomment"><div class="comment cmt"><p>check if NDArray is SparseNDArray</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>Boolean</p></dd></dl></div>
     </li><li name="org.apache.mxnet.WarnIfNotDisposed#logDisposeWarning" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logDisposeWarning():Unit"></a>
       <a id="logDisposeWarning():Unit"></a>
@@ -1534,6 +1554,23 @@ ResourceScope if used inside ResourceScope.</p></div><dl class="paramcmts block"
       <p class="shortcomment cmt">Return a sliced NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a sliced NDArray that shares memory with current one.
 NDArray only support continuous slicing on axis 0
 </p></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting index of slice.</p></dd><dt class="param">stop</dt><dd class="cmt"><p>Finishing index of slice.</p></dd><dt>returns</dt><dd class="cmt"><p>a sliced NDArray that shares memory with current one.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#sparseFormat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sparseFormat:org.apache.mxnet.SparseFormat.SparseFormat"></a>
+      <a id="sparseFormat:SparseFormat.SparseFormat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sparseFormat</span><span class="result">: <a href="SparseFormat$.html#SparseFormat=org.apache.mxnet.SparseFormat.Value" class="extmbr" name="org.apache.mxnet.SparseFormat.SparseFormat">SparseFormat.SparseFormat</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@sparseFormat:org.apache.mxnet.SparseFormat.SparseFormat" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -1621,6 +1658,25 @@ NDArray only support continuous slicing on axis 0
       <p class="shortcomment cmt">Return a CPU scalar(float) of current ndarray.</p><div class="fullcomment"><div class="comment cmt"><p>Return a CPU scalar(float) of current ndarray.
 This ndarray must have shape (1,)
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The scalar representation of the ndarray.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#toSparse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toSparse(sfOption:Option[org.apache.mxnet.SparseFormat.SparseFormat]):org.apache.mxnet.SparseNDArray"></a>
+      <a id="toSparse(Option[SparseFormat.SparseFormat]):SparseNDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toSparse</span><span class="params">(<span name="sfOption">sfOption: <span class="extype" name="scala.Option">Option</span>[<a href="SparseFormat$.html#SparseFormat=org.apache.mxnet.SparseFormat.Value" class="extmbr" name="org.apache.mxnet.SparseFormat.SparseFormat">SparseFormat.SparseFormat</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="SparseNDArray.html" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@toSparse(sfOption:Option[org.apache.mxnet.SparseFormat.SparseFormat]):org.apache.mxnet.SparseNDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert a NDArray to SparseNDArray
+</p><div class="fullcomment"><div class="comment cmt"><p>Convert a NDArray to SparseNDArray
+</p></div><dl class="paramcmts block"><dt class="param">sfOption</dt><dd class="cmt"><p>the target sparse type</p></dd><dt>returns</dt><dd class="cmt"><p>SparseNDArray</p></dd></dl></div>
     </li><li name="org.apache.mxnet.NDArray#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

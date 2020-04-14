@@ -1,0 +1,1914 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>SparseNDArray - JavaCPP Presets for MXNet 1.6.0-1.5.3 API - org.apache.mxnet.SparseNDArray</title>
+          <meta name="description" content="SparseNDArray - JavaCPP Presets for MXNet 1.6.0 - 1.5.3 API - org.apache.mxnet.SparseNDArray" />
+          <meta name="keywords" content="SparseNDArray JavaCPP Presets for MXNet 1.6.0 1.5.3 API org.apache.mxnet.SparseNDArray" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.apache.mxnet.SparseNDArray';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="SparseNDArray$.html" title="See companion object"><img alt="Class/Object" src="../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.apache">apache</a>.<a href="package.html" class="extype" name="org.apache.mxnet">mxnet</a></p>
+        <h1><a href="SparseNDArray$.html" title="See companion object">SparseNDArray</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="SparseNDArray$.html" title="See companion object">object SparseNDArray</a>
+            | <a href="package.html" class="extype" name="org.apache.mxnet">package mxnet</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SparseNDArray</span><span class="result"> extends <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Sparse NDArray is the child class of NDArray designed to hold the Sparse format</p><p> Currently, Rowsparse and CSR typed NDArray is supported. Most of the Operators
+will convert Sparse NDArray to dense. Basic operators like <code>add</code> will
+have optimization for sparse operattions</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>, <span class="extype" name="org.apache.mxnet.NativeResource">NativeResource</span>, <a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a>, <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.apache.mxnet.SparseNDArray"><span>SparseNDArray</span></li><li class="in" name="org.apache.mxnet.NDArray"><span>NDArray</span></li><li class="in" name="org.apache.mxnet.NativeResource"><span>NativeResource</span></li><li class="in" name="org.apache.mxnet.WarnIfNotDisposed"><span>WarnIfNotDisposed</span></li><li class="in" name="java.lang.AutoCloseable"><span>AutoCloseable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#%" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="%(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="%(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $percent" class="name">%</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@%(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#%" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="%(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="%(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $percent" class="name">%</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@%(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#%=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="%=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="%=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $percent$eq" class="name">%=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@%=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#%=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="%=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="%=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $percent$eq" class="name">%=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@%=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="*(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@*(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="*(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@*(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#**" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="**(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="**(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times$times" class="name">**</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@**(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#**" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="**(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="**(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times$times" class="name">**</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@**(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#**=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="**=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="**=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times$times$eq" class="name">**=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@**=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#**=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="**=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="**=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times$times$eq" class="name">**=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@**=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#*=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="*=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times$eq" class="name">*=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@*=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#*=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="*=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times$eq" class="name">*=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@*=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="+(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@+(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="+(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@+(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#+=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="+=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$eq" class="name">+=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@+=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#+=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="+=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$eq" class="name">+=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@+=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#-" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="-(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="-(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@-(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#-" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="-(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="-(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@-(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#-=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="-=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="-=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus$eq" class="name">-=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@-=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#-=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="-=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="-=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus$eq" class="name">-=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@-=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#/" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="/(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="/(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@/(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#/" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="/(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="/(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@/(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#/=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="/=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="/=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div$eq" class="name">/=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@/=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#/=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="/=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="/=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div$eq" class="name">/=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@/=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&lt;(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less" class="name">&lt;</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&lt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="&lt;(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less" class="name">&lt;</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&lt;(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&lt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&lt;=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$eq" class="name">&lt;=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&lt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&lt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="&lt;=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$eq" class="name">&lt;=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&lt;=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&gt;(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&gt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="&gt;(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&gt;(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&gt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&gt;=(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater$eq" class="name">&gt;=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&gt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#&gt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="&gt;=(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater$eq" class="name">&gt;=</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@&gt;=(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#T" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="T:org.apache.mxnet.NDArray"></a>
+      <a id="T:NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">T</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@T:org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#asInContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInContext(context:org.apache.mxnet.Context):org.apache.mxnet.NDArray"></a>
+      <a id="asInContext(Context):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInContext</span><span class="params">(<span name="context">context: <a href="Context.html" class="extype" name="org.apache.mxnet.Context">Context</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@asInContext(context:org.apache.mxnet.Context):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return an <code>NDArray</code> that lives in the target context.</p><div class="fullcomment"><div class="comment cmt"><p>Return an <code>NDArray</code> that lives in the target context. If the array
+is already in that context, <code>self</code> is returned. Otherwise, a copy is made.</p></div><dl class="paramcmts block"><dt class="param">context</dt><dd class="cmt"><p>The target context we want the return value to live in.</p></dd><dt>returns</dt><dd class="cmt"><p>A copy or <code>self</code> as an <code>NDArray</code> that lives in the target context.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#asType" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asType(dtype:org.apache.mxnet.DType.DType):org.apache.mxnet.NDArray"></a>
+      <a id="asType(DType.DType):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asType</span><span class="params">(<span name="dtype">dtype: <a href="DType$.html#DType=org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType.DType">DType.DType</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@asType(dtype:org.apache.mxnet.DType.DType):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a copied numpy array of current array with specified type.</p><div class="fullcomment"><div class="comment cmt"><p>Return a copied numpy array of current array with specified type.</p></div><dl class="paramcmts block"><dt class="param">dtype</dt><dd class="cmt"><p>Desired type of result array.</p></dd><dt>returns</dt><dd class="cmt"><p>A copy of array content.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#at" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="at(idx:Int):org.apache.mxnet.NDArray"></a>
+      <a id="at(Int):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">at</span><span class="params">(<span name="idx">idx: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@at(idx:Int):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a sub NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a sub NDArray that shares memory with current one.
+the first axis will be rolled up, which causes its shape different from slice(i, i+1)</p></div><dl class="paramcmts block"><dt class="param">idx</dt><dd class="cmt"><p>index of sub array.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a> → <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#bytesAllocated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bytesAllocated:Long"></a>
+      <a id="bytesAllocated:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bytesAllocated</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@bytesAllocated:Long" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Off-Heap Bytes Allocated for this object
+</p><div class="fullcomment"><div class="comment cmt"><p>Off-Heap Bytes Allocated for this object
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → NativeResource</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.NativeResource#close" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="close():Unit"></a>
+      <a id="close():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">close</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@close():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NativeResource → AutoCloseable</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#context" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="context:org.apache.mxnet.Context"></a>
+      <a id="context:Context"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">context</span><span class="result">: <a href="Context.html" class="extype" name="org.apache.mxnet.Context">Context</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@context:org.apache.mxnet.Context" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get context of current NDArray.</p><div class="fullcomment"><div class="comment cmt"><p>Get context of current NDArray.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The context of current NDArray.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#copy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copy():org.apache.mxnet.NDArray"></a>
+      <a id="copy():NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copy</span><span class="params">()</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@copy():org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Clone the current array</p><div class="fullcomment"><div class="comment cmt"><p>Clone the current array</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the copied NDArray in the same context</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#copyTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copyTo(ctx:org.apache.mxnet.Context):org.apache.mxnet.NDArray"></a>
+      <a id="copyTo(Context):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copyTo</span><span class="params">(<span name="ctx">ctx: <a href="Context.html" class="extype" name="org.apache.mxnet.Context">Context</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@copyTo(ctx:org.apache.mxnet.Context):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Copy the content of current array to a new NDArray in the context.</p><div class="fullcomment"><div class="comment cmt"><p>Copy the content of current array to a new NDArray in the context.
+</p></div><dl class="paramcmts block"><dt class="param">ctx</dt><dd class="cmt"><p>Target context we want to copy data to.</p></dd><dt>returns</dt><dd class="cmt"><p>The copy target NDArray</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#copyTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copyTo(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="copyTo(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copyTo</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@copyTo(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Copy the content of current array to other.</p><div class="fullcomment"><div class="comment cmt"><p>Copy the content of current array to other.
+</p></div><dl class="paramcmts block"><dt class="param">other</dt><dd class="cmt"><p>Target NDArray or context we want to copy data to.</p></dd><dt>returns</dt><dd class="cmt"><p>The copy target NDArray</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#creationTrace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="creationTrace:Option[Array[StackTraceElement]]"></a>
+      <a id="creationTrace:Option[Array[StackTraceElement]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">creationTrace</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@creationTrace:Option[Array[StackTraceElement]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#dispose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dispose():Unit"></a>
+      <a id="dispose():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dispose</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@dispose():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Release the native memory.</p><div class="fullcomment"><div class="comment cmt"><p>Release the native memory. <br />
+The NDArrays it depends on will NOT be disposed. <br />
+The object shall never be used after it is disposed.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#disposeDeps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="disposeDeps():org.apache.mxnet.NDArray"></a>
+      <a id="disposeDeps():NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">disposeDeps</span><span class="params">()</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@disposeDeps():org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Dispose all NDArrays who help to construct this array.</p><div class="fullcomment"><div class="comment cmt"><p>Dispose all NDArrays who help to construct this array. <br />
+e.g. (a * b + c).disposeDeps() will dispose a, b, c (including their deps) and a * b</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>this NDArray</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#disposeDepsExcept" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="disposeDepsExcept(arrs:org.apache.mxnet.NDArray*):org.apache.mxnet.NDArray"></a>
+      <a id="disposeDepsExcept(NDArray*):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">disposeDepsExcept</span><span class="params">(<span name="arrs">arrs: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>*</span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@disposeDepsExcept(arrs:org.apache.mxnet.NDArray*):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Dispose all NDArrays who help to construct this array, excepts those in the arguments.</p><div class="fullcomment"><div class="comment cmt"><p>Dispose all NDArrays who help to construct this array, excepts those in the arguments. <br />
+e.g. (a * b + c).disposeDepsExcept(a, b)
+will dispose c and a * b.
+Note that a, b's dependencies will not be disposed either.</p></div><dl class="paramcmts block"><dt class="param">arrs</dt><dd class="cmt"><p>array of NDArrays</p></dd><dt>returns</dt><dd class="cmt"><p>this array</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#dtype" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dtype:org.apache.mxnet.DType.DType"></a>
+      <a id="dtype:DType.DType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dtype</span><span class="result">: <a href="DType$.html#DType=org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType.DType">DType.DType</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@dtype:org.apache.mxnet.DType.DType" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get data type of current NDArray.</p><div class="fullcomment"><div class="comment cmt"><p>Get data type of current NDArray.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>class representing type of current ndarray</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(o:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="o">o: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@equals(o:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a> → AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#getData" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getData:org.apache.mxnet.NDArray"></a>
+      <a id="getData:NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getData</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@getData:org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get the Data portion from a Row Sparse NDArray</p><div class="fullcomment"><div class="comment cmt"><p>Get the Data portion from a Row Sparse NDArray</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>NDArray</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#getIndices" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getIndices:org.apache.mxnet.NDArray"></a>
+      <a id="getIndices:NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getIndices</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@getIndices:org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get the indice Array</p><div class="fullcomment"><div class="comment cmt"><p>Get the indice Array</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>NDArray</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#getIndptr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getIndptr:org.apache.mxnet.NDArray"></a>
+      <a id="getIndptr:NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getIndptr</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@getIndptr:org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get the indptr Array from a CSR NDArray</p><div class="fullcomment"><div class="comment cmt"><p>Get the indptr Array from a CSR NDArray</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>NDArray</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#internal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="internal:org.apache.mxnet.NDArrayInternal"></a>
+      <a id="internal:NDArrayInternal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">internal</span><span class="result">: <span class="extype" name="org.apache.mxnet.NDArrayInternal">NDArrayInternal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@internal:org.apache.mxnet.NDArrayInternal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NativeResource#isDisposed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDisposed:Boolean"></a>
+      <a id="isDisposed:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDisposed</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@isDisposed:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NativeResource → <a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#isSparse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSparse:Boolean"></a>
+      <a id="isSparse:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSparse</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@isSparse:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">check if NDArray is SparseNDArray</p><div class="fullcomment"><div class="comment cmt"><p>check if NDArray is SparseNDArray</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>Boolean</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#logDisposeWarning" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logDisposeWarning():Unit"></a>
+      <a id="logDisposeWarning():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logDisposeWarning</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@logDisposeWarning():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#nativeAddress" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nativeAddress:org.apache.mxnet.Base.CPtrAddress"></a>
+      <a id="nativeAddress:CPtrAddress"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nativeAddress</span><span class="result">: <span class="extype" name="org.apache.mxnet.Base.CPtrAddress">CPtrAddress</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@nativeAddress:org.apache.mxnet.Base.CPtrAddress" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">native Address associated with this object
+</p><div class="fullcomment"><div class="comment cmt"><p>native Address associated with this object
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#nativeDeAllocator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nativeDeAllocator:org.apache.mxnet.Base.CPtrAddress=&gt;Int"></a>
+      <a id="nativeDeAllocator:(CPtrAddress)⇒Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nativeDeAllocator</span><span class="result">: (<span class="extype" name="org.apache.mxnet.Base.CPtrAddress">CPtrAddress</span>) ⇒ <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@nativeDeAllocator:org.apache.mxnet.Base.CPtrAddress=&gt;Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Function Pointer to the NativeDeAllocator of nativeAddress
+</p><div class="fullcomment"><div class="comment cmt"><p>Function Pointer to the NativeDeAllocator of nativeAddress
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → NativeResource</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#ref" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ref:org.apache.mxnet.NativeResourceRef"></a>
+      <a id="ref:NativeResourceRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ref</span><span class="result">: <span class="extype" name="org.apache.mxnet.NativeResourceRef">NativeResourceRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@ref:org.apache.mxnet.NativeResourceRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Call NativeResource.register to get the reference
+</p><div class="fullcomment"><div class="comment cmt"><p>Call NativeResource.register to get the reference
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.NativeResource#register" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="register():org.apache.mxnet.NativeResourceRef"></a>
+      <a id="register():NativeResourceRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">register</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.mxnet.NativeResourceRef">NativeResourceRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@register():org.apache.mxnet.NativeResourceRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Register this object for PhantomReference tracking and in
+ResourceScope if used inside ResourceScope.</p><div class="fullcomment"><div class="comment cmt"><p>Register this object for PhantomReference tracking and in
+ResourceScope if used inside ResourceScope.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>NativeResourceRef that tracks reachability of this object
+        using PhantomReference</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#reshape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reshape(dims:org.apache.mxnet.Shape):org.apache.mxnet.NDArray"></a>
+      <a id="reshape(Shape):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reshape</span><span class="params">(<span name="dims">dims: <a href="Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@reshape(dims:org.apache.mxnet.Shape):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a reshaped NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a reshaped NDArray that shares memory with current one.</p></div><dl class="paramcmts block"><dt class="param">dims</dt><dd class="cmt"><p>New shape.</p></dd><dt>returns</dt><dd class="cmt"><p>a reshaped NDArray that shares memory with current one.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#reshape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reshape(dims:Array[Long],reverse:Option[Boolean]):org.apache.mxnet.NDArray"></a>
+      <a id="reshape(Array[Long],Option[Boolean]):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reshape</span><span class="params">(<span name="dims">dims: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Long">Long</span>]</span>, <span name="reverse">reverse: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@reshape(dims:Array[Long],reverse:Option[Boolean]):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a reshaped NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a reshaped NDArray that shares memory with current one.</p></div><dl class="paramcmts block"><dt class="param">dims</dt><dd class="cmt"><p>New shape.</p></dd><dt class="param">reverse</dt><dd class="cmt"><p>whether to inplace reshape</p></dd><dt>returns</dt><dd class="cmt"><p>a reshaped NDArray that shares memory with current one.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#reshape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reshape(dims:Array[Int]):org.apache.mxnet.NDArray"></a>
+      <a id="reshape(Array[Int]):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reshape</span><span class="params">(<span name="dims">dims: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@reshape(dims:Array[Int]):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a reshaped NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a reshaped NDArray that shares memory with current one.</p></div><dl class="paramcmts block"><dt class="param">dims</dt><dd class="cmt"><p>New shape.</p></dd><dt>returns</dt><dd class="cmt"><p>a reshaped NDArray that shares memory with current one.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#serialize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="serialize():Array[Byte]"></a>
+      <a id="serialize():Array[Byte]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">serialize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@serialize():Array[Byte]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set(other:Array[Double]):org.apache.mxnet.NDArray"></a>
+      <a id="set(Array[Double]):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@set(other:Array[Double]):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set(other:Array[Float]):org.apache.mxnet.NDArray"></a>
+      <a id="set(Array[Float]):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@set(other:Array[Float]):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray"></a>
+      <a id="set(NDArray):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="params">(<span name="other">other: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@set(other:org.apache.mxnet.NDArray):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set(value:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="set(MX_PRIMITIVE_TYPE):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="params">(<span name="value">value: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@set(value:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Set the values of the NDArray</p><div class="fullcomment"><div class="comment cmt"><p>Set the values of the NDArray</p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>Value to set</p></dd><dt>returns</dt><dd class="cmt"><p>Current NDArray</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#shape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="shape:org.apache.mxnet.Shape"></a>
+      <a id="shape:Shape"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">shape</span><span class="result">: <a href="Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@shape:org.apache.mxnet.Shape" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get shape of current NDArray.</p><div class="fullcomment"><div class="comment cmt"><p>Get shape of current NDArray.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an array representing shape of current ndarray</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#size" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="size:Int"></a>
+      <a id="size:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">size</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@size:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="slice(start:Int,end:Int):org.apache.mxnet.NDArray"></a>
+      <a id="slice(Int,Int):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">slice</span><span class="params">(<span name="start">start: <span class="extype" name="scala.Int">Int</span></span>, <span name="end">end: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@slice(start:Int,end:Int):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a sliced NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a sliced NDArray that shares memory with current one.
+NDArray only support continuous slicing on axis 0
+</p></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting index of slice.</p></dd><dt>returns</dt><dd class="cmt"><p>a sliced NDArray that shares memory with current one.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a> → <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="slice(i:Int):org.apache.mxnet.NDArray"></a>
+      <a id="slice(Int):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">slice</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@slice(i:Int):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a sliced NDArray at the ith position of axis0</p><div class="fullcomment"><div class="comment cmt"><p>Return a sliced NDArray at the ith position of axis0</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a sliced NDArray that shares memory with current one.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="slice(range:(Int,Int)):org.apache.mxnet.NDArray"></a>
+      <a id="slice((Int,Int)):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">slice</span><span class="params">(<span name="range">range: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)</span>)</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@slice(range:(Int,Int)):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#sparseFormat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sparseFormat:org.apache.mxnet.SparseFormat.SparseFormat"></a>
+      <a id="sparseFormat:SparseFormat.SparseFormat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sparseFormat</span><span class="result">: <a href="SparseFormat$.html#SparseFormat=org.apache.mxnet.SparseFormat.Value" class="extmbr" name="org.apache.mxnet.SparseFormat.SparseFormat">SparseFormat.SparseFormat</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@sparseFormat:org.apache.mxnet.SparseFormat.SparseFormat" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#toArray" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toArray:Array[Float]"></a>
+      <a id="toArray:Array[Float]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toArray</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Float">Float</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@toArray:Array[Float]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a copied flat java array of current array (row-major).</p><div class="fullcomment"><div class="comment cmt"><p>Return a copied flat java array of current array (row-major).</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>A copy of array content.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a> → <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#toDense" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toDense:org.apache.mxnet.NDArray"></a>
+      <a id="toDense:NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toDense</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@toDense:org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert a SparseNDArray to dense NDArray</p><div class="fullcomment"><div class="comment cmt"><p>Convert a SparseNDArray to dense NDArray</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>NDArray</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#toFloat64Array" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFloat64Array:Array[Double]"></a>
+      <a id="toFloat64Array:Array[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFloat64Array</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@toFloat64Array:Array[Double]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a copied flat java array of current array (row-major) with datatype as Float64/Double.</p><div class="fullcomment"><div class="comment cmt"><p>Return a copied flat java array of current array (row-major) with datatype as Float64/Double.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>A copy of array content.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#toFloat64Scalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFloat64Scalar:Double"></a>
+      <a id="toFloat64Scalar:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFloat64Scalar</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@toFloat64Scalar:Double" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#toScalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toScalar:Float"></a>
+      <a id="toScalar:Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toScalar</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@toScalar:Float" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a CPU scalar(float) of current ndarray.</p><div class="fullcomment"><div class="comment cmt"><p>Return a CPU scalar(float) of current ndarray.
+This ndarray must have shape (1,)
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The scalar representation of the ndarray.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#toSparse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toSparse(sfOption:Option[org.apache.mxnet.SparseFormat.SparseFormat]):org.apache.mxnet.SparseNDArray"></a>
+      <a id="toSparse(Option[SparseFormat.SparseFormat]):SparseNDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toSparse</span><span class="params">(<span name="sfOption">sfOption: <span class="extype" name="scala.Option">Option</span>[<a href="SparseFormat$.html#SparseFormat=org.apache.mxnet.SparseFormat.Value" class="extmbr" name="org.apache.mxnet.SparseFormat.SparseFormat">SparseFormat.SparseFormat</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@toSparse(sfOption:Option[org.apache.mxnet.SparseFormat.SparseFormat]):org.apache.mxnet.SparseNDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert a NDArray to SparseNDArray
+</p><div class="fullcomment"><div class="comment cmt"><p>Convert a NDArray to SparseNDArray
+</p></div><dl class="paramcmts block"><dt class="param">sfOption</dt><dd class="cmt"><p>the target sparse type</p></dd><dt>returns</dt><dd class="cmt"><p>SparseNDArray</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Visualize the internal structure of NDArray</p><div class="fullcomment"><div class="comment cmt"><p>Visualize the internal structure of NDArray</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>String that show the structure</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a> → <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#tracingEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tracingEnabled:Boolean"></a>
+      <a id="tracingEnabled:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tracingEnabled</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@tracingEnabled:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#unary_-" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unary_-():org.apache.mxnet.NDArray"></a>
+      <a id="unary_-():NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: unary_$minus" class="name">unary_-</span><span class="params">()</span><span class="result">: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@unary_-():org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#waitToRead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="waitToRead():Unit"></a>
+      <a id="waitToRead():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">waitToRead</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@waitToRead():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Block until all pending writes operations on current NDArray are finished.</p><div class="fullcomment"><div class="comment cmt"><p>Block until all pending writes operations on current NDArray are finished.
+This function will return when all the pending writes to the current
+NDArray finishes. There can still be pending read going on when the
+function returns.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.SparseNDArray#writable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="writable:Boolean"></a>
+      <a id="writable:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writable</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.SparseNDArray@writable:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">whether the NDArray is writable</p><div class="fullcomment"><div class="comment cmt"><p>whether the NDArray is writable</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.SparseNDArray">SparseNDArray</a> → <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.apache.mxnet.NDArray">
+              <h3>Inherited from <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></h3>
+            </div><div class="parent" name="org.apache.mxnet.NativeResource">
+              <h3>Inherited from <span class="extype" name="org.apache.mxnet.NativeResource">NativeResource</span></h3>
+            </div><div class="parent" name="org.apache.mxnet.WarnIfNotDisposed">
+              <h3>Inherited from <a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></h3>
+            </div><div class="parent" name="java.lang.AutoCloseable">
+              <h3>Inherited from <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

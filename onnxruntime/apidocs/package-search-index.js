@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"org.bytedeco.onnxruntime"},{"l":"org.bytedeco.onnxruntime.global"},{"l":"org.bytedeco.onnxruntime.presets"}]
