@@ -74,7 +74,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "curand", "cudnn"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-arm64":
