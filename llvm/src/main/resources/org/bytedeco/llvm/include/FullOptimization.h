@@ -20,8 +20,8 @@
  * limitations under the License.
  */
 
-#ifndef JAVACPP_LLVM_HELPER_H
-#define JAVACPP_LLVM_HELPER_H
+#ifndef FULL_OPTIMIZATION_H
+#define FULL_OPTIMIZATION_H
 
 #include "llvm/ExecutionEngine/ExecutionEngine.h"
 #include "llvm/Target/TargetMachine.h"
@@ -40,21 +40,16 @@
 
 using namespace llvm;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * This function does the standard LLVM optimization.
  * This function is based on main() of llvm/tools/opt/opt.cpp.
  * Use LLVMGetHostCPUName() for the cpu argument.
  */
-LLVMBool JavaCPPLLVMOptimizeModule(
+void optimizeModule(
     LLVMModuleRef moduleRef,
     const char* cpu,
     unsigned optLevel,
-    unsigned sizeLevel,
-    char** outError
+    unsigned sizeLevel
 ) {
     Module *module = unwrap(moduleRef);
 
@@ -65,8 +60,7 @@ LLVMBool JavaCPPLLVMOptimizeModule(
         .setErrorStr(&error)
         .selectTarget();
     if (machine == nullptr) {
-        *outError = strdup(error.c_str());
-        return 1;
+        throw std::runtime_error(error);
     }
 
     module->setTargetTriple(machine->getTargetTriple().str());
@@ -104,20 +98,17 @@ LLVMBool JavaCPPLLVMOptimizeModule(
 
     passes.add(createVerifierPass());
     passes.run(*module);
-
-    return 0;
 }
 
 /**
  * This function is similar to LLVMCreateJITCompilerForModule() but does CPU specific optimization.
  * Use LLVMGetHostCPUName() for the cpu argument.
  */
-LLVMBool JavaCPPLLVMCreateOptimizedJITCompilerForModule(
+void createOptimizedJITCompilerForModule(
     LLVMExecutionEngineRef *outJIT,
     LLVMModuleRef moduleRef,
     const char* cpu,
-    unsigned optLevel,
-    char **outError
+    unsigned optLevel
 ) {
     std::string error;
     EngineBuilder engineBuilder(std::unique_ptr<Module>(unwrap(moduleRef)));
@@ -128,16 +119,10 @@ LLVMBool JavaCPPLLVMCreateOptimizedJITCompilerForModule(
         .setErrorStr(&error)
         .create();
     if (ee == nullptr) {
-        *outError = strdup(error.c_str());
-        return 1;
+        throw std::runtime_error(error);
     }
     ee->finalizeObject();
     *outJIT = wrap(ee);
-    return 0;
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

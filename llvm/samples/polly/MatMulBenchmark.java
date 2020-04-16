@@ -15,6 +15,9 @@ import static org.bytedeco.llvm.global.LLVM.*;
  *
  * If you set usePollyParallel, you may have to modify the file name of LLVMLoadLibraryPermanently().
  *
+ * Note: This code is equivalent to this:
+ * clang -O3 -march=native -mllvm -polly -mllvm -polly-vectorizer=stripmine
+ *
  * Note: Instead of JNA, to obtain maximum performance, FunctionPointer should be used as shown here:
  * https://github.com/bytedeco/javacpp/blob/master/src/test/java/org/bytedeco/javacpp/PointerTest.java
  *
@@ -235,14 +238,7 @@ public class MatMulBenchmark {
     }
 
     static void optimize(LLVMModuleRef module) {
-        BytePointer error = new BytePointer((Pointer) null);
-        try {
-            if (JavaCPPLLVMOptimizeModule(module, cpu, 3, 0, error) != 0) {
-                throw new RuntimeException(error.getString());
-            }
-        } finally {
-            LLVMDisposeMessage(error);
-        }
+        optimizeModule(module, cpu, 3, 0);
     }
 
     static void verify(LLVMModuleRef module, boolean dumpModule) {
@@ -260,14 +256,7 @@ public class MatMulBenchmark {
     }
 
     static void jitCompile(LLVMExecutionEngineRef engine, LLVMModuleRef module) {
-        BytePointer error = new BytePointer((Pointer) null);
-        try {
-            if (JavaCPPLLVMCreateOptimizedJITCompilerForModule(engine, module, cpu, 3, error) != 0) {
-                throw new RuntimeException(error.getString());
-            }
-        } finally {
-            LLVMDisposeMessage(error);
-        }
+        createOptimizedJITCompilerForModule(engine, module, cpu, 3);
     }
 
     static LLVMValueRef toConstInt(int v) {
