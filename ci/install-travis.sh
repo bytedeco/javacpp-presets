@@ -228,7 +228,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgfortran.4.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
-       sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.5.0_1/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+       sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.5.0_2/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
