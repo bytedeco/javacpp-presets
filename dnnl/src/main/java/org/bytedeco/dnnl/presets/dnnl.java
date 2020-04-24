@@ -61,7 +61,9 @@ public class dnnl implements InfoMapper {
                .put(new Info("DNNL_DEPRECATED").cppText("#define DNNL_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
-               .put(new Info("DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL").define(false))
+               .put(new Info("DNNL_CPU_RUNTIME == DNNL_RUNTIME_THREADPOOL",
+                             "DNNL_CPU_THREADING_RUNTIME == DNNL_RUNTIME_THREADPOOL",
+                             "DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL").define(false))
                .put(new Info("DNNL_RUNTIME_F32_VAL_REP").skip())
 
                .put(new Info("dnnl_dims_t").cppTypes("int64_t* const"))
@@ -81,6 +83,8 @@ public class dnnl implements InfoMapper {
                .put(new Info("const_dnnl_primitive_t").valueTypes("@Const dnnl_primitive").pointerTypes("@Const @ByPtrPtr dnnl_primitive", "@Cast(\"const_dnnl_primitive_t*\") PointerPointer"))
                .put(new Info("dnnl_stream_t").valueTypes("dnnl_stream").pointerTypes("@ByPtrPtr dnnl_stream", "@Cast(\"dnnl_stream_t*\") PointerPointer"))
                .put(new Info("const_dnnl_stream_t").valueTypes("@Const dnnl_stream").pointerTypes("@Const @ByPtrPtr dnnl_stream", "@Cast(\"const_dnnl_stream_t*\") PointerPointer"))
+               .put(new Info("dnnl_stream_attr_t").valueTypes("dnnl_stream_attr").pointerTypes("@ByPtrPtr dnnl_stream_attr", "@Cast(\"dnnl_stream_attr_t*\") PointerPointer"))
+               .put(new Info("const_dnnl_stream_attr_t").valueTypes("@Const dnnl_stream_attr").pointerTypes("@Const @ByPtrPtr dnnl_stream_attr", "@Cast(\"const_dnnl_stream_attr_t*\") PointerPointer"))
 
                .put(new Info("dnnl::primitive_desc").pointerTypes("org.bytedeco.dnnl.primitive_desc"))
                .put(new Info("dnnl::memory::dims").annotations("@Cast({\"dnnl_dim_t*\", \"std::vector<dnnl_dim_t>&\"}) @StdVector(\"dnnl_dim_t\")").pointerTypes("LongPointer", "LongBuffer", "long[]"))
@@ -110,6 +114,7 @@ public class dnnl implements InfoMapper {
                .put(new Info("dnnl::handle<dnnl_post_ops_t>", "dnnl::handle<dnnl_post_ops_t,traits>").pointerTypes("dnnl_post_ops_handle"))
                .put(new Info("dnnl::handle<dnnl_primitive_t>", "dnnl::handle<dnnl_primitive_t,traits>").pointerTypes("dnnl_primitive_handle"))
                .put(new Info("dnnl::handle<dnnl_stream_t>", "dnnl::handle<dnnl_stream_t,traits>").pointerTypes("dnnl_stream_handle"))
+               .put(new Info("dnnl::handle<dnnl_stream_attr_t>", "dnnl::handle<dnnl_stream_attr_t,traits>").pointerTypes("dnnl_stream_attr_handle"))
 
                .put(new Info("std::unordered_map<int,dnnl::memory>").pointerTypes("IntMemoryMap").define())
                .put(new Info("dnnl::primitive::get_primitive_desc").javaNames("get_dnnl_primitive_desc"))

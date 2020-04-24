@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-MKLDNN_VERSION=0.21.4
+MKLDNN_VERSION=0.21.5
 MKLDNN_VERSION2=0.21
 MKLML_VERSION=2019.0.5.20190502
 download https://github.com/oneapi-src/oneDNN/archive/v$MKLDNN_VERSION.tar.gz oneDNN-$MKLDNN_VERSION.tar.bz2

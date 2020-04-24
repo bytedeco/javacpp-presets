@@ -10,16 +10,16 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
-@Name("dnnl::handle<dnnl_post_ops_t>") @NoOffset @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
-public class dnnl_post_ops_handle extends Pointer {
+@Name("dnnl::handle<dnnl_stream_attr_t>") @NoOffset @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
+public class dnnl_stream_attr_handle extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public dnnl_post_ops_handle(Pointer p) { super(p); }
+    public dnnl_stream_attr_handle(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public dnnl_post_ops_handle(long size) { super((Pointer)null); allocateArray(size); }
+    public dnnl_stream_attr_handle(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public dnnl_post_ops_handle position(long position) {
-        return (dnnl_post_ops_handle)super.position(position);
+    @Override public dnnl_stream_attr_handle position(long position) {
+        return (dnnl_stream_attr_handle)super.position(position);
     }
 
     /** Constructs an empty handle object.
@@ -29,14 +29,14 @@ public class dnnl_post_ops_handle extends Pointer {
      *      equivalent to a null pointer. Any attempt to use its methods, or
      *      passing it to the other library function, will cause an exception
      *      to be thrown. */
-    public dnnl_post_ops_handle() { super((Pointer)null); allocate(); }
+    public dnnl_stream_attr_handle() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** Copy constructor. */
-    public dnnl_post_ops_handle(@Const @ByRef dnnl_post_ops_handle arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(@Const @ByRef dnnl_post_ops_handle arg0);
+    public dnnl_stream_attr_handle(@Const @ByRef dnnl_stream_attr_handle arg0) { super((Pointer)null); allocate(arg0); }
+    private native void allocate(@Const @ByRef dnnl_stream_attr_handle arg0);
     /** Assignment operator. */
-    public native @ByRef @Name("operator =") dnnl_post_ops_handle put(@Const @ByRef dnnl_post_ops_handle arg0);
+    public native @ByRef @Name("operator =") dnnl_stream_attr_handle put(@Const @ByRef dnnl_stream_attr_handle arg0);
     /** Move constructor. */
     /** Move assignment operator. */
 
@@ -47,10 +47,10 @@ public class dnnl_post_ops_handle extends Pointer {
      *      defaults to \c false. */
     
     ///
-    public dnnl_post_ops_handle(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
-    private native void allocate(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/);
-    public dnnl_post_ops_handle(dnnl_post_ops t) { super((Pointer)null); allocate(t); }
-    private native void allocate(dnnl_post_ops t);
+    public dnnl_stream_attr_handle(dnnl_stream_attr t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(dnnl_stream_attr t, @Cast("bool") boolean weak/*=false*/);
+    public dnnl_stream_attr_handle(dnnl_stream_attr t) { super((Pointer)null); allocate(t); }
+    private native void allocate(dnnl_stream_attr t);
 
     /** Resets the handle wrapper objects to wrap a new C API handle.
      * 
@@ -59,8 +59,8 @@ public class dnnl_post_ops_handle extends Pointer {
      *      defaults to \c false. */
     
     ///
-    public native void reset(dnnl_post_ops t, @Cast("bool") boolean weak/*=false*/);
-    public native void reset(dnnl_post_ops t);
+    public native void reset(dnnl_stream_attr t, @Cast("bool") boolean weak/*=false*/);
+    public native void reset(dnnl_stream_attr t);
 
     /** Returns the underlying C API handle.
      * 
@@ -69,8 +69,8 @@ public class dnnl_post_ops_handle extends Pointer {
      *  @return The underlying C API handle. */
     
     ///
-    public native dnnl_post_ops get(@Cast("bool") boolean allow_empty/*=false*/);
-    public native dnnl_post_ops get();
+    public native dnnl_stream_attr get(@Cast("bool") boolean allow_empty/*=false*/);
+    public native dnnl_stream_attr get();
 
     /** Converts a handle to the underlying C API handle type. Does not throw
      *  and returns {@code nullptr} if the object is empty.
@@ -78,7 +78,7 @@ public class dnnl_post_ops_handle extends Pointer {
      *  @return The underlying C API handle. */
     
     ///
-    public native @Name("operator dnnl_post_ops_t") dnnl_post_ops asDnnl_post_ops();
+    public native @Name("operator dnnl_stream_attr_t") dnnl_stream_attr asDnnl_stream_attr();
 
     /** Checks whether the object is empty.
      * 
@@ -95,7 +95,7 @@ public class dnnl_post_ops_handle extends Pointer {
      *      objects are considered to be equal. */
     
     ///
-    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef dnnl_post_ops_handle other);
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef dnnl_stream_attr_handle other);
 
     /** Inequality operator.
      * 
@@ -103,5 +103,5 @@ public class dnnl_post_ops_handle extends Pointer {
      *  @return \c true if this and the other handle wrapper manage different
      *      underlying C API handles, and \c false otherwise. Empty handle
      *      objects are considered to be equal. */
-    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef dnnl_post_ops_handle other);
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef dnnl_stream_attr_handle other);
 }

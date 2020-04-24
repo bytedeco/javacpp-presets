@@ -1,4 +1,5 @@
 
+ * Upgrade presets for MKL-DNN 0.21.5, DNNL 1.4, NumPy 1.18.3, and their dependencies
  * Add `FullOptimization.h` allowing users to fully optimize LLVM modules ([pull #869](https://github.com/bytedeco/javacpp-presets/pull/869))
 
 ### April 14, 2020 version 1.5.3
