@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl-dnn</artifactId>
-  <version>0.21.4-${project.parent.version}</version>
+  <version>0.21.5-${project.parent.version}</version>
   <name>JavaCPP Presets for MKL-DNN</name>
 
   <properties>

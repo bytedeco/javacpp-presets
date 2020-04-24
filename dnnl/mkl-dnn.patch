@@ -1,7 +1,7 @@
-diff -ruN mkl-dnn-1.2/include/dnnl.hpp mkl-dnn-1.2-patch/include/dnnl.hpp
---- mkl-dnn-1.2/include/dnnl.hpp	2020-01-25 06:54:36.000000000 +0900
-+++ mkl-dnn-1.2-patch/include/dnnl.hpp	2020-02-03 12:04:59.085778234 +0900
-@@ -106,6 +106,8 @@
+diff -ruN oneDNN-1.4/include/dnnl.hpp oneDNN-1.4-patch/include/dnnl.hpp
+--- oneDNN-1.4/include/dnnl.hpp	2020-04-16 03:55:44.000000000 +0900
++++ oneDNN-1.4-patch/include/dnnl.hpp	2020-04-24 20:28:45.882224020 +0900
+@@ -110,6 +110,8 @@
      static void wrap_c_api(dnnl_status_t status, const char *message) {
          if (status != dnnl_success) DNNL_THROW_ERROR(status, message);
      }
@@ -9,15 +9,15 @@ diff -ruN mkl-dnn-1.2/include/dnnl.hpp mkl-dnn-1.2-patch/include/dnnl.hpp
 +    const std::string& toStdString() { return std::string(message).append(": status = ").append(std::to_string(status)); }
  };
  
- /// A class that provides the destructor for a DNNL C API handle.
-diff -ruN mkl-dnn-1.2/src/CMakeLists.txt mkl-dnn-1.2-patch/src/CMakeLists.txt
---- mkl-dnn-1.2/src/CMakeLists.txt	2020-01-25 06:54:36.000000000 +0900
-+++ mkl-dnn-1.2-patch/src/CMakeLists.txt	2020-02-03 12:05:40.463770968 +0900
-@@ -136,48 +136,6 @@
+ /// @cond DO_NOT_DOCUMENT_THIS
+diff -ruN oneDNN-1.4/src/CMakeLists.txt oneDNN-1.4-patch/src/CMakeLists.txt
+--- oneDNN-1.4/src/CMakeLists.txt	2020-04-16 03:55:44.000000000 +0900
++++ oneDNN-1.4-patch/src/CMakeLists.txt	2020-04-24 20:29:30.129190818 +0900
+@@ -140,48 +140,6 @@
      -DDIR=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake
      -P ${PROJECT_SOURCE_DIR}/cmake/gen_mkldnn_compat_cmakes.cmake)")
  
--# MKL-DNN compat libraries
+-# Intel MKL-DNN compat libraries
 -if (WIN32)
 -    if (NOT MINGW)
 -        set(prefix "")
@@ -62,9 +62,9 @@ diff -ruN mkl-dnn-1.2/src/CMakeLists.txt mkl-dnn-1.2-patch/src/CMakeLists.txt
  # Install custom find modules for transitive dependencies
  set(LIB_CONFIG_INSTALL_DIR_COMPAT "${CMAKE_INSTALL_LIBDIR}/cmake/mkldnn")
  if(DNNL_CPU_RUNTIME STREQUAL "TBB")
-diff -ruN mkl-dnn-1.2/src/cpu/cpu_engine.cpp mkl-dnn-1.2-patch/src/cpu/cpu_engine.cpp
---- mkl-dnn-1.2/src/cpu/cpu_engine.cpp	2020-01-25 06:54:36.000000000 +0900
-+++ mkl-dnn-1.2-patch/src/cpu/cpu_engine.cpp	2020-02-03 12:18:10.721768939 +0900
+diff -ruN oneDNN-1.4/src/cpu/cpu_engine.cpp oneDNN-1.4-patch/src/cpu/cpu_engine.cpp
+--- oneDNN-1.4/src/cpu/cpu_engine.cpp	2020-04-16 03:55:44.000000000 +0900
++++ oneDNN-1.4-patch/src/cpu/cpu_engine.cpp	2020-04-24 20:28:45.883224019 +0900
 @@ -23,10 +23,29 @@
  #include "cpu_stream.hpp"
  #include "memory.hpp"
@@ -95,10 +95,10 @@ diff -ruN mkl-dnn-1.2/src/cpu/cpu_engine.cpp mkl-dnn-1.2-patch/src/cpu/cpu_engin
  status_t cpu_engine_t::create_memory_storage(
          memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
      auto _storage = new cpu_memory_storage_t(this);
-diff -ruN mkl-dnn-1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.2-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
---- mkl-dnn-1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2020-01-25 06:54:36.000000000 +0900
-+++ mkl-dnn-1.2-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2020-02-03 12:05:04.333777313 +0900
-@@ -192,11 +192,6 @@
+diff -ruN oneDNN-1.4/src/cpu/jit_uni_dw_conv_kernel_utils.hpp oneDNN-1.4-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
+--- oneDNN-1.4/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2020-04-16 03:55:44.000000000 +0900
++++ oneDNN-1.4-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2020-04-24 20:28:45.883224019 +0900
+@@ -242,11 +242,6 @@
          scratchpad.book(key_conv_padded_bias, sizeof(float) * jcp.oc);
  }
  
@@ -110,7 +110,7 @@ diff -ruN mkl-dnn-1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.2-patch
  template <cpu_isa_t isa, data_type_t kernel_dt>
  struct jit_uni_dw_conv_bwd_data_kernel {
  
-@@ -326,11 +321,6 @@
+@@ -376,11 +371,6 @@
      UNUSED(jcp);
  }
  
@@ -122,7 +122,7 @@ diff -ruN mkl-dnn-1.2/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.2-patch
  template <cpu_isa_t isa, data_type_t kernel_dt>
  struct jit_uni_dw_conv_bwd_weights_kernel {
  
-@@ -507,12 +497,6 @@
+@@ -557,12 +547,6 @@
      jcp.nthr = jcp.nthr_g * jcp.nthr_mb;
  }
  
