@@ -55,11 +55,11 @@ void optimizeModule(
 
     std::string error;
     EngineBuilder engineBuilder;
-    TargetMachine *machine = engineBuilder
+    auto machine = std::unique_ptr<TargetMachine>(engineBuilder
         .setMCPU(cpu)
         .setErrorStr(&error)
-        .selectTarget();
-    if (machine == nullptr) {
+        .selectTarget());
+    if (!machine) {
         throw std::runtime_error(error);
     }
 
