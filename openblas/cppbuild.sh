@@ -145,6 +145,7 @@ case $PLATFORM in
         export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/'
         export BINARY=32
         export DYNAMIC_ARCH=1
+        export TARGET=NORTHWOOD
         ;;
     linux-x86_64)
         export CC="gcc -m64"
@@ -152,6 +153,7 @@ case $PLATFORM in
         export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/'
         export BINARY=64
         export DYNAMIC_ARCH=1
+        export TARGET=NEHALEM
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
@@ -200,6 +202,7 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export NO_AVX512=1
+        export TARGET=NEHALEM
         ;;
     windows-x86)
         export CC="gcc -m32"
@@ -208,6 +211,7 @@ case $PLATFORM in
         export BINARY=32
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lquadmath -lgcc -lgcc_eh -lpthread"
+        export TARGET=NORTHWOOD
         ;;
     windows-x86_64)
         export CC="gcc -m64"
@@ -217,6 +221,7 @@ case $PLATFORM in
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lquadmath -lgcc -lgcc_eh -lpthread"
         export NO_AVX512=1
+        export TARGET=NEHALEM
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -228,9 +233,6 @@ make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$
 make install "PREFIX=$INSTALL_PATH"
 
 unset DYNAMIC_ARCH
-if [[ -z ${TARGET:-} ]]; then
-    export TARGET=GENERIC
-fi
 cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
 make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_LAPACK=1 LIBNAMESUFFIX=nolapack
 make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=nolapack
