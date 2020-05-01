@@ -54,7 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "gandiva/decimal_scalar.h",
                 "gandiva/tree_expr_builder.h",
             },
-            link = "gandiva@.16"
+            link = "gandiva@.17"
         ),
     },
     target = "org.bytedeco.gandiva",

@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Arrow 0.16.0  https://arrow.apache.org/
+ * Arrow 0.17.0  https://arrow.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of Arrow ported to Java from this C++ source file:
 
- * https://github.com/apache/arrow/blob/apache-arrow-0.16.0/cpp/examples/arrow/row-wise-conversion-example.cc
+ * https://github.com/apache/arrow/blob/apache-arrow-0.17.0/cpp/examples/arrow/row-wise-conversion-example.cc
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SimpleExample.java` source files below, simply execute on the command line:
 ```bash
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.arrow</groupId>
     <artifactId>row-wise-conversion-example</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>RowWiseConversionExample</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>arrow-platform</artifactId>
-            <version>0.16.0-1.5.3</version>
+            <version>0.17.0-1.5.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
