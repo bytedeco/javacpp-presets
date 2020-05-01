@@ -48,7 +48,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
-  SCL_ENABLE="devtoolset-7 python27"
+  SCL_ENABLE="devtoolset-7 rh-python36 python27"
   if [[ "hyperscan tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="devtoolset-7"
@@ -59,7 +59,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y repolist"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel ragel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch make autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel ragel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
@@ -87,13 +87,17 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.cache /root/.cache"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.ccache /root/.ccache"
 
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz -o $HOME/cmake-3.16.6-Linux-x86_64.tar.gz"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz -o $HOME/apache-maven-3.3.9-bin.tar.gz"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz -o $HOME/git-2.18.3.tar.gz"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/cmake-3.16.6-Linux-x86_64.tar.gz -C /opt/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/apache-maven-3.3.9-bin.tar.gz -C /opt/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/git-2.18.3.tar.gz -C $HOME"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/git-2.18.3; make prefix=/usr/local/; make prefix=/usr/local/ install"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/bin/python3.6 /usr/bin/python3"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/cmake-3.16.6-Linux-x86_64/bin/* /usr/bin/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cmake -version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "git --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
 
@@ -268,7 +272,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]]; then
+      if [[ "arrow mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /
