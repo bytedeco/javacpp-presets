@@ -5,7 +5,6 @@ module org.bytedeco.cuda {
   exports org.bytedeco.cuda.cublas;
   exports org.bytedeco.cuda.cudart;
   exports org.bytedeco.cuda.cudnn;
-  exports org.bytedeco.cuda.cufft;
   exports org.bytedeco.cuda.cufftw;
   exports org.bytedeco.cuda.curand;
   exports org.bytedeco.cuda.cusolver;
@@ -15,8 +14,6 @@ module org.bytedeco.cuda {
   exports org.bytedeco.cuda.nppicc;
   exports org.bytedeco.cuda.nppicom;
   exports org.bytedeco.cuda.nppig;
-  exports org.bytedeco.cuda.npps;
-  exports org.bytedeco.cuda.nvblas;
   exports org.bytedeco.cuda.nvgraph;
   exports org.bytedeco.cuda.nvml;
   exports org.bytedeco.cuda.nvrtc;
