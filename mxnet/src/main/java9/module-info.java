@@ -23,5 +23,5 @@ module org.bytedeco.mxnet {
   exports org.apache.mxnet.spark.example;
   exports org.apache.mxnet.spark.transformer;
   exports org.apache.mxnet.spark.io;
-  exports org.apache.mxnet.spark.optimizer;
+  exports org.apache.mxnet.optimizer;
 }
