@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.4-SNAPSHOT</version>
+    <version>1.5.3</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>openblas</artifactId>
-  <version>0.3.9-${project.parent.version}</version>
+  <version>0.3.9-1-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenBLAS</name>
 
   <properties>

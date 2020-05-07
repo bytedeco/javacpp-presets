@@ -36,7 +36,7 @@ echo "export CCACHE_DIR=$HOME/.ccache" | tee --append $HOME/vars.list
 echo "export PATH=/usr/lib64/ccache/:/usr/lib/ccache/:\$PATH" | tee --append $HOME/vars.list
 echo -e "log_file = $HOME/ccache.log\nmax_size = 5.0G\nhash_dir = false\nsloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" > $CCACHE_DIR/ccache.conf
 
-if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ "$TRAVIS_BRANCH" == "release" ]]; then
+if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ "$TRAVIS_BRANCH" == "openblas" ]]; then
     python $TRAVIS_BUILD_DIR/ci/gDownload.py $HOME/settings.tar.gz
     tar xzf $HOME/settings.tar.gz -C $HOME
     MAVEN_RELEASE="-Dgpg.homedir=$HOME/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
