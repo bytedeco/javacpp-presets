@@ -33,7 +33,7 @@ FFMPEG_VERSION=4.2.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
-download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
+download https://ftp.osuosl.org/pub/xiph/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
 download https://archive.mozilla.org/pub/opus/$OPUS.tar.gz $OPUS.tar.gz
 download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
 download http://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
