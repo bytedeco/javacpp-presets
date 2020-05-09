@@ -107,7 +107,7 @@ fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16222/w_mkl_2020.0.166.exe"
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16543/w_mkl_2020.1.216.exe"
        ./mkl.exe --s --x --f .
        ./install.exe install --output=mkllog.txt -eula=accept
        sleep 60
@@ -115,7 +115,7 @@ if [ "$PROJ" == "mkl" ]; then
        echo Finished mkl 
 fi
 
-if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
+if [ "$PROJ" == "cuda" ] || [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_10.2.89_441.22_windows.exe "http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_441.22_windows.exe"
        curl -L -o cudnn-10.2-windows7-x64-v7.6.5.32.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.5/cudnn-10.2-windows7-x64-v7.6.5.32.zip"
@@ -127,6 +127,14 @@ if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.2/lib/x64
        echo Finished cuda install
 fi 
+
+if [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
+       echo Installing tensorrt 
+       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1MqoSNUEnbZPn4HNdJX3uic-Ej5ZejCaV /c/Downloads/tensorrt.zip
+       unzip -o /c/Downloads/tensorrt.zip -d /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/
+       ln -sf /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT* /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT
+       echo Finished tensorrt install
+fi
 
 if [ "$PROJ" == "tensorflow" ]; then
        curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip

@@ -26,6 +26,7 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -34,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(global = "org.bytedeco.mkl.global.mkl_rt", names = {"linux-x86", "macosx-x86", "windows-x86"}, value = {
+@Properties(inherit = javacpp.class, global = "org.bytedeco.mkl.global.mkl_rt", names = {"linux-x86", "macosx-x86", "windows-x86"}, value = {
     @Platform(include = {"mkl.h", "mkl_version.h", "mkl_types.h", /*"mkl_blas.h",*/ "mkl_trans.h", "mkl_cblas.h", "mkl_spblas.h", /*"mkl_lapack.h",*/ "mkl_lapacke.h",
         "mkl_dss.h", "mkl_pardiso.h", "mkl_sparse_handle.h", "mkl_service.h", "mkl_rci.h", "mkl_vml.h", "mkl_vml_defines.h", "mkl_vml_types.h", "mkl_vml_functions.h",
         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "mkl_df.h", "mkl_df_defines.h", "mkl_df_types.h", "mkl_df_functions.h",
@@ -60,7 +61,7 @@ public class mkl_rt implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
-                             "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_INT32",
+                             "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_INT32", "NOTHROW",
 
                              "mkl_simatcopy", "mkl_dimatcopy", "mkl_cimatcopy", "mkl_zimatcopy", "mkl_somatcopy", "mkl_domatcopy", "mkl_comatcopy", "mkl_zomatcopy",
                              "mkl_somatcopy2", "mkl_domatcopy2", "mkl_comatcopy2", "mkl_zomatcopy2", "mkl_somatadd", "mkl_domatadd", "mkl_comatadd", "mkl_zomatadd",

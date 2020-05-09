@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.llvm</groupId>
+    <artifactId>ClangASTVisitorExample</artifactId>
+    <version>1.5.3</version>
+    <properties>
+        <exec.mainClass>ClangASTVisitorExample</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>llvm-platform</artifactId>
+            <version>10.0.0-1.5.3</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

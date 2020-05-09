@@ -25,11 +25,13 @@ package org.bytedeco.hyperscan.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
+    inherit = javacpp.class,
     value = {
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},

@@ -7,17 +7,17 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-MKLDNN_VERSION=0.21.4
+MKLDNN_VERSION=0.21.5
 MKLDNN_VERSION2=0.21
 MKLML_VERSION=2019.0.5.20190502
-download https://github.com/intel/mkl-dnn/archive/v$MKLDNN_VERSION.tar.gz mkl-dnn-$MKLDNN_VERSION.tar.bz2
+download https://github.com/oneapi-src/oneDNN/archive/v$MKLDNN_VERSION.tar.gz oneDNN-$MKLDNN_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-tar --totals -xf ../mkl-dnn-$MKLDNN_VERSION.tar.bz2
-cd mkl-dnn-$MKLDNN_VERSION
+tar --totals -xf ../oneDNN-$MKLDNN_VERSION.tar.bz2
+cd oneDNN-$MKLDNN_VERSION
 patch -Np1 < ../../../mkl-dnn.patch
 
 sedinplace 's/-fvisibility=internal//g' cmake/platform.cmake

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.3-SNAPSHOT</version>
+    <version>1.5.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>arrow</artifactId>
-  <version>0.16.0-${project.parent.version}</version>
+  <version>0.17.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Arrow</name>
 
   <dependencies>

@@ -74,7 +74,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "curand", "cudnn"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-arm64":
@@ -103,9 +103,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api").skip())
                .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
-               .put(new Info("const std::vector<Ort::Value>", "std::vector<Ort::Value>").pointerTypes("ValueVector").define())
-               .put(new Info("Ort::Exception").pointerTypes("OrtException"))
-               .put(new Info("Ort::Value(Ort::Value)", "Ort::Value::operator =(Ort::Value)", "Ort::RunOptions::GetRunLogSeverityLevel").skip())
+               .put(new Info("std::vector<Ort::Value>").valueTypes("@StdMove ValueVector").pointerTypes("ValueVector").define())
+               .put(new Info("Ort::Value").valueTypes("@StdMove Value").pointerTypes("Value"))
                .put(new Info("Ort::Value::CreateTensor<float>").javaNames("CreateTensorFloat"))
                .put(new Info("Ort::Value::CreateTensor<double>").javaNames("CreateTensorDouble"))
                .put(new Info("Ort::Value::CreateTensor<int8_t>").javaNames("CreateTensorByte"))
@@ -129,6 +128,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::Value::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
                .put(new Info("Ort::Value::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
                .put(new Info("Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
+               .put(new Info("Ort::RunOptions::GetRunLogSeverityLevel").skip())
+               .put(new Info("Ort::Exception").pointerTypes("OrtException"))
                .put(new Info("Ort::Base<OrtMemoryInfo>").pointerTypes("BaseMemoryInfo"))
                .put(new Info("Ort::Base<OrtModelMetadata>").pointerTypes("BaseModelMetadata"))
                .put(new Info("Ort::Base<OrtCustomOpDomain>").pointerTypes("BaseCustomOpDomain"))

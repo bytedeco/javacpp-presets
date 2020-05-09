@@ -23,10 +23,10 @@
 package org.bytedeco.dnnl.presets;
 
 import java.util.List;
-import org.bytedeco.javacpp.ClassProperties;
-import org.bytedeco.javacpp.LoadEnabled;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -36,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(
+    inherit = javacpp.class,
     value = {
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
@@ -44,58 +45,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             include = {"dnnl_types.h", "dnnl_config.h", /*"dnnl_debug.h",*/ "dnnl_version.h", "dnnl.h", "dnnl.hpp"},
             link = "dnnl@.1", preload = {"gomp@.1", "iomp5"}, resource = {"include", "lib"}
         ),
-        @Platform(
-            value = "windows",
-            preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
-                       "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-                       "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
-                       "api-ms-win-core-string-l1-1-0", "api-ms-win-core-errorhandling-l1-1-0", "api-ms-win-core-timezone-l1-1-0", "api-ms-win-core-file-l1-1-0",
-                       "api-ms-win-core-namedpipe-l1-1-0", "api-ms-win-core-handle-l1-1-0", "api-ms-win-core-file-l2-1-0", "api-ms-win-core-heap-l1-1-0",
-                       "api-ms-win-core-libraryloader-l1-1-0", "api-ms-win-core-synch-l1-1-0", "api-ms-win-core-processthreads-l1-1-0",
-                       "api-ms-win-core-processenvironment-l1-1-0", "api-ms-win-core-datetime-l1-1-0", "api-ms-win-core-localization-l1-2-0",
-                       "api-ms-win-core-sysinfo-l1-1-0", "api-ms-win-core-synch-l1-2-0", "api-ms-win-core-console-l1-1-0", "api-ms-win-core-debug-l1-1-0",
-                       "api-ms-win-core-rtlsupport-l1-1-0", "api-ms-win-core-processthreads-l1-1-1", "api-ms-win-core-file-l1-2-0", "api-ms-win-core-profile-l1-1-0",
-                       "api-ms-win-core-memory-l1-1-0", "api-ms-win-core-util-l1-1-0", "api-ms-win-core-interlocked-l1-1-0", "ucrtbase",
-                       "vcruntime140", "msvcp140", "concrt140", "vcomp140"}
-        ),
-        @Platform(
-            value = "windows-x86",
-            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
-                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
-                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}
-        ),
-        @Platform(
-            value = "windows-x86_64",
-            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
-                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
-                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}
-        ),
     },
     target = "org.bytedeco.dnnl",
     global = "org.bytedeco.dnnl.global.dnnl"
 )
-public class dnnl implements LoadEnabled, InfoMapper {
-
-    @Override public void init(ClassProperties properties) {
-        String platform = properties.getProperty("platform");
-        List<String> preloadpaths = properties.get("platform.preloadpath");
-
-        String vcredistdir = System.getenv("VCToolsRedistDir");
-        if (vcredistdir != null && vcredistdir.length() > 0) {
-            switch (platform) {
-                case "windows-x86":
-                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
-                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
-                    break;
-                case "windows-x86_64":
-                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
-                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
-                    break;
-                default:
-                    // not Windows
-            }
-        }
-    }
+public class dnnl implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "dnnl"); }
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
@@ -106,7 +61,9 @@ public class dnnl implements LoadEnabled, InfoMapper {
                .put(new Info("DNNL_DEPRECATED").cppText("#define DNNL_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
-               .put(new Info("DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL").define(false))
+               .put(new Info("DNNL_CPU_RUNTIME == DNNL_RUNTIME_THREADPOOL",
+                             "DNNL_CPU_THREADING_RUNTIME == DNNL_RUNTIME_THREADPOOL",
+                             "DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL").define(false))
                .put(new Info("DNNL_RUNTIME_F32_VAL_REP").skip())
 
                .put(new Info("dnnl_dims_t").cppTypes("int64_t* const"))
@@ -126,6 +83,8 @@ public class dnnl implements LoadEnabled, InfoMapper {
                .put(new Info("const_dnnl_primitive_t").valueTypes("@Const dnnl_primitive").pointerTypes("@Const @ByPtrPtr dnnl_primitive", "@Cast(\"const_dnnl_primitive_t*\") PointerPointer"))
                .put(new Info("dnnl_stream_t").valueTypes("dnnl_stream").pointerTypes("@ByPtrPtr dnnl_stream", "@Cast(\"dnnl_stream_t*\") PointerPointer"))
                .put(new Info("const_dnnl_stream_t").valueTypes("@Const dnnl_stream").pointerTypes("@Const @ByPtrPtr dnnl_stream", "@Cast(\"const_dnnl_stream_t*\") PointerPointer"))
+               .put(new Info("dnnl_stream_attr_t").valueTypes("dnnl_stream_attr").pointerTypes("@ByPtrPtr dnnl_stream_attr", "@Cast(\"dnnl_stream_attr_t*\") PointerPointer"))
+               .put(new Info("const_dnnl_stream_attr_t").valueTypes("@Const dnnl_stream_attr").pointerTypes("@Const @ByPtrPtr dnnl_stream_attr", "@Cast(\"const_dnnl_stream_attr_t*\") PointerPointer"))
 
                .put(new Info("dnnl::primitive_desc").pointerTypes("org.bytedeco.dnnl.primitive_desc"))
                .put(new Info("dnnl::memory::dims").annotations("@Cast({\"dnnl_dim_t*\", \"std::vector<dnnl_dim_t>&\"}) @StdVector(\"dnnl_dim_t\")").pointerTypes("LongPointer", "LongBuffer", "long[]"))
@@ -155,6 +114,7 @@ public class dnnl implements LoadEnabled, InfoMapper {
                .put(new Info("dnnl::handle<dnnl_post_ops_t>", "dnnl::handle<dnnl_post_ops_t,traits>").pointerTypes("dnnl_post_ops_handle"))
                .put(new Info("dnnl::handle<dnnl_primitive_t>", "dnnl::handle<dnnl_primitive_t,traits>").pointerTypes("dnnl_primitive_handle"))
                .put(new Info("dnnl::handle<dnnl_stream_t>", "dnnl::handle<dnnl_stream_t,traits>").pointerTypes("dnnl_stream_handle"))
+               .put(new Info("dnnl::handle<dnnl_stream_attr_t>", "dnnl::handle<dnnl_stream_attr_t,traits>").pointerTypes("dnnl_stream_attr_handle"))
 
                .put(new Info("std::unordered_map<int,dnnl::memory>").pointerTypes("IntMemoryMap").define())
                .put(new Info("dnnl::primitive::get_primitive_desc").javaNames("get_dnnl_primitive_desc"))

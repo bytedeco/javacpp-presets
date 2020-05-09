@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2014 Samuel Audet
+ * Copyright (C) 2013-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -35,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target = "org.bytedeco.libfreenect", global = "org.bytedeco.libfreenect.global.freenect", value = {
+@Properties(inherit = javacpp.class, target = "org.bytedeco.libfreenect", global = "org.bytedeco.libfreenect.global.freenect", value = {
     @Platform(not = "android", include = {"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>",
                                         /*"<libfreenect/libfreenect_audio.h>",*/ "<libfreenect/libfreenect_sync.h>"},
         link = {"freenect@0.5", "freenect_sync@0.5"}),

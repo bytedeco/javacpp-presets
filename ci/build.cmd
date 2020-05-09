@@ -68,7 +68,8 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
     cd %%a
-    call mvn deploy -B -U --settings ..\ci\settings.xml -f platform -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT%
+    if "%EXT%" == "" (set EXT2=) else (set EXT2=%EXT:~1%)
+    call mvn deploy -B -U --settings ..\ci\settings.xml -f platform\%EXT2%\pom.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT%
     IF ERRORLEVEL 1 (
       echo Quitting with error  
       exit 1

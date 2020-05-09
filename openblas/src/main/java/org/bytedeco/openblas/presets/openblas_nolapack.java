@@ -31,6 +31,7 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -39,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(global = "org.bytedeco.openblas.global.openblas_nolapack", value = {
+@Properties(inherit = javacpp.class, global = "org.bytedeco.openblas.global.openblas_nolapack", value = {
     @Platform(define = {"__OPENBLAS 1", "LAPACK_COMPLEX_CPP"},
               include = {"openblas_config.h", "cblas.h"},
               link    =  "openblas_nolapack@.0", resource = {"include", "lib"},
@@ -107,7 +108,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             if (platform.startsWith("linux")) {
                 preloads.add(i, lib + "#" + className + "@.0");
             } else if (platform.startsWith("macosx")) {
-                preloads.add(i, lib + "#" + className);
+                preloads.add(i, lib + "#" + className + ".0");
             } else if (platform.startsWith("windows")) {
                 preloads.add(i, lib + "#lib" + className);
             }

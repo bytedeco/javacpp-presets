@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Felix Andrews
+ * Copyright (C) 2016-2020 Felix Andrews, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ package org.bytedeco.liquidfun.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -33,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Felix Andrews
  */
 
-@Properties(target = "org.bytedeco.liquidfun", global = "org.bytedeco.liquidfun.global.liquidfun", value = {
+@Properties(inherit = javacpp.class, target = "org.bytedeco.liquidfun", global = "org.bytedeco.liquidfun.global.liquidfun", value = {
     @Platform(value = {"linux-x86", "macosx", "windows-x86"},
               define = "LIQUIDFUN_EXTERNAL_LANGUAGE_API 1",
               include = {"<Box2D/Common/b2Settings.h>",

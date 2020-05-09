@@ -48,10 +48,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
-  SCL_ENABLE="devtoolset-7 python27 rh-git29"
-  if [[ "mxnet hyperscan tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  SCL_ENABLE="devtoolset-7 rh-python36 python27"
+  if [[ "hyperscan tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE="devtoolset-7 rh-git218"
+    SCL_ENABLE="devtoolset-7"
   fi
   echo "Starting docker for x86_64 and x86 linux"
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.2-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
@@ -59,7 +59,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y repolist"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel ragel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch make autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel ragel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
@@ -87,10 +87,18 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.cache /root/.cache"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.ccache /root/.ccache"
 
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz -o $HOME/cmake-3.16.6-Linux-x86_64.tar.gz"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz -o $HOME/apache-maven-3.3.9-bin.tar.gz"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz -o $HOME/git-2.18.3.tar.gz"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/cmake-3.16.6-Linux-x86_64.tar.gz -C /opt/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/apache-maven-3.3.9-bin.tar.gz -C /opt/"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/git-2.18.3.tar.gz -C $HOME"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/git-2.18.3; make prefix=/usr/local/; make prefix=/usr/local/ install"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/bin/python3.6 /usr/bin/python3"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/cmake-3.16.6-Linux-x86_64/bin/* /usr/bin/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cmake -version"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "git --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -a /opt/rh/httpd24/root/usr/lib64/* /usr/lib64/"
@@ -138,10 +146,10 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
-         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16318/l_mkl_2020.0.166.tgz -o $HOME/mkl.tgz
+         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16533/l_mkl_2020.1.217.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
-         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2020.0.166/silent.cfg
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2020.0.166/install.sh -s $HOME/build/l_mkl_2020.0.166/silent.cfg"
+         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2020.1.217/silent.cfg
+         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2020.1.217/install.sh -s $HOME/build/l_mkl_2020.1.217/silent.cfg"
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
@@ -156,7 +164,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing nccl.."
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1WF2Pv1aQxLm-42euWamlF8dc4KMQRn2a $HOME/downloads/nccl_x86_64.txz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1eO-wi1kVmUjpJ3nwx8_Wsnsb90uP5PLl $HOME/downloads/nccl_x86_64.txz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi
@@ -177,9 +185,11 @@ if [ "$OS" == "linux-armhf" ]; then
     mkdir -p $HOME/tools $HOME/userland
     tar xzf $HOME/tools-master.tar.gz --strip-components=1 -C $HOME/tools
     tar xzf $HOME/userland-master.tar.gz --strip-components=1 -C $HOME/userland
-    export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
+    ln -s $HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-gfortran $HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/
+    ln -s $HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/libgfortran* $HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/
+    export PATH=$PATH:$HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/
     export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
-    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/
+    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/
     pushd $HOME/userland
     # https://github.com/raspberrypi/userland/issues/603
     sed -i -e 's/"${INSTALL_TARGETS} vcilcs"/${INSTALL_TARGETS} vcilcs/g' interface/vmcs_host/CMakeLists.txt
@@ -203,7 +213,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
    echo "performing brew update and install of dependencies, please wait.."
    brew update
-   brew upgrade cmake maven
+   brew upgrade cmake
    brew install ccache swig autoconf-archive libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
 
    # Try to use ccache to speed up the build
@@ -222,7 +232,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgfortran.4.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
-       sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.5.0_1/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+       sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.5.0_2/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
@@ -262,7 +272,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]]; then
+      if [[ "arrow mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /
@@ -270,13 +280,13 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "mkl" ]; then
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16240/m_mkl_2020.0.166.dmg -o $HOME/mkl.dmg
+        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16525/m_mkl_2020.1.216.dmg -o $HOME/mkl.dmg
         echo "Mount mkl dmg"
         hdiutil mount $HOME/mkl.dmg
         sleep 10
-        cp /Volumes/m_mkl_2020.0.166/m_mkl_2020.0.166.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
+        cp /Volumes/m_mkl_2020.1.216/m_mkl_2020.1.216.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
         sed -i -e 's/decline/accept/g' $HOME/silent.cfg
-        sudo /Volumes/m_mkl_2020.0.166/m_mkl_2020.0.166.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
+        sudo /Volumes/m_mkl_2020.1.216/m_mkl_2020.1.216.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
         echo "mkl status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "mkl Failed"
@@ -343,7 +353,7 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
          echo "Deploying platform"
          for i in ${PROJ//,/ }
          do
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT "; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/${EXT:1}/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT "; export BUILD_STATUS=$?
           if [ $BUILD_STATUS -ne 0 ]; then
            echo "Build Failed"
            exit $BUILD_STATUS
@@ -374,7 +384,7 @@ else
         for i in ${PROJ//,/ }
         do
 	  cd $i
-          mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -f platform -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT; export BUILD_STATUS=$?
+          mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -f platform/${EXT:1}/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT; export BUILD_STATUS=$?
           cd ..
         done
       fi

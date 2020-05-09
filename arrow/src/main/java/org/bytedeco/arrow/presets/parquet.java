@@ -58,7 +58,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/printer.h",
                 "parquet/statistics.h",
             },
-            link = "parquet@.16"
+            link = "parquet@.17"
         ),
     },
     target = "org.bytedeco.parquet",
@@ -76,12 +76,14 @@ public class parquet implements InfoMapper {
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("Compression::type").valueTypes("Compression.type", "@Cast(\"arrow::Compression::type\") int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("parquet::Encoding::type").valueTypes("Encoding.type", "@Cast(\"parquet::Encoding::type\") int").pointerTypes("IntPointer", "IntBuffer", "int[]").enumerate())
                .put(new Info("parquet::Type").pointerTypes("org.bytedeco.parquet.Type"))
                .put(new Info("std::list<int>").pointerTypes("IntList").define())
                .put(new Info("std::shared_ptr<parquet::ColumnDecryptionProperties>").annotations("@SharedPtr").pointerTypes("ColumnDecryptionProperties"))
                .put(new Info("std::shared_ptr<const parquet::LogicalType>").annotations("@Cast(\"const parquet::LogicalType*\") @SharedPtr").pointerTypes("LogicalType"))
                .put(new Info("std::shared_ptr<parquet::schema::Node>").annotations("@SharedPtr").pointerTypes("Node"))
                .put(new Info("std::vector<std::shared_ptr<parquet::schema::Node> >").pointerTypes("NodeVector").define())
+               .put(new Info("std::map<parquet::Encoding::type,int32_t>").pointerTypes("EncodingIntMap").define())
                .put(new Info("std::map<std::string,std::shared_ptr<parquet::ColumnDecryptionProperties> >").pointerTypes("ColumnDecryptionPropertiesStringMap").define())
                .put(new Info("arrow::Result<std::shared_ptr<parquet::Buffer> >").pointerTypes("BufferResult"))
                .put(new Info("parquet::Encryptor", "parquet::FooterSigningEncryptor", "parquet::OutputStream").skip())

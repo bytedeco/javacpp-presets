@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Audet
+ * Copyright (C) 2017-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ package org.bytedeco.ale.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -33,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(
+@Properties(inherit = javacpp.class,
     value = {
         @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp11", define = "UNIQUE_PTR_NAMESPACE std", link = "ale",
             include = {"emucore/m6502/src/bspf/src/bspf.hxx", "emucore/m6502/src/Device.hxx", "emucore/Control.hxx", "emucore/Event.hxx",

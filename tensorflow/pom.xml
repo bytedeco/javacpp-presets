@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.3-SNAPSHOT</version>
+    <version>1.5.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -31,12 +31,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.21.4-${project.parent.version}</version>
+      <version>0.21.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy</artifactId>
-      <version>1.18.1-${project.parent.version}</version>
+      <version>1.18.3-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -92,12 +92,12 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.21.4-${project.parent.version}</version>
+            <version>0.21.5-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.18.1-${project.parent.version}</version>
+            <version>1.18.3-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
