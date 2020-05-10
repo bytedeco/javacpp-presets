@@ -1,7 +1,7 @@
 
  * Fix JPMS modules for CUDA, ARPACK-NG, GSL, SciPy, Gym, MXNet ([pull #880](https://github.com/bytedeco/javacpp-presets/pull/880) and [pull #881](https://github.com/bytedeco/javacpp-presets/pull/881))
  * Build OpenBLAS with a `TARGET` even for `DYNAMIC_ARCH` to avoid SIGILL ([issue eclipse/deeplearning4j#8747](https://github.com/eclipse/deeplearning4j/issues/8747))
- * Upgrade presets for Arrow 0.17.0, MKL-DNN 0.21.5, DNNL 1.4, NumPy 1.18.3, and their dependencies
+ * Upgrade presets for Arrow 0.17.0, MKL-DNN 0.21.5, DNNL 1.4, NumPy 1.18.3, ONNX 1.7.0, and their dependencies
  * Add `FullOptimization.h` allowing users to fully optimize LLVM modules ([pull #869](https://github.com/bytedeco/javacpp-presets/pull/869))
 
 ### April 14, 2020 version 1.5.3

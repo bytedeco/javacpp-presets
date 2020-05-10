@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.Pointer;
         "onnx/defs/schema.h",
         "onnx/defs/operator_sets.h",
         "onnx/defs/operator_sets_ml.h",
-	"onnx/defs/operator_sets_training.h",
+        "onnx/defs/operator_sets_training.h",
         "onnx/defs/data_type_utils.h",
         "onnx/defs/shape_inference.h",
         "onnx/onnx-operators-ml.pb.h",
@@ -144,7 +144,7 @@ public class onnx implements InfoMapper {
                .put(new Info("std::unordered_map<std::string,const onnx::TensorProto*>",
                              "std::unordered_map<std::string,onnx::TensorProto*>").pointerTypes("StringTensorProtoMap").define())
                .put(new Info("std::unordered_map<std::string,const onnx::AttributeProto*>",
-		             "std::unordered_map<std::string,AttributeProto*>",
+                             "std::unordered_map<std::string,AttributeProto*>",
                              "std::unordered_map<std::string,const AttributeProto*>",
                              "std::unordered_map<std::string,onnx::AttributeProto*>").pointerTypes("StringAttributeProtoMap").define())
                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("StringIntIntPairMap").define())
