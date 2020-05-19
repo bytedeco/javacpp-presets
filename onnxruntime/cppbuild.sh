@@ -26,7 +26,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.2.0
+ONNXRUNTIME=1.3.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -78,6 +78,8 @@ which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 
 # install headers and libraries in standard directories
 cp -r include/* ../include
+cp -r orttraining/orttraining/models/runner/training_runner.h ../include
+cp -r orttraining/orttraining/models/runner/training_util.h ../include
 cp -r java/src/main/java/* ../java
 cp ../build/Release/lib* ../lib || true
 cp ../build/Release/Release/onnxruntime.dll ../bin || true
