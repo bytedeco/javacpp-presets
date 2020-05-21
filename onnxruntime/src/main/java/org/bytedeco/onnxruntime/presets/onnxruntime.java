@@ -50,7 +50,7 @@ import org.bytedeco.dnnl.presets.*;
                 "onnxruntime/core/providers/cuda/cuda_provider_factory.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
             },
-            link = "onnxruntime@.1.2.0"
+            link = "onnxruntime@.1.3.0"
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
