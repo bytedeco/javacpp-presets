@@ -58,6 +58,8 @@ sedinplace 's/Value(std::nullptr_t)/Value(std::nullptr_t = nullptr)/g' include/o
 for f in java/src/main/native/*.c; do cp $f ${f}pp; done
 for f in java/src/main/native/ai_onnxruntime_*.cpp; do sedinplace 's/#include "ai_onnxruntime_.*.h"/extern "C" {/g' $f; echo "}" >> $f; done
 sedinplace 's/(\*jniEnv)->\(.*\)(jniEnv,/jniEnv->\1(/g' java/src/main/native/*.cpp
+sedinplace 's/ WIN32/ _WIN32/g' java/src/main/native/*.cpp
+sedinplace 's/FreeLibrary(/FreeLibrary((HMODULE)/g' java/src/main/native/*.cpp
 sedinplace 's/(javaStrings/((jstring)javaStrings/g' java/src/main/native/*.cpp
 sedinplace 's/(javaInputStrings/((jstring)javaInputStrings/g' java/src/main/native/*.cpp
 sedinplace 's/(javaOutputStrings/((jstring)javaOutputStrings/g' java/src/main/native/*.cpp
