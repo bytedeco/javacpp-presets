@@ -1094,6 +1094,23 @@ public static final int kAadFileUniqueLength = kAadFileUniqueLength();
 
 
 
+/** Controls serialization format of data pages.  parquet-format v2.0.0
+ *  introduced a new data page metadata type DataPageV2 and serialized page
+ *  structure (for example, encoded levels are no longer compressed). Prior to
+ *  the completion of PARQUET-457 in 2020, this library did not implement
+ *  DataPageV2 correctly, so if you use the V2 data page format, you may have
+ *  forward compatibility issues (older versions of the library will be unable
+ *  to read the files). Note that some Parquet implementations do not implement
+ *  DataPageV2 at all. */
+@Namespace("parquet") public enum ParquetDataPageVersion { V1(0), V2(1);
+
+    public final int value;
+    private ParquetDataPageVersion(int v) { this.value = v; }
+    private ParquetDataPageVersion(ParquetDataPageVersion e) { this.value = e.value; }
+    public ParquetDataPageVersion intern() { for (ParquetDataPageVersion e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
 @Namespace("parquet") @MemberGetter public static native @Cast("int64_t") long DEFAULT_BUFFER_SIZE();
 @Namespace("parquet") @MemberGetter public static native @Cast("bool") boolean DEFAULT_USE_BUFFERED_STREAM();
 // Targeting ../../parquet/ReaderProperties.java
@@ -1117,7 +1134,6 @@ public static final boolean DEFAULT_ARE_STATISTICS_ENABLED = DEFAULT_ARE_STATIST
 @Namespace("parquet") @MemberGetter public static native @Cast("const int64_t") long DEFAULT_MAX_STATISTICS_SIZE();
 public static final long DEFAULT_MAX_STATISTICS_SIZE = DEFAULT_MAX_STATISTICS_SIZE();
 @Namespace("parquet") @MemberGetter public static native Encoding.type DEFAULT_ENCODING();
-@Namespace("parquet") @MemberGetter public static native ParquetVersion.type DEFAULT_WRITER_VERSION();
 @Namespace("parquet") @MemberGetter public static native byte DEFAULT_CREATED_BY(int i);
 @Namespace("parquet") @MemberGetter public static native String DEFAULT_CREATED_BY();
 @Namespace("parquet") @MemberGetter public static native Compression.type DEFAULT_COMPRESSION_TYPE();

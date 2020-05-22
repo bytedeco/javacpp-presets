@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GYM_VERSION=0.17.1
+GYM_VERSION=0.17.2
 download https://github.com/openai/gym/archive/$GYM_VERSION.tar.gz gym-$GYM_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -72,7 +72,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(cloudpickle future six pyglet gym)
+export MODULES=(cloudpickle future `#six` pyglet gym)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE-*/$MODULE* ../python/

@@ -12,22 +12,22 @@ import static org.bytedeco.skia.global.Skia.*;
 
 
 @Properties(inherit = org.bytedeco.skia.presets.Skia.class)
-public class sk_rect_t extends Pointer {
+public class sk_rsxform_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public sk_rect_t() { super((Pointer)null); allocate(); }
+    public sk_rsxform_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public sk_rect_t(long size) { super((Pointer)null); allocateArray(size); }
+    public sk_rsxform_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public sk_rect_t(Pointer p) { super(p); }
+    public sk_rsxform_t(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public sk_rect_t position(long position) {
-        return (sk_rect_t)super.position(position);
+    @Override public sk_rsxform_t position(long position) {
+        return (sk_rsxform_t)super.position(position);
     }
 
-    public native float left(); public native sk_rect_t left(float setter);
-    public native float top(); public native sk_rect_t top(float setter);
-    public native float right(); public native sk_rect_t right(float setter);
-    public native float bottom(); public native sk_rect_t bottom(float setter);
+    public native float fSCos(); public native sk_rsxform_t fSCos(float setter);
+    public native float fSSin(); public native sk_rsxform_t fSSin(float setter);
+    public native float fTX(); public native sk_rsxform_t fTX(float setter);
+    public native float fTY(); public native sk_rsxform_t fTY(float setter);
 }

@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>gym-platform</artifactId>
-  <version>0.17.1-${project.parent.version}</version>
+  <version>0.17.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Gym</name>
 
   <properties>

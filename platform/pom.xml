@@ -138,7 +138,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>arrow-platform</artifactId>
-      <version>0.17.0-${project.version}</version>
+      <version>0.17.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -198,7 +198,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.18.3-${project.version}</version>
+      <version>1.18.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -208,7 +208,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.17.1-${project.version}</version>
+      <version>0.17.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -248,7 +248,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.15.2-${project.version}</version>
+      <version>1.15.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -288,7 +288,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>skia-platform</artifactId>
-      <version>1.68.1-${project.version}</version>
+      <version>1.68.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

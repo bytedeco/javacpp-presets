@@ -41,7 +41,7 @@ case $PLATFORM in
 esac
 
 # Must be kept in sync with skia.version in pom.xml
-SKIA_VERSION=1.68.1
+SKIA_VERSION=1.68.3
 download https://chromium.googlesource.com/chromium/tools/depot_tools.git/+archive/master.tar.gz depot_tools.tar.gz
 download https://github.com/mono/skia/archive/v$SKIA_VERSION.tar.gz skia-$SKIA_VERSION.tar.gz
 
@@ -53,6 +53,7 @@ mkdir -p depot_tools
 tar --totals -xzf ../depot_tools.tar.gz -C depot_tools
 tar --totals -xzf ../skia-$SKIA_VERSION.tar.gz
 
+sedinplace 's/"HAVE_MEMMOVE"/"HAVE_MEMMOVE", "XML_DEV_URANDOM"/g' skia-$SKIA_VERSION/third_party/expat/BUILD.gn
 sedinplace '/sources = tests_sources/,/}/d' skia-$SKIA_VERSION/BUILD.gn
 sedinplace /-ffp-contract=fast/d skia-$SKIA_VERSION/BUILD.gn
 sedinplace /-march=haswell/d skia-$SKIA_VERSION/BUILD.gn
