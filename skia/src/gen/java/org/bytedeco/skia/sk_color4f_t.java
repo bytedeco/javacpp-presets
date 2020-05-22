@@ -12,22 +12,22 @@ import static org.bytedeco.skia.global.Skia.*;
 
 
 @Properties(inherit = org.bytedeco.skia.presets.Skia.class)
-public class sk_rect_t extends Pointer {
+public class sk_color4f_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public sk_rect_t() { super((Pointer)null); allocate(); }
+    public sk_color4f_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public sk_rect_t(long size) { super((Pointer)null); allocateArray(size); }
+    public sk_color4f_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public sk_rect_t(Pointer p) { super(p); }
+    public sk_color4f_t(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public sk_rect_t position(long position) {
-        return (sk_rect_t)super.position(position);
+    @Override public sk_color4f_t position(long position) {
+        return (sk_color4f_t)super.position(position);
     }
 
-    public native float left(); public native sk_rect_t left(float setter);
-    public native float top(); public native sk_rect_t top(float setter);
-    public native float right(); public native sk_rect_t right(float setter);
-    public native float bottom(); public native sk_rect_t bottom(float setter);
+    public native float fR(); public native sk_color4f_t fR(float setter);
+    public native float fG(); public native sk_color4f_t fG(float setter);
+    public native float fB(); public native sk_color4f_t fB(float setter);
+    public native float fA(); public native sk_color4f_t fA(float setter);
 }

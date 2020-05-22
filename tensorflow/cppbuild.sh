@@ -44,7 +44,7 @@ export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 #export TF_IGNORE_MAX_BAZEL_VERSION=1
 
-TENSORFLOW_VERSION=1.15.2
+TENSORFLOW_VERSION=1.15.3
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 

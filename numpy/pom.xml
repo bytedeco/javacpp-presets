@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy</artifactId>
-  <version>1.18.3-${project.parent.version}</version>
+  <version>1.18.4-${project.parent.version}</version>
   <name>JavaCPP Presets for NumPy</name>
 
   <properties>

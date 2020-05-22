@@ -57,6 +57,9 @@ public class WriterProperties extends Pointer {
 
     public native Builder data_pagesize(@Cast("int64_t") long pg_size);
 
+    public native Builder data_page_version(ParquetDataPageVersion data_page_version);
+    public native Builder data_page_version(@Cast("parquet::ParquetDataPageVersion") int data_page_version);
+
     public native Builder version(ParquetVersion.type version);
     public native Builder version(@Cast("parquet::ParquetVersion::type") int version);
 
@@ -182,6 +185,8 @@ public class WriterProperties extends Pointer {
   public native @Cast("int64_t") long max_row_group_length();
 
   public native @Cast("int64_t") long data_pagesize();
+
+  public native ParquetDataPageVersion data_page_version();
 
   public native ParquetVersion.type version();
 

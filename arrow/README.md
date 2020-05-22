@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Arrow 0.17.0  https://arrow.apache.org/
+ * Arrow 0.17.1  https://arrow.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>arrow-platform</artifactId>
-            <version>0.17.0-1.5.4-SNAPSHOT</version>
+            <version>0.17.1-1.5.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

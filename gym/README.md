@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Gym 0.17.1  https://gym.openai.com/
+ * Gym 0.17.2  https://gym.openai.com/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.gym</groupId>
     <artifactId>listenvs</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ListEnvs</exec.mainClass>
     </properties>
@@ -44,14 +44,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gym-platform</artifactId>
-            <version>0.17.1-1.5.3</version>
+            <version>0.17.2-1.5.4-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2020.1-1.5.3</version>
+            <version>2020.1-1.5.4-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

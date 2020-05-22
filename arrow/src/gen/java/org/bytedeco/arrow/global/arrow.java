@@ -137,11 +137,11 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 
 public static final int ARROW_VERSION_MAJOR = 0;
 public static final int ARROW_VERSION_MINOR = 17;
-public static final int ARROW_VERSION_PATCH = 0;
+public static final int ARROW_VERSION_PATCH = 1;
 public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VERSION_MINOR) * 1000 + ARROW_VERSION_PATCH;
 
 public static final String ARROW_SO_VERSION = "17";
-public static final String ARROW_FULL_SO_VERSION = "17.0.0";
+public static final String ARROW_FULL_SO_VERSION = "17.1.0";
 
 // #define GRPCPP_PP_INCLUDE
 

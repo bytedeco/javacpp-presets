@@ -16,7 +16,7 @@ LLVM_VERSION=8.0.1
 OPENSSL_VERSION=1.1.1f
 ZLIB_VERSION=1.2.11
 PROTO_VERSION=3.7.1
-ARROW_VERSION=0.17.0
+ARROW_VERSION=0.17.1
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
 download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
