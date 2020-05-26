@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Hyperscan 5.2.1  https://www.hyperscan.io
+ * Hyperscan 5.3.0  https://www.hyperscan.io
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -37,7 +37,7 @@ Be aware that flag `-Djavacpp.platform` can be used to specify the target platfo
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.hyperscan</groupId>
     <artifactId>HyperscanTest</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>HyperscanTest</exec.mainClass>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -47,7 +47,7 @@ Be aware that flag `-Djavacpp.platform` can be used to specify the target platfo
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hyperscan-platform</artifactId>
-            <version>5.2.1-1.5.3</version>
+            <version>5.3.0-1.5.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

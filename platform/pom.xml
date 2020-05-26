@@ -78,7 +78,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>4.2.2-${project.version}</version>
+      <version>4.2.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -148,7 +148,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hyperscan-platform</artifactId>
-      <version>5.2.1-${project.version}</version>
+      <version>5.3.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -283,7 +283,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>qt-platform</artifactId>
-      <version>5.14.2-${project.version}</version>
+      <version>5.15.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
