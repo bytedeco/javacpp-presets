@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-QT_VERSION=5.14.2
+QT_VERSION=5.15.0
 download https://download.qt.io/archive/qt/${QT_VERSION%.*}/$QT_VERSION/single/qt-everywhere-src-$QT_VERSION.tar.xz qt-$QT_VERSION.tar.xz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -26,7 +26,7 @@ QT_OPTIONS="-prefix .. -qt-zlib -qt-libjpeg -qt-libpng -qt-pcre -qt-harfbuzz -op
 
 case $PLATFORM in
     linux-x86_64)
-        ./configure $QT_OPTIONS
+        ./configure $QT_OPTIONS -xcb
         make -j $MAKEJ
         make install
         ;;

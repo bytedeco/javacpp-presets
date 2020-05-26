@@ -116,6 +116,7 @@ public class Qt5Core extends QtInfoMapper {
         "QT_DEPRECATED_SINCE(5, 0)",
         "QT_DEPRECATED_SINCE(5, 9)",
         "QT_DEPRECATED_SINCE(5, 13)",
+        "QT_DEPRECATED_SINCE(5, 15)",
 
         // qnamespace.h
         "defined(Q_COMPILER_CLASS_ENUM) && defined(Q_COMPILER_CONSTEXPR)",
@@ -232,6 +233,7 @@ public class Qt5Core extends QtInfoMapper {
     macros.put("Q_ALWAYS_INLINE", "inline");
     macros.put("Q_DECL_COLD_FUNCTION", "");
     macros.put("Q_DECL_CONSTEXPR", "");
+    macros.put("Q_DECL_ENUMERATOR_DEPRECATED_X", "");
     macros.put("Q_DECL_ENUMERATOR_DEPRECATED", "");
     macros.put("Q_DECL_DEPRECATED", "");
     macros.put("Q_DECL_NOEXCEPT", "");

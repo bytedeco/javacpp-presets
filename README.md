@@ -121,7 +121,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * Arrow 0.17.x  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
- * Hyperscan 5.2.x  https://github.com/intel/hyperscan
+ * Hyperscan 5.3.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 1.4.x  https://github.com/oneapi-src/oneDNN
@@ -150,7 +150,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.3.0  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
- * Qt 5.14.x  https://download.qt.io/archive/qt/
+ * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.x  https://github.com/mono/skia
  * cpu_features 0.4.1  https://github.com/google/cpu_features
  * System APIs of the build environments:
