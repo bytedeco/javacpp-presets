@@ -34,7 +34,7 @@ index 9a79115ed..7ddaeec32 100644
  if(UNIX)
    if (APPLE)
 -    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker -dead_strip")
-+    set(ONNXRUNTIME_SO_LINK_FLAG "")
++    set(ONNXRUNTIME_SO_LINK_FLAG "-L/usr/local/lib -lomp")
    else()
 -    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker --version-script=${SYMBOL_FILE} -Xlinker --no-undefined -Xlinker --gc-sections -z noexecstack")
 +    set(ONNXRUNTIME_SO_LINK_FLAG "-Xlinker --no-undefined -Xlinker -z -Xlinker noexecstack")

@@ -29,7 +29,7 @@ case $PLATFORM in
         ;;
     macosx-x86_64)
         sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_C_FLAGS="-I/usr/local/include -L/usr/local/lib -lomp" -DCMAKE_CXX_FLAGS="-I/usr/local/include -L/usr/local/lib -lomp" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;

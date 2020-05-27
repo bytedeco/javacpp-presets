@@ -239,6 +239,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
    fi
 
+   sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
    sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL-1.2.0.dylib /usr/local/lib/libSDL-1.2.0.dylib
    sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/lib/libusb-1.0.0.dylib
 
@@ -378,19 +379,19 @@ else
       bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT; export BUILD_STATUS=0
    elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"
-      mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
+      mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository  --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
       if [ $BUILD_STATUS -eq 0 ]; then
         echo "Deploying platform step"
         for i in ${PROJ//,/ }
         do
 	  cd $i
-          mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -f platform/${EXT:1}/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT; export BUILD_STATUS=$?
+          mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -f platform/${EXT:1}/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT; export BUILD_STATUS=$?
           cd ..
         done
       fi
     else
       echo "Pull request so install only"
-      mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
+      mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
    fi
 
    echo "Build status $BUILD_STATUS"
