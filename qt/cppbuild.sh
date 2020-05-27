@@ -20,6 +20,8 @@ cd qt-everywhere-src-$QT_VERSION
 
 # remove stuff not actually available on Mac
 sedinplace '/kTLSProtocol13/d' qtbase/src/network/ssl/qsslsocket_mac.cpp
+sedinplace '/backtrace_from_fp/d' qtbase/src/corelib/kernel/qcore_mac.mm
+sedinplace 's/(__builtin_available(.*)/(0)/g' qtbase/src/corelib/kernel/qcore_mac.mm
 sedinplace 's/kIOSurfaceSuccess/KERN_SUCCESS/g' qtbase/src/plugins/platforms/cocoa/qiosurfacegraphicsbuffer.mm
 
 QT_OPTIONS="-prefix .. -qt-zlib -qt-libjpeg -qt-libpng -qt-pcre -qt-harfbuzz -opensource -confirm-license -nomake examples -nomake tests -nomake tools -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtdoc -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qtsvg -skip qttools -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip websockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtxmlpatterns -no-icu -no-framework -release -silent"
