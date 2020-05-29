@@ -10,9 +10,10 @@ language: java
 services:
       - docker
 
-matrix:
+jobs:
    include:
-      - os: linux
+      - stage: Deploy
+        os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=android-arm
         install: true
         script: ./ci/install-travis.sh
@@ -660,3 +661,8 @@ matrix:
         env: PROJ=onnxruntime OS=macosx-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
+
+      - stage: Redeploy
+        os: linux
+        install: true
+        script: ./ci/redeploy.sh
