@@ -1541,6 +1541,7 @@
         <module>ale</module>
         <module>onnxruntime</module>
         <module>liquidfun</module>
+        <module>qt</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>
