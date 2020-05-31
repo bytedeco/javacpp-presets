@@ -15,6 +15,10 @@ sudo mkswap /swapfile
 sudo swapon /swapfile
 df -h
 
+# Fix issue with Sectigo CA root certificate on Ubuntu Xenial
+sudo sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf
+sudo update-ca-certificates -f
+
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 sudo chown -R travis:travis $HOME
@@ -214,10 +218,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update
    brew upgrade cmake
-   brew install ccache swig autoconf-archive libomp libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
+   brew install ccache curl swig autoconf-archive libomp libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
 
-   # Try to use ccache to speed up the build
-   export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:/usr/local/opt/bison/bin/:/usr/local/opt/flex/bin/:$PATH
+   # Try to use ccache to speed up the build and work around issue with Sectigo CA root certificate
+   export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/curl/bin/:/usr/local/opt/gpg1/libexec/gpgbin/:/usr/local/opt/bison/bin/:/usr/local/opt/flex/bin/:$PATH
 
    if [[ "$PROJ" =~ arpack-ng ]] || [[ "$PROJ" =~ cminpack ]] || [[ "$PROJ" =~ mkl-dnn ]] || [[ "$PROJ" =~ openblas ]] || [[ "$PROJ" =~ scipy ]]; then
        brew install gcc@7
