@@ -15,6 +15,10 @@ sudo mkswap /swapfile
 sudo swapon /swapfile
 df -h
 
+# Fix issue with Sectigo CA root certificate on Ubuntu Xenial
+sudo sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf
+sudo update-ca-certificates -f
+
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 sudo chown -R travis:travis $HOME
@@ -66,6 +70,10 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-key adv --keyserver key
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:$ARM libasound2-dev:$ARM libusb-dev:$ARM libusb-1.0-0-dev:$ARM libffi-dev:$ARM zlib1g-dev:$ARM libxcb1-dev:$ARM"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARM-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool bison flex perl nasm yasm curl cmake libffi-dev zlib1g-dev"
+
+# Fix issue with Sectigo CA root certificate on Ubuntu Xenial
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "update-ca-certificates -f"
 
 if [ "$OS" == "linux-arm64" ]; then
     if [[ "$PROJ" =~ flycapture ]]; then
