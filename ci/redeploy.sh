@@ -11,6 +11,7 @@ GROUP="org.bytedeco"
 REPOSITORY_ID="sonatype-nexus-snapshots"
 REPOSITORY_URL="https://oss.sonatype.org/content/repositories/snapshots/"
 MAVEN_ARGS="-N -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml"
+REDEPLOY_STATUS=0
 
 cd $TRAVIS_BUILD_DIR
 rm -f dependencies.txt
@@ -21,7 +22,7 @@ for DIR in *; do
             # Skip over currently broken builds on Windows
             JAVACPP_ARGS="-Djavacpp.platform.windows-x86_64="
         fi
-        mvn dependency:list $MAVEN_ARGS $JAVACPP_ARGS -f $POM | tee /dev/tty | grep "$GROUP:.*:compile" >> dependencies.txt
+        mvn dependency:list $MAVEN_ARGS $JAVACPP_ARGS -f $POM | tee /dev/tty | grep "$GROUP:.*:compile" >> dependencies.txt || REDEPLOY_STATUS=$?
     done
 done
 
@@ -47,10 +48,12 @@ for LINE in $(sort -u dependencies.txt); do
             cp -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
             unzip -o $FILE META-INF/maven/$GROUP/$ARTIFACT/pom.xml
             mvn deploy:deploy-file $MAVEN_ARGS -DrepositoryId=$REPOSITORY_ID -Durl=$REPOSITORY_URL -DpomFile=META-INF/maven/$GROUP/$ARTIFACT/pom.xml \
-                    -Dfile=$FILE -DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION -Dfiles=$FILES -Dtypes=$TYPES -Dclassifiers=$CLASSIFIERS
+                    -Dfile=$FILE -DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION -Dfiles=$FILES -Dtypes=$TYPES -Dclassifiers=$CLASSIFIERS || REDEPLOY_STATUS=$?
         fi
     fi
 done
 
 # Prevent all this from getting cached by the CI server
 rm -Rf $(find $HOME/.m2/repository -name '*SNAPSHOT*')
+
+exit $REDEPLOY_STATUS
