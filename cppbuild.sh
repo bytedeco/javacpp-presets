@@ -76,7 +76,7 @@ while [[ $# > 0 ]]; do
     shift
 done
 
-echo -n "Building for platform \"$PLATFORM\""
+echo -n "Building platform \"$PLATFORM\""
 if [[ -n "$EXTENSION" ]]; then
     echo -n " with extension \"$EXTENSION\""
 fi
