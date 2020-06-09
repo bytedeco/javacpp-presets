@@ -64,6 +64,7 @@
               <classifier>${javacpp.platform}</classifier>
               <includes>
                 <include>org/bytedeco/tensorrt/${javacpp.platform}/*jni*</include>
+                <include>META-INF/native-image/${javacpp.platform}/</include>
               </includes>
             </configuration>
           </execution>
@@ -78,6 +79,7 @@
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <includes>
                 <include>org/bytedeco/tensorrt/${javacpp.platform}/</include>
+                <include>META-INF/native-image/${javacpp.platform}/</include>
               </includes>
               <excludes>
                 <exclude>org/bytedeco/tensorrt/${javacpp.platform}/*jni*</exclude>

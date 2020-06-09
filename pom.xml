@@ -298,6 +298,7 @@
               <classOrPackageName>org.bytedeco.${javacpp.packageName}.**</classOrPackageName>
               <copyLibs>true</copyLibs>
               <copyResources>true</copyResources>
+              <configDirectory>${project.build.directory}/native/META-INF/native-image/${javacpp.platform}${javacpp.platform.extension}/</configDirectory>
             </configuration>
           </execution>
         </executions>
@@ -351,6 +352,7 @@
                      without cleaning, ensures we only include files for
                      this platform. -->
                 <include>${javacpp.platform.nativeOutputPath}/</include>
+                <include>META-INF/native-image/${javacpp.platform}${javacpp.platform.extension}/</include>
               </includes>
               <archive>
                 <manifestEntries>
