@@ -1,4 +1,5 @@
 
+ * Add `requires org.bytedeco.javacpp.${javacpp.platform.module}` to load `jnijavacpp` with JPMS ([pull #893](https://github.com/bytedeco/javacpp-presets/pull/893))
  * Add support for Windows to presets for Qt ([issue #862](https://github.com/bytedeco/javacpp-presets/issues/862))
  * Fix JPMS modules for CUDA, ARPACK-NG, GSL, SciPy, Gym, MXNet ([pull #880](https://github.com/bytedeco/javacpp-presets/pull/880) and [pull #881](https://github.com/bytedeco/javacpp-presets/pull/881))
  * Build OpenBLAS with a `TARGET` even for `DYNAMIC_ARCH` to avoid SIGILL ([issue eclipse/deeplearning4j#8747](https://github.com/eclipse/deeplearning4j/issues/8747))
