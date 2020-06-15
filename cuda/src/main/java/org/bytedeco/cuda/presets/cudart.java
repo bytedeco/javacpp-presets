@@ -40,14 +40,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
               compiler = "cpp11", exclude = "<crt/host_defines.h>",
-              includepath = "/usr/local/cuda-10.2/include/", link = {"cudart@.10.2", "cuda@.1#"}, linkpath = "/usr/local/cuda-10.2/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.2/lib64/"),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.2/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-10.2/lib/", "/usr/local/cuda/lib/"}),
-    @Platform(value = "windows-x86_64",     preload = "cudart64_102",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/") },
+              includepath = "/usr/local/cuda-11.0/include/", link = {"cudart@.11.0", "cuda@.1#"}, linkpath = "/usr/local/cuda-11.0/lib/"),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-11.0/lib64/"),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-11.0/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-11.0/lib/", "/usr/local/cuda/lib/"}),
+    @Platform(value = "windows-x86_64",     preload = "cudart64_110",
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
@@ -60,7 +60,10 @@ public class cudart implements InfoMapper {
                              "CUDA_CB", "CUDAAPI", "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__", "__CUDA_HOSTDEVICE_FP16_DECL__",
                              "CUSPARSE_DEPRECATED_HINT").cppTypes().annotations().cppText(""))
 
+               .put(new Info("cuda.h").linePatterns("#define cuDeviceTotalMem.*", "#define cuGraphInstantiate.*").skip())
+
                .put(new Info("__CUDA_DEPRECATED").cppText("#define __CUDA_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CUDNN_DEPRECATED").cppText("#define CUDNN_DEPRECATED deprecated").cppTypes())
                .put(new Info("CUSPARSE_DEPRECATED").cppText("#define CUSPARSE_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
@@ -87,7 +90,8 @@ public class cudart implements InfoMapper {
                .put(new Info("__CUDA_FP16_DECL__", "__float_simpl_sinf(float)", "__float_simpl_cosf(float)",
                              "__internal_trig_reduction_kernel", "__internal_sin_cos_kernel", "cuDeviceGetP2PAttribute",
                              "cuMemRangeGetAttribute", "cuMemRangeGetAttributes", "float2::__cuda_gnu_arm_ice_workaround",
-                             "cuDeviceGetLuid", "cuDeviceGetNvSciSyncAttributes", "cudaDeviceGetNvSciSyncAttributes").skip())
+                             "cuDeviceGetLuid", "cuDeviceGetNvSciSyncAttributes", "cudaDeviceGetNvSciSyncAttributes",
+                             "cuMemRetainAllocationHandle").skip())
                .put(new Info("CUcontext").valueTypes("CUctx_st").pointerTypes("@ByPtrPtr CUctx_st"))
                .put(new Info("CUmodule").valueTypes("CUmod_st").pointerTypes("@ByPtrPtr CUmod_st"))
                .put(new Info("CUfunction").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))
@@ -120,6 +124,7 @@ public class cudart implements InfoMapper {
                .put(new Info("cudaGraph_t").valueTypes("CUgraph_st").pointerTypes("@ByPtrPtr CUgraph_st"))
                .put(new Info("cudaGraphNode_t").valueTypes("CUgraphNode_st").pointerTypes("@ByPtrPtr CUgraphNode_st"))
                .put(new Info("const cudaGraphNode_t").valueTypes("CUgraphNode_st").pointerTypes("@Cast(\"const cudaGraphNode_t*\") @ByPtrPtr CUgraphNode_st"))
+               .put(new Info("cudaFunction_t").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))
                .put(new Info("cudaGraphExec_t").valueTypes("CUgraphExec_st").pointerTypes("@ByPtrPtr CUgraphExec_st"));
     }
 }

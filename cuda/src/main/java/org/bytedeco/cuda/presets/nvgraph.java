@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Samuel Audet
+ * Copyright (C) 2018-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,11 +33,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = cudart.class, value = {
-    @Platform(include = "<nvgraph.h>", link = "nvgraph@.10"),
-    @Platform(value = "windows-x86_64", preload = "nvgraph64_10")},
-        target = "org.bytedeco.cuda.nvgraph", global = "org.bytedeco.cuda.global.nvgraph")
-@NoException
+//@Properties(inherit = cudart.class, value = {
+//    @Platform(include = "<nvgraph.h>", link = "nvgraph@.11"),
+//    @Platform(value = "windows-x86_64", preload = "nvgraph64_11")},
+//        target = "org.bytedeco.cuda.nvgraph", global = "org.bytedeco.cuda.global.nvgraph")
+//@NoException
 public class nvgraph implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NVGRAPH_API").cppTypes().annotations().cppText(""))

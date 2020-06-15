@@ -79,17 +79,16 @@ public class nvinfer implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
+                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
+                         "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
-            switch (platform) {
-                case "linux-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.2" : lib.equals("nvrtc") ? "@.10.2" : "@.10";
-                    break;
-                case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_102" : lib.equals("nvrtc") ? "64_102_0" : "64_10";
-                    break;
-                default:
-                    continue; // no CUDA
+            if (platform.startsWith("linux")) {
+                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.11.0" : lib.equals("nvrtc") ? "@.11.0" : "@.11";
+            } else if (platform.startsWith("windows")) {
+                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_110" : lib.equals("nvrtc") ? "64_110_0" : "64_11";
+            } else {
+                continue; // no CUDA
             }
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);

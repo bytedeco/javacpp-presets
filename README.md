@@ -139,9 +139,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Leptonica 1.79.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
- * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.6.x  https://developer.nvidia.com/nccl
+ * CUDA 11.0  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 8.0.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.7.x  https://developer.nvidia.com/nccl
  * MXNet 1.6.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.0  https://developer.nvidia.com/tensorrt

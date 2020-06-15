@@ -541,11 +541,11 @@ jobs:
         env: PROJ=caffe OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=cuda OS=macosx-x86_64
-        install: true
-        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=cuda OS=macosx-x86_64
+#        install: true
+#        script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode9.3
         env: PROJ=mxnet OS=macosx-x86_64
@@ -626,41 +626,41 @@ jobs:
         install: true
         script: ./ci/install-travis.sh
 
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=opencv OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=opencv OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode9.3
         env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python
         install: true
         script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python-gpu
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=onnxruntime OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=onnxruntime OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
 
       - stage: Redeploy
         os: linux

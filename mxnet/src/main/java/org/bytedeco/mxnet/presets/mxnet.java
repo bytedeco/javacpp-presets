@@ -50,10 +50,10 @@ import org.bytedeco.opencv.presets.*;
         includepath = {"/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}),
     @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
         define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0", "MXNET_USE_TVM_OP 0"},
-        link = {"cudart@.10.2#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.1", "libmxnet", "mxnet_30"},
-        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/"},
-        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/"},
-        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin/"}, extension = "-gpu") })
+        link = {"cudart@.11.0#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.1", "libmxnet", "mxnet_35"},
+        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/include/"},
+        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/lib/x64/"},
+        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/bin/"}, extension = "-gpu") })
 public class mxnet implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "mxnet"); }
 
@@ -77,20 +77,25 @@ public class mxnet implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl", "nvrtc"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl", "nvrtc",
+                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer", "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
-            switch (platform) {
-                case "linux-arm64":
-                case "linux-ppc64le":
-                case "linux-x86_64":
-                case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvrtc") || lib.equals("cudart") ? "@.10.2" : "@.10";
-                    break;
-                case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_102_0" : lib.equals("cudart") ? "64_102" : "64_10";
-                    break;
-                default:
-                    continue; // no CUDA
+            if (platform.startsWith("linux")) {
+                lib += lib.startsWith("cudnn") ? "@.8"
+                     : lib.equals("nccl") ? "@.2"
+                     : lib.equals("cufft") || lib.equals("curand") || lib.equals("cusolver") ? "@.10"
+                     : lib.equals("cudart") ? "@.11.0"
+                     : lib.equals("nvrtc") ? "@.11.0"
+                     : "@.11";
+            } else if (platform.startsWith("windows")) {
+                lib += lib.startsWith("cudnn") ? "64_8"
+                     : lib.equals("nccl") ? "64_2"
+                     : lib.equals("cufft") || lib.equals("curand") || lib.equals("cusolver") ? "64_10"
+                     : lib.equals("cudart") ? "64_110"
+                     : lib.equals("nvrtc") ? "64_110_0"
+                     : "64_11";
+            } else {
+                continue; // no CUDA
             }
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);

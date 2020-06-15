@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_geometry_transforms.h>", link = "nppig@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppig64_10")},
+    @Platform(include = "<nppi_geometry_transforms.h>", link = "nppig@.11"),
+    @Platform(value = "windows-x86_64", preload = "nppig64_11")},
         target = "org.bytedeco.cuda.nppig", global = "org.bytedeco.cuda.global.nppig")
 @NoException
 public class nppig implements InfoMapper {

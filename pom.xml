@@ -1402,7 +1402,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
-        <module>cuda</module>
+<!--        <module>cuda</module>-->
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>ale</module>

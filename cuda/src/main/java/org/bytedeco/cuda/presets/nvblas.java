@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Samuel Audet
+ * Copyright (C) 2018-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<nvblas.h>", link = "nvblas@.10"),
-    @Platform(value = "windows-x86_64", preload = "nvblas64_10")},
+    @Platform(include = "<nvblas.h>", link = "nvblas@.11"),
+    @Platform(value = "windows-x86_64", preload = "nvblas64_11")},
         global = "org.bytedeco.cuda.global.nvblas")
 @NoException
 public class nvblas implements InfoMapper {

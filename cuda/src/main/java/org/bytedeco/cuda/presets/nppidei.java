@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_data_exchange_and_initialization.h>", link = "nppidei@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppidei64_10")},
+    @Platform(include = "<nppi_data_exchange_and_initialization.h>", link = "nppidei@.11"),
+    @Platform(value = "windows-x86_64", preload = "nppidei64_11")},
         global = "org.bytedeco.cuda.global.nppidei")
 @NoException
 public class nppidei implements InfoMapper {
