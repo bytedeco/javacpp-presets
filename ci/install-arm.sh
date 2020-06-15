@@ -75,6 +75,32 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-conf
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "update-ca-certificates -f"
 
+if [[ "$PROJ" =~ cuda ]]; then
+   echo "Setting up for cuda build"
+   cd $HOME/
+   curl -L http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb -o $HOME/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb
+   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.0/cudnn-11.0-linux-arm64-v8.0.0.180.tgz -o $HOME/cudnn-11.0-linux-arm64-v8.0.0.180.tgz
+   curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.3-1+cuda11.0_arm64.txz -o $HOME/nccl_arm64.txz
+   ar vx $HOME/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb
+   tar xvf data.tar.xz
+   mkdir $HOME/cudaFS
+   cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/cudaFS; done
+   cd ..
+   rm -Rf var
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /; cp -R $HOME/cudaFS/* ."
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda-11.0 /usr/local/cuda"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-arm64-v8.0.0.180.tgz -C /usr/local/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_arm64.txz --strip-components=1 -C /usr/local/cuda/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
+   # work around issues with CUDA 10.2/11.0
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib/powerpc64le-linux-gnu/libcublas* /usr/lib/powerpc64le-linux-gnu/libnvblas* /usr/local/cuda/lib64/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.2; done"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \${f:0:-1}1; done"
+fi
+
 if [ "$OS" == "linux-arm64" ]; then
     if [[ "$PROJ" =~ flycapture ]]; then
       if [[ $(find $HOME/downloads/flycapture.2.13.3.31_arm64.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then

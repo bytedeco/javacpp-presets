@@ -19,9 +19,9 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 10.2  https://developer.nvidia.com/cuda-zone
- * cuDNN 7.6.5  https://developer.nvidia.com/cudnn
- * NCCL 2.6.4  https://developer.nvidia.com/nccl
+ * CUDA 11.0  https://developer.nvidia.com/cuda-zone
+ * cuDNN 8.0.0  https://developer.nvidia.com/cudnn
+ * NCCL 2.7.3  https://developer.nvidia.com/nccl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -52,7 +52,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>MNISTCUDNN</exec.mainClass>
     </properties>
@@ -60,14 +60,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>10.2-7.6-1.5.3</version>
+            <version>11.0-8.0-1.5.4-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>10.2-7.6-1.5.3</version>
+            <version>11.0-8.0-1.5.4-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -309,6 +309,7 @@ public class MNISTCUDNN {
                               int[] n, int[] c, int[] h, int[] w,
                               FloatPointer srcData, FloatPointer dstData) {
             int[] algo = new int[1];
+            cudnnConvolutionFwdAlgoPerf_t algoPerf = new cudnnConvolutionFwdAlgoPerf_t(1);
 
             checkCUDNN( cudnnSetTensor4dDescriptor(srcTensorDesc,
                                                     tensorFormat,
@@ -343,14 +344,14 @@ public class MNISTCUDNN {
                                                     n[0], c[0],
                                                     h[0],
                                                     w[0]) );
-            checkCUDNN( cudnnGetConvolutionForwardAlgorithm(cudnnHandle,
+            checkCUDNN( cudnnGetConvolutionForwardAlgorithm_v7(cudnnHandle,
                                                     srcTensorDesc,
                                                     filterDesc,
                                                     convDesc,
                                                     dstTensorDesc,
-                                                    CUDNN_CONVOLUTION_FWD_PREFER_FASTEST,
-                                                    0,
-                                                    algo
+                                                    1,
+                                                    algo,
+                                                    algoPerf
                                                     ) );
             resize(n[0]*c[0]*h[0]*w[0], dstData);
             SizeTPointer sizeInBytes=new SizeTPointer(1);
@@ -360,7 +361,7 @@ public class MNISTCUDNN {
                                                     filterDesc,
                                                     convDesc,
                                                     dstTensorDesc,
-                                                    algo[0],
+                                                    algoPerf.algo(),
                                                     sizeInBytes) );
             if (sizeInBytes.get(0)!=0) {
                 checkCudaErrors( cudaMalloc(workSpace,sizeInBytes.get(0)) );

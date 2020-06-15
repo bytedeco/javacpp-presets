@@ -1,0 +1,143 @@
+diff -ruN caffe-1.0/include/caffe/layers/cudnn_conv_layer.hpp caffe-1.0-cudnn8/include/caffe/layers/cudnn_conv_layer.hpp
+--- caffe-1.0/include/caffe/layers/cudnn_conv_layer.hpp	2017-04-16 01:17:48.000000000 +0900
++++ caffe-1.0-cudnn8/include/caffe/layers/cudnn_conv_layer.hpp	2020-06-10 15:04:13.540649654 +0900
+@@ -48,9 +48,9 @@
+   cudaStream_t*  stream_;
+ 
+   // algorithms for forward and backwards convolutions
+-  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+-  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+-  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
++  cudnnConvolutionFwdAlgoPerf_t *fwd_algo_;
++  cudnnConvolutionBwdFilterAlgoPerf_t *bwd_filter_algo_;
++  cudnnConvolutionBwdDataAlgoPerf_t *bwd_data_algo_;
+ 
+   vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+   cudnnTensorDescriptor_t    bias_desc_;
+diff -ruN caffe-1.0/src/caffe/layers/cudnn_conv_layer.cpp caffe-1.0-cudnn8/src/caffe/layers/cudnn_conv_layer.cpp
+--- caffe-1.0/src/caffe/layers/cudnn_conv_layer.cpp	2017-04-16 01:17:48.000000000 +0900
++++ caffe-1.0-cudnn8/src/caffe/layers/cudnn_conv_layer.cpp	2020-06-10 15:19:37.811734002 +0900
+@@ -23,9 +23,9 @@
+   handle_         = new cudnnHandle_t[this->group_ * CUDNN_STREAMS_PER_GROUP];
+ 
+   // Initialize algorithm arrays
+-  fwd_algo_       = new cudnnConvolutionFwdAlgo_t[bottom.size()];
+-  bwd_filter_algo_= new cudnnConvolutionBwdFilterAlgo_t[bottom.size()];
+-  bwd_data_algo_  = new cudnnConvolutionBwdDataAlgo_t[bottom.size()];
++  fwd_algo_       = new cudnnConvolutionFwdAlgoPerf_t[bottom.size()];
++  bwd_filter_algo_= new cudnnConvolutionBwdFilterAlgoPerf_t[bottom.size()];
++  bwd_data_algo_  = new cudnnConvolutionBwdDataAlgoPerf_t[bottom.size()];
+ 
+   // initialize size arrays
+   workspace_fwd_sizes_ = new size_t[bottom.size()];
+@@ -39,9 +39,9 @@
+ 
+   for (size_t i = 0; i < bottom.size(); ++i) {
+     // initialize all to default algorithms
+-    fwd_algo_[i] = (cudnnConvolutionFwdAlgo_t)0;
+-    bwd_filter_algo_[i] = (cudnnConvolutionBwdFilterAlgo_t)0;
+-    bwd_data_algo_[i] = (cudnnConvolutionBwdDataAlgo_t)0;
++    fwd_algo_[i].algo = (cudnnConvolutionFwdAlgo_t)0;
++    bwd_filter_algo_[i].algo = (cudnnConvolutionBwdFilterAlgo_t)0;
++    bwd_data_algo_[i].algo = (cudnnConvolutionBwdDataAlgo_t)0;
+     // default algorithms don't require workspace
+     workspace_fwd_sizes_[i] = 0;
+     workspace_bwd_data_sizes_[i] = 0;
+@@ -128,13 +128,13 @@
+         stride_h, stride_w);
+ 
+     // choose forward and backward algorithms + workspace(s)
+-    CUDNN_CHECK(cudnnGetConvolutionForwardAlgorithm(handle_[0],
++    CUDNN_CHECK(cudnnGetConvolutionForwardAlgorithm_v7(handle_[0],
+       bottom_descs_[i],
+       filter_desc_,
+       conv_descs_[i],
+       top_descs_[i],
+-      CUDNN_CONVOLUTION_FWD_SPECIFY_WORKSPACE_LIMIT,
+-      workspace_limit_bytes,
++      1,
++      0,
+       &fwd_algo_[i]));
+ 
+     CUDNN_CHECK(cudnnGetConvolutionForwardWorkspaceSize(handle_[0],
+@@ -142,30 +142,28 @@
+       filter_desc_,
+       conv_descs_[i],
+       top_descs_[i],
+-      fwd_algo_[i],
++      fwd_algo_[i].algo,
+       &(workspace_fwd_sizes_[i])));
+ 
+     // choose backward algorithm for filter
+-    CUDNN_CHECK(cudnnGetConvolutionBackwardFilterAlgorithm(handle_[0],
++    CUDNN_CHECK(cudnnGetConvolutionBackwardFilterAlgorithm_v7(handle_[0],
+           bottom_descs_[i], top_descs_[i], conv_descs_[i], filter_desc_,
+-          CUDNN_CONVOLUTION_BWD_FILTER_SPECIFY_WORKSPACE_LIMIT,
+-          workspace_limit_bytes, &bwd_filter_algo_[i]) );
++          1, 0, &bwd_filter_algo_[i]) );
+ 
+     // get workspace for backwards filter algorithm
+     CUDNN_CHECK(cudnnGetConvolutionBackwardFilterWorkspaceSize(handle_[0],
+           bottom_descs_[i], top_descs_[i], conv_descs_[i], filter_desc_,
+-          bwd_filter_algo_[i], &workspace_bwd_filter_sizes_[i]));
++          bwd_filter_algo_[i].algo, &workspace_bwd_filter_sizes_[i]));
+ 
+     // choose backward algo for data
+-    CUDNN_CHECK(cudnnGetConvolutionBackwardDataAlgorithm(handle_[0],
++    CUDNN_CHECK(cudnnGetConvolutionBackwardDataAlgorithm_v7(handle_[0],
+           filter_desc_, top_descs_[i], conv_descs_[i], bottom_descs_[i],
+-          CUDNN_CONVOLUTION_BWD_DATA_SPECIFY_WORKSPACE_LIMIT,
+-        workspace_limit_bytes, &bwd_data_algo_[i]));
++          1, 0, &bwd_data_algo_[i]));
+ 
+     // get workspace size
+     CUDNN_CHECK(cudnnGetConvolutionBackwardDataWorkspaceSize(handle_[0],
+           filter_desc_, top_descs_[i], conv_descs_[i], bottom_descs_[i],
+-          bwd_data_algo_[i], &workspace_bwd_data_sizes_[i]) );
++          bwd_data_algo_[i].algo, &workspace_bwd_data_sizes_[i]) );
+   }
+ 
+   // reduce over all workspace sizes to get a maximum to allocate / reallocate
+@@ -204,9 +202,9 @@
+         workspace_fwd_sizes_[i] = 0;
+         workspace_bwd_filter_sizes_[i] = 0;
+         workspace_bwd_data_sizes_[i] = 0;
+-        fwd_algo_[i] = CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_GEMM;
+-        bwd_filter_algo_[i] = CUDNN_CONVOLUTION_BWD_FILTER_ALGO_0;
+-        bwd_data_algo_[i] = CUDNN_CONVOLUTION_BWD_DATA_ALGO_0;
++        fwd_algo_[i].algo = CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_GEMM;
++        bwd_filter_algo_[i].algo = CUDNN_CONVOLUTION_BWD_FILTER_ALGO_0;
++        bwd_data_algo_[i].algo = CUDNN_CONVOLUTION_BWD_DATA_ALGO_0;
+       }
+ 
+       // NULL out all workspace pointers
+diff -ruN caffe-1.0/src/caffe/layers/cudnn_conv_layer.cu caffe-1.0-cudnn8/src/caffe/layers/cudnn_conv_layer.cu
+--- caffe-1.0/src/caffe/layers/cudnn_conv_layer.cu	2017-04-16 01:17:48.000000000 +0900
++++ caffe-1.0-cudnn8/src/caffe/layers/cudnn_conv_layer.cu	2020-06-10 15:24:49.248840334 +0900
+@@ -23,7 +23,7 @@
+             bottom_descs_[i], bottom_data + bottom_offset_ * g,
+             filter_desc_, weight + this->weight_offset_ * g,
+             conv_descs_[i],
+-            fwd_algo_[i], workspace[g], workspace_fwd_sizes_[i],
++            fwd_algo_[i].algo, workspace[g], workspace_fwd_sizes_[i],
+             cudnn::dataType<Dtype>::zero,
+             top_descs_[i], top_data + top_offset_ * g));
+ 
+@@ -80,7 +80,7 @@
+               bottom_descs_[i], bottom_data + bottom_offset_ * g,
+               top_descs_[i],    top_diff + top_offset_ * g,
+               conv_descs_[i],
+-              bwd_filter_algo_[i], workspace[1*this->group_ + g],
++              bwd_filter_algo_[i].algo, workspace[1*this->group_ + g],
+               workspace_bwd_filter_sizes_[i],
+               cudnn::dataType<Dtype>::one,
+               filter_desc_, weight_diff + this->weight_offset_ * g));
+@@ -98,7 +98,7 @@
+               filter_desc_, weight + this->weight_offset_ * g,
+               top_descs_[i], top_diff + top_offset_ * g,
+               conv_descs_[i],
+-              bwd_data_algo_[i], workspace[2*this->group_ + g],
++              bwd_data_algo_[i].algo, workspace[2*this->group_ + g],
+               workspace_bwd_data_sizes_[i],
+               cudnn::dataType<Dtype>::zero,
+               bottom_descs_[i], bottom_diff + bottom_offset_ * g));
