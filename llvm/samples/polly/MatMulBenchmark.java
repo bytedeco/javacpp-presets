@@ -1,4 +1,6 @@
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.FloatPointer;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
@@ -6,6 +8,7 @@ import org.bytedeco.llvm.LLVM.*;
 import java.util.Random;
 
 import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.mkl.global.mkl_rt.*;
 
 /**
  * Matrix multiply benchmark.
@@ -26,7 +29,7 @@ import static org.bytedeco.llvm.global.LLVM.*;
 public class MatMulBenchmark {
     static final int M = 2000, N = 2000, K = 2000;
     static final boolean usePolly = true;
-    static final boolean usePollyParallel = false;
+    static final boolean usePollyParallel = true;
     static final boolean printResult = false;
 
     static final BytePointer cpu = LLVMGetHostCPUName();
@@ -42,8 +45,29 @@ public class MatMulBenchmark {
 
         initialize();
 
+        benchmarkMKL(a, b, c);
         benchmarkLLVM(a, b, c);
         benchmarkPureJava(a, b, c);
+    }
+
+    static void benchmarkMKL(float[] a, float[] b, float[] c) {
+        Pointer jitter = new Pointer();
+        mkl_cblas_jit_create_sgemm(jitter, CblasRowMajor, CblasNoTrans, CblasNoTrans, M, N, K, 1.0f, K, N, 0.0f, N);
+        sgemm_jit_kernel_t sgemm = mkl_jit_get_sgemm_ptr(jitter);
+
+        FloatPointer A = new FloatPointer(a);
+        FloatPointer B = new FloatPointer(b);
+        FloatPointer C = new FloatPointer(c);
+
+        int iterations = 10;
+        long start = System.nanoTime();
+        for (int i = 0; i < iterations; i++) {
+            sgemm.call(jitter, A, B, C);
+        }
+        long end = System.nanoTime();
+        System.out.printf("MKL: %fms. c[0] = %f\n", (end - start) / (iterations * 1000d * 1000d), C.get(0));
+
+        mkl_jit_destroy(jitter);
     }
 
     static void benchmarkPureJava(float[] a, float[] b, float[] c) {
@@ -70,7 +94,14 @@ public class MatMulBenchmark {
     static void initialize() {
         if (usePolly) {
             if (usePollyParallel) {
-                LLVMLoadLibraryPermanently("libgomp.so.1"); // This file name depends on your machine
+                String platform = Loader.getPlatform();
+                String omplib = platform.startsWith("linux") ? "libiomp5.so"
+                              : platform.startsWith("macosx") ? "libiomp5.dylib"
+                              : platform.startsWith("windows") ? "libiomp5md.dll"
+                              : null;
+                if (omplib != null) {
+                    LLVMLoadLibraryPermanently(omplib);
+                }
                 setLLVMCommandLineOptions("",
                         "-mllvm", "-polly",
                         "-mllvm", "-polly-parallel",
