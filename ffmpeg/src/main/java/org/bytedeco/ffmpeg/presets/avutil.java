@@ -72,7 +72,8 @@ public class avutil implements InfoMapper {
                .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID", "AVCOL_SPC_YCGCO", "AVCOL_SPC_YCOCG", "FF_CEIL_RSHIFT",
                              "av_ceil_log2", "av_clip", "av_clip64", "av_clip_uint8", "av_clip_int8", "av_clip_uint16", "av_clip_int16",
                              "av_clipl_int32", "av_clip_intp2", "av_clip_uintp2", "av_mod_uintp2", "av_sat_add32", "av_sat_dadd32",
-                             "av_sat_sub32", "av_sat_dsub32", "av_clipf", "av_clipd", "av_popcount", "av_popcount64", "av_parity", "av_sat_add64", "av_sat_sub64").cppTypes().translate())
+                             "av_sat_sub32", "av_sat_dsub32", "av_clipf", "av_clipd", "av_popcount", "av_popcount64", "av_parity",
+                             "av_sat_add64", "av_sat_sub64").cppTypes().translate())
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())

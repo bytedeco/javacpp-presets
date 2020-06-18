@@ -14,7 +14,11 @@ import static org.bytedeco.ffmpeg.global.swresample.*;
 
 import static org.bytedeco.ffmpeg.global.avcodec.*;
 
-// #endif
+
+/**
+ * \addtogroup lavc_core
+ * \{
+ */
 
 @Opaque @Properties(inherit = org.bytedeco.ffmpeg.presets.avcodec.class)
 public class AVBSFInternal extends Pointer {

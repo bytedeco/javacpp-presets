@@ -76,10 +76,14 @@ public static final int AV_OPT_FLAG_EXPORT =          64;
 public static final int AV_OPT_FLAG_READONLY =        128;
 /** a generic parameter which can be set by the user for bit stream filtering */
 public static final int AV_OPT_FLAG_BSF_PARAM =       (1<<8);
+/** a generic parameter which can be set by the user at runtime */
+public static final int AV_OPT_FLAG_RUNTIME_PARAM =   (1<<15);
 /** a generic parameter which can be set by the user for filtering */
 public static final int AV_OPT_FLAG_FILTERING_PARAM = (1<<16);
 /** set if option is deprecated, users should refer to AVOption.help text for more information */
 public static final int AV_OPT_FLAG_DEPRECATED =      (1<<17);
+/** set if option constants can also reside in child objects */
+public static final int AV_OPT_FLAG_CHILD_CONSTS =    (1<<18);
 //FIXME think about enc-audio, ... style flags
 
     /**

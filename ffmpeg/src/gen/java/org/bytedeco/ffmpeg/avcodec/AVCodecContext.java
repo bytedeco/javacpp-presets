@@ -1552,6 +1552,9 @@ public static final int FF_PROFILE_PRORES_XQ =        5;
 public static final int FF_PROFILE_ARIB_PROFILE_A = 0;
 public static final int FF_PROFILE_ARIB_PROFILE_C = 1;
 
+public static final int FF_PROFILE_KLVA_SYNC = 0;
+public static final int FF_PROFILE_KLVA_ASYNC = 1;
+
     /**
      * level
      * - encoding: Set by user.
@@ -1899,4 +1902,22 @@ public static final int FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS = 1;
      * - encoding: unused
      */
     public native int discard_damaged_percentage(); public native AVCodecContext discard_damaged_percentage(int setter);
+
+    /**
+     * The number of samples per frame to maximally accept.
+     *
+     * - decoding: set by user
+     * - encoding: set by user
+     */
+    public native @Cast("int64_t") long max_samples(); public native AVCodecContext max_samples(long setter);
+
+    /**
+     * Bit set of AV_CODEC_EXPORT_DATA_* flags, which affects the kind of
+     * metadata exported in frame, packet, or coded stream side data by
+     * decoders and encoders.
+     *
+     * - decoding: set by user
+     * - encoding: set by user
+     */
+    public native int export_side_data(); public native AVCodecContext export_side_data(int setter);
 }
