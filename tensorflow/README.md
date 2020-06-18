@@ -59,7 +59,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>10.2-7.6-1.5.4-SNAPSHOT</version>
+            <version>11.0-8.0-1.5.4-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional dependencies to load Python-enabled builds -->

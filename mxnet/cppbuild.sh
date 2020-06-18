@@ -10,7 +10,7 @@ fi
 export ADD_CFLAGS="-DMXNET_USE_LAPACK=1"
 export ADD_LDFLAGS=
 export USE_OPENMP=1
-export CUDA_ARCH=-arch=sm_30
+export CUDA_ARCH=-arch=sm_35
 export USE_CUDA=0
 export USE_CUDNN=0
 export USE_NCCL=0
@@ -74,6 +74,7 @@ sedinplace '/LDFLAGS += -llapack/d' Makefile
 # patch up compile errors
 sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
 sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
+sedinplace '/include_directories("3rdparty\/nvidia_cub")/d' CMakeLists.txt
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
 
@@ -96,6 +97,7 @@ case $PLATFORM in
         export CC="$(which gcc) -m64"
         export CXX="$(which g++) -m64"
         export BLAS="openblas"
+        sedinplace "s/-std=c++11/-std=c++14/g" Makefile
         # libmklml_intel.so does not have a SONAME, so libmkldnn.so.0 needs an RPATH to be able to load
         sedinplace "s/$CMAKE/$CMAKE -DCMAKE_CXX_FLAGS='-Wl,-rpath,\$\$ORIGIN\/'/g" mkldnn.mk
         ;;
@@ -106,6 +108,9 @@ case $PLATFORM in
         export CXX="$(which clang++)"
         export BLAS="openblas"
         export USE_OPENMP=0
+#        export USE_OPENMP=1
+#        export ADD_CFLAGS="$ADD_CFLAGS -I/usr/local/include"
+#        export ADD_CFLAGS="$ADD_CFLAGS -L/usr/local/lib -lomp"
         ;;
     windows-x86_64)
         # copy include files
@@ -115,7 +120,7 @@ case $PLATFORM in
         # configure the build
         mkdir -p ../build
         cd ../build
-        USE_X="-DMXNET_CUDA_ARCH=3.0+PTX -DCUDA_ARCH_LIST=3.0+PTX -DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
+        USE_X="-DMXNET_CUDA_ARCH=3.5+PTX -DCUDA_ARCH_LIST=3.5+PTX -DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
         OPENCV="-DOpenCV_DIR=$OPENCV_PATH/ -DOpenCV_CONFIG_PATH=$OPENCV_PATH/"
         OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/lib/openblas.lib"
         "$CMAKE" -G "Visual Studio 16 2019" $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
@@ -152,7 +157,7 @@ if [[ ! "$PLATFORM" == windows* ]]; then
     sed -i="" 's/$(shell pkg-config --cflags $(OPENCV_LIB))//' Makefile
     sed -i="" 's/$(shell pkg-config --libs-only-L $(OPENCV_LIB))//' Makefile
     sed -i="" 's/$(filter -lopencv_imgcodecs -lopencv_highgui, $(shell pkg-config --libs-only-l $(OPENCV_LIB)))/-lopencv_highgui -lopencv_imgcodecs/' Makefile
-    make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+    make -s -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
     cp -RLf include lib 3rdparty/dmlc-core/include ..
     cp -RLf 3rdparty/mshadow/mshadow ../include
     unset CC

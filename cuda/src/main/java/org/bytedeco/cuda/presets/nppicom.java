@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,11 +33,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_compression_functions.h>", link = "nppicom@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppicom64_10")},
-        target = "org.bytedeco.cuda.nppicom", global = "org.bytedeco.cuda.global.nppicom")
-@NoException
+//@Properties(inherit = nppc.class, value = {
+//    @Platform(include = "<nppi_compression_functions.h>", link = "nppicom@.11"),
+//    @Platform(value = "windows-x86_64", preload = "nppicom64_11")},
+//        target = "org.bytedeco.cuda.nppicom", global = "org.bytedeco.cuda.global.nppicom")
+//@NoException
 public class nppicom implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("nppiDecodeHuffmanScanHost_JPEG_8u16s_P1R_Ctx", "nppiDecodeHuffmanScanHost_JPEG_8u16s_P3R_Ctx").skip());

@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
-      <version>10.2-7.6-${project.parent.version}</version>
+      <version>11.0-8.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -47,7 +47,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.2-7.6-${project.parent.version}</version>
+            <version>11.0-8.0-${project.parent.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -64,6 +64,7 @@
               <classifier>${javacpp.platform}</classifier>
               <includes>
                 <include>org/bytedeco/tensorrt/${javacpp.platform}/*jni*</include>
+                <include>META-INF/native-image/${javacpp.platform}/</include>
               </includes>
             </configuration>
           </execution>
@@ -78,6 +79,7 @@
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <includes>
                 <include>org/bytedeco/tensorrt/${javacpp.platform}/</include>
+                <include>META-INF/native-image/${javacpp.platform}/</include>
               </includes>
               <excludes>
                 <exclude>org/bytedeco/tensorrt/${javacpp.platform}/*jni*</exclude>

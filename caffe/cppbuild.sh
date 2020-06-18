@@ -161,6 +161,7 @@ cp SENet-master/src/caffe/layers/axpy_layer.* caffe-$CAFFE_VERSION/src/caffe/lay
 
 cd caffe-$CAFFE_VERSION
 patch -Np1 < ../../../caffe-nogpu.patch
+patch -Np1 < ../../../caffe-cudnn8.patch
 sedinplace 's/CV_LOAD_IMAGE_GRAYSCALE/cv::IMREAD_GRAYSCALE/g' src/caffe/util/io.cpp src/caffe/layers/window_data_layer.cpp
 sedinplace 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' src/caffe/util/io.cpp src/caffe/layers/window_data_layer.cpp
 cp Makefile.config.example Makefile.config
@@ -168,8 +169,8 @@ export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include -std=c++11"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include $CUDAFLAGS -std=c++11"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH -L$OPENCV_PATH/lib -L$HDF5_PATH -L$HDF5_PATH/lib"
-make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CPU_ONLY=$CPU_ONLY CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN proto
-make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CPU_ONLY=$CPU_ONLY CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN lib
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CPU_ONLY=$CPU_ONLY CUDA_ARCH=-arch=sm_35 USE_CUDNN=$USE_CUDNN proto
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CPU_ONLY=$CPU_ONLY CUDA_ARCH=-arch=sm_35 USE_CUDNN=$USE_CUDNN lib
 # Manual deploy to avoid Caffe's python build
 mkdir -p ../include/caffe/proto
 cp -a include/caffe/* ../include/caffe/
