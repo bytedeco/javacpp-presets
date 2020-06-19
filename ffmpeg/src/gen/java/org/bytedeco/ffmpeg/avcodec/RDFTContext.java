@@ -16,9 +16,9 @@ import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 
 @Opaque @Properties(inherit = org.bytedeco.ffmpeg.presets.avcodec.class)
-public class AVCodecInternal extends Pointer {
+public class RDFTContext extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public AVCodecInternal() { super((Pointer)null); }
+    public RDFTContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVCodecInternal(Pointer p) { super(p); }
+    public RDFTContext(Pointer p) { super(p); }
 }

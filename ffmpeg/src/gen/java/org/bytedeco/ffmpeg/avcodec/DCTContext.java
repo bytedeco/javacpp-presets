@@ -15,10 +15,12 @@ import static org.bytedeco.ffmpeg.global.swresample.*;
 import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 
+/* Discrete Cosine Transform */
+
 @Opaque @Properties(inherit = org.bytedeco.ffmpeg.presets.avcodec.class)
-public class AVCodecInternal extends Pointer {
+public class DCTContext extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public AVCodecInternal() { super((Pointer)null); }
+    public DCTContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVCodecInternal(Pointer p) { super(p); }
+    public DCTContext(Pointer p) { super(p); }
 }

@@ -702,4 +702,11 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * - decoding: set by user
      */
     public native int skip_estimate_duration_from_pts(); public native AVFormatContext skip_estimate_duration_from_pts(int setter);
+
+    /**
+     * Maximum number of packets that can be probed
+     * - encoding: unused
+     * - decoding: set by user
+     */
+    public native int max_probe_packets(); public native AVFormatContext max_probe_packets(int setter);
 }
