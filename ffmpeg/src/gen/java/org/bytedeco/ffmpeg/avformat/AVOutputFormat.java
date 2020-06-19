@@ -129,7 +129,8 @@ public class AVOutputFormat extends Pointer {
     }
     public native Write_trailer_AVFormatContext write_trailer(); public native AVOutputFormat write_trailer(Write_trailer_AVFormatContext setter);
     /**
-     * Currently only used to set pixel format if not YUV420P.
+     * A format-specific function for interleavement.
+     * If unset, packets will be interleaved by dts.
      */
     public static class Interleave_packet_AVFormatContext_AVPacket_AVPacket_int extends FunctionPointer {
         static { Loader.load(); }

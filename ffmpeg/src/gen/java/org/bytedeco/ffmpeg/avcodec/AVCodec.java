@@ -95,20 +95,6 @@ public class AVCodec extends Pointer {
      * \{
      */
     /**
-     * If defined, called on thread contexts when they are created.
-     * If the codec allocates writable tables in init(), re-allocate them here.
-     * priv_data will be set to a copy of the original.
-     */
-    public static class Init_thread_copy_AVCodecContext extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Init_thread_copy_AVCodecContext(Pointer p) { super(p); }
-        protected Init_thread_copy_AVCodecContext() { allocate(); }
-        private native void allocate();
-        public native int call(AVCodecContext arg0);
-    }
-    public native Init_thread_copy_AVCodecContext init_thread_copy(); public native AVCodec init_thread_copy(Init_thread_copy_AVCodecContext setter);
-    /**
      * Copy necessary context variables from a previous thread context to the current one.
      * If not defined, the next thread will start automatically; otherwise, the codec
      * must call ff_thread_finish_setup().
@@ -182,8 +168,8 @@ public class AVCodec extends Pointer {
         public    Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer(Pointer p) { super(p); }
         protected Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer() { allocate(); }
         private native void allocate();
-        public native int call(AVCodecContext avctx, AVPacket avpkt, @Const AVFrame frame,
-                       IntPointer got_packet_ptr);
+        public native int call(AVCodecContext avctx, AVPacket avpkt,
+                       @Const AVFrame frame, IntPointer got_packet_ptr);
     }
     public native Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer encode2(); public native AVCodec encode2(Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer setter);
     public static class Decode_AVCodecContext_Pointer_IntPointer_AVPacket extends FunctionPointer {
@@ -279,4 +265,9 @@ public class AVCodec extends Pointer {
      */
     public native @Cast("const AVCodecHWConfigInternal*") Pointer hw_configs(int i); public native AVCodec hw_configs(int i, Pointer setter);
     @MemberGetter public native @Cast("const AVCodecHWConfigInternal**") PointerPointer hw_configs();
+
+    /**
+     * List of supported codec_tags, terminated by FF_CODEC_TAGS_END.
+     */
+    public native @Cast("const uint32_t*") IntPointer codec_tags(); public native AVCodec codec_tags(IntPointer setter);
 }

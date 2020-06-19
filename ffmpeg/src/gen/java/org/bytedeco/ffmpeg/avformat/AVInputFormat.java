@@ -134,8 +134,7 @@ public class AVInputFormat extends Pointer {
      * AVFMTCTX_NOHEADER is used and only in the calling thread (not in a
      * background thread).
      * @return 0 on success, < 0 on error.
-     *         When returning an error, pkt must not have been allocated
-     *         or must be freed before returning
+     *         Upon returning an error, pkt must be unreferenced by the caller.
      */
     public static class Read_packet_AVFormatContext_AVPacket extends FunctionPointer {
         static { Loader.load(); }

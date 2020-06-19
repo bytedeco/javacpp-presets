@@ -16,6 +16,11 @@ import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 
 /**
+ * \addtogroup lavc_core
+ * \{
+ */
+
+/**
  * This struct describes the properties of a single codec described by an
  * AVCodecID.
  * @see avcodec_descriptor_get()

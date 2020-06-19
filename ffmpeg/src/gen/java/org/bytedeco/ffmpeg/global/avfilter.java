@@ -109,7 +109,7 @@ public class avfilter extends org.bytedeco.ffmpeg.presets.avfilter {
  * Get the name of an AVFilterPad.
  *
  * @param pads an array of AVFilterPads
- * @param pad_idx index of the pad in the array it; is the caller's
+ * @param pad_idx index of the pad in the array; it is the caller's
  *                responsibility to ensure the index is valid
  *
  * @return name of the pad_idx'th pad in pads
@@ -405,7 +405,7 @@ public static final int AVFILTER_CMD_FLAG_FAST =  2;
 /**
  * Create and add a filter instance into an existing graph.
  * The filter instance is created from the filter filt and inited
- * with the parameters args and opaque.
+ * with the parameter args. opaque is currently ignored.
  *
  * In case of success put in *filt_ctx the pointer to the created
  * filter instance, otherwise set *filt_ctx to NULL.
@@ -709,7 +709,7 @@ public static final int AV_BUFFERSINK_FLAG_NO_REQUEST = 2;
  *
  * Must be freed with av_free().
  */
-@NoException public static native AVBufferSinkParams av_buffersink_params_alloc();
+@NoException public static native @Deprecated AVBufferSinkParams av_buffersink_params_alloc();
 // Targeting ../avfilter/AVABufferSinkParams.java
 
 
@@ -719,7 +719,8 @@ public static final int AV_BUFFERSINK_FLAG_NO_REQUEST = 2;
  *
  * Must be freed with av_free().
  */
-@NoException public static native AVABufferSinkParams av_abuffersink_params_alloc();
+@NoException public static native @Deprecated AVABufferSinkParams av_abuffersink_params_alloc();
+// #endif
 
 /**
  * Set the frame size for an audio buffer sink.

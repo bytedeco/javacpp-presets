@@ -297,7 +297,6 @@ public static final int MAX_REORDER_DELAY = 16;
      * -1   -> probing finished
      *  0   -> no probing requested
      * rest -> perform probing with request_probe being the minimum score to accept.
-     * NOT PART OF PUBLIC API
      */
     public native int request_probe(); public native AVStream request_probe(int setter);
     /**
@@ -343,7 +342,6 @@ public static final int MAX_REORDER_DELAY = 16;
 
     /**
      * Timestamp offset added to timestamps before muxing
-     * NOT PART OF PUBLIC API
      */
     public native @Cast("int64_t") long mux_ts_offset(); public native AVStream mux_ts_offset(long setter);
 

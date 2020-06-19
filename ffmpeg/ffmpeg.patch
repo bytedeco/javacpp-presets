@@ -1,26 +1,27 @@
-diff -ruN ffmpeg-4.2/configure ffmpeg-4.2-patch/configure
---- ffmpeg-4.2/configure	2019-08-06 06:11:40.000000000 +0900
-+++ ffmpeg-4.2-patch/configure	2019-08-10 11:02:11.257404696 +0900
-@@ -6207,7 +6207,7 @@
+diff --git a/configure b/configure
+index 8569a60bf8..0ca4f4ea77 100755
+--- a/configure
++++ b/configure
+@@ -6306,7 +6306,7 @@ flite_extralibs="-lflite_cmu_time_awb -lflite_cmu_us_awb -lflite_cmu_us_kal -lfl
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
  enabled libfontconfig     && require_pkg_config libfontconfig fontconfig "fontconfig/fontconfig.h" FcInit
 -enabled libfreetype       && require_pkg_config libfreetype freetype2 "ft2build.h FT_FREETYPE_H" FT_Init_FreeType
 +enabled libfreetype       && add_cppflags -I ../include/freetype2/ && require libfreetype "ft2build.h FT_FREETYPE_H" FT_Init_FreeType -lfreetype
  enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
+ enabled libglslang        && require_cpp libglslang glslang/SPIRV/GlslangToSpv.h "glslang::TIntermediate*" -lglslang -lOSDependent -lHLSL -lOGLCompiler -lSPVRemapper -lSPIRV -lSPIRV-Tools-opt -lSPIRV-Tools -lpthread -lstdc++
  enabled libgme            && { check_pkg_config libgme libgme gme/gme.h gme_new_emu ||
-                                require libgme gme/gme.h gme_new_emu -lgme -lstdc++; }
-@@ -6224,8 +6224,7 @@
+@@ -6324,8 +6324,7 @@ enabled liblensfun        && require_pkg_config liblensfun lensfun lensfun.h lf_
  # Media SDK or Intel Media Server Studio, these don't come with
  # pkg-config support.  Instead, users should make sure that the build
  # can find the libraries and headers through other means.
 -enabled libmfx            && { check_pkg_config libmfx libmfx "mfx/mfxvideo.h" MFXInit ||
 -                               { require libmfx "mfx/mfxvideo.h" MFXInit "-llibmfx $advapi32_extralibs" && warn "using libmfx without pkg-config"; } }
 +enabled libmfx            && require libmfx "mfx/mfxvideo.h" MFXInit -lmfx && warn "using libmfx without pkg-config";
- enabled libmodplug        && require_pkg_config libmodplug libmodplug libmodplug/modplug.h ModPlug_Load
- enabled libmp3lame        && require "libmp3lame >= 3.98.3" lame/lame.h lame_set_VBR_quality -lmp3lame $libm_extralibs
- enabled libmysofa         && { check_pkg_config libmysofa libmysofa mysofa.h mysofa_load ||
-@@ -6239,18 +6238,11 @@
+ if enabled libmfx; then
+    check_cc MFX_CODEC_VP9 "mfx/mfxvp9.h mfx/mfxstructures.h" "MFX_CODEC_VP9"
+ fi
+@@ -6343,18 +6342,11 @@ enabled libopencv         && { check_headers opencv2/core/core_c.h &&
                                 { check_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
                                   require libopencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config libopencv opencv opencv/cxcore.h cvCreateImageHeader; }
@@ -39,9 +40,9 @@ diff -ruN ffmpeg-4.2/configure ffmpeg-4.2-patch/configure
 -}
 +enabled libopus           && add_cppflags -I ../include/opus/ && require libopus opus_multistream.h opus_multistream_decoder_create -lopus
  enabled libpulse          && require_pkg_config libpulse libpulse pulse/pulseaudio.h pa_context_new
- enabled librsvg           && require_pkg_config librsvg librsvg-2.0 librsvg-2.0/librsvg/rsvg.h rsvg_handle_render_cairo
- enabled librtmp           && require_pkg_config librtmp librtmp librtmp/rtmp.h RTMP_Socket
-@@ -6261,7 +6253,7 @@
+ enabled librabbitmq       && require_pkg_config librabbitmq "librabbitmq >= 0.7.1" amqp.h amqp_new_connection
+ enabled librav1e          && require_pkg_config librav1e "rav1e >= 0.1.0" rav1e.h rav1e_context_new
+@@ -6367,7 +6359,7 @@ enabled libsmbclient      && { check_pkg_config libsmbclient smbclient libsmbcli
  enabled libsnappy         && require libsnappy snappy-c.h snappy_compress -lsnappy -lstdc++
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh libssh libssh/sftp.h sftp_init
@@ -50,7 +51,7 @@ diff -ruN ffmpeg-4.2/configure ffmpeg-4.2-patch/configure
  enabled libsrt            && require_pkg_config libsrt "srt >= 1.3.0" srt/srt.h srt_socket
  enabled libtensorflow     && require libtensorflow tensorflow/c/c_api.h TF_Version -ltensorflow
  enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
-@@ -6279,19 +6271,15 @@
+@@ -6385,19 +6377,15 @@ enabled libvorbis         && require_pkg_config libvorbis vorbis vorbis/codec.h
  
  enabled libvpx            && {
      enabled libvpx_vp8_decoder && {
@@ -70,7 +71,7 @@ diff -ruN ffmpeg-4.2/configure ffmpeg-4.2-patch/configure
              check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs $pthreads_extralibs"
      }
      if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
-@@ -6303,12 +6291,12 @@
+@@ -6409,12 +6397,12 @@ enabled libwavpack        && require libwavpack wavpack/wavpack.h WavpackOpenFil
  enabled libwebp           && {
      enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
      enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
@@ -82,13 +83,13 @@ diff -ruN ffmpeg-4.2/configure ffmpeg-4.2-patch/configure
                               check_cpp_condition libx262 x264.h "X264_MPEG2"
 -enabled libx265           && require_pkg_config libx265 x265 x265.h x265_api_get &&
 +enabled libx265           && require libx265 x265.h x265_encoder_encode -lx265 $pthreads_extralibs &&
-                              require_cpp_condition libx265 x265.h "X265_BUILD >= 68"
+                              require_cpp_condition libx265 x265.h "X265_BUILD >= 70"
  enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode "-lxavs $pthreads_extralibs $libm_extralibs"
  enabled libxavs2          && require_pkg_config libxavs2 "xavs2 >= 1.3.0" "stdint.h xavs2.h" xavs2_api_get
-@@ -6355,9 +6343,9 @@
-                                die "ERROR: OpenMAX IL headers not found"; } && enable omx
+@@ -6465,9 +6453,9 @@ enabled omx               && require_headers OMX_Core.h
  enabled openssl           && { check_pkg_config openssl openssl openssl/ssl.h OPENSSL_init_ssl ||
                                 check_pkg_config openssl openssl openssl/ssl.h SSL_library_init ||
+                                check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto ||
 -                               check_lib openssl openssl/ssl.h SSL_library_init -lssl -lcrypto ||
 -                               check_lib openssl openssl/ssl.h SSL_library_init -lssl32 -leay32 ||
 -                               check_lib openssl openssl/ssl.h SSL_library_init -lssl -lcrypto -lws2_32 -lgdi32 ||

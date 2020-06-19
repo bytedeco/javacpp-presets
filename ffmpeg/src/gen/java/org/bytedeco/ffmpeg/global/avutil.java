@@ -1772,6 +1772,12 @@ public static final int
 @NoException public static native @Cast("uint32_t") int av_q2intfloat(@ByVal AVRational q);
 
 /**
+ * Return the best rational so that a and b are multiple of it.
+ * If the resulting denominator is larger than max_den, return def.
+ */
+@NoException public static native @ByVal AVRational av_gcd_q(@ByVal AVRational a, @ByVal AVRational b, int max_den, @ByVal AVRational def);
+
+/**
  * \}
  */
 
@@ -1934,6 +1940,32 @@ public static final int AV_LOG_MAX_OFFSET = (AV_LOG_TRACE - AV_LOG_QUIET);
  */
 @NoException public static native void av_log(Pointer avcl, int level, @Cast("const char*") BytePointer fmt);
 @NoException public static native void av_log(Pointer avcl, int level, String fmt);
+
+/**
+ * Send the specified message to the log once with the initial_level and then with
+ * the subsequent_level. By default, all logging messages are sent to
+ * stderr. This behavior can be altered by setting a different logging callback
+ * function.
+ * @see av_log
+ *
+ * @param avcl A pointer to an arbitrary struct of which the first field is a
+ *        pointer to an AVClass struct or NULL if general log.
+ * @param initial_level importance level of the message expressed using a \ref
+ *        lavu_log_constants "Logging Constant" for the first occurance.
+ * @param subsequent_level importance level of the message expressed using a \ref
+ *        lavu_log_constants "Logging Constant" after the first occurance.
+ * @param fmt The format string (printf-compatible) that specifies how
+ *        subsequent arguments are converted to output.
+ * @param state a variable to keep trak of if a message has already been printed
+ *        this must be initialized to 0 before the first use. The same state
+ *        must not be accessed by 2 Threads simultaneously.
+ */
+@NoException public static native void av_log_once(Pointer avcl, int initial_level, int subsequent_level, IntPointer state, @Cast("const char*") BytePointer fmt);
+@NoException public static native void av_log_once(Pointer avcl, int initial_level, int subsequent_level, IntBuffer state, String fmt);
+@NoException public static native void av_log_once(Pointer avcl, int initial_level, int subsequent_level, int[] state, @Cast("const char*") BytePointer fmt);
+@NoException public static native void av_log_once(Pointer avcl, int initial_level, int subsequent_level, IntPointer state, String fmt);
+@NoException public static native void av_log_once(Pointer avcl, int initial_level, int subsequent_level, IntBuffer state, @Cast("const char*") BytePointer fmt);
+@NoException public static native void av_log_once(Pointer avcl, int initial_level, int subsequent_level, int[] state, String fmt);
 
 
 /**
@@ -2262,6 +2294,19 @@ public static final int AV_BUFFER_FLAG_READONLY = (1 << 0);
  * @return a reference to the new buffer on success, NULL on error.
  */
 @NoException public static native AVBufferRef av_buffer_pool_get(AVBufferPool pool);
+
+/**
+ * Query the original opaque parameter of an allocated buffer in the pool.
+ *
+ * @param ref a buffer reference to a buffer returned by av_buffer_pool_get.
+ * @return the opaque parameter set by the buffer allocator function of the
+ *         buffer pool.
+ *
+ * \note the opaque parameter of ref is used by the buffer pool implementation,
+ * therefore you have to use this function to access the original opaque
+ * parameter of an allocated buffer.
+ */
+@NoException public static native Pointer av_buffer_pool_buffer_get_opaque(AVBufferRef ref);
 
 /**
  * \}
@@ -2807,8 +2852,20 @@ public static final int
     /** as above, but U and V bytes are swapped */
     AV_PIX_FMT_NV42 = AV_PIX_FMT_GBRP + 119,
 
+    /**
+     * Vulkan hardware images.
+     *
+     * data[0] points to an AVVkFrame
+     */
+    AV_PIX_FMT_VULKAN = AV_PIX_FMT_GBRP + 120,
+
+    /** packed YUV 4:2:2 like YUYV422, 20bpp, data in the high bits, big-endian */
+    AV_PIX_FMT_Y210BE = AV_PIX_FMT_GBRP + 121,
+    /** packed YUV 4:2:2 like YUYV422, 20bpp, data in the high bits, little-endian */
+    AV_PIX_FMT_Y210LE = AV_PIX_FMT_GBRP + 122,
+
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 120;
+    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 123;
 
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
@@ -2965,6 +3022,9 @@ public static final int AV_PIX_FMT_P010 = AV_PIX_FMT_P010();
 public static native @MemberGetter int AV_PIX_FMT_P016();
 public static final int AV_PIX_FMT_P016 = AV_PIX_FMT_P016();
 
+public static native @MemberGetter int AV_PIX_FMT_Y210();
+public static final int AV_PIX_FMT_Y210 = AV_PIX_FMT_Y210();
+
 /**
   * Chromaticity coordinates of the source primaries.
   * These values match the ones defined by ISO/IEC 23001-8_2013 § 7.1.
@@ -2996,10 +3056,11 @@ public static final int
     AVCOL_PRI_SMPTE431    = 11,
     /** SMPTE ST 432-1 (2010) / P3 D65 / Display P3 */
     AVCOL_PRI_SMPTE432    = 12,
-    /** JEDEC P22 phosphors */
-    AVCOL_PRI_JEDEC_P22   = 22,
+    /** EBU Tech. 3213-E / JEDEC P22 phosphors */
+    AVCOL_PRI_EBU3213     = 22,
+    AVCOL_PRI_JEDEC_P22   = AVCOL_PRI_EBU3213,
     /** Not part of ABI */
-    AVCOL_PRI_NB = 23;
+    AVCOL_PRI_NB = AVCOL_PRI_EBU3213 + 1;
 
 /**
  * Color Transfer Characteristic.
@@ -3313,7 +3374,12 @@ public static final int
      * Regions Of Interest, the data is an array of AVRegionOfInterest type, the number of
      * array element is implied by AVFrameSideData.size / AVRegionOfInterest.self_size.
      */
-    AV_FRAME_DATA_REGIONS_OF_INTEREST = 20;
+    AV_FRAME_DATA_REGIONS_OF_INTEREST = 20,
+
+    /**
+     * Encoding parameters for a video frame, as described by AVVideoEncParams.
+     */
+    AV_FRAME_DATA_VIDEO_ENC_PARAMS = 21;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3559,8 +3625,7 @@ public static final int
                                         @Cast("AVFrameSideDataType") int type);
 
 /**
- * If side data of the supplied type exists in the frame, free it and remove it
- * from the frame.
+ * Remove and free all side data instances of the given type.
  */
 @NoException public static native void av_frame_remove_side_data(AVFrame frame, @Cast("AVFrameSideDataType") int type);
 
@@ -5229,6 +5294,9 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = (1 << 12);
  * scalars or named flags separated by '+' or '-'. Prefixing a flag
  * with '+' causes it to be set without affecting the other flags;
  * similarly, '-' unsets a flag.
+ * If the field is of a dictionary type, it has to be a ':' separated list of
+ * key=value parameters. Values containing ':' special characters must be
+ * escaped.
  * @param search_flags flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
  * is passed here, then the option may be set on a child of obj.
  *
@@ -5304,9 +5372,10 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = (1 << 12);
 /**
  * \note the returned string will be av_malloc()ed and must be av_free()ed by the caller
  *
- * \note if AV_OPT_ALLOW_NULL is set in search_flags in av_opt_get, and the option has
- * AV_OPT_TYPE_STRING or AV_OPT_TYPE_BINARY and is set to NULL, *out_val will be set
- * to NULL instead of an allocated empty string.
+ * \note if AV_OPT_ALLOW_NULL is set in search_flags in av_opt_get, and the
+ * option is of type AV_OPT_TYPE_STRING, AV_OPT_TYPE_BINARY or AV_OPT_TYPE_DICT
+ * and is set to NULL, *out_val will be set to NULL instead of an allocated
+ * empty string.
  */
 @NoException public static native int av_opt_get(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("uint8_t**") PointerPointer out_val);
 @NoException public static native int av_opt_get(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("uint8_t**") @ByPtrPtr BytePointer out_val);
@@ -6570,7 +6639,7 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "4.2.3";
+public static final String FFMPEG_VERSION = "4.3";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
@@ -6980,7 +7049,8 @@ public static final int
     AV_HWDEVICE_TYPE_D3D11VA = 7,
     AV_HWDEVICE_TYPE_DRM = 8,
     AV_HWDEVICE_TYPE_OPENCL = 9,
-    AV_HWDEVICE_TYPE_MEDIACODEC = 10;
+    AV_HWDEVICE_TYPE_MEDIACODEC = 10,
+    AV_HWDEVICE_TYPE_VULKAN = 11;
 // Targeting ../avutil/AVHWDeviceInternal.java
 
 
@@ -7101,6 +7171,30 @@ public static final int
                                    @Cast("AVHWDeviceType") int type,
                                    AVBufferRef src_ctx, int flags);
 
+/**
+ * Create a new device of the specified type from an existing device.
+ *
+ * This function performs the same action as av_hwdevice_ctx_create_derived,
+ * however, it is able to set options for the new device to be derived.
+ *
+ * @param dst_ctx On success, a reference to the newly-created
+ *                AVHWDeviceContext.
+ * @param type    The type of the new device to create.
+ * @param src_ctx A reference to an existing AVHWDeviceContext which will be
+ *                used to create the new device.
+ * @param options Options for the new device to create, same format as in
+ *                av_hwdevice_ctx_create.
+ * @param flags   Currently unused; should be set to zero.
+ * @return        Zero on success, a negative AVERROR code on failure.
+ */
+@NoException public static native int av_hwdevice_ctx_create_derived_opts(@Cast("AVBufferRef**") PointerPointer dst_ctx,
+                                        @Cast("AVHWDeviceType") int type,
+                                        AVBufferRef src_ctx,
+                                        AVDictionary options, int flags);
+@NoException public static native int av_hwdevice_ctx_create_derived_opts(@ByPtrPtr AVBufferRef dst_ctx,
+                                        @Cast("AVHWDeviceType") int type,
+                                        AVBufferRef src_ctx,
+                                        AVDictionary options, int flags);
 
 /**
  * Allocate an AVHWFramesContext tied to a given device context.
@@ -9351,17 +9445,22 @@ public static final int
 
 /**
  * Thread safe basename.
- * @param path the path, on DOS both \ and / are considered separators.
+ * @param path the string to parse, on DOS both \ and / are considered separators.
  * @return pointer to the basename substring.
+ * If path does not contain a slash, the function returns a copy of path.
+ * If path is a NULL pointer or points to an empty string, a pointer
+ * to a string "." is returned.
  */
 @NoException public static native @Cast("const char*") BytePointer av_basename(@Cast("const char*") BytePointer path);
 @NoException public static native String av_basename(String path);
 
 /**
  * Thread safe dirname.
- * @param path the path, on DOS both \ and / are considered separators.
- * @return the path with the separator replaced by the string terminator or ".".
- * \note the function may change the input string.
+ * @param path the string to parse, on DOS both \ and / are considered separators.
+ * @return A pointer to a string that's the parent directory of path.
+ * If path is a NULL pointer or points to an empty string, a pointer
+ * to a string "." is returned.
+ * \note the function may modify the contents of the path, so copies should be passed.
  */
 @NoException public static native @Cast("const char*") BytePointer av_dirname(@Cast("char*") BytePointer path);
 @NoException public static native String av_dirname(@Cast("char*") ByteBuffer path);
@@ -9772,7 +9871,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 //rounded division & shift
 // #define RSHIFT(a,b) ((a) > 0 ? ((a) + ((1<<(b))>>1))>>(b) : ((a) + ((1<<(b))>>1)-1)>>(b))
 /* assume b>0 */
-// #define ROUNDED_DIV(a,b) (((a)>0 ? (a) + ((b)>>1) : (a) - ((b)>>1))/(b))
+// #define ROUNDED_DIV(a,b) (((a)>=0 ? (a) + ((b)>>1) : (a) - ((b)>>1))/(b))
 /* Fast a/(1<<b) rounded toward +inf. Assume a>=0 and b>=0 */
 // #define AV_CEIL_RSHIFT(a,b) (!av_builtin_constant_p(b) ? -((-(a)) >> (b))
 //                                                        : ((a) + (1<<(b)) - 1) >> (b))
@@ -9950,6 +10049,24 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 @NoException public static native int av_sat_dsub32_c(int a, int b);
 
 /**
+ * Add two signed 64-bit values with saturation.
+ *
+ * @param  a one value
+ * @param  b another value
+ * @return sum with signed saturation
+ */
+@NoException public static native @Cast("int64_t") long av_sat_add64_c(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+/**
+ * Subtract two signed 64-bit values with saturation.
+ *
+ * @param  a one value
+ * @param  b another value
+ * @return difference with signed saturation
+ */
+@NoException public static native @Cast("int64_t") long av_sat_sub64_c(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+/**
  * Clip a float value into the amin-amax range.
  * @param a value to clip
  * @param amin minimum value of the clip range
@@ -9999,7 +10116,9 @@ public static native int MKBETAG(@Cast("char") byte a, @Cast("char") byte b, @Ca
  * @param GET_BYTE Expression reading one byte from the input.
  *                 Evaluated up to 7 times (4 for the currently
  *                 assigned Unicode range).  With a memory buffer
- *                 input, this could be *ptr++.
+ *                 input, this could be *ptr++, or if you want to make sure
+ *                 that *ptr stops at the end of a NULL terminated string then
+ *                 *ptr ? *ptr++ : 0
  * @param ERROR    Expression to be evaluated on invalid input,
  *                 typically a goto statement.
  *
@@ -10013,11 +10132,11 @@ public static native int MKBETAG(@Cast("char") byte a, @Cast("char") byte b, @Ca
 //     {
 //         uint32_t top = (val & 128) >> 1;
 //         if ((val & 0xc0) == 0x80 || val >= 0xFE)
-//             ERROR
+//             {ERROR}
 //         while (val & top) {
-//             int tmp= (GET_BYTE) - 128;
+//             unsigned int tmp = (GET_BYTE) - 128;
 //             if(tmp>>6)
-//                 ERROR
+//                 {ERROR}
 //             val= (val<<6) + tmp;
 //             top <<= 5;
 //         }
@@ -10034,13 +10153,13 @@ public static native int MKBETAG(@Cast("char") byte a, @Cast("char") byte b, @Ca
  *                  typically a goto statement.
  */
 // #define GET_UTF16(val, GET_16BIT, ERROR)
-//     val = GET_16BIT;
+//     val = (GET_16BIT);
 //     {
 //         unsigned int hi = val - 0xD800;
 //         if (hi < 0x800) {
-//             val = GET_16BIT - 0xDC00;
+//             val = (GET_16BIT) - 0xDC00;
 //             if (val > 0x3FF || hi > 0x3FF)
-//                 ERROR
+//                 {ERROR}
 //             val += (hi<<10) + 0x10000;
 //         }
 //     }
@@ -10168,6 +10287,12 @@ public static native int MKBETAG(@Cast("char") byte a, @Cast("char") byte b, @Ca
 // #endif
 // #ifndef av_sat_dsub32
 // #   define av_sat_dsub32    av_sat_dsub32_c
+// #endif
+// #ifndef av_sat_add64
+// #   define av_sat_add64     av_sat_add64_c
+// #endif
+// #ifndef av_sat_sub64
+// #   define av_sat_sub64     av_sat_sub64_c
 // #endif
 // #ifndef av_clipf
 // #   define av_clipf         av_clipf_c
@@ -10449,6 +10574,34 @@ public static native int MKBETAG(@Cast("char") byte a, @Cast("char") byte b, @Ca
 @NoException public static native double av_expr_eval(AVExpr e, @Const DoublePointer const_values, Pointer opaque);
 @NoException public static native double av_expr_eval(AVExpr e, @Const DoubleBuffer const_values, Pointer opaque);
 @NoException public static native double av_expr_eval(AVExpr e, @Const double[] const_values, Pointer opaque);
+
+/**
+ * Track the presence of variables and their number of occurrences in a parsed expression
+ *
+ * @param counter a zero-initialized array where the count of each variable will be stored
+ * @param size size of array
+ * @return 0 on success, a negative value indicates that no expression or array was passed
+ * or size was zero
+ */
+@NoException public static native int av_expr_count_vars(AVExpr e, @Cast("unsigned*") IntPointer counter, int size);
+@NoException public static native int av_expr_count_vars(AVExpr e, @Cast("unsigned*") IntBuffer counter, int size);
+@NoException public static native int av_expr_count_vars(AVExpr e, @Cast("unsigned*") int[] counter, int size);
+
+/**
+ * Track the presence of user provided functions and their number of occurrences
+ * in a parsed expression.
+ *
+ * @param counter a zero-initialized array where the count of each function will be stored
+ *                if you passed 5 functions with 2 arguments to av_expr_parse()
+ *                then for arg=2 this will use upto 5 entries.
+ * @param size size of array
+ * @param arg number of arguments the counted functions have
+ * @return 0 on success, a negative value indicates that no expression or array was passed
+ * or size was zero
+ */
+@NoException public static native int av_expr_count_func(AVExpr e, @Cast("unsigned*") IntPointer counter, int size, int arg);
+@NoException public static native int av_expr_count_func(AVExpr e, @Cast("unsigned*") IntBuffer counter, int size, int arg);
+@NoException public static native int av_expr_count_func(AVExpr e, @Cast("unsigned*") int[] counter, int size, int arg);
 
 /**
  * Free a parsed expression previously created with av_expr_parse().
@@ -12852,26 +13005,57 @@ public static final int AV_TS_MAX_STRING_SIZE = 32;
 // Targeting ../avutil/AVComplexFloat.java
 
 
+// Targeting ../avutil/AVComplexDouble.java
+
+
+// Targeting ../avutil/AVComplexInt32.java
+
+
 
 /** enum AVTXType */
 public static final int
     /**
      * Standard complex to complex FFT with sample data type AVComplexFloat.
-     * Scaling currently unsupported
+     * Output is not 1/len normalized. Scaling currently unsupported.
+     * The stride parameter is ignored.
      */
     AV_TX_FLOAT_FFT = 0,
     /**
      * Standard MDCT with sample data type of float and a scale type of
      * float. Length is the frame size, not the window size (which is 2x frame)
+     * For forward transforms, the stride specifies the spacing between each
+     * sample in the output array in bytes. The input must be a flat array.
+     * For inverse transforms, the stride specifies the spacing between each
+     * sample in the input array in bytes. The output will be a flat array.
+     * Stride must be a non-zero multiple of sizeof(float).
      */
-    AV_TX_FLOAT_MDCT = 1;
+    AV_TX_FLOAT_MDCT = 1,
+    /**
+     * Same as AV_TX_FLOAT_FFT with a data type of AVComplexDouble.
+     */
+    AV_TX_DOUBLE_FFT = 2,
+    /**
+     * Same as AV_TX_FLOAT_MDCT with data and scale type of double.
+     * Stride must be a non-zero multiple of sizeof(double).
+     */
+    AV_TX_DOUBLE_MDCT = 3,
+    /**
+     * Same as AV_TX_FLOAT_FFT with a data type of AVComplexInt32.
+     */
+    AV_TX_INT32_FFT = 4,
+    /**
+     * Same as AV_TX_FLOAT_MDCT with data type of int32_t and scale type of float.
+     * Only scale values less than or equal to 1.0 are supported.
+     * Stride must be a non-zero multiple of sizeof(int32_t).
+     */
+    AV_TX_INT32_MDCT = 5;
 // Targeting ../avutil/av_tx_fn.java
 
 
 
 /**
  * Initialize a transform context with the given configuration
- * Currently power of two lengths from 4 to 131072 are supported, along with
+ * Currently power of two lengths from 2 to 131072 are supported, along with
  * any length decomposable to a power of two and either 3, 5 or 15.
  *
  * @param ctx the context to allocate, will be NULL on error

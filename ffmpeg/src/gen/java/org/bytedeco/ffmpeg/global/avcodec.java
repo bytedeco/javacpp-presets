@@ -17,10 +17,10 @@ import static org.bytedeco.ffmpeg.global.swresample.*;
 public class avcodec extends org.bytedeco.ffmpeg.presets.avcodec {
     static { Loader.load(); }
 
-// Parsed from <libavcodec/avcodec.h>
+// Parsed from <libavcodec/codec_id.h>
 
 /*
- * copyright (c) 2001 Fabrice Bellard
+ * Codec IDs
  *
  * This file is part of FFmpeg.
  *
@@ -39,184 +39,15 @@ public class avcodec extends org.bytedeco.ffmpeg.presets.avcodec {
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-// #ifndef AVCODEC_AVCODEC_H
-// #define AVCODEC_AVCODEC_H
+// #ifndef AVCODEC_CODEC_ID_H
+// #define AVCODEC_CODEC_ID_H
 
-/**
- * \file
- * \ingroup libavc
- * Libavcodec external API header
- */
-
-// #include <errno.h>
-// #include "libavutil/samplefmt.h"
-// #include "libavutil/attributes.h"
 // #include "libavutil/avutil.h"
-// #include "libavutil/buffer.h"
-// #include "libavutil/cpu.h"
-// #include "libavutil/channel_layout.h"
-// #include "libavutil/dict.h"
-// #include "libavutil/frame.h"
-// #include "libavutil/hwcontext.h"
-// #include "libavutil/log.h"
-// #include "libavutil/pixfmt.h"
-// #include "libavutil/rational.h"
-
-// #include "version.h"
 
 /**
- * \defgroup libavc libavcodec
- * Encoding/Decoding Library
- *
- * \{
- *
- * \defgroup lavc_decoding Decoding
- * \{
- * \}
- *
- * \defgroup lavc_encoding Encoding
- * \{
- * \}
- *
- * \defgroup lavc_codec Codecs
- * \{
- * \defgroup lavc_codec_native Native Codecs
- * \{
- * \}
- * \defgroup lavc_codec_wrappers External library wrappers
- * \{
- * \}
- * \defgroup lavc_codec_hwaccel Hardware Accelerators bridge
- * \{
- * \}
- * \}
- * \defgroup lavc_internal Internal
- * \{
- * \}
- * \}
- */
-
-/**
- * \ingroup libavc
- * \defgroup lavc_encdec send/receive encoding and decoding API overview
- * \{
- *
- * The avcodec_send_packet()/avcodec_receive_frame()/avcodec_send_frame()/
- * avcodec_receive_packet() functions provide an encode/decode API, which
- * decouples input and output.
- *
- * The API is very similar for encoding/decoding and audio/video, and works as
- * follows:
- * - Set up and open the AVCodecContext as usual.
- * - Send valid input:
- *   - For decoding, call avcodec_send_packet() to give the decoder raw
- *     compressed data in an AVPacket.
- *   - For encoding, call avcodec_send_frame() to give the encoder an AVFrame
- *     containing uncompressed audio or video.
- *   In both cases, it is recommended that AVPackets and AVFrames are
- *   refcounted, or libavcodec might have to copy the input data. (libavformat
- *   always returns refcounted AVPackets, and av_frame_get_buffer() allocates
- *   refcounted AVFrames.)
- * - Receive output in a loop. Periodically call one of the avcodec_receive_*()
- *   functions and process their output:
- *   - For decoding, call avcodec_receive_frame(). On success, it will return
- *     an AVFrame containing uncompressed audio or video data.
- *   - For encoding, call avcodec_receive_packet(). On success, it will return
- *     an AVPacket with a compressed frame.
- *   Repeat this call until it returns AVERROR(EAGAIN) or an error. The
- *   AVERROR(EAGAIN) return value means that new input data is required to
- *   return new output. In this case, continue with sending input. For each
- *   input frame/packet, the codec will typically return 1 output frame/packet,
- *   but it can also be 0 or more than 1.
- *
- * At the beginning of decoding or encoding, the codec might accept multiple
- * input frames/packets without returning a frame, until its internal buffers
- * are filled. This situation is handled transparently if you follow the steps
- * outlined above.
- *
- * In theory, sending input can result in EAGAIN - this should happen only if
- * not all output was received. You can use this to structure alternative decode
- * or encode loops other than the one suggested above. For example, you could
- * try sending new input on each iteration, and try to receive output if that
- * returns EAGAIN.
- *
- * End of stream situations. These require "flushing" (aka draining) the codec,
- * as the codec might buffer multiple frames or packets internally for
- * performance or out of necessity (consider B-frames).
- * This is handled as follows:
- * - Instead of valid input, send NULL to the avcodec_send_packet() (decoding)
- *   or avcodec_send_frame() (encoding) functions. This will enter draining
- *   mode.
- * - Call avcodec_receive_frame() (decoding) or avcodec_receive_packet()
- *   (encoding) in a loop until AVERROR_EOF is returned. The functions will
- *   not return AVERROR(EAGAIN), unless you forgot to enter draining mode.
- * - Before decoding can be resumed again, the codec has to be reset with
- *   avcodec_flush_buffers().
- *
- * Using the API as outlined above is highly recommended. But it is also
- * possible to call functions outside of this rigid schema. For example, you can
- * call avcodec_send_packet() repeatedly without calling
- * avcodec_receive_frame(). In this case, avcodec_send_packet() will succeed
- * until the codec's internal buffer has been filled up (which is typically of
- * size 1 per output frame, after initial input), and then reject input with
- * AVERROR(EAGAIN). Once it starts rejecting input, you have no choice but to
- * read at least some output.
- *
- * Not all codecs will follow a rigid and predictable dataflow; the only
- * guarantee is that an AVERROR(EAGAIN) return value on a send/receive call on
- * one end implies that a receive/send call on the other end will succeed, or
- * at least will not fail with AVERROR(EAGAIN). In general, no codec will
- * permit unlimited buffering of input or output.
- *
- * This API replaces the following legacy functions:
- * - avcodec_decode_video2() and avcodec_decode_audio4():
- *   Use avcodec_send_packet() to feed input to the decoder, then use
- *   avcodec_receive_frame() to receive decoded frames after each packet.
- *   Unlike with the old video decoding API, multiple frames might result from
- *   a packet. For audio, splitting the input packet into frames by partially
- *   decoding packets becomes transparent to the API user. You never need to
- *   feed an AVPacket to the API twice (unless it is rejected with AVERROR(EAGAIN) - then
- *   no data was read from the packet).
- *   Additionally, sending a flush/draining packet is required only once.
- * - avcodec_encode_video2()/avcodec_encode_audio2():
- *   Use avcodec_send_frame() to feed input to the encoder, then use
- *   avcodec_receive_packet() to receive encoded packets.
- *   Providing user-allocated buffers for avcodec_receive_packet() is not
- *   possible.
- * - The new API does not handle subtitles yet.
- *
- * Mixing new and old function calls on the same AVCodecContext is not allowed,
- * and will result in undefined behavior.
- *
- * Some codecs might require using the new API; using the old API will return
- * an error when calling it. All codecs support the new API.
- *
- * A codec is not allowed to return AVERROR(EAGAIN) for both sending and receiving. This
- * would be an invalid state, which could put the codec user into an endless
- * loop. The API has no concept of time either: it cannot happen that trying to
- * do avcodec_send_packet() results in AVERROR(EAGAIN), but a repeated call 1 second
- * later accepts the packet (with no other receive/flush API calls involved).
- * The API is a strict state machine, and the passage of time is not supposed
- * to influence it. Some timing-dependent behavior might still be deemed
- * acceptable in certain cases. But it must never result in both send/receive
- * returning EAGAIN at the same time at any point. It must also absolutely be
- * avoided that the current state is "unstable" and can "flip-flop" between
- * the send/receive APIs allowing progress. For example, it's not allowed that
- * the codec randomly decides that it actually wants to consume a packet now
- * instead of returning a frame, after it just returned AVERROR(EAGAIN) on an
- * avcodec_send_packet() call.
- * \}
- */
-
-/**
- * \defgroup lavc_core Core functions/structures.
- * \ingroup libavc
- *
- * Basic definitions, functions for querying libavcodec capabilities,
- * allocating core structures, etc.
+ * \addtogroup lavc_core
  * \{
  */
-
 
 /**
  * Identify the syntax and semantics of the bitstream.
@@ -482,6 +313,13 @@ public static final int
     AV_CODEC_ID_AGM = 0x8000 + 43,
     AV_CODEC_ID_LSCR = 0x8000 + 44,
     AV_CODEC_ID_VP4 = 0x8000 + 45,
+    AV_CODEC_ID_IMM5 = 0x8000 + 46,
+    AV_CODEC_ID_MVDV = 0x8000 + 47,
+    AV_CODEC_ID_MVHA = 0x8000 + 48,
+    AV_CODEC_ID_CDTOONS = 0x8000 + 49,
+    AV_CODEC_ID_MV30 = 0x8000 + 50,
+    AV_CODEC_ID_NOTCHLC = 0x8000 + 51,
+    AV_CODEC_ID_PFM = 0x8000 + 52,
 
     /* various PCM "codecs" */
     /** A dummy id pointing at the start of audio codecs */
@@ -568,6 +406,13 @@ public static final int
     AV_CODEC_ID_ADPCM_IMA_DAT4 = 0x11800 + 8,
     AV_CODEC_ID_ADPCM_MTAF = 0x11800 + 9,
     AV_CODEC_ID_ADPCM_AGM = 0x11800 + 10,
+    AV_CODEC_ID_ADPCM_ARGO = 0x11800 + 11,
+    AV_CODEC_ID_ADPCM_IMA_SSI = 0x11800 + 12,
+    AV_CODEC_ID_ADPCM_ZORK = 0x11800 + 13,
+    AV_CODEC_ID_ADPCM_IMA_APM = 0x11800 + 14,
+    AV_CODEC_ID_ADPCM_IMA_ALP = 0x11800 + 15,
+    AV_CODEC_ID_ADPCM_IMA_MTF = 0x11800 + 16,
+    AV_CODEC_ID_ADPCM_IMA_CUNNING = 0x11800 + 17,
 
     /* AMR */
     AV_CODEC_ID_AMR_NB = 0x12000,
@@ -585,6 +430,7 @@ public static final int
 
     AV_CODEC_ID_SDX2_DPCM = 0x14800,
     AV_CODEC_ID_GREMLIN_DPCM = 0x14800 + 1,
+    AV_CODEC_ID_DERF_DPCM = 0x14800 + 2,
 
     /* audio codecs */
     AV_CODEC_ID_MP2 = 0x15000,
@@ -680,6 +526,10 @@ public static final int
     AV_CODEC_ID_SBC = 0x15800 + 19,
     AV_CODEC_ID_ATRAC9 = 0x15800 + 20,
     AV_CODEC_ID_HCOM = 0x15800 + 21,
+    AV_CODEC_ID_ACELP_KELVIN = 0x15800 + 22,
+    AV_CODEC_ID_MPEGH_3D_AUDIO = 0x15800 + 23,
+    AV_CODEC_ID_SIREN = 0x15800 + 24,
+    AV_CODEC_ID_HCA = 0x15800 + 25,
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -720,6 +570,7 @@ public static final int
 
     /** Contain timestamp estimated through PCR of program stream. */
     AV_CODEC_ID_SCTE_35 = 0x18000 + 1,
+    AV_CODEC_ID_EPG = 0x18000 + 2,
     AV_CODEC_ID_BINTEXT    = 0x18800,
     AV_CODEC_ID_XBIN = 0x18800 + 1,
     AV_CODEC_ID_IDF = 0x18800 + 2,
@@ -743,6 +594,53 @@ public static final int
     AV_CODEC_ID_FFMETADATA = 0x21000,
     /** Passthrough codec, AVFrames wrapped in AVPacket */
     AV_CODEC_ID_WRAPPED_AVFRAME = 0x21001;
+
+/**
+ * Get the type of the given codec.
+ */
+@NoException public static native @Cast("AVMediaType") int avcodec_get_type(@Cast("AVCodecID") int codec_id);
+
+/**
+ * Get the name of a codec.
+ * @return  a static string identifying the codec; never NULL
+ */
+@NoException public static native @Cast("const char*") BytePointer avcodec_get_name(@Cast("AVCodecID") int id);
+
+/**
+ * \}
+ */
+
+// #endif // AVCODEC_CODEC_ID_H
+
+
+// Parsed from <libavcodec/codec_desc.h>
+
+/*
+ * Codec descriptors public API
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_CODEC_DESC_H
+// #define AVCODEC_CODEC_DESC_H
+
+// #include "libavutil/avutil.h"
+
+// #include "codec_id.h"
 // Targeting ../avcodec/AVCodecDescriptor.java
 
 
@@ -784,328 +682,146 @@ public static final int AV_CODEC_PROP_BITMAP_SUB =    (1 << 16);
 public static final int AV_CODEC_PROP_TEXT_SUB =      (1 << 17);
 
 /**
- * \ingroup lavc_decoding
- * Required number of additionally allocated bytes at the end of the input bitstream for decoding.
- * This is mainly needed because some optimized bitstream readers read
- * 32 or 64 bit at once and could read over the end.<br>
- * Note: If the first 23 bits of the additional bytes are not 0, then damaged
- * MPEG bitstreams could cause overread and segfault.
+ * @return descriptor for given codec ID or NULL if no descriptor exists.
  */
-public static final int AV_INPUT_BUFFER_PADDING_SIZE = 64;
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get(@Cast("AVCodecID") int id);
 
 /**
- * \ingroup lavc_encoding
- * minimum encoding buffer size
- * Used to avoid some checks during header writing.
+ * Iterate over all codec descriptors known to libavcodec.
+ *
+ * @param prev previous descriptor. NULL to get the first descriptor.
+ *
+ * @return next descriptor or NULL after the last descriptor
  */
-public static final int AV_INPUT_BUFFER_MIN_SIZE = 16384;
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_next(@Const AVCodecDescriptor prev);
 
 /**
- * \ingroup lavc_decoding
+ * @return codec descriptor with the given name or NULL if no such descriptor
+ *         exists.
  */
-/** enum AVDiscard */
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(@Cast("const char*") BytePointer name);
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(String name);
+
+/**
+ * \}
+ */
+
+// #endif // AVCODEC_CODEC_DESC_H
+
+
+// Parsed from <libavcodec/codec_par.h>
+
+/*
+ * Codec parameters public API
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_CODEC_PAR_H
+// #define AVCODEC_CODEC_PAR_H
+
+// #include <stdint.h>
+
+// #include "libavutil/avutil.h"
+// #include "libavutil/rational.h"
+// #include "libavutil/pixfmt.h"
+
+// #include "codec_id.h"
+
+/**
+ * \addtogroup lavc_core
+ */
+
+/** enum AVFieldOrder */
 public static final int
-    /* We leave some space between them for extensions (drop some
-     * keyframes for intra-only or drop just some bidir frames). */
-    /** discard nothing */
-    AVDISCARD_NONE    = -16,
-    /** discard useless packets like 0 size packets in avi */
-    AVDISCARD_DEFAULT = 0,
-    /** discard all non reference */
-    AVDISCARD_NONREF  = 8,
-    /** discard all bidirectional frames */
-    AVDISCARD_BIDIR   = 16,
-    /** discard all non intra frames */
-    AVDISCARD_NONINTRA = 24,
-    /** discard all frames except keyframes */
-    AVDISCARD_NONKEY  = 32,
-    /** discard all */
-    AVDISCARD_ALL     = 48;
-
-/** enum AVAudioServiceType */
-public static final int
-    AV_AUDIO_SERVICE_TYPE_MAIN              = 0,
-    AV_AUDIO_SERVICE_TYPE_EFFECTS           = 1,
-    AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = 2,
-    AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED  = 3,
-    AV_AUDIO_SERVICE_TYPE_DIALOGUE          = 4,
-    AV_AUDIO_SERVICE_TYPE_COMMENTARY        = 5,
-    AV_AUDIO_SERVICE_TYPE_EMERGENCY         = 6,
-    AV_AUDIO_SERVICE_TYPE_VOICE_OVER        = 7,
-    AV_AUDIO_SERVICE_TYPE_KARAOKE           = 8,
-    /** Not part of ABI */
-    AV_AUDIO_SERVICE_TYPE_NB = 9;
-// Targeting ../avcodec/RcOverride.java
+    AV_FIELD_UNKNOWN = 0,
+    AV_FIELD_PROGRESSIVE = 1,
+    AV_FIELD_TT = 2,          //< Top coded_first, top displayed first
+    AV_FIELD_BB = 3,          //< Bottom coded first, bottom displayed first
+    AV_FIELD_TB = 4,          //< Top coded first, bottom displayed first
+    AV_FIELD_BT = 5;          //< Bottom coded first, top displayed first
+// Targeting ../avcodec/AVCodecParameters.java
 
 
 
-/* encoding support
-   These flags can be passed in AVCodecContext.flags before initialization.
-   Note: Not everything is supported yet.
-*/
+/**
+ * Allocate a new AVCodecParameters and set its fields to default values
+ * (unknown/invalid/0). The returned struct must be freed with
+ * avcodec_parameters_free().
+ */
+@NoException public static native AVCodecParameters avcodec_parameters_alloc();
 
 /**
- * Allow decoders to produce frames with data planes that are not aligned
- * to CPU requirements (e.g. due to cropping).
+ * Free an AVCodecParameters instance and everything associated with it and
+ * write NULL to the supplied pointer.
  */
-public static final int AV_CODEC_FLAG_UNALIGNED =       (1 <<  0);
-/**
- * Use fixed qscale.
- */
-public static final int AV_CODEC_FLAG_QSCALE =          (1 <<  1);
-/**
- * 4 MV per MB allowed / advanced prediction for H.263.
- */
-public static final int AV_CODEC_FLAG_4MV =             (1 <<  2);
-/**
- * Output even those frames that might be corrupted.
- */
-public static final int AV_CODEC_FLAG_OUTPUT_CORRUPT =  (1 <<  3);
-/**
- * Use qpel MC.
- */
-public static final int AV_CODEC_FLAG_QPEL =            (1 <<  4);
-/**
- * Don't output frames whose parameters differ from first
- * decoded frame in stream.
- */
-public static final int AV_CODEC_FLAG_DROPCHANGED =     (1 <<  5);
-/**
- * Use internal 2pass ratecontrol in first pass mode.
- */
-public static final int AV_CODEC_FLAG_PASS1 =           (1 <<  9);
-/**
- * Use internal 2pass ratecontrol in second pass mode.
- */
-public static final int AV_CODEC_FLAG_PASS2 =           (1 << 10);
-/**
- * loop filter.
- */
-public static final int AV_CODEC_FLAG_LOOP_FILTER =     (1 << 11);
-/**
- * Only decode/encode grayscale.
- */
-public static final int AV_CODEC_FLAG_GRAY =            (1 << 13);
-/**
- * error[?] variables will be set during encoding.
- */
-public static final int AV_CODEC_FLAG_PSNR =            (1 << 15);
-/**
- * Input bitstream might be truncated at a random location
- * instead of only at frame boundaries.
- */
-public static final int AV_CODEC_FLAG_TRUNCATED =       (1 << 16);
-/**
- * Use interlaced DCT.
- */
-public static final int AV_CODEC_FLAG_INTERLACED_DCT =  (1 << 18);
-/**
- * Force low delay.
- */
-public static final int AV_CODEC_FLAG_LOW_DELAY =       (1 << 19);
-/**
- * Place global headers in extradata instead of every keyframe.
- */
-public static final int AV_CODEC_FLAG_GLOBAL_HEADER =   (1 << 22);
-/**
- * Use only bitexact stuff (except (I)DCT).
- */
-public static final int AV_CODEC_FLAG_BITEXACT =        (1 << 23);
-/* Fx : Flag for H.263+ extra options */
-/**
- * H.263 advanced intra coding / MPEG-4 AC prediction
- */
-public static final int AV_CODEC_FLAG_AC_PRED =         (1 << 24);
-/**
- * interlaced motion estimation
- */
-public static final int AV_CODEC_FLAG_INTERLACED_ME =   (1 << 29);
-public static final long AV_CODEC_FLAG_CLOSED_GOP =      (1L << 31);
+@NoException public static native void avcodec_parameters_free(@Cast("AVCodecParameters**") PointerPointer par);
+@NoException public static native void avcodec_parameters_free(@ByPtrPtr AVCodecParameters par);
 
 /**
- * Allow non spec compliant speedup tricks.
- */
-public static final int AV_CODEC_FLAG2_FAST =           (1 <<  0);
-/**
- * Skip bitstream encoding.
- */
-public static final int AV_CODEC_FLAG2_NO_OUTPUT =      (1 <<  2);
-/**
- * Place global headers at every keyframe instead of in extradata.
- */
-public static final int AV_CODEC_FLAG2_LOCAL_HEADER =   (1 <<  3);
-
-/**
- * timecode is in drop frame format. DEPRECATED!!!!
- */
-public static final int AV_CODEC_FLAG2_DROP_FRAME_TIMECODE = (1 << 13);
-
-/**
- * Input bitstream might be truncated at a packet boundaries
- * instead of only at frame boundaries.
- */
-public static final int AV_CODEC_FLAG2_CHUNKS =         (1 << 15);
-/**
- * Discard cropping information from SPS.
- */
-public static final int AV_CODEC_FLAG2_IGNORE_CROP =    (1 << 16);
-
-/**
- * Show all frames before the first keyframe
- */
-public static final int AV_CODEC_FLAG2_SHOW_ALL =       (1 << 22);
-/**
- * Export motion vectors through frame side data
- */
-public static final int AV_CODEC_FLAG2_EXPORT_MVS =     (1 << 28);
-/**
- * Do not skip samples and export skip information as frame side data
- */
-public static final int AV_CODEC_FLAG2_SKIP_MANUAL =    (1 << 29);
-/**
- * Do not reset ASS ReadOrder field on flush (subtitles decoding)
- */
-public static final int AV_CODEC_FLAG2_RO_FLUSH_NOOP =  (1 << 30);
-
-/* Unsupported options :
- *              Syntax Arithmetic coding (SAC)
- *              Reference Picture Selection
- *              Independent Segment Decoding */
-/* /Fx */
-/* codec capabilities */
-
-/**
- * Decoder can use draw_horiz_band callback.
- */
-public static final int AV_CODEC_CAP_DRAW_HORIZ_BAND =     (1 <<  0);
-/**
- * Codec uses get_buffer() for allocating buffers and supports custom allocators.
- * If not set, it might not use get_buffer() at all or use operations that
- * assume the buffer was allocated by avcodec_default_get_buffer.
- */
-public static final int AV_CODEC_CAP_DR1 =                 (1 <<  1);
-public static final int AV_CODEC_CAP_TRUNCATED =           (1 <<  3);
-/**
- * Encoder or decoder requires flushing with NULL input at the end in order to
- * give the complete and correct output.
+ * Copy the contents of src to dst. Any allocated fields in dst are freed and
+ * replaced with newly allocated duplicates of the corresponding fields in src.
  *
- * NOTE: If this flag is not set, the codec is guaranteed to never be fed with
- *       with NULL data. The user can still send NULL data to the public encode
- *       or decode function, but libavcodec will not pass it along to the codec
- *       unless this flag is set.
+ * @return >= 0 on success, a negative AVERROR code on failure.
+ */
+@NoException public static native int avcodec_parameters_copy(AVCodecParameters dst, @Const AVCodecParameters src);
+
+
+/**
+ * \}
+ */
+
+// #endif // AVCODEC_CODEC_PAR_H
+
+
+// Parsed from <libavcodec/packet.h>
+
+/*
+ * AVPacket public API
  *
- * Decoders:
- * The decoder has a non-zero delay and needs to be fed with avpkt->data=NULL,
- * avpkt->size=0 at the end to get the delayed data until the decoder no longer
- * returns frames.
+ * This file is part of FFmpeg.
  *
- * Encoders:
- * The encoder needs to be fed with NULL data at the end of encoding until the
- * encoder no longer returns data.
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * NOTE: For encoders implementing the AVCodec.encode2() function, setting this
- *       flag also means that the encoder must set the pts and duration for
- *       each output packet. If this flag is not set, the pts and duration will
- *       be determined by libavcodec from the input frame.
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-public static final int AV_CODEC_CAP_DELAY =               (1 <<  5);
-/**
- * Codec can be fed a final frame with a smaller size.
- * This can be used to prevent truncation of the last audio samples.
- */
-public static final int AV_CODEC_CAP_SMALL_LAST_FRAME =    (1 <<  6);
 
-/**
- * Codec can output multiple frames per AVPacket
- * Normally demuxers return one frame at a time, demuxers which do not do
- * are connected to a parser to split what they return into proper frames.
- * This flag is reserved to the very rare category of codecs which have a
- * bitstream that cannot be split into frames without timeconsuming
- * operations like full decoding. Demuxers carrying such bitstreams thus
- * may return multiple frames in a packet. This has many disadvantages like
- * prohibiting stream copy in many cases thus it should only be considered
- * as a last resort.
- */
-public static final int AV_CODEC_CAP_SUBFRAMES =           (1 <<  8);
-/**
- * Codec is experimental and is thus avoided in favor of non experimental
- * encoders
- */
-public static final int AV_CODEC_CAP_EXPERIMENTAL =        (1 <<  9);
-/**
- * Codec should fill in channel configuration and samplerate instead of container
- */
-public static final int AV_CODEC_CAP_CHANNEL_CONF =        (1 << 10);
-/**
- * Codec supports frame-level multithreading.
- */
-public static final int AV_CODEC_CAP_FRAME_THREADS =       (1 << 12);
-/**
- * Codec supports slice-based (or partition-based) multithreading.
- */
-public static final int AV_CODEC_CAP_SLICE_THREADS =       (1 << 13);
-/**
- * Codec supports changed parameters at any point.
- */
-public static final int AV_CODEC_CAP_PARAM_CHANGE =        (1 << 14);
-/**
- * Codec supports avctx->thread_count == 0 (auto).
- */
-public static final int AV_CODEC_CAP_AUTO_THREADS =        (1 << 15);
-/**
- * Audio encoder supports receiving a different number of samples in each call.
- */
-public static final int AV_CODEC_CAP_VARIABLE_FRAME_SIZE = (1 << 16);
-/**
- * Decoder is not a preferred choice for probing.
- * This indicates that the decoder is not a good choice for probing.
- * It could for example be an expensive to spin up hardware decoder,
- * or it could simply not provide a lot of useful information about
- * the stream.
- * A decoder marked with this flag should only be used as last resort
- * choice for probing.
- */
-public static final int AV_CODEC_CAP_AVOID_PROBING =       (1 << 17);
-/**
- * Codec is intra only.
- */
-public static final int AV_CODEC_CAP_INTRA_ONLY =       0x40000000;
-/**
- * Codec is lossless.
- */
-public static final int AV_CODEC_CAP_LOSSLESS =         0x80000000;
+// #ifndef AVCODEC_PACKET_H
+// #define AVCODEC_PACKET_H
 
-/**
- * Codec is backed by a hardware implementation. Typically used to
- * identify a non-hwaccel hardware decoder. For information about hwaccels, use
- * avcodec_get_hw_config() instead.
- */
-public static final int AV_CODEC_CAP_HARDWARE =            (1 << 18);
+// #include <stddef.h>
+// #include <stdint.h>
 
-/**
- * Codec is potentially backed by a hardware implementation, but not
- * necessarily. This is used instead of AV_CODEC_CAP_HARDWARE, if the
- * implementation provides some sort of internal fallback.
- */
-public static final int AV_CODEC_CAP_HYBRID =              (1 << 19);
+// #include "libavutil/attributes.h"
+// #include "libavutil/buffer.h"
+// #include "libavutil/dict.h"
+// #include "libavutil/rational.h"
 
-/**
- * This codec takes the reordered_opaque field from input AVFrames
- * and returns it in the corresponding field in AVCodecContext after
- * encoding.
- */
-public static final int AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE = (1 << 20);
-// Targeting ../avcodec/AVPanScan.java
-
-
-// Targeting ../avcodec/AVCPBProperties.java
-
-
-
-/**
- * The decoder will keep a reference to the frame and may reuse it later.
- */
-public static final int AV_GET_BUFFER_FLAG_REF = (1 << 0);
+// #include "libavcodec/version.h"
 
 /**
  * \defgroup lavc_packet AVPacket
@@ -1338,6 +1054,28 @@ public static final int
     AV_PKT_DATA_AFD = 26,
 
     /**
+     * Producer Reference Time data corresponding to the AVProducerReferenceTime struct,
+     * usually exported by some encoders (on demand through the prft flag set in the
+     * AVCodecContext export_side_data field).
+     */
+    AV_PKT_DATA_PRFT = 27,
+
+    /**
+     * ICC profile data consisting of an opaque octet buffer following the
+     * format described by ISO 15076-1.
+     */
+    AV_PKT_DATA_ICC_PROFILE = 28,
+
+    /**
+     * DOVI configuration
+     * ref:
+     * dolby-vision-bitstreams-within-the-iso-base-media-file-format-v2.1.2, section 2.2
+     * dolby-vision-bitstreams-in-mpeg-2-transport-stream-multiplex-v1.2, section 3.3
+     * Tags are stored in struct AVDOVIDecoderConfigurationRecord.
+     */
+    AV_PKT_DATA_DOVI_CONF = 29,
+
+    /**
      * The number of side data types.
      * This is not part of the public API/ABI in the sense that it may
      * change when new side data types are added.
@@ -1345,13 +1083,14 @@ public static final int
      * If its value becomes huge, some code using it
      * needs to be updated as it assumes it to be smaller than other limits.
      */
-    AV_PKT_DATA_NB = 27;
+    AV_PKT_DATA_NB = 30;
 
 public static final int AV_PKT_DATA_QUALITY_FACTOR = AV_PKT_DATA_QUALITY_STATS;
 // Targeting ../avcodec/AVPacketSideData.java
 
 
 // Targeting ../avcodec/AVPacket.java
+
 
 
 /** The packet contains a keyframe */
@@ -1377,445 +1116,12 @@ public static final int AV_PKT_FLAG_TRUSTED =   0x0008;
  */
 public static final int AV_PKT_FLAG_DISPOSABLE = 0x0010;
 
-
 /** enum AVSideDataParamChangeFlags */
 public static final int
     AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT  = 0x0001,
     AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_LAYOUT = 0x0002,
     AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE    = 0x0004,
     AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS     = 0x0008;
-// Targeting ../avcodec/AVCodecInternal.java
-
-
-
-/** enum AVFieldOrder */
-public static final int
-    AV_FIELD_UNKNOWN = 0,
-    AV_FIELD_PROGRESSIVE = 1,
-    AV_FIELD_TT = 2,          //< Top coded_first, top displayed first
-    AV_FIELD_BB = 3,          //< Bottom coded first, bottom displayed first
-    AV_FIELD_TB = 4,          //< Top coded first, bottom displayed first
-    AV_FIELD_BT = 5;          //< Bottom coded first, top displayed first
-// Targeting ../avcodec/AVCodecContext.java
-
-
-
-// #if FF_API_CODEC_GET_SET
-/**
- * Accessors for some AVCodecContext fields. These used to be provided for ABI
- * compatibility, and do not need to be used anymore.
- */
-@NoException public static native @Deprecated @ByVal AVRational av_codec_get_pkt_timebase(@Const AVCodecContext avctx);
-@NoException public static native @Deprecated void av_codec_set_pkt_timebase(AVCodecContext avctx, @ByVal AVRational val);
-
-@NoException public static native @Const @Deprecated AVCodecDescriptor av_codec_get_codec_descriptor(@Const AVCodecContext avctx);
-@NoException public static native @Deprecated void av_codec_set_codec_descriptor(AVCodecContext avctx, @Const AVCodecDescriptor desc);
-
-@NoException public static native @Cast("unsigned") @Deprecated int av_codec_get_codec_properties(@Const AVCodecContext avctx);
-
-// #if FF_API_LOWRES
-@NoException public static native @Deprecated int av_codec_get_lowres(@Const AVCodecContext avctx);
-@NoException public static native @Deprecated void av_codec_set_lowres(AVCodecContext avctx, int val);
-// #endif
-
-@NoException public static native @Deprecated int av_codec_get_seek_preroll(@Const AVCodecContext avctx);
-@NoException public static native @Deprecated void av_codec_set_seek_preroll(AVCodecContext avctx, int val);
-
-@NoException public static native @Cast("uint16_t*") @Deprecated ShortPointer av_codec_get_chroma_intra_matrix(@Const AVCodecContext avctx);
-@NoException public static native @Deprecated void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortPointer val);
-@NoException public static native @Deprecated void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortBuffer val);
-@NoException public static native @Deprecated void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") short[] val);
-// Targeting ../avcodec/AVProfile.java
-
-
-
-/** enum  */
-public static final int
-    /**
-     * The codec supports this format via the hw_device_ctx interface.
-     *
-     * When selecting this format, AVCodecContext.hw_device_ctx should
-     * have been set to a device of the specified type before calling
-     * avcodec_open2().
-     */
-    AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX = 0x01,
-    /**
-     * The codec supports this format via the hw_frames_ctx interface.
-     *
-     * When selecting this format for a decoder,
-     * AVCodecContext.hw_frames_ctx should be set to a suitable frames
-     * context inside the get_format() callback.  The frames context
-     * must have been created on a device of the specified type.
-     */
-    AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX = 0x02,
-    /**
-     * The codec supports this format by some internal method.
-     *
-     * This format can be selected without any additional configuration -
-     * no device or frames context is required.
-     */
-    AV_CODEC_HW_CONFIG_METHOD_INTERNAL      = 0x04,
-    /**
-     * The codec supports this format by some ad-hoc method.
-     *
-     * Additional settings and/or function calls are required.  See the
-     * codec-specific documentation for details.  (Methods requiring
-     * this sort of configuration are deprecated and others should be
-     * used in preference.)
-     */
-    AV_CODEC_HW_CONFIG_METHOD_AD_HOC        = 0x08;
-// Targeting ../avcodec/AVCodecHWConfig.java
-
-
-// Targeting ../avcodec/AVCodecDefault.java
-
-
-// Targeting ../avcodec/AVCodec.java
-
-
-
-// #if FF_API_CODEC_GET_SET
-@NoException public static native @Deprecated int av_codec_get_max_lowres(@Const AVCodec codec);
-// Targeting ../avcodec/MpegEncContext.java
-
-
-
-/**
- * Retrieve supported hardware configurations for a codec.
- *
- * Values of index from zero to some maximum return the indexed configuration
- * descriptor; all other values return NULL.  If the codec does not support
- * any hardware configurations then it will always return NULL.
- */
-@NoException public static native @Const AVCodecHWConfig avcodec_get_hw_config(@Const AVCodec codec, int index);
-// Targeting ../avcodec/AVHWAccel.java
-
-
-
-/**
- * HWAccel is experimental and is thus avoided in favor of non experimental
- * codecs
- */
-public static final int AV_HWACCEL_CODEC_CAP_EXPERIMENTAL = 0x0200;
-
-/**
- * Hardware acceleration should be used for decoding even if the codec level
- * used is unknown or higher than the maximum supported level reported by the
- * hardware driver.
- *
- * It's generally a good idea to pass this flag unless you have a specific
- * reason not to, as hardware tends to under-report supported levels.
- */
-public static final int AV_HWACCEL_FLAG_IGNORE_LEVEL = (1 << 0);
-
-/**
- * Hardware acceleration can output YUV pixel formats with a different chroma
- * sampling than 4:2:0 and/or other than 8 bits per component.
- */
-public static final int AV_HWACCEL_FLAG_ALLOW_HIGH_DEPTH = (1 << 1);
-
-/**
- * Hardware acceleration should still be attempted for decoding when the
- * codec profile does not match the reported capabilities of the hardware.
- *
- * For example, this can be used to try to decode baseline profile H.264
- * streams in hardware - it will often succeed, because many streams marked
- * as baseline profile actually conform to constrained baseline profile.
- *
- * \warning If the stream is actually not supported then the behaviour is
- *          undefined, and may include returning entirely incorrect output
- *          while indicating success.
- */
-public static final int AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH = (1 << 2);
-// Targeting ../avcodec/AVPicture.java
-
-
-
-/**
- * \}
- */
-// #endif
-
-/** enum AVSubtitleType */
-public static final int
-    SUBTITLE_NONE = 0,
-
-    /** A bitmap, pict will be set */
-    SUBTITLE_BITMAP = 1,
-
-    /**
-     * Plain text, the text field must be set by the decoder and is
-     * authoritative. ass and pict fields may contain approximations.
-     */
-    SUBTITLE_TEXT = 2,
-
-    /**
-     * Formatted text, the ass field must be set by the decoder and is
-     * authoritative. pict and text fields may contain approximations.
-     */
-    SUBTITLE_ASS = 3;
-
-public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
-// Targeting ../avcodec/AVSubtitleRect.java
-
-
-// Targeting ../avcodec/AVSubtitle.java
-
-
-// Targeting ../avcodec/AVCodecParameters.java
-
-
-
-/**
- * Iterate over all registered codecs.
- *
- * @param opaque a pointer where libavcodec will store the iteration state. Must
- *               point to NULL to start the iteration.
- *
- * @return the next registered codec or NULL when the iteration is
- *         finished
- */
-@NoException public static native @Const AVCodec av_codec_iterate(@Cast("void**") PointerPointer opaque);
-@NoException public static native @Const AVCodec av_codec_iterate(@Cast("void**") @ByPtrPtr Pointer opaque);
-
-// #if FF_API_NEXT
-/**
- * If c is NULL, returns the first registered codec,
- * if c is non-NULL, returns the next registered codec after c,
- * or NULL if c is the last one.
- */
-@NoException public static native @Deprecated AVCodec av_codec_next(@Const AVCodec c);
-// #endif
-
-/**
- * Return the LIBAVCODEC_VERSION_INT constant.
- */
-@NoException public static native @Cast("unsigned") int avcodec_version();
-
-/**
- * Return the libavcodec build-time configuration.
- */
-@NoException public static native @Cast("const char*") BytePointer avcodec_configuration();
-
-/**
- * Return the libavcodec license.
- */
-@NoException public static native @Cast("const char*") BytePointer avcodec_license();
-
-// #if FF_API_NEXT
-/**
- * Register the codec codec and initialize libavcodec.
- *
- * \warning either this function or avcodec_register_all() must be called
- * before any other libavcodec functions.
- *
- * @see avcodec_register_all()
- */
-@NoException public static native @Deprecated void avcodec_register(AVCodec codec);
-
-/**
- * Register all the codecs, parsers and bitstream filters which were enabled at
- * configuration time. If you do not call this function you can select exactly
- * which formats you want to support, by using the individual registration
- * functions.
- *
- * @see avcodec_register
- * @see av_register_codec_parser
- * @see av_register_bitstream_filter
- */
-@NoException public static native @Deprecated void avcodec_register_all();
-// #endif
-
-/**
- * Allocate an AVCodecContext and set its fields to default values. The
- * resulting struct should be freed with avcodec_free_context().
- *
- * @param codec if non-NULL, allocate private data and initialize defaults
- *              for the given codec. It is illegal to then call avcodec_open2()
- *              with a different codec.
- *              If NULL, then the codec-specific defaults won't be initialized,
- *              which may result in suboptimal default settings (this is
- *              important mainly for encoders, e.g. libx264).
- *
- * @return An AVCodecContext filled with default values or NULL on failure.
- */
-@NoException public static native AVCodecContext avcodec_alloc_context3(@Const AVCodec codec);
-
-/**
- * Free the codec context and everything associated with it and write NULL to
- * the provided pointer.
- */
-@NoException public static native void avcodec_free_context(@Cast("AVCodecContext**") PointerPointer avctx);
-@NoException public static native void avcodec_free_context(@ByPtrPtr AVCodecContext avctx);
-
-// #if FF_API_GET_CONTEXT_DEFAULTS
-/**
- * @deprecated This function should not be used, as closing and opening a codec
- * context multiple time is not supported. A new codec context should be
- * allocated for each new use.
- */
-@NoException public static native int avcodec_get_context_defaults3(AVCodecContext s, @Const AVCodec codec);
-// #endif
-
-/**
- * Get the AVClass for AVCodecContext. It can be used in combination with
- * AV_OPT_SEARCH_FAKE_OBJ for examining options.
- *
- * @see av_opt_find().
- */
-@NoException public static native @Const AVClass avcodec_get_class();
-
-// #if FF_API_COPY_CONTEXT
-/**
- * Get the AVClass for AVFrame. It can be used in combination with
- * AV_OPT_SEARCH_FAKE_OBJ for examining options.
- *
- * @see av_opt_find().
- */
-@NoException public static native @Const AVClass avcodec_get_frame_class();
-
-/**
- * Get the AVClass for AVSubtitleRect. It can be used in combination with
- * AV_OPT_SEARCH_FAKE_OBJ for examining options.
- *
- * @see av_opt_find().
- */
-@NoException public static native @Const AVClass avcodec_get_subtitle_rect_class();
-
-/**
- * Copy the settings of the source AVCodecContext into the destination
- * AVCodecContext. The resulting destination codec context will be
- * unopened, i.e. you are required to call avcodec_open2() before you
- * can use this AVCodecContext to decode/encode video/audio data.
- *
- * @param dest target codec context, should be initialized with
- *             avcodec_alloc_context3(NULL), but otherwise uninitialized
- * @param src source codec context
- * @return AVERROR() on error (e.g. memory allocation error), 0 on success
- *
- * @deprecated The semantics of this function are ill-defined and it should not
- * be used. If you need to transfer the stream parameters from one codec context
- * to another, use an intermediate AVCodecParameters instance and the
- * avcodec_parameters_from_context() / avcodec_parameters_to_context()
- * functions.
- */
-@NoException public static native @Deprecated int avcodec_copy_context(AVCodecContext dest, @Const AVCodecContext src);
-// #endif
-
-/**
- * Allocate a new AVCodecParameters and set its fields to default values
- * (unknown/invalid/0). The returned struct must be freed with
- * avcodec_parameters_free().
- */
-@NoException public static native AVCodecParameters avcodec_parameters_alloc();
-
-/**
- * Free an AVCodecParameters instance and everything associated with it and
- * write NULL to the supplied pointer.
- */
-@NoException public static native void avcodec_parameters_free(@Cast("AVCodecParameters**") PointerPointer par);
-@NoException public static native void avcodec_parameters_free(@ByPtrPtr AVCodecParameters par);
-
-/**
- * Copy the contents of src to dst. Any allocated fields in dst are freed and
- * replaced with newly allocated duplicates of the corresponding fields in src.
- *
- * @return >= 0 on success, a negative AVERROR code on failure.
- */
-@NoException public static native int avcodec_parameters_copy(AVCodecParameters dst, @Const AVCodecParameters src);
-
-/**
- * Fill the parameters struct based on the values from the supplied codec
- * context. Any allocated fields in par are freed and replaced with duplicates
- * of the corresponding fields in codec.
- *
- * @return >= 0 on success, a negative AVERROR code on failure
- */
-@NoException public static native int avcodec_parameters_from_context(AVCodecParameters par,
-                                    @Const AVCodecContext codec);
-
-/**
- * Fill the codec context based on the values from the supplied codec
- * parameters. Any allocated fields in codec that have a corresponding field in
- * par are freed and replaced with duplicates of the corresponding field in par.
- * Fields in codec that do not have a counterpart in par are not touched.
- *
- * @return >= 0 on success, a negative AVERROR code on failure.
- */
-@NoException public static native int avcodec_parameters_to_context(AVCodecContext codec,
-                                  @Const AVCodecParameters par);
-
-/**
- * Initialize the AVCodecContext to use the given AVCodec. Prior to using this
- * function the context has to be allocated with avcodec_alloc_context3().
- *
- * The functions avcodec_find_decoder_by_name(), avcodec_find_encoder_by_name(),
- * avcodec_find_decoder() and avcodec_find_encoder() provide an easy way for
- * retrieving a codec.
- *
- * \warning This function is not thread safe!
- *
- * \note Always call this function before using decoding routines (such as
- * \ref avcodec_receive_frame()).
- *
- * <pre>{@code
- * avcodec_register_all();
- * av_dict_set(&opts, "b", "2.5M", 0);
- * codec = avcodec_find_decoder(AV_CODEC_ID_H264);
- * if (!codec)
- *     exit(1);
- *
- * context = avcodec_alloc_context3(codec);
- *
- * if (avcodec_open2(context, codec, opts) < 0)
- *     exit(1);
- * }</pre>
- *
- * @param avctx The context to initialize.
- * @param codec The codec to open this context for. If a non-NULL codec has been
- *              previously passed to avcodec_alloc_context3() or
- *              for this context, then this parameter MUST be either NULL or
- *              equal to the previously passed codec.
- * @param options A dictionary filled with AVCodecContext and codec-private options.
- *                On return this object will be filled with options that were not found.
- *
- * @return zero on success, a negative value on error
- * @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
- *      av_dict_set(), av_opt_find().
- */
-@NoException public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @Cast("AVDictionary**") PointerPointer options);
-@NoException public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @ByPtrPtr AVDictionary options);
-
-/**
- * Close a given AVCodecContext and free all the data associated with it
- * (but not the AVCodecContext itself).
- *
- * Calling this function on an AVCodecContext that hasn't been opened will free
- * the codec-specific data allocated in avcodec_alloc_context3() with a non-NULL
- * codec. Subsequent calls will do nothing.
- *
- * \note Do not use this function. Use avcodec_free_context() to destroy a
- * codec context (either open or closed). Opening and closing a codec context
- * multiple times is not supported anymore -- use multiple codec contexts
- * instead.
- */
-@NoException public static native int avcodec_close(AVCodecContext avctx);
-
-/**
- * Free all allocated data in the given subtitle struct.
- *
- * @param sub AVSubtitle to free.
- */
-@NoException public static native void avsubtitle_free(AVSubtitle sub);
-
-/**
- * \}
- */
-
-/**
- * \addtogroup lavc_packet
- * \{
- */
 
 /**
  * Allocate an AVPacket and set its fields to default values.  The resulting
@@ -2048,10 +1354,11 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *
  * @see av_packet_unref
  *
- * @param dst Destination packet
+ * @param dst Destination packet. Will be completely overwritten.
  * @param src Source packet
  *
- * @return 0 on success, a negative AVERROR on error.
+ * @return 0 on success, a negative AVERROR on error. On error, dst
+ *         will be blank (as if returned by av_packet_alloc()).
  */
 @NoException public static native int av_packet_ref(AVPacket dst, @Const AVPacket src);
 
@@ -2132,10 +1439,447 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * \}
  */
 
+// #endif // AVCODEC_PACKET_H
+
+
+// Parsed from <libavcodec/bsf.h>
+
+/*
+ * Bitstream filters public API
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_BSF_H
+// #define AVCODEC_BSF_H
+
+// #include "libavutil/dict.h"
+// #include "libavutil/log.h"
+// #include "libavutil/rational.h"
+
+// #include "codec_id.h"
+// #include "codec_par.h"
+// #include "packet.h"
+// Targeting ../avcodec/AVBSFInternal.java
+
+
+// Targeting ../avcodec/AVBSFContext.java
+
+
+// Targeting ../avcodec/AVBitStreamFilter.java
+
+
+
 /**
- * \addtogroup lavc_decoding
+ * @return a bitstream filter with the specified name or NULL if no such
+ *         bitstream filter exists.
+ */
+@NoException public static native @Const AVBitStreamFilter av_bsf_get_by_name(@Cast("const char*") BytePointer name);
+@NoException public static native @Const AVBitStreamFilter av_bsf_get_by_name(String name);
+
+/**
+ * Iterate over all registered bitstream filters.
+ *
+ * @param opaque a pointer where libavcodec will store the iteration state. Must
+ *               point to NULL to start the iteration.
+ *
+ * @return the next registered bitstream filter or NULL when the iteration is
+ *         finished
+ */
+@NoException public static native @Const AVBitStreamFilter av_bsf_iterate(@Cast("void**") PointerPointer opaque);
+@NoException public static native @Const AVBitStreamFilter av_bsf_iterate(@Cast("void**") @ByPtrPtr Pointer opaque);
+
+/**
+ * Allocate a context for a given bitstream filter. The caller must fill in the
+ * context parameters as described in the documentation and then call
+ * av_bsf_init() before sending any data to the filter.
+ *
+ * @param filter the filter for which to allocate an instance.
+ * @param ctx a pointer into which the pointer to the newly-allocated context
+ *            will be written. It must be freed with av_bsf_free() after the
+ *            filtering is done.
+ *
+ * @return 0 on success, a negative AVERROR code on failure
+ */
+@NoException public static native int av_bsf_alloc(@Const AVBitStreamFilter filter, @Cast("AVBSFContext**") PointerPointer ctx);
+@NoException public static native int av_bsf_alloc(@Const AVBitStreamFilter filter, @ByPtrPtr AVBSFContext ctx);
+
+/**
+ * Prepare the filter for use, after all the parameters and options have been
+ * set.
+ */
+@NoException public static native int av_bsf_init(AVBSFContext ctx);
+
+/**
+ * Submit a packet for filtering.
+ *
+ * After sending each packet, the filter must be completely drained by calling
+ * av_bsf_receive_packet() repeatedly until it returns AVERROR(EAGAIN) or
+ * AVERROR_EOF.
+ *
+ * @param pkt the packet to filter. The bitstream filter will take ownership of
+ * the packet and reset the contents of pkt. pkt is not touched if an error occurs.
+ * If pkt is empty (i.e. NULL, or pkt->data is NULL and pkt->side_data_elems zero),
+ * it signals the end of the stream (i.e. no more non-empty packets will be sent;
+ * sending more empty packets does nothing) and will cause the filter to output
+ * any packets it may have buffered internally.
+ *
+ * @return 0 on success. AVERROR(EAGAIN) if packets need to be retrieved from the
+ * filter (using av_bsf_receive_packet()) before new input can be consumed. Another
+ * negative AVERROR value if an error occurs.
+ */
+@NoException public static native int av_bsf_send_packet(AVBSFContext ctx, AVPacket pkt);
+
+/**
+ * Retrieve a filtered packet.
+ *
+ * @param pkt [out] this struct will be filled with the contents of the filtered
+ *                 packet. It is owned by the caller and must be freed using
+ *                 av_packet_unref() when it is no longer needed.
+ *                 This parameter should be "clean" (i.e. freshly allocated
+ *                 with av_packet_alloc() or unreffed with av_packet_unref())
+ *                 when this function is called. If this function returns
+ *                 successfully, the contents of pkt will be completely
+ *                 overwritten by the returned data. On failure, pkt is not
+ *                 touched.
+ *
+ * @return 0 on success. AVERROR(EAGAIN) if more packets need to be sent to the
+ * filter (using av_bsf_send_packet()) to get more output. AVERROR_EOF if there
+ * will be no further output from the filter. Another negative AVERROR value if
+ * an error occurs.
+ *
+ * \note one input packet may result in several output packets, so after sending
+ * a packet with av_bsf_send_packet(), this function needs to be called
+ * repeatedly until it stops returning 0. It is also possible for a filter to
+ * output fewer packets than were sent to it, so this function may return
+ * AVERROR(EAGAIN) immediately after a successful av_bsf_send_packet() call.
+ */
+@NoException public static native int av_bsf_receive_packet(AVBSFContext ctx, AVPacket pkt);
+
+/**
+ * Reset the internal bitstream filter state / flush internal buffers.
+ */
+@NoException public static native void av_bsf_flush(AVBSFContext ctx);
+
+/**
+ * Free a bitstream filter context and everything associated with it; write NULL
+ * into the supplied pointer.
+ */
+@NoException public static native void av_bsf_free(@Cast("AVBSFContext**") PointerPointer ctx);
+@NoException public static native void av_bsf_free(@ByPtrPtr AVBSFContext ctx);
+
+/**
+ * Get the AVClass for AVBSFContext. It can be used in combination with
+ * AV_OPT_SEARCH_FAKE_OBJ for examining options.
+ *
+ * @see av_opt_find().
+ */
+@NoException public static native @Const AVClass av_bsf_get_class();
+// Targeting ../avcodec/AVBSFList.java
+
+
+
+/**
+ * Allocate empty list of bitstream filters.
+ * The list must be later freed by av_bsf_list_free()
+ * or finalized by av_bsf_list_finalize().
+ *
+ * @return Pointer to \ref AVBSFList on success, NULL in case of failure
+ */
+@NoException public static native AVBSFList av_bsf_list_alloc();
+
+/**
+ * Free list of bitstream filters.
+ *
+ * @param lst Pointer to pointer returned by av_bsf_list_alloc()
+ */
+@NoException public static native void av_bsf_list_free(@Cast("AVBSFList**") PointerPointer lst);
+@NoException public static native void av_bsf_list_free(@ByPtrPtr AVBSFList lst);
+
+/**
+ * Append bitstream filter to the list of bitstream filters.
+ *
+ * @param lst List to append to
+ * @param bsf Filter context to be appended
+ *
+ * @return >=0 on success, negative AVERROR in case of failure
+ */
+@NoException public static native int av_bsf_list_append(AVBSFList lst, AVBSFContext bsf);
+
+/**
+ * Construct new bitstream filter context given it's name and options
+ * and append it to the list of bitstream filters.
+ *
+ * @param lst      List to append to
+ * @param bsf_name Name of the bitstream filter
+ * @param options  Options for the bitstream filter, can be set to NULL
+ *
+ * @return >=0 on success, negative AVERROR in case of failure
+ */
+@NoException public static native int av_bsf_list_append2(AVBSFList lst, @Cast("const char*") BytePointer bsf_name, @Cast("AVDictionary**") PointerPointer options);
+@NoException public static native int av_bsf_list_append2(AVBSFList lst, @Cast("const char*") BytePointer bsf_name, @ByPtrPtr AVDictionary options);
+@NoException public static native int av_bsf_list_append2(AVBSFList lst, String bsf_name, @ByPtrPtr AVDictionary options);
+/**
+ * Finalize list of bitstream filters.
+ *
+ * This function will transform \ref AVBSFList to single \ref AVBSFContext,
+ * so the whole chain of bitstream filters can be treated as single filter
+ * freshly allocated by av_bsf_alloc().
+ * If the call is successful, \ref AVBSFList structure is freed and lst
+ * will be set to NULL. In case of failure, caller is responsible for
+ * freeing the structure by av_bsf_list_free()
+ *
+ * @param      lst Filter list structure to be transformed
+ * @param bsf [out] Pointer to be set to newly created \ref AVBSFContext structure
+ *                 representing the chain of bitstream filters
+ *
+ * @return >=0 on success, negative AVERROR in case of failure
+ */
+@NoException public static native int av_bsf_list_finalize(@Cast("AVBSFList**") PointerPointer lst, @Cast("AVBSFContext**") PointerPointer bsf);
+@NoException public static native int av_bsf_list_finalize(@ByPtrPtr AVBSFList lst, @ByPtrPtr AVBSFContext bsf);
+
+/**
+ * Parse string describing list of bitstream filters and create single
+ * \ref AVBSFContext describing the whole chain of bitstream filters.
+ * Resulting \ref AVBSFContext can be treated as any other \ref AVBSFContext freshly
+ * allocated by av_bsf_alloc().
+ *
+ * @param      str String describing chain of bitstream filters in format
+ *                 {@code bsf1[=opt1=val1:opt2=val2][,bsf2]}
+ * @param bsf [out] Pointer to be set to newly created \ref AVBSFContext structure
+ *                 representing the chain of bitstream filters
+ *
+ * @return >=0 on success, negative AVERROR in case of failure
+ */
+@NoException public static native int av_bsf_list_parse_str(@Cast("const char*") BytePointer str, @Cast("AVBSFContext**") PointerPointer bsf);
+@NoException public static native int av_bsf_list_parse_str(@Cast("const char*") BytePointer str, @ByPtrPtr AVBSFContext bsf);
+@NoException public static native int av_bsf_list_parse_str(String str, @ByPtrPtr AVBSFContext bsf);
+
+/**
+ * Get null/pass-through bitstream filter.
+ *
+ * @param bsf [out] Pointer to be set to new instance of pass-through bitstream filter
+ *
+ * @return
+ */
+@NoException public static native int av_bsf_get_null_filter(@Cast("AVBSFContext**") PointerPointer bsf);
+@NoException public static native int av_bsf_get_null_filter(@ByPtrPtr AVBSFContext bsf);
+
+/**
+ * \}
+ */
+
+// #endif // AVCODEC_BSF_H
+
+
+// Parsed from <libavcodec/codec.h>
+
+/*
+ * AVCodec public API
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_CODEC_H
+// #define AVCODEC_CODEC_H
+
+// #include <stdint.h>
+
+// #include "libavutil/avutil.h"
+// #include "libavutil/hwcontext.h"
+// #include "libavutil/log.h"
+// #include "libavutil/pixfmt.h"
+// #include "libavutil/rational.h"
+// #include "libavutil/samplefmt.h"
+
+// #include "libavcodec/codec_id.h"
+// #include "libavcodec/version.h"
+
+/**
+ * \addtogroup lavc_core
  * \{
  */
+
+/**
+ * Decoder can use draw_horiz_band callback.
+ */
+public static final int AV_CODEC_CAP_DRAW_HORIZ_BAND =     (1 <<  0);
+/**
+ * Codec uses get_buffer() for allocating buffers and supports custom allocators.
+ * If not set, it might not use get_buffer() at all or use operations that
+ * assume the buffer was allocated by avcodec_default_get_buffer.
+ */
+public static final int AV_CODEC_CAP_DR1 =                 (1 <<  1);
+public static final int AV_CODEC_CAP_TRUNCATED =           (1 <<  3);
+/**
+ * Encoder or decoder requires flushing with NULL input at the end in order to
+ * give the complete and correct output.
+ *
+ * NOTE: If this flag is not set, the codec is guaranteed to never be fed with
+ *       with NULL data. The user can still send NULL data to the public encode
+ *       or decode function, but libavcodec will not pass it along to the codec
+ *       unless this flag is set.
+ *
+ * Decoders:
+ * The decoder has a non-zero delay and needs to be fed with avpkt->data=NULL,
+ * avpkt->size=0 at the end to get the delayed data until the decoder no longer
+ * returns frames.
+ *
+ * Encoders:
+ * The encoder needs to be fed with NULL data at the end of encoding until the
+ * encoder no longer returns data.
+ *
+ * NOTE: For encoders implementing the AVCodec.encode2() function, setting this
+ *       flag also means that the encoder must set the pts and duration for
+ *       each output packet. If this flag is not set, the pts and duration will
+ *       be determined by libavcodec from the input frame.
+ */
+public static final int AV_CODEC_CAP_DELAY =               (1 <<  5);
+/**
+ * Codec can be fed a final frame with a smaller size.
+ * This can be used to prevent truncation of the last audio samples.
+ */
+public static final int AV_CODEC_CAP_SMALL_LAST_FRAME =    (1 <<  6);
+
+/**
+ * Codec can output multiple frames per AVPacket
+ * Normally demuxers return one frame at a time, demuxers which do not do
+ * are connected to a parser to split what they return into proper frames.
+ * This flag is reserved to the very rare category of codecs which have a
+ * bitstream that cannot be split into frames without timeconsuming
+ * operations like full decoding. Demuxers carrying such bitstreams thus
+ * may return multiple frames in a packet. This has many disadvantages like
+ * prohibiting stream copy in many cases thus it should only be considered
+ * as a last resort.
+ */
+public static final int AV_CODEC_CAP_SUBFRAMES =           (1 <<  8);
+/**
+ * Codec is experimental and is thus avoided in favor of non experimental
+ * encoders
+ */
+public static final int AV_CODEC_CAP_EXPERIMENTAL =        (1 <<  9);
+/**
+ * Codec should fill in channel configuration and samplerate instead of container
+ */
+public static final int AV_CODEC_CAP_CHANNEL_CONF =        (1 << 10);
+/**
+ * Codec supports frame-level multithreading.
+ */
+public static final int AV_CODEC_CAP_FRAME_THREADS =       (1 << 12);
+/**
+ * Codec supports slice-based (or partition-based) multithreading.
+ */
+public static final int AV_CODEC_CAP_SLICE_THREADS =       (1 << 13);
+/**
+ * Codec supports changed parameters at any point.
+ */
+public static final int AV_CODEC_CAP_PARAM_CHANGE =        (1 << 14);
+/**
+ * Codec supports avctx->thread_count == 0 (auto).
+ */
+public static final int AV_CODEC_CAP_AUTO_THREADS =        (1 << 15);
+/**
+ * Audio encoder supports receiving a different number of samples in each call.
+ */
+public static final int AV_CODEC_CAP_VARIABLE_FRAME_SIZE = (1 << 16);
+/**
+ * Decoder is not a preferred choice for probing.
+ * This indicates that the decoder is not a good choice for probing.
+ * It could for example be an expensive to spin up hardware decoder,
+ * or it could simply not provide a lot of useful information about
+ * the stream.
+ * A decoder marked with this flag should only be used as last resort
+ * choice for probing.
+ */
+public static final int AV_CODEC_CAP_AVOID_PROBING =       (1 << 17);
+
+// #if FF_API_UNUSED_CODEC_CAPS
+/**
+ * Deprecated and unused. Use AVCodecDescriptor.props instead
+ */
+public static final int AV_CODEC_CAP_INTRA_ONLY =       0x40000000;
+/**
+ * Deprecated and unused. Use AVCodecDescriptor.props instead
+ */
+public static final int AV_CODEC_CAP_LOSSLESS =         0x80000000;
+// #endif
+
+/**
+ * Codec is backed by a hardware implementation. Typically used to
+ * identify a non-hwaccel hardware decoder. For information about hwaccels, use
+ * avcodec_get_hw_config() instead.
+ */
+public static final int AV_CODEC_CAP_HARDWARE =            (1 << 18);
+
+/**
+ * Codec is potentially backed by a hardware implementation, but not
+ * necessarily. This is used instead of AV_CODEC_CAP_HARDWARE, if the
+ * implementation provides some sort of internal fallback.
+ */
+public static final int AV_CODEC_CAP_HYBRID =              (1 << 19);
+
+/**
+ * This codec takes the reordered_opaque field from input AVFrames
+ * and returns it in the corresponding field in AVCodecContext after
+ * encoding.
+ */
+public static final int AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE = (1 << 20);
+
+/**
+ * This encoder can be flushed using avcodec_flush_buffers(). If this flag is
+ * not set, the encoder must be closed and reopened to ensure that no frames
+ * remain pending.
+ */
+public static final int AV_CODEC_CAP_ENCODER_FLUSH =   (1 << 21);
+// Targeting ../avcodec/AVProfile.java
+
+
+// Targeting ../avcodec/AVCodecDefault.java
+
+
+// Targeting ../avcodec/AVCodec.java
+
+
+
+/**
+ * Iterate over all registered codecs.
+ *
+ * @param opaque a pointer where libavcodec will store the iteration state. Must
+ *               point to NULL to start the iteration.
+ *
+ * @return the next registered codec or NULL when the iteration is
+ *         finished
+ */
+@NoException public static native @Const AVCodec av_codec_iterate(@Cast("void**") PointerPointer opaque);
+@NoException public static native @Const AVCodec av_codec_iterate(@Cast("void**") @ByPtrPtr Pointer opaque);
 
 /**
  * Find a registered decoder with a matching codec ID.
@@ -2153,6 +1897,851 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  */
 @NoException public static native AVCodec avcodec_find_decoder_by_name(@Cast("const char*") BytePointer name);
 @NoException public static native AVCodec avcodec_find_decoder_by_name(String name);
+
+/**
+ * Find a registered encoder with a matching codec ID.
+ *
+ * @param id AVCodecID of the requested encoder
+ * @return An encoder if one was found, NULL otherwise.
+ */
+@NoException public static native AVCodec avcodec_find_encoder(@Cast("AVCodecID") int id);
+
+/**
+ * Find a registered encoder with the specified name.
+ *
+ * @param name name of the requested encoder
+ * @return An encoder if one was found, NULL otherwise.
+ */
+@NoException public static native AVCodec avcodec_find_encoder_by_name(@Cast("const char*") BytePointer name);
+@NoException public static native AVCodec avcodec_find_encoder_by_name(String name);
+/**
+ * @return a non-zero number if codec is an encoder, zero otherwise
+ */
+@NoException public static native int av_codec_is_encoder(@Const AVCodec codec);
+
+/**
+ * @return a non-zero number if codec is a decoder, zero otherwise
+ */
+@NoException public static native int av_codec_is_decoder(@Const AVCodec codec);
+
+/** enum  */
+public static final int
+    /**
+     * The codec supports this format via the hw_device_ctx interface.
+     *
+     * When selecting this format, AVCodecContext.hw_device_ctx should
+     * have been set to a device of the specified type before calling
+     * avcodec_open2().
+     */
+    AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX = 0x01,
+    /**
+     * The codec supports this format via the hw_frames_ctx interface.
+     *
+     * When selecting this format for a decoder,
+     * AVCodecContext.hw_frames_ctx should be set to a suitable frames
+     * context inside the get_format() callback.  The frames context
+     * must have been created on a device of the specified type.
+     *
+     * When selecting this format for an encoder,
+     * AVCodecContext.hw_frames_ctx should be set to the context which
+     * will be used for the input frames before calling avcodec_open2().
+     */
+    AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX = 0x02,
+    /**
+     * The codec supports this format by some internal method.
+     *
+     * This format can be selected without any additional configuration -
+     * no device or frames context is required.
+     */
+    AV_CODEC_HW_CONFIG_METHOD_INTERNAL      = 0x04,
+    /**
+     * The codec supports this format by some ad-hoc method.
+     *
+     * Additional settings and/or function calls are required.  See the
+     * codec-specific documentation for details.  (Methods requiring
+     * this sort of configuration are deprecated and others should be
+     * used in preference.)
+     */
+    AV_CODEC_HW_CONFIG_METHOD_AD_HOC        = 0x08;
+// Targeting ../avcodec/AVCodecHWConfig.java
+
+
+
+/**
+ * Retrieve supported hardware configurations for a codec.
+ *
+ * Values of index from zero to some maximum return the indexed configuration
+ * descriptor; all other values return NULL.  If the codec does not support
+ * any hardware configurations then it will always return NULL.
+ */
+@NoException public static native @Const AVCodecHWConfig avcodec_get_hw_config(@Const AVCodec codec, int index);
+
+/**
+ * \}
+ */
+
+// #endif /* AVCODEC_CODEC_H */
+
+
+// Parsed from <libavcodec/avcodec.h>
+
+/*
+ * copyright (c) 2001 Fabrice Bellard
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_AVCODEC_H
+// #define AVCODEC_AVCODEC_H
+
+/**
+ * \file
+ * \ingroup libavc
+ * Libavcodec external API header
+ */
+
+// #include <errno.h>
+// #include "libavutil/samplefmt.h"
+// #include "libavutil/attributes.h"
+// #include "libavutil/avutil.h"
+// #include "libavutil/buffer.h"
+// #include "libavutil/cpu.h"
+// #include "libavutil/channel_layout.h"
+// #include "libavutil/dict.h"
+// #include "libavutil/frame.h"
+// #include "libavutil/hwcontext.h"
+// #include "libavutil/log.h"
+// #include "libavutil/pixfmt.h"
+// #include "libavutil/rational.h"
+
+// #include "bsf.h"
+// #include "codec.h"
+// #include "codec_desc.h"
+// #include "codec_par.h"
+// #include "codec_id.h"
+// #include "packet.h"
+// #include "version.h"
+
+/**
+ * \defgroup libavc libavcodec
+ * Encoding/Decoding Library
+ *
+ * \{
+ *
+ * \defgroup lavc_decoding Decoding
+ * \{
+ * \}
+ *
+ * \defgroup lavc_encoding Encoding
+ * \{
+ * \}
+ *
+ * \defgroup lavc_codec Codecs
+ * \{
+ * \defgroup lavc_codec_native Native Codecs
+ * \{
+ * \}
+ * \defgroup lavc_codec_wrappers External library wrappers
+ * \{
+ * \}
+ * \defgroup lavc_codec_hwaccel Hardware Accelerators bridge
+ * \{
+ * \}
+ * \}
+ * \defgroup lavc_internal Internal
+ * \{
+ * \}
+ * \}
+ */
+
+/**
+ * \ingroup libavc
+ * \defgroup lavc_encdec send/receive encoding and decoding API overview
+ * \{
+ *
+ * The avcodec_send_packet()/avcodec_receive_frame()/avcodec_send_frame()/
+ * avcodec_receive_packet() functions provide an encode/decode API, which
+ * decouples input and output.
+ *
+ * The API is very similar for encoding/decoding and audio/video, and works as
+ * follows:
+ * - Set up and open the AVCodecContext as usual.
+ * - Send valid input:
+ *   - For decoding, call avcodec_send_packet() to give the decoder raw
+ *     compressed data in an AVPacket.
+ *   - For encoding, call avcodec_send_frame() to give the encoder an AVFrame
+ *     containing uncompressed audio or video.
+ *
+ *   In both cases, it is recommended that AVPackets and AVFrames are
+ *   refcounted, or libavcodec might have to copy the input data. (libavformat
+ *   always returns refcounted AVPackets, and av_frame_get_buffer() allocates
+ *   refcounted AVFrames.)
+ * - Receive output in a loop. Periodically call one of the avcodec_receive_*()
+ *   functions and process their output:
+ *   - For decoding, call avcodec_receive_frame(). On success, it will return
+ *     an AVFrame containing uncompressed audio or video data.
+ *   - For encoding, call avcodec_receive_packet(). On success, it will return
+ *     an AVPacket with a compressed frame.
+ *
+ *   Repeat this call until it returns AVERROR(EAGAIN) or an error. The
+ *   AVERROR(EAGAIN) return value means that new input data is required to
+ *   return new output. In this case, continue with sending input. For each
+ *   input frame/packet, the codec will typically return 1 output frame/packet,
+ *   but it can also be 0 or more than 1.
+ *
+ * At the beginning of decoding or encoding, the codec might accept multiple
+ * input frames/packets without returning a frame, until its internal buffers
+ * are filled. This situation is handled transparently if you follow the steps
+ * outlined above.
+ *
+ * In theory, sending input can result in EAGAIN - this should happen only if
+ * not all output was received. You can use this to structure alternative decode
+ * or encode loops other than the one suggested above. For example, you could
+ * try sending new input on each iteration, and try to receive output if that
+ * returns EAGAIN.
+ *
+ * End of stream situations. These require "flushing" (aka draining) the codec,
+ * as the codec might buffer multiple frames or packets internally for
+ * performance or out of necessity (consider B-frames).
+ * This is handled as follows:
+ * - Instead of valid input, send NULL to the avcodec_send_packet() (decoding)
+ *   or avcodec_send_frame() (encoding) functions. This will enter draining
+ *   mode.
+ * - Call avcodec_receive_frame() (decoding) or avcodec_receive_packet()
+ *   (encoding) in a loop until AVERROR_EOF is returned. The functions will
+ *   not return AVERROR(EAGAIN), unless you forgot to enter draining mode.
+ * - Before decoding can be resumed again, the codec has to be reset with
+ *   avcodec_flush_buffers().
+ *
+ * Using the API as outlined above is highly recommended. But it is also
+ * possible to call functions outside of this rigid schema. For example, you can
+ * call avcodec_send_packet() repeatedly without calling
+ * avcodec_receive_frame(). In this case, avcodec_send_packet() will succeed
+ * until the codec's internal buffer has been filled up (which is typically of
+ * size 1 per output frame, after initial input), and then reject input with
+ * AVERROR(EAGAIN). Once it starts rejecting input, you have no choice but to
+ * read at least some output.
+ *
+ * Not all codecs will follow a rigid and predictable dataflow; the only
+ * guarantee is that an AVERROR(EAGAIN) return value on a send/receive call on
+ * one end implies that a receive/send call on the other end will succeed, or
+ * at least will not fail with AVERROR(EAGAIN). In general, no codec will
+ * permit unlimited buffering of input or output.
+ *
+ * This API replaces the following legacy functions:
+ * - avcodec_decode_video2() and avcodec_decode_audio4():
+ *   Use avcodec_send_packet() to feed input to the decoder, then use
+ *   avcodec_receive_frame() to receive decoded frames after each packet.
+ *   Unlike with the old video decoding API, multiple frames might result from
+ *   a packet. For audio, splitting the input packet into frames by partially
+ *   decoding packets becomes transparent to the API user. You never need to
+ *   feed an AVPacket to the API twice (unless it is rejected with AVERROR(EAGAIN) - then
+ *   no data was read from the packet).
+ *   Additionally, sending a flush/draining packet is required only once.
+ * - avcodec_encode_video2()/avcodec_encode_audio2():
+ *   Use avcodec_send_frame() to feed input to the encoder, then use
+ *   avcodec_receive_packet() to receive encoded packets.
+ *   Providing user-allocated buffers for avcodec_receive_packet() is not
+ *   possible.
+ * - The new API does not handle subtitles yet.
+ *
+ * Mixing new and old function calls on the same AVCodecContext is not allowed,
+ * and will result in undefined behavior.
+ *
+ * Some codecs might require using the new API; using the old API will return
+ * an error when calling it. All codecs support the new API.
+ *
+ * A codec is not allowed to return AVERROR(EAGAIN) for both sending and receiving. This
+ * would be an invalid state, which could put the codec user into an endless
+ * loop. The API has no concept of time either: it cannot happen that trying to
+ * do avcodec_send_packet() results in AVERROR(EAGAIN), but a repeated call 1 second
+ * later accepts the packet (with no other receive/flush API calls involved).
+ * The API is a strict state machine, and the passage of time is not supposed
+ * to influence it. Some timing-dependent behavior might still be deemed
+ * acceptable in certain cases. But it must never result in both send/receive
+ * returning EAGAIN at the same time at any point. It must also absolutely be
+ * avoided that the current state is "unstable" and can "flip-flop" between
+ * the send/receive APIs allowing progress. For example, it's not allowed that
+ * the codec randomly decides that it actually wants to consume a packet now
+ * instead of returning a frame, after it just returned AVERROR(EAGAIN) on an
+ * avcodec_send_packet() call.
+ * \}
+ */
+
+/**
+ * \defgroup lavc_core Core functions/structures.
+ * \ingroup libavc
+ *
+ * Basic definitions, functions for querying libavcodec capabilities,
+ * allocating core structures, etc.
+ * \{
+ */
+
+/**
+ * \ingroup lavc_decoding
+ * Required number of additionally allocated bytes at the end of the input bitstream for decoding.
+ * This is mainly needed because some optimized bitstream readers read
+ * 32 or 64 bit at once and could read over the end.<br>
+ * Note: If the first 23 bits of the additional bytes are not 0, then damaged
+ * MPEG bitstreams could cause overread and segfault.
+ */
+public static final int AV_INPUT_BUFFER_PADDING_SIZE = 64;
+
+/**
+ * \ingroup lavc_encoding
+ * minimum encoding buffer size
+ * Used to avoid some checks during header writing.
+ */
+public static final int AV_INPUT_BUFFER_MIN_SIZE = 16384;
+
+/**
+ * \ingroup lavc_decoding
+ */
+/** enum AVDiscard */
+public static final int
+    /* We leave some space between them for extensions (drop some
+     * keyframes for intra-only or drop just some bidir frames). */
+    /** discard nothing */
+    AVDISCARD_NONE    = -16,
+    /** discard useless packets like 0 size packets in avi */
+    AVDISCARD_DEFAULT = 0,
+    /** discard all non reference */
+    AVDISCARD_NONREF  = 8,
+    /** discard all bidirectional frames */
+    AVDISCARD_BIDIR   = 16,
+    /** discard all non intra frames */
+    AVDISCARD_NONINTRA = 24,
+    /** discard all frames except keyframes */
+    AVDISCARD_NONKEY  = 32,
+    /** discard all */
+    AVDISCARD_ALL     = 48;
+
+/** enum AVAudioServiceType */
+public static final int
+    AV_AUDIO_SERVICE_TYPE_MAIN              = 0,
+    AV_AUDIO_SERVICE_TYPE_EFFECTS           = 1,
+    AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = 2,
+    AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED  = 3,
+    AV_AUDIO_SERVICE_TYPE_DIALOGUE          = 4,
+    AV_AUDIO_SERVICE_TYPE_COMMENTARY        = 5,
+    AV_AUDIO_SERVICE_TYPE_EMERGENCY         = 6,
+    AV_AUDIO_SERVICE_TYPE_VOICE_OVER        = 7,
+    AV_AUDIO_SERVICE_TYPE_KARAOKE           = 8,
+    /** Not part of ABI */
+    AV_AUDIO_SERVICE_TYPE_NB = 9;
+// Targeting ../avcodec/RcOverride.java
+
+
+
+/* encoding support
+   These flags can be passed in AVCodecContext.flags before initialization.
+   Note: Not everything is supported yet.
+*/
+
+/**
+ * Allow decoders to produce frames with data planes that are not aligned
+ * to CPU requirements (e.g. due to cropping).
+ */
+public static final int AV_CODEC_FLAG_UNALIGNED =       (1 <<  0);
+/**
+ * Use fixed qscale.
+ */
+public static final int AV_CODEC_FLAG_QSCALE =          (1 <<  1);
+/**
+ * 4 MV per MB allowed / advanced prediction for H.263.
+ */
+public static final int AV_CODEC_FLAG_4MV =             (1 <<  2);
+/**
+ * Output even those frames that might be corrupted.
+ */
+public static final int AV_CODEC_FLAG_OUTPUT_CORRUPT =  (1 <<  3);
+/**
+ * Use qpel MC.
+ */
+public static final int AV_CODEC_FLAG_QPEL =            (1 <<  4);
+/**
+ * Don't output frames whose parameters differ from first
+ * decoded frame in stream.
+ */
+public static final int AV_CODEC_FLAG_DROPCHANGED =     (1 <<  5);
+/**
+ * Use internal 2pass ratecontrol in first pass mode.
+ */
+public static final int AV_CODEC_FLAG_PASS1 =           (1 <<  9);
+/**
+ * Use internal 2pass ratecontrol in second pass mode.
+ */
+public static final int AV_CODEC_FLAG_PASS2 =           (1 << 10);
+/**
+ * loop filter.
+ */
+public static final int AV_CODEC_FLAG_LOOP_FILTER =     (1 << 11);
+/**
+ * Only decode/encode grayscale.
+ */
+public static final int AV_CODEC_FLAG_GRAY =            (1 << 13);
+/**
+ * error[?] variables will be set during encoding.
+ */
+public static final int AV_CODEC_FLAG_PSNR =            (1 << 15);
+/**
+ * Input bitstream might be truncated at a random location
+ * instead of only at frame boundaries.
+ */
+public static final int AV_CODEC_FLAG_TRUNCATED =       (1 << 16);
+/**
+ * Use interlaced DCT.
+ */
+public static final int AV_CODEC_FLAG_INTERLACED_DCT =  (1 << 18);
+/**
+ * Force low delay.
+ */
+public static final int AV_CODEC_FLAG_LOW_DELAY =       (1 << 19);
+/**
+ * Place global headers in extradata instead of every keyframe.
+ */
+public static final int AV_CODEC_FLAG_GLOBAL_HEADER =   (1 << 22);
+/**
+ * Use only bitexact stuff (except (I)DCT).
+ */
+public static final int AV_CODEC_FLAG_BITEXACT =        (1 << 23);
+/* Fx : Flag for H.263+ extra options */
+/**
+ * H.263 advanced intra coding / MPEG-4 AC prediction
+ */
+public static final int AV_CODEC_FLAG_AC_PRED =         (1 << 24);
+/**
+ * interlaced motion estimation
+ */
+public static final int AV_CODEC_FLAG_INTERLACED_ME =   (1 << 29);
+public static final long AV_CODEC_FLAG_CLOSED_GOP =      (1L << 31);
+
+/**
+ * Allow non spec compliant speedup tricks.
+ */
+public static final int AV_CODEC_FLAG2_FAST =           (1 <<  0);
+/**
+ * Skip bitstream encoding.
+ */
+public static final int AV_CODEC_FLAG2_NO_OUTPUT =      (1 <<  2);
+/**
+ * Place global headers at every keyframe instead of in extradata.
+ */
+public static final int AV_CODEC_FLAG2_LOCAL_HEADER =   (1 <<  3);
+
+/**
+ * timecode is in drop frame format. DEPRECATED!!!!
+ */
+public static final int AV_CODEC_FLAG2_DROP_FRAME_TIMECODE = (1 << 13);
+
+/**
+ * Input bitstream might be truncated at a packet boundaries
+ * instead of only at frame boundaries.
+ */
+public static final int AV_CODEC_FLAG2_CHUNKS =         (1 << 15);
+/**
+ * Discard cropping information from SPS.
+ */
+public static final int AV_CODEC_FLAG2_IGNORE_CROP =    (1 << 16);
+
+/**
+ * Show all frames before the first keyframe
+ */
+public static final int AV_CODEC_FLAG2_SHOW_ALL =       (1 << 22);
+/**
+ * Export motion vectors through frame side data
+ */
+public static final int AV_CODEC_FLAG2_EXPORT_MVS =     (1 << 28);
+/**
+ * Do not skip samples and export skip information as frame side data
+ */
+public static final int AV_CODEC_FLAG2_SKIP_MANUAL =    (1 << 29);
+/**
+ * Do not reset ASS ReadOrder field on flush (subtitles decoding)
+ */
+public static final int AV_CODEC_FLAG2_RO_FLUSH_NOOP =  (1 << 30);
+
+/* Unsupported options :
+ *              Syntax Arithmetic coding (SAC)
+ *              Reference Picture Selection
+ *              Independent Segment Decoding */
+/* /Fx */
+/* codec capabilities */
+
+/* Exported side data.
+   These flags can be passed in AVCodecContext.export_side_data before initialization.
+*/
+/**
+ * Export motion vectors through frame side data
+ */
+public static final int AV_CODEC_EXPORT_DATA_MVS =         (1 << 0);
+/**
+ * Export encoder Producer Reference Time through packet side data
+ */
+public static final int AV_CODEC_EXPORT_DATA_PRFT =        (1 << 1);
+/**
+ * Decoding only.
+ * Export the AVVideoEncParams structure through frame side data.
+ */
+public static final int AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS = (1 << 2);
+// Targeting ../avcodec/AVPanScan.java
+
+
+// Targeting ../avcodec/AVCPBProperties.java
+
+
+// Targeting ../avcodec/AVProducerReferenceTime.java
+
+
+
+/**
+ * The decoder will keep a reference to the frame and may reuse it later.
+ */
+public static final int AV_GET_BUFFER_FLAG_REF = (1 << 0);
+// Targeting ../avcodec/AVCodecInternal.java
+
+
+// Targeting ../avcodec/AVCodecContext.java
+
+
+
+// #if FF_API_CODEC_GET_SET
+/**
+ * Accessors for some AVCodecContext fields. These used to be provided for ABI
+ * compatibility, and do not need to be used anymore.
+ */
+@NoException public static native @Deprecated @ByVal AVRational av_codec_get_pkt_timebase(@Const AVCodecContext avctx);
+@NoException public static native @Deprecated void av_codec_set_pkt_timebase(AVCodecContext avctx, @ByVal AVRational val);
+
+@NoException public static native @Const @Deprecated AVCodecDescriptor av_codec_get_codec_descriptor(@Const AVCodecContext avctx);
+@NoException public static native @Deprecated void av_codec_set_codec_descriptor(AVCodecContext avctx, @Const AVCodecDescriptor desc);
+
+@NoException public static native @Cast("unsigned") @Deprecated int av_codec_get_codec_properties(@Const AVCodecContext avctx);
+
+// #if FF_API_LOWRES
+@NoException public static native @Deprecated int av_codec_get_lowres(@Const AVCodecContext avctx);
+@NoException public static native @Deprecated void av_codec_set_lowres(AVCodecContext avctx, int val);
+// #endif
+
+@NoException public static native @Deprecated int av_codec_get_seek_preroll(@Const AVCodecContext avctx);
+@NoException public static native @Deprecated void av_codec_set_seek_preroll(AVCodecContext avctx, int val);
+
+@NoException public static native @Cast("uint16_t*") @Deprecated ShortPointer av_codec_get_chroma_intra_matrix(@Const AVCodecContext avctx);
+@NoException public static native @Deprecated void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortPointer val);
+@NoException public static native @Deprecated void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortBuffer val);
+@NoException public static native @Deprecated void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") short[] val);
+// #endif
+
+// #if FF_API_CODEC_GET_SET
+@NoException public static native @Deprecated int av_codec_get_max_lowres(@Const AVCodec codec);
+// Targeting ../avcodec/MpegEncContext.java
+
+
+// Targeting ../avcodec/AVHWAccel.java
+
+
+
+/**
+ * HWAccel is experimental and is thus avoided in favor of non experimental
+ * codecs
+ */
+public static final int AV_HWACCEL_CODEC_CAP_EXPERIMENTAL = 0x0200;
+
+/**
+ * Hardware acceleration should be used for decoding even if the codec level
+ * used is unknown or higher than the maximum supported level reported by the
+ * hardware driver.
+ *
+ * It's generally a good idea to pass this flag unless you have a specific
+ * reason not to, as hardware tends to under-report supported levels.
+ */
+public static final int AV_HWACCEL_FLAG_IGNORE_LEVEL = (1 << 0);
+
+/**
+ * Hardware acceleration can output YUV pixel formats with a different chroma
+ * sampling than 4:2:0 and/or other than 8 bits per component.
+ */
+public static final int AV_HWACCEL_FLAG_ALLOW_HIGH_DEPTH = (1 << 1);
+
+/**
+ * Hardware acceleration should still be attempted for decoding when the
+ * codec profile does not match the reported capabilities of the hardware.
+ *
+ * For example, this can be used to try to decode baseline profile H.264
+ * streams in hardware - it will often succeed, because many streams marked
+ * as baseline profile actually conform to constrained baseline profile.
+ *
+ * \warning If the stream is actually not supported then the behaviour is
+ *          undefined, and may include returning entirely incorrect output
+ *          while indicating success.
+ */
+public static final int AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH = (1 << 2);
+// Targeting ../avcodec/AVPicture.java
+
+
+
+/**
+ * \}
+ */
+// #endif
+
+/** enum AVSubtitleType */
+public static final int
+    SUBTITLE_NONE = 0,
+
+    /** A bitmap, pict will be set */
+    SUBTITLE_BITMAP = 1,
+
+    /**
+     * Plain text, the text field must be set by the decoder and is
+     * authoritative. ass and pict fields may contain approximations.
+     */
+    SUBTITLE_TEXT = 2,
+
+    /**
+     * Formatted text, the ass field must be set by the decoder and is
+     * authoritative. pict and text fields may contain approximations.
+     */
+    SUBTITLE_ASS = 3;
+
+public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
+// Targeting ../avcodec/AVSubtitleRect.java
+
+
+// Targeting ../avcodec/AVSubtitle.java
+
+
+
+// #if FF_API_NEXT
+/**
+ * If c is NULL, returns the first registered codec,
+ * if c is non-NULL, returns the next registered codec after c,
+ * or NULL if c is the last one.
+ */
+@NoException public static native @Deprecated AVCodec av_codec_next(@Const AVCodec c);
+// #endif
+
+/**
+ * Return the LIBAVCODEC_VERSION_INT constant.
+ */
+@NoException public static native @Cast("unsigned") int avcodec_version();
+
+/**
+ * Return the libavcodec build-time configuration.
+ */
+@NoException public static native @Cast("const char*") BytePointer avcodec_configuration();
+
+/**
+ * Return the libavcodec license.
+ */
+@NoException public static native @Cast("const char*") BytePointer avcodec_license();
+
+// #if FF_API_NEXT
+/**
+ * Register the codec codec and initialize libavcodec.
+ *
+ * \warning either this function or avcodec_register_all() must be called
+ * before any other libavcodec functions.
+ *
+ * @see avcodec_register_all()
+ */
+@NoException public static native @Deprecated void avcodec_register(AVCodec codec);
+
+/**
+ * Register all the codecs, parsers and bitstream filters which were enabled at
+ * configuration time. If you do not call this function you can select exactly
+ * which formats you want to support, by using the individual registration
+ * functions.
+ *
+ * @see avcodec_register
+ * @see av_register_codec_parser
+ * @see av_register_bitstream_filter
+ */
+@NoException public static native @Deprecated void avcodec_register_all();
+// #endif
+
+/**
+ * Allocate an AVCodecContext and set its fields to default values. The
+ * resulting struct should be freed with avcodec_free_context().
+ *
+ * @param codec if non-NULL, allocate private data and initialize defaults
+ *              for the given codec. It is illegal to then call avcodec_open2()
+ *              with a different codec.
+ *              If NULL, then the codec-specific defaults won't be initialized,
+ *              which may result in suboptimal default settings (this is
+ *              important mainly for encoders, e.g. libx264).
+ *
+ * @return An AVCodecContext filled with default values or NULL on failure.
+ */
+@NoException public static native AVCodecContext avcodec_alloc_context3(@Const AVCodec codec);
+
+/**
+ * Free the codec context and everything associated with it and write NULL to
+ * the provided pointer.
+ */
+@NoException public static native void avcodec_free_context(@Cast("AVCodecContext**") PointerPointer avctx);
+@NoException public static native void avcodec_free_context(@ByPtrPtr AVCodecContext avctx);
+
+// #if FF_API_GET_CONTEXT_DEFAULTS
+/**
+ * @deprecated This function should not be used, as closing and opening a codec
+ * context multiple time is not supported. A new codec context should be
+ * allocated for each new use.
+ */
+@NoException public static native int avcodec_get_context_defaults3(AVCodecContext s, @Const AVCodec codec);
+// #endif
+
+/**
+ * Get the AVClass for AVCodecContext. It can be used in combination with
+ * AV_OPT_SEARCH_FAKE_OBJ for examining options.
+ *
+ * @see av_opt_find().
+ */
+@NoException public static native @Const AVClass avcodec_get_class();
+
+// #if FF_API_COPY_CONTEXT
+/**
+ * Get the AVClass for AVFrame. It can be used in combination with
+ * AV_OPT_SEARCH_FAKE_OBJ for examining options.
+ *
+ * @see av_opt_find().
+ */
+@NoException public static native @Const AVClass avcodec_get_frame_class();
+
+/**
+ * Get the AVClass for AVSubtitleRect. It can be used in combination with
+ * AV_OPT_SEARCH_FAKE_OBJ for examining options.
+ *
+ * @see av_opt_find().
+ */
+@NoException public static native @Const AVClass avcodec_get_subtitle_rect_class();
+
+/**
+ * Copy the settings of the source AVCodecContext into the destination
+ * AVCodecContext. The resulting destination codec context will be
+ * unopened, i.e. you are required to call avcodec_open2() before you
+ * can use this AVCodecContext to decode/encode video/audio data.
+ *
+ * @param dest target codec context, should be initialized with
+ *             avcodec_alloc_context3(NULL), but otherwise uninitialized
+ * @param src source codec context
+ * @return AVERROR() on error (e.g. memory allocation error), 0 on success
+ *
+ * @deprecated The semantics of this function are ill-defined and it should not
+ * be used. If you need to transfer the stream parameters from one codec context
+ * to another, use an intermediate AVCodecParameters instance and the
+ * avcodec_parameters_from_context() / avcodec_parameters_to_context()
+ * functions.
+ */
+@NoException public static native @Deprecated int avcodec_copy_context(AVCodecContext dest, @Const AVCodecContext src);
+// #endif
+
+/**
+ * Fill the parameters struct based on the values from the supplied codec
+ * context. Any allocated fields in par are freed and replaced with duplicates
+ * of the corresponding fields in codec.
+ *
+ * @return >= 0 on success, a negative AVERROR code on failure
+ */
+@NoException public static native int avcodec_parameters_from_context(AVCodecParameters par,
+                                    @Const AVCodecContext codec);
+
+/**
+ * Fill the codec context based on the values from the supplied codec
+ * parameters. Any allocated fields in codec that have a corresponding field in
+ * par are freed and replaced with duplicates of the corresponding field in par.
+ * Fields in codec that do not have a counterpart in par are not touched.
+ *
+ * @return >= 0 on success, a negative AVERROR code on failure.
+ */
+@NoException public static native int avcodec_parameters_to_context(AVCodecContext codec,
+                                  @Const AVCodecParameters par);
+
+/**
+ * Initialize the AVCodecContext to use the given AVCodec. Prior to using this
+ * function the context has to be allocated with avcodec_alloc_context3().
+ *
+ * The functions avcodec_find_decoder_by_name(), avcodec_find_encoder_by_name(),
+ * avcodec_find_decoder() and avcodec_find_encoder() provide an easy way for
+ * retrieving a codec.
+ *
+ * \warning This function is not thread safe!
+ *
+ * \note Always call this function before using decoding routines (such as
+ * \ref avcodec_receive_frame()).
+ *
+ * <pre>{@code
+ * avcodec_register_all();
+ * av_dict_set(&opts, "b", "2.5M", 0);
+ * codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+ * if (!codec)
+ *     exit(1);
+ *
+ * context = avcodec_alloc_context3(codec);
+ *
+ * if (avcodec_open2(context, codec, opts) < 0)
+ *     exit(1);
+ * }</pre>
+ *
+ * @param avctx The context to initialize.
+ * @param codec The codec to open this context for. If a non-NULL codec has been
+ *              previously passed to avcodec_alloc_context3() or
+ *              for this context, then this parameter MUST be either NULL or
+ *              equal to the previously passed codec.
+ * @param options A dictionary filled with AVCodecContext and codec-private options.
+ *                On return this object will be filled with options that were not found.
+ *
+ * @return zero on success, a negative value on error
+ * @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
+ *      av_dict_set(), av_opt_find().
+ */
+@NoException public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @Cast("AVDictionary**") PointerPointer options);
+@NoException public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @ByPtrPtr AVDictionary options);
+
+/**
+ * Close a given AVCodecContext and free all the data associated with it
+ * (but not the AVCodecContext itself).
+ *
+ * Calling this function on an AVCodecContext that hasn't been opened will free
+ * the codec-specific data allocated in avcodec_alloc_context3() with a non-NULL
+ * codec. Subsequent calls will do nothing.
+ *
+ * \note Do not use this function. Use avcodec_free_context() to destroy a
+ * codec context (either open or closed). Opening and closing a codec context
+ * multiple times is not supported anymore -- use multiple codec contexts
+ * instead.
+ */
+@NoException public static native int avcodec_close(AVCodecContext avctx);
+
+/**
+ * Free all allocated data in the given subtitle struct.
+ *
+ * @param sub AVSubtitle to free.
+ */
+@NoException public static native void avsubtitle_free(AVSubtitle sub);
+
+/**
+ * \}
+ */
+
+/**
+ * \addtogroup lavc_decoding
+ * \{
+ */
 
 /**
  * The default callback for AVCodecContext.get_buffer2(). It is made public so
@@ -2331,7 +2920,7 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * If no subtitle could be decompressed, got_sub_ptr is zero.
  * Otherwise, the subtitle is stored in *sub.
  * Note that AV_CODEC_CAP_DR1 is not available for subtitle codecs. This is for
- * simplicity, because the performance difference is expect to be negligible
+ * simplicity, because the performance difference is expected to be negligible
  * and reusing a get_buffer written for video codecs would probably perform badly
  * due to a potentially very different allocation pattern.
  *
@@ -2347,7 +2936,7 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * before packets may be fed to the decoder.
  *
  * @param avctx the codec context
- * @param sub [out] The Preallocated AVSubtitle in which the decoded subtitle will be stored,
+ * @param sub [out] The preallocated AVSubtitle in which the decoded subtitle will be stored,
  *                 must be freed with avsubtitle_free if *got_sub_ptr is set.
  * @param got_sub_ptr [in,out] Zero if no subtitle could be decompressed, otherwise, it is nonzero.
  * @param avpkt [in] The input AVPacket containing the input buffer.
@@ -2470,7 +3059,7 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *      AVERROR(EINVAL):   codec not opened, refcounted_frames not set, it is a
  *                         decoder, or requires flush
  *      AVERROR(ENOMEM):   failed to add packet to internal queue, or similar
- *      other errors: legitimate decoding errors
+ *      other errors: legitimate encoding errors
  */
 @NoException public static native int avcodec_send_frame(AVCodecContext avctx, @Const AVFrame frame);
 
@@ -2480,14 +3069,14 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * @param avctx codec context
  * @param avpkt This will be set to a reference-counted packet allocated by the
  *              encoder. Note that the function will always call
- *              av_frame_unref(frame) before doing anything else.
+ *              av_packet_unref(avpkt) before doing anything else.
  * @return 0 on success, otherwise negative error code:
  *      AVERROR(EAGAIN):   output is not available in the current state - user
  *                         must try to send input
  *      AVERROR_EOF:       the encoder has been fully flushed, and there will be
  *                         no more output packets
- *      AVERROR(EINVAL):   codec not opened, or it is an encoder
- *      other errors: legitimate decoding errors
+ *      AVERROR(EINVAL):   codec not opened, or it is a decoder
+ *      other errors: legitimate encoding errors
  */
 @NoException public static native int avcodec_receive_packet(AVCodecContext avctx, AVPacket avpkt);
 
@@ -2721,23 +3310,6 @@ public static final int
  * \addtogroup lavc_encoding
  * \{
  */
-
-/**
- * Find a registered encoder with a matching codec ID.
- *
- * @param id AVCodecID of the requested encoder
- * @return An encoder if one was found, NULL otherwise.
- */
-@NoException public static native AVCodec avcodec_find_encoder(@Cast("AVCodecID") int id);
-
-/**
- * Find a registered encoder with the specified name.
- *
- * @param name name of the requested encoder
- * @return An encoder if one was found, NULL otherwise.
- */
-@NoException public static native AVCodec avcodec_find_encoder_by_name(@Cast("const char*") BytePointer name);
-@NoException public static native AVCodec avcodec_find_encoder_by_name(String name);
 
 /**
  * Encode a frame of audio.
@@ -3092,13 +3664,21 @@ public static final int
                              int buf_size, int align);
 
 /**
- * Reset the internal decoder state / flush internal buffers. Should be called
+ * Reset the internal codec state / flush internal buffers. Should be called
  * e.g. when seeking or when switching to a different stream.
  *
- * \note when refcounted frames are not used (i.e. avctx->refcounted_frames is 0),
- * this invalidates the frames previously returned from the decoder. When
- * refcounted frames are used, the decoder just releases any references it might
- * keep internally, but the caller's reference remains valid.
+ * \note for decoders, when refcounted frames are not used
+ * (i.e. avctx->refcounted_frames is 0), this invalidates the frames previously
+ * returned from the decoder. When refcounted frames are used, the decoder just
+ * releases any references it might keep internally, but the caller's reference
+ * remains valid.
+ *
+ * \note for encoders, this function will only do something if the encoder
+ * declares support for AV_CODEC_CAP_ENCODER_FLUSH. When called, the encoder
+ * will drain any remaining packets, and can then be re-used for a different
+ * stream (as opposed to sending a null frame which will leave the encoder
+ * in a permanent EOF state after draining). This can be desirable if the
+ * cost of tearing down and replacing the encoder instance is high.
  */
 @NoException public static native void avcodec_flush_buffers(AVCodecContext avctx);
 
@@ -3146,17 +3726,7 @@ public static final int
 // Targeting ../avcodec/AVBitStreamFilterContext.java
 
 
-// Targeting ../avcodec/AVBSFInternal.java
 
-
-// Targeting ../avcodec/AVBSFContext.java
-
-
-// Targeting ../avcodec/AVBitStreamFilter.java
-
-
-
-// #if FF_API_OLD_BSF
 /**
  * @deprecated the old bitstream filtering API (using AVBitStreamFilterContext)
  * is deprecated. Use the new bitstream filtering API (using AVBSFContext).
@@ -3216,201 +3786,10 @@ public static final int
 @NoException public static native @Const @Deprecated AVBitStreamFilter av_bitstream_filter_next(@Const AVBitStreamFilter f);
 // #endif
 
-/**
- * @return a bitstream filter with the specified name or NULL if no such
- *         bitstream filter exists.
- */
-@NoException public static native @Const AVBitStreamFilter av_bsf_get_by_name(@Cast("const char*") BytePointer name);
-@NoException public static native @Const AVBitStreamFilter av_bsf_get_by_name(String name);
-
-/**
- * Iterate over all registered bitstream filters.
- *
- * @param opaque a pointer where libavcodec will store the iteration state. Must
- *               point to NULL to start the iteration.
- *
- * @return the next registered bitstream filter or NULL when the iteration is
- *         finished
- */
-@NoException public static native @Const AVBitStreamFilter av_bsf_iterate(@Cast("void**") PointerPointer opaque);
-@NoException public static native @Const AVBitStreamFilter av_bsf_iterate(@Cast("void**") @ByPtrPtr Pointer opaque);
 // #if FF_API_NEXT
 @NoException public static native @Const @Deprecated AVBitStreamFilter av_bsf_next(@Cast("void**") PointerPointer opaque);
 @NoException public static native @Const @Deprecated AVBitStreamFilter av_bsf_next(@Cast("void**") @ByPtrPtr Pointer opaque);
 // #endif
-
-/**
- * Allocate a context for a given bitstream filter. The caller must fill in the
- * context parameters as described in the documentation and then call
- * av_bsf_init() before sending any data to the filter.
- *
- * @param filter the filter for which to allocate an instance.
- * @param ctx a pointer into which the pointer to the newly-allocated context
- *            will be written. It must be freed with av_bsf_free() after the
- *            filtering is done.
- *
- * @return 0 on success, a negative AVERROR code on failure
- */
-@NoException public static native int av_bsf_alloc(@Const AVBitStreamFilter filter, @Cast("AVBSFContext**") PointerPointer ctx);
-@NoException public static native int av_bsf_alloc(@Const AVBitStreamFilter filter, @ByPtrPtr AVBSFContext ctx);
-
-/**
- * Prepare the filter for use, after all the parameters and options have been
- * set.
- */
-@NoException public static native int av_bsf_init(AVBSFContext ctx);
-
-/**
- * Submit a packet for filtering.
- *
- * After sending each packet, the filter must be completely drained by calling
- * av_bsf_receive_packet() repeatedly until it returns AVERROR(EAGAIN) or
- * AVERROR_EOF.
- *
- * @param pkt the packet to filter. The bitstream filter will take ownership of
- * the packet and reset the contents of pkt. pkt is not touched if an error occurs.
- * This parameter may be NULL, which signals the end of the stream (i.e. no more
- * packets will be sent). That will cause the filter to output any packets it
- * may have buffered internally.
- *
- * @return 0 on success, a negative AVERROR on error.
- */
-@NoException public static native int av_bsf_send_packet(AVBSFContext ctx, AVPacket pkt);
-
-/**
- * Retrieve a filtered packet.
- *
- * @param pkt [out] this struct will be filled with the contents of the filtered
- *                 packet. It is owned by the caller and must be freed using
- *                 av_packet_unref() when it is no longer needed.
- *                 This parameter should be "clean" (i.e. freshly allocated
- *                 with av_packet_alloc() or unreffed with av_packet_unref())
- *                 when this function is called. If this function returns
- *                 successfully, the contents of pkt will be completely
- *                 overwritten by the returned data. On failure, pkt is not
- *                 touched.
- *
- * @return 0 on success. AVERROR(EAGAIN) if more packets need to be sent to the
- * filter (using av_bsf_send_packet()) to get more output. AVERROR_EOF if there
- * will be no further output from the filter. Another negative AVERROR value if
- * an error occurs.
- *
- * \note one input packet may result in several output packets, so after sending
- * a packet with av_bsf_send_packet(), this function needs to be called
- * repeatedly until it stops returning 0. It is also possible for a filter to
- * output fewer packets than were sent to it, so this function may return
- * AVERROR(EAGAIN) immediately after a successful av_bsf_send_packet() call.
- */
-@NoException public static native int av_bsf_receive_packet(AVBSFContext ctx, AVPacket pkt);
-
-/**
- * Reset the internal bitstream filter state / flush internal buffers.
- */
-@NoException public static native void av_bsf_flush(AVBSFContext ctx);
-
-/**
- * Free a bitstream filter context and everything associated with it; write NULL
- * into the supplied pointer.
- */
-@NoException public static native void av_bsf_free(@Cast("AVBSFContext**") PointerPointer ctx);
-@NoException public static native void av_bsf_free(@ByPtrPtr AVBSFContext ctx);
-
-/**
- * Get the AVClass for AVBSFContext. It can be used in combination with
- * AV_OPT_SEARCH_FAKE_OBJ for examining options.
- *
- * @see av_opt_find().
- */
-@NoException public static native @Const AVClass av_bsf_get_class();
-// Targeting ../avcodec/AVBSFList.java
-
-
-
-/**
- * Allocate empty list of bitstream filters.
- * The list must be later freed by av_bsf_list_free()
- * or finalized by av_bsf_list_finalize().
- *
- * @return Pointer to \ref AVBSFList on success, NULL in case of failure
- */
-@NoException public static native AVBSFList av_bsf_list_alloc();
-
-/**
- * Free list of bitstream filters.
- *
- * @param lst Pointer to pointer returned by av_bsf_list_alloc()
- */
-@NoException public static native void av_bsf_list_free(@Cast("AVBSFList**") PointerPointer lst);
-@NoException public static native void av_bsf_list_free(@ByPtrPtr AVBSFList lst);
-
-/**
- * Append bitstream filter to the list of bitstream filters.
- *
- * @param lst List to append to
- * @param bsf Filter context to be appended
- *
- * @return >=0 on success, negative AVERROR in case of failure
- */
-@NoException public static native int av_bsf_list_append(AVBSFList lst, AVBSFContext bsf);
-
-/**
- * Construct new bitstream filter context given it's name and options
- * and append it to the list of bitstream filters.
- *
- * @param lst      List to append to
- * @param bsf_name Name of the bitstream filter
- * @param options  Options for the bitstream filter, can be set to NULL
- *
- * @return >=0 on success, negative AVERROR in case of failure
- */
-@NoException public static native int av_bsf_list_append2(AVBSFList lst, @Cast("const char*") BytePointer bsf_name, @Cast("AVDictionary**") PointerPointer options);
-@NoException public static native int av_bsf_list_append2(AVBSFList lst, @Cast("const char*") BytePointer bsf_name, @ByPtrPtr AVDictionary options);
-@NoException public static native int av_bsf_list_append2(AVBSFList lst, String bsf_name, @ByPtrPtr AVDictionary options);
-/**
- * Finalize list of bitstream filters.
- *
- * This function will transform \ref AVBSFList to single \ref AVBSFContext,
- * so the whole chain of bitstream filters can be treated as single filter
- * freshly allocated by av_bsf_alloc().
- * If the call is successful, \ref AVBSFList structure is freed and lst
- * will be set to NULL. In case of failure, caller is responsible for
- * freeing the structure by av_bsf_list_free()
- *
- * @param      lst Filter list structure to be transformed
- * @param bsf [out] Pointer to be set to newly created \ref AVBSFContext structure
- *                 representing the chain of bitstream filters
- *
- * @return >=0 on success, negative AVERROR in case of failure
- */
-@NoException public static native int av_bsf_list_finalize(@Cast("AVBSFList**") PointerPointer lst, @Cast("AVBSFContext**") PointerPointer bsf);
-@NoException public static native int av_bsf_list_finalize(@ByPtrPtr AVBSFList lst, @ByPtrPtr AVBSFContext bsf);
-
-/**
- * Parse string describing list of bitstream filters and create single
- * \ref AVBSFContext describing the whole chain of bitstream filters.
- * Resulting \ref AVBSFContext can be treated as any other \ref AVBSFContext freshly
- * allocated by av_bsf_alloc().
- *
- * @param      str String describing chain of bitstream filters in format
- *                 {@code bsf1[=opt1=val1:opt2=val2][,bsf2]}
- * @param bsf [out] Pointer to be set to newly created \ref AVBSFContext structure
- *                 representing the chain of bitstream filters
- *
- * @return >=0 on success, negative AVERROR in case of failure
- */
-@NoException public static native int av_bsf_list_parse_str(@Cast("const char*") BytePointer str, @Cast("AVBSFContext**") PointerPointer bsf);
-@NoException public static native int av_bsf_list_parse_str(@Cast("const char*") BytePointer str, @ByPtrPtr AVBSFContext bsf);
-@NoException public static native int av_bsf_list_parse_str(String str, @ByPtrPtr AVBSFContext bsf);
-
-/**
- * Get null/pass-through bitstream filter.
- *
- * @param bsf [out] Pointer to be set to new instance of pass-through bitstream filter
- *
- * @return
- */
-@NoException public static native int av_bsf_get_null_filter(@Cast("AVBSFContext**") PointerPointer bsf);
-@NoException public static native int av_bsf_get_null_filter(@ByPtrPtr AVBSFContext bsf);
 
 /* memory */
 
@@ -3490,52 +3869,10 @@ public static final int
 // #endif
 
 /**
- * Get the type of the given codec.
- */
-@NoException public static native @Cast("AVMediaType") int avcodec_get_type(@Cast("AVCodecID") int codec_id);
-
-/**
- * Get the name of a codec.
- * @return  a static string identifying the codec; never NULL
- */
-@NoException public static native @Cast("const char*") BytePointer avcodec_get_name(@Cast("AVCodecID") int id);
-
-/**
  * @return a positive value if s is open (i.e. avcodec_open2() was called on it
  * with no corresponding avcodec_close()), 0 otherwise.
  */
 @NoException public static native int avcodec_is_open(AVCodecContext s);
-
-/**
- * @return a non-zero number if codec is an encoder, zero otherwise
- */
-@NoException public static native int av_codec_is_encoder(@Const AVCodec codec);
-
-/**
- * @return a non-zero number if codec is a decoder, zero otherwise
- */
-@NoException public static native int av_codec_is_decoder(@Const AVCodec codec);
-
-/**
- * @return descriptor for given codec ID or NULL if no descriptor exists.
- */
-@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get(@Cast("AVCodecID") int id);
-
-/**
- * Iterate over all codec descriptors known to libavcodec.
- *
- * @param prev previous descriptor. NULL to get the first descriptor.
- *
- * @return next descriptor or NULL after the last descriptor
- */
-@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_next(@Const AVCodecDescriptor prev);
-
-/**
- * @return codec descriptor with the given name or NULL if no such descriptor
- *         exists.
- */
-@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(@Cast("const char*") BytePointer name);
-@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(String name);
 
 /**
  * Allocate a CPB properties structure and initialize its fields to default
@@ -3603,6 +3940,136 @@ public static final int
 @NoException public static native Pointer av_jni_get_java_vm(Pointer log_ctx);
 
 // #endif /* AVCODEC_JNI_H */
+
+
+// Parsed from <libavcodec/avfft.h>
+
+/*
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_AVFFT_H
+// #define AVCODEC_AVFFT_H
+
+/**
+ * \file
+ * \ingroup lavc_fft
+ * FFT functions
+ */
+
+/**
+ * \defgroup lavc_fft FFT functions
+ * \ingroup lavc_misc
+ *
+ * \{
+ */
+// Targeting ../avcodec/FFTComplex.java
+
+
+// Targeting ../avcodec/FFTContext.java
+
+
+
+/**
+ * Set up a complex FFT.
+ * @param nbits           log2 of the length of the input array
+ * @param inverse         if 0 perform the forward transform, if 1 perform the inverse
+ */
+@NoException public static native FFTContext av_fft_init(int nbits, int inverse);
+
+/**
+ * Do the permutation needed BEFORE calling ff_fft_calc().
+ */
+@NoException public static native void av_fft_permute(FFTContext s, FFTComplex z);
+
+/**
+ * Do a complex FFT with the parameters defined in av_fft_init(). The
+ * input data must be permuted before. No 1.0/sqrt(n) normalization is done.
+ */
+@NoException public static native void av_fft_calc(FFTContext s, FFTComplex z);
+
+@NoException public static native void av_fft_end(FFTContext s);
+
+@NoException public static native FFTContext av_mdct_init(int nbits, int inverse, double scale);
+@NoException public static native void av_imdct_calc(FFTContext s, @Cast("FFTSample*") FloatPointer output, @Cast("const FFTSample*") FloatPointer input);
+@NoException public static native void av_imdct_calc(FFTContext s, @Cast("FFTSample*") FloatBuffer output, @Cast("const FFTSample*") FloatBuffer input);
+@NoException public static native void av_imdct_calc(FFTContext s, @Cast("FFTSample*") float[] output, @Cast("const FFTSample*") float[] input);
+@NoException public static native void av_imdct_half(FFTContext s, @Cast("FFTSample*") FloatPointer output, @Cast("const FFTSample*") FloatPointer input);
+@NoException public static native void av_imdct_half(FFTContext s, @Cast("FFTSample*") FloatBuffer output, @Cast("const FFTSample*") FloatBuffer input);
+@NoException public static native void av_imdct_half(FFTContext s, @Cast("FFTSample*") float[] output, @Cast("const FFTSample*") float[] input);
+@NoException public static native void av_mdct_calc(FFTContext s, @Cast("FFTSample*") FloatPointer output, @Cast("const FFTSample*") FloatPointer input);
+@NoException public static native void av_mdct_calc(FFTContext s, @Cast("FFTSample*") FloatBuffer output, @Cast("const FFTSample*") FloatBuffer input);
+@NoException public static native void av_mdct_calc(FFTContext s, @Cast("FFTSample*") float[] output, @Cast("const FFTSample*") float[] input);
+@NoException public static native void av_mdct_end(FFTContext s);
+
+/* Real Discrete Fourier Transform */
+
+/** enum RDFTransformType */
+public static final int
+    DFT_R2C = 0,
+    IDFT_C2R = 1,
+    IDFT_R2C = 2,
+    DFT_C2R = 3;
+// Targeting ../avcodec/RDFTContext.java
+
+
+
+/**
+ * Set up a real FFT.
+ * @param nbits           log2 of the length of the input array
+ * @param trans           the type of transform
+ */
+@NoException public static native RDFTContext av_rdft_init(int nbits, @Cast("RDFTransformType") int trans);
+@NoException public static native void av_rdft_calc(RDFTContext s, @Cast("FFTSample*") FloatPointer data);
+@NoException public static native void av_rdft_calc(RDFTContext s, @Cast("FFTSample*") FloatBuffer data);
+@NoException public static native void av_rdft_calc(RDFTContext s, @Cast("FFTSample*") float[] data);
+@NoException public static native void av_rdft_end(RDFTContext s);
+// Targeting ../avcodec/DCTContext.java
+
+
+
+/** enum DCTTransformType */
+public static final int
+    DCT_II = 0,
+    DCT_III = 1,
+    DCT_I = 2,
+    DST_I = 3;
+
+/**
+ * Set up DCT.
+ *
+ * @param nbits           size of the input array:
+ *                        (1 << nbits)     for DCT-II, DCT-III and DST-I
+ *                        (1 << nbits) + 1 for DCT-I
+ * @param type            the type of transform
+ *
+ * \note the first element of the input of DST-I is ignored
+ */
+@NoException public static native DCTContext av_dct_init(int nbits, @Cast("DCTTransformType") int type);
+@NoException public static native void av_dct_calc(DCTContext s, @Cast("FFTSample*") FloatPointer data);
+@NoException public static native void av_dct_calc(DCTContext s, @Cast("FFTSample*") FloatBuffer data);
+@NoException public static native void av_dct_calc(DCTContext s, @Cast("FFTSample*") float[] data);
+@NoException public static native void av_dct_end(DCTContext s);
+
+/**
+ * \}
+ */
+
+// #endif /* AVCODEC_AVFFT_H */
 
 
 }

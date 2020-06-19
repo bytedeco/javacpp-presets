@@ -20,8 +20,11 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * @param s the transform context
  * @param out the output array
  * @param in the input array
- * @param stride the input or output stride (depending on transform direction)
- * in bytes, currently implemented for all MDCT transforms
+ * @param stride the input or output stride in bytes
+ *
+ * The out and in arrays must be aligned to the maximum required by the CPU
+ * architecture.
+ * The stride must follow the constraints the transform type has specified.
  */
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class av_tx_fn extends FunctionPointer {

@@ -23,6 +23,7 @@ import static org.bytedeco.ffmpeg.global.swscale.*;
 import static org.bytedeco.ffmpeg.global.avfilter.*;
 
 
+// #if FF_API_NEXT
 /**
  * Struct to use for initializing a buffersink context.
  */

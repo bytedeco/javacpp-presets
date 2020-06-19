@@ -383,9 +383,32 @@ public static final int AVSEEK_FORCE = 0x20000;
  */
 @NoException public static native int avio_feof(AVIOContext s);
 
-/** \warning Writes up to 4 KiB per call */
+/**
+ * Writes a formatted string to the context.
+ * @return number of bytes written, < 0 on error.
+ */
 @NoException public static native int avio_printf(AVIOContext s, @Cast("const char*") BytePointer fmt);
 @NoException public static native int avio_printf(AVIOContext s, String fmt);
+
+/**
+ * Write a NULL terminated array of strings to the context.
+ * Usually you don't need to use this function directly but its macro wrapper,
+ * avio_print.
+ */
+@NoException public static native void avio_print_string_array(AVIOContext s, @Cast("const char**") PointerPointer strings);
+@NoException public static native void avio_print_string_array(AVIOContext s, @Cast("const char**") @ByPtrPtr BytePointer strings);
+@NoException public static native void avio_print_string_array(AVIOContext s, @Cast("const char**") @ByPtrPtr ByteBuffer strings);
+@NoException public static native void avio_print_string_array(AVIOContext s, @Cast("const char**") @ByPtrPtr byte[] strings);
+
+/**
+ * Write strings (const char *) to the context.
+ * This is a convenience macro around avio_print_string_array and it
+ * automatically creates the string array from the variable argument list.
+ * For simple string concatenations this function is more performant than using
+ * avio_printf since it does not need a temporary buffer.
+ */
+// #define avio_print(s, ...)
+//     avio_print_string_array(s, (const char*[]){__VA_ARGS__, NULL})
 
 /**
  * Force flushing of buffered data.
@@ -627,6 +650,14 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  */
 @NoException public static native @Cast("const char*") BytePointer avio_enum_protocols(@Cast("void**") PointerPointer opaque, int output);
 @NoException public static native @Cast("const char*") BytePointer avio_enum_protocols(@Cast("void**") @ByPtrPtr Pointer opaque, int output);
+
+/**
+ * Get AVClass by names of available protocols.
+ *
+ * @return A AVClass of input protocol name or NULL
+ */
+@NoException public static native @Const AVClass avio_protocol_get_class(@Cast("const char*") BytePointer name);
+@NoException public static native @Const AVClass avio_protocol_get_class(String name);
 
 /**
  * Pause and resume playing - only meaningful if using a network streaming
@@ -876,14 +907,9 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * information will be in AVStream.time_base units, i.e. it has to be
  * multiplied by the timebase to convert them to seconds.
  *
- * If AVPacket.buf is set on the returned packet, then the packet is
- * allocated dynamically and the user may keep it indefinitely.
- * Otherwise, if AVPacket.buf is NULL, the packet data is backed by a
- * static storage somewhere inside the demuxer and the packet is only valid
- * until the next av_read_frame() call or closing the file. If the caller
- * requires a longer lifetime, av_packet_make_refcounted() will ensure that
- * the data is reference counted, copying the data if necessary.
- * In both cases, the packet must be freed with av_packet_unref() when it is no
+ * A packet returned by av_read_frame() is always reference-counted,
+ * i.e. AVPacket.buf is set and the user may keep it indefinitely.
+ * The packet must be freed with av_packet_unref() when it is no
  * longer needed.
  *
  * \section lavf_decoding_seek Seeking
@@ -1811,13 +1837,12 @@ public static final int
  * omit invalid data between valid frames so as to give the decoder the maximum
  * information possible for decoding.
  *
- * If pkt->buf is NULL, then the packet is valid until the next
- * av_read_frame() or until avformat_close_input(). Otherwise the packet
- * is valid indefinitely. In both cases the packet must be freed with
- * av_packet_unref when it is no longer needed. For video, the packet contains
- * exactly one frame. For audio, it contains an integer number of frames if each
- * frame has a known fixed size (e.g. PCM or ADPCM data). If the audio frames
- * have a variable size (e.g. MPEG audio), then it contains one frame.
+ * On success, the returned packet is reference-counted (pkt->buf is set) and
+ * valid indefinitely. The packet must be freed with av_packet_unref() when
+ * it is no longer needed. For video, the packet contains exactly one frame.
+ * For audio, it contains an integer number of frames if each frame has
+ * a known fixed size (e.g. PCM or ADPCM data). If the audio frames have
+ * a variable size (e.g. MPEG audio), then it contains one frame.
  *
  * pkt->pts, pkt->dts and pkt->duration are always set to correct
  * values in AVStream.time_base units (and guessed if the format cannot
@@ -1825,7 +1850,11 @@ public static final int
  * has B-frames, so it is better to rely on pkt->dts if you do not
  * decompress the payload.
  *
- * @return 0 if OK, < 0 on error or end of file
+ * @return 0 if OK, < 0 on error or end of file. On error, pkt will be blank
+ *         (as if it came from av_packet_alloc()).
+ *
+ * \note pkt will be initialized, so it may be uninitialized, but it must not
+ *       contain data that needs to be freed.
  */
 @NoException public static native int av_read_frame(AVFormatContext s, AVPacket pkt);
 
@@ -1870,8 +1899,6 @@ public static final int
  * @return >=0 on success, error code otherwise
  *
  * \note This is part of the new seek API which is still under construction.
- *       Thus do not use this yet. It may change at any time, do not expect
- *       ABI compatibility yet!
  */
 @NoException public static native int avformat_seek_file(AVFormatContext s, int stream_index, @Cast("int64_t") long min_ts, @Cast("int64_t") long ts, @Cast("int64_t") long max_ts, int flags);
 
@@ -2065,9 +2092,9 @@ public static final int AVSTREAM_INIT_IN_INIT_OUTPUT =  1;
  * Write an uncoded frame to an output media file.
  *
  * The frame must be correctly interleaved according to the container
- * specification; if not, then av_interleaved_write_frame() must be used.
+ * specification; if not, av_interleaved_write_uncoded_frame() must be used.
  *
- * See av_interleaved_write_frame() for details.
+ * See av_interleaved_write_uncoded_frame() for details.
  */
 @NoException public static native int av_write_uncoded_frame(AVFormatContext s, int stream_index,
                            AVFrame frame);
