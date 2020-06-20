@@ -42,12 +42,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-ppc64le}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.macosx-x86_64}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.macosx-x86_64}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -113,7 +113,7 @@
                     module org.bytedeco.${javacpp.moduleId}.platform {
                       requires org.bytedeco.${javacpp.moduleId}.linux.x86_64;
                       requires org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
-                      requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
+//                      requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
                       requires org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
                   </moduleInfoSource>
