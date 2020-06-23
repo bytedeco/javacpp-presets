@@ -124,15 +124,15 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.3.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 1.4.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.9  http://www.openblas.net/
+ * DNNL 1.5.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.10  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.7  https://www.python.org/downloads/
- * NumPy 1.18.x  https://github.com/numpy/numpy
- * SciPy 1.4.x  https://github.com/scipy/scipy
+ * NumPy 1.19.x  https://github.com/numpy/numpy
+ * SciPy 1.5.x  https://github.com/scipy/scipy
  * Gym 0.17.x  https://github.com/openai/gym
  * LLVM 10.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
@@ -144,11 +144,11 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * NCCL 2.7.x  https://developer.nvidia.com/nccl
  * MXNet 1.6.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorRT 7.0  https://developer.nvidia.com/tensorrt
+ * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.7.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.3.0  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.3.x  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.x  https://github.com/mono/skia

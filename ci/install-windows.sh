@@ -130,7 +130,7 @@ fi
 
 if [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing tensorrt 
-       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1MqoSNUEnbZPn4HNdJX3uic-Ej5ZejCaV /c/Downloads/tensorrt.zip
+       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1Da7QE9li7MZlPd_fALqTKhKG8rXBWm1O /c/Downloads/tensorrt.zip
        unzip -o /c/Downloads/tensorrt.zip -d /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/
        ln -sf /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT* /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT
        echo Finished tensorrt install

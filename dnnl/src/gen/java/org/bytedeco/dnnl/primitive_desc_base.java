@@ -64,9 +64,9 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
     /** Returns a memory descriptor.
      * 
      *  \note
-     *      See also the convenience methods
-     *      dnnl::primitive_desc_base::src_desc(),
-     *      dnnl::primitive_desc_base::dst_desc(), and others.
+     *      There are also convenience methods
+     *      #dnnl::primitive_desc_base::src_desc(),
+     *      #dnnl::primitive_desc_base::dst_desc(), and others.
      * 
      *  @param what The kind of parameter to query; can be
      *      #dnnl::query::src_md, #dnnl::query::dst_md, etc.

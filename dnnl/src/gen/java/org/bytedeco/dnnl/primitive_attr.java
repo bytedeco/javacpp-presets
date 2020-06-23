@@ -12,7 +12,7 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 /** \endcond
  <p>
- *  Primitive attributes
+ *  Primitive attributes.
  * 
  *  @see \ref dev_guide_attributes */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
@@ -84,14 +84,6 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
 
     /** Sets output scaling factors correspondence mask and values.
      * 
-     *  \note
-     *      The order of dimensions does not depend on how elements are laid
-     *      out in memory. For example:
-     *      - for a 2D CNN activations tensor the order is always (n, c)
-     *      - for a 4D CNN activations tensor the order is always (n, c, h, w)
-     *      - for a 5D CNN weights tensor the order is always
-     *         (g, oc, ic, kh, kw)
-     * 
      *  Example usage:
      *  <pre>{@code
      *      int mb = 32, oc = 32,
@@ -109,6 +101,14 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      dnnl::primitive_desc conv_pd(conv_d, attr, engine);
      *  }</pre>
      * 
+     *  \note
+     *      The order of dimensions does not depend on how elements are laid
+     *      out in memory. For example:
+     *      - for a 2D CNN activations tensor the order is always (n, c)
+     *      - for a 4D CNN activations tensor the order is always (n, c, h, w)
+     *      - for a 5D CNN weights tensor the order is always
+     *         (g, oc, ic, kh, kw)
+     * 
      *  @param mask Defines the correspondence between the output tensor
      *      dimensions and the \p scales vector. The set i-th bit indicates
      *      that a dedicated scaling factor is used for each index along that
@@ -117,7 +117,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *  @param scales Constant vector of output scaling factors. If the
      *      scaling factors are known at the time of this call, the following
      *      equality must hold:
-     *      <pre>{@code \[scales.size() = \prod\limits_{d \in mask} output.dims[d].\]}</pre>
+     *      {@code scales.size() = \prod\limits_{d \in mask} output.dims[d].}
      *      Violations can only be detected when the attributes
      *      are used to create a primitive descriptor.
      *      If the scaling factors are not known at the time of the call,
@@ -163,7 +163,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      use a common scaling factor for the whole output tensor.
      *  @param scales Constant vector of scaling factors. The following equality
      *      must hold:
-     *      <pre>{@code \[scales.size() = \prod\limits_{d \in mask} argument.dims[d].\]}</pre> */
+     *      {@code scales.size() = \prod\limits_{d \in mask} argument.dims[d].} */
     
     ///
     public native void set_scales(int arg, int mask, @StdVector FloatPointer scales);
@@ -204,12 +204,12 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      mask to 0 to use a common zero point for the whole output tensor.
      *  @param zero_points Constant vector of zero points. If the zero points
      *      are known at the time of this call, the following equality must
-     *      hold:
-     *      <pre>{@code \[zero_points.size() = \prod\limits_{d \in mask} argument.dims[d].\]}</pre>
-     *      If the zero points are not known at the time of the call, this
-     *      vector must contain a single #DNNL_RUNTIME_F32_VAL value and the
-     *      zero points must be passed at execution time as an argument with
-     *      index #DNNL_ARG_ATTR_ZERO_POINTS. */
+     *      hold: {@code zero\_points.size() = \prod\limits_{d \in mask}
+     *      argument.dims[d].} If the zero points are not known at the time
+     *      of the call, this vector must contain a single
+     *      #DNNL_RUNTIME_F32_VAL value and the zero points must be passed at
+     *      execution time as an argument with index
+     *      #DNNL_ARG_ATTR_ZERO_POINTS. */
     
     ///
     public native void set_zero_points(
@@ -265,7 +265,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      // RNN parameters
      *      int l = 2, t = 2, mb = 32, sic = 32, slc = 32, dic = 32, dlc = 32;
      *      // Activations quantization parameters
-     *      float scale = ..., shift = ..;
+     *      float scale = 2.0f, shift = 0.5f;
      * 
      *      primitive_attr attr;
      * 
@@ -273,7 +273,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      attr.set_rnn_data_qparams(scale, shift);
      * 
      *      // Create and configure rnn op_desc
-     *      vanilla_rnn_forward::desc rnn_d(...);
+     *      vanilla_rnn_forward::desc rnn_d(/* arguments * /);
      *      vanilla_rnn_forward::primitive_desc rnn_d(rnn_d, attr, engine);
      *  }</pre>
      * 
@@ -308,7 +308,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      tensor.
      *  @param scales Constant vector of output scaling factors. The following
      *      equality must hold:
-     *      <pre>{@code \[scales.size() = \prod\limits_{d \in mask} weights.dims[d].\]}</pre>
+     *      {@code scales.size() = \prod\limits_{d \in mask} weights.dims[d].}
      *      Violations can only be detected when the attributes are used to
      *      create a primitive descriptor. */
     public native void set_rnn_weights_qparams(int mask, @StdVector FloatPointer scales);

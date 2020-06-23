@@ -43,7 +43,7 @@ public class lrn_backward extends primitive {
          *   - {@code diff_dst} (#dnnl::primitive_desc_base::diff_dst_desc({@code 0}))
          *   - {@code workspace} (#dnnl::primitive_desc_base::workspace_desc({@code 0})),
          *      if the underlying implementation requires it; must be queried
-         *      for using \ref dnnl_primitive_desc_query_md() after a
+         *      for using \ref dnnl::primitive_desc_base::query_md() after a
          *      corresponding primitive descriptor is created
          * 
          *  Outputs:
