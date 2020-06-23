@@ -143,7 +143,7 @@ public class memory extends dnnl_memory_handle {
          *  values in each dimension. See \ref dnnl_blocking_desc_t for more
          *  information. */
         blocked(dnnl_blocked),
-        /** Weights format used in 8bit Winograd convolution. */
+        /** Weights format used in 8-bit Winograd convolution. */
         wino(dnnl_format_kind_wino),
         /** Packed weights format used in RNN. */
         packed(dnnl_format_kind_rnn_packed);
@@ -245,6 +245,8 @@ public class memory extends dnnl_memory_handle {
         /** permuted 5D tensor */
         acdeb(dnnl_acdeb),
         /** permuted 5D tensor */
+        bacde(dnnl_bacde),
+        /** permuted 5D tensor */
         bcdea(dnnl_bcdea),
         /** permuted 5D tensor */
         cdeba(dnnl_cdeba),
@@ -310,6 +312,8 @@ public class memory extends dnnl_memory_handle {
         dhwio(cdeba),
         /** 5D CNN weights tensor; an alias for #dnnl::memory::format_tag::acdeb */
         odhwi(acdeb),
+        /** 5D CNN weights tensor; an alias for #dnnl::memory::format_tag::bacde */
+        iodhw(bacde),
         /** 5D CNN weights tensor; an alias for #dnnl::memory::format_tag::bcdea */
         idhwo(bcdea),
 
@@ -377,6 +381,7 @@ public class memory extends dnnl_memory_handle {
         ABc16a16b(dnnl_ABc16a16b),
         ABc4a4b(dnnl_ABc4a4b),
         aBc16b(dnnl_aBc16b),
+        aBc32b(dnnl_aBc32b),
         ABc16b16a(dnnl_ABc16b16a),
         Abc4a(dnnl_Abc4a),
         aBc4b(dnnl_aBc4b),
@@ -385,12 +390,15 @@ public class memory extends dnnl_memory_handle {
         ABc4b4a(dnnl_ABc4b4a),
         ABc8a16b2a(dnnl_ABc8a16b2a),
         ABc8a8b(dnnl_ABc8a8b),
+        ABc8a4b(dnnl_ABc8a4b),
         aBc8b(dnnl_aBc8b),
         ABc8b16a2b(dnnl_ABc8b16a2b),
         ABc8b8a(dnnl_ABc8b8a),
         Abcd16a(dnnl_Abcd16a),
+        Abcd32a(dnnl_Abcd32a),
         ABcd16a16b(dnnl_ABcd16a16b),
         aBcd16b(dnnl_aBcd16b),
+        aBcd32b(dnnl_aBcd32b),
         ABcd16b16a(dnnl_ABcd16b16a),
         aBCd16b16c(dnnl_aBCd16b16c),
         aBCd16c16b(dnnl_aBCd16c16b),
@@ -406,6 +414,7 @@ public class memory extends dnnl_memory_handle {
         aBCd4b4c(dnnl_aBCd4b4c),
         ABcd8a16b2a(dnnl_ABcd8a16b2a),
         ABcd8a8b(dnnl_ABcd8a8b),
+        ABcd8a4b(dnnl_ABcd8a4b),
         /** 4D tensor blocked by 2nd dimension with block size 8 */
         aBcd8b(dnnl_aBcd8b),
         ABcd8b16a2b(dnnl_ABcd8b16a2b),
@@ -413,11 +422,14 @@ public class memory extends dnnl_memory_handle {
         /** 4D tensor blocked by 1st and 2nd dimension with block size 8 */
         ABcd8b8a(dnnl_ABcd8b8a),
         aBCd8b8c(dnnl_aBCd8b8c),
+        aBCd8b4c(dnnl_aBCd8b4c),
         aBCd8c16b2c(dnnl_aBCd8c16b2c),
         aBCd8c8b(dnnl_aBCd8c8b),
         Abcde16a(dnnl_Abcde16a),
+        Abcde32a(dnnl_Abcde32a),
         ABcde16a16b(dnnl_ABcde16a16b),
         aBcde16b(dnnl_aBcde16b),
+        aBcde32b(dnnl_aBcde32b),
         ABcde16b16a(dnnl_ABcde16b16a),
         aBCde16b16c(dnnl_aBCde16b16c),
         aBCde16c16b(dnnl_aBCde16c16b),
@@ -431,6 +443,7 @@ public class memory extends dnnl_memory_handle {
         aBCde4c4b(dnnl_aBCde4c4b),
         Abcde8a(dnnl_Abcde8a),
         ABcde8a8b(dnnl_ABcde8a8b),
+        ABcde8a4b(dnnl_ABcde8a4b),
         aBcde8b(dnnl_aBcde8b),
         ABcde8b16a2b(dnnl_ABcde8b16a2b),
         ABcde4b16a4b(dnnl_ABcde4b16a4b),
@@ -438,6 +451,7 @@ public class memory extends dnnl_memory_handle {
         aBCde8b16c2b(dnnl_aBCde8b16c2b),
         ABcde8b8a(dnnl_ABcde8b8a),
         aBCde8b8c(dnnl_aBCde8b8c),
+        aBCde8b4c(dnnl_aBCde8b4c),
         ABcd4a8b8a4b(dnnl_ABcd4a8b8a4b),
         ABcd2a8b8a2b(dnnl_ABcd2a8b8a2b),
         aBCde4b8c8b4c(dnnl_aBCde4b8c8b4c),
@@ -451,6 +465,7 @@ public class memory extends dnnl_memory_handle {
         aBCdef4c4b(dnnl_aBCdef4c4b),
         aBCdef4b4c(dnnl_aBCdef4b4c),
         aBCdef8b8c(dnnl_aBCdef8b8c),
+        aBCdef8b4c(dnnl_aBCdef8b4c),
         aBCdef8c16b2c(dnnl_aBCdef8c16b2c),
         aBCdef4c16b4c(dnnl_aBCdef4c16b4c),
         aBCdef8c8b(dnnl_aBCdef8c8b),
@@ -487,6 +502,7 @@ public class memory extends dnnl_memory_handle {
         BAcde16a16b(dnnl_BAcde16a16b),
         aBdec32b(dnnl_aBdec32b),
         Abcdef16a(dnnl_Abcdef16a),
+        Abcdef32a(dnnl_Abcdef32a),
         Acdb32a(dnnl_Acdb32a),
         aBCd2b4c2b(dnnl_aBCd2b4c2b),
         aBCde2b4c2b(dnnl_aBCde2b4c2b),
@@ -515,6 +531,7 @@ public class memory extends dnnl_memory_handle {
         NCw16n16c(dnnl_NCw16n16c),
         NChw16n16c(dnnl_NChw16n16c),
         NCdhw16n16c(dnnl_NCdhw16n16c),
+        NCdhw32n32c(dnnl_NCdhw32n32c),
         NChw32n32c(dnnl_NChw32n32c),
         IOhw16i16o(dnnl_IOhw16i16o),
         Ohwi32o(dnnl_Ohwi32o),
@@ -537,6 +554,7 @@ public class memory extends dnnl_memory_handle {
         OIw8i8o(dnnl_OIw8i8o),
         OIw8o16i2o(dnnl_OIw8o16i2o),
         OIw8o8i(dnnl_OIw8o8i),
+        OIw8o4i(dnnl_OIw8o4i),
         Owi16o(dnnl_Owi16o),
         OwI16o2i(dnnl_OwI16o2i),
         Owi4o(dnnl_Owi4o),
@@ -557,6 +575,7 @@ public class memory extends dnnl_memory_handle {
         OIhw8i8o(dnnl_OIhw8i8o),
         OIhw8o16i2o(dnnl_OIhw8o16i2o),
         OIhw8o8i(dnnl_OIhw8o8i),
+        OIhw8o4i(dnnl_OIhw8o4i),
         OIhw2i8o4i(dnnl_OIhw2i8o4i),
         IOdhw16o16i(dnnl_IOdhw16o16i),
         Odhwi16o(dnnl_Odhwi16o),
@@ -574,6 +593,7 @@ public class memory extends dnnl_memory_handle {
         OIdhw2i8o4i(dnnl_OIdhw2i8o4i),
         OIdhw8i8o(dnnl_OIdhw8i8o),
         OIdhw8o8i(dnnl_OIdhw8o8i),
+        OIdhw8o4i(dnnl_OIdhw8o4i),
         gIOw16o16i(dnnl_gIOw16o16i),
         gOIw16i16o(dnnl_gOIw16i16o),
         gOIw16o16i(dnnl_gOIw16o16i),
@@ -587,6 +607,7 @@ public class memory extends dnnl_memory_handle {
         gOIw8i8o(dnnl_gOIw8i8o),
         gOIw8o16i2o(dnnl_gOIw8o16i2o),
         gOIw8o8i(dnnl_gOIw8o8i),
+        gOIw8o4i(dnnl_gOIw8o4i),
         gOwi16o(dnnl_gOwi16o),
         gOwI16o2i(dnnl_gOwI16o2i),
         gOwi4o(dnnl_gOwi4o),
@@ -611,11 +632,16 @@ public class memory extends dnnl_memory_handle {
         gOIhw8i16o2i(dnnl_gOIhw8i16o2i),
         gOIhw8i8o(dnnl_gOIhw8i8o),
         gOIhw8o16i2o(dnnl_gOIhw8o16i2o),
+        OIw4o8i8o4i(dnnl_OIw4o8i8o4i),
+        OIdhw4o8i8o4i(dnnl_OIdhw4o8i8o4i),
         OIhw4o8i8o4i(dnnl_OIhw4o8i8o4i),
         OIhw2o8i8o2i(dnnl_OIhw2o8i8o2i),
+        gOIw4o8i8o4i(dnnl_gOIw4o8i8o4i),
+        gOIdhw4o8i8o4i(dnnl_gOIdhw4o8i8o4i),
         gOIhw4o8i8o4i(dnnl_gOIhw4o8i8o4i),
         gOIhw2o8i8o2i(dnnl_gOIhw2o8i8o2i),
         gOIhw8o8i(dnnl_gOIhw8o8i),
+        gOIhw8o4i(dnnl_gOIhw8o4i),
         gIOdhw16i16o(dnnl_gIOdhw16i16o),
         gIOdhw16o16i(dnnl_gIOdhw16o16i),
         gOdhwi16o(dnnl_gOdhwi16o),
@@ -633,6 +659,7 @@ public class memory extends dnnl_memory_handle {
         gOIdhw2i8o4i(dnnl_gOIdhw2i8o4i),
         gOIdhw8i8o(dnnl_gOIdhw8i8o),
         gOIdhw8o8i(dnnl_gOIdhw8o8i),
+        gOIdhw8o4i(dnnl_gOIdhw8o4i),
         gOIw2i4o2i(dnnl_gOIw2i4o2i),
         gOIhw2i4o2i(dnnl_gOIhw2i4o2i),
         gOIdhw2i4o2i(dnnl_gOIdhw2i4o2i),
@@ -827,7 +854,7 @@ public class memory extends dnnl_memory_handle {
          *     - Here, dense means:
          *       {@code stride for dim[i] == (stride for dim[i + 1]) * dim[i + 1]};
          *     - And same order means:
-         *       {@code i < j <=> stride for dim[i] < stride for dim[j]}.
+         *       {@code i < j} if and only if {@code stride for dim[j] <= stride for dim[i]}.
          * 
          *  \warning
          *      Some combinations of physical memory layout and/or offsets or
@@ -868,7 +895,7 @@ public class memory extends dnnl_memory_handle {
          * 
          *  The logical axes will be permuted in the following manner:
          *  <pre>{@code
-         *  for (i: 0 .. ndims())
+         *  for (i = 0; i < ndims(); i++)
          *      new_desc.dims()[permutation[i]] = dims()[i];
          *  }</pre>
          * 
@@ -936,10 +963,10 @@ public class memory extends dnnl_memory_handle {
         public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef desc other);
     }
 
-    // Default constructor.
-    //
-    // Constructs an empty memory object, which can be used to indicate absence
-    // of a parameter.
+    /** Default constructor.
+     * 
+     *  Constructs an empty memory object, which can be used to indicate
+     *  absence of a parameter. */
     
     ///
     ///
@@ -1000,11 +1027,11 @@ public class memory extends dnnl_memory_handle {
     ///
     public native Pointer get_data_handle();
 
-    /** Sets data handle.
+    /** Sets the underlying memory buffer.
      * 
      *  This function may write zero values to the memory specified by the \p
      *  handle if the memory object has a zero padding area. This may be time
-     *  consuming and happens each time this function is called.  The
+     *  consuming and happens each time this function is called. The
      *  operation is always blocking and the stream parameter is a hint.
      * 
      *  \note
@@ -1031,7 +1058,7 @@ public class memory extends dnnl_memory_handle {
     ///
     public native void set_data_handle(Pointer handle, @Const @ByRef stream stream);
 
-    /** Sets data handle.
+    /** Sets the underlying memory buffer.
      * 
      *  See documentation for
      *  #dnnl::memory::set_data_handle(void *, const stream &) const

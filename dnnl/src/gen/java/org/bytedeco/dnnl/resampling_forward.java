@@ -46,6 +46,7 @@ public class resampling_forward extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef dnnl_resampling_desc_t data(); public native desc data(dnnl_resampling_desc_t setter);
 
         /** Constructs a descriptor for a resampling forward propagation
@@ -59,16 +60,16 @@ public class resampling_forward extends primitive {
          * 
          *  \note
          *      Destination memory descriptor may be initialized with
-         *      #dnnl::memory::format_tag::any value of \p format_tag. */
-        //
-        /** @param prop_kind Propagation kind. Possible values are
-        /**     #dnnl::prop_kind::forward_training, and
-        /**     #dnnl::prop_kind::forward_inference.
-        /** @param algorithm resampling algorithm kind: either
-        /**     #dnnl::algorithm::resampling_nearest, or
-        /**     #dnnl::algorithm::resampling_linear
-        /** @param src_desc Source memory descriptor.
-        /** @param dst_desc Destination memory descriptor. */
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  @param prop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
+         *  @param algorithm resampling algorithm kind: either
+         *      #dnnl::algorithm::resampling_nearest, or
+         *      #dnnl::algorithm::resampling_linear
+         *  @param src_desc Source memory descriptor.
+         *  @param dst_desc Destination memory descriptor. */
         
         ///
         ///
@@ -96,6 +97,7 @@ public class resampling_forward extends primitive {
          *  @param factors Vector of scaling factors for spatial dimension.
          *  @param src_desc Source memory descriptor. */
         
+        ///
         ///
         ///
         ///
@@ -146,18 +148,18 @@ public class resampling_forward extends primitive {
          *  - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
          * 
          *  \note
-         *      Destination memory descriptor may be initialized with
-         *      #dnnl::memory::format_tag::any value of \p format_tag. */
-        //
-        /** @param prop_kind Propagation kind. Possible values are
-        /**     #dnnl::prop_kind::forward_training, and
-        /**     #dnnl::prop_kind::forward_inference.
-        /** @param algorithm resampling algorithm kind: either
-        /**     #dnnl::algorithm::resampling_nearest, or
-        /**     #dnnl::algorithm::resampling_linear
-        /** @param factors Vector of scaling factors for spatial dimension.
-        /** @param src_desc Source memory descriptor.
-        /** @param dst_desc Destination memory descriptor. */
+         *      The destination memory descriptor may be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
+         *  @param prop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
+         *  @param algorithm resampling algorithm kind: either
+         *      #dnnl::algorithm::resampling_nearest, or
+         *      #dnnl::algorithm::resampling_linear
+         *  @param factors Vector of scaling factors for spatial dimension.
+         *  @param src_desc Source memory descriptor.
+         *  @param dst_desc Destination memory descriptor. */
         public desc(prop_kind prop_kind, algorithm algorithm,
                         @StdVector FloatPointer factors, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(prop_kind, algorithm, factors, src_desc, dst_desc); }

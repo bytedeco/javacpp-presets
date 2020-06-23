@@ -26,7 +26,7 @@ import static org.bytedeco.dnnl.global.dnnl.*;
  *  \warning
  *      Because the original source data is required for backward propagation,
  *      in-place forward propagation is not generally supported in the
- *      training mode.  However, for algorithms supporting destination as input
+ *      training mode. However, for algorithms supporting destination as input
  *      memory, dst can be used for the backward propagation, which makes it
  *      possible to get performance benefit even in the training mode.
  * 

@@ -58,7 +58,6 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
-    ///
     public native primitive.kind kind(int index);
 
     /** Appends an accumulation (sum) post-op. Prior to accumulating the
@@ -74,9 +73,8 @@ public class post_ops extends dnnl_post_ops_handle {
      *  activations have different logical scaling factors.
      * 
      *  In the simplest case when the accumulation is the only post-op,
-     *  the computations would be:
-     * 
-     *      dst[:] <- scale * dst[:] + op(...) // instead of dst[:] <- op(...)
+     *  the computations would be {@code dst[:] := scale * dst[:] + op(...)}
+     *  instead of {@code dst[:] := op(...)}.
      * 
      *  \note
      *      This post-op executes in-place and does not change the
@@ -96,8 +94,6 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
-    ///
-    ///
     public native void get_params_sum(int index, @ByRef FloatPointer scale);
     public native void get_params_sum(int index, @ByRef FloatBuffer scale);
     public native void get_params_sum(int index, @ByRef float[] scale);
@@ -107,11 +103,9 @@ public class post_ops extends dnnl_post_ops_handle {
      *  The kind of this post-op is #dnnl::primitive::kind::eltwise.
      * 
      *  In the simplest case when the elementwise is the only post-op, the
-     *  computations would be:
-     * 
-     *      dst[:] <- scale * eltwise_op (op(...)) // instead of dst[:] <- op(...)
-     * 
-     *  where eltwise_op is configured with the given parameters.
+     *  computations would be {@code dst[:] := scale * eltwise_op (op(...))} instead
+     *  of {@code dst[:] <- op(...)}, where eltwise_op is configured with the given
+     *  parameters.
      * 
      *  @param scale Scaling factor.
      *  @param algorithm Elementwise algorithm.

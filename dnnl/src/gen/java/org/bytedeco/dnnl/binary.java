@@ -67,7 +67,7 @@ public class binary extends primitive {
          *  Outputs:
          *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
          * 
-         *  @param algorithm Elementwise algorithm.
+         *  @param algorithm Elementwise binary algorithm.
          *  @param src0 Memory descriptor for source tensor #0.
          *  @param src1 Memory descriptor for source tensor #1.
          *  @param dst Memory descriptor for destination tensor. */
@@ -141,7 +141,7 @@ public class binary extends primitive {
         /** Constructs a primitive descriptor for a binary primitive from a C
          *  API primitive descriptor that must have a matching kind.
          * 
-         *  @param pd C API primitive descriptor for a binary primitve. */
+         *  @param pd C API primitive descriptor for a binary primitive. */
         public primitive_desc(dnnl_primitive_desc pd) { super((Pointer)null); allocate(pd); }
         private native void allocate(dnnl_primitive_desc pd);
 

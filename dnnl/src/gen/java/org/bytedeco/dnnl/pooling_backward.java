@@ -34,6 +34,7 @@ public class pooling_backward extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef dnnl_pooling_desc_t data(); public native desc data(dnnl_pooling_desc_t setter);
 
         /** Constructs a descriptor for pooling backward propagation primitive.
@@ -48,6 +49,12 @@ public class pooling_backward extends primitive {
          *  Outputs:
          *   - {@code diff_src} (#dnnl::primitive_desc_base::diff_src_desc({@code 0}))
          * 
+         *  Arrays \p strides, \p kernel, \p padding_l, and \p padding_r
+         *  contain values for spatial dimensions only and hence must have the
+         *  same number of elements as there are spatial dimensions. The order
+         *  of values is the same as in the tensor: depth (for 3D tensors),
+         *  height (for 3D and 2D tensors), and width.
+         * 
          *  @param algorithm Pooling algorithm kind: either
          *      #dnnl::algorithm::pooling_max,
          *      #dnnl::algorithm::pooling_avg_include_padding,
@@ -58,9 +65,9 @@ public class pooling_backward extends primitive {
          *  @param strides Vector of strides for spatial dimension.
          *  @param kernel Vector of kernel spatial dimensions.
          *  @param padding_l Vector of padding values for low indices for each
-         *      spatial dimension (front, top, left).
+         *      spatial dimension {@code ([[front,] top,] left)}.
          *  @param padding_r Vector of padding values for high indices for
-         *      each spatial dimension (back, bottom, right). */
+         *      each spatial dimension {@code ([[back,] bottom,] right)}. */
         public desc(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l,

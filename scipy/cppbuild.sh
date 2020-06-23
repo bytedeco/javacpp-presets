@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SCIPY_VERSION=1.4.1
+SCIPY_VERSION=1.5.0
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -77,6 +77,7 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; 
     source crossenv/bin/activate
     cross-expose cython numpy pybind11
     PYTHON_BIN_PATH="python"
+    export NUMPY_MADVISE_HUGEPAGE=1
 fi
 
 case $PLATFORM in

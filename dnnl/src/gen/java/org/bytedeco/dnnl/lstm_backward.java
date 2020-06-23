@@ -37,21 +37,25 @@ public class lstm_backward extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
 
         /** Constructs an LSTM (with or without peephole and with or without
          *  projection) descriptor for backward propagation using \p prop_kind,
          *  \p direction, and memory descriptors.
          * 
-         *  The \p src_iter_desc together with \p diff_iter_desc, \p
-         *  src_iter_c_desc together with \p src_iter_c_desc, \p
-         *  weights_peephole_desc together with \p diff_weights_peephole_desc,
-         *  \p bias_desc together with \p diff_bias_desc, \p dst_iter_desc
-         *  together with \p diff_dst_iter_desc, and \p dst_iter_c_desc
-         *  together with \p diff_dst_iter_c_desc, may point to a zero memory
-         *  descriptor. This would then indicate that the LSTM backward
-         *  propagation primitive should not use them and should default to
-         *  zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p src_iter_c_desc,
+         *    \p diff_src_iter_desc, and \p diff_src_iter_c_desc,
+         *  - \p weights_peephole_desc together with
+         *    \p diff_weights_peephole_desc
+         *  - \p bias_desc together with \p diff_bias_desc,
+         *  - \p dst_iter_desc together with \p dst_iter_c_desc,
+         *    \p diff_dst_iter_desc, and \p diff_dst_iter_c_desc.
+         * 
+         *  This would then indicate that the LSTM backward propagation
+         *  primitive should not use them and should default to zero values
+         *  instead.
          * 
          *  The \p weights_projection_desc together with \p
          *  diff_weights_projection_desc may point to a zero memory descriptor.
@@ -167,6 +171,7 @@ public class lstm_backward extends primitive {
          *      output recurrent cell state vector.
          *  @param flags Unused. */
         
+        ///
         ///
         ///
         ///
@@ -365,15 +370,18 @@ public class lstm_backward extends primitive {
          *  backward propagation using \p prop_kind, \p direction, and memory
          *  descriptors.
          * 
-         *  The \p src_iter_desc together with \p diff_iter_desc, \p
-         *  src_iter_c_desc together with \p src_iter_c_desc, \p
-         *  weights_peephole_desc together with \p diff_weights_peephole_desc,
-         *  \p bias_desc together with \p diff_bias_desc, \p dst_iter_desc
-         *  together with \p diff_dst_iter_desc, and \p dst_iter_c_desc
-         *  together with \p diff_dst_iter_c_desc, may point to a zero memory
-         *  descriptor. This would then indicate that the LSTM backward
-         *  propagation primitive should not use them and should default to
-         *  zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p src_iter_c_desc,
+         *    \p diff_src_iter_desc, and \p diff_src_iter_c_desc,
+         *  - \p weights_peephole_desc together with
+         *    \p diff_weights_peephole_desc
+         *  - \p bias_desc together with \p diff_bias_desc,
+         *  - \p dst_iter_desc together with \p dst_iter_c_desc,
+         *    \p diff_dst_iter_desc, and \p diff_dst_iter_c_desc.
+         * 
+         *  This would then indicate that the LSTM backward propagation
+         *  primitive should not use them and should default to zero values
+         *  instead.
          * 
          *  \note
          *      All memory descriptors may be initialized with
@@ -462,6 +470,7 @@ public class lstm_backward extends primitive {
          *      output recurrent cell state vector.
          *  @param flags Unused. */
         
+        ///
         ///
         ///
         ///
@@ -643,13 +652,16 @@ public class lstm_backward extends primitive {
         /** Constructs an LSTM descriptor for backward propagation using \p
          *  prop_kind, \p direction, and memory descriptors.
          * 
-         *  The \p src_iter_desc together with \p diff_iter_desc, \p
-         *  src_iter_c_desc together with \p src_iter_c_desc, \p bias_desc
-         *  together with \p diff_bias_desc, \p dst_iter_desc together with \p
-         *  diff_dst_iter_desc, and \p dst_iter_c_desc together with \p
-         *  diff_dst_iter_c_desc, may point to a zero memory descriptor. This
-         *  would then indicate that the LSTM backward propagation primitive
-         *  should not use them and should default to zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p src_iter_c_desc,
+         *    \p diff_src_iter_desc, and \p diff_src_iter_c_desc,
+         *  - \p bias_desc together with \p diff_bias_desc,
+         *  - \p dst_iter_desc together with \p dst_iter_c_desc,
+         *    \p diff_dst_iter_desc, and \p diff_dst_iter_c_desc.
+         * 
+         *  This would then indicate that the LSTM backward propagation
+         *  primitive should not use them and should default to zero values
+         *  instead.
          * 
          *  \note
          *      All memory descriptors may be initialized with
@@ -880,7 +892,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_c_desc);
     }
 
-    /** Primitive descriptor for LSTM backward propagation. */
+    /** Primitive descriptor for an LSTM backward propagation primitive. */
     public static class primitive_desc extends rnn_primitive_desc_base {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

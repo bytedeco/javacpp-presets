@@ -36,15 +36,19 @@ public class vanilla_rnn_forward extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
 
         /** Constructs a descriptor for a vanilla RNN forward propagation
          *  primitive.
          * 
-         *  The \p src_iter_desc, \p bias_desc, and \p dst_iter_desc may point
-         *  to a zero memory descriptor. This would then indicate that the RNN
-         *  forward propagation primitive should not use them and should
-         *  default to zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc,
+         *  - \p bias_desc,
+         *  - \p dst_iter_desc.
+         * 
+         *  This would then indicate that the RNN forward propagation primitive
+         *  should not use them and should default to zero values instead.
          * 
          *  Inputs:
          *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))

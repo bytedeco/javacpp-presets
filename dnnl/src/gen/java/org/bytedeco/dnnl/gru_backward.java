@@ -36,16 +36,19 @@ public class gru_backward extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
 
         /** Constructs a descriptor for a GRU backward propagation primitive.
          * 
-         *  The \p src_iter_desc together with \p diff_src_iter_desc, \p
-         *  bias_desc together with \p diff_bias_desc, and \p dst_iter
-         *  together with \p diff_dst_iter, may point to a zero memory
-         *  descriptor.  This would then indicate that the GRU backward
-         *  propagation primitive should not use them and should default to
-         *  zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p diff_src_iter_desc,
+         *  - \p bias_desc together with \p diff_bias_desc,
+         *  - \p dst_iter_desc together with \p diff_dst_iter_desc.
+         * 
+         *  This would then indicate that the GRU backward propagation
+         *  primitive should not use them and should default to zero values
+         *  instead.
          * 
          *  Inputs:
          *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))

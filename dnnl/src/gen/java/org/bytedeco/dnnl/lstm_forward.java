@@ -37,16 +37,21 @@ public class lstm_forward extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
 
         /** Constructs a descriptor for an LSTM (with or without peephole and
          *  with or without projection) forward propagation primitive.
          * 
-         *  The \p src_iter_desc, \p src_iter_c_desc, \p weights_peephole_desc,
-         *  \p bias_desc, \p dst_iter_desc, and \p dst_iter_c_desc may point to
-         *  a zero memory descriptor. This would then indicate that the LSTM
-         *  forward propagation primitive should not use them and should
-         *  default to zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p src_iter_c_desc,
+         *  - \p weights_peephole_desc,
+         *  - \p bias_desc,
+         *  - \p dst_iter_desc together with \p dst_iter_c_desc.
+         * 
+         *  This would then indicate that the LSTM forward propagation
+         *  primitive should not use them and should default to zero values
+         *  instead.
          * 
          *  The \p weights_projection_desc may point to a zero memory
          *  descriptor. This would then indicate that the LSTM doesn't have
@@ -113,6 +118,7 @@ public class lstm_forward extends primitive {
          *      cell state vector.
          *  @param flags Unused. */
         
+        ///
         ///
         ///
         ///
@@ -222,11 +228,15 @@ public class lstm_forward extends primitive {
         /** Constructs a descriptor for an LSTM (with or without peephole)
          *  forward propagation primitive.
          * 
-         *  The \p src_iter_desc, \p src_iter_c_desc, \p weights_peephole_desc,
-         *  \p bias_desc, \p dst_iter_desc, and \p dst_iter_c_desc may point to
-         *  a zero memory descriptor. This would then indicate that the LSTM
-         *  forward propagation primitive should not use them and should
-         *  default to zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p src_iter_c_desc,
+         *  - \p weights_peephole_desc,
+         *  - \p bias_desc,
+         *  - \p dst_iter_desc together with \p dst_iter_c_desc.
+         * 
+         *  This would then indicate that the LSTM forward propagation
+         *  primitive should not use them and should default to zero values
+         *  instead.
          * 
          *  Inputs:
          *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))
@@ -280,6 +290,7 @@ public class lstm_forward extends primitive {
          *      cell state vector.
          *  @param flags Unused. */
         
+        ///
         ///
         ///
         ///
@@ -380,11 +391,14 @@ public class lstm_forward extends primitive {
 
         /** Constructs a descriptor for an LSTM forward propagation primitive.
          * 
-         *  The \p src_iter_desc, \p src_iter_c_desc, \p bias_desc, \p
-         *  dst_iter_desc, and \p dst_iter_c_desc may point to a zero memory
-         *  descriptor. This would then indicate that the LSTM forward
-         *  propagation primitive should not use them and should default to
-         *  zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p src_iter_c_desc,
+         *  - \p bias_desc,
+         *  - \p dst_iter_desc together with \p dst_iter_c_desc.
+         * 
+         *  This would then indicate that the LSTM forward propagation
+         *  primitive should not use them and should default to zero values
+         *  instead.
          * 
          *  Inputs:
          *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))
