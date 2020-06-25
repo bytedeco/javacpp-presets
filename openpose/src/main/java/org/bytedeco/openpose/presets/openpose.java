@@ -1,3 +1,25 @@
+/*
+ * Copyright (C) 2020 Frankie Robertson
+ *
+ * Licensed either under the Apache License, Version 2.0, or (at your option)
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (subject to the "Classpath" exception),
+ * either version 2, or any later version (collectively, the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.gnu.org/licenses/
+ *     http://www.gnu.org/software/classpath/license.html
+ *
+ * or as provided in the LICENSE.txt file that accompanied this code.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.bytedeco.openpose.presets;
 
 import java.util.List;
@@ -20,7 +42,7 @@ import org.bytedeco.hdf5.presets.*;
 
 
 @Properties(
-    inherit = {opencv_core.class, opencv_highgui.class, opencv_imgproc.class, opencv_imgcodecs.class, openblas.class, caffe.class, hdf5.class},
+    inherit = caffe.class,
     value = {
         @Platform(
             value = {"linux", "macosx"},
@@ -65,35 +87,34 @@ import org.bytedeco.hdf5.presets.*;
             },
             link = {
                 "openpose@.1.6.0",
-                "openpose_3d@.1.6.0",
-                "openpose_calibration@.1.6.0",
-                "openpose_core@.1.6.0",
-                "openpose_face@.1.6.0",
-                "openpose_filestream@.1.6.0",
-                "openpose_gpu@.1.6.0",
-                "openpose_gui@.1.6.0",
-                "openpose_hand@.1.6.0",
-                "openpose_net@.1.6.0",
-                "openpose_pose@.1.6.0",
-                "openpose_producer@.1.6.0",
-                "openpose_thread@.1.6.0",
-                "openpose_tracking@.1.6.0",
-                "openpose_unity@.1.6.0",
-                "openpose_utilities@.1.6.0",
-                "openpose_wrapper@.1.6.0",
+                "openpose_3d",
+                "openpose_calibration",
+                "openpose_core",
+                "openpose_face",
+                "openpose_filestream",
+                "openpose_gpu",
+                "openpose_gui",
+                "openpose_hand",
+                "openpose_net",
+                "openpose_pose",
+                "openpose_producer",
+                "openpose_thread",
+                "openpose_tracking",
+                "openpose_unity",
+                "openpose_utilities",
+                "openpose_wrapper",
             },
-            includepath = {"/usr/local/cuda/include/"},
+            includepath = "/usr/local/cuda/include/",
             linkpath = "/usr/local/cuda/lib/"
         ),
         @Platform(
-            value = {"linux-x86_64"},
-            define = {"GPU_MODE CUDA"},
+            value = "linux-x86_64",
+            define = "GPU_MODE CUDA",
             extension = "-gpu"
         )
     },
     target = "org.bytedeco.openpose",
-    global = "org.bytedeco.openpose.global.openpose",
-    helper = "org.bytedeco.openpose.helper.openpose"
+    global = "org.bytedeco.openpose.global.openpose"
 )
 public class openpose implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -179,4 +200,16 @@ public class openpose implements InfoMapper {
         // don't need this
         .put(new Info("OVERLOAD_C_OUT").cppText("#define OVERLOAD_C_OUT(x)"));
     }
+
+    public static int POSE_MAX_PEOPLE = 127;
+    public static float POSE_DEFAULT_ALPHA_KEYPOINT = 0.6f;
+    public static float POSE_DEFAULT_ALPHA_HEAT_MAP = 0.7f;
+    public static int FACE_MAX_FACES = 127;
+    public static float FACE_DEFAULT_ALPHA_KEYPOINT = 0.6f;
+    public static float FACE_DEFAULT_ALPHA_HEAT_MAP = 0.7f;
+    public static int HAND_MAX_HANDS = 254;
+    public static int HAND_NUMBER_PARTS = 21;
+    public static float HAND_CCN_DECREASE_FACTOR = 8.0f;
+    public static float HAND_DEFAULT_ALPHA_KEYPOINT = 0.6f;
+    public static float HAND_DEFAULT_ALPHA_HEAT_MAP = 0.7f;
 }

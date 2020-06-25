@@ -165,6 +165,21 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>javacpp-${javacpp.platform}</id>
+            <phase>package</phase>
+            <configuration>
+              <excludes>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}/include/boost/**</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.a</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.la</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.dylib</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.moditect</groupId>

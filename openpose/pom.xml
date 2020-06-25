@@ -42,7 +42,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.9-${project.parent.version}</version>
+      <version>0.3.10-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -80,7 +80,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.9-${project.parent.version}</version>
+            <version>0.3.10-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -103,7 +103,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.9-${project.parent.version}</version>
+            <version>0.3.10-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -133,6 +133,7 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
           </includePaths>
           <linkPaths>
+            <linkPath>${basedir}/../caffe/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>

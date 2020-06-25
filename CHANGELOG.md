@@ -1,4 +1,5 @@
 
+ * Add presets for OpenPose 1.6.0 ([pull #898](https://github.com/bytedeco/javacpp-presets/pull/898))
  * Add `requires org.bytedeco.javacpp.${javacpp.platform.module}` to load `jnijavacpp` with JPMS ([pull #893](https://github.com/bytedeco/javacpp-presets/pull/893))
  * Bundle configuration files required by AOT compilation with GraalVM ([issue eclipse/deeplearning4j#7362](https://github.com/eclipse/deeplearning4j/issues/7362))
  * Add support for Windows to presets for Qt ([issue #862](https://github.com/bytedeco/javacpp-presets/issues/862))
