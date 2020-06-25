@@ -34,7 +34,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.9-${project.parent.version}</version>
+      <version>0.3.10-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -47,12 +47,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.macosx-x86_64}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.macosx-x86_64}</classifier>-->
+<!--    </dependency>-->
   </dependencies>
 
   <build>
@@ -111,7 +111,7 @@
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
                       requires org.bytedeco.${javacpp.moduleId}.linux.x86_64.gpu;
-                      requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64.gpu;
+//                      requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64.gpu;
                     }
                   </moduleInfoSource>
                 </module>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = {"<npp.h>", /*"<nppversion.h>",*/ "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppc64_10")},
+    @Platform(include = {"<npp.h>", /*"<nppversion.h>",*/ "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.11"),
+    @Platform(value = "windows-x86_64", preload = "nppc64_11")},
         target = "org.bytedeco.cuda.nppc", global = "org.bytedeco.cuda.global.nppc")
 @NoException
 public class nppc implements InfoMapper {

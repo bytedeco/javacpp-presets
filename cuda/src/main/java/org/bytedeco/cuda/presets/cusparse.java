@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @NoException
 public class cusparse implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("CUSPARSEAPI").cppTypes().annotations().cppText(""))
+        infoMap.put(new Info("CUSPARSEAPI", "CUSPARSE_CPP_VERSION").cppTypes().annotations().cppText(""))
                .put(new Info("cusparseHandle_t").valueTypes("cusparseContext").pointerTypes("@ByPtrPtr cusparseContext"))
                .put(new Info("cusparseMatDescr_t").valueTypes("cusparseMatDescr").pointerTypes("@ByPtrPtr cusparseMatDescr"))
                .put(new Info("cusparseSolveAnalysisInfo_t").valueTypes("cusparseSolveAnalysisInfo").pointerTypes("@ByPtrPtr cusparseSolveAnalysisInfo"))
@@ -61,6 +61,7 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseDnVecDescr_t").valueTypes("cusparseDnVecDescr").pointerTypes("@ByPtrPtr cusparseDnVecDescr"))
                .put(new Info("cusparseSpMatDescr_t").valueTypes("cusparseSpMatDescr").pointerTypes("@ByPtrPtr cusparseSpMatDescr"))
                .put(new Info("cusparseDnMatDescr_t").valueTypes("cusparseDnMatDescr").pointerTypes("@ByPtrPtr cusparseDnMatDescr"))
+               .put(new Info("cusparseSpGEMMDescr_t").valueTypes("cusparseSpGEMMDescr").pointerTypes("@ByPtrPtr cusparseSpGEMMDescr"))
                .put(new Info("cusparseCreateSpVec", "cusparseDestroySpVec", "cusparseSpVecGet", "cusparseSpVecGetIndexBase",
                              "cusparseSpVecGetValues", "cusparseSpVecSetValues", "cusparseCreateDnVec", "cusparseDestroyDnVec",
                              "cusparseDnVecGet", "cusparseDnVecGetValues", "cusparseDnVecSetValues", "cusparseCreateCoo",

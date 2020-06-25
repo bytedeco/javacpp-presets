@@ -72,6 +72,7 @@ patch -Np1 < ../../../opencv_contrib.patch
 
 cd ../opencv-$OPENCV_VERSION
 patch -Np1 < ../../../opencv.patch
+patch -Np1 < ../../../opencv-cudnn8.patch
 patch -Np1 < ../../../opencv-linux-ppc64le.patch
 
 # work around the toolchain for Android not supporting Clang with libc++ properly
@@ -121,7 +122,7 @@ BUILD_CONTRIB_X="-DBUILD_opencv_stereo=OFF -DBUILD_opencv_plot=ON -DBUILD_opencv
 
 GPU_FLAGS="-DWITH_CUDA=OFF"
 if [[ "$EXTENSION" == *gpu ]]; then
-    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=10.2 -DCUDA_ARCH_BIN='3.0' -DCUDA_ARCH_PTX='3.0' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=11.0 -DCUDNN_VERSION=8.0 -DCUDA_ARCH_BIN='3.5' -DCUDA_ARCH_PTX='3.5' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
 fi
 
 case $PLATFORM in

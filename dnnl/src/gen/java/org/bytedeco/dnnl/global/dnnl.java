@@ -235,190 +235,219 @@ public static final int
     dnnl_bac = 16,
     /** permuted 4D tensor */
     dnnl_bacd = 17,
+    /** permuted 5D tensor */
+    dnnl_bacde = 18,
     /** permuted 3D tensor */
-    dnnl_bca = 18,
+    dnnl_bca = 19,
     /** permuted 4D tensor */
-    dnnl_bcda = 19,
+    dnnl_bcda = 20,
     /** permuted 5D tensor */
-    dnnl_bcdea = 20,
+    dnnl_bcdea = 21,
     /** permuted 3D tensor */
-    dnnl_cba = 21,
+    dnnl_cba = 22,
     /** permuted 4D tensor */
-    dnnl_cdba = 22,
+    dnnl_cdba = 23,
     /** permuted 4D tensor */
-    dnnl_dcab = 23,
+    dnnl_dcab = 24,
     /** permuted 5D tensor */
-    dnnl_cdeba = 24,
+    dnnl_cdeba = 25,
     /** permuted 5D tensor */
-    dnnl_decab = 25,
+    dnnl_decab = 26,
     /** permuted 6D tensor */
-    dnnl_defcab = 26,
+    dnnl_defcab = 27,
 
     // Opaque blocked formats
 
-    dnnl_Abc16a = 27,
-    dnnl_ABc16a16b = 28,
-    dnnl_ABc4a4b = 29,
+    dnnl_Abc16a = 28,
+    dnnl_ABc16a16b = 29,
+    dnnl_ABc32a32b = 30,
+    dnnl_ABc4a4b = 31,
     /** 3D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBc16b = 30,
-    dnnl_ABc16b16a = 31,
-    dnnl_Abc4a = 32,
+    dnnl_aBc16b = 32,
+    dnnl_ABc16b16a = 33,
+    dnnl_Abc4a = 34,
+    /** 3D tensor blocked by 2nd dimension with block size 32 */
+    dnnl_aBc32b = 35,
     /** 3D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBc4b = 33,
-    dnnl_ABc4b16a4b = 34,
-    dnnl_ABc2b8a4b = 35,
-    dnnl_ABc4b4a = 36,
-    dnnl_ABc8a16b2a = 37,
-    dnnl_ABc8a8b = 38,
+    dnnl_aBc4b = 36,
+    dnnl_ABc4b16a4b = 37,
+    dnnl_ABc2b8a4b = 38,
+    dnnl_ABc4b4a = 39,
+    dnnl_ABc8a16b2a = 40,
+    dnnl_ABc8a8b = 41,
+    dnnl_ABc8a4b = 42,
     /** 3D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBc8b = 39,
-    dnnl_ABc8b16a2b = 40,
-    dnnl_BAc8a16b2a = 41,
-    dnnl_ABc8b8a = 42,
-    dnnl_Abcd16a = 43,
-    dnnl_Abcd8a = 44,
-    dnnl_ABcd16a16b = 45,
-    dnnl_ABcd32a32b = 46,
+    dnnl_aBc8b = 43,
+    dnnl_ABc8b16a2b = 44,
+    dnnl_BAc8a16b2a = 45,
+    dnnl_ABc8b8a = 46,
+    dnnl_Abcd16a = 47,
+    dnnl_Abcd8a = 48,
+    dnnl_ABcd16a16b = 49,
+    dnnl_Abcd32a = 50,
+    dnnl_ABcd32a32b = 51,
     /** 4D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcd16b = 47,
-    dnnl_ABcd16b16a = 48,
-    dnnl_aBCd16b16c = 49,
-    dnnl_aBCd16c16b = 50,
-    dnnl_Abcd4a = 51,
+    dnnl_aBcd16b = 52,
+    dnnl_ABcd16b16a = 53,
+    dnnl_aBCd16b16c = 54,
+    dnnl_aBCd16c16b = 55,
+    dnnl_Abcd4a = 56,
+    /** 4D tensor blocked by 2nd dimension with block size 32 */
+    dnnl_aBcd32b = 57,
     /** 4D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcd4b = 52,
-    dnnl_ABcd4b16a4b = 53,
-    dnnl_ABcd4b4a = 54,
-    dnnl_ABcd4a4b = 55,
-    dnnl_aBCd2c4b2c = 56,
-    dnnl_aBCd4b8c2b = 57,
-    dnnl_aBCd4c16b4c = 58,
-    dnnl_aBCd2c8b4c = 59,
-    dnnl_aBCd4c4b = 60,
-    dnnl_aBCd4b4c = 61,
-    dnnl_ABcd8a16b2a = 62,
-    dnnl_ABcd2b8a4b = 63,
-    dnnl_ABcd8a8b = 64,
+    dnnl_aBcd4b = 58,
+    dnnl_ABcd4b16a4b = 59,
+    dnnl_ABcd4b4a = 60,
+    dnnl_ABcd4a4b = 61,
+    dnnl_aBCd2c4b2c = 62,
+    dnnl_aBCd4b8c2b = 63,
+    dnnl_aBCd4c16b4c = 64,
+    dnnl_aBCd2c8b4c = 65,
+    dnnl_aBCd4c4b = 66,
+    dnnl_aBCd4b4c = 67,
+    dnnl_ABcd8a16b2a = 68,
+    dnnl_ABcd2b8a4b = 69,
+    dnnl_ABcd8a8b = 70,
+    dnnl_ABcd8a4b = 71,
     /** 4D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBcd8b = 65,
-    dnnl_aBCd4c8b2c = 66,
-    dnnl_ABcd8b16a2b = 67,
-    dnnl_aBCd8b16c2b = 68,
-    dnnl_BAcd8a16b2a = 69,
+    dnnl_aBcd8b = 72,
+    dnnl_aBCd4c8b2c = 73,
+    dnnl_ABcd8b16a2b = 74,
+    dnnl_aBCd8b16c2b = 75,
+    dnnl_BAcd8a16b2a = 76,
     /** 4D tensor blocked by 1st and 2nd dimension with block size 8 */
-    dnnl_ABcd8b8a = 70,
-    dnnl_aBCd8b8c = 71,
-    dnnl_aBCd8c16b2c = 72,
-    dnnl_ABcde8a16b2a = 73,
-    dnnl_aCBd8b16c2b = 74,
-    dnnl_aBCd8c8b = 75,
-    dnnl_Abcde16a = 76,
-    dnnl_ABcde16a16b = 77,
-    dnnl_BAcde8a16b2a = 78,
+    dnnl_ABcd8b8a = 77,
+    dnnl_aBCd8b8c = 78,
+    dnnl_aBCd8b4c = 79,
+    dnnl_aBCd8c16b2c = 80,
+    dnnl_ABcde8a16b2a = 81,
+    dnnl_aCBd8b16c2b = 82,
+    dnnl_aBCd8c8b = 83,
+    dnnl_Abcde16a = 84,
+    dnnl_Abcde32a = 85,
+    dnnl_ABcde16a16b = 86,
+    dnnl_BAcde8a16b2a = 87,
     /** 4D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCd2b4c2b = 79,
+    dnnl_aBCd2b4c2b = 88,
     /** 5D tensor blocked by 1st dimension with block size 16 */
-    dnnl_ABcde4b16a4b = 80,
+    dnnl_ABcde4b16a4b = 89,
     /** 5D tensor blocked by 1st dimension with block size 8 */
-    dnnl_ABcde2b8a4b = 81,
+    dnnl_ABcde2b8a4b = 90,
     /** 5D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcde16b = 82,
-    dnnl_ABcde16b16a = 83,
-    dnnl_aBCde16b16c = 84,
-    dnnl_aBCde16c16b = 85,
-    dnnl_aBCde2c8b4c = 86,
-    dnnl_Abcde4a = 87,
+    dnnl_aBcde16b = 91,
+    dnnl_ABcde16b16a = 92,
+    dnnl_aBCde16b16c = 93,
+    dnnl_aBCde16c16b = 94,
+    dnnl_aBCde2c8b4c = 95,
+    dnnl_Abcde4a = 96,
+    /** 5D tensor blocked by 2nd dimension with block size 32 */
+    dnnl_aBcde32b = 97,
     /** 5D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcde4b = 88,
-    dnnl_ABcde4b4a = 89,
-    dnnl_ABcde4a4b = 90,
-    dnnl_aBCde4b4c = 91,
-    dnnl_aBCde2c4b2c = 92,
-    dnnl_aBCde4b8c2b = 93,
-    dnnl_aBCde4c16b4c = 94,
-    dnnl_aBCde4c4b = 95,
-    dnnl_Abcde8a = 96,
-    dnnl_ABcde8a8b = 97,
-    dnnl_BAcde16b16a = 98,
+    dnnl_aBcde4b = 98,
+    dnnl_ABcde4b4a = 99,
+    dnnl_ABcde4a4b = 100,
+    dnnl_aBCde4b4c = 101,
+    dnnl_aBCde2c4b2c = 102,
+    dnnl_aBCde4b8c2b = 103,
+    dnnl_aBCde4c16b4c = 104,
+    dnnl_aBCde4c4b = 105,
+    dnnl_Abcde8a = 106,
+    dnnl_ABcde8a8b = 107,
+    dnnl_ABcde8a4b = 108,
+    dnnl_BAcde16b16a = 109,
     /** 5D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBcde8b = 99,
-    dnnl_ABcde8b16a2b = 100,
-    dnnl_aBCde8b16c2b = 101,
-    dnnl_aBCde4c8b2c = 102,
-    dnnl_aCBde8b16c2b = 103,
-    dnnl_ABcde8b8a = 104,
-    dnnl_aBCde8b8c = 105,
-    dnnl_ABcd4a8b8a4b = 106,
-    dnnl_ABcd2a8b8a2b = 107,
-    dnnl_aBCde4b8c8b4c = 108,
-    dnnl_aBCde2b8c8b2c = 109,
-    dnnl_aBCde8c16b2c = 110,
-    dnnl_aBCde8c8b = 111,
+    dnnl_aBcde8b = 110,
+    dnnl_ABcde8b16a2b = 111,
+    dnnl_aBCde8b16c2b = 112,
+    dnnl_aBCde4c8b2c = 113,
+    dnnl_aCBde8b16c2b = 114,
+    dnnl_ABcde8b8a = 115,
+    dnnl_ABcde32a32b = 116,
+    dnnl_aBCde8b8c = 117,
+    dnnl_aBCde8b4c = 118,
+    dnnl_ABc4a8b8a4b = 119,
+    dnnl_ABcd4a8b8a4b = 120,
+    dnnl_ABcde4a8b8a4b = 121,
+    dnnl_BAc4b8a8b4a = 122,
+    dnnl_BAcd4b8a8b4a = 123,
+    dnnl_BAcde4b8a8b4a = 124,
+    dnnl_ABcd2a8b8a2b = 125,
+    dnnl_aBCd4b8c8b4c = 126,
+    dnnl_aBCde4b8c8b4c = 127,
+    dnnl_aBCde2b8c8b2c = 128,
+    dnnl_aBCde8c16b2c = 129,
+    dnnl_aBCde8c8b = 130,
     /** 5D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCde2b4c2b = 112,
+    dnnl_aBCde2b4c2b = 131,
     /** 6D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcdef16b = 113,
-    dnnl_aBCdef16b16c = 114,
-    dnnl_aBCdef16c16b = 115,
-    dnnl_aBCdef4c16b4c = 116,
+    dnnl_aBcdef16b = 132,
+    dnnl_aBCdef16b16c = 133,
+    dnnl_aBCdef16c16b = 134,
+    dnnl_aBCdef4c16b4c = 135,
     /** 6D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBCdef2c8b4c = 117,
-    dnnl_aBCdef4c8b2c = 118,
+    dnnl_aBCdef2c8b4c = 136,
+    dnnl_aBCdef4c8b2c = 137,
     /** 6D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCdef2b4c2b = 119,
+    dnnl_aBCdef2b4c2b = 138,
     /** 6D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcdef4b = 120,
-    dnnl_aBCdef4c4b = 121,
-    dnnl_aBCdef4b4c = 122,
-    dnnl_aBCdef2c4b2c = 123,
-    dnnl_aBCdef4b8c2b = 124,
-    dnnl_aBCdef8b8c = 125,
-    dnnl_aBCdef8c16b2c = 126,
-    dnnl_aBCdef8b16c2b = 127,
-    dnnl_aCBdef8b16c2b = 128,
-    dnnl_aBCdef8c8b = 129,
-    dnnl_aBdc16b = 130,
-    dnnl_aBdC16b2c = 131,
-    dnnl_aBdc4b = 132,
-    dnnl_aBdc8b = 133,
-    dnnl_aBdec16b = 134,
-    dnnl_aBdeC16b2c = 135,
-    dnnl_aBdec32b = 136,
-    dnnl_aBdec4b = 137,
-    dnnl_aBdec8b = 138,
-    dnnl_aBdefc16b = 139,
-    dnnl_aBdefC16b2c = 140,
-    dnnl_aCBdef16c16b = 141,
-    dnnl_aBdefc4b = 142,
-    dnnl_aBdefc8b = 143,
-    dnnl_Abcdef16a = 144,
-    dnnl_Acb16a = 145,
-    dnnl_AcB16a2b = 146,
-    dnnl_Acb4a = 147,
-    dnnl_Acb8a = 148,
-    dnnl_aCBd16b16c = 149,
-    dnnl_aCBd16c16b = 150,
-    dnnl_aCBde16b16c = 151,
-    dnnl_aCBde16c16b = 152,
-    dnnl_Acdb16a = 153,
-    dnnl_AcdB16a2b = 154,
-    dnnl_Acdb32a = 155,
-    dnnl_Acdb4a = 156,
-    dnnl_Acdb8a = 157,
-    dnnl_Acdeb16a = 158,
-    dnnl_AcdeB16a2b = 159,
-    dnnl_Acdeb4a = 160,
-    dnnl_Acdeb8a = 161,
-    dnnl_BAc16a16b = 162,
-    dnnl_BAc16b16a = 163,
-    dnnl_BAcd16a16b = 164,
-    dnnl_BAcd16b16a = 165,
-    dnnl_BAcde16a16b = 166,
-    dnnl_aCBdef16b16c = 167,
+    dnnl_aBcdef4b = 139,
+    dnnl_aBCdef4c4b = 140,
+    dnnl_aBCdef4b4c = 141,
+    dnnl_aBCdef2c4b2c = 142,
+    dnnl_aBCdef4b8c2b = 143,
+    dnnl_aBCdef8b8c = 144,
+    dnnl_aBCdef8b4c = 145,
+    dnnl_aBCdef8c16b2c = 146,
+    dnnl_aBCdef4b8c8b4c = 147,
+    dnnl_aBCdef8b16c2b = 148,
+    dnnl_aCBdef8b16c2b = 149,
+    dnnl_aBCdef8c8b = 150,
+    dnnl_aBdc16b = 151,
+    dnnl_aBdC16b2c = 152,
+    dnnl_aBdc4b = 153,
+    dnnl_aBdc8b = 154,
+    dnnl_aBdec16b = 155,
+    dnnl_aBdeC16b2c = 156,
+    dnnl_aBdec32b = 157,
+    dnnl_aBdec4b = 158,
+    dnnl_aBdec8b = 159,
+    dnnl_aBdefc16b = 160,
+    dnnl_aBdefC16b2c = 161,
+    dnnl_aCBdef16c16b = 162,
+    dnnl_aBdefc4b = 163,
+    dnnl_aBdefc8b = 164,
+    dnnl_Abcdef16a = 165,
+    dnnl_Abcdef32a = 166,
+    dnnl_Acb16a = 167,
+    dnnl_AcB16a2b = 168,
+    dnnl_Acb4a = 169,
+    dnnl_Acb8a = 170,
+    dnnl_aCBd16b16c = 171,
+    dnnl_aCBd16c16b = 172,
+    dnnl_aCBde16b16c = 173,
+    dnnl_aCBde16c16b = 174,
+    dnnl_Acdb16a = 175,
+    dnnl_AcdB16a2b = 176,
+    dnnl_Acdb32a = 177,
+    dnnl_Acdb4a = 178,
+    dnnl_Acdb8a = 179,
+    dnnl_Acdeb16a = 180,
+    dnnl_AcdeB16a2b = 181,
+    dnnl_Acdeb4a = 182,
+    dnnl_Acdeb8a = 183,
+    dnnl_BAc16a16b = 184,
+    dnnl_BAc16b16a = 185,
+    dnnl_BAcd16a16b = 186,
+    dnnl_BAcd16b16a = 187,
+    dnnl_aCBd4c8b8c4b = 188,
+    dnnl_aCBde4c8b8c4b = 189,
+    dnnl_aCBdef4c8b8c4b = 190,
+    dnnl_BAcde16a16b = 191,
+    dnnl_aCBdef16b16c = 192,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 168,
+    dnnl_format_tag_last = 193,
 
     // Aliases
 
@@ -471,6 +500,8 @@ public static final int
     dnnl_iohw = dnnl_bacd,
     /** 5D CNN weights tensor, an alias to #dnnl_abcde */
     dnnl_oidhw = dnnl_abcde,
+    /** 5D CNN weights tensor, an alias to #dnnl_bacde */
+    dnnl_iodhw = dnnl_bacde,
     /** 5D CNN weights tensor, an alias to #dnnl_cdeba */
     dnnl_dhwio = dnnl_cdeba,
     /** 5D CNN weights tensor, an alias to #dnnl_acdeb */
@@ -539,7 +570,9 @@ public static final int
     // Opaque data types, are not to be used explicitly
 
     // data
-
+    /** 5D CNN activations tensor blocked by channels with block size 32,
+     *  an alias to #dnnl_aBcde32b */
+    dnnl_nCdhw32c = dnnl_aBcde32b,
     /** 5D CNN activations tensor blocked by channels with block size 16,
      *  an alias to #dnnl_aBcde16b */
     dnnl_nCdhw16c = dnnl_aBcde16b,
@@ -549,6 +582,9 @@ public static final int
     /** 5D CNN activations tensor blocked by channels with block size 8,
      *  an alias to #dnnl_aBcde8b */
     dnnl_nCdhw8c = dnnl_aBcde8b,
+    /** 4D CNN activations tensor blocked by channels with block size 32,
+     *  an alias to #dnnl_aBcd32b */
+    dnnl_nChw32c = dnnl_aBcd32b,
     /** 4D CNN activations tensor blocked by channels with block size 16,
      *  an alias to #dnnl_aBcd16b */
     dnnl_nChw16c = dnnl_aBcd16b,
@@ -558,6 +594,9 @@ public static final int
     /** 4D CNN activations tensor blocked by channels with block size 8,
      *  an alias to #dnnl_aBcd8b */
     dnnl_nChw8c = dnnl_aBcd8b,
+    /** 3D CNN activations tensor blocked by channels with block size 32,
+     *  an alias to #dnnl_aBc32b */
+    dnnl_nCw32c = dnnl_aBc32b,
     /** 3D CNN activations tensor blocked by channels with block size 16,
      *  an alias to #dnnl_aBc16b */
     dnnl_nCw16c = dnnl_aBc16b,
@@ -570,7 +609,9 @@ public static final int
     dnnl_NCw16n16c = dnnl_ABc16a16b,
     dnnl_NCdhw16n16c = dnnl_ABcde16a16b,
     dnnl_NChw16n16c = dnnl_ABcd16a16b,
+    dnnl_NCw32n32c = dnnl_ABc32a32b,
     dnnl_NChw32n32c = dnnl_ABcd32a32b,
+    dnnl_NCdhw32n32c = dnnl_ABcde32a32b,
 
     // weights, 3D
     dnnl_IOw16o16i = dnnl_BAc16a16b,
@@ -588,6 +629,7 @@ public static final int
     dnnl_OIw8o16i2o = dnnl_ABc8a16b2a,
     dnnl_IOw8o16i2o = dnnl_BAc8a16b2a,
     dnnl_OIw8o8i = dnnl_ABc8a8b,
+    dnnl_OIw8o4i = dnnl_ABc8a4b,
     dnnl_Owi16o = dnnl_Acb16a,
     dnnl_OwI16o2i = dnnl_AcB16a2b,
     dnnl_Owi4o = dnnl_Acb4a,
@@ -614,6 +656,7 @@ public static final int
     dnnl_OIhw2i8o4i = dnnl_ABcd2b8a4b,
     dnnl_IOhw8o16i2o = dnnl_BAcd8a16b2a,
     dnnl_OIhw8o8i = dnnl_ABcd8a8b,
+    dnnl_OIhw8o4i = dnnl_ABcd8a4b,
 
     // weights, 5D
     dnnl_Odhwi16o = dnnl_Acdeb16a,
@@ -633,7 +676,9 @@ public static final int
     dnnl_OIdhw4i16o4i = dnnl_ABcde4b16a4b,
     dnnl_OIdhw2i8o4i = dnnl_ABcde2b8a4b,
     dnnl_OIdhw8o8i = dnnl_ABcde8a8b,
+    dnnl_OIdhw8o4i = dnnl_ABcde8a4b,
     dnnl_IOdhw16i16o = dnnl_BAcde16b16a,
+    dnnl_OIdhw4o8i8o4i = dnnl_ABcde4a8b8a4b,
     dnnl_IOdhw16o16i = dnnl_BAcde16a16b,
 
     // weights w/ groups, 3D
@@ -654,10 +699,12 @@ public static final int
     dnnl_gOIw8o16i2o = dnnl_aBCd8b16c2b,
     dnnl_gIOw8o16i2o = dnnl_aCBd8b16c2b,
     dnnl_gOIw8o8i = dnnl_aBCd8b8c,
+    dnnl_gOIw8o4i = dnnl_aBCd8b4c,
     dnnl_gOwi16o = dnnl_aBdc16b,
     dnnl_gOwI16o2i = dnnl_aBdC16b2c,
     dnnl_gOwi4o = dnnl_aBdc4b,
     dnnl_gOwi8o = dnnl_aBdc8b,
+    dnnl_Goiw32g = dnnl_Abcd32a,
     dnnl_gOIw2i4o2i = dnnl_aBCd2c4b2c,
     dnnl_gOIw2o4i2o = dnnl_aBCd2b4c2b,
     dnnl_gOIw4i8o2i = dnnl_aBCd4c8b2c,
@@ -686,10 +733,22 @@ public static final int
     dnnl_gOIhw8o16i2o = dnnl_aBCde8b16c2b,
     dnnl_gIOhw8o16i2o = dnnl_aCBde8b16c2b,
     dnnl_gOIhw8o8i = dnnl_aBCde8b8c,
+    dnnl_gOIhw8o4i = dnnl_aBCde8b4c,
+    dnnl_Goihw32g = dnnl_Abcde32a,
 
+    dnnl_OIw4o8i8o4i = dnnl_ABc4a8b8a4b,
     dnnl_OIhw4o8i8o4i = dnnl_ABcd4a8b8a4b,
+    dnnl_IOw4i8o8i4o = dnnl_BAc4b8a8b4a,
+    dnnl_IOhw4i8o8i4o = dnnl_BAcd4b8a8b4a,
+    dnnl_IOdhw4i8o8i4o = dnnl_BAcde4b8a8b4a,
+
     dnnl_OIhw2o8i8o2i = dnnl_ABcd2a8b8a2b,
+    dnnl_gOIw4o8i8o4i = dnnl_aBCd4b8c8b4c,
     dnnl_gOIhw4o8i8o4i = dnnl_aBCde4b8c8b4c,
+    dnnl_gOIdhw4o8i8o4i = dnnl_aBCdef4b8c8b4c,
+    dnnl_gIOw4i8o8i4o = dnnl_aCBd4c8b8c4b,
+    dnnl_gIOhw4i8o8i4o = dnnl_aCBde4c8b8c4b,
+    dnnl_gIOdhw4i8o8i4o = dnnl_aCBdef4c8b8c4b,
     dnnl_gOIhw2o8i8o2i = dnnl_aBCde2b8c8b2c,
     dnnl_gOIhw2i4o2i = dnnl_aBCde2c4b2c,
     dnnl_gOIhw2o4i2o = dnnl_aBCde2b4c2b,
@@ -716,7 +775,9 @@ public static final int
     dnnl_gOIdhw8o16i2o = dnnl_aBCdef8b16c2b,
     dnnl_gIOdhw8o16i2o = dnnl_aCBdef8b16c2b,
     dnnl_gOIdhw8o8i = dnnl_aBCdef8b8c,
+    dnnl_gOIdhw8o4i = dnnl_aBCdef8b4c,
     dnnl_Goidhw16g = dnnl_Abcdef16a,
+    dnnl_Goidhw32g = dnnl_Abcdef32a,
     dnnl_gOIdhw2i4o2i = dnnl_aBCdef2c4b2c,
     dnnl_gOIdhw4i8o2i = dnnl_aBCdef4c8b2c,
     dnnl_gOIdhw2o4i2o = dnnl_aBCdef2b4c2b,
@@ -1814,7 +1875,7 @@ public static final long DNNL_GPU_RUNTIME = DNNL_RUNTIME_NONE;
 public static final int DNNL_VERSION_MAJOR = 1;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 4;
+public static final int DNNL_VERSION_MINOR = 5;
 
 /** Patch version */
 public static final int DNNL_VERSION_PATCH = 0;
@@ -1986,7 +2047,7 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_desc_clone(
  *      primitive_desc has been destroyed.
  * 
  *  @param primitive_desc Primitive descriptor.
- *  @param attr Ouput primitive attributes.
+ *  @param attr Output primitive attributes.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
@@ -2982,7 +3043,7 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_desc_init_submemory(
  *     - Here, dense means:
  *       {@code stride for dim[i] == (stride for dim[i + 1]) * dim[i + 1]};
  *     - And same order means:
- *       {@code i < j <=> stride for dim[i] < stride for dim[j]}.
+ *       {@code i < j} if and only if {@code stride for dim[j] <= stride for dim[i]}.
  * 
  *  \warning
  *      Some combinations of physical memory layout and/or offsets or
@@ -3221,7 +3282,7 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_get_data_handle(
 public static native @Cast("dnnl_status_t") int dnnl_memory_get_data_handle(
         @Const dnnl_memory memory, @Cast("void**") @ByPtrPtr Pointer handle);
 
-/** Sets a memory object's data handle.
+/** Sets the underlying memory buffer.
  * 
  *  See the description of dnnl_memory_set_data_handle_v2() for more details.
  * 
@@ -3238,7 +3299,7 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_get_data_handle(
 public static native @Cast("dnnl_status_t") int dnnl_memory_set_data_handle(
         dnnl_memory memory, Pointer handle);
 
-/** Sets a memory object's data handle.
+/** Sets the underlying memory buffer.
  * 
  *  This function may write zero values to the memory specified by the \p
  *  handle if the memory object has a zero padding area. This may be time
@@ -3456,14 +3517,15 @@ public static native @Cast("dnnl_status_t") int dnnl_sum_primitive_desc_create(
  *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
  * 
  *  @param binary_desc Output descriptor for a binary primitive.
- *  @param alg_kind Algorithm kind. Valid values are #dnnl_binary_add and
- *      #dnnl_binary_mul.
+ *  @param alg_kind Algorithm kind. Valid values are #dnnl_binary_add,
+ *      #dnnl_binary_mul, #dnnl_binary_max and #dnnl_binary_min.
  *  @param src0_desc Source 0 memory descriptor.
  *  @param src1_desc Source 1 memory descriptor.
  *  @param dst_desc Destination memory descriptor.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3492,6 +3554,11 @@ public static native @Cast("dnnl_status_t") int dnnl_binary_desc_init(dnnl_binar
  *  Outputs:
  *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
  * 
+ *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
+ *  spatial dimensions only and hence must have the same number of elements as
+ *  there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param conv_desc Output descriptor for a convolution primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -3506,13 +3573,14 @@ public static native @Cast("dnnl_status_t") int dnnl_binary_desc_init(dnnl_binar
  *  @param dst_desc Destination memory descriptor.
  *  @param strides Array of strides for spatial dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is assumed to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3554,6 +3622,12 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_forward_desc_in
  *  Outputs:
  *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
  * 
+ *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
+ *  values for spatial dimensions only and hence must have the same number of
+ *  elements as there are spatial dimensions. The order of values is the same
+ *  as in the tensor: depth (for 3D tensors), height (for 3D and 2D tensors),
+ *  and width.
+ * 
  *  @param conv_desc Output descriptor for a convolution primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -3570,13 +3644,14 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_forward_desc_in
  *  @param dilates Array of dilations for spatial dimension. A zero value
  *      means no dilation in the corresponding dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3616,6 +3691,11 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_forward
  *  Outputs:
  *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
+ *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
+ *  spatial dimensions only and hence must have the same number of elements as
+ *  there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param conv_desc Output descriptor for a convolution primitive.
  *  @param alg_kind Convolution algorithm. Possible values are
  *      #dnnl_convolution_direct, #dnnl_convolution_winograd,
@@ -3625,13 +3705,14 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_forward
  *  @param diff_dst_desc Diff destination memory descriptor.
  *  @param strides Array of strides for spatial dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is assumed to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3669,6 +3750,12 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_data_d
  *  Outputs:
  *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
+ *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
+ *  values for spatial dimensions only and hence must have the same number of
+ *  elements as there are spatial dimensions. The order of values is the same
+ *  as in the tensor: depth (for 3D tensors), height (for 3D and 2D tensors),
+ *  and width.
+ * 
  *  @param conv_desc Output descriptor for a convolution primitive.
  *  @param alg_kind Convolution algorithm. Possible values are
  *      #dnnl_convolution_direct, #dnnl_convolution_winograd,
@@ -3680,13 +3767,14 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_data_d
  *  @param dilates Array of dilations for spatial dimension. A zero value
  *      means no dilation in the corresponding dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3727,6 +3815,11 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
  *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
  * 
+ *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
+ *  spatial dimensions only and hence must have the same number of elements as
+ *  there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param conv_desc Output descriptor for a convolution primitive.
  *  @param alg_kind Convolution algorithm. Possible values are
  *      #dnnl_convolution_direct, #dnnl_convolution_winograd,
@@ -3739,13 +3832,14 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *  @param diff_dst_desc Diff destination memory descriptor.
  *  @param strides Array of strides for spatial dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3787,6 +3881,12 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_weight
  *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
  *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
  * 
+ *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
+ *  values for spatial dimensions only and hence must have the same number of
+ *  elements as there are spatial dimensions. The order of values is the same
+ *  as in the tensor: depth (for 3D tensors), height (for 3D and 2D tensors),
+ *  and width.
+ * 
  *  @param conv_desc Output descriptor for a convolution primitive.
  *  @param alg_kind Convolution algorithm. Possible values are
  *      #dnnl_convolution_direct, #dnnl_convolution_winograd,
@@ -3801,13 +3901,14 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_weight
  *  @param dilates Array of dilations for spatial dimension. A zero value
  *      means no dilation in the corresponding dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3856,6 +3957,11 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *  Outputs:
  *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
  * 
+ *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
+ *  spatial dimensions only and hence must have the same number of elements as
+ *  there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param deconv_desc Output descriptor for a deconvolution primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -3869,13 +3975,14 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *  @param dst_desc Destination memory descriptor.
  *  @param strides Array of strides for spatial dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3917,6 +4024,12 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_forward_desc_
  *  Outputs:
  *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
  * 
+ *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
+ *  values for spatial dimensions only and hence must have the same number of
+ *  elements as there are spatial dimensions. The order of values is the same
+ *  as in the tensor: depth (for 3D tensors), height (for 3D and 2D tensors),
+ *  and width.
+ * 
  *  @param deconv_desc Output descriptor for a deconvolution primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -3932,13 +4045,14 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_forward_desc_
  *  @param dilates Array of dilations for spatial dimension. A zero value
  *      means no dilation in the corresponding dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -3978,6 +4092,11 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_forwa
  *  Outputs:
  *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
+ *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
+ *  spatial dimensions only and hence must have the same number of elements as
+ *  there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param deconv_desc Output descriptor for a deconvolution primitive.
  *  @param alg_kind Deconvolution algorithm. Possible values are
  *      #dnnl_deconvolution_direct, #dnnl_deconvolution_winograd.
@@ -3986,13 +4105,14 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_forwa
  *  @param diff_dst_desc Diff destination memory descriptor.
  *  @param strides Array of strides for spatial dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -4030,6 +4150,12 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_data
  *  Outputs:
  *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
+ *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
+ *  values for spatial dimensions only and hence must have the same number of
+ *  elements as there are spatial dimensions. The order of values is the same
+ *  as in the tensor: depth (for 3D tensors), height (for 3D and 2D tensors),
+ *  and width.
+ * 
  *  @param deconv_desc Output descriptor for a deconvolution primitive.
  *  @param alg_kind Deconvolution algorithm. Possible values are
  *      #dnnl_deconvolution_direct, #dnnl_deconvolution_winograd.
@@ -4040,13 +4166,14 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_data
  *  @param dilates Array of dilations for spatial dimension. A zero value
  *      means no dilation in the corresponding dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -4087,6 +4214,11 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_backw
  *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
  *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
  * 
+ *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
+ *  spatial dimensions only and hence must have the same number of elements as
+ *  there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param deconv_desc Output descriptor for a deconvolution primitive.
  *  @param alg_kind Deconvolution algorithm. Possible values are
  *      #dnnl_deconvolution_direct, #dnnl_deconvolution_winograd.
@@ -4098,13 +4230,14 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_backw
  *  @param diff_dst_desc Diff destination memory descriptor.
  *  @param strides Array of strides for spatial dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -4146,6 +4279,12 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_weig
  *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
  *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
  * 
+ *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
+ *  values for spatial dimensions only and hence must have the same number of
+ *  elements as there are spatial dimensions. The order of values is the same
+ *  as in the tensor: depth (for 3D tensors), height (for 3D and 2D tensors),
+ *  and width.
+ * 
  *  @param deconv_desc Output descriptor for a deconvolution primitive.
  *  @param alg_kind Deconvolution algorithm. Possible values are
  *      #dnnl_deconvolution_direct, #dnnl_deconvolution_winograd.
@@ -4159,10 +4298,10 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_weig
  *  @param dilates Array of dilations for spatial dimension. A zero value
  *      means no dilation in the corresponding dimension.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
@@ -4406,6 +4545,7 @@ public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_forward_desc_ini
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_backward_desc_init(
         @Cast("dnnl_logsoftmax_desc_t*") dnnl_softmax_desc_t logsoftmax_desc,
         @Const dnnl_memory_desc_t diff_data_desc,
@@ -4429,6 +4569,11 @@ public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_backward_desc_in
  *      dnnl_primitive_desc_query_md() after a corresponding primitive
  *      descriptor is created
  * 
+ *  Arrays \p strides, \p kernel, \p padding_l, and \p padding_r contain values
+ *  for spatial dimensions only and hence must have the same number of elements
+ *  as there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param pool_desc Output descriptor for a pooling primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4440,13 +4585,14 @@ public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_backward_desc_in
  *  @param strides Array of strides for spatial dimension.
  *  @param kernel Array of kernel spatial dimensions.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
+///
 ///
 ///
 ///
@@ -4481,6 +4627,11 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_forward_desc_init(
  *  Outputs:
  *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
+ *  Arrays \p strides, \p kernel, \p padding_l, and \p padding_r contain values
+ *  for spatial dimensions only and hence must have the same number of elements
+ *  as there are spatial dimensions. The order of values is the same as in the
+ *  tensor: depth (for 3D tensors), height (for 3D and 2D tensors), and width.
+ * 
  *  @param pool_desc Output descriptor for a pooling primitive.
  *  @param alg_kind Pooling algorithm kind: either #dnnl_pooling_max,
  *      #dnnl_pooling_avg_include_padding, or #dnnl_pooling_avg (same as
@@ -4490,10 +4641,10 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_forward_desc_init(
  *  @param strides Array of strides for spatial dimension.
  *  @param kernel Array of kernel spatial dimensions.
  *  @param padding_l Array of padding values for low indices for each spatial
- *      dimension (front, top, left).
+ *      dimension {@code ([[front,] top,] left)}.
  *  @param padding_r Array of padding values for high indices for each spatial
- *      dimension (back, bottom, right). Can be NULL in which case padding is
- *      considered to be symmetrical.
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
@@ -4982,6 +5133,7 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_data
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_weights_qparams(
         dnnl_primitive_attr attr, @Cast("dnnl_dim_t") long count, int mask,
         @Const FloatPointer scales);
@@ -4999,10 +5151,14 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_weig
  <p>
  *  Initializes a descriptor for vanilla RNN forward propagation primitive.
  * 
- *  The \p src_iter_desc, \p bias_desc, and \p dst_iter_desc may either be \c
- *  NULL or point to a zero memory descriptor. This would then indicate that
- *  the RNN forward propagation primitive should not use them and should
- *  default to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc,
+ *  - \p bias_desc,
+ *  - \p dst_iter_desc.
+ * 
+ *  This would then indicate that the RNN forward propagation primitive should
+ *  not use them and should default to zero values instead.
  * 
  *  \note
  *      All memory descriptors can be initialized with
@@ -5052,6 +5208,7 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_weig
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_forward_desc_init(
         dnnl_rnn_desc_t rnn_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("const dnnl_alg_kind_t") int activation, @Cast("const dnnl_rnn_direction_t") int direction,
@@ -5066,12 +5223,14 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_forward_desc_in
 
 /** Initializes a descriptor for vanilla RNN backward propagation primitive.
  * 
- *  The \p src_iter_desc together with \p diff_src_iter_desc, \p bias_desc
- *  together with \p diff_bias_desc, and \p dst_iter_desc together with \p
- *  diff_src_iter_desc, may either be \c NULL or point to a zero memory
- *  descriptor. This would then indicate that the RNN backward propagation
- *  primitive should not use the respective data and should use zero values
- *  instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p diff_src_iter_desc,
+ *  - \p bias_desc together with \p diff_bias_desc,
+ *  - \p dst_iter_desc together with \p diff_dst_iter_desc.
+ * 
+ *  This would then indicate that the RNN backward propagation primitive should
+ *  not use the respective data and should use zero values instead.
  * 
  *  \note
  *      All memory descriptors can be initialized with
@@ -5137,6 +5296,7 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_forward_desc_in
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_backward_desc_init(
         dnnl_rnn_desc_t rnn_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("const dnnl_alg_kind_t") int activation, @Cast("const dnnl_rnn_direction_t") int direction,
@@ -5158,10 +5318,14 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_backward_desc_i
 
 /** Initializes a descriptor for LSTM forward propagation primitive.
  * 
- *  The \p src_iter_desc, \p src_iter_c_desc, \p bias_desc, \p dst_iter_desc,
- *  and \p dst_iter_c_desc may either be \c NULL or point to a zero memory
- *  descriptor. This would then indicate that the LSTM forward propagation
- *  primitive should not use them and should default to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p src_iter_c_desc,
+ *  - \p bias_desc,
+ *  - \p dst_iter_desc together with \p dst_iter_c_desc.
+ * 
+ *  This would then indicate that the LSTM forward propagation primitive should
+ *  not use them and should default to zero values instead.
  * 
  *  \note
  *      All memory descriptors can be initialized with
@@ -5219,6 +5383,7 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_backward_desc_i
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init(dnnl_rnn_desc_t rnn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_rnn_direction_t") int direction,
         @Const dnnl_memory_desc_t src_layer_desc,
@@ -5234,11 +5399,15 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init(dnnl
 /** Initializes a descriptor for an LSTM (with or without peephole) forward
  *  propagation primitive.
  * 
- *  The \p src_iter_desc, \p src_iter_c_desc, \p weights_peephole_desc, \p
- *  bias_desc, \p dst_iter_desc, and \p dst_iter_c_desc may either be \c NULL
- *  or point to a zero memory descriptor. This would then indicate that the
- *  LSTM forward propagation primitive should not use them and should default
- *  to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p src_iter_c_desc,
+ *  - \p weights_peephole_desc,
+ *  - \p bias_desc,
+ *  - \p dst_iter_desc together with \p dst_iter_c_desc.
+ * 
+ *  This would then indicate that the LSTM forward propagation primitive should
+ *  not use them and should default to zero values instead.
  * 
  *  \note
  *      All memory descriptors can be initialized with #dnnl_format_tag_any or
@@ -5298,6 +5467,7 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init(dnnl
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v2(dnnl_rnn_desc_t rnn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_rnn_direction_t") int direction,
         @Const dnnl_memory_desc_t src_layer_desc,
@@ -5314,11 +5484,15 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v2(d
 /** Initializes a descriptor for an LSTM (with or without peephole and with
  *  or without recurrent projection layer) forward propagation primitive.
  * 
- *  The \p src_iter_desc, \p src_iter_c_desc, \p weights_peephole_desc, \p
- *  bias_desc, \p dst_iter_desc, and \p dst_iter_c_desc may either be \c NULL
- *  or point to a zero memory descriptor. This would then indicate that the
- *  LSTM forward propagation primitive should not use them and should default
- *  to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p src_iter_c_desc,
+ *  - \p weights_peephole_desc,
+ *  - \p bias_desc,
+ *  - \p dst_iter_desc together with \p dst_iter_c_desc.
+ * 
+ *  This would then indicate that the LSTM forward propagation primitive should
+ *  not use them and should default to zero values instead.
  * 
  *  The \p weights_projection_desc could either be \c NULL or point to a zero
  *  memory descriptor. This would then indicate that the LSTM doesn't have
@@ -5387,6 +5561,7 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v2(d
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v3(dnnl_rnn_desc_t rnn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_rnn_direction_t") int direction,
         @Const dnnl_memory_desc_t src_layer_desc,
@@ -5403,13 +5578,16 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v3(d
 
 /** Initializes a descriptor for an LSTM backward propagation primitive.
  * 
- *  The \p src_iter_desc together with \p diff_iter_desc, \p src_iter_c_desc
- *  together with \p src_iter_c_desc, \p bias_desc together with \p
- *  diff_bias_desc, \p dst_iter_desc together with \p diff_dst_iter_desc, and
- *  \p dst_iter_c_desc together with \p diff_dst_iter_c_desc, may either be \c
- *  NULL or point to a zero memory descriptor. This would then indicate that
- *  the LSTM backward propagation primitive should not use them and should
- *  default to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p src_iter_c_desc, diff_src_iter_desc,
+ *    and \p diff_src_iter_c_desc,
+ *  - \p bias_desc together with \p diff_bias_desc,
+ *  - \p dst_iter_desc together with \p dst_iter_c_desc, diff_dst_iter_desc,
+ *    and \p diff_dst_iter_c_desc.
+ * 
+ *  This would then indicate that the LSTM backward propagation primitive
+ *  should not use them and should default to zero values instead.
  * 
  *  \note
  *      All memory descriptors can be initialized with
@@ -5488,6 +5666,7 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v3(d
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init(dnnl_rnn_desc_t rnn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_rnn_direction_t") int direction,
         @Const dnnl_memory_desc_t src_layer_desc,
@@ -5512,14 +5691,17 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init(dnn
 /** Initializes a descriptor for an LSTM (with or without peephole) backward
  *  propagation primitive.
  * 
- *  The \p src_iter_desc together with \p diff_iter_desc, \p src_iter_c_desc
- *  together with \p diff_src_iter_c_desc, \p weights_peephole_desc together
- *  with \p diff_weights_peephole_desc, \p bias_desc together with \p
- *  diff_bias_desc, \p dst_iter_desc together with \p diff_dst_iter_desc, and
- *  \p dst_iter_c_desc together with \p diff_dst_iter_c_desc, may either be \c
- *  NULL or point to a zero memory descriptor. This would then indicate that
- *  the LSTM backward propagation primitive should not use them and should
- *  default to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p src_iter_c_desc, diff_src_iter_desc,
+ *    and \p diff_src_iter_c_desc,
+ *  - \p weights_peephole_desc together with \p diff_weights_peephole_desc,
+ *  - \p bias_desc together with \p diff_bias_desc,
+ *  - \p dst_iter_desc together with \p dst_iter_c_desc, diff_dst_iter_desc,
+ *    and \p diff_dst_iter_c_desc.
+ * 
+ *  This would then indicate that the LSTM backward propagation primitive
+ *  should not use them and should default to zero values instead.
  * 
  *  \note
  *      All memory descriptors can be initialized with #dnnl_format_tag_any or
@@ -5606,6 +5788,7 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init(dnn
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v2(
         dnnl_rnn_desc_t rnn_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_rnn_direction_t") int direction,
@@ -5633,14 +5816,17 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v2(
 /** Initializes a descriptor for an LSTM (with or without peephole and with or
  *  with out recurrent projection layer) backward propagation primitive.
  * 
- *  The \p src_iter_desc together with \p diff_iter_desc, \p src_iter_c_desc
- *  together with \p diff_src_iter_c_desc, \p weights_peephole_desc together
- *  with \p diff_weights_peephole_desc, \p bias_desc together with \p
- *  diff_bias_desc, \p dst_iter_desc together with \p diff_dst_iter_desc, and
- *  \p dst_iter_c_desc together with \p diff_dst_iter_c_desc, may either be \c
- *  NULL or point to a zero memory descriptor. This would then indicate that
- *  the LSTM backward propagation primitive should not use them and should
- *  default to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p src_iter_c_desc, diff_src_iter_desc,
+ *    and \p diff_src_iter_c_desc,
+ *  - \p weights_peephole_desc together with \p diff_weights_peephole_desc,
+ *  - \p bias_desc together with \p diff_bias_desc,
+ *  - \p dst_iter_desc together with \p dst_iter_c_desc, diff_dst_iter_desc,
+ *    and \p diff_dst_iter_c_desc.
+ * 
+ *  This would then indicate that the LSTM backward propagation primitive
+ *  should not use them and should default to zero values instead.
  * 
  *  The \p weights_projection_desc together with \p
  *  diff_weights_projection_desc could either be \c NULL or point to a zero
@@ -5743,6 +5929,7 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v2(
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v3(
         dnnl_rnn_desc_t rnn_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_rnn_direction_t") int direction,
@@ -5771,10 +5958,14 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v3(
 
 /** Initializes a descriptor for GRU forward propagation primitive.
  * 
- *  The \p src_iter_desc, \p bias_desc, and \p dst_iter, may either be \c NULL
- *  or point to a zero memory descriptor. This would then indicate that the
- *  GRU forward propagation primitive should not use them and should default
- *  to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc,
+ *  - \p bias_desc,
+ *  - \p dst_iter_desc.
+ * 
+ *  This would then indicate that the GRU forward propagation primitive should
+ *  not use them and should default to zero values instead.
  * 
  *  \note
  *      All memory descriptors can be initialized with
@@ -5820,6 +6011,7 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v3(
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_gru_forward_desc_init(dnnl_rnn_desc_t rnn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_rnn_direction_t") int direction,
         @Const dnnl_memory_desc_t src_layer_desc,
@@ -5832,9 +6024,12 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_forward_desc_init(dnnl_
 
 /** Initializes a descriptor for GRU backward propagation primitive.
  * 
- *  The \p src_iter_desc together with \p diff_src_iter_desc, \p bias_desc
- *  together with \p diff_bias_desc, and \p dst_iter together with \p
- *  diff_dst_iter, may either be \c NULL or point to a zero memory descriptor.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p diff_src_iter_desc,
+ *  - \p bias_desc together with \p diff_bias_desc,
+ *  - \p dst_iter_desc together with \p diff_dst_iter_desc.
+ * 
  *  This would then indicate that the GRU backward propagation primitive
  *  should not use them and should default to zero values instead.
  * 
@@ -5896,6 +6091,7 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_forward_desc_init(dnnl_
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_gru_backward_desc_init(dnnl_rnn_desc_t rnn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_rnn_direction_t") int direction,
         @Const dnnl_memory_desc_t src_layer_desc,
@@ -5915,10 +6111,14 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_backward_desc_init(dnnl
 
 /** Initializes a descriptor for LBR GRU forward propagation primitive.
  * 
- *  The \p src_iter_desc, \p bias_desc, and \p dst_iter, may either be \c NULL
- *  or point to a zero memory descriptor. This would then indicate that the
- *  LBR GRU forward propagation primitive should not use them and should
- *  default to zero values instead.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc,
+ *  - \p bias_desc,
+ *  - \p dst_iter_desc.
+ * 
+ *  This would then indicate that the LBR GRU forward propagation primitive
+ *  should not use them and should default to zero values instead.
  * 
  *  Inputs:
  *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
@@ -5960,6 +6160,7 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_backward_desc_init(dnnl
 ///
 ///
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_lbr_gru_forward_desc_init(dnnl_rnn_desc_t rnn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_rnn_direction_t") int direction,
         @Const dnnl_memory_desc_t src_layer_desc,
@@ -5972,9 +6173,12 @@ public static native @Cast("dnnl_status_t") int dnnl_lbr_gru_forward_desc_init(d
 
 /** Initializes a descriptor for LBR GRU backward propagation primitive.
  * 
- *  The \p src_iter_desc together with \p diff_src_iter_desc, \p bias_desc
- *  together with \p diff_bias_desc, and \p dst_iter together with \p
- *  diff_dst_iter, may either be \c NULL or point to a zero memory descriptor.
+ *  The following arguments may either be \c NULL or point to a zero memory
+ *  descriptor:
+ *  - \p src_iter_desc together with \p diff_src_iter_desc,
+ *  - \p bias_desc together with \p diff_bias_desc,
+ *  - \p dst_iter_desc together with \p diff_dst_iter_desc.
+ * 
  *  This would then indicate that the LBR GRU backward propagation primitive
  *  should not use them and should default to zero values instead.
  * 
@@ -6107,7 +6311,7 @@ public static native @Cast("dnnl_status_t") int dnnl_matmul_desc_init(dnnl_matmu
  *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
  * 
  * 
- *  @param resampling_desc Output descriptor for a resamplinging primitive.
+ *  @param resampling_desc Output descriptor for a resampling primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
  *  @param alg_kind resampling algorithm kind: either #dnnl_resampling_nearest,
@@ -6306,10 +6510,44 @@ public static native @Cast("dnnl_status_t") int dnnl_stream_wait(dnnl_stream str
  *      otherwise. */
 
 ///
-///
 public static native @Cast("dnnl_status_t") int dnnl_stream_destroy(dnnl_stream stream);
 
 /** \} dnnl_api_stream
+ <p>
+ *  \addtogroup dnnl_api_primitive_cache
+ *  \{
+ <p>
+ *  Returns the number of primitives that can be held in the primitive cache
+ *  at the same time.
+ * 
+ *  @param capacity Primitive cache capacity to query. Concurrently
+ *  accessing \p capacity is safe.
+ *  @return #dnnl_invalid_arguments/#dnnl::status::invalid_arguments if the
+ *      \p capacity value is invalid, and #dnnl_success/#dnnl::status::success on
+ *      success. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_get_primitive_cache_capacity(IntPointer _capacity);
+public static native @Cast("dnnl_status_t") int dnnl_get_primitive_cache_capacity(IntBuffer _capacity);
+public static native @Cast("dnnl_status_t") int dnnl_get_primitive_cache_capacity(int[] _capacity);
+
+/** Sets a number of primitives that can be held in the primitive cache
+ *  at a time.
+ * 
+ *  @param capacity Primitive cache capacity to set. If a new \p capacity is
+ *  less than a number of primitives that the primitive cache already has
+ *  then the excess entries will be evicted. Setting the \p capacity to 0
+ *  clears the primitive cache and disables it. Concurrently modifying
+ *  \p capacity is safe.
+ *  @return #dnnl_invalid_arguments/#dnnl::status::invalid_arguments if the
+ *      \p capacity value is invalid, and #dnnl_success/#dnnl::status::success on
+ *      success. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_set_primitive_cache_capacity(int _capacity);
+
+/** \} dnnl_api_primitive_cache
  <p>
  *  \addtogroup dnnl_api_service
  *  \{
@@ -7241,11 +7479,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     /** runtime estimation (seconds), unimplemented */
     
 ///
-///
     time_estimate_f64(dnnl_query_time_estimate_f64),
-    /** memory consumption (bytes)
-     * 
-     *  extra (scratch) memory, additional to all inputs and outputs memory
+    /** memory required for scratchpad (bytes)
      * 
      *  @see \ref dev_guide_attributes_scratchpad */
     
@@ -7681,9 +7916,27 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 /** \} dnnl_api_service
  <p>
+ *  \addtogroup dnnl_api_primitive_cache Primitive Cache
+ * 
+ *  A set of functions that provide primitive cache control.
+ * 
+ *  \{
+ <p>
+ *  Returns the number of primitives that can be held in the primitive cache
+ *  at the same time. */
+@Namespace("dnnl") public static native int get_primitive_cache_capacity();
+
+/** \copydoc dnnl_set_primitive_cache_capacity(int capacity) */
+
+///
+///
+@Namespace("dnnl") public static native void set_primitive_cache_capacity(int _capacity);
+
+/** \} dnnl_api_primitive_cache
+ <p>
  *  \addtogroup dnnl_api_blas BLAS functions
  * 
- *  A subset of Basic Linear ALgebra (BLAS) functions that perform
+ *  A subset of Basic Linear Algebra (BLAS) functions that perform
  *  matrix-matrix multiplication.
  * 
  *  \{
@@ -7735,6 +7988,7 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 // implementation section
 
 /** \cond DO_NOT_DOCUMENT_THIS */
+
 
 
 

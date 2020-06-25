@@ -46,7 +46,6 @@ public class primitive extends dnnl_primitive_handle {
         return (primitive)super.position(position);
     }
 
-
     /** Kinds of primitives supported by the library. */
     public enum kind {
         /** Undefined primitive */
@@ -77,7 +76,7 @@ public class primitive extends dnnl_primitive_handle {
         layer_normalization(dnnl_layer_normalization),
         /** An inner product primitive. */
         inner_product(dnnl_inner_product),
-        /** A rnn primitive. */
+        /** An RNN primitive. */
         rnn(dnnl_rnn),
         /** A binary primitive. */
         binary(dnnl_binary),

@@ -24,7 +24,7 @@ public class vanilla_rnn_backward extends primitive {
         return (vanilla_rnn_backward)super.position(position);
     }
 
-    /** Vanilla RNN descriptor backward propagation primitive. */
+    /** Descriptor for a vanilla RNN backward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -36,17 +36,20 @@ public class vanilla_rnn_backward extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
 
         /** Constructs a descriptor for a vanilla RNN backward propagation
          *  primitive.
          * 
-         *  The \p src_iter_desc together with \p diff_src_iter_desc, \p
-         *  bias_desc together with \p diff_bias_desc, and \p dst_iter_desc
-         *  together with \p diff_src_iter_desc, may point to a zero memory
-         *  descriptor. This would then indicate that the RNN backward
-         *  propagation primitive should not use the respective data and
-         *  should use zero values instead.
+         *  The following arguments may point to a zero memory descriptor:
+         *  - \p src_iter_desc together with \p diff_src_iter_desc,
+         *  - \p bias_desc together with \p diff_bias_desc,
+         *  - \p dst_iter_desc together with \p diff_dst_iter_desc.
+         * 
+         *  This would then indicate that the RNN backward propagation
+         *  primitive should not use the respective data and should use zero
+         *  values instead.
          * 
          *  Inputs:
          *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))
@@ -243,7 +246,7 @@ public class vanilla_rnn_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc);
     }
 
-    /** Primitive descriptor for a RNN backward propagation primitive. */
+    /** Primitive descriptor for an RNN backward propagation primitive. */
     public static class primitive_desc extends rnn_primitive_desc_base {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

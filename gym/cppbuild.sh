@@ -68,7 +68,7 @@ export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/:$SCIPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
 # setup.py install doesn't accept absolute paths on Windows
-"$PYTHON_BIN_PATH" setup.py install --prefix ..
+PYTHONNOUSERSITE=1 "$PYTHON_BIN_PATH" setup.py install --prefix ..
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python

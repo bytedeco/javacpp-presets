@@ -117,20 +117,20 @@ fi
 
 if [ "$PROJ" == "cuda" ] || [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
-       curl -L -o cuda_10.2.89_441.22_windows.exe "http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_441.22_windows.exe"
-       curl -L -o cudnn-10.2-windows7-x64-v7.6.5.32.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.5/cudnn-10.2-windows7-x64-v7.6.5.32.zip"
-       ./cuda_10.2.89_441.22_windows.exe -s
+       curl -L -o cuda_11.0.1_451.22_win10.exe "http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda_11.0.1_451.22_win10.exe"
+       curl -L -o cudnn-11.0-windows-x64-v8.0.0.180.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.0/cudnn-11.0-windows-x64-v8.0.0.180.zip"
+       ./cuda_11.0.1_451.22_win10.exe -s
        sleep 60
-       unzip ./cudnn-10.2-windows7-x64-v7.6.5.32.zip
-       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.2/bin
-       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.2/include
-       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.2/lib/x64
+       unzip ./cudnn-11.0-windows-x64-v8.0.0.180.zip
+       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v11.0/bin
+       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v11.0/include
+       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v11.0/lib/x64
        echo Finished cuda install
 fi 
 
 if [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing tensorrt 
-       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1MqoSNUEnbZPn4HNdJX3uic-Ej5ZejCaV /c/Downloads/tensorrt.zip
+       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1Da7QE9li7MZlPd_fALqTKhKG8rXBWm1O /c/Downloads/tensorrt.zip
        unzip -o /c/Downloads/tensorrt.zip -d /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/
        ln -sf /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT* /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/TensorRT
        echo Finished tensorrt install

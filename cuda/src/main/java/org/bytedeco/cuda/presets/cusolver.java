@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019 Samuel Audet
+ * Copyright (C) 2015-2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {cublas.class, cusparse.class}, value = {
-    @Platform(include = {"<cusolver_common.h>", "<cusolverDn.h>", "<cusolverRf.h>", "cusolverSp.h"}, link = "cusolver@.10"),
-    @Platform(value = "windows-x86_64", preload = "cusolver64_10")},
+    @Platform(include = {"<cusolver_common.h>", "<cusolverDn.h>", "<cusolverMg.h>", "<cusolverRf.h>", "cusolverSp.h"},
+        link = {"cusolver@.10", "cusolverMg@.10"}),
+    @Platform(value = "windows-x86_64", preload = {"cusolver64_10", "cusolverMg64_10"})},
         target = "org.bytedeco.cuda.cusolver", global = "org.bytedeco.cuda.global.cusolver")
 @NoException
 public class cusolver implements InfoMapper {
@@ -44,10 +45,12 @@ public class cusolver implements InfoMapper {
                .put(new Info("cusolverDnCunmtr_bufferSize", "cusolverDnDormtr_bufferSize", "cusolverDnZunmtr_bufferSize", "cusolverDnZunmtr",
                              "cusolverDnSormtr_bufferSize", "cusolverDnDormtr", "cusolverDnCunmtr", "cusolverDnSormtr").skip())
                .put(new Info("cusolverDnHandle_t").valueTypes("cusolverDnContext").pointerTypes("@ByPtrPtr cusolverDnContext"))
+               .put(new Info("cusolverDnParams_t").valueTypes("cusolverDnParams").pointerTypes("@ByPtrPtr cusolverDnParams"))
                .put(new Info("syevjInfo_t").valueTypes("syevjInfo").pointerTypes("@ByPtrPtr syevjInfo"))
                .put(new Info("gesvdjInfo_t").valueTypes("gesvdjInfo").pointerTypes("@ByPtrPtr gesvdjInfo"))
                .put(new Info("cusolverDnIRSParams_t").valueTypes("cusolverDnIRSParams").pointerTypes("@ByPtrPtr cusolverDnIRSParams"))
                .put(new Info("cusolverDnIRSInfos_t").valueTypes("cusolverDnIRSInfos").pointerTypes("@ByPtrPtr cusolverDnIRSInfos"))
+               .put(new Info("cusolverMgHandle_t").valueTypes("cusolverMgContext").pointerTypes("@ByPtrPtr cusolverMgContext"))
                .put(new Info("cusolverRfHandle_t").valueTypes("cusolverRfCommon").pointerTypes("@ByPtrPtr cusolverRfCommon"))
                .put(new Info("cusolverSpHandle_t").valueTypes("cusolverSpContext").pointerTypes("@ByPtrPtr cusolverSpContext"))
                .put(new Info("csrqrInfo_t").valueTypes("csrqrInfo").pointerTypes("@ByPtrPtr csrqrInfo"));

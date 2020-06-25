@@ -26,7 +26,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.3.0
+ONNXRUNTIME=1.3.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -44,11 +44,13 @@ git submodule foreach --recursive 'git reset --hard'
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
+sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
+sedinplace 's/cudnnSetRNNDescriptor(/cudnnSetRNNDescriptor_v6(/g' onnxruntime/core/providers/cuda/rnn/cudnn_rnn_base.h
 sedinplace 's/HOST_NAME_MAX/sysconf(_SC_HOST_NAME_MAX)/g' onnxruntime/core/providers/cuda/cuda_call.cc
 
 # use PTX instead of compiling for all CUDA archs to reduce library size
-sedinplace 's/-gencode=arch=compute_30,code=sm_30/-arch=sm_30/g' cmake/CMakeLists.txt
+sedinplace 's/-gencode=arch=compute_35,code=sm_35/-arch=sm_35/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt
 
 # provide a default constructor to Ort::Value to make it more usable with std::vector

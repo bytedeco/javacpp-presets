@@ -12,9 +12,9 @@ module org.bytedeco.cuda {
   exports org.bytedeco.cuda.nccl;
   exports org.bytedeco.cuda.nppc;
   exports org.bytedeco.cuda.nppicc;
-  exports org.bytedeco.cuda.nppicom;
+//  exports org.bytedeco.cuda.nppicom;
   exports org.bytedeco.cuda.nppig;
-  exports org.bytedeco.cuda.nvgraph;
+//  exports org.bytedeco.cuda.nvgraph;
   exports org.bytedeco.cuda.nvml;
   exports org.bytedeco.cuda.nvrtc;
 }
