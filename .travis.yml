@@ -414,7 +414,7 @@ jobs:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=caffe OS=linux-x86_64
+        env: PROJ=caffe,openpose OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -538,7 +538,7 @@ jobs:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode9.3
-        env: PROJ=caffe OS=macosx-x86_64
+        env: PROJ=caffe,openpose OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
 #      - os: osx

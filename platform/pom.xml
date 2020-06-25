@@ -48,6 +48,7 @@
     <module>../leptonica/platform</module>
     <module>../tesseract/platform</module>
     <module>../caffe/platform</module>
+    <module>../openpose/platform</module>
     <module>../cuda/platform</module>
     <module>../mxnet/platform</module>
     <module>../tensorflow/platform</module>
@@ -234,6 +235,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>caffe-platform</artifactId>
       <version>1.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>openpose-platform</artifactId>
+      <version>1.6.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
