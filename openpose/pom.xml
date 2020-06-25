@@ -10,12 +10,13 @@
   </parent>
 
   <groupId>org.bytedeco</groupId>
-  <artifactId>caffe</artifactId>
-  <version>1.0-${project.parent.version}</version>
-  <name>JavaCPP Presets for Caffe</name>
+  <artifactId>openpose</artifactId>
+  <version>1.6.0-${project.parent.version}</version>
+  <name>JavaCPP Presets for OpenPose</name>
 
   <properties>
     <javacpp.nativeRequires>
+      requires org.bytedeco.caffe.${javacpp.platform.module};
       requires org.bytedeco.opencv.${javacpp.platform.module};
       requires org.bytedeco.hdf5.${javacpp.platform.module};
       requires org.bytedeco.openblas.${javacpp.platform.module};
@@ -23,6 +24,11 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>caffe</artifactId>
+      <version>1.0-${project.parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
@@ -58,13 +64,18 @@
         <dependencies>
           <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.3.0-${project.parent.version}</version>
+            <artifactId>caffe</artifactId>
+            <version>1.0-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5</artifactId>
             <version>1.12.0-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencv</artifactId>
+            <version>4.3.0-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -73,14 +84,20 @@
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.3.0-${project.parent.version}</version>
+            <artifactId>caffe</artifactId>
+            <version>1.0-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5</artifactId>
             <version>1.12.0-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencv</artifactId>
+            <version>4.3.0-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
@@ -92,12 +109,17 @@
         </dependencies>
         <configuration>
           <classPaths>
+            <classPath>${basedir}/../caffe/target/classes/</classPath>
             <classPath>${basedir}/../opencv/target/classes/</classPath>
             <classPath>${basedir}/../hdf5/target/classes/</classPath>
             <classPath>${basedir}/../openblas/target/classes/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
+            <includePath>${basedir}/../caffe/target/classes/org/bytedeco/caffe/include/</includePath>
+            <includePath>${basedir}/../caffe/src/main/resources/org/bytedeco/caffe/include/</includePath>
+            <includePath>${basedir}/../caffe/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../caffe/cppbuild/${javacpp.platform}/include/caffe/</includePath>
             <includePath>${basedir}/../opencv/target/classes/org/bytedeco/opencv/include/</includePath>
             <includePath>${basedir}/../opencv/src/main/resources/org/bytedeco/opencv/include/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
@@ -111,12 +133,14 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
           </includePaths>
           <linkPaths>
+            <linkPath>${basedir}/../caffe/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
+            <preloadPath>${basedir}/../caffe/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
@@ -124,12 +148,15 @@
           </preloadPaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/caffe/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/opencv/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/hdf5/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
           </buildResources>
           <includeResources>
             <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/caffe/include/</includeResource>
+            <includeResource>/org/bytedeco/caffe/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/opencv/include/</includeResource>
             <includeResource>/org/bytedeco/opencv/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/hdf5/include/</includeResource>
@@ -140,6 +167,8 @@
           <linkResources>
             <linkResource>/${javacpp.platform.library.path}/</linkResource>
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/caffe/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/caffe/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/opencv/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/opencv/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/hdf5/${javacpp.platform}/</linkResource>
@@ -152,34 +181,19 @@
           <execution>
             <id>javacpp-parser</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.caffe.presets.caffe</classOrPackageName>
+              <classOrPackageName>org.bytedeco.openpose.presets.openpose</classOrPackageName>
             </configuration>
           </execution>
           <execution>
             <id>javacpp-compiler</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.caffe.**</classOrPackageName>
+              <classOrPackageName>org.bytedeco.openpose.**</classOrPackageName>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>javacpp-${javacpp.platform}</id>
-            <phase>package</phase>
-            <configuration>
-              <excludes>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/include/boost/**</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.a</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.la</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.so*</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.dylib</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.moditect</groupId>

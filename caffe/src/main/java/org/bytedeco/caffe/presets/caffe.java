@@ -64,7 +64,7 @@ import org.bytedeco.openblas.presets.*;
         "caffe/layers/spp_layer.hpp", "caffe/layers/recurrent_layer.hpp", "caffe/layers/lstm_layer.hpp", "caffe/layers/rnn_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp",
         "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
         "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link = "caffe@.1.0.0", /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
-        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
+        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/", resource = {"include", "lib"}, linkresource = "lib"),
     @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV", "USE_CUDNN"}, extension = "-gpu") })
 public class caffe implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "caffe"); }
