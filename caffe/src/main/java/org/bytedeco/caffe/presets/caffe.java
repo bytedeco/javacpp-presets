@@ -64,7 +64,7 @@ import org.bytedeco.openblas.presets.*;
         "caffe/layers/spp_layer.hpp", "caffe/layers/recurrent_layer.hpp", "caffe/layers/lstm_layer.hpp", "caffe/layers/rnn_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp",
         "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
         "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link = "caffe@.1.0.0", /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
-        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
+        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/", resource = {"include", "lib"}, linkresource = "lib"),
     @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV", "USE_CUDNN"}, extension = "-gpu") })
 public class caffe implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "caffe"); }
@@ -80,20 +80,16 @@ public class caffe implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublasLt", "cublas", "curand", "cudnn"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "curand", "cudnn",
+                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
+                         "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
-            switch (platform) {
-                case "linux-arm64":
-                case "linux-ppc64le":
-                case "linux-x86_64":
-                case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.2" : "@.10";
-                    break;
-                case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_102" : "64_10";
-                    break;
-                default:
-                    continue; // no CUDA
+            if (platform.startsWith("linux")) {
+                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.11.0" : "@.11";
+            } else if (platform.startsWith("windows")) {
+                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_110" : "64_11";
+            } else {
+                continue; // no CUDA
             }
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);

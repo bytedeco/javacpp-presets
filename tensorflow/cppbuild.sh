@@ -29,18 +29,18 @@ export TF_NEED_MPI=0
 export TF_NEED_ROCM=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
-export TF_CUDA_VERSION=10.2
-export TF_CUDNN_VERSION=7
+export TF_CUDA_VERSION=11.0
+export TF_CUDNN_VERSION=8
 export TF_DOWNLOAD_CLANG=0
-export TF_NCCL_VERSION=2.6
-export TF_TENSORRT_VERSION=7.0
+export TF_NCCL_VERSION=2.7
+export TF_TENSORRT_VERSION=7.1
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export NCCL_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TENSORRT_INSTALL_PATH=/usr/local/tensorrt
-export TF_CUDA_COMPUTE_CAPABILITIES=3.0
+export TF_CUDA_COMPUTE_CAPABILITIES=3.5
 export TF_SET_ANDROID_WORKSPACE=0
 #export TF_IGNORE_MAX_BAZEL_VERSION=1
 
@@ -128,6 +128,14 @@ sedinplace 's/std::vector<TensorShape> value/std::vector<TensorShape>* value/g' 
 # Fix support for TensorRT 6.0
 sedinplace 's/NvInferRTSafe.h/NvInferRuntimeCommon.h/g' third_party/tensorrt/tensorrt_configure.bzl
 sedinplace 's/NvInferRTExt.h/NvInferRuntime.h/g' third_party/tensorrt/tensorrt_configure.bzl
+
+# Fix support for CUDA 11.0
+sedinplace 's/cudnn.h/cudnn_version.h/g' third_party/gpus/find_cuda_config.py
+sedinplace 's/if check_soname/if False/g' third_party/gpus/cuda_configure.bzl
+patch -Np1 < ../../../tensorflow-cuda11.patch
+
+# Fix build with NumPy 1.19.0
+sedinplace 's/, CompareUFunc/, (PyUFuncGenericFunction)CompareUFunc/g' tensorflow/python/lib/core/bfloat16.cc
 
 export GPU_FLAGS=
 #export CMAKE_GPU_FLAGS=

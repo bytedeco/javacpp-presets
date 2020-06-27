@@ -107,7 +107,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 4.3.0  https://opencv.org/releases.html
- * FFmpeg 4.2.x  http://ffmpeg.org/download.html
+ * FFmpeg 4.3.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 1.27.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
@@ -124,31 +124,32 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.3.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 1.4.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.9  http://www.openblas.net/
+ * DNNL 1.5.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.10  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.7  https://www.python.org/downloads/
- * NumPy 1.18.x  https://github.com/numpy/numpy
- * SciPy 1.4.x  https://github.com/scipy/scipy
+ * NumPy 1.19.x  https://github.com/numpy/numpy
+ * SciPy 1.5.x  https://github.com/scipy/scipy
  * Gym 0.17.x  https://github.com/openai/gym
  * LLVM 10.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.79.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
- * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.6.x  https://developer.nvidia.com/nccl
+ * OpenPose 1.6.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
+ * CUDA 11.0  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 8.0.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.7.x  https://developer.nvidia.com/nccl
  * MXNet 1.6.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorRT 7.0  https://developer.nvidia.com/tensorrt
+ * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.7.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.3.0  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.3.x  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.x  https://github.com/mono/skia

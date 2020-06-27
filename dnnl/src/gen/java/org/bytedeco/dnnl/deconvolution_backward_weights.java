@@ -35,6 +35,7 @@ public class deconvolution_backward_weights extends primitive {
         ///
         ///
         ///
+        ///
         public native @ByRef @Cast("dnnl_deconvolution_desc_t*") dnnl_convolution_desc_t data(); public native desc data(dnnl_convolution_desc_t setter);
 
         /** Constructs a descriptor for a deconvolution weights gradient
@@ -52,6 +53,12 @@ public class deconvolution_backward_weights extends primitive {
          *      All the memory descriptors may be initialized with the
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
+         *  Arrays \p strides, \p padding_l, and \p padding_r contain values
+         *  for spatial dimensions only and hence must have the same number of
+         *  elements as there are spatial dimensions. The order of values is
+         *  the same as in the tensor: depth (for 3D tensors), height (for 3D
+         *  and 2D tensors), and width.
+         * 
          *  @param algorithm Deconvolution algorithm. Possible values are
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.
@@ -62,10 +69,11 @@ public class deconvolution_backward_weights extends primitive {
          *  @param diff_dst_desc Diff destination memory descriptor.
          *  @param strides Strides for each spatial dimension.
          *  @param padding_l Vector of padding values for low indices for each
-         *      spatial dimension (front, top, left).
+         *      spatial dimension {@code ([[front,] top,] left)}.
          *  @param padding_r Vector of padding values for high indices for
-         *      each spatial dimension (back, bottom, right). */
+         *      each spatial dimension {@code ([[back,] bottom,] right)}. */
         
+        ///
         ///
         ///
         ///
@@ -145,6 +153,12 @@ public class deconvolution_backward_weights extends primitive {
          *      All the memory descriptors may be initialized with the
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
+         *  Arrays \p strides, \p padding_l, and \p padding_r contain values
+         *  for spatial dimensions only and hence must have the same number of
+         *  elements as there are spatial dimensions. The order of values is
+         *  the same as in the tensor: depth (for 3D tensors), height (for 3D
+         *  and 2D tensors), and width.
+         * 
          *  @param algorithm Deconvolution algorithm. Possible values are
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.
@@ -153,10 +167,11 @@ public class deconvolution_backward_weights extends primitive {
          *  @param diff_dst_desc Diff destination memory descriptor.
          *  @param strides Strides for each spatial dimension.
          *  @param padding_l Vector of padding values for low indices for each
-         *      spatial dimension (front, top, left).
+         *      spatial dimension {@code ([[front,] top,] left)}.
          *  @param padding_r Vector of padding values for high indices for
-         *      each spatial dimension (back, bottom, right). */
+         *      each spatial dimension {@code ([[back,] bottom,] right)}. */
         
+        ///
         ///
         ///
         ///
@@ -225,6 +240,12 @@ public class deconvolution_backward_weights extends primitive {
          *      All the memory descriptors may be initialized with the
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
+         *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r
+         *  contain values for spatial dimensions only and hence must have the
+         *  same number of elements as there are spatial dimensions. The order
+         *  of values is the same as in the tensor: depth (for 3D tensors),
+         *  height (for 3D and 2D tensors), and width.
+         * 
          *  @param algorithm Deconvolution algorithm. Possible values are
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.
@@ -237,10 +258,11 @@ public class deconvolution_backward_weights extends primitive {
          *  @param dilates Dilations for each spatial dimension. A zero value
          *      means no dilation in the corresponding dimension.
          *  @param padding_l Vector of padding values for low indices for each
-         *      spatial dimension (front, top, left).
+         *      spatial dimension {@code ([[front,] top,] left)}.
          *  @param padding_r Vector of padding values for high indices for
-         *      each spatial dimension (back, bottom, right). */
+         *      each spatial dimension {@code ([[back,] bottom,] right)}. */
         
+        ///
         ///
         ///
         ///
@@ -332,6 +354,12 @@ public class deconvolution_backward_weights extends primitive {
          *      All the memory descriptors may be initialized with the
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
+         *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r
+         *  contain values for spatial dimensions only and hence must have the
+         *  same number of elements as there are spatial dimensions. The order
+         *  of values is the same as in the tensor: depth (for 3D tensors),
+         *  height (for 3D and 2D tensors), and width.
+         * 
          *  @param algorithm Deconvolution algorithm. Possible values are
          *      #dnnl::algorithm::deconvolution_direct, and
          *      #dnnl::algorithm::deconvolution_winograd.
@@ -342,9 +370,9 @@ public class deconvolution_backward_weights extends primitive {
          *  @param dilates Dilations for each spatial dimension. A zero value
          *      means no dilation in the corresponding dimension.
          *  @param padding_l Vector of padding values for low indices for each
-         *      spatial dimension (front, top, left).
+         *      spatial dimension {@code ([[front,] top,] left)}.
          *  @param padding_r Vector of padding values for high indices for
-         *      each spatial dimension (back, bottom, right). */
+         *      each spatial dimension {@code ([[back,] bottom,] right)}. */
         public desc(algorithm algorithm, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc diff_weights_desc,
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
@@ -428,7 +456,7 @@ public class deconvolution_backward_weights extends primitive {
         /** Constructs a primitive descriptor for a deconvolution weights
          *  update primitive.
          * 
-         *  @param desc descriptor for a deconvolution weights gradient
+         *  @param desc Descriptor for a deconvolution weights gradient
          *      primitive.
          *  @param engine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a deconvolution forward
@@ -454,7 +482,7 @@ public class deconvolution_backward_weights extends primitive {
         /** Constructs a primitive descriptor for a deconvolution weights
          *  update primitive.
          * 
-         *  @param desc descriptor for a deconvolution weights gradient
+         *  @param desc Descriptor for a deconvolution weights gradient
          *      primitive.
          *  @param attr Primitive attributes to use.
          *  @param engine Engine to use.

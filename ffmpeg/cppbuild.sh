@@ -23,13 +23,14 @@ OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
 OPENSSL=openssl-1.1.1g
 OPENH264_VERSION=2.1.1
-X265=3.3
+X264=x264-stable
+X265=3.4
 VPX_VERSION=1.8.2
-ALSA_VERSION=1.2.2
+ALSA_VERSION=1.2.3
 FREETYPE_VERSION=2.10.2
 MFX_VERSION=1.25
 NVCODEC_VERSION=9.1.23.1
-FFMPEG_VERSION=4.2.3
+FFMPEG_VERSION=4.3
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -39,7 +40,7 @@ download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCO
 download http://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
-download https://code.videolan.org/videolan/x264/-/archive/stable/x264-stable.tar.bz2 x264-stable.tar.bz2
+download https://code.videolan.org/videolan/x264/-/archive/stable/$X264.tar.gz $X264.tar.gz
 download https://github.com/videolan/x265/archive/$X265.tar.gz x265-$X265.tar.gz
 download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
 download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
@@ -61,14 +62,13 @@ tar --totals -xzf ../$OPENCORE_AMR.tar.gz
 tar --totals -xzf ../$VO_AMRWBENC.tar.gz
 tar --totals -xzf ../$OPENSSL.tar.gz
 tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
-tar --totals -xjf ../x264-stable.tar.bz2
+tar --totals -xzf ../$X264.tar.gz
 tar --totals -xzf ../x265-$X265.tar.gz
 tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz
 tar --totals -xJf ../freetype-$FREETYPE_VERSION.tar.xz
 tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
-X264="x264-stable"
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal

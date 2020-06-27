@@ -14,7 +14,6 @@ import static org.bytedeco.ffmpeg.global.swresample.*;
 
 import static org.bytedeco.ffmpeg.global.avcodec.*;
 
-// #endif
 
 /**
  * AVProfile.

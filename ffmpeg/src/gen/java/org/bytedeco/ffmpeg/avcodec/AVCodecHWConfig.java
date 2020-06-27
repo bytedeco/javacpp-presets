@@ -31,7 +31,12 @@ public class AVCodecHWConfig extends Pointer {
     }
 
     /**
-     * A hardware pixel format which the codec can use.
+     * For decoders, a hardware pixel format which that decoder may be
+     * able to decode to if suitable hardware is available.
+     *
+     * For encoders, a pixel format which the encoder may be able to
+     * accept.  If set to AV_PIX_FMT_NONE, this applies to all pixel
+     * formats supported by the codec.
      */
     public native @Cast("AVPixelFormat") int pix_fmt(); public native AVCodecHWConfig pix_fmt(int setter);
     /**

@@ -15,6 +15,10 @@ sudo mkswap /swapfile
 sudo swapon /swapfile
 df -h
 
+# Fix issue with Sectigo CA root certificate on Ubuntu Xenial
+sudo sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf
+sudo update-ca-certificates -f
+
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 sudo chown -R travis:travis $HOME
@@ -54,31 +58,21 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     SCL_ENABLE="devtoolset-7"
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.2-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build centos:$CENTOS_VERSION /bin/bash
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install centos-release-scl-rh epel-release"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y repolist"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch make autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install rh-java-common-ant $SCL_ENABLE boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch make autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y update"
   if [ "$OS" == "linux-x86" ]; then
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y install"
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find /var/cache/yum/ -name *.rpm | xargs rpm -i --force"
     if [[ "$SCL_ENABLE" =~ devtoolset-7 ]]; then
       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "wget --no-directories --no-parent -r https://www.repo.cloudlinux.com/cloudlinux/$CENTOS_VERSION/sclo/devtoolset-7/i386/ -P $HOME"
       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i --force --nodeps $HOME/*.rpm"
     fi
   fi
-  # work around issues with CUDA 10.2
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.2; done"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
-
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7/; ./configure; make; make install"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "chmod 755 /usr/local/cuda/bin/nvcccache"
-
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3*" # not required for GCC 7+
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
@@ -162,14 +156,33 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         export TEST_TMPDIR=$HOME/.cache/bazel
         echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
   fi
-  if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
-        echo "installing nccl.."
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1eO-wi1kVmUjpJ3nwx8_Wsnsb90uP5PLl $HOME/downloads/nccl_x86_64.txz
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
+  if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
+        echo "installing cuda, cudnn, and nccl.."
+        curl -L http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda-repo-rhel7-11-0-local-11.0.1_450.36.06-1.x86_64.rpm -o $HOME/cuda-repo-rhel7-11-0-local-11.0.1_450.36.06-1.x86_64.rpm
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.0/cudnn-11.0-linux-x64-v8.0.0.180.tgz -o $HOME/cudnn-11.0-linux-x64-v8.0.0.180.tgz
+        curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.3-1+cuda11.0_x86_64.txz -o $HOME/nccl_x86_64.txz
+
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i $HOME/cuda-repo-rhel7-11-0-local-11.0.1_450.36.06-1.x86_64.rpm"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /var/cuda-repo-rhel7-11-0-local/; rpm -i --nodeps cuda*.rpm libc*.rpm libn*.rpm"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-x64-v8.0.0.180.tgz  -C /usr/local/"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
+        # work around issues with CUDA 10.2/11.0
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.2; done"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \${f:0:-1}1; done"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libnvidia-ml.so.1"
+
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7/; ./configure; make; make install"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "chmod 755 /usr/local/cuda/bin/nvcccache"
   fi
   if [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 109QuHD5xXv3WtsSsvjyhsPOlBDxIxYSR $HOME/downloads/tensorrt.tar.gz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1xHWJHMNJ6g29YnMNeFKwJZF1KdRl_N3e $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi
@@ -214,10 +227,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update
    brew upgrade cmake
-   brew install ccache swig autoconf-archive libomp libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
+   brew install ccache curl swig autoconf-archive libomp libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
 
-   # Try to use ccache to speed up the build
-   export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:/usr/local/opt/bison/bin/:/usr/local/opt/flex/bin/:$PATH
+   # Try to use ccache to speed up the build and work around issue with Sectigo CA root certificate
+   export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/curl/bin/:/usr/local/opt/gpg1/libexec/gpgbin/:/usr/local/opt/bison/bin/:/usr/local/opt/flex/bin/:$PATH
 
    if [[ "$PROJ" =~ arpack-ng ]] || [[ "$PROJ" =~ cminpack ]] || [[ "$PROJ" =~ mkl-dnn ]] || [[ "$PROJ" =~ openblas ]] || [[ "$PROJ" =~ scipy ]]; then
        brew install gcc@7

@@ -228,6 +228,7 @@ public class MNISTCUDNN {
                               int[] n, int[] c, int[] h, int[] w,
                               FloatPointer srcData, FloatPointer dstData) {
             int[] algo = new int[1];
+            cudnnConvolutionFwdAlgoPerf_t algoPerf = new cudnnConvolutionFwdAlgoPerf_t(1);
 
             checkCUDNN( cudnnSetTensor4dDescriptor(srcTensorDesc,
                                                     tensorFormat,
@@ -262,14 +263,14 @@ public class MNISTCUDNN {
                                                     n[0], c[0],
                                                     h[0],
                                                     w[0]) );
-            checkCUDNN( cudnnGetConvolutionForwardAlgorithm(cudnnHandle,
+            checkCUDNN( cudnnGetConvolutionForwardAlgorithm_v7(cudnnHandle,
                                                     srcTensorDesc,
                                                     filterDesc,
                                                     convDesc,
                                                     dstTensorDesc,
-                                                    CUDNN_CONVOLUTION_FWD_PREFER_FASTEST,
-                                                    0,
-                                                    algo
+                                                    1,
+                                                    algo,
+                                                    algoPerf
                                                     ) );
             resize(n[0]*c[0]*h[0]*w[0], dstData);
             SizeTPointer sizeInBytes=new SizeTPointer(1);
@@ -279,7 +280,7 @@ public class MNISTCUDNN {
                                                     filterDesc,
                                                     convDesc,
                                                     dstTensorDesc,
-                                                    algo[0],
+                                                    algoPerf.algo(),
                                                     sizeInBytes) );
             if (sizeInBytes.get(0)!=0) {
                 checkCudaErrors( cudaMalloc(workSpace,sizeInBytes.get(0)) );

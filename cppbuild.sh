@@ -76,7 +76,7 @@ while [[ $# > 0 ]]; do
     shift
 done
 
-echo -n "Building for platform \"$PLATFORM\""
+echo -n "Building platform \"$PLATFORM\""
 if [[ -n "$EXTENSION" ]]; then
     echo -n " with extension \"$EXTENSION\""
 fi
@@ -164,7 +164,7 @@ function sedinplace {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal leptonica tesseract caffe cuda mxnet tensorflow tensorrt ale onnx ngraph onnxruntime liquidfun qt skia cpu_features systems)
+    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal leptonica tesseract caffe openpose cuda mxnet tensorflow tensorrt ale onnx ngraph onnxruntime liquidfun qt skia cpu_features systems)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

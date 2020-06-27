@@ -15,6 +15,10 @@ sudo mkswap /swapfile
 sudo swapon /swapfile
 df -h
 
+# Fix issue with Sectigo CA root certificate on Ubuntu Xenial
+sudo sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf
+sudo update-ca-certificates -f
+
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 sudo chown -R travis:travis $HOME
@@ -66,6 +70,36 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-key adv --keyserver key
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:$ARM libasound2-dev:$ARM libusb-dev:$ARM libusb-1.0-0-dev:$ARM libffi-dev:$ARM zlib1g-dev:$ARM libxcb1-dev:$ARM"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARM-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool bison flex perl nasm yasm curl cmake libffi-dev zlib1g-dev"
+
+# Fix issue with Sectigo CA root certificate on Ubuntu Xenial
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "update-ca-certificates -f"
+
+if [[ "$PROJ" =~ cuda ]]; then
+   echo "Setting up for cuda build"
+   cd $HOME/
+   curl -L http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb -o $HOME/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb
+   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.0/cudnn-11.0-linux-arm64-v8.0.0.180.tgz -o $HOME/cudnn-11.0-linux-arm64-v8.0.0.180.tgz
+   curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.3-1+cuda11.0_arm64.txz -o $HOME/nccl_arm64.txz
+   ar vx $HOME/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb
+   tar xvf data.tar.xz
+   mkdir $HOME/cudaFS
+   cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/cudaFS; done
+   cd ..
+   rm -Rf var
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /; cp -R $HOME/cudaFS/* ."
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda-11.0 /usr/local/cuda"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-arm64-v8.0.0.180.tgz -C /usr/local/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_arm64.txz --strip-components=1 -C /usr/local/cuda/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
+   # work around issues with CUDA 10.2/11.0
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib/powerpc64le-linux-gnu/libcublas* /usr/lib/powerpc64le-linux-gnu/libnvblas* /usr/local/cuda/lib64/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.2; done"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \${f:0:-1}1; done"
+fi
 
 if [ "$OS" == "linux-arm64" ]; then
     if [[ "$PROJ" =~ flycapture ]]; then

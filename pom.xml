@@ -298,6 +298,7 @@
               <classOrPackageName>org.bytedeco.${javacpp.packageName}.**</classOrPackageName>
               <copyLibs>true</copyLibs>
               <copyResources>true</copyResources>
+              <configDirectory>${project.build.directory}/native/META-INF/native-image/${javacpp.platform}${javacpp.platform.extension}/</configDirectory>
             </configuration>
           </execution>
         </executions>
@@ -351,6 +352,7 @@
                      without cleaning, ensures we only include files for
                      this platform. -->
                 <include>${javacpp.platform.nativeOutputPath}/</include>
+                <include>META-INF/native-image/${javacpp.platform}${javacpp.platform.extension}/</include>
               </includes>
               <archive>
                 <manifestEntries>
@@ -370,7 +372,7 @@
       <plugin>
         <groupId>org.moditect</groupId>
         <artifactId>moditect-maven-plugin</artifactId>
-        <version>1.0.0.Beta2</version>
+        <version>1.0.0.RC1</version>
         <configuration>
           <jvmVersion>9</jvmVersion>
           <overwriteExistingFiles>true</overwriteExistingFiles>
@@ -394,6 +396,7 @@
                   <moduleInfoSource>
                     open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module} {
                       requires transitive org.bytedeco.${javacpp.packageName};
+                      requires org.bytedeco.javacpp.${javacpp.platform.module};
                       ${javacpp.nativeRequires}
                     }
                   </moduleInfoSource>
@@ -608,6 +611,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
+        <module>openpose</module>
         <module>cuda</module>
         <module>mxnet</module>
         <module>tensorflow</module>
@@ -1326,6 +1330,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
+        <module>openpose</module>
         <module>cuda</module>
         <module>mxnet</module>
         <module>tensorflow</module>
@@ -1399,7 +1404,8 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
-        <module>cuda</module>
+        <module>openpose</module>
+<!--        <module>cuda</module>-->
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>ale</module>
@@ -1541,6 +1547,7 @@
         <module>ale</module>
         <module>onnxruntime</module>
         <module>liquidfun</module>
+        <module>qt</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>

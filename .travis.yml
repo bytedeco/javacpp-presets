@@ -10,9 +10,10 @@ language: java
 services:
       - docker
 
-matrix:
+jobs:
    include:
-      - os: linux
+      - stage: Deploy
+        os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=android-arm
         install: true
         script: ./ci/install-travis.sh
@@ -413,7 +414,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=caffe OS=linux-x86_64
+        env: PROJ=caffe,openpose OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -537,14 +538,14 @@ matrix:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode9.3
-        env: PROJ=caffe OS=macosx-x86_64
+        env: PROJ=caffe,openpose OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=cuda OS=macosx-x86_64
-        install: true
-        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=cuda OS=macosx-x86_64
+#        install: true
+#        script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode9.3
         env: PROJ=mxnet OS=macosx-x86_64
@@ -625,38 +626,43 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
 
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=opencv OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=opencv OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode9.3
         env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python
         install: true
         script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python-gpu
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+#      - os: osx
+#        osx_image: xcode9.3
+#        env: PROJ=onnxruntime OS=macosx-x86_64 EXT=-gpu
+#        install: true
+#        script: ./ci/install-travis.sh
+
+      - stage: Redeploy
+        os: linux
         install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode9.3
-        env: PROJ=onnxruntime OS=macosx-x86_64 EXT=-gpu
-        install: true
-        script: ./ci/install-travis.sh
+        script: ./ci/redeploy.sh
