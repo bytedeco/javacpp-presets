@@ -106,9 +106,9 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.packageName}.platform {
-                      requires org.bytedeco.${javacpp.packageName}.linux.x86_64;
-                      requires org.bytedeco.${javacpp.packageName}.macosx.x86_64;
-                      requires org.bytedeco.${javacpp.packageName}.windows.x86_64;
+                      requires static org.bytedeco.${javacpp.packageName}.linux.x86_64;
+                      requires static org.bytedeco.${javacpp.packageName}.macosx.x86_64;
+                      requires static org.bytedeco.${javacpp.packageName}.windows.x86_64;
                     }
                   </moduleInfoSource>
                 </module>

@@ -171,7 +171,6 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
-                      requires transitive org.bytedeco.${javacpp.moduleId};
 //                      requires static org.bytedeco.${javacpp.moduleId}.android.arm;
 //                      requires static org.bytedeco.${javacpp.moduleId}.android.arm64;
 //                      requires static org.bytedeco.${javacpp.moduleId}.android.x86;
