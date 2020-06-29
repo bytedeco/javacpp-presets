@@ -1,4 +1,5 @@
 
+ * Replace `requires` with `requires static` in JPMS `.platform` modules ([pull #900](https://github.com/bytedeco/javacpp-presets/pull/900))
  * Add presets for OpenPose 1.6.0 ([pull #898](https://github.com/bytedeco/javacpp-presets/pull/898))
  * Add comparison against MKL in `llvm/samples/polly/MatMulBenchmark.java`
  * Add `requires org.bytedeco.javacpp.${javacpp.platform.module}` to load `jnijavacpp` with JPMS ([pull #893](https://github.com/bytedeco/javacpp-presets/pull/893))
