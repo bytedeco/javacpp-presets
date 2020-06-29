@@ -118,10 +118,10 @@ fi
 if [ "$PROJ" == "cuda" ] || [ "$PROJ" == "tensorrt" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_11.0.1_451.22_win10.exe "http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda_11.0.1_451.22_win10.exe"
-       curl -L -o cudnn-11.0-windows-x64-v8.0.0.180.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.0/cudnn-11.0-windows-x64-v8.0.0.180.zip"
+       curl -L -o cudnn-11.0-windows-x64-v8.0.1.13.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.1/cudnn-11.0-windows-x64-v8.0.1.13.zip"
        ./cuda_11.0.1_451.22_win10.exe -s
        sleep 60
-       unzip ./cudnn-11.0-windows-x64-v8.0.0.180.zip
+       unzip ./cudnn-11.0-windows-x64-v8.0.1.13.zip
        mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v11.0/bin
        mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v11.0/include
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v11.0/lib/x64

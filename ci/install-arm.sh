@@ -79,7 +79,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
    cd $HOME/
    curl -L http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb -o $HOME/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb
-   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.0/cudnn-11.0-linux-arm64-v8.0.0.180.tgz -o $HOME/cudnn-11.0-linux-arm64-v8.0.0.180.tgz
+   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.1/cudnn-11.0-linux-arm64-v8.0.1.13.tgz -o $HOME/cudnn-11.0-linux-arm64-v8.0.1.13.tgz
    curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.3-1+cuda11.0_arm64.txz -o $HOME/nccl_arm64.txz
    ar vx $HOME/cuda-repo-cross-sbsa-ubuntu1804-11-0-local_11.0.1-1_all.deb
    tar xvf data.tar.xz
@@ -91,7 +91,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda-11.0 /usr/local/cuda"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-arm64-v8.0.0.180.tgz -C /usr/local/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-arm64-v8.0.1.13.tgz -C /usr/local/"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_arm64.txz --strip-components=1 -C /usr/local/cuda/"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
    # work around issues with CUDA 10.2/11.0
