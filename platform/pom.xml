@@ -194,7 +194,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.7.7-${project.version}</version>
+      <version>3.7.8-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
