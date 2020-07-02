@@ -33,8 +33,17 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IInt8Calibrator extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IInt8Calibrator() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IInt8Calibrator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IInt8Calibrator(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public IInt8Calibrator position(long position) {
+        return (IInt8Calibrator)super.position(position);
+    }
 
     /**
      *  \brief Get the batch size used for calibration batches.
@@ -48,7 +57,7 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    public native int getBatchSize();
+    @Virtual(true) public native @Const({false, false, true}) int getBatchSize();
 
     /**
      *  \brief Get a batch of input for calibration.
@@ -70,10 +79,7 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean getBatch(@Cast("void**") PointerPointer bindings, @Cast("const char**") PointerPointer names, int nbBindings);
-    public native @Cast("bool") boolean getBatch(@Cast("void**") @ByPtrPtr Pointer bindings, @Cast("const char**") @ByPtrPtr BytePointer names, int nbBindings);
-    public native @Cast("bool") boolean getBatch(@Cast("void**") @ByPtrPtr Pointer bindings, @Cast("const char**") @ByPtrPtr ByteBuffer names, int nbBindings);
-    public native @Cast("bool") boolean getBatch(@Cast("void**") @ByPtrPtr Pointer bindings, @Cast("const char**") @ByPtrPtr byte[] names, int nbBindings);
+    @Virtual(true) public native @Cast("bool") boolean getBatch(@Cast("void**") PointerPointer bindings, @Cast("const char**") PointerPointer names, int nbBindings);
 
     /**
      *  \brief Load a calibration cache.
@@ -95,9 +101,7 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    public native @Const Pointer readCalibrationCache(@Cast("std::size_t*") @ByRef LongPointer length);
-    public native @Const Pointer readCalibrationCache(@Cast("std::size_t*") @ByRef LongBuffer length);
-    public native @Const Pointer readCalibrationCache(@Cast("std::size_t*") @ByRef long[] length);
+    @Virtual(true) public native @Const Pointer readCalibrationCache(@Cast("std::size_t*") @ByRef LongPointer length);
 
     /**
      *  \brief Save a calibration cache.
@@ -112,12 +116,12 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    public native void writeCalibrationCache(@Const Pointer ptr, @Cast("std::size_t") long length);
+    @Virtual(true) public native void writeCalibrationCache(@Const Pointer ptr, @Cast("std::size_t") long length);
 
     /**
      *  \brief Get the algorithm used by this calibrator.
      * 
      *  @return The algorithm used by the calibrator.
      *  */
-    public native CalibrationAlgoType getAlgorithm();
+    @Virtual(true) public native CalibrationAlgoType getAlgorithm();
 }

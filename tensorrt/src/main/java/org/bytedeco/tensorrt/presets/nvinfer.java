@@ -114,19 +114,12 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                .put(new Info("nvinfer1::EnumMax").skip())
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
-                             "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator", "nvinfer1::IInt8EntropyCalibrator2",
-                             "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IParametricReLULayer", "nvinfer1::IShapeLayer", "nvinfer1::ISelectLayer").purify())
+                             "nvinfer1::IConcatenationLayer", "nvinfer1::IParametricReLULayer", "nvinfer1::IShapeLayer", "nvinfer1::ISelectLayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
-               .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger").purify().virtualize())
+               .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
+                             "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator").virtualize())
                .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(
                              "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
-               .put(new Info("nvinfer1::IProfiler::~IProfiler").javaText("\n"
-                     + "/** Default native constructor. */\n"
-                     + "public IProfiler() { super((Pointer)null); allocate(); }\n"
-                     + "private native void allocate();\n"))
-               .put(new Info("nvinfer1::ILogger::~ILogger").javaText("\n"
-                     + "/** Default native constructor. */\n"
-                     + "public ILogger() { super((Pointer)null); allocate(); }\n"
-                     + "private native void allocate();\n"));
+        ;
     }
 }
