@@ -26,8 +26,17 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IInt8MinMaxCalibrator extends IInt8Calibrator {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IInt8MinMaxCalibrator() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IInt8MinMaxCalibrator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IInt8MinMaxCalibrator(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public IInt8MinMaxCalibrator position(long position) {
+        return (IInt8MinMaxCalibrator)super.position(position);
+    }
 
     /**
      *  Signal that this is the MinMax Calibrator.

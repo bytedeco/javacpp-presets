@@ -32,8 +32,17 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IProfiler extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IProfiler() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IProfiler(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IProfiler(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public IProfiler position(long position) {
+        return (IProfiler)super.position(position);
+    }
 
     /**
      *  \brief Layer time reporting callback.
@@ -42,9 +51,4 @@ public class IProfiler extends Pointer {
      *  @param ms The time in milliseconds to execute the layer.
      *  */
     @Virtual(true) public native void reportLayerTime(String layerName, float ms);
-
-    
-    /** Default native constructor. */
-    public IProfiler() { super((Pointer)null); allocate(); }
-    private native void allocate();
 }

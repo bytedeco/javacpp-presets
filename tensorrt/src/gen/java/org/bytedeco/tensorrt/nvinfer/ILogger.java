@@ -30,8 +30,17 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ILogger extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public ILogger() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ILogger(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILogger(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public ILogger position(long position) {
+        return (ILogger)super.position(position);
+    }
 
     /**
      *  \enum Severity
@@ -64,9 +73,4 @@ public class ILogger extends Pointer {
      *  @param msg The log message, null terminated.
      *  */
     @Virtual(true) public native void log(Severity severity, String msg);
-
-    
-    /** Default native constructor. */
-    public ILogger() { super((Pointer)null); allocate(); }
-    private native void allocate();
 }

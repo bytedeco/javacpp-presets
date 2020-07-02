@@ -26,8 +26,17 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IInt8EntropyCalibrator extends IInt8Calibrator {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IInt8EntropyCalibrator() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IInt8EntropyCalibrator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IInt8EntropyCalibrator(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public IInt8EntropyCalibrator position(long position) {
+        return (IInt8EntropyCalibrator)super.position(position);
+    }
 
     /**
      *  Signal that this is the entropy calibrator.

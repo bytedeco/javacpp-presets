@@ -26,8 +26,17 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IInt8LegacyCalibrator extends IInt8Calibrator {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IInt8LegacyCalibrator() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IInt8LegacyCalibrator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IInt8LegacyCalibrator(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public IInt8LegacyCalibrator position(long position) {
+        return (IInt8LegacyCalibrator)super.position(position);
+    }
 
     /**
      *  Signal that this is the legacy calibrator.
@@ -50,7 +59,7 @@ public class IInt8LegacyCalibrator extends IInt8Calibrator {
     //!
     //!
     //!
-    public native double getQuantile();
+    @Virtual(true) public native @Const({false, false, true}) double getQuantile();
 
     /**
      *  \brief The fraction (between 0 and 1) of the maximum used to define the regression cutoff when using regression
@@ -65,7 +74,7 @@ public class IInt8LegacyCalibrator extends IInt8Calibrator {
     //!
     //!
     //!
-    public native double getRegressionCutoff();
+    @Virtual(true) public native @Const({false, false, true}) double getRegressionCutoff();
 
     /**
      *  \brief Load a histogram.
@@ -85,9 +94,7 @@ public class IInt8LegacyCalibrator extends IInt8Calibrator {
     //!
     //!
     //!
-    public native @Const Pointer readHistogramCache(@Cast("std::size_t*") @ByRef LongPointer length);
-    public native @Const Pointer readHistogramCache(@Cast("std::size_t*") @ByRef LongBuffer length);
-    public native @Const Pointer readHistogramCache(@Cast("std::size_t*") @ByRef long[] length);
+    @Virtual(true) public native @Const Pointer readHistogramCache(@Cast("std::size_t*") @ByRef LongPointer length);
 
     /**
      *  \brief Save a histogram cache.
@@ -97,5 +104,5 @@ public class IInt8LegacyCalibrator extends IInt8Calibrator {
      * 
      *  @see readHistogramCache()
      *  */
-    public native void writeHistogramCache(@Const Pointer ptr, @Cast("std::size_t") long length);
+    @Virtual(true) public native void writeHistogramCache(@Const Pointer ptr, @Cast("std::size_t") long length);
 }
