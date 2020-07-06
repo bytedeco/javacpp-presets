@@ -2,7 +2,7 @@
 # Redeploys in one shot main and secondary artifacts to get consistent timestamps among them as required by Gradle, sbt, etc
 set -euv
 
-if [[ "$TRAVIS_PULL_REQUEST" != "false" ]] || [[ "$TRAVIS_BRANCH" == "release" ]]; then
+if [[ "$TRAVIS_PULL_REQUEST" != "false" ]] || [[ "$TRAVIS_BRANCH" == "dnnl" ]]; then
     # We are not deploying snapshots
     exit 0
 fi

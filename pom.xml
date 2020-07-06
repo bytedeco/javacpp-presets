@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5.4-SNAPSHOT</version>
+  <version>1.5.3</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -578,53 +578,53 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>flycapture</module>
-        <module>spinnaker</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>libfreenect2</module>
-        <module>librealsense</module>
-        <module>librealsense2</module>
-        <module>videoinput</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>hyperscan</module>
-        <module>mkl</module>
-        <module>mkl-dnn</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>flycapture</module>-->
+<!--        <module>spinnaker</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>libfreenect2</module>-->
+<!--        <module>librealsense</module>-->
+<!--        <module>librealsense2</module>-->
+<!--        <module>videoinput</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>hyperscan</module>-->
+<!--        <module>mkl</module>-->
+<!--        <module>mkl-dnn</module>-->
         <module>dnnl</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>libpostal</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>caffe</module>
-        <module>openpose</module>
-        <module>cuda</module>
-        <module>mxnet</module>
-        <module>tensorflow</module>
-        <module>tensorrt</module>
-        <module>ale</module>
-        <module>onnx</module>
-        <module>ngraph</module>
-        <module>onnxruntime</module>
-        <module>liquidfun</module>
-        <module>qt</module>
-        <module>skia</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>libpostal</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>caffe</module>-->
+<!--        <module>openpose</module>-->
+<!--        <module>cuda</module>-->
+<!--        <module>mxnet</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>tensorrt</module>-->
+<!--        <module>ale</module>-->
+<!--        <module>onnx</module>-->
+<!--        <module>ngraph</module>-->
+<!--        <module>onnxruntime</module>-->
+<!--        <module>liquidfun</module>-->
+<!--        <module>qt</module>-->
+<!--        <module>skia</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
@@ -752,18 +752,18 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>openblas</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>tensorflow</module>
-        <module>cpu_features</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>cpu_features</module>-->
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -799,18 +799,18 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>openblas</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>tensorflow</module>
-        <module>cpu_features</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>cpu_features</module>-->
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -846,18 +846,18 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>openblas</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>tensorflow</module>
-        <module>cpu_features</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>cpu_features</module>-->
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -893,18 +893,18 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>openblas</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>tensorflow</module>
-        <module>cpu_features</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>cpu_features</module>-->
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -940,9 +940,9 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>openblas</module>
-        <module>skia</module>
+<!--        <module>opencv</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>skia</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -973,9 +973,9 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>openblas</module>
-        <module>skia</module>
+<!--        <module>opencv</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>skia</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1006,9 +1006,9 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>openblas</module>
-        <module>skia</module>
+<!--        <module>opencv</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>skia</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1039,9 +1039,9 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>openblas</module>
-        <module>skia</module>
+<!--        <module>opencv</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>skia</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1072,30 +1072,30 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>flycapture</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>flycapture</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1126,30 +1126,30 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>flycapture</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>flycapture</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1180,30 +1180,30 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>cuda</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>cuda</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1234,40 +1234,40 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>flycapture</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>libfreenect2</module>
-        <module>librealsense</module>
-        <module>librealsense2</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>mkl</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>caffe</module>
-        <module>mxnet</module>
-        <module>tensorflow</module>
-        <module>ale</module>
-        <module>liquidfun</module>
-        <module>skia</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>flycapture</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>libfreenect2</module>-->
+<!--        <module>librealsense</module>-->
+<!--        <module>librealsense2</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>mkl</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>caffe</module>-->
+<!--        <module>mxnet</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>ale</module>-->
+<!--        <module>liquidfun</module>-->
+<!--        <module>skia</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1298,52 +1298,52 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>flycapture</module>
-        <module>spinnaker</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>libfreenect2</module>
-        <module>librealsense</module>
-        <module>librealsense2</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>hyperscan</module>
-        <module>mkl</module>
-        <module>mkl-dnn</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>flycapture</module>-->
+<!--        <module>spinnaker</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>libfreenect2</module>-->
+<!--        <module>librealsense</module>-->
+<!--        <module>librealsense2</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>hyperscan</module>-->
+<!--        <module>mkl</module>-->
+<!--        <module>mkl-dnn</module>-->
         <module>dnnl</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>libpostal</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>caffe</module>
-        <module>openpose</module>
-        <module>cuda</module>
-        <module>mxnet</module>
-        <module>tensorflow</module>
-        <module>tensorrt</module>
-        <module>ale</module>
-        <module>onnx</module>
-        <module>ngraph</module>
-        <module>onnxruntime</module>
-        <module>liquidfun</module>
-        <module>qt</module>
-        <module>skia</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>libpostal</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>caffe</module>-->
+<!--        <module>openpose</module>-->
+<!--        <module>cuda</module>-->
+<!--        <module>mxnet</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>tensorrt</module>-->
+<!--        <module>ale</module>-->
+<!--        <module>onnx</module>-->
+<!--        <module>ngraph</module>-->
+<!--        <module>onnxruntime</module>-->
+<!--        <module>liquidfun</module>-->
+<!--        <module>qt</module>-->
+<!--        <module>skia</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1374,49 +1374,49 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>libfreenect2</module>
-        <module>librealsense</module>
-        <module>librealsense2</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>hyperscan</module>
-        <module>mkl</module>
-        <module>mkl-dnn</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>libfreenect2</module>-->
+<!--        <module>librealsense</module>-->
+<!--        <module>librealsense2</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>hyperscan</module>-->
+<!--        <module>mkl</module>-->
+<!--        <module>mkl-dnn</module>-->
         <module>dnnl</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>libpostal</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>caffe</module>
-        <module>openpose</module>
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>libpostal</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>caffe</module>-->
+<!--        <module>openpose</module>-->
 <!--        <module>cuda</module>-->
-        <module>mxnet</module>
-        <module>tensorflow</module>
-        <module>ale</module>
-        <module>onnx</module>
-        <module>ngraph</module>
-        <module>onnxruntime</module>
-        <module>liquidfun</module>
-        <module>qt</module>
-        <module>skia</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>mxnet</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>ale</module>-->
+<!--        <module>onnx</module>-->
+<!--        <module>ngraph</module>-->
+<!--        <module>onnxruntime</module>-->
+<!--        <module>liquidfun</module>-->
+<!--        <module>qt</module>-->
+<!--        <module>skia</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1447,37 +1447,37 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>flycapture</module>
-        <module>spinnaker</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>librealsense</module>
-        <module>librealsense2</module>
-        <module>videoinput</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>mkl</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>ale</module>
-        <module>liquidfun</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>flycapture</module>-->
+<!--        <module>spinnaker</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>librealsense</module>-->
+<!--        <module>librealsense2</module>-->
+<!--        <module>videoinput</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>mkl</module>-->
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>ale</module>-->
+<!--        <module>liquidfun</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1508,48 +1508,48 @@
         </property>
       </activation>
       <modules>
-        <module>opencv</module>
-        <module>ffmpeg</module>
-        <module>flycapture</module>
-        <module>spinnaker</module>
-        <module>libdc1394</module>
-        <module>libfreenect</module>
-        <module>libfreenect2</module>
-        <module>librealsense</module>
-        <module>librealsense2</module>
-        <module>videoinput</module>
-        <module>artoolkitplus</module>
-        <module>chilitags</module>
-        <module>flandmark</module>
-        <module>arrow</module>
-        <module>hdf5</module>
-        <module>hyperscan</module>
-        <module>mkl</module>
-        <module>mkl-dnn</module>
+<!--        <module>opencv</module>-->
+<!--        <module>ffmpeg</module>-->
+<!--        <module>flycapture</module>-->
+<!--        <module>spinnaker</module>-->
+<!--        <module>libdc1394</module>-->
+<!--        <module>libfreenect</module>-->
+<!--        <module>libfreenect2</module>-->
+<!--        <module>librealsense</module>-->
+<!--        <module>librealsense2</module>-->
+<!--        <module>videoinput</module>-->
+<!--        <module>artoolkitplus</module>-->
+<!--        <module>chilitags</module>-->
+<!--        <module>flandmark</module>-->
+<!--        <module>arrow</module>-->
+<!--        <module>hdf5</module>-->
+<!--        <module>hyperscan</module>-->
+<!--        <module>mkl</module>-->
+<!--        <module>mkl-dnn</module>-->
         <module>dnnl</module>
-        <module>openblas</module>
-        <module>arpack-ng</module>
-        <module>cminpack</module>
-        <module>fftw</module>
-        <module>gsl</module>
-        <module>cpython</module>
-        <module>numpy</module>
-        <module>scipy</module>
-        <module>gym</module>
-        <module>llvm</module>
-        <module>libpostal</module>
-        <module>leptonica</module>
-        <module>tesseract</module>
-        <module>cuda</module>
-        <module>mxnet</module>
-        <module>tensorflow</module>
-        <module>tensorrt</module>
-        <module>ale</module>
-        <module>onnxruntime</module>
-        <module>liquidfun</module>
-        <module>qt</module>
-        <module>cpu_features</module>
-        <module>systems</module>
+<!--        <module>openblas</module>-->
+<!--        <module>arpack-ng</module>-->
+<!--        <module>cminpack</module>-->
+<!--        <module>fftw</module>-->
+<!--        <module>gsl</module>-->
+<!--        <module>cpython</module>-->
+<!--        <module>numpy</module>-->
+<!--        <module>scipy</module>-->
+<!--        <module>gym</module>-->
+<!--        <module>llvm</module>-->
+<!--        <module>libpostal</module>-->
+<!--        <module>leptonica</module>-->
+<!--        <module>tesseract</module>-->
+<!--        <module>cuda</module>-->
+<!--        <module>mxnet</module>-->
+<!--        <module>tensorflow</module>-->
+<!--        <module>tensorrt</module>-->
+<!--        <module>ale</module>-->
+<!--        <module>onnxruntime</module>-->
+<!--        <module>liquidfun</module>-->
+<!--        <module>qt</module>-->
+<!--        <module>cpu_features</module>-->
+<!--        <module>systems</module>-->
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>

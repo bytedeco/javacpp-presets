@@ -24,7 +24,7 @@ IF "%OS%"=="windows-x86" (
 )
 echo on
 
-if "%APPVEYOR_PULL_REQUEST_NUMBER%" == "" if "%APPVEYOR_REPO_BRANCH%" == "release" (
+if "%APPVEYOR_PULL_REQUEST_NUMBER%" == "" if "%APPVEYOR_REPO_BRANCH%" == "dnnl" (
     set "MAVEN_RELEASE=-DperformRelease -DstagingRepositoryId=%STAGING_REPOSITORY%"
 ) else (
     set "MAVEN_RELEASE=-Dmaven.javadoc.skip=true"
