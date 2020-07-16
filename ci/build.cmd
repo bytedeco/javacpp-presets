@@ -41,6 +41,7 @@ if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
     SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.0"
     SET "CUDA_PATH_V11_0=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.0"
     SET "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.0\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.0\libnvvp;%PATH%"
+    echo CUDA Version 11.0.182>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.0\version.txt"
 )
 
 echo Building for "%APPVEYOR_REPO_BRANCH%"

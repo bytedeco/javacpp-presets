@@ -71,10 +71,10 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "update-ca-certificates -f"
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
    cd $HOME/
-   curl -L http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda-repo-ubuntu1804-11-0-local_11.0.1-450.36.06-1_ppc64el.deb -o $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.1-450.36.06-1_ppc64el.deb
+   curl -L http://developer.download.nvidia.com/compute/cuda/11.0.2/local_installers/cuda-repo-ubuntu1804-11-0-local_11.0.2-450.51.05-1_ppc64el.deb -o $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.2-450.51.05-1_ppc64el.deb
    curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.1/cudnn-11.0-linux-ppc64le-v8.0.1.13.tgz -o $HOME/cudnn-11.0-linux-ppc64le-v8.0.1.13.tgz
-   curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.3-1+cuda11.0_ppc64le.txz -o $HOME/nccl_ppc64le.txz
-   ar vx $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.1-450.36.06-1_ppc64el.deb
+   curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.6-1+cuda11.0_ppc64le.txz -o $HOME/nccl_ppc64le.txz
+   ar vx $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.2-450.51.05-1_ppc64el.deb
    tar xvf data.tar.xz
    mkdir $HOME/cudaFS
    cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/cudaFS; done

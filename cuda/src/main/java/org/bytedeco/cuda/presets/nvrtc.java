@@ -40,6 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @NoException
 public class nvrtc implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("nvrtcProgram").valueTypes("_nvrtcProgram").pointerTypes("@ByPtrPtr _nvrtcProgram", "@Cast(\"_nvrtcProgram**\") PointerPointer"));
+        infoMap.put(new Info("NVRTC_GET_TYPE_NAME || __DOXYGEN_ONLY__").define(false))
+               .put(new Info("nvrtcProgram").valueTypes("_nvrtcProgram").pointerTypes("@ByPtrPtr _nvrtcProgram", "@Cast(\"_nvrtcProgram**\") PointerPointer"));
     }
 }

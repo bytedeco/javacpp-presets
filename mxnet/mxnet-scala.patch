@@ -1,9 +1,9 @@
 diff --git a/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala b/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala
 new file mode 100644
-index 000000000..57c7747e1
+index 0000000000..692242c177
 --- /dev/null
 +++ b/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala
-@@ -0,0 +1,9925 @@
+@@ -0,0 +1,9999 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
 + * contributor license agreements.  See the NOTICE file distributed with
@@ -43,7 +43,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/activation.cc:L168
++  * Defined in src/operator/nn/activation.cc:L165
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -107,7 +107,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/batch_norm.cc:L571
++  * Defined in src/operator/nn/batch_norm.cc:L587
 +  * }}}
 +  * 
 +  * @param data		Input data to batch normalization
@@ -312,7 +312,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -401,7 +401,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -452,7 +452,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @param data		List of arrays to concatenate
@@ -540,7 +540,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/convolution.cc:L473
++  * Defined in src/operator/nn/convolution.cc:L469
 +  * }}}
 +  * 
 +  * @param data		Input data to the ConvolutionOp.
@@ -832,7 +832,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L539
++  * Defined in src/operator/tensor/indexing_op.cc:L598
 +  * }}}
 +  * 
 +  * @param data		The input array to the embedding operator.
@@ -913,7 +913,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/fully_connected.cc:L291
++  * Defined in src/operator/nn/fully_connected.cc:L287
 +  * }}}
 +  * 
 +  * @param data		Input data.
@@ -1131,7 +1131,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/lrn.cc:L164
++  * Defined in src/operator/nn/lrn.cc:L158
 +  * }}}
 +  * 
 +  * @param data		Input data to LRN
@@ -1174,7 +1174,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/layer_norm.cc:L156
++  * Defined in src/operator/nn/layer_norm.cc:L158
 +  * }}}
 +  * 
 +  * @param data		Input data to layer normalization
@@ -1524,7 +1524,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/pooling.cc:L417
++  * Defined in src/operator/nn/pooling.cc:L414
 +  * }}}
 +  * 
 +  * @param data		Input data to the pooling operator.
@@ -1644,6 +1644,23 @@ index 000000000..57c7747e1
 +  *             h_t = o_t * \tanh(c_t)
 +  *             \end{array}
 +  * 
++  * With the projection size being set, LSTM could use the projection feature to reduce the parameters
++  * size and give some speedups without significant damage to the accuracy.
++  * 
++  * Long Short-Term Memory Based Recurrent Neural Network Architectures for Large Vocabulary Speech
++  * Recognition - Sak et al. 2014. https://arxiv.org/abs/1402.1128
++  * 
++  * .. math::
++  *   \begin{array}{ll}
++  *             i_t = \mathrm{sigmoid}(W_{ii} x_t + b_{ii} + W_{ri} r_{(t-1)} + b_{ri}) \\
++  *             f_t = \mathrm{sigmoid}(W_{if} x_t + b_{if} + W_{rf} r_{(t-1)} + b_{rf}) \\
++  *             g_t = \tanh(W_{ig} x_t + b_{ig} + W_{rc} r_{(t-1)} + b_{rg}) \\
++  *             o_t = \mathrm{sigmoid}(W_{io} x_t + b_{o} + W_{ro} r_{(t-1)} + b_{ro}) \\
++  *             c_t = f_t * c_{(t-1)} + i_t * g_t \\
++  *             h_t = o_t * \tanh(c_t)
++  *             r_t = W_{hr} h_t
++  *             \end{array}
++  * 
 +  * **GRU**
 +  * 
 +  * Gated Recurrent Unit - Cho et al. 2014. http://arxiv.org/abs/1406.1078
@@ -1659,7 +1676,7 @@ index 000000000..57c7747e1
 +  *             \end{array}
 +  * 
 +  * 
-+  * Defined in src/operator/rnn.cc:L354
++  * Defined in src/operator/rnn.cc:L368
 +  * }}}
 +  * 
 +  * @param data		Input data to RNN
@@ -2490,7 +2507,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L721
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L720
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2604,7 +2621,7 @@ index 000000000..57c7747e1
 +  * It casts only between low precision float/FP32 and does not do anything for other types.
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L37
++  * Defined in src/operator/tensor/amp_cast.cc:L121
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -2623,7 +2640,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L71
++  * Defined in src/operator/tensor/amp_cast.cc:L165
 +  * }}}
 +  * 
 +  * @param data		Weights
@@ -2649,7 +2666,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L233
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2668,7 +2685,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L474
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L535
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2719,7 +2736,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L436
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L494
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2746,7 +2763,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L227
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L282
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2769,7 +2786,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L515
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L579
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2903,7 +2920,7 @@ index 000000000..57c7747e1
 +  *   argsort(x, axis=None) = [ 3.,  1.,  5.,  0.,  4.,  2.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L183
++  * Defined in src/operator/tensor/ordering_op.cc:L185
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -2968,7 +2985,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L777
++  * Defined in src/operator/tensor/indexing_op.cc:L836
 +  * }}}
 +  * 
 +  * @param a		The input array
@@ -3042,7 +3059,7 @@ index 000000000..57c7747e1
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @param data		The input
@@ -3079,7 +3096,7 @@ index 000000000..57c7747e1
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @param data		The input
@@ -3319,7 +3336,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L135
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L170
 +  * }}}
 +  * 
 +  * @param lhs		First input.
@@ -3727,7 +3744,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L82
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L117
 +  * }}}
 +  * 
 +  * @param data		The input
@@ -3752,7 +3769,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -3833,7 +3850,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L270
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3861,7 +3878,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L818
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L817
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3897,10 +3914,6 @@ index 000000000..57c7747e1
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -3910,13 +3923,13 @@ index 000000000..57c7747e1
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -3965,6 +3978,38 @@ index 000000000..57c7747e1
 +  *
 +  * {{{
 +  *
++  * Combining the output column matrix of im2col back to image array.
++  * 
++  * Like :class:`~mxnet.ndarray.im2col`, this operator is also used in the vanilla convolution
++  * implementation. Despite the name, col2im is not the reverse operation of im2col. Since there
++  * may be overlaps between neighbouring sliding blocks, the column elements cannot be directly
++  * put back into image. Instead, they are accumulated (i.e., summed) in the input image
++  * just like the gradient computation, so col2im is the gradient of im2col and vice versa.
++  * 
++  * Using the notation in im2col, given an input column array of shape
++  * :math:`(N, C \times  \prod(\text{kernel}), W)`, this operator accumulates the column elements
++  * into output array of shape :math:`(N, C, \text{output_size}[0], \text{output_size}[1], \dots)`.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L182
++  * }}}
++  * 
++  * @param data		Input array to combine sliding blocks.
++  * @param output_size		The spatial dimension of image array: (w,), (h, w) or (d, h, w).
++  * @param kernel		Sliding kernel size: (w,), (h, w) or (d, h, w).
++  * @param stride		The stride between adjacent sliding blocks in spatial dimension: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param dilate		The spacing between adjacent kernel points: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param pad		The zero-value padding size on both sides of spatial dimension: (w,), (h, w) or (d, h, w). Defaults to no padding.
++  * @return org.apache.mxnet.NDArrayFuncReturn
++  */
++@Experimental
++def col2im (data : org.apache.mxnet.NDArray, output_size : org.apache.mxnet.Shape, kernel : org.apache.mxnet.Shape, stride : Option[org.apache.mxnet.Shape] = None, dilate : Option[org.apache.mxnet.Shape] = None, pad : Option[org.apache.mxnet.Shape] = None, out : Option[NDArray] = None): org.apache.mxnet.NDArrayFuncReturn
++  /**
++  *
++  * {{{
++  *
 +  * Joins input arrays along a given axis.
 +  * 
 +  * .. note:: `Concat` is deprecated. Use `concat` instead.
@@ -4003,7 +4048,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @param data		List of arrays to concatenate
@@ -4049,7 +4094,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L409
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4205,7 +4250,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L274
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L332
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4500,7 +4545,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L908
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4525,7 +4570,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L64
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4567,7 +4612,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L224
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L244
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4608,7 +4653,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L875
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L874
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4692,7 +4737,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L837
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L836
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4874,7 +4919,7 @@ index 000000000..57c7747e1
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:246
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:244
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4882,6 +4927,39 @@ index 000000000..57c7747e1
 +  */
 +@Experimental
 +def identity (data : org.apache.mxnet.NDArray, out : Option[NDArray] = None): org.apache.mxnet.NDArrayFuncReturn
++  /**
++  *
++  * {{{
++  *
++  * Extract sliding blocks from input array.
++  * 
++  * This operator is used in vanilla convolution implementation to transform the sliding
++  * blocks on image to column matrix, then the convolution operation can be computed
++  * by matrix multiplication between column and convolution weight. Due to the close
++  * relation between im2col and convolution, the concept of **kernel**, **stride**,
++  * **dilate** and **pad** in this operator are inherited from convolution operation.
++  * 
++  * Given the input data of shape :math:`(N, C, *)`, where :math:`N` is the batch size,
++  * :math:`C` is the channel size, and :math:`*` is the arbitrary spatial dimension,
++  * the output column array is always with shape :math:`(N, C \times \prod(\text{kernel}), W)`,
++  * where :math:`C \times \prod(\text{kernel})` is the block size, and :math:`W` is the
++  * block number which is the spatial size of the convolution output with same input parameters.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L100
++  * }}}
++  * 
++  * @param data		Input array to extract sliding blocks.
++  * @param kernel		Sliding kernel size: (w,), (h, w) or (d, h, w).
++  * @param stride		The stride between adjacent sliding blocks in spatial dimension: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param dilate		The spacing between adjacent kernel points: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param pad		The zero-value padding size on both sides of spatial dimension: (w,), (h, w) or (d, h, w). Defaults to no padding.
++  * @return org.apache.mxnet.NDArrayFuncReturn
++  */
++@Experimental
++def im2col (data : org.apache.mxnet.NDArray, kernel : org.apache.mxnet.Shape, stride : Option[org.apache.mxnet.Shape] = None, dilate : Option[org.apache.mxnet.Shape] = None, pad : Option[org.apache.mxnet.Shape] = None, out : Option[NDArray] = None): org.apache.mxnet.NDArrayFuncReturn
 +  /**
 +  *
 +  * {{{
@@ -5052,7 +5130,7 @@ index 000000000..57c7747e1
 +  *    det(A) = [-5., 5.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L973
++  * Defined in src/operator/tensor/la_op.cc:L975
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -5370,7 +5448,7 @@ index 000000000..57c7747e1
 +  *                  `[ [-2., 1.5], [1., -0.5] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L919
++  * Defined in src/operator/tensor/la_op.cc:L920
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -5604,7 +5682,7 @@ index 000000000..57c7747e1
 +  *    logabsdet = [1.609438, -inf, 1.609438]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L1031
++  * Defined in src/operator/tensor/la_op.cc:L1034
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -5812,7 +5890,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L76
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L77
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -5832,7 +5910,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L93
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L94
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -5857,7 +5935,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L199
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -5877,7 +5955,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L105
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L106
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -5955,7 +6033,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L360
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L358
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -6721,7 +6799,7 @@ index 000000000..57c7747e1
 +  *                                       [ 1.  0.  0.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L824
++  * Defined in src/operator/tensor/indexing_op.cc:L883
 +  * }}}
 +  * 
 +  * @param indices		array of locations where to set on_value
@@ -6880,10 +6958,6 @@ index 000000000..57c7747e1
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -6893,13 +6967,13 @@ index 000000000..57c7747e1
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -7076,7 +7150,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L293
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -7656,7 +7730,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L269
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L323
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -7678,7 +7752,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L42
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L43
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -7844,7 +7918,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L513
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L511
 +  * }}}
 +  * 
 +  * @param lhs		First input.
@@ -7903,7 +7977,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L799
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L798
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -8033,7 +8107,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L778
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L777
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -8058,7 +8132,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L193
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L221
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -8551,7 +8625,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L574
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L573
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -8615,7 +8689,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L759
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L758
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -8737,7 +8811,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L313
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L371
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -8757,7 +8831,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L625
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L624
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -8921,7 +8995,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L108
++  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L109
 +  * }}}
 +  * 
 +  * @param data		source input
@@ -8958,7 +9032,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/softmax.cc:L103
++  * Defined in src/operator/nn/softmax.cc:L134
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -9104,7 +9178,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L132
++  * Defined in src/operator/tensor/ordering_op.cc:L133
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -9251,7 +9325,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L142
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L170
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -9280,7 +9354,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L118
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L119
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -9367,7 +9441,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -9592,7 +9666,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L718
++  * Defined in src/operator/tensor/indexing_op.cc:L777
 +  * }}}
 +  * 
 +  * @param a		The input array.
@@ -9647,7 +9721,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L393
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L451
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -9798,7 +9872,7 @@ index 000000000..57c7747e1
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L857
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L856
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -9931,10 +10005,10 @@ index 000000000..57c7747e1
 +
 diff --git a/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala b/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala
 new file mode 100644
-index 000000000..6b87a9928
+index 0000000000..9c886aedf3
 --- /dev/null
 +++ b/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala
-@@ -0,0 +1,17858 @@
+@@ -0,0 +1,17986 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
 + * contributor license agreements.  See the NOTICE file distributed with
@@ -9974,7 +10048,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/activation.cc:L168
++  * Defined in src/operator/nn/activation.cc:L165
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -9998,7 +10072,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/activation.cc:L168
++  * Defined in src/operator/nn/activation.cc:L165
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10060,7 +10134,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/batch_norm.cc:L571
++  * Defined in src/operator/nn/batch_norm.cc:L587
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10123,7 +10197,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/batch_norm.cc:L571
++  * Defined in src/operator/nn/batch_norm.cc:L587
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10447,7 +10521,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10486,7 +10560,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10626,7 +10700,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10650,7 +10724,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10699,7 +10773,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10749,7 +10823,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10834,7 +10908,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/convolution.cc:L473
++  * Defined in src/operator/nn/convolution.cc:L469
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -10920,7 +10994,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/convolution.cc:L473
++  * Defined in src/operator/nn/convolution.cc:L469
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11092,7 +11166,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/custom/custom.cc:L546
++  * Defined in src/operator/custom/custom.cc:L547
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11112,7 +11186,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/custom/custom.cc:L546
++  * Defined in src/operator/custom/custom.cc:L547
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11339,7 +11413,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L539
++  * Defined in src/operator/tensor/indexing_op.cc:L598
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11404,7 +11478,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L539
++  * Defined in src/operator/tensor/indexing_op.cc:L598
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11510,7 +11584,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/fully_connected.cc:L291
++  * Defined in src/operator/nn/fully_connected.cc:L287
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11554,7 +11628,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/fully_connected.cc:L291
++  * Defined in src/operator/nn/fully_connected.cc:L287
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11915,7 +11989,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/lrn.cc:L164
++  * Defined in src/operator/nn/lrn.cc:L158
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11944,7 +12018,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/lrn.cc:L164
++  * Defined in src/operator/nn/lrn.cc:L158
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -11982,7 +12056,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/layer_norm.cc:L156
++  * Defined in src/operator/nn/layer_norm.cc:L158
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -12021,7 +12095,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/layer_norm.cc:L156
++  * Defined in src/operator/nn/layer_norm.cc:L158
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -12607,7 +12681,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/pooling.cc:L417
++  * Defined in src/operator/nn/pooling.cc:L414
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -12670,7 +12744,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/pooling.cc:L417
++  * Defined in src/operator/nn/pooling.cc:L414
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -12822,6 +12896,23 @@ index 000000000..6b87a9928
 +  *             h_t = o_t * \tanh(c_t)
 +  *             \end{array}
 +  * 
++  * With the projection size being set, LSTM could use the projection feature to reduce the parameters
++  * size and give some speedups without significant damage to the accuracy.
++  * 
++  * Long Short-Term Memory Based Recurrent Neural Network Architectures for Large Vocabulary Speech
++  * Recognition - Sak et al. 2014. https://arxiv.org/abs/1402.1128
++  * 
++  * .. math::
++  *   \begin{array}{ll}
++  *             i_t = \mathrm{sigmoid}(W_{ii} x_t + b_{ii} + W_{ri} r_{(t-1)} + b_{ri}) \\
++  *             f_t = \mathrm{sigmoid}(W_{if} x_t + b_{if} + W_{rf} r_{(t-1)} + b_{rf}) \\
++  *             g_t = \tanh(W_{ig} x_t + b_{ig} + W_{rc} r_{(t-1)} + b_{rg}) \\
++  *             o_t = \mathrm{sigmoid}(W_{io} x_t + b_{o} + W_{ro} r_{(t-1)} + b_{ro}) \\
++  *             c_t = f_t * c_{(t-1)} + i_t * g_t \\
++  *             h_t = o_t * \tanh(c_t)
++  *             r_t = W_{hr} h_t
++  *             \end{array}
++  * 
 +  * **GRU**
 +  * 
 +  * Gated Recurrent Unit - Cho et al. 2014. http://arxiv.org/abs/1406.1078
@@ -12837,7 +12928,7 @@ index 000000000..6b87a9928
 +  *             \end{array}
 +  * 
 +  * 
-+  * Defined in src/operator/rnn.cc:L354
++  * Defined in src/operator/rnn.cc:L368
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -12889,6 +12980,23 @@ index 000000000..6b87a9928
 +  *             h_t = o_t * \tanh(c_t)
 +  *             \end{array}
 +  * 
++  * With the projection size being set, LSTM could use the projection feature to reduce the parameters
++  * size and give some speedups without significant damage to the accuracy.
++  * 
++  * Long Short-Term Memory Based Recurrent Neural Network Architectures for Large Vocabulary Speech
++  * Recognition - Sak et al. 2014. https://arxiv.org/abs/1402.1128
++  * 
++  * .. math::
++  *   \begin{array}{ll}
++  *             i_t = \mathrm{sigmoid}(W_{ii} x_t + b_{ii} + W_{ri} r_{(t-1)} + b_{ri}) \\
++  *             f_t = \mathrm{sigmoid}(W_{if} x_t + b_{if} + W_{rf} r_{(t-1)} + b_{rf}) \\
++  *             g_t = \tanh(W_{ig} x_t + b_{ig} + W_{rc} r_{(t-1)} + b_{rg}) \\
++  *             o_t = \mathrm{sigmoid}(W_{io} x_t + b_{o} + W_{ro} r_{(t-1)} + b_{ro}) \\
++  *             c_t = f_t * c_{(t-1)} + i_t * g_t \\
++  *             h_t = o_t * \tanh(c_t)
++  *             r_t = W_{hr} h_t
++  *             \end{array}
++  * 
 +  * **GRU**
 +  * 
 +  * Gated Recurrent Unit - Cho et al. 2014. http://arxiv.org/abs/1406.1078
@@ -12904,7 +13012,7 @@ index 000000000..6b87a9928
 +  *             \end{array}
 +  * 
 +  * 
-+  * Defined in src/operator/rnn.cc:L354
++  * Defined in src/operator/rnn.cc:L368
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14384,7 +14492,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L721
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L720
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14410,7 +14518,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L721
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L720
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14593,7 +14701,7 @@ index 000000000..6b87a9928
 +  * It casts only between low precision float/FP32 and does not do anything for other types.
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L37
++  * Defined in src/operator/tensor/amp_cast.cc:L121
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14610,7 +14718,7 @@ index 000000000..6b87a9928
 +  * It casts only between low precision float/FP32 and does not do anything for other types.
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L37
++  * Defined in src/operator/tensor/amp_cast.cc:L121
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14627,7 +14735,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L71
++  * Defined in src/operator/tensor/amp_cast.cc:L165
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14645,7 +14753,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L71
++  * Defined in src/operator/tensor/amp_cast.cc:L165
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14668,7 +14776,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L233
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14692,7 +14800,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L233
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14710,7 +14818,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L474
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L535
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14729,7 +14837,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L474
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L535
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14806,7 +14914,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L436
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L494
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14829,7 +14937,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L436
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L494
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14855,7 +14963,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L227
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L282
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14882,7 +14990,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L227
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L282
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14904,7 +15012,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L515
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L579
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -14927,7 +15035,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L515
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L579
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15149,7 +15257,7 @@ index 000000000..6b87a9928
 +  *   argsort(x, axis=None) = [ 3.,  1.,  5.,  0.,  4.,  2.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L183
++  * Defined in src/operator/tensor/ordering_op.cc:L185
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15183,7 +15291,7 @@ index 000000000..6b87a9928
 +  *   argsort(x, axis=None) = [ 3.,  1.,  5.,  0.,  4.,  2.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L183
++  * Defined in src/operator/tensor/ordering_op.cc:L185
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15264,7 +15372,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L777
++  * Defined in src/operator/tensor/indexing_op.cc:L836
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15297,7 +15405,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L777
++  * Defined in src/operator/tensor/indexing_op.cc:L836
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15404,7 +15512,7 @@ index 000000000..6b87a9928
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15439,7 +15547,7 @@ index 000000000..6b87a9928
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15473,7 +15581,7 @@ index 000000000..6b87a9928
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15508,7 +15616,7 @@ index 000000000..6b87a9928
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15932,7 +16040,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L135
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L170
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -15962,7 +16070,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L135
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L170
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16704,7 +16812,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L82
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L117
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16735,7 +16843,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L82
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L117
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16758,7 +16866,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16782,7 +16890,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16909,7 +17017,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L270
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16938,7 +17046,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L270
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16965,7 +17073,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L818
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L817
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -16993,7 +17101,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L818
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L817
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17028,10 +17136,6 @@ index 000000000..6b87a9928
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -17041,13 +17145,13 @@ index 000000000..6b87a9928
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17083,10 +17187,6 @@ index 000000000..6b87a9928
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -17096,13 +17196,13 @@ index 000000000..6b87a9928
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17174,6 +17274,59 @@ index 000000000..6b87a9928
 +  *
 +  * {{{
 +  *
++  * Combining the output column matrix of im2col back to image array.
++  * 
++  * Like :class:`~mxnet.ndarray.im2col`, this operator is also used in the vanilla convolution
++  * implementation. Despite the name, col2im is not the reverse operation of im2col. Since there
++  * may be overlaps between neighbouring sliding blocks, the column elements cannot be directly
++  * put back into image. Instead, they are accumulated (i.e., summed) in the input image
++  * just like the gradient computation, so col2im is the gradient of im2col and vice versa.
++  * 
++  * Using the notation in im2col, given an input column array of shape
++  * :math:`(N, C \times  \prod(\text{kernel}), W)`, this operator accumulates the column elements
++  * into output array of shape :math:`(N, C, \text{output_size}[0], \text{output_size}[1], \dots)`.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L182
++  * }}}
++  * 
++  * @return org.apache.mxnet.NDArrayFuncReturn
++  */
++def col2im(kwargs: Map[String, Any] = null)
++    (args: Any*): org.apache.mxnet.NDArrayFuncReturn
++
++  /**
++  *
++  * {{{
++  *
++  * Combining the output column matrix of im2col back to image array.
++  * 
++  * Like :class:`~mxnet.ndarray.im2col`, this operator is also used in the vanilla convolution
++  * implementation. Despite the name, col2im is not the reverse operation of im2col. Since there
++  * may be overlaps between neighbouring sliding blocks, the column elements cannot be directly
++  * put back into image. Instead, they are accumulated (i.e., summed) in the input image
++  * just like the gradient computation, so col2im is the gradient of im2col and vice versa.
++  * 
++  * Using the notation in im2col, given an input column array of shape
++  * :math:`(N, C \times  \prod(\text{kernel}), W)`, this operator accumulates the column elements
++  * into output array of shape :math:`(N, C, \text{output_size}[0], \text{output_size}[1], \dots)`.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L182
++  * }}}
++  * 
++  * @return org.apache.mxnet.NDArrayFuncReturn
++  */
++def col2im(args: Any*): org.apache.mxnet.NDArrayFuncReturn
++           
++  /**
++  *
++  * {{{
++  *
 +  * Joins input arrays along a given axis.
 +  * 
 +  * .. note:: `Concat` is deprecated. Use `concat` instead.
@@ -17212,7 +17365,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17262,7 +17415,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17327,7 +17480,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L409
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17348,7 +17501,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L409
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17609,7 +17762,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L274
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L332
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -17634,7 +17787,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L274
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L332
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18171,7 +18324,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L908
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18191,7 +18344,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L908
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18215,7 +18368,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L64
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18240,7 +18393,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L64
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18296,7 +18449,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L224
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L244
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18320,7 +18473,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L224
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L244
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18369,7 +18522,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L875
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L874
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18396,7 +18549,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L875
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L874
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18531,7 +18684,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L837
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L836
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18559,7 +18712,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L837
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L836
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18854,7 +19007,7 @@ index 000000000..6b87a9928
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:246
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:244
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -18868,12 +19021,69 @@ index 000000000..6b87a9928
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:246
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:244
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
 +  */
 +def identity(args: Any*): org.apache.mxnet.NDArrayFuncReturn
++           
++  /**
++  *
++  * {{{
++  *
++  * Extract sliding blocks from input array.
++  * 
++  * This operator is used in vanilla convolution implementation to transform the sliding
++  * blocks on image to column matrix, then the convolution operation can be computed
++  * by matrix multiplication between column and convolution weight. Due to the close
++  * relation between im2col and convolution, the concept of **kernel**, **stride**,
++  * **dilate** and **pad** in this operator are inherited from convolution operation.
++  * 
++  * Given the input data of shape :math:`(N, C, *)`, where :math:`N` is the batch size,
++  * :math:`C` is the channel size, and :math:`*` is the arbitrary spatial dimension,
++  * the output column array is always with shape :math:`(N, C \times \prod(\text{kernel}), W)`,
++  * where :math:`C \times \prod(\text{kernel})` is the block size, and :math:`W` is the
++  * block number which is the spatial size of the convolution output with same input parameters.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L100
++  * }}}
++  * 
++  * @return org.apache.mxnet.NDArrayFuncReturn
++  */
++def im2col(kwargs: Map[String, Any] = null)
++    (args: Any*): org.apache.mxnet.NDArrayFuncReturn
++
++  /**
++  *
++  * {{{
++  *
++  * Extract sliding blocks from input array.
++  * 
++  * This operator is used in vanilla convolution implementation to transform the sliding
++  * blocks on image to column matrix, then the convolution operation can be computed
++  * by matrix multiplication between column and convolution weight. Due to the close
++  * relation between im2col and convolution, the concept of **kernel**, **stride**,
++  * **dilate** and **pad** in this operator are inherited from convolution operation.
++  * 
++  * Given the input data of shape :math:`(N, C, *)`, where :math:`N` is the batch size,
++  * :math:`C` is the channel size, and :math:`*` is the arbitrary spatial dimension,
++  * the output column array is always with shape :math:`(N, C \times \prod(\text{kernel}), W)`,
++  * where :math:`C \times \prod(\text{kernel})` is the block size, and :math:`W` is the
++  * block number which is the spatial size of the convolution output with same input parameters.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L100
++  * }}}
++  * 
++  * @return org.apache.mxnet.NDArrayFuncReturn
++  */
++def im2col(args: Any*): org.apache.mxnet.NDArrayFuncReturn
 +           
 +  /**
 +  *
@@ -19146,7 +19356,7 @@ index 000000000..6b87a9928
 +  *    det(A) = [-5., 5.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L973
++  * Defined in src/operator/tensor/la_op.cc:L975
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -19186,7 +19396,7 @@ index 000000000..6b87a9928
 +  *    det(A) = [-5., 5.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L973
++  * Defined in src/operator/tensor/la_op.cc:L975
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -19749,7 +19959,7 @@ index 000000000..6b87a9928
 +  *                  `[ [-2., 1.5], [1., -0.5] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L919
++  * Defined in src/operator/tensor/la_op.cc:L920
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -19786,7 +19996,7 @@ index 000000000..6b87a9928
 +  *                  `[ [-2., 1.5], [1., -0.5] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L919
++  * Defined in src/operator/tensor/la_op.cc:L920
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20197,7 +20407,7 @@ index 000000000..6b87a9928
 +  *    logabsdet = [1.609438, -inf, 1.609438]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L1031
++  * Defined in src/operator/tensor/la_op.cc:L1034
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20243,7 +20453,7 @@ index 000000000..6b87a9928
 +  *    logabsdet = [1.609438, -inf, 1.609438]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L1031
++  * Defined in src/operator/tensor/la_op.cc:L1034
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20610,7 +20820,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L76
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L77
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20630,7 +20840,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L76
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L77
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20649,7 +20859,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L93
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L94
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20669,7 +20879,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L93
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L94
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20693,7 +20903,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L199
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20718,7 +20928,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L199
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20737,7 +20947,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L105
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L106
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20757,7 +20967,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L105
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L106
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20867,7 +21077,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L360
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L358
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -20902,7 +21112,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L360
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L358
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -21947,7 +22157,7 @@ index 000000000..6b87a9928
 +  *                                       [ 1.  0.  0.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L824
++  * Defined in src/operator/tensor/indexing_op.cc:L883
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -21993,7 +22203,7 @@ index 000000000..6b87a9928
 +  *                                       [ 1.  0.  0.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L824
++  * Defined in src/operator/tensor/indexing_op.cc:L883
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -22258,10 +22468,6 @@ index 000000000..6b87a9928
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -22271,13 +22477,13 @@ index 000000000..6b87a9928
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -22313,10 +22519,6 @@ index 000000000..6b87a9928
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -22326,13 +22528,13 @@ index 000000000..6b87a9928
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -22587,7 +22789,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L293
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -22612,7 +22814,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L293
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23627,7 +23829,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L269
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L323
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23650,7 +23852,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L269
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L323
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23671,7 +23873,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L42
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L43
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23693,7 +23895,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L42
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L43
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23967,7 +24169,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L513
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L511
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24006,7 +24208,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L513
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L511
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24080,7 +24282,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L799
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L798
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24110,7 +24312,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L799
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L798
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24299,7 +24501,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L778
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L777
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24325,7 +24527,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L778
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L777
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24349,7 +24551,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L193
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L221
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24374,7 +24576,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L193
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L221
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25252,7 +25454,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L574
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L573
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25272,7 +25474,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L574
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L573
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25371,7 +25573,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L759
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L758
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25397,7 +25599,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L759
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L758
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25586,7 +25788,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L313
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L371
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25611,7 +25813,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L313
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L371
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25630,7 +25832,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L625
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L624
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25650,7 +25852,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L625
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L624
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25927,7 +26129,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L108
++  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L109
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25958,7 +26160,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L108
++  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L109
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -25993,7 +26195,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/softmax.cc:L103
++  * Defined in src/operator/nn/softmax.cc:L134
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26029,7 +26231,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/softmax.cc:L103
++  * Defined in src/operator/nn/softmax.cc:L134
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26261,7 +26463,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L132
++  * Defined in src/operator/tensor/ordering_op.cc:L133
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26297,7 +26499,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L132
++  * Defined in src/operator/tensor/ordering_op.cc:L133
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26547,7 +26749,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L142
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L170
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26576,7 +26778,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L142
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L170
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26604,7 +26806,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L118
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L119
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26633,7 +26835,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L118
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L119
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26759,7 +26961,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26798,7 +27000,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27113,7 +27315,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L718
++  * Defined in src/operator/tensor/indexing_op.cc:L777
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27176,7 +27378,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L718
++  * Defined in src/operator/tensor/indexing_op.cc:L777
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27253,7 +27455,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L393
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L451
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27278,7 +27480,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L393
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L451
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27531,7 +27733,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L857
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L856
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27560,7 +27762,7 @@ index 000000000..6b87a9928
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L857
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L856
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27795,7 +27997,7 @@ index 000000000..6b87a9928
 +
 diff --git a/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala b/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala
 new file mode 100644
-index 000000000..f46635fc5
+index 0000000000..f46635fc59
 --- /dev/null
 +++ b/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala
 @@ -0,0 +1,815 @@
@@ -28616,10 +28818,10 @@ index 000000000..f46635fc5
 +
 diff --git a/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala b/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala
 new file mode 100644
-index 000000000..600f551ea
+index 0000000000..4f22e69fea
 --- /dev/null
 +++ b/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala
-@@ -0,0 +1,9925 @@
+@@ -0,0 +1,9999 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
 + * contributor license agreements.  See the NOTICE file distributed with
@@ -28659,7 +28861,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/activation.cc:L168
++  * Defined in src/operator/nn/activation.cc:L165
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -28723,7 +28925,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/batch_norm.cc:L571
++  * Defined in src/operator/nn/batch_norm.cc:L587
 +  * }}}
 +  * 
 +  * @param data		Input data to batch normalization
@@ -28928,7 +29130,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -29017,7 +29219,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -29068,7 +29270,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @param data		List of arrays to concatenate
@@ -29156,7 +29358,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/convolution.cc:L473
++  * Defined in src/operator/nn/convolution.cc:L469
 +  * }}}
 +  * 
 +  * @param data		Input data to the ConvolutionOp.
@@ -29448,7 +29650,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L539
++  * Defined in src/operator/tensor/indexing_op.cc:L598
 +  * }}}
 +  * 
 +  * @param data		The input array to the embedding operator.
@@ -29529,7 +29731,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/fully_connected.cc:L291
++  * Defined in src/operator/nn/fully_connected.cc:L287
 +  * }}}
 +  * 
 +  * @param data		Input data.
@@ -29747,7 +29949,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/lrn.cc:L164
++  * Defined in src/operator/nn/lrn.cc:L158
 +  * }}}
 +  * 
 +  * @param data		Input data to LRN
@@ -29790,7 +29992,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/layer_norm.cc:L156
++  * Defined in src/operator/nn/layer_norm.cc:L158
 +  * }}}
 +  * 
 +  * @param data		Input data to layer normalization
@@ -30140,7 +30342,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/pooling.cc:L417
++  * Defined in src/operator/nn/pooling.cc:L414
 +  * }}}
 +  * 
 +  * @param data		Input data to the pooling operator.
@@ -30260,6 +30462,23 @@ index 000000000..600f551ea
 +  *             h_t = o_t * \tanh(c_t)
 +  *             \end{array}
 +  * 
++  * With the projection size being set, LSTM could use the projection feature to reduce the parameters
++  * size and give some speedups without significant damage to the accuracy.
++  * 
++  * Long Short-Term Memory Based Recurrent Neural Network Architectures for Large Vocabulary Speech
++  * Recognition - Sak et al. 2014. https://arxiv.org/abs/1402.1128
++  * 
++  * .. math::
++  *   \begin{array}{ll}
++  *             i_t = \mathrm{sigmoid}(W_{ii} x_t + b_{ii} + W_{ri} r_{(t-1)} + b_{ri}) \\
++  *             f_t = \mathrm{sigmoid}(W_{if} x_t + b_{if} + W_{rf} r_{(t-1)} + b_{rf}) \\
++  *             g_t = \tanh(W_{ig} x_t + b_{ig} + W_{rc} r_{(t-1)} + b_{rg}) \\
++  *             o_t = \mathrm{sigmoid}(W_{io} x_t + b_{o} + W_{ro} r_{(t-1)} + b_{ro}) \\
++  *             c_t = f_t * c_{(t-1)} + i_t * g_t \\
++  *             h_t = o_t * \tanh(c_t)
++  *             r_t = W_{hr} h_t
++  *             \end{array}
++  * 
 +  * **GRU**
 +  * 
 +  * Gated Recurrent Unit - Cho et al. 2014. http://arxiv.org/abs/1406.1078
@@ -30275,7 +30494,7 @@ index 000000000..600f551ea
 +  *             \end{array}
 +  * 
 +  * 
-+  * Defined in src/operator/rnn.cc:L354
++  * Defined in src/operator/rnn.cc:L368
 +  * }}}
 +  * 
 +  * @param data		Input data to RNN
@@ -31106,7 +31325,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L721
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L720
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -31220,7 +31439,7 @@ index 000000000..600f551ea
 +  * It casts only between low precision float/FP32 and does not do anything for other types.
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L37
++  * Defined in src/operator/tensor/amp_cast.cc:L121
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -31239,7 +31458,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L71
++  * Defined in src/operator/tensor/amp_cast.cc:L165
 +  * }}}
 +  * 
 +  * @param data		Weights
@@ -31265,7 +31484,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L233
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -31284,7 +31503,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L474
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L535
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -31335,7 +31554,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L436
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L494
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -31362,7 +31581,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L227
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L282
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -31385,7 +31604,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L515
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L579
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -31519,7 +31738,7 @@ index 000000000..600f551ea
 +  *   argsort(x, axis=None) = [ 3.,  1.,  5.,  0.,  4.,  2.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L183
++  * Defined in src/operator/tensor/ordering_op.cc:L185
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -31584,7 +31803,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L777
++  * Defined in src/operator/tensor/indexing_op.cc:L836
 +  * }}}
 +  * 
 +  * @param a		The input array
@@ -31658,7 +31877,7 @@ index 000000000..600f551ea
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @param data		The input
@@ -31695,7 +31914,7 @@ index 000000000..600f551ea
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @param data		The input
@@ -31935,7 +32154,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L135
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L170
 +  * }}}
 +  * 
 +  * @param lhs		First input.
@@ -32343,7 +32562,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L82
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L117
 +  * }}}
 +  * 
 +  * @param data		The input
@@ -32368,7 +32587,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -32449,7 +32668,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L270
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -32477,7 +32696,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L818
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L817
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -32513,10 +32732,6 @@ index 000000000..600f551ea
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -32526,13 +32741,13 @@ index 000000000..600f551ea
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -32581,6 +32796,38 @@ index 000000000..600f551ea
 +  *
 +  * {{{
 +  *
++  * Combining the output column matrix of im2col back to image array.
++  * 
++  * Like :class:`~mxnet.ndarray.im2col`, this operator is also used in the vanilla convolution
++  * implementation. Despite the name, col2im is not the reverse operation of im2col. Since there
++  * may be overlaps between neighbouring sliding blocks, the column elements cannot be directly
++  * put back into image. Instead, they are accumulated (i.e., summed) in the input image
++  * just like the gradient computation, so col2im is the gradient of im2col and vice versa.
++  * 
++  * Using the notation in im2col, given an input column array of shape
++  * :math:`(N, C \times  \prod(\text{kernel}), W)`, this operator accumulates the column elements
++  * into output array of shape :math:`(N, C, \text{output_size}[0], \text{output_size}[1], \dots)`.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L182
++  * }}}
++  * 
++  * @param data		Input array to combine sliding blocks.
++  * @param output_size		The spatial dimension of image array: (w,), (h, w) or (d, h, w).
++  * @param kernel		Sliding kernel size: (w,), (h, w) or (d, h, w).
++  * @param stride		The stride between adjacent sliding blocks in spatial dimension: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param dilate		The spacing between adjacent kernel points: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param pad		The zero-value padding size on both sides of spatial dimension: (w,), (h, w) or (d, h, w). Defaults to no padding.
++  * @return org.apache.mxnet.Symbol
++  */
++@Experimental
++def col2im (data : Option[org.apache.mxnet.Symbol] = None, output_size : org.apache.mxnet.Shape, kernel : org.apache.mxnet.Shape, stride : Option[org.apache.mxnet.Shape] = None, dilate : Option[org.apache.mxnet.Shape] = None, pad : Option[org.apache.mxnet.Shape] = None, name : String = null, attr : Map[String, String] = null): org.apache.mxnet.Symbol
++  /**
++  *
++  * {{{
++  *
 +  * Joins input arrays along a given axis.
 +  * 
 +  * .. note:: `Concat` is deprecated. Use `concat` instead.
@@ -32619,7 +32866,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @param data		List of arrays to concatenate
@@ -32665,7 +32912,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L409
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -32821,7 +33068,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L274
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L332
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -33116,7 +33363,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L908
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -33141,7 +33388,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L64
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -33183,7 +33430,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L224
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L244
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -33224,7 +33471,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L875
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L874
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -33308,7 +33555,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L837
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L836
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -33490,7 +33737,7 @@ index 000000000..600f551ea
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:246
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:244
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -33498,6 +33745,39 @@ index 000000000..600f551ea
 +  */
 +@Experimental
 +def identity (data : Option[org.apache.mxnet.Symbol] = None, name : String = null, attr : Map[String, String] = null): org.apache.mxnet.Symbol
++  /**
++  *
++  * {{{
++  *
++  * Extract sliding blocks from input array.
++  * 
++  * This operator is used in vanilla convolution implementation to transform the sliding
++  * blocks on image to column matrix, then the convolution operation can be computed
++  * by matrix multiplication between column and convolution weight. Due to the close
++  * relation between im2col and convolution, the concept of **kernel**, **stride**,
++  * **dilate** and **pad** in this operator are inherited from convolution operation.
++  * 
++  * Given the input data of shape :math:`(N, C, *)`, where :math:`N` is the batch size,
++  * :math:`C` is the channel size, and :math:`*` is the arbitrary spatial dimension,
++  * the output column array is always with shape :math:`(N, C \times \prod(\text{kernel}), W)`,
++  * where :math:`C \times \prod(\text{kernel})` is the block size, and :math:`W` is the
++  * block number which is the spatial size of the convolution output with same input parameters.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L100
++  * }}}
++  * 
++  * @param data		Input array to extract sliding blocks.
++  * @param kernel		Sliding kernel size: (w,), (h, w) or (d, h, w).
++  * @param stride		The stride between adjacent sliding blocks in spatial dimension: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param dilate		The spacing between adjacent kernel points: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++  * @param pad		The zero-value padding size on both sides of spatial dimension: (w,), (h, w) or (d, h, w). Defaults to no padding.
++  * @return org.apache.mxnet.Symbol
++  */
++@Experimental
++def im2col (data : Option[org.apache.mxnet.Symbol] = None, kernel : org.apache.mxnet.Shape, stride : Option[org.apache.mxnet.Shape] = None, dilate : Option[org.apache.mxnet.Shape] = None, pad : Option[org.apache.mxnet.Shape] = None, name : String = null, attr : Map[String, String] = null): org.apache.mxnet.Symbol
 +  /**
 +  *
 +  * {{{
@@ -33668,7 +33948,7 @@ index 000000000..600f551ea
 +  *    det(A) = [-5., 5.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L973
++  * Defined in src/operator/tensor/la_op.cc:L975
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -33986,7 +34266,7 @@ index 000000000..600f551ea
 +  *                  `[ [-2., 1.5], [1., -0.5] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L919
++  * Defined in src/operator/tensor/la_op.cc:L920
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -34220,7 +34500,7 @@ index 000000000..600f551ea
 +  *    logabsdet = [1.609438, -inf, 1.609438]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L1031
++  * Defined in src/operator/tensor/la_op.cc:L1034
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -34428,7 +34708,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L76
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L77
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -34448,7 +34728,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L93
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L94
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -34473,7 +34753,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L199
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -34493,7 +34773,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L105
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L106
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -34571,7 +34851,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L360
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L358
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -35337,7 +35617,7 @@ index 000000000..600f551ea
 +  *                                       [ 1.  0.  0.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L824
++  * Defined in src/operator/tensor/indexing_op.cc:L883
 +  * }}}
 +  * 
 +  * @param indices		array of locations where to set on_value
@@ -35496,10 +35776,6 @@ index 000000000..600f551ea
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -35509,13 +35785,13 @@ index 000000000..600f551ea
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -35692,7 +35968,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L293
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -36272,7 +36548,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L269
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L323
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -36294,7 +36570,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L42
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L43
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -36460,7 +36736,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L513
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L511
 +  * }}}
 +  * 
 +  * @param lhs		First input.
@@ -36519,7 +36795,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L799
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L798
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -36649,7 +36925,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L778
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L777
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -36674,7 +36950,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L193
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L221
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -37167,7 +37443,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L574
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L573
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -37231,7 +37507,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L759
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L758
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -37353,7 +37629,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L313
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L371
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -37373,7 +37649,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L625
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L624
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -37537,7 +37813,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L108
++  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L109
 +  * }}}
 +  * 
 +  * @param data		source input
@@ -37574,7 +37850,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/softmax.cc:L103
++  * Defined in src/operator/nn/softmax.cc:L134
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -37720,7 +37996,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L132
++  * Defined in src/operator/tensor/ordering_op.cc:L133
 +  * }}}
 +  * 
 +  * @param data		The input array
@@ -37867,7 +38143,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L142
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L170
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -37896,7 +38172,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L118
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L119
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -37983,7 +38259,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -38208,7 +38484,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L718
++  * Defined in src/operator/tensor/indexing_op.cc:L777
 +  * }}}
 +  * 
 +  * @param a		The input array.
@@ -38263,7 +38539,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L393
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L451
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -38414,7 +38690,7 @@ index 000000000..600f551ea
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L857
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L856
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -38547,10 +38823,10 @@ index 000000000..600f551ea
 +
 diff --git a/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala b/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala
 new file mode 100644
-index 000000000..ebb4a9e8c
+index 0000000000..bc99ffdfa4
 --- /dev/null
 +++ b/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala
-@@ -0,0 +1,9342 @@
+@@ -0,0 +1,9409 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
 + * contributor license agreements.  See the NOTICE file distributed with
@@ -38590,7 +38866,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/activation.cc:L168
++  * Defined in src/operator/nn/activation.cc:L165
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -38654,7 +38930,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/batch_norm.cc:L571
++  * Defined in src/operator/nn/batch_norm.cc:L587
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -38840,7 +39116,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -38925,7 +39201,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -38976,7 +39252,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -39063,7 +39339,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/convolution.cc:L473
++  * Defined in src/operator/nn/convolution.cc:L469
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -39165,7 +39441,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/custom/custom.cc:L546
++  * Defined in src/operator/custom/custom.cc:L547
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -39317,7 +39593,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L539
++  * Defined in src/operator/tensor/indexing_op.cc:L598
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -39395,7 +39671,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/fully_connected.cc:L291
++  * Defined in src/operator/nn/fully_connected.cc:L287
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -39599,7 +39875,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/lrn.cc:L164
++  * Defined in src/operator/nn/lrn.cc:L158
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -39639,7 +39915,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/layer_norm.cc:L156
++  * Defined in src/operator/nn/layer_norm.cc:L158
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -39974,7 +40250,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/pooling.cc:L417
++  * Defined in src/operator/nn/pooling.cc:L414
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -40079,6 +40355,23 @@ index 000000000..ebb4a9e8c
 +  *             h_t = o_t * \tanh(c_t)
 +  *             \end{array}
 +  * 
++  * With the projection size being set, LSTM could use the projection feature to reduce the parameters
++  * size and give some speedups without significant damage to the accuracy.
++  * 
++  * Long Short-Term Memory Based Recurrent Neural Network Architectures for Large Vocabulary Speech
++  * Recognition - Sak et al. 2014. https://arxiv.org/abs/1402.1128
++  * 
++  * .. math::
++  *   \begin{array}{ll}
++  *             i_t = \mathrm{sigmoid}(W_{ii} x_t + b_{ii} + W_{ri} r_{(t-1)} + b_{ri}) \\
++  *             f_t = \mathrm{sigmoid}(W_{if} x_t + b_{if} + W_{rf} r_{(t-1)} + b_{rf}) \\
++  *             g_t = \tanh(W_{ig} x_t + b_{ig} + W_{rc} r_{(t-1)} + b_{rg}) \\
++  *             o_t = \mathrm{sigmoid}(W_{io} x_t + b_{o} + W_{ro} r_{(t-1)} + b_{ro}) \\
++  *             c_t = f_t * c_{(t-1)} + i_t * g_t \\
++  *             h_t = o_t * \tanh(c_t)
++  *             r_t = W_{hr} h_t
++  *             \end{array}
++  * 
 +  * **GRU**
 +  * 
 +  * Gated Recurrent Unit - Cho et al. 2014. http://arxiv.org/abs/1406.1078
@@ -40094,7 +40387,7 @@ index 000000000..ebb4a9e8c
 +  *             \end{array}
 +  * 
 +  * 
-+  * Defined in src/operator/rnn.cc:L354
++  * Defined in src/operator/rnn.cc:L368
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -40868,7 +41161,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L721
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L720
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -40974,7 +41267,7 @@ index 000000000..ebb4a9e8c
 +  * It casts only between low precision float/FP32 and does not do anything for other types.
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L37
++  * Defined in src/operator/tensor/amp_cast.cc:L121
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -40993,7 +41286,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L71
++  * Defined in src/operator/tensor/amp_cast.cc:L165
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41018,7 +41311,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L233
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41038,7 +41331,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L474
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L535
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41091,7 +41384,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L436
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L494
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41119,7 +41412,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L227
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L282
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41143,7 +41436,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L515
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L579
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41277,7 +41570,7 @@ index 000000000..ebb4a9e8c
 +  *   argsort(x, axis=None) = [ 3.,  1.,  5.,  0.,  4.,  2.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L183
++  * Defined in src/operator/tensor/ordering_op.cc:L185
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41337,7 +41630,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L777
++  * Defined in src/operator/tensor/indexing_op.cc:L836
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41411,7 +41704,7 @@ index 000000000..ebb4a9e8c
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41447,7 +41740,7 @@ index 000000000..ebb4a9e8c
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -41686,7 +41979,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L135
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L170
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42092,7 +42385,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L82
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L117
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42117,7 +42410,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42198,7 +42491,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L270
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42227,7 +42520,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L818
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L817
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42264,10 +42557,6 @@ index 000000000..ebb4a9e8c
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -42277,13 +42566,13 @@ index 000000000..ebb4a9e8c
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42321,6 +42610,34 @@ index 000000000..ebb4a9e8c
 +  * @return org.apache.mxnet.Symbol
 +  */
 +def clip(name : String = null, attr : Map[String, String] = null)
++    (args : org.apache.mxnet.Symbol*)(kwargs : Map[String, Any] = null):
++    org.apache.mxnet.Symbol
++           
++  /**
++  *
++  * {{{
++  *
++  * Combining the output column matrix of im2col back to image array.
++  * 
++  * Like :class:`~mxnet.ndarray.im2col`, this operator is also used in the vanilla convolution
++  * implementation. Despite the name, col2im is not the reverse operation of im2col. Since there
++  * may be overlaps between neighbouring sliding blocks, the column elements cannot be directly
++  * put back into image. Instead, they are accumulated (i.e., summed) in the input image
++  * just like the gradient computation, so col2im is the gradient of im2col and vice versa.
++  * 
++  * Using the notation in im2col, given an input column array of shape
++  * :math:`(N, C \times  \prod(\text{kernel}), W)`, this operator accumulates the column elements
++  * into output array of shape :math:`(N, C, \text{output_size}[0], \text{output_size}[1], \dots)`.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L182
++  * }}}
++  * 
++  * @return org.apache.mxnet.Symbol
++  */
++def col2im(name : String = null, attr : Map[String, String] = null)
 +    (args : org.apache.mxnet.Symbol*)(kwargs : Map[String, Any] = null):
 +    org.apache.mxnet.Symbol
 +           
@@ -42366,7 +42683,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42412,7 +42729,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L409
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42561,7 +42878,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L274
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L332
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42853,7 +43170,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L908
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42879,7 +43196,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L64
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42922,7 +43239,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L224
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L244
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -42963,7 +43280,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L875
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L874
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -43049,7 +43366,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L837
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L836
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -43214,12 +43531,42 @@ index 000000000..ebb4a9e8c
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:246
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:244
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
 +  */
 +def identity(name : String = null, attr : Map[String, String] = null)
++    (args : org.apache.mxnet.Symbol*)(kwargs : Map[String, Any] = null):
++    org.apache.mxnet.Symbol
++           
++  /**
++  *
++  * {{{
++  *
++  * Extract sliding blocks from input array.
++  * 
++  * This operator is used in vanilla convolution implementation to transform the sliding
++  * blocks on image to column matrix, then the convolution operation can be computed
++  * by matrix multiplication between column and convolution weight. Due to the close
++  * relation between im2col and convolution, the concept of **kernel**, **stride**,
++  * **dilate** and **pad** in this operator are inherited from convolution operation.
++  * 
++  * Given the input data of shape :math:`(N, C, *)`, where :math:`N` is the batch size,
++  * :math:`C` is the channel size, and :math:`*` is the arbitrary spatial dimension,
++  * the output column array is always with shape :math:`(N, C \times \prod(\text{kernel}), W)`,
++  * where :math:`C \times \prod(\text{kernel})` is the block size, and :math:`W` is the
++  * block number which is the spatial size of the convolution output with same input parameters.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L100
++  * }}}
++  * 
++  * @return org.apache.mxnet.Symbol
++  */
++def im2col(name : String = null, attr : Map[String, String] = null)
 +    (args : org.apache.mxnet.Symbol*)(kwargs : Map[String, Any] = null):
 +    org.apache.mxnet.Symbol
 +           
@@ -43379,7 +43726,7 @@ index 000000000..ebb4a9e8c
 +  *    det(A) = [-5., 5.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L973
++  * Defined in src/operator/tensor/la_op.cc:L975
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -43688,7 +44035,7 @@ index 000000000..ebb4a9e8c
 +  *                  `[ [-2., 1.5], [1., -0.5] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L919
++  * Defined in src/operator/tensor/la_op.cc:L920
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -43924,7 +44271,7 @@ index 000000000..ebb4a9e8c
 +  *    logabsdet = [1.609438, -inf, 1.609438]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L1031
++  * Defined in src/operator/tensor/la_op.cc:L1034
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -44125,7 +44472,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L76
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L77
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -44146,7 +44493,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L93
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L94
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -44172,7 +44519,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L199
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -44193,7 +44540,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L105
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L106
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -44270,7 +44617,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L360
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L358
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -44853,7 +45200,7 @@ index 000000000..ebb4a9e8c
 +  *                                       [ 1.  0.  0.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L824
++  * Defined in src/operator/tensor/indexing_op.cc:L883
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -45008,10 +45355,6 @@ index 000000000..ebb4a9e8c
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -45021,13 +45364,13 @@ index 000000000..ebb4a9e8c
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -45176,7 +45519,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L293
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -45722,7 +46065,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L269
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L323
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -45745,7 +46088,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L42
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L43
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -45909,7 +46252,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L513
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L511
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -45964,7 +46307,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L799
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L798
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46076,7 +46419,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L778
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L777
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46102,7 +46445,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L193
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L221
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46569,7 +46912,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L574
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L573
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46636,7 +46979,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L759
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L758
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46749,7 +47092,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L313
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L371
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46770,7 +47113,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L625
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L624
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46930,7 +47273,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L108
++  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L109
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -46967,7 +47310,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/softmax.cc:L103
++  * Defined in src/operator/nn/softmax.cc:L134
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47107,7 +47450,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L132
++  * Defined in src/operator/tensor/ordering_op.cc:L133
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47251,7 +47594,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L142
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L170
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47281,7 +47624,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L118
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L119
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47368,7 +47711,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47563,7 +47906,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L718
++  * Defined in src/operator/tensor/indexing_op.cc:L777
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47617,7 +47960,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L393
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L451
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47764,7 +48107,7 @@ index 000000000..ebb4a9e8c
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L857
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L856
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -47895,7 +48238,7 @@ index 000000000..ebb4a9e8c
 +
 diff --git a/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala b/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala
 new file mode 100644
-index 000000000..d52d41b1d
+index 0000000000..d52d41b1d8
 --- /dev/null
 +++ b/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala
 @@ -0,0 +1,815 @@
@@ -48716,10 +49059,10 @@ index 000000000..d52d41b1d
 +
 diff --git a/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala b/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala
 new file mode 100644
-index 000000000..c9993cac0
+index 0000000000..ea5709fff7
 --- /dev/null
 +++ b/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala
-@@ -0,0 +1,14958 @@
+@@ -0,0 +1,15111 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
 + * contributor license agreements.  See the NOTICE file distributed with
@@ -48870,6 +49213,23 @@ index 000000000..c9993cac0
 +  *             h_t = o_t * \tanh(c_t)
 +  *             \end{array}
 +  * 
++  * With the projection size being set, LSTM could use the projection feature to reduce the parameters
++  * size and give some speedups without significant damage to the accuracy.
++  * 
++  * Long Short-Term Memory Based Recurrent Neural Network Architectures for Large Vocabulary Speech
++  * Recognition - Sak et al. 2014. https://arxiv.org/abs/1402.1128
++  * 
++  * .. math::
++  *   \begin{array}{ll}
++  *             i_t = \mathrm{sigmoid}(W_{ii} x_t + b_{ii} + W_{ri} r_{(t-1)} + b_{ri}) \\
++  *             f_t = \mathrm{sigmoid}(W_{if} x_t + b_{if} + W_{rf} r_{(t-1)} + b_{rf}) \\
++  *             g_t = \tanh(W_{ig} x_t + b_{ig} + W_{rc} r_{(t-1)} + b_{rg}) \\
++  *             o_t = \mathrm{sigmoid}(W_{io} x_t + b_{o} + W_{ro} r_{(t-1)} + b_{ro}) \\
++  *             c_t = f_t * c_{(t-1)} + i_t * g_t \\
++  *             h_t = o_t * \tanh(c_t)
++  *             r_t = W_{hr} h_t
++  *             \end{array}
++  * 
 +  * **GRU**
 +  * 
 +  * Gated Recurrent Unit - Cho et al. 2014. http://arxiv.org/abs/1406.1078
@@ -48885,7 +49245,7 @@ index 000000000..c9993cac0
 +  *             \end{array}
 +  * 
 +  * 
-+  * Defined in src/operator/rnn.cc:L354
++  * Defined in src/operator/rnn.cc:L368
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -49164,7 +49524,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/softmax.cc:L103
++  * Defined in src/operator/nn/softmax.cc:L134
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -49333,7 +49693,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L105
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L106
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49369,7 +49729,7 @@ index 000000000..c9993cac0
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -49527,7 +49887,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L360
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L358
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49851,7 +50211,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/lrn.cc:L164
++  * Defined in src/operator/nn/lrn.cc:L158
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -49876,7 +50236,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L313
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L371
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49961,7 +50321,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/activation.cc:L168
++  * Defined in src/operator/nn/activation.cc:L165
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -50080,7 +50440,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L274
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L332
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -50105,7 +50465,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L224
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L244
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -50458,7 +50818,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L539
++  * Defined in src/operator/tensor/indexing_op.cc:L598
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -50482,7 +50842,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L233
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -50503,7 +50863,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L908
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -50648,7 +51008,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/layer_norm.cc:L156
++  * Defined in src/operator/nn/layer_norm.cc:L158
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -50751,7 +51111,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L515
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L579
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -51216,7 +51576,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L193
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L221
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -51267,7 +51627,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L93
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L94
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -51327,7 +51687,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L875
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L874
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -51427,7 +51787,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/concat.cc:L383
++  * Defined in src/operator/nn/concat.cc:L385
 +  * }}}
 +  * 
 +  * @param data		List of arrays to concatenate
@@ -51780,7 +52140,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/convolution.cc:L473
++  * Defined in src/operator/nn/convolution.cc:L469
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -52090,7 +52450,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L293
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -52130,7 +52490,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -52266,7 +52626,7 @@ index 000000000..c9993cac0
 +  *    logabsdet = [1.609438, -inf, 1.609438]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L1031
++  * Defined in src/operator/tensor/la_op.cc:L1034
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -52402,7 +52762,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/pooling.cc:L417
++  * Defined in src/operator/nn/pooling.cc:L414
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -52508,7 +52868,7 @@ index 000000000..c9993cac0
 +  *    det(A) = [-5., 5.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L973
++  * Defined in src/operator/tensor/la_op.cc:L975
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -52578,7 +52938,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L64
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -52643,7 +53003,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L625
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L624
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -52712,7 +53072,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L118
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L119
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -52742,7 +53102,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L270
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -52869,7 +53229,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L227
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L282
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -52996,7 +53356,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L436
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L494
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53092,7 +53452,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L327
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L325
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53121,7 +53481,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L818
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L817
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53215,7 +53575,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L799
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L798
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53380,7 +53740,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L474
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L535
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53431,7 +53791,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L759
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L758
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53675,7 +54035,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L269
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L323
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53737,7 +54097,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L206
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L199
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -53762,7 +54122,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L665
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L664
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -53809,7 +54169,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L108
++  * Defined in src/operator/tensor/elemwise_binary_scalar_op_extended.cc:L109
 +  * }}}
 +  * 
 +  * @param data		source input
@@ -53873,7 +54233,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L142
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L170
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -54033,7 +54393,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L718
++  * Defined in src/operator/tensor/indexing_op.cc:L777
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -54263,7 +54623,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L837
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L836
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -54495,10 +54855,6 @@ index 000000000..c9993cac0
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -54508,13 +54864,13 @@ index 000000000..c9993cac0
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -54796,7 +55152,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L135
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L170
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -54999,7 +55355,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L777
++  * Defined in src/operator/tensor/indexing_op.cc:L836
 +  * }}}
 +  * 
 +  * @param a		The input array
@@ -55127,7 +55483,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L393
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L451
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -55243,6 +55599,33 @@ index 000000000..c9993cac0
 +  *
 +  * {{{
 +  *
++  * Combining the output column matrix of im2col back to image array.
++  * 
++  * Like :class:`~mxnet.ndarray.im2col`, this operator is also used in the vanilla convolution
++  * implementation. Despite the name, col2im is not the reverse operation of im2col. Since there
++  * may be overlaps between neighbouring sliding blocks, the column elements cannot be directly
++  * put back into image. Instead, they are accumulated (i.e., summed) in the input image
++  * just like the gradient computation, so col2im is the gradient of im2col and vice versa.
++  * 
++  * Using the notation in im2col, given an input column array of shape
++  * :math:`(N, C \times  \prod(\text{kernel}), W)`, this operator accumulates the column elements
++  * into output array of shape :math:`(N, C, \text{output_size}[0], \text{output_size}[1], \dots)`.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L182
++  * }}}
++  * 
++  * @return Array[org.apache.mxnet.javaapi.NDArray]
++  */
++ @Experimental
++ def col2im(po: col2imParam) : Array[NDArray]
++ 
++  /**
++  *
++  * {{{
++  *
 +  * Returns element-wise difference of the input arrays with broadcasting.
 +  * 
 +  * `broadcast_minus` is an alias to the function `broadcast_sub`.
@@ -55308,7 +55691,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L574
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L573
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -55355,7 +55738,7 @@ index 000000000..c9993cac0
 +  *                                       [ 1.  0.  0.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/indexing_op.cc:L824
++  * Defined in src/operator/tensor/indexing_op.cc:L883
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -55409,7 +55792,7 @@ index 000000000..c9993cac0
 +  *                  `[ [-2., 1.5], [1., -0.5] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/la_op.cc:L919
++  * Defined in src/operator/tensor/la_op.cc:L920
 +  * }}}
 +  * 
 +  * @param A		Tensor of square matrix
@@ -55551,7 +55934,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L778
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L777
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -55671,7 +56054,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L351
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L409
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -55816,10 +56199,6 @@ index 000000000..c9993cac0
 +  *   // picks elements with specified indices along axis 1
 +  *   pick(x, y=[0,1,0], 1) = [ 1.,  4.,  5.]
 +  * 
-+  *   y = `[ [ 1.],
-+  *        [ 0.],
-+  *        [ 2.] ]
-+  * 
 +  *   // picks elements with specified indices along axis 1 using 'wrap' mode
 +  *   // to place indicies that would normally be out of bounds
 +  *   pick(x, y=[2,-1,-2], 1, mode='wrap') = [ 1.,  4.,  5.]
@@ -55829,13 +56208,13 @@ index 000000000..c9993cac0
 +  *        [ 2.] ]
 +  * 
 +  *   // picks elements with specified indices along axis 1 and dims are maintained
-+  *   pick(x,y, 1, keepdims=True) = `[ [ 2.],
++  *   pick(x, y, 1, keepdims=True) = `[ [ 2.],
 +  *                                  [ 3.],
 +  *                                  [ 6.] ]
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L155
++  * Defined in src/operator/tensor/broadcast_reduce_op_index.cc:L151
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -55895,7 +56274,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L42
++  * Defined in src/operator/tensor/elemwise_unary_op_pow.cc:L43
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -55910,7 +56289,7 @@ index 000000000..c9993cac0
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:246
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:244
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -55941,7 +56320,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L71
++  * Defined in src/operator/tensor/amp_cast.cc:L165
 +  * }}}
 +  * 
 +  * @param data		Weights
@@ -56091,7 +56470,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/batch_norm.cc:L571
++  * Defined in src/operator/nn/batch_norm.cc:L587
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -56127,7 +56506,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L132
++  * Defined in src/operator/tensor/ordering_op.cc:L133
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -56240,6 +56619,35 @@ index 000000000..c9993cac0
 +  */
 +@Experimental
 + def clip(data : org.apache.mxnet.javaapi.NDArray, a_min : java.lang.Float, a_max : java.lang.Float, out : NDArray) : Array[NDArray]
++ 
++  /**
++  *
++  * {{{
++  *
++  * Extract sliding blocks from input array.
++  * 
++  * This operator is used in vanilla convolution implementation to transform the sliding
++  * blocks on image to column matrix, then the convolution operation can be computed
++  * by matrix multiplication between column and convolution weight. Due to the close
++  * relation between im2col and convolution, the concept of **kernel**, **stride**,
++  * **dilate** and **pad** in this operator are inherited from convolution operation.
++  * 
++  * Given the input data of shape :math:`(N, C, *)`, where :math:`N` is the batch size,
++  * :math:`C` is the channel size, and :math:`*` is the arbitrary spatial dimension,
++  * the output column array is always with shape :math:`(N, C \times \prod(\text{kernel}), W)`,
++  * where :math:`C \times \prod(\text{kernel})` is the block size, and :math:`W` is the
++  * block number which is the spatial size of the convolution output with same input parameters.
++  * Only 1-D, 2-D and 3-D of spatial dimension is supported in this operator.
++  * 
++  * 
++  * 
++  * Defined in src/operator/nn/im2col.cc:L100
++  * }}}
++  * 
++  * @return Array[org.apache.mxnet.javaapi.NDArray]
++  */
++ @Experimental
++ def im2col(po: im2colParam) : Array[NDArray]
 + 
 +  /**
 +  *
@@ -56384,7 +56792,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L721
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L720
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -56420,7 +56828,7 @@ index 000000000..c9993cac0
 +  *                                                  [ 2.,  2.,  2.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L58
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L93
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -56470,7 +56878,7 @@ index 000000000..c9993cac0
 +  *   argsort(x, axis=None) = [ 3.,  1.,  5.,  0.,  4.,  2.]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/ordering_op.cc:L183
++  * Defined in src/operator/tensor/ordering_op.cc:L185
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -56806,7 +57214,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L82
++  * Defined in src/operator/tensor/broadcast_reduce_op_value.cc:L117
 +  * }}}
 +  * 
 +  * @param data		The input
@@ -57217,7 +57625,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L76
++  * Defined in src/operator/tensor/elemwise_unary_op_logexp.cc:L77
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -57262,7 +57670,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/nn/fully_connected.cc:L291
++  * Defined in src/operator/nn/fully_connected.cc:L287
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -57330,7 +57738,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L857
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L856
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -57404,7 +57812,7 @@ index 000000000..c9993cac0
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L513
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L511
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -57600,7 +58008,7 @@ index 000000000..c9993cac0
 +  * It casts only between low precision float/FP32 and does not do anything for other types.
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/amp_cast.cc:L37
++  * Defined in src/operator/tensor/amp_cast.cc:L121
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -62041,6 +62449,51 @@ index 000000000..c9993cac0
 + 
 + }
 +/**
++ * This Param Object is specifically used for col2im
++   * @param data		Input array to combine sliding blocks.
++  * @param output_size		The spatial dimension of image array: (w,), (h, w) or (d, h, w).
++  * @param kernel		Sliding kernel size: (w,), (h, w) or (d, h, w).
++ */
++ class col2imParam(data : org.apache.mxnet.javaapi.NDArray,output_size : org.apache.mxnet.javaapi.Shape,kernel : org.apache.mxnet.javaapi.Shape) {
++  def getData() = this.data
++  def getOutput_size() = this.output_size
++  def getKernel() = this.kernel
++  private var stride: org.apache.mxnet.javaapi.Shape = null
++/**
++ * @param stride		The stride between adjacent sliding blocks in spatial dimension: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++ */
++def setStride(stride : org.apache.mxnet.javaapi.Shape): col2imParam = {
++  this.stride = stride
++  this
++ }
++  def getStride() = this.stride
++  private var dilate: org.apache.mxnet.javaapi.Shape = null
++/**
++ * @param dilate		The spacing between adjacent kernel points: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++ */
++def setDilate(dilate : org.apache.mxnet.javaapi.Shape): col2imParam = {
++  this.dilate = dilate
++  this
++ }
++  def getDilate() = this.dilate
++  private var pad: org.apache.mxnet.javaapi.Shape = null
++/**
++ * @param pad		The zero-value padding size on both sides of spatial dimension: (w,), (h, w) or (d, h, w). Defaults to no padding.
++ */
++def setPad(pad : org.apache.mxnet.javaapi.Shape): col2imParam = {
++  this.pad = pad
++  this
++ }
++  def getPad() = this.pad
++  private var out : org.apache.mxnet.NDArray = null
++def setOut(out : NDArray) : col2imParam = {
++  this.out = out
++  this
++ }
++ def getOut() = this.out
++ 
++ }
++/**
 + * This Param Object is specifically used for one_hot
 +   * @param indices		array of locations where to set on_value
 +  * @param depth		Depth of the one hot dimension.
@@ -62771,6 +63224,49 @@ index 000000000..c9993cac0
 +  def getNum_weights() = this.num_weights
 +  private var out : org.apache.mxnet.NDArray = null
 +def setOut(out : NDArray) : preloaded_multi_sgd_mom_updateParam = {
++  this.out = out
++  this
++ }
++ def getOut() = this.out
++ 
++ }
++/**
++ * This Param Object is specifically used for im2col
++   * @param data		Input array to extract sliding blocks.
++  * @param kernel		Sliding kernel size: (w,), (h, w) or (d, h, w).
++ */
++ class im2colParam(data : org.apache.mxnet.javaapi.NDArray,kernel : org.apache.mxnet.javaapi.Shape) {
++  def getData() = this.data
++  def getKernel() = this.kernel
++  private var stride: org.apache.mxnet.javaapi.Shape = null
++/**
++ * @param stride		The stride between adjacent sliding blocks in spatial dimension: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++ */
++def setStride(stride : org.apache.mxnet.javaapi.Shape): im2colParam = {
++  this.stride = stride
++  this
++ }
++  def getStride() = this.stride
++  private var dilate: org.apache.mxnet.javaapi.Shape = null
++/**
++ * @param dilate		The spacing between adjacent kernel points: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.
++ */
++def setDilate(dilate : org.apache.mxnet.javaapi.Shape): im2colParam = {
++  this.dilate = dilate
++  this
++ }
++  def getDilate() = this.dilate
++  private var pad: org.apache.mxnet.javaapi.Shape = null
++/**
++ * @param pad		The zero-value padding size on both sides of spatial dimension: (w,), (h, w) or (d, h, w). Defaults to no padding.
++ */
++def setPad(pad : org.apache.mxnet.javaapi.Shape): im2colParam = {
++  this.pad = pad
++  this
++ }
++  def getPad() = this.pad
++  private var out : org.apache.mxnet.NDArray = null
++def setOut(out : NDArray) : im2colParam = {
 +  this.out = out
 +  this
 + }

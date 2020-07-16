@@ -29,5 +29,4 @@ public class sk_jpegencoder_options_t extends Pointer {
     public native int fQuality(); public native sk_jpegencoder_options_t fQuality(int setter);
     public native @Cast("sk_jpegencoder_downsample_t") int fDownsample(); public native sk_jpegencoder_options_t fDownsample(int setter);
     public native @Cast("sk_jpegencoder_alphaoption_t") int fAlphaOption(); public native sk_jpegencoder_options_t fAlphaOption(int setter);
-    public native @Cast("sk_transfer_function_behavior_t") int fBlendBehavior(); public native sk_jpegencoder_options_t fBlendBehavior(int setter);
 }

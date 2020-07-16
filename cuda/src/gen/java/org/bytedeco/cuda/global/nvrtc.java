@@ -529,45 +529,6 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
    
 // #if NVRTC_GET_TYPE_NAME || __DOXYGEN_ONLY__
 
-// #if NVRTC_USE_CXXABI || __clang__ || __GNUC__ || __DOXYGEN_ONLY__
-// #include <cxxabi.h>
-// #include <cstdlib>
-
-// #elif defined(_WIN32)
-// #include <Windows.h>
-// #include <DbgHelp.h>
-// #endif /* NVRTC_USE_CXXABI || __clang__ || __GNUC__ */
-
-
-// #include <string>
-// #include <typeinfo>
-
-
-/*************************************************************************//**
- *
- * \defgroup hosthelper Host Helper
- *
- * NVRTC defines the following functions for easier interaction with host code.
- *
- ****************************************************************************/
-
-/**
- * \ingroup hosthelper
- * \brief   nvrtcGetTypeName stores the source level name of the template type argument
- *          T in the given std::string location.
- *
- * This function is only provided when the macro NVRTC_GET_TYPE_NAME is
- * defined with a non-zero value. It uses abi::__cxa_demangle or UnDecorateSymbolName
- * function calls to extract the type name, when using gcc/clang or cl.exe compilers,
- * respectively. If the name extraction fails, it will return NVRTC_INTERNAL_ERROR,
- * otherwise *result is initialized with the extracted name.
- * 
- * @param result [in] : pointer to std::string in which to store the type name.
- * @return
- *  - \link #nvrtcResult NVRTC_SUCCESS \endlink
- *  - \link #nvrtcResult NVRTC_ERROR_INTERNAL_ERROR \endlink
- *
- */
 // #endif  /* NVRTC_GET_TYPE_NAME */
 
 // #endif /* __NVRTC_H__ */

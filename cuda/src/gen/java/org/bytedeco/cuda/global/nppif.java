@@ -17,7 +17,7 @@ public class nppif extends org.bytedeco.cuda.presets.nppif {
 
 // Parsed from <nppi_filtering_functions.h>
 
- /* Copyright 2009-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2020 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -16793,18 +16793,18 @@ public static native @Cast("NppStatus") int nppiFilterSharpenBorder_32f_AC4R(@Ca
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C1R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Three channel 8-bit unsigned unsharp filter.
@@ -16813,18 +16813,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C1R(@Cast
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C3R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 8-bit unsigned unsharp filter.
@@ -16833,18 +16833,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C3R(@Cast
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							       @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C4R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-							   @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                               @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 8-bit unsigned unsharp filter (alpha channel is not processed).
@@ -16853,18 +16853,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_C4R(@Cast
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Single channel 16-bit unsigned unsharp filter.
@@ -16873,18 +16873,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_8u_AC4R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C1R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Three channel 16-bit unsigned unsharp filter.
@@ -16893,18 +16893,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C1R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C3R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 16-bit unsigned unsharp filter.
@@ -16913,18 +16913,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C3R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C4R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 16-bit unsigned unsharp filter (alpha channel is not processed).
@@ -16933,18 +16933,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_C4R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Single channel 16-bit signed unsharp filter.
@@ -16953,18 +16953,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16u_AC4R(@Ca
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C1R(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C1R(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Three channel 16-bit signed unsharp filter.
@@ -16973,18 +16973,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C1R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C3R(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C3R(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 16-bit signed unsharp filter.
@@ -16993,18 +16993,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C3R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C4R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C4R(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C4R(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C4R(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 16-bit signed unsharp filter (alpha channel is not processed).
@@ -17013,18 +17013,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_C4R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_AC4R(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_AC4R(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Single channel 32-bit floating point unsharp filter.
@@ -17033,18 +17033,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_16s_AC4R(@Ca
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C1R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Three channel 32-bit floating point unsharp filter.
@@ -17053,18 +17053,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C1R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C3R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 32-bit floating point unsharp filter.
@@ -17073,18 +17073,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C3R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                    @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C4R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								@Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Four channel 32-bit floating point unsharp filter (alpha channel is not processed).
@@ -17093,18 +17093,18 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_C4R(@Cas
  *
  */
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+                                     @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") BytePointer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
 public static native @Cast("NppStatus") int nppiFilterUnsharpBorder_32f_AC4R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nRadius, @Cast("Npp32f") float nSigma, @Cast("Npp32f") float nWeight, @Cast("Npp32f") float nThreshold,
-								 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
+                                 @Cast("NppiBorderType") int eBorderType, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
  * Single channel 8-bit unsigned unsharp filter scratch memory size.
@@ -19107,6 +19107,1568 @@ public static native @Cast("NppStatus") int nppiHistogramOfGradientsBorder_32f_C
 
 /** \} image_filter_histogram_of_oriented_gradients_border */
 
+/** \defgroup image_filter_flood_fill FloodFill
+ * Flood fill a connected region of an image with a specified new value.
+ *
+ * \{
+ *
+ */
+
+/** \name FloodFillGetBufferSize
+ *
+ * Before calling any of the FloodFill functions the application first needs to call the
+ * FloodFillGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The application allocated device memory
+ * is then passed as the pBuffer parameter to the corresponding FloodFill function.
+ *
+ * \{
+ *
+ */
+
+/**
+ * Calculate scratch buffer size needed for the FloodFill function based on destination image oSizeROI width and height.
+ *
+ * @param oSizeROI \ref roi_specification.
+ * @param hpBufferSize Required buffer size in bytes.
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGetBufferSize(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiFloodFillGetBufferSize(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiFloodFillGetBufferSize(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** \} Flood_fill_get_buffer_size */
+
+/** \name FloodFill
+ *
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location in an image with a new pixel value. 
+ *  
+ * Before calling any of the FloodFill functions the application first needs to call the
+ * FloodFillGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
+ * is then passed as the pBuffer parameter to the corresponding FloodFill function. 
+ * 
+ * Optionally the function can return connected region information for the filled region in the pConnectedRegion
+ * NppiConnectedRegion structure in host memory. The oBoundingBox x and y will be set to the left and top coordinates and width
+ * and height will be set to the right bottom coordinates of the bounding box relative to pSrcDst.  Set pConnectedRegion to NULL
+ * if not required. Requesting pConnectedRegion information may slightly degrade performance.
+ *  
+ * \{
+ *
+ */
+
+/**
+ * 1 channel 8-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification. 
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                          @Cast("const Npp8u") byte nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI,
+                          NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                          @Cast("const Npp8u") byte nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI,
+                          NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                          @Cast("const Npp8u") byte nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI,
+                          NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                      @Cast("const Npp8u") byte nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                      NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                      @Cast("const Npp8u") byte nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                      NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                      @Cast("const Npp8u") byte nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                      NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 8-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                          @Cast("const Npp8u*") BytePointer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                          NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                          @Cast("const Npp8u*") ByteBuffer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                          NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                          @Cast("const Npp8u*") byte[] aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                          NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                      @Cast("const Npp8u*") BytePointer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                      NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C3IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                      @Cast("const Npp8u*") ByteBuffer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                      NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_8u_C3IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                      @Cast("const Npp8u*") byte[] aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                      NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 16-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp16u") short nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp16u") short nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp16u") short nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp16u") short nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp16u") short nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp16u") short nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 16-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp16u*") ShortPointer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp16u*") ShortBuffer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp16u*") short[] aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp16u*") ShortPointer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C3IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp16u*") ShortBuffer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_16u_C3IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp16u*") short[] aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 32-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp32u") int nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp32u") int nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("const Npp32u") int nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp32u") int nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp32u") int nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                       @Cast("const Npp32u") int nNewValue, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 32-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C3IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("const Npp32u*") IntPointer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C3IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C3IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("const Npp32u*") int[] aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                           NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C3IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("const Npp32u*") IntPointer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C3IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFill_32u_C3IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("const Npp32u*") int[] aNewValues, @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, 
+                       NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/** \} flood_fill */
+
+/** \name FloodFillBoundary
+ *
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location in an image with a new pixel value. 
+ * Also fill boundary of filled region with a specified color. 
+ *  
+ * Before calling any of the FloodFill functions the application first needs to call the
+ * FloodFillGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
+ * is then passed as the pBuffer parameter to the corresponding FloodFill function. 
+ * 
+ * Optionally the function can return connected region information for the filled region in the pConnectedRegion
+ * NppiConnectedRegion structure in host memory. The oBoundingBox x and y will be set to the left and top coordinates and width
+ * and height will be set to the right bottom coordinates of the bounding box relative to pSrcDst.  Set pConnectedRegion to NULL
+ * if not required. Requesting pConnectedRegion information may slightly degrade performance.
+ *  
+ * \{
+ *
+ */
+
+/**
+ * 1 channel 8-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification. 
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                  @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                  @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                  @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                  @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                  @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                  @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                  @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                  @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                  @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                              @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                              @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                              @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                              @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                              @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                              @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                              @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                              @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                              @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 8-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                  @Cast("const Npp8u*") BytePointer aNewValues, @Cast("const Npp8u*") BytePointer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                  @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                  @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                  @Cast("const Npp8u*") ByteBuffer aNewValues, @Cast("const Npp8u*") ByteBuffer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                  @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                  @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                  @Cast("const Npp8u*") byte[] aNewValues, @Cast("const Npp8u*") byte[] aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                  @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                  @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+
+/**
+ * 1 channel 16-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 16-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp16u*") ShortPointer aNewValues, @Cast("const Npp16u*") ShortPointer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp16u*") ShortBuffer aNewValues, @Cast("const Npp16u*") ShortBuffer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp16u*") short[] aNewValues, @Cast("const Npp16u*") short[] aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+
+
+/**
+ * 1 channel 32-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 32-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp32u*") IntPointer aNewValues, @Cast("const Npp32u*") IntPointer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("const Npp32u*") IntBuffer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("const Npp32u*") int[] aNewValues, @Cast("const Npp32u*") int[] aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                                   @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp32u*") IntPointer aNewValues, @Cast("const Npp32u*") IntPointer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("const Npp32u*") IntBuffer aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("const Npp32u*") int[] aNewValues, @Cast("const Npp32u*") int[] aBoundaryValues, @Cast("NppiNorm") int eNorm, 
+                               @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") byte[] pBuffer);
+
+/** \} flood_fill_boundary */
+
+/** \name FloodFillRange
+ *
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location and with a Pixel value >= Min and
+ * <= Max in an image with a new pixel value.
+ *  
+ * Before calling any of the FloodFill functions the application first needs to call the
+ * FloodFillGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
+ * is then passed as the pBuffer parameter to the corresponding FloodFill function.
+ * 
+ * Optionally the function can return connected region information for the filled region in the pConnectedRegion
+ * NppiConnectedRegion structure in host memory. The oBoundingBox x and y will be set to the left and top coordinates and width
+ * and height will be set to the right bottom coordinates of the bounding box relative to pSrcDst.  Set pConnectedRegion to NULL
+ * if not required. Requesting pConnectedRegion information may slightly degrade performance.
+ * 
+ * \{
+ *
+ */
+
+/**
+ * 1 channel 8-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= this value. 
+ * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification. 
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                           @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                           @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                           @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 8-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                               @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                               @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, 
+                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                           @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, 
+                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                           @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                           @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, 
+                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                           @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 16-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= this value. 
+ * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 16-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 32-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= this value. 
+ * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 32-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, 
+                                @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                            @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, 
+                            @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                            @Cast("Npp8u*") byte[] pBuffer);
+
+/** \} flood_fill_range */
+
+/** \name FloodFillRangeBoundary
+ *
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location and with a Pixel value >= Min and
+ * <= Max in an image with a new pixel value.
+ * Also fill boundary of filled region with a specified color. 
+ *  
+ * Before calling any of the FloodFill functions the application first needs to call the
+ * FloodFillGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
+ * is then passed as the pBuffer parameter to the corresponding FloodFill function.
+ * 
+ * Optionally the function can return connected region information for the filled region in the pConnectedRegion
+ * NppiConnectedRegion structure in host memory. The oBoundingBox x and y will be set to the left and top coordinates and width
+ * and height will be set to the right bottom coordinates of the bounding box relative to pSrcDst.  Set pConnectedRegion to NULL
+ * if not required. Requesting pConnectedRegion information may slightly degrade performance.
+ * 
+ * \{
+ *
+ */
+
+/**
+ * 1 channel 8-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= this value. 
+ * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification. 
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue,
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue,
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue,
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 8-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, @Cast("const Npp8u*") BytePointer aBoundaryValues, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, @Cast("const Npp8u*") ByteBuffer aBoundaryValues, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, @Cast("const Npp8u*") byte[] aBoundaryValues, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, @Cast("const Npp8u*") BytePointer aBoundryValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, @Cast("const Npp8u*") ByteBuffer aBoundryValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                   @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, @Cast("const Npp8u*") byte[] aBoundryValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                   @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 16-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= this value. 
+ * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 16-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, @Cast("const Npp16u*") ShortPointer aBoundaryValues,
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, @Cast("const Npp16u*") ShortBuffer aBoundaryValues,
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, @Cast("const Npp16u*") short[] aBoundaryValues,
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, @Cast("const Npp16u*") ShortPointer aBoundaryValues, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, @Cast("const Npp16u*") ShortBuffer aBoundaryValues, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, @Cast("const Npp16u*") short[] aBoundaryValues, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 32-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= this value. 
+ * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 32-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, @Cast("const Npp32u*") IntPointer aBoundaryValues, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("const Npp32u*") IntBuffer aBoundaryValues, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                        @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, @Cast("const Npp32u*") int[] aBoundaryValues, 
+                                        @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                        @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, @Cast("const Npp32u*") IntPointer aBoundaryValues,
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("const Npp32u*") IntBuffer aBoundaryValues,
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                    @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, @Cast("const Npp32u*") int[] aBoundaryValues,
+                                    @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                    @Cast("Npp8u*") byte[] pBuffer);
+
+/** \} flood_fill_range_boundary */
+
+/** \name FloodFillGradient
+ *
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location and with an original pixel value
+ * including seed - Min to seed + Max in an image with a new pixel value.
+ *  
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location in an image with a new pixel value. 
+ *  
+ * Before calling any of the FloodFill functions the application first needs to call the
+ * FloodFillGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
+ * is then passed as the pBuffer parameter to the corresponding FloodFill function.
+ * 
+ * Optionally the function can return connected region information for the filled region in the pConnectedRegion
+ * NppiConnectedRegion structure in host memory. The oBoundingBox x and y will be set to the left and top coordinates and width
+ * and height will be set to the right bottom coordinates of the bounding box relative to pSrcDst.  Set pConnectedRegion to NULL
+ * if not required. Requesting pConnectedRegion information may slightly degrade performance.
+ * 
+ * \{
+ *
+ */
+
+/**
+ * 1 channel 8-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= seed value - this value. 
+ * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification. 
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                                  @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                                  @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                                  @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                              @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                              @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, 
+                              @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 8-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, 
+                                  @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, 
+                                  @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, 
+                                  @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, 
+                              @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, 
+                              @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, 
+                              @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 16-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= seed value - this value. 
+ * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 16-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 32-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= seed value - this value. 
+ * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 32-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, 
+                                   @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, 
+                               @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, @Cast("Npp8u*") byte[] pBuffer);
+
+/** \} flood_fill_gradient */
+
+/** \name FloodFillGradientBoundary
+ *
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location and with an original pixel value
+ * including seed - Min to seed + Max in an image with a new pixel value.
+ * Also fill boundary of filled region with a specified color. 
+ *  
+ * In place flood fill of a region of pixels connected to the pixel at the seed pixel location in an image with a new pixel value. 
+ *  
+ * Before calling any of the FloodFill functions the application first needs to call the
+ * FloodFillGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
+ * is then passed as the pBuffer parameter to the corresponding FloodFill function.
+ * 
+ * Optionally the function can return connected region information for the filled region in the pConnectedRegion
+ * NppiConnectedRegion structure in host memory. The oBoundingBox x and y will be set to the left and top coordinates and width
+ * and height will be set to the right bottom coordinates of the bounding box relative to pSrcDst.  Set pConnectedRegion to NULL
+ * if not required. Requesting pConnectedRegion information may slightly degrade performance.
+ * 
+ * \{
+ *
+ */
+
+/**
+ * 1 channel 8-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= seed value - this value. 
+ * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification. 
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                          @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, 
+                                          @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                          @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                          @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, 
+                                          @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                          @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                          @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundaryValue, 
+                                          @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                          @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                      @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundryValue, 
+                                      @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                      @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                      @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundryValue, 
+                                      @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                      @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                      @Cast("Npp8u") byte nMin, @Cast("Npp8u") byte nMax, @Cast("const Npp8u") byte nNewValue, @Cast("const Npp8u") byte nBoundryValue, 
+                                      @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                      @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 8-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                          @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, @Cast("const Npp8u*") BytePointer aBoundaryValues,
+                                          @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                          @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                          @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, @Cast("const Npp8u*") ByteBuffer aBoundaryValues,
+                                          @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                          @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                          @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, @Cast("const Npp8u*") byte[] aBoundaryValues,
+                                          @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                          @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                      @Cast("Npp8u*") BytePointer aMin, @Cast("Npp8u*") BytePointer aMax, @Cast("const Npp8u*") BytePointer aNewValues, @Cast("const Npp8u*") BytePointer aBoundaryValues,
+                                      @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                      @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                      @Cast("Npp8u*") ByteBuffer aMin, @Cast("Npp8u*") ByteBuffer aMax, @Cast("const Npp8u*") ByteBuffer aNewValues, @Cast("const Npp8u*") ByteBuffer aBoundaryValues,
+                                      @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                      @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                      @Cast("Npp8u*") byte[] aMin, @Cast("Npp8u*") byte[] aMax, @Cast("const Npp8u*") byte[] aNewValues, @Cast("const Npp8u*") byte[] aBoundaryValues,
+                                      @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                      @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 16-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= seed value - this value. 
+ * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp16u") short nMin, @Cast("Npp16u") short nMax, @Cast("const Npp16u") short nNewValue, @Cast("const Npp16u") short nBoundaryValue, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 16-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, @Cast("const Npp16u*") ShortPointer aBoundaryValues, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, @Cast("const Npp16u*") ShortBuffer aBoundaryValues, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, @Cast("const Npp16u*") short[] aBoundaryValues, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp16u*") ShortPointer aMin, @Cast("Npp16u*") ShortPointer aMax, @Cast("const Npp16u*") ShortPointer aNewValues, @Cast("const Npp16u*") ShortPointer aBoundaryValues, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp16u*") ShortBuffer aMin, @Cast("Npp16u*") ShortBuffer aMax, @Cast("const Npp16u*") ShortBuffer aNewValues, @Cast("const Npp16u*") ShortBuffer aBoundaryValues, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp16u*") short[] aMin, @Cast("Npp16u*") short[] aMax, @Cast("const Npp16u*") short[] aNewValues, @Cast("const Npp16u*") short[] aBoundaryValues, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 1 channel 32-bit unsigned integer grayscale in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param nMin Value of tested pixel must be >= seed value - this value. 
+ * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nNewValue Image pixel value to be used to replace matching pixels. 
+ * @param nBoundaryValue Image pixel value to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp32u") int nMin, @Cast("Npp32u") int nMax, @Cast("const Npp32u") int nNewValue, @Cast("const Npp32u") int nBoundaryValue, 
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") byte[] pBuffer);
+
+/**
+ * 3 channel 32-bit unsigned integer color in place flood fill.
+ * 
+ * @param pSrcDst  \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
+ * @param oSeed Image location of seed pixel value to be used for comparison. 
+ * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
+ * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aNewValues Image pixel values to be used to replace matching pixels. 
+ * @param aBoundaryValues Image pixel values to be used for region boundary. 
+ * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
+ * @param oSizeROI \ref roi_specification.
+ * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
+ *        filled region. Set to NULL if not needed.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, @Cast("const Npp32u*") IntPointer aBoundaryValues,
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("const Npp32u*") IntBuffer aBoundaryValues,
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C3IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                           @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, @Cast("const Npp32u*") int[] aBoundaryValues,
+                                           @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                           @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C3IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp32u*") IntPointer aMin, @Cast("Npp32u*") IntPointer aMax, @Cast("const Npp32u*") IntPointer aNewValues, @Cast("const Npp32u*") IntPointer aBoundaryValues,
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") BytePointer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C3IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp32u*") IntBuffer aMin, @Cast("Npp32u*") IntBuffer aMax, @Cast("const Npp32u*") IntBuffer aNewValues, @Cast("const Npp32u*") IntBuffer aBoundaryValues,
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") ByteBuffer pBuffer);
+public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C3IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiPoint oSeed, 
+                                       @Cast("Npp32u*") int[] aMin, @Cast("Npp32u*") int[] aMax, @Cast("const Npp32u*") int[] aNewValues, @Cast("const Npp32u*") int[] aBoundaryValues,
+                                       @Cast("NppiNorm") int eNorm, @ByVal NppiSize oSizeROI, NppiConnectedRegion pConnectedRegion, 
+                                       @Cast("Npp8u*") byte[] pBuffer);
+
+/** \} flood_fill_gradient_boundary */
+
+/** \} image_filter_flood_fill */
+
+
 /** \defgroup image_filter_label_markers LabelMarkers
  * Generate image connected region label markers to be used for later image segmentation.
  *
@@ -19309,9 +20871,9 @@ public static native @Cast("NppStatus") int nppiLabelMarkersUFGetBufferSize_32u_
  *  
  * The algorithm used in this implementation is based on the one described in "An Optimized Union-Find Algorithm for Connected Components Labeling Using GPUs" by Jun Chen and others. 
  *  
- * Note that the destination images in these functions must be allocated with cudaMalloc() and NOT cudaMallocPitch(). 
+ * Note that the destination image in these functions must be allocated with cudaMalloc() and NOT cudaMallocPitch(). 
  * Also the pitch of the output image MUST be set to oSizeROI.width * sizeof(Npp32u).
- *
+ *  
  * \{
  *
  */
@@ -19599,14 +21161,14 @@ public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSiz
  * Calculate scratch buffer size needed for 1 channel 32-bit unsigned integer CompressMarkerLabels function based on the number returned in pNumber from a previous nppiLabelMarkers call.
  * Note that this is the only function that supports the nppiCompressMarkerLabelsUF_32u function and that nStartingNumber MUST be ROI width * ROI height when used with that function.
  *  
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_32u function or ROI width * ROI height for images generated by the nppiLabelMarkersUF funcions.
+ * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_32u function or ROI width * ROI height for images generated by the nppiLabelMarkersUF function 
+ *                        and those values MUST match the values used those used in that call.
  * @param hpBufferSize Required buffer size in bytes.
  *    
  */
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u_C1R(int nStartingNumber, IntPointer hpBufferSize);
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u_C1R(int nStartingNumber, IntBuffer hpBufferSize);
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u_C1R(int nStartingNumber, int[] hpBufferSize);
-
 
 /** \} compress_marker_labels_get_buffer_size */
 
@@ -19746,16 +21308,16 @@ public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u_C1IR(@C
  * @param pSrcDst  \ref in_place_image_pointer.
  * @param nSrcDstStep \ref source_image_line_step. NOTE THAT THIS VALUE MUST BE EQUAL TO oSizeROI.width * sizeof(Npp32u).
  * @param oSizeROI \ref roi_specification.
- * @param nStartingNumber MUST be ROI width * ROI height.
+ * @param nStartingNumber MUST be ROI width * ROI height and MUST match ROI values used in the label markers generation function call.
  * @param pNewNumber Pointer to host memory integer value where the maximum renumbered marker label ID will be returned.
  * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding CompressMarkerLabelsGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
+ * @return \ref image_data_error_codes, \ref roi_error_codes. 
+ *  
  * Note that the image in this function must be allocated with cudaMalloc() and NOT cudaMallocPitch(). 
  * Also the pitch MUST be set to oSizeROI.width * sizeof(Npp32u).  And the image pointer and oSizeROI values MUST match those used when nppiLabelMarkersUF was called.
- *  
- */ 
+ *    
+ */
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
@@ -19763,6 +21325,33 @@ public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR_
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer);
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
 public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer);
+
+/** \} compress_marker_labels */
+
+/** \name CompressMarkerLabelsUFBatch
+ *
+ * Renumber connected region marker label IDs from one or more previous calls to nppiLabelMarkersUF_32u_C1R(_Ctx), nppiLabelMarkersUFBatch_32u_C1R(_Ctx), 
+ * or nppiLabelMarkersUFBatch_32u_C1R_Advanced(_Ctx) calls to eliminate label numbering sparseness.
+ * Note that while marker label IDs still start at ID number 1, the value of pNewNumber returned by this function will represent
+ * the minimum number of label IDs to give each connected region in the image a unique label ID. 
+ *
+ * Before calling any of the CompressMarkerLabelsUFBatch functions the application first needs to call the corresponding
+ * CompressMarkerLabelsGetBufferSize to determine the amount of device memory to allocate as a working buffer for each image. 
+ * If all of the images in the batch have the same ROI values then the total amount of device memory needed is the value returned by CompressMarkerLabelsGetBufferSize and 
+ * can be allocated as a single chunk of device memory of returned buffer size value * nBatchList or separately per image in the batch. 
+ * The pointer to each buffer if the images in the batch have variable ROIs is the returned buffer size for each image.  This can also be allocated as a single 
+ * chunk of device memory for all images in the list if desired.  In any case, the buffer pointers for each image in the batch list must be set correctly per each image. 
+ * Once pBufferList is created and initialized then it needs to be copied to device memory and a pointer to that list must be passed to the compression batch function. 
+ *  
+ * Note that these functions are only supported for output from the UF versions of LabelMarkers functions. Also, for each marker labels image in the list the same image pointer value 
+ * and ROI that were used when creating the marker labels image MUST be used.
+ *    
+ * Also note that the images in this function must be allocated with cudaMalloc() and NOT cudaMallocPitch(). 
+ * And the pitch MUST be set to oSize.width * sizeof(Npp32u).  And the image pointers and oSize values MUST match those used when the nppiLabelMarkersUF funcions were called.
+ *  
+ * \{
+ *
+ */
 
 public static class NppiBufferDescriptor extends Pointer {
     static { Loader.load(); }
@@ -19782,7 +21371,68 @@ public static class NppiBufferDescriptor extends Pointer {
     public native int nBufferSize(); public native NppiBufferDescriptor nBufferSize(int setter);  // step size
 }
 
-/** \} compress_marker_labels */
+
+/**
+ * 1 channel 32-bit unsigned integer in place label markers renumbering for output from nppiLabelMarkersUF functions only with numbering sparseness elimination
+ * image generation with one per list image ROI.
+ * 
+ * @param pSrcDstBatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize is ignored.
+ * @param pBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device memory buffer pointers and size as 
+ *                    returned by at least one CompressMarkerLabelsGetBufferSize call.
+ * @param pNewMaxLabelIDList Device memory pointer at least nBatchSize * sizeof(Npp32u) bytes which will contain the returned per image new maximum label ID.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param nPerImageBufferSize The value of the buffer size value returned by the call to CompressMarkerLabelsGetBufferSize for one image in the batch list.  
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Ctx(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntPointer pNewMaxLabelIDList, int nBatchSize, 
+                                             @ByVal NppiSize oSizeROI, int nPerImageBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Ctx(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntBuffer pNewMaxLabelIDList, int nBatchSize, 
+                                             @ByVal NppiSize oSizeROI, int nPerImageBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Ctx(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") int[] pNewMaxLabelIDList, int nBatchSize, 
+                                             @ByVal NppiSize oSizeROI, int nPerImageBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntPointer pNewMaxLabelIDList, int nBatchSize, 
+                                         @ByVal NppiSize oSizeROI, int nPerImageBufferSize);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntBuffer pNewMaxLabelIDList, int nBatchSize, 
+                                         @ByVal NppiSize oSizeROI, int nPerImageBufferSize);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") int[] pNewMaxLabelIDList, int nBatchSize, 
+                                         @ByVal NppiSize oSizeROI, int nPerImageBufferSize);
+
+
+/**
+ * 1 channel 32-bit unsigned integer in place label markers renumbering for output from nppiLabelMarkersUF functions only with numbering sparseness elimination
+ * image generation with per image ROI.
+ * 
+ * @param pSrcDstBatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize ROI is used.
+ * @param pBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device memory buffer pointers and sizes as 
+ *                    returned by per image CompressMarkerLabelsGetBufferSize calls.
+ * @param pNewMaxLabelIDList Device memory pointer at least nBatchSize * sizeof(Npp32u) bytes which will contain the returned per image new maximum label ID.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oMaxSizeROI \ref roi_specification maximum ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param nLargestPerImageBufferSize The value of the the largest per image buffer size value returned by the per image calls to CompressMarkerLabelsGetBufferSize for the images in the batch list.  
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+
+
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Advanced_Ctx(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntPointer pNewMaxLabelIDList, int nBatchSize, 
+                                                      @ByVal NppiSize oMaxSizeROI, int nLargestPerImageBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Advanced_Ctx(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntBuffer pNewMaxLabelIDList, int nBatchSize, 
+                                                      @ByVal NppiSize oMaxSizeROI, int nLargestPerImageBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Advanced_Ctx(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") int[] pNewMaxLabelIDList, int nBatchSize, 
+                                                      @ByVal NppiSize oMaxSizeROI, int nLargestPerImageBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Advanced(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntPointer pNewMaxLabelIDList, int nBatchSize, 
+                                                  @ByVal NppiSize oMaxSizeROI, int nLargestPerImageBufferSize);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Advanced(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") IntBuffer pNewMaxLabelIDList, int nBatchSize, 
+                                                  @ByVal NppiSize oMaxSizeROI, int nLargestPerImageBufferSize);
+public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_C1IR_Advanced(NppiImageDescriptor pSrcDstBatchList, NppiBufferDescriptor pBufferList, @Cast("unsigned int*") int[] pNewMaxLabelIDList, int nBatchSize, 
+                                                  @ByVal NppiSize oMaxSizeROI, int nLargestPerImageBufferSize);
+
+/** \} compress_marker_labels_uf_batch */
 
 /** \} image_filter_compress_marker_labels */
 

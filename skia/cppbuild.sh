@@ -33,6 +33,8 @@ case $PLATFORM in
         export TARGET_CPU="x64"
         ;;
     macosx-*)
+        export CC="clang"
+        export CXX="clang++"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -41,7 +43,7 @@ case $PLATFORM in
 esac
 
 # Must be kept in sync with skia.version in pom.xml
-SKIA_VERSION=1.68.3
+SKIA_VERSION=2.80.0
 download https://chromium.googlesource.com/chromium/tools/depot_tools.git/+archive/master.tar.gz depot_tools.tar.gz
 download https://github.com/mono/skia/archive/v$SKIA_VERSION.tar.gz skia-$SKIA_VERSION.tar.gz
 
@@ -54,20 +56,20 @@ tar --totals -xzf ../depot_tools.tar.gz -C depot_tools
 tar --totals -xzf ../skia-$SKIA_VERSION.tar.gz
 
 sedinplace 's/"HAVE_MEMMOVE"/"HAVE_MEMMOVE", "XML_DEV_URANDOM"/g' skia-$SKIA_VERSION/third_party/expat/BUILD.gn
-sedinplace '/sources = tests_sources/,/}/d' skia-$SKIA_VERSION/BUILD.gn
+#sedinplace '/sources = tests_sources/,/}/d' skia-$SKIA_VERSION/BUILD.gn
 sedinplace /-ffp-contract=fast/d skia-$SKIA_VERSION/BUILD.gn
 sedinplace /-march=haswell/d skia-$SKIA_VERSION/BUILD.gn
 sedinplace /-Werror/d skia-$SKIA_VERSION/gn/BUILD.gn
 export PATH="$PWD/depot_tools:$PATH"
 
 cd skia-$SKIA_VERSION
-python2 tools/git-sync-deps
+python tools/git-sync-deps
 
 if [[ $PLATFORM == ios* ]]; then
-    bin/gn gen out/Static --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\"] $EXTRA_ARGS"
+    bin/gn gen out/Static --args="target_cxx=\"$CXX\" target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\"] $EXTRA_ARGS"
     ninja -C out/Static skia
 else
-    bin/gn gen out/Shared --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
+    bin/gn gen out/Shared --args="target_cxx=\"$CXX\" target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
     ninja -C out/Shared skia
 fi
 

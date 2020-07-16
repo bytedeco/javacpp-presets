@@ -52,6 +52,38 @@ public class Skia extends org.bytedeco.skia.presets.Skia {
 //         #endif
 //     #else
 //         #define SK_C_API
+//     #endif
+// #endif
+
+// #if defined(_WIN32)
+    // On Windows, Vulkan commands use the stdcall convention
+//     #define VKAPI_ATTR
+//     #define VKAPI_CALL __stdcall
+//     #define VKAPI_PTR  VKAPI_CALL
+// #elif defined(__ANDROID__) && defined(__ARM_ARCH) && __ARM_ARCH < 7
+//     #error "Vulkan isn't supported for the 'armeabi' NDK ABI"
+// #elif defined(__ANDROID__) && defined(__ARM_ARCH) && __ARM_ARCH >= 7 && defined(__ARM_32BIT_STATE)
+    // On Android 32-bit ARM targets, Vulkan functions use the "hardfloat"
+    // calling convention, i.e. float parameters are passed in registers. This
+    // is true even if the rest of the application passes floats on the stack,
+    // as it does by default when compiling for the armeabi-v7a NDK ABI.
+//     #define VKAPI_ATTR __attribute__((pcs("aapcs-vfp")))
+//     #define VKAPI_CALL
+//     #define VKAPI_PTR  VKAPI_ATTR
+// #else
+    // On other platforms, use the default calling convention
+//     #define VKAPI_ATTR
+//     #define VKAPI_CALL
+//     #define VKAPI_PTR
+// #endif
+
+// #if !defined(SK_TO_STRING)
+//     #define SK_TO_STRING(X) SK_TO_STRING_IMPL(X)
+//     #define SK_TO_STRING_IMPL(X) #X
+// #endif
+
+// #ifndef SK_C_INCREMENT
+public static final int SK_C_INCREMENT = 0;
 // Targeting ../sk_refcnt_t.java
 
 
@@ -81,7 +113,17 @@ public static final int
     RGBA_1010102_SK_COLORTYPE = 7,
     RGB_101010X_SK_COLORTYPE = 8,
     GRAY_8_SK_COLORTYPE = 9,
-    RGBA_F16_SK_COLORTYPE = 10;
+    RGBA_F16_NORM_SK_COLORTYPE = 10,
+    RGBA_F16_SK_COLORTYPE = 11,
+    RGBA_F32_SK_COLORTYPE = 12,
+
+    // READONLY
+    R8G8_UNORM_SK_COLORTYPE = 13,
+    A16_FLOAT_SK_COLORTYPE = 14,
+    R16G16_FLOAT_SK_COLORTYPE = 15,
+    A16_UNORM_SK_COLORTYPE = 16,
+    R16G16_UNORM_SK_COLORTYPE = 17,
+    R16G16B16A16_UNORM_SK_COLORTYPE = 18;
 
 /** enum sk_alphatype_t */
 public static final int
@@ -153,6 +195,9 @@ public static final int
 
 
 // Targeting ../sk_paint_t.java
+
+
+// Targeting ../sk_font_t.java
 
 
 // Targeting ../sk_path_t.java
@@ -297,12 +342,6 @@ public static final long FONTMETRICS_FLAGS_UNDERLINE_POSITION_IS_VALID = (1L << 
 
 
 
-/** enum sk_encoding_t */
-public static final int
-    UTF8_SK_ENCODING = 0,
-    UTF16_SK_ENCODING = 1,
-    UTF32_SK_ENCODING = 2;
-
 /** enum sk_point_mode_t */
 public static final int
     POINTS_SK_POINT_MODE = 0,
@@ -351,24 +390,12 @@ public static final int
     HAS_HEIGHT_SK_CROP_RECT_FLAG = 0x08,
     HAS_ALL_SK_CROP_RECT_FLAG    = 0x0F;
 
-/** enum sk_drop_shadow_image_filter_shadow_mode_t */
+/** enum sk_color_channel_t */
 public static final int
-    DRAW_SHADOW_AND_FOREGROUND_SK_DROP_SHADOW_IMAGE_FILTER_SHADOW_MODE = 0,
-    DRAW_SHADOW_ONLY_SK_DROP_SHADOW_IMAGE_FILTER_SHADOW_MODE = 1;
-
-/** enum sk_displacement_map_effect_channel_selector_type_t */
-public static final int
-    UNKNOWN_SK_DISPLACEMENT_MAP_EFFECT_CHANNEL_SELECTOR_TYPE = 0,
-    R_SK_DISPLACEMENT_MAP_EFFECT_CHANNEL_SELECTOR_TYPE = 1,
-    G_SK_DISPLACEMENT_MAP_EFFECT_CHANNEL_SELECTOR_TYPE = 2,
-    B_SK_DISPLACEMENT_MAP_EFFECT_CHANNEL_SELECTOR_TYPE = 3,
-    A_SK_DISPLACEMENT_MAP_EFFECT_CHANNEL_SELECTOR_TYPE = 4;
-
-/** enum sk_matrix_convolution_tilemode_t */
-public static final int
-    CLAMP_SK_MATRIX_CONVOLUTION_TILEMODE = 0,
-    REPEAT_SK_MATRIX_CONVOLUTION_TILEMODE = 1,
-    CLAMP_TO_BLACK_SK_MATRIX_CONVOLUTION_TILEMODE = 2;
+    R_SK_COLOR_CHANNEL = 0,
+    G_SK_COLOR_CHANNEL = 1,
+    B_SK_COLOR_CHANNEL = 2,
+    A_SK_COLOR_CHANNEL = 3;
 
 /**
     The logical operations that can be performed when combining two regions.
@@ -440,11 +467,6 @@ public static final int
 public static final int
     YES_SK_CODEC_ZERO_INITIALIZED = 0,
     NO_SK_CODEC_ZERO_INITIALIZED = 1;
-
-/** enum sk_transfer_function_behavior_t */
-public static final int
-    RESPECT_SK_TRANSFER_FUNCTION_BEHAVIOR = 0,
-    IGNORE_SK_TRANSFER_FUNCTION_BEHAVIOR = 1;
 // Targeting ../sk_codec_options_t.java
 
 
@@ -513,7 +535,8 @@ public static final int
 public static final int
     CLAMP_SK_SHADER_TILEMODE = 0,
     REPEAT_SK_SHADER_TILEMODE = 1,
-    MIRROR_SK_SHADER_TILEMODE = 2;
+    MIRROR_SK_SHADER_TILEMODE = 2,
+    DECAL_SK_SHADER_TILEMODE = 3;
 
 /** enum sk_blurstyle_t */
 public static final int
@@ -542,12 +565,18 @@ public static final int
     STROKE_SK_PAINT_STYLE = 1,
     STROKE_AND_FILL_SK_PAINT_STYLE = 2;
 
-/** enum sk_paint_hinting_t */
+/** enum sk_font_hinting_t */
 public static final int
-    NO_HINTING_SK_PAINT_HINTING = 0,
-    SLIGHT_HINTING_SK_PAINT_HINTING = 1,
-    NORMAL_HINTING_SK_PAINT_HINTING = 2,
-    FULL_HINTING_SK_PAINT_HINTING = 3;
+    NONE_SK_FONT_HINTING = 0,
+    SLIGHT_SK_FONT_HINTING = 1,
+    NORMAL_SK_FONT_HINTING = 2,
+    FULL_SK_FONT_HINTING = 3;
+
+/** enum sk_font_edging_t */
+public static final int
+    ALIAS_SK_FONT_EDGING = 0,
+    ANTIALIAS_SK_FONT_EDGING = 1,
+    SUBPIXEL_ANTIALIAS_SK_FONT_EDGING = 2;
 // Targeting ../sk_colortable_t.java
 
 
@@ -560,36 +589,14 @@ public static final int
     TOP_LEFT_GR_SURFACE_ORIGIN = 0,
     BOTTOM_LEFT_GR_SURFACE_ORIGIN = 1;
 
-/** enum gr_pixelconfig_t */
-public static final int
-    UNKNOWN_GR_PIXEL_CONFIG = 0,
-    ALPHA_8_GR_PIXEL_CONFIG = 1,
-    GRAY_8_GR_PIXEL_CONFIG = 2,
-    RGB_565_GR_PIXEL_CONFIG = 3,
-    RGBA_4444_GR_PIXEL_CONFIG = 4,
-    RGBA_8888_GR_PIXEL_CONFIG = 5,
-    RGB_888_GR_PIXEL_CONFIG = 6,
-    BGRA_8888_GR_PIXEL_CONFIG = 7,
-    SRGBA_8888_GR_PIXEL_CONFIG = 8,
-    SBGRA_8888_GR_PIXEL_CONFIG = 9,
-    RGBA_1010102_GR_PIXEL_CONFIG = 10,
-    RGBA_FLOAT_GR_PIXEL_CONFIG = 11,
-    RG_FLOAT_GR_PIXEL_CONFIG = 12,
-    ALPHA_HALF_GR_PIXEL_CONFIG = 13,
-    RGBA_HALF_GR_PIXEL_CONFIG = 14;
-
 /** enum sk_mask_format_t */
 public static final int
-    /** 1bit per pixel mask (e.g. monochrome) */
     BW_SK_MASK_FORMAT = 0,
-    /** 8bits per pixel mask (e.g. antialiasing) */
     A8_SK_MASK_FORMAT = 1,
-    /** 3 8bit per pixl planes: alpha, mul, add */
     THREE_D_SK_MASK_FORMAT = 2,
-    /** SkPMColor */
     ARGB32_SK_MASK_FORMAT = 3,
-    /** 565 alpha for r/g/b */
-    LCD16_SK_MASK_FORMAT = 4;
+    LCD16_SK_MASK_FORMAT = 4,
+    SDF_SK_MASK_FORMAT = 5;
 // Targeting ../sk_mask_t.java
 
 
@@ -606,8 +613,9 @@ public static final int
 /** enum gr_backend_t */
 public static final int
     METAL_GR_BACKEND = 0,
-    OPENGL_GR_BACKEND = 1,
-    VULKAN_GR_BACKEND = 2;
+    DAWN_GR_BACKEND = 1,
+    OPENGL_GR_BACKEND = 2,
+    VULKAN_GR_BACKEND = 3;
 // Targeting ../gr_glinterface_t.java
 
 
@@ -615,6 +623,51 @@ public static final int
 
 
 // Targeting ../gr_gl_framebufferinfo_t.java
+
+
+// Targeting ../vk_instance_t.java
+
+
+// Targeting ../gr_vkinterface_t.java
+
+
+// Targeting ../vk_physical_device_t.java
+
+
+// Targeting ../vk_physical_device_features_t.java
+
+
+// Targeting ../vk_physical_device_features_2_t.java
+
+
+// Targeting ../vk_device_t.java
+
+
+// Targeting ../vk_queue_t.java
+
+
+// Targeting ../gr_vk_extensions_t.java
+
+
+// Targeting ../gr_vk_memory_allocator_t.java
+
+
+// Targeting ../gr_vk_func_ptr.java
+
+
+// Targeting ../gr_vk_get_proc.java
+
+
+// Targeting ../gr_vk_backendcontext_t.java
+
+
+// Targeting ../gr_vk_alloc_t.java
+
+
+// Targeting ../gr_vk_ycbcrconversioninfo_t.java
+
+
+// Targeting ../gr_vk_imageinfo_t.java
 
 
 
@@ -667,6 +720,9 @@ public static final int
 // Targeting ../sk_surface_raster_release_proc.java
 
 
+// Targeting ../sk_glyph_path_proc.java
+
+
 
 /** enum sk_image_caching_hint_t */
 public static final int
@@ -716,35 +772,16 @@ public static final int
 // Targeting ../sk_vertices_t.java
 
 
-
-/** enum sk_gamma_named_t */
-public static final int
-    LINEAR_SK_GAMMA_NAMED = 0,
-    SRGB_SK_GAMMA_NAMED = 1,
-    TWO_DOT_TWO_CURVE_SK_GAMMA_NAMED = 2,
-    NON_STANDARD_SK_GAMMA_NAMED = 3;
-
-/** enum sk_colorspace_type_t */
-public static final int
-    RGB_SK_COLORSPACE_TYPE = 0,
-    CMYK_SK_COLORSPACE_TYPE = 1,
-    GRAY_SK_COLORSPACE_TYPE = 2;
-
-/** enum sk_colorspace_render_target_gamma_t */
-public static final int
-    LINEAR_SK_COLORSPACE_RENDER_TARGET_GAMMA = 0,
-    SRGB_SK_COLORSPACE_RENDER_TARGET_GAMMA = 1;
-
-/** enum sk_colorspace_gamut_t */
-public static final int
-    SRGB_SK_COLORSPACE_GAMUT = 0,
-    ADOBE_RGB_SK_COLORSPACE_GAMUT = 1,
-    DCIP3_D65_SK_COLORSPACE_GAMUT = 2,
-    REC2020_SK_COLORSPACE_GAMUT = 3;
 // Targeting ../sk_colorspace_transfer_fn_t.java
 
 
-// Targeting ../sk_colorspaceprimaries_t.java
+// Targeting ../sk_colorspace_primaries_t.java
+
+
+// Targeting ../sk_colorspace_xyz_t.java
+
+
+// Targeting ../sk_colorspace_icc_profile_t.java
 
 
 
@@ -844,21 +881,21 @@ public static final int
 // #ifndef gr_context_DEFINED
 // #define gr_context_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 // GrContext
 
 public static native gr_context_t gr_context_make_gl(@Const gr_glinterface_t glInterface);
+public static native gr_context_t gr_context_make_vulkan(@Const @ByVal gr_vk_backendcontext_t vkBackendContext);
+
 // TODO: the overloads with GrContextOptions
-// TODO: the Vulkan and Metal contexts
+// TODO: the Metal context
 
 public static native void gr_context_unref(gr_context_t context);
 public static native void gr_context_abandon_context(gr_context_t context);
 public static native void gr_context_release_resources_and_abandon_context(gr_context_t context);
-public static native void gr_context_get_resource_cache_limits(gr_context_t context, IntPointer maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
-public static native void gr_context_get_resource_cache_limits(gr_context_t context, IntBuffer maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
-public static native void gr_context_get_resource_cache_limits(gr_context_t context, int[] maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
-public static native void gr_context_set_resource_cache_limits(gr_context_t context, int maxResources, @Cast("size_t") long maxResourceBytes);
+public static native @Cast("size_t") long gr_context_get_resource_cache_limit(gr_context_t context);
+public static native void gr_context_set_resource_cache_limit(gr_context_t context, @Cast("size_t") long maxResourceBytes);
 public static native void gr_context_get_resource_cache_usage(gr_context_t context, IntPointer maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
 public static native void gr_context_get_resource_cache_usage(gr_context_t context, IntBuffer maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
 public static native void gr_context_get_resource_cache_usage(gr_context_t context, int[] maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
@@ -871,15 +908,27 @@ public static native @Cast("gr_backend_t") int gr_context_get_backend(gr_context
 // GrGLInterface
 
 public static native @Const gr_glinterface_t gr_glinterface_create_native_interface();
+
 public static native void gr_glinterface_unref(@Const gr_glinterface_t glInterface);
 public static native @Cast("bool") boolean gr_glinterface_validate(@Const gr_glinterface_t glInterface);
 public static native @Cast("bool") boolean gr_glinterface_has_extension(@Const gr_glinterface_t glInterface, @Cast("const char*") BytePointer extension);
 public static native @Cast("bool") boolean gr_glinterface_has_extension(@Const gr_glinterface_t glInterface, String extension);
 
+// GrVkExtensions
+
+public static native gr_vk_extensions_t gr_vk_extensions_new();
+public static native void gr_vk_extensions_delete(gr_vk_extensions_t extensions);
+public static native void gr_vk_extensions_init(gr_vk_extensions_t extensions, gr_vk_get_proc getProc, Pointer userData, vk_instance_t instance, vk_physical_device_t physDev, @Cast("uint32_t") int instanceExtensionCount, @Cast("const char**") PointerPointer instanceExtensions, @Cast("uint32_t") int deviceExtensionCount, @Cast("const char**") PointerPointer deviceExtensions);
+public static native void gr_vk_extensions_init(gr_vk_extensions_t extensions, gr_vk_get_proc getProc, Pointer userData, vk_instance_t instance, vk_physical_device_t physDev, @Cast("uint32_t") int instanceExtensionCount, @Cast("const char**") @ByPtrPtr BytePointer instanceExtensions, @Cast("uint32_t") int deviceExtensionCount, @Cast("const char**") @ByPtrPtr BytePointer deviceExtensions);
+public static native void gr_vk_extensions_init(gr_vk_extensions_t extensions, gr_vk_get_proc getProc, Pointer userData, vk_instance_t instance, vk_physical_device_t physDev, @Cast("uint32_t") int instanceExtensionCount, @Cast("const char**") @ByPtrPtr ByteBuffer instanceExtensions, @Cast("uint32_t") int deviceExtensionCount, @Cast("const char**") @ByPtrPtr ByteBuffer deviceExtensions);
+public static native void gr_vk_extensions_init(gr_vk_extensions_t extensions, gr_vk_get_proc getProc, Pointer userData, vk_instance_t instance, vk_physical_device_t physDev, @Cast("uint32_t") int instanceExtensionCount, @Cast("const char**") @ByPtrPtr byte[] instanceExtensions, @Cast("uint32_t") int deviceExtensionCount, @Cast("const char**") @ByPtrPtr byte[] deviceExtensions);
+public static native @Cast("bool") boolean gr_vk_extensions_has_extension(gr_vk_extensions_t extensions, @Cast("const char*") BytePointer ext, @Cast("uint32_t") int minVersion);
+public static native @Cast("bool") boolean gr_vk_extensions_has_extension(gr_vk_extensions_t extensions, String ext, @Cast("uint32_t") int minVersion);
 
 // GrBackendTexture
 
 public static native gr_backendtexture_t gr_backendtexture_new_gl(int width, int height, @Cast("bool") boolean mipmapped, @Const gr_gl_textureinfo_t glInfo);
+public static native gr_backendtexture_t gr_backendtexture_new_vulkan(int width, int height, @Const gr_vk_imageinfo_t vkInfo);
 public static native void gr_backendtexture_delete(gr_backendtexture_t texture);
 
 public static native @Cast("bool") boolean gr_backendtexture_is_valid(@Const gr_backendtexture_t texture);
@@ -893,6 +942,8 @@ public static native @Cast("bool") boolean gr_backendtexture_get_gl_textureinfo(
 // GrBackendRenderTarget
 
 public static native gr_backendrendertarget_t gr_backendrendertarget_new_gl(int width, int height, int samples, int stencils, @Const gr_gl_framebufferinfo_t glInfo);
+public static native gr_backendrendertarget_t gr_backendrendertarget_new_vulkan(int width, int height, int samples, @Const gr_vk_imageinfo_t vkImageInfo);
+
 public static native void gr_backendrendertarget_delete(gr_backendrendertarget_t rendertarget);
 
 public static native @Cast("bool") boolean gr_backendrendertarget_is_valid(@Const gr_backendrendertarget_t rendertarget);
@@ -921,7 +972,7 @@ public static native @Cast("bool") boolean gr_backendrendertarget_get_gl_framebu
 // #ifndef sk_bitmap_DEFINED
 // #define sk_bitmap_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_bitmap_destructor(sk_bitmap_t cbitmap);
 public static native sk_bitmap_t sk_bitmap_new();
@@ -937,19 +988,15 @@ public static native @Cast("bool") boolean sk_bitmap_is_volatile(sk_bitmap_t cbi
 public static native void sk_bitmap_set_volatile(sk_bitmap_t cbitmap, @Cast("bool") boolean value);
 public static native void sk_bitmap_erase(sk_bitmap_t cbitmap, @Cast("sk_color_t") int color);
 public static native void sk_bitmap_erase_rect(sk_bitmap_t cbitmap, @Cast("sk_color_t") int color, sk_irect_t rect);
-public static native @Cast("uint8_t") byte sk_bitmap_get_addr_8(sk_bitmap_t cbitmap, int x, int y);
-public static native @Cast("uint16_t") short sk_bitmap_get_addr_16(sk_bitmap_t cbitmap, int x, int y);
-public static native @Cast("uint32_t") int sk_bitmap_get_addr_32(sk_bitmap_t cbitmap, int x, int y);
+public static native @Cast("uint8_t*") BytePointer sk_bitmap_get_addr_8(sk_bitmap_t cbitmap, int x, int y);
+public static native @Cast("uint16_t*") ShortPointer sk_bitmap_get_addr_16(sk_bitmap_t cbitmap, int x, int y);
+public static native @Cast("uint32_t*") IntPointer sk_bitmap_get_addr_32(sk_bitmap_t cbitmap, int x, int y);
 public static native Pointer sk_bitmap_get_addr(sk_bitmap_t cbitmap, int x, int y);
 public static native @Cast("sk_color_t") int sk_bitmap_get_pixel_color(sk_bitmap_t cbitmap, int x, int y);
-public static native void sk_bitmap_set_pixel_color(sk_bitmap_t cbitmap, int x, int y, @Cast("sk_color_t") int color);
 public static native @Cast("bool") boolean sk_bitmap_ready_to_draw(sk_bitmap_t cbitmap);
 public static native void sk_bitmap_get_pixel_colors(sk_bitmap_t cbitmap, @Cast("sk_color_t*") IntPointer colors);
 public static native void sk_bitmap_get_pixel_colors(sk_bitmap_t cbitmap, @Cast("sk_color_t*") IntBuffer colors);
 public static native void sk_bitmap_get_pixel_colors(sk_bitmap_t cbitmap, @Cast("sk_color_t*") int[] colors);
-public static native void sk_bitmap_set_pixel_colors(sk_bitmap_t cbitmap, @Cast("const sk_color_t*") IntPointer colors);
-public static native void sk_bitmap_set_pixel_colors(sk_bitmap_t cbitmap, @Cast("const sk_color_t*") IntBuffer colors);
-public static native void sk_bitmap_set_pixel_colors(sk_bitmap_t cbitmap, @Cast("const sk_color_t*") int[] colors);
 public static native @Cast("bool") boolean sk_bitmap_install_pixels(sk_bitmap_t cbitmap, @Const sk_imageinfo_t cinfo, Pointer pixels, @Cast("size_t") long rowBytes, sk_bitmap_release_proc releaseProc, Pointer context);
 public static native @Cast("bool") boolean sk_bitmap_install_pixels_with_pixmap(sk_bitmap_t cbitmap, @Const sk_pixmap_t cpixmap);
 public static native @Cast("bool") boolean sk_bitmap_install_mask_pixels(sk_bitmap_t cbitmap, @Const sk_mask_t cmask);
@@ -961,6 +1008,7 @@ public static native @Cast("bool") boolean sk_bitmap_extract_subset(sk_bitmap_t 
 public static native @Cast("bool") boolean sk_bitmap_extract_alpha(sk_bitmap_t cbitmap, sk_bitmap_t dst, @Const sk_paint_t paint, sk_ipoint_t offset);
 public static native void sk_bitmap_notify_pixels_changed(sk_bitmap_t cbitmap);
 public static native void sk_bitmap_swap(sk_bitmap_t cbitmap, sk_bitmap_t cother);
+public static native sk_shader_t sk_bitmap_make_shader(sk_bitmap_t cbitmap, @Cast("sk_shader_tilemode_t") int tmx, @Cast("sk_shader_tilemode_t") int tmy, @Const sk_matrix_t cmatrix);
 
 // #endif
 
@@ -979,7 +1027,7 @@ public static native void sk_bitmap_swap(sk_bitmap_t cbitmap, sk_bitmap_t cother
 // #ifndef sk_canvas_DEFINED
 // #define sk_canvas_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_canvas_destroy(sk_canvas_t arg0);
 public static native int sk_canvas_save(sk_canvas_t arg0);
@@ -1012,12 +1060,7 @@ public static native void sk_canvas_draw_color(sk_canvas_t ccanvas, @Cast("sk_co
 public static native void sk_canvas_draw_points(sk_canvas_t arg0, @Cast("sk_point_mode_t") int arg1, @Cast("size_t") long arg2, @Const sk_point_t arg3, @Const sk_paint_t arg4);
 public static native void sk_canvas_draw_point(sk_canvas_t arg0, float arg1, float arg2, @Const sk_paint_t arg3);
 public static native void sk_canvas_draw_line(sk_canvas_t ccanvas, float x0, float y0, float x1, float y1, sk_paint_t cpaint);
-public static native void sk_canvas_draw_text(sk_canvas_t arg0, @Cast("const char*") BytePointer text, @Cast("size_t") long byteLength, float x, float y, @Const sk_paint_t paint);
-public static native void sk_canvas_draw_text(sk_canvas_t arg0, String text, @Cast("size_t") long byteLength, float x, float y, @Const sk_paint_t paint);
-public static native void sk_canvas_draw_pos_text(sk_canvas_t arg0, @Cast("const char*") BytePointer text, @Cast("size_t") long byteLength, @Const sk_point_t arg3, @Const sk_paint_t paint);
-public static native void sk_canvas_draw_pos_text(sk_canvas_t arg0, String text, @Cast("size_t") long byteLength, @Const sk_point_t arg3, @Const sk_paint_t paint);
-public static native void sk_canvas_draw_text_on_path(sk_canvas_t arg0, @Cast("const char*") BytePointer text, @Cast("size_t") long byteLength, @Const sk_path_t path, float hOffset, float vOffset, @Const sk_paint_t paint);
-public static native void sk_canvas_draw_text_on_path(sk_canvas_t arg0, String text, @Cast("size_t") long byteLength, @Const sk_path_t path, float hOffset, float vOffset, @Const sk_paint_t paint);
+public static native void sk_canvas_draw_simple_text(sk_canvas_t ccanvas, @Const Pointer text, @Cast("size_t") long byte_length, @Cast("sk_text_encoding_t") int encoding, float x, float y, @Const sk_font_t cfont, @Const sk_paint_t cpaint);
 public static native void sk_canvas_draw_text_blob(sk_canvas_t arg0, sk_textblob_t text, float x, float y, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_bitmap(sk_canvas_t ccanvas, @Const sk_bitmap_t bitmap, float left, float top, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_bitmap_rect(sk_canvas_t ccanvas, @Const sk_bitmap_t bitmap, @Const sk_rect_t src, @Const sk_rect_t dst, @Const sk_paint_t paint);
@@ -1082,7 +1125,7 @@ public static native void sk_overdraw_canvas_destroy(sk_overdraw_canvas_t canvas
 // #ifndef sk_codec_DEFINED
 // #define sk_codec_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native @Cast("size_t") long sk_codec_min_buffered_bytes_needed();
 
@@ -1129,7 +1172,7 @@ public static native int sk_codec_get_repetition_count(sk_codec_t codec);
 // #ifndef sk_colorfilter_DEFINED
 // #define sk_colorfilter_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_colorfilter_unref(sk_colorfilter_t filter);
 public static native sk_colorfilter_t sk_colorfilter_new_mode(@Cast("sk_color_t") int c, @Cast("sk_blendmode_t") int mode);
@@ -1164,7 +1207,7 @@ public static native sk_colorfilter_t sk_colorfilter_new_table_argb(@Cast("const
 // #ifndef sk_colortable_DEFINED
 // #define sk_colortable_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_colortable_unref(sk_colortable_t ctable);
 public static native sk_colortable_t sk_colortable_new(@Cast("const sk_pmcolor_t*") IntPointer colors, int count);
@@ -1193,7 +1236,7 @@ public static native void sk_colortable_read_colors(@Const sk_colortable_t ctabl
 // #ifndef sk_data_DEFINED
 // #define sk_data_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native sk_data_t sk_data_new_empty();
 public static native sk_data_t sk_data_new_with_copy(@Const Pointer src, @Cast("size_t") long length);
@@ -1226,7 +1269,7 @@ public static native sk_data_t sk_data_new_uninitialized(@Cast("size_t") long si
 // #ifndef sk_document_DEFINED
 // #define sk_document_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_document_unref(sk_document_t document);
 
@@ -1257,7 +1300,7 @@ public static native void sk_document_abort(sk_document_t document);
 // #ifndef sk_image_DEFINED
 // #define sk_image_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native sk_image_t sk_image_new_raster_copy(@Const sk_imageinfo_t arg0, @Const Pointer pixels, @Cast("size_t") long rowBytes);
 public static native sk_image_t sk_image_new_raster_copy_with_pixmap(@Const sk_pixmap_t pixmap);
@@ -1270,7 +1313,7 @@ public static native sk_image_t sk_image_new_from_adopted_texture(gr_context_t c
 public static native sk_image_t sk_image_new_from_picture(sk_picture_t picture, @Const sk_isize_t dimensions, @Const sk_matrix_t matrix, @Const sk_paint_t paint);
 
 public static native sk_image_t sk_image_make_subset(@Const sk_image_t cimage, @Const sk_irect_t subset);
-public static native sk_image_t sk_image_make_texture_image(@Const sk_image_t cimage, gr_context_t context, sk_colorspace_t colorspace);
+public static native sk_image_t sk_image_make_texture_image(@Const sk_image_t cimage, gr_context_t context, @Cast("bool") boolean mipmapped);
 public static native sk_image_t sk_image_make_non_texture_image(@Const sk_image_t cimage);
 public static native sk_image_t sk_image_make_raster_image(@Const sk_image_t cimage);
 public static native sk_image_t sk_image_make_with_filter(@Const sk_image_t cimage, @Const sk_imagefilter_t filter, @Const sk_irect_t subset, @Const sk_irect_t clipBounds, sk_irect_t outSubset, sk_ipoint_t outOffset);
@@ -1313,190 +1356,55 @@ public static native sk_data_t sk_image_encode_specific(@Const sk_image_t cimage
 // #ifndef sk_imagefilter_DEFINED
 // #define sk_imagefilter_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
+
+// sk_imagefilter_croprect_t
 
 public static native sk_imagefilter_croprect_t sk_imagefilter_croprect_new();
 public static native sk_imagefilter_croprect_t sk_imagefilter_croprect_new_with_rect(@Const sk_rect_t rect, @Cast("uint32_t") int flags);
 public static native void sk_imagefilter_croprect_destructor(sk_imagefilter_croprect_t cropRect);
 public static native void sk_imagefilter_croprect_get_rect(sk_imagefilter_croprect_t cropRect, sk_rect_t rect);
 public static native @Cast("uint32_t") int sk_imagefilter_croprect_get_flags(sk_imagefilter_croprect_t cropRect);
+
+
+// sk_imagefilter_t
+
 public static native void sk_imagefilter_unref(sk_imagefilter_t arg0);
-public static native sk_imagefilter_t sk_imagefilter_new_matrix(
-    @Const sk_matrix_t matrix, 
-    @Cast("sk_filter_quality_t") int quality, 
-    sk_imagefilter_t input);
-public static native sk_imagefilter_t sk_imagefilter_new_alpha_threshold(
-    @Const sk_region_t region,
-    float innerThreshold,
-    float outerThreshold, 
-    sk_imagefilter_t input);
-public static native sk_imagefilter_t sk_imagefilter_new_blur(
-    float sigmaX,
-    float sigmaY,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_color_filter(
-    sk_colorfilter_t cf,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_compose(
-    sk_imagefilter_t outer,
-    sk_imagefilter_t inner);
-public static native sk_imagefilter_t sk_imagefilter_new_displacement_map_effect(
-    @Cast("sk_displacement_map_effect_channel_selector_type_t") int xChannelSelector,
-    @Cast("sk_displacement_map_effect_channel_selector_type_t") int yChannelSelector,
-    float scale,
-    sk_imagefilter_t displacement,
-    sk_imagefilter_t color,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_drop_shadow(
-    float dx,
-    float dy,
-    float sigmaX,
-    float sigmaY,
-    @Cast("sk_color_t") int color, 
-    @Cast("sk_drop_shadow_image_filter_shadow_mode_t") int shadowMode,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_distant_lit_diffuse(
-    @Const sk_point3_t direction,
-    @Cast("sk_color_t") int lightColor,
-    float surfaceScale,
-    float kd,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_point_lit_diffuse(
-    @Const sk_point3_t location,
-    @Cast("sk_color_t") int lightColor,
-    float surfaceScale, 
-    float kd,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_spot_lit_diffuse(
-    @Const sk_point3_t location,
-    @Const sk_point3_t target,
-    float specularExponent,
-    float cutoffAngle,
-    @Cast("sk_color_t") int lightColor, 
-    float surfaceScale,
-    float kd,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_distant_lit_specular(
-    @Const sk_point3_t direction,
-    @Cast("sk_color_t") int lightColor, 
-    float surfaceScale,
-    float ks,
-    float shininess, 
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_point_lit_specular(
-    @Const sk_point3_t location,
-    @Cast("sk_color_t") int lightColor, 
-    float surfaceScale, 
-    float ks,
-    float shininess, 
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_spot_lit_specular(
-    @Const sk_point3_t location,
-    @Const sk_point3_t target, 
-    float specularExponent, 
-    float cutoffAngle,
-    @Cast("sk_color_t") int lightColor, 
-    float surfaceScale,
-    float ks,
-    float shininess,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_magnifier(
-    @Const sk_rect_t src, 
-    float inset,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(
-    @Const sk_isize_t kernelSize,
-    @Const FloatPointer kernel,
-    float gain,
-    float bias,
-    @Const sk_ipoint_t kernelOffset,
-    @Cast("sk_matrix_convolution_tilemode_t") int tileMode,
-    @Cast("bool") boolean convolveAlpha,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(
-    @Const sk_isize_t kernelSize,
-    @Const FloatBuffer kernel,
-    float gain,
-    float bias,
-    @Const sk_ipoint_t kernelOffset,
-    @Cast("sk_matrix_convolution_tilemode_t") int tileMode,
-    @Cast("bool") boolean convolveAlpha,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(
-    @Const sk_isize_t kernelSize,
-    @Const float[] kernel,
-    float gain,
-    float bias,
-    @Const sk_ipoint_t kernelOffset,
-    @Cast("sk_matrix_convolution_tilemode_t") int tileMode,
-    @Cast("bool") boolean convolveAlpha,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_merge(
-    @Cast("sk_imagefilter_t**") PointerPointer filters,
-    int count,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_merge(
-    @ByPtrPtr sk_imagefilter_t filters,
-    int count,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_dilate(
-    int radiusX, 
-    int radiusY, 
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_erode(
-    int radiusX,
-    int radiusY,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_offset(
-    float dx,
-    float dy,
-    sk_imagefilter_t input,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_picture(
-    sk_picture_t picture);
-public static native sk_imagefilter_t sk_imagefilter_new_picture_with_croprect(
-    sk_picture_t picture,
-    @Const sk_rect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_tile(
-    @Const sk_rect_t src,
-    @Const sk_rect_t dst,
-    sk_imagefilter_t input);
-public static native sk_imagefilter_t sk_imagefilter_new_xfermode(
-    @Cast("sk_blendmode_t") int mode,
-    sk_imagefilter_t background,
-    sk_imagefilter_t foreground,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_arithmetic(
-    float k1, float k2, float k3, float k4,
-    @Cast("bool") boolean enforcePMColor,
-    sk_imagefilter_t background,
-    sk_imagefilter_t foreground,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_image_source(
-    sk_image_t image,
-    @Const sk_rect_t srcRect,
-    @Const sk_rect_t dstRect,
-    @Cast("sk_filter_quality_t") int filterQuality);
-public static native sk_imagefilter_t sk_imagefilter_new_image_source_default(
-    sk_image_t image);
-public static native sk_imagefilter_t sk_imagefilter_new_paint(
-    @Const sk_paint_t paint,
-    @Const sk_imagefilter_croprect_t cropRect);
+
+public static native sk_imagefilter_t sk_imagefilter_new_alpha_threshold(@Const sk_region_t region, float innerThreshold, float outerThreshold, sk_imagefilter_t input);
+public static native sk_imagefilter_t sk_imagefilter_new_arithmetic(float k1, float k2, float k3, float k4, @Cast("bool") boolean enforcePMColor, sk_imagefilter_t background, sk_imagefilter_t foreground, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_blur(float sigmaX, float sigmaY, @Cast("sk_shader_tilemode_t") int tileMode, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_color_filter(sk_colorfilter_t cf, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_compose(sk_imagefilter_t outer, sk_imagefilter_t inner);
+public static native sk_imagefilter_t sk_imagefilter_new_displacement_map_effect(@Cast("sk_color_channel_t") int xChannelSelector, @Cast("sk_color_channel_t") int yChannelSelector, float scale, sk_imagefilter_t displacement, sk_imagefilter_t color, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_drop_shadow(float dx, float dy, float sigmaX, float sigmaY, @Cast("sk_color_t") int color, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_drop_shadow_only(float dx, float dy, float sigmaX, float sigmaY, @Cast("sk_color_t") int color, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_image_source(sk_image_t image, @Const sk_rect_t srcRect, @Const sk_rect_t dstRect, @Cast("sk_filter_quality_t") int filterQuality);
+public static native sk_imagefilter_t sk_imagefilter_new_image_source_default(sk_image_t image);
+public static native sk_imagefilter_t sk_imagefilter_new_magnifier(@Const sk_rect_t src, float inset, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(@Const sk_isize_t kernelSize, @Const FloatPointer kernel, float gain, float bias, @Const sk_ipoint_t kernelOffset, @Cast("sk_shader_tilemode_t") int tileMode, @Cast("bool") boolean convolveAlpha, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(@Const sk_isize_t kernelSize, @Const FloatBuffer kernel, float gain, float bias, @Const sk_ipoint_t kernelOffset, @Cast("sk_shader_tilemode_t") int tileMode, @Cast("bool") boolean convolveAlpha, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(@Const sk_isize_t kernelSize, @Const float[] kernel, float gain, float bias, @Const sk_ipoint_t kernelOffset, @Cast("sk_shader_tilemode_t") int tileMode, @Cast("bool") boolean convolveAlpha, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_matrix(@Const sk_matrix_t matrix, @Cast("sk_filter_quality_t") int quality, sk_imagefilter_t input);
+public static native sk_imagefilter_t sk_imagefilter_new_merge(@Cast("sk_imagefilter_t**") PointerPointer filters, int count, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_merge(@ByPtrPtr sk_imagefilter_t filters, int count, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_offset(float dx, float dy, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_paint(@Const sk_paint_t paint, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_picture(sk_picture_t picture);
+public static native sk_imagefilter_t sk_imagefilter_new_picture_with_croprect(sk_picture_t picture, @Const sk_rect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_tile(@Const sk_rect_t src, @Const sk_rect_t dst, sk_imagefilter_t input);
+public static native sk_imagefilter_t sk_imagefilter_new_xfermode(@Cast("sk_blendmode_t") int mode, sk_imagefilter_t background, sk_imagefilter_t foreground, @Const sk_imagefilter_croprect_t cropRect);
+
+public static native sk_imagefilter_t sk_imagefilter_new_dilate(int radiusX, int radiusY, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_erode(int radiusX, int radiusY, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+
+public static native sk_imagefilter_t sk_imagefilter_new_distant_lit_diffuse(@Const sk_point3_t direction, @Cast("sk_color_t") int lightColor, float surfaceScale, float kd, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_point_lit_diffuse(@Const sk_point3_t location, @Cast("sk_color_t") int lightColor, float surfaceScale, float kd, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_spot_lit_diffuse(@Const sk_point3_t location, @Const sk_point3_t target, float specularExponent, float cutoffAngle, @Cast("sk_color_t") int lightColor, float surfaceScale, float kd, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_distant_lit_specular(@Const sk_point3_t direction, @Cast("sk_color_t") int lightColor, float surfaceScale, float ks, float shininess, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_point_lit_specular(@Const sk_point3_t location, @Cast("sk_color_t") int lightColor, float surfaceScale, float ks, float shininess, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_spot_lit_specular(@Const sk_point3_t location, @Const sk_point3_t target, float specularExponent, float cutoffAngle, @Cast("sk_color_t") int lightColor, float surfaceScale, float ks, float shininess, sk_imagefilter_t input, @Const sk_imagefilter_croprect_t cropRect);
+
 
 // #endif
 
@@ -1516,17 +1424,17 @@ public static native sk_imagefilter_t sk_imagefilter_new_paint(
 // #ifndef sk_mask_DEFINED
 // #define sk_mask_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native @Cast("uint8_t*") BytePointer sk_mask_alloc_image(@Cast("size_t") long bytes);
 public static native void sk_mask_free_image(Pointer image);
 public static native @Cast("bool") boolean sk_mask_is_empty(sk_mask_t cmask);
 public static native @Cast("size_t") long sk_mask_compute_image_size(sk_mask_t cmask);
 public static native @Cast("size_t") long sk_mask_compute_total_image_size(sk_mask_t cmask);
-public static native @Cast("uint8_t") byte sk_mask_get_addr_1(sk_mask_t cmask, int x, int y);
-public static native @Cast("uint8_t") byte sk_mask_get_addr_8(sk_mask_t cmask, int x, int y);
-public static native @Cast("uint16_t") short sk_mask_get_addr_lcd_16(sk_mask_t cmask, int x, int y);
-public static native @Cast("uint32_t") int sk_mask_get_addr_32(sk_mask_t cmask, int x, int y);
+public static native @Cast("uint8_t*") BytePointer sk_mask_get_addr_1(sk_mask_t cmask, int x, int y);
+public static native @Cast("uint8_t*") BytePointer sk_mask_get_addr_8(sk_mask_t cmask, int x, int y);
+public static native @Cast("uint16_t*") ShortPointer sk_mask_get_addr_lcd_16(sk_mask_t cmask, int x, int y);
+public static native @Cast("uint32_t*") IntPointer sk_mask_get_addr_32(sk_mask_t cmask, int x, int y);
 public static native Pointer sk_mask_get_addr(sk_mask_t cmask, int x, int y);
 
 // #endif
@@ -1546,17 +1454,18 @@ public static native Pointer sk_mask_get_addr(sk_mask_t cmask, int x, int y);
 // #ifndef sk_maskfilter_DEFINED
 // #define sk_maskfilter_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_maskfilter_ref(sk_maskfilter_t arg0);
 public static native void sk_maskfilter_unref(sk_maskfilter_t arg0);
 public static native sk_maskfilter_t sk_maskfilter_new_blur(@Cast("sk_blurstyle_t") int arg0, float sigma);
-public static native sk_maskfilter_t sk_maskfilter_new_blur_with_flags(@Cast("sk_blurstyle_t") int arg0, float sigma, @Const sk_rect_t occluder, @Cast("bool") boolean respectCTM);
+public static native sk_maskfilter_t sk_maskfilter_new_blur_with_flags(@Cast("sk_blurstyle_t") int arg0, float sigma, @Cast("bool") boolean respectCTM);
 public static native sk_maskfilter_t sk_maskfilter_new_table(@Cast("const uint8_t*") BytePointer table);
 public static native sk_maskfilter_t sk_maskfilter_new_table(@Cast("const uint8_t*") ByteBuffer table);
 public static native sk_maskfilter_t sk_maskfilter_new_table(@Cast("const uint8_t*") byte[] table);
 public static native sk_maskfilter_t sk_maskfilter_new_gamma(float gamma);
 public static native sk_maskfilter_t sk_maskfilter_new_clip(@Cast("uint8_t") byte min, @Cast("uint8_t") byte max);
+public static native sk_maskfilter_t sk_maskfilter_new_shader(sk_shader_t cshader);
 
 // #endif
 
@@ -1575,7 +1484,7 @@ public static native sk_maskfilter_t sk_maskfilter_new_clip(@Cast("uint8_t") byt
 // #ifndef sk_matrix_DEFINED
 // #define sk_matrix_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native @Cast("bool") boolean sk_matrix_try_invert(sk_matrix_t matrix, sk_matrix_t result);
 public static native void sk_matrix_concat(sk_matrix_t result, sk_matrix_t first, sk_matrix_t second);
@@ -1673,7 +1582,7 @@ public static native double sk_matrix44_determinant(sk_matrix44_t matrix);
 // #ifndef sk_paint_DEFINED
 // #define sk_paint_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native sk_paint_t sk_paint_new();
 public static native sk_paint_t sk_paint_clone(sk_paint_t arg0);
@@ -1682,7 +1591,9 @@ public static native void sk_paint_reset(sk_paint_t arg0);
 public static native @Cast("bool") boolean sk_paint_is_antialias(@Const sk_paint_t arg0);
 public static native void sk_paint_set_antialias(sk_paint_t arg0, @Cast("bool") boolean arg1);
 public static native @Cast("sk_color_t") int sk_paint_get_color(@Const sk_paint_t arg0);
+public static native void sk_paint_get_color4f(@Const sk_paint_t paint, sk_color4f_t color);
 public static native void sk_paint_set_color(sk_paint_t arg0, @Cast("sk_color_t") int arg1);
+public static native void sk_paint_set_color4f(sk_paint_t paint, sk_color4f_t color, sk_colorspace_t colorspace);
 public static native @Cast("sk_paint_style_t") int sk_paint_get_style(@Const sk_paint_t arg0);
 public static native void sk_paint_set_style(sk_paint_t arg0, @Cast("sk_paint_style_t") int arg1);
 public static native float sk_paint_get_stroke_width(@Const sk_paint_t arg0);
@@ -1698,8 +1609,6 @@ public static native void sk_paint_set_maskfilter(sk_paint_t arg0, sk_maskfilter
 public static native void sk_paint_set_blendmode(sk_paint_t arg0, @Cast("sk_blendmode_t") int arg1);
 public static native @Cast("bool") boolean sk_paint_is_dither(@Const sk_paint_t arg0);
 public static native void sk_paint_set_dither(sk_paint_t arg0, @Cast("bool") boolean arg1);
-public static native @Cast("bool") boolean sk_paint_is_verticaltext(@Const sk_paint_t arg0);
-public static native void sk_paint_set_verticaltext(sk_paint_t arg0, @Cast("bool") boolean arg1);
 public static native sk_shader_t sk_paint_get_shader(sk_paint_t arg0);
 public static native sk_maskfilter_t sk_paint_get_maskfilter(sk_paint_t arg0);
 public static native void sk_paint_set_colorfilter(sk_paint_t arg0, sk_colorfilter_t arg1);
@@ -1709,64 +1618,9 @@ public static native sk_imagefilter_t sk_paint_get_imagefilter(sk_paint_t arg0);
 public static native @Cast("sk_blendmode_t") int sk_paint_get_blendmode(sk_paint_t arg0);
 public static native void sk_paint_set_filter_quality(sk_paint_t arg0, @Cast("sk_filter_quality_t") int arg1);
 public static native @Cast("sk_filter_quality_t") int sk_paint_get_filter_quality(sk_paint_t arg0);
-public static native sk_typeface_t sk_paint_get_typeface(sk_paint_t arg0);
-public static native void sk_paint_set_typeface(sk_paint_t arg0, sk_typeface_t arg1);
-public static native float sk_paint_get_textsize(sk_paint_t arg0);
-public static native void sk_paint_set_textsize(sk_paint_t arg0, float arg1);
-public static native @Cast("sk_text_align_t") int sk_paint_get_text_align(@Const sk_paint_t arg0);
-public static native void sk_paint_set_text_align(sk_paint_t arg0, @Cast("sk_text_align_t") int arg1);
-public static native @Cast("sk_text_encoding_t") int sk_paint_get_text_encoding(@Const sk_paint_t arg0);
-public static native void sk_paint_set_text_encoding(sk_paint_t arg0, @Cast("sk_text_encoding_t") int arg1);
-public static native float sk_paint_get_text_scale_x(@Const sk_paint_t cpaint);
-public static native void sk_paint_set_text_scale_x(sk_paint_t cpaint, float scale);
-public static native float sk_paint_get_text_skew_x(@Const sk_paint_t cpaint);
-public static native void sk_paint_set_text_skew_x(sk_paint_t cpaint, float skew);
-public static native @Cast("size_t") long sk_paint_break_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float maxWidth, FloatPointer measuredWidth);
-public static native @Cast("size_t") long sk_paint_break_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float maxWidth, FloatBuffer measuredWidth);
-public static native @Cast("size_t") long sk_paint_break_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float maxWidth, float[] measuredWidth);
-public static native float sk_paint_measure_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, sk_rect_t cbounds);
-public static native sk_path_t sk_paint_get_text_path(sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float x, float y);
-public static native sk_path_t sk_paint_get_pos_text_path(sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, @Const sk_point_t pos);
-public static native float sk_paint_get_fontmetrics(sk_paint_t cpaint, sk_fontmetrics_t cfontmetrics, float scale);
 public static native sk_path_effect_t sk_paint_get_path_effect(sk_paint_t cpaint);
 public static native void sk_paint_set_path_effect(sk_paint_t cpaint, sk_path_effect_t effect);  
-public static native @Cast("bool") boolean sk_paint_is_linear_text(@Const sk_paint_t arg0);
-public static native void sk_paint_set_linear_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-public static native @Cast("bool") boolean sk_paint_is_subpixel_text(@Const sk_paint_t arg0);
-public static native void sk_paint_set_subpixel_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-public static native @Cast("bool") boolean sk_paint_is_lcd_render_text(@Const sk_paint_t arg0);
-public static native void sk_paint_set_lcd_render_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-public static native @Cast("bool") boolean sk_paint_is_embedded_bitmap_text(@Const sk_paint_t arg0);
-public static native void sk_paint_set_embedded_bitmap_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-public static native @Cast("sk_paint_hinting_t") int sk_paint_get_hinting(@Const sk_paint_t arg0);
-public static native void sk_paint_set_hinting(sk_paint_t arg0, @Cast("sk_paint_hinting_t") int arg1);
-public static native @Cast("bool") boolean sk_paint_is_autohinted(@Const sk_paint_t arg0);
-public static native void sk_paint_set_autohinted(sk_paint_t arg0, @Cast("bool") boolean arg1);
-public static native @Cast("bool") boolean sk_paint_is_fake_bold_text(@Const sk_paint_t arg0);
-public static native void sk_paint_set_fake_bold_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-public static native @Cast("bool") boolean sk_paint_is_dev_kern_text(@Const sk_paint_t arg0);
-public static native void sk_paint_set_dev_kern_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
 public static native @Cast("bool") boolean sk_paint_get_fill_path(@Const sk_paint_t arg0, @Const sk_path_t src, sk_path_t dst, @Const sk_rect_t cullRect, float resScale);
-public static native int sk_paint_text_to_glyphs(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, @Cast("uint16_t*") ShortPointer glyphs);
-public static native int sk_paint_text_to_glyphs(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, @Cast("uint16_t*") ShortBuffer glyphs);
-public static native int sk_paint_text_to_glyphs(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, @Cast("uint16_t*") short[] glyphs);
-public static native @Cast("bool") boolean sk_paint_contains_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength);
-public static native int sk_paint_count_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength);
-public static native int sk_paint_get_text_widths(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatPointer widths, sk_rect_t bounds);
-public static native int sk_paint_get_text_widths(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatBuffer widths, sk_rect_t bounds);
-public static native int sk_paint_get_text_widths(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float[] widths, sk_rect_t bounds);
-public static native int sk_paint_get_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float x, float y, @Const FloatPointer bounds, FloatPointer intervals);
-public static native int sk_paint_get_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float x, float y, @Const FloatBuffer bounds, FloatBuffer intervals);
-public static native int sk_paint_get_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float x, float y, @Const float[] bounds, float[] intervals);
-public static native int sk_paint_get_pos_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, sk_point_t pos, @Const FloatPointer bounds, FloatPointer intervals);
-public static native int sk_paint_get_pos_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, sk_point_t pos, @Const FloatBuffer bounds, FloatBuffer intervals);
-public static native int sk_paint_get_pos_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, sk_point_t pos, @Const float[] bounds, float[] intervals);
-public static native int sk_paint_get_pos_text_h_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatPointer xpos, float y, @Const FloatPointer bounds, FloatPointer intervals);
-public static native int sk_paint_get_pos_text_h_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatBuffer xpos, float y, @Const FloatBuffer bounds, FloatBuffer intervals);
-public static native int sk_paint_get_pos_text_h_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float[] xpos, float y, @Const float[] bounds, float[] intervals);
-public static native int sk_paint_get_pos_text_blob_intercepts(@Const sk_paint_t cpaint, sk_textblob_t blob, @Const FloatPointer bounds, FloatPointer intervals);
-public static native int sk_paint_get_pos_text_blob_intercepts(@Const sk_paint_t cpaint, sk_textblob_t blob, @Const FloatBuffer bounds, FloatBuffer intervals);
-public static native int sk_paint_get_pos_text_blob_intercepts(@Const sk_paint_t cpaint, sk_textblob_t blob, @Const float[] bounds, float[] intervals);
 
 // #endif
 
@@ -1785,7 +1639,7 @@ public static native int sk_paint_get_pos_text_blob_intercepts(@Const sk_paint_t
 // #ifndef sk_path_DEFINED
 // #define sk_path_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 /* Path */
 public static native sk_path_t sk_path_new();
@@ -1818,7 +1672,7 @@ public static native void sk_path_add_arc(sk_path_t cpath, @Const sk_rect_t crec
 public static native @Cast("sk_path_filltype_t") int sk_path_get_filltype(sk_path_t arg0);
 public static native void sk_path_set_filltype(sk_path_t arg0, @Cast("sk_path_filltype_t") int arg1);
 public static native void sk_path_transform(sk_path_t cpath, @Const sk_matrix_t cmatrix);
-public static native void sk_path_transform_to_dest(sk_path_t cpath, @Const sk_matrix_t cmatrix, sk_path_t destination);
+public static native void sk_path_transform_to_dest(@Const sk_path_t cpath, @Const sk_matrix_t cmatrix, sk_path_t destination);
 public static native sk_path_t sk_path_clone(@Const sk_path_t cpath);
 public static native void sk_path_add_path_offset(sk_path_t cpath, sk_path_t other, float dx, float dy, @Cast("sk_path_add_mode_t") int add_mode);
 public static native void sk_path_add_path_matrix(sk_path_t cpath, sk_path_t other, sk_matrix_t matrix, @Cast("sk_path_add_mode_t") int add_mode);
@@ -1852,7 +1706,7 @@ public static native @Cast("bool") boolean sk_path_is_rect(sk_path_t cpath, sk_r
 
 /* Iterators */
 public static native sk_path_iterator_t sk_path_create_iter(sk_path_t cpath, int forceClose);
-public static native @Cast("sk_path_verb_t") int sk_path_iter_next(sk_path_iterator_t iterator, sk_point_t points, int doConsumeDegenerates, int exact);
+public static native @Cast("sk_path_verb_t") int sk_path_iter_next(sk_path_iterator_t iterator, sk_point_t points);
 public static native float sk_path_iter_conic_weight(sk_path_iterator_t iterator);
 public static native int sk_path_iter_is_close_line(sk_path_iterator_t iterator);
 public static native int sk_path_iter_is_closed_contour(sk_path_iterator_t iterator);
@@ -1869,6 +1723,7 @@ public static native void sk_path_rawiter_destroy(sk_path_rawiterator_t iterator
 public static native @Cast("bool") boolean sk_pathop_op(@Const sk_path_t one, @Const sk_path_t two, @Cast("sk_pathop_t") int op, sk_path_t result);
 public static native @Cast("bool") boolean sk_pathop_simplify(@Const sk_path_t path, sk_path_t result);
 public static native @Cast("bool") boolean sk_pathop_tight_bounds(@Const sk_path_t path, sk_rect_t result);
+public static native @Cast("bool") boolean sk_pathop_as_winding(@Const sk_path_t path, sk_path_t result);
 
 /* Path Op Builder */
 public static native sk_opbuilder_t sk_opbuilder_new();
@@ -1905,7 +1760,7 @@ public static native @Cast("bool") boolean sk_pathmeasure_next_contour(sk_pathme
 // #ifndef sk_patheffect_DEFINED
 // #define sk_patheffect_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_path_effect_unref(sk_path_effect_t t); 
 public static native sk_path_effect_t sk_path_effect_create_compose(sk_path_effect_t outer, sk_path_effect_t inner);
@@ -1937,7 +1792,7 @@ public static native sk_path_effect_t sk_path_effect_create_trim(float start, fl
 // #ifndef sk_picture_DEFINED
 // #define sk_picture_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native sk_picture_recorder_t sk_picture_recorder_new();
 public static native void sk_picture_recorder_delete(sk_picture_recorder_t arg0);
@@ -1950,6 +1805,7 @@ public static native void sk_picture_ref(sk_picture_t arg0);
 public static native void sk_picture_unref(sk_picture_t arg0);
 public static native @Cast("uint32_t") int sk_picture_get_unique_id(sk_picture_t arg0);
 public static native void sk_picture_get_cull_rect(sk_picture_t arg0, sk_rect_t arg1);
+public static native sk_shader_t sk_picture_make_shader(sk_picture_t src, @Cast("sk_shader_tilemode_t") int tmx, @Cast("sk_shader_tilemode_t") int tmy, @Const sk_matrix_t localMatrix, @Const sk_rect_t tile);
 
 // #endif
 
@@ -1968,7 +1824,7 @@ public static native void sk_picture_get_cull_rect(sk_picture_t arg0, sk_rect_t 
 // #ifndef sk_pixmap_DEFINED
 // #define sk_pixmap_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_pixmap_destructor(sk_pixmap_t cpixmap);
 public static native sk_pixmap_t sk_pixmap_new();
@@ -1982,7 +1838,7 @@ public static native @Const Pointer sk_pixmap_get_pixels(@Const sk_pixmap_t cpix
 public static native @Const Pointer sk_pixmap_get_pixels_with_xy(@Const sk_pixmap_t cpixmap, int x, int y);
 public static native @Cast("sk_color_t") int sk_pixmap_get_pixel_color(@Const sk_pixmap_t cpixmap, int x, int y);
 public static native @Cast("bool") boolean sk_pixmap_encode_image(sk_wstream_t dst, @Const sk_pixmap_t src, @Cast("sk_encoded_image_format_t") int encoder, int quality);
-public static native @Cast("bool") boolean sk_pixmap_read_pixels(@Const sk_pixmap_t cpixmap, @Const sk_imageinfo_t dstInfo, Pointer dstPixels, @Cast("size_t") long dstRowBytes, int srcX, int srcY, @Cast("sk_transfer_function_behavior_t") int behavior);
+public static native @Cast("bool") boolean sk_pixmap_read_pixels(@Const sk_pixmap_t cpixmap, @Const sk_imageinfo_t dstInfo, Pointer dstPixels, @Cast("size_t") long dstRowBytes, int srcX, int srcY);
 public static native @Cast("bool") boolean sk_pixmap_scale_pixels(@Const sk_pixmap_t cpixmap, @Const sk_pixmap_t dst, @Cast("sk_filter_quality_t") int quality);
 public static native @Cast("bool") boolean sk_pixmap_extract_subset(@Const sk_pixmap_t cpixmap, sk_pixmap_t result, @Const sk_irect_t subset);
 public static native @Cast("bool") boolean sk_pixmap_erase_color(@Const sk_pixmap_t cpixmap, @Cast("sk_color_t") int color, @Const sk_irect_t subset);
@@ -2026,7 +1882,7 @@ public static native @Cast("bool") boolean sk_pngencoder_encode(sk_wstream_t dst
 // #ifndef sk_region_DEFINED
 // #define sk_region_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 // sk_region_t
 
@@ -2096,7 +1952,7 @@ public static native @Cast("bool") boolean sk_region_spanerator_next(sk_region_s
 // #ifndef sk_shader_DEFINED
 // #define sk_shader_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 // SkShader
 
@@ -2110,9 +1966,9 @@ public static native sk_shader_t sk_shader_with_color_filter(@Const sk_shader_t 
 public static native sk_shader_t sk_shader_new_empty();
 public static native sk_shader_t sk_shader_new_color(@Cast("sk_color_t") int color);
 public static native sk_shader_t sk_shader_new_color4f(@Const sk_color4f_t color, @Const sk_colorspace_t colorspace);
-public static native sk_shader_t sk_shader_new_compose(@Const sk_shader_t shaderA, @Const sk_shader_t shaderB, @Cast("sk_blendmode_t") int mode);
-public static native sk_shader_t sk_shader_new_bitmap(@Const sk_bitmap_t src, @Cast("sk_shader_tilemode_t") int tmx, @Cast("sk_shader_tilemode_t") int tmy, @Const sk_matrix_t localMatrix);
-public static native sk_shader_t sk_shader_new_picture(sk_picture_t src, @Cast("sk_shader_tilemode_t") int tmx, @Cast("sk_shader_tilemode_t") int tmy, @Const sk_matrix_t localMatrix, @Const sk_rect_t tile);
+public static native sk_shader_t sk_shader_new_blend(@Cast("sk_blendmode_t") int mode, @Const sk_shader_t dst, @Const sk_shader_t src, @Const sk_matrix_t localMatrix);
+public static native sk_shader_t sk_shader_new_lerp(float t, @Const sk_shader_t dst, @Const sk_shader_t src, @Const sk_matrix_t localMatrix);
+public static native sk_shader_t sk_shader_new_lerp_red(@Const sk_shader_t red, @Const sk_shader_t dst, @Const sk_shader_t src, @Const sk_matrix_t localMatrix);
 
 // SkGradientShader
 
@@ -2164,7 +2020,7 @@ public static native sk_shader_t sk_shader_new_perlin_noise_improved_noise(float
 // #ifndef sk_stream_DEFINED
 // #define sk_stream_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_stream_asset_destroy(sk_stream_asset_t cstream);
 
@@ -2274,7 +2130,7 @@ public static native int sk_wstream_get_size_of_packed_uint(@Cast("size_t") long
 // #ifndef sk_string_DEFINED
 // #define sk_string_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native sk_string_t sk_string_new_empty();
 public static native sk_string_t sk_string_new_with_copy(@Cast("const char*") BytePointer src, @Cast("size_t") long length);
@@ -2300,7 +2156,7 @@ public static native @Cast("const char*") BytePointer sk_string_get_c_str(@Const
 // #ifndef sk_surface_DEFINED
 // #define sk_surface_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 // surface
 
@@ -2316,6 +2172,7 @@ public static native sk_surface_t sk_surface_new_render_target(gr_context_t cont
 public static native void sk_surface_unref(sk_surface_t arg0);
 public static native sk_canvas_t sk_surface_get_canvas(sk_surface_t arg0);
 public static native sk_image_t sk_surface_new_image_snapshot(sk_surface_t arg0);
+public static native sk_image_t sk_surface_new_image_snapshot_with_crop(sk_surface_t surface, @Const sk_irect_t bounds);
 public static native void sk_surface_draw(sk_surface_t surface, sk_canvas_t canvas, float x, float y, @Const sk_paint_t paint);
 public static native @Cast("bool") boolean sk_surface_peek_pixels(sk_surface_t surface, sk_pixmap_t pixmap);
 public static native @Cast("bool") boolean sk_surface_read_pixels(sk_surface_t surface, sk_imageinfo_t dstInfo, Pointer dstPixels, @Cast("size_t") long dstRowBytes, int srcX, int srcY);
@@ -2345,7 +2202,7 @@ public static native @Cast("sk_pixelgeometry_t") int sk_surfaceprops_get_pixel_g
 // #ifndef sk_svg_DEFINED
 // #define sk_svg_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native sk_canvas_t sk_svgcanvas_create_with_stream(@Const sk_rect_t bounds, sk_wstream_t stream);
 public static native sk_canvas_t sk_svgcanvas_create_with_writer(@Const sk_rect_t bounds, sk_xmlwriter_t writer);
@@ -2367,44 +2224,46 @@ public static native sk_canvas_t sk_svgcanvas_create_with_writer(@Const sk_rect_
 // #ifndef sk_typeface_DEFINED
 // #define sk_typeface_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 // typeface
 
+public static native void sk_typeface_unref(sk_typeface_t typeface);
+public static native sk_fontstyle_t sk_typeface_get_fontstyle(@Const sk_typeface_t typeface);
+public static native int sk_typeface_get_font_weight(@Const sk_typeface_t typeface);
+public static native int sk_typeface_get_font_width(@Const sk_typeface_t typeface);
+public static native @Cast("sk_font_style_slant_t") int sk_typeface_get_font_slant(@Const sk_typeface_t typeface);
+public static native @Cast("bool") boolean sk_typeface_is_fixed_pitch(@Const sk_typeface_t typeface);
 public static native sk_typeface_t sk_typeface_create_default();
 public static native sk_typeface_t sk_typeface_ref_default();
-public static native sk_typeface_t sk_typeface_create_from_name_with_font_style(@Cast("const char*") BytePointer familyName, sk_fontstyle_t style);
-public static native sk_typeface_t sk_typeface_create_from_name_with_font_style(String familyName, sk_fontstyle_t style);
-public static native void sk_typeface_unref(sk_typeface_t arg0);
+public static native sk_typeface_t sk_typeface_create_from_name(@Cast("const char*") BytePointer familyName, @Const sk_fontstyle_t style);
+public static native sk_typeface_t sk_typeface_create_from_name(String familyName, @Const sk_fontstyle_t style);
 public static native sk_typeface_t sk_typeface_create_from_file(@Cast("const char*") BytePointer path, int index);
 public static native sk_typeface_t sk_typeface_create_from_file(String path, int index);
 public static native sk_typeface_t sk_typeface_create_from_stream(sk_stream_asset_t stream, int index);
-public static native int sk_typeface_chars_to_glyphs(sk_typeface_t typeface, @Cast("const char*") BytePointer chars, @Cast("sk_encoding_t") int encoding, @Cast("uint16_t*") ShortPointer glyphs, int glyphCount);
-public static native int sk_typeface_chars_to_glyphs(sk_typeface_t typeface, String chars, @Cast("sk_encoding_t") int encoding, @Cast("uint16_t*") ShortBuffer glyphs, int glyphCount);
-public static native int sk_typeface_chars_to_glyphs(sk_typeface_t typeface, @Cast("const char*") BytePointer chars, @Cast("sk_encoding_t") int encoding, @Cast("uint16_t*") short[] glyphs, int glyphCount);
-public static native int sk_typeface_chars_to_glyphs(sk_typeface_t typeface, String chars, @Cast("sk_encoding_t") int encoding, @Cast("uint16_t*") ShortPointer glyphs, int glyphCount);
-public static native int sk_typeface_chars_to_glyphs(sk_typeface_t typeface, @Cast("const char*") BytePointer chars, @Cast("sk_encoding_t") int encoding, @Cast("uint16_t*") ShortBuffer glyphs, int glyphCount);
-public static native int sk_typeface_chars_to_glyphs(sk_typeface_t typeface, String chars, @Cast("sk_encoding_t") int encoding, @Cast("uint16_t*") short[] glyphs, int glyphCount);
-public static native sk_stream_asset_t sk_typeface_open_stream(sk_typeface_t typeface, IntPointer ttcIndex);
-public static native sk_stream_asset_t sk_typeface_open_stream(sk_typeface_t typeface, IntBuffer ttcIndex);
-public static native sk_stream_asset_t sk_typeface_open_stream(sk_typeface_t typeface, int[] ttcIndex);
-public static native int sk_typeface_get_units_per_em(sk_typeface_t typeface);
-public static native sk_string_t sk_typeface_get_family_name(sk_typeface_t typeface);
-public static native sk_fontstyle_t sk_typeface_get_fontstyle(sk_typeface_t typeface);
-public static native int sk_typeface_get_font_weight(sk_typeface_t typeface);
-public static native int sk_typeface_get_font_width(sk_typeface_t typeface);
-public static native @Cast("sk_font_style_slant_t") int sk_typeface_get_font_slant(sk_typeface_t typeface);
-public static native int sk_typeface_count_glyphs(sk_typeface_t typeface);
-public static native int sk_typeface_count_tables(sk_typeface_t typeface);
-public static native int sk_typeface_get_table_tags(sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") IntPointer tags);
-public static native int sk_typeface_get_table_tags(sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") IntBuffer tags);
-public static native int sk_typeface_get_table_tags(sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") int[] tags);
-public static native @Cast("size_t") long sk_typeface_get_table_size(sk_typeface_t typeface, @Cast("sk_font_table_tag_t") int tag);
-public static native @Cast("size_t") long sk_typeface_get_table_data(sk_typeface_t typeface, @Cast("sk_font_table_tag_t") int tag, @Cast("size_t") long offset, @Cast("size_t") long length, Pointer data);
-public static native @Cast("bool") boolean sk_typeface_is_fixed_pitch(sk_typeface_t typeface);
-public static native @Cast("bool") boolean sk_typeface_get_kerning_pair_adjustments(sk_typeface_t typeface, @Cast("const uint16_t*") ShortPointer glyphs, int count, IntPointer adjustments);
-public static native @Cast("bool") boolean sk_typeface_get_kerning_pair_adjustments(sk_typeface_t typeface, @Cast("const uint16_t*") ShortBuffer glyphs, int count, IntBuffer adjustments);
-public static native @Cast("bool") boolean sk_typeface_get_kerning_pair_adjustments(sk_typeface_t typeface, @Cast("const uint16_t*") short[] glyphs, int count, int[] adjustments);
+public static native sk_typeface_t sk_typeface_create_from_data(sk_data_t data, int index);
+public static native void sk_typeface_unichars_to_glyphs(@Const sk_typeface_t typeface, @Const IntPointer unichars, int count, @Cast("uint16_t*") ShortPointer glyphs);
+public static native void sk_typeface_unichars_to_glyphs(@Const sk_typeface_t typeface, @Const IntBuffer unichars, int count, @Cast("uint16_t*") ShortBuffer glyphs);
+public static native void sk_typeface_unichars_to_glyphs(@Const sk_typeface_t typeface, @Const int[] unichars, int count, @Cast("uint16_t*") short[] glyphs);
+public static native @Cast("uint16_t") short sk_typeface_unichar_to_glyph(@Const sk_typeface_t typeface, int unichar);
+public static native int sk_typeface_count_glyphs(@Const sk_typeface_t typeface);
+public static native int sk_typeface_count_tables(@Const sk_typeface_t typeface);
+public static native int sk_typeface_get_table_tags(@Const sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") IntPointer tags);
+public static native int sk_typeface_get_table_tags(@Const sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") IntBuffer tags);
+public static native int sk_typeface_get_table_tags(@Const sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") int[] tags);
+public static native @Cast("size_t") long sk_typeface_get_table_size(@Const sk_typeface_t typeface, @Cast("sk_font_table_tag_t") int tag);
+public static native @Cast("size_t") long sk_typeface_get_table_data(@Const sk_typeface_t typeface, @Cast("sk_font_table_tag_t") int tag, @Cast("size_t") long offset, @Cast("size_t") long length, Pointer data);
+public static native sk_data_t sk_typeface_copy_table_data(@Const sk_typeface_t typeface, @Cast("sk_font_table_tag_t") int tag);
+public static native int sk_typeface_get_units_per_em(@Const sk_typeface_t typeface);
+public static native @Cast("bool") boolean sk_typeface_get_kerning_pair_adjustments(@Const sk_typeface_t typeface, @Cast("const uint16_t*") ShortPointer glyphs, int count, IntPointer adjustments);
+public static native @Cast("bool") boolean sk_typeface_get_kerning_pair_adjustments(@Const sk_typeface_t typeface, @Cast("const uint16_t*") ShortBuffer glyphs, int count, IntBuffer adjustments);
+public static native @Cast("bool") boolean sk_typeface_get_kerning_pair_adjustments(@Const sk_typeface_t typeface, @Cast("const uint16_t*") short[] glyphs, int count, int[] adjustments);
+// TODO: createFamilyNameIterator
+public static native sk_string_t sk_typeface_get_family_name(@Const sk_typeface_t typeface);
+public static native sk_stream_asset_t sk_typeface_open_stream(@Const sk_typeface_t typeface, IntPointer ttcIndex);
+public static native sk_stream_asset_t sk_typeface_open_stream(@Const sk_typeface_t typeface, IntBuffer ttcIndex);
+public static native sk_stream_asset_t sk_typeface_open_stream(@Const sk_typeface_t typeface, int[] ttcIndex);
+
 
 // font manager
 
@@ -2465,7 +2324,7 @@ public static native sk_typeface_t sk_fontstyleset_match_style(sk_fontstyleset_t
 // #ifndef sk_vertices_DEFINED
 // #define sk_vertices_DEFINED
 
-// #include "sk_types.h"
+// #include "include/c/sk_types.h"
 
 public static native void sk_vertices_unref(sk_vertices_t cvertices);
 public static native void sk_vertices_ref(sk_vertices_t cvertices);

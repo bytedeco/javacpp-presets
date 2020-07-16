@@ -19,7 +19,7 @@ public class nppicc extends org.bytedeco.cuda.presets.nppicc {
 
 // Parsed from <nppi_color_conversion.h>
 
- /* Copyright 2009-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2020 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -1276,7 +1276,7 @@ public static native @Cast("NppStatus") int nppiYUV420ToRGBBatch_8u_P3C3R_Advanc
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
  *  	  plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each source plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1299,7 +1299,7 @@ public static native @Cast("NppStatus") int nppiNV12ToRGB_8u_P2C3R(@Cast("const 
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
  *  	  plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1322,7 +1322,7 @@ public static native @Cast("NppStatus") int nppiNV12ToRGB_709HDTV_8u_P2C3R(@Cast
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
  *  	  plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1352,7 +1352,7 @@ public static native @Cast("NppStatus") int nppiNV12ToRGB_709CSC_8u_P2C3R(@Cast(
  *  2 channel 8-bit unsigned planar NV21 to 4 channel 8-bit unsigned packed RGBA color conversion with constant alpha (0xFF).
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y plane, one for VU plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1528,7 +1528,7 @@ public static native @Cast("NppStatus") int nppiYUV420ToBGRBatch_8u_P3C3R_Advanc
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
  *  	  plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step.  Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1551,7 +1551,7 @@ public static native @Cast("NppStatus") int nppiNV12ToBGR_8u_P2C3R(@Cast("const 
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
  *  	  plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1574,7 +1574,7 @@ public static native @Cast("NppStatus") int nppiNV12ToBGR_709HDTV_8u_P2C3R(@Cast
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
  *  	  plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1604,7 +1604,7 @@ public static native @Cast("NppStatus") int nppiNV12ToBGR_709CSC_8u_P2C3R(@Cast(
  *  2 channel 8-bit unsigned planar NV21 to 4 channel 8-bit unsigned packed BGRA color conversion with constant alpha (0xFF).
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y plane, one for VU plane).
- * @param rSrcStep \ref source_planar_image_line_step_array.
+ * @param rSrcStep \ref source_planar_image_line_step.  Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4346,6 +4346,157 @@ public static native @Cast("NppStatus") int nppiYCCToRGB_8u_AC4R(@Cast("const Np
 public static native @Cast("NppStatus") int nppiYCCToRGB_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 
 /** \} ycctorgb */
+
+/** \defgroup yccktocmyk601 YCCKToCMYK_JPEG 
+ *  This function partially converts JPEG YCCK to CMYK.
+ *
+ *  This is how NPP converts JPEG YCCK to CMYK. NPP only performs and initial YCC to RGB conversion using the 601 conversion coefficients
+ *  and the RGB to CMY inversion leaving K unmodified.  To complete this conversion to useful RGB values an additional RGB conversion needs
+ *  to follow this function using the color profile contained in the YCCK JPEG file metadata section.  NPP does not directly support
+ *  this conversion but potentially nppiColorTwist can be used to perform it once the conversion coefficients are known.
+ *
+ *  <pre>{@code
+ *  Npp32f nY  = static_cast<Npp32f>(Y);
+ *  Npp32f nC1 = static_cast<Npp32f>(Cb);
+ *  Npp32f nC2 = static_cast<Npp32f>(Cr);
+ *  Npp32f nR = nY + 1.402F * nC2 - 179.456F;
+ *  Npp32f nG = nY - 0.34414F * nC1 - 0.71414F * nC2 + 135.45984F;
+ *  Npp32f nB = nY + 1.772F * nC1 - 226.816F;
+ *
+ *  Npp8u nC = static_cast<Npp8u>(255.0F - nR);
+ *  Npp8u nM = static_cast<Npp8u>(255.0F - nG);
+ *  Npp8u nM = static_cast<Npp8u>(255.0F - nB);
+ *  Npp8u nK = K;
+ *  }</pre>
+ *
+ * \{
+ */
+/**
+ * 4 channel 8-bit unsigned planar JPEG YCCK color format to 4 channel 8-bit unsigned planar CMYK color conversion using 601 RGB color coefficients and CMY inversion.
+ *
+ * @param pSrc \ref source_planar_image_pointer_array.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param pDst \ref destination_planar_image_pointer_array.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R_Ctx(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u**") PointerPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R_Ctx(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u**") PointerPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
+/** \} yccktocmyk601 */
+
+/** \defgroup ycckorcmyktorgb CMYK_OR_YCCK_JPEG_TO_RGB 
+ *  These functions convert JPEG CMYK or YCCK color format images to either planar or packed RGB images for images which need no color profile conversion.
+ *
+ * \{
+ */
+
+/**
+ * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned planar RGB color model image without color profile conversion.
+ *
+ * @param pSrc \ref source_planar_image_pointer_array.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param pDst \ref destination_planar_image_pointer_array.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u**") PointerPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u**") PointerPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
+/**
+ * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned packed RGB color model image without color profile conversion.
+ *
+ * @param pSrc \ref source_planar_image_pointer_array.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param pDst \ref destination_planar_image_pointer_array.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
+/** \} ycckorcmyktorgb */
+
+/** \defgroup ycckorcmyktobgr CMYK_OR_YCCK_JPEG_TO_BGR 
+ *  These functions convert JPEG CMYK or YCCK color format images to either planar or packed BGR images for images which need no color profile conversion.
+ *
+ * \{
+ */
+
+/**
+ * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned planar BGR color model image without color profile conversion.
+ *
+ * @param pSrc \ref source_planar_image_pointer_array.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param pDst \ref destination_planar_image_pointer_array.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u**") PointerPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u**") PointerPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
+/**
+ * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned packed BGR color model image without color profile conversion.
+ *
+ * @param pSrc \ref source_planar_image_pointer_array.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param pDst \ref destination_planar_image_pointer_array.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R(@Cast("const Npp8u**") PointerPointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
+/** \} ycckorcmyktobgr */
 
 /** \defgroup rgbtohls RGBToHLS 
  *  RGB to HLS color conversion.
@@ -7668,7 +7819,7 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb420_8u_P2P3R(@Cas
  *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit unsigned planar YUV420 color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y plane, one for UV plane).
- * @param nSrcStep \ref source_planar_image_line_step_array.
+ * @param nSrcStep \ref source_planar_image_line_step.  Same value is used for each plane.
  * @param pDst \ref destination_image_pointer.
  * @param aDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.

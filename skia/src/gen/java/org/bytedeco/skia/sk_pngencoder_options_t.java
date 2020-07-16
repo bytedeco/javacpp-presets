@@ -28,6 +28,5 @@ public class sk_pngencoder_options_t extends Pointer {
 
     public native @Cast("sk_pngencoder_filterflags_t") int fFilterFlags(); public native sk_pngencoder_options_t fFilterFlags(int setter);
     public native int fZLibLevel(); public native sk_pngencoder_options_t fZLibLevel(int setter);
-    public native @Cast("sk_transfer_function_behavior_t") int fUnpremulBehavior(); public native sk_pngencoder_options_t fUnpremulBehavior(int setter);
     public native Pointer fComments(); public native sk_pngencoder_options_t fComments(Pointer setter);
 }

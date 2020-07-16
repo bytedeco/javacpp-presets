@@ -31,9 +31,8 @@ export MAKEJ=2
 echo "export MAKEJ=2" | tee --append $HOME/vars.list
 
 # Try to use ccache to speed up the build
-curl -L https://github.com/ccache/ccache/releases/download/v3.7/ccache-3.7.tar.gz -o $HOME/ccache-3.7.tar.gz
-tar xvf $HOME/ccache-3.7.tar.gz -C $HOME
-patch -Np1 -d $HOME/ccache-3.7/ < $TRAVIS_BUILD_DIR/ci/ccache-cuda.patch
+curl -L https://github.com/ccache/ccache/releases/download/v3.7.10/ccache-3.7.10.tar.gz -o $HOME/ccache-3.7.10.tar.gz
+tar xvf $HOME/ccache-3.7.10.tar.gz -C $HOME
 export CCACHE_DIR=$HOME/.ccache
 export PATH=/usr/lib64/ccache/:/usr/lib/ccache/:$PATH
 echo "export CCACHE_DIR=$HOME/.ccache" | tee --append $HOME/vars.list
@@ -158,11 +157,11 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda, cudnn, and nccl.."
-        curl -L http://developer.download.nvidia.com/compute/cuda/11.0.1/local_installers/cuda-repo-rhel7-11-0-local-11.0.1_450.36.06-1.x86_64.rpm -o $HOME/cuda-repo-rhel7-11-0-local-11.0.1_450.36.06-1.x86_64.rpm
+        curl -L http://developer.download.nvidia.com/compute/cuda/11.0.2/local_installers/cuda-repo-rhel7-11-0-local-11.0.2_450.51.05-1.x86_64.rpm -o $HOME/cuda-repo-rhel7-11-0-local-11.0.2_450.51.05-1.x86_64.rpm
         curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.1/cudnn-11.0-linux-x64-v8.0.1.13.tgz -o $HOME/cudnn-11.0-linux-x64-v8.0.1.13.tgz
-        curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.3-1+cuda11.0_x86_64.txz -o $HOME/nccl_x86_64.txz
+        curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.6-1+cuda11.0_x86_64.txz -o $HOME/nccl_x86_64.txz
 
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i $HOME/cuda-repo-rhel7-11-0-local-11.0.1_450.36.06-1.x86_64.rpm"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i $HOME/cuda-repo-rhel7-11-0-local-11.0.2_450.51.05-1.x86_64.rpm"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /var/cuda-repo-rhel7-11-0-local/; rpm -i --nodeps cuda*.rpm libc*.rpm libn*.rpm"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
@@ -177,7 +176,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libnvidia-ml.so.1"
 
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7/; ./configure; make; make install"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7.10/; ./configure; make; make install"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "chmod 755 /usr/local/cuda/bin/nvcccache"
   fi
@@ -335,7 +334,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         # work around issues with CUDA 10.2
         for f in /usr/local/cuda/lib/*.10.dylib; do sudo ln -s $f ${f/%.10.dylib/.10.2.dylib}; done
 
-        cd $HOME/ccache-3.7/; ./configure; make; sudo make install; cd $TRAVIS_BUILD_DIR
+        cd $HOME/ccache-3.7.10/; ./configure; make; sudo make install; cd $TRAVIS_BUILD_DIR
         echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler "$@"' | sudo tee /usr/local/cuda/bin/nvcccache
         sudo chmod 755 /usr/local/cuda/bin/nvcccache
       fi

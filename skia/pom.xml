@@ -16,7 +16,7 @@
 
   <properties>
     <!-- Must be kept in sync with SKIA_VERSION in cppbuild.sh -->
-    <skia.version>1.68.3</skia.version>
+    <skia.version>2.80.0</skia.version>
   </properties>
 
   <dependencies>
@@ -39,6 +39,7 @@
         <artifactId>javacpp</artifactId>
         <configuration>
           <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/include/c/</includePath>
           </includePaths>
           <linkPaths>

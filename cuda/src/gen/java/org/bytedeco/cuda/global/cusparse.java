@@ -79,9 +79,9 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 //##############################################################################
 
 public static final int CUSPARSE_VER_MAJOR = 11;
-public static final int CUSPARSE_VER_MINOR = 0;
+public static final int CUSPARSE_VER_MINOR = 1;
 public static final int CUSPARSE_VER_PATCH = 0;
-public static final int CUSPARSE_VER_BUILD = 191;
+public static final int CUSPARSE_VER_BUILD = 218;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -90,7 +90,7 @@ public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 +
 // # MACRO
 // #############################################################################
 
-// #ifndef CUSPARSEAPI
+// #if !defined(CUSPARSEAPI)
 // #    if defined(_WIN32)
 // #        define CUSPARSEAPI __stdcall
 // #    else
@@ -113,7 +113,10 @@ public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 +
 // #if !defined(DISABLE_CUSPARSE_DEPRECATED)
 
 // #else // defined(DISABLE_CUSPARSE_DEPRECATED)
+
 // #   define CUSPARSE_DEPRECATED(new_func)
+// #   define CUSPARSE_DEPRECATED_ENUM(new_enum)
+
 // #endif // !defined(DISABLE_CUSPARSE_DEPRECATED)
 
 // #undef CUSPARSE_CPP_VERSION
@@ -365,21 +368,21 @@ public static native @Cast("cusparseStatus_t") int cusparseDestroyPruneInfo(prun
 //# SPARSE LEVEL 1 ROUTINES
 //##############################################################################
 
-public static native @Cast("cusparseStatus_t") int cusparseSaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSaxpyi(cusparseContext handle,
                int nnz,
                @Const FloatPointer alpha,
                @Const FloatPointer xVal,
                @Const IntPointer xInd,
                FloatPointer y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSaxpyi(cusparseContext handle,
                int nnz,
                @Const FloatBuffer alpha,
                @Const FloatBuffer xVal,
                @Const IntBuffer xInd,
                FloatBuffer y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSaxpyi(cusparseContext handle,
                int nnz,
                @Const float[] alpha,
                @Const float[] xVal,
@@ -387,21 +390,21 @@ public static native @Cast("cusparseStatus_t") int cusparseSaxpyi(cusparseContex
                float[] y,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseDaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDaxpyi(cusparseContext handle,
                int nnz,
                @Const DoublePointer alpha,
                @Const DoublePointer xVal,
                @Const IntPointer xInd,
                DoublePointer y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDaxpyi(cusparseContext handle,
                int nnz,
                @Const DoubleBuffer alpha,
                @Const DoubleBuffer xVal,
                @Const IntBuffer xInd,
                DoubleBuffer y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDaxpyi(cusparseContext handle,
                int nnz,
                @Const double[] alpha,
                @Const double[] xVal,
@@ -409,21 +412,21 @@ public static native @Cast("cusparseStatus_t") int cusparseDaxpyi(cusparseContex
                double[] y,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseCaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCaxpyi(cusparseContext handle,
                int nnz,
                @Cast("const cuComplex*") float2 alpha,
                @Cast("const cuComplex*") float2 xVal,
                @Const IntPointer xInd,
                @Cast("cuComplex*") float2 y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCaxpyi(cusparseContext handle,
                int nnz,
                @Cast("const cuComplex*") float2 alpha,
                @Cast("const cuComplex*") float2 xVal,
                @Const IntBuffer xInd,
                @Cast("cuComplex*") float2 y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCaxpyi(cusparseContext handle,
                int nnz,
                @Cast("const cuComplex*") float2 alpha,
                @Cast("const cuComplex*") float2 xVal,
@@ -431,21 +434,21 @@ public static native @Cast("cusparseStatus_t") int cusparseCaxpyi(cusparseContex
                @Cast("cuComplex*") float2 y,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseZaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZaxpyi(cusparseContext handle,
                int nnz,
                @Cast("const cuDoubleComplex*") double2 alpha,
                @Cast("const cuDoubleComplex*") double2 xVal,
                @Const IntPointer xInd,
                @Cast("cuDoubleComplex*") double2 y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZaxpyi(cusparseContext handle,
                int nnz,
                @Cast("const cuDoubleComplex*") double2 alpha,
                @Cast("const cuDoubleComplex*") double2 xVal,
                @Const IntBuffer xInd,
                @Cast("cuDoubleComplex*") double2 y,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZaxpyi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZaxpyi(cusparseContext handle,
                int nnz,
                @Cast("const cuDoubleComplex*") double2 alpha,
                @Cast("const cuDoubleComplex*") double2 xVal,
@@ -453,235 +456,235 @@ public static native @Cast("cusparseStatus_t") int cusparseZaxpyi(cusparseContex
                @Cast("cuDoubleComplex*") double2 y,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseSgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgthr(cusparseContext handle,
               int nnz,
               @Const FloatPointer y,
               FloatPointer xVal,
               @Const IntPointer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgthr(cusparseContext handle,
               int nnz,
               @Const FloatBuffer y,
               FloatBuffer xVal,
               @Const IntBuffer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgthr(cusparseContext handle,
               int nnz,
               @Const float[] y,
               float[] xVal,
               @Const int[] xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseDgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgthr(cusparseContext handle,
               int nnz,
               @Const DoublePointer y,
               DoublePointer xVal,
               @Const IntPointer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgthr(cusparseContext handle,
               int nnz,
               @Const DoubleBuffer y,
               DoubleBuffer xVal,
               @Const IntBuffer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgthr(cusparseContext handle,
               int nnz,
               @Const double[] y,
               double[] xVal,
               @Const int[] xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseCgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgthr(cusparseContext handle,
               int nnz,
               @Cast("const cuComplex*") float2 y,
               @Cast("cuComplex*") float2 xVal,
               @Const IntPointer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgthr(cusparseContext handle,
               int nnz,
               @Cast("const cuComplex*") float2 y,
               @Cast("cuComplex*") float2 xVal,
               @Const IntBuffer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgthr(cusparseContext handle,
               int nnz,
               @Cast("const cuComplex*") float2 y,
               @Cast("cuComplex*") float2 xVal,
               @Const int[] xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseZgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgthr(cusparseContext handle,
               int nnz,
               @Cast("const cuDoubleComplex*") double2 y,
               @Cast("cuDoubleComplex*") double2 xVal,
               @Const IntPointer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgthr(cusparseContext handle,
               int nnz,
               @Cast("const cuDoubleComplex*") double2 y,
               @Cast("cuDoubleComplex*") double2 xVal,
               @Const IntBuffer xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZgthr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgthr(cusparseContext handle,
               int nnz,
               @Cast("const cuDoubleComplex*") double2 y,
               @Cast("cuDoubleComplex*") double2 xVal,
               @Const int[] xInd,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseSgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgthrz(cusparseContext handle,
                int nnz,
                FloatPointer y,
                FloatPointer xVal,
                @Const IntPointer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgthrz(cusparseContext handle,
                int nnz,
                FloatBuffer y,
                FloatBuffer xVal,
                @Const IntBuffer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgthrz(cusparseContext handle,
                int nnz,
                float[] y,
                float[] xVal,
                @Const int[] xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseDgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgthrz(cusparseContext handle,
                int nnz,
                DoublePointer y,
                DoublePointer xVal,
                @Const IntPointer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgthrz(cusparseContext handle,
                int nnz,
                DoubleBuffer y,
                DoubleBuffer xVal,
                @Const IntBuffer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgthrz(cusparseContext handle,
                int nnz,
                double[] y,
                double[] xVal,
                @Const int[] xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseCgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgthrz(cusparseContext handle,
                int nnz,
                @Cast("cuComplex*") float2 y,
                @Cast("cuComplex*") float2 xVal,
                @Const IntPointer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgthrz(cusparseContext handle,
                int nnz,
                @Cast("cuComplex*") float2 y,
                @Cast("cuComplex*") float2 xVal,
                @Const IntBuffer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgthrz(cusparseContext handle,
                int nnz,
                @Cast("cuComplex*") float2 y,
                @Cast("cuComplex*") float2 xVal,
                @Const int[] xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseZgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgthrz(cusparseContext handle,
                int nnz,
                @Cast("cuDoubleComplex*") double2 y,
                @Cast("cuDoubleComplex*") double2 xVal,
                @Const IntPointer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgthrz(cusparseContext handle,
                int nnz,
                @Cast("cuDoubleComplex*") double2 y,
                @Cast("cuDoubleComplex*") double2 xVal,
                @Const IntBuffer xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZgthrz(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgthrz(cusparseContext handle,
                int nnz,
                @Cast("cuDoubleComplex*") double2 y,
                @Cast("cuDoubleComplex*") double2 xVal,
                @Const int[] xInd,
                @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseSsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSsctr(cusparseContext handle,
               int nnz,
               @Const FloatPointer xVal,
               @Const IntPointer xInd,
               FloatPointer y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSsctr(cusparseContext handle,
               int nnz,
               @Const FloatBuffer xVal,
               @Const IntBuffer xInd,
               FloatBuffer y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSsctr(cusparseContext handle,
               int nnz,
               @Const float[] xVal,
               @Const int[] xInd,
               float[] y,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseDsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDsctr(cusparseContext handle,
               int nnz,
               @Const DoublePointer xVal,
               @Const IntPointer xInd,
               DoublePointer y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDsctr(cusparseContext handle,
               int nnz,
               @Const DoubleBuffer xVal,
               @Const IntBuffer xInd,
               DoubleBuffer y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDsctr(cusparseContext handle,
               int nnz,
               @Const double[] xVal,
               @Const int[] xInd,
               double[] y,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseCsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCsctr(cusparseContext handle,
               int nnz,
               @Cast("const cuComplex*") float2 xVal,
               @Const IntPointer xInd,
               @Cast("cuComplex*") float2 y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCsctr(cusparseContext handle,
               int nnz,
               @Cast("const cuComplex*") float2 xVal,
               @Const IntBuffer xInd,
               @Cast("cuComplex*") float2 y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseCsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCsctr(cusparseContext handle,
               int nnz,
               @Cast("const cuComplex*") float2 xVal,
               @Const int[] xInd,
               @Cast("cuComplex*") float2 y,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseZsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZsctr(cusparseContext handle,
               int nnz,
               @Cast("const cuDoubleComplex*") double2 xVal,
               @Const IntPointer xInd,
               @Cast("cuDoubleComplex*") double2 y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZsctr(cusparseContext handle,
               int nnz,
               @Cast("const cuDoubleComplex*") double2 xVal,
               @Const IntBuffer xInd,
               @Cast("cuDoubleComplex*") double2 y,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseZsctr(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZsctr(cusparseContext handle,
               int nnz,
               @Cast("const cuDoubleComplex*") double2 xVal,
               @Const int[] xInd,
               @Cast("cuDoubleComplex*") double2 y,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseSroti(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSroti(cusparseContext handle,
               int nnz,
               FloatPointer xVal,
               @Const IntPointer xInd,
@@ -689,7 +692,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSroti(cusparseContext
               @Const FloatPointer c,
               @Const FloatPointer s,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSroti(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSroti(cusparseContext handle,
               int nnz,
               FloatBuffer xVal,
               @Const IntBuffer xInd,
@@ -697,7 +700,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSroti(cusparseContext
               @Const FloatBuffer c,
               @Const FloatBuffer s,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseSroti(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSroti(cusparseContext handle,
               int nnz,
               float[] xVal,
               @Const int[] xInd,
@@ -706,7 +709,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSroti(cusparseContext
               @Const float[] s,
               @Cast("cusparseIndexBase_t") int idxBase);
 
-public static native @Cast("cusparseStatus_t") int cusparseDroti(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDroti(cusparseContext handle,
               int nnz,
               DoublePointer xVal,
               @Const IntPointer xInd,
@@ -714,7 +717,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDroti(cusparseContext
               @Const DoublePointer c,
               @Const DoublePointer s,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDroti(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDroti(cusparseContext handle,
               int nnz,
               DoubleBuffer xVal,
               @Const IntBuffer xInd,
@@ -722,7 +725,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDroti(cusparseContext
               @Const DoubleBuffer c,
               @Const DoubleBuffer s,
               @Cast("cusparseIndexBase_t") int idxBase);
-public static native @Cast("cusparseStatus_t") int cusparseDroti(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDroti(cusparseContext handle,
               int nnz,
               double[] xVal,
               @Const int[] xInd,
@@ -2723,7 +2726,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZbsrmm(cusparseContex
                 @Cast("cuDoubleComplex*") double2 C,
                 int ldc);
 
-public static native @Cast("cusparseStatus_t") int cusparseSgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2737,7 +2740,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSgemmi(cusparseContex
                @Const FloatPointer beta,
                FloatPointer C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseSgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2751,7 +2754,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSgemmi(cusparseContex
                @Const FloatBuffer beta,
                FloatBuffer C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseSgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2766,7 +2769,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSgemmi(cusparseContex
                float[] C,
                int ldc);
 
-public static native @Cast("cusparseStatus_t") int cusparseDgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2780,7 +2783,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDgemmi(cusparseContex
                @Const DoublePointer beta,
                DoublePointer C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseDgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2794,7 +2797,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDgemmi(cusparseContex
                @Const DoubleBuffer beta,
                DoubleBuffer C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseDgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2809,7 +2812,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDgemmi(cusparseContex
                double[] C,
                int ldc);
 
-public static native @Cast("cusparseStatus_t") int cusparseCgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2823,7 +2826,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCgemmi(cusparseContex
                @Cast("const cuComplex*") float2 beta,
                @Cast("cuComplex*") float2 C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseCgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2837,7 +2840,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCgemmi(cusparseContex
                @Cast("const cuComplex*") float2 beta,
                @Cast("cuComplex*") float2 C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseCgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2852,7 +2855,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCgemmi(cusparseContex
                @Cast("cuComplex*") float2 C,
                int ldc);
 
-public static native @Cast("cusparseStatus_t") int cusparseZgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2866,7 +2869,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZgemmi(cusparseContex
                @Cast("const cuDoubleComplex*") double2 beta,
                @Cast("cuDoubleComplex*") double2 C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseZgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -2880,7 +2883,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZgemmi(cusparseContex
                @Cast("const cuDoubleComplex*") double2 beta,
                @Cast("cuDoubleComplex*") double2 C,
                int ldc);
-public static native @Cast("cusparseStatus_t") int cusparseZgemmi(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgemmi(cusparseContext handle,
                int m,
                int n,
                int k,
@@ -12729,19 +12732,19 @@ public static native @Cast("cusparseStatus_t") int cusparseCsr2cscEx2_bufferSize
                               @Cast("size_t*") SizeTPointer bufferSize);
 
 // #############################################################################
-// # Generic APIs
+// # GENERIC APIs - Enumerators and Opaque Data Structures
 // #############################################################################
 
 /** enum cusparseFormat_t */
 public static final int
     /** Compressed Sparse Row (CSR) */
-    CUSPARSE_FORMAT_CSR         = 1,
+    CUSPARSE_FORMAT_CSR        = 1,
     /** Compressed Sparse Column (CSC) */
-    CUSPARSE_FORMAT_CSC         = 2,
+    CUSPARSE_FORMAT_CSC        = 2,
     /** Coordinate (COO) - Structure of Arrays */
-    CUSPARSE_FORMAT_COO         = 3,
+    CUSPARSE_FORMAT_COO        = 3,
     /** Coordinate (COO) - Array of Structures */
-    CUSPARSE_FORMAT_COO_AOS     = 4;
+    CUSPARSE_FORMAT_COO_AOS    = 4;
 
 /** enum cusparseOrder_t */
 public static final int
@@ -12759,21 +12762,6 @@ public static final int
     CUSPARSE_INDEX_32I = 2,
     /** 64-bit signed integer for matrix/vector indices */
     CUSPARSE_INDEX_64I = 3;
-
-/** enum cusparseSpMVAlg_t */
-public static final int
-    CUSPARSE_MV_ALG_DEFAULT = 0,
-    CUSPARSE_COOMV_ALG      = 1,
-    CUSPARSE_CSRMV_ALG1     = 2,
-    CUSPARSE_CSRMV_ALG2     = 3;
-
-/** enum cusparseSpMMAlg_t */
-public static final int
-    CUSPARSE_MM_ALG_DEFAULT = 0,
-    CUSPARSE_COOMM_ALG1     = 1, // non-deterministc results
-    CUSPARSE_COOMM_ALG2     = 2, // deterministic results
-    CUSPARSE_COOMM_ALG3     = 3, // non-deterministc results, for large matrices
-    CUSPARSE_CSRMM_ALG1     = 4;
 // Targeting ../cusparse/cusparseSpVecDescr.java
 
 
@@ -12848,6 +12836,15 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMatGetSize(cusparse
 
 
 
+public static native @Cast("cusparseStatus_t") int cusparseCooSetStridedBatch(cusparseSpMatDescr spMatDescr,
+                            int batchCount,
+                            @Cast("int64_t") long batchStride);
+
+public static native @Cast("cusparseStatus_t") int cusparseCsrSetStridedBatch(cusparseSpMatDescr spMatDescr,
+                            int batchCount,
+                            @Cast("int64_t") long offsetsBatchStride,
+                            @Cast("int64_t") long columnsValuesBatchStride);
+
 //------------------------------------------------------------------------------
 // ### CSR ###
 
@@ -12862,7 +12859,6 @@ public static native @Cast("cusparseStatus_t") int cusparseCsrSetPointers(cuspar
 
 //------------------------------------------------------------------------------
 // ### COO ###
-
 
 
 
@@ -12891,8 +12887,28 @@ public static native @Cast("cusparseStatus_t") int cusparseCsrSetPointers(cuspar
 
 
 // #############################################################################
-// # SPARSE VECTOR-VECTOR MULTIPLICATION
+// # VECTOR-VECTOR OPERATIONS
 // #############################################################################
+
+public static native @Cast("cusparseStatus_t") int cusparseAxpby(cusparseContext handle,
+              @Const Pointer alpha,
+              cusparseSpVecDescr vecX,
+              @Const Pointer beta,
+              cusparseDnVecDescr vecY);
+
+public static native @Cast("cusparseStatus_t") int cusparseGather(cusparseContext handle,
+               cusparseDnVecDescr vecY,
+               cusparseSpVecDescr vecX);
+
+public static native @Cast("cusparseStatus_t") int cusparseScatter(cusparseContext handle,
+                cusparseSpVecDescr vecX,
+                cusparseDnVecDescr vecY);
+
+public static native @Cast("cusparseStatus_t") int cusparseRot(cusparseContext handle,
+            @Const Pointer c_coeff,
+            @Const Pointer s_coeff,
+            cusparseSpVecDescr vecX,
+            cusparseDnVecDescr vecY);
 
 
 
@@ -12902,6 +12918,13 @@ public static native @Cast("cusparseStatus_t") int cusparseCsrSetPointers(cuspar
 // # SPARSE MATRIX-VECTOR MULTIPLICATION
 // #############################################################################
 
+/** enum cusparseSpMVAlg_t */
+public static final int
+    CUSPARSE_MV_ALG_DEFAULT = 0,
+    CUSPARSE_COOMV_ALG      = 1,
+    CUSPARSE_CSRMV_ALG1     = 2,
+    CUSPARSE_CSRMV_ALG2     = 3;
+
 
 
 
@@ -12909,6 +12932,22 @@ public static native @Cast("cusparseStatus_t") int cusparseCsrSetPointers(cuspar
 // #############################################################################
 // # SPARSE MATRIX-MATRIX MULTIPLICATION
 // #############################################################################
+
+/** enum cusparseSpMMAlg_t */
+public static final int
+    CUSPARSE_MM_ALG_DEFAULT
+                         = 0,
+    CUSPARSE_COOMM_ALG1 = 1,
+    CUSPARSE_COOMM_ALG2 = 2,
+    CUSPARSE_COOMM_ALG3 = 3,
+    CUSPARSE_CSRMM_ALG1 = 4,
+    CUSPARSE_SPMM_ALG_DEFAULT = 0,
+    CUSPARSE_SPMM_COO_ALG1    = 1,
+    CUSPARSE_SPMM_COO_ALG2    = 2,
+    CUSPARSE_SPMM_COO_ALG3    = 3,
+    CUSPARSE_SPMM_COO_ALG4    = 5,
+    CUSPARSE_SPMM_CSR_ALG1    = 4,
+    CUSPARSE_SPMM_CSR_ALG2    = 6;
 
 
 
@@ -12994,6 +13033,9 @@ public static native @Cast("cusparseStatus_t") int cusparseConstrainedGeMM_buffe
                                    cusparseSpMatDescr matC,
                                    @Cast("cudaDataType") int computeType,
                                    @Cast("size_t*") SizeTPointer bufferSize);
+
+//==============================================================================
+//==============================================================================
 
 // #if defined(__cplusplus)
 // #endif // defined(__cplusplus)

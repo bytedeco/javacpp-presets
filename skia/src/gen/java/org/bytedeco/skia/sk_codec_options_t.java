@@ -30,5 +30,4 @@ public class sk_codec_options_t extends Pointer {
     public native sk_irect_t fSubset(); public native sk_codec_options_t fSubset(sk_irect_t setter);
     public native int fFrameIndex(); public native sk_codec_options_t fFrameIndex(int setter);
     public native int fPriorFrame(); public native sk_codec_options_t fPriorFrame(int setter);
-    public native @Cast("sk_transfer_function_behavior_t") int fPremulBehavior(); public native sk_codec_options_t fPremulBehavior(int setter);
 }
