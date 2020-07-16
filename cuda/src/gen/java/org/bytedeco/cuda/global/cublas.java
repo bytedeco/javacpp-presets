@@ -101,9 +101,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 11;
-public static final int CUBLAS_VER_MINOR = 0;
+public static final int CUBLAS_VER_MINOR = 1;
 public static final int CUBLAS_VER_PATCH = 0;
-public static final int CUBLAS_VER_BUILD = 191;
+public static final int CUBLAS_VER_BUILD = 229;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
@@ -146,7 +146,7 @@ public static final int
     CUBLAS_OP_T = 1,  
     CUBLAS_OP_C = 2,
     CUBLAS_OP_HERMITAN = 2, /* synonym if CUBLAS_OP_C */
-    CUBLAS_OP_CONJG = 3;     /* conjugate */
+    CUBLAS_OP_CONJG = 3;     /* conjugate, placeholder - not supported in the current release */
 
 
 /** enum cublasPointerMode_t */
@@ -7592,7 +7592,9 @@ public static final int
     CUBLASLT_MATMUL_DESC_EPILOGUE = 7,
 
     /** Bias vector pointer in the device memory, see CUBLASLT_EPILOGUE_BIAS. Bias vector elements are the same type as
-     * alpha, beta (see CUBLASLT_MATMUL_DESC_SCALE_TYPE). Bias vector length must match matrix D rows count.
+     * the output elements (Ctype) with the exception of IMMA kernels with computeType=CUDA_R_32I and Ctype=CUDA_R_8I
+     * where the bias vector elements are the same type as alpha, beta (CUBLASLT_MATMUL_DESC_SCALE_TYPE=CUDA_R_32F).
+     * Bias vector length must match matrix D rows count.
      *
      * const void *, default: NULL
      */

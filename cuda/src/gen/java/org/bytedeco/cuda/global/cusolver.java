@@ -93,9 +93,9 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
 // #endif /* __cplusplus */
 
 public static final int CUSOLVER_VER_MAJOR = 10;
-public static final int CUSOLVER_VER_MINOR = 4;
+public static final int CUSOLVER_VER_MINOR = 5;
 public static final int CUSOLVER_VER_PATCH = 0;
-public static final int CUSOLVER_VER_BUILD = 191;
+public static final int CUSOLVER_VER_BUILD = 218;
 public static final int CUSOLVER_VERSION = (CUSOLVER_VER_MAJOR * 1000 + 
                         CUSOLVER_VER_MINOR *  100 + 
                         CUSOLVER_VER_PATCH);
@@ -11293,6 +11293,95 @@ public static native @Cast("cusolverStatus_t") int cusolverDnSyevdx(
     @Cast("size_t") long workspaceInBytes,
     int[] info);
 
+/* 64-bit API for GESVD */
+public static native @Cast("cusolverStatus_t") int cusolverDnGesvd_bufferSize(
+    cusolverDnContext handle,
+    cusolverDnParams params,
+    byte jobu,
+    byte jobvt,
+    @Cast("int64_t") long m,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    @Const Pointer A,
+    @Cast("int64_t") long lda,
+    @Cast("cudaDataType") int dataTypeS,
+    @Const Pointer S,
+    @Cast("cudaDataType") int dataTypeU,
+    @Const Pointer U,
+    @Cast("int64_t") long ldu,
+    @Cast("cudaDataType") int dataTypeVT,
+    @Const Pointer VT,
+    @Cast("int64_t") long ldvt,
+    @Cast("cudaDataType") int computeType,
+    @Cast("size_t*") SizeTPointer workspaceInBytes);
+
+public static native @Cast("cusolverStatus_t") int cusolverDnGesvd(
+    cusolverDnContext handle,
+    cusolverDnParams params,
+    byte jobu,
+    byte jobvt,
+    @Cast("int64_t") long m,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    Pointer A,
+    @Cast("int64_t") long lda,
+    @Cast("cudaDataType") int dataTypeS,
+    Pointer S,
+    @Cast("cudaDataType") int dataTypeU,
+    Pointer U,
+    @Cast("int64_t") long ldu,
+    @Cast("cudaDataType") int dataTypeVT,
+    Pointer VT,
+    @Cast("int64_t") long ldvt,
+    @Cast("cudaDataType") int computeType,
+    Pointer pBuffer,
+    @Cast("size_t") long workspaceInBytes,
+    IntPointer info);
+public static native @Cast("cusolverStatus_t") int cusolverDnGesvd(
+    cusolverDnContext handle,
+    cusolverDnParams params,
+    byte jobu,
+    byte jobvt,
+    @Cast("int64_t") long m,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    Pointer A,
+    @Cast("int64_t") long lda,
+    @Cast("cudaDataType") int dataTypeS,
+    Pointer S,
+    @Cast("cudaDataType") int dataTypeU,
+    Pointer U,
+    @Cast("int64_t") long ldu,
+    @Cast("cudaDataType") int dataTypeVT,
+    Pointer VT,
+    @Cast("int64_t") long ldvt,
+    @Cast("cudaDataType") int computeType,
+    Pointer pBuffer,
+    @Cast("size_t") long workspaceInBytes,
+    IntBuffer info);
+public static native @Cast("cusolverStatus_t") int cusolverDnGesvd(
+    cusolverDnContext handle,
+    cusolverDnParams params,
+    byte jobu,
+    byte jobvt,
+    @Cast("int64_t") long m,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    Pointer A,
+    @Cast("int64_t") long lda,
+    @Cast("cudaDataType") int dataTypeS,
+    Pointer S,
+    @Cast("cudaDataType") int dataTypeU,
+    Pointer U,
+    @Cast("int64_t") long ldu,
+    @Cast("cudaDataType") int dataTypeVT,
+    Pointer VT,
+    @Cast("int64_t") long ldvt,
+    @Cast("cudaDataType") int computeType,
+    Pointer pBuffer,
+    @Cast("size_t") long workspaceInBytes,
+    int[] info);
+
 
 
 // #if defined(__cplusplus)
@@ -11583,7 +11672,6 @@ public static native @Cast("cusolverStatus_t") int cusolverMgSyevd(
     @Cast("int64_t") long lwork,
     int[] info );
 
-
 public static native @Cast("cusolverStatus_t") int cusolverMgGetrf_bufferSize(
     cusolverMgContext handle,
     int M,
@@ -11682,7 +11770,6 @@ public static native @Cast("cusolverStatus_t") int cusolverMgGetrf(
     @Cast("int64_t") long lwork,
     int[] info );
 
-
 public static native @Cast("cusolverStatus_t") int cusolverMgGetrs_bufferSize(
     cusolverMgContext handle,
     @Cast("cublasOperation_t") int TRANS,
@@ -11747,7 +11834,6 @@ public static native @Cast("cusolverStatus_t") int cusolverMgGetrs_bufferSize(
     cudaLibMgMatrixDesc_t descrB,
     @Cast("cudaDataType") int computeType,
     @Cast("int64_t*") long[] lwork);
-
 
 public static native @Cast("cusolverStatus_t") int cusolverMgGetrs(
     cusolverMgContext handle,
@@ -11821,6 +11907,316 @@ public static native @Cast("cusolverStatus_t") int cusolverMgGetrs(
     @Cast("void**") @ByPtrPtr Pointer array_d_work,
     @Cast("int64_t") long lwork,
     int[] info );
+
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") PointerPointer array_d_A,
+    int IA,
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongPointer lwork);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA,
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongPointer lwork);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA,
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongBuffer lwork);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA,
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") long[] lwork);
+
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") PointerPointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") PointerPointer array_d_work,
+    @Cast("int64_t") long lwork,
+    IntPointer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+    @Cast("int64_t") long lwork,
+    IntPointer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+    @Cast("int64_t") long lwork,
+    IntBuffer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrf( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+    @Cast("int64_t") long lwork,
+    int[] h_info);
+
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") PointerPointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") PointerPointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongPointer lwork );
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") @ByPtrPtr Pointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongPointer lwork );
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") @ByPtrPtr Pointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongBuffer lwork );
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") @ByPtrPtr Pointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") long[] lwork );
+
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") PointerPointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") PointerPointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") PointerPointer array_d_work,
+	@Cast("int64_t") long lwork,
+	IntPointer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") @ByPtrPtr Pointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+	@Cast("int64_t") long lwork,
+	IntPointer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") @ByPtrPtr Pointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+	@Cast("int64_t") long lwork,
+	IntBuffer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotrs( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int n, 
+	int nrhs,
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("void**") @ByPtrPtr Pointer array_d_B,
+    int IB, 
+    int JB, 
+    cudaLibMgMatrixDesc_t descrB,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+	@Cast("int64_t") long lwork,
+	int[] h_info);
+
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") PointerPointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongPointer lwork);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongPointer lwork);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") LongBuffer lwork);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri_bufferSize( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+	@Cast("int64_t*") long[] lwork);
+
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") PointerPointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") PointerPointer array_d_work,
+	@Cast("int64_t") long lwork,
+    IntPointer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+	@Cast("int64_t") long lwork,
+    IntPointer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+	@Cast("int64_t") long lwork,
+    IntBuffer h_info);
+public static native @Cast("cusolverStatus_t") int cusolverMgPotri( 
+    cusolverMgContext handle,
+	@Cast("cublasFillMode_t") int uplo,
+    int N, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_A,
+    int IA, 
+    int JA, 
+    cudaLibMgMatrixDesc_t descrA,
+    @Cast("cudaDataType") int computeType, 
+    @Cast("void**") @ByPtrPtr Pointer array_d_work,
+	@Cast("int64_t") long lwork,
+    int[] h_info);
 
 
 

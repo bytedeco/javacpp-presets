@@ -31,7 +31,7 @@ tar --totals -xf ../protobuf-$PROTO.tar.gz
 tar --totals -xf ../pybind11-$PYBIND.tar.gz
 
 export LIBRARY_PATH="$INSTALL_PATH/lib"
-export PATH="$PATH:$INSTALL_PATH/bin"
+export PATH="$INSTALL_PATH/bin:$PATH"
 export CFLAGS="-I$INSTALL_PATH/include"
 export CXXFLAGS="-I$INSTALL_PATH/include"
 

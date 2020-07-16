@@ -140,10 +140,10 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.6.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.0  https://developer.nvidia.com/cuda-downloads
+ * CUDA 11.0.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.0.x  https://developer.nvidia.com/cudnn
    * NCCL 2.7.x  https://developer.nvidia.com/nccl
- * MXNet 1.6.0  https://github.com/apache/incubator-mxnet
+ * MXNet 1.7.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
@@ -152,7 +152,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX Runtime 1.3.x  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
- * Mono/Skia 1.68.x  https://github.com/mono/skia
+ * Mono/Skia 2.80.x  https://github.com/mono/skia
  * cpu_features 0.4.1  https://github.com/google/cpu_features
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/

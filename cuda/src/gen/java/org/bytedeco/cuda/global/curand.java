@@ -91,8 +91,8 @@ public class curand extends org.bytedeco.cuda.presets.curand {
 
 public static final int CURAND_VER_MAJOR = 10;
 public static final int CURAND_VER_MINOR = 2;
-public static final int CURAND_VER_PATCH = 0;
-public static final int CURAND_VER_BUILD = 191;
+public static final int CURAND_VER_PATCH = 1;
+public static final int CURAND_VER_BUILD = 218;
 public static final int CURAND_VERSION = (CURAND_VER_MAJOR * 1000 + 
                         CURAND_VER_MINOR *  100 + 
                         CURAND_VER_PATCH);

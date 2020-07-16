@@ -17,7 +17,7 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
 
 // Parsed from <npp.h>
 
- /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved.
+ /* Copyright 2009-2020 NVIDIA Corporation.  All rights reserved.
   *
   * NOTICE TO LICENSEE:
   *
@@ -74,9 +74,9 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
  */
 
 public static final int NPP_VER_MAJOR = 11;
-public static final int NPP_VER_MINOR = 0;
+public static final int NPP_VER_MINOR = 1;
 public static final int NPP_VER_PATCH = 0;
-public static final int NPP_VER_BUILD = 191;
+public static final int NPP_VER_BUILD = 218;
 
 public static final int NPP_VERSION = (NPP_VER_MAJOR * 1000 +     
                      NPP_VER_MINOR *  100 +     
@@ -84,6 +84,7 @@ public static final int NPP_VERSION = (NPP_VER_MAJOR * 1000 +
 
 public static final int NPP_VERSION_MAJOR =  NPP_VER_MAJOR;
 public static final int NPP_VERSION_MINOR =  NPP_VER_MINOR;
+public static final int NPP_VERSION_PATCH =  NPP_VER_PATCH;
 public static final int NPP_VERSION_BUILD =  NPP_VER_BUILD;
 
 // #include <nppdefs.h>
@@ -629,11 +630,14 @@ public static final int
 /** enum NppiNorm */
 public static final int
     /**  maximum */
-    nppiNormInf = 0,
+    nppiNormInf = 0, 
     /**  sum */
     nppiNormL1 = 1,
     /**  square root of sum of squares */
     nppiNormL2 = 2;
+// Targeting ../nppc/NppiConnectedRegion.java
+
+
 // Targeting ../nppc/NppiImageDescriptor.java
 
 

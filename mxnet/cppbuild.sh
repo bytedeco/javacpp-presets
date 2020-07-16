@@ -15,6 +15,7 @@ export USE_CUDA=0
 export USE_CUDNN=0
 export USE_NCCL=0
 export USE_CUDA_PATH=
+export NVCC=
 export USE_MKLDNN=1
 if [[ "$EXTENSION" == *gpu ]]; then
     export ADD_CFLAGS="$ADD_CFLAGS -DMXNET_USE_CUDA=1"
@@ -24,9 +25,11 @@ if [[ "$EXTENSION" == *gpu ]]; then
         export USE_NCCL=1
     fi
     export USE_CUDA_PATH="/usr/local/cuda"
+    export NVCC="$USE_CUDA_PATH/bin/nvcc"
+    export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 fi
 
-MXNET_VERSION=1.6.0
+MXNET_VERSION=1.7.0.rc0
 download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -77,6 +80,8 @@ sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
 sedinplace '/include_directories("3rdparty\/nvidia_cub")/d' CMakeLists.txt
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
+sedinplace 's/-Xcompiler "$(CFLAGS)/"-Xcompiler=$(CFLAGS)/g' Makefile
+sedinplace '/CHECK(mshadow::DataType<DType>::kFlag == type_flag_)/{N;N;N;d;}' include/mxnet/tensor_blob.h
 
 sedinplace '/#include <opencv2\/opencv.hpp>/a\
 #include <opencv2/imgproc/types_c.h>\
@@ -99,7 +104,11 @@ case $PLATFORM in
         export BLAS="openblas"
         sedinplace "s/-std=c++11/-std=c++14/g" Makefile
         # libmklml_intel.so does not have a SONAME, so libmkldnn.so.0 needs an RPATH to be able to load
-        sedinplace "s/$CMAKE/$CMAKE -DCMAKE_CXX_FLAGS='-Wl,-rpath,\$\$ORIGIN\/'/g" mkldnn.mk
+#        sedinplace "s/$CMAKE/$CMAKE -DCMAKE_CXX_FLAGS='-Wl,-rpath,\$\$ORIGIN\/'/g" mkldnn.mk
+        if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
+            export NVCC=/usr/local/cuda/bin/nvcccache
+            sedinplace 's/-ccbin $(CXX)/-ccbin $(ACTUAL_GCC_HOST_COMPILER_PATH) -Xcompiler -fPIC -Xcompiler -O3/g' Makefile
+        fi
         ;;
     macosx-*)
         # remove harmful changes to rpath
@@ -131,7 +140,8 @@ case $PLATFORM in
 
         # copy binary files
         mkdir -p ../bin
-        cp -f Release/*.dll 3rdparty/mkldnn/src/Release/*.dll ../bin
+        cp -f Release/*.dll ../bin
+#        cp -f 3rdparty/mkldnn/src/Release/*.dll ../bin
 
         # copy library files
         mkdir -p ../lib
@@ -157,7 +167,7 @@ if [[ ! "$PLATFORM" == windows* ]]; then
     sed -i="" 's/$(shell pkg-config --cflags $(OPENCV_LIB))//' Makefile
     sed -i="" 's/$(shell pkg-config --libs-only-L $(OPENCV_LIB))//' Makefile
     sed -i="" 's/$(filter -lopencv_imgcodecs -lopencv_highgui, $(shell pkg-config --libs-only-l $(OPENCV_LIB)))/-lopencv_highgui -lopencv_imgcodecs/' Makefile
-    make -s -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+    make -s -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" NVCC="$NVCC" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
     cp -RLf include lib 3rdparty/dmlc-core/include ..
     cp -RLf 3rdparty/mshadow/mshadow ../include
     unset CC

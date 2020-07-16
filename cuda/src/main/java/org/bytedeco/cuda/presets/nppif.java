@@ -40,5 +40,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @NoException
 public class nppif implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("nppiFloodFillBoundary_8u_C3IR", "nppiFloodFillBoundary_16u_C3IR").skip());
     }
 }

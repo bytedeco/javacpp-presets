@@ -30,7 +30,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy</artifactId>
-      <version>1.5.0-${project.parent.version}</version>
+      <version>1.5.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -91,7 +91,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy</artifactId>
-            <version>1.5.0-${project.parent.version}</version>
+            <version>1.5.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -120,7 +120,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy</artifactId>
-            <version>1.5.0-${project.parent.version}</version>
+            <version>1.5.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>

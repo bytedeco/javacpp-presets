@@ -28,5 +28,4 @@ public class sk_webpencoder_options_t extends Pointer {
 
     public native @Cast("sk_webpencoder_compression_t") int fCompression(); public native sk_webpencoder_options_t fCompression(int setter);
     public native float fQuality(); public native sk_webpencoder_options_t fQuality(float setter);
-    public native @Cast("sk_transfer_function_behavior_t") int fUnpremulBehavior(); public native sk_webpencoder_options_t fUnpremulBehavior(int setter);
 }
