@@ -1,4 +1,5 @@
 
+ * Build LibTIFF after WebP to make sure they link correctly in presets for Leptonica
  * Virtualize `IInt8Calibrator` plus subclasses from TensorRT to allow customization ([issue #902](https://github.com/bytedeco/javacpp-presets/issues/902))
  * Replace `requires` with `requires static` in JPMS `.platform` modules ([pull #900](https://github.com/bytedeco/javacpp-presets/pull/900))
  * Add presets for OpenPose 1.6.0 ([pull #898](https://github.com/bytedeco/javacpp-presets/pull/898))
