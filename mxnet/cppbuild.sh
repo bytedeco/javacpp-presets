@@ -122,6 +122,9 @@ case $PLATFORM in
 #        export ADD_CFLAGS="$ADD_CFLAGS -L/usr/local/lib -lomp"
         ;;
     windows-x86_64)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+
         # copy include files
         mkdir -p ../include
         cp -RLf include/mxnet 3rdparty/dmlc-core/include/dmlc 3rdparty/mshadow/mshadow ../include
@@ -132,21 +135,19 @@ case $PLATFORM in
         USE_X="-DMXNET_CUDA_ARCH=3.5+PTX -DCUDA_ARCH_LIST=3.5+PTX -DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
         OPENCV="-DOpenCV_DIR=$OPENCV_PATH/ -DOpenCV_CONFIG_PATH=$OPENCV_PATH/"
         OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/lib/openblas.lib"
-        "$CMAKE" -G "Visual Studio 16 2019" $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
 
         # try to rebuild the project without compiler parallelism to avoid "out of heap space"
-        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ || \
-        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //p:CL_MPCount=1
+        ninja -j $MAKEJ || ninja -j 1
 
         # copy binary files
         mkdir -p ../bin
-        cp -f Release/*.dll ../bin
-#        cp -f 3rdparty/mkldnn/src/Release/*.dll ../bin
+        cp -f *.dll ../bin
 
         # copy library files
         mkdir -p ../lib
-        cp -f Release/libmxnet.lib ../lib/mxnet.lib
-        cp -f Release/mxnet_??.lib ../lib/mxnet.lib || true
+        cp -f libmxnet.lib ../lib/mxnet.lib
+        cp -f mxnet_??.lib ../lib/mxnet.lib || true
 
         # finish
         cd ../apache-mxnet-src-$MXNET_VERSION-incubating
