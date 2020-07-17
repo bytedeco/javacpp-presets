@@ -15,25 +15,34 @@ public class openblas_nolapack extends org.bytedeco.openblas.presets.openblas_no
 
 // #ifndef OPENBLAS_CONFIG_H
 // #define OPENBLAS_CONFIG_H
-public static native @MemberGetter int OPENBLAS_OS_LINUX();
-public static final int OPENBLAS_OS_LINUX = OPENBLAS_OS_LINUX();
-public static final int OPENBLAS_ARCH_ARM = 1;
+public static final int OPENBLAS_OS_LINUX = 1;
+public static final int OPENBLAS_ARCH_X86_64 = 1;
 public static final int OPENBLAS_C_GCC = 1;
-public static final int OPENBLAS___32BIT__ = 1;
+public static final int OPENBLAS___64BIT__ = 1;
 // #define OPENBLAS_PTHREAD_CREATE_FUNC pthread_create
 // #define OPENBLAS_BUNDERSCORE _
 public static final int OPENBLAS_NEEDBUNDERSCORE = 1;
-// #define OPENBLAS_ARMV6 
-public static final int OPENBLAS_L1_DATA_SIZE = 65536;
-public static final int OPENBLAS_L1_DATA_LINESIZE = 32;
-public static final int OPENBLAS_L2_SIZE = 512488;
-public static final int OPENBLAS_L2_LINESIZE = 32;
+// #define OPENBLAS_NEHALEM 
+public static final int OPENBLAS_L1_DATA_SIZE = 32768;
+public static final int OPENBLAS_L1_DATA_LINESIZE = 64;
+public static final int OPENBLAS_L2_SIZE = 262144;
+public static final int OPENBLAS_L2_LINESIZE = 64;
 public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 64;
 public static final int OPENBLAS_DTB_SIZE = 4096;
-public static final int OPENBLAS_L2_ASSOCIATIVE = 4;
-// #define OPENBLAS_HAVE_VFP 
-// #define OPENBLAS_CORE_ARMV6 
-public static final String OPENBLAS_CHAR_CORENAME = "ARMV6";
+// #define OPENBLAS_HAVE_CMOV 
+// #define OPENBLAS_HAVE_MMX 
+// #define OPENBLAS_HAVE_SSE 
+// #define OPENBLAS_HAVE_SSE2 
+// #define OPENBLAS_HAVE_SSE3 
+// #define OPENBLAS_HAVE_SSSE3 
+// #define OPENBLAS_HAVE_SSE4_1 
+// #define OPENBLAS_HAVE_SSE4_2 
+// #define OPENBLAS_CORE_NEHALEM 
+public static final String OPENBLAS_CHAR_CORENAME = "NEHALEM";
+public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 65536;
+public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
+public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 65536;
+public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
 public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.10 ";
 /*This is only for "make install" target.*/
