@@ -1,20 +1,8 @@
-diff --git a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
-index aa4a5f6c0..2a223dd51 100644
---- a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
-+++ b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
-@@ -2,6 +2,7 @@
- // Licensed under the MIT License.
- 
- #pragma once
-+#include <cmath>
- #include "dnnl_types.h"
- #include "core/providers/dnnl/dnnl_fwd.h"
- #include "core/providers/dnnl/dnnl_execution_provider.h"
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index 5db7fbc4c..402876415 100644
+index af70328fb..3b6ad2b5e 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -637,8 +637,8 @@ if (WIN32)
+@@ -688,8 +688,8 @@ if (WIN32)
  else()
    add_definitions(-DPLATFORM_POSIX)
    # Enable warning and enable space optimization in Linux
@@ -26,7 +14,7 @@ index 5db7fbc4c..402876415 100644
    if(onnxruntime_DEV_MODE)
      string(APPEND CMAKE_CXX_FLAGS " -Werror")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 9a79115ed..7ddaeec32 100644
+index 2c0768d9c..4728b2aa4 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
 @@ -52,9 +52,9 @@ endif()
@@ -42,7 +30,7 @@ index 9a79115ed..7ddaeec32 100644
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/include/onnxruntime/core/session/onnxruntime_c_api.h b/include/onnxruntime/core/session/onnxruntime_c_api.h
-index b5dd59970..debeb4fbb 100644
+index c94631620..aa72ca004 100644
 --- a/include/onnxruntime/core/session/onnxruntime_c_api.h
 +++ b/include/onnxruntime/core/session/onnxruntime_c_api.h
 @@ -73,7 +73,7 @@ extern "C" {
@@ -54,6 +42,17 @@ index b5dd59970..debeb4fbb 100644
  #else
  #define NO_EXCEPTION
  #endif
+diff --git a/java/src/main/native/ai_onnxruntime_OrtSession.c b/java/src/main/native/ai_onnxruntime_OrtSession.c
+index 79a2abc2e..a742571e9 100644
+--- a/java/src/main/native/ai_onnxruntime_OrtSession.c
++++ b/java/src/main/native/ai_onnxruntime_OrtSession.c
+@@ -428,5 +428,5 @@ JNIEXPORT jstring JNICALL Java_ai_onnxruntime_OrtSession_constructMetadata
+   // Release the metadata
+   api->ReleaseModelMetadata(metadata);
+ 
+-  return metadataJava;
++  return (jstring)metadataJava;
+ }
 diff --git a/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S b/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S
 index f874710c1..d21eb958e 100644
 --- a/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S
@@ -268,10 +267,10 @@ index 243b35539..2fdb8442c 100644
          vmaxps  ymm0,ymm4,ymm0                  # clamp lower bound
          vminps  ymm0,ymm5,ymm0                  # clamp upper bound
 diff --git a/onnxruntime/core/mlas/lib/x86_64/QgemmU8S8KernelAvx2.S b/onnxruntime/core/mlas/lib/x86_64/QgemmU8S8KernelAvx2.S
-index 6a6edd7e8..f4d380a89 100644
+index 6245aa97d..97a450cab 100644
 --- a/onnxruntime/core/mlas/lib/x86_64/QgemmU8S8KernelAvx2.S
 +++ b/onnxruntime/core/mlas/lib/x86_64/QgemmU8S8KernelAvx2.S
-@@ -106,17 +106,17 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
+@@ -101,17 +101,17 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
          and     eax,15                      # isolate unaligned count
          add     eax,3
          shr     eax,2                       # align unaligned count to quad count
@@ -294,7 +293,7 @@ index 6a6edd7e8..f4d380a89 100644
  
  //
  // Process 4 rows of matrix A in a loop.
-@@ -193,7 +193,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
+@@ -188,7 +188,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
  //
  
  .LCopyPackA.CopyRemainingCountKLessThan16M4:
@@ -303,7 +302,7 @@ index 6a6edd7e8..f4d380a89 100644
          test    bl,8                        # (CountK & 8) != 0?
          jz      .LCopyPackA.CopyRemainingCountKLessThan8M4
          mov     rax,QWORD PTR [rdx]
-@@ -252,10 +252,10 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
+@@ -247,10 +247,10 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
  //
  
  .LCopyPackA.ProcessPaddedMatrixADataM4:
@@ -318,7 +317,7 @@ index 6a6edd7e8..f4d380a89 100644
          lea     rax,[rcx+r12*2]             # compute matrix D plus 2 rows
          vpmaskmovd XMMWORD PTR [rcx],xmm10,xmm4
          vpmaskmovd XMMWORD PTR [rcx+r12],xmm10,xmm5
-@@ -333,7 +333,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
+@@ -331,7 +331,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
  //
  
  .LCopyPackA.CopyRemainingCountKLessThan16M1:
@@ -327,7 +326,7 @@ index 6a6edd7e8..f4d380a89 100644
          test    bl,8                        # (CountK & 8) != 0?
          jz      .LCopyPackA.CopyRemainingCountKLessThan8M1
          mov     rax,QWORD PTR [rdx]
-@@ -368,7 +368,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
+@@ -366,7 +366,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackAAvx2):
  //
  
  .LCopyPackA.ProcessPaddedMatrixADataM1:
@@ -336,14 +335,14 @@ index 6a6edd7e8..f4d380a89 100644
          vpmaskmovd XMMWORD PTR [rcx],xmm10,xmm4
          vpmaddubsw ymm4,ymm4,ymm9           # horizontal byte+byte=word per row
          vpaddw  ymm0,ymm0,ymm4              # accumulate per row along columns
-@@ -542,14 +542,14 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackBAvx2):
+@@ -551,14 +551,14 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackBAvx2):
  .LCopyPackB.ProcessColumnNUnaligned:
          vpxor   xmm0,xmm0,xmm0              # clear column accumulators
          vpxor   xmm1,xmm1,xmm1
--        vmovdqu YMMWORD PTR .LGemmU8S8CopyPackBFrame_PaddedMatrixBData[rsp],ymm0
--        vmovdqu YMMWORD PTR .LGemmU8S8CopyPackBFrame_PaddedMatrixBData[rsp+32],ymm0
-+        vmovdqu YMMWORD PTR [.LGemmU8S8CopyPackBFrame_PaddedMatrixBData+rsp],ymm0
-+        vmovdqu YMMWORD PTR [.LGemmU8S8CopyPackBFrame_PaddedMatrixBData+rsp+32],ymm0
+-        vmovdqu YMMWORD PTR .LGemmU8S8CopyPackBFrame_PaddedMatrixBData[rsp],ymm9
+-        vmovdqu YMMWORD PTR .LGemmU8S8CopyPackBFrame_PaddedMatrixBData[rsp+32],ymm9
++        vmovdqu YMMWORD PTR [.LGemmU8S8CopyPackBFrame_PaddedMatrixBData+rsp],ymm9
++        vmovdqu YMMWORD PTR [.LGemmU8S8CopyPackBFrame_PaddedMatrixBData+rsp+32],ymm9
          sub     r8,4
          jb      .LCopyPackB.ProcessRemainingRowsNUnaligned
  
@@ -354,7 +353,7 @@ index 6a6edd7e8..f4d380a89 100644
          test    cl,8                        # (CountN & 8) != 0?
          jz      .LCopyPackB.CopyRemainingCountNLessThan8K4
          mov     rax,QWORD PTR [rdx]
-@@ -604,10 +604,10 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackBAvx2):
+@@ -613,10 +613,10 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackBAvx2):
          mov     BYTE PTR [rbp+48],al
  
  .LCopyPackB.ProcessPaddedMatrixBData:
@@ -369,20 +368,20 @@ index 6a6edd7e8..f4d380a89 100644
          vpunpcklbw xmm6,xmm2,xmm3           # interleave row data
          vpunpckhbw xmm3,xmm2,xmm3
          vpunpcklbw xmm2,xmm4,xmm5
-@@ -637,7 +637,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackBAvx2):
+@@ -650,7 +650,7 @@ C_UNDERSCORE(MlasGemmU8S8CopyPackBAvx2):
  // Process the less than 4 remaining rows where the row has less than 16 columns.
  //
  
 -        lea     rbp,.LGemmU8S8CopyPackBFrame_PaddedMatrixBData[rsp]
 +        lea     rbp,[.LGemmU8S8CopyPackBFrame_PaddedMatrixBData+rsp]
-         vpxor   xmm6,xmm6,xmm6
-         vmovdqu YMMWORD PTR [rbp],ymm6
-         vmovdqu YMMWORD PTR [rbp+32],ymm6
+         vmovdqu YMMWORD PTR [rbp],ymm9
+         vmovdqu YMMWORD PTR [rbp+32],ymm9
+ 
 diff --git a/onnxruntime/core/mlas/lib/x86_64/QgemmU8U8KernelAvx2.S b/onnxruntime/core/mlas/lib/x86_64/QgemmU8U8KernelAvx2.S
-index d443561f6..163ea0766 100644
+index 1952578d7..fc9b473a9 100644
 --- a/onnxruntime/core/mlas/lib/x86_64/QgemmU8U8KernelAvx2.S
 +++ b/onnxruntime/core/mlas/lib/x86_64/QgemmU8U8KernelAvx2.S
-@@ -107,17 +107,17 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
+@@ -102,17 +102,17 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
          and     eax,15                      # isolate unaligned count
          inc     eax
          shr     eax,1                       # align unaligned count to pair count
@@ -405,7 +404,7 @@ index d443561f6..163ea0766 100644
  
  //
  // Process 4 rows of matrix A in a loop.
-@@ -177,7 +177,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
+@@ -168,7 +168,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
  // Copy the unaligned CountK columns to a zero padded stack buffer.
  //
  
@@ -414,7 +413,7 @@ index d443561f6..163ea0766 100644
          test    bl,8                        # (CountK & 8) != 0?
          jz      .LCopyPackA.CopyRemainingCountKLessThan8M4
          lea     r13,[rdx+r10*2]             # compute matrix A plus 2 rows
-@@ -240,10 +240,10 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
+@@ -231,10 +231,10 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
  //
  
  .LCopyPackA.ProcessPaddedMatrixADataM4:
@@ -429,7 +428,7 @@ index d443561f6..163ea0766 100644
          lea     rax,[rcx+r12*4]             # compute matrix D plus 2 rows
          vpmaskmovd YMMWORD PTR [rcx],ymm9,ymm4
          vpmaskmovd YMMWORD PTR [rcx+r12*2],ymm9,ymm5
-@@ -308,7 +308,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
+@@ -299,7 +299,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
  // Copy the unaligned CountK columns to a zero padded stack buffer.
  //
  
@@ -438,7 +437,7 @@ index d443561f6..163ea0766 100644
          test    bl,8                        # (CountK & 8) != 0?
          jz      .LCopyPackA.CopyRemainingCountKLessThan8M1
          mov     rax,QWORD PTR [rdx]
-@@ -343,7 +343,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
+@@ -334,7 +334,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackAAvx2):
  //
  
  .LCopyPackA.ProcessPaddedMatrixADataM1:
@@ -447,7 +446,7 @@ index d443561f6..163ea0766 100644
          vpmaskmovd YMMWORD PTR [rcx],ymm9,ymm4
          vpaddw  ymm0,ymm0,ymm4              # accumulate per row along columns
  
-@@ -421,7 +421,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
+@@ -409,7 +409,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
  //
  
          vpxor   xmm0,xmm0,xmm0
@@ -456,7 +455,7 @@ index d443561f6..163ea0766 100644
  
  //
  // Process 16 columns of matrix B in a loop.
-@@ -503,7 +503,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
+@@ -493,7 +493,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
  
  .LCopyPackB.ProcessNextRowLoopNUnaligned:
          mov     rdx,rsi
@@ -465,7 +464,7 @@ index d443561f6..163ea0766 100644
          test    cl,8                        # (CountN & 8) != 0?
          jz      .LCopyPackB.CopyRemainingCountNLessThan8K2
          mov     rax,QWORD PTR [rdx]
-@@ -542,8 +542,8 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
+@@ -532,8 +532,8 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
          mov     BYTE PTR [rbp+16],al
  
  .LCopyPackB.ProcessPaddedMatrixBDataK2:
@@ -476,16 +475,16 @@ index d443561f6..163ea0766 100644
          vpunpcklbw xmm4,xmm2,xmm3           # interleave row data
          vpunpckhbw xmm3,xmm2,xmm3
          vmovdqu XMMWORD PTR [rdi],xmm4      # store interleaved rows
-@@ -561,7 +561,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
+@@ -553,7 +553,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
          add     r8,2
-         jz      .LCopyPackB.ReduceColumnSumVectorNUnaligned
+         jz      .LCopyPackB.StoreColumnSumBufferNUnaligned
          mov     rdx,rsi
 -        lea     rbp,.LGemmU8U8CopyPackBFrame_PaddedMatrixBData[rsp]
 +        lea     rbp,[.LGemmU8U8CopyPackBFrame_PaddedMatrixBData+rsp]
          test    cl,8                        # (CountN & 8) != 0?
          jz      .LCopyPackB.CopyRemainingCountNLessThan8K1
          mov     rax,QWORD PTR [rdx]
-@@ -592,7 +592,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
+@@ -584,7 +584,7 @@ C_UNDERSCORE(MlasGemmU8U8CopyPackBAvx2):
          mov     BYTE PTR [rbp],al
  
  .LCopyPackB.ProcessPaddedMatrixBDataK1:
@@ -495,7 +494,7 @@ index d443561f6..163ea0766 100644
          vextracti128 xmm3,ymm4,1
          vpmovzxbw ymm4,xmm4
 diff --git a/onnxruntime/core/mlas/lib/x86_64/QgemmU8X8KernelAvx2Common.h b/onnxruntime/core/mlas/lib/x86_64/QgemmU8X8KernelAvx2Common.h
-index 172bd9fab..98cfd72b3 100644
+index 8a2bf10db..eba56a8c5 100644
 --- a/onnxruntime/core/mlas/lib/x86_64/QgemmU8X8KernelAvx2Common.h
 +++ b/onnxruntime/core/mlas/lib/x86_64/QgemmU8X8KernelAvx2Common.h
 @@ -241,9 +241,9 @@ Implicit Arguments:
@@ -760,16 +759,28 @@ index 200fa352a..71f2acb98 100644
  }
  
  template<>
+diff --git a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
+index aa4a5f6c0..2a223dd51 100644
+--- a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
++++ b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
+@@ -2,6 +2,7 @@
+ // Licensed under the MIT License.
+ 
+ #pragma once
++#include <cmath>
+ #include "dnnl_types.h"
+ #include "core/providers/dnnl/dnnl_fwd.h"
+ #include "core/providers/dnnl/dnnl_execution_provider.h"
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 412502969..727ddba2a 100755
+index 6b0519d39..ee8e13e41 100755
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -517,9 +517,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home,
+@@ -556,9 +556,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
          "-Donnxruntime_BUILD_WINML_TESTS=" + (
              "OFF" if args.skip_winml_tests else "ON"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
 -        "-Donnxruntime_DEV_MODE=" + (
--            "OFF" if args.android or args.use_acl or
+-            "OFF" if args.android or args.use_acl or args.use_armnn or
 -            (args.ios and is_macOS()) else "ON"),
 +        "-Donnxruntime_DEV_MODE=OFF",
 +        "-Donnxruntime_ENABLE_LTO=OFF",
@@ -777,14 +788,3 @@ index 412502969..727ddba2a 100755
          "-DPYTHON_EXECUTABLE=" + sys.executable,
          "-Donnxruntime_USE_CUDA=" + ("ON" if args.use_cuda else "OFF"),
          "-Donnxruntime_CUDNN_HOME=" + (cudnn_home if args.use_cuda else ""),
-diff --git a/java/src/main/native/ai_onnxruntime_OrtSession.c b/java/src/main/native/ai_onnxruntime_OrtSession.c
-index 79a2abc2e..a742571e9 100644
---- a/java/src/main/native/ai_onnxruntime_OrtSession.c
-+++ b/java/src/main/native/ai_onnxruntime_OrtSession.c
-@@ -428,5 +428,5 @@ JNIEXPORT jstring JNICALL Java_ai_onnxruntime_OrtSession_constructMetadata
-   // Release the metadata
-   api->ReleaseModelMetadata(metadata);
- 
--  return metadataJava;
-+  return (jstring)metadataJava;
- }

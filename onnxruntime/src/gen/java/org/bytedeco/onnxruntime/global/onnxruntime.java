@@ -15,6 +15,9 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
     static { Loader.load(); }
 
+// Targeting ../StringVector.java
+
+
 // Targeting ../ValueVector.java
 
 
@@ -29,7 +32,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // #include <string.h>
 
 // This value is used in structures passed to ORT so that a newer version of ORT will still work with them
-public static final int ORT_API_VERSION = 3;
+public static final int ORT_API_VERSION = 4;
 
 // #ifdef __cplusplus
 // #endif
@@ -337,6 +340,10 @@ public static native @Const OrtApiBase OrtGetApiBase();
 // This returns a reference to the OrtApi interface in use, in case someone wants to use the C API functions
 @Namespace("Ort") public static native @Const @ByRef OrtApi GetApi();
 
+// This is a C++ wrapper for GetAvailableProviders() C API and returns
+// a vector of strings representing the available execution providers.
+@Namespace("Ort") public static native @ByVal StringVector GetAvailableProviders();
+
 // This is used internally by the C++ API. This macro is to make it easy to generate overloaded methods for all of the various OrtRelease* functions for every Ort* type
 // This can't be done in the C API since C doesn't have function overloading.
 // #define ORT_DEFINE_RELEASE(NAME)
@@ -426,6 +433,7 @@ public static native @Const OrtApiBase OrtGetApiBase();
   // namespace Ort
 
 // #include "onnxruntime_cxx_inline.h"
+
 
 // Parsed from onnxruntime/core/providers/cuda/cuda_provider_factory.h
 
