@@ -1603,4 +1603,39 @@ public class OrtApi extends Pointer {
                     @Cast("int64_t") long dim_value);
   }
   public native AddFreeDimensionOverrideByName_OrtSessionOptions_BytePointer_long AddFreeDimensionOverrideByName(); public native OrtApi AddFreeDimensionOverrideByName(AddFreeDimensionOverrideByName_OrtSessionOptions_BytePointer_long setter);
+
+  /**
+   * @param out_ptr will hold a pointer to the array of char *
+   * representing available providers.
+   * @param provider_length is a pointer to an int variable where
+   * the number of available providers will be added.
+   * The caller is responsible for freeing each char * and the pointer
+   * array by calling ReleaseAvailableProviders().
+   */
+  public static class GetAvailableProviders_PointerPointer_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetAvailableProviders_PointerPointer_IntPointer(Pointer p) { super(p); }
+      protected GetAvailableProviders_PointerPointer_IntPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("char***") @ByPtrPtr PointerPointer out_ptr,
+                    IntPointer provider_length);
+  }
+  public native GetAvailableProviders_PointerPointer_IntPointer GetAvailableProviders(); public native OrtApi GetAvailableProviders(GetAvailableProviders_PointerPointer_IntPointer setter);
+
+  /**
+   * @param ptr is the pointer to an array of available providers you
+   * get after calling GetAvailableProviders().
+   * @param providers_length is the number of available providers.
+   */
+  public static class ReleaseAvailableProviders_PointerPointer_int extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseAvailableProviders_PointerPointer_int(Pointer p) { super(p); }
+      protected ReleaseAvailableProviders_PointerPointer_int() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("char**") PointerPointer ptr,
+                    int providers_length);
+  }
+  public native ReleaseAvailableProviders_PointerPointer_int ReleaseAvailableProviders(); public native OrtApi ReleaseAvailableProviders(ReleaseAvailableProviders_PointerPointer_int setter);
 }
