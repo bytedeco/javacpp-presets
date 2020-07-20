@@ -1,4 +1,6 @@
 
+ * Use TBB instead of OpenMP for DNNL to prevent conflicts with MKL, ONNX Runtime, etc ([issue #907](https://github.com/bytedeco/javacpp-presets/issues/907))
+ * Fix loading issue with `opencv_ximgproc` ([issue #911](https://github.com/bytedeco/javacpp-presets/issues/911))
  * Build LibTIFF after WebP to make sure they link correctly in presets for Leptonica
  * Virtualize `IInt8Calibrator` plus subclasses from TensorRT to allow customization ([issue #902](https://github.com/bytedeco/javacpp-presets/issues/902))
  * Replace `requires` with `requires static` in JPMS `.platform` modules ([pull #900](https://github.com/bytedeco/javacpp-presets/pull/900))
