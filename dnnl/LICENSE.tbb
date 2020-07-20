@@ -175,10 +175,18 @@
 
    END OF TERMS AND CONDITIONS
 
-   ============================================================================
+   APPENDIX: How to apply the Apache License to your work.
 
-   Copyright 2016-2019 Intel Corporation
-   Copyright 2018 YANDEX LLC
+      To apply the Apache License to your work, attach the following
+      boilerplate notice, with the fields enclosed by brackets "[]"
+      replaced with your own identifying information. (Don't include
+      the brackets!)  The text should be enclosed in the appropriate
+      comment syntax for the file format. We also recommend that a
+      file or class name and description of purpose be included on the
+      same "printed page" as the copyright notice for easier
+      identification within third-party archives.
+
+   Copyright [yyyy] [name of copyright owner]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -191,11 +199,3 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-   This distribution includes third party software ("third party programs").
-   This third party software, even if included with the distribution of
-   the Intel software, may be governed by separate license terms, including
-   without limitation, third party license terms, other Intel software license
-   terms, and open source software license terms. These separate license terms
-   govern your use of the third party programs as set forth in the
-   "THIRD-PARTY-PROGRAMS" file.

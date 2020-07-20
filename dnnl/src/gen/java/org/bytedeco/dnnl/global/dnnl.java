@@ -1822,10 +1822,10 @@ public static final int
 // clang-format off
 
 // oneDNN CPU threading runtime
-public static final long DNNL_CPU_THREADING_RUNTIME = DNNL_RUNTIME_OMP;
+public static final long DNNL_CPU_THREADING_RUNTIME = DNNL_RUNTIME_TBB;
 
 // oneDNN CPU engine runtime
-public static final long DNNL_CPU_RUNTIME = DNNL_RUNTIME_OMP;
+public static final long DNNL_CPU_RUNTIME = DNNL_RUNTIME_TBB;
 
 // oneDNN GPU engine runtime
 public static final long DNNL_GPU_RUNTIME = DNNL_RUNTIME_NONE;
