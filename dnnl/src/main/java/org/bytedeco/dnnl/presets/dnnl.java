@@ -43,7 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             compiler = "cpp11",
             define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
             include = {"dnnl_types.h", "dnnl_config.h", /*"dnnl_debug.h",*/ "dnnl_version.h", "dnnl.h", "dnnl.hpp"},
-            link = "dnnl@.1", preload = "tbb@.2", resource = {"include", "lib"}
+            link = "dnnl@.1", preload = {"gomp@.1", "iomp5", "omp", "tbb@.2"}, resource = {"include", "lib"}
         ),
     },
     target = "org.bytedeco.dnnl",
