@@ -35,12 +35,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_imgcodecs.class,
     value = {
-        @Platform(include = {/*"<opencv2/videoio/videoio_c.h>",*/ "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.4.3"),
+        @Platform(include = {/*"<opencv2/videoio/videoio_c.h>",*/ "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.4.4"),
         @Platform(value = "android", preload = {
             "native_camera_r2.2.0", "native_camera_r2.3.4", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
             "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}),
         @Platform(value = "ios", preload = "libopencv_videoio"),
-        @Platform(value = "windows", link = "opencv_videoio430", preload = {"opencv_ffmpeg430", "opencv_ffmpeg430_64"})},
+        @Platform(value = "windows", link = "opencv_videoio440", preload = {"opencv_ffmpeg440", "opencv_ffmpeg440_64"})},
     target = "org.bytedeco.opencv.opencv_videoio",
     global = "org.bytedeco.opencv.global.opencv_videoio"
 )
@@ -51,6 +51,7 @@ public class opencv_videoio implements InfoMapper {
                .put(new Info("cvCaptureFromCAM").cppTypes("CvCapture*", "int"))
                .put(new Info("cvCreateAVIWriter").cppTypes("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))
                .put(new Info("cvWriteToAVI").cppTypes("int", "CvVideoWriter*", "IplImage*"))
+               .put(new Info("std::vector<int>").pointerTypes("IntVector").define())
                .put(new Info("cv::DefaultDeleter<CvCapture>").pointerTypes("CvCaptureDefaultDeleter"))
                .put(new Info("cv::DefaultDeleter<CvVideoWriter>").pointerTypes("CvVideoWriterDefaultDeleter"));
     }

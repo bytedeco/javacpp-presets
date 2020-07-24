@@ -33,10 +33,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = {"<opencv2/aruco/dictionary.hpp>", "<opencv2/aruco.hpp>", "<opencv2/aruco/charuco.hpp>"},
-            link = "opencv_aruco@.4.3"
+            link = "opencv_aruco@.4.4"
         ),
         @Platform(value = "ios", preload = "libopencv_aruco"),
-        @Platform(value = "windows", link = "opencv_aruco430")
+        @Platform(value = "windows", link = "opencv_aruco440")
     },
     target = "org.bytedeco.opencv.opencv_aruco",
     global = "org.bytedeco.opencv.global.opencv_aruco"
