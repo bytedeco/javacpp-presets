@@ -37,6 +37,9 @@ public class NativeOpInfo extends Pointer {
     @Override public NativeOpInfo position(long position) {
         return (NativeOpInfo)super.position(position);
     }
+    @Override public NativeOpInfo getPointer(long i) {
+        return new NativeOpInfo(this).position(position + i);
+    }
 
   public static class Forward_int_PointerPointer_IntPointer_PointerPointer_IntPointer_Pointer extends FunctionPointer {
       static { Loader.load(); }

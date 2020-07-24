@@ -36,6 +36,9 @@ public class NDArrayOpInfo extends Pointer {
     @Override public NDArrayOpInfo position(long position) {
         return (NDArrayOpInfo)super.position(position);
     }
+    @Override public NDArrayOpInfo getPointer(long i) {
+        return new NDArrayOpInfo(this).position(position + i);
+    }
 
   public static class Forward_int_PointerPointer_IntPointer_Pointer extends FunctionPointer {
       static { Loader.load(); }

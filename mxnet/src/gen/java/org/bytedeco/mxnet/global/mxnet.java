@@ -7699,4 +7699,636 @@ public static native int MXNDListFree(NDListHandle handle);
 // #endif  // MXNET_C_PREDICT_API_H_
 
 
+// Parsed from nnvm/c_api.h
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/**
+ * \file nnvm/c_api.h
+ * \brief C API of NNVM symbolic construction and pass.
+ *  Enables construction and transformation of Graph
+ *  in any other host languages.
+ */
+// #ifndef NNVM_C_API_H_
+// #define NNVM_C_API_H_
+
+/** \brief NNVM_DLL prefix for windows */
+// #ifdef _WIN32
+// #ifdef NNVM_EXPORTS
+// #define NNVM_DLL __declspec(dllexport)
+// #else
+// #define NNVM_DLL __declspec(dllimport)
+// #endif
+// #else
+// #define NNVM_DLL __attribute__((visibility("default")))
+// #endif
+
+/** \brief manually define unsigned int */
+// Targeting ../OpHandle.java
+
+
+// Targeting ../SymbolHandle.java
+
+
+// Targeting ../GraphHandle.java
+
+
+
+// #ifdef __cplusplus
+// #endif
+/**
+ * \brief Set the last error message needed by C API
+ * @param msg The error message to set.
+ */
+public static native void NNAPISetLastError(@Cast("const char*") BytePointer msg);
+public static native void NNAPISetLastError(String msg);
+
+/**
+ * \brief return str message of the last error
+ *  all function in this file will return 0 when success
+ *  and -1 when an error occurred,
+ *  NNGetLastError can be called to retrieve the error
+ *
+ *  this function is threadsafe and can be called by different thread
+ *  @return error info
+ */
+public static native @Cast("const char*") BytePointer NNGetLastError();
+
+/**
+ * \brief list all the available operator names, include entries.
+ * @param out_size the size of returned array
+ * @param out_array the output operator name array.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNListAllOpNames(@Cast("nn_uint*") IntPointer out_size,
+                              @Cast("const char***") @ByPtrPtr PointerPointer out_array);
+public static native int NNListAllOpNames(@Cast("nn_uint*") IntBuffer out_size,
+                              @Cast("const char***") @ByPtrPtr PointerPointer out_array);
+public static native int NNListAllOpNames(@Cast("nn_uint*") int[] out_size,
+                              @Cast("const char***") @ByPtrPtr PointerPointer out_array);
+
+/**
+ * \brief Get operator handle given name.
+ * @param op_name The name of the operator.
+ * @param op_out The returnning op handle.
+ */
+public static native int NNGetOpHandle(@Cast("const char*") BytePointer op_name,
+                           @ByPtrPtr OpHandle op_out);
+public static native int NNGetOpHandle(String op_name,
+                           @ByPtrPtr OpHandle op_out);
+
+/**
+ * \brief list all the available operators.
+ *  This won't include the alias, use ListAllNames
+ *  instead to get all alias names.
+ *
+ * @param out_size the size of returned array
+ * @param out_array the output AtomicSymbolCreator array
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNListUniqueOps(@Cast("nn_uint*") IntPointer out_size,
+                             @Cast("OpHandle**") @ByPtrPtr PointerPointer out_array);
+public static native int NNListUniqueOps(@Cast("nn_uint*") IntBuffer out_size,
+                             @Cast("OpHandle**") @ByPtrPtr PointerPointer out_array);
+public static native int NNListUniqueOps(@Cast("nn_uint*") int[] out_size,
+                             @Cast("OpHandle**") @ByPtrPtr PointerPointer out_array);
+
+/**
+ * \brief Get the detailed information about atomic symbol.
+ * @param op The operator handle.
+ * @param real_name The returned name of the creator.
+ *   This name is not the alias name of the atomic symbol.
+ * @param description The returned description of the symbol.
+ * @param num_doc_args Number of arguments that contain documents.
+ * @param arg_names Name of the arguments of doc args
+ * @param arg_type_infos Type informations about the arguments.
+ * @param arg_descriptions Description information about the arguments.
+ * @param return_type Return type of the function, if any.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNGetOpInfo(OpHandle op,
+                         @Cast("const char**") PointerPointer real_name,
+                         @Cast("const char**") PointerPointer description,
+                         @Cast("nn_uint*") IntPointer num_doc_args,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_names,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_type_infos,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_descriptions,
+                         @Cast("const char**") PointerPointer return_type);
+public static native int NNGetOpInfo(OpHandle op,
+                         @Cast("const char**") @ByPtrPtr BytePointer real_name,
+                         @Cast("const char**") @ByPtrPtr BytePointer description,
+                         @Cast("nn_uint*") IntPointer num_doc_args,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_names,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_type_infos,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_descriptions,
+                         @Cast("const char**") @ByPtrPtr BytePointer return_type);
+public static native int NNGetOpInfo(OpHandle op,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer real_name,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer description,
+                         @Cast("nn_uint*") IntBuffer num_doc_args,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_names,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_type_infos,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_descriptions,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer return_type);
+public static native int NNGetOpInfo(OpHandle op,
+                         @Cast("const char**") @ByPtrPtr byte[] real_name,
+                         @Cast("const char**") @ByPtrPtr byte[] description,
+                         @Cast("nn_uint*") int[] num_doc_args,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_names,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_type_infos,
+                         @Cast("const char***") @ByPtrPtr PointerPointer arg_descriptions,
+                         @Cast("const char**") @ByPtrPtr byte[] return_type);
+/**
+ * \brief Create an AtomicSymbol functor.
+ * @param op The operator handle
+ * @param num_param the number of parameters
+ * @param keys the keys to the params
+ * @param vals the vals of the params
+ * @param out pointer to the created symbol handle
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolCreateAtomicSymbol(OpHandle op,
+                                        @Cast("nn_uint") int num_param,
+                                        @Cast("const char**") PointerPointer keys,
+                                        @Cast("const char**") PointerPointer vals,
+                                        PointerPointer out);
+public static native int NNSymbolCreateAtomicSymbol(OpHandle op,
+                                        @Cast("nn_uint") int num_param,
+                                        @Cast("const char**") @ByPtrPtr BytePointer keys,
+                                        @Cast("const char**") @ByPtrPtr BytePointer vals,
+                                        PointerPointer out);
+public static native int NNSymbolCreateAtomicSymbol(OpHandle op,
+                                        @Cast("nn_uint") int num_param,
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer vals,
+                                        @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+public static native int NNSymbolCreateAtomicSymbol(OpHandle op,
+                                        @Cast("nn_uint") int num_param,
+                                        @Cast("const char**") @ByPtrPtr byte[] keys,
+                                        @Cast("const char**") @ByPtrPtr byte[] vals,
+                                        PointerPointer out);
+public static native int NNSymbolCreateAtomicSymbol(OpHandle op,
+                                        @Cast("nn_uint") int num_param,
+                                        @Cast("const char**") @ByPtrPtr BytePointer keys,
+                                        @Cast("const char**") @ByPtrPtr BytePointer vals,
+                                        @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+public static native int NNSymbolCreateAtomicSymbol(OpHandle op,
+                                        @Cast("nn_uint") int num_param,
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer vals,
+                                        PointerPointer out);
+public static native int NNSymbolCreateAtomicSymbol(OpHandle op,
+                                        @Cast("nn_uint") int num_param,
+                                        @Cast("const char**") @ByPtrPtr byte[] keys,
+                                        @Cast("const char**") @ByPtrPtr byte[] vals,
+                                        @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+/**
+ * \brief Create a Variable Symbol.
+ * @param name name of the variable
+ * @param out pointer to the created symbol handle
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolCreateVariable(@Cast("const char*") BytePointer name, PointerPointer out);
+public static native int NNSymbolCreateVariable(String name, @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+/**
+ * \brief Create a Symbol by grouping list of symbols together
+ * @param num_symbols number of symbols to be grouped
+ * @param symbols array of symbol handles
+ * @param out pointer to the created symbol handle
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolCreateGroup(@Cast("nn_uint") int num_symbols,
+                                 PointerPointer symbols,
+                                 PointerPointer out);
+public static native int NNSymbolCreateGroup(@Cast("nn_uint") int num_symbols,
+                                 @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle symbols,
+                                 @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+/**
+ * \brief Add src_dep to the handle as control dep.
+ * @param handle The symbol to add dependency edges on.
+ * @param src_dep the source handles.
+ */
+public static native int NNAddControlDeps(SymbolHandle handle,
+                              SymbolHandle src_dep);
+/**
+ * \brief Free the symbol handle.
+ * @param symbol the symbol
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolFree(SymbolHandle symbol);
+/**
+ * \brief Copy the symbol to another handle
+ * @param symbol the source symbol
+ * @param out used to hold the result of copy
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolCopy(SymbolHandle symbol, PointerPointer out);
+public static native int NNSymbolCopy(SymbolHandle symbol, @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+/**
+ * \brief Print the content of symbol, used for debug.
+ * @param symbol the symbol
+ * @param out_str pointer to hold the output string of the printing.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolPrint(SymbolHandle symbol, @Cast("const char**") PointerPointer out_str);
+public static native int NNSymbolPrint(SymbolHandle symbol, @Cast("const char**") @ByPtrPtr BytePointer out_str);
+public static native int NNSymbolPrint(SymbolHandle symbol, @Cast("const char**") @ByPtrPtr ByteBuffer out_str);
+public static native int NNSymbolPrint(SymbolHandle symbol, @Cast("const char**") @ByPtrPtr byte[] out_str);
+/**
+ * \brief Get string attribute from symbol
+ * @param symbol the source symbol
+ * @param key The key of the symbol.
+ * @param out The result attribute, can be NULL if the attribute do not exist.
+ * @param success Whether the result is contained in out.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolGetAttr(SymbolHandle symbol,
+                             @Cast("const char*") BytePointer key,
+                             @Cast("const char**") PointerPointer out,
+                             IntPointer success);
+public static native int NNSymbolGetAttr(SymbolHandle symbol,
+                             @Cast("const char*") BytePointer key,
+                             @Cast("const char**") @ByPtrPtr BytePointer out,
+                             IntPointer success);
+public static native int NNSymbolGetAttr(SymbolHandle symbol,
+                             String key,
+                             @Cast("const char**") @ByPtrPtr ByteBuffer out,
+                             IntBuffer success);
+public static native int NNSymbolGetAttr(SymbolHandle symbol,
+                             @Cast("const char*") BytePointer key,
+                             @Cast("const char**") @ByPtrPtr byte[] out,
+                             int[] success);
+public static native int NNSymbolGetAttr(SymbolHandle symbol,
+                             String key,
+                             @Cast("const char**") @ByPtrPtr BytePointer out,
+                             IntPointer success);
+public static native int NNSymbolGetAttr(SymbolHandle symbol,
+                             @Cast("const char*") BytePointer key,
+                             @Cast("const char**") @ByPtrPtr ByteBuffer out,
+                             IntBuffer success);
+public static native int NNSymbolGetAttr(SymbolHandle symbol,
+                             String key,
+                             @Cast("const char**") @ByPtrPtr byte[] out,
+                             int[] success);
+/**
+ * \brief Set string attribute from symbol.
+ *  NOTE: Setting attribute to a symbol can affect the semantics(mutable/immutable) of symbolic graph.
+ *
+ *  Safe recommendaton: use  immutable graph
+ *  - Only allow set attributes during creation of new symbol as optional parameter
+ *
+ *  Mutable graph (be careful about the semantics):
+ *  - Allow set attr at any point.
+ *  - Mutating an attribute of some common node of two graphs can cause confusion from user.
+ *
+ * @param symbol the source symbol
+ * @param num_param Number of parameters to set.
+ * @param keys The keys of the attribute
+ * @param values The value to be set
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolSetAttrs(SymbolHandle symbol,
+                              @Cast("nn_uint") int num_param,
+                              @Cast("const char**") PointerPointer keys,
+                              @Cast("const char**") PointerPointer values);
+public static native int NNSymbolSetAttrs(SymbolHandle symbol,
+                              @Cast("nn_uint") int num_param,
+                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                              @Cast("const char**") @ByPtrPtr BytePointer values);
+public static native int NNSymbolSetAttrs(SymbolHandle symbol,
+                              @Cast("nn_uint") int num_param,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer values);
+public static native int NNSymbolSetAttrs(SymbolHandle symbol,
+                              @Cast("nn_uint") int num_param,
+                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                              @Cast("const char**") @ByPtrPtr byte[] values);
+/**
+ * \brief Get all attributes from symbol, including all descendents.
+ * @param symbol the source symbol
+ * @param recursive_option 0 for recursive, 1 for shallow.
+ * @param out_size The number of output attributes
+ * @param out 2*out_size strings representing key value pairs.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolListAttrs(SymbolHandle symbol,
+                               int recursive_option,
+                               @Cast("nn_uint*") IntPointer out_size,
+                               @Cast("const char***") @ByPtrPtr PointerPointer out);
+public static native int NNSymbolListAttrs(SymbolHandle symbol,
+                               int recursive_option,
+                               @Cast("nn_uint*") IntBuffer out_size,
+                               @Cast("const char***") @ByPtrPtr PointerPointer out);
+public static native int NNSymbolListAttrs(SymbolHandle symbol,
+                               int recursive_option,
+                               @Cast("nn_uint*") int[] out_size,
+                               @Cast("const char***") @ByPtrPtr PointerPointer out);
+
+/**
+ * \brief List inputs variables in the symbol.
+ * @param symbol the symbol
+ * @param option The option to list the inputs
+ *   option=0 means list all arguments.
+ *   option=1 means list arguments that are readed only by the graph.
+ *   option=2 means list arguments that are mutated by the graph.
+ * @param out_size output size
+ * @param out_sym_array the output array.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolListInputVariables(SymbolHandle symbol,
+                                        int option,
+                                        @Cast("nn_uint*") IntPointer out_size,
+                                        @ByPtrPtr PointerPointer out_sym_array);
+public static native int NNSymbolListInputVariables(SymbolHandle symbol,
+                                        int option,
+                                        @Cast("nn_uint*") IntBuffer out_size,
+                                        @Cast("SymbolHandle**") @ByPtrPtr PointerPointer out_sym_array);
+public static native int NNSymbolListInputVariables(SymbolHandle symbol,
+                                        int option,
+                                        @Cast("nn_uint*") int[] out_size,
+                                        @ByPtrPtr PointerPointer out_sym_array);
+
+/**
+ * \brief List input names in the symbol.
+ * @param symbol the symbol
+ * @param option The option to list the inputs
+ *   option=0 means list all arguments.
+ *   option=1 means list arguments that are readed only by the graph.
+ *   option=2 means list arguments that are mutated by the graph.
+ * @param out_size output size
+ * @param out_str_array pointer to hold the output string array
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolListInputNames(SymbolHandle symbol,
+                                    int option,
+                                    @Cast("nn_uint*") IntPointer out_size,
+                                    @Cast("const char***") @ByPtrPtr PointerPointer out_str_array);
+public static native int NNSymbolListInputNames(SymbolHandle symbol,
+                                    int option,
+                                    @Cast("nn_uint*") IntBuffer out_size,
+                                    @Cast("const char***") @ByPtrPtr PointerPointer out_str_array);
+public static native int NNSymbolListInputNames(SymbolHandle symbol,
+                                    int option,
+                                    @Cast("nn_uint*") int[] out_size,
+                                    @Cast("const char***") @ByPtrPtr PointerPointer out_str_array);
+/**
+ * \brief List returns names in the symbol.
+ * @param symbol the symbol
+ * @param out_size output size
+ * @param out_str_array pointer to hold the output string array
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolListOutputNames(SymbolHandle symbol,
+                                     @Cast("nn_uint*") IntPointer out_size,
+                                     @Cast("const char***") @ByPtrPtr PointerPointer out_str_array);
+public static native int NNSymbolListOutputNames(SymbolHandle symbol,
+                                     @Cast("nn_uint*") IntBuffer out_size,
+                                     @Cast("const char***") @ByPtrPtr PointerPointer out_str_array);
+public static native int NNSymbolListOutputNames(SymbolHandle symbol,
+                                     @Cast("nn_uint*") int[] out_size,
+                                     @Cast("const char***") @ByPtrPtr PointerPointer out_str_array);
+
+
+/**
+ * \brief Supply number of outputs of the symbol.
+ * @param symbol the symbol
+ * @param output_count number of outputs
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolGetNumOutputs(SymbolHandle symbol,
+                                    @Cast("nn_uint*") IntPointer output_count);
+public static native int NNSymbolGetNumOutputs(SymbolHandle symbol,
+                                    @Cast("nn_uint*") IntBuffer output_count);
+public static native int NNSymbolGetNumOutputs(SymbolHandle symbol,
+                                    @Cast("nn_uint*") int[] output_count);
+
+/**
+ * \brief Get a symbol that contains all the internals.
+ * @param symbol The symbol
+ * @param out The output symbol whose outputs are all the internals.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolGetInternals(SymbolHandle symbol,
+                                  PointerPointer out);
+public static native int NNSymbolGetInternals(SymbolHandle symbol,
+                                  @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+/**
+ * \brief Get a symbol that contains only direct children.
+ * @param symbol The symbol
+ * @param out The output symbol whose outputs are the direct children.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolGetChildren(SymbolHandle symbol,
+                                 PointerPointer out);
+public static native int NNSymbolGetChildren(SymbolHandle symbol,
+                                 @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+/**
+ * \brief Get index-th outputs of the symbol.
+ * @param symbol The symbol
+ * @param index the Index of the output.
+ * @param out The output symbol whose outputs are the index-th symbol.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolGetOutput(SymbolHandle symbol,
+                               @Cast("nn_uint") int index,
+                               PointerPointer out);
+public static native int NNSymbolGetOutput(SymbolHandle symbol,
+                               @Cast("nn_uint") int index,
+                               @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+
+/**
+ * \brief Compose the symbol on other symbols.
+ *
+ *  This function will change the sym hanlde.
+ *  To achieve function apply behavior, copy the symbol first
+ *  before apply.
+ *
+ * @param sym the symbol to apply
+ * @param name the name of symbol
+ * @param num_args number of arguments
+ * @param keys the key of keyword args (optional)
+ * @param args arguments to sym
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNSymbolCompose(SymbolHandle sym,
+                             @Cast("const char*") BytePointer name,
+                             @Cast("nn_uint") int num_args,
+                             @Cast("const char**") PointerPointer keys,
+                             PointerPointer args);
+public static native int NNSymbolCompose(SymbolHandle sym,
+                             @Cast("const char*") BytePointer name,
+                             @Cast("nn_uint") int num_args,
+                             @Cast("const char**") @ByPtrPtr BytePointer keys,
+                             PointerPointer args);
+public static native int NNSymbolCompose(SymbolHandle sym,
+                             String name,
+                             @Cast("nn_uint") int num_args,
+                             @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                             @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle args);
+public static native int NNSymbolCompose(SymbolHandle sym,
+                             @Cast("const char*") BytePointer name,
+                             @Cast("nn_uint") int num_args,
+                             @Cast("const char**") @ByPtrPtr byte[] keys,
+                             PointerPointer args);
+public static native int NNSymbolCompose(SymbolHandle sym,
+                             String name,
+                             @Cast("nn_uint") int num_args,
+                             @Cast("const char**") @ByPtrPtr BytePointer keys,
+                             @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle args);
+public static native int NNSymbolCompose(SymbolHandle sym,
+                             @Cast("const char*") BytePointer name,
+                             @Cast("nn_uint") int num_args,
+                             @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                             PointerPointer args);
+public static native int NNSymbolCompose(SymbolHandle sym,
+                             String name,
+                             @Cast("nn_uint") int num_args,
+                             @Cast("const char**") @ByPtrPtr byte[] keys,
+                             @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle args);
+
+// Graph IR API
+/**
+ * \brief create a graph handle from symbol
+ * @param symbol The symbol representing the graph.
+ * @param graph The graph handle created.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNGraphCreate(SymbolHandle symbol, @ByPtrPtr GraphHandle graph);
+/**
+ * \brief free the graph handle
+ * @param handle The handle to be freed.
+ */
+public static native int NNGraphFree(GraphHandle handle);
+/**
+ * \brief Get a new symbol from the graph.
+ * @param graph The graph handle.
+ * @param symbol The corresponding symbol
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNGraphGetSymbol(GraphHandle graph, PointerPointer symbol);
+public static native int NNGraphGetSymbol(GraphHandle graph, @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle symbol);
+
+/**
+ * \brief Get Set a attribute in json format.
+ * This feature allows pass graph attributes back and forth in reasonable speed.
+ *
+ * @param handle The graph handle.
+ * @param key The key to the attribute.
+ * @param json_value The value need to be in format [type_name, value],
+ *  Where type_name is a registered type string in C++ side via DMLC_JSON_ENABLE_ANY.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNGraphSetJSONAttr(GraphHandle handle,
+                                @Cast("const char*") BytePointer key,
+                                @Cast("const char*") BytePointer json_value);
+public static native int NNGraphSetJSONAttr(GraphHandle handle,
+                                String key,
+                                String json_value);
+
+/**
+ * \brief Get a serialized attrirbute from graph.
+ * This feature allows pass graph attributes back and forth in reasonable speed.
+ *
+ * @param handle The graph handle.
+ * @param key The key to the attribute.
+ * @param json_out The result attribute, can be NULL if the attribute do not exist.
+ *  The json_out is an array of [type_name, value].
+ *  Where the type_name is a registered type string in C++ side via DMLC_JSON_ENABLE_ANY.
+ * @param success Whether the result is contained in out.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNGraphGetJSONAttr(GraphHandle handle,
+                                @Cast("const char*") BytePointer key,
+                                @Cast("const char**") PointerPointer json_out,
+                                IntPointer success);
+public static native int NNGraphGetJSONAttr(GraphHandle handle,
+                                @Cast("const char*") BytePointer key,
+                                @Cast("const char**") @ByPtrPtr BytePointer json_out,
+                                IntPointer success);
+public static native int NNGraphGetJSONAttr(GraphHandle handle,
+                                String key,
+                                @Cast("const char**") @ByPtrPtr ByteBuffer json_out,
+                                IntBuffer success);
+public static native int NNGraphGetJSONAttr(GraphHandle handle,
+                                @Cast("const char*") BytePointer key,
+                                @Cast("const char**") @ByPtrPtr byte[] json_out,
+                                int[] success);
+public static native int NNGraphGetJSONAttr(GraphHandle handle,
+                                String key,
+                                @Cast("const char**") @ByPtrPtr BytePointer json_out,
+                                IntPointer success);
+public static native int NNGraphGetJSONAttr(GraphHandle handle,
+                                @Cast("const char*") BytePointer key,
+                                @Cast("const char**") @ByPtrPtr ByteBuffer json_out,
+                                IntBuffer success);
+public static native int NNGraphGetJSONAttr(GraphHandle handle,
+                                String key,
+                                @Cast("const char**") @ByPtrPtr byte[] json_out,
+                                int[] success);
+
+/**
+ * \brief Set a attribute whose type is std::vector<NodeEntry> in c++
+ * This feature allows pass List of symbolic variables for gradient request.
+ *
+ * \note This is beta feature only used for test purpos
+ *
+ * @param handle The graph handle.
+ * @param key The key to the attribute.
+ * @param list The symbol whose outputs represents the list of NodeEntry to be passed.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNGraphSetNodeEntryListAttr_(GraphHandle handle,
+                                          @Cast("const char*") BytePointer key,
+                                          SymbolHandle list);
+public static native int NNGraphSetNodeEntryListAttr_(GraphHandle handle,
+                                          String key,
+                                          SymbolHandle list);
+/**
+ * \brief Apply passes on the src graph.
+ * @param src The source graph handle.
+ * @param num_pass The number of pass to be applied.
+ * @param pass_names The names of the pass.
+ * @param dst The result graph.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int NNGraphApplyPasses(GraphHandle src,
+                                @Cast("nn_uint") int num_pass,
+                                @Cast("const char**") PointerPointer pass_names,
+                                @ByPtrPtr GraphHandle dst);
+public static native int NNGraphApplyPasses(GraphHandle src,
+                                @Cast("nn_uint") int num_pass,
+                                @Cast("const char**") @ByPtrPtr BytePointer pass_names,
+                                @ByPtrPtr GraphHandle dst);
+public static native int NNGraphApplyPasses(GraphHandle src,
+                                @Cast("nn_uint") int num_pass,
+                                @Cast("const char**") @ByPtrPtr ByteBuffer pass_names,
+                                @ByPtrPtr GraphHandle dst);
+public static native int NNGraphApplyPasses(GraphHandle src,
+                                @Cast("nn_uint") int num_pass,
+                                @Cast("const char**") @ByPtrPtr byte[] pass_names,
+                                @ByPtrPtr GraphHandle dst);
+
+// #ifdef __cplusplus /* end extern "C" */
+// #endif
+
+// #endif  // NNVM_C_API_H_
+
+
 }

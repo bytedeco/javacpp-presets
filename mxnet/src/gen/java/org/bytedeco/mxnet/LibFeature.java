@@ -36,6 +36,9 @@ public class LibFeature extends Pointer {
     @Override public LibFeature position(long position) {
         return (LibFeature)super.position(position);
     }
+    @Override public LibFeature getPointer(long i) {
+        return new LibFeature(this).position(position + i);
+    }
 
   public native @Cast("const char*") BytePointer name(); public native LibFeature name(BytePointer setter);
   public native @Cast("bool") boolean enabled(); public native LibFeature enabled(boolean setter);
