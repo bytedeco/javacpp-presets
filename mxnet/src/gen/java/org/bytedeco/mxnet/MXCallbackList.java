@@ -36,6 +36,9 @@ public class MXCallbackList extends Pointer {
     @Override public MXCallbackList position(long position) {
         return (MXCallbackList)super.position(position);
     }
+    @Override public MXCallbackList getPointer(long i) {
+        return new MXCallbackList(this).position(position + i);
+    }
 
   public native int num_callbacks(); public native MXCallbackList num_callbacks(int setter);
   public static class Int_Callbacks extends FunctionPointer {
