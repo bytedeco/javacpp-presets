@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_features2d.class,
     value = {
-        @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.4.3"),
+        @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.4.4"),
         @Platform(value = "ios", preload = "libopencv_calib3d"),
-        @Platform(value = "windows", link = "opencv_calib3d430")
+        @Platform(value = "windows", link = "opencv_calib3d440")
     },
     target = "org.bytedeco.opencv.opencv_calib3d",
     global = "org.bytedeco.opencv.global.opencv_calib3d"

@@ -61,7 +61,7 @@ public class mkl_rt implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
-                             "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_INT32", "NOTHROW",
+                             "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_BF16", "MKL_INT32", "NOTHROW",
 
                              "mkl_simatcopy", "mkl_dimatcopy", "mkl_cimatcopy", "mkl_zimatcopy", "mkl_somatcopy", "mkl_domatcopy", "mkl_comatcopy", "mkl_zomatcopy",
                              "mkl_somatcopy2", "mkl_domatcopy2", "mkl_comatcopy2", "mkl_zomatcopy2", "mkl_somatadd", "mkl_domatadd", "mkl_comatadd", "mkl_zomatadd",
@@ -137,6 +137,9 @@ public class mkl_rt implements InfoMapper {
                              "MKL_MIC_Set_Offload_Report", "MKL_MIC_Set_Device_Num_Threads", "MKL_MIC_Set_Resource_Limit", "MKL_MIC_Get_Resource_Limit",
                              "VMDAcospi", "VMDAsinpi", "VMDAtanpi", "VMDCosd", "VMDCospi", "VMDSind", "VMDSinpi", "VMDTand", "VMDTanpi",
                              "MKL_MIC_Get_Flags", "MKL_MIC_Set_Flags", "MKL_MIC_Get_Status", "MKL_MIC_Clear_Status",
-                             "VSLCONVCopyTask", "VSLCONVDeleteTask", "VSLCORRCopyTask", "VSLCORRDeleteTask").skip());
+                             "VSLCONVCopyTask", "VSLCONVDeleteTask", "VSLCORRCopyTask", "VSLCORRDeleteTask",
+                             "vclog2i", "vmclog2i", "vmzlog2i", "vzlog2i",
+                             "vcLog2I", "vmcLog2I", "vmzLog2I", "vzLog2I",
+                             "VCLOG2I", "VMCLOG2I", "VMZLOG2I", "VZLOG2I").skip());
     }
 }

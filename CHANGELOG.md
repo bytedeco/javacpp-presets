@@ -11,7 +11,7 @@
  * Add support for Windows to presets for Qt ([issue #862](https://github.com/bytedeco/javacpp-presets/issues/862))
  * Fix JPMS modules for CUDA, ARPACK-NG, GSL, SciPy, Gym, MXNet ([pull #880](https://github.com/bytedeco/javacpp-presets/pull/880) and [pull #881](https://github.com/bytedeco/javacpp-presets/pull/881))
  * Build OpenBLAS with a `TARGET` even for `DYNAMIC_ARCH` to avoid SIGILL ([issue eclipse/deeplearning4j#8747](https://github.com/eclipse/deeplearning4j/issues/8747))
- * Upgrade presets for FFmpeg 4.3.1 ([pull #891](https://github.com/bytedeco/javacpp-presets/pull/891)), Arrow 0.17.1, Hyperscan 5.3.0, MKL-DNN 0.21.5, DNNL 1.5.1, OpenBLAS 0.3.10, CPython 3.7.8, NumPy 1.19.0, SciPy 1.5.1, Gym 0.17.2, CUDA 11.0.2, cuDNN 8.0.1, NCCL 2.7.6, MXNet 1.7.0.rc1, TensorFlow 1.15.3, TensorRT 7.1, ONNX 1.7.0 ([pull #882](https://github.com/bytedeco/javacpp-presets/pull/882)), ONNX Runtime 1.4.0 ([pull #887](https://github.com/bytedeco/javacpp-presets/pull/887)), Qt 5.15.0, Skia 2.80.1, and their dependencies
+ * Upgrade presets for OpenCV 4.4.0, FFmpeg 4.3.1 ([pull #891](https://github.com/bytedeco/javacpp-presets/pull/891)), Arrow 0.17.1, Hyperscan 5.3.0, MKL 2020.2, MKL-DNN 0.21.5, DNNL 1.5.1, OpenBLAS 0.3.10, CPython 3.7.8, NumPy 1.19.0, SciPy 1.5.1, Gym 0.17.2, CUDA 11.0.2, cuDNN 8.0.1, NCCL 2.7.6, MXNet 1.7.0.rc1, TensorFlow 1.15.3, TensorRT 7.1, ONNX 1.7.0 ([pull #882](https://github.com/bytedeco/javacpp-presets/pull/882)), ONNX Runtime 1.4.0 ([pull #887](https://github.com/bytedeco/javacpp-presets/pull/887)), Qt 5.15.0, Skia 2.80.1, and their dependencies
  * Add `FullOptimization.h` allowing users to fully optimize LLVM modules ([pull #869](https://github.com/bytedeco/javacpp-presets/pull/869))
 
 ### April 14, 2020 version 1.5.3
