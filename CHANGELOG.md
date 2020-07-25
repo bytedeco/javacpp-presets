@@ -1,6 +1,6 @@
 
  * Include `nnvm/c_api.h` header file in presets for MXNet ([issue #912](https://github.com/bytedeco/javacpp-presets/issues/912))
- * Enable OpenMP for DNNL and ONNX Runtime on Mac using same library name as MKL to prevent conflicts ([issue #907](https://github.com/bytedeco/javacpp-presets/issues/907))
+ * Enable OpenMP for DNNL on Mac using same library name as MKL to prevent conflicts ([issue #907](https://github.com/bytedeco/javacpp-presets/issues/907))
  * Fix loading issue with `opencv_ximgproc` ([issue #911](https://github.com/bytedeco/javacpp-presets/issues/911))
  * Build LibTIFF after WebP to make sure they link correctly in presets for Leptonica
  * Virtualize `IInt8Calibrator` plus subclasses from TensorRT to allow customization ([issue #902](https://github.com/bytedeco/javacpp-presets/issues/902))
