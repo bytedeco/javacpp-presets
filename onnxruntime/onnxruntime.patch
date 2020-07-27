@@ -53,6 +53,35 @@ index 79a2abc2e..a742571e9 100644
 -  return metadataJava;
 +  return (jstring)metadataJava;
  }
+diff --git a/onnxruntime/core/framework/provider_bridge_ort.cc b/onnxruntime/core/framework/provider_bridge_ort.cc
+index c269070ea..8b7f8a864 100644
+--- a/onnxruntime/core/framework/provider_bridge_ort.cc
++++ b/onnxruntime/core/framework/provider_bridge_ort.cc
+@@ -502,9 +502,24 @@ struct ProviderHostImpl : ProviderHost {
+ 
+ } provider_host_;
+ 
++#ifdef __APPLE__
++#include <mach-o/dyld.h>
++#endif
++
+ struct ProviderLibrary {
+   ProviderLibrary(const char* filename) {
+     std::string full_path = Env::Default().GetRuntimePath() + std::string(filename);
++#ifdef __APPLE__
++size_t len1 = strlen(filename);
++for (uint32_t i = 0; i < _dyld_image_count(); i++) {
++    const char *libname = _dyld_get_image_name(i);
++    size_t len2 = strlen(libname);
++    if (len2 > len1 && strcmp(filename, libname + len2 - len1) == 0) {
++        full_path = libname;
++        break;
++    }
++}
++#endif
+     Env::Default().LoadDynamicLibrary(full_path, &handle_);
+     if (!handle_)
+       return;
 diff --git a/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S b/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S
 index f874710c1..d21eb958e 100644
 --- a/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S
