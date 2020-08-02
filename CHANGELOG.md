@@ -1,4 +1,5 @@
 
+ * Bundle programs from Clang and LLVM, executable via `Loader.load()` for convenience
  * Include `nnvm/c_api.h` header file in presets for MXNet ([issue #912](https://github.com/bytedeco/javacpp-presets/issues/912))
  * Enable OpenMP for DNNL on Mac using same library name as MKL to prevent conflicts ([issue #907](https://github.com/bytedeco/javacpp-presets/issues/907))
  * Fix loading issue with `opencv_ximgproc` ([issue #911](https://github.com/bytedeco/javacpp-presets/issues/911))
