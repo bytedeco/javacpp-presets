@@ -11,7 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief A scalar value for NullType. Never valid */
+/** \defgroup concrete-scalar-classes Concrete Scalar subclasses
+ * 
+ *  \{
+ <p>
+ *  \brief A scalar value for NullType. Never valid */
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class NullScalar extends Scalar {
     static { Loader.load(); }
@@ -22,6 +26,9 @@ public class NullScalar extends Scalar {
     private native void allocateArray(long size);
     @Override public NullScalar position(long position) {
         return (NullScalar)super.position(position);
+    }
+    @Override public NullScalar getPointer(long i) {
+        return new NullScalar(this).position(position + i);
     }
 
 

@@ -27,12 +27,34 @@ public class FlightClientOptions extends Pointer {
     @Override public FlightClientOptions position(long position) {
         return (FlightClientOptions)super.position(position);
     }
+    @Override public FlightClientOptions getPointer(long i) {
+        return new FlightClientOptions(this).position(position + i);
+    }
 
   /** \brief Root certificates to use for validating server
    *  certificates. */
   public native @StdString String tls_root_certs(); public native FlightClientOptions tls_root_certs(String setter);
   /** \brief Override the hostname checked by TLS. Use with caution. */
   public native @StdString String override_hostname(); public native FlightClientOptions override_hostname(String setter);
+  /** \brief The client certificate to use if using Mutual TLS */
+  public native @StdString String cert_chain(); public native FlightClientOptions cert_chain(String setter);
+  /** \brief The private key associated with the client certificate for Mutual TLS */
+  public native @StdString String private_key(); public native FlightClientOptions private_key(String setter);
   /** \brief A list of client middleware to apply. */
+  
+  ///
   public native @ByRef ClientMiddlewareFactoryVector middleware(); public native FlightClientOptions middleware(ClientMiddlewareFactoryVector setter);
+  /** \brief A soft limit on the number of bytes to write in a single
+   *      batch when sending Arrow data to a server.
+   * 
+   *  Used to help limit server memory consumption. Only enabled if
+   *  positive. When enabled, FlightStreamWriter.Write* may yield a
+   *  IOError with error detail FlightWriteSizeStatusDetail. */
+  public native @Cast("int64_t") long write_size_limit_bytes(); public native FlightClientOptions write_size_limit_bytes(long setter);
+  /** \brief Generic connection options, passed to the underlying
+   *      transport; interpretation is implementation-dependent. */
+  
+
+  /** \brief Get default options. */
+  public static native @ByVal FlightClientOptions Defaults();
 }

@@ -24,13 +24,18 @@ public class ScannerBuilder extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScannerBuilder(Pointer p) { super(p); }
 
+  public ScannerBuilder(@SharedPtr @ByVal Dataset dataset,
+                   @SharedPtr ScanContext scan_context) { super((Pointer)null); allocate(dataset, scan_context); }
+  private native void allocate(@SharedPtr @ByVal Dataset dataset,
+                   @SharedPtr ScanContext scan_context);
+
   
   ///
   ///
   ///
-  public ScannerBuilder(@SharedPtr @ByVal Dataset dataset,
-                   @SharedPtr ScanContext scan_context) { super((Pointer)null); allocate(dataset, scan_context); }
-  private native void allocate(@SharedPtr @ByVal Dataset dataset,
+  public ScannerBuilder(@SharedPtr @ByVal Schema schema, @SharedPtr @ByVal Fragment fragment,
+                   @SharedPtr ScanContext scan_context) { super((Pointer)null); allocate(schema, fragment, scan_context); }
+  private native void allocate(@SharedPtr @ByVal Schema schema, @SharedPtr @ByVal Fragment fragment,
                    @SharedPtr ScanContext scan_context);
 
   /** \brief Set the subset of columns to materialize.

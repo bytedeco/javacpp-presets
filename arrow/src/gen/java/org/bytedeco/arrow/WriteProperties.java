@@ -25,6 +25,9 @@ public class WriteProperties extends Pointer {
     @Override public WriteProperties position(long position) {
         return (WriteProperties)super.position(position);
     }
+    @Override public WriteProperties getPointer(long i) {
+        return new WriteProperties(this).position(position + i);
+    }
 
   public static native @ByVal WriteProperties Defaults();
 

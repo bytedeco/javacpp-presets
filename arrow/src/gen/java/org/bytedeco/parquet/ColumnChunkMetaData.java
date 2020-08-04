@@ -13,6 +13,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 import static org.bytedeco.arrow.global.parquet.*;
 
 
+/** \brief ColumnChunkMetaData is a proxy around format::ColumnChunkMetaData. */
 @Namespace("parquet") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.parquet.class)
 public class ColumnChunkMetaData extends Pointer {
     static { Loader.load(); }

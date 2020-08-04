@@ -24,6 +24,6 @@ public class WriteTask extends Pointer {
 
   public native @ByVal Status Execute();
 
-  public native @Const @ByRef FileSource destination();
+  public native @Const @ByRef WritableFileSource destination();
   public native @SharedPtr FileFormat format();
 }

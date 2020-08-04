@@ -12,15 +12,15 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Namespace("arrow::compute") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class CompareOptions extends Pointer {
+public class CompareOptions extends FunctionOptions {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompareOptions(Pointer p) { super(p); }
 
   public CompareOptions(CompareOperator op) { super((Pointer)null); allocate(op); }
   private native void allocate(CompareOperator op);
-  public CompareOptions(@Cast("arrow::compute::CompareOperator") int op) { super((Pointer)null); allocate(op); }
-  private native void allocate(@Cast("arrow::compute::CompareOperator") int op);
+  public CompareOptions(@Cast("arrow::compute::CompareOperator") byte op) { super((Pointer)null); allocate(op); }
+  private native void allocate(@Cast("arrow::compute::CompareOperator") byte op);
 
   public native CompareOperator op(); public native CompareOptions op(CompareOperator setter);
 }

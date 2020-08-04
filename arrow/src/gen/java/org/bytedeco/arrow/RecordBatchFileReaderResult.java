@@ -21,6 +21,9 @@ public class RecordBatchFileReaderResult extends Pointer {
     @Override public RecordBatchFileReaderResult position(long position) {
         return (RecordBatchFileReaderResult)super.position(position);
     }
+    @Override public RecordBatchFileReaderResult getPointer(long i) {
+        return new RecordBatchFileReaderResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class RecordBatchFileReaderResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

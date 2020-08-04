@@ -140,40 +140,15 @@ public class gandiva extends org.bytedeco.arrow.presets.gandiva {
 // #include <memory>
 // #include <vector>
 
-// #include <arrow/array.h>
-// #include <arrow/builder.h>
-// #include <arrow/pretty_print.h>
-// #include <arrow/record_batch.h>
-// #include <arrow/status.h>
-// #include <arrow/type.h>
+// #include "arrow/array.h"         // IWYU pragma: export
+// #include "arrow/builder.h"       // IWYU pragma: export
+// #include "arrow/pretty_print.h"  // IWYU pragma: export
+// #include "arrow/record_batch.h"  // IWYU pragma: export
+// #include "arrow/status.h"        // IWYU pragma: export
+// #include "arrow/type.h"          // IWYU pragma: export
 
 @Namespace("gandiva") public static native @Cast("bool") boolean is_decimal_128(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
   // namespace gandiva
-
-
-// Parsed from gandiva/logging.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// TODO : setup logging or use glog.
-// #include <arrow/util/logging.h>
 
 
 // Parsed from gandiva/function_signature.h
@@ -197,12 +172,10 @@ public class gandiva extends org.bytedeco.arrow.presets.gandiva {
 
 // #pragma once
 
-// #include <sstream>
 // #include <string>
 // #include <vector>
 
 // #include "gandiva/arrow.h"
-// #include "gandiva/logging.h"
 // #include "gandiva/visibility.h"
 // Targeting ../../gandiva/FunctionSignature.java
 
@@ -325,9 +298,6 @@ public class gandiva extends org.bytedeco.arrow.presets.gandiva {
 // Targeting ../../gandiva/NativeFunction.java
 
 
-// Targeting ../../gandiva/FunctionRegistry.java
-
-
 // Targeting ../../gandiva/ExpressionRegistry.java
 
 
@@ -395,8 +365,8 @@ public class gandiva extends org.bytedeco.arrow.presets.gandiva {
 
 // #include "arrow/status.h"
 
+// #include "arrow/util/logging.h"
 // #include "gandiva/arrow.h"
-// #include "gandiva/logging.h"
 // #include "gandiva/visibility.h"
 // Targeting ../../gandiva/SelectionVector.java
 
@@ -439,6 +409,9 @@ public class gandiva extends org.bytedeco.arrow.presets.gandiva {
 // #include "gandiva/selection_vector.h"
 // #include "gandiva/visibility.h"
 // Targeting ../../gandiva/LLVMGenerator.java
+
+
+// Targeting ../../gandiva/FilterCacheKey.java
 
 
 // Targeting ../../gandiva/Filter.java

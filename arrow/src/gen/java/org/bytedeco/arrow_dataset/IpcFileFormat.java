@@ -30,6 +30,9 @@ public class IpcFileFormat extends FileFormat {
     @Override public IpcFileFormat position(long position) {
         return (IpcFileFormat)super.position(position);
     }
+    @Override public IpcFileFormat getPointer(long i) {
+        return new IpcFileFormat(this).position(position + i);
+    }
 
   public native @StdString String type_name();
 
@@ -41,11 +44,12 @@ public class IpcFileFormat extends FileFormat {
   public native @ByVal SchemaResult Inspect(@Const @ByRef FileSource source);
 
   /** \brief Open a file for scanning */
-  public native @ByVal ScanTaskIteratorResult ScanFile(@Const @ByRef FileSource source,
-                                      @SharedPtr ScanOptions options,
-                                      @SharedPtr ScanContext context);
+  public native @ByVal ScanTaskIteratorResult ScanFile(@SharedPtr ScanOptions options,
+                                      @SharedPtr ScanContext context,
+                                      FileFragment fragment);
 
   public native @ByVal WriteTaskResult WriteFragment(
-        @ByVal FileSource destination, @SharedPtr @ByVal Fragment fragment,
+        @ByVal WritableFileSource destination, @SharedPtr @ByVal Fragment fragment,
+        @SharedPtr ScanOptions options,
         @SharedPtr ScanContext context);
 }

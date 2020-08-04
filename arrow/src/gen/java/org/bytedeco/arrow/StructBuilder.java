@@ -51,8 +51,12 @@ public class StructBuilder extends ArrayBuilder {
   public native @ByVal Status Append(@Cast("bool") boolean is_valid/*=true*/);
   public native @ByVal Status Append();
 
+  /** \brief Append a null value. Automatically appends a null to each child
+   *  builder. */
   public native @ByVal Status AppendNull();
 
+  /** \brief Append multiple null values. Automatically appends nulls to each
+   *  child builder. */
   public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
 
   public native void Reset();

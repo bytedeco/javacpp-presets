@@ -21,6 +21,9 @@ public class BufferOutputStreamResult extends Pointer {
     @Override public BufferOutputStreamResult position(long position) {
         return (BufferOutputStreamResult)super.position(position);
     }
+    @Override public BufferOutputStreamResult getPointer(long i) {
+        return new BufferOutputStreamResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class BufferOutputStreamResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

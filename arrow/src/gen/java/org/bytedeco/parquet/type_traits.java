@@ -27,6 +27,9 @@ public class type_traits extends Pointer {
     @Override public type_traits position(long position) {
         return (type_traits)super.position(position);
     }
+    @Override public type_traits getPointer(long i) {
+        return new type_traits(this).position(position + i);
+    }
 
 
   @MemberGetter public static native int value_byte_size();

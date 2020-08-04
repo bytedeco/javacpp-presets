@@ -30,8 +30,6 @@ public class Decimal128Type extends DecimalType {
   /** Decimal128Type constructor that returns an error on invalid input. */
   public static native @ByVal DataTypeResult Make(int precision, int scale);
 
-  public static native @Deprecated @ByVal Status Make(int precision, int scale, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>*"}) DataType out);
-
   public native @StdString String ToString();
   public native @StdString String name();
 

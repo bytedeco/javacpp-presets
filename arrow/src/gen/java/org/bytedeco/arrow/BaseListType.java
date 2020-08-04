@@ -18,7 +18,7 @@ public class BaseListType extends NestedType {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseListType(Pointer p) { super(p); }
 
-  public native @SharedPtr @ByVal Field value_field();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_field();
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type();
 }

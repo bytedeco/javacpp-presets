@@ -15,8 +15,11 @@ import static org.bytedeco.arrow.global.parquet.*;
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 
-/** \brief A container of zero or more Fragments. A Dataset acts as a discovery mechanism
- *  of Fragments and partitions, e.g. files deeply nested in a directory. */
+/** \brief A container of zero or more Fragments.
+ * 
+ *  A Dataset acts as a union of Fragments, e.g. files deeply nested in a
+ *  directory. A Dataset has a schema to which Fragments must align during a
+ *  scan operation. This is analogous to Avro's reader and writer schema. */
 @Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class Dataset extends Pointer {
     static { Loader.load(); }
@@ -27,8 +30,9 @@ public class Dataset extends Pointer {
   public native @ByVal ScannerBuilderResult NewScan(@SharedPtr ScanContext context);
   public native @ByVal ScannerBuilderResult NewScan();
 
-  /** \brief GetFragments returns an iterator of Fragments given ScanOptions. */
-  public native @ByVal FragmentIterator GetFragments(@SharedPtr ScanOptions options);
+  /** \brief GetFragments returns an iterator of Fragments given a predicate. */
+  public native @ByVal FragmentIterator GetFragments(@SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression predicate);
+  public native @ByVal FragmentIterator GetFragments();
 
   public native @Const @SharedPtr @ByRef Schema schema();
 

@@ -21,6 +21,9 @@ public class ResizableUniqueResult extends Pointer {
     @Override public ResizableUniqueResult position(long position) {
         return (ResizableUniqueResult)super.position(position);
     }
+    @Override public ResizableUniqueResult getPointer(long i) {
+        return new ResizableUniqueResult(this).position(position + i);
+    }
 
   
   ///
@@ -156,7 +159,7 @@ public class ResizableUniqueResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

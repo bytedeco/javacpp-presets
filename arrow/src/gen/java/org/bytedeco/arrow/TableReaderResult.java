@@ -21,6 +21,9 @@ public class TableReaderResult extends Pointer {
     @Override public TableReaderResult position(long position) {
         return (TableReaderResult)super.position(position);
     }
+    @Override public TableReaderResult getPointer(long i) {
+        return new TableReaderResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class TableReaderResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

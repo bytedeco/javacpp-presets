@@ -76,6 +76,8 @@ public class StructArray extends Array {
   // count adjusted.
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array field(int pos);
 
+  public native @Const @ByRef ArrayVector fields();
+
   /** Returns null if name not found */
   
   ///
@@ -87,6 +89,4 @@ public class StructArray extends Array {
    *  @param pool [in] The pool to allocate null bitmaps from, if necessary */
   public native @ByVal ArrayVectorResult Flatten(MemoryPool pool/*=arrow::default_memory_pool()*/);
   public native @ByVal ArrayVectorResult Flatten();
-
-  public native @Deprecated @ByVal Status Flatten(MemoryPool pool, ArrayVector out);
 }

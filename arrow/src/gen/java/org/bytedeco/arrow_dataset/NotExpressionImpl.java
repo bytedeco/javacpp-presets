@@ -28,6 +28,9 @@ public class NotExpressionImpl extends UnaryExpression {
     @Override public NotExpressionImpl position(long position) {
         return (NotExpressionImpl)super.position(position);
     }
+    @Override public NotExpressionImpl getPointer(long i) {
+        return new NotExpressionImpl(this).position(position + i);
+    }
 
   @MemberGetter public static native ExpressionType.type expression_type();
 

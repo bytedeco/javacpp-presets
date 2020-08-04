@@ -14,220 +14,25 @@ import static org.bytedeco.arrow.global.arrow.*;
 // ----------------------------------------------------------------------
 // Union
 
-/** Concrete Array class for union data */
+/** Base class for SparseUnionArray and DenseUnionArray */
 @Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class UnionArray extends Array {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public UnionArray() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UnionArray(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UnionArray(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public UnionArray position(long position) {
+        return (UnionArray)super.position(position);
+    }
+    @Override public UnionArray getPointer(long i) {
+        return new UnionArray(this).position(position + i);
+    }
 
-
-  public UnionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
-
-  
-  ///
-  ///
-  public UnionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-               @Const @ByRef ArrayVector children,
-               @SharedPtr ArrowBuffer type_ids,
-               @SharedPtr ArrowBuffer value_offsets/*=nullptr*/,
-               @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
-               @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, children, type_ids, value_offsets, null_bitmap, null_count, offset); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-               @Const @ByRef ArrayVector children,
-               @SharedPtr ArrowBuffer type_ids,
-               @SharedPtr ArrowBuffer value_offsets/*=nullptr*/,
-               @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
-               @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
-  public UnionArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-               @Const @ByRef ArrayVector children,
-               @SharedPtr ArrowBuffer type_ids) { super((Pointer)null); allocate(type, length, children, type_ids); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-               @Const @ByRef ArrayVector children,
-               @SharedPtr ArrowBuffer type_ids);
-
-  /** \brief Construct Dense UnionArray from types_ids, value_offsets and children
-   * 
-   *  This function does the bare minimum of validation of the offsets and
-   *  input types. The value_offsets are assumed to be well-formed.
-   * 
-   *  @param type_ids [in] An array of logical type ids for the union type
-   *  @param value_offsets [in] An array of signed int32 values indicating the
-   *  relative offset into the respective child array for the type in a given slot.
-   *  The respective offsets for each child value array must be in order / increasing.
-   *  @param children [in] Vector of children Arrays containing the data for each type.
-   *  @param field_names [in] Vector of strings containing the name of each field.
-   *  @param type_codes [in] Vector of type codes. */
-  
-  ///
-  ///
-  public static native @ByVal ArrayResult MakeDense(
-        @Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-        @Const @ByRef ArrayVector children,
-        @Const @ByRef(nullValue = "std::vector<std::string>({})") StringVector field_names,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes/*={}*/);
-  public static native @ByVal ArrayResult MakeDense(
-        @Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-        @Const @ByRef ArrayVector children);
-  public static native @ByVal ArrayResult MakeDense(
-        @Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-        @Const @ByRef ArrayVector children,
-        @Const @ByRef(nullValue = "std::vector<std::string>({})") StringVector field_names,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes/*={}*/);
-  public static native @ByVal ArrayResult MakeDense(
-        @Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-        @Const @ByRef ArrayVector children,
-        @Const @ByRef(nullValue = "std::vector<std::string>({})") StringVector field_names,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes/*={}*/);
-
-  /** \brief Construct Dense UnionArray from types_ids, value_offsets and children
-   * 
-   *  This function does the bare minimum of validation of the offsets and
-   *  input types. The value_offsets are assumed to be well-formed.
-   * 
-   *  @param type_ids [in] An array of logical type ids for the union type
-   *  @param value_offsets [in] An array of signed int32 values indicating the
-   *  relative offset into the respective child array for the type in a given slot.
-   *  The respective offsets for each child value array must be in order / increasing.
-   *  @param children [in] Vector of children Arrays containing the data for each type.
-   *  @param type_codes [in] Vector of type codes. */
-  public static native @ByVal ArrayResult MakeDense(
-        @Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-        @Const @ByRef ArrayVector children,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes);
-  public static native @ByVal ArrayResult MakeDense(
-        @Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-        @Const @ByRef ArrayVector children,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes);
-  public static native @ByVal ArrayResult MakeDense(
-        @Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-        @Const @ByRef ArrayVector children,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes);
-
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @Const @ByRef StringVector field_names,
-                            @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
-                            @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @Const @ByRef StringVector field_names,
-                            @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
-                            @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @Const @ByRef StringVector field_names,
-                            @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
-                            @SharedPtr Array out);
-
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @Const @ByRef StringVector field_names,
-                            @SharedPtr Array out);
-
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
-                            @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
-                            @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
-                            @SharedPtr Array out);
-
-  
-  ///
-  ///
-  public static native @Deprecated @ByVal Status MakeDense(@Const @ByRef Array type_ids, @Const @ByRef Array value_offsets,
-                            @Const @ByRef ArrayVector children,
-                            @SharedPtr Array out);
-
-  /** \brief Construct Sparse UnionArray from type_ids and children
-   * 
-   *  This function does the bare minimum of validation of the offsets and
-   *  input types.
-   * 
-   *  @param type_ids [in] An array of logical type ids for the union type
-   *  @param children [in] Vector of children Arrays containing the data for each type.
-   *  @param field_names [in] Vector of strings containing the name of each field.
-   *  @param type_codes [in] Vector of type codes. */
-  
-  ///
-  ///
-  public static native @ByVal ArrayResult MakeSparse(
-        @Const @ByRef Array type_ids, @Const @ByRef ArrayVector children,
-        @Const @ByRef(nullValue = "std::vector<std::string>({})") StringVector field_names,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes/*={}*/);
-  public static native @ByVal ArrayResult MakeSparse(
-        @Const @ByRef Array type_ids, @Const @ByRef ArrayVector children);
-  public static native @ByVal ArrayResult MakeSparse(
-        @Const @ByRef Array type_ids, @Const @ByRef ArrayVector children,
-        @Const @ByRef(nullValue = "std::vector<std::string>({})") StringVector field_names,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes/*={}*/);
-  public static native @ByVal ArrayResult MakeSparse(
-        @Const @ByRef Array type_ids, @Const @ByRef ArrayVector children,
-        @Const @ByRef(nullValue = "std::vector<std::string>({})") StringVector field_names,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes/*={}*/);
-
-  /** \brief Construct Sparse UnionArray from type_ids and children
-   * 
-   *  This function does the bare minimum of validation of the offsets and
-   *  input types.
-   * 
-   *  @param type_ids [in] An array of logical type ids for the union type
-   *  @param children [in] Vector of children Arrays containing the data for each type.
-   *  @param type_codes [in] Vector of type codes. */
-  public static native @ByVal ArrayResult MakeSparse(
-        @Const @ByRef Array type_ids, @Const @ByRef ArrayVector children,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes);
-  public static native @ByVal ArrayResult MakeSparse(
-        @Const @ByRef Array type_ids, @Const @ByRef ArrayVector children,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes);
-  public static native @ByVal ArrayResult MakeSparse(
-        @Const @ByRef Array type_ids, @Const @ByRef ArrayVector children,
-        @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes);
-
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @Const @ByRef StringVector field_names,
-                             @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
-                             @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @Const @ByRef StringVector field_names,
-                             @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
-                             @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @Const @ByRef StringVector field_names,
-                             @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
-                             @SharedPtr Array out);
-
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @Const @ByRef StringVector field_names,
-                             @SharedPtr Array out);
-
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @Cast("arrow::UnionArray::type_code_t*") @StdVector BytePointer type_codes,
-                             @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @Cast("arrow::UnionArray::type_code_t*") @StdVector ByteBuffer type_codes,
-                             @SharedPtr Array out);
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @Cast("arrow::UnionArray::type_code_t*") @StdVector byte[] type_codes,
-                             @SharedPtr Array out);
-
-  public static native @Deprecated @ByVal Status MakeSparse(@Const @ByRef Array type_ids,
-                             @Const @ByRef ArrayVector children,
-                             @SharedPtr Array out);
 
   /** Note that this buffer does not account for any slice offset */
   public native @SharedPtr ArrowBuffer type_codes();
@@ -237,16 +42,6 @@ public class UnionArray extends Array {
   /** The physical child id containing value at index. */
   public native int child_id(@Cast("int64_t") long i);
 
-  /** For dense arrays only.
-   *  Note that this buffer does not account for any slice offset */
-  public native @SharedPtr ArrowBuffer value_offsets();
-
-  /** For dense arrays only. */
-  public native int value_offset(@Cast("int64_t") long i);
-
-  /** For dense arrays only. */
-  public native @Const IntPointer raw_value_offsets();
-
   public native @Const UnionType union_type();
 
   public native UnionMode.type mode();
@@ -254,6 +49,13 @@ public class UnionArray extends Array {
   // Return the given field as an individual array.
   // For sparse unions, the returned array has its offset, length and null
   // count adjusted.
-  // For dense unions, the returned array is unchanged.
-  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array child(int pos);
+  
+  ///
+  public native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array child(int pos);
+
+  /** \brief Return the given field as an individual array.
+   * 
+   *  For sparse unions, the returned array has its offset, length and null
+   *  count adjusted. */
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array field(int pos);
 }

@@ -14,16 +14,13 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Name("arrow::NumericScalar<arrow::DoubleType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseDoubleScalar extends Scalar {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public BaseDoubleScalar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BaseDoubleScalar(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseDoubleScalar(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public BaseDoubleScalar position(long position) {
-        return (BaseDoubleScalar)super.position(position);
-    }
 
+
+  public BaseDoubleScalar(@Cast("arrow::NumericScalar<arrow::DoubleType>::ValueType") double value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@Cast("arrow::NumericScalar<arrow::DoubleType>::ValueType") double value);
+
+  public BaseDoubleScalar() { super((Pointer)null); allocate(); }
+  private native void allocate();
 }

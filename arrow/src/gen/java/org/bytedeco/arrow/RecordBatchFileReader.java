@@ -65,11 +65,6 @@ public class RecordBatchFileReader extends Pointer {
    *  @param options [in] options for IPC reading
    *  @return the returned reader */
 
-  public static native @Deprecated @ByVal Status Open(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file,
-                       @Cast("int64_t") long footer_offset, @SharedPtr RecordBatchFileReader out);
-  public static native @Deprecated @ByVal Status Open(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file,
-                       @SharedPtr RecordBatchFileReader out);
-
   /** \brief The schema read from the file */
   public native @SharedPtr @ByVal Schema schema();
 
@@ -91,6 +86,4 @@ public class RecordBatchFileReader extends Pointer {
    *  @param i [in] the index of the record batch to return
    *  @return the read batch */
   public native @ByVal RecordBatchResult ReadRecordBatch(int i);
-
-  public native @Deprecated @ByVal Status ReadRecordBatch(int i, @SharedPtr RecordBatch batch);
 }

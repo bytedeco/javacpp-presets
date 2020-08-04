@@ -39,4 +39,5 @@ public class BufferReader extends BufferReaderRandomAccessFileConcurrencyWrapper
 
   // Synchronous ReadAsync override
   
+  public native @ByVal Status WillNeed(@StdVector ReadRange ranges);
 }

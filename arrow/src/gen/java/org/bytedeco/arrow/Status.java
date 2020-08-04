@@ -30,6 +30,9 @@ public class Status extends Pointer {
     @Override public Status position(long position) {
         return (Status)super.position(position);
     }
+    @Override public Status getPointer(long i) {
+        return new Status(this).position(position + i);
+    }
 
   // Create a success status.
   public Status() { super((Pointer)null); allocate(); }

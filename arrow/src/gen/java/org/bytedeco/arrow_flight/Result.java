@@ -28,6 +28,9 @@ public class Result extends Pointer {
     @Override public Result position(long position) {
         return (Result)super.position(position);
     }
+    @Override public Result getPointer(long i) {
+        return new Result(this).position(position + i);
+    }
 
   public native @SharedPtr ArrowBuffer body(); public native Result body(ArrowBuffer setter);
 }

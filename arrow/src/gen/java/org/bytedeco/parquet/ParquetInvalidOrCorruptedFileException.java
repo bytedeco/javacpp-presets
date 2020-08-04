@@ -28,5 +28,8 @@ public class ParquetInvalidOrCorruptedFileException extends ParquetStatusExcepti
     @Override public ParquetInvalidOrCorruptedFileException position(long position) {
         return (ParquetInvalidOrCorruptedFileException)super.position(position);
     }
+    @Override public ParquetInvalidOrCorruptedFileException getPointer(long i) {
+        return new ParquetInvalidOrCorruptedFileException(this).position(position + i);
+    }
 
 }

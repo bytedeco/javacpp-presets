@@ -10,27 +10,10 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
 
-
-/** Concrete Array class for large variable-size binary data */
-@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class LargeBinaryArray extends BaseLargeBinaryArray {
-    static { Loader.load(); }
+@Namespace("arrow") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class LargeBinaryArray extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public LargeBinaryArray() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LargeBinaryArray(Pointer p) { super(p); }
-
-  public LargeBinaryArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
-  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
-
-  public LargeBinaryArray(@Cast("int64_t") long length, @SharedPtr ArrowBuffer value_offsets,
-                     @SharedPtr ArrowBuffer data,
-                     @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
-                     @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(length, value_offsets, data, null_bitmap, null_count, offset); }
-  private native void allocate(@Cast("int64_t") long length, @SharedPtr ArrowBuffer value_offsets,
-                     @SharedPtr ArrowBuffer data,
-                     @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
-                     @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
-  public LargeBinaryArray(@Cast("int64_t") long length, @SharedPtr ArrowBuffer value_offsets,
-                     @SharedPtr ArrowBuffer data) { super((Pointer)null); allocate(length, value_offsets, data); }
-  private native void allocate(@Cast("int64_t") long length, @SharedPtr ArrowBuffer value_offsets,
-                     @SharedPtr ArrowBuffer data);
 }

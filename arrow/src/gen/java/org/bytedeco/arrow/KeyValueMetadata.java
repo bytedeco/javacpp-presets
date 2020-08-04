@@ -23,6 +23,9 @@ public class KeyValueMetadata extends Pointer {
     @Override public KeyValueMetadata position(long position) {
         return (KeyValueMetadata)super.position(position);
     }
+    @Override public KeyValueMetadata getPointer(long i) {
+        return new KeyValueMetadata(this).position(position + i);
+    }
 
   public KeyValueMetadata() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -37,12 +40,17 @@ public class KeyValueMetadata extends Pointer {
 
   public native @ByVal StringResult Get(@StdString String key);
   public native @ByVal StringResult Get(@StdString BytePointer key);
-  public native @ByVal Status Delete(@StdString String key);
-  public native @ByVal Status Delete(@StdString BytePointer key);
-  public native @ByVal Status Set(@StdString String key, @StdString String value);
-  public native @ByVal Status Set(@StdString BytePointer key, @StdString BytePointer value);
   public native @Cast("bool") boolean Contains(@StdString String key);
   public native @Cast("bool") boolean Contains(@StdString BytePointer key);
+  // Note that deleting may invalidate known indices
+  public native @ByVal Status Delete(@StdString String key);
+  public native @ByVal Status Delete(@StdString BytePointer key);
+  public native @ByVal Status Delete(@Cast("int64_t") long index);
+  public native @ByVal Status DeleteMany(@Cast("int64_t*") @StdVector LongPointer indices);
+  public native @ByVal Status DeleteMany(@Cast("int64_t*") @StdVector LongBuffer indices);
+  public native @ByVal Status DeleteMany(@Cast("int64_t*") @StdVector long[] indices);
+  public native @ByVal Status Set(@StdString String key, @StdString String value);
+  public native @ByVal Status Set(@StdString BytePointer key, @StdString BytePointer value);
 
   public native void reserve(@Cast("int64_t") long n);
   public native @Cast("int64_t") long size();

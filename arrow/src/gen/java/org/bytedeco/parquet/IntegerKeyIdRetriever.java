@@ -28,6 +28,9 @@ public class IntegerKeyIdRetriever extends DecryptionKeyRetriever {
     @Override public IntegerKeyIdRetriever position(long position) {
         return (IntegerKeyIdRetriever)super.position(position);
     }
+    @Override public IntegerKeyIdRetriever getPointer(long i) {
+        return new IntegerKeyIdRetriever(this).position(position + i);
+    }
 
   public native void PutKey(@Cast("uint32_t") int key_id, @StdString String key);
   public native void PutKey(@Cast("uint32_t") int key_id, @StdString BytePointer key);

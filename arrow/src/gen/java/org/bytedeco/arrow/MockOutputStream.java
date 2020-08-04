@@ -27,6 +27,9 @@ public class MockOutputStream extends OutputStream {
     @Override public MockOutputStream position(long position) {
         return (MockOutputStream)super.position(position);
     }
+    @Override public MockOutputStream getPointer(long i) {
+        return new MockOutputStream(this).position(position + i);
+    }
 
   public MockOutputStream() { super((Pointer)null); allocate(); }
   private native void allocate();

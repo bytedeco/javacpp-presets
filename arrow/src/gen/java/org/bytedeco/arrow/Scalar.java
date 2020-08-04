@@ -11,8 +11,12 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief Base class for scalar values, representing a single value occupying
- *  an array "slot" */
+/** \brief Base class for scalar values
+ * 
+ *  A Scalar represents a single value with a specific DataType.
+ *  Scalars are useful for passing single value inputs to compute functions,
+ *  or for representing individual array elements (with a non-trivial
+ *  wrapping cost, though). */
 @Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Scalar extends Pointer {
     static { Loader.load(); }
@@ -39,6 +43,9 @@ public class Scalar extends Pointer {
       private native void allocateArray(long size);
       @Override public Hash position(long position) {
           return (Hash)super.position(position);
+      }
+      @Override public Hash getPointer(long i) {
+          return new Hash(this).position(position + i);
       }
   
     public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef Scalar scalar);

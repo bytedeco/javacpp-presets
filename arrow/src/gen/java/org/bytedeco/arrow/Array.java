@@ -39,6 +39,9 @@ public class Array extends Pointer {
    *  boundscheck */
   public native @Cast("bool") boolean IsValid(@Cast("int64_t") long i);
 
+  /** \brief Return a Scalar containing the value of this array at i */
+  public native @ByVal ScalarResult GetScalar(@Cast("int64_t") long i);
+
   /** Size in the number of elements this array contains. */
   public native @Cast("int64_t") long length();
 
@@ -57,9 +60,10 @@ public class Array extends Pointer {
   ///
   public native @Cast("arrow::Type::type") int type_id();
 
-  /** Buffer for the null bitmap.
+  /** Buffer for the validity (null) bitmap, if any. Note that Union types
+   *  never have a null bitmap.
    * 
-   *  Note that for {@code null_count == 0}, this can be null.
+   *  Note that for {@code null_count == 0} or for null type, this will be null.
    *  This buffer does not account for any slice offset */
   
   ///
@@ -67,7 +71,7 @@ public class Array extends Pointer {
 
   /** Raw pointer to the null bitmap.
    * 
-   *  Note that for {@code null_count == 0}, this can be null.
+   *  Note that for {@code null_count == 0} or for null type, this will be null.
    *  This buffer does not account for any slice offset */
   public native @Cast("const uint8_t*") BytePointer null_bitmap_data();
 
@@ -105,12 +109,10 @@ public class Array extends Pointer {
    *  Nested types are traversed in depth-first order. Data buffers must have
    *  the same item sizes, even though the logical types may be different.
    *  An error is returned if the types are not layout-compatible. */
-  public native @ByVal ArrayResult View(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
   
   ///
   ///
-  public native @Deprecated @ByVal Status View(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @SharedPtr Array out);
+  public native @ByVal ArrayResult View(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
   /** Construct a zero-copy slice of the array with the indicated offset and
    *  length
@@ -125,6 +127,11 @@ public class Array extends Pointer {
 
   /** Slice from offset until end of the array */
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array Slice(@Cast("int64_t") long offset);
+
+  /** Input-checking variant of Array::Slice */
+  public native @ByVal ArrayResult SliceSafe(@Cast("int64_t") long offset, @Cast("int64_t") long length);
+  /** Input-checking variant of Array::Slice */
+  public native @ByVal ArrayResult SliceSafe(@Cast("int64_t") long offset);
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data();
 

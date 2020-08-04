@@ -30,6 +30,9 @@ public class FlightPayload extends Pointer {
     @Override public FlightPayload position(long position) {
         return (FlightPayload)super.position(position);
     }
+    @Override public FlightPayload getPointer(long i) {
+        return new FlightPayload(this).position(position + i);
+    }
 
   public native @SharedPtr ArrowBuffer descriptor(); public native FlightPayload descriptor(ArrowBuffer setter);
   public native @SharedPtr ArrowBuffer app_metadata(); public native FlightPayload app_metadata(ArrowBuffer setter);

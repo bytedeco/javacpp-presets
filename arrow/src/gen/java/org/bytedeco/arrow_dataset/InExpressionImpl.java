@@ -28,6 +28,9 @@ public class InExpressionImpl extends UnaryExpression {
     @Override public InExpressionImpl position(long position) {
         return (InExpressionImpl)super.position(position);
     }
+    @Override public InExpressionImpl getPointer(long i) {
+        return new InExpressionImpl(this).position(position + i);
+    }
 
   @MemberGetter public static native ExpressionType.type expression_type();
 

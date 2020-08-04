@@ -20,6 +20,9 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/ExpressionVector.java
 
 
+// Targeting ../../arrow_dataset/FileFragmentVector.java
+
+
 // Targeting ../../arrow_dataset/ScanTaskVector.java
 
 
@@ -73,7 +76,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** \brief Simple iterator which yields the elements of a std::vector */
 
-/** \brief Simple iterator which yields the elements of a std::vector<T> as optional<T>.
+/** \brief Simple iterator which yields *pointers* to the elements of a std::vector<T>.
  *  This is provided to support T where IterationTraits<T>::End is not specialized */
 
 /** \brief MapIterator takes ownership of an iterator and a function to apply
@@ -101,84 +104,6 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 /** \brief Readahead iterator that iterates on the underlying iterator in a
  *  separate thread, getting up to N values in advance. */
 
-  // namespace arrow
-
-
-// Parsed from arrow/util/thread_pool.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #ifndef _WIN32
-// #include <unistd.h>
-// #endif
-
-// #include <cstdlib>
-// #include <functional>
-// #include <memory>
-// #include <string>
-// #include <type_traits>
-// #include <utility>
-
-// #include "arrow/result.h"
-// #include "arrow/status.h"
-// #include "arrow/util/future.h"
-// #include "arrow/util/macros.h"
-// #include "arrow/util/visibility.h"
-
-// #if defined(_MSC_VER)
-// Disable harmless warning for decorated name length limit
-// #pragma warning(disable : 4503)
-// #endif
-
-/** \brief Get the capacity of the global thread pool
- * 
- *  Return the number of worker threads in the thread pool to which
- *  Arrow dispatches various CPU-bound tasks.  This is an ideal number,
- *  not necessarily the exact number of threads at a given point in time.
- * 
- *  You can change this number using SetCpuThreadPoolCapacity(). */
-
-///
-///
-@Namespace("arrow") public static native int GetCpuThreadPoolCapacity();
-
-/** \brief Set the capacity of the global thread pool
- * 
- *  Set the number of worker threads int the thread pool to which
- *  Arrow dispatches various CPU-bound tasks.
- * 
- *  The current number is returned by GetCpuThreadPoolCapacity(). */
-@Namespace("arrow") public static native @ByVal Status SetCpuThreadPoolCapacity(int threads);
-
-// Make sure that both functions returning T and Result<T> can be called
-// through Submit(), and that a Future<T> is returned for both.
-
-
-// Targeting ../../arrow_dataset/ThreadPool.java
-
-
-
-// Return the process-global thread pool for CPU-bound tasks.
-@Namespace("arrow::internal") public static native ThreadPool GetCpuThreadPool();
-
-  // namespace internal
   // namespace arrow
 
 
@@ -249,13 +174,13 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/ScanTaskResult.java
 
 
+// Targeting ../../arrow_dataset/FileReaderResult.java
+
+
 // Targeting ../../arrow_dataset/UnionDatasetResult.java
 
 
 // Targeting ../../arrow_dataset/WriteTaskResult.java
-
-
-// Targeting ../../arrow_dataset/ThreadPoolResult.java
 
 
 // Targeting ../../arrow_dataset/FragmentIteratorResult.java
@@ -323,11 +248,14 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
 // #include "arrow/dataset/dataset.h"
 // #include "arrow/dataset/discovery.h"
 // #include "arrow/dataset/file_base.h"
+// #include "arrow/dataset/file_csv.h"
 // #include "arrow/dataset/file_ipc.h"
 // #include "arrow/dataset/file_parquet.h"
 // #include "arrow/dataset/filter.h"
@@ -352,6 +280,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+
+// This API is EXPERIMENTAL.
 
 // #pragma once
 
@@ -405,23 +335,24 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
 // #include <memory>
 // #include <vector>
 
 // #include "arrow/dataset/visibility.h"
-// #include "arrow/type_fwd.h"  // IWYU pragma: export
+// #include "arrow/filesystem/type_fwd.h"  // IWYU pragma: export
+// #include "arrow/type_fwd.h"             // IWYU pragma: export
 
   // namespace compute
-
-  // namespace fs
-// Targeting ../../arrow_dataset/FieldReferenceExpression.java
+// Targeting ../../arrow_dataset/CsvFileFormat.java
 
 
 
 /** forward declared to facilitate scalar(true) as a default for Expression parameters */
-@Namespace("arrow::dataset") public static native @SharedPtr ScalarExpression scalar(@Cast("bool") boolean arg0);
+@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression scalar(@Cast("bool") boolean arg0);
 // Targeting ../../arrow_dataset/Partitioning.java
 
 
@@ -458,6 +389,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
 // #include <functional>
@@ -469,6 +402,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include "arrow/dataset/type_fwd.h"
 // #include "arrow/dataset/visibility.h"
 // #include "arrow/util/macros.h"
+// #include "arrow/util/mutex.h"
 // Targeting ../../arrow_dataset/Fragment.java
 
 
@@ -511,6 +445,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 /** Logic for automatically determining the structure of multi-file
  *  dataset with possible partitioning according to available
  *  partitioning */
+
+// This API is EXPERIMENTAL.
 
 // #pragma once
 
@@ -568,6 +504,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
 // #include <memory>
@@ -576,16 +514,13 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <utility>
 // #include <vector>
 
-// #include "arrow/compute/context.h"
 // #include "arrow/dataset/dataset.h"
 // #include "arrow/dataset/projector.h"
 // #include "arrow/dataset/type_fwd.h"
 // #include "arrow/dataset/visibility.h"
 // #include "arrow/memory_pool.h"
-// Targeting ../../arrow_dataset/TaskGroup.java
-
-
-
+// #include "arrow/type_fwd.h"
+// #include "arrow/util/type_fwd.h"
 // Targeting ../../arrow_dataset/ScanContext.java
 
 
@@ -634,8 +569,11 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
+// #include <functional>
 // #include <memory>
 // #include <string>
 // #include <unordered_map>
@@ -652,8 +590,10 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include "arrow/filesystem/path_forest.h"
 // #include "arrow/io/file.h"
 // #include "arrow/util/compression.h"
-// #include "arrow/util/variant.h"
 // Targeting ../../arrow_dataset/FileSource.java
+
+
+// Targeting ../../arrow_dataset/WritableFileSource.java
 
 
 // Targeting ../../arrow_dataset/FileFormat.java
@@ -695,6 +635,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
 // #include <memory>
@@ -731,6 +673,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
 // #include <memory>
@@ -739,14 +683,25 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <utility>
 // #include <vector>
 
+// #include "arrow/dataset/discovery.h"
 // #include "arrow/dataset/file_base.h"
 // #include "arrow/dataset/type_fwd.h"
 // #include "arrow/dataset/visibility.h"
+  // namespace arrow
   // namespace parquet
 // Targeting ../../arrow_dataset/ParquetFileFormat.java
 
 
+// Targeting ../../arrow_dataset/RowGroupInfo.java
+
+
 // Targeting ../../arrow_dataset/ParquetFileFragment.java
+
+
+// Targeting ../../arrow_dataset/ParquetFactoryOptions.java
+
+
+// Targeting ../../arrow_dataset/ParquetDatasetFactory.java
 
 
 
@@ -773,6 +728,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // specific language governing permissions and limitations
 // under the License.
 
+// This API is EXPERIMENTAL.
+
 // #pragma once
 
 // #include <functional>
@@ -781,12 +738,11 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <utility>
 // #include <vector>
 
-// #include "arrow/compute/context.h"
-// #include "arrow/compute/kernel.h"
-// #include "arrow/compute/kernels/cast.h"
-// #include "arrow/compute/kernels/compare.h"
+// #include "arrow/compute/api_scalar.h"
+// #include "arrow/compute/cast.h"
 // #include "arrow/dataset/type_fwd.h"
 // #include "arrow/dataset/visibility.h"
+// #include "arrow/datum.h"
 // #include "arrow/result.h"
 // #include "arrow/scalar.h"
 // #include "arrow/type_fwd.h"
@@ -856,45 +812,42 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 
 
-@Namespace("arrow::dataset") public static native @SharedPtr AndExpression and_(@SharedPtr @ByVal Expression lhs,
-                                                    @SharedPtr @ByVal Expression rhs);
+@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression and_(@SharedPtr @ByVal Expression lhs,
+                                                 @SharedPtr @ByVal Expression rhs);
 
 @Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression and_(@Const @ByRef ExpressionVector subexpressions);
 
 @Namespace("arrow::dataset") public static native @ByVal @Name("operator &&") AndExpression and(@Const @ByRef Expression lhs, @Const @ByRef Expression rhs);
 
-@Namespace("arrow::dataset") public static native @SharedPtr OrExpression or_(@SharedPtr @ByVal Expression lhs,
-                                                  @SharedPtr @ByVal Expression rhs);
+@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression or_(@SharedPtr @ByVal Expression lhs,
+                                                @SharedPtr @ByVal Expression rhs);
 
 @Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression or_(@Const @ByRef ExpressionVector subexpressions);
 
 @Namespace("arrow::dataset") public static native @ByVal @Name("operator ||") OrExpression or(@Const @ByRef Expression lhs, @Const @ByRef Expression rhs);
 
-@Namespace("arrow::dataset") public static native @SharedPtr NotExpression not_(@SharedPtr @ByVal Expression operand);
+@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression not_(@SharedPtr @ByVal Expression operand);
 
 @Namespace("arrow::dataset") public static native @ByVal @Name("operator !") NotExpression not(@Const @ByRef Expression rhs);
 
-@Namespace("arrow::dataset") public static native @SharedPtr ScalarExpression scalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value);
-
-
+@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression scalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value);
 
 // #define COMPARISON_FACTORY(NAME, FACTORY_NAME, OP)
 //   inline std::shared_ptr<ComparisonExpression> FACTORY_NAME(
 //       const std::shared_ptr<Expression>& lhs, const std::shared_ptr<Expression>& rhs) {
-//     return std::make_shared<ComparisonExpression>(compute::CompareOperator::NAME, lhs,
-//                                                   rhs);
+//     return std::make_shared<ComparisonExpression>(CompareOperator::NAME, lhs, rhs);
 //   }
 // 
 //   template <typename T, typename Enable = typename std::enable_if<!std::is_base_of<
 //                             Expression, typename std::decay<T>::type>::value>::type>
 //   ComparisonExpression operator OP(const Expression& lhs, T&& rhs) {
-//     return ComparisonExpression(compute::CompareOperator::NAME, lhs.Copy(),
+//     return ComparisonExpression(CompareOperator::NAME, lhs.Copy(),
 //                                 scalar(std::forward<T>(rhs)));
 //   }
 // 
 //   inline ComparisonExpression operator OP(const Expression& lhs,
 //                                           const Expression& rhs) {
-//     return ComparisonExpression(compute::CompareOperator::NAME, lhs.Copy(), rhs.Copy());
+//     return ComparisonExpression(CompareOperator::NAME, lhs.Copy(), rhs.Copy());
 //   }
 @Namespace("arrow::dataset") public static native @SharedPtr ComparisonExpression equal(
       @Const @SharedPtr @ByRef Expression lhs, @Const @SharedPtr @ByRef Expression rhs);
@@ -928,13 +881,11 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
                                             @Const @ByRef Expression rhs);
 // #undef COMPARISON_FACTORY
 
-@Namespace("arrow::dataset") public static native @SharedPtr FieldExpression field_ref(@StdString String name);
-@Namespace("arrow::dataset") public static native @SharedPtr FieldExpression field_ref(@StdString BytePointer name);
+@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression field_ref(@StdString String name);
+@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression field_ref(@StdString BytePointer name);
 // clang-format off
 
   // namespace string_literals
-
-
 
 
 

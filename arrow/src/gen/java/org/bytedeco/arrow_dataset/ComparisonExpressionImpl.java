@@ -28,6 +28,9 @@ public class ComparisonExpressionImpl extends BinaryExpression {
     @Override public ComparisonExpressionImpl position(long position) {
         return (ComparisonExpressionImpl)super.position(position);
     }
+    @Override public ComparisonExpressionImpl getPointer(long i) {
+        return new ComparisonExpressionImpl(this).position(position + i);
+    }
 
   @MemberGetter public static native ExpressionType.type expression_type();
 

@@ -56,6 +56,9 @@ public class ArrayData extends Pointer {
     @Override public ArrayData position(long position) {
         return (ArrayData)super.position(position);
     }
+    @Override public ArrayData getPointer(long i) {
+        return new ArrayData(this).position(position + i);
+    }
 
   public ArrayData() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -116,13 +119,13 @@ public class ArrayData extends Pointer {
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
         @ByVal BufferVector buffers,
         @ByVal ArrayDataVector child_data,
-        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary, @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData dictionary, @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/,
         @Cast("int64_t") long offset/*=0*/);
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
         @ByVal BufferVector buffers,
         @ByVal ArrayDataVector child_data,
-        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary);
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData dictionary);
 
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Make(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                                            @Cast("int64_t") long length,
@@ -166,13 +169,23 @@ public class ArrayData extends Pointer {
 
   // Access a buffer's data as a typed C pointer
 
-  // Construct a zero-copy slice of the data with the indicated offset and length
-  public native @ByVal ArrayData Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
+  /** \brief Construct a zero-copy slice of the data with the given offset and length */
+  
+  ///
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData Slice(@Cast("int64_t") long offset, @Cast("int64_t") long length);
+
+  /** \brief Input-checking variant of Slice
+   * 
+   *  An Invalid Status is returned if the requested slice falls out of bounds.
+   *  Note that unlike Slice, {@code length} isn't clamped to the available buffer size. */
+  public native @ByVal ArrayDataResult SliceSafe(@Cast("int64_t") long offset, @Cast("int64_t") long length);
 
   public native void SetNullCount(@Cast("int64_t") long v);
 
   /** \brief Return null count, or compute and set it if it's not known */
   public native @Cast("int64_t") long GetNullCount();
+
+  public native @Cast("bool") boolean MayHaveNulls();
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type(); public native ArrayData type(DataType setter);
   public native @Cast("int64_t") long length(); public native ArrayData length(long setter);
@@ -182,7 +195,6 @@ public class ArrayData extends Pointer {
   public native @ByRef BufferVector buffers(); public native ArrayData buffers(BufferVector setter);
   public native @ByRef ArrayDataVector child_data(); public native ArrayData child_data(ArrayDataVector setter);
 
-  // The dictionary for this Array, if any. Only used for dictionary
-  // type
-  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary(); public native ArrayData dictionary(Array setter);
+  // The dictionary for this Array, if any. Only used for dictionary type
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData dictionary(); public native ArrayData dictionary(ArrayData setter);
 }

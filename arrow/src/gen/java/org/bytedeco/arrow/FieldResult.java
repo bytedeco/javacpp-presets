@@ -21,6 +21,9 @@ public class FieldResult extends Pointer {
     @Override public FieldResult position(long position) {
         return (FieldResult)super.position(position);
     }
+    @Override public FieldResult getPointer(long i) {
+        return new FieldResult(this).position(position + i);
+    }
 
   
   ///
@@ -86,8 +89,8 @@ public class FieldResult extends Pointer {
   
   ///
   ///
-  public FieldResult(@SharedPtr @ByVal Field value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal Field value);
+  public FieldResult(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value);
 
   /** Copy constructor.
    * 
@@ -162,7 +165,7 @@ public class FieldResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 
@@ -218,5 +221,5 @@ public class FieldResult extends Pointer {
 
   
 
-  public native @SharedPtr @ByVal Field MoveValueUnsafe();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field MoveValueUnsafe();
 }

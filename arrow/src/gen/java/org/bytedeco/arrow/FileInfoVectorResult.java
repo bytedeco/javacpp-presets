@@ -21,6 +21,9 @@ public class FileInfoVectorResult extends Pointer {
     @Override public FileInfoVectorResult position(long position) {
         return (FileInfoVectorResult)super.position(position);
     }
+    @Override public FileInfoVectorResult getPointer(long i) {
+        return new FileInfoVectorResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class FileInfoVectorResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

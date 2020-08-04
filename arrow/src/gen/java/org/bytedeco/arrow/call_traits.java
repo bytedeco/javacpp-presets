@@ -27,6 +27,9 @@ public class call_traits extends Pointer {
     @Override public call_traits position(long position) {
         return (call_traits)super.position(position);
     }
+    @Override public call_traits getPointer(long i) {
+        return new call_traits(this).position(position + i);
+    }
 
 
   /** bool constant indicating whether F is a callable with more than one possible

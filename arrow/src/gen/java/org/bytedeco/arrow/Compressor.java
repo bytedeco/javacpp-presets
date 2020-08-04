@@ -33,6 +33,9 @@ public class Compressor extends Pointer {
       @Override public CompressResult position(long position) {
           return (CompressResult)super.position(position);
       }
+      @Override public CompressResult getPointer(long i) {
+          return new CompressResult(this).position(position + i);
+      }
   
     public native @Cast("int64_t") long bytes_read(); public native CompressResult bytes_read(long setter);
     public native @Cast("int64_t") long bytes_written(); public native CompressResult bytes_written(long setter);
@@ -50,6 +53,9 @@ public class Compressor extends Pointer {
       @Override public FlushResult position(long position) {
           return (FlushResult)super.position(position);
       }
+      @Override public FlushResult getPointer(long i) {
+          return new FlushResult(this).position(position + i);
+      }
   
     public native @Cast("int64_t") long bytes_written(); public native FlushResult bytes_written(long setter);
     public native @Cast("bool") boolean should_retry(); public native FlushResult should_retry(boolean setter);
@@ -66,6 +72,9 @@ public class Compressor extends Pointer {
       private native void allocateArray(long size);
       @Override public EndResult position(long position) {
           return (EndResult)super.position(position);
+      }
+      @Override public EndResult getPointer(long i) {
+          return new EndResult(this).position(position + i);
       }
   
     public native @Cast("int64_t") long bytes_written(); public native EndResult bytes_written(long setter);

@@ -28,6 +28,9 @@ public class BinaryScalar extends BaseBinaryScalar {
     @Override public BinaryScalar position(long position) {
         return (BinaryScalar)super.position(position);
     }
+    @Override public BinaryScalar getPointer(long i) {
+        return new BinaryScalar(this).position(position + i);
+    }
 
 
   public BinaryScalar(@SharedPtr ArrowBuffer value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }

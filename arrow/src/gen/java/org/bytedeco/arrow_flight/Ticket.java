@@ -29,6 +29,9 @@ public class Ticket extends Pointer {
     @Override public Ticket position(long position) {
         return (Ticket)super.position(position);
     }
+    @Override public Ticket getPointer(long i) {
+        return new Ticket(this).position(position + i);
+    }
 
   public native @StdString String ticket(); public native Ticket ticket(String setter);
 

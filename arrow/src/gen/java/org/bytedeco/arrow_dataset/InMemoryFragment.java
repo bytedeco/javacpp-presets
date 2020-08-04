@@ -23,19 +23,21 @@ public class InMemoryFragment extends Fragment {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InMemoryFragment(Pointer p) { super(p); }
 
+  public InMemoryFragment(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches,
+                     @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg2) { super((Pointer)null); allocate(schema, record_batches, arg2); }
+  private native void allocate(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches,
+                     @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg2);
+  public InMemoryFragment(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches) { super((Pointer)null); allocate(schema, record_batches); }
+  private native void allocate(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches);
   public InMemoryFragment(@ByVal RecordBatchVector record_batches,
-                     @SharedPtr ScanOptions scan_options) { super((Pointer)null); allocate(record_batches, scan_options); }
+                              @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg1) { super((Pointer)null); allocate(record_batches, arg1); }
   private native void allocate(@ByVal RecordBatchVector record_batches,
-                     @SharedPtr ScanOptions scan_options);
+                              @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg1);
+  public InMemoryFragment(@ByVal RecordBatchVector record_batches) { super((Pointer)null); allocate(record_batches); }
+  private native void allocate(@ByVal RecordBatchVector record_batches);
 
-  public InMemoryFragment(@ByVal RecordBatchVector record_batches,
-                     @SharedPtr ScanOptions scan_options,
-                     @SharedPtr @ByVal Expression partition_expression) { super((Pointer)null); allocate(record_batches, scan_options, partition_expression); }
-  private native void allocate(@ByVal RecordBatchVector record_batches,
-                     @SharedPtr ScanOptions scan_options,
-                     @SharedPtr @ByVal Expression partition_expression);
-
-  public native @ByVal ScanTaskIteratorResult Scan(@SharedPtr ScanContext context);
+  public native @ByVal ScanTaskIteratorResult Scan(@SharedPtr ScanOptions options,
+                                  @SharedPtr ScanContext context);
 
   public native @Cast("bool") boolean splittable();
 

@@ -25,6 +25,9 @@ public class FileSystemDatasetResult extends Pointer {
     @Override public FileSystemDatasetResult position(long position) {
         return (FileSystemDatasetResult)super.position(position);
     }
+    @Override public FileSystemDatasetResult getPointer(long i) {
+        return new FileSystemDatasetResult(this).position(position + i);
+    }
 
   
   ///
@@ -166,7 +169,7 @@ public class FileSystemDatasetResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

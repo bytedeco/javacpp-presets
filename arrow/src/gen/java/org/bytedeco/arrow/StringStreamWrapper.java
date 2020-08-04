@@ -22,6 +22,9 @@ public class StringStreamWrapper extends Pointer {
     @Override public StringStreamWrapper position(long position) {
         return (StringStreamWrapper)super.position(position);
     }
+    @Override public StringStreamWrapper getPointer(long i) {
+        return new StringStreamWrapper(this).position(position + i);
+    }
 
   public StringStreamWrapper() { super((Pointer)null); allocate(); }
   private native void allocate();

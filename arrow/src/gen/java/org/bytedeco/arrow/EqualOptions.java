@@ -26,27 +26,30 @@ public class EqualOptions extends Pointer {
     @Override public EqualOptions position(long position) {
         return (EqualOptions)super.position(position);
     }
+    @Override public EqualOptions getPointer(long i) {
+        return new EqualOptions(this).position(position + i);
+    }
 
   /** Whether or not NaNs are considered equal. */
-  public native @Cast("bool") @Function boolean nans_equal();
+  public native @Cast("bool") @org.bytedeco.javacpp.annotation.Function boolean nans_equal();
 
   /** Return a new EqualOptions object with the "nans_equal" property changed. */
-  public native @ByVal @Function EqualOptions nans_equal(@Cast("bool") boolean v);
+  public native @ByVal @org.bytedeco.javacpp.annotation.Function EqualOptions nans_equal(@Cast("bool") boolean v);
 
   /** The absolute tolerance for approximate comparisons of floating-point values. */
-  public native @Function double atol();
+  public native @org.bytedeco.javacpp.annotation.Function double atol();
 
   /** Return a new EqualOptions object with the "atol" property changed. */
-  public native @ByVal @Function EqualOptions atol(double v);
+  public native @ByVal @org.bytedeco.javacpp.annotation.Function EqualOptions atol(double v);
 
   /** The ostream to which a diff will be formatted if arrays disagree.
    *  If this is null (the default) no diff will be formatted. */
-  public native @Cast("std::ostream*") @Function Pointer diff_sink();
+  public native @Cast("std::ostream*") @org.bytedeco.javacpp.annotation.Function Pointer diff_sink();
 
   /** Return a new EqualOptions object with the "diff_sink" property changed.
    *  This option will be ignored if diff formatting of the types of compared arrays is
    *  not supported. */
-  public native @ByVal @Function EqualOptions diff_sink(@Cast("std::ostream*") Pointer diff_sink);
+  public native @ByVal @org.bytedeco.javacpp.annotation.Function EqualOptions diff_sink(@Cast("std::ostream*") Pointer diff_sink);
 
   public static native @ByVal EqualOptions Defaults();
 }

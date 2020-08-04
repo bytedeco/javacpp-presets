@@ -21,6 +21,9 @@ public class ScalarResult extends Pointer {
     @Override public ScalarResult position(long position) {
         return (ScalarResult)super.position(position);
     }
+    @Override public ScalarResult getPointer(long i) {
+        return new ScalarResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class ScalarResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

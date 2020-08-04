@@ -73,6 +73,8 @@ public class MemoryMappedFile extends ReadWriteFileInterface {
   // Synchronous ReadAsync override
   
 
+  public native @ByVal Status WillNeed(@StdVector ReadRange ranges);
+
   public native @Cast("bool") boolean supports_zero_copy();
 
   /** Write data at the current position in the file. Thread-safe */

@@ -28,10 +28,13 @@ public class FlightServerOptions extends Pointer {
   /** \brief The authentication handler to use. */
   public native @SharedPtr ServerAuthHandler auth_handler(); public native FlightServerOptions auth_handler(ServerAuthHandler setter);
   /** \brief A list of TLS certificate+key pairs to use. */
+  public native @StdVector CertKeyPair tls_certificates(); public native FlightServerOptions tls_certificates(CertKeyPair setter);
+  /** \brief Enable mTLS and require that the client present a certificate. */
+  public native @Cast("bool") boolean verify_client(); public native FlightServerOptions verify_client(boolean setter);
+  /** \brief If using mTLS, the PEM-encoded root certificate to use. */
   
   ///
-  public native @StdVector CertKeyPair tls_certificates(); public native FlightServerOptions tls_certificates(CertKeyPair setter);
-
+  public native @StdString String root_certificates(); public native FlightServerOptions root_certificates(String setter);
   /** \brief A list of server middleware to apply, along with a key to
    *  identify them by.
    * 

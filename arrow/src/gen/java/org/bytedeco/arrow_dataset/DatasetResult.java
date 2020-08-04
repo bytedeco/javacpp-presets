@@ -78,6 +78,9 @@ public class DatasetResult extends Pointer {
     @Override public DatasetResult position(long position) {
         return (DatasetResult)super.position(position);
     }
+    @Override public DatasetResult getPointer(long i) {
+        return new DatasetResult(this).position(position + i);
+    }
 
   
   ///
@@ -219,7 +222,7 @@ public class DatasetResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

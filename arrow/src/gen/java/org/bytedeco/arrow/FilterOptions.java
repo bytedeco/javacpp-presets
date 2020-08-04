@@ -11,19 +11,22 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Namespace("arrow::compute") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class FilterOptions extends Pointer {
+/** \addtogroup compute-concrete-options
+ *  \{ */
+
+@Namespace("arrow::compute") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class FilterOptions extends FunctionOptions {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public FilterOptions() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FilterOptions(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FilterOptions(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FilterOptions(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public FilterOptions position(long position) {
         return (FilterOptions)super.position(position);
+    }
+    @Override public FilterOptions getPointer(long i) {
+        return new FilterOptions(this).position(position + i);
     }
 
   /** Configure the action taken when a slot of the selection mask is null */
@@ -39,6 +42,15 @@ public class FilterOptions extends Pointer {
       public NullSelectionBehavior intern() { for (NullSelectionBehavior e : values()) if (e.value == value) return e; return this; }
       @Override public String toString() { return intern().name(); }
   }
+
+  public FilterOptions(NullSelectionBehavior null_selection/*=arrow::compute::FilterOptions::DROP*/) { super((Pointer)null); allocate(null_selection); }
+  private native void allocate(NullSelectionBehavior null_selection/*=arrow::compute::FilterOptions::DROP*/);
+  public FilterOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public FilterOptions(@Cast("arrow::compute::FilterOptions::NullSelectionBehavior") int null_selection/*=arrow::compute::FilterOptions::DROP*/) { super((Pointer)null); allocate(null_selection); }
+  private native void allocate(@Cast("arrow::compute::FilterOptions::NullSelectionBehavior") int null_selection/*=arrow::compute::FilterOptions::DROP*/);
+
+  public static native @ByVal FilterOptions Defaults();
 
   public native NullSelectionBehavior null_selection_behavior(); public native FilterOptions null_selection_behavior(NullSelectionBehavior setter);
 }

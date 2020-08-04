@@ -32,8 +32,8 @@ public class StructType extends NestedType {
   public native @StdString String name();
 
   /** Returns null if name not found */
-  public native @SharedPtr @ByVal Field GetFieldByName(@StdString String name);
-  public native @SharedPtr @ByVal Field GetFieldByName(@StdString BytePointer name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field GetFieldByName(@StdString String name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field GetFieldByName(@StdString BytePointer name);
 
   /** Return all fields having this name */
   public native @ByVal FieldVector GetAllFieldsByName(@StdString String name);

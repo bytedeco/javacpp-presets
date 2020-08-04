@@ -22,7 +22,8 @@ public class FileFragment extends Fragment {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileFragment(Pointer p) { super(p); }
 
-  public native @ByVal ScanTaskIteratorResult Scan(@SharedPtr ScanContext context);
+  public native @ByVal ScanTaskIteratorResult Scan(@SharedPtr ScanOptions options,
+                                  @SharedPtr ScanContext context);
 
   public native @StdString String type_name();
   public native @Cast("bool") boolean splittable();

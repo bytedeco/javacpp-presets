@@ -32,6 +32,9 @@ public class Comparator extends Pointer {
     @Override public Comparator position(long position) {
         return (Comparator)super.position(position);
     }
+    @Override public Comparator getPointer(long i) {
+        return new Comparator(this).position(position + i);
+    }
 
 
   /** \brief Create a comparator explicitly from physical type and

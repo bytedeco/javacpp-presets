@@ -25,6 +25,9 @@ public class MockFileInfo extends Pointer {
     @Override public MockFileInfo position(long position) {
         return (MockFileInfo)super.position(position);
     }
+    @Override public MockFileInfo getPointer(long i) {
+        return new MockFileInfo(this).position(position + i);
+    }
 
   public native @StdString String full_path(); public native MockFileInfo full_path(String setter);
   public native @ByRef @Cast("arrow::fs::TimePoint*") Pointer mtime(); public native MockFileInfo mtime(Pointer setter);

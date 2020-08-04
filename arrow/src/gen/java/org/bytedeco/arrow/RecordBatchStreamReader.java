@@ -53,8 +53,4 @@ public class RecordBatchStreamReader extends RecordBatchReader {
    *  @param stream [in] the input stream
    *  @param options [in] any IPC reading options (optional)
    *  @return the created batch reader */
-
-  public static native @Deprecated @ByVal Status Open(@UniquePtr MessageReader message_reader,
-                       @SharedPtr RecordBatchReader out);
-  public static native @Deprecated @ByVal Status Open(InputStream stream, @SharedPtr RecordBatchReader out);
 }

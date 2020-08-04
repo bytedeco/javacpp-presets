@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "gandiva/visibility.h",
                 "gandiva/configuration.h",
                 "gandiva/arrow.h",
-                "gandiva/logging.h",
+//                "gandiva/logging.h",
                 "gandiva/function_signature.h",
                 "gandiva/gandiva_aliases.h",
                 "gandiva/expression.h",
@@ -54,7 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "gandiva/decimal_scalar.h",
                 "gandiva/tree_expr_builder.h",
             },
-            link = "gandiva@.17"
+            link = "gandiva@.100"
         ),
     },
     target = "org.bytedeco.gandiva",

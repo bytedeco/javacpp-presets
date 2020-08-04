@@ -21,6 +21,9 @@ public class BufferVectorResult extends Pointer {
     @Override public BufferVectorResult position(long position) {
         return (BufferVectorResult)super.position(position);
     }
+    @Override public BufferVectorResult getPointer(long i) {
+        return new BufferVectorResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class BufferVectorResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

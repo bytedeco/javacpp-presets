@@ -10,38 +10,10 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
 
-
-// ----------------------------------------------------------------------
-// Decimal128Array
-
-/** Concrete Array class for 128-bit decimal data */
-@Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class Decimal128Array extends FixedSizeBinaryArray {
-    static { Loader.load(); }
-
-
-  
-  
-    public Decimal128Array(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data) { super((Pointer)null); allocate(data); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data);
-  
-    public Decimal128Array(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                           @SharedPtr ArrowBuffer data,
-                           @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
-                           @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, data, null_bitmap, null_count, offset); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                           @SharedPtr ArrowBuffer data,
-                           @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
-                           @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
-    public Decimal128Array(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                           @SharedPtr ArrowBuffer data) { super((Pointer)null); allocate(type, length, data); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                           @SharedPtr ArrowBuffer data);
+@Namespace("arrow") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class Decimal128Array extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Decimal128Array() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Decimal128Array(Pointer p) { super(p); }
-
-
-  /** \brief Construct Decimal128Array from ArrayData instance */
-
-  public native @StdString String FormatValue(@Cast("int64_t") long i);
 }

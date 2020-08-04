@@ -53,16 +53,13 @@ public class LargeListArray extends BaseLargeListArray {
    *  @param values [in] Array containing list values
    *  @param pool [in] MemoryPool in case new offsets array needs to be
    *  allocated because of null values */
+  
+  ///
   public static native @ByVal ArrayResult FromArrays(
         @Const @ByRef Array offsets, @Const @ByRef Array values,
         MemoryPool pool/*=arrow::default_memory_pool()*/);
   public static native @ByVal ArrayResult FromArrays(
         @Const @ByRef Array offsets, @Const @ByRef Array values);
-
-  
-  ///
-  public static native @Deprecated @ByVal Status FromArrays(@Const @ByRef Array offsets, @Const @ByRef Array values, MemoryPool pool,
-                             @SharedPtr Array out);
 
   /** \brief Return an Array that is a concatenation of the lists in this array.
    * 
@@ -72,4 +69,7 @@ public class LargeListArray extends BaseLargeListArray {
   public native @ByVal ArrayResult Flatten(
         MemoryPool memory_pool/*=arrow::default_memory_pool()*/);
   public native @ByVal ArrayResult Flatten();
+
+  /** \brief Return list offsets as an Int64Array */
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array offsets();
 }

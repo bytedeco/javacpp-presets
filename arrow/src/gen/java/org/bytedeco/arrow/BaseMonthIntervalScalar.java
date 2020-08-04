@@ -16,11 +16,6 @@ public class BaseMonthIntervalScalar extends BaseBaseMonthIntervalType {
     static { Loader.load(); }
 
   
-    
-    
-      public BaseMonthIntervalScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-  
   
     public BaseMonthIntervalScalar(@Cast("arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
     private native void allocate(@Cast("arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);

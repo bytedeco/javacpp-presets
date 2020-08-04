@@ -36,18 +36,30 @@ public class DataType extends Fingerprintable {
 
   /** \brief Return whether the types are equal */
 
-  public native @Const @SharedPtr @ByRef Field child(int i);
+  public native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field child(int i);
 
-  public native @Const @ByRef FieldVector children();
+  /** Returns the the child-field at index i. */
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(int i);
 
-  public native int num_children();
+  public native @Const @Deprecated @ByRef FieldVector children();
+
+  /** \brief Returns the children fields associated with this type. */
+  public native @Const @ByRef FieldVector fields();
+
+  public native @Deprecated int num_children();
+
+  /** \brief Returns the number of children fields associated with this type. */
+  public native int num_fields();
 
   public native @ByVal Status Accept(TypeVisitor visitor);
 
   /** \brief A string representation of the type, including any children */
+  public native @StdString String ToString();
+
+  /** \brief Return hash value (excluding metadata in child fields) */
   
   ///
-  public native @StdString String ToString();
+  public native @Cast("size_t") long Hash();
 
   /** \brief A string name of the type, omitting any child fields
    * 

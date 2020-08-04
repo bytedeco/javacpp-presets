@@ -53,4 +53,6 @@ public class ReadableFile extends ReadableFileRandomAccessFileConcurrencyWrapper
   public native @Cast("bool") boolean closed();
 
   public native int file_descriptor();
+
+  public native @ByVal Status WillNeed(@StdVector ReadRange ranges);
 }

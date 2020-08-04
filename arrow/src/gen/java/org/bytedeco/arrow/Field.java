@@ -44,27 +44,27 @@ public class Field extends Fingerprintable {
   public native @Cast("bool") boolean HasMetadata();
 
   /** \brief Return a copy of this field with the given metadata attached to it */
-  public native @SharedPtr @ByVal Field WithMetadata(
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field WithMetadata(
         @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata);
 
   /** \brief EXPERIMENTAL: Return a copy of this field with the given metadata
    *  merged with existing metadata (any colliding keys will be overridden by
    *  the passed metadata) */
-  public native @SharedPtr @ByVal Field WithMergedMetadata(
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field WithMergedMetadata(
         @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata);
 
   /** \brief Return a copy of this field without any metadata attached to it */
-  public native @SharedPtr @ByVal Field RemoveMetadata();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field RemoveMetadata();
 
   /** \brief Return a copy of this field with the replaced type. */
-  public native @SharedPtr @ByVal Field WithType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field WithType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
   /** \brief Return a copy of this field with the replaced name. */
-  public native @SharedPtr @ByVal Field WithName(@StdString String name);
-  public native @SharedPtr @ByVal Field WithName(@StdString BytePointer name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field WithName(@StdString String name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field WithName(@StdString BytePointer name);
 
   /** \brief Return a copy of this field with the replaced nullability. */
-  public native @SharedPtr @ByVal Field WithNullable(@Cast("bool") boolean nullable);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field WithNullable(@Cast("bool") boolean nullable);
 
   /** \brief Options that control the behavior of {@code MergeWith}.
    *  Options are to be added to allow type conversions, including integer
@@ -81,6 +81,9 @@ public class Field extends Fingerprintable {
       private native void allocateArray(long size);
       @Override public MergeOptions position(long position) {
           return (MergeOptions)super.position(position);
+      }
+      @Override public MergeOptions getPointer(long i) {
+          return new MergeOptions(this).position(position + i);
       }
   
     /** If true, a Field of NullType can be unified with a Field of another type.
@@ -140,5 +143,5 @@ public class Field extends Fingerprintable {
   /** \brief Return whether the field is nullable */
   public native @Cast("bool") boolean nullable();
 
-  public native @SharedPtr @ByVal Field Copy();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field Copy();
 }

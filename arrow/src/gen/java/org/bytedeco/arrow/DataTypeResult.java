@@ -21,6 +21,9 @@ public class DataTypeResult extends Pointer {
     @Override public DataTypeResult position(long position) {
         return (DataTypeResult)super.position(position);
     }
+    @Override public DataTypeResult getPointer(long i) {
+        return new DataTypeResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class DataTypeResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

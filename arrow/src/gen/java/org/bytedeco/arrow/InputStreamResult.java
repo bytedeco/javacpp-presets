@@ -21,6 +21,9 @@ public class InputStreamResult extends Pointer {
     @Override public InputStreamResult position(long position) {
         return (InputStreamResult)super.position(position);
     }
+    @Override public InputStreamResult getPointer(long i) {
+        return new InputStreamResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class InputStreamResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

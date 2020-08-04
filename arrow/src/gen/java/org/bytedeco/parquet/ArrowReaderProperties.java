@@ -25,6 +25,9 @@ public class ArrowReaderProperties extends Pointer {
     @Override public ArrowReaderProperties position(long position) {
         return (ArrowReaderProperties)super.position(position);
     }
+    @Override public ArrowReaderProperties getPointer(long i) {
+        return new ArrowReaderProperties(this).position(position + i);
+    }
 
   public ArrowReaderProperties(@Cast("bool") boolean use_threads/*=parquet::kArrowDefaultUseThreads*/) { super((Pointer)null); allocate(use_threads); }
   private native void allocate(@Cast("bool") boolean use_threads/*=parquet::kArrowDefaultUseThreads*/);
@@ -40,5 +43,27 @@ public class ArrowReaderProperties extends Pointer {
 
   public native void set_batch_size(@Cast("int64_t") long batch_size);
 
+  
+  ///
   public native @Cast("int64_t") long batch_size();
+
+  /** Enable read coalescing.
+   * 
+   *  When enabled, the Arrow reader will pre-buffer necessary regions
+   *  of the file in-memory. This is intended to improve performance on
+   *  high-latency filesystems (e.g. Amazon S3). */
+  public native void set_pre_buffer(@Cast("bool") boolean pre_buffer);
+
+  public native @Cast("bool") boolean pre_buffer();
+
+  /** Set options for read coalescing. This can be used to tune the
+   *  implementation for characteristics of different filesystems. */
+  public native void set_cache_options(@ByVal CacheOptions options);
+
+  public native @ByVal CacheOptions cache_options();
+
+  /** Set execution context for read coalescing. */
+  public native void set_async_context(@ByVal AsyncContext ctx);
+
+  public native @ByVal AsyncContext async_context();
 }

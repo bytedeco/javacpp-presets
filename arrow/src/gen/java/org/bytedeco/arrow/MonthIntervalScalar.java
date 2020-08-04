@@ -17,11 +17,6 @@ public class MonthIntervalScalar extends BaseMonthIntervalScalar {
 
   
     
-      
-      
-        public MonthIntervalScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-        private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-    
     
       public MonthIntervalScalar(@Cast("arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
       private native void allocate(@Cast("arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
@@ -38,6 +33,9 @@ public class MonthIntervalScalar extends BaseMonthIntervalScalar {
     private native void allocateArray(long size);
     @Override public MonthIntervalScalar position(long position) {
         return (MonthIntervalScalar)super.position(position);
+    }
+    @Override public MonthIntervalScalar getPointer(long i) {
+        return new MonthIntervalScalar(this).position(position + i);
     }
 
 }

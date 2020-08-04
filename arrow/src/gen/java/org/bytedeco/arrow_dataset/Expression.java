@@ -122,8 +122,25 @@ public class Expression extends Pointer {
    *      (not (a or b)).Equals(not a and not b) */
   public native @SharedPtr @ByVal Expression Assume(@Const @ByRef Expression given);
 
+  /** Indicates if the expression is satisfiable.
+   * 
+   *  This is a shortcut to check if the expression is neither null nor false. */
+  
+  ///
+  public native @Cast("bool") boolean IsSatisfiable();
+
+  /** Indicates if the expression is satisfiable given an other expression.
+   * 
+   *  This behaves like IsSatisfiable, but it simplifies the current expression
+   *  with the given {@code other} information. */
+  public native @Cast("bool") boolean IsSatisfiableWith(@Const @ByRef Expression other);
+
   /** returns a debug string representing this expression */
   public native @StdString String ToString();
+
+  /** serialize/deserialize an Expression. */
+  public native @ByVal BufferResult Serialize();
+  public static native @ByVal ExpressionResult Deserialize(@Const @ByRef ArrowBuffer arg0);
 
   /** \brief Return the expression's type identifier */
   public native ExpressionType.type type();
@@ -136,10 +153,10 @@ public class Expression extends Pointer {
   public native @ByVal IsValidExpression IsValid();
 
   public native @ByVal CastExpression CastTo(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                          @ByVal(nullValue = "arrow::compute::CastOptions(compute::CastOptions())") CastOptions options);
+                          @ByVal(nullValue = "arrow::compute::CastOptions()") CastOptions options);
   public native @ByVal CastExpression CastTo(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
   public native @ByVal CastExpression CastLike(@Const @ByRef Expression expr,
-                            @ByVal(nullValue = "arrow::compute::CastOptions(compute::CastOptions())") CastOptions options);
+                            @ByVal(nullValue = "arrow::compute::CastOptions()") CastOptions options);
   public native @ByVal CastExpression CastLike(@Const @ByRef Expression expr);
 }

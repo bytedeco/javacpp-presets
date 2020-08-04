@@ -17,11 +17,6 @@ public class Time64Scalar extends BaseTime64Scalar {
 
   
     
-      
-      
-        public Time64Scalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-        private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-    
     
       public Time64Scalar(@Cast("arrow::TemporalScalar<arrow::Time64Type>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
       private native void allocate(@Cast("arrow::TemporalScalar<arrow::Time64Type>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);

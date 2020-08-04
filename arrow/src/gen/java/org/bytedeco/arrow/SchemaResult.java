@@ -21,6 +21,9 @@ public class SchemaResult extends Pointer {
     @Override public SchemaResult position(long position) {
         return (SchemaResult)super.position(position);
     }
+    @Override public SchemaResult getPointer(long i) {
+        return new SchemaResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class SchemaResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

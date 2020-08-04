@@ -21,17 +21,13 @@ public class ComparisonExpression extends ComparisonExpressionImpl {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ComparisonExpression(Pointer p) { super(p); }
 
-  public ComparisonExpression(CompareOperator op,
-                         @SharedPtr @ByVal Expression left_operand,
+  public ComparisonExpression(CompareOperator op, @SharedPtr @ByVal Expression left_operand,
                          @SharedPtr @ByVal Expression right_operand) { super((Pointer)null); allocate(op, left_operand, right_operand); }
-  private native void allocate(CompareOperator op,
-                         @SharedPtr @ByVal Expression left_operand,
+  private native void allocate(CompareOperator op, @SharedPtr @ByVal Expression left_operand,
                          @SharedPtr @ByVal Expression right_operand);
-  public ComparisonExpression(@Cast("arrow::compute::CompareOperator") int op,
-                         @SharedPtr @ByVal Expression left_operand,
+  public ComparisonExpression(@Cast("arrow::compute::CompareOperator") byte op, @SharedPtr @ByVal Expression left_operand,
                          @SharedPtr @ByVal Expression right_operand) { super((Pointer)null); allocate(op, left_operand, right_operand); }
-  private native void allocate(@Cast("arrow::compute::CompareOperator") int op,
-                         @SharedPtr @ByVal Expression left_operand,
+  private native void allocate(@Cast("arrow::compute::CompareOperator") byte op, @SharedPtr @ByVal Expression left_operand,
                          @SharedPtr @ByVal Expression right_operand);
 
   public native @StdString String ToString();

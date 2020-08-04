@@ -22,6 +22,9 @@ public class BooleanBuilder extends ArrayBuilder {
     @Override public BooleanBuilder position(long position) {
         return (BooleanBuilder)super.position(position);
     }
+    @Override public BooleanBuilder getPointer(long i) {
+        return new BooleanBuilder(this).position(position + i);
+    }
 
 
   public BooleanBuilder(MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(pool); }

@@ -21,6 +21,9 @@ public class RecordBatchWriterUniqueResult extends Pointer {
     @Override public RecordBatchWriterUniqueResult position(long position) {
         return (RecordBatchWriterUniqueResult)super.position(position);
     }
+    @Override public RecordBatchWriterUniqueResult getPointer(long i) {
+        return new RecordBatchWriterUniqueResult(this).position(position + i);
+    }
 
   
   ///
@@ -156,7 +159,7 @@ public class RecordBatchWriterUniqueResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

@@ -39,5 +39,13 @@ public class LargeStringScalar extends LargeBinaryScalar {
     @Override public LargeStringScalar position(long position) {
         return (LargeStringScalar)super.position(position);
     }
+    @Override public LargeStringScalar getPointer(long i) {
+        return new LargeStringScalar(this).position(position + i);
+    }
 
+
+  public LargeStringScalar(@StdString String s) { super((Pointer)null); allocate(s); }
+  private native void allocate(@StdString String s);
+  public LargeStringScalar(@StdString BytePointer s) { super((Pointer)null); allocate(s); }
+  private native void allocate(@StdString BytePointer s);
 }

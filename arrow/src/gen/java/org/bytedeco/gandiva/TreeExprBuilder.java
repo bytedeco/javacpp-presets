@@ -28,6 +28,9 @@ public class TreeExprBuilder extends Pointer {
     @Override public TreeExprBuilder position(long position) {
         return (TreeExprBuilder)super.position(position);
     }
+    @Override public TreeExprBuilder getPointer(long i) {
+        return new TreeExprBuilder(this).position(position + i);
+    }
 
   /** \brief create a node on a literal. */
   public static native @SharedPtr Node MakeLiteral(@Cast("bool") boolean value);
@@ -49,7 +52,7 @@ public class TreeExprBuilder extends Pointer {
 
   /** \brief create a node on arrow field.
    *  returns null if input is null. */
-  public static native @SharedPtr Node MakeField(@SharedPtr @ByVal Field field);
+  public static native @SharedPtr Node MakeField(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field);
 
   /** \brief create a node with a function.
    *  returns null if return_type is null */
@@ -72,14 +75,14 @@ public class TreeExprBuilder extends Pointer {
   /** \brief create an expression with the specified root_node, and the
    *  result written to result_field.
    *  returns null if the result_field is null. */
-  public static native @SharedPtr Expression MakeExpression(@SharedPtr Node root_node, @SharedPtr @ByVal Field result_field);
+  public static native @SharedPtr Expression MakeExpression(@SharedPtr Node root_node, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field result_field);
 
   /** \brief convenience function for simple function expressions.
    *  returns null if the out_field is null. */
   public static native @SharedPtr Expression MakeExpression(@StdString String function,
-                                        @Const @ByRef FieldVector in_fields, @SharedPtr @ByVal Field out_field);
+                                        @Const @ByRef FieldVector in_fields, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field out_field);
   public static native @SharedPtr Expression MakeExpression(@StdString BytePointer function,
-                                        @Const @ByRef FieldVector in_fields, @SharedPtr @ByVal Field out_field);
+                                        @Const @ByRef FieldVector in_fields, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field out_field);
 
   /** \brief create a condition with the specified root_node */
   public static native @SharedPtr Condition MakeCondition(@SharedPtr Node root_node);

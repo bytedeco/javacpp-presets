@@ -13,8 +13,6 @@ import static org.bytedeco.arrow.global.arrow.*;
 import static org.bytedeco.arrow.global.gandiva.*;
 
 
-
-///
 @Namespace("gandiva") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.gandiva.class)
 public class LLVMGenerator extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

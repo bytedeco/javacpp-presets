@@ -22,6 +22,8 @@ public class ServerCallContext extends Pointer {
 
   /** \brief The name of the authenticated peer (may be the empty string) */
   public native @StdString String peer_identity();
+  /** \brief The peer address (not validated) */
+  public native @StdString String peer();
   /** \brief Look up a middleware by key. Do not maintain a reference
    *  to the object beyond the request body.
    *  @return The middleware, or nullptr if not found. */

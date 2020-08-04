@@ -21,6 +21,9 @@ public class ArrayResult extends Pointer {
     @Override public ArrayResult position(long position) {
         return (ArrayResult)super.position(position);
     }
+    @Override public ArrayResult getPointer(long i) {
+        return new ArrayResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class ArrayResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

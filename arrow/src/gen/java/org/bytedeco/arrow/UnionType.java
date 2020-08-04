@@ -18,65 +18,11 @@ public class UnionType extends NestedType {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UnionType(Pointer p) { super(p); }
 
-  @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
-  public static final int type_id = type_id();
   @MemberGetter public static native byte kMaxTypeCode();
   public static final byte kMaxTypeCode = kMaxTypeCode();
   @MemberGetter public static native int kInvalidChildId();
   public static final int kInvalidChildId = kInvalidChildId();
 
-  public static native String type_name();
-
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector BytePointer type_codes,
-              UnionMode.type mode/*=arrow::UnionMode::SPARSE*/) { super((Pointer)null); allocate(fields, type_codes, mode); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector BytePointer type_codes,
-              UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector BytePointer type_codes) { super((Pointer)null); allocate(fields, type_codes); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector BytePointer type_codes);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector ByteBuffer type_codes,
-              @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/) { super((Pointer)null); allocate(fields, type_codes, mode); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector ByteBuffer type_codes,
-              @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector ByteBuffer type_codes) { super((Pointer)null); allocate(fields, type_codes); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector ByteBuffer type_codes);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector byte[] type_codes,
-              UnionMode.type mode/*=arrow::UnionMode::SPARSE*/) { super((Pointer)null); allocate(fields, type_codes, mode); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector byte[] type_codes,
-              UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector byte[] type_codes) { super((Pointer)null); allocate(fields, type_codes); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector byte[] type_codes);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector BytePointer type_codes,
-              @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/) { super((Pointer)null); allocate(fields, type_codes, mode); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector BytePointer type_codes,
-              @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector ByteBuffer type_codes,
-              UnionMode.type mode/*=arrow::UnionMode::SPARSE*/) { super((Pointer)null); allocate(fields, type_codes, mode); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector ByteBuffer type_codes,
-              UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-  public UnionType(@Const @ByRef FieldVector fields,
-              @StdVector byte[] type_codes,
-              @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/) { super((Pointer)null); allocate(fields, type_codes, mode); }
-  private native void allocate(@Const @ByRef FieldVector fields,
-              @StdVector byte[] type_codes,
-              @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-
-  // A constructor variant that validates input parameters
   public static native @ByVal DataTypeResult Make(
         @Const @ByRef FieldVector fields,
         @StdVector BytePointer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
@@ -107,10 +53,9 @@ public class UnionType extends NestedType {
 
   public native @ByVal DataTypeLayout layout();
 
-  public native @StdString String ToString();
   
   ///
-  public native @StdString String name();
+  public native @StdString String ToString();
 
   /** The array of logical type ids.
    * 

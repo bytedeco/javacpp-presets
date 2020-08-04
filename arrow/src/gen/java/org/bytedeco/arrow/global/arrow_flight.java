@@ -24,6 +24,83 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // Targeting ../../arrow_flight/ServerMiddlewareFactoryStringPair.java
 
 
+// Parsed from arrow/result.h
+
+//
+// Copyright 2017 Asylo authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// Adapted from Asylo
+
+// #pragma once
+
+// #include <new>
+// #include <string>
+// #include <type_traits>
+// #include <utility>
+
+// #include "arrow/status.h"
+// #include "arrow/util/compare.h"
+
+// #if __cplusplus >= 201703L
+// #else
+// #endif
+
+@Namespace("arrow::internal") public static native void DieWithMessage(@StdString String msg);
+@Namespace("arrow::internal") public static native void DieWithMessage(@StdString BytePointer msg);
+
+@Namespace("arrow::internal") public static native void InvalidValueOrDie(@Const @ByRef Status st);
+
+
+// Targeting ../../arrow_flight/FlightInfoResult.java
+
+
+
+// #define ARROW_ASSIGN_OR_RAISE_IMPL(result_name, lhs, rexpr)
+//   auto result_name = (rexpr);
+//   ARROW_RETURN_NOT_OK((result_name).status());
+//   lhs = std::move(result_name).MoveValueUnsafe();
+
+
+///
+///
+///
+// #define ARROW_ASSIGN_OR_RAISE_NAME(x, y) ARROW_CONCAT(x, y)
+
+/** \brief Execute an expression that returns a Result, extracting its value
+ *  into the variable defined by {@code lhs} (or returning a Status on error).
+ * 
+ *  Example: Assigning to a new value:
+ *    ARROW_ASSIGN_OR_RAISE(auto value, MaybeGetValue(arg));
+ * 
+ *  Example: Assigning to an existing value:
+ *    ValueType value;
+ *    ARROW_ASSIGN_OR_RAISE(value, MaybeGetValue(arg));
+ * 
+ *  WARNING: ARROW_ASSIGN_OR_RAISE expands into multiple statements;
+ *  it cannot be used in a single statement (e.g. as the body of an if
+ *  statement without {})! */
+// #define ARROW_ASSIGN_OR_RAISE(lhs, rexpr)
+//   ARROW_ASSIGN_OR_RAISE_IMPL(ARROW_ASSIGN_OR_RAISE_NAME(_error_or_value, __COUNTER__),
+//                              lhs, rexpr);
+
+  // namespace internal
+
+  // namespace arrow
+
+
 // Parsed from arrow/flight/api.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -138,7 +215,9 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include <vector>
 
 // #include "arrow/flight/visibility.h"
+// #include "arrow/ipc/options.h"
 // #include "arrow/ipc/writer.h"
+// #include "arrow/result.h"
 
 
 // Targeting ../../arrow_flight/Uri.java
@@ -262,6 +341,9 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // Targeting ../../arrow_flight/MetadataRecordBatchReader.java
 
 
+// Targeting ../../arrow_flight/MetadataRecordBatchWriter.java
+
+
 // Targeting ../../arrow_flight/SimpleFlightListing.java
 
 
@@ -342,9 +424,11 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include <utility>
 // #include <vector>
 
+// #include "arrow/ipc/options.h"
 // #include "arrow/ipc/reader.h"
 // #include "arrow/ipc/writer.h"
 // #include "arrow/status.h"
+// #include "arrow/util/variant.h"
 
 // #include "arrow/flight/types.h"  // IWYU pragma: keep
 // #include "arrow/flight/visibility.h"
@@ -357,6 +441,9 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 
 /** \brief A duration type for Flight call timeouts. */
 // Targeting ../../arrow_flight/FlightCallOptions.java
+
+
+// Targeting ../../arrow_flight/FlightWriteSizeStatusDetail.java
 
 
 // Targeting ../../arrow_flight/FlightClientOptions.java
@@ -466,7 +553,7 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include "arrow/flight/types.h"       // IWYU pragma: keep
 // #include "arrow/flight/visibility.h"  // IWYU pragma: keep
 // #include "arrow/ipc/dictionary.h"
-// #include "arrow/memory_pool.h"
+// #include "arrow/ipc/options.h"
 // #include "arrow/record_batch.h"
 // Targeting ../../arrow_flight/ServerMiddleware.java
 
@@ -484,6 +571,9 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 
 
 // Targeting ../../arrow_flight/FlightMetadataWriter.java
+
+
+// Targeting ../../arrow_flight/FlightMessageWriter.java
 
 
 // Targeting ../../arrow_flight/ServerCallContext.java

@@ -14,16 +14,13 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Name("arrow::NumericScalar<arrow::UInt64Type>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseUInt64Type extends Scalar {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public BaseUInt64Type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BaseUInt64Type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseUInt64Type(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public BaseUInt64Type position(long position) {
-        return (BaseUInt64Type)super.position(position);
-    }
 
+
+  public BaseUInt64Type(@Cast("arrow::NumericScalar<arrow::UInt64Type>::ValueType") long value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@Cast("arrow::NumericScalar<arrow::UInt64Type>::ValueType") long value);
+
+  public BaseUInt64Type() { super((Pointer)null); allocate(); }
+  private native void allocate();
 }

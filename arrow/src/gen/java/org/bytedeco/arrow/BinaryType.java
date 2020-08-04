@@ -23,6 +23,9 @@ public class BinaryType extends BaseBinaryType {
     @Override public BinaryType position(long position) {
         return (BinaryType)super.position(position);
     }
+    @Override public BinaryType getPointer(long i) {
+        return new BinaryType(this).position(position + i);
+    }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();

@@ -27,6 +27,9 @@ public class ParquetOutputWrapper extends OutputStream {
     @Override public ParquetOutputWrapper position(long position) {
         return (ParquetOutputWrapper)super.position(position);
     }
+    @Override public ParquetOutputWrapper getPointer(long i) {
+        return new ParquetOutputWrapper(this).position(position + i);
+    }
 
 
   // FileInterface

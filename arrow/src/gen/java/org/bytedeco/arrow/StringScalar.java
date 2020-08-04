@@ -39,6 +39,9 @@ public class StringScalar extends BinaryScalar {
     @Override public StringScalar position(long position) {
         return (StringScalar)super.position(position);
     }
+    @Override public StringScalar getPointer(long i) {
+        return new StringScalar(this).position(position + i);
+    }
 
 
   public StringScalar(@StdString String s) { super((Pointer)null); allocate(s); }

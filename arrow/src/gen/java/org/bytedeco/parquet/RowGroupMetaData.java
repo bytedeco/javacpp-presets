@@ -13,13 +13,14 @@ import static org.bytedeco.arrow.global.arrow.*;
 import static org.bytedeco.arrow.global.parquet.*;
 
 
+/** \brief RowGroupMetaData is a proxy around format::RowGroupMetaData. */
 @Namespace("parquet") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.parquet.class)
 public class RowGroupMetaData extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RowGroupMetaData(Pointer p) { super(p); }
 
-  // API convenience to get a MetaData accessor
+  /** \brief Create a RowGroupMetaData from a serialized thrift message. */
   public static native @UniquePtr RowGroupMetaData Make(
         @Const Pointer metadata, @Const SchemaDescriptor schema,
         @Const ApplicationVersion writer_version/*=nullptr*/,
@@ -27,14 +28,32 @@ public class RowGroupMetaData extends Pointer {
   public static native @UniquePtr RowGroupMetaData Make(
         @Const Pointer metadata, @Const SchemaDescriptor schema);
 
-  // row-group metadata
+  /** \brief The number of columns in this row group. The order must match the
+   *  parent's column ordering. */
+  
+  ///
+  ///
+  ///
   public native int num_columns();
+
+  /** \brief Return the ColumnChunkMetaData of the corresponding column ordinal.
+   * 
+   *  WARNING, the returned object references memory location in it's parent
+   *  (RowGroupMetaData) object. Hence, the parent must outlive the returned
+   *  object.
+   * 
+   *  @param index [in] of the ColumnChunkMetaData to retrieve.
+   * 
+   *  @throws ParquetException if the index is out of bound. */
+  public native @UniquePtr ColumnChunkMetaData ColumnChunk(int index);
+
+  /** \brief Number of rows in this row group. */
   public native @Cast("int64_t") long num_rows();
+
+  /** \brief Total byte size of all the uncompressed column data in this row group. */
   public native @Cast("int64_t") long total_byte_size();
   // Return const-pointer to make it clear that this object is not to be copied
   public native @Const SchemaDescriptor schema();
   // Indicate if all of the RowGroup's ColumnChunks can be decompressed.
   public native @Cast("bool") boolean can_decompress();
-
-  public native @UniquePtr ColumnChunkMetaData ColumnChunk(int i);
 }

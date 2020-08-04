@@ -21,6 +21,9 @@ public class StringViewResult extends Pointer {
     @Override public StringViewResult position(long position) {
         return (StringViewResult)super.position(position);
     }
+    @Override public StringViewResult getPointer(long i) {
+        return new StringViewResult(this).position(position + i);
+    }
 
   
   ///
@@ -157,7 +160,7 @@ public class StringViewResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

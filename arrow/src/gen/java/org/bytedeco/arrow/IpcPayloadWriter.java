@@ -11,6 +11,8 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
+// These internal APIs may change without warning or deprecation
+
 @Namespace("arrow::ipc::internal") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class IpcPayloadWriter extends Pointer {
     static { Loader.load(); }

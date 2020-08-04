@@ -21,6 +21,9 @@ public class FlushResultResult extends Pointer {
     @Override public FlushResultResult position(long position) {
         return (FlushResultResult)super.position(position);
     }
+    @Override public FlushResultResult getPointer(long i) {
+        return new FlushResultResult(this).position(position + i);
+    }
 
   
   ///
@@ -160,7 +163,7 @@ public class FlushResultResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

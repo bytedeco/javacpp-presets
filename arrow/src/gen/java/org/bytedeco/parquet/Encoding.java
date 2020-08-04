@@ -28,6 +28,9 @@ public class Encoding extends Pointer {
     @Override public Encoding position(long position) {
         return (Encoding)super.position(position);
     }
+    @Override public Encoding getPointer(long i) {
+        return new Encoding(this).position(position + i);
+    }
 
   public enum type {
     PLAIN(0),

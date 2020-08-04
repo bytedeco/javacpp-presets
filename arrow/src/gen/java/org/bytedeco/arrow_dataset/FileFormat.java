@@ -35,22 +35,29 @@ public class FileFormat extends Pointer {
   /** \brief Return the schema of the file if possible. */
   public native @ByVal SchemaResult Inspect(@Const @ByRef FileSource source);
 
-  /** \brief Open a file for scanning */
-  public native @ByVal ScanTaskIteratorResult ScanFile(
-        @Const @ByRef FileSource source, @SharedPtr ScanOptions options,
-        @SharedPtr ScanContext context);
+  /** \brief Open a FileFragment for scanning.
+   *  May populate lazy properties of the FileFragment. */
+  public native @ByVal ScanTaskIteratorResult ScanFile(@SharedPtr ScanOptions options,
+                                              @SharedPtr ScanContext context,
+                                              FileFragment file);
 
   /** \brief Open a fragment */
   public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr ScanOptions options,
-        @SharedPtr @ByVal Expression partition_expression);
+        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
+        @SharedPtr @ByVal Schema physical_schema);
 
   public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr ScanOptions options);
+        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression);
+
+  public native @ByVal FileFragmentResult MakeFragment(
+        @ByVal FileSource source, @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Schema>(nullptr)") Schema physical_schema);
+  public native @ByVal FileFragmentResult MakeFragment(
+        @ByVal FileSource source);
 
   /** \brief Write a fragment. If the parent directory of destination does not exist, it
    *  will be created. */
   public native @ByVal WriteTaskResult WriteFragment(
-        @ByVal FileSource destination, @SharedPtr @ByVal Fragment fragment,
+        @ByVal WritableFileSource destination, @SharedPtr @ByVal Fragment fragment,
+        @SharedPtr ScanOptions options,
         @SharedPtr ScanContext scan_context);  // FIXME(bkietz) make this pure virtual
 }

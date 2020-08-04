@@ -41,15 +41,15 @@ public class Schema extends Fingerprintable {
   public native int num_fields();
 
   /** Return the ith schema element. Does not boundscheck */
-  public native @Const @SharedPtr @ByRef Field field(int i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(int i);
 
   public native @Const @ByRef FieldVector fields();
 
   public native @ByVal StringVector field_names();
 
   /** Returns null if name not found */
-  public native @SharedPtr @ByVal Field GetFieldByName(@StdString String name);
-  public native @SharedPtr @ByVal Field GetFieldByName(@StdString BytePointer name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field GetFieldByName(@StdString String name);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field GetFieldByName(@StdString BytePointer name);
 
   /** \brief Return the indices of all fields having this name in sorted order */
   public native @ByVal FieldVector GetAllFieldsByName(@StdString String name);
@@ -80,18 +80,12 @@ public class Schema extends Fingerprintable {
   public native @StdString String ToString();
 
   public native @ByVal SchemaResult AddField(int i,
-                                             @Const @SharedPtr @ByRef Field field);
+                                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field);
   public native @ByVal SchemaResult RemoveField(int i);
-  public native @ByVal SchemaResult SetField(int i,
-                                             @Const @SharedPtr @ByRef Field field);
-
-  public native @Deprecated @ByVal Status AddField(int i, @Const @SharedPtr @ByRef Field field,
-                    @SharedPtr Schema out);
-  public native @Deprecated @ByVal Status RemoveField(int i, @SharedPtr Schema out);
   
   ///
-  public native @Deprecated @ByVal Status SetField(int i, @Const @SharedPtr @ByRef Field field,
-                    @SharedPtr Schema out);
+  public native @ByVal SchemaResult SetField(int i,
+                                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field);
 
   /** \brief Replace key-value metadata with new metadata
    * 

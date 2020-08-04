@@ -26,6 +26,9 @@ public class FlightServerBase extends Pointer {
     @Override public FlightServerBase position(long position) {
         return (FlightServerBase)super.position(position);
     }
+    @Override public FlightServerBase getPointer(long i) {
+        return new FlightServerBase(this).position(position + i);
+    }
 
   public FlightServerBase() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -121,6 +124,15 @@ public class FlightServerBase extends Pointer {
   public native @ByVal Status DoPut(@Const @ByRef ServerCallContext context,
                          @UniquePtr FlightMessageReader reader,
                          @UniquePtr FlightMetadataWriter writer);
+
+  /** \brief Process a bidirectional stream of IPC payloads
+   *  @param context [in] The call context.
+   *  @param reader [in] a sequence of uploaded record batches
+   *  @param writer [in] send data back to the client
+   *  @return Status */
+  public native @ByVal Status DoExchange(@Const @ByRef ServerCallContext context,
+                              @UniquePtr FlightMessageReader reader,
+                              @UniquePtr FlightMessageWriter writer);
 
   /** \brief Execute an action, return stream of zero or more results
    *  @param context [in] The call context.

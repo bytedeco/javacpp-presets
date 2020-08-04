@@ -11,33 +11,40 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \class CountOptions
+// ----------------------------------------------------------------------
+// Aggregate functions
+
+/** \addtogroup compute-concrete-options
+ *  \{
+ <p>
+ *  \brief Control Count kernel behavior
  * 
- *  The user control the Count kernel behavior with this class. By default, the
- *  it will count all non-null values. */
+ *  By default, all non-null values are counted. */
 @Namespace("arrow::compute") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class CountOptions extends Pointer {
+public class CountOptions extends FunctionOptions {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CountOptions(Pointer p) { super(p); }
 
-  public enum mode {
-    // Count all non-null values.
-    COUNT_ALL(0),
-    // Count all null values.
+  public enum Mode {
+    /** Count all non-null values. */
+    COUNT_NON_NULL(0),
+    /** Count all null values. */
     COUNT_NULL(1);
 
       public final int value;
-      private mode(int v) { this.value = v; }
-      private mode(mode e) { this.value = e.value; }
-      public mode intern() { for (mode e : values()) if (e.value == value) return e; return this; }
+      private Mode(int v) { this.value = v; }
+      private Mode(Mode e) { this.value = e.value; }
+      public Mode intern() { for (Mode e : values()) if (e.value == value) return e; return this; }
       @Override public String toString() { return intern().name(); }
   }
 
-  public CountOptions(mode count_mode) { super((Pointer)null); allocate(count_mode); }
-  private native void allocate(mode count_mode);
-  public CountOptions(@Cast("arrow::compute::CountOptions::mode") int count_mode) { super((Pointer)null); allocate(count_mode); }
-  private native void allocate(@Cast("arrow::compute::CountOptions::mode") int count_mode);
+  public CountOptions(Mode count_mode) { super((Pointer)null); allocate(count_mode); }
+  private native void allocate(Mode count_mode);
+  public CountOptions(@Cast("arrow::compute::CountOptions::Mode") int count_mode) { super((Pointer)null); allocate(count_mode); }
+  private native void allocate(@Cast("arrow::compute::CountOptions::Mode") int count_mode);
 
-  public native mode count_mode(); public native CountOptions count_mode(mode setter);
+  public static native @ByVal CountOptions Defaults();
+
+  public native Mode count_mode(); public native CountOptions count_mode(Mode setter);
 }

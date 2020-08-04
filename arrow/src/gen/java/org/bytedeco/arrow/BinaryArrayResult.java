@@ -21,6 +21,9 @@ public class BinaryArrayResult extends Pointer {
     @Override public BinaryArrayResult position(long position) {
         return (BinaryArrayResult)super.position(position);
     }
+    @Override public BinaryArrayResult getPointer(long i) {
+        return new BinaryArrayResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class BinaryArrayResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

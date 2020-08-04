@@ -39,7 +39,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             include = {
                 "arrow/util/iterator.h",
-                "arrow/util/thread_pool.h",
                 "arrow/result.h",
                 "arrow/dataset/api.h",
                 "arrow/dataset/visibility.h",
@@ -53,7 +52,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/dataset/file_parquet.h",
                 "arrow/dataset/filter.h",
             },
-            link = "arrow_dataset@.17"
+            link = "arrow_dataset@.100"
         ),
     },
     target = "org.bytedeco.arrow_dataset",
@@ -66,6 +65,7 @@ public class arrow_dataset implements InfoMapper {
         infoMap.put(new Info("ARROW_DS_EXPORT").cppTypes().annotations())
                .put(new Info("std::enable_shared_from_this<arrow::dataset::Dataset>",
                              "std::enable_shared_from_this<arrow::dataset::FileFormat>",
+                             "arrow::util::EqualityComparable<arrow::dataset::RowGroupInfo>",
                              "arrow::util::EqualityComparable<arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> > >",
                              "arrow::util::EqualityComparable<arrow::Iterator<std::unique_ptr<arrow::dataset::ScanTask> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::Dataset> > >",
@@ -77,11 +77,11 @@ public class arrow_dataset implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::Scanner> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::ScannerBuilder> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::dataset::ScanTask> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<parquet::arrow::FileReader> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::Source> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::SourceFactory> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::UnionDataset> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::WriteTask> > >",
-                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::internal::ThreadPool> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<std::shared_ptr<arrow::dataset::Fragment> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<std::unique_ptr<arrow::dataset::ScanTask> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> > > >",
@@ -91,18 +91,21 @@ public class arrow_dataset implements InfoMapper {
                .put(new Info("std::shared_ptr<arrow::dataset::DatasetFactory>").annotations("@SharedPtr").pointerTypes("DatasetFactory"))
 //               .put(new Info("std::shared_ptr<arrow::dataset::DataSource>").annotations("@SharedPtr").pointerTypes("DataSource"))
                .put(new Info("std::shared_ptr<arrow::dataset::Expression>").annotations("@SharedPtr").pointerTypes("Expression"))
+               .put(new Info("std::shared_ptr<arrow::dataset::FileFragment>").annotations("@SharedPtr").pointerTypes("FileFragment"))
                .put(new Info("std::shared_ptr<arrow::dataset::Fragment>").annotations("@SharedPtr").pointerTypes("Fragment"))
 //               .put(new Info("std::shared_ptr<arrow::dataset::FileScanOptions>").annotations("@SharedPtr").pointerTypes("FileScanOptions"))
                .put(new Info("std::shared_ptr<arrow::dataset::Scanner>").annotations("@SharedPtr").pointerTypes("Scanner"))
                .put(new Info("std::shared_ptr<arrow::dataset::ScannerBuilder>").annotations("@SharedPtr").pointerTypes("ScannerBuilder"))
                .put(new Info("std::shared_ptr<arrow::dataset::ScanTask>").annotations("@SharedPtr").pointerTypes("ScanTask"))
                .put(new Info("std::unique_ptr<arrow::dataset::ScanTask>").annotations("@UniquePtr").pointerTypes("ScanTask"))
+               .put(new Info("std::unique_ptr<parquet::arrow::FileReader>").annotations("@UniquePtr").pointerTypes("FileReader"))
                .put(new Info("std::shared_ptr<arrow::dataset::Source>").annotations("@SharedPtr").pointerTypes("Source"))
                .put(new Info("std::shared_ptr<arrow::dataset::SourceFactory>").annotations("@SharedPtr").pointerTypes("SourceFactory"))
                .put(new Info("std::shared_ptr<arrow::dataset::UnionDataset>").annotations("@SharedPtr").pointerTypes("UnionDataset"))
 //               .put(new Info("std::vector<std::shared_ptr<arrow::dataset::DataSource> >").pointerTypes("DataSourceVector").define())
 //               .put(new Info("std::vector<std::shared_ptr<arrow::dataset::FileScanOptions> >").pointerTypes("FileScanOptionsVector").define())
                .put(new Info("std::vector<std::shared_ptr<arrow::dataset::Expression> >").pointerTypes("ExpressionVector").define())
+               .put(new Info("std::vector<std::shared_ptr<arrow::dataset::FileFragment> >").pointerTypes("FileFragmentVector").define())
                .put(new Info("std::vector<std::unique_ptr<arrow::dataset::ScanTask> >").pointerTypes("ScanTaskVector").define())
 //               .put(new Info("std::vector<std::shared_ptr<arrow::dataset::SourceFactory> >").pointerTypes("SourceFactoryVector").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::Dataset> >").pointerTypes("DatasetResult").define())
@@ -116,11 +119,14 @@ public class arrow_dataset implements InfoMapper {
                .put(new Info("arrow::Result<std::unique_ptr<arrow::dataset::ScanTask> >").pointerTypes("ScanTaskResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::dataset::ScanTask> >(const arrow::Result<std::unique_ptr<arrow::dataset::ScanTask> >&)",
                              "arrow::Result<std::unique_ptr<arrow::dataset::ScanTask> >::operator =").skip())
+               .put(new Info("arrow::Result<std::unique_ptr<parquet::arrow::FileReader> >").pointerTypes("FileReaderResult").define())
+               .put(new Info("arrow::Result<std::unique_ptr<parquet::arrow::FileReader> >(const arrow::Result<std::unique_ptr<parquet::arrow::FileReader> >&)",
+                             "arrow::Result<std::unique_ptr<parquet::arrow::FileReader> >::operator =").skip())
+
 //               .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::Source> >").pointerTypes("SourceResult").define())
 //               .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::SourceFactory> >").pointerTypes("SourceFactoryResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::UnionDataset> >").pointerTypes("UnionDatasetResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::WriteTask> >").pointerTypes("WriteTaskResult").define())
-               .put(new Info("arrow::Result<std::shared_ptr<arrow::internal::ThreadPool> >").pointerTypes("ThreadPoolResult").define())
                .put(new Info("arrow::Result<arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> > >", "arrow::Result<arrow::dataset::FragmentIterator>").pointerTypes("FragmentIteratorResult").define())
                .put(new Info("arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> >").pointerTypes("FragmentIterator").define())
                .put(new Info("arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> >::RangeIterator").pointerTypes("FragmentIterator.RangeIterator").define())
@@ -133,10 +139,14 @@ public class arrow_dataset implements InfoMapper {
                .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::UnaryExpression,arrow::dataset::CastExpression,arrow::dataset::ExpressionType::CAST>").pointerTypes("CastExpressionImpl").define())
                .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::UnaryExpression,arrow::dataset::InExpression,arrow::dataset::ExpressionType::IN>").pointerTypes("InExpressionImpl").define())
                .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::UnaryExpression,arrow::dataset::IsValidExpression,arrow::dataset::ExpressionType::IS_VALID>").pointerTypes("IsValidExpressionImpl").define())
-               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::UnaryExpression,arrow::dataset::NotExpression,arrow::dataset::ExpressionType::NOT>").pointerTypes("NotExpressionImpl").define())
-               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,arrow::dataset::OrExpression,arrow::dataset::ExpressionType::OR>").pointerTypes("OrExpressionImpl").define())
-               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,arrow::dataset::AndExpression,arrow::dataset::ExpressionType::AND>").pointerTypes("AndExpressionImpl").define())
-               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,arrow::dataset::ComparisonExpression,arrow::dataset::ExpressionType::COMPARISON>").pointerTypes("ComparisonExpressionImpl").define())
+               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::UnaryExpression,arrow::dataset::NotExpression,arrow::dataset::ExpressionType::NOT>",
+                             "arrow::dataset::ExpressionImpl::ExpressionImpl<arrow::dataset::UnaryExpression,NotExpression,arrow::dataset::ExpressionType::NOT>").pointerTypes("NotExpressionImpl").define())
+               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,arrow::dataset::OrExpression,arrow::dataset::ExpressionType::OR>",
+                             "arrow::dataset::ExpressionImpl::ExpressionImpl<arrow::dataset::BinaryExpression,OrExpression,arrow::dataset::ExpressionType::OR>").pointerTypes("OrExpressionImpl").define())
+               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,arrow::dataset::AndExpression,arrow::dataset::ExpressionType::AND>",
+                             "arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,AndExpression,arrow::dataset::ExpressionType::AND>").pointerTypes("AndExpressionImpl").define())
+               .put(new Info("arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,arrow::dataset::ComparisonExpression,arrow::dataset::ExpressionType::COMPARISON>",
+                             "arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,ComparisonExpression,arrow::dataset::ExpressionType::COMPARISON>").pointerTypes("ComparisonExpressionImpl").define())
                .put(new Info("arrow::dataset::DiscoverSource", "arrow::dataset::RowGroupStatisticsAsExpression",
                              "arrow::dataset::WritePlan::fragment_or_partition_expressions", "arrow::dataset::string_literals::operator \"\"_")/*.javaNames("quote")*/.skip())
         ;

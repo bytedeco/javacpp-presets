@@ -25,21 +25,17 @@ public class ListArray extends BaseListArray {
   ///
   ///
   public ListArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-              @SharedPtr ArrowBuffer value_offsets,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
+              @SharedPtr ArrowBuffer value_offsets, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
               @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
               @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(type, length, value_offsets, values, null_bitmap, null_count, offset); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-              @SharedPtr ArrowBuffer value_offsets,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
+              @SharedPtr ArrowBuffer value_offsets, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values,
               @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
               @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
   public ListArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-              @SharedPtr ArrowBuffer value_offsets,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values) { super((Pointer)null); allocate(type, length, value_offsets, values); }
+              @SharedPtr ArrowBuffer value_offsets, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values) { super((Pointer)null); allocate(type, length, value_offsets, values); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-              @SharedPtr ArrowBuffer value_offsets,
-              @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values);
+              @SharedPtr ArrowBuffer value_offsets, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array values);
 
   /** \brief Construct ListArray from array of offsets and child value array
    * 
@@ -53,16 +49,13 @@ public class ListArray extends BaseListArray {
    *  @param values [in] Array containing list values
    *  @param pool [in] MemoryPool in case new offsets array needs to be
    *  allocated because of null values */
+  
+  ///
   public static native @ByVal ArrayResult FromArrays(
         @Const @ByRef Array offsets, @Const @ByRef Array values,
         MemoryPool pool/*=arrow::default_memory_pool()*/);
   public static native @ByVal ArrayResult FromArrays(
         @Const @ByRef Array offsets, @Const @ByRef Array values);
-
-  
-  ///
-  public static native @Deprecated @ByVal Status FromArrays(@Const @ByRef Array offsets, @Const @ByRef Array values, MemoryPool pool,
-                             @SharedPtr Array out);
 
   /** \brief Return an Array that is a concatenation of the lists in this array.
    * 
@@ -72,4 +65,7 @@ public class ListArray extends BaseListArray {
   public native @ByVal ArrayResult Flatten(
         MemoryPool memory_pool/*=arrow::default_memory_pool()*/);
   public native @ByVal ArrayResult Flatten();
+
+  /** \brief Return list offsets as an Int32Array */
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array offsets();
 }

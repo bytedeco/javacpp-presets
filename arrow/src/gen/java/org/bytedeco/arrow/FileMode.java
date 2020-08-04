@@ -25,6 +25,9 @@ public class FileMode extends Pointer {
     @Override public FileMode position(long position) {
         return (FileMode)super.position(position);
     }
+    @Override public FileMode getPointer(long i) {
+        return new FileMode(this).position(position + i);
+    }
 
   public enum type { READ(0), WRITE(1), READWRITE(2);
 

@@ -23,15 +23,6 @@ public class Message extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Message(Pointer p) { super(p); }
 
-  public enum Type { NONE(0), SCHEMA(1), DICTIONARY_BATCH(2), RECORD_BATCH(3), TENSOR(4), SPARSE_TENSOR(5);
-
-      public final int value;
-      private Type(int v) { this.value = v; }
-      private Type(Type e) { this.value = e.value; }
-      public Type intern() { for (Type e : values()) if (e.value == value) return e; return this; }
-      @Override public String toString() { return intern().name(); }
-  }
-
   /** \brief Construct message, but do not validate
    * 
    *  Use at your own risk; Message::Open has more metadata validation */
@@ -43,13 +34,10 @@ public class Message extends Pointer {
    *  @param metadata [in] a buffer containing the Flatbuffer metadata
    *  @param body [in] a buffer containing the message body, which may be null
    *  @return the created message */
-  public static native @ByVal MessageUniqueResult Open(@SharedPtr ArrowBuffer metadata,
-                                                 @SharedPtr ArrowBuffer body);
-
   
   ///
-  public static native @Deprecated @ByVal Status Open(@SharedPtr ArrowBuffer metadata,
-                       @SharedPtr ArrowBuffer body, @UniquePtr Message out);
+  public static native @ByVal MessageUniqueResult Open(@SharedPtr ArrowBuffer metadata,
+                                                 @SharedPtr ArrowBuffer body);
 
   /** \brief Read message body and create Message given Flatbuffer metadata
    *  @param metadata [in] containing a serialized Message flatbuffer
@@ -57,13 +45,10 @@ public class Message extends Pointer {
    *  @return the created Message
    * 
    *  \note If stream supports zero-copy, this is zero-copy */
-  public static native @ByVal MessageUniqueResult ReadFrom(@SharedPtr ArrowBuffer metadata,
-                                                     InputStream stream);
-
   
   ///
-  public static native @Deprecated @ByVal Status ReadFrom(@SharedPtr ArrowBuffer metadata, InputStream stream,
-                           @UniquePtr Message out);
+  public static native @ByVal MessageUniqueResult ReadFrom(@SharedPtr ArrowBuffer metadata,
+                                                     InputStream stream);
 
   /** \brief Read message body from position in file, and create Message given
    *  the Flatbuffer metadata
@@ -73,14 +58,11 @@ public class Message extends Pointer {
    *  @return the created Message
    * 
    *  \note If file supports zero-copy, this is zero-copy */
+  
+  ///
   public static native @ByVal MessageUniqueResult ReadFrom(@Cast("const int64_t") long offset,
                                                      @SharedPtr ArrowBuffer metadata,
                                                      RandomAccessFile file);
-
-  
-  ///
-  public static native @Deprecated @ByVal Status ReadFrom(@Cast("const int64_t") long offset, @SharedPtr ArrowBuffer metadata,
-                           RandomAccessFile file, @UniquePtr Message out);
 
   /** \brief Return true if message type and contents are equal
    * 
@@ -111,7 +93,7 @@ public class Message extends Pointer {
   public native @Cast("int64_t") long body_length();
 
   /** \brief The Message type */
-  public native Type type();
+  public native MessageType type();
 
   /** \brief The Message metadata version */
   public native MetadataVersion metadata_version();
@@ -137,6 +119,6 @@ public class Message extends Pointer {
   public native @Cast("bool") boolean Verify();
 
   /** \brief Whether a given message type needs a body. */
-  public static native @Cast("bool") boolean HasBody(Type type);
-  public static native @Cast("bool") boolean HasBody(@Cast("arrow::ipc::Message::Type") int type);
+  public static native @Cast("bool") boolean HasBody(MessageType type);
+  public static native @Cast("bool") boolean HasBody(@Cast("arrow::ipc::MessageType") int type);
 }

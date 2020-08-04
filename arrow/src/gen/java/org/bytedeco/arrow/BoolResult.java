@@ -74,6 +74,9 @@ public class BoolResult extends Pointer {
     @Override public BoolResult position(long position) {
         return (BoolResult)super.position(position);
     }
+    @Override public BoolResult getPointer(long i) {
+        return new BoolResult(this).position(position + i);
+    }
 
   
   ///
@@ -215,7 +218,7 @@ public class BoolResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

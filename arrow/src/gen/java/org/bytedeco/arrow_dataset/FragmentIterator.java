@@ -27,6 +27,9 @@ public class FragmentIterator extends Pointer {
     @Override public FragmentIterator position(long position) {
         return (FragmentIterator)super.position(position);
     }
+    @Override public FragmentIterator getPointer(long i) {
+        return new FragmentIterator(this).position(position + i);
+    }
 
   /** \brief Iterator may be constructed from any type which has a member function
    *  with signature Status Next(T*);
@@ -67,6 +70,9 @@ public class FragmentIterator extends Pointer {
       private native void allocateArray(long size);
       @Override public RangeIterator position(long position) {
           return (RangeIterator)super.position(position);
+      }
+      @Override public RangeIterator getPointer(long i) {
+          return new RangeIterator(this).position(position + i);
       }
   
     public RangeIterator() { super((Pointer)null); allocate(); }

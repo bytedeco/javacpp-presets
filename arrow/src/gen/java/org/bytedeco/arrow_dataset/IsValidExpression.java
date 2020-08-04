@@ -29,6 +29,9 @@ public class IsValidExpression extends IsValidExpressionImpl {
     @Override public IsValidExpression position(long position) {
         return (IsValidExpression)super.position(position);
     }
+    @Override public IsValidExpression getPointer(long i) {
+        return new IsValidExpression(this).position(position + i);
+    }
 
 
   public native @StdString String ToString();

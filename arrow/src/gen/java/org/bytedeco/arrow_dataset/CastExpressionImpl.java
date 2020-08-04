@@ -30,6 +30,9 @@ public class CastExpressionImpl extends UnaryExpression {
     @Override public CastExpressionImpl position(long position) {
         return (CastExpressionImpl)super.position(position);
     }
+    @Override public CastExpressionImpl getPointer(long i) {
+        return new CastExpressionImpl(this).position(position + i);
+    }
 
   @MemberGetter public static native ExpressionType.type expression_type();
 

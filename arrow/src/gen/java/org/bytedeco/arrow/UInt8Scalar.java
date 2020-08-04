@@ -14,16 +14,24 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class UInt8Scalar extends BaseUInt8Type {
     static { Loader.load(); }
-    /** Default native constructor. */
+
+  
+  
+    public UInt8Scalar(@Cast("arrow::NumericScalar<arrow::UInt8Type>::ValueType") byte value) { super((Pointer)null); allocate(value); }
+    private native void allocate(@Cast("arrow::NumericScalar<arrow::UInt8Type>::ValueType") byte value);
+  
     public UInt8Scalar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public UInt8Scalar(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UInt8Scalar(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UInt8Scalar(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public UInt8Scalar position(long position) {
         return (UInt8Scalar)super.position(position);
+    }
+    @Override public UInt8Scalar getPointer(long i) {
+        return new UInt8Scalar(this).position(position + i);
     }
 
 }

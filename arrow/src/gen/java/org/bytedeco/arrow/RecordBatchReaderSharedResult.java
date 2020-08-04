@@ -21,6 +21,9 @@ public class RecordBatchReaderSharedResult extends Pointer {
     @Override public RecordBatchReaderSharedResult position(long position) {
         return (RecordBatchReaderSharedResult)super.position(position);
     }
+    @Override public RecordBatchReaderSharedResult getPointer(long i) {
+        return new RecordBatchReaderSharedResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class RecordBatchReaderSharedResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

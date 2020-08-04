@@ -25,6 +25,9 @@ public class JsonParseOptions extends Pointer {
     @Override public JsonParseOptions position(long position) {
         return (JsonParseOptions)super.position(position);
     }
+    @Override public JsonParseOptions getPointer(long i) {
+        return new JsonParseOptions(this).position(position + i);
+    }
 
   // Parsing options
 

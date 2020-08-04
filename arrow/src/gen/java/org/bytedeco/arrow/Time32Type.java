@@ -24,6 +24,9 @@ public class Time32Type extends TimeType {
     @Override public Time32Type position(long position) {
         return (Time32Type)super.position(position);
     }
+    @Override public Time32Type getPointer(long i) {
+        return new Time32Type(this).position(position + i);
+    }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();

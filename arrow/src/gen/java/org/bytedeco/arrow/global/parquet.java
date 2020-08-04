@@ -169,15 +169,16 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // #include <cstdint>
 // #include <memory>
 
-// #include "arrow/buffer.h"            // IWYU pragma: export
-// #include "arrow/io/interfaces.h"     // IWYU pragma: export
-// #include "arrow/io/memory.h"         // IWYU pragma: export
-// #include "arrow/memory_pool.h"       // IWYU pragma: export
-// #include "arrow/status.h"            // IWYU pragma: export
-// #include "arrow/util/bit_util.h"     // IWYU pragma: export
-// #include "arrow/util/compression.h"  // IWYU pragma: export
-// #include "arrow/util/macros.h"       // IWYU pragma: export
-// #include "arrow/util/string_view.h"  // IWYU pragma: export
+// #include "arrow/buffer.h"              // IWYU pragma: export
+// #include "arrow/io/interfaces.h"       // IWYU pragma: export
+// #include "arrow/io/memory.h"           // IWYU pragma: export
+// #include "arrow/memory_pool.h"         // IWYU pragma: export
+// #include "arrow/status.h"              // IWYU pragma: export
+// #include "arrow/util/bit_util.h"       // IWYU pragma: export
+// #include "arrow/util/bitmap_writer.h"  // IWYU pragma: export
+// #include "arrow/util/compression.h"    // IWYU pragma: export
+// #include "arrow/util/macros.h"         // IWYU pragma: export
+// #include "arrow/util/string_view.h"    // IWYU pragma: export
 
 // #if defined(_WIN32) || defined(__CYGWIN__)
 
@@ -248,6 +249,31 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
     MemoryPool pool/*=arrow::default_memory_pool()*/, @Cast("int64_t") long size/*=0*/);
 @Namespace("parquet") public static native @SharedPtr ResizableBuffer AllocateBuffer();
 
+  // namespace parquet
+
+
+// Parsed from parquet/type_fwd.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+  // namespace arrow
   // namespace parquet
 
 
@@ -365,6 +391,13 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 /** \brief Return true if Parquet supports indicated compression type */
 @Namespace("parquet") public static native @Cast("bool") boolean IsCodecSupported(Compression.type codec);
 @Namespace("parquet") public static native @Cast("bool") boolean IsCodecSupported(@Cast("arrow::Compression::type") int codec);
+
+// ARROW-9424: Separate functions for reading and writing so we can disable LZ4
+// on writing
+
+
+
+  // namespace internal
 
 @Namespace("parquet") public static native @UniquePtr Codec GetCodec(Compression.type codec);
 @Namespace("parquet") public static native @UniquePtr Codec GetCodec(@Cast("arrow::Compression::type") int codec);
@@ -800,21 +833,6 @@ public static final int kDefaultPageHeaderSize = kDefaultPageHeaderSize();
 
 
 
-@Namespace("parquet::internal") public static native void DefinitionLevelsToBitmap(
-    @Const ShortPointer def_levels, @Cast("int64_t") long num_def_levels, short max_definition_level,
-    short max_repetition_level, @Cast("int64_t*") LongPointer values_read, @Cast("int64_t*") LongPointer null_count,
-    @Cast("uint8_t*") BytePointer valid_bits, @Cast("int64_t") long valid_bits_offset);
-@Namespace("parquet::internal") public static native void DefinitionLevelsToBitmap(
-    @Const ShortBuffer def_levels, @Cast("int64_t") long num_def_levels, short max_definition_level,
-    short max_repetition_level, @Cast("int64_t*") LongBuffer values_read, @Cast("int64_t*") LongBuffer null_count,
-    @Cast("uint8_t*") ByteBuffer valid_bits, @Cast("int64_t") long valid_bits_offset);
-@Namespace("parquet::internal") public static native void DefinitionLevelsToBitmap(
-    @Const short[] def_levels, @Cast("int64_t") long num_def_levels, short max_definition_level,
-    short max_repetition_level, @Cast("int64_t*") long[] values_read, @Cast("int64_t*") long[] null_count,
-    @Cast("uint8_t*") byte[] valid_bits, @Cast("int64_t") long valid_bits_offset);
-
-  // namespace internal
-
 // TODO(itaiin): another code path split to merge when the general case is done
 @Namespace("parquet::internal") public static native @Cast("bool") boolean HasSpacedValues(@Const ColumnDescriptor descr);
 
@@ -1082,6 +1100,7 @@ public static final int kAadFileUniqueLength = kAadFileUniqueLength();
 // #include <unordered_set>
 // #include <utility>
 
+// #include "arrow/io/caching.h"
 // #include "arrow/type.h"
 // #include "arrow/util/compression.h"
 // #include "parquet/encryption.h"
@@ -1111,8 +1130,8 @@ public static final int kAadFileUniqueLength = kAadFileUniqueLength();
     @Override public String toString() { return intern().name(); }
 }
 
-@Namespace("parquet") @MemberGetter public static native @Cast("int64_t") long DEFAULT_BUFFER_SIZE();
-@Namespace("parquet") @MemberGetter public static native @Cast("bool") boolean DEFAULT_USE_BUFFERED_STREAM();
+/** Align the default buffer size to a small multiple of a page size. */
+@Namespace("parquet") @MemberGetter public static native @Cast("const int64_t") long kDefaultBufferSize();
 // Targeting ../../parquet/ReaderProperties.java
 
 
@@ -1274,6 +1293,7 @@ public static final long kArrowDefaultBatchSize = kArrowDefaultBatchSize();
 // #include <string>
 // #include <vector>
 
+// #include "arrow/io/caching.h"
 // #include "parquet/metadata.h"  // IWYU pragma: keep
 // #include "parquet/platform.h"
 // #include "parquet/properties.h"
@@ -1419,6 +1439,9 @@ public static final long kArrowDefaultBatchSize = kArrowDefaultBatchSize();
 
 // #include "parquet/platform.h"
 // #include "parquet/types.h"
+// Targeting ../../parquet/BinaryArray.java
+
+
 
   // namespace arrow
 // Targeting ../../parquet/Comparator.java
@@ -1451,6 +1474,132 @@ public static final long kArrowDefaultBatchSize = kArrowDefaultBatchSize();
 
 /** \brief Typed version of Statistics::Make */
 
+  // namespace parquet
+
+
+// Parsed from parquet/arrow/reader.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+// #include <vector>
+
+// #include "parquet/file_reader.h"
+// #include "parquet/platform.h"
+// #include "parquet/properties.h"
+
+
+// Targeting ../../parquet/SchemaManifest.java
+
+
+// Targeting ../../parquet/FileReader.java
+
+
+// Targeting ../../parquet/ColumnChunkReader.java
+
+
+
+// At this point, the column reader is a stream iterator. It only knows how to
+// read the next batch of values for a particular column from the file until it
+// runs out.
+//
+// We also do not expose any internal Parquet details, such as row groups. This
+// might change in the future.
+// Targeting ../../parquet/FileReaderBuilder.java
+
+
+
+/** \defgroup parquet-arrow-reader-factories Factory functions for Parquet Arrow readers
+ * 
+ *  \{
+ <p>
+ *  \brief Build FileReader from Arrow file and MemoryPool
+ * 
+ *  Advanced settings are supported through the FileReaderBuilder class. */
+@Namespace("parquet::arrow") public static native @ByVal Status OpenFile(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile arg0,
+                         MemoryPool allocator,
+                         @UniquePtr FileReader reader);
+
+/** \} */
+
+@Namespace("parquet::arrow") public static native @ByVal Status StatisticsAsScalars(@Const @ByRef Statistics Statistics,
+                                    @SharedPtr Scalar min,
+                                    @SharedPtr Scalar max);
+
+@Namespace("parquet::arrow::internal") public static native @ByVal Status FuzzReader(@Cast("const uint8_t*") BytePointer data, @Cast("int64_t") long size);
+@Namespace("parquet::arrow::internal") public static native @ByVal Status FuzzReader(@Cast("const uint8_t*") ByteBuffer data, @Cast("int64_t") long size);
+@Namespace("parquet::arrow::internal") public static native @ByVal Status FuzzReader(@Cast("const uint8_t*") byte[] data, @Cast("int64_t") long size);
+
+  // namespace internal
+  // namespace arrow
+  // namespace parquet
+
+
+// Parsed from parquet/arrow/writer.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+
+// #include "parquet/platform.h"
+// #include "parquet/properties.h"
+
+  // namespace arrow
+// Targeting ../../parquet/FileWriter.java
+
+
+
+/** \brief Write Parquet file metadata only to indicated Arrow OutputStream */
+
+/** \brief Write metadata-only Parquet file to indicated Arrow OutputStream */
+
+/** \brief Write a Table to Parquet.
+ * 
+ *  The table shall only consist of columns of primitive type or of primitive lists. */
+@Namespace("parquet::arrow") public static native @ByVal Status WriteTable(@Const @ByRef Table table, MemoryPool pool,
+           @SharedPtr OutputStream sink, @Cast("int64_t") long chunk_size,
+           @SharedPtr WriterProperties properties/*=parquet::default_writer_properties()*/,
+           @SharedPtr ArrowWriterProperties arrow_properties/*=parquet::default_arrow_writer_properties()*/);
+@Namespace("parquet::arrow") public static native @ByVal Status WriteTable(@Const @ByRef Table table, MemoryPool pool,
+           @SharedPtr OutputStream sink, @Cast("int64_t") long chunk_size);
+
+  // namespace arrow
   // namespace parquet
 
 

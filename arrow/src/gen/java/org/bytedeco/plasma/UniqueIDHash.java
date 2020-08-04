@@ -26,6 +26,9 @@ public class UniqueIDHash extends Pointer {
     @Override public UniqueIDHash position(long position) {
         return (UniqueIDHash)super.position(position);
     }
+    @Override public UniqueIDHash getPointer(long i) {
+        return new UniqueIDHash(this).position(position + i);
+    }
 
   public native @Cast("std::size_t") @Name("operator ()") long apply(@Const @ByRef UniqueID id);
 }

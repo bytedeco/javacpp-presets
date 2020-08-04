@@ -28,6 +28,9 @@ public class FlightDescriptor extends Pointer {
     @Override public FlightDescriptor position(long position) {
         return (FlightDescriptor)super.position(position);
     }
+    @Override public FlightDescriptor getPointer(long i) {
+        return new FlightDescriptor(this).position(position + i);
+    }
 
   public enum DescriptorType {
     UNKNOWN(0),  /** Unused */

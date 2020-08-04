@@ -11,20 +11,13 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Name("arrow::TemporalScalar<arrow::MonthIntervalType>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+@Name("arrow::TemporalScalar<arrow::MonthIntervalType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseBaseMonthIntervalType extends Scalar {
     static { Loader.load(); }
-
-  
-  
-    public BaseBaseMonthIntervalType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseBaseMonthIntervalType(Pointer p) { super(p); }
 
 
   public BaseBaseMonthIntervalType(@Cast("arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
   private native void allocate(@Cast("arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
-  public native @Cast("arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType") int value(); public native BaseBaseMonthIntervalType value(int setter);
 }

@@ -25,6 +25,9 @@ public class WriteTaskResult extends Pointer {
     @Override public WriteTaskResult position(long position) {
         return (WriteTaskResult)super.position(position);
     }
+    @Override public WriteTaskResult getPointer(long i) {
+        return new WriteTaskResult(this).position(position + i);
+    }
 
   
   ///
@@ -166,7 +169,7 @@ public class WriteTaskResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

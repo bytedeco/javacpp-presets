@@ -21,6 +21,9 @@ public class FeatherReaderResult extends Pointer {
     @Override public FeatherReaderResult position(long position) {
         return (FeatherReaderResult)super.position(position);
     }
+    @Override public FeatherReaderResult getPointer(long i) {
+        return new FeatherReaderResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class FeatherReaderResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

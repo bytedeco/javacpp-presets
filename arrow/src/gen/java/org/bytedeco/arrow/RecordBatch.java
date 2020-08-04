@@ -54,24 +54,19 @@ public class RecordBatch extends Pointer {
    *  Create a struct array whose child arrays are the record batch's columns.
    *  Note that the record batch's top-level field metadata cannot be reflected
    *  in the resulting struct array. */
-  public native @ByVal ArrayResult ToStructArray();
-
   
   ///
-  public native @Deprecated @ByVal Status ToStructArray(@SharedPtr Array out);
+  public native @ByVal ArrayResult ToStructArray();
 
   /** \brief Construct record batch from struct array
    * 
    *  This constructs a record batch using the child arrays of the given
    *  array, which must be a struct array.  Note that the struct array's own
    *  null bitmap is not reflected in the resulting record batch. */
-  public static native @ByVal RecordBatchResult FromStructArray(
-        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array array);
-
   
   ///
-  public static native @Deprecated @ByVal Status FromStructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array array,
-                                  @SharedPtr RecordBatch out);
+  public static native @ByVal RecordBatchResult FromStructArray(
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array array);
 
   /** \brief Determine if two record batches are exactly equal
    * 
@@ -117,16 +112,12 @@ public class RecordBatch extends Pointer {
    *  @param i [in] field index, which will be boundschecked
    *  @param field [in] field to be added
    *  @param column [in] column to be added */
-  public native @ByVal RecordBatchResult AddColumn(
-        int i, @Const @SharedPtr @ByRef Field field,
-        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column);
-
   
   ///
   ///
-  public native @Deprecated @ByVal Status AddColumn(int i, @Const @SharedPtr @ByRef Field field,
-                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column,
-                     @SharedPtr RecordBatch out);
+  public native @ByVal RecordBatchResult AddColumn(
+        int i, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column);
 
   /** \brief Add new nullable column to the record batch, producing a new
    *  RecordBatch.
@@ -136,24 +127,17 @@ public class RecordBatch extends Pointer {
    *  @param i [in] field index, which will be boundschecked
    *  @param field_name [in] name of field to be added
    *  @param column [in] column to be added */
+  
+  ///
   public native @ByVal RecordBatchResult AddColumn(
         int i, @StdString String field_name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column);
   public native @ByVal RecordBatchResult AddColumn(
         int i, @StdString BytePointer field_name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column);
 
-  
-  ///
-  public native @Deprecated @ByVal Status AddColumn(int i, @StdString String field_name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column,
-                     @SharedPtr RecordBatch out);
-  public native @Deprecated @ByVal Status AddColumn(int i, @StdString BytePointer field_name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column,
-                     @SharedPtr RecordBatch out);
-
   /** \brief Remove column from the record batch, producing a new RecordBatch
    * 
    *  @param i [in] field index, does boundscheck */
   public native @ByVal RecordBatchResult RemoveColumn(int i);
-
-  public native @Deprecated @ByVal Status RemoveColumn(int i, @SharedPtr RecordBatch out);
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch ReplaceSchemaMetadata(
         @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata);

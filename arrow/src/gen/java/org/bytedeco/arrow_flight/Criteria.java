@@ -28,6 +28,9 @@ public class Criteria extends Pointer {
     @Override public Criteria position(long position) {
         return (Criteria)super.position(position);
     }
+    @Override public Criteria getPointer(long i) {
+        return new Criteria(this).position(position + i);
+    }
 
   /** Opaque criteria expression, dependent on server implementation */
   public native @StdString String expression(); public native Criteria expression(String setter);

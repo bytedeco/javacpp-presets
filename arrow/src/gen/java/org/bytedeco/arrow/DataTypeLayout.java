@@ -41,6 +41,9 @@ public class DataTypeLayout extends Pointer {
       @Override public BufferSpec position(long position) {
           return (BufferSpec)super.position(position);
       }
+      @Override public BufferSpec getPointer(long i) {
+          return new BufferSpec(this).position(position + i);
+      }
   
     public native BufferKind kind(); public native BufferSpec kind(BufferKind setter);
     public native @Cast("int64_t") long byte_width(); public native BufferSpec byte_width(long setter);  // For FIXED_WIDTH

@@ -60,6 +60,7 @@ public class SubTreeFileSystem extends FileSystem {
   public native @ByVal Status DeleteDir(@StdString BytePointer path);
   public native @ByVal Status DeleteDirContents(@StdString String path);
   public native @ByVal Status DeleteDirContents(@StdString BytePointer path);
+  public native @ByVal Status DeleteRootDirContents();
 
   public native @ByVal Status DeleteFile(@StdString String path);
   public native @ByVal Status DeleteFile(@StdString BytePointer path);
@@ -74,10 +75,13 @@ public class SubTreeFileSystem extends FileSystem {
         @StdString String path);
   public native @ByVal InputStreamResult OpenInputStream(
         @StdString BytePointer path);
+  public native @ByVal InputStreamResult OpenInputStream(@Const @ByRef FileInfo info);
   public native @ByVal RandomAccessFileResult OpenInputFile(
         @StdString String path);
   public native @ByVal RandomAccessFileResult OpenInputFile(
         @StdString BytePointer path);
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @Const @ByRef FileInfo info);
   public native @ByVal OutputStreamResult OpenOutputStream(
         @StdString String path);
   public native @ByVal OutputStreamResult OpenOutputStream(

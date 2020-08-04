@@ -38,6 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = {
+                "arrow/result.h",
                 "arrow/flight/api.h",
                 "arrow/flight/visibility.h",
                 "arrow/flight/types.h",
@@ -46,7 +47,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/flight/server_auth.h",
                 "arrow/flight/server.h",
             },
-            link = "arrow_flight@.17",
+            link = "arrow_flight@.100",
             preload = {"libcrypto-1_1", "libssl-1_1"}
         ),
     },
@@ -58,7 +59,10 @@ public class arrow_flight implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ARROW_FLIGHT_EXPORT").cppTypes().annotations())
-               .put(new Info("arrow::flight::TimeoutDuration", "std::function<void(void*)>").cast().pointerTypes("Pointer"))
+               .put(new Info("arrow::flight::FlightClientOptions::generic_options").skip())
+               .put(new Info("arrow::Result<arrow::flight::FlightInfo>").pointerTypes("FlightInfoResult").define())
+               .put(new Info("arrow::util::EqualityComparable<arrow::Result<arrow::flight::FlightInfo> >",
+                             "arrow::flight::TimeoutDuration", "std::function<void(void*)>").cast().pointerTypes("Pointer"))
                .put(new Info("std::shared_ptr<arrow::flight::ClientMiddlewareFactory>").annotations("@SharedPtr").pointerTypes("ClientMiddlewareFactory"))
                .put(new Info("std::shared_ptr<arrow::flight::ServerMiddlewareFactory>").annotations("@SharedPtr").pointerTypes("ServerMiddlewareFactory"))
                .put(new Info("std::pair<std::string,std::shared_ptr<arrow::flight::ServerMiddlewareFactory> >").pointerTypes("ServerMiddlewareFactoryStringPair").define())

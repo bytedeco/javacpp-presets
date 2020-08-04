@@ -17,15 +17,11 @@ import static org.bytedeco.arrow.global.arrow_flight.*;
 /** \brief A RecordBatchWriter that also allows sending
  *  application-defined metadata via the Flight protocol. */
 @Namespace("arrow::flight") @Properties(inherit = org.bytedeco.arrow.presets.arrow_flight.class)
-public class FlightStreamWriter extends RecordBatchWriter {
+public class FlightStreamWriter extends MetadataRecordBatchWriter {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlightStreamWriter(Pointer p) { super(p); }
 
-  
-  ///
-  public native @ByVal Status WriteWithMetadata(@Const @ByRef RecordBatch batch,
-                                     @SharedPtr ArrowBuffer app_metadata);
   /** \brief Indicate that the application is done writing to this stream.
    * 
    *  The application may not write to this stream after calling

@@ -17,13 +17,12 @@ import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 /** \brief Scanner is a materialized scan operation with context and options
  *  bound. A scanner is the class that glues ScanTask, Fragment,
- *  and Source. In python pseudo code, it performs the following:
+ *  and Dataset. In python pseudo code, it performs the following:
  * 
  *   def Scan():
- *     for source in this.sources_:
- *       for fragment in source.GetFragments(this.options_):
- *         for scan_task in fragment.Scan(this.context_):
- *           yield scan_task */
+ *     for fragment in self.dataset.GetFragments(this.options.filter):
+ *       for scan_task in fragment.Scan(this.options):
+ *         yield scan_task */
 @Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class Scanner extends Pointer {
     static { Loader.load(); }
@@ -35,8 +34,10 @@ public class Scanner extends Pointer {
   private native void allocate(@SharedPtr @ByVal Dataset dataset, @SharedPtr ScanOptions scan_options,
             @SharedPtr ScanContext scan_context);
 
-  public Scanner(@SharedPtr @ByVal Fragment fragment, @SharedPtr ScanContext scan_context) { super((Pointer)null); allocate(fragment, scan_context); }
-  private native void allocate(@SharedPtr @ByVal Fragment fragment, @SharedPtr ScanContext scan_context);
+  public Scanner(@SharedPtr @ByVal Fragment fragment, @SharedPtr ScanOptions scan_options,
+            @SharedPtr ScanContext scan_context) { super((Pointer)null); allocate(fragment, scan_options, scan_context); }
+  private native void allocate(@SharedPtr @ByVal Fragment fragment, @SharedPtr ScanOptions scan_options,
+            @SharedPtr ScanContext scan_context);
 
   /** \brief The Scan operator returns a stream of ScanTask. The caller is
    *  responsible to dispatch/schedule said tasks. Tasks should be safe to run

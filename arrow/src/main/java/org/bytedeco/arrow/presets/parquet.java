@@ -43,6 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/api/reader.h",
                 "parquet/api/writer.h",
                 "parquet/platform.h",
+                "parquet/type_fwd.h",
                 "parquet/types.h",
                 "parquet/deprecated_io.h",
                 "parquet/exception.h",
@@ -57,8 +58,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/file_writer.h",
                 "parquet/printer.h",
                 "parquet/statistics.h",
+                "parquet/arrow/reader.h",
+                "parquet/arrow/writer.h",
             },
-            link = "parquet@.17"
+            link = "parquet@.100"
         ),
     },
     target = "org.bytedeco.parquet",
@@ -86,7 +89,7 @@ public class parquet implements InfoMapper {
                .put(new Info("std::map<parquet::Encoding::type,int32_t>").pointerTypes("EncodingIntMap").define())
                .put(new Info("std::map<std::string,std::shared_ptr<parquet::ColumnDecryptionProperties> >").pointerTypes("ColumnDecryptionPropertiesStringMap").define())
                .put(new Info("arrow::Result<std::shared_ptr<parquet::Buffer> >").pointerTypes("BufferResult"))
-               .put(new Info("parquet::Encryptor", "parquet::FooterSigningEncryptor", "parquet::OutputStream").skip())
+               .put(new Info("parquet::Encryptor", "parquet::FooterSigningEncryptor", "parquet::OutputStream", "parquet::internal::GetReadCodec", "parquet::internal::GetWriteCodec").skip())
         ;
     }
 }

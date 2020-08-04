@@ -28,6 +28,9 @@ public class SharedExclusiveChecker extends Pointer {
     @Override public SharedExclusiveChecker position(long position) {
         return (SharedExclusiveChecker)super.position(position);
     }
+    @Override public SharedExclusiveChecker getPointer(long i) {
+        return new SharedExclusiveChecker(this).position(position + i);
+    }
 
   public SharedExclusiveChecker() { super((Pointer)null); allocate(); }
   private native void allocate();

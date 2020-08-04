@@ -134,4 +134,11 @@ public class FlightClient extends Pointer {
   public native @ByVal Status DoPut(@Const @ByRef FlightDescriptor descriptor, @Const @SharedPtr @ByRef Schema schema,
                  @UniquePtr FlightStreamWriter stream,
                  @UniquePtr FlightMetadataReader reader);
+
+  public native @ByVal Status DoExchange(@Const @ByRef FlightCallOptions options, @Const @ByRef FlightDescriptor descriptor,
+                      @UniquePtr FlightStreamWriter writer,
+                      @UniquePtr FlightStreamReader reader);
+  public native @ByVal Status DoExchange(@Const @ByRef FlightDescriptor descriptor,
+                      @UniquePtr FlightStreamWriter writer,
+                      @UniquePtr FlightStreamReader reader);
 }

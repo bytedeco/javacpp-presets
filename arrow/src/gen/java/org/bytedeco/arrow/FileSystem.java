@@ -71,9 +71,18 @@ public class FileSystem extends Pointer {
   /** Delete a directory's contents, recursively.
    * 
    *  Like DeleteDir, but doesn't delete the directory itself.
-   *  Passing an empty path ("") will wipe the entire filesystem tree. */
+   *  Passing an empty path ("" or "/") is disallowed, see DeleteRootDirContents. */
+  
+  ///
   public native @ByVal Status DeleteDirContents(@StdString String path);
   public native @ByVal Status DeleteDirContents(@StdString BytePointer path);
+
+  /** EXPERIMENTAL: Delete the root directory's contents, recursively.
+   * 
+   *  Implementations may decide to raise an error if this operation is
+   *  too dangerous. */
+  // NOTE: may decide to remove this if it's deemed not useful
+  public native @ByVal Status DeleteRootDirContents();
 
   /** Delete a file. */
   
@@ -106,10 +115,18 @@ public class FileSystem extends Pointer {
   public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer dest);
 
   /** Open an input stream for sequential reading. */
+  
+  ///
   public native @ByVal InputStreamResult OpenInputStream(
         @StdString String path);
   public native @ByVal InputStreamResult OpenInputStream(
         @StdString BytePointer path);
+  /** Open an input stream for sequential reading.
+   * 
+   *  This override assumes the given FileInfo validly represents the file's
+   *  characteristics, and may optimize access depending on them (for example
+   *  avoid querying the file size or its existence). */
+  public native @ByVal InputStreamResult OpenInputStream(@Const @ByRef FileInfo info);
 
   /** Open an input file for random access reading. */
   
@@ -118,6 +135,15 @@ public class FileSystem extends Pointer {
         @StdString String path);
   public native @ByVal RandomAccessFileResult OpenInputFile(
         @StdString BytePointer path);
+  /** Open an input file for random access reading.
+   * 
+   *  This override assumes the given FileInfo validly represents the file's
+   *  characteristics, and may optimize access depending on them (for example
+   *  avoid querying the file size or its existence). */
+  
+  ///
+  public native @ByVal RandomAccessFileResult OpenInputFile(
+        @Const @ByRef FileInfo info);
 
   /** Open an output stream for sequential writing.
    * 

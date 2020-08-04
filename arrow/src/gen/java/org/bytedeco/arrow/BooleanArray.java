@@ -34,4 +34,12 @@ public class BooleanArray extends PrimitiveArray {
   public native @Cast("bool") boolean Value(@Cast("int64_t") long i);
 
   public native @Cast("bool") boolean GetView(@Cast("int64_t") long i);
+
+  /** \brief Return the number of false (0) values among the valid
+   *  values. Result is not cached. */
+  public native @Cast("int64_t") long false_count();
+
+  /** \brief Return the number of true (1) values among the valid
+   *  values. Result is not cached. */
+  public native @Cast("int64_t") long true_count();
 }

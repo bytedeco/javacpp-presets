@@ -26,6 +26,9 @@ public class BasicDecimal128 extends Pointer {
     @Override public BasicDecimal128 position(long position) {
         return (BasicDecimal128)super.position(position);
     }
+    @Override public BasicDecimal128 getPointer(long i) {
+        return new BasicDecimal128(this).position(position + i);
+    }
 
   /** \brief Create a BasicDecimal128 from the two's complement representation. */
   public BasicDecimal128(@Cast("int64_t") long high, @Cast("uint64_t") long low) { super((Pointer)null); allocate(high, low); }
@@ -38,7 +41,7 @@ public class BasicDecimal128 extends Pointer {
   /** \brief Convert any integer value into a BasicDecimal128. */
 
   /** \brief Create a BasicDecimal128 from an array of bytes. Bytes are assumed to be in
-   *  little-endian byte order. */
+   *  native-endian byte order. */
   public BasicDecimal128(@Cast("const uint8_t*") BytePointer bytes) { super((Pointer)null); allocate(bytes); }
   private native void allocate(@Cast("const uint8_t*") BytePointer bytes);
   public BasicDecimal128(@Cast("const uint8_t*") ByteBuffer bytes) { super((Pointer)null); allocate(bytes); }
@@ -101,7 +104,7 @@ public class BasicDecimal128 extends Pointer {
   /** \brief Get the low bits of the two's complement representation of the number. */
   public native @Cast("uint64_t") long low_bits();
 
-  /** \brief Return the raw bytes of the value in little-endian byte order. */
+  /** \brief Return the raw bytes of the value in native-endian byte order. */
   public native @ByVal Byte16Array ToBytes();
   public native void ToBytes(@Cast("uint8_t*") BytePointer out);
   public native void ToBytes(@Cast("uint8_t*") ByteBuffer out);
@@ -126,8 +129,15 @@ public class BasicDecimal128 extends Pointer {
    *    rounded up (+1 for +ve, -1 for -ve) based on the value of the dropped digits
    *    (>= 10^reduce_by / 2).
    *  - If 'round' is false, the right-most digits are simply dropped. */
+  
+  ///
   public native @ByVal BasicDecimal128 ReduceScaleBy(int reduce_by, @Cast("bool") boolean round/*=true*/);
   public native @ByVal BasicDecimal128 ReduceScaleBy(int reduce_by);
+
+  /** \brief Whether this number fits in the given precision
+   * 
+   *  Return true if the number of significant digits is less or equal to {@code precision}. */
+  public native @Cast("bool") boolean FitsInPrecision(int precision);
 
   // returns 1 for positive and zero decimal values, -1 for negative decimal values.
   public native @Cast("int64_t") long Sign();

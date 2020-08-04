@@ -25,6 +25,9 @@ public class ConvertOptions extends Pointer {
     @Override public ConvertOptions position(long position) {
         return (ConvertOptions)super.position(position);
     }
+    @Override public ConvertOptions getPointer(long i) {
+        return new ConvertOptions(this).position(position + i);
+    }
 
   // Conversion options
 
@@ -50,7 +53,7 @@ public class ConvertOptions extends Pointer {
 
   /** Whether to try to automatically dict-encode string / binary data.
    *  If true, then when type inference detects a string or binary column,
-   *  it it dict-encoded up to {@code auto_dict_max_cardinality} distinct values
+   *  it is dict-encoded up to {@code auto_dict_max_cardinality} distinct values
    *  (per chunk), after which it switches to regular encoding.
    * 
    *  This setting is ignored for non-inferred columns (those in {@code column_types}). */
@@ -69,6 +72,13 @@ public class ConvertOptions extends Pointer {
    *  or null by default)
    *  This option is ignored if {@code include_columns} is empty. */
   public native @Cast("bool") boolean include_missing_columns(); public native ConvertOptions include_missing_columns(boolean setter);
+
+  /** User-defined timestamp parsers, using the virtual parser interface in
+   *  arrow/util/value_parsing.h. More than one parser can be specified, and
+   *  the CSV conversion logic will try parsing values starting from the
+   *  beginning of this vector. If no parsers are specified, we use the default
+   *  built-in ISO-8601 parser. */
+  
 
   /** Create conversion options with default values, including conventional
    *  values for {@code null_values}, {@code true_values} and {@code false_values} */

@@ -20,35 +20,39 @@ import static org.bytedeco.arrow.global.arrow_dataset.*;
 @Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class FileSource extends Pointer {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public FileSource(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FileSource(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FileSource position(long position) {
+        return (FileSource)super.position(position);
+    }
+    @Override public FileSource getPointer(long i) {
+        return new FileSource(this).position(position + i);
+    }
 
-  // NOTE(kszucs): it'd be better to separate the BufferSource from FileSource
-  public enum DatasetType { PATH(0), BUFFER(1);
+  public FileSource(@StdString String path, @SharedPtr FileSystem filesystem,
+               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(path, filesystem, compression); }
+  private native void allocate(@StdString String path, @SharedPtr FileSystem filesystem,
+               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/);
+  public FileSource(@StdString String path, @SharedPtr FileSystem filesystem) { super((Pointer)null); allocate(path, filesystem); }
+  private native void allocate(@StdString String path, @SharedPtr FileSystem filesystem);
+  public FileSource(@StdString BytePointer path, @SharedPtr FileSystem filesystem,
+               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(path, filesystem, compression); }
+  private native void allocate(@StdString BytePointer path, @SharedPtr FileSystem filesystem,
+               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
+  public FileSource(@StdString BytePointer path, @SharedPtr FileSystem filesystem) { super((Pointer)null); allocate(path, filesystem); }
+  private native void allocate(@StdString BytePointer path, @SharedPtr FileSystem filesystem);
 
-      public final int value;
-      private DatasetType(int v) { this.value = v; }
-      private DatasetType(DatasetType e) { this.value = e.value; }
-      public DatasetType intern() { for (DatasetType e : values()) if (e.value == value) return e; return this; }
-      @Override public String toString() { return intern().name(); }
-  }
-
-  public FileSource(@StdString String path, FileSystem filesystem,
-               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/,
-               @Cast("bool") boolean writable/*=true*/) { super((Pointer)null); allocate(path, filesystem, compression, writable); }
-  private native void allocate(@StdString String path, FileSystem filesystem,
-               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/,
-               @Cast("bool") boolean writable/*=true*/);
-  public FileSource(@StdString String path, FileSystem filesystem) { super((Pointer)null); allocate(path, filesystem); }
-  private native void allocate(@StdString String path, FileSystem filesystem);
-  public FileSource(@StdString BytePointer path, FileSystem filesystem,
-               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/,
-               @Cast("bool") boolean writable/*=true*/) { super((Pointer)null); allocate(path, filesystem, compression, writable); }
-  private native void allocate(@StdString BytePointer path, FileSystem filesystem,
-               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/,
-               @Cast("bool") boolean writable/*=true*/);
-  public FileSource(@StdString BytePointer path, FileSystem filesystem) { super((Pointer)null); allocate(path, filesystem); }
-  private native void allocate(@StdString BytePointer path, FileSystem filesystem);
+  public FileSource(@ByVal FileInfo info, @SharedPtr FileSystem filesystem,
+               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(info, filesystem, compression); }
+  private native void allocate(@ByVal FileInfo info, @SharedPtr FileSystem filesystem,
+               Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/);
+  public FileSource(@ByVal FileInfo info, @SharedPtr FileSystem filesystem) { super((Pointer)null); allocate(info, filesystem); }
+  private native void allocate(@ByVal FileInfo info, @SharedPtr FileSystem filesystem);
+  public FileSource(@ByVal FileInfo info, @SharedPtr FileSystem filesystem,
+               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(info, filesystem, compression); }
+  private native void allocate(@ByVal FileInfo info, @SharedPtr FileSystem filesystem,
+               @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
 
   public FileSource(@SharedPtr ArrowBuffer buffer,
                         Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
@@ -60,45 +64,46 @@ public class FileSource extends Pointer {
                         @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
   private native void allocate(@SharedPtr ArrowBuffer buffer,
                         @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
-
-  public FileSource(@SharedPtr @ByVal ResizableBuffer buffer,
-                        Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
-  private native void allocate(@SharedPtr @ByVal ResizableBuffer buffer,
+  public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpen*") Pointer open) { super((Pointer)null); allocate(open); }
+  private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpen*") Pointer open);
+  public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
+                        Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(open_with_compression, compression); }
+  private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
                         Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/);
-  public FileSource(@SharedPtr @ByVal ResizableBuffer buffer) { super((Pointer)null); allocate(buffer); }
-  private native void allocate(@SharedPtr @ByVal ResizableBuffer buffer);
-  public FileSource(@SharedPtr @ByVal ResizableBuffer buffer,
-                        @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
-  private native void allocate(@SharedPtr @ByVal ResizableBuffer buffer,
+  public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
+                        @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(open_with_compression, compression); }
+  private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
                         @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
 
-  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FileSource other);
+  public FileSource(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file,
+                        Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(file, compression); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file,
+                        Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/);
+  public FileSource(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file) { super((Pointer)null); allocate(file); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file);
+  public FileSource(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file,
+                        @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(file, compression); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::io::RandomAccessFile>"}) RandomAccessFile file,
+                        @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
 
-  /** \brief The kind of file, whether stored in a filesystem, memory
-   *  resident, or other */
-  public native DatasetType type();
+  public FileSource() { super((Pointer)null); allocate(); }
+  private native void allocate();
 
-  /** \brief Return the type of raw compression on the file, if any */
+  public static native @StdVector FileSource FromPaths(@SharedPtr FileSystem fs,
+                                             @ByVal StringVector paths);
+
+  /** \brief Return the type of raw compression on the file, if any. */
   public native Compression.type compression();
 
-  /** \brief Whether the this source may be opened writable */
-  public native @Cast("bool") boolean writable();
-
-  /** \brief Return the file path, if any. Only valid when file source
-   *  type is PATH */
+  /** \brief Return the file path, if any. Only valid when file source wraps a path. */
   public native @StdString String path();
 
-  /** \brief Return the filesystem, if any. Only non null when file
-   *  source type is PATH */
-  public native FileSystem filesystem();
+  /** \brief Return the filesystem, if any. Otherwise returns nullptr */
+  public native @SharedPtr FileSystem filesystem();
 
-  /** \brief Return the buffer containing the file, if any. Only value
-   *  when file source type is BUFFER */
+  /** \brief Return the buffer containing the file, if any. Otherwise returns nullptr */
   public native @SharedPtr ArrowBuffer buffer();
 
   /** \brief Get a RandomAccessFile which views this file source */
   public native @ByVal RandomAccessFileResult Open();
-
-  /** \brief Get an OutputStream which wraps this file source */
-  public native @ByVal OutputStreamResult OpenWritable();
 }

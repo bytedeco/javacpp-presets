@@ -23,6 +23,9 @@ public class FileSelector extends Pointer {
     @Override public FileSelector position(long position) {
         return (FileSelector)super.position(position);
     }
+    @Override public FileSelector getPointer(long i) {
+        return new FileSelector(this).position(position + i);
+    }
 
   /** The directory in which to select files.
    *  If the path exists but doesn't point to a directory, this should be an error. */

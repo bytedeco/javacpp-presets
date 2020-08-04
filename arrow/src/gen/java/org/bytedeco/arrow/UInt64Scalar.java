@@ -14,16 +14,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class UInt64Scalar extends BaseUInt64Type {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public UInt64Scalar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public UInt64Scalar(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UInt64Scalar(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public UInt64Scalar position(long position) {
-        return (UInt64Scalar)super.position(position);
-    }
 
 }

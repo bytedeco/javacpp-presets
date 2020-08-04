@@ -25,6 +25,9 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // Targeting ../StringStringPairVector.java
 
 
+// Targeting ../DataTypeVector.java
+
+
 // Targeting ../ScalarVector.java
 
 
@@ -58,7 +61,16 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // Targeting ../ArrayVectorVector.java
 
 
+// Targeting ../DictionaryVector.java
+
+
 // Targeting ../DatumVector.java
+
+
+// Targeting ../FutureImplVector.java
+
+
+// Targeting ../ValueDescrVector.java
 
 
 // Targeting ../Decimal128Pair.java
@@ -97,7 +109,10 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // #include "arrow/array/concatenate.h"        // IYWU pragma: export
 // #include "arrow/buffer.h"                   // IYWU pragma: export
 // #include "arrow/builder.h"                  // IYWU pragma: export
+// #include "arrow/chunked_array.h"            // IYWU pragma: export
 // #include "arrow/compare.h"                  // IYWU pragma: export
+// #include "arrow/config.h"                   // IYWU pragma: export
+// #include "arrow/datum.h"                    // IYWU pragma: export
 // #include "arrow/extension_type.h"           // IYWU pragma: export
 // #include "arrow/memory_pool.h"              // IYWU pragma: export
 // #include "arrow/pretty_print.h"             // IYWU pragma: export
@@ -108,7 +123,6 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // #include "arrow/table_builder.h"            // IYWU pragma: export
 // #include "arrow/tensor.h"                   // IYWU pragma: export
 // #include "arrow/type.h"                     // IYWU pragma: export
-// #include "arrow/util/config.h"              // IYWU pragma: export
 // #include "arrow/util/key_value_metadata.h"  // IWYU pragma: export
 // #include "arrow/visitor.h"                  // IYWU pragma: export
 
@@ -135,13 +149,24 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // specific language governing permissions and limitations
 // under the License.
 
-public static final int ARROW_VERSION_MAJOR = 0;
-public static final int ARROW_VERSION_MINOR = 17;
-public static final int ARROW_VERSION_PATCH = 1;
+public static final int ARROW_VERSION_MAJOR = 1;
+public static final int ARROW_VERSION_MINOR = 0;
+public static final int ARROW_VERSION_PATCH = 0;
 public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VERSION_MINOR) * 1000 + ARROW_VERSION_PATCH;
 
-public static final String ARROW_SO_VERSION = "17";
-public static final String ARROW_FULL_SO_VERSION = "17.1.0";
+public static final String ARROW_VERSION_STRING = "1.0.0";
+
+public static final String ARROW_SO_VERSION = "100";
+public static final String ARROW_FULL_SO_VERSION = "100.0.0";
+
+public static final String ARROW_CXX_COMPILER_ID = "GNU";
+public static final String ARROW_CXX_COMPILER_VERSION = "9.3.1";
+public static final String ARROW_CXX_COMPILER_FLAGS = "-std=c++11 -m64 -fdiagnostics-color=always -O3 -DNDEBUG";
+
+public static final String ARROW_GIT_ID = "cc708f44cfef500905e3b70015a9d194e60e8e65";
+public static final String ARROW_GIT_DESCRIPTION = "1.5.3-50-gcc708f44cf-dirty";
+
+public static final String ARROW_PACKAGE_KIND = "";
 
 // #define GRPCPP_PP_INCLUDE
 
@@ -169,6 +194,7 @@ public static final String ARROW_FULL_SO_VERSION = "17.1.0";
 
 // #include <memory>
 // #include <type_traits>
+// #include <utility>
 
   // namespace internal
   // namespace arrow
@@ -197,6 +223,7 @@ public static final String ARROW_FULL_SO_VERSION = "17.1.0";
 
 // #include <cstdint>
 
+// #define ARROW_EXPAND(x) x
 // #define ARROW_STRINGIFY(x) #x
 // #define ARROW_CONCAT(x, y) x##y
 
@@ -225,9 +252,11 @@ public static final String ARROW_FULL_SO_VERSION = "17.1.0";
 // #define ARROW_PREDICT_FALSE(x) (__builtin_expect(!!(x), 0))
 // #define ARROW_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
 // #define ARROW_NORETURN __attribute__((noreturn))
+// #define ARROW_NOINLINE __attribute__((noinline))
 // #define ARROW_PREFETCH(addr) __builtin_prefetch(addr)
 // #elif defined(_MSC_VER)
 // #define ARROW_NORETURN __declspec(noreturn)
+// #define ARROW_NOINLINE __declspec(noinline)
 // #define ARROW_PREDICT_FALSE(x) (x)
 // #define ARROW_PREDICT_TRUE(x) (x)
 // #define ARROW_PREFETCH(addr)
@@ -288,6 +317,7 @@ public static final String ARROW_FULL_SO_VERSION = "17.1.0";
 // #  define ARROW_DEPRECATED_USING(...)
 // # endif
 // #endif
+// clang-format on
 
 // ----------------------------------------------------------------------
 
@@ -357,6 +387,63 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 // #define FRIEND_TEST(test_case_name, test_name)
 //   friend class test_case_name##_##test_name##_Test
 
+
+// Parsed from arrow/util/compare.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <memory>
+// #include <type_traits>
+// #include <utility>
+
+// #include "arrow/util/macros.h"
+
+/** CRTP helper for declaring equality comparison. Defines operator== and operator!= */
+
+  // namespace util
+  // namespace arrow
+
+
+// Parsed from arrow/util/type_fwd.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+  // namespace internal
+  // namespace arrow
 
 
 // Parsed from arrow/util/type_traits.h
@@ -571,7 +658,7 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 
 /** \brief Simple iterator which yields the elements of a std::vector */
 
-/** \brief Simple iterator which yields the elements of a std::vector<T> as optional<T>.
+/** \brief Simple iterator which yields *pointers* to the elements of a std::vector<T>.
  *  This is provided to support T where IterationTraits<T>::End is not specialized */
 
 /** \brief MapIterator takes ownership of an iterator and a function to apply
@@ -692,9 +779,9 @@ public static native @MemberGetter int ARROW_LITTLE_ENDIAN();
 public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #else
 // #if defined(__APPLE__) || defined(__FreeBSD__)
-// #include <machine/endian.h>
+// #include <machine/endian.h>  // IWYU pragma: keep
 // #else
-// #include <endian.h>
+// #include <endian.h>  // IWYU pragma: keep
 // #endif
 // #
 // #ifndef __BYTE_ORDER__
@@ -711,37 +798,25 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #endif
 
 // #if defined(_MSC_VER)
-// #include <intrin.h>
+// #include <intrin.h>  // IWYU pragma: keep
+// #include <nmmintrin.h>
 // #pragma intrinsic(_BitScanReverse)
 // #pragma intrinsic(_BitScanForward)
 // #define ARROW_BYTE_SWAP64 _byteswap_uint64
 // #define ARROW_BYTE_SWAP32 _byteswap_ulong
+// #define ARROW_POPCOUNT64 __popcnt64
+// #define ARROW_POPCOUNT32 __popcnt
 // #else
 // #define ARROW_BYTE_SWAP64 __builtin_bswap64
 // #define ARROW_BYTE_SWAP32 __builtin_bswap32
+// #define ARROW_POPCOUNT64 __builtin_popcountll
+// #define ARROW_POPCOUNT32 __builtin_popcount
 // #endif
 
-// #include <algorithm>
-// #include <array>
-// #include <bitset>
-// #include <cassert>
-// #include <cmath>
 // #include <cstdint>
-// #include <cstring>
-// #include <limits>
-// #include <memory>
-// #include <string>
 // #include <type_traits>
-// #include <utility>
-// #include <vector>
 
-// #include "arrow/buffer.h"
-// #include "arrow/result.h"
-// #include "arrow/util/compare.h"
-// #include "arrow/util/functional.h"
 // #include "arrow/util/macros.h"
-// #include "arrow/util/string_builder.h"
-// #include "arrow/util/string_view.h"
 // #include "arrow/util/type_traits.h"
 // #include "arrow/util/visibility.h"
 
@@ -755,6 +830,9 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // print(output.format(', '.join(popcounts)))
 @Namespace("arrow::BitUtil") @MemberGetter public static native @Cast("const uint8_t") byte kBytePopcount(int i);
 @Namespace("arrow::BitUtil") @MemberGetter public static native @Cast("const uint8_t*") BytePointer kBytePopcount();
+
+@Namespace("arrow::BitUtil") public static native @Cast("uint64_t") long PopCount(@Cast("uint64_t") long bitmap);
+@Namespace("arrow::BitUtil") public static native @Cast("uint32_t") int PopCount(@Cast("uint32_t") int bitmap);
 
 //
 // Bit-related computations on integer values
@@ -775,6 +853,10 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 @Namespace("arrow::BitUtil") public static native @Cast("const bool") boolean IsMultipleOf64(@Cast("int64_t") long n);
 
 @Namespace("arrow::BitUtil") public static native @Cast("const bool") boolean IsMultipleOf8(@Cast("int64_t") long n);
+
+// Returns a mask for the bit_index lower order bits.
+// Only valid for bit_index in the range [0, 64).
+@Namespace("arrow::BitUtil") public static native @Cast("const uint64_t") long LeastSignficantBitMask(@Cast("int64_t") long bit_index);
 
 // Returns 'value' rounded up to the nearest multiple of 'factor'
 @Namespace("arrow::BitUtil") public static native @Cast("const int64_t") long RoundUp(@Cast("int64_t") long value, @Cast("int64_t") long factor);
@@ -831,6 +913,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 @Namespace("arrow::BitUtil") public static native @Cast("int64_t") long ByteSwap(@Cast("int64_t") long value);
 @Namespace("arrow::BitUtil") public static native int ByteSwap(int value);
 @Namespace("arrow::BitUtil") public static native short ByteSwap(short value);
+@Namespace("arrow::BitUtil") public static native @Cast("uint8_t") byte ByteSwap(@Cast("uint8_t") byte value);
 
 // Write the swapped bytes into dst. Src and dst cannot overlap.
 @Namespace("arrow::BitUtil") public static native void ByteSwap(Pointer dst, @Const Pointer src, int len);
@@ -888,234 +971,11 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 @Namespace("arrow::BitUtil") public static native void SetBitTo(@Cast("uint8_t*") byte[] bits, @Cast("int64_t") long i, @Cast("bool") boolean bit_is_set);
 
 /** \brief set or clear a range of bits quickly */
-@Namespace("arrow::BitUtil") public static native void SetBitsTo(@Cast("uint8_t*") BytePointer bits, @Cast("int64_t") long start_offset, @Cast("int64_t") long length,
-                             @Cast("bool") boolean bits_are_set);
-@Namespace("arrow::BitUtil") public static native void SetBitsTo(@Cast("uint8_t*") ByteBuffer bits, @Cast("int64_t") long start_offset, @Cast("int64_t") long length,
-                             @Cast("bool") boolean bits_are_set);
-@Namespace("arrow::BitUtil") public static native void SetBitsTo(@Cast("uint8_t*") byte[] bits, @Cast("int64_t") long start_offset, @Cast("int64_t") long length,
-                             @Cast("bool") boolean bits_are_set);
+@Namespace("arrow::BitUtil") public static native void SetBitsTo(@Cast("uint8_t*") BytePointer bits, @Cast("int64_t") long start_offset, @Cast("int64_t") long length, @Cast("bool") boolean bits_are_set);
+@Namespace("arrow::BitUtil") public static native void SetBitsTo(@Cast("uint8_t*") ByteBuffer bits, @Cast("int64_t") long start_offset, @Cast("int64_t") long length, @Cast("bool") boolean bits_are_set);
+@Namespace("arrow::BitUtil") public static native void SetBitsTo(@Cast("uint8_t*") byte[] bits, @Cast("int64_t") long start_offset, @Cast("int64_t") long length, @Cast("bool") boolean bits_are_set);
 
-/** \brief Convert vector of bytes to bitmap buffer */
-@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector BytePointer arg0,
-                                            MemoryPool pool/*=default_memory_pool()*/);
-@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector BytePointer arg0);
-@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector ByteBuffer arg0,
-                                            MemoryPool pool/*=default_memory_pool()*/);
-@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector ByteBuffer arg0);
-@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector byte[] arg0,
-                                            MemoryPool pool/*=default_memory_pool()*/);
-@Namespace("arrow::BitUtil") public static native @ByVal BufferResult BytesToBits(@Cast("uint8_t*") @StdVector byte[] arg0);
-
-
-// Targeting ../BitmapReader.java
-
-
-// Targeting ../BitmapWriter.java
-
-
-// Targeting ../FirstTimeBitmapWriter.java
-
-
-
-// A std::generate() like function to write sequential bits into a bitmap area.
-// Bits preceding the bitmap area are preserved, bits following the bitmap
-// area may be clobbered.
-
-// Like GenerateBits(), but unrolls its main loop for higher performance.
-
-// A function that visits each bit in a bitmap and calls a visitor function with a
-// boolean representation of that bit. This is intended to be analogous to
-// GenerateBits.
-
-// Like VisitBits(), but unrolls its main loop for better performance.
-
-// ----------------------------------------------------------------------
-// Bitmap utilities
-
-/** Copy a bit range of an existing bitmap
- * 
- *  @param pool [in] memory pool to allocate memory from
- *  @param bitmap [in] source data
- *  @param offset [in] bit offset into the source data
- *  @param length [in] number of bits to copy
- * 
- *  @return Status message */
-
-///
-@Namespace("arrow::internal") public static native @ByVal BufferResult CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") BytePointer bitmap,
-                                           @Cast("int64_t") long offset, @Cast("int64_t") long length);
-@Namespace("arrow::internal") public static native @ByVal BufferResult CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer bitmap,
-                                           @Cast("int64_t") long offset, @Cast("int64_t") long length);
-@Namespace("arrow::internal") public static native @ByVal BufferResult CopyBitmap(MemoryPool pool, @Cast("const uint8_t*") byte[] bitmap,
-                                           @Cast("int64_t") long offset, @Cast("int64_t") long length);
-
-/** Copy a bit range of an existing bitmap into an existing bitmap
- * 
- *  @param bitmap [in] source data
- *  @param offset [in] bit offset into the source data
- *  @param length [in] number of bits to copy
- *  @param dest_offset [in] bit offset into the destination
- *  @param restore_trailing_bits [in] don't clobber bits outside the destination range
- *  @param dest [out] the destination buffer, must have at least space for
- *  (offset + length) bits */
-
-///
-@Namespace("arrow::internal") public static native void CopyBitmap(@Cast("const uint8_t*") BytePointer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") BytePointer dest,
-                @Cast("int64_t") long dest_offset, @Cast("bool") boolean restore_trailing_bits/*=true*/);
-@Namespace("arrow::internal") public static native void CopyBitmap(@Cast("const uint8_t*") BytePointer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") BytePointer dest,
-                @Cast("int64_t") long dest_offset);
-@Namespace("arrow::internal") public static native void CopyBitmap(@Cast("const uint8_t*") ByteBuffer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") ByteBuffer dest,
-                @Cast("int64_t") long dest_offset, @Cast("bool") boolean restore_trailing_bits/*=true*/);
-@Namespace("arrow::internal") public static native void CopyBitmap(@Cast("const uint8_t*") ByteBuffer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") ByteBuffer dest,
-                @Cast("int64_t") long dest_offset);
-@Namespace("arrow::internal") public static native void CopyBitmap(@Cast("const uint8_t*") byte[] bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") byte[] dest,
-                @Cast("int64_t") long dest_offset, @Cast("bool") boolean restore_trailing_bits/*=true*/);
-@Namespace("arrow::internal") public static native void CopyBitmap(@Cast("const uint8_t*") byte[] bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long length, @Cast("uint8_t*") byte[] dest,
-                @Cast("int64_t") long dest_offset);
-
-/** Invert a bit range of an existing bitmap into an existing bitmap
- * 
- *  @param bitmap [in] source data
- *  @param offset [in] bit offset into the source data
- *  @param length [in] number of bits to copy
- *  @param dest_offset [in] bit offset into the destination
- *  @param dest [out] the destination buffer, must have at least space for
- *  (offset + length) bits */
-
-
-/** Invert a bit range of an existing bitmap
- * 
- *  @param pool [in] memory pool to allocate memory from
- *  @param bitmap [in] source data
- *  @param offset [in] bit offset into the source data
- *  @param length [in] number of bits to copy
- * 
- *  @return Status message */
-
-
-/** Compute the number of 1's in the given data array
- * 
- *  @param data [in] a packed LSB-ordered bitmap as a byte array
- *  @param bit_offset [in] a bitwise offset into the bitmap
- *  @param length [in] the number of bits to inspect in the bitmap relative to
- *  the offset
- * 
- *  @return The number of set (1) bits in the range */
-@Namespace("arrow::internal") public static native @Cast("int64_t") long CountSetBits(@Cast("const uint8_t*") BytePointer data, @Cast("int64_t") long bit_offset, @Cast("int64_t") long length);
-@Namespace("arrow::internal") public static native @Cast("int64_t") long CountSetBits(@Cast("const uint8_t*") ByteBuffer data, @Cast("int64_t") long bit_offset, @Cast("int64_t") long length);
-@Namespace("arrow::internal") public static native @Cast("int64_t") long CountSetBits(@Cast("const uint8_t*") byte[] data, @Cast("int64_t") long bit_offset, @Cast("int64_t") long length);
-
-
-///
-@Namespace("arrow::internal") public static native @Cast("bool") boolean BitmapEquals(@Cast("const uint8_t*") BytePointer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
-                  @Cast("int64_t") long right_offset, @Cast("int64_t") long bit_length);
-@Namespace("arrow::internal") public static native @Cast("bool") boolean BitmapEquals(@Cast("const uint8_t*") ByteBuffer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
-                  @Cast("int64_t") long right_offset, @Cast("int64_t") long bit_length);
-@Namespace("arrow::internal") public static native @Cast("bool") boolean BitmapEquals(@Cast("const uint8_t*") byte[] left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
-                  @Cast("int64_t") long right_offset, @Cast("int64_t") long bit_length);
-
-/** \brief Do a "bitmap and" on right and left buffers starting at
- *  their respective bit-offsets for the given bit-length and put
- *  the results in out_buffer starting at the given bit-offset.
- * 
- *  out_buffer will be allocated and initialized to zeros using pool before
- *  the operation. */
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") BytePointer left,
-                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
-                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                          @Cast("int64_t") long out_offset);
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left,
-                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
-                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                          @Cast("int64_t") long out_offset);
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAnd(MemoryPool pool, @Cast("const uint8_t*") byte[] left,
-                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
-                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                          @Cast("int64_t") long out_offset);
-
-/** \brief Do a "bitmap and" on right and left buffers starting at
- *  their respective bit-offsets for the given bit-length and put
- *  the results in out starting at the given bit-offset. */
-
-///
-@Namespace("arrow::internal") public static native void BitmapAnd(@Cast("const uint8_t*") BytePointer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
-               @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") BytePointer out);
-@Namespace("arrow::internal") public static native void BitmapAnd(@Cast("const uint8_t*") ByteBuffer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
-               @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") ByteBuffer out);
-@Namespace("arrow::internal") public static native void BitmapAnd(@Cast("const uint8_t*") byte[] left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
-               @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") byte[] out);
-
-/** \brief Do a "bitmap or" for the given bit length on right and left buffers
- *  starting at their respective bit-offsets and put the results in out_buffer
- *  starting at the given bit-offset.
- * 
- *  out_buffer will be allocated and initialized to zeros using pool before
- *  the operation. */
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapOr(MemoryPool pool, @Cast("const uint8_t*") BytePointer left,
-                                         @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
-                                         @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                         @Cast("int64_t") long out_offset);
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapOr(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left,
-                                         @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
-                                         @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                         @Cast("int64_t") long out_offset);
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapOr(MemoryPool pool, @Cast("const uint8_t*") byte[] left,
-                                         @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
-                                         @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                         @Cast("int64_t") long out_offset);
-
-/** \brief Do a "bitmap or" for the given bit length on right and left buffers
- *  starting at their respective bit-offsets and put the results in out
- *  starting at the given bit-offset. */
-
-///
-@Namespace("arrow::internal") public static native void BitmapOr(@Cast("const uint8_t*") BytePointer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
-              @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") BytePointer out);
-@Namespace("arrow::internal") public static native void BitmapOr(@Cast("const uint8_t*") ByteBuffer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
-              @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") ByteBuffer out);
-@Namespace("arrow::internal") public static native void BitmapOr(@Cast("const uint8_t*") byte[] left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
-              @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") byte[] out);
-
-/** \brief Do a "bitmap xor" for the given bit-length on right and left
- *  buffers starting at their respective bit-offsets and put the results in
- *  out_buffer starting at the given bit offset.
- * 
- *  out_buffer will be allocated and initialized to zeros using pool before
- *  the operation. */
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapXor(MemoryPool pool, @Cast("const uint8_t*") BytePointer left,
-                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
-                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                          @Cast("int64_t") long out_offset);
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapXor(MemoryPool pool, @Cast("const uint8_t*") ByteBuffer left,
-                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
-                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                          @Cast("int64_t") long out_offset);
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapXor(MemoryPool pool, @Cast("const uint8_t*") byte[] left,
-                                          @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
-                                          @Cast("int64_t") long right_offset, @Cast("int64_t") long length,
-                                          @Cast("int64_t") long out_offset);
-
-/** \brief Do a "bitmap xor" for the given bit-length on right and left
- *  buffers starting at their respective bit-offsets and put the results in
- *  out starting at the given bit offset. */
-@Namespace("arrow::internal") public static native void BitmapXor(@Cast("const uint8_t*") BytePointer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") BytePointer right,
-               @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") BytePointer out);
-@Namespace("arrow::internal") public static native void BitmapXor(@Cast("const uint8_t*") ByteBuffer left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") ByteBuffer right,
-               @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") ByteBuffer out);
-@Namespace("arrow::internal") public static native void BitmapXor(@Cast("const uint8_t*") byte[] left, @Cast("int64_t") long left_offset, @Cast("const uint8_t*") byte[] right,
-               @Cast("int64_t") long right_offset, @Cast("int64_t") long length, @Cast("int64_t") long out_offset, @Cast("uint8_t*") byte[] out);
-
-/** \brief Generate Bitmap with all position to {@code value} except for one found
- *  at {@code straggler_pos}. */
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAllButOne(MemoryPool pool, @Cast("int64_t") long length,
-                                                @Cast("int64_t") long straggler_pos, @Cast("bool") boolean value/*=true*/);
-@Namespace("arrow::internal") public static native @ByVal BufferResult BitmapAllButOne(MemoryPool pool, @Cast("int64_t") long length,
-                                                @Cast("int64_t") long straggler_pos);
-// Targeting ../BitsetStack.java
-
-
-
-  // namespace internal
+  // namespace BitUtil
   // namespace arrow
 
 
@@ -1490,12 +1350,10 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #include <cstring>
 // #include <memory>
 // #include <string>
-// #include <type_traits>
 // #include <utility>
 // #include <vector>
 
 // #include "arrow/device.h"
-// #include "arrow/io/type_fwd.h"
 // #include "arrow/status.h"
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
@@ -1526,6 +1384,22 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 @Namespace("arrow") public static native @SharedPtr ArrowBuffer SliceBuffer(@SharedPtr ArrowBuffer buffer,
                                                   @Cast("const int64_t") long offset);
 
+/** \brief Input-checking version of SliceBuffer
+ * 
+ *  An Invalid Status is returned if the requested slice falls out of bounds. */
+
+///
+@Namespace("arrow") public static native @ByVal BufferResult SliceBufferSafe(@SharedPtr ArrowBuffer buffer,
+                                                @Cast("int64_t") long offset);
+/** \brief Input-checking version of SliceBuffer
+ * 
+ *  An Invalid Status is returned if the requested slice falls out of bounds.
+ *  Note that unlike SliceBuffer, {@code length} isn't clamped to the available buffer size. */
+
+///
+@Namespace("arrow") public static native @ByVal BufferResult SliceBufferSafe(@SharedPtr ArrowBuffer buffer,
+                                                @Cast("int64_t") long offset, @Cast("int64_t") long length);
+
 /** \brief Like SliceBuffer, but construct a mutable buffer slice.
  * 
  *  If the parent buffer is not mutable, behavior is undefined (it may abort
@@ -1539,8 +1413,24 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  * 
  *  If the parent buffer is not mutable, behavior is undefined (it may abort
  *  in debug builds). */
+
+///
 @Namespace("arrow") public static native @SharedPtr ArrowBuffer SliceMutableBuffer(
     @SharedPtr ArrowBuffer buffer, @Cast("const int64_t") long offset);
+
+/** \brief Input-checking version of SliceMutableBuffer
+ * 
+ *  An Invalid Status is returned if the requested slice falls out of bounds. */
+
+///
+@Namespace("arrow") public static native @ByVal BufferResult SliceMutableBufferSafe(
+    @SharedPtr ArrowBuffer buffer, @Cast("int64_t") long offset);
+/** \brief Input-checking version of SliceMutableBuffer
+ * 
+ *  An Invalid Status is returned if the requested slice falls out of bounds.
+ *  Note that unlike SliceBuffer, {@code length} isn't clamped to the available buffer size. */
+@Namespace("arrow") public static native @ByVal BufferResult SliceMutableBufferSafe(
+    @SharedPtr ArrowBuffer buffer, @Cast("int64_t") long offset, @Cast("int64_t") long length);
 // Targeting ../MutableBuffer.java
 
 
@@ -1556,66 +1446,49 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
  * 
  *  @param size [in] size of buffer to allocate
  *  @param pool [in] a memory pool */
+
+///
 @Namespace("arrow") public static native @ByVal BufferUniqueResult AllocateBuffer(@Cast("const int64_t") long size,
                                                MemoryPool pool/*=nullptr*/);
 @Namespace("arrow") public static native @ByVal BufferUniqueResult AllocateBuffer(@Cast("const int64_t") long size);
-
-@Namespace("arrow") public static native @Deprecated @ByVal Status AllocateBuffer(MemoryPool pool, @Cast("const int64_t") long size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
-@Namespace("arrow") public static native @Deprecated @ByVal Status AllocateBuffer(@Cast("const int64_t") long size, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Allocate a resizeable buffer from a memory pool, zero its padding.
  * 
  *  @param size [in] size of buffer to allocate
  *  @param pool [in] a memory pool */
+
+///
 @Namespace("arrow") public static native @ByVal ResizableUniqueResult AllocateResizableBuffer(
     @Cast("const int64_t") long size, MemoryPool pool/*=nullptr*/);
 @Namespace("arrow") public static native @ByVal ResizableUniqueResult AllocateResizableBuffer(
     @Cast("const int64_t") long size);
-
-@Namespace("arrow") public static native @Deprecated @ByVal Status AllocateResizableBuffer(MemoryPool pool, @Cast("const int64_t") long size,
-                               @SharedPtr ResizableBuffer out);
-
-@Namespace("arrow") public static native @Deprecated @ByVal Status AllocateResizableBuffer(@Cast("const int64_t") long size, @SharedPtr ResizableBuffer out);
 
 /** \brief Allocate a bitmap buffer from a memory pool
  *  no guarantee on values is provided.
  * 
  *  @param length [in] size in bits of bitmap to allocate
  *  @param pool [in] memory pool to allocate memory from */
-@Namespace("arrow") public static native @ByVal BufferResult AllocateBitmap(@Cast("int64_t") long length,
-                                               MemoryPool pool/*=nullptr*/);
-@Namespace("arrow") public static native @ByVal BufferResult AllocateBitmap(@Cast("int64_t") long length);
 
 
-///
-@Namespace("arrow") public static native @ByVal Status AllocateBitmap(MemoryPool pool, @Cast("int64_t") long length, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
+
 
 /** \brief Allocate a zero-initialized bitmap buffer from a memory pool
  * 
  *  @param length [in] size in bits of bitmap to allocate
  *  @param pool [in] memory pool to allocate memory from */
+
+///
 @Namespace("arrow") public static native @ByVal BufferResult AllocateEmptyBitmap(@Cast("int64_t") long length,
                                                     MemoryPool pool/*=nullptr*/);
 @Namespace("arrow") public static native @ByVal BufferResult AllocateEmptyBitmap(@Cast("int64_t") long length);
-
-@Namespace("arrow") public static native @Deprecated @ByVal Status AllocateEmptyBitmap(MemoryPool pool, @Cast("int64_t") long length,
-                           @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
-
-///
-@Namespace("arrow") public static native @Deprecated @ByVal Status AllocateEmptyBitmap(@Cast("int64_t") long length, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
 /** \brief Concatenate multiple buffers into a single buffer
  * 
  *  @param buffers [in] to be concatenated
  *  @param pool [in] memory pool to allocate the new buffer from */
-@Namespace("arrow") public static native @ByVal BufferResult ConcatenateBuffers(@Const @ByRef BufferVector buffers,
-                                                   MemoryPool pool/*=nullptr*/);
-@Namespace("arrow") public static native @ByVal BufferResult ConcatenateBuffers(@Const @ByRef BufferVector buffers);
 
-@Namespace("arrow") public static native @ByVal Status ConcatenateBuffers(@Const @ByRef BufferVector buffers, MemoryPool pool,
-                          @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
+
+
 
 /** \} */
 
@@ -1653,6 +1526,7 @@ public static final int ARROW_LITTLE_ENDIAN = ARROW_LITTLE_ENDIAN();
 // #include "arrow/buffer.h"
 // #include "arrow/status.h"
 // #include "arrow/util/bit_util.h"
+// #include "arrow/util/bitmap_generate.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/ubsan.h"
 // #include "arrow/util/visibility.h"
@@ -1800,6 +1674,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../StringResult.java
 
 
+// Targeting ../ValueDescrResult.java
+
+
 // Targeting ../ArrayVectorResult.java
 
 
@@ -1821,13 +1698,25 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../LocalFileSystemOptionsResult.java
 
 
+// Targeting ../HDFSOptionsResult.java
+
+
+// Targeting ../ThreadPoolResult.java
+
+
 // Targeting ../ArrayResult.java
+
+
+// Targeting ../ArrayDataResult.java
 
 
 // Targeting ../BufferResult.java
 
 
 // Targeting ../BufferUniqueResult.java
+
+
+// Targeting ../ResizableResult.java
 
 
 // Targeting ../ResizableUniqueResult.java
@@ -1908,7 +1797,22 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../TableReaderResult.java
 
 
+// Targeting ../FunctionResult.java
+
+
 // Targeting ../DatumResult.java
+
+
+// Targeting ../ScalarKernelResult.java
+
+
+// Targeting ../ScalarAggregateKernelResult.java
+
+
+// Targeting ../VectorKernelResult.java
+
+
+// Targeting ../SelectionVectorResult.java
 
 
 // Targeting ../FileInfoResult.java
@@ -1951,6 +1855,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // Targeting ../DecompressResultResult.java
+
+
+// Targeting ../IpcPayloadWriterResult.java
 
 
 // Targeting ../MessageSharedResult.java
@@ -2041,19 +1948,42 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #pragma once
 
+// #include <limits>
 // #include <memory>
 // #include <string>
 // #include <vector>
 
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
+
 // Targeting ../Device.java
 
 
 // Targeting ../MemoryManager.java
 
 
+// Targeting ../DictionaryArray.java
+
+
 // Targeting ../BooleanType.java
+
+
+// Targeting ../BinaryArray.java
+
+
+// Targeting ../LargeBinaryArray.java
+
+
+// Targeting ../FixedSizeBinaryArray.java
+
+
+// Targeting ../StringArray.java
+
+
+// Targeting ../LargeStringArray.java
+
+
+// Targeting ../Decimal128Array.java
 
 
 // Targeting ../UnionMode.java
@@ -2101,11 +2031,21 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // #undef _NUMERIC_TYPE_DECL
+
+@Namespace("arrow") public enum DateUnit { DAY((byte)0), MILLI((byte)1);
+
+    public final byte value;
+    private DateUnit(byte v) { this.value = v; }
+    private DateUnit(DateUnit e) { this.value = e.value; }
+    public DateUnit intern() { for (DateUnit e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 // Targeting ../TimeUnit.java
 
 
+// Targeting ../Type.java
 
-// ----------------------------------------------------------------------
+
 
 /** \defgroup type-factories Factory functions for creating data types
  * 
@@ -2158,13 +2098,13 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType decimal(int precision, int scale);
 
 /** \brief Create a ListType instance from its child Field type */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType list(@Const @SharedPtr @ByRef Field value_type);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType list(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_type);
 
 /** \brief Create a ListType instance from its child DataType */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType list(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type);
 
 /** \brief Create a LargeListType instance from its child Field type */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType large_list(@Const @SharedPtr @ByRef Field value_type);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType large_list(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_type);
 
 /** \brief Create a LargeListType instance from its child DataType */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType large_list(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type);
@@ -2182,13 +2122,13 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  * 
  *  The field override is provided to communicate nullability of the value. */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType map(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType key_type,
-                              @Const @SharedPtr @ByRef Field item_field,
+                              @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field item_field,
                               @Cast("bool") boolean keys_sorted/*=false*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType map(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType key_type,
-                              @Const @SharedPtr @ByRef Field item_field);
+                              @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field item_field);
 
 /** \brief Create a FixedSizeListType instance from its child Field type */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType fixed_size_list(@Const @SharedPtr @ByRef Field value_type,
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType fixed_size_list(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_type,
                                           int list_size);
 
 /** \brief Create a FixedSizeListType instance from its child DataType */
@@ -2232,81 +2172,109 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 /** \brief Create a StructType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType struct_(@Const @ByRef FieldVector fields);
 
+/** \brief Create a SparseUnionType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@ByVal FieldVector child_fields,
+                                                    @StdVector BytePointer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@ByVal FieldVector child_fields);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@ByVal FieldVector child_fields,
+                                                    @StdVector ByteBuffer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@ByVal FieldVector child_fields,
+                                                    @StdVector byte[] type_codes/*={}*/);
+/** \brief Create a DenseUnionType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
+                                                   @StdVector BytePointer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
+                                                   @StdVector ByteBuffer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
+                                                   @StdVector byte[] type_codes/*={}*/);
+
+/** \brief Create a SparseUnionType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>({})") StringVector field_names,
+             @StdVector BytePointer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@Const @ByRef ArrayVector children);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>({})") StringVector field_names,
+             @StdVector ByteBuffer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>({})") StringVector field_names,
+             @StdVector byte[] type_codes/*={}*/);
+/** \brief Create a DenseUnionType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>({})") StringVector field_names,
+            @StdVector BytePointer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@Const @ByRef ArrayVector children);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>({})") StringVector field_names,
+            @StdVector ByteBuffer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>({})") StringVector field_names,
+            @StdVector byte[] type_codes/*={}*/);
+
 /** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector BytePointer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector BytePointer type_codes);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector ByteBuffer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector ByteBuffer type_codes);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector byte[] type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector byte[] type_codes);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector BytePointer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector ByteBuffer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @StdVector byte[] type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 
 /** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields);
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
        @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 
 /** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_();
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-
-/** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes,
        UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes,
        @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector byte[] type_codes,
        UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector byte[] type_codes);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes,
        @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes,
        UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names, @StdVector byte[] type_codes,
        @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 
 /** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names,
        UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Const @ByRef StringVector field_names,
        @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 
 /** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children);
+@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
        @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-
 /** \brief Create a DictionaryType instance
  *  @param index_type [in] the type of the dictionary indices (must be
  *  a signed integer)
@@ -2337,12 +2305,12 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  @param metadata any custom key-value metadata, default null */
 
 ///
-@Namespace("arrow") public static native @SharedPtr @ByVal Field field(@StdString String name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean nullable/*=true*/,
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(@StdString String name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean nullable/*=true*/,
       @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByVal(nullValue = "std::shared_ptr<const arrow::KeyValueMetadata>(nullptr)") KeyValueMetadata metadata);
-@Namespace("arrow") public static native @SharedPtr @ByVal Field field(@StdString String name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-@Namespace("arrow") public static native @SharedPtr @ByVal Field field(@StdString BytePointer name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean nullable/*=true*/,
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(@StdString String name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(@StdString BytePointer name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("bool") boolean nullable/*=true*/,
       @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByVal(nullValue = "std::shared_ptr<const arrow::KeyValueMetadata>(nullptr)") KeyValueMetadata metadata);
-@Namespace("arrow") public static native @SharedPtr @ByVal Field field(@StdString BytePointer name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(@StdString BytePointer name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
 /** \brief Create a Schema instance
  * 
@@ -2391,6 +2359,21 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/bit_util.h"
+
+//
+// Per-type id type lookup
+//
+
+// #define TYPE_ID_TRAIT(_id, _typeclass)
+//   template <>
+//   struct TypeIdTraits<Type::_id> {
+//     using Type = _typeclass;
+//   };
+// Targeting ../TypeIdTraits.java
+
+  // XXX or DecimalType?
+
+// #undef TYPE_ID_TRAIT
 
 //
 // Per-type type traits
@@ -2480,6 +2463,8 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow") public static native @Cast("bool") boolean is_fixed_size_binary(@Cast("arrow::Type::type") int type_id);
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_fixed_width(@Cast("arrow::Type::type") int type_id);
+
+@Namespace("arrow") public static native @Cast("bool") boolean is_nested(@Cast("arrow::Type::type") int type_id);
 
   // namespace arrow
 
@@ -2579,7 +2564,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <iosfwd>
 // #include <limits>
 // #include <string>
-// #include <type_traits>
 // #include <utility>
 
 // #include "arrow/result.h"
@@ -2625,6 +2609,235 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
   // namespace arrow
 
 
+// Parsed from arrow/util/future.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <atomic>
+// #include <cmath>
+// #include <memory>
+// #include <type_traits>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+
+/** A Future's execution or completion status */
+@Namespace("arrow") public enum FutureState { PENDING((byte)0), SUCCESS((byte)1), FAILURE((byte)2);
+
+    public final byte value;
+    private FutureState(byte v) { this.value = v; }
+    private FutureState(FutureState e) { this.value = e.value; }
+    public FutureState intern() { for (FutureState e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("arrow") public static native @Cast("bool") boolean IsFutureFinished(FutureState state);
+@Namespace("arrow") public static native @Cast("bool") boolean IsFutureFinished(@Cast("arrow::FutureState") byte state);
+// Targeting ../FutureImpl.java
+
+
+// Targeting ../FutureWaiter.java
+
+
+// Targeting ../FutureStorageBase.java
+
+
+// Targeting ../FutureStorage.java
+
+
+
+// A Future<Status> just stores a Status.
+
+// ---------------------------------------------------------------------
+// Public API
+
+/** \brief EXPERIMENTAL A std::future-like class with more functionality.
+ * 
+ *  A Future represents the results of a past or future computation.
+ *  The Future API has two sides: a producer side and a consumer side.
+ * 
+ *  The producer API allows creating a Future and setting its result or
+ *  status, possibly after running a computation function.
+ * 
+ *  The consumer API allows querying a Future's current state, wait for it
+ *  to complete, or wait on multiple Futures at once (using WaitForAll,
+ *  WaitForAny or AsCompletedIterator). */
+
+/** \brief Wait for all the futures to end, or for the given timeout to expire.
+ * 
+ *  {@code true} is returned if all the futures completed before the timeout was reached,
+ *  {@code false} otherwise. */
+
+/** \brief Wait for all the futures to end, or for the given timeout to expire.
+ * 
+ *  {@code true} is returned if all the futures completed before the timeout was reached,
+ *  {@code false} otherwise. */
+
+/** \brief Wait for one of the futures to end, or for the given timeout to expire.
+ * 
+ *  The indices of all completed futures are returned.  Note that some futures
+ *  may not be in the returned set, but still complete concurrently. */
+
+/** \brief Wait for one of the futures to end, or for the given timeout to expire.
+ * 
+ *  The indices of all completed futures are returned.  Note that some futures
+ *  may not be in the returned set, but still complete concurrently. */
+
+// #define ARROW_ASSIGN_OR_RETURN_FUTURE_IMPL(result_name, lhs, T, rexpr)
+//   auto result_name = (rexpr);
+//   if (ARROW_PREDICT_FALSE(!(result_name).ok())) {
+//     return Future<T>::MakeFinished(std::move(result_name).status());
+//   }
+//   lhs = std::move(result_name).MoveValueUnsafe();
+
+// #define ARROW_ASSIGN_OR_RETURN_FUTURE(lhs, T, rexpr)
+//   ARROW_ASSIGN_OR_RETURN_FUTURE_IMPL(
+//       ARROW_ASSIGN_OR_RAISE_NAME(_error_or_value, __COUNTER__), lhs, T, rexpr);
+
+  // namespace arrow
+
+
+// Parsed from arrow/util/task_group.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <functional>
+// #include <memory>
+// #include <utility>
+
+// #include "arrow/status.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/type_fwd.h"
+// #include "arrow/util/visibility.h"
+// Targeting ../TaskGroup.java
+
+
+
+  // namespace internal
+  // namespace arrow
+
+
+// Parsed from arrow/util/thread_pool.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #ifndef _WIN32
+// #include <unistd.h>
+// #endif
+
+// #include <cstdint>
+// #include <functional>
+// #include <memory>
+// #include <type_traits>
+// #include <utility>
+
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/util/future.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+
+// #if defined(_MSC_VER)
+// Disable harmless warning for decorated name length limit
+// #pragma warning(disable : 4503)
+// #endif
+
+/** \brief Get the capacity of the global thread pool
+ * 
+ *  Return the number of worker threads in the thread pool to which
+ *  Arrow dispatches various CPU-bound tasks.  This is an ideal number,
+ *  not necessarily the exact number of threads at a given point in time.
+ * 
+ *  You can change this number using SetCpuThreadPoolCapacity(). */
+
+///
+///
+@Namespace("arrow") public static native int GetCpuThreadPoolCapacity();
+
+/** \brief Set the capacity of the global thread pool
+ * 
+ *  Set the number of worker threads int the thread pool to which
+ *  Arrow dispatches various CPU-bound tasks.
+ * 
+ *  The current number is returned by GetCpuThreadPoolCapacity(). */
+@Namespace("arrow") public static native @ByVal Status SetCpuThreadPoolCapacity(int threads);
+
+// Make sure that both functions returning T and Result<T> can be called
+// through Executor::Submit(), and that a Future<T> is returned for both.
+
+
+// Targeting ../TaskHints.java
+
+
+// Targeting ../Executor.java
+
+
+// Targeting ../ThreadPool.java
+
+
+
+// Return the process-global thread pool for CPU-bound tasks.
+@Namespace("arrow::internal") public static native ThreadPool GetCpuThreadPool();
+
+  // namespace internal
+  // namespace arrow
+
+
 // Parsed from arrow/type.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -2650,6 +2863,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <climits>
 // #include <cstdint>
 // #include <iosfwd>
+// #include <limits>
 // #include <memory>
 // #include <string>
 // #include <utility>
@@ -2662,9 +2876,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/util/variant.h"
 // #include "arrow/util/visibility.h"
 // #include "arrow/visitor.h"
-// Targeting ../Type.java
-
-
 // Targeting ../Fingerprintable.java
 
 
@@ -2700,6 +2911,8 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // Targeting ../Field.java
+
+
 
 
 
@@ -2749,6 +2962,8 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../BaseBinaryType.java
 
 
+
+@Namespace("arrow") @MemberGetter public static native @Cast("const int64_t") long kBinaryMemoryLimit();
 // Targeting ../BinaryType.java
 
 
@@ -2776,18 +2991,12 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../UnionType.java
 
 
+// Targeting ../SparseUnionType.java
 
-// ----------------------------------------------------------------------
-// Date and time types
 
-@Namespace("arrow") public enum DateUnit { DAY((byte)0), MILLI((byte)1);
+// Targeting ../DenseUnionType.java
 
-    public final byte value;
-    private DateUnit(byte v) { this.value = v; }
-    private DateUnit(DateUnit e) { this.value = e.value; }
-    public DateUnit intern() { for (DateUnit e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+
 // Targeting ../TemporalType.java
 
 
@@ -2867,6 +3076,18 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow") public static native @ByVal SchemaResult UnifySchemas(
     @Const @ByRef SchemaVector schemas);
 
+@Namespace("arrow::internal") public static native @Cast("bool") boolean HasValidityBitmap(@Cast("arrow::Type::type") int id);
+
+@Namespace("arrow::internal") public static native @StdString String ToString(@Cast("arrow::Type::type") int id);
+
+@Namespace("arrow::internal") public static native @StdString String ToTypeName(@Cast("arrow::Type::type") int id);
+
+@Namespace("arrow::internal") public static native @StdString String ToString(TimeUnit.type unit);
+
+@Namespace("arrow::internal") public static native int GetByteWidth(@Const @ByRef DataType type);
+
+  // namespace internal
+
   // namespace arrow
 
 
@@ -2909,13 +3130,15 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/type_traits.h"
 // #include "arrow/util/compare.h"
 // #include "arrow/util/decimal.h"
-// #include "arrow/util/logging.h"
 // #include "arrow/util/string_view.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../Scalar.java
 
 
 // Targeting ../NullScalar.java
+
+
+// Targeting ../PrimitiveScalarBase.java
 
 
 
@@ -3097,6 +3320,12 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../UnionScalar.java
 
 
+// Targeting ../SparseUnionScalar.java
+
+
+// Targeting ../DenseUnionScalar.java
+
+
 // Targeting ../DictionaryScalar.java
 
 
@@ -3104,7 +3333,16 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 
+/** \}
+ <p>
+ *  \defgroup scalar-factories Scalar factory functions
+ * 
+ *  \{
+ <p>
+ *  \brief Scalar factory for null scalars */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeNullScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+
+/** \} */
 
 @Namespace("arrow::internal") public static native @ByVal Status CheckBufferLength();
 
@@ -3113,10 +3351,22 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
   // namespace internal
 
-/** \brief type inferring scalar factory */
+/** \addtogroup scalar-factories
+ * 
+ *  \{
+ <p>
+ *  \brief Scalar factory for non-null scalars */
+
+/** \brief Type-inferring scalar factory for non-null scalars
+ * 
+ *  Construct a Scalar instance with a DataType determined by the input C++ type.
+ *  (for example Int8Scalar for a int8_t input).
+ *  Only non-parametric primitive types and String are supported. */
 
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeScalar(@StdString String value);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeScalar(@StdString BytePointer value);
+
+/** \} */
 
   // namespace arrow
 
@@ -3177,35 +3427,118 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // specific language governing permissions and limitations
 // under the License.
 
+// Kitchen-sink public API for arrow::Array data structures. C++ library code
+// (especially header files) in Apache Arrow should use more specific headers
+// unless it's a file that uses most or all Array types in which case using
+// arrow/array.h is fine.
+
+// #pragma once
+
+// #include "arrow/array/array_base.h"       // IWYU pragma: keep
+// #include "arrow/array/array_binary.h"     // IWYU pragma: keep
+// #include "arrow/array/array_decimal.h"    // IWYU pragma: keep
+// #include "arrow/array/array_dict.h"       // IWYU pragma: keep
+// #include "arrow/array/array_nested.h"     // IWYU pragma: keep
+// #include "arrow/array/array_primitive.h"  // IWYU pragma: keep
+// #include "arrow/array/data.h"             // IWYU pragma: keep
+// #include "arrow/array/util.h"             // IWYU pragma: keep
+
+
+// Parsed from arrow/array/data.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 // #pragma once
 
 // #include <atomic>  // IWYU pragma: export
 // #include <cstdint>
-// #include <iosfwd>
 // #include <memory>
-// #include <string>
-// #include <type_traits>
 // #include <utility>
 // #include <vector>
 
-// #include "arrow/compare.h"
-// #include "arrow/type.h"
-// #include "arrow/type_fwd.h"
-// #include "arrow/type_traits.h"
-// #include "arrow/util/bit_util.h"
-// #include "arrow/util/checked_cast.h"
+// #include "arrow/buffer.h"
+// #include "arrow/result.h"
 // #include "arrow/util/macros.h"
-// #include "arrow/util/string_view.h"  // IWYU pragma: export
 // #include "arrow/util/visibility.h"
 
 // When slicing, we do not know the null count of the sliced range without
 // doing some computation. To avoid doing this eagerly, we set the null count
 // to -1 (any negative number will do). When Array::null_count is called the
 // first time, the null count will be computed. See ARROW-33
+
+///
+///
+///
+///
+///
+///
+///
+///
 @Namespace("arrow") @MemberGetter public static native @Cast("const int64_t") long kUnknownNullCount();
 // Targeting ../ArrayData.java
 
 
+
+/** Construct a zero-copy view of this ArrayData with the given type.
+ * 
+ *  This method checks if the types are layout-compatible.
+ *  Nested types are traversed in depth-first order. Data buffers must have
+ *  the same item sizes, even though the logical types may be different.
+ *  An error is returned if the types are not layout-compatible. */
+@Namespace("arrow::internal") public static native @ByVal ArrayDataResult GetArrayView(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ArrayData>"}) ArrayData data,
+                                                @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+
+  // namespace internal
+  // namespace arrow
+
+
+// Parsed from arrow/array/util.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+// #include <vector>
+
+// #include "arrow/array/data.h"
+// #include "arrow/compare.h"
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
 
 /** \brief Create a strongly-typed Array instance from generic ArrayData
  *  @param data [in] the array contents
@@ -3231,43 +3564,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow") public static native @ByVal ArrayResult MakeArrayFromScalar(
     @Const @ByRef Scalar scalar, @Cast("int64_t") long length);
 
-/** \brief Create a strongly-typed Array instance with all elements null
- *  @param type [in] the array type
- *  @param length [in] the array length
- *  @param out [out] resulting Array instance */
-@Namespace("arrow") public static native @Deprecated @ByVal Status MakeArrayOfNull(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
-                       @SharedPtr Array out);
-
-/** \brief Create a strongly-typed Array instance with all elements null
- *  @param pool [in] the pool from which memory for this array will be allocated
- *  @param type [in] the array type
- *  @param length [in] the array length
- *  @param out [out] resulting Array instance */
-@Namespace("arrow") public static native @Deprecated @ByVal Status MakeArrayOfNull(MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                       @Cast("int64_t") long length, @SharedPtr Array out);
-
-/** \brief Create an Array instance whose slots are the given scalar
- *  @param scalar [in] the value with which to fill the array
- *  @param length [in] the array length
- *  @param out [out] resulting Array instance */
-@Namespace("arrow") public static native @Deprecated @ByVal Status MakeArrayFromScalar(@Const @ByRef Scalar scalar, @Cast("int64_t") long length,
-                           @SharedPtr Array out);
-
-/** \brief Create a strongly-typed Array instance with all elements null
- *  @param pool [in] the pool from which memory for this array will be allocated
- *  @param scalar [in] the value with which to fill the array
- *  @param length [in] the array length
- *  @param out [out] resulting Array instance */
-
-///
-///
-///
-@Namespace("arrow") public static native @Deprecated @ByVal Status MakeArrayFromScalar(MemoryPool pool, @Const @ByRef Scalar scalar, @Cast("int64_t") long length,
-                           @SharedPtr Array out);
-// Targeting ../Array.java
-
-
-
 /** Given a number of ArrayVectors, treat each ArrayVector as the
  *  chunks of a chunked array.  Then rechunk each ArrayVector such that
  *  all ArrayVectors are chunked identically.  It is mandatory that
@@ -3275,17 +3571,172 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow::internal") public static native @ByVal ArrayVectorVector RechunkArraysConsistently(@Const @ByRef ArrayVectorVector arg0);
 
   // namespace internal
+  // namespace arrow
+
+
+// Parsed from arrow/array/array_base.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <iosfwd>
+// #include <memory>
+// #include <string>
+// #include <vector>
+
+// #include "arrow/array/data.h"
+// #include "arrow/buffer.h"
+// #include "arrow/compare.h"
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/util/bit_util.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+// #include "arrow/visitor.h"
+// Targeting ../Array.java
+
+
 
 @Namespace("arrow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef Array x);
 // Targeting ../FlatArray.java
 
 
-// Targeting ../NullArray.java
-
-
 // Targeting ../PrimitiveArray.java
 
 
+// Targeting ../NullArray.java
+
+
+
+  // namespace arrow
+
+
+// Parsed from arrow/array/array_nested.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// Array accessor classes for List, LargeList, FixedSizeList, Map, Struct, and
+// Union
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/array/array_base.h"
+// #include "arrow/array/data.h"
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/type_fwd.h"
+// #include "arrow/util/checked_cast.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+// Targeting ../BaseListArray.java
+
+
+// Targeting ../BaseLargeListArray.java
+
+
+// Targeting ../ListArray.java
+
+
+// Targeting ../LargeListArray.java
+
+
+// Targeting ../MapArray.java
+
+
+// Targeting ../FixedSizeListArray.java
+
+
+// Targeting ../StructArray.java
+
+
+// Targeting ../UnionArray.java
+
+
+// Targeting ../SparseUnionArray.java
+
+
+// Targeting ../DenseUnionArray.java
+
+
+
+  // namespace arrow
+
+
+// Parsed from arrow/array/array_primitive.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// Array accessor types for primitive/C-type-based arrays, such as numbers,
+// boolean, and temporal types.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+
+// #include "arrow/array/array_base.h"
+// #include "arrow/array/data.h"
+// #include "arrow/type.h"
+// #include "arrow/type_fwd.h"  // IWYU pragma: export
+// #include "arrow/type_traits.h"
+// #include "arrow/util/bit_util.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
 // Targeting ../Int8Array.java
 
 
@@ -3343,60 +3794,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../BooleanArray.java
 
 
-// Targeting ../BaseListArray.java
-
-
-// Targeting ../BaseLargeListArray.java
-
-
-// Targeting ../ListArray.java
-
-
-// Targeting ../LargeListArray.java
-
-
-// Targeting ../MapArray.java
-
-
-// Targeting ../FixedSizeListArray.java
-
-
-// Targeting ../BaseBinaryArray.java
-
-
-// Targeting ../BaseLargeBinaryArray.java
-
-
-// Targeting ../BinaryArray.java
-
-
-// Targeting ../StringArray.java
-
-
-// Targeting ../LargeBinaryArray.java
-
-
-// Targeting ../LargeStringArray.java
-
-
-// Targeting ../FixedSizeBinaryArray.java
-
-
 // Targeting ../DayTimeIntervalArray.java
-
-
-// Targeting ../Decimal128Array.java
-
-
-
-// Backward compatibility
-// Targeting ../StructArray.java
-
-
-// Targeting ../UnionArray.java
-
-
-// Targeting ../DictionaryArray.java
 
 
 
@@ -3425,19 +3823,21 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #pragma once
 
 // #include <memory>
-// #include <vector>
 
-// #include "arrow/array.h"
-// #include "arrow/memory_pool.h"
+// #include "arrow/type_fwd.h"
+// #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 
 /** \brief Concatenate arrays
  * 
  *  @param arrays [in] a vector of arrays to be concatenated
  *  @param pool [in] memory to store the result will be allocated from this memory pool
- *  @param out [out] the resulting concatenated array
- *  @return Status */
-@Namespace("arrow") public static native @ByVal Status Concatenate(@Const @ByRef ArrayVector arrays, MemoryPool pool,
+ *  @return the concatenated array */
+@Namespace("arrow") public static native @ByVal ArrayResult Concatenate(@Const @ByRef ArrayVector arrays,
+                                           MemoryPool pool/*=arrow::default_memory_pool()*/);
+@Namespace("arrow") public static native @ByVal ArrayResult Concatenate(@Const @ByRef ArrayVector arrays);
+
+@Namespace("arrow") public static native @Deprecated @ByVal Status Concatenate(@Const @ByRef ArrayVector arrays, MemoryPool pool,
                    @SharedPtr Array out);
 
   // namespace arrow
@@ -3466,19 +3866,18 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #include <algorithm>  // IWYU pragma: keep
 // #include <cstdint>
-// #include <cstring>
 // #include <limits>
 // #include <memory>
-// #include <type_traits>
 // #include <utility>
 // #include <vector>
 
+// #include "arrow/array/array_base.h"
+// #include "arrow/array/array_primitive.h"
+// #include "arrow/buffer.h"
 // #include "arrow/buffer_builder.h"
 // #include "arrow/status.h"
 // #include "arrow/type.h"
-// #include "arrow/type_traits.h"
 // #include "arrow/util/macros.h"
-// #include "arrow/util/type_traits.h"
 // #include "arrow/util/visibility.h"
 
 @Namespace("arrow") @MemberGetter public static native @Cast("const int64_t") long kMinBuilderCapacity();
@@ -3514,23 +3913,27 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #pragma once
 
-// #include <algorithm>
+// #include <array>
+// #include <cstddef>
 // #include <cstdint>
+// #include <cstring>
 // #include <limits>
 // #include <memory>
 // #include <numeric>
 // #include <string>
 // #include <vector>
 
-// #include "arrow/array.h"
+// #include "arrow/array/array_base.h"
+// #include "arrow/array/array_binary.h"
 // #include "arrow/array/builder_base.h"
+// #include "arrow/array/data.h"
+// #include "arrow/buffer.h"
 // #include "arrow/buffer_builder.h"
 // #include "arrow/status.h"
-// #include "arrow/type_traits.h"
+// #include "arrow/type.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/string_view.h"  // IWYU pragma: export
-
-@Namespace("arrow") @MemberGetter public static native @Cast("const int64_t") long kBinaryMemoryLimit();
+// #include "arrow/util/visibility.h"
 // Targeting ../BaseBinaryBuilder.java
 
 
@@ -3587,8 +3990,13 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #include <memory>
 
+// #include "arrow/array/array_decimal.h"
 // #include "arrow/array/builder_base.h"
 // #include "arrow/array/builder_binary.h"
+// #include "arrow/array/data.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/util/visibility.h"
 // Targeting ../Decimal128Builder.java
 
 
@@ -3618,13 +4026,22 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #pragma once
 
 // #include <algorithm>
+// #include <cstdint>
 // #include <memory>
+// #include <type_traits>
 
+// #include "arrow/array/array_base.h"
+// #include "arrow/array/array_binary.h"
 // #include "arrow/array/builder_adaptive.h"   // IWYU pragma: export
 // #include "arrow/array/builder_base.h"       // IWYU pragma: export
 // #include "arrow/array/builder_primitive.h"  // IWYU pragma: export
-
-// #include "arrow/array.h"
+// #include "arrow/array/data.h"
+// #include "arrow/array/util.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/type_traits.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
 
 // ----------------------------------------------------------------------
 // Dictionary builder
@@ -3676,14 +4093,21 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #pragma once
 
+// #include <cstdint>
 // #include <limits>
 // #include <memory>
 // #include <utility>
 // #include <vector>
 
-// #include "arrow/array.h"
+// #include "arrow/array/array_nested.h"
 // #include "arrow/array/builder_base.h"
+// #include "arrow/array/data.h"
+// #include "arrow/buffer.h"
 // #include "arrow/buffer_builder.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
 // Targeting ../BaseListBuilder.java
 
 
@@ -3734,9 +4158,10 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <memory>
 // #include <vector>
 
-// #include "arrow/array.h"
 // #include "arrow/array/builder_base.h"
+// #include "arrow/array/data.h"
 // #include "arrow/type.h"
+// #include "arrow/type_traits.h"
 // Targeting ../NullBuilder.java
 
 
@@ -3839,14 +4264,19 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #pragma once
 
+// #include <cstdint>
 // #include <memory>
 // #include <string>
-// #include <utility>
 // #include <vector>
 
-// #include "arrow/array.h"
+// #include "arrow/array/array_nested.h"
 // #include "arrow/array/builder_base.h"
+// #include "arrow/array/data.h"
 // #include "arrow/buffer_builder.h"
+// #include "arrow/memory_pool.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/util/visibility.h"
 // Targeting ../BasicUnionBuilder.java
 
 
@@ -3854,6 +4284,162 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // Targeting ../SparseUnionBuilder.java
+
+
+
+  // namespace arrow
+
+
+// Parsed from arrow/chunked_array.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/type_fwd.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+// Targeting ../ChunkedArray.java
+
+
+// Targeting ../MultipleChunkIterator.java
+
+
+
+/** \brief Evaluate binary function on two ChunkedArray objects having possibly
+ *  different chunk layouts. The passed binary function / functor should have
+ *  the following signature.
+ * 
+ *     Status(const Array&, const Array&, int64_t)
+ * 
+ *  The third argument is the absolute position relative to the start of each
+ *  ChunkedArray. The function is executed against each contiguous pair of
+ *  array segments, slicing if necessary.
+ * 
+ *  For example, if two arrays have chunk sizes
+ * 
+ *    left: [10, 10, 20]
+ *    right: [15, 10, 15]
+ * 
+ *  Then the following invocations take place (pseudocode)
+ * 
+ *    func(left.chunk[0][0:10], right.chunk[0][0:10], 0)
+ *    func(left.chunk[1][0:5], right.chunk[0][10:15], 10)
+ *    func(left.chunk[1][5:10], right.chunk[1][0:5], 15)
+ *    func(left.chunk[2][0:5], right.chunk[1][5:10], 20)
+ *    func(left.chunk[2][5:20], right.chunk[2][:], 25) */
+
+  // namespace internal
+  // namespace arrow
+
+
+// Parsed from arrow/config.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <string>
+
+// #include "arrow/util/config.h"  // IWYU pragma: export
+// #include "arrow/util/visibility.h"
+// Targeting ../BuildInfo.java
+
+
+
+/** \brief Get runtime build info.
+ * 
+ *  The returned values correspond to exact loaded version of the Arrow library,
+ *  rather than the values frozen at application compile-time through the {@code ARROW_*}
+ *  preprocessor definitions. */
+@Namespace("arrow") public static native @Const @ByRef BuildInfo GetBuildInfo();
+
+  // namespace arrow
+
+
+// Parsed from arrow/datum.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+// #include <string>
+// #include <type_traits>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/array/data.h"
+// #include "arrow/scalar.h"
+// #include "arrow/type.h"
+// #include "arrow/type_traits.h"
+// #include "arrow/util/checked_cast.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/variant.h"  // IWYU pragma: export
+// #include "arrow/util/visibility.h"
+// Targeting ../ValueDescr.java
+
+
+
+/** \brief For use with scalar functions, returns the broadcasted Value::Shape
+ *  given a vector of value descriptors. Return SCALAR unless any value is
+ *  ARRAY */
+@Namespace("arrow") public static native ValueDescr.Shape GetBroadcastShape(@Const @ByRef ValueDescrVector args);
+// Targeting ../Datum.java
 
 
 
@@ -3883,15 +4469,15 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #include <memory>
 
-// #include "arrow/array/builder_adaptive.h"   // IWYU pragma: export
-// #include "arrow/array/builder_base.h"       // IWYU pragma: export
-// #include "arrow/array/builder_binary.h"     // IWYU pragma: export
-// #include "arrow/array/builder_decimal.h"    // IWYU pragma: export
-// #include "arrow/array/builder_dict.h"       // IWYU pragma: export
-// #include "arrow/array/builder_nested.h"     // IWYU pragma: export
-// #include "arrow/array/builder_primitive.h"  // IWYU pragma: export
-// #include "arrow/array/builder_time.h"       // IWYU pragma: export
-// #include "arrow/array/builder_union.h"      // IWYU pragma: export
+// #include "arrow/array/builder_adaptive.h"   // IWYU pragma: keep
+// #include "arrow/array/builder_base.h"       // IWYU pragma: keep
+// #include "arrow/array/builder_binary.h"     // IWYU pragma: keep
+// #include "arrow/array/builder_decimal.h"    // IWYU pragma: keep
+// #include "arrow/array/builder_dict.h"       // IWYU pragma: keep
+// #include "arrow/array/builder_nested.h"     // IWYU pragma: keep
+// #include "arrow/array/builder_primitive.h"  // IWYU pragma: keep
+// #include "arrow/array/builder_time.h"       // IWYU pragma: keep
+// #include "arrow/array/builder_union.h"      // IWYU pragma: keep
 // #include "arrow/status.h"
 // #include "arrow/util/visibility.h"
 
@@ -3943,8 +4529,13 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <memory>
 // #include <string>
 
-// #include "arrow/array.h"
+// #include "arrow/array/array_base.h"
+// #include "arrow/array/data.h"
+// #include "arrow/result.h"
+// #include "arrow/status.h"
 // #include "arrow/type.h"
+// #include "arrow/util/checked_cast.h"
+// #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../ExtensionType.java
 
@@ -4090,21 +4681,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 
-/** \brief Create a RecordBatchReader from a vector of RecordBatch.
- * 
- *  @param batches [in] the vector of RecordBatch to read from
- *  @param schema [in] schema to conform to. Will be inferred from the first
- *             element if not provided. */
-@Namespace("arrow") public static native @ByVal RecordBatchReaderSharedResult MakeRecordBatchReader(
-    @ByVal RecordBatchVector batches,
-    @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Schema>(nullptr)") Schema schema);
-@Namespace("arrow") public static native @ByVal RecordBatchReaderSharedResult MakeRecordBatchReader(
-    @ByVal RecordBatchVector batches);
-
-@Namespace("arrow") public static native @Deprecated @ByVal Status MakeRecordBatchReader(
-    @ByVal RecordBatchVector batches, @SharedPtr @ByVal Schema schema,
-    @SharedPtr RecordBatchReader out);
-
   // namespace arrow
 
 
@@ -4132,45 +4708,15 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <cstdint>
 // #include <memory>
 // #include <string>
-// #include <utility>
 // #include <vector>
 
+// #include "arrow/chunked_array.h"  // IWYU pragma: keep
 // #include "arrow/record_batch.h"
+// #include "arrow/status.h"
 // #include "arrow/type.h"
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
-// Targeting ../ChunkedArray.java
-
-
-// Targeting ../MultipleChunkIterator.java
-
-
-
-/** \brief Evaluate binary function on two ChunkedArray objects having possibly
- *  different chunk layouts. The passed binary function / functor should have
- *  the following signature.
- * 
- *     Status(const Array&, const Array&, int64_t)
- * 
- *  The third argument is the absolute position relative to the start of each
- *  ChunkedArray. The function is executed against each contiguous pair of
- *  array segments, slicing if necessary.
- * 
- *  For example, if two arrays have chunk sizes
- * 
- *    left: [10, 10, 20]
- *    right: [15, 10, 15]
- * 
- *  Then the following invocations take place (pseudocode)
- * 
- *    func(left.chunk[0][0:10], right.chunk[0][0:10], 0)
- *    func(left.chunk[1][0:5], right.chunk[0][10:15], 10)
- *    func(left.chunk[1][5:10], right.chunk[1][0:5], 15)
- *    func(left.chunk[2][0:5], right.chunk[1][5:10], 20)
- *    func(left.chunk[2][5:20], right.chunk[2][:], 25) */
-
-
 // Targeting ../Table.java
 
 
@@ -4241,7 +4787,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <memory>
 // #include <vector>
 
-// #include "arrow/builder.h"
+// #include "arrow/array/builder_base.h"
 // #include "arrow/status.h"
 // #include "arrow/type.h"
 // #include "arrow/util/checked_cast.h"
@@ -4280,14 +4826,23 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <string>
 // #include <vector>
 
+// #include "arrow/buffer.h"
 // #include "arrow/compare.h"
+// #include "arrow/result.h"
+// #include "arrow/status.h"
 // #include "arrow/type.h"
-// #include "arrow/type_fwd.h"
 // #include "arrow/type_traits.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_tensor_supported(@Cast("arrow::Type::type") int type_id);
+
+@Namespace("arrow::internal") public static native void ComputeRowMajorStrides(@Const @ByRef FixedWidthType type, @Cast("int64_t*") @StdVector LongPointer shape,
+                            @Cast("int64_t*") @StdVector LongPointer strides);
+@Namespace("arrow::internal") public static native void ComputeRowMajorStrides(@Const @ByRef FixedWidthType type, @Cast("int64_t*") @StdVector LongBuffer shape,
+                            @Cast("int64_t*") @StdVector LongBuffer strides);
+@Namespace("arrow::internal") public static native void ComputeRowMajorStrides(@Const @ByRef FixedWidthType type, @Cast("int64_t*") @StdVector long[] shape,
+                            @Cast("int64_t*") @StdVector long[] strides);
 
 @Namespace("arrow::internal") public static native @Cast("bool") boolean IsTensorStridesContiguous(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                                @Cast("int64_t*") @StdVector LongPointer shape,
@@ -4352,6 +4907,47 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/io/memory.h"
 
 
+// Parsed from arrow/io/caching.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <cstdint>
+// #include <memory>
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/io/interfaces.h"
+// #include "arrow/util/visibility.h"
+// Targeting ../CacheOptions.java
+
+
+// Targeting ../ReadRangeCache.java
+
+
+
+  // namespace internal
+  // namespace io
+  // namespace arrow
+
+
 // Parsed from arrow/io/type_fwd.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -4373,6 +4969,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #pragma once
 // Targeting ../FileMode.java
+
+
+// Targeting ../BufferInputStream.java
 
 
 
@@ -4410,8 +5009,12 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/string_view.h"
+// #include "arrow/util/type_fwd.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../ReadRange.java
+
+
+// Targeting ../AsyncContext.java
 
 
 // Targeting ../FileInterface.java
@@ -4620,6 +5223,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <cstdint>
 // #include <memory>
 // #include <string>
+// #include <vector>
 
 // #include "arrow/io/concurrency.h"
 // #include "arrow/io/interfaces.h"
@@ -4724,6 +5328,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #include <cstdint>
 // #include <memory>
+// #include <vector>
 
 // #include "arrow/io/concurrency.h"
 // #include "arrow/io/interfaces.h"
@@ -4824,6 +5429,58 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/filesystem/s3fs.h"        // IWYU pragma: export
 
 
+// Parsed from arrow/filesystem/type_fwd.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+/** \brief FileSystem entry type */
+@Namespace("arrow::fs") public enum FileType {
+  /** Entry is not found */
+  
+///
+  NotFound((byte)0),
+  /** Entry exists but its type is unknown
+   * 
+   *  This can designate a special file such as a Unix socket or character
+   *  device, or Windows NUL / CON / ... */
+  Unknown((byte)1),
+  /** Entry is a regular file */
+  File((byte)2),
+  /** Entry is a directory */
+  Directory((byte)3);
+
+    public final byte value;
+    private FileType(byte v) { this.value = v; }
+    private FileType(FileType e) { this.value = e.value; }
+    public FileType intern() { for (FileType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../S3FileSystem.java
+
+
+// #endif
+
+  // namespace fs
+  // namespace arrow
+
+
 // Parsed from arrow/filesystem/filesystem.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -4853,39 +5510,16 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <utility>
 // #include <vector>
 
+// #include "arrow/filesystem/type_fwd.h"
+// #include "arrow/io/type_fwd.h"
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/compare.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 // #include "arrow/util/windows_fixup.h"
 
-  // namespace io
-
 // A system clock time point expressed as a 64-bit (or more) number of
 // nanoseconds since the epoch.
-
-/** \brief FileSystem entry type */
-@Namespace("arrow::fs") public enum FileType {
-  /** Entry is not found */
-  
-///
-  NotFound((byte)0),
-  /** Entry exists but its type is unknown
-   * 
-   *  This can designate a special file such as a Unix socket or character
-   *  device, or Windows NUL / CON / ... */
-  Unknown((byte)1),
-  /** Entry is a regular file */
-  File((byte)2),
-  /** Entry is a directory */
-  Directory((byte)3);
-
-    public final byte value;
-    private FileType(byte v) { this.value = v; }
-    private FileType(FileType e) { this.value = e.value; }
-    public FileType intern() { for (FileType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
 
 @Namespace("arrow::fs") public static native @StdString String ToString(FileType arg0);
 @Namespace("arrow::fs") public static native @StdString BytePointer ToString(@Cast("arrow::fs::FileType") byte arg0);
@@ -4932,9 +5566,6 @@ public static final long kNoSize = kNoSize();
  *  Same as FileSystemFromUri, but in addition also recognize non-URIs
  *  and treat them as local filesystem paths.  Only absolute local filesystem
  *  paths are allowed. */
-
-///
-///
 @Namespace("arrow::fs") public static native @ByVal FileSystemResult FileSystemFromUriOrPath(
     @StdString String uri, @StdString @Cast({"char*", "std::string*"}) BytePointer out_path/*=nullptr*/);
 @Namespace("arrow::fs") public static native @ByVal FileSystemResult FileSystemFromUriOrPath(
@@ -4943,18 +5574,56 @@ public static final long kNoSize = kNoSize();
     @StdString BytePointer uri, @StdString @Cast({"char*", "std::string*"}) BytePointer out_path/*=nullptr*/);
 @Namespace("arrow::fs") public static native @ByVal FileSystemResult FileSystemFromUriOrPath(
     @StdString BytePointer uri);
+// Targeting ../FileSystemGlobalOptions.java
 
-/** \}
- <p>
- *  \brief Create a new FileSystem by URI
- * 
- *  Recognized schemes are "file", "mock", "hdfs" and "s3fs".
- * 
- *  @param uri [in] a URI-based path, ex: file:///some/local/path
- *  @param out_fs [out] FileSystem instance.
- *  @param out_path [out] (optional) Path inside the filesystem.
- *  @return Status */
 
+
+/** Experimental: optional global initialization routine
+ * 
+ *  This is for environments (such as manylinux) where the path
+ *  to TLS CA certificates needs to be configured at runtime. */
+@Namespace("arrow::fs") public static native @ByVal Status Initialize(@Const @ByRef FileSystemGlobalOptions options);
+
+  // namespace fs
+  // namespace arrow
+
+
+// Parsed from arrow/filesystem/hdfs.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <memory>
+// #include <string>
+// #include <vector>
+
+// #include "arrow/filesystem/filesystem.h"
+// #include "arrow/io/hdfs.h"
+// #include "arrow/util/uri.h"
+// Targeting ../HdfsOptions.java
+
+
+
+/** HDFS-backed FileSystem implementation.
+ * 
+ *  implementation notes:
+ *  - This is a wrapper of arrow/io/hdfs, so we can use FileSystem API to handle hdfs. */
 
   // namespace fs
   // namespace arrow
@@ -5149,6 +5818,9 @@ public static final long kNoSize = kNoSize();
 // #include <vector>
 
 // #include "arrow/util/visibility.h"
+// Targeting ../TimestampParser.java
+
+
 
 // Silly workaround for https://github.com/michaeljones/breathe/issues/453
 @Namespace("arrow::csv") @MemberGetter public static native byte kDefaultEscapeChar();
@@ -5279,6 +5951,7 @@ public static final long kNoSize = kNoSize();
 // #include <memory>
 
 // #include "arrow/json/options.h"
+// #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
@@ -5288,11 +5961,8 @@ public static final long kNoSize = kNoSize();
  * 
  *  The file is expected to consist of individual line-separated JSON objects */
 
-@Namespace("arrow::json") public static native @ByVal Status ParseOne(@ByVal JsonParseOptions options, @SharedPtr ArrowBuffer json,
-                             @SharedPtr RecordBatch out);
-
-/** \brief convert an Array produced by BlockParser into an Array of out_type */
-
+@Namespace("arrow::json") public static native @ByVal RecordBatchResult ParseOne(@ByVal JsonParseOptions options,
+                                                           @SharedPtr ArrowBuffer json);
 
   // namespace json
   // namespace arrow
@@ -5317,26 +5987,466 @@ public static final long kNoSize = kNoSize();
 // specific language governing permissions and limitations
 // under the License.
 
+// NOTE: API is EXPERIMENTAL and will change without going through a
+// deprecation cycle
+
 // #pragma once
 
-// #include "arrow/compute/context.h"  // IWYU pragma: export
-// #include "arrow/compute/kernel.h"   // IWYU pragma: export
+/** \defgroup compute-concrete-options Concrete option classes for compute functions
+ *  \{
+ *  \} */
 
-// #include "arrow/compute/kernels/boolean.h"          // IWYU pragma: export
-// #include "arrow/compute/kernels/cast.h"             // IWYU pragma: export
-// #include "arrow/compute/kernels/compare.h"          // IWYU pragma: export
-// #include "arrow/compute/kernels/count.h"            // IWYU pragma: export
-// #include "arrow/compute/kernels/filter.h"           // IWYU pragma: export
-// #include "arrow/compute/kernels/hash.h"             // IWYU pragma: export
-// #include "arrow/compute/kernels/isin.h"             // IWYU pragma: export
-// #include "arrow/compute/kernels/mean.h"             // IWYU pragma: export
-// #include "arrow/compute/kernels/nth_to_indices.h"   // IWYU pragma: export
-// #include "arrow/compute/kernels/sort_to_indices.h"  // IWYU pragma: export
-// #include "arrow/compute/kernels/sum.h"              // IWYU pragma: export
-// #include "arrow/compute/kernels/take.h"             // IWYU pragma: export
+// #include "arrow/compute/api_aggregate.h"  // IWYU pragma: export
+// #include "arrow/compute/api_scalar.h"     // IWYU pragma: export
+// #include "arrow/compute/api_vector.h"     // IWYU pragma: export
+// #include "arrow/compute/cast.h"           // IWYU pragma: export
+// #include "arrow/compute/exec.h"           // IWYU pragma: export
+// #include "arrow/compute/function.h"       // IWYU pragma: export
+// #include "arrow/compute/kernel.h"         // IWYU pragma: export
+// #include "arrow/compute/registry.h"       // IWYU pragma: export
+// #include "arrow/datum.h"                  // IWYU pragma: export
 
 
-// Parsed from arrow/compute/context.h
+// Parsed from arrow/compute/api_aggregate.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// Eager evaluation convenience APIs for invoking common functions, including
+// necessary memory allocations
+
+// #pragma once
+
+// #include "arrow/compute/function.h"
+// #include "arrow/datum.h"
+// #include "arrow/result.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+// Targeting ../CountOptions.java
+
+
+// Targeting ../MinMaxOptions.java
+
+
+
+/** \}
+ <p>
+ *  \brief Count non-null (or null) values in an array.
+ * 
+ *  @param options [in] counting options, see CountOptions for more information
+ *  @param datum [in] to count
+ *  @param ctx [in] the function execution context, optional
+ *  @return out resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Count(@Const @ByRef Datum datum, @ByVal(nullValue = "arrow::compute::CountOptions::Defaults()") CountOptions options,
+                    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Count(@Const @ByRef Datum datum);
+
+/** \brief Compute the mean of a numeric array.
+ * 
+ *  @param value [in] datum to compute the mean, expecting Array
+ *  @param ctx [in] the function execution context, optional
+ *  @return datum of the computed mean as a DoubleScalar
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Mean(@Const @ByRef Datum value, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Mean(@Const @ByRef Datum value);
+
+/** \brief Sum values of a numeric array.
+ * 
+ *  @param value [in] datum to sum, expecting Array or ChunkedArray
+ *  @param ctx [in] the function execution context, optional
+ *  @return datum of the computed sum as a Scalar
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Sum(@Const @ByRef Datum value, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Sum(@Const @ByRef Datum value);
+
+/** \brief Calculate the min / max of a numeric array
+ * 
+ *  This function returns both the min and max as a struct scalar, with type
+ *  struct<min: T, max: T>, where T is ht einput type
+ * 
+ *  @param value [in] input datum, expecting Array or ChunkedArray
+ *  @param options [in] see MinMaxOptions for more information
+ *  @param ctx [in] the function execution context, optional
+ *  @return resulting datum as a struct<min: T, max: T> scalar
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+
+/** \brief Calculate the min / max of a numeric array.
+ * 
+ *  This function returns both the min and max as a collection. The resulting
+ *  datum thus consists of two scalar datums: {Datum(min), Datum(max)}
+ * 
+ *  @param array [in] input array
+ *  @param options [in] see MinMaxOptions for more information
+ *  @param ctx [in] the function execution context, optional
+ *  @return resulting datum containing a {min, max} collection
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+
+  // namespace compute
+  // namespace arrow
+
+
+// Parsed from arrow/compute/api_scalar.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// Eager evaluation convenience APIs for invoking common functions, including
+// necessary memory allocations
+
+// #pragma once
+
+// #include <string>
+// #include <utility>
+
+// #include "arrow/compute/exec.h"  // IWYU pragma: keep
+// #include "arrow/compute/function.h"
+// #include "arrow/datum.h"
+// #include "arrow/result.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+// Targeting ../ArithmeticOptions.java
+
+
+// Targeting ../MatchSubstringOptions.java
+
+
+// Targeting ../SetLookupOptions.java
+
+
+// Targeting ../StrptimeOptions.java
+
+
+
+@Namespace("arrow::compute") public enum CompareOperator {
+  EQUAL((byte)0),
+  NOT_EQUAL((byte)1),
+  GREATER((byte)2),
+  GREATER_EQUAL((byte)3),
+  LESS((byte)4),
+  LESS_EQUAL((byte)5);
+
+    public final byte value;
+    private CompareOperator(byte v) { this.value = v; }
+    private CompareOperator(CompareOperator e) { this.value = e.value; }
+    public CompareOperator intern() { for (CompareOperator e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../CompareOptions.java
+
+
+
+/** \}
+ <p>
+ *  \brief Add two values together. Array values must be the same length. If
+ *  either addend is null the result will be null.
+ * 
+ *  @param left [in] the first addend
+ *  @param right [in] the second addend
+ *  @param options [in] arithmetic options (overflow handling), optional
+ *  @param ctx [in] the function execution context, optional
+ *  @return the elementwise sum */
+
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Add(@Const @ByRef Datum left, @Const @ByRef Datum right,
+                  @ByVal(nullValue = "arrow::compute::ArithmeticOptions()") ArithmeticOptions options,
+                  ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Add(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief Subtract two values. Array values must be the same length. If the
+ *  minuend or subtrahend is null the result will be null.
+ * 
+ *  @param left [in] the value subtracted from (minuend)
+ *  @param right [in] the value by which the minuend is reduced (subtrahend)
+ *  @param options [in] arithmetic options (overflow handling), optional
+ *  @param ctx [in] the function execution context, optional
+ *  @return the elementwise difference */
+
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Subtract(@Const @ByRef Datum left, @Const @ByRef Datum right,
+                       @ByVal(nullValue = "arrow::compute::ArithmeticOptions()") ArithmeticOptions options,
+                       ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Subtract(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief Multiply two values. Array values must be the same length. If either
+ *  factor is null the result will be null.
+ * 
+ *  @param left [in] the first factor
+ *  @param right [in] the second factor
+ *  @param options [in] arithmetic options (overflow handling), optional
+ *  @param ctx [in] the function execution context, optional
+ *  @return the elementwise product */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Multiply(@Const @ByRef Datum left, @Const @ByRef Datum right,
+                       @ByVal(nullValue = "arrow::compute::ArithmeticOptions()") ArithmeticOptions options,
+                       ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Multiply(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief Compare a numeric array with a scalar.
+ * 
+ *  @param left [in] datum to compare, must be an Array
+ *  @param right [in] datum to compare, must be a Scalar of the same type than
+ *             left Datum.
+ *  @param options [in] compare options
+ *  @param ctx [in] the function execution context, optional
+ *  @return resulting datum
+ * 
+ *  Note on floating point arrays, this uses ieee-754 compare semantics.
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Compare(@Const @ByRef Datum left, @Const @ByRef Datum right,
+                      @ByVal CompareOptions options, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Compare(@Const @ByRef Datum left, @Const @ByRef Datum right,
+                      @ByVal CompareOptions options);
+
+/** \brief Invert the values of a boolean datum
+ *  @param value [in] datum to invert
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Invert(@Const @ByRef Datum value, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Invert(@Const @ByRef Datum value);
+
+/** \brief Element-wise AND of two boolean datums which always propagates nulls
+ *  (null and false is null).
+ * 
+ *  @param left [in] left operand (array)
+ *  @param right [in] right operand (array)
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult And(@Const @ByRef Datum left, @Const @ByRef Datum right, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult And(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief Element-wise AND of two boolean datums with a Kleene truth table
+ *  (null and false is false).
+ * 
+ *  @param left [in] left operand (array)
+ *  @param right [in] right operand (array)
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult KleeneAnd(@Const @ByRef Datum left, @Const @ByRef Datum right,
+                        ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult KleeneAnd(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief Element-wise OR of two boolean datums which always propagates nulls
+ *  (null and true is null).
+ * 
+ *  @param left [in] left operand (array)
+ *  @param right [in] right operand (array)
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Or(@Const @ByRef Datum left, @Const @ByRef Datum right, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Or(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief Element-wise OR of two boolean datums with a Kleene truth table
+ *  (null or true is true).
+ * 
+ *  @param left [in] left operand (array)
+ *  @param right [in] right operand (array)
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult KleeneOr(@Const @ByRef Datum left, @Const @ByRef Datum right, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult KleeneOr(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief Element-wise XOR of two boolean datums
+ *  @param left [in] left operand (array)
+ *  @param right [in] right operand (array)
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Xor(@Const @ByRef Datum left, @Const @ByRef Datum right, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Xor(@Const @ByRef Datum left, @Const @ByRef Datum right);
+
+/** \brief IsIn returns true for each element of {@code values} that is contained in
+ *  {@code value_set}
+ * 
+ *  If null occurs in left, if null count in right is not 0,
+ *  it returns true, else returns null.
+ * 
+ *  @param values [in] array-like input to look up in value_set
+ *  @param value_set [in] either Array or ChunkedArray
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult IsIn(@Const @ByRef Datum values, @Const @ByRef Datum value_set,
+                   ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult IsIn(@Const @ByRef Datum values, @Const @ByRef Datum value_set);
+
+/** \brief IndexIn examines each slot in the values against a value_set array.
+ *  If the value is not found in value_set, null will be output.
+ *  If found, the index of occurrence within value_set (ignoring duplicates)
+ *  will be output.
+ * 
+ *  For example given values = [99, 42, 3, null] and
+ *  value_set = [3, 3, 99], the output will be = [1, null, 0, null]
+ * 
+ *  Note: Null in the values is considered to match
+ *  a null in the value_set array. For example given
+ *  values = [99, 42, 3, null] and value_set = [3, 99, null],
+ *  the output will be = [1, null, 0, 2]
+ * 
+ *  @param values [in] array-like input
+ *  @param value_set [in] either Array or ChunkedArray
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult IndexIn(@Const @ByRef Datum values, @Const @ByRef Datum value_set,
+                      ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult IndexIn(@Const @ByRef Datum values, @Const @ByRef Datum value_set);
+
+/** \brief IsValid returns true for each element of {@code values} that is not null,
+ *  false otherwise
+ * 
+ *  @param values [in] input to examine for validity
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult IsValid(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult IsValid(@Const @ByRef Datum values);
+
+/** \brief IsNull returns true for each element of {@code values} that is null,
+ *  false otherwise
+ * 
+ *  @param values [in] input to examine for nullity
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult IsNull(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult IsNull(@Const @ByRef Datum values);
+
+/** \brief FillNull replaces each null element in {@code values}
+ *  with {@code fill_value}
+ * 
+ *  @param values [in] input to examine for nullity
+ *  @param fill_value [in] scalar
+ *  @param ctx [in] the function execution context, optional
+ * 
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+@Namespace("arrow::compute") public static native @ByVal DatumResult FillNull(@Const @ByRef Datum values, @Const @ByRef Datum fill_value,
+                       ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult FillNull(@Const @ByRef Datum values, @Const @ByRef Datum fill_value);
+
+  // namespace compute
+  // namespace arrow
+
+
+// Parsed from arrow/compute/api_vector.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
@@ -5357,27 +6467,232 @@ public static final long kNoSize = kNoSize();
 
 // #pragma once
 
-// #include <cstdint>
 // #include <memory>
 
-// #include "arrow/memory_pool.h"
-// #include "arrow/status.h"
-// #include "arrow/util/macros.h"
-// #include "arrow/util/visibility.h"
-// Targeting ../CpuInfo.java
+// #include "arrow/compute/function.h"
+// #include "arrow/datum.h"
+// #include "arrow/result.h"
+// #include "arrow/type_fwd.h"
+// Targeting ../FilterOptions.java
 
+
+// Targeting ../TakeOptions.java
+
+
+// Targeting ../PartitionNthOptions.java
+
+
+
+/** \}
+ <p>
+ *  \brief Filter with a boolean selection filter
+ * 
+ *  The output will be populated with values from the input at positions
+ *  where the selection filter is not 0. Nulls in the filter will be handled
+ *  based on options.null_selection_behavior.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"] and
+ *  filter = [0, 1, 1, 0, null, 1], the output will be
+ *  (null_selection_behavior == DROP)      = ["b", "c", "f"]
+ *  (null_selection_behavior == EMIT_NULL) = ["b", "c", null, "f"]
+ * 
+ *  @param values [in] array to filter
+ *  @param filter [in] indicates which values should be filtered out
+ *  @param options [in] configures null_selection_behavior
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum */
+@Namespace("arrow::compute") public static native @ByVal DatumResult Filter(@Const @ByRef Datum values, @Const @ByRef Datum filter,
+                     @Const @ByRef(nullValue = "arrow::compute::FilterOptions::Defaults()") FilterOptions options,
+                     ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Filter(@Const @ByRef Datum values, @Const @ByRef Datum filter);
+
+// These internal functions are implemented in kernels/vector_selection.cc
+
+/** \brief Return the number of selected indices in the boolean filter */
+@Namespace("arrow::compute::internal") public static native @Cast("int64_t") long GetFilterOutputSize(@Const @ByRef ArrayData filter,
+                            FilterOptions.NullSelectionBehavior null_selection);
+@Namespace("arrow::compute::internal") public static native @Cast("int64_t") long GetFilterOutputSize(@Const @ByRef ArrayData filter,
+                            @Cast("arrow::compute::FilterOptions::NullSelectionBehavior") int null_selection);
+
+/** \brief Compute uint64 selection indices for use with Take given a boolean
+ *  filter */
+@Namespace("arrow::compute::internal") public static native @ByVal ArrayDataResult GetTakeIndices(
+    @Const @ByRef ArrayData filter, FilterOptions.NullSelectionBehavior null_selection,
+    MemoryPool memory_pool/*=arrow::default_memory_pool()*/);
+@Namespace("arrow::compute::internal") public static native @ByVal ArrayDataResult GetTakeIndices(
+    @Const @ByRef ArrayData filter, FilterOptions.NullSelectionBehavior null_selection);
+@Namespace("arrow::compute::internal") public static native @ByVal ArrayDataResult GetTakeIndices(
+    @Const @ByRef ArrayData filter, @Cast("arrow::compute::FilterOptions::NullSelectionBehavior") int null_selection,
+    MemoryPool memory_pool/*=arrow::default_memory_pool()*/);
+@Namespace("arrow::compute::internal") public static native @ByVal ArrayDataResult GetTakeIndices(
+    @Const @ByRef ArrayData filter, @Cast("arrow::compute::FilterOptions::NullSelectionBehavior") int null_selection);
 
   // namespace internal
 
-// #define ARROW_RETURN_IF_ERROR(ctx)
-//   if (ARROW_PREDICT_FALSE(ctx->HasError())) {
-//     Status s = ctx->status();
-//     ctx->ResetStatus();
-//     return s;
-//   }
-// Targeting ../FunctionContext.java
+/** \brief Take from an array of values at indices in another array
+ * 
+ *  The output array will be of the same type as the input values
+ *  array, with elements taken from the values array at the given
+ *  indices. If an index is null then the taken element will be null.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"] and
+ *  indices = [2, 1, null, 3], the output will be
+ *  = [values[2], values[1], null, values[3]]
+ *  = ["c", "b", null, null]
+ * 
+ *  @param values [in] datum from which to take
+ *  @param indices [in] which values to take
+ *  @param options [in] options
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum */
+@Namespace("arrow::compute") public static native @ByVal DatumResult Take(@Const @ByRef Datum values, @Const @ByRef Datum indices,
+                   @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options,
+                   ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Take(@Const @ByRef Datum values, @Const @ByRef Datum indices);
 
+/** \brief Take with Array inputs and output */
 
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult Take(@Const @ByRef Array values, @Const @ByRef Array indices,
+                                    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options,
+                                    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult Take(@Const @ByRef Array values, @Const @ByRef Array indices);
+
+/** \brief Returns indices that partition an array around n-th
+ *  sorted element.
+ * 
+ *  Find index of n-th(0 based) smallest value and perform indirect
+ *  partition of an array around that element. Output indices[0 ~ n-1]
+ *  holds values no greater than n-th element, and indices[n+1 ~ end]
+ *  holds values no less than n-th element. Elements in each partition
+ *  is not sorted. Nulls will be partitioned to the end of the output.
+ *  Output is not guaranteed to be stable.
+ * 
+ *  @param values [in] array to be partitioned
+ *  @param n [in] pivot array around sorted n-th element
+ *  @param ctx [in] the function execution context, optional
+ *  @return offsets indices that would partition an array */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult NthToIndices(@Const @ByRef Array values, @Cast("int64_t") long n,
+                                            ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult NthToIndices(@Const @ByRef Array values, @Cast("int64_t") long n);
+
+/** \brief Returns the indices that would sort an array.
+ * 
+ *  Perform an indirect sort of array. The output array will contain
+ *  indices that would sort an array, which would be the same length
+ *  as input. Nulls will be stably partitioned to the end of the output.
+ * 
+ *  For example given values = [null, 1, 3.3, null, 2, 5.3], the output
+ *  will be [1, 4, 2, 5, 0, 3]
+ * 
+ *  @param values [in] array to sort
+ *  @param ctx [in] the function execution context, optional
+ *  @return offsets indices that would sort an array */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SortToIndices(@Const @ByRef Array values,
+                                             ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SortToIndices(@Const @ByRef Array values);
+
+/** \brief Compute unique elements from an array-like object
+ * 
+ *  Note if a null occurs in the input it will NOT be included in the output.
+ * 
+ *  @param datum [in] array-like input
+ *  @param ctx [in] the function execution context, optional
+ *  @return result as Array
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+@Namespace("arrow::compute") public static native @ByVal ArrayResult Unique(@Const @ByRef Datum datum, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult Unique(@Const @ByRef Datum datum);
+
+// Constants for accessing the output of ValueCounts
+@Namespace("arrow::compute") @MemberGetter public static native byte kValuesFieldName(int i);
+@Namespace("arrow::compute") @MemberGetter public static native String kValuesFieldName();
+@Namespace("arrow::compute") @MemberGetter public static native byte kCountsFieldName(int i);
+@Namespace("arrow::compute") @MemberGetter public static native String kCountsFieldName();
+@Namespace("arrow::compute") @MemberGetter public static native int kValuesFieldIndex();
+
+///
+///
+///
+///
+@Namespace("arrow::compute") @MemberGetter public static native int kCountsFieldIndex();
+
+/** \brief Return counts of unique elements from an array-like object.
+ * 
+ *  Note that the counts do not include counts for nulls in the array.  These can be
+ *  obtained separately from metadata.
+ * 
+ *  For floating point arrays there is no attempt to normalize -0.0, 0.0 and NaN values
+ *  which can lead to unexpected results if the input Array has these values.
+ * 
+ *  @param value [in] array-like input
+ *  @param ctx [in] the function execution context, optional
+ *  @return counts An array of  <input type "Values", int64_t "Counts"> structs.
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult ValueCounts(@Const @ByRef Datum value,
+                                           ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult ValueCounts(@Const @ByRef Datum value);
+
+/** \brief Dictionary-encode values in an array-like object
+ *  @param data [in] array-like input
+ *  @param ctx [in] the function execution context, optional
+ *  @return result with same shape and type as input
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+@Namespace("arrow::compute") public static native @ByVal DatumResult DictionaryEncode(@Const @ByRef Datum data, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult DictionaryEncode(@Const @ByRef Datum data);
+
+// ----------------------------------------------------------------------
+// Deprecated functions
+
+@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
+    @Const @ByRef ChunkedArray values, @Const @ByRef Array indices,
+    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
+@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
+    @Const @ByRef ChunkedArray values, @Const @ByRef Array indices);
+
+@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
+    @Const @ByRef ChunkedArray values, @Const @ByRef ChunkedArray indices,
+    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
+@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
+    @Const @ByRef ChunkedArray values, @Const @ByRef ChunkedArray indices);
+
+@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
+    @Const @ByRef Array values, @Const @ByRef ChunkedArray indices,
+    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
+@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
+    @Const @ByRef Array values, @Const @ByRef ChunkedArray indices);
+
+@Namespace("arrow::compute") public static native @Deprecated @ByVal RecordBatchResult Take(
+    @Const @ByRef RecordBatch batch, @Const @ByRef Array indices,
+    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
+@Namespace("arrow::compute") public static native @Deprecated @ByVal RecordBatchResult Take(
+    @Const @ByRef RecordBatch batch, @Const @ByRef Array indices);
+
+@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef Array indices,
+                                    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options,
+                                    ExecContext context/*=nullptr*/);
+@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef Array indices);
+
+@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef ChunkedArray indices,
+                                    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options,
+                                    ExecContext context/*=nullptr*/);
+@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef ChunkedArray indices);
 
   // namespace compute
   // namespace arrow
@@ -5402,49 +6717,146 @@ public static final long kNoSize = kNoSize();
 // specific language governing permissions and limitations
 // under the License.
 
+// NOTE: API is EXPERIMENTAL and will change without going through a
+// deprecation cycle
+
 // #pragma once
 
+// #include <cstddef>
+// #include <cstdint>
+// #include <functional>
 // #include <memory>
+// #include <string>
 // #include <utility>
 // #include <vector>
 
-// #include "arrow/array.h"
-// #include "arrow/record_batch.h"
-// #include "arrow/scalar.h"
-// #include "arrow/table.h"
+// #include "arrow/buffer.h"
+// #include "arrow/compute/exec.h"
+// #include "arrow/datum.h"
+// #include "arrow/memory_pool.h"
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/type.h"
 // #include "arrow/util/macros.h"
-// #include "arrow/util/memory.h"
-// #include "arrow/util/variant.h"  // IWYU pragma: export
 // #include "arrow/util/visibility.h"
-// Targeting ../OpKernel.java
+// Targeting ../FunctionOptions.java
 
 
-@Namespace("arrow::compute") public static native @Cast("bool") boolean CollectionEquals(@Const @ByRef DatumVector left,
-                                    @Const @ByRef DatumVector right);
-
-// Datums variants may have a length. This special value indicate that the
-// current variant does not have a length.
-@Namespace("arrow::compute") @MemberGetter public static native @Cast("const int64_t") long kUnknownLength();
-// Targeting ../Datum.java
+// Targeting ../KernelState.java
 
 
-// Targeting ../UnaryKernel.java
-
-
-// Targeting ../BinaryKernel.java
+// Targeting ../KernelContext.java
 
 
 
-// TODO doxygen 1.8.16 does not like the following code
-/**\cond INTERNAL */
+// A macro to invoke for error control flow after invoking functions (such as
+// kernel init or exec functions) that propagate errors via KernelContext.
+// #define ARROW_CTX_RETURN_IF_ERROR(CTX)
+//   do {
+//     if (ARROW_PREDICT_FALSE((CTX)->HasError())) {
+//       Status s = (CTX)->status();
+//       (CTX)->ResetStatus();
+//       return s;
+//     }
+//   } while (0)
 
-/**\endcond */
+/** \brief The standard kernel execution API that must be implemented for
+ *  SCALAR and VECTOR kernel types. This includes both stateless and stateful
+ *  kernels. Kernels depending on some execution state access that state via
+ *  subclasses of KernelState set on the KernelContext object. May be used for
+ *  SCALAR and VECTOR kernel kinds. Implementations should endeavor to write
+ *  into pre-allocated memory if they are able, though for some kernels
+ *  (e.g. in cases when a builder like StringBuilder) must be employed this may
+ *  not be possible. */
+// Targeting ../TypeMatcher.java
+
+
+
+/** \brief Match any DataType instance having the same DataType::id. */
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher SameTypeId(@Cast("arrow::Type::type") int type_id);
+
+/** \brief Match any TimestampType instance having the same unit, but the time
+ *  zones can be different. */
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher TimestampTypeUnit(TimeUnit.type unit);
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher TimestampTypeUnit(@Cast("arrow::TimeUnit::type") int unit);
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher Time32TypeUnit(TimeUnit.type unit);
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher Time32TypeUnit(@Cast("arrow::TimeUnit::type") int unit);
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher Time64TypeUnit(TimeUnit.type unit);
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher Time64TypeUnit(@Cast("arrow::TimeUnit::type") int unit);
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher DurationTypeUnit(TimeUnit.type unit);
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher DurationTypeUnit(@Cast("arrow::TimeUnit::type") int unit);
+
+// \brief Match any integer type
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher Integer();
+
+// Match types using 32-bit varbinary representation
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher BinaryLike();
+
+// Match types using 64-bit varbinary representation
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher LargeBinaryLike();
+
+// \brief Match any primitive type (boolean or any type representable as a C
+// Type)
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher Primitive();
+
+
+// Targeting ../InputType.java
+
+
+// Targeting ../OutputType.java
+
+
+// Targeting ../KernelSignature.java
+
+
+// Targeting ../SimdLevel.java
+
+
+// Targeting ../NullHandling.java
+
+
+// Targeting ../MemAllocation.java
+
+
+// Targeting ../KernelInitArgs.java
+
+
+
+/** \brief Common initializer function for all kernel types.
+ *  If an error occurs it will be stored in the KernelContext; nullptr will be returned. */
+// Targeting ../Kernel.java
+
+
+// Targeting ../ArrayKernel.java
+
+
+// Targeting ../ScalarKernel.java
+
+
+
+// ----------------------------------------------------------------------
+// VectorKernel (for VectorFunction)
+
+/** \brief See VectorKernel::finalize member for usage */
+// Targeting ../VectorKernel.java
+
+
+
+// ----------------------------------------------------------------------
+// ScalarAggregateKernel (for ScalarAggregateFunction)
+
+// Finalize returns Datum to permit multiple return values
+
+///
+// Targeting ../ScalarAggregateKernel.java
+
+
 
   // namespace compute
   // namespace arrow
 
 
-// Parsed from arrow/compute/kernels/boolean.h
+// Parsed from arrow/compute/type_fwd.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
@@ -5465,97 +6877,175 @@ public static final long kNoSize = kNoSize();
 
 // #pragma once
 
-// #include "arrow/status.h"
+  // namespace compute
+  // namespace arrow
+
+
+// Parsed from arrow/compute/exec.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// NOTE: API is EXPERIMENTAL and will change without going through a
+// deprecation cycle
+
+// #pragma once
+
+// #include <cstdint>
+// #include <limits>
+// #include <memory>
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/array/data.h"
+// #include "arrow/datum.h"
+// #include "arrow/memory_pool.h"
+// #include "arrow/result.h"
+// #include "arrow/type_fwd.h"
+// #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
+// Targeting ../CpuInfo.java
 
-/** \brief Invert the values of a boolean datum
- *  @param context [in] the FunctionContext
- *  @param value [in] datum to invert
- *  @param out [out] resulting datum
+
+
+  // namespace internal
+
+// It seems like 64K might be a good default chunksize to use for execution
+// based on the experience of other query processing systems. The current
+// default is not to chunk contiguous arrays, though, but this may change in
+// the future once parallel execution is implemented
+@Namespace("arrow::compute") @MemberGetter public static native @Cast("const int64_t") long kDefaultExecChunksize();
+public static final long kDefaultExecChunksize = kDefaultExecChunksize();
+// Targeting ../ExecContext.java
+
+
+// Targeting ../SelectionVector.java
+
+
+// Targeting ../ExecBatch.java
+
+
+
+/** \defgroup compute-call-function One-shot calls to compute functions
  * 
- *  @since 0.11.0
- *  \note API not yet finalized */
+ *  \{
+ <p>
+ *  \brief One-shot invoker for all types of functions.
+ * 
+ *  Does kernel dispatch, argument checking, iteration of ChunkedArray inputs,
+ *  and wrapping of outputs. */
 
 ///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Invert(FunctionContext context, @Const @ByRef Datum value, Datum out);
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString String func_name, @Const @ByRef DatumVector args,
+                           @Const FunctionOptions options, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString String func_name, @Const @ByRef DatumVector args,
+                           @Const FunctionOptions options);
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString BytePointer func_name, @Const @ByRef DatumVector args,
+                           @Const FunctionOptions options, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString BytePointer func_name, @Const @ByRef DatumVector args,
+                           @Const FunctionOptions options);
 
-/** \brief Element-wise AND of two boolean datums which always propagates nulls
- *  (null and false is null).
+/** \brief Variant of CallFunction which uses a function's default options.
  * 
- *  @param context [in] the FunctionContext
- *  @param left [in] left operand (array)
- *  @param right [in] right operand (array)
- *  @param out [out] resulting datum
- * 
- *  @since 0.11.0
- *  \note API not yet finalized */
+ *  NB: Some functions require FunctionOptions be provided. */
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString String func_name, @Const @ByRef DatumVector args,
+                           ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString String func_name, @Const @ByRef DatumVector args);
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString BytePointer func_name, @Const @ByRef DatumVector args,
+                           ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult CallFunction(@StdString BytePointer func_name, @Const @ByRef DatumVector args);
 
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status And(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right, Datum out);
-
-/** \brief Element-wise AND of two boolean datums with a Kleene truth table
- *  (null and false is false).
- * 
- *  @param context [in] the FunctionContext
- *  @param left [in] left operand (array)
- *  @param right [in] right operand (array)
- *  @param out [out] resulting datum
- * 
- *  @since 1.0.0
- *  \note API not yet finalized */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status KleeneAnd(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right,
-                 Datum out);
-
-/** \brief Element-wise OR of two boolean datums which always propagates nulls
- *  (null and true is null).
- * 
- *  @param context [in] the FunctionContext
- *  @param left [in] left operand (array)
- *  @param right [in] right operand (array)
- *  @param out [out] resulting datum
- * 
- *  @since 0.11.0
- *  \note API not yet finalized */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Or(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right, Datum out);
-
-/** \brief Element-wise OR of two boolean datums with a Kleene truth table
- *  (null or true is true).
- * 
- *  @param context [in] the FunctionContext
- *  @param left [in] left operand (array)
- *  @param right [in] right operand (array)
- *  @param out [out] resulting datum
- * 
- *  @since 1.0.0
- *  \note API not yet finalized */
-
-///
-@Namespace("arrow::compute") public static native @ByVal Status KleeneOr(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right,
-                Datum out);
-
-/** \brief Element-wise XOR of two boolean datums
- *  @param context [in] the FunctionContext
- *  @param left [in] left operand (array)
- *  @param right [in] right operand (array)
- *  @param out [out] resulting datum
- * 
- *  @since 0.11.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status Xor(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right, Datum out);
+/** \} */
 
   // namespace compute
   // namespace arrow
 
 
-// Parsed from arrow/compute/kernels/cast.h
+// Parsed from arrow/compute/function.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// NOTE: API is EXPERIMENTAL and will change without going through a
+// deprecation cycle.
+
+// #pragma once
+
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/compute/kernel.h"
+// #include "arrow/compute/type_fwd.h"
+// #include "arrow/datum.h"
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/util/macros.h"
+// #include "arrow/util/visibility.h"
+
+/** \defgroup compute-functions Abstract compute function API
+ * 
+ *  \{
+ <p>
+ *  \brief Base class for specifying options configuring a function's behavior,
+ *  such as error handling. */
+// Targeting ../Arity.java
+
+
+// Targeting ../Function.java
+
+
+
+
+// Targeting ../ScalarFunction.java
+
+
+// Targeting ../VectorFunction.java
+
+
+// Targeting ../ScalarAggregateFunction.java
+
+
+// Targeting ../MetaFunction.java
+
+
+
+/** \} */
+
+  // namespace compute
+  // namespace arrow
+
+
+// Parsed from arrow/compute/cast.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
@@ -5577,397 +7067,85 @@ public static final long kNoSize = kNoSize();
 // #pragma once
 
 // #include <memory>
+// #include <string>
+// #include <vector>
 
+// #include "arrow/compute/function.h"
+// #include "arrow/compute/kernel.h"
+// #include "arrow/datum.h"
+// #include "arrow/result.h"
 // #include "arrow/status.h"
+// #include "arrow/type.h"
+// #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 // Targeting ../CastOptions.java
 
 
 
-/** @since 0.7.0
- *  \note API not yet finalized */
+/** \} */
+
+// Cast functions are _not_ registered in the FunctionRegistry, though they use
+// the same execution machinery
+
+
+
+/** \brief Return true if a cast function is defined */
 
 ///
-@Namespace("arrow::compute") public static native @ByVal Status GetCastFunction(@Const @ByRef DataType in_type, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type,
-                       @Const @ByRef CastOptions options, @UniquePtr UnaryKernel kernel);
+@Namespace("arrow::compute") public static native @Cast("bool") boolean CanCast(@Const @ByRef DataType from_type, @Const @ByRef DataType to_type);
+
+// ----------------------------------------------------------------------
+// Convenience invocation APIs for a number of kernels
 
 /** \brief Cast from one array type to another
- *  @param context [in] the FunctionContext
  *  @param value [in] array to cast
  *  @param to_type [in] type to cast to
  *  @param options [in] casting options
- *  @param out [out] resulting array
- * 
- *  @since 0.7.0
- *  \note API not yet finalized */
-
-///
-@Namespace("arrow::compute") public static native @ByVal Status Cast(FunctionContext context, @Const @ByRef Array value,
-            @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type, @Const @ByRef CastOptions options,
-            @SharedPtr Array out);
-
-/** \brief Cast from one value to another
- *  @param context [in] the FunctionContext
- *  @param value [in] datum to cast
- *  @param to_type [in] type to cast to
- *  @param options [in] casting options
- *  @param out [out] resulting datum
- * 
- *  @since 0.8.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status Cast(FunctionContext context, @Const @ByRef Datum value,
-            @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type, @Const @ByRef CastOptions options, Datum out);
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/compare.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #include <memory>
-
-// #include "arrow/compute/kernel.h"
-// #include "arrow/util/visibility.h"
-
-@Namespace("arrow::compute") public enum CompareOperator {
-  EQUAL(0),
-  NOT_EQUAL(1),
-  GREATER(2),
-  GREATER_EQUAL(3),
-  LESS(4),
-  LESS_EQUAL(5);
-
-    public final int value;
-    private CompareOperator(int v) { this.value = v; }
-    private CompareOperator(CompareOperator e) { this.value = e.value; }
-    public CompareOperator intern() { for (CompareOperator e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../CompareOptions.java
-
-
-
-/** \brief BinaryKernel bound implementing comparison */
-
-
-/** \brief Compare a numeric array with a scalar.
- * 
- *  @param context [in] the FunctionContext
- *  @param left [in] datum to compare, must be an Array
- *  @param right [in] datum to compare, must be a Scalar of the same type than
- *             left Datum.
- *  @param options [in] compare options
- *  @param out [out] resulting datum
- * 
- *  Note on floating point arrays, this uses ieee-754 compare semantics.
- * 
- *  @since 0.14.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status Compare(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right,
-               @ByVal CompareOptions options, Datum out);
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/count.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #include <memory>
-// #include <type_traits>
-
-// #include "arrow/status.h"
-// #include "arrow/type.h"
-// #include "arrow/type_traits.h"
-// #include "arrow/util/visibility.h"
-// Targeting ../AggregateFunction.java
-
-
-// Targeting ../CountOptions.java
-
-
-
-/** \brief Return Count function aggregate */
-
-
-/** \brief Count non-null (or null) values in an array.
- * 
- *  @param context [in] the FunctionContext
- *  @param options [in] counting options, see CountOptions for more information
- *  @param datum [in] to count
- *  @param out [out] resulting datum
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Count(FunctionContext context, @Const @ByRef CountOptions options, @Const @ByRef Datum datum,
-             Datum out);
-
-/** \brief Count non-null (or null) values in an array.
- * 
- *  @param context [in] the FunctionContext
- *  @param options [in] counting options, see CountOptions for more information
- *  @param array [in] to count
- *  @param out [out] resulting datum
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status Count(FunctionContext context, @Const @ByRef CountOptions options, @Const @ByRef Array array,
-             Datum out);
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/filter.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #include <memory>
-// #include <utility>
-
-// #include "arrow/compute/kernel.h"
-// #include "arrow/record_batch.h"
-// #include "arrow/status.h"
-// #include "arrow/util/visibility.h"
-// Targeting ../FilterOptions.java
-
-
-
-/** \brief Filter with a boolean selection filter
- * 
- *  The output will be populated with values from the input at positions
- *  where the selection filter is not 0. Nulls in the filter will be handled
- *  based on options.null_selection_behavior.
- * 
- *  For example given values = ["a", "b", "c", null, "e", "f"] and
- *  filter = [0, 1, 1, 0, null, 1], the output will be
- *  (null_selection_behavior == DROP)      = ["b", "c", "f"]
- *  (null_selection_behavior == EMIT_NULL) = ["b", "c", null, "f"]
- * 
- *  @param ctx [in] the FunctionContext
- *  @param values [in] array to filter
- *  @param filter [in] indicates which values should be filtered out
- *  @param options [in] configures null_selection_behavior
- *  @param out [out] resulting array */
-@Namespace("arrow::compute") public static native @ByVal Status Filter(FunctionContext ctx, @Const @ByRef Datum values, @Const @ByRef Datum filter,
-              @ByVal FilterOptions options, Datum out);
-// Targeting ../FilterKernel.java
-
-
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/hash.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #include <memory>
-
-// #include "arrow/compute/kernel.h"
-// #include "arrow/status.h"
-// #include "arrow/util/visibility.h"
-
-/** \brief Compute unique elements from an array-like object
- * 
- *  Note if a null occurs in the input it will NOT be included in the output.
- * 
- *  @param context [in] the FunctionContext
- *  @param datum [in] array-like input
- *  @param out [out] result as Array
- * 
- *  @since 0.8.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status Unique(FunctionContext context, @Const @ByRef Datum datum, @SharedPtr Array out);
-
-// Constants for accessing the output of ValueCounts
-@Namespace("arrow::compute") @MemberGetter public static native byte kValuesFieldName(int i);
-@Namespace("arrow::compute") @MemberGetter public static native String kValuesFieldName();
-@Namespace("arrow::compute") @MemberGetter public static native byte kCountsFieldName(int i);
-@Namespace("arrow::compute") @MemberGetter public static native String kCountsFieldName();
-@Namespace("arrow::compute") @MemberGetter public static native int kValuesFieldIndex();
-
-///
-///
-///
-///
-@Namespace("arrow::compute") @MemberGetter public static native int kCountsFieldIndex();
-/** \brief Return counts of unique elements from an array-like object.
- * 
- *  Note that the counts do not include counts for nulls in the array.  These can be
- *  obtained separately from metadata.
- * 
- *  For floating point arrays there is no attempt to normalize -0.0, 0.0 and NaN values
- *  which can lead to unexpected results if the input Array has these values.
- * 
- *  @param context [in] the FunctionContext
- *  @param value [in] array-like input
- *  @param counts [out] An array of  <input type "Values", int64_t "Counts"> structs.
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-
-///
-@Namespace("arrow::compute") public static native @ByVal Status ValueCounts(FunctionContext context, @Const @ByRef Datum value,
-                   @SharedPtr Array counts);
-
-/** \brief Dictionary-encode values in an array-like object
- *  @param context [in] the FunctionContext
- *  @param data [in] array-like input
- *  @param out [out] result with same shape and type as input
- * 
- *  @since 0.8.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status DictionaryEncode(FunctionContext context, @Const @ByRef Datum data, Datum out);
-
-// TODO(wesm): Define API for incremental dictionary encoding
-
-// TODO(wesm): Define API for regularizing DictionaryArray objects with
-// different dictionaries
-
-//
-// ARROW_EXPORT
-// Status DictionaryEncode(FunctionContext* context, const Datum& data,
-//                         const Array& prior_dictionary, Datum* out);
-
-// TODO(wesm): Implement these next
-// ARROW_EXPORT
-// Status Match(FunctionContext* context, const Datum& values, const Datum& member_set,
-//              Datum* out);
-
-// ARROW_EXPORT
-// Status IsIn(FunctionContext* context, const Datum& values, const Datum& member_set,
-//             Datum* out);
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/isin.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #include <memory>
-
-// #include "arrow/array.h"
-// #include "arrow/compute/context.h"
-// #include "arrow/compute/kernel.h"
-// #include "arrow/status.h"
-// #include "arrow/type.h"
-// #include "arrow/util/visibility.h"
-
-/** \brief IsIn returns boolean values if the value
- *  is in both left and right arrays.
- * 
- *  If null occurs in left, if null count in right is not 0,
- *  it returns true, else returns null.
- * 
- *  @param context [in] the FunctionContext
- *  @param left [in] array-like input
- *  @param right [in] array-like input
- *  @param out [out] resulting datum
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting array
  * 
  *  @since 1.0.0
  *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status IsIn(FunctionContext context, @Const @ByRef Datum left, @Const @ByRef Datum right, Datum out);
+
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult Cast(@Const @ByRef Array value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type,
+                                    @Const @ByRef(nullValue = "arrow::compute::CastOptions::Safe()") CastOptions options,
+                                    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult Cast(@Const @ByRef Array value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type);
+
+/** \brief Cast from one array type to another
+ *  @param value [in] array to cast
+ *  @param options [in] casting options. The "to_type" field must be populated
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting array
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Cast(@Const @ByRef Datum value, @Const @ByRef CastOptions options,
+                   ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Cast(@Const @ByRef Datum value, @Const @ByRef CastOptions options);
+
+/** \brief Cast from one value to another
+ *  @param value [in] datum to cast
+ *  @param to_type [in] type to cast to
+ *  @param options [in] casting options
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 1.0.0
+ *  \note API not yet finalized */
+@Namespace("arrow::compute") public static native @ByVal DatumResult Cast(@Const @ByRef Datum value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type,
+                   @Const @ByRef(nullValue = "arrow::compute::CastOptions::Safe()") CastOptions options,
+                   ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Cast(@Const @ByRef Datum value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type);
 
   // namespace compute
   // namespace arrow
 
 
-// Parsed from arrow/compute/kernels/mean.h
+// Parsed from arrow/compute/registry.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
@@ -5986,350 +7164,24 @@ public static final long kNoSize = kNoSize();
 // specific language governing permissions and limitations
 // under the License.
 
-// #pragma once
-
-// #include <memory>
-// #include <type_traits>
-
-// #include "arrow/status.h"
-// #include "arrow/type.h"
-// #include "arrow/type_traits.h"
-// #include "arrow/util/visibility.h"
-
-
-///
-///
-@Namespace("arrow::compute") public static native @SharedPtr AggregateFunction MakeMeanAggregateFunction(@Const @ByRef DataType type,
-                                                             FunctionContext context);
-
-/** \brief Compute the mean of a numeric array.
- * 
- *  @param context [in] the FunctionContext
- *  @param value [in] datum to compute the mean, expecting Array
- *  @param mean [out] datum of the computed mean as a DoubleScalar
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Mean(FunctionContext context, @Const @ByRef Datum value, Datum mean);
-
-/** \brief Compute the mean of a numeric array.
- * 
- *  @param context [in] the FunctionContext
- *  @param array [in] to compute the mean
- *  @param mean [out] datum of the computed mean as a DoubleScalar
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status Mean(FunctionContext context, @Const @ByRef Array array, Datum mean);
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/sort_to_indices.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
+// NOTE: API is EXPERIMENTAL and will change without going through a
+// deprecation cycle
 
 // #pragma once
 
 // #include <memory>
+// #include <string>
+// #include <vector>
 
-// #include "arrow/compute/kernel.h"
+// #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/util/visibility.h"
-
-/** \brief Returns the indices that would sort an array.
- * 
- *  Perform an indirect sort of array. The output array will contain
- *  indices that would sort an array, which would be the same length
- *  as input. Nulls will be stably partitioned to the end of the output.
- * 
- *  For example given values = [null, 1, 3.3, null, 2, 5.3], the output
- *  will be [1, 4, 2, 5, 0, 3]
- * 
- *  @param ctx [in] the FunctionContext
- *  @param values [in] array to sort
- *  @param offsets [out] indices that would sort an array */
-@Namespace("arrow::compute") public static native @ByVal Status SortToIndices(FunctionContext ctx, @Const @ByRef Array values,
-                     @SharedPtr Array offsets);
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/sum.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #include <memory>
-
-// #include "arrow/util/visibility.h"
-
-/** \brief Return a Sum Kernel
- * 
- *  @param type [in] required to specialize the kernel
- *  @param context [in] the FunctionContext
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-
-///
-///
-@Namespace("arrow::compute") public static native @SharedPtr AggregateFunction MakeSumAggregateFunction(@Const @ByRef DataType type,
-                                                            FunctionContext context);
-
-/** \brief Sum values of a numeric array.
- * 
- *  @param context [in] the FunctionContext
- *  @param value [in] datum to sum, expecting Array or ChunkedArray
- *  @param out [out] resulting datum
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Sum(FunctionContext context, @Const @ByRef Datum value, Datum out);
-
-/** \brief Sum values of a numeric array.
- * 
- *  @param context [in] the FunctionContext
- *  @param array [in] to sum
- *  @param out [out] resulting datum
- * 
- *  @since 0.13.0
- *  \note API not yet finalized */
-@Namespace("arrow::compute") public static native @ByVal Status Sum(FunctionContext context, @Const @ByRef Array array, Datum out);
-
-  // namespace compute
-  // namespace arrow
-
-
-// Parsed from arrow/compute/kernels/take.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// #pragma once
-
-// #include <memory>
-
-// #include "arrow/compute/kernel.h"
-// #include "arrow/status.h"
-// #include "arrow/util/visibility.h"
-// Targeting ../TakeOptions.java
+// Targeting ../FunctionRegistry.java
 
 
 
-/** \brief Take from an array of values at indices in another array
- * 
- *  The output array will be of the same type as the input values
- *  array, with elements taken from the values array at the given
- *  indices. If an index is null then the taken element will be null.
- * 
- *  For example given values = ["a", "b", "c", null, "e", "f"] and
- *  indices = [2, 1, null, 3], the output will be
- *  = [values[2], values[1], null, values[3]]
- *  = ["c", "b", null, null]
- * 
- *  @param ctx [in] the FunctionContext
- *  @param values [in] array from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting array */
-
-///
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Array values, @Const @ByRef Array indices,
-            @Const @ByRef TakeOptions options, @SharedPtr Array out);
-
-/** \brief Take from a chunked array of values at indices in another array
- * 
- *  The output chunked array will be of the same type as the input values
- *  array, with elements taken from the values array at the given
- *  indices. If an index is null then the taken element will be null.
- * 
- *  For example given values = ["a", "b", "c", null, "e", "f"] and
- *  indices = [2, 1, null, 3], the output will be
- *  = [values[2], values[1], null, values[3]]
- *  = ["c", "b", null, null]
- * 
- *  @param ctx [in] the FunctionContext
- *  @param values [in] chunked array from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting chunked array
- *  NOTE: Experimental API */
-
-///
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef ChunkedArray values, @Const @ByRef Array indices,
-            @Const @ByRef TakeOptions options, @SharedPtr ChunkedArray out);
-
-/** \brief Take from a chunked array of values at indices in a chunked array
- * 
- *  The output chunked array will be of the same type as the input values
- *  array, with elements taken from the values array at the given
- *  indices. If an index is null then the taken element will be null.
- *  The chunks in the output array will align with the chunks in the indices.
- * 
- *  For example given values = ["a", "b", "c", null, "e", "f"] and
- *  indices = [2, 1, null, 3], the output will be
- *  = [values[2], values[1], null, values[3]]
- *  = ["c", "b", null, null]
- * 
- *  @param ctx [in] the FunctionContext
- *  @param values [in] chunked array from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting chunked array
- *  NOTE: Experimental API */
-
-///
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef ChunkedArray values, @Const @ByRef ChunkedArray indices,
-            @Const @ByRef TakeOptions options, @SharedPtr ChunkedArray out);
-
-/** \brief Take from an array of values at indices in a chunked array
- * 
- *  The output chunked array will be of the same type as the input values
- *  array, with elements taken from the values array at the given
- *  indices. If an index is null then the taken element will be null.
- *  The chunks in the output array will align with the chunks in the indices.
- * 
- *  For example given values = ["a", "b", "c", null, "e", "f"] and
- *  indices = [2, 1, null, 3], the output will be
- *  = [values[2], values[1], null, values[3]]
- *  = ["c", "b", null, null]
- * 
- *  @param ctx [in] the FunctionContext
- *  @param values [in] array from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting chunked array
- *  NOTE: Experimental API */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Array values, @Const @ByRef ChunkedArray indices,
-            @Const @ByRef TakeOptions options, @SharedPtr ChunkedArray out);
-
-/** \brief Take from a record batch at indices in another array
- * 
- *  The output batch will have the same schema as the input batch,
- *  with rows taken from the columns in the batch at the given
- *  indices. If an index is null then the taken element will be null.
- * 
- *  @param ctx [in] the FunctionContext
- *  @param batch [in] record batch from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting record batch
- *  NOTE: Experimental API */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef RecordBatch batch, @Const @ByRef Array indices,
-            @Const @ByRef TakeOptions options, @SharedPtr RecordBatch out);
-
-/** \brief Take from a table at indices in an array
- * 
- *  The output table will have the same schema as the input table,
- *  with rows taken from the columns in the table at the given
- *  indices. If an index is null then the taken element will be null.
- * 
- *  @param ctx [in] the FunctionContext
- *  @param table [in] table from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting table
- *  NOTE: Experimental API */
-
-///
-///
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Table table, @Const @ByRef Array indices,
-            @Const @ByRef TakeOptions options, @SharedPtr Table out);
-
-/** \brief Take from a table at indices in a chunked array
- * 
- *  The output table will have the same schema as the input table,
- *  with rows taken from the values array at the given
- *  indices. If an index is null then the taken element will be null.
- * 
- *  @param ctx [in] the FunctionContext
- *  @param table [in] table from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting table
- *  NOTE: Experimental API */
-
-///
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Table table, @Const @ByRef ChunkedArray indices,
-            @Const @ByRef TakeOptions options, @SharedPtr Table out);
-
-/** \brief Take from an array of values at indices in another array
- * 
- *  @param ctx [in] the FunctionContext
- *  @param values [in] datum from which to take
- *  @param indices [in] which values to take
- *  @param options [in] options
- *  @param out [out] resulting datum */
-@Namespace("arrow::compute") public static native @ByVal Status Take(FunctionContext ctx, @Const @ByRef Datum values, @Const @ByRef Datum indices,
-            @Const @ByRef TakeOptions options, Datum out);
-// Targeting ../TakeKernel.java
-
+/** \brief Return the process-global function registry */
+@Namespace("arrow::compute") public static native FunctionRegistry GetFunctionRegistry();
 
   // namespace compute
   // namespace arrow
@@ -6364,6 +7216,72 @@ public static final long kNoSize = kNoSize();
 // #include "arrow/ipc/writer.h"
 
 
+// Parsed from arrow/ipc/type_fwd.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+@Namespace("arrow::ipc") public enum MetadataVersion {
+  /** 0.1.0 */
+  V1((byte)0),
+
+  /** 0.2.0 */
+  V2((byte)1),
+
+  /** 0.3.0 to 0.7.1 */
+  V3((byte)2),
+
+  /** 0.8.0 to 0.17.0 */
+  V4((byte)3),
+
+  /** >= 1.0.0 */
+  V5((byte)4);
+
+    public final byte value;
+    private MetadataVersion(byte v) { this.value = v; }
+    private MetadataVersion(MetadataVersion e) { this.value = e.value; }
+    public MetadataVersion intern() { for (MetadataVersion e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+@Namespace("arrow::ipc") public enum MessageType {
+  NONE(0),
+  SCHEMA(1),
+  DICTIONARY_BATCH(2),
+  RECORD_BATCH(3),
+  TENSOR(4),
+  SPARSE_TENSOR(5);
+
+    public final int value;
+    private MessageType(int v) { this.value = v; }
+    private MessageType(MessageType e) { this.value = e.value; }
+    public MessageType intern() { for (MessageType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../RecordBatchStreamWriter.java
+
+
+
+  // namespace feather
+  // namespace ipc
+  // namespace arrow
+
+
 // Parsed from arrow/ipc/dictionary.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -6390,7 +7308,10 @@ public static final long kNoSize = kNoSize();
 // #include <cstdint>
 // #include <memory>
 // #include <unordered_map>
+// #include <utility>
+// #include <vector>
 
+// #include "arrow/memory_pool.h"
 // #include "arrow/status.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
@@ -6524,6 +7445,8 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 // #include <cstdint>
 // #include <vector>
 
+// #include "arrow/ipc/type_fwd.h"
+// #include "arrow/status.h"
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/compression.h"
 // #include "arrow/util/visibility.h"
@@ -6541,8 +7464,7 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 
 
 
-@Namespace("arrow::ipc::internal") public static native @ByVal Status CheckCompressionSupported(Compression.type codec);
-@Namespace("arrow::ipc::internal") public static native @ByVal Status CheckCompressionSupported(@Cast("arrow::Compression::type") int codec);
+
 
   // namespace internal
   // namespace ipc
@@ -6577,33 +7499,13 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 // #include <string>
 // #include <utility>
 
+// #include "arrow/io/type_fwd.h"
+// #include "arrow/ipc/type_fwd.h"
 // #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/type_fwd.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
-
-  // namespace io
-
-@Namespace("arrow::ipc") public enum MetadataVersion {
-  /** 0.1.0 */
-  V1((byte)0),
-
-  /** 0.2.0 */
-  V2((byte)1),
-
-  /** 0.3.0 to 0.7.1 */
-  V3((byte)2),
-
-  /** >= 0.8.0 */
-  V4((byte)3);
-
-    public final byte value;
-    private MetadataVersion(byte v) { this.value = v; }
-    private MetadataVersion(MetadataVersion e) { this.value = e.value; }
-    public MetadataVersion intern() { for (MetadataVersion e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
 // Targeting ../Message.java
 
 
@@ -6611,8 +7513,8 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 
 ///
 ///
-@Namespace("arrow::ipc") public static native @StdString String FormatMessageType(Message.Type type);
-@Namespace("arrow::ipc") public static native @StdString BytePointer FormatMessageType(@Cast("arrow::ipc::Message::Type") int type);
+@Namespace("arrow::ipc") public static native @StdString String FormatMessageType(MessageType type);
+@Namespace("arrow::ipc") public static native @StdString BytePointer FormatMessageType(@Cast("arrow::ipc::MessageType") int type);
 // Targeting ../MessageDecoderListener.java
 
 
@@ -6720,14 +7622,6 @@ public static final int kFeatherV2Version = kFeatherV2Version();
  *  @return Status */
 
 
-// ----------------------------------------------------------------------
-// Deprecated APIs
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status ReadMessage(@Cast("const int64_t") long offset, int metadata_length,
-                   RandomAccessFile file, @UniquePtr Message message);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status ReadMessage(InputStream stream, @UniquePtr Message message);
-
   // namespace ipc
   // namespace arrow
 
@@ -6769,8 +7663,6 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 // #include "arrow/util/visibility.h"
 
   // namespace io
-
-  // namespace internal
 
 
 ///
@@ -6918,24 +7810,6 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 
   // namespace internal
 
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status ReadSchema(InputStream stream, DictionaryMemo dictionary_memo,
-                  @SharedPtr Schema out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status ReadSchema(@Const @ByRef Message message, DictionaryMemo dictionary_memo,
-                  @SharedPtr Schema out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status ReadRecordBatch(@Const @SharedPtr @ByRef Schema schema,
-                       @Const DictionaryMemo dictionary_memo, InputStream stream,
-                       @SharedPtr RecordBatch out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status ReadRecordBatch(@Const @ByRef ArrowBuffer metadata, @Const @SharedPtr @ByRef Schema schema,
-                       @Const DictionaryMemo dictionary_memo, RandomAccessFile file,
-                       @SharedPtr RecordBatch out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status ReadRecordBatch(@Const @ByRef Message message, @Const @SharedPtr @ByRef Schema schema,
-                       @Const DictionaryMemo dictionary_memo,
-                       @SharedPtr RecordBatch out);
-
   // namespace ipc
   // namespace arrow
 
@@ -6975,6 +7849,9 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 // #include "arrow/util/visibility.h"
 
   // namespace io
+// Targeting ../IpcPayload.java
+
+
 // Targeting ../RecordBatchWriter.java
 
 
@@ -7000,7 +7877,7 @@ public static final int kFeatherV2Version = kFeatherV2Version();
  *  @param schema [in] the schema of the record batches to be written
  *  @param options [in] options for serialization, optional
  *  @param metadata [in] custom metadata for File Footer, optional
- *  @return Status */
+ *  @return Result<std::shared_ptr<RecordBatchWriter>> */
 
 ///
 @Namespace("arrow::ipc") public static native @ByVal RecordBatchWriterSharedResult NewFileWriter(
@@ -7092,6 +7969,18 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 @Namespace("arrow::ipc") public static native @ByVal Status WriteRecordBatchStream(@Const @ByRef RecordBatchVector batches,
                               @Const @ByRef IpcWriteOptions options, OutputStream dst);
 
+/** \brief Compute the number of bytes needed to write an IPC payload
+ *      including metadata
+ * 
+ *  @param payload [in] the IPC payload to write
+ *  @param options [in] write options
+ *  @return the size of the complete encapsulated message */
+
+///
+@Namespace("arrow::ipc") public static native @Cast("int64_t") long GetPayloadSize(@Const @ByRef IpcPayload payload,
+                       @Const @ByRef(nullValue = "arrow::ipc::IpcWriteOptions::Defaults()") IpcWriteOptions options);
+@Namespace("arrow::ipc") public static native @Cast("int64_t") long GetPayloadSize(@Const @ByRef IpcPayload payload);
+
 /** \brief Compute the number of bytes needed to write a record batch including metadata
  * 
  *  @param batch [in] the record batch to write
@@ -7102,6 +7991,21 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 @Namespace("arrow::ipc") public static native @ByVal Status GetRecordBatchSize(@Const @ByRef RecordBatch batch, @Cast("int64_t*") LongPointer size);
 @Namespace("arrow::ipc") public static native @ByVal Status GetRecordBatchSize(@Const @ByRef RecordBatch batch, @Cast("int64_t*") LongBuffer size);
 @Namespace("arrow::ipc") public static native @ByVal Status GetRecordBatchSize(@Const @ByRef RecordBatch batch, @Cast("int64_t*") long[] size);
+
+/** \brief Compute the number of bytes needed to write a record batch including metadata
+ * 
+ *  @param batch [in] the record batch to write
+ *  @param options [in] options for serialization
+ *  @param size [out] the size of the complete encapsulated message
+ *  @return Status */
+
+///
+@Namespace("arrow::ipc") public static native @ByVal Status GetRecordBatchSize(@Const @ByRef RecordBatch batch, @Const @ByRef IpcWriteOptions options,
+                          @Cast("int64_t*") LongPointer size);
+@Namespace("arrow::ipc") public static native @ByVal Status GetRecordBatchSize(@Const @ByRef RecordBatch batch, @Const @ByRef IpcWriteOptions options,
+                          @Cast("int64_t*") LongBuffer size);
+@Namespace("arrow::ipc") public static native @ByVal Status GetRecordBatchSize(@Const @ByRef RecordBatch batch, @Const @ByRef IpcWriteOptions options,
+                          @Cast("int64_t*") long[] size);
 
 /** \brief Compute the number of bytes needed to write a tensor including metadata
  * 
@@ -7184,21 +8088,98 @@ public static final int kFeatherV2Version = kFeatherV2Version();
                          IntBuffer metadata_length, @Cast("int64_t*") LongBuffer body_length);
 @Namespace("arrow::ipc") public static native @ByVal Status WriteSparseTensor(@Const @ByRef SparseTensor sparse_tensor, OutputStream dst,
                          int[] metadata_length, @Cast("int64_t*") long[] body_length);
-// Targeting ../IpcPayload.java
 
+/** \brief Compute IpcPayload for the given schema
+ *  @param schema [in] the Schema that is being serialized
+ *  @param options [in] options for serialization
+ *  @param dictionary_memo [in,out] class to populate with assigned dictionary ids
+ *  @param out [out] the returned vector of IpcPayloads
+ *  @return Status */
+@Namespace("arrow::ipc") public static native @ByVal Status GetSchemaPayload(@Const @ByRef Schema schema, @Const @ByRef IpcWriteOptions options,
+                        DictionaryMemo dictionary_memo, IpcPayload out);
 
+/** \brief Compute IpcPayload for a dictionary
+ *  @param id [in] the dictionary id
+ *  @param dictionary [in] the dictionary values
+ *  @param options [in] options for serialization
+ *  @param payload [out] the output IpcPayload
+ *  @return Status */
+@Namespace("arrow::ipc") public static native @ByVal Status GetDictionaryPayload(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary,
+                            @Const @ByRef IpcWriteOptions options, IpcPayload payload);
+
+/** \brief Compute IpcPayload for a dictionary
+ *  @param id [in] the dictionary id
+ *  @param is_delta [in] whether the dictionary is a delta dictionary
+ *  @param dictionary [in] the dictionary values
+ *  @param options [in] options for serialization
+ *  @param payload [out] the output IpcPayload
+ *  @return Status */
+@Namespace("arrow::ipc") public static native @ByVal Status GetDictionaryPayload(@Cast("int64_t") long id, @Cast("bool") boolean is_delta,
+                            @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary,
+                            @Const @ByRef IpcWriteOptions options, IpcPayload payload);
+
+/** \brief Compute IpcPayload for the given record batch
+ *  @param batch [in] the RecordBatch that is being serialized
+ *  @param options [in] options for serialization
+ *  @param out [out] the returned IpcPayload
+ *  @return Status */
+@Namespace("arrow::ipc") public static native @ByVal Status GetRecordBatchPayload(@Const @ByRef RecordBatch batch, @Const @ByRef IpcWriteOptions options,
+                             IpcPayload out);
+
+/** \brief Write an IPC payload to the given stream.
+ *  @param payload [in] the payload to write
+ *  @param options [in] options for serialization
+ *  @param dst [in] The stream to write the payload to.
+ *  @param metadata_length [out] the length of the serialized metadata
+ *  @return Status */
+@Namespace("arrow::ipc") public static native @ByVal Status WriteIpcPayload(@Const @ByRef IpcPayload payload, @Const @ByRef IpcWriteOptions options,
+                       OutputStream dst, IntPointer metadata_length);
+@Namespace("arrow::ipc") public static native @ByVal Status WriteIpcPayload(@Const @ByRef IpcPayload payload, @Const @ByRef IpcWriteOptions options,
+                       OutputStream dst, IntBuffer metadata_length);
+@Namespace("arrow::ipc") public static native @ByVal Status WriteIpcPayload(@Const @ByRef IpcPayload payload, @Const @ByRef IpcWriteOptions options,
+                       OutputStream dst, int[] metadata_length);
+
+/** \brief Compute IpcPayload for the given sparse tensor
+ *  @param sparse_tensor [in] the SparseTensor that is being serialized
+ *  @param pool [in,out] for any required temporary memory allocations
+ *  @param out [out] the returned IpcPayload
+ *  @return Status */
+@Namespace("arrow::ipc") public static native @ByVal Status GetSparseTensorPayload(@Const @ByRef SparseTensor sparse_tensor, MemoryPool pool,
+                              IpcPayload out);
 // Targeting ../IpcPayloadWriter.java
 
 
 
-/** Create a new RecordBatchWriter from IpcPayloadWriter and schema.
+/** Create a new IPC payload stream writer from stream sink. User is
+ *  responsible for closing the actual OutputStream.
  * 
- *  @param sink [in] the IpcPayloadWriter to write to
+ *  @param sink [in] output stream to write to
+ *  @param options [in] options for serialization
+ *  @return Result<std::shared_ptr<IpcPayloadWriter>> */
+
+///
+@Namespace("arrow::ipc::internal") public static native @ByVal IpcPayloadWriterResult MakePayloadStreamWriter(
+    OutputStream sink, @Const @ByRef(nullValue = "arrow::ipc::IpcWriteOptions::Defaults()") IpcWriteOptions options);
+@Namespace("arrow::ipc::internal") public static native @ByVal IpcPayloadWriterResult MakePayloadStreamWriter(
+    OutputStream sink);
+
+/** Create a new IPC payload file writer from stream sink.
+ * 
+ *  @param sink [in] output stream to write to
  *  @param schema [in] the schema of the record batches to be written
- *  @param out [out] the created RecordBatchWriter
- *  @return Status
- <p>
- *  Create a new RecordBatchWriter from IpcPayloadWriter and schema.
+ *  @param options [in] options for serialization, optional
+ *  @param metadata [in] custom metadata for File Footer, optional
+ *  @return Status */
+
+///
+@Namespace("arrow::ipc::internal") public static native @ByVal IpcPayloadWriterResult MakePayloadFileWriter(
+    OutputStream sink, @Const @SharedPtr @ByRef Schema schema,
+    @Const @ByRef(nullValue = "arrow::ipc::IpcWriteOptions::Defaults()") IpcWriteOptions options,
+    @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef(nullValue = "std::shared_ptr<const arrow::KeyValueMetadata>(nullptr)") KeyValueMetadata metadata);
+@Namespace("arrow::ipc::internal") public static native @ByVal IpcPayloadWriterResult MakePayloadFileWriter(
+    OutputStream sink, @Const @SharedPtr @ByRef Schema schema);
+
+/** Create a new RecordBatchWriter from IpcPayloadWriter and schema.
  * 
  *  @param sink [in] the IpcPayloadWriter to write to
  *  @param schema [in] the schema of the record batches to be written
@@ -7210,99 +8191,7 @@ public static final int kFeatherV2Version = kFeatherV2Version();
 @Namespace("arrow::ipc::internal") public static native @ByVal RecordBatchWriterUniqueResult OpenRecordBatchWriter(
     @UniquePtr IpcPayloadWriter sink, @Const @SharedPtr @ByRef Schema schema);
 
-/** \brief Compute IpcPayload for the given schema
- *  @param schema [in] the Schema that is being serialized
- *  @param options [in] options for serialization
- *  @param dictionary_memo [in,out] class to populate with assigned dictionary ids
- *  @param out [out] the returned vector of IpcPayloads
- *  @return Status */
-@Namespace("arrow::ipc::internal") public static native @ByVal Status GetSchemaPayload(@Const @ByRef Schema schema, @Const @ByRef IpcWriteOptions options,
-                        DictionaryMemo dictionary_memo, IpcPayload out);
-
-/** \brief Compute IpcPayload for a dictionary
- *  @param id [in] the dictionary id
- *  @param dictionary [in] the dictionary values
- *  @param options [in] options for serialization
- *  @param payload [out] the output IpcPayload
- *  @return Status */
-@Namespace("arrow::ipc::internal") public static native @ByVal Status GetDictionaryPayload(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary,
-                            @Const @ByRef IpcWriteOptions options, IpcPayload payload);
-
-/** \brief Compute IpcPayload for the given record batch
- *  @param batch [in] the RecordBatch that is being serialized
- *  @param options [in] options for serialization
- *  @param out [out] the returned IpcPayload
- *  @return Status */
-@Namespace("arrow::ipc::internal") public static native @ByVal Status GetRecordBatchPayload(@Const @ByRef RecordBatch batch, @Const @ByRef IpcWriteOptions options,
-                             IpcPayload out);
-
-@Namespace("arrow::ipc::internal") public static native @ByVal Status WriteIpcPayload(@Const @ByRef IpcPayload payload, @Const @ByRef IpcWriteOptions options,
-                       OutputStream dst, IntPointer metadata_length);
-@Namespace("arrow::ipc::internal") public static native @ByVal Status WriteIpcPayload(@Const @ByRef IpcPayload payload, @Const @ByRef IpcWriteOptions options,
-                       OutputStream dst, IntBuffer metadata_length);
-@Namespace("arrow::ipc::internal") public static native @ByVal Status WriteIpcPayload(@Const @ByRef IpcPayload payload, @Const @ByRef IpcWriteOptions options,
-                       OutputStream dst, int[] metadata_length);
-
-/** \brief Compute IpcPayload for the given sparse tensor
- *  @param sparse_tensor [in] the SparseTensor that is being serialized
- *  @param pool [in,out] for any required temporary memory allocations
- *  @param out [out] the returned IpcPayload
- *  @return Status */
-@Namespace("arrow::ipc::internal") public static native @ByVal Status GetSparseTensorPayload(@Const @ByRef SparseTensor sparse_tensor, MemoryPool pool,
-                              IpcPayload out);
-
-
-// Targeting ../RecordBatchStreamWriter.java
-
-
-// Targeting ../RecordBatchFileWriter.java
-
-
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status WriteRecordBatch(@Const @ByRef RecordBatch batch, @Cast("int64_t") long buffer_start_offset,
-                        OutputStream dst, IntPointer metadata_length,
-                        @Cast("int64_t*") LongPointer body_length, @Const @ByRef IpcWriteOptions options,
-                        MemoryPool pool);
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status WriteRecordBatch(@Const @ByRef RecordBatch batch, @Cast("int64_t") long buffer_start_offset,
-                        OutputStream dst, IntBuffer metadata_length,
-                        @Cast("int64_t*") LongBuffer body_length, @Const @ByRef IpcWriteOptions options,
-                        MemoryPool pool);
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status WriteRecordBatch(@Const @ByRef RecordBatch batch, @Cast("int64_t") long buffer_start_offset,
-                        OutputStream dst, int[] metadata_length,
-                        @Cast("int64_t*") long[] body_length, @Const @ByRef IpcWriteOptions options,
-                        MemoryPool pool);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status SerializeRecordBatch(@Const @ByRef RecordBatch batch, @Const @ByRef IpcWriteOptions options,
-                            @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status SerializeRecordBatch(@Const @ByRef RecordBatch batch, MemoryPool pool,
-                            @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status SerializeRecordBatch(@Const @ByRef RecordBatch batch, MemoryPool pool,
-                            OutputStream out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status SerializeSchema(@Const @ByRef Schema schema, DictionaryMemo dictionary_memo,
-                       MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status GetTensorMessage(@Const @ByRef Tensor tensor, MemoryPool pool,
-                        @UniquePtr Message out);
-
-@Namespace("arrow::ipc") public static native @Deprecated @ByVal Status GetSparseTensorMessage(@Const @ByRef SparseTensor sparse_tensor, MemoryPool pool,
-                              @UniquePtr Message out);
-
-@Namespace("arrow::ipc::internal") public static native @Deprecated @ByVal Status OpenRecordBatchWriter(@UniquePtr IpcPayloadWriter sink,
-                             @Const @SharedPtr @ByRef Schema schema,
-                             @UniquePtr RecordBatchWriter out);
-
-@Namespace("arrow::ipc::internal") public static native @Deprecated @ByVal Status GetDictionaryPayload(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary,
-                            @Const @ByRef IpcWriteOptions options, MemoryPool pool,
-                            IpcPayload payload);
-
-@Namespace("arrow::ipc::internal") public static native @Deprecated @ByVal Status GetRecordBatchPayload(@Const @ByRef RecordBatch batch, @Const @ByRef IpcWriteOptions options,
-                             MemoryPool pool, IpcPayload out);
-
   // namespace internal
-
   // namespace ipc
   // namespace arrow
 

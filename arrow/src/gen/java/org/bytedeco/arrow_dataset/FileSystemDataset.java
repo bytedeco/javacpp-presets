@@ -15,7 +15,10 @@ import static org.bytedeco.arrow.global.parquet.*;
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 
-/** \brief A Dataset of FileFragments. */
+/** \brief A Dataset of FileFragments.
+ * 
+ *  A FileSystemDataset is composed of one or more FileFragment. The fragments
+ *  are independent and don't need to share the same format and/or filesystem. */
 @Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class FileSystemDataset extends Dataset {
     static { Loader.load(); }
@@ -24,79 +27,43 @@ public class FileSystemDataset extends Dataset {
 
   /** \brief Create a FileSystemDataset.
    * 
-   *  @param schema [in] the top-level schema of the DataDataset
-   *  @param root_partition [in] the top-level partition of the DataDataset
-   *  @param format [in] file format to create fragments from.
-   *  @param filesystem [in] the filesystem which files are from.
-   *  @param infos [in] a list of files/directories to consume.
-   *  attach additional partition expressions to FileInfo found in {@code infos}.
+   *  @param schema [in] the schema of the dataset
+   *  @param root_partition [in] the partition expression of the dataset
+   *  @param format [in] the format of each FileFragment.
+   *  @param fragments [in] list of fragments to create the dataset from
    * 
-   *  The caller is not required to provide a complete coverage of nodes and
-   *  partitions. */
-  
-  ///
-  ///
-  public static native @ByVal FileSystemDatasetResult Make(
-        @SharedPtr @ByVal Schema schema, @SharedPtr @ByVal Expression root_partition,
-        @SharedPtr FileFormat format, @SharedPtr FileSystem filesystem,
-        @StdVector FileInfo infos);
-
-  /** \brief Create a FileSystemDataset with file-level partitions.
+   *  Note that all fragment must be of {@code FileFragment} type. The type are
+   *  erased to simplify callers.
    * 
-   *  @param schema [in] the top-level schema of the DataDataset
-   *  @param root_partition [in] the top-level partition of the DataDataset
-   *  @param format [in] file format to create fragments from.
-   *  @param filesystem [in] the filesystem which files are from.
-   *  @param infos [in] a list of files/directories to consume.
-   *  @param partitions [in] partition information associated with {@code infos}.
-   *  attach additional partition expressions to FileInfo found in {@code infos}.
-   * 
-   *  The caller is not required to provide a complete coverage of nodes and
-   *  partitions. */
-  
-  ///
-  ///
-  public static native @ByVal FileSystemDatasetResult Make(
-        @SharedPtr @ByVal Schema schema, @SharedPtr @ByVal Expression root_partition,
-        @SharedPtr FileFormat format, @SharedPtr FileSystem filesystem,
-        @StdVector FileInfo infos, @ByVal ExpressionVector partitions);
-
-  /** \brief Create a FileSystemDataset with file-level partitions.
-   * 
-   *  @param schema [in] the top-level schema of the DataDataset
-   *  @param root_partition [in] the top-level partition of the DataDataset
-   *  @param format [in] file format to create fragments from.
-   *  @param filesystem [in] the filesystem which files are from.
-   *  @param forest [in] a PathForest of files/directories to consume.
-   *  @param partitions [in] partition information associated with {@code forest}.
-   *  attach additional partition expressions to FileInfo found in {@code forest}.
-   * 
-   *  The caller is not required to provide a complete coverage of nodes and
-   *  partitions. */
+   *  @return A constructed dataset. */
   
   ///
   public static native @ByVal FileSystemDatasetResult Make(
         @SharedPtr @ByVal Schema schema, @SharedPtr @ByVal Expression root_partition,
-        @SharedPtr FileFormat format, @SharedPtr FileSystem filesystem,
-        @ByVal PathForest forest, @ByVal ExpressionVector partitions);
+        @SharedPtr FileFormat format,
+        @ByVal FileFragmentVector fragments);
 
   /** \brief Write to a new format and filesystem location, preserving partitioning.
    * 
    *  @param plan [in] the WritePlan to execute.
+   *  @param scan_options [in] options in which to scan fragments
    *  @param scan_context [in] context in which to scan fragments before writing. */
   public static native @ByVal FileSystemDatasetResult Write(
-        @Const @ByRef WritePlan plan, @SharedPtr ScanContext scan_context);
+        @Const @ByRef WritePlan plan, @SharedPtr ScanOptions scan_options,
+        @SharedPtr ScanContext scan_context);
 
+  /** \brief Return the type name of the dataset. */
   public native @StdString String type_name();
 
+  /** \brief Replace the schema of the dataset. */
   public native @ByVal DatasetResult ReplaceSchema(
         @SharedPtr @ByVal Schema schema);
 
-  public native @SharedPtr FileFormat format();
-
+  /** \brief Return the path of files. */
   public native @ByVal StringVector files();
 
-  public native @Const @ByRef ExpressionVector partitions();
+  /** \brief Return the format. */
+  public native @SharedPtr FileFormat format();
 
   public native @StdString String ToString();
 }

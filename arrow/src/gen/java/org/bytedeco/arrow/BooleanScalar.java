@@ -11,19 +11,29 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
   // namespace internal
 
+/** \addtogroup concrete-scalar-classes Concrete Scalar subclasses
+ * 
+ *  \{ */
+
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BooleanScalar extends Scalar {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public BooleanScalar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BooleanScalar(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BooleanScalar(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BooleanScalar(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public BooleanScalar position(long position) {
         return (BooleanScalar)super.position(position);
     }
+    @Override public BooleanScalar getPointer(long i) {
+        return new BooleanScalar(this).position(position + i);
+    }
 
+
+  public BooleanScalar(@Cast("bool") boolean value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@Cast("bool") boolean value);
+
+  public BooleanScalar() { super((Pointer)null); allocate(); }
+  private native void allocate();
 }

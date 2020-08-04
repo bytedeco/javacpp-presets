@@ -11,8 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
+/** \addtogroup compute-concrete-options
+ *  \{ */
+
 @Namespace("arrow::compute") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class CastOptions extends Pointer {
+public class CastOptions extends FunctionOptions {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CastOptions(Pointer p) { super(p); }
@@ -21,6 +24,9 @@ public class CastOptions extends Pointer {
     private native void allocateArray(long size);
     @Override public CastOptions position(long position) {
         return (CastOptions)super.position(position);
+    }
+    @Override public CastOptions getPointer(long i) {
+        return new CastOptions(this).position(position + i);
     }
 
   public CastOptions() { super((Pointer)null); allocate(); }
@@ -32,6 +38,10 @@ public class CastOptions extends Pointer {
   public static native @ByVal CastOptions Safe();
 
   public static native @ByVal CastOptions Unsafe();
+
+  // Type being casted to. May be passed separate to eager function
+  // compute::Cast
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type(); public native CastOptions to_type(DataType setter);
 
   public native @Cast("bool") boolean allow_int_overflow(); public native CastOptions allow_int_overflow(boolean setter);
   public native @Cast("bool") boolean allow_time_truncate(); public native CastOptions allow_time_truncate(boolean setter);
