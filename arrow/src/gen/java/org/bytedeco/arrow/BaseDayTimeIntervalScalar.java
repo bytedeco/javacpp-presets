@@ -16,11 +16,6 @@ public class BaseDayTimeIntervalScalar extends BaseBaseDayTimeIntervalScalar {
     static { Loader.load(); }
 
   
-    
-    
-      public BaseDayTimeIntervalScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-  
   
     public BaseDayTimeIntervalScalar(@ByVal DayTimeIntervalType.DayMilliseconds value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
     private native void allocate(@ByVal DayTimeIntervalType.DayMilliseconds value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
@@ -31,6 +26,9 @@ public class BaseDayTimeIntervalScalar extends BaseBaseDayTimeIntervalScalar {
     private native void allocateArray(long size);
     @Override public BaseDayTimeIntervalScalar position(long position) {
         return (BaseDayTimeIntervalScalar)super.position(position);
+    }
+    @Override public BaseDayTimeIntervalScalar getPointer(long i) {
+        return new BaseDayTimeIntervalScalar(this).position(position + i);
     }
 
 

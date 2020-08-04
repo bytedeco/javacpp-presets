@@ -22,13 +22,17 @@ public class RecordBatchStream extends FlightDataStream {
     public RecordBatchStream(Pointer p) { super(p); }
 
   /** @param reader [in] produces a sequence of record batches
-   *  @param pool [in,out] a MemoryPool to use for allocations */
-  public RecordBatchStream(@SharedPtr RecordBatchReader reader,
-                               MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(reader, pool); }
-  private native void allocate(@SharedPtr RecordBatchReader reader,
-                               MemoryPool pool/*=arrow::default_memory_pool()*/);
-  public RecordBatchStream(@SharedPtr RecordBatchReader reader) { super((Pointer)null); allocate(reader); }
-  private native void allocate(@SharedPtr RecordBatchReader reader);
+   *  @param options [in] IPC options for writing */
+  public RecordBatchStream(
+        @SharedPtr RecordBatchReader reader,
+        @Const @ByRef(nullValue = "arrow::ipc::IpcWriteOptions::Defaults()") IpcWriteOptions options) { super((Pointer)null); allocate(reader, options); }
+  private native void allocate(
+        @SharedPtr RecordBatchReader reader,
+        @Const @ByRef(nullValue = "arrow::ipc::IpcWriteOptions::Defaults()") IpcWriteOptions options);
+  public RecordBatchStream(
+        @SharedPtr RecordBatchReader reader) { super((Pointer)null); allocate(reader); }
+  private native void allocate(
+        @SharedPtr RecordBatchReader reader);
 
   public native @SharedPtr @ByVal Schema schema();
   public native @ByVal Status GetSchemaPayload(FlightPayload payload);

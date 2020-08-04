@@ -21,6 +21,9 @@ public class StreamingReaderResult extends Pointer {
     @Override public StreamingReaderResult position(long position) {
         return (StreamingReaderResult)super.position(position);
     }
+    @Override public StreamingReaderResult getPointer(long i) {
+        return new StreamingReaderResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class StreamingReaderResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

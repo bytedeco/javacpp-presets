@@ -29,6 +29,4 @@ public class MessageReader extends Pointer {
    * 
    *  @return an arrow::ipc::Message instance */
   public native @ByVal MessageUniqueResult ReadNextMessage();
-
-  public native @Deprecated @ByVal Status ReadNextMessage(@UniquePtr Message message);
 }

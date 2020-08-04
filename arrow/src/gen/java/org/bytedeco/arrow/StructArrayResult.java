@@ -21,6 +21,9 @@ public class StructArrayResult extends Pointer {
     @Override public StructArrayResult position(long position) {
         return (StructArrayResult)super.position(position);
     }
+    @Override public StructArrayResult getPointer(long i) {
+        return new StructArrayResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class StructArrayResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

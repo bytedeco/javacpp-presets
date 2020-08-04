@@ -21,6 +21,9 @@ public class MessageUniqueResult extends Pointer {
     @Override public MessageUniqueResult position(long position) {
         return (MessageUniqueResult)super.position(position);
     }
+    @Override public MessageUniqueResult getPointer(long i) {
+        return new MessageUniqueResult(this).position(position + i);
+    }
 
   
   ///
@@ -156,7 +159,7 @@ public class MessageUniqueResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

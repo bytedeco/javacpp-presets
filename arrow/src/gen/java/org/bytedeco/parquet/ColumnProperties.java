@@ -24,6 +24,9 @@ public class ColumnProperties extends Pointer {
     @Override public ColumnProperties position(long position) {
         return (ColumnProperties)super.position(position);
     }
+    @Override public ColumnProperties getPointer(long i) {
+        return new ColumnProperties(this).position(position + i);
+    }
 
   public ColumnProperties(Encoding.type encoding/*=parquet::DEFAULT_ENCODING*/,
                      Compression.type codec/*=parquet::DEFAULT_COMPRESSION_TYPE*/,

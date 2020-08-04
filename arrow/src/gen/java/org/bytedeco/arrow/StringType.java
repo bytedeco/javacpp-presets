@@ -23,6 +23,9 @@ public class StringType extends BinaryType {
     @Override public StringType position(long position) {
         return (StringType)super.position(position);
     }
+    @Override public StringType getPointer(long i) {
+        return new StringType(this).position(position + i);
+    }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();

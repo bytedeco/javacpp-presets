@@ -11,20 +11,13 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Name("arrow::TemporalScalar<arrow::DayTimeIntervalType>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+@Name("arrow::TemporalScalar<arrow::DayTimeIntervalType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseBaseDayTimeIntervalScalar extends Scalar {
     static { Loader.load(); }
-
-  
-  
-    public BaseBaseDayTimeIntervalScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseBaseDayTimeIntervalScalar(Pointer p) { super(p); }
 
 
   public BaseBaseDayTimeIntervalScalar(@ByVal DayTimeIntervalType.DayMilliseconds value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
   private native void allocate(@ByVal DayTimeIntervalType.DayMilliseconds value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
-  public native @ByRef DayTimeIntervalType.DayMilliseconds value(); public native BaseBaseDayTimeIntervalScalar value(DayTimeIntervalType.DayMilliseconds setter);
 }

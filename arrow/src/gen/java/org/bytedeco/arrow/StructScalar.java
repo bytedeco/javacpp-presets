@@ -19,4 +19,6 @@ public class StructScalar extends Scalar {
 
 
   public native @ByRef ScalarVector value(); public native StructScalar value(ScalarVector setter);
+
+  public native @ByVal ScalarResult field(@ByVal FieldRef ref);
 }

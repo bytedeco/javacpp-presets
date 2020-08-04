@@ -30,6 +30,9 @@ public class WritePlan extends Pointer {
     @Override public WritePlan position(long position) {
         return (WritePlan)super.position(position);
     }
+    @Override public WritePlan getPointer(long i) {
+        return new WritePlan(this).position(position + i);
+    }
 
   /** The partitioning with which paths were generated */
   public native @SharedPtr Partitioning partitioning(); public native WritePlan partitioning(Partitioning setter);
@@ -43,6 +46,32 @@ public class WritePlan extends Pointer {
   /** The FileSystem and base directory for partitioned writing */
   public native @SharedPtr FileSystem filesystem(); public native WritePlan filesystem(FileSystem setter);
   public native @StdString String partition_base_dir(); public native WritePlan partition_base_dir(String setter);
+
+  @NoOffset public static class FragmentOrPartitionExpression extends Pointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public FragmentOrPartitionExpression(Pointer p) { super(p); }
+  
+    public enum Kind { EXPRESSION(0), FRAGMENT(1);
+
+        public final int value;
+        private Kind(int v) { this.value = v; }
+        private Kind(Kind e) { this.value = e.value; }
+        public Kind intern() { for (Kind e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+
+    public FragmentOrPartitionExpression(@SharedPtr @ByVal Expression partition_expr) { super((Pointer)null); allocate(partition_expr); }
+    private native void allocate(@SharedPtr @ByVal Expression partition_expr);
+
+    public FragmentOrPartitionExpression(@SharedPtr @ByVal Fragment fragment) { super((Pointer)null); allocate(fragment); }
+    private native void allocate(@SharedPtr @ByVal Fragment fragment);
+
+    public native Kind kind();
+
+    public native @Const @SharedPtr @ByRef Expression partition_expr();
+    public native @Const @SharedPtr @ByRef Fragment fragment();
+  }
 
   /** If fragment_or_partition_expressions[i] is a Fragment, that Fragment will be
    *  written to paths[i]. If it is an Expression, a directory representing that partition

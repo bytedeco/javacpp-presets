@@ -24,6 +24,9 @@ public class EventLoop extends Pointer {
     @Override public EventLoop position(long position) {
         return (EventLoop)super.position(position);
     }
+    @Override public EventLoop getPointer(long i) {
+        return new EventLoop(this).position(position + i);
+    }
 
   // Signature of the handler that will be called when there is a new event
   // on the file descriptor that this handler has been registered for.

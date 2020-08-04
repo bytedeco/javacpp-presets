@@ -35,6 +35,9 @@ public class StringBuilder extends BinaryBuilder {
     @Override public StringBuilder position(long position) {
         return (StringBuilder)super.position(position);
     }
+    @Override public StringBuilder getPointer(long i) {
+        return new StringBuilder(this).position(position + i);
+    }
 
 
   /** \cond FALSE */

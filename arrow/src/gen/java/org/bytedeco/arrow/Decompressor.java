@@ -33,6 +33,9 @@ public class Decompressor extends Pointer {
       @Override public DecompressResult position(long position) {
           return (DecompressResult)super.position(position);
       }
+      @Override public DecompressResult getPointer(long i) {
+          return new DecompressResult(this).position(position + i);
+      }
   
     // XXX is need_more_output necessary? (Brotli?)
     public native @Cast("int64_t") long bytes_read(); public native DecompressResult bytes_read(long setter);

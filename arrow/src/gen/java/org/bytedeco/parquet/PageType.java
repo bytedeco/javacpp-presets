@@ -28,6 +28,9 @@ public class PageType extends Pointer {
     @Override public PageType position(long position) {
         return (PageType)super.position(position);
     }
+    @Override public PageType getPointer(long i) {
+        return new PageType(this).position(position + i);
+    }
 
   public enum type {
     DATA_PAGE(0),

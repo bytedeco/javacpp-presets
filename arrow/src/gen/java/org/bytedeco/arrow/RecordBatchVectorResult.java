@@ -21,6 +21,9 @@ public class RecordBatchVectorResult extends Pointer {
     @Override public RecordBatchVectorResult position(long position) {
         return (RecordBatchVectorResult)super.position(position);
     }
+    @Override public RecordBatchVectorResult getPointer(long i) {
+        return new RecordBatchVectorResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class RecordBatchVectorResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

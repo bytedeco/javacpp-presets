@@ -43,6 +43,4 @@ public class RecordBatchWriter extends Pointer {
    * 
    *  @return Status */
   public native @ByVal Status Close();
-
-  public native @Deprecated void set_memory_pool(MemoryPool pool);
 }

@@ -29,6 +29,9 @@ public class NotExpression extends NotExpressionImpl {
     @Override public NotExpression position(long position) {
         return (NotExpression)super.position(position);
     }
+    @Override public NotExpression getPointer(long i) {
+        return new NotExpression(this).position(position + i);
+    }
 
 
   public native @StdString String ToString();

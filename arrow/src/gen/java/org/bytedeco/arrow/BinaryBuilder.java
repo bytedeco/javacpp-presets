@@ -34,6 +34,9 @@ public class BinaryBuilder extends BaseBinaryBuilder {
     @Override public BinaryBuilder position(long position) {
         return (BinaryBuilder)super.position(position);
     }
+    @Override public BinaryBuilder getPointer(long i) {
+        return new BinaryBuilder(this).position(position + i);
+    }
 
 
   /** \cond FALSE */

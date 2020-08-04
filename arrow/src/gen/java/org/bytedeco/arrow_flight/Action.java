@@ -28,6 +28,9 @@ public class Action extends Pointer {
     @Override public Action position(long position) {
         return (Action)super.position(position);
     }
+    @Override public Action getPointer(long i) {
+        return new Action(this).position(position + i);
+    }
 
   /** The action type */
   public native @StdString String type(); public native Action type(String setter);

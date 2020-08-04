@@ -25,6 +25,9 @@ public class FileFragmentResult extends Pointer {
     @Override public FileFragmentResult position(long position) {
         return (FileFragmentResult)super.position(position);
     }
+    @Override public FileFragmentResult getPointer(long i) {
+        return new FileFragmentResult(this).position(position + i);
+    }
 
   
   ///
@@ -90,8 +93,8 @@ public class FileFragmentResult extends Pointer {
   
   ///
   ///
-  public FileFragmentResult(@SharedPtr FileFragment value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr FileFragment value);
+  public FileFragmentResult(@SharedPtr @ByVal FileFragment value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByVal FileFragment value);
 
   /** Copy constructor.
    * 
@@ -166,7 +169,7 @@ public class FileFragmentResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 
@@ -181,11 +184,11 @@ public class FileFragmentResult extends Pointer {
    *  (i.e. a call to ok() returns true), otherwise this call will abort.
    * 
    *  @return The stored {@code T} value. */
-  public native @SharedPtr FileFragment ValueOrDie();
+  public native @SharedPtr @ByRef FileFragment ValueOrDie();
   
   ///
   ///
-  public native @SharedPtr @Name("operator *") FileFragment multiply();
+  public native @SharedPtr @ByRef @Name("operator *") FileFragment multiply();
 
   /** Moves and returns the internally-stored {@code T} value.
    * 
@@ -218,9 +221,9 @@ public class FileFragmentResult extends Pointer {
   /** Apply a function to the internally stored value to produce a new result or propagate
    *  the stored error. */
 
-  public native @SharedPtr FileFragment ValueUnsafe();
+  public native @SharedPtr @ByRef FileFragment ValueUnsafe();
 
   
 
-  public native @SharedPtr FileFragment MoveValueUnsafe();
+  public native @SharedPtr @ByVal FileFragment MoveValueUnsafe();
 }

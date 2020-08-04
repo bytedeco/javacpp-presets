@@ -21,6 +21,9 @@ public class ChunkedArrayVectorResult extends Pointer {
     @Override public ChunkedArrayVectorResult position(long position) {
         return (ChunkedArrayVectorResult)super.position(position);
     }
+    @Override public ChunkedArrayVectorResult getPointer(long i) {
+        return new ChunkedArrayVectorResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class ChunkedArrayVectorResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

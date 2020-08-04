@@ -29,6 +29,9 @@ public class FinishOptions extends Pointer {
     @Override public FinishOptions position(long position) {
         return (FinishOptions)super.position(position);
     }
+    @Override public FinishOptions getPointer(long i) {
+        return new FinishOptions(this).position(position + i);
+    }
 
   /** Finalize the dataset with this given schema. If the schema is not
    *  provided, infer the schema via the Inspect, see the {@code inspect_options}

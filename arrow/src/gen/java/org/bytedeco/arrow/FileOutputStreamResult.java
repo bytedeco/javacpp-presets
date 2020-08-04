@@ -21,6 +21,9 @@ public class FileOutputStreamResult extends Pointer {
     @Override public FileOutputStreamResult position(long position) {
         return (FileOutputStreamResult)super.position(position);
     }
+    @Override public FileOutputStreamResult getPointer(long i) {
+        return new FileOutputStreamResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class FileOutputStreamResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

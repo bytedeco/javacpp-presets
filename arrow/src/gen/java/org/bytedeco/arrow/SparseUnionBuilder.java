@@ -35,8 +35,12 @@ public class SparseUnionBuilder extends BasicUnionBuilder {
                        @Const @ByRef ArrayBuilderVector children,
                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
+  /** \brief Append a null value. A null is added automatically to all the
+   *  children but the type id in the slot will be 0 */
   public native @ByVal Status AppendNull();
 
+  /** \brief Append multiple null values. Nulls will be automatically appended
+   *  to all the children but the type ids will be all 0. */
   
   ///
   ///

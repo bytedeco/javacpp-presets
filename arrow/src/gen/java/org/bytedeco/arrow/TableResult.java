@@ -21,6 +21,9 @@ public class TableResult extends Pointer {
     @Override public TableResult position(long position) {
         return (TableResult)super.position(position);
     }
+    @Override public TableResult getPointer(long i) {
+        return new TableResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class TableResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

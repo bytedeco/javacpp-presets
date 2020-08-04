@@ -26,6 +26,9 @@ public class IpcWriteOptions extends Pointer {
     @Override public IpcWriteOptions position(long position) {
         return (IpcWriteOptions)super.position(position);
     }
+    @Override public IpcWriteOptions getPointer(long i) {
+        return new IpcWriteOptions(this).position(position + i);
+    }
 
   // If true, allow field lengths that don't fit in a signed 32-bit int.
   // Some implementations may not be able to parse such streams.
@@ -42,18 +45,27 @@ public class IpcWriteOptions extends Pointer {
   public native @Cast("bool") boolean write_legacy_ipc_format(); public native IpcWriteOptions write_legacy_ipc_format(boolean setter);
 
   /** \brief The memory pool to use for allocations made during IPC writing */
+  
+  ///
   public native MemoryPool memory_pool(); public native IpcWriteOptions memory_pool(MemoryPool setter);
 
-  /** \brief EXPERIMENTAL: Codec to use for compressing and decompressing
-   *  record batch body buffers. This is not part of the Arrow IPC protocol and
-   *  only for internal use (e.g. Feather files). May only be LZ4_FRAME and
-   *  ZSTD */
+  /** \brief Compression codec to use for record batch body buffers
+   * 
+   *  May only be UNCOMPRESSED, LZ4_FRAME and ZSTD. */
   public native Compression.type compression(); public native IpcWriteOptions compression(Compression.type setter);
   public native int compression_level(); public native IpcWriteOptions compression_level(int setter);
 
   /** \brief Use global CPU thread pool to parallelize any computational tasks
    *  like compression */
+  
+  ///
   public native @Cast("bool") boolean use_threads(); public native IpcWriteOptions use_threads(boolean setter);
+
+  /** \brief Format version to use for IPC messages and their metadata.
+   * 
+   *  Presently using V5 version (readable by 1.0.0 and later).
+   *  V4 is also available (readable by 0.8.0 and later). */
+  public native MetadataVersion metadata_version(); public native IpcWriteOptions metadata_version(MetadataVersion setter);
 
   public static native @ByVal IpcWriteOptions Defaults();
 }

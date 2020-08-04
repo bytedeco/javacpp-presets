@@ -76,6 +76,13 @@ public class RandomAccessFile extends Pointer {
    *  @return A buffer containing the bytes read, or an error */
   public native @ByVal BufferResult ReadAt(@Cast("int64_t") long _position, @Cast("int64_t") long nbytes);
 
-  // EXPERIMENTAL
+  /** EXPERIMENTAL: Read data asynchronously. */
   
+
+  /** EXPERIMENTAL: Inform that the given ranges may be read soon.
+   * 
+   *  Some implementations might arrange to prefetch some of the data.
+   *  However, no guarantee is made and the default implementation does nothing.
+   *  For robust prefetching, use ReadAt() or ReadAsync(). */
+  public native @ByVal Status WillNeed(@StdVector ReadRange ranges);
 }

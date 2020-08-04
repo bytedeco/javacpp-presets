@@ -21,6 +21,9 @@ public class RandomAccessFileResult extends Pointer {
     @Override public RandomAccessFileResult position(long position) {
         return (RandomAccessFileResult)super.position(position);
     }
+    @Override public RandomAccessFileResult getPointer(long i) {
+        return new RandomAccessFileResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class RandomAccessFileResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

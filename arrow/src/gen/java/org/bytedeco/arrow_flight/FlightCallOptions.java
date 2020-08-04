@@ -25,6 +25,9 @@ public class FlightCallOptions extends Pointer {
     @Override public FlightCallOptions position(long position) {
         return (FlightCallOptions)super.position(position);
     }
+    @Override public FlightCallOptions getPointer(long i) {
+        return new FlightCallOptions(this).position(position + i);
+    }
 
   /** Create a default set of call options. */
   public FlightCallOptions() { super((Pointer)null); allocate(); }
@@ -34,4 +37,10 @@ public class FlightCallOptions extends Pointer {
    *  mean an implementation-defined default behavior will be used
    *  instead. This is the default value. */
   public native @ByRef @Cast("arrow::flight::TimeoutDuration*") Pointer timeout(); public native FlightCallOptions timeout(Pointer setter);
+
+  /** \brief IPC reader options, if applicable for the call. */
+  public native @ByRef IpcReadOptions read_options(); public native FlightCallOptions read_options(IpcReadOptions setter);
+
+  /** \brief IPC writer options, if applicable for the call. */
+  public native @ByRef IpcWriteOptions write_options(); public native FlightCallOptions write_options(IpcWriteOptions setter);
 }

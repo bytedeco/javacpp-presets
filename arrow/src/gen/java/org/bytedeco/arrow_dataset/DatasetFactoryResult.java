@@ -25,6 +25,9 @@ public class DatasetFactoryResult extends Pointer {
     @Override public DatasetFactoryResult position(long position) {
         return (DatasetFactoryResult)super.position(position);
     }
+    @Override public DatasetFactoryResult getPointer(long i) {
+        return new DatasetFactoryResult(this).position(position + i);
+    }
 
   
   ///
@@ -166,7 +169,7 @@ public class DatasetFactoryResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

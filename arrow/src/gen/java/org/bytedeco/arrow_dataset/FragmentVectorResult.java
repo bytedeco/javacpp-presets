@@ -25,6 +25,9 @@ public class FragmentVectorResult extends Pointer {
     @Override public FragmentVectorResult position(long position) {
         return (FragmentVectorResult)super.position(position);
     }
+    @Override public FragmentVectorResult getPointer(long i) {
+        return new FragmentVectorResult(this).position(position + i);
+    }
 
   
   ///
@@ -166,7 +169,7 @@ public class FragmentVectorResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

@@ -27,8 +27,8 @@ public class FixedSizeListType extends BaseListType {
   public FixedSizeListType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type, int list_size) { super((Pointer)null); allocate(value_type, list_size); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type, int list_size);
 
-  public FixedSizeListType(@Const @SharedPtr @ByRef Field value_field, int list_size) { super((Pointer)null); allocate(value_field, list_size); }
-  private native void allocate(@Const @SharedPtr @ByRef Field value_field, int list_size);
+  public FixedSizeListType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_field, int list_size) { super((Pointer)null); allocate(value_field, list_size); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_field, int list_size);
 
   public native @ByVal DataTypeLayout layout();
 

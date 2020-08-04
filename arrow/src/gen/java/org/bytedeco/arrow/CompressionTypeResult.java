@@ -21,6 +21,9 @@ public class CompressionTypeResult extends Pointer {
     @Override public CompressionTypeResult position(long position) {
         return (CompressionTypeResult)super.position(position);
     }
+    @Override public CompressionTypeResult getPointer(long i) {
+        return new CompressionTypeResult(this).position(position + i);
+    }
 
   
   ///
@@ -164,7 +167,7 @@ public class CompressionTypeResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

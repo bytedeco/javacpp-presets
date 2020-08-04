@@ -21,6 +21,9 @@ public class FileInfoResult extends Pointer {
     @Override public FileInfoResult position(long position) {
         return (FileInfoResult)super.position(position);
     }
+    @Override public FileInfoResult getPointer(long i) {
+        return new FileInfoResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class FileInfoResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

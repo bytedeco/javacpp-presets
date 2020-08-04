@@ -10,6 +10,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
 
+
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class UnionMode extends Pointer {
     static { Loader.load(); }
@@ -23,6 +24,9 @@ public class UnionMode extends Pointer {
     private native void allocateArray(long size);
     @Override public UnionMode position(long position) {
         return (UnionMode)super.position(position);
+    }
+    @Override public UnionMode getPointer(long i) {
+        return new UnionMode(this).position(position + i);
     }
 
   public enum type { SPARSE(0), DENSE(1);

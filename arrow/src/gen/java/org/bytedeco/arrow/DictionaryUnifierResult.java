@@ -21,6 +21,9 @@ public class DictionaryUnifierResult extends Pointer {
     @Override public DictionaryUnifierResult position(long position) {
         return (DictionaryUnifierResult)super.position(position);
     }
+    @Override public DictionaryUnifierResult getPointer(long i) {
+        return new DictionaryUnifierResult(this).position(position + i);
+    }
 
   
   ///
@@ -156,7 +159,7 @@ public class DictionaryUnifierResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

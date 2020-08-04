@@ -28,6 +28,9 @@ public class AndExpressionImpl extends BinaryExpression {
     @Override public AndExpressionImpl position(long position) {
         return (AndExpressionImpl)super.position(position);
     }
+    @Override public AndExpressionImpl getPointer(long i) {
+        return new AndExpressionImpl(this).position(position + i);
+    }
 
   @MemberGetter public static native ExpressionType.type expression_type();
 

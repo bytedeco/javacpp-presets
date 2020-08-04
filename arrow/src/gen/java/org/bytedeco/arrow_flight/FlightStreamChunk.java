@@ -28,6 +28,9 @@ public class FlightStreamChunk extends Pointer {
     @Override public FlightStreamChunk position(long position) {
         return (FlightStreamChunk)super.position(position);
     }
+    @Override public FlightStreamChunk getPointer(long i) {
+        return new FlightStreamChunk(this).position(position + i);
+    }
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch data(); public native FlightStreamChunk data(RecordBatch setter);
   public native @SharedPtr ArrowBuffer app_metadata(); public native FlightStreamChunk app_metadata(ArrowBuffer setter);

@@ -28,6 +28,9 @@ public class EncodedStatistics extends Pointer {
     @Override public EncodedStatistics position(long position) {
         return (EncodedStatistics)super.position(position);
     }
+    @Override public EncodedStatistics getPointer(long i) {
+        return new EncodedStatistics(this).position(position + i);
+    }
 
   public EncodedStatistics() { super((Pointer)null); allocate(); }
   private native void allocate();

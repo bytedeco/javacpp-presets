@@ -21,6 +21,9 @@ public class MessageSharedResult extends Pointer {
     @Override public MessageSharedResult position(long position) {
         return (MessageSharedResult)super.position(position);
     }
+    @Override public MessageSharedResult getPointer(long i) {
+        return new MessageSharedResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class MessageSharedResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

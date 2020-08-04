@@ -21,6 +21,9 @@ public class LocalFileSystemOptionsResult extends Pointer {
     @Override public LocalFileSystemOptionsResult position(long position) {
         return (LocalFileSystemOptionsResult)super.position(position);
     }
+    @Override public LocalFileSystemOptionsResult getPointer(long i) {
+        return new LocalFileSystemOptionsResult(this).position(position + i);
+    }
 
   
   ///
@@ -160,7 +163,7 @@ public class LocalFileSystemOptionsResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

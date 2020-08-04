@@ -21,6 +21,9 @@ public class CodecResult extends Pointer {
     @Override public CodecResult position(long position) {
         return (CodecResult)super.position(position);
     }
+    @Override public CodecResult getPointer(long i) {
+        return new CodecResult(this).position(position + i);
+    }
 
   
   ///
@@ -156,7 +159,7 @@ public class CodecResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

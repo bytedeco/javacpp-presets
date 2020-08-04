@@ -25,6 +25,9 @@ public class Location extends Pointer {
     @Override public Location position(long position) {
         return (Location)super.position(position);
     }
+    @Override public Location getPointer(long i) {
+        return new Location(this).position(position + i);
+    }
 
   /** \brief Initialize a blank location. */
   public Location() { super((Pointer)null); allocate(); }

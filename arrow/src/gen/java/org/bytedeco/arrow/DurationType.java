@@ -23,6 +23,9 @@ public class DurationType extends TemporalType {
     @Override public DurationType position(long position) {
         return (DurationType)super.position(position);
     }
+    @Override public DurationType getPointer(long i) {
+        return new DurationType(this).position(position + i);
+    }
     public ParametricType asParametricType() { return asParametricType(this); }
     @Namespace public static native @Name("static_cast<arrow::ParametricType*>") ParametricType asParametricType(DurationType pointer);
 

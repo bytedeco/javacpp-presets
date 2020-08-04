@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-
+  // IWYU pragma: keep
 
 @Namespace("arrow::detail") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Fingerprintable extends Pointer {

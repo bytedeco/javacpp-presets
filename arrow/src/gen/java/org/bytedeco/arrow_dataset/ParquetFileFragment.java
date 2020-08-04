@@ -15,15 +15,40 @@ import static org.bytedeco.arrow.global.parquet.*;
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 
+/** \brief A FileFragment with parquet logic.
+ * 
+ *  ParquetFileFragment provides a lazy (with respect to IO) interface to
+ *  scan parquet files. Any heavy IO calls are deferred to the Scan() method.
+ * 
+ *  The caller can provide an optional list of selected RowGroups to limit the
+ *  number of scanned RowGroups, or to partition the scans across multiple
+ *  threads.
+ * 
+ *  It can also attach optional statistics with each RowGroups, providing
+ *  pushdown predicate benefits before invoking any heavy IO. This can induce
+ *  significant performance boost when scanning high latency file systems. */
 @Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class ParquetFileFragment extends FileFragment {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParquetFileFragment(Pointer p) { super(p); }
 
-  public native @ByVal ScanTaskIteratorResult Scan(@SharedPtr ScanContext context);
+  public native @ByVal FragmentResult SplitByRowGroup(@Const @SharedPtr @ByRef Expression predicate);
 
-  /** \brief The row groups viewed by this Fragment. This may be empty which signifies all
-   *  row groups are selected. */
-  public native @StdVector IntPointer row_groups();
+  /** \brief Return the RowGroups selected by this fragment. An empty list
+   *  represents all RowGroups in the parquet file. */
+  
+  ///
+  public native @StdVector RowGroupInfo row_groups();
+
+  /** \brief Indicate if the attached statistics are complete and the physical schema
+   *  is cached.
+   * 
+   *  The statistics are complete if the provided RowGroups (see {@code row_groups()})
+   *  is not empty / and all RowGroup return true on {@code RowGroup::HasStatistics()}. */
+  public native @Cast("bool") boolean HasCompleteMetadata();
+
+  /** \brief Ensure attached statistics are complete and the physical schema is cached. */
+  public native @ByVal Status EnsureCompleteMetadata(FileReader reader/*=nullptr*/);
+  public native @ByVal Status EnsureCompleteMetadata();
 }

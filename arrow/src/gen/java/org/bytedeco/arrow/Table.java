@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-  // namespace internal
+
 
 /** \class Table
  *  \brief Logical table as sequence of chunked arrays */
@@ -21,10 +21,14 @@ public class Table extends Pointer {
 
 
   /** \brief Construct a Table from schema and columns
+   * 
    *  If columns is zero-length, the table's number of rows is zero
-   *  @param schema The table schema (column types)
-   *  @param columns The table's columns as chunked arrays
-   *  @param num_rows number of rows in table, -1 (default) to infer from columns */
+   * 
+   *  @param schema [in] The table schema (column types)
+   *  @param columns [in] The table's columns as chunked arrays
+   *  @param num_rows [in] number of rows in table, -1 (default) to infer from columns */
+  
+  ///
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@SharedPtr @ByVal Schema schema,
                                        @ByVal ChunkedArrayVector columns,
                                        @Cast("int64_t") long num_rows/*=-1*/);
@@ -32,9 +36,10 @@ public class Table extends Pointer {
                                        @ByVal ChunkedArrayVector columns);
 
   /** \brief Construct a Table from schema and arrays
-   *  @param schema The table schema (column types)
-   *  @param arrays The table's columns as arrays
-   *  @param num_rows number of rows in table, -1 (default) to infer from columns */
+   * 
+   *  @param schema [in] The table schema (column types)
+   *  @param arrays [in] The table's columns as arrays
+   *  @param num_rows [in] number of rows in table, -1 (default) to infer from columns */
   
   ///
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@SharedPtr @ByVal Schema schema,
@@ -43,34 +48,32 @@ public class Table extends Pointer {
   public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Table>"}) Table Make(@SharedPtr @ByVal Schema schema,
                                        @Const @ByRef ArrayVector arrays);
 
+  /** \brief Construct a Table from a RecordBatchReader.
+   * 
+   *  @param reader [in] the arrow::Schema for each batch */
+  
+  ///
+  public static native @ByVal TableResult FromRecordBatchReader(RecordBatchReader reader);
+
   /** \brief Construct a Table from RecordBatches, using schema supplied by the first
    *  RecordBatch.
    * 
    *  @param batches [in] a std::vector of record batches */
-  public static native @ByVal TableResult FromRecordBatches(
-        @Const @ByRef RecordBatchVector batches);
-
   
   ///
-  public static native @Deprecated @ByVal Status FromRecordBatches(
-        @Const @ByRef RecordBatchVector batches,
-        @SharedPtr Table table);
+  public static native @ByVal TableResult FromRecordBatches(
+        @Const @ByRef RecordBatchVector batches);
 
   /** \brief Construct a Table from RecordBatches, using supplied schema. There may be
    *  zero record batches
    * 
    *  @param schema [in] the arrow::Schema for each batch
    *  @param batches [in] a std::vector of record batches */
+  
+  ///
   public static native @ByVal TableResult FromRecordBatches(
         @SharedPtr @ByVal Schema schema,
         @Const @ByRef RecordBatchVector batches);
-
-  
-  ///
-  public static native @Deprecated @ByVal Status FromRecordBatches(
-        @SharedPtr @ByVal Schema schema,
-        @Const @ByRef RecordBatchVector batches,
-        @SharedPtr Table table);
 
   /** \brief Construct a Table from a chunked StructArray. One column will be produced
    *  for each field of the StructArray.
@@ -78,9 +81,6 @@ public class Table extends Pointer {
    *  @param array [in] a chunked StructArray */
   public static native @ByVal TableResult FromChunkedStructArray(
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray array);
-
-  public static native @Deprecated @ByVal Status FromChunkedStructArray(@SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray array,
-                                         @SharedPtr Table table);
 
   /** \brief Return the table schema */
   public native @SharedPtr @ByVal Schema schema();
@@ -92,7 +92,7 @@ public class Table extends Pointer {
   public native @ByVal ChunkedArrayVector columns();
 
   /** Return a column's field by index */
-  public native @SharedPtr @ByVal Field field(int i);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(int i);
 
   /** \brief Return vector of all fields for table */
   
@@ -123,25 +123,15 @@ public class Table extends Pointer {
   /** \brief Remove column from the table, producing a new Table */
   public native @ByVal TableResult RemoveColumn(int i);
 
-  public native @Deprecated @ByVal Status RemoveColumn(int i, @SharedPtr Table out);
-
   /** \brief Add column to the table, producing a new Table */
   public native @ByVal TableResult AddColumn(
-        int i, @SharedPtr @ByVal Field field_arg,
+        int i, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field_arg,
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column);
-
-  public native @Deprecated @ByVal Status AddColumn(int i, @SharedPtr @ByVal Field field_arg,
-                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column,
-                     @SharedPtr Table out);
 
   /** \brief Replace a column in the table, producing a new Table */
   public native @ByVal TableResult SetColumn(
-        int i, @SharedPtr @ByVal Field field_arg,
+        int i, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field_arg,
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column);
-
-  public native @Deprecated @ByVal Status SetColumn(int i, @SharedPtr @ByVal Field field_arg,
-                     @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column,
-                     @SharedPtr Table out);
 
   /** \brief Return names of all columns */
   public native @ByVal StringVector ColumnNames();
@@ -150,10 +140,12 @@ public class Table extends Pointer {
   public native @ByVal TableResult RenameColumns(
         @Const @ByRef StringVector names);
 
+  /** \brief Return new table with specified columns */
   
   ///
-  public native @Deprecated @ByVal Status RenameColumns(@Const @ByRef StringVector names,
-                         @SharedPtr Table out);
+  public native @ByVal TableResult SelectColumns(@StdVector IntPointer indices);
+  public native @ByVal TableResult SelectColumns(@StdVector IntBuffer indices);
+  public native @ByVal TableResult SelectColumns(@StdVector int[] indices);
 
   /** \brief Replace schema key-value metadata with new metadata (EXPERIMENTAL)
    *  @since 0.5.0
@@ -172,8 +164,6 @@ public class Table extends Pointer {
   public native @ByVal TableResult Flatten(
         MemoryPool pool/*=arrow::default_memory_pool()*/);
   public native @ByVal TableResult Flatten();
-
-  public native @Deprecated @ByVal Status Flatten(MemoryPool pool, @SharedPtr Table out);
 
   /** @return PrettyPrint representation suitable for debugging */
   
@@ -229,6 +219,4 @@ public class Table extends Pointer {
   public native @ByVal TableResult CombineChunks(
         MemoryPool pool/*=arrow::default_memory_pool()*/);
   public native @ByVal TableResult CombineChunks();
-
-  public native @Deprecated @ByVal Status CombineChunks(MemoryPool pool, @SharedPtr Table out);
 }

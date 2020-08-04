@@ -25,6 +25,9 @@ public class TypeVisitor extends Pointer {
     @Override public TypeVisitor position(long position) {
         return (TypeVisitor)super.position(position);
     }
+    @Override public TypeVisitor getPointer(long i) {
+        return new TypeVisitor(this).position(position + i);
+    }
 
 
   public native @ByVal Status Visit(@Const @ByRef NullType type);
@@ -59,7 +62,8 @@ public class TypeVisitor extends Pointer {
   public native @ByVal Status Visit(@Const @ByRef MapType type);
   public native @ByVal Status Visit(@Const @ByRef FixedSizeListType type);
   public native @ByVal Status Visit(@Const @ByRef StructType type);
-  public native @ByVal Status Visit(@Const @ByRef UnionType type);
+  public native @ByVal Status Visit(@Const @ByRef SparseUnionType type);
+  public native @ByVal Status Visit(@Const @ByRef DenseUnionType type);
   public native @ByVal Status Visit(@Const @ByRef DictionaryType type);
   public native @ByVal Status Visit(@Const @ByRef ExtensionType type);
 }

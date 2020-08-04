@@ -47,6 +47,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/util/config.h",
                 "arrow/util/checked_cast.h",
                 "arrow/util/macros.h",
+                "arrow/util/compare.h",
+                "arrow/util/type_fwd.h",
                 "arrow/util/type_traits.h",
                 "arrow/util/visibility.h",
                 "arrow/util/compression.h",
@@ -72,10 +74,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/util/basic_decimal.h",
                 "arrow/util/decimal.h",
                 "arrow/util/sort.h",
+                "arrow/util/future.h",
+                "arrow/util/task_group.h",
+                "arrow/util/thread_pool.h",
+//                "arrow/util/value_parsing.h",
                 "arrow/type.h",
                 "arrow/scalar.h",
                 "arrow/visitor.h",
                 "arrow/array.h",
+                "arrow/array/data.h",
+                "arrow/array/util.h",
+                "arrow/array/array_base.h",
+                "arrow/array/array_nested.h",
+                "arrow/array/array_primitive.h",
                 "arrow/array/concatenate.h",
                 "arrow/array/builder_base.h",
 //                "arrow/array/builder_adaptive.h",
@@ -86,6 +97,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/array/builder_primitive.h",
                 "arrow/array/builder_time.h",
                 "arrow/array/builder_union.h",
+                "arrow/chunked_array.h",
+                "arrow/config.h",
+                "arrow/datum.h",
                 "arrow/builder.h",
                 "arrow/extension_type.h",
                 "arrow/pretty_print.h",
@@ -94,6 +108,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/table_builder.h",
                 "arrow/tensor.h",
                 "arrow/io/api.h",
+                "arrow/io/caching.h",
                 "arrow/io/type_fwd.h",
                 "arrow/io/interfaces.h",
                 "arrow/io/concurrency.h",
@@ -104,7 +119,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/io/memory.h",
                 "arrow/io/slow.h",
                 "arrow/filesystem/api.h",
+                "arrow/filesystem/type_fwd.h",
                 "arrow/filesystem/filesystem.h",
+                "arrow/filesystem/hdfs.h",
                 "arrow/filesystem/localfs.h",
                 "arrow/filesystem/mockfs.h",
                 "arrow/filesystem/path_forest.h",
@@ -115,20 +132,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/json/options.h",
                 "arrow/json/reader.h",
                 "arrow/compute/api.h",
-                "arrow/compute/context.h",
+                "arrow/compute/api_aggregate.h",
+                "arrow/compute/api_scalar.h",
+                "arrow/compute/api_vector.h",
                 "arrow/compute/kernel.h",
-                "arrow/compute/kernels/boolean.h",
-                "arrow/compute/kernels/cast.h",
-                "arrow/compute/kernels/compare.h",
-                "arrow/compute/kernels/count.h",
-                "arrow/compute/kernels/filter.h",
-                "arrow/compute/kernels/hash.h",
-                "arrow/compute/kernels/isin.h",
-                "arrow/compute/kernels/mean.h",
-                "arrow/compute/kernels/sort_to_indices.h",
-                "arrow/compute/kernels/sum.h",
-                "arrow/compute/kernels/take.h",
+                "arrow/compute/type_fwd.h",
+                "arrow/compute/exec.h",
+                "arrow/compute/function.h",
+                "arrow/compute/cast.h",
+                "arrow/compute/registry.h",
                 "arrow/ipc/api.h",
+                "arrow/ipc/type_fwd.h",
                 "arrow/ipc/dictionary.h",
                 "arrow/ipc/feather.h",
                 "arrow/ipc/json_simple.h",
@@ -137,7 +151,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/ipc/reader.h",
                 "arrow/ipc/writer.h",
             },
-            link = "arrow@.17"
+            link = "arrow@.100"
         ),
     },
     target = "org.bytedeco.arrow",
@@ -151,7 +165,8 @@ public class arrow implements InfoMapper {
                .put(new Info("defined(__cplusplus)").define())
                .put(new Info("__cplusplus_cli", "ARROW_EXTRA_ERROR_CONTEXT").define(false))
                .put(new Info("ARROW_NORETURN", "ARROW_MUST_USE_RESULT", "NULLPTR", "ARROW_EXPORT", "ARROW_FORCE_INLINE",
-                             "ARROW_MEMORY_POOL_DEFAULT", "ARROW_BYTE_SWAP64", "ARROW_BYTE_SWAP32", "ARROW_MUST_USE_TYPE").cppTypes().annotations())
+                             "ARROW_MEMORY_POOL_DEFAULT", "ARROW_BYTE_SWAP64", "ARROW_BYTE_SWAP32", "ARROW_MUST_USE_TYPE",
+                             "ARROW_NOINLINE", "ARROW_POPCOUNT64", "ARROW_POPCOUNT32").cppTypes().annotations())
                .put(new Info("ARROW_BITNESS", "ARROW_LITTLE_ENDIAN").translate(false))
 
                .put(new Info("ARROW_DEPRECATED").cppText("#define ARROW_DEPRECATED(...) deprecated").cppTypes())
@@ -160,8 +175,9 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::internal::BitsetStack::reference").pointerTypes("BoolPointer"))
                .put(new Info("arrow::util::bytes_view", "arrow::util::string_view", "arrow::internal::Bitmap", "std::atomic<int64_t>", "std::initializer_list").skip())
                .put(new Info("arrow::Buffer").pointerTypes("ArrowBuffer"))
-               .put(new Info("arrow::EqualOptions::nans_equal", "arrow::EqualOptions::atol", "arrow::EqualOptions::diff_sink").annotations("@Function"))
-               .put(new Info("arrow::detail::CTypeImpl", "arrow::detail::IntegerTypeImpl", "arrow::internal::IsOneOf", "arrow::util::internal::non_null_filler", "arrow::TypeTraits").skip())
+               .put(new Info("arrow::EqualOptions::nans_equal", "arrow::EqualOptions::atol", "arrow::EqualOptions::diff_sink").annotations("@org.bytedeco.javacpp.annotation.Function"))
+               .put(new Info("arrow::detail::CTypeImpl", "arrow::detail::IntegerTypeImpl", "arrow::internal::IsOneOf", "arrow::util::internal::non_null_filler", "arrow::TypeTraits",
+                             "arrow::detail::CTypeImpl<DERIVED,BASE,TYPE_ID,C_TYPE>::type_id", "arrow::Decimal128::ToRealConversion").skip())
 
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
                .put(new Info("const char").valueTypes("byte").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
@@ -176,19 +192,28 @@ public class arrow implements InfoMapper {
 
                .put(new Info("arrow::NumericArray<arrow::Int8Type>::value_type",
                              "arrow::NumericArray<arrow::UInt8Type>::value_type",
+                             "arrow::UnionArray::type_code_t", "arrow::DenseUnionArray::type_code_t", "arrow::SparseUnionArray::type_code_t",
+                             "arrow::NumericScalar<arrow::Int8Type>::ValueType",
+                             "arrow::NumericScalar<arrow::UInt8Type>::ValueType",
                              "arrow::NumericBuilder<arrow::Int8Type>::value_type",
                              "arrow::NumericBuilder<arrow::UInt8Type>::value_type").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("arrow::NumericBuilder<arrow::Int8Type>::ArrayType",
                              "arrow::NumericBuilder<arrow::UInt8Type>::ArrayType").cast().valueTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("arrow::NumericArray<arrow::Int16Type>::value_type",
                              "arrow::NumericArray<arrow::UInt16Type>::value_type",
+                             "arrow::NumericScalar<arrow::Int16Type>::ValueType",
+                             "arrow::NumericScalar<arrow::UInt16Type>::ValueType",
                              "arrow::NumericBuilder<arrow::Int16Type>::value_type",
                              "arrow::NumericBuilder<arrow::UInt16Type>::value_type").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("arrow::NumericBuilder<arrow::Int16Type>::ArrayType",
                              "arrow::NumericBuilder<arrow::UInt16Type>::ArrayType").cast().valueTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("arrow::NumericArray<arrow::Int32Type>::value_type",
                              "arrow::NumericArray<arrow::UInt32Type>::value_type",
+                             "arrow::NumericScalar<arrow::Int32Type>::ValueType",
+                             "arrow::NumericScalar<arrow::UInt32Type>::ValueType",
                              "arrow::DateScalar<arrow::Date32Type>::ValueType",
+                             "arrow::TemporalScalar<arrow::Date32Type>::ValueType",
+                             "arrow::TemporalScalar<arrow::Time32Type>::ValueType",
                              "arrow::TemporalScalar<arrow::MonthIntervalType>::ValueType",
                              "arrow::NumericArray<arrow::Date32Type>::value_type",
                              "arrow::NumericArray<arrow::Time32Type>::value_type",
@@ -204,6 +229,11 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::NumericArray<arrow::Int64Type>::value_type",
                              "arrow::NumericArray<arrow::UInt64Type>::value_type",
                              "arrow::DateScalar<arrow::Date64Type>::ValueType",
+                             "arrow::NumericScalar<arrow::Int64Type>::ValueType",
+                             "arrow::NumericScalar<arrow::UInt64Type>::ValueType",
+                             "arrow::TemporalScalar<arrow::Date64Type>::ValueType",
+                             "arrow::TemporalScalar<arrow::DurationType>::ValueType",
+                             "arrow::TemporalScalar<arrow::Time64Type>::ValueType",
                              "arrow::TemporalScalar<arrow::TimestampType>::ValueType",
                              "arrow::NumericArray<arrow::Date64Type>::value_type",
                              "arrow::NumericArray<arrow::Time64Type>::value_type",
@@ -220,16 +250,19 @@ public class arrow implements InfoMapper {
                              "arrow::NumericBuilder<arrow::UInt64Type>::ArrayType",
                              "arrow::NumericBuilder<arrow::DayTimeIntervalType>::ArrayType").cast().valueTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("arrow::NumericArray<arrow::HalfFloatType>::value_type", 
+                             "arrow::NumericScalar<arrow::HalfFloatType>::ValueType",
                              "arrow::NumericBuilder<arrow::HalfFloatType>::value_type",
                              "arrow::NumericBuilder<arrow::HalfFloatType>::value_type").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("arrow::NumericBuilder<arrow::HalfFloatType>::ArrayType",
                              "arrow::NumericBuilder<arrow::HalfFloatType>::ArrayType").cast().valueTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("arrow::NumericArray<arrow::FloatType>::value_type",
+                             "arrow::NumericScalar<arrow::FloatType>::ValueType",
                              "arrow::NumericBuilder<arrow::FloatType>::value_type",
                              "arrow::NumericBuilder<arrow::FloatType>::value_type").cast().valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("arrow::NumericBuilder<arrow::FloatType>::ArrayType",
                              "arrow::NumericBuilder<arrow::FloatType>::ArrayType").cast().valueTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("arrow::NumericArray<arrow::DoubleType>::value_type",
+                             "arrow::NumericScalar<arrow::DoubleType>::ValueType",
                              "arrow::NumericBuilder<arrow::DoubleType>::value_type",
                              "arrow::NumericBuilder<arrow::DoubleType>::value_type").cast().valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double[]"))
                .put(new Info("arrow::NumericBuilder<arrow::DoubleType>::ArrayType",
@@ -239,10 +272,10 @@ public class arrow implements InfoMapper {
                              "arrow::TemporalScalar<arrow::DayTimeIntervalType>::ValueType").pointerTypes("DayTimeIntervalType.DayMilliseconds"))
 
                .put(new Info("arrow::BaseListType", "arrow::BaseBinaryType", "arrow::BaseListScalar", "arrow::NestedType", "arrow::NumberType",
-                             "arrow::Date64Scalar", "arrow::DayTimeIntervalScalar", "arrow::FixedSizeListScalar",
-                             "arrow::PrimitiveCType", "arrow::Scalar", "arrow::StructScalar", "arrow::TemporalType",
+                             "arrow::Date64Scalar", "arrow::DayTimeIntervalScalar", "arrow::FixedSizeListScalar", "arrow::Int64Scalar", "arrow::UInt64Scalar",
+                             "arrow::PrimitiveCType", "arrow::Scalar", "arrow::StructScalar", "arrow::TemporalType", "arrow::TimestampParser",
                              "arrow::ipc::RecordBatchStreamReader", "arrow::ipc::RecordBatchStreamWriter", "arrow::ipc::RecordBatchFileWriter",
-                             "arrow::csv::StreamingReader", "arrow::compute::CompareFunction").purify())
+                             "arrow::csv::StreamingReader", "arrow::compute::CompareFunction", "arrow::compute::KernelInitArgs").purify())
 
                .put(new Info("arrow::BaseBinaryScalar<arrow::BinaryType>").pointerTypes("BaseBinaryScalar").define())
                .put(new Info("arrow::BaseBinaryScalar<arrow::LargeBinaryType>").pointerTypes("BaseLargeBinaryScalar").define())
@@ -295,6 +328,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::NumericArray<arrow::DurationType>").pointerTypes("DurationArray").define())
 //               .put(new Info("arrow::NumericArray<arrow::ExtensionType>").pointerTypes("ExtensionArray").define())
 
+               .put(new Info("finalize").javaNames("_finalize"))
                .put(new Info("arrow::ArrayData::GetValues<jbyte>").javaNames("GetValuesByte"))
                .put(new Info("arrow::ArrayData::GetValues<jshort>").javaNames("GetValuesShort"))
                .put(new Info("arrow::ArrayData::GetValues<jint>").javaNames("GetValuesInt"))
@@ -303,7 +337,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::ArrayData::GetValues<double>").javaNames("GetValuesDouble"))
 
                .put(new Info("std::shared_ptr<arrow::Scalar>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::Scalar>\"}) Scalar").pointerTypes("Scalar"))
-               .put(new Info("std::shared_ptr<arrow::Field>").annotations("@SharedPtr").pointerTypes("Field"))
+               .put(new Info("std::shared_ptr<arrow::Field>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::Field>\"}) Field").pointerTypes("Field"))
                .put(new Info("std::shared_ptr<arrow::Array>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::Array>\"}) Array").pointerTypes("Array"))
                .put(new Info("std::shared_ptr<arrow::ArrayData>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::ArrayData>\"}) ArrayData").pointerTypes("ArrayData"))
                .put(new Info("std::shared_ptr<arrow::Buffer>").annotations("@SharedPtr").valueTypes("ArrowBuffer").pointerTypes("@Cast({\"\", \"std::shared_ptr<arrow::Buffer>*\"}) ArrowBuffer"))
@@ -313,12 +347,17 @@ public class arrow implements InfoMapper {
                .put(new Info("std::shared_ptr<arrow::ChunkedArray>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::ChunkedArray>\"}) ChunkedArray").pointerTypes("ChunkedArray"))
                .put(new Info("std::shared_ptr<arrow::Schema>").annotations("@SharedPtr").pointerTypes("Schema"))
                .put(new Info("std::shared_ptr<arrow::Table>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::Table>\"}) Table").pointerTypes("Table"))
+//               .put(new Info("std::shared_ptr<arrow::TimestampParser>").annotations("@SharedPtr").pointerTypes("TimestampParser"))
                .put(new Info("std::shared_ptr<arrow::ListArray>").annotations("@SharedPtr").pointerTypes("ListArray"))
                .put(new Info("std::shared_ptr<arrow::BinaryArray>").annotations("@SharedPtr").pointerTypes("BinaryArray"))
                .put(new Info("std::shared_ptr<arrow::StructArray>").annotations("@SharedPtr").pointerTypes("StructArray"))
                .put(new Info("std::shared_ptr<arrow::DataType>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::DataType>\"}) DataType")
                                                                                           .pointerTypes("@Cast({\"\", \"std::shared_ptr<arrow::DataType>*\"}) DataType"))
                .put(new Info("std::shared_ptr<const arrow::KeyValueMetadata>").annotations("@Cast(\"const arrow::KeyValueMetadata*\") @SharedPtr").pointerTypes("KeyValueMetadata"))
+               .put(new Info("std::shared_ptr<arrow::compute::KernelSignature>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::compute::KernelSignature>\"}) KernelSignature")
+                                                                                .pointerTypes("KernelSignature"))
+               .put(new Info("std::shared_ptr<arrow::compute::SelectionVector>").annotations("@SharedPtr").pointerTypes("SelectionVector"))
+               .put(new Info("std::shared_ptr<arrow::internal::ThreadPool>").annotations("@SharedPtr").pointerTypes("ThreadPool"))
                .put(new Info("std::shared_ptr<arrow::io::OutputStream>").annotations("@SharedPtr").valueTypes("OutputStream")
                                                                         .pointerTypes("@Cast({\"\", \"std::shared_ptr<arrow::io::OutputStream>*\"}) OutputStream"))
                .put(new Info("std::shared_ptr<arrow::io::FileOutputStream>").annotations("@SharedPtr").valueTypes("FileOutputStream")
@@ -326,6 +365,7 @@ public class arrow implements InfoMapper {
                .put(new Info("std::shared_ptr<arrow::io::RandomAccessFile>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::io::RandomAccessFile>\"}) RandomAccessFile")
                                                                             .pointerTypes("RandomAccessFile"))
 
+               .put(new Info("std::vector<std::shared_ptr<arrow::DataType> >").pointerTypes("DataTypeVector").define())
                .put(new Info("std::vector<std::shared_ptr<arrow::Scalar> >").pointerTypes("ScalarVector").define())
                .put(new Info("std::vector<std::shared_ptr<arrow::Field> >").pointerTypes("FieldVector").define())
                .put(new Info("std::vector<std::shared_ptr<arrow::Array> >").pointerTypes("ArrayVector").define())
@@ -336,8 +376,12 @@ public class arrow implements InfoMapper {
                .put(new Info("std::vector<std::shared_ptr<arrow::ChunkedArray> >").pointerTypes("ChunkedArrayVector").define())
                .put(new Info("std::vector<std::shared_ptr<arrow::Schema> >").pointerTypes("SchemaVector").define())
                .put(new Info("std::vector<std::shared_ptr<arrow::Table> >").pointerTypes("TableVector").define())
+//               .put(new Info("std::vector<std::shared_ptr<arrow::TimestampParser> >").pointerTypes("TimestampParserVector").define())
                .put(new Info("std::vector<std::vector<std::shared_ptr<arrow::Array> > >", "std::vector<arrow::ArrayVector>").pointerTypes("ArrayVectorVector").define())
-               .put(new Info("std::vector<arrow::compute::Datum>").pointerTypes("DatumVector").define())
+               .put(new Info("std::vector<std::pair<int64_t,std::shared_ptr<arrow::Array> > >").pointerTypes("DictionaryVector").define())
+               .put(new Info("std::vector<arrow::Datum>").pointerTypes("DatumVector").define())
+               .put(new Info("std::vector<arrow::FutureImpl*>").pointerTypes("FutureImplVector").define())
+               .put(new Info("std::vector<arrow::ValueDescr>").pointerTypes("ValueDescrVector").define())
 //               .put(new Info("std::vector<arrow::fs::FileStats>").pointerTypes("FileStatsVector").define())
                .put(new Info("arrow::BaseListArray<arrow::ListType>").pointerTypes("BaseListArray").define())
                .put(new Info("arrow::BaseBinaryArray<arrow::BinaryType>").pointerTypes("BaseBinaryArray").define())
@@ -347,6 +391,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::Result<int64_t>").pointerTypes("LongResult").define())
                .put(new Info("arrow::Result<size_t>").pointerTypes("SizeTResult").define())
                .put(new Info("arrow::Result<std::string>").pointerTypes("StringResult").define())
+               .put(new Info("arrow::Result<arrow::ValueDescr>").pointerTypes("ValueDescrResult").define())
                .put(new Info("arrow::Result<arrow::ArrayVector>").pointerTypes("ArrayVectorResult").define())
                .put(new Info("arrow::Result<arrow::Compression::type>").pointerTypes("CompressionTypeResult").define())
                .put(new Info("arrow::Result<arrow::FieldRef>").pointerTypes("FieldRefResult").define())
@@ -355,11 +400,18 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::Result<arrow::util::string_view>").pointerTypes("StringViewResult").define())
                .put(new Info("arrow::Result<arrow::fs::LocalFileSystemOptions>").pointerTypes("LocalFileSystemOptionsResult").define())
                .put(new Info("arrow::Result<arrow::fs::LocalFileSystemOptions>::Equals").skip())
+               .put(new Info("arrow::Result<arrow::fs::HdfsOptions>").pointerTypes("HDFSOptionsResult").define())
+               .put(new Info("arrow::Result<arrow::fs::HdfsOptions>::Equals").skip())
+//               .put(new Info("arrow::Result<arrow::fs::S3Options>").pointerTypes("S3OptionsResult").define())
+//               .put(new Info("arrow::Result<arrow::fs::S3Options>::Equals").skip())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::internal::ThreadPool> >").pointerTypes("ThreadPoolResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::Array> >").pointerTypes("ArrayResult").define())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::ArrayData> >").pointerTypes("ArrayDataResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::Buffer> >").pointerTypes("BufferResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::Buffer> >").pointerTypes("BufferUniqueResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::Buffer> >(const arrow::Result<std::unique_ptr<arrow::Buffer> >&)",
                              "arrow::Result<std::unique_ptr<arrow::Buffer> >::operator =").skip())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::ResizableBuffer> >").pointerTypes("ResizableResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ResizableBuffer> >").pointerTypes("ResizableUniqueResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ResizableBuffer> >(const arrow::Result<std::unique_ptr<arrow::ResizableBuffer> >&)",
                              "arrow::Result<std::unique_ptr<arrow::ResizableBuffer> >::operator =").skip())
@@ -389,8 +441,14 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::Result<std::shared_ptr<arrow::io::RandomAccessFile> >", "arrow::Result<std::shared_ptr<io::RandomAccessFile> >").pointerTypes("RandomAccessFileResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::csv::StreamingReader> >").pointerTypes("StreamingReaderResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::csv::TableReader> >").pointerTypes("TableReaderResult").define())
-               .put(new Info("arrow::Result<arrow::compute::Datum>").pointerTypes("DatumResult").define())
-               .put(new Info("arrow::Result<arrow::compute::Datum>::Equals").skip())
+//               .put(new Info("arrow::Result<std::shared_ptr<arrow::compute::CastFunction> >").pointerTypes("CastFunctionResult").define())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::compute::Function> >").pointerTypes("FunctionResult").define())
+               .put(new Info("arrow::Result<arrow::Datum>").pointerTypes("DatumResult").define())
+               .put(new Info("arrow::Result<arrow::Datum>::Equals").skip())
+               .put(new Info("arrow::Result<arrow::compute::ScalarKernel*>", "arrow::Result<const arrow::compute::ScalarKernel*>").cast().pointerTypes("ScalarKernelResult").define())
+               .put(new Info("arrow::Result<arrow::compute::ScalarAggregateKernel*>", "arrow::Result<const arrow::compute::ScalarAggregateKernel*>").cast().pointerTypes("ScalarAggregateKernelResult").define())
+               .put(new Info("arrow::Result<arrow::compute::VectorKernel*>", "arrow::Result<const arrow::compute::VectorKernel*>").cast().pointerTypes("VectorKernelResult").define())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::compute::SelectionVector> >").pointerTypes("SelectionVectorResult").define())
                .put(new Info("arrow::Result<arrow::fs::FileInfo>").pointerTypes("FileInfoResult").define())
 //               .put(new Info("arrow::Result<arrow::fs::FileStats>").pointerTypes("FileStatsResult").define())
                .put(new Info("arrow::Result<arrow::fs::PathForest>").pointerTypes("PathForestResult").define())
@@ -401,6 +459,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::Result<std::vector<std::shared_ptr<arrow::RecordBatch> > >").pointerTypes("RecordBatchVectorResult").define())
                .put(new Info("arrow::Result<std::vector<std::shared_ptr<arrow::Schema> > >").pointerTypes("SchemaVectorResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::fs::FileSystem> >").pointerTypes("FileSystemResult").define())
+//               .put(new Info("arrow::Result<std::shared_ptr<arrow::fs::S3FileSystem> >").pointerTypes("S3FileSystemResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::util::Compressor> >").pointerTypes("CompressorResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::util::Decompressor> >").pointerTypes("DecompressorResult").define())
                .put(new Info("arrow::Result<arrow::util::Compressor::CompressResult>").pointerTypes("CompressResultResult").define())
@@ -411,6 +470,9 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::Result<arrow::util::Compressor::FlushResult>::Equals").skip())
                .put(new Info("arrow::Result<arrow::util::Decompressor::DecompressResult>").pointerTypes("DecompressResultResult").define())
                .put(new Info("arrow::Result<arrow::util::Decompressor::DecompressResult>::Equals").skip())
+               .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >").pointerTypes("IpcPayloadWriterResult").define())
+               .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >(const arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >&)",
+                             "arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >::operator =").skip())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::Message> >").pointerTypes("MessageSharedResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::Message> >").pointerTypes("MessageUniqueResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::Message> >(const arrow::Result<std::unique_ptr<arrow::ipc::Message> >&)",
@@ -456,15 +518,16 @@ public class arrow implements InfoMapper {
                              "arrow::internal::BinaryDictionaryBuilderImpl<arrow::StringType>",
                              "arrow::internal::BinaryDictionary32BuilderImpl<arrow::BinaryType>",
                              "arrow::internal::BinaryDictionary32BuilderImpl<arrow::StringType>",
-                             "arrow::CTypeTraits<const char*>", "arrow::CTypeTraits<std::string>", "arrow::fs::TimePoint",
+                             "arrow::CTypeTraits<const char*>", "arrow::CTypeTraits<std::string>", "arrow::DictionaryScalar::ValueType", "arrow::fs::TimePoint",
                              "std::enable_shared_from_this<arrow::fs::FileSystem>", "std::enable_shared_from_this<FileSystem>",
                              "std::enable_shared_from_this<arrow::io::RandomAccessFile>", "std::enable_shared_from_this<RandomAccessFile>",
+                             "std::enable_shared_from_this<arrow::internal::TaskGroup>",
                              "std::function<std::unique_ptr<arrow::detail::ReadaheadPromise>()>",
                              "arrow::util::ToStringOstreamable<arrow::Schema>",
-                             "arrow::util::ToStringOstreamable<arrow::Status>",
+                             "arrow::util::ToStringOstreamable<arrow::Status>", "arrow::util::ToStringOstreamable<Status>",
                              "arrow::util::EqualityComparable<arrow::Scalar>",
                              "arrow::util::EqualityComparable<arrow::Schema>",
-                             "arrow::util::EqualityComparable<arrow::Status>",
+                             "arrow::util::EqualityComparable<arrow::Status>", "arrow::util::EqualityComparable<Status>",
                              "arrow::util::EqualityComparable<arrow::fs::FileInfo>", "arrow::util::EqualityComparable<FileInfo>",
 //                             "arrow::util::EqualityComparable<arrow::fs::FileStats>", "arrow::util::EqualityComparable<FileStats>",
                              "arrow::util::EqualityComparable<arrow::fs::PathForest>", "arrow::util::EqualityComparable<PathForest>",
@@ -472,6 +535,7 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<int64_t> >",
                              "arrow::util::EqualityComparable<arrow::Result<size_t> >",
                              "arrow::util::EqualityComparable<arrow::Result<std::string> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::ValueDescr> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::ArrayVector> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::Compression::type> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::FieldRef> >",
@@ -479,16 +543,25 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::pair<arrow::Decimal128,arrow::Decimal128> > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::util::string_view> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::fs::LocalFileSystemOptions> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::fs::HdfsOptions> >",
+//                             "arrow::util::EqualityComparable<arrow::Result<arrow::fs::S3Options> >",
                              "arrow::util::EqualityComparable<arrow::Iterator<std::shared_ptr<arrow::Buffer> > >",
                              "arrow::util::EqualityComparable<arrow::Iterator<std::shared_ptr<arrow::RecordBatch> > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::Iterator<std::shared_ptr<arrow::Buffer> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::Iterator<std::shared_ptr<arrow::RecordBatch> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::RecordBatchIterator> >",
-                             "arrow::util::EqualityComparable<arrow::Result<arrow::compute::Datum> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::Datum> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::compute::ScalarKernel*> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::compute::ScalarAggregateKernel*> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::compute::VectorKernel*> >",
+//                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::compute::CastFunction> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::compute::Function> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::compute::SelectionVector> > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::fs::FileInfo> >",
 //                             "arrow::util::EqualityComparable<arrow::Result<arrow::fs::FileStats> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::fs::PathForest> >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::fs::FileSystem> > >",
+//                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::fs::S3FileSystem> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<arrow::fs::FileInfo> > >",
 //                             "arrow::util::EqualityComparable<arrow::Result<std::vector<arrow::fs::FileStats> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<std::shared_ptr<arrow::Buffer> > > >",
@@ -507,6 +580,7 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchWriter> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchReader> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchFileReader> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ipc::feather::Reader> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ipc::Message> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::ipc::Message> > >",
@@ -524,9 +598,12 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::io::RandomAccessFile> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::csv::StreamingReader> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::csv::TableReader> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::internal::ThreadPool> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::Array> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ArrayData> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::Buffer> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::Buffer> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ResizableBuffer> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::ResizableBuffer> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::DataType> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::Field> > >",
@@ -541,6 +618,12 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::Table> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::Tensor> > >").cast().pointerTypes("Pointer"))
                .put(new Info("arrow::internal::PrimitiveScalar",
+                             "arrow::internal::PrimitiveScalar<arrow::DurationType>",
+                             "arrow::internal::PrimitiveScalar<arrow::DayTimeIntervalType>",
+                             "arrow::internal::PrimitiveScalar<arrow::Time32Type>",
+                             "arrow::internal::PrimitiveScalar<arrow::Time64Type>",
+                             "arrow::internal::PrimitiveScalar<arrow::TimestampType>",
+                             "arrow::internal::PrimitiveScalar<arrow::MonthIntervalType>",
                              "arrow::internal::PrimitiveScalar<arrow::BooleanType,bool>",
                              "arrow::internal::PrimitiveScalar<arrow::Date32Type>",
                              "arrow::internal::PrimitiveScalar<arrow::Date64Type>",
@@ -555,13 +638,18 @@ public class arrow implements InfoMapper {
                              "arrow::internal::PrimitiveScalar<arrow::HalfFloatType>",
                              "arrow::internal::PrimitiveScalar<arrow::FloatType>",
                              "arrow::internal::PrimitiveScalar<arrow::DoubleType>").cast().pointerTypes("Scalar"))
-               .put(new Info("arrow::internal::DictionaryScalar", "arrow::NullBuilder::Append(std::nullptr_t)", "arrow::compute::Datum::value",
+               .put(new Info("arrow::compute::detail::FunctionImpl<arrow::compute::ScalarKernel>",
+                             "arrow::compute::detail::FunctionImpl<arrow::compute::ScalarAggregateKernel>",
+                             "arrow::compute::detail::FunctionImpl<arrow::compute::VectorKernel>").pointerTypes("Function"))
+               .put(new Info("arrow::internal::DictionaryScalar", "arrow::NullBuilder::Append(std::nullptr_t)", "arrow::Datum::value",
                              "arrow::compute::MakeCount", "arrow::internal::parallel_memcopy", "arrow::io::HdfsReadableFile::set_memory_pool",
                              "arrow::compute::MakeCompareKernel", "arrow::internal::InvertBitmap", "arrow::fs::FileSystemFromUri",
                              "arrow::io::BufferReader::ReadAsync", "arrow::io::MemoryMappedFile::ReadAsync", "arrow::io::RandomAccessFile::ReadAsync",
                              "arrow::ipc::DictionaryMemo(arrow::ipc::DictionaryMemo)", "arrow::ipc::DictionaryMemo::operator =",
-                             "arrow::ipc::WriteMessage", "arrow::json::Convert").skip())
-               .put(new Info("arrow::compute::Datum::type").enumerate(false).valueTypes("int"))
+                             "arrow::ipc::WriteMessage", "arrow::json::Convert", "arrow::csv::ConvertOptions::timestamp_parsers",
+                             "arrow::AllocateBitmap", "arrow::ConcatenateBuffers", "arrow::FieldPath::Get", "arrow::GetCastFunction",
+                             "arrow::compute::CastFunction", "arrow::compute::MinMax", "arrow::ipc::internal::CheckCompressionSupported").skip())
+               .put(new Info("arrow::Datum::type").enumerate(false).valueTypes("int"))
 
                .put(new Info("arrow::NumericBuilder<arrow::Int8Type>").pointerTypes("Int8Builder").define())
                .put(new Info("arrow::NumericBuilder<arrow::Int16Type>").pointerTypes("Int16Builder").define())

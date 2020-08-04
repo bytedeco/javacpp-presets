@@ -29,6 +29,9 @@ public class OrExpression extends OrExpressionImpl {
     @Override public OrExpression position(long position) {
         return (OrExpression)super.position(position);
     }
+    @Override public OrExpression getPointer(long i) {
+        return new OrExpression(this).position(position + i);
+    }
 
 
   public native @StdString String ToString();

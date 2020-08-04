@@ -41,6 +41,9 @@ public class Type extends Pointer {
     @Override public Type position(long position) {
         return (Type)super.position(position);
     }
+    @Override public Type getPointer(long i) {
+        return new Type(this).position(position + i);
+    }
 
   public enum type {
     BOOLEAN(0),

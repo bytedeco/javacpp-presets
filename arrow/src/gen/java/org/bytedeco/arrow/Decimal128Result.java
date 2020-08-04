@@ -21,6 +21,9 @@ public class Decimal128Result extends Pointer {
     @Override public Decimal128Result position(long position) {
         return (Decimal128Result)super.position(position);
     }
+    @Override public Decimal128Result getPointer(long i) {
+        return new Decimal128Result(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class Decimal128Result extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

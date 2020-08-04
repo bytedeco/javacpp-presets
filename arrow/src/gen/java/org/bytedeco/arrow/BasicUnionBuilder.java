@@ -11,6 +11,10 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
+/** \brief Base class for union array builds.
+ * 
+ *  Note that while we subclass ArrayBuilder, as union types do not have a
+ *  validity bitmap, the bitmap builder member of ArrayBuilder is not used. */
 @Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BasicUnionBuilder extends ArrayBuilder {
     static { Loader.load(); }
@@ -41,4 +45,6 @@ public class BasicUnionBuilder extends ArrayBuilder {
                        @StdString BytePointer field_name/*=""*/);
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type();
+
+  public native @Cast("int64_t") long length();
 }

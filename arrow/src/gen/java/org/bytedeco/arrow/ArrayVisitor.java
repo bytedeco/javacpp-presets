@@ -25,6 +25,9 @@ public class ArrayVisitor extends Pointer {
     @Override public ArrayVisitor position(long position) {
         return (ArrayVisitor)super.position(position);
     }
+    @Override public ArrayVisitor getPointer(long i) {
+        return new ArrayVisitor(this).position(position + i);
+    }
 
 
   public native @ByVal Status Visit(@Const @ByRef NullArray array);
@@ -59,7 +62,8 @@ public class ArrayVisitor extends Pointer {
   public native @ByVal Status Visit(@Const @ByRef MapArray array);
   public native @ByVal Status Visit(@Const @ByRef FixedSizeListArray array);
   public native @ByVal Status Visit(@Const @ByRef StructArray array);
-  public native @ByVal Status Visit(@Const @ByRef UnionArray array);
+  public native @ByVal Status Visit(@Const @ByRef SparseUnionArray array);
+  public native @ByVal Status Visit(@Const @ByRef DenseUnionArray array);
   public native @ByVal Status Visit(@Const @ByRef DictionaryArray array);
   public native @ByVal Status Visit(@Const @ByRef ExtensionArray array);
 }

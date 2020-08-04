@@ -21,6 +21,9 @@ public class RecordBatchIterator extends Pointer {
     @Override public RecordBatchIterator position(long position) {
         return (RecordBatchIterator)super.position(position);
     }
+    @Override public RecordBatchIterator getPointer(long i) {
+        return new RecordBatchIterator(this).position(position + i);
+    }
 
   /** \brief Iterator may be constructed from any type which has a member function
    *  with signature Status Next(T*);
@@ -61,6 +64,9 @@ public class RecordBatchIterator extends Pointer {
       private native void allocateArray(long size);
       @Override public RangeIterator position(long position) {
           return (RangeIterator)super.position(position);
+      }
+      @Override public RangeIterator getPointer(long i) {
+          return new RangeIterator(this).position(position + i);
       }
   
     public RangeIterator() { super((Pointer)null); allocate(); }

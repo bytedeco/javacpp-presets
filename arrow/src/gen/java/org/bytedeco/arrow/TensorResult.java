@@ -21,6 +21,9 @@ public class TensorResult extends Pointer {
     @Override public TensorResult position(long position) {
         return (TensorResult)super.position(position);
     }
+    @Override public TensorResult getPointer(long i) {
+        return new TensorResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class TensorResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

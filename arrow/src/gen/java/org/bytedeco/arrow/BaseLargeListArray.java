@@ -24,6 +24,9 @@ public class BaseLargeListArray extends Array {
     @Override public BaseLargeListArray position(long position) {
         return (BaseLargeListArray)super.position(position);
     }
+    @Override public BaseLargeListArray getPointer(long i) {
+        return new BaseLargeListArray(this).position(position + i);
+    }
 
 
   public native @Cast("const arrow::BaseListArray<arrow::LargeListType>::TypeClass*") LargeListType list_type();

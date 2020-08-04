@@ -29,6 +29,9 @@ public class SchemaBuilder extends Pointer {
     @Override public SchemaBuilder position(long position) {
         return (SchemaBuilder)super.position(position);
     }
+    @Override public SchemaBuilder getPointer(long i) {
+        return new SchemaBuilder(this).position(position + i);
+    }
 
   // Indicate how field conflict(s) should be resolved when building a schema. A
   // conflict arise when a field is added to the builder and one or more field(s)
@@ -130,7 +133,7 @@ public class SchemaBuilder extends Pointer {
    *  @return A failure if encountered. */
   
   ///
-  public native @ByVal Status AddField(@Const @SharedPtr @ByRef Field field);
+  public native @ByVal Status AddField(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field);
 
   /** \brief Add multiple fields to the constructed schema.
    * 

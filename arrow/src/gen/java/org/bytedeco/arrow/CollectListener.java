@@ -28,6 +28,9 @@ public class CollectListener extends Listener {
     @Override public CollectListener position(long position) {
         return (CollectListener)super.position(position);
     }
+    @Override public CollectListener getPointer(long i) {
+        return new CollectListener(this).position(position + i);
+    }
 
   public CollectListener() { super((Pointer)null); allocate(); }
   private native void allocate();

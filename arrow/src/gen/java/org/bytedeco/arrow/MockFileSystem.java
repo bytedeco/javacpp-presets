@@ -41,6 +41,7 @@ public class MockFileSystem extends FileSystem {
   public native @ByVal Status DeleteDir(@StdString BytePointer path);
   public native @ByVal Status DeleteDirContents(@StdString String path);
   public native @ByVal Status DeleteDirContents(@StdString BytePointer path);
+  public native @ByVal Status DeleteRootDirContents();
 
   public native @ByVal Status DeleteFile(@StdString String path);
   public native @ByVal Status DeleteFile(@StdString BytePointer path);

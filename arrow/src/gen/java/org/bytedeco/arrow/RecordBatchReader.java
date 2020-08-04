@@ -38,5 +38,18 @@ public class RecordBatchReader extends Pointer {
   public native @ByVal Status ReadAll(RecordBatchVector batches);
 
   /** \brief Read all batches and concatenate as arrow::Table */
+  
+  ///
   public native @ByVal Status ReadAll(@SharedPtr Table table);
+
+  /** \brief Create a RecordBatchReader from a vector of RecordBatch.
+   * 
+   *  @param batches [in] the vector of RecordBatch to read from
+   *  @param schema [in] schema to conform to. Will be inferred from the first
+   *             element if not provided. */
+  public static native @ByVal RecordBatchReaderSharedResult Make(
+        @ByVal RecordBatchVector batches,
+        @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Schema>(nullptr)") Schema schema);
+  public static native @ByVal RecordBatchReaderSharedResult Make(
+        @ByVal RecordBatchVector batches);
 }

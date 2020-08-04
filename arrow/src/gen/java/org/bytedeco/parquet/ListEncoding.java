@@ -59,6 +59,9 @@ public class ListEncoding extends Pointer {
     @Override public ListEncoding position(long position) {
         return (ListEncoding)super.position(position);
     }
+    @Override public ListEncoding getPointer(long i) {
+        return new ListEncoding(this).position(position + i);
+    }
 
   public enum type { ONE_LEVEL(0), TWO_LEVEL(1), THREE_LEVEL(2);
 

@@ -31,8 +31,8 @@ public class ListType extends BaseListType {
   public ListType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type) { super((Pointer)null); allocate(value_type); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type);
 
-  public ListType(@Const @SharedPtr @ByRef Field value_field) { super((Pointer)null); allocate(value_field); }
-  private native void allocate(@Const @SharedPtr @ByRef Field value_field);
+  public ListType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_field) { super((Pointer)null); allocate(value_field); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field value_field);
 
   public native @ByVal DataTypeLayout layout();
 

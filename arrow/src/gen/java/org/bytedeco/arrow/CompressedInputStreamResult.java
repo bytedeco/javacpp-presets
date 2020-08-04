@@ -21,6 +21,9 @@ public class CompressedInputStreamResult extends Pointer {
     @Override public CompressedInputStreamResult position(long position) {
         return (CompressedInputStreamResult)super.position(position);
     }
+    @Override public CompressedInputStreamResult getPointer(long i) {
+        return new CompressedInputStreamResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class CompressedInputStreamResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

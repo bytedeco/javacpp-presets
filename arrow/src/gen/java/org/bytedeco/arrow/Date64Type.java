@@ -23,6 +23,9 @@ public class Date64Type extends DateType {
     @Override public Date64Type position(long position) {
         return (Date64Type)super.position(position);
     }
+    @Override public Date64Type getPointer(long i) {
+        return new Date64Type(this).position(position + i);
+    }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();
   public static final int type_id = type_id();

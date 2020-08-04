@@ -28,6 +28,9 @@ public class BufferBuilder extends Pointer {
     @Override public BufferBuilder position(long position) {
         return (BufferBuilder)super.position(position);
     }
+    @Override public BufferBuilder getPointer(long i) {
+        return new BufferBuilder(this).position(position + i);
+    }
 
   public BufferBuilder(MemoryPool pool/*=default_memory_pool()*/) { super((Pointer)null); allocate(pool); }
   private native void allocate(MemoryPool pool/*=default_memory_pool()*/);

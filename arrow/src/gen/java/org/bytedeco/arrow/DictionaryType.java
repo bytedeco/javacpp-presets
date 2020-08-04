@@ -16,7 +16,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 // in memory)
 
 /** \brief Dictionary-encoded value type with data-dependent
- *  dictionary */
+ *  dictionary. Indices are represented by any integer types. */
 @Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class DictionaryType extends FixedWidthType {
     static { Loader.load(); }

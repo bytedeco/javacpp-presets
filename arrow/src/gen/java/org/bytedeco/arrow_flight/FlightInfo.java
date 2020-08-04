@@ -34,6 +34,9 @@ public class FlightInfo extends Pointer {
       @Override public Data position(long position) {
           return (Data)super.position(position);
       }
+      @Override public Data getPointer(long i) {
+          return new Data(this).position(position + i);
+      }
   
     public native @StdString String schema(); public native Data schema(String setter);
     public native @ByRef FlightDescriptor descriptor(); public native Data descriptor(FlightDescriptor setter);
@@ -44,6 +47,12 @@ public class FlightInfo extends Pointer {
 
   public FlightInfo(@Const @ByRef Data data) { super((Pointer)null); allocate(data); }
   private native void allocate(@Const @ByRef Data data);
+
+  /** \brief Factory method to construct a FlightInfo. */
+  public static native @ByVal FlightInfoResult Make(@Const @ByRef Schema schema,
+                                          @Const @ByRef FlightDescriptor descriptor,
+                                          @StdVector FlightEndpoint endpoints,
+                                          @Cast("int64_t") long total_records, @Cast("int64_t") long total_bytes);
 
   /** \brief Deserialize the Arrow schema of the dataset, to be passed
    *  to each call to DoGet. Populate any dictionary encoded fields

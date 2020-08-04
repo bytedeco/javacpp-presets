@@ -25,6 +25,10 @@ public class DictionaryMemo extends Pointer {
     @Override public DictionaryMemo position(long position) {
         return (DictionaryMemo)super.position(position);
     }
+    @Override public DictionaryMemo getPointer(long i) {
+        return new DictionaryMemo(this).position(position + i);
+    }
+
 
   public DictionaryMemo() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -41,9 +45,9 @@ public class DictionaryMemo extends Pointer {
   public native @ByVal Status GetDictionaryType(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>*"}) DataType type);
 
   /** \brief Return id for dictionary, computing new id if necessary */
-  public native @ByVal Status GetOrAssignId(@Const @SharedPtr @ByRef Field field, @Cast("int64_t*") LongPointer out);
-  public native @ByVal Status GetOrAssignId(@Const @SharedPtr @ByRef Field field, @Cast("int64_t*") LongBuffer out);
-  public native @ByVal Status GetOrAssignId(@Const @SharedPtr @ByRef Field field, @Cast("int64_t*") long[] out);
+  public native @ByVal Status GetOrAssignId(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field, @Cast("int64_t*") LongPointer out);
+  public native @ByVal Status GetOrAssignId(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field, @Cast("int64_t*") LongBuffer out);
+  public native @ByVal Status GetOrAssignId(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field, @Cast("int64_t*") long[] out);
 
   /** \brief Return id for dictionary if it exists, otherwise return
    *  KeyError */
@@ -58,13 +62,23 @@ public class DictionaryMemo extends Pointer {
   public native @Cast("bool") boolean HasDictionary(@Cast("int64_t") long id);
 
   /** \brief Add field to the memo, return KeyError if already present */
-  public native @ByVal Status AddField(@Cast("int64_t") long id, @Const @SharedPtr @ByRef Field field);
+  public native @ByVal Status AddField(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field);
 
   /** \brief Add a dictionary to the memo with a particular id. Returns
    *  KeyError if that dictionary already exists */
   public native @ByVal Status AddDictionary(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary);
 
-  public native @Cast("const arrow::ipc::DictionaryMap*") @ByRef StringStringMap id_to_dictionary();
+  /** \brief Append a dictionary delta to the memo with a particular id. Returns
+   *  KeyError if that dictionary does not exists */
+  public native @ByVal Status AddDictionaryDelta(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary,
+                              MemoryPool pool);
+
+  /** \brief Add a dictionary to the memo if it does not have one with the id,
+   *  otherwise, replace the dictionary with the new one. */
+  public native @ByVal Status AddOrReplaceDictionary(@Cast("int64_t") long id, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dictionary);
+
+  /** \brief The stored dictionaries, in ascending id order. */
+  public native @ByVal DictionaryVector dictionaries();
 
   /** \brief The number of fields tracked in the memo */
   public native int num_fields();

@@ -13,6 +13,8 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 /** Represents a signed 128-bit integer in two's complement.
  *  Calculations wrap around and overflow is ignored.
+ *  The max decimal precision that can be safely represented is
+ *  38 significant digits.
  * 
  *  For a discussion of the algorithms, look at Knuth's volume 2,
  *  Semi-numerical Algorithms section 4.3.1.
@@ -48,6 +50,9 @@ public class Decimal128 extends BasicDecimal128 {
     private native void allocateArray(long size);
     @Override public Decimal128 position(long position) {
         return (Decimal128)super.position(position);
+    }
+    @Override public Decimal128 getPointer(long i) {
+        return new Decimal128(this).position(position + i);
     }
 
   /** \cond FALSE */
@@ -110,6 +115,9 @@ public class Decimal128 extends BasicDecimal128 {
   public static native @ByVal Decimal128Result FromString(@StdString String s);
   public static native @ByVal Decimal128Result FromString(@StdString BytePointer s);
 
+  public static native @ByVal Decimal128Result FromReal(double real, int precision, int scale);
+  public static native @ByVal Decimal128Result FromReal(float real, int precision, int scale);
+
   /** \brief Convert from a big-endian byte representation. The length must be
    *         between 1 and 16.
    *  @return error status if the length is an invalid value */
@@ -123,6 +131,13 @@ public class Decimal128 extends BasicDecimal128 {
   /** \brief Convert to a signed integer */
 
   /** \brief Convert to a signed integer */
+
+  /** \brief Convert to a floating-point number (scaled) */
+  public native float ToFloat(int scale);
+  /** \brief Convert to a floating-point number (scaled) */
+  public native double ToDouble(int scale);
+
+  /** \brief Convert to a floating-point number (scaled) */
 
   
 }

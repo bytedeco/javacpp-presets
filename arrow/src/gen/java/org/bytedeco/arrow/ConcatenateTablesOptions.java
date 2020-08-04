@@ -31,6 +31,9 @@ public class ConcatenateTablesOptions extends Pointer {
     @Override public ConcatenateTablesOptions position(long position) {
         return (ConcatenateTablesOptions)super.position(position);
     }
+    @Override public ConcatenateTablesOptions getPointer(long i) {
+        return new ConcatenateTablesOptions(this).position(position + i);
+    }
 
   /** If true, the schemas of the tables will be first unified with fields of
    *  the same name being merged, according to {@code field_merge_options}, then each

@@ -24,6 +24,9 @@ public class ParquetFileReader extends Pointer {
     @Override public ParquetFileReader position(long position) {
         return (ParquetFileReader)super.position(position);
     }
+    @Override public ParquetFileReader getPointer(long i) {
+        return new ParquetFileReader(this).position(position + i);
+    }
 
   // Declare a virtual class 'Contents' to aid dependency injection and more
   // easily create test fixtures
@@ -91,5 +94,40 @@ public class ParquetFileReader extends Pointer {
   public native @SharedPtr RowGroupReader RowGroup(int i);
 
   // Returns the file metadata. Only one instance is ever created
+  
+  ///
+  ///
+  ///
   public native @SharedPtr FileMetaData metadata();
+
+  /** Pre-buffer the specified column indices in all row groups.
+   * 
+   *  Readers can optionally call this to cache the necessary slices
+   *  of the file in-memory before deserialization. Arrow readers can
+   *  automatically do this via an option. This is intended to
+   *  increase performance when reading from high-latency filesystems
+   *  (e.g. Amazon S3).
+   * 
+   *  After calling this, creating readers for row groups/column
+   *  indices that were not buffered may fail. Creating multiple
+   *  readers for the a subset of the buffered regions is
+   *  acceptable. This may be called again to buffer a different set
+   *  of row groups/columns.
+   * 
+   *  If memory usage is a concern, note that data will remain
+   *  buffered in memory until either \a PreBuffer() is called again,
+   *  or the reader itself is destructed. Reading - and buffering -
+   *  only one row group at a time may be useful. */
+  public native void PreBuffer(@StdVector IntPointer row_groups,
+                   @StdVector IntPointer column_indices,
+                   @Const @ByRef AsyncContext ctx,
+                   @Const @ByRef CacheOptions options);
+  public native void PreBuffer(@StdVector IntBuffer row_groups,
+                   @StdVector IntBuffer column_indices,
+                   @Const @ByRef AsyncContext ctx,
+                   @Const @ByRef CacheOptions options);
+  public native void PreBuffer(@StdVector int[] row_groups,
+                   @StdVector int[] column_indices,
+                   @Const @ByRef AsyncContext ctx,
+                   @Const @ByRef CacheOptions options);
 }

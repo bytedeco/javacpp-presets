@@ -29,6 +29,9 @@ public class AndExpression extends AndExpressionImpl {
     @Override public AndExpression position(long position) {
         return (AndExpression)super.position(position);
     }
+    @Override public AndExpression getPointer(long i) {
+        return new AndExpression(this).position(position + i);
+    }
 
 
   public native @StdString String ToString();

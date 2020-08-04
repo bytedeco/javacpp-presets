@@ -11,14 +11,28 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-
-///
-///
-///
-@Namespace("arrow::compute") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class TakeOptions extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public TakeOptions() { super((Pointer)null); }
+@Namespace("arrow::compute") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class TakeOptions extends FunctionOptions {
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TakeOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TakeOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TakeOptions position(long position) {
+        return (TakeOptions)super.position(position);
+    }
+    @Override public TakeOptions getPointer(long i) {
+        return new TakeOptions(this).position(position + i);
+    }
+
+  public TakeOptions(@Cast("bool") boolean boundscheck/*=true*/) { super((Pointer)null); allocate(boundscheck); }
+  private native void allocate(@Cast("bool") boolean boundscheck/*=true*/);
+  public TakeOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native @Cast("bool") boolean boundscheck(); public native TakeOptions boundscheck(boolean setter);
+  public static native @ByVal TakeOptions BoundsCheck();
+  public static native @ByVal TakeOptions NoBoundsCheck();
+  public static native @ByVal TakeOptions Defaults();
 }

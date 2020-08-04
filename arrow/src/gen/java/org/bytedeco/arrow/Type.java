@@ -9,7 +9,9 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-  // IWYU pragma: keep
+
+
+// ----------------------------------------------------------------------
 
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Type extends Pointer {
@@ -24,6 +26,9 @@ public class Type extends Pointer {
     private native void allocateArray(long size);
     @Override public Type position(long position) {
         return (Type)super.position(position);
+    }
+    @Override public Type getPointer(long i) {
+        return new Type(this).position(position + i);
     }
 
   /** \brief Main data type enumeration
@@ -98,47 +103,56 @@ public class Type extends Pointer {
      *  nanoseconds since midnight */
     TIME64 = 20,
 
-    /** YEAR_MONTH or DAY_TIME interval in SQL style */
-    INTERVAL = 21,
+    /** YEAR_MONTH interval in SQL style */
+    INTERVAL_MONTHS = 21,
+
+    /** DAY_TIME interval in SQL style */
+    INTERVAL_DAY_TIME = 22,
 
     /** Precision- and scale-based decimal type. Storage type depends on the
      *  parameters. */
-    DECIMAL = 22,
+    DECIMAL = 23,
 
     /** A list of some logical data type */
-    LIST = 23,
+    LIST = 24,
 
     /** Struct of logical types */
-    STRUCT = 24,
+    STRUCT = 25,
 
-    /** Unions of logical types */
-    UNION = 25,
+    /** Sparse unions of logical types */
+    SPARSE_UNION = 26,
+
+    /** Dense unions of logical types */
+    DENSE_UNION = 27,
 
     /** Dictionary-encoded type, also called "categorical" or "factor"
      *  in other programming languages. Holds the dictionary value
      *  type but not the dictionary itself, which is part of the
      *  ArrayData struct */
-    DICTIONARY = 26,
+    DICTIONARY = 28,
 
     /** Map, a repeated struct logical type */
-    MAP = 27,
+    MAP = 29,
 
     /** Custom data type, implemented by user */
-    EXTENSION = 28,
+    EXTENSION = 30,
 
     /** Fixed size list of some logical type */
-    FIXED_SIZE_LIST = 29,
+    FIXED_SIZE_LIST = 31,
 
     /** Measure of elapsed time in either seconds, milliseconds, microseconds
      *  or nanoseconds. */
-    DURATION = 30,
+    DURATION = 32,
 
     /** Like STRING, but with 64-bit offsets */
-    LARGE_STRING = 31,
+    LARGE_STRING = 33,
 
     /** Like BINARY, but with 64-bit offsets */
-    LARGE_BINARY = 32,
+    LARGE_BINARY = 34,
 
     /** Like LIST, but with 64-bit offsets */
-    LARGE_LIST = 33;
+    LARGE_LIST = 35,
+
+    // Leave this at the end
+    MAX_ID = 36;
 }

@@ -59,13 +59,6 @@ public class ExtensionType extends DataType {
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType storage_type,
         @StdString BytePointer serialized_data);
 
-  public native @Deprecated @ByVal Status Deserialize(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType storage_type,
-                       @StdString String serialized_data,
-                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>*"}) DataType out);
-  public native @Deprecated @ByVal Status Deserialize(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType storage_type,
-                       @StdString BytePointer serialized_data,
-                       @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>*"}) DataType out);
-
   /** \brief Create a serialized representation of the extension type's
    *  metadata. The storage type will be handled automatically in IPC code
    *  paths

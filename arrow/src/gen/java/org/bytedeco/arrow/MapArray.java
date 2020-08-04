@@ -84,10 +84,13 @@ public class MapArray extends ListArray {
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array offsets, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys,
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items);
 
-  public static native @Deprecated @ByVal Status FromArrays(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array offsets,
-                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys,
-                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items, MemoryPool pool,
-                             @SharedPtr Array out);
+  public static native @ByVal ArrayResult FromArrays(
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array offsets,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items,
+        MemoryPool pool/*=arrow::default_memory_pool()*/);
+  public static native @ByVal ArrayResult FromArrays(
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array offsets,
+        @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array keys, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array items);
 
   public native @Const MapType map_type();
 

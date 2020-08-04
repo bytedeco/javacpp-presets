@@ -28,6 +28,9 @@ public class ObjectBuffer extends Pointer {
     @Override public ObjectBuffer position(long position) {
         return (ObjectBuffer)super.position(position);
     }
+    @Override public ObjectBuffer getPointer(long i) {
+        return new ObjectBuffer(this).position(position + i);
+    }
 
   /** The data buffer. */
   public native @SharedPtr ArrowBuffer data(); public native ObjectBuffer data(ArrowBuffer setter);

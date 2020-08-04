@@ -27,6 +27,9 @@ public class ParquetFileFormat extends FileFormat {
     @Override public ParquetFileFormat position(long position) {
         return (ParquetFileFormat)super.position(position);
     }
+    @Override public ParquetFileFormat getPointer(long i) {
+        return new ParquetFileFormat(this).position(position + i);
+    }
 
   public ParquetFileFormat() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -76,45 +79,27 @@ public class ParquetFileFormat extends FileFormat {
   public native @ByVal SchemaResult Inspect(@Const @ByRef FileSource source);
 
   /** \brief Open a file for scanning */
-  public native @ByVal ScanTaskIteratorResult ScanFile(@Const @ByRef FileSource source,
-                                      @SharedPtr ScanOptions options,
-                                      @SharedPtr ScanContext context);
-
-  /** \brief Open a file for scanning, restricted to the specified row groups. */
-  public native @ByVal ScanTaskIteratorResult ScanFile(@Const @ByRef FileSource source,
-                                      @SharedPtr ScanOptions options,
+  public native @ByVal ScanTaskIteratorResult ScanFile(@SharedPtr ScanOptions options,
                                       @SharedPtr ScanContext context,
-                                      @StdVector IntPointer row_groups);
-  public native @ByVal ScanTaskIteratorResult ScanFile(@Const @ByRef FileSource source,
-                                      @SharedPtr ScanOptions options,
-                                      @SharedPtr ScanContext context,
-                                      @StdVector IntBuffer row_groups);
-  public native @ByVal ScanTaskIteratorResult ScanFile(@Const @ByRef FileSource source,
-                                      @SharedPtr ScanOptions options,
-                                      @SharedPtr ScanContext context,
-                                      @StdVector int[] row_groups);
-
-  public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr ScanOptions options,
-        @SharedPtr @ByVal Expression partition_expression);
+                                      FileFragment file);
 
   /** \brief Create a Fragment, restricted to the specified row groups. */
   public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr ScanOptions options,
-        @SharedPtr @ByVal Expression partition_expression, @StdVector IntPointer row_groups);
+        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
+        @StdVector RowGroupInfo row_groups,
+        @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Schema>(nullptr)") Schema physical_schema);
   public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr ScanOptions options,
-        @SharedPtr @ByVal Expression partition_expression, @StdVector IntBuffer row_groups);
-  public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr ScanOptions options,
-        @SharedPtr @ByVal Expression partition_expression, @StdVector int[] row_groups);
+        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
+        @StdVector RowGroupInfo row_groups);
 
-  /** \brief Split a ParquetFileFragment into a Fragment for each row group.
-   *  Row groups whose metadata contradicts the fragment's filter or the extra_filter
-   *  will be excluded. */
-  public native @ByVal FragmentIteratorResult GetRowGroupFragments(
-        @Const @ByRef ParquetFileFragment fragment,
-        @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression extra_filter);
-  public native @ByVal FragmentIteratorResult GetRowGroupFragments(
-        @Const @ByRef ParquetFileFragment fragment);
+  /** \brief Create a Fragment targeting all RowGroups. */
+  public native @ByVal FileFragmentResult MakeFragment(
+        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
+        @SharedPtr @ByVal Schema physical_schema);
+
+  /** \brief Return a FileReader on the given source. */
+  public native @ByVal FileReaderResult GetReader(
+        @Const @ByRef FileSource source, ScanOptions arg1/*=nullptr*/, ScanContext arg2/*=nullptr*/);
+  public native @ByVal FileReaderResult GetReader(
+        @Const @ByRef FileSource source);
 }

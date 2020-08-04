@@ -28,6 +28,9 @@ public class CertKeyPair extends Pointer {
     @Override public CertKeyPair position(long position) {
         return (CertKeyPair)super.position(position);
     }
+    @Override public CertKeyPair getPointer(long i) {
+        return new CertKeyPair(this).position(position + i);
+    }
 
   /** \brief The certificate in PEM format. */
   public native @StdString String pem_cert(); public native CertKeyPair pem_cert(String setter);

@@ -11,6 +11,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
+// ----------------------------------------------------------------------
+// Date and time types
+
 /** \brief Base type for all date and time types */
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class TemporalType extends FixedWidthType {

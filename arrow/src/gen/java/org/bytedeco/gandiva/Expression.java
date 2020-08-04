@@ -20,12 +20,12 @@ public class Expression extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Expression(Pointer p) { super(p); }
 
-  public Expression(@SharedPtr Node root, @Const @SharedPtr @ByVal Field result) { super((Pointer)null); allocate(root, result); }
-  private native void allocate(@SharedPtr Node root, @Const @SharedPtr @ByVal Field result);
+  public Expression(@SharedPtr Node root, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field result) { super((Pointer)null); allocate(root, result); }
+  private native void allocate(@SharedPtr Node root, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field result);
 
   public native @SharedPtr Node root();
 
-  public native @Const @SharedPtr @ByRef Field result();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field result();
 
   public native @StdString String ToString();
 }

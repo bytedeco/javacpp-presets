@@ -30,12 +30,10 @@ public class ExpressionEvaluator extends Pointer {
    *  slots contain a single repeated value.
    * 
    *  expr must be validated against the schema of batch before calling this method. */
-  public native @ByVal DatumResult Evaluate(@Const @ByRef Expression expr,
-                                            @Const @ByRef RecordBatch batch,
-                                            MemoryPool pool);
+  public native @ByVal DatumResult Evaluate(@Const @ByRef Expression expr, @Const @ByRef RecordBatch batch,
+                                   MemoryPool pool);
 
-  public native @ByVal DatumResult Evaluate(@Const @ByRef Expression expr,
-                                    @Const @ByRef RecordBatch batch);
+  public native @ByVal DatumResult Evaluate(@Const @ByRef Expression expr, @Const @ByRef RecordBatch batch);
 
   public native @ByVal RecordBatchResult Filter(
         @Const @ByRef Datum selection, @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch batch,

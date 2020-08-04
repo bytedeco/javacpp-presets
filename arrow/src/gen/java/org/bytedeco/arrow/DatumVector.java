@@ -10,7 +10,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
 
-@Name("std::vector<arrow::compute::Datum>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+@Name("std::vector<arrow::Datum>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class DatumVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

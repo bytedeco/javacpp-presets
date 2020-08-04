@@ -26,6 +26,9 @@ public class FileStatistics extends Pointer {
     @Override public FileStatistics position(long position) {
         return (FileStatistics)super.position(position);
     }
+    @Override public FileStatistics getPointer(long i) {
+        return new FileStatistics(this).position(position + i);
+    }
 
   /** Size of file, -1 if finding length is unsupported */
   public native @Cast("int64_t") long size(); public native FileStatistics size(long setter);

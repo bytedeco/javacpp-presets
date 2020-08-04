@@ -23,12 +23,24 @@ public class FileInfo extends Pointer {
     @Override public FileInfo position(long position) {
         return (FileInfo)super.position(position);
     }
+    @Override public FileInfo getPointer(long i) {
+        return new FileInfo(this).position(position + i);
+    }
 
   public FileInfo() { super((Pointer)null); allocate(); }
   private native void allocate();
   public FileInfo(@ByVal FileInfo arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@ByVal FileInfo arg0);
   public native @ByRef @Name("operator =") FileInfo put(@ByVal FileInfo arg0);
+
+  public FileInfo(@StdString String path, FileType type/*=arrow::fs::FileType::Unknown*/) { super((Pointer)null); allocate(path, type); }
+  private native void allocate(@StdString String path, FileType type/*=arrow::fs::FileType::Unknown*/);
+  public FileInfo(@StdString String path) { super((Pointer)null); allocate(path); }
+  private native void allocate(@StdString String path);
+  public FileInfo(@StdString BytePointer path, @Cast("arrow::fs::FileType") byte type/*=arrow::fs::FileType::Unknown*/) { super((Pointer)null); allocate(path, type); }
+  private native void allocate(@StdString BytePointer path, @Cast("arrow::fs::FileType") byte type/*=arrow::fs::FileType::Unknown*/);
+  public FileInfo(@StdString BytePointer path) { super((Pointer)null); allocate(path); }
+  private native void allocate(@StdString BytePointer path);
 
   /** The file type */
   public native FileType type();
@@ -83,6 +95,9 @@ public class FileInfo extends Pointer {
       private native void allocateArray(long size);
       @Override public ByPath position(long position) {
           return (ByPath)super.position(position);
+      }
+      @Override public ByPath getPointer(long i) {
+          return new ByPath(this).position(position + i);
       }
   
     public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef FileInfo l, @Const @ByRef FileInfo r);

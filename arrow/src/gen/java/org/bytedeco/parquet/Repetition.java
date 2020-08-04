@@ -28,6 +28,9 @@ public class Repetition extends Pointer {
     @Override public Repetition position(long position) {
         return (Repetition)super.position(position);
     }
+    @Override public Repetition getPointer(long i) {
+        return new Repetition(this).position(position + i);
+    }
 
   public enum type { REQUIRED(0), OPTIONAL(1), REPEATED(2), /*Always last*/ UNDEFINED(3);
 

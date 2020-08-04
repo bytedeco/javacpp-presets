@@ -21,6 +21,9 @@ public class ReadableFileResult extends Pointer {
     @Override public ReadableFileResult position(long position) {
         return (ReadableFileResult)super.position(position);
     }
+    @Override public ReadableFileResult getPointer(long i) {
+        return new ReadableFileResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class ReadableFileResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

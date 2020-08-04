@@ -18,7 +18,7 @@ import static org.bytedeco.arrow.global.arrow.*;
  * 
  *  Represents a path to a nested field using indices of child fields.
  *  For example, given indices {5, 9, 3} the field would be retrieved with
- *  schema->field(5)->type()->child(9)->type()->child(3)
+ *  schema->field(5)->type()->field(9)->type()->field(3)
  * 
  *  Attempting to retrieve a child field using a FieldPath which is not valid for
  *  a given schema will raise an error. Invalid FieldPaths include:
@@ -42,6 +42,9 @@ public class FieldPath extends Pointer {
     @Override public FieldPath position(long position) {
         return (FieldPath)super.position(position);
     }
+    @Override public FieldPath getPointer(long i) {
+        return new FieldPath(this).position(position + i);
+    }
 
   public FieldPath() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -64,16 +67,16 @@ public class FieldPath extends Pointer {
   public native @StdVector IntPointer indices();
 
   /** \brief Retrieve the referenced child Field from a Schema, Field, or DataType */
-  public native @ByVal FieldResult Get(@Const @ByRef Schema schema);
-  public native @ByVal FieldResult Get(@Const @ByRef Field field);
-  public native @ByVal FieldResult Get(@Const @ByRef DataType type);
-  public native @ByVal FieldResult Get(@Const @ByRef FieldVector fields);
+  
+  
+  
+  
 
   /** \brief Retrieve the referenced column from a RecordBatch or Table */
-  public native @ByVal ArrayResult Get(@Const @ByRef RecordBatch batch);
-  public native @ByVal ChunkedArrayResult Get(@Const @ByRef Table table);
+  
+  
 
   /** \brief Retrieve the referenced child Array from an Array or ChunkedArray */
-  public native @ByVal ArrayResult Get(@Const @ByRef Array array);
-  public native @ByVal ChunkedArrayResult Get(@Const @ByRef ChunkedArray array);
+  
+  
 }

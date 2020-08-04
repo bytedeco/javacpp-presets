@@ -28,6 +28,9 @@ public class ConvertedType extends Pointer {
     @Override public ConvertedType position(long position) {
         return (ConvertedType)super.position(position);
     }
+    @Override public ConvertedType getPointer(long i) {
+        return new ConvertedType(this).position(position + i);
+    }
 
   public enum type {
     NONE(0),

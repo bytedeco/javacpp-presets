@@ -21,6 +21,9 @@ public class FieldRefResult extends Pointer {
     @Override public FieldRefResult position(long position) {
         return (FieldRefResult)super.position(position);
     }
+    @Override public FieldRefResult getPointer(long i) {
+        return new FieldRefResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class FieldRefResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

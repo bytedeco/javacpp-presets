@@ -1,5 +1,5 @@
 
- * Bundle programs from Clang and LLVM, executable via `Loader.load()` for convenience
+ * Bundle programs from Clang and LLVM, executable via `Loader.load()` for convenience ([issue #833](https://github.com/bytedeco/javacpp-presets/issues/833))
  * Include `nnvm/c_api.h` header file in presets for MXNet ([issue #912](https://github.com/bytedeco/javacpp-presets/issues/912))
  * Enable OpenMP for DNNL on Mac using same library name as MKL to prevent conflicts ([issue #907](https://github.com/bytedeco/javacpp-presets/issues/907))
  * Fix loading issue with `opencv_ximgproc` ([issue #911](https://github.com/bytedeco/javacpp-presets/issues/911))
@@ -13,7 +13,7 @@
  * Add support for Windows to presets for Qt ([issue #862](https://github.com/bytedeco/javacpp-presets/issues/862))
  * Fix JPMS modules for CUDA, ARPACK-NG, GSL, SciPy, Gym, MXNet ([pull #880](https://github.com/bytedeco/javacpp-presets/pull/880) and [pull #881](https://github.com/bytedeco/javacpp-presets/pull/881))
  * Build OpenBLAS with a `TARGET` even for `DYNAMIC_ARCH` to avoid SIGILL ([issue eclipse/deeplearning4j#8747](https://github.com/eclipse/deeplearning4j/issues/8747))
- * Upgrade presets for OpenCV 4.4.0, FFmpeg 4.3.1 ([pull #891](https://github.com/bytedeco/javacpp-presets/pull/891)), Arrow 0.17.1, Hyperscan 5.3.0, MKL 2020.2, MKL-DNN 0.21.5, DNNL 1.5.1, OpenBLAS 0.3.10, CPython 3.7.8, NumPy 1.19.0, SciPy 1.5.1, Gym 0.17.2, CUDA 11.0.2, cuDNN 8.0.1, NCCL 2.7.6, MXNet 1.7.0.rc1, TensorFlow 1.15.3, TensorRT 7.1, ONNX 1.7.0 ([pull #882](https://github.com/bytedeco/javacpp-presets/pull/882)), ONNX Runtime 1.4.0 ([pull #887](https://github.com/bytedeco/javacpp-presets/pull/887)), Qt 5.15.0, Skia 2.80.1, and their dependencies
+ * Upgrade presets for OpenCV 4.4.0, FFmpeg 4.3.1 ([pull #891](https://github.com/bytedeco/javacpp-presets/pull/891)), Arrow 1.0.0, Hyperscan 5.3.0, MKL 2020.2, MKL-DNN 0.21.5, DNNL 1.5.1, OpenBLAS 0.3.10, CPython 3.7.8, NumPy 1.19.0, SciPy 1.5.1, Gym 0.17.2, CUDA 11.0.2, cuDNN 8.0.1, NCCL 2.7.6, MXNet 1.7.0.rc1, TensorFlow 1.15.3, TensorRT 7.1, ONNX 1.7.0 ([pull #882](https://github.com/bytedeco/javacpp-presets/pull/882)), ONNX Runtime 1.4.0 ([pull #887](https://github.com/bytedeco/javacpp-presets/pull/887)), Qt 5.15.0, Skia 2.80.1, and their dependencies
  * Add `FullOptimization.h` allowing users to fully optimize LLVM modules ([pull #869](https://github.com/bytedeco/javacpp-presets/pull/869))
 
 ### April 14, 2020 version 1.5.3

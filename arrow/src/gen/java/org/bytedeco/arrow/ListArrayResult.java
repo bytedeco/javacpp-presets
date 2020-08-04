@@ -21,6 +21,9 @@ public class ListArrayResult extends Pointer {
     @Override public ListArrayResult position(long position) {
         return (ListArrayResult)super.position(position);
     }
+    @Override public ListArrayResult getPointer(long i) {
+        return new ListArrayResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class ListArrayResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

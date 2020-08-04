@@ -33,6 +33,9 @@ public class Listener extends Pointer {
     @Override public Listener position(long position) {
         return (Listener)super.position(position);
     }
+    @Override public Listener getPointer(long i) {
+        return new Listener(this).position(position + i);
+    }
 
 
   /** \brief Called when end-of-stream is received.

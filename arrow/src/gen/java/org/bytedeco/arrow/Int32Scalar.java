@@ -14,16 +14,24 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Int32Scalar extends BaseInt32Type {
     static { Loader.load(); }
-    /** Default native constructor. */
+
+  
+  
+    public Int32Scalar(@Cast("arrow::NumericScalar<arrow::Int32Type>::ValueType") int value) { super((Pointer)null); allocate(value); }
+    private native void allocate(@Cast("arrow::NumericScalar<arrow::Int32Type>::ValueType") int value);
+  
     public Int32Scalar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Int32Scalar(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Int32Scalar(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Int32Scalar(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public Int32Scalar position(long position) {
         return (Int32Scalar)super.position(position);
+    }
+    @Override public Int32Scalar getPointer(long i) {
+        return new Int32Scalar(this).position(position + i);
     }
 
 }

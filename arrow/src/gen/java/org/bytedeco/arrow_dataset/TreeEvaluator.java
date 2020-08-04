@@ -31,9 +31,12 @@ public class TreeEvaluator extends ExpressionEvaluator {
     @Override public TreeEvaluator position(long position) {
         return (TreeEvaluator)super.position(position);
     }
+    @Override public TreeEvaluator getPointer(long i) {
+        return new TreeEvaluator(this).position(position + i);
+    }
 
   public native @ByVal DatumResult Evaluate(@Const @ByRef Expression expr, @Const @ByRef RecordBatch batch,
-                                    MemoryPool pool);
+                           MemoryPool pool);
 
   public native @ByVal RecordBatchResult Filter(@Const @ByRef Datum selection,
                                                 @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch batch,

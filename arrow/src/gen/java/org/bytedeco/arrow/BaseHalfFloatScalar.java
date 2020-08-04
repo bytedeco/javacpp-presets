@@ -14,16 +14,22 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Name("arrow::NumericScalar<arrow::HalfFloatType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseHalfFloatScalar extends Scalar {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public BaseHalfFloatScalar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BaseHalfFloatScalar(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseHalfFloatScalar(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BaseHalfFloatScalar(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public BaseHalfFloatScalar position(long position) {
         return (BaseHalfFloatScalar)super.position(position);
     }
+    @Override public BaseHalfFloatScalar getPointer(long i) {
+        return new BaseHalfFloatScalar(this).position(position + i);
+    }
 
+
+  public BaseHalfFloatScalar(@Cast("arrow::NumericScalar<arrow::HalfFloatType>::ValueType") short value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@Cast("arrow::NumericScalar<arrow::HalfFloatType>::ValueType") short value);
+
+  public BaseHalfFloatScalar() { super((Pointer)null); allocate(); }
+  private native void allocate();
 }

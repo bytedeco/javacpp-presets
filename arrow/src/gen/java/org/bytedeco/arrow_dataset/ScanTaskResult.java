@@ -25,6 +25,9 @@ public class ScanTaskResult extends Pointer {
     @Override public ScanTaskResult position(long position) {
         return (ScanTaskResult)super.position(position);
     }
+    @Override public ScanTaskResult getPointer(long i) {
+        return new ScanTaskResult(this).position(position + i);
+    }
 
   
   ///
@@ -160,7 +163,7 @@ public class ScanTaskResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

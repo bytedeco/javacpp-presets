@@ -21,6 +21,9 @@ public class PathForestResult extends Pointer {
     @Override public PathForestResult position(long position) {
         return (PathForestResult)super.position(position);
     }
+    @Override public PathForestResult getPointer(long i) {
+        return new PathForestResult(this).position(position + i);
+    }
 
   
   ///
@@ -162,7 +165,7 @@ public class PathForestResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

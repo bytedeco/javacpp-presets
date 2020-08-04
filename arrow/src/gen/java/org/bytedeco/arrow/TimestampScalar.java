@@ -16,11 +16,6 @@ public class TimestampScalar extends BaseTimestampScalar {
     static { Loader.load(); }
 
   
-    
-    
-      public TimestampScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-  
   
     public TimestampScalar(@Cast("arrow::TemporalScalar<arrow::TimestampType>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
     private native void allocate(@Cast("arrow::TemporalScalar<arrow::TimestampType>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);

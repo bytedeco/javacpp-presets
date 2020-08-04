@@ -23,6 +23,9 @@ public class DayTimeIntervalType extends IntervalType {
     @Override public DayTimeIntervalType position(long position) {
         return (DayTimeIntervalType)super.position(position);
     }
+    @Override public DayTimeIntervalType getPointer(long i) {
+        return new DayTimeIntervalType(this).position(position + i);
+    }
 
   public static class DayMilliseconds extends Pointer {
       static { Loader.load(); }
@@ -36,6 +39,9 @@ public class DayTimeIntervalType extends IntervalType {
       private native void allocateArray(long size);
       @Override public DayMilliseconds position(long position) {
           return (DayMilliseconds)super.position(position);
+      }
+      @Override public DayMilliseconds getPointer(long i) {
+          return new DayMilliseconds(this).position(position + i);
       }
   
     public native int days(); public native DayMilliseconds days(int setter);

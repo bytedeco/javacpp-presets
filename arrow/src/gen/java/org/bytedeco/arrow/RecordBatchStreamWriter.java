@@ -9,41 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-  // namespace internal
 
-// Deprecated functions
-
-/** \class RecordBatchStreamWriter
- *  \brief Synchronous batch stream writer that writes the Arrow streaming
- *  format */
-@Namespace("arrow::ipc") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class RecordBatchStreamWriter extends RecordBatchWriter {
-    static { Loader.load(); }
+@Namespace("arrow::ipc") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+public class RecordBatchStreamWriter extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public RecordBatchStreamWriter() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RecordBatchStreamWriter(Pointer p) { super(p); }
-
-  /** Create a new writer from stream sink and schema. User is responsible for
-   *  closing the actual OutputStream.
-   * 
-   *  @param sink [in] output stream to write to
-   *  @param schema [in] the schema of the record batches to be written
-   *  @param out [out] the created stream writer
-   *  @return Status */
-  
-  ///
-  public static native @Deprecated @ByVal Status Open(OutputStream sink, @Const @SharedPtr @ByRef Schema schema,
-                       @SharedPtr RecordBatchWriter out);
-
-  /** Create a new writer from stream sink and schema. User is responsible for
-   *  closing the actual OutputStream.
-   * 
-   *  @param sink [in] output stream to write to
-   *  @param schema [in] the schema of the record batches to be written
-   *  @return Result<std::shared_ptr<RecordBatchWriter>> */
-  public static native @Deprecated @ByVal RecordBatchWriterSharedResult Open(
-        OutputStream sink, @Const @SharedPtr @ByRef Schema schema);
-
-  public static native @Deprecated @ByVal RecordBatchWriterSharedResult Open(
-        OutputStream sink, @Const @SharedPtr @ByRef Schema schema,
-        @Const @ByRef IpcWriteOptions options);
 }

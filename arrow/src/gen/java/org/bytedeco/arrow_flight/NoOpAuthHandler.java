@@ -28,6 +28,9 @@ public class NoOpAuthHandler extends ServerAuthHandler {
     @Override public NoOpAuthHandler position(long position) {
         return (NoOpAuthHandler)super.position(position);
     }
+    @Override public NoOpAuthHandler getPointer(long i) {
+        return new NoOpAuthHandler(this).position(position + i);
+    }
 
   public native @ByVal Status Authenticate(ServerAuthSender outgoing, ServerAuthReader incoming);
   public native @ByVal Status IsValid(@StdString String token, @StdString @Cast({"char*", "std::string*"}) BytePointer peer_identity);

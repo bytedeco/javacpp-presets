@@ -24,10 +24,10 @@ public class LargeListScalar extends BaseListScalar {
   
     public LargeListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
     private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-  
-    public LargeListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value) { super((Pointer)null); allocate(value); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LargeListScalar(Pointer p) { super(p); }
 
+
+  public LargeListScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value);
 }

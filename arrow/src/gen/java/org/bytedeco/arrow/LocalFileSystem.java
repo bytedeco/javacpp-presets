@@ -28,6 +28,9 @@ public class LocalFileSystem extends FileSystem {
     @Override public LocalFileSystem position(long position) {
         return (LocalFileSystem)super.position(position);
     }
+    @Override public LocalFileSystem getPointer(long i) {
+        return new LocalFileSystem(this).position(position + i);
+    }
 
   public LocalFileSystem() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -58,6 +61,7 @@ public class LocalFileSystem extends FileSystem {
   public native @ByVal Status DeleteDir(@StdString BytePointer path);
   public native @ByVal Status DeleteDirContents(@StdString String path);
   public native @ByVal Status DeleteDirContents(@StdString BytePointer path);
+  public native @ByVal Status DeleteRootDirContents();
 
   public native @ByVal Status DeleteFile(@StdString String path);
   public native @ByVal Status DeleteFile(@StdString BytePointer path);

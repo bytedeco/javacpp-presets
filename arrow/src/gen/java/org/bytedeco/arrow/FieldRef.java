@@ -67,7 +67,7 @@ public class FieldRef extends Pointer {
   public FieldRef(@StdString String name) { super((Pointer)null); allocate(name); }
   private native void allocate(@StdString String name);
   public FieldRef(@StdString BytePointer name) { super((Pointer)null); allocate(name); }
-  private native void allocate(@StdString BytePointer name);  // NOLINT runtime/explicit
+  private native void allocate(@StdString BytePointer name);    // NOLINT runtime/explicit  // NOLINT runtime/explicit
 
   /** Equivalent to a single index string of indices. */
   public FieldRef(int index) { super((Pointer)null); allocate(index); }
@@ -112,6 +112,12 @@ public class FieldRef extends Pointer {
   public native @StdVector FieldPath FindAll(@Const @ByRef Field field);
   public native @StdVector FieldPath FindAll(@Const @ByRef DataType type);
   public native @StdVector FieldPath FindAll(@Const @ByRef FieldVector fields);
+
+  /** \brief Convenience function which applies FindAll to arg's type or schema. */
+  public native @StdVector FieldPath FindAll(@Const @ByRef Array array);
+  public native @StdVector FieldPath FindAll(@Const @ByRef ChunkedArray array);
+  public native @StdVector FieldPath FindAll(@Const @ByRef RecordBatch batch);
+  public native @StdVector FieldPath FindAll(@Const @ByRef Table table);
 
   /** \brief Convenience function: raise an error if matches is empty. */
 

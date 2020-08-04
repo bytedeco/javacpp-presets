@@ -16,11 +16,6 @@ public class BaseDate32Scalar extends BaseBaseDate32Scalar {
     static { Loader.load(); }
 
   
-    
-    
-      public BaseDate32Scalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-  
   
     public BaseDate32Scalar(@Cast("arrow::TemporalScalar<arrow::Date32Type>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
     private native void allocate(@Cast("arrow::TemporalScalar<arrow::Date32Type>::ValueType") int value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);

@@ -24,6 +24,9 @@ public class ColumnEncryptionProperties extends Pointer {
     @Override public ColumnEncryptionProperties position(long position) {
         return (ColumnEncryptionProperties)super.position(position);
     }
+    @Override public ColumnEncryptionProperties getPointer(long i) {
+        return new ColumnEncryptionProperties(this).position(position + i);
+    }
 
   @NoOffset public static class Builder extends Pointer {
       static { Loader.load(); }

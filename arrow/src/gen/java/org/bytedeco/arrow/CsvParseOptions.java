@@ -25,6 +25,9 @@ public class CsvParseOptions extends Pointer {
     @Override public CsvParseOptions position(long position) {
         return (CsvParseOptions)super.position(position);
     }
+    @Override public CsvParseOptions getPointer(long i) {
+        return new CsvParseOptions(this).position(position + i);
+    }
 
   // Parsing options
 

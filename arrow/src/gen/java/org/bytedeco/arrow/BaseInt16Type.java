@@ -14,16 +14,22 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Name("arrow::NumericScalar<arrow::Int16Type>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseInt16Type extends Scalar {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public BaseInt16Type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BaseInt16Type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseInt16Type(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BaseInt16Type(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public BaseInt16Type position(long position) {
         return (BaseInt16Type)super.position(position);
     }
+    @Override public BaseInt16Type getPointer(long i) {
+        return new BaseInt16Type(this).position(position + i);
+    }
 
+
+  public BaseInt16Type(@Cast("arrow::NumericScalar<arrow::Int16Type>::ValueType") short value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@Cast("arrow::NumericScalar<arrow::Int16Type>::ValueType") short value);
+
+  public BaseInt16Type() { super((Pointer)null); allocate(); }
+  private native void allocate();
 }

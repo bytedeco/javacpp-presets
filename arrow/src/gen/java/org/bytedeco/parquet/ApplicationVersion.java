@@ -24,6 +24,9 @@ public class ApplicationVersion extends Pointer {
     @Override public ApplicationVersion position(long position) {
         return (ApplicationVersion)super.position(position);
     }
+    @Override public ApplicationVersion getPointer(long i) {
+        return new ApplicationVersion(this).position(position + i);
+    }
 
   // Known Versions with Issues
   public static native @Const @ByRef ApplicationVersion PARQUET_251_FIXED_VERSION();

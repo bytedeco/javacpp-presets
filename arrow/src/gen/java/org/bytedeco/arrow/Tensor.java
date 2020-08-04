@@ -133,9 +133,12 @@ public class Tensor extends Pointer {
   public native @Cast("bool") boolean Equals(@Const @ByRef Tensor other);
 
   /** Compute the number of non-zero values in the tensor */
-  public native @ByVal Status CountNonZero(@Cast("int64_t*") LongPointer result);
-  public native @ByVal Status CountNonZero(@Cast("int64_t*") LongBuffer result);
-  public native @ByVal Status CountNonZero(@Cast("int64_t*") long[] result);
+  public native @ByVal LongResult CountNonZero();
+
+  /** Compute the number of non-zero values in the tensor */
+  public native @Deprecated @ByVal Status CountNonZero(@Cast("int64_t*") LongPointer result);
+  public native @Deprecated @ByVal Status CountNonZero(@Cast("int64_t*") LongBuffer result);
+  public native @Deprecated @ByVal Status CountNonZero(@Cast("int64_t*") long[] result);
 
   /** Return the offset of the given index on the given strides */
   public static native @Cast("int64_t") long CalculateValueOffset(@Cast("int64_t*") @StdVector LongPointer strides,
@@ -144,6 +147,10 @@ public class Tensor extends Pointer {
                                         @Cast("int64_t*") @StdVector LongBuffer index);
   public static native @Cast("int64_t") long CalculateValueOffset(@Cast("int64_t*") @StdVector long[] strides,
                                         @Cast("int64_t*") @StdVector long[] index);
+
+  public native @Cast("int64_t") long CalculateValueOffset(@Cast("int64_t*") @StdVector LongPointer index);
+  public native @Cast("int64_t") long CalculateValueOffset(@Cast("int64_t*") @StdVector LongBuffer index);
+  public native @Cast("int64_t") long CalculateValueOffset(@Cast("int64_t*") @StdVector long[] index);
 
   /** Returns the value at the given index without data-type and bounds checks */
 }

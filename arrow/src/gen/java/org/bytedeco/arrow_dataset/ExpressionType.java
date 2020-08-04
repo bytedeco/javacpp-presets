@@ -29,6 +29,9 @@ public class ExpressionType extends Pointer {
     @Override public ExpressionType position(long position) {
         return (ExpressionType)super.position(position);
     }
+    @Override public ExpressionType getPointer(long i) {
+        return new ExpressionType(this).position(position + i);
+    }
 
   public enum type {
     /** a reference to a column within a record batch, will evaluate to an array */

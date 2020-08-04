@@ -16,21 +16,26 @@ import static org.bytedeco.arrow.global.gandiva.*;
  * 
  *  It contains elements to customize gandiva execution
  *  at run time. */
-@Namespace("gandiva") @Properties(inherit = org.bytedeco.arrow.presets.gandiva.class)
+@Namespace("gandiva") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.gandiva.class)
 public class Configuration extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public Configuration() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Configuration(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Configuration(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Configuration(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public Configuration position(long position) {
         return (Configuration)super.position(position);
     }
+    @Override public Configuration getPointer(long i) {
+        return new Configuration(this).position(position + i);
+    }
 
+
+  public Configuration() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public Configuration(@Cast("bool") boolean optimize) { super((Pointer)null); allocate(optimize); }
+  private native void allocate(@Cast("bool") boolean optimize);
 
   public native @Cast("std::size_t") long Hash();
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Configuration other);

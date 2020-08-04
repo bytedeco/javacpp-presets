@@ -25,6 +25,9 @@ public class Compression extends Pointer {
     @Override public Compression position(long position) {
         return (Compression)super.position(position);
     }
+    @Override public Compression getPointer(long i) {
+        return new Compression(this).position(position + i);
+    }
 
   /** \brief Compression algorithm */
   public enum type { UNCOMPRESSED(0), SNAPPY(1), GZIP(2), BROTLI(3), ZSTD(4), LZ4(5), LZ4_FRAME(6), LZO(7), BZ2(8);

@@ -110,12 +110,6 @@ public class ArrowBuffer extends Pointer {
   public native @ByVal BufferResult CopySlice(
         @Cast("const int64_t") long start, @Cast("const int64_t") long nbytes);
 
-  public native @Deprecated @ByVal Status Copy(@Cast("const int64_t") long start, @Cast("const int64_t") long nbytes, MemoryPool pool,
-                @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
-  public native @Deprecated @ByVal Status Copy(@Cast("const int64_t") long start, @Cast("const int64_t") long nbytes,
-                @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
   /** Zero bytes in padding, i.e. bytes between size_ and capacity_. */
   
   ///
@@ -128,14 +122,6 @@ public class ArrowBuffer extends Pointer {
    *  @return a new Buffer instance */
   public static native @SharedPtr @ByVal ArrowBuffer FromString(@Cast({"", "std::string&&"}) @StdString BytePointer data);
   public static native @SharedPtr @ByVal ArrowBuffer FromString(@Cast({"", "std::string&&"}) @StdString String data);
-
-  public static native @Deprecated @ByVal Status FromString(@StdString String data, MemoryPool pool,
-                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-  public static native @Deprecated @ByVal Status FromString(@StdString BytePointer data, MemoryPool pool,
-                             @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-
-  public static native @Deprecated @ByVal Status FromString(@StdString String data, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
-  public static native @Deprecated @ByVal Status FromString(@StdString BytePointer data, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Buffer>*"}) ArrowBuffer out);
 
   /** \brief Create buffer referencing typed memory with some length without
    *  copying

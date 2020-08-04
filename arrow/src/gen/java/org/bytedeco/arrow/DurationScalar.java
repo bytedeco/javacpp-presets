@@ -16,11 +16,6 @@ public class DurationScalar extends BaseDurationScalar {
     static { Loader.load(); }
 
   
-    
-    
-      public DurationScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-  
   
     public DurationScalar(@Cast("arrow::TemporalScalar<arrow::DurationType>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
     private native void allocate(@Cast("arrow::TemporalScalar<arrow::DurationType>::ValueType") long value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);

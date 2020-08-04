@@ -30,6 +30,9 @@ public class ScanContext extends Pointer {
     @Override public ScanContext position(long position) {
         return (ScanContext)super.position(position);
     }
+    @Override public ScanContext getPointer(long i) {
+        return new ScanContext(this).position(position + i);
+    }
 
   /** A pool from which materialized and scanned arrays will be allocated. */
   public native MemoryPool pool(); public native ScanContext pool(MemoryPool setter);

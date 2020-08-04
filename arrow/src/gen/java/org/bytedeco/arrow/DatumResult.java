@@ -10,7 +10,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
 
-@Name("arrow::Result<arrow::compute::Datum>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+@Name("arrow::Result<arrow::Datum>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class DatumResult extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -20,6 +20,9 @@ public class DatumResult extends Pointer {
     private native void allocateArray(long size);
     @Override public DatumResult position(long position) {
         return (DatumResult)super.position(position);
+    }
+    @Override public DatumResult getPointer(long i) {
+        return new DatumResult(this).position(position + i);
     }
 
   
@@ -160,7 +163,7 @@ public class DatumResult extends Pointer {
   
   ///
   ///
-  public native @ByVal Status status();
+  public native @Const @ByRef Status status();
 
   /** Gets the stored {@code T} value.
    * 

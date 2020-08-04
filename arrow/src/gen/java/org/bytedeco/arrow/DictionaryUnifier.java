@@ -27,9 +27,6 @@ public class DictionaryUnifier extends Pointer {
   public static native @ByVal DictionaryUnifierResult Make(
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type);
 
-  public static native @Deprecated @ByVal Status Make(MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType value_type,
-                       @UniquePtr DictionaryUnifier out);
-
   /** \brief Append dictionary to the internal memo */
   public native @ByVal Status Unify(@Const @ByRef Array dictionary);
 

@@ -29,6 +29,9 @@ public class InspectOptions extends Pointer {
     @Override public InspectOptions position(long position) {
         return (InspectOptions)super.position(position);
     }
+    @Override public InspectOptions getPointer(long i) {
+        return new InspectOptions(this).position(position + i);
+    }
 
   /** See {@code fragments} property. */
   

@@ -27,10 +27,13 @@ public class ExpressionRegistry extends Pointer {
     @Override public ExpressionRegistry position(long position) {
         return (ExpressionRegistry)super.position(position);
     }
+    @Override public ExpressionRegistry getPointer(long i) {
+        return new ExpressionRegistry(this).position(position + i);
+    }
 
   public ExpressionRegistry() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType supported_types();
+  public static native @ByVal DataTypeVector supported_types();
   @NoOffset public static class FunctionSignatureIterator extends Pointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

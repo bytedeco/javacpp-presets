@@ -12,13 +12,13 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=8.0.1
+LLVM_VERSION=10.0.0
 OPENSSL_VERSION=1.1.1g
 ZLIB_VERSION=1.2.11
 PROTO_VERSION=3.7.1
-ARROW_VERSION=0.17.1
+ARROW_VERSION=1.0.0
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
-download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
+download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang-$LLVM_VERSION.src.tar.xz clang-$LLVM_VERSION.src.tar.xz
 download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
 download https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz openssl-$OPENSSL_VERSION.tar.gz
 download http://zlib.net/zlib-$ZLIB_VERSION.tar.gz zlib-$ZLIB_VERSION.tar.gz
@@ -34,17 +34,17 @@ tar --totals -xzf ../protobuf-$PROTO_VERSION.tar.gz
 tar --totals -xzf ../zlib-$ZLIB_VERSION.tar.gz
 tar --totals -xzf ../openssl-$OPENSSL_VERSION.tar.gz
 tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
-cd llvm-$LLVM_VERSION.src
+cd apache-arrow-$ARROW_VERSION
+patch -Np1 < ../../../arrow.patch
+cd ../llvm-$LLVM_VERSION.src
 mkdir -p build tools
 cd tools
-tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz
+tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz
 rm -Rf clang
-mv cfe-$LLVM_VERSION.src clang
+mv clang-$LLVM_VERSION.src clang
 cd ../build
 
-export ARROW_BOOST_URL=http://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.tar.gz
-
-COMPONENTS="-DARROW_CSV=ON -DARROW_DATASET=ON -DARROW_FILESYSTEM=ON -DARROW_FLIGHT=ON -DARROW_GANDIVA=ON -DARROW_HDFS=ON -DARROW_JSON=ON -DARROW_ORC=ON -DARROW_PARQUET=ON -DARROW_PLASMA=ON -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_USE_GLOG=ON -DARROW_WITH_BROTLI=ON -DARROW_WITH_BZ2=OFF -DARROW_WITH_LZ4=ON -DARROW_WITH_SNAPPY=ON -DARROW_WITH_ZLIB=ON -DARROW_WITH_ZSTD=OFF"
+COMPONENTS="-DARROW_COMPUTE=ON -DARROW_CSV=ON -DARROW_DATASET=ON -DARROW_FILESYSTEM=ON -DARROW_FLIGHT=ON -DARROW_GANDIVA=ON -DARROW_HDFS=ON -DARROW_JSON=ON -DARROW_ORC=ON -DARROW_PARQUET=ON -DARROW_PLASMA=ON -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_USE_GLOG=ON -DARROW_WITH_BROTLI=ON -DARROW_WITH_BZ2=OFF -DARROW_WITH_LZ4=ON -DARROW_WITH_SNAPPY=ON -DARROW_WITH_ZLIB=ON -DARROW_WITH_ZSTD=OFF"
 
 case $PLATFORM in
     linux-armhf)
@@ -160,7 +160,7 @@ case $PLATFORM in
         make install/strip
         ;;
     windows-x86)
-        "$CMAKE" -G "Visual Studio 15 2017" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
+        "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd ../..
         unzip -o ../cpython-bin-deps-openssl-bin.zip
@@ -184,7 +184,7 @@ case $PLATFORM in
         cd apache-arrow-$ARROW_VERSION/cpp
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd ../..
         unzip -o ../cpython-bin-deps-openssl-bin.zip

@@ -26,6 +26,9 @@ public class ObjectTableEntry extends Pointer {
     @Override public ObjectTableEntry position(long position) {
         return (ObjectTableEntry)super.position(position);
     }
+    @Override public ObjectTableEntry getPointer(long i) {
+        return new ObjectTableEntry(this).position(position + i);
+    }
 
   public ObjectTableEntry() { super((Pointer)null); allocate(); }
   private native void allocate();

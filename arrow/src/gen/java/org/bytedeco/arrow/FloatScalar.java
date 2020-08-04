@@ -14,16 +14,24 @@ import static org.bytedeco.arrow.global.arrow.*;
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class FloatScalar extends BaseFloatScalar {
     static { Loader.load(); }
-    /** Default native constructor. */
+
+  
+  
+    public FloatScalar(@Cast("arrow::NumericScalar<arrow::FloatType>::ValueType") float value) { super((Pointer)null); allocate(value); }
+    private native void allocate(@Cast("arrow::NumericScalar<arrow::FloatType>::ValueType") float value);
+  
     public FloatScalar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FloatScalar(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatScalar(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FloatScalar(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public FloatScalar position(long position) {
         return (FloatScalar)super.position(position);
+    }
+    @Override public FloatScalar getPointer(long i) {
+        return new FloatScalar(this).position(position + i);
     }
 
 }

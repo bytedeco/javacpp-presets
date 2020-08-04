@@ -39,6 +39,9 @@ public class ArrowWriterProperties extends Pointer {
       @Override public Builder position(long position) {
           return (Builder)super.position(position);
       }
+      @Override public Builder getPointer(long i) {
+          return new Builder(this).position(position + i);
+      }
   
     public Builder() { super((Pointer)null); allocate(); }
     private native void allocate();
