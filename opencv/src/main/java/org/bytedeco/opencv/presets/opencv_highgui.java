@@ -43,6 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 )
 public class opencv_highgui implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.remove("std::vector<int>"); // disable hack from opencv_videoio.class
         infoMap.put(new Info("defined _WIN32").define(false))
                .put(new Info("cvFontQt").annotations("@Platform(\"linux\")").javaNames("cvFontQt"))
                .put(new Info("cvAddText").annotations("@Platform(\"linux\")").javaNames("cvAddText"))

@@ -104,29 +104,37 @@ cluster, the average rectangle is computed and put into the output rectangle lis
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold, double eps/*=0.2*/);
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold);
 /** \overload */
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector weights,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer weights,
                                   int groupThreshold, double eps/*=0.2*/);
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector weights,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer weights,
+                                  int groupThreshold);
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntBuffer weights,
+                                  int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntBuffer weights,
+                                  int groupThreshold);
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector int[] weights,
+                                  int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector int[] weights,
                                   int groupThreshold);
 /** \overload */
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold,
-                                  double eps, IntVector weights, @StdVector DoublePointer levelWeights );
+                                  double eps, @StdVector IntPointer weights, @StdVector DoublePointer levelWeights );
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold,
-                                  double eps, IntVector weights, @StdVector DoubleBuffer levelWeights );
+                                  double eps, @StdVector IntBuffer weights, @StdVector DoubleBuffer levelWeights );
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold,
-                                  double eps, IntVector weights, @StdVector double[] levelWeights );
+                                  double eps, @StdVector int[] weights, @StdVector double[] levelWeights );
 /** \overload */
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector rejectLevels,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer rejectLevels,
                                   @StdVector DoublePointer levelWeights, int groupThreshold, double eps/*=0.2*/);
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector rejectLevels,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer rejectLevels,
                                   @StdVector DoublePointer levelWeights, int groupThreshold);
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector rejectLevels,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntBuffer rejectLevels,
                                   @StdVector DoubleBuffer levelWeights, int groupThreshold, double eps/*=0.2*/);
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector rejectLevels,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntBuffer rejectLevels,
                                   @StdVector DoubleBuffer levelWeights, int groupThreshold);
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector rejectLevels,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector int[] rejectLevels,
                                   @StdVector double[] levelWeights, int groupThreshold, double eps/*=0.2*/);
-@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @ByRef IntVector rejectLevels,
+@Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector int[] rejectLevels,
                                   @StdVector double[] levelWeights, int groupThreshold);
 /** \overload */
 @Namespace("cv") public static native void groupRectangles_meanshift(@ByRef RectVector rectList, @StdVector DoublePointer foundWeights,

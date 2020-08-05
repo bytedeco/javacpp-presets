@@ -84,5 +84,5 @@ public class Board extends Pointer {
 
     /** vector of the identifiers of the markers in the board (same size than objPoints)
      *  The identifiers refers to the board dictionary */
-    public native @ByRef IntVector ids(); public native Board ids(IntVector setter);
+    public native @StdVector IntPointer ids(); public native Board ids(IntPointer setter);
 }

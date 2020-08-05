@@ -55,26 +55,62 @@ public class BaseCascadeClassifier extends Algorithm {
 
     public native void detectMultiScale( @ByVal Mat image,
                                @ByRef RectVector objects,
-                               @ByRef IntVector numDetections,
+                               @StdVector IntPointer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal Mat image,
+                               @ByRef RectVector objects,
+                               @StdVector IntBuffer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal Mat image,
+                               @ByRef RectVector objects,
+                               @StdVector int[] numDetections,
                                double scaleFactor,
                                int minNeighbors, int flags,
                                @ByVal Size minSize, @ByVal Size maxSize );
     public native void detectMultiScale( @ByVal UMat image,
                                @ByRef RectVector objects,
-                               @ByRef IntVector numDetections,
+                               @StdVector IntPointer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal UMat image,
+                               @ByRef RectVector objects,
+                               @StdVector IntBuffer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal UMat image,
+                               @ByRef RectVector objects,
+                               @StdVector int[] numDetections,
                                double scaleFactor,
                                int minNeighbors, int flags,
                                @ByVal Size minSize, @ByVal Size maxSize );
     public native void detectMultiScale( @ByVal GpuMat image,
                                @ByRef RectVector objects,
-                               @ByRef IntVector numDetections,
+                               @StdVector IntPointer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                               @ByRef RectVector objects,
+                               @StdVector IntBuffer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                               @ByRef RectVector objects,
+                               @StdVector int[] numDetections,
                                double scaleFactor,
                                int minNeighbors, int flags,
                                @ByVal Size minSize, @ByVal Size maxSize );
 
     public native void detectMultiScale( @ByVal Mat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector IntPointer rejectLevels,
                                        @StdVector DoublePointer levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -82,7 +118,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal Mat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector IntBuffer rejectLevels,
                                        @StdVector DoubleBuffer levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -90,7 +126,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal Mat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector int[] rejectLevels,
                                        @StdVector double[] levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -98,7 +134,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal UMat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector IntPointer rejectLevels,
                                        @StdVector DoublePointer levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -106,7 +142,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal UMat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector IntBuffer rejectLevels,
                                        @StdVector DoubleBuffer levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -114,7 +150,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal UMat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector int[] rejectLevels,
                                        @StdVector double[] levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -122,7 +158,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal GpuMat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector IntPointer rejectLevels,
                                        @StdVector DoublePointer levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -130,7 +166,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal GpuMat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector IntBuffer rejectLevels,
                                        @StdVector DoubleBuffer levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
@@ -138,7 +174,7 @@ public class BaseCascadeClassifier extends Algorithm {
                                        @Cast("bool") boolean outputRejectLevels );
     public native void detectMultiScale( @ByVal GpuMat image,
                                        @ByRef RectVector objects,
-                                       @ByRef IntVector rejectLevels,
+                                       @StdVector int[] rejectLevels,
                                        @StdVector double[] levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,

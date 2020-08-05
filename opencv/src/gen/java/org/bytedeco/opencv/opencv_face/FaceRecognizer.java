@@ -374,8 +374,8 @@ public class FaceRecognizer extends Algorithm {
     The function searches for the labels containing the specified sub-string in the associated string
     info.
      */
-    public native @ByVal IntVector getLabelsByString(@Str BytePointer str);
-    public native @ByVal IntVector getLabelsByString(@Str String str);
+    public native @StdVector IntPointer getLabelsByString(@Str BytePointer str);
+    public native @StdVector IntBuffer getLabelsByString(@Str String str);
     /** \brief threshold parameter accessor - required for default BestMinDist collector */
     public native double getThreshold();
     /** \brief Sets threshold of model */

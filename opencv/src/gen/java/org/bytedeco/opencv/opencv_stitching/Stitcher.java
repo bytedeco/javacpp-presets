@@ -244,7 +244,7 @@ public class Stitcher extends Pointer {
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @ByVal UMatVector masks, @ByVal GpuMat pano);
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal GpuMatVector masks, @ByVal GpuMat pano);
 
-    public native @ByVal IntVector component();
+    public native @StdVector IntPointer component();
     public native @StdVector CameraParams cameras();
     public native double workScale();
     public native @ByVal UMat resultMask();
