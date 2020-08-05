@@ -56,6 +56,6 @@ public class DisjointSets extends Pointer {
     public native int findSetByElem(int elem);
     public native int mergeSets(int set1, int set2);
 
-    public native @ByRef IntVector parent(); public native DisjointSets parent(IntVector setter);
-    public native @ByRef IntVector size(); public native DisjointSets size(IntVector setter);
+    public native @StdVector IntPointer parent(); public native DisjointSets parent(IntPointer setter);
+    public native @StdVector IntPointer size(); public native DisjointSets size(IntPointer setter);
 }

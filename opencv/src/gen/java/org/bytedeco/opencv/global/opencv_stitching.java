@@ -423,7 +423,9 @@ public class opencv_stitching extends org.bytedeco.opencv.presets.opencv_stitchi
 @Namespace("cv::detail") public static native @ByVal Point resultTl(@Const @ByRef PointVector corners);
 
 // Returns random 'count' element subset of the {0,1,...,size-1} set
-@Namespace("cv::detail") public static native void selectRandomSubset(int count, int size, @ByRef IntVector subset);
+@Namespace("cv::detail") public static native void selectRandomSubset(int count, int size, @StdVector IntPointer subset);
+@Namespace("cv::detail") public static native void selectRandomSubset(int count, int size, @StdVector IntBuffer subset);
+@Namespace("cv::detail") public static native void selectRandomSubset(int count, int size, @StdVector int[] subset);
 
 @Namespace("cv::detail") public static native @ByRef IntPointer stitchingLogLevel();
 
@@ -597,14 +599,20 @@ public static final int
 @Namespace("cv::detail") public static native @Str BytePointer matchesGraphAsString(@ByRef StringVector pathes, @StdVector MatchesInfo pairwise_matches,
                                             float conf_threshold);
 
-@Namespace("cv::detail") public static native @ByVal IntVector leaveBiggestComponent(
+@Namespace("cv::detail") public static native @StdVector IntPointer leaveBiggestComponent(
         @StdVector ImageFeatures features,
         @StdVector MatchesInfo pairwise_matches,
         float conf_threshold);
 
 @Namespace("cv::detail") public static native void findMaxSpanningTree(
         int num_images, @StdVector MatchesInfo pairwise_matches,
-        @ByRef Graph span_tree, @ByRef IntVector centers);
+        @ByRef Graph span_tree, @StdVector IntPointer centers);
+@Namespace("cv::detail") public static native void findMaxSpanningTree(
+        int num_images, @StdVector MatchesInfo pairwise_matches,
+        @ByRef Graph span_tree, @StdVector IntBuffer centers);
+@Namespace("cv::detail") public static native void findMaxSpanningTree(
+        int num_images, @StdVector MatchesInfo pairwise_matches,
+        @ByRef Graph span_tree, @StdVector int[] centers);
 
 /** \} stitching_rotation */
 

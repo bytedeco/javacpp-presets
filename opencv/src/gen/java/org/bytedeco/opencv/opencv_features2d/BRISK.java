@@ -66,15 +66,15 @@ public class BRISK extends Feature2D {
     @param dMin threshold for the long pairings used for orientation determination (in pixels for
     keypoint scale 1).
     @param indexChange index remapping of the bits. */
-    public static native @Ptr BRISK create(@StdVector FloatPointer radiusList, @Const @ByRef IntVector numberList,
-            float dMax/*=5.85f*/, float dMin/*=8.2f*/, @Const @ByRef(nullValue = "std::vector<int>()") IntVector indexChange);
-    public static native @Ptr BRISK create(@StdVector FloatPointer radiusList, @Const @ByRef IntVector numberList);
-    public static native @Ptr BRISK create(@StdVector FloatBuffer radiusList, @Const @ByRef IntVector numberList,
-            float dMax/*=5.85f*/, float dMin/*=8.2f*/, @Const @ByRef(nullValue = "std::vector<int>()") IntVector indexChange);
-    public static native @Ptr BRISK create(@StdVector FloatBuffer radiusList, @Const @ByRef IntVector numberList);
-    public static native @Ptr BRISK create(@StdVector float[] radiusList, @Const @ByRef IntVector numberList,
-            float dMax/*=5.85f*/, float dMin/*=8.2f*/, @Const @ByRef(nullValue = "std::vector<int>()") IntVector indexChange);
-    public static native @Ptr BRISK create(@StdVector float[] radiusList, @Const @ByRef IntVector numberList);
+    public static native @Ptr BRISK create(@StdVector FloatPointer radiusList, @StdVector IntPointer numberList,
+            float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector IntPointer indexChange/*=std::vector<int>()*/);
+    public static native @Ptr BRISK create(@StdVector FloatPointer radiusList, @StdVector IntPointer numberList);
+    public static native @Ptr BRISK create(@StdVector FloatBuffer radiusList, @StdVector IntBuffer numberList,
+            float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector IntBuffer indexChange/*=std::vector<int>()*/);
+    public static native @Ptr BRISK create(@StdVector FloatBuffer radiusList, @StdVector IntBuffer numberList);
+    public static native @Ptr BRISK create(@StdVector float[] radiusList, @StdVector int[] numberList,
+            float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector int[] indexChange/*=std::vector<int>()*/);
+    public static native @Ptr BRISK create(@StdVector float[] radiusList, @StdVector int[] numberList);
 
     /** \brief The BRISK constructor for a custom pattern, detection threshold and octaves
     <p>
@@ -90,20 +90,20 @@ public class BRISK extends Feature2D {
     keypoint scale 1).
     @param indexChange index remapping of the bits. */
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatPointer radiusList,
-            @Const @ByRef IntVector numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
-            @Const @ByRef(nullValue = "std::vector<int>()") IntVector indexChange);
+            @StdVector IntPointer numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
+            @StdVector IntPointer indexChange/*=std::vector<int>()*/);
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatPointer radiusList,
-            @Const @ByRef IntVector numberList);
+            @StdVector IntPointer numberList);
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatBuffer radiusList,
-            @Const @ByRef IntVector numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
-            @Const @ByRef(nullValue = "std::vector<int>()") IntVector indexChange);
+            @StdVector IntBuffer numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
+            @StdVector IntBuffer indexChange/*=std::vector<int>()*/);
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatBuffer radiusList,
-            @Const @ByRef IntVector numberList);
+            @StdVector IntBuffer numberList);
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector float[] radiusList,
-            @Const @ByRef IntVector numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
-            @Const @ByRef(nullValue = "std::vector<int>()") IntVector indexChange);
+            @StdVector int[] numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
+            @StdVector int[] indexChange/*=std::vector<int>()*/);
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector float[] radiusList,
-            @Const @ByRef IntVector numberList);
+            @StdVector int[] numberList);
     public native @Str @Override BytePointer getDefaultName();
 
     /** \brief Set detection threshold.

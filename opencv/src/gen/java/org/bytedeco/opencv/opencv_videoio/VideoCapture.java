@@ -271,9 +271,23 @@ public class VideoCapture extends Pointer {
     */
     public static native @Cast("bool") boolean waitAny(
                 @StdVector VideoCapture streams,
-                @ByRef IntVector readyIndex,
+                @StdVector @ByRef IntPointer readyIndex,
                 @Cast("int64") long timeoutNs/*=0*/);
     public static native @Cast("bool") boolean waitAny(
                 @StdVector VideoCapture streams,
-                @ByRef IntVector readyIndex);
+                @StdVector @ByRef IntPointer readyIndex);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector @ByRef IntBuffer readyIndex,
+                @Cast("int64") long timeoutNs/*=0*/);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector @ByRef IntBuffer readyIndex);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector @ByRef int[] readyIndex,
+                @Cast("int64") long timeoutNs/*=0*/);
+    public static native @Cast("bool") boolean waitAny(
+                @StdVector VideoCapture streams,
+                @StdVector @ByRef int[] readyIndex);
 }

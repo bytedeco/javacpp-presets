@@ -135,7 +135,13 @@ public class PCTSignatures extends Algorithm {
     */
     public static native @Ptr PCTSignatures create(
             @Const @ByRef Point2fVector initSamplingPoints,
-            @Const @ByRef IntVector initClusterSeedIndexes);
+            @StdVector IntPointer initClusterSeedIndexes);
+    public static native @Ptr PCTSignatures create(
+            @Const @ByRef Point2fVector initSamplingPoints,
+            @StdVector IntBuffer initClusterSeedIndexes);
+    public static native @Ptr PCTSignatures create(
+            @Const @ByRef Point2fVector initSamplingPoints,
+            @StdVector int[] initClusterSeedIndexes);
 
 
 
@@ -416,11 +422,13 @@ public class PCTSignatures extends Algorithm {
     /**
     * \brief Initial seeds (initial number of clusters) for the k-means algorithm.
     */
-    public native @ByVal IntVector getInitSeedIndexes();
+    public native @StdVector IntPointer getInitSeedIndexes();
     /**
     * \brief Initial seed indexes for the k-means algorithm.
     */
-    public native void setInitSeedIndexes(@ByVal IntVector initSeedIndexes);
+    public native void setInitSeedIndexes(@StdVector IntPointer initSeedIndexes);
+    public native void setInitSeedIndexes(@StdVector IntBuffer initSeedIndexes);
+    public native void setInitSeedIndexes(@StdVector int[] initSeedIndexes);
     /**
     * \brief Number of initial seeds (initial number of clusters) for the k-means algorithm.
     */

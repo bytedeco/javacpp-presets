@@ -57,7 +57,7 @@ public class Detector extends Pointer {
 
   public native int getPatchIdxOfDetection( int detectionIdx );
 
-  public native @Const @ByRef IntVector getIdxDetections();
+  public native @StdVector IntPointer getIdxDetections();
   public native @StdVector FloatPointer getConfidences();
 
   public native @Const @ByRef Mat getConfImageDisplay();

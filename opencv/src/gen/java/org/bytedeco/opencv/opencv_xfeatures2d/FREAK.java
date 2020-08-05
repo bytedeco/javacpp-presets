@@ -84,6 +84,16 @@ public class FREAK extends Feature2D {
                                  @Cast("bool") boolean scaleNormalized/*=true*/,
                                  float patternScale/*=22.0f*/,
                                  int nOctaves/*=4*/,
-                                 @Const @ByRef(nullValue = "std::vector<int>()") IntVector selectedPairs);
+                                 @StdVector IntPointer selectedPairs/*=std::vector<int>()*/);
     public static native @Ptr FREAK create();
+    public static native @Ptr FREAK create(@Cast("bool") boolean orientationNormalized/*=true*/,
+                                 @Cast("bool") boolean scaleNormalized/*=true*/,
+                                 float patternScale/*=22.0f*/,
+                                 int nOctaves/*=4*/,
+                                 @StdVector IntBuffer selectedPairs/*=std::vector<int>()*/);
+    public static native @Ptr FREAK create(@Cast("bool") boolean orientationNormalized/*=true*/,
+                                 @Cast("bool") boolean scaleNormalized/*=true*/,
+                                 float patternScale/*=22.0f*/,
+                                 int nOctaves/*=4*/,
+                                 @StdVector int[] selectedPairs/*=std::vector<int>()*/);
 }

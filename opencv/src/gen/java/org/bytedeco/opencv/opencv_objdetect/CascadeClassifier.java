@@ -138,34 +138,94 @@ public class CascadeClassifier extends Pointer {
     */
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
                               @ByRef RectVector objects,
-                              @ByRef IntVector numDetections,
+                              @StdVector IntPointer numDetections,
                               double scaleFactor/*=1.1*/,
                               int minNeighbors/*=3*/, int flags/*=0*/,
                               @ByVal(nullValue = "cv::Size()") Size minSize,
                               @ByVal(nullValue = "cv::Size()") Size maxSize );
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
                               @ByRef RectVector objects,
-                              @ByRef IntVector numDetections );
+                              @StdVector IntPointer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections );
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
                               @ByRef RectVector objects,
-                              @ByRef IntVector numDetections,
+                              @StdVector IntPointer numDetections,
                               double scaleFactor/*=1.1*/,
                               int minNeighbors/*=3*/, int flags/*=0*/,
                               @ByVal(nullValue = "cv::Size()") Size minSize,
                               @ByVal(nullValue = "cv::Size()") Size maxSize );
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
                               @ByRef RectVector objects,
-                              @ByRef IntVector numDetections );
+                              @StdVector IntPointer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections );
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
                               @ByRef RectVector objects,
-                              @ByRef IntVector numDetections,
+                              @StdVector IntPointer numDetections,
                               double scaleFactor/*=1.1*/,
                               int minNeighbors/*=3*/, int flags/*=0*/,
                               @ByVal(nullValue = "cv::Size()") Size minSize,
                               @ByVal(nullValue = "cv::Size()") Size maxSize );
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
                               @ByRef RectVector objects,
-                              @ByRef IntVector numDetections );
+                              @StdVector IntPointer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections );
 
     /** \overload
     This function allows you to retrieve the final stage decision certainty of classification.
@@ -186,7 +246,7 @@ public class CascadeClassifier extends Pointer {
     */
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntPointer rejectLevels,
                                       @StdVector DoublePointer levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -195,11 +255,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntPointer rejectLevels,
                                       @StdVector DoublePointer levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntBuffer rejectLevels,
                                       @StdVector DoubleBuffer levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -208,11 +268,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntBuffer rejectLevels,
                                       @StdVector DoubleBuffer levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -221,11 +281,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntPointer rejectLevels,
                                       @StdVector DoublePointer levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -234,11 +294,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntPointer rejectLevels,
                                       @StdVector DoublePointer levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntBuffer rejectLevels,
                                       @StdVector DoubleBuffer levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -247,11 +307,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntBuffer rejectLevels,
                                       @StdVector DoubleBuffer levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -260,11 +320,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntPointer rejectLevels,
                                       @StdVector DoublePointer levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -273,11 +333,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntPointer rejectLevels,
                                       @StdVector DoublePointer levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntBuffer rejectLevels,
                                       @StdVector DoubleBuffer levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -286,11 +346,11 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector IntBuffer rejectLevels,
                                       @StdVector DoubleBuffer levelWeights );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights,
                                       double scaleFactor/*=1.1*/,
                                       int minNeighbors/*=3*/, int flags/*=0*/,
@@ -299,7 +359,7 @@ public class CascadeClassifier extends Pointer {
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
                                       @ByRef RectVector objects,
-                                      @ByRef IntVector rejectLevels,
+                                      @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights );
 
     public native @Cast("bool") boolean isOldFormatCascade();

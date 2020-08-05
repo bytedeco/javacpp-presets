@@ -99,12 +99,12 @@ public class FacemarkLBF extends FacemarkTrain {
         /** seed for shuffling the training data */
         public native @Cast("unsigned int") int seed(); public native Params seed(int setter);
 
-        public native @ByRef IntVector feats_m(); public native Params feats_m(IntVector setter);
+        public native @StdVector IntPointer feats_m(); public native Params feats_m(IntPointer setter);
         public native @StdVector DoublePointer radius_m(); public native Params radius_m(DoublePointer setter);
         
         /**  index of facemark points on pupils of left and right eye */
-        public native @ByRef IntVector pupils(int i); public native Params pupils(int i, IntVector setter);
-        @MemberGetter public native IntVector pupils();
+        public native @StdVector IntPointer pupils(int i); public native Params pupils(int i, IntPointer setter);
+        @MemberGetter public native @StdVector IntPointer pupils();
 
         public native @ByRef Rect detectROI(); public native Params detectROI(Rect setter);
 

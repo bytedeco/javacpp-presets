@@ -112,13 +112,13 @@ public class TrackerStateEstimatorAdaBoosting extends TrackerStateEstimator {
 
   /** \brief Get the list of the selected weak classifiers for the classification step
      */
-  public native @ByVal IntVector computeSelectedWeakClassifier();
+  public native @StdVector IntPointer computeSelectedWeakClassifier();
 
   /** \brief Get the list of the weak classifiers that should be replaced
      */
-  public native @ByVal IntVector computeReplacedClassifier();
+  public native @StdVector IntPointer computeReplacedClassifier();
 
   /** \brief Get the list of the weak classifiers that replace those to be replaced
      */
-  public native @ByVal IntVector computeSwappedClassifier();
+  public native @StdVector IntPointer computeSwappedClassifier();
 }

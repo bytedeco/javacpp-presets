@@ -211,7 +211,13 @@ Detects corners using the FAST algorithm by \cite Rosten06 .
         Image descriptors are then represented by their closest codevector (nearest BoW centroid).
  */
 @Namespace("cv::xfeatures2d") public static native void matchLOGOS(@Const @ByRef KeyPointVector keypoints1, @Const @ByRef KeyPointVector keypoints2,
-                             @Const @ByRef IntVector nn1, @Const @ByRef IntVector nn2,
+                             @StdVector IntPointer nn1, @StdVector IntPointer nn2,
+                             @ByRef DMatchVector matches1to2);
+@Namespace("cv::xfeatures2d") public static native void matchLOGOS(@Const @ByRef KeyPointVector keypoints1, @Const @ByRef KeyPointVector keypoints2,
+                             @StdVector IntBuffer nn1, @StdVector IntBuffer nn2,
+                             @ByRef DMatchVector matches1to2);
+@Namespace("cv::xfeatures2d") public static native void matchLOGOS(@Const @ByRef KeyPointVector keypoints1, @Const @ByRef KeyPointVector keypoints2,
+                             @StdVector int[] nn1, @StdVector int[] nn2,
                              @ByRef DMatchVector matches1to2);
 
 /** \} */

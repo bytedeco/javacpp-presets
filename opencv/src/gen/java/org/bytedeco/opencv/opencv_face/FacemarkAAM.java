@@ -217,10 +217,10 @@ public class FacemarkAAM extends FacemarkTrain {
             public native @ByRef Point2fVector base_shape(); public native Texture base_shape(Point2fVector setter);
             
             /**  index of pixels for mapping process to obtains the grays values of face region */
-            public native @ByRef IntVector ind1(); public native Texture ind1(IntVector setter);
+            public native @StdVector IntPointer ind1(); public native Texture ind1(IntPointer setter);
             
             /**  index of pixels for mapping process to obtains the grays values of eroded face region */
-            public native @ByRef IntVector ind2(); public native Texture ind2(IntVector setter);
+            public native @StdVector IntPointer ind2(); public native Texture ind2(IntPointer setter);
         }
         
         /**  a container to holds the texture data for each scale of fitting */

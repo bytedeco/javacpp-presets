@@ -51,7 +51,10 @@ public class opencv_videoio implements InfoMapper {
                .put(new Info("cvCaptureFromCAM").cppTypes("CvCapture*", "int"))
                .put(new Info("cvCreateAVIWriter").cppTypes("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))
                .put(new Info("cvWriteToAVI").cppTypes("int", "CvVideoWriter*", "IplImage*"))
-               .put(new Info("std::vector<int>").pointerTypes("IntVector").define())
+               .put(new Info("std::vector<int>").annotations("@StdVector").valueTypes(
+                        "@Cast({\"int*\", \"std::vector<int>&\"}) IntPointer",
+                        "@Cast({\"int*\", \"std::vector<int>&\"}) IntBuffer",
+                        "@Cast({\"int*\", \"std::vector<int>&\"}) int[]").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("cv::DefaultDeleter<CvCapture>").pointerTypes("CvCaptureDefaultDeleter"))
                .put(new Info("cv::DefaultDeleter<CvVideoWriter>").pointerTypes("CvVideoWriterDefaultDeleter"));
     }

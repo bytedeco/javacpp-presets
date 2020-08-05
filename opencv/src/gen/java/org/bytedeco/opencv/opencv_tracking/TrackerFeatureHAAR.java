@@ -90,7 +90,9 @@ public class TrackerFeatureHAAR extends TrackerFeature {
     @param images The images
     @param response Collection of response for the specific TrackerFeature
      */
-  public native @Cast("bool") boolean extractSelected( @Const @ByVal IntVector selFeatures, @Const @ByRef MatVector images, @ByRef Mat response );
+  public native @Cast("bool") boolean extractSelected( @StdVector IntPointer selFeatures, @Const @ByRef MatVector images, @ByRef Mat response );
+  public native @Cast("bool") boolean extractSelected( @StdVector IntBuffer selFeatures, @Const @ByRef MatVector images, @ByRef Mat response );
+  public native @Cast("bool") boolean extractSelected( @StdVector int[] selFeatures, @Const @ByRef MatVector images, @ByRef Mat response );
 
   /** \brief Identify most effective features
     @param response Collection of response for the specific TrackerFeature

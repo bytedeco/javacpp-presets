@@ -119,24 +119,56 @@ public class VideoWriter extends Pointer {
      * see cv::VideoWriterProperties
      */
     public VideoWriter(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
-                            @Const @ByRef IntVector params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
     private native void allocate(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
-                            @Const @ByRef IntVector params);
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
     public VideoWriter(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
-                            @Const @ByRef IntVector params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
     private native void allocate(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
-                            @Const @ByRef IntVector params);
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public VideoWriter(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+    public VideoWriter(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public VideoWriter(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public VideoWriter(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                            @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
 
     /** \overload
      */
     public VideoWriter(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
-                            @Const @ByRef Size frameSize, @Const @ByRef IntVector params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
     private native void allocate(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
-                            @Const @ByRef Size frameSize, @Const @ByRef IntVector params);
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
     public VideoWriter(@Str String filename, int apiPreference, int fourcc, double fps,
-                            @Const @ByRef Size frameSize, @Const @ByRef IntVector params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
     private native void allocate(@Str String filename, int apiPreference, int fourcc, double fps,
-                            @Const @ByRef Size frameSize, @Const @ByRef IntVector params);
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public VideoWriter(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+    public VideoWriter(@Str String filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str String filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public VideoWriter(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public VideoWriter(@Str String filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, params); }
+    private native void allocate(@Str String filename, int apiPreference, int fourcc, double fps,
+                            @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
 
     /** \brief Default destructor
     <p>
@@ -174,16 +206,32 @@ public class VideoWriter extends Pointer {
     /** \overload
      */
     public native @Cast("bool") boolean open(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
-                          @Const @ByRef IntVector params);
+                          @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
     public native @Cast("bool") boolean open(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
-                          @Const @ByRef IntVector params);
+                          @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                          @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+    public native @Cast("bool") boolean open(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                          @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                          @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public native @Cast("bool") boolean open(@Str String filename, int fourcc, double fps, @Const @ByRef Size frameSize,
+                          @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
 
     /** \overload
      */
     public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
-                          @Const @ByRef Size frameSize, @Const @ByRef IntVector params);
+                          @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
     public native @Cast("bool") boolean open(@Str String filename, int apiPreference, int fourcc, double fps,
-                          @Const @ByRef Size frameSize, @Const @ByRef IntVector params);
+                          @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                          @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference, int fourcc, double fps,
+                          @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                          @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference, int fourcc, double fps,
+                          @Const @ByRef Size frameSize, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
 
     /** \brief Returns true if video writer has been successfully initialized.
     */

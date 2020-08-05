@@ -58,7 +58,7 @@ public class StrongClassifierDirectSelection extends Pointer {
   public native @Cast("bool") boolean update( @Const @ByRef Mat image, int target, float importance/*=1.0*/ );
   public native @Cast("bool") boolean update( @Const @ByRef Mat image, int target );
   public native float eval( @Const @ByRef Mat response );
-  public native @ByVal IntVector getSelectedWeakClassifier();
+  public native @StdVector IntPointer getSelectedWeakClassifier();
   public native float classifySmooth( @Const @ByRef MatVector images, @Const @ByRef Rect sampleROI, @ByRef IntPointer idx );
   public native float classifySmooth( @Const @ByRef MatVector images, @Const @ByRef Rect sampleROI, @ByRef IntBuffer idx );
   public native float classifySmooth( @Const @ByRef MatVector images, @Const @ByRef Rect sampleROI, @ByRef int[] idx );

@@ -20,9 +20,6 @@ import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 public class opencv_videoio extends org.bytedeco.opencv.presets.opencv_videoio {
     static { Loader.load(); }
 
-// Targeting ../opencv_videoio/IntVector.java
-
-
 // Parsed from <opencv2/videoio.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
