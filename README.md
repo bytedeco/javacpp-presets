@@ -124,7 +124,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.3.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 1.5.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 1.6.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.10  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -136,7 +136,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Gym 0.17.x  https://github.com/openai/gym
  * LLVM 10.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.79.0  http://www.leptonica.org/download.html
+ * Leptonica 1.80.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.6.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose

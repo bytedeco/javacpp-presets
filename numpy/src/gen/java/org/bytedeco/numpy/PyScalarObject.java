@@ -30,6 +30,9 @@ public class PyScalarObject extends Pointer {
     @Override public PyScalarObject position(long position) {
         return (PyScalarObject)super.position(position);
     }
+    @Override public PyScalarObject getPointer(long i) {
+        return new PyScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyScalarObject ob_base(PyObject setter);
         public native @Cast("char") byte obval(); public native PyScalarObject obval(byte setter);

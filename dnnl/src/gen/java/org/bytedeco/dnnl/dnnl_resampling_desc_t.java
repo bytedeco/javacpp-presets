@@ -31,6 +31,9 @@ public class dnnl_resampling_desc_t extends Pointer {
     @Override public dnnl_resampling_desc_t position(long position) {
         return (dnnl_resampling_desc_t)super.position(position);
     }
+    @Override public dnnl_resampling_desc_t getPointer(long i) {
+        return new dnnl_resampling_desc_t(this).position(position + i);
+    }
 
     /** The kind of primitive. Used for self-identifying the primitive
      *  descriptor. Must be #dnnl_resampling. */

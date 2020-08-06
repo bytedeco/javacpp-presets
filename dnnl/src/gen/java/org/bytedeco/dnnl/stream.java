@@ -35,6 +35,9 @@ public class stream extends dnnl_stream_handle {
     @Override public stream position(long position) {
         return (stream)super.position(position);
     }
+    @Override public stream getPointer(long i) {
+        return new stream(this).position(position + i);
+    }
 
 
     /** Stream flags. Can be combined using the bitwise OR operator. */
@@ -62,15 +65,15 @@ public class stream extends dnnl_stream_handle {
     /** Constructs a stream for the specified engine and with behavior
      *  controlled by the specified flags.
      * 
-     *  @param engine Engine to create the stream on.
-     *  @param flags Flags controlling stream behavior.
+     *  @param aengine Engine to create the stream on.
+     *  @param aflags Flags controlling stream behavior.
      *  @param attr Stream attributes. */
-    public stream(@Const @ByRef engine engine, flags flags/*=dnnl::stream::flags::default_flags*/,
-                @Const @ByRef(nullValue = "dnnl::stream_attr()") stream_attr attr) { super((Pointer)null); allocate(engine, flags, attr); }
-    private native void allocate(@Const @ByRef engine engine, flags flags/*=dnnl::stream::flags::default_flags*/,
+    public stream(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/,
+                @Const @ByRef(nullValue = "dnnl::stream_attr()") stream_attr attr) { super((Pointer)null); allocate(aengine, aflags, attr); }
+    private native void allocate(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/,
                 @Const @ByRef(nullValue = "dnnl::stream_attr()") stream_attr attr);
-    public stream(@Const @ByRef engine engine) { super((Pointer)null); allocate(engine); }
-    private native void allocate(@Const @ByRef engine engine);
+    public stream(@Const @ByRef engine aengine) { super((Pointer)null); allocate(aengine); }
+    private native void allocate(@Const @ByRef engine aengine);
 
 // #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
 // #endif

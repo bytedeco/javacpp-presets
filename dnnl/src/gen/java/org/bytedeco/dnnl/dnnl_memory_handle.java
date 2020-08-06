@@ -21,6 +21,9 @@ public class dnnl_memory_handle extends Pointer {
     @Override public dnnl_memory_handle position(long position) {
         return (dnnl_memory_handle)super.position(position);
     }
+    @Override public dnnl_memory_handle getPointer(long i) {
+        return new dnnl_memory_handle(this).position(position + i);
+    }
 
     /** Constructs an empty handle object.
      * 
@@ -80,9 +83,9 @@ public class dnnl_memory_handle extends Pointer {
     ///
     public native @Name("operator dnnl_memory_t") dnnl_memory asDnnl_memory();
 
-    /** Checks whether the object is empty.
+    /** Checks whether the object is not empty.
      * 
-     *  @return Whether the object is empty. */
+     *  @return Whether the object is not empty. */
     
     ///
     public native @Cast("bool") @Name("operator bool") boolean asBoolean();

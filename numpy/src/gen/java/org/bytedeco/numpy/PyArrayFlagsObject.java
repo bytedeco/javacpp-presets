@@ -30,6 +30,9 @@ public class PyArrayFlagsObject extends Pointer {
     @Override public PyArrayFlagsObject position(long position) {
         return (PyArrayFlagsObject)super.position(position);
     }
+    @Override public PyArrayFlagsObject getPointer(long i) {
+        return new PyArrayFlagsObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyArrayFlagsObject ob_base(PyObject setter);
         public native PyObject arr(); public native PyArrayFlagsObject arr(PyObject setter);

@@ -29,6 +29,9 @@ public class PyUFuncObject extends Pointer {
     @Override public PyUFuncObject position(long position) {
         return (PyUFuncObject)super.position(position);
     }
+    @Override public PyUFuncObject getPointer(long i) {
+        return new PyUFuncObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyUFuncObject ob_base(PyObject setter);
         /*

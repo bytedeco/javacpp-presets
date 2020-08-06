@@ -28,6 +28,9 @@ public class PyUnicodeScalarObject extends Pointer {
     @Override public PyUnicodeScalarObject position(long position) {
         return (PyUnicodeScalarObject)super.position(position);
     }
+    @Override public PyUnicodeScalarObject getPointer(long i) {
+        return new PyUnicodeScalarObject(this).position(position + i);
+    }
 
         /* note that the PyObject_HEAD macro lives right here */
         public native @ByRef PyUnicodeObject base(); public native PyUnicodeScalarObject base(PyUnicodeObject setter);

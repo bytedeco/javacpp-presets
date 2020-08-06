@@ -30,6 +30,9 @@ public class PyDoubleScalarObject extends Pointer {
     @Override public PyDoubleScalarObject position(long position) {
         return (PyDoubleScalarObject)super.position(position);
     }
+    @Override public PyDoubleScalarObject getPointer(long i) {
+        return new PyDoubleScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyDoubleScalarObject ob_base(PyObject setter);
         public native double obval(); public native PyDoubleScalarObject obval(double setter);

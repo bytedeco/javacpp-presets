@@ -33,6 +33,9 @@ public class sum extends primitive {
     @Override public sum position(long position) {
         return (sum)super.position(position);
     }
+    @Override public sum getPointer(long i) {
+        return new sum(this).position(position + i);
+    }
 
     /** Primitive descriptor for a sum primitive. */
     public static class primitive_desc extends primitive_desc_base {
@@ -58,72 +61,66 @@ public class sum extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
 
         /** Default constructor. Produces an empty object. */
 
         /** Constructs a primitive descriptor for a sum primitive.
          * 
-         *  Inputs:
-         *   - {@code src[0]} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code src[1]} (#dnnl::primitive_desc_base::src_desc({@code 1}))
-         *   - ...
-         *   - {@code src[n - 1]} (#dnnl::primitive_desc_base::src_desc({@code n - 1}))
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         * 
          *  @param dst Destination memory descriptor.
          *  @param scales Vector of scales to multiply data in each source
          *      memory by.
          *  @param srcs Vector of source memory descriptors.
-         *  @param engine Engine to perform the operation on.
+         *  @param aengine Engine to perform the operation on.
          *  @param attr Primitive attributes to use (optional). */
         
         ///
         ///
         public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, scales, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, scales, srcs, aengine, attr); }
         private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(dst, scales, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, scales, srcs, aengine); }
         private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
         public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, scales, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, scales, srcs, aengine, attr); }
         private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(dst, scales, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, scales, srcs, aengine); }
         private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
         public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, scales, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, scales, srcs, aengine, attr); }
         private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(dst, scales, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, scales, srcs, aengine); }
         private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a sum primitive.
          * 
@@ -133,40 +130,40 @@ public class sum extends primitive {
          *  @param scales Vector of scales by which to multiply data in each
          *      source memory object.
          *  @param srcs Vector of source memory descriptors.
-         *  @param engine Engine on which to perform the operation.
+         *  @param aengine Engine on which to perform the operation.
          *  @param attr Primitive attributes to use (optional). */
         
         ///
         public primitive_desc(@StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(scales, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(scales, srcs, aengine, attr); }
         private native void allocate(@StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(@StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(scales, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(scales, srcs, aengine); }
         private native void allocate(@StdVector FloatPointer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
         public primitive_desc(@StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(scales, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(scales, srcs, aengine, attr); }
         private native void allocate(@StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(@StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(scales, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(scales, srcs, aengine); }
         private native void allocate(@StdVector FloatBuffer scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
         public primitive_desc(@StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(scales, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(scales, srcs, aengine, attr); }
         private native void allocate(@StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(@StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(scales, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(scales, srcs, aengine); }
         private native void allocate(@StdVector float[] scales,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for sum primitive from a C API
          *  primitive descriptor which must have a matching kind.

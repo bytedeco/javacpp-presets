@@ -40,6 +40,9 @@ public class PyArrayObject extends PyObject {
     @Override public PyArrayObject position(long position) {
         return (PyArrayObject)super.position(position);
     }
+    @Override public PyArrayObject getPointer(long i) {
+        return new PyArrayObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyArrayObject ob_base(PyObject setter);
     /* Pointer to the raw data buffer */

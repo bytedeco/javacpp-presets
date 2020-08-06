@@ -30,6 +30,9 @@ public class PyUFunc_PyFuncData extends Pointer {
     @Override public PyUFunc_PyFuncData position(long position) {
         return (PyUFunc_PyFuncData)super.position(position);
     }
+    @Override public PyUFunc_PyFuncData getPointer(long i) {
+        return new PyUFunc_PyFuncData(this).position(position + i);
+    }
 
         public native int nin(); public native PyUFunc_PyFuncData nin(int setter);
         public native int nout(); public native PyUFunc_PyFuncData nout(int setter);

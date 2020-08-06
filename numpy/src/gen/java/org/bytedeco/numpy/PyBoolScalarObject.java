@@ -30,6 +30,9 @@ public class PyBoolScalarObject extends Pointer {
     @Override public PyBoolScalarObject position(long position) {
         return (PyBoolScalarObject)super.position(position);
     }
+    @Override public PyBoolScalarObject getPointer(long i) {
+        return new PyBoolScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyBoolScalarObject ob_base(PyObject setter);
         public native @Cast("npy_bool") byte obval(); public native PyBoolScalarObject obval(byte setter);

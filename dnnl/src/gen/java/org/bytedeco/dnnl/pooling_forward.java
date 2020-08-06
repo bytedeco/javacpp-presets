@@ -33,6 +33,9 @@ public class pooling_forward extends primitive {
     @Override public pooling_forward position(long position) {
         return (pooling_forward)super.position(position);
     }
+    @Override public pooling_forward getPointer(long i) {
+        return new pooling_forward(this).position(position + i);
+    }
 
     /** Descriptor for a pooling forward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -43,22 +46,9 @@ public class pooling_forward extends primitive {
         
         ///
         ///
-        ///
-        ///
         public native @ByRef dnnl_pooling_desc_t data(); public native desc data(dnnl_pooling_desc_t setter);
 
         /** Constructs a descriptor for pooling forward propagation primitive.
-         * 
-         *  Inputs:
-         *   - {@code src} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         *   - {@code workspace} (#dnnl::primitive_desc_base::workspace_desc({@code 0})),
-         *      if \p alg_kind = #dnnl::algorithm::pooling_max and \p
-         *      prop_kind = #dnnl::prop_kind::forward_training; must be
-         *      queried for using \ref dnnl::primitive_desc_base::query_md()
-         *      after a corresponding primitive descriptor is created
          * 
          *  Arrays \p strides, \p kernel, \p padding_l, and \p padding_r
          *  contain values for spatial dimensions only and hence must have the
@@ -66,10 +56,10 @@ public class pooling_forward extends primitive {
          *  of values is the same as in the tensor: depth (for 3D tensors),
          *  height (for 3D and 2D tensors), and width.
          * 
-         *  @param prop_kind Propagation kind. Possible values are
+         *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
-         *  @param algorithm Pooling algorithm kind: either
+         *  @param aalgorithm Pooling algorithm kind: either
          *      #dnnl::algorithm::pooling_max,
          *      #dnnl::algorithm::pooling_avg_include_padding,
          *      or #dnnl::algorithm::pooling_avg (same as
@@ -82,51 +72,51 @@ public class pooling_forward extends primitive {
          *      spatial dimension {@code ([[front,] top,] left)}.
          *  @param padding_r Vector of padding values for high indices for
          *      each spatial dimension {@code ([[back,] bottom,] right)}. */
-        public desc(prop_kind prop_kind, algorithm algorithm,
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(prop_kind, algorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(prop_kind prop_kind, algorithm algorithm,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::algorithm") int algorithm,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(prop_kind, algorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::algorithm") int algorithm,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(prop_kind prop_kind, algorithm algorithm,
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(prop_kind, algorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(prop_kind prop_kind, algorithm algorithm,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::algorithm") int algorithm,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(prop_kind, algorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::algorithm") int algorithm,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer kernel,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer padding_r);
-        public desc(prop_kind prop_kind, algorithm algorithm,
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(prop_kind, algorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(prop_kind prop_kind, algorithm algorithm,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer kernel,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer padding_r);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::algorithm") int algorithm,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel,
-                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(prop_kind, algorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::algorithm") int algorithm,
+                        @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, strides, kernel, padding_l, padding_r); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] kernel,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
@@ -143,6 +133,9 @@ public class pooling_forward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -153,26 +146,26 @@ public class pooling_forward extends primitive {
         /** Constructs a primitive descriptor for a pooling forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a pooling forward propagation primitive.
-         *  @param engine Engine to use.
+         *  @param adesc Descriptor for a pooling forward propagation primitive.
+         *  @param aengine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a pooling forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a pooling forward propagation primitive.
-         *  @param engine Engine to use.
+         *  @param adesc Descriptor for a pooling forward propagation primitive.
+         *  @param aengine Engine to use.
          *  @param attr Primitive attributes to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
@@ -180,14 +173,14 @@ public class pooling_forward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, attr, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a pooling forward
          *  propagation primitive from a C API primitive descriptor that must

@@ -37,6 +37,9 @@ public class engine extends dnnl_engine_handle {
     @Override public engine position(long position) {
         return (engine)super.position(position);
     }
+    @Override public engine getPointer(long i) {
+        return new engine(this).position(position + i);
+    }
 
 
     /** Kinds of engines. */
@@ -60,22 +63,22 @@ public class engine extends dnnl_engine_handle {
 
     /** Returns the number of engines of a certain kind.
      * 
-     *  @param kind The kind of engines to count.
+     *  @param akind The kind of engines to count.
      *  @return The number of engines of the specified kind. */
     
     ///
-    public static native @Cast("size_t") long get_count(kind kind);
-    public static native @Cast("size_t") long get_count(@Cast("dnnl::engine::kind") int kind);
+    public static native @Cast("size_t") long get_count(kind akind);
+    public static native @Cast("size_t") long get_count(@Cast("dnnl::engine::kind") int akind);
 
     /** Constructs an engine.
      * 
-     *  @param kind The kind of engine to construct.
+     *  @param akind The kind of engine to construct.
      *  @param index The index of the engine. Must be less than the value
      *      returned by #get_count() for this particular kind of engine. */
-    public engine(kind kind, @Cast("size_t") long index) { super((Pointer)null); allocate(kind, index); }
-    private native void allocate(kind kind, @Cast("size_t") long index);
-    public engine(@Cast("dnnl::engine::kind") int kind, @Cast("size_t") long index) { super((Pointer)null); allocate(kind, index); }
-    private native void allocate(@Cast("dnnl::engine::kind") int kind, @Cast("size_t") long index);
+    public engine(kind akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
+    private native void allocate(kind akind, @Cast("size_t") long index);
+    public engine(@Cast("dnnl::engine::kind") int akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
+    private native void allocate(@Cast("dnnl::engine::kind") int akind, @Cast("size_t") long index);
 
 // #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
 // #endif

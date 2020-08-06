@@ -35,6 +35,9 @@ public class PyArrayMultiIterObject extends Pointer {
     @Override public PyArrayMultiIterObject position(long position) {
         return (PyArrayMultiIterObject)super.position(position);
     }
+    @Override public PyArrayMultiIterObject getPointer(long i) {
+        return new PyArrayMultiIterObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyArrayMultiIterObject ob_base(PyObject setter);
         public native int numiter(); public native PyArrayMultiIterObject numiter(int setter);                 /* number of iters */

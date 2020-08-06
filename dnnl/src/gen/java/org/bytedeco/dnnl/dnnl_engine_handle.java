@@ -35,6 +35,9 @@ public class dnnl_engine_handle extends Pointer {
     @Override public dnnl_engine_handle position(long position) {
         return (dnnl_engine_handle)super.position(position);
     }
+    @Override public dnnl_engine_handle getPointer(long i) {
+        return new dnnl_engine_handle(this).position(position + i);
+    }
 
     /** Constructs an empty handle object.
      * 
@@ -94,9 +97,9 @@ public class dnnl_engine_handle extends Pointer {
     ///
     public native @Name("operator dnnl_engine_t") dnnl_engine asDnnl_engine();
 
-    /** Checks whether the object is empty.
+    /** Checks whether the object is not empty.
      * 
-     *  @return Whether the object is empty. */
+     *  @return Whether the object is not empty. */
     
     ///
     public native @Cast("bool") @Name("operator bool") boolean asBoolean();

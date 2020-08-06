@@ -67,6 +67,8 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/:$SCIPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools
+
 # setup.py install doesn't accept absolute paths on Windows
 PYTHONNOUSERSITE=1 "$PYTHON_BIN_PATH" setup.py install --prefix ..
 

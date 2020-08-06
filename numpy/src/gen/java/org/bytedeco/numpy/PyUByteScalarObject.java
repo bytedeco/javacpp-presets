@@ -30,6 +30,9 @@ public class PyUByteScalarObject extends Pointer {
     @Override public PyUByteScalarObject position(long position) {
         return (PyUByteScalarObject)super.position(position);
     }
+    @Override public PyUByteScalarObject getPointer(long i) {
+        return new PyUByteScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyUByteScalarObject ob_base(PyObject setter);
         public native @Cast("unsigned char") byte obval(); public native PyUByteScalarObject obval(byte setter);

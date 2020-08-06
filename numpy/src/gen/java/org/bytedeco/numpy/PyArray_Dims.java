@@ -29,6 +29,9 @@ public class PyArray_Dims extends Pointer {
     @Override public PyArray_Dims position(long position) {
         return (PyArray_Dims)super.position(position);
     }
+    @Override public PyArray_Dims getPointer(long i) {
+        return new PyArray_Dims(this).position(position + i);
+    }
 
         public native @Cast("npy_intp*") SizeTPointer ptr(); public native PyArray_Dims ptr(SizeTPointer setter);
         public native int len(); public native PyArray_Dims len(int setter);

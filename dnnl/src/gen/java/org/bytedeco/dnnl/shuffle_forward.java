@@ -33,6 +33,9 @@ public class shuffle_forward extends primitive {
     @Override public shuffle_forward position(long position) {
         return (shuffle_forward)super.position(position);
     }
+    @Override public shuffle_forward getPointer(long i) {
+        return new shuffle_forward(this).position(position + i);
+    }
 
     /** Descriptor for a shuffle forward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -42,32 +45,24 @@ public class shuffle_forward extends primitive {
     
         
         ///
-        ///
-        ///
         public native @ByRef dnnl_shuffle_desc_t data(); public native desc data(dnnl_shuffle_desc_t setter);
 
         /** Constructs a descriptor for a shuffle forward propagation
          *  primitive.
          * 
-         *  Inputs:
-         *   - {@code src} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         * 
-         *  @param prop_kind Propagation kind. Possible values are
+         *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param data_desc Source and destination memory descriptor.
          *  @param axis The axis along which the data is shuffled.
          *  @param group_size Shuffle group size. */
-        public desc(prop_kind prop_kind, @Const @ByRef memory.desc data_desc, int axis,
-                        int group_size) { super((Pointer)null); allocate(prop_kind, data_desc, axis, group_size); }
-        private native void allocate(prop_kind prop_kind, @Const @ByRef memory.desc data_desc, int axis,
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc, int axis,
+                        int group_size) { super((Pointer)null); allocate(aprop_kind, data_desc, axis, group_size); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc, int axis,
                         int group_size);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc data_desc, int axis,
-                        int group_size) { super((Pointer)null); allocate(prop_kind, data_desc, axis, group_size); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc data_desc, int axis,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc, int axis,
+                        int group_size) { super((Pointer)null); allocate(aprop_kind, data_desc, axis, group_size); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc, int axis,
                         int group_size);
     }
 
@@ -82,6 +77,9 @@ public class shuffle_forward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -92,9 +90,9 @@ public class shuffle_forward extends primitive {
         /** Constructs a primitive descriptor for a shuffle forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a shuffle forward propagation
+         *  @param adesc Descriptor for a shuffle forward propagation
          *      primitive.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param attr Primitive attributes to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
@@ -102,14 +100,14 @@ public class shuffle_forward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, attr, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, attr, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a shuffle forward propagation
          *  primitive from a C API primitive descriptor that must have a

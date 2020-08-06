@@ -28,6 +28,9 @@ public class dnnl_blocking_desc_t extends Pointer {
     @Override public dnnl_blocking_desc_t position(long position) {
         return (dnnl_blocking_desc_t)super.position(position);
     }
+    @Override public dnnl_blocking_desc_t getPointer(long i) {
+        return new dnnl_blocking_desc_t(this).position(position + i);
+    }
 
     /** The strides between the outermost blocks.
      *  In case of plain (non-blocked) formats the strides between dimensions. */

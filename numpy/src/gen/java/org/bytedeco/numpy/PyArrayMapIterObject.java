@@ -35,6 +35,9 @@ public class PyArrayMapIterObject extends Pointer {
     @Override public PyArrayMapIterObject position(long position) {
         return (PyArrayMapIterObject)super.position(position);
     }
+    @Override public PyArrayMapIterObject getPointer(long i) {
+        return new PyArrayMapIterObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyArrayMapIterObject ob_base(PyObject setter);
         /*

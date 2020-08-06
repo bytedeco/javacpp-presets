@@ -29,6 +29,9 @@ public class NpyAuxData extends PyObject {
     @Override public NpyAuxData position(long position) {
         return (NpyAuxData)super.position(position);
     }
+    @Override public NpyAuxData getPointer(long i) {
+        return new NpyAuxData(this).position(position + i);
+    }
 
     public native @Name("free") NpyAuxData_FreeFunc _free(); public native NpyAuxData _free(NpyAuxData_FreeFunc setter);
     public native NpyAuxData_CloneFunc clone(); public native NpyAuxData clone(NpyAuxData_CloneFunc setter);

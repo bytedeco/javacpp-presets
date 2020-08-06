@@ -34,6 +34,9 @@ public class reorder extends primitive {
     @Override public reorder position(long position) {
         return (reorder)super.position(position);
     }
+    @Override public reorder getPointer(long i) {
+        return new reorder(this).position(position + i);
+    }
 
     /** Primitive descriptor for a reorder primitive. */
     public static class primitive_desc extends primitive_desc_base {
@@ -59,17 +62,18 @@ public class reorder extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
 
         /** Default constructor. Produces an empty object. */
 
         /** Constructs a primitive descriptor for reorder primitive.
          * 
-         *  Inputs:
-         *   - {@code src} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
+         *  \note
+         *      If \p allow_empty is true, the constructor does not throw if a
+         *      primitive descriptor cannot be created.
          * 
          *  @param src_engine Engine on which the source memory object will be
          *      located.
@@ -77,15 +81,21 @@ public class reorder extends primitive {
          *  @param dst_engine Engine on which the destination memory object
          *      will be located.
          *  @param dst_md Destination memory descriptor.
-         *  @param attr Primitive attributes to use (optional). */
+         *  @param attr Primitive attributes to use (optional).
+         *  @param allow_empty A flag signifying whether construction is allowed
+         *      to fail without throwing an exception. In this case an empty
+         *      object will be produced. This flag is optional and defaults to
+         *      false. */
         
         ///
         public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
                         @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md, attr); }
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md, attr, allow_empty); }
         private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
                         @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
                         @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md); }
         private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
@@ -97,13 +107,19 @@ public class reorder extends primitive {
          *      memory descriptor and engine.
          *  @param dst Destination memory object. It is used to obtain the
          *      destination memory descriptor and engine.
-         *  @param attr Primitive attributes to use (optional). */
+         *  @param attr Primitive attributes to use (optional).
+         *  @param allow_empty A flag signifying whether construction is allowed
+         *      to fail without throwing an exception. In this case an empty
+         *      object will be produced. This flag is optional and defaults to
+         *      false. */
         
         ///
         public primitive_desc(@Const @ByRef memory src, @Const @ByRef memory dst,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(src, dst, attr); }
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(src, dst, attr, allow_empty); }
         private native void allocate(@Const @ByRef memory src, @Const @ByRef memory dst,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef memory src, @Const @ByRef memory dst) { super((Pointer)null); allocate(src, dst); }
         private native void allocate(@Const @ByRef memory src, @Const @ByRef memory dst);
 
@@ -158,9 +174,9 @@ public class reorder extends primitive {
 
     /** Executes the reorder primitive.
      * 
-     *  @param stream Stream object. The stream must belong to the same engine
+     *  @param astream Stream object. The stream must belong to the same engine
      *      as the primitive.
      *  @param src Source memory object.
      *  @param dst Destination memory object. */
-    public native void execute(@Const @ByRef stream stream, @ByRef memory src, @ByRef memory dst);
+    public native void execute(@Const @ByRef stream astream, @ByRef memory src, @ByRef memory dst);
 }

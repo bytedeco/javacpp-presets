@@ -26,6 +26,9 @@ public class dnnl_wino_desc_t extends Pointer {
     @Override public dnnl_wino_desc_t position(long position) {
         return (dnnl_wino_desc_t)super.position(position);
     }
+    @Override public dnnl_wino_desc_t getPointer(long i) {
+        return new dnnl_wino_desc_t(this).position(position + i);
+    }
 
     public native @Cast("dnnl_wino_memory_format_t") int wino_format(); public native dnnl_wino_desc_t wino_format(int setter);
     public native int r(); public native dnnl_wino_desc_t r(int setter);

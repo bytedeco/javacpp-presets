@@ -29,6 +29,9 @@ public class PyArray_ArrayDescr extends Pointer {
     @Override public PyArray_ArrayDescr position(long position) {
         return (PyArray_ArrayDescr)super.position(position);
     }
+    @Override public PyArray_ArrayDescr getPointer(long i) {
+        return new PyArray_ArrayDescr(this).position(position + i);
+    }
 
         public native PyArray_Descr base(); public native PyArray_ArrayDescr base(PyArray_Descr setter);
         public native PyObject shape(); public native PyArray_ArrayDescr shape(PyObject setter);       /* a tuple */

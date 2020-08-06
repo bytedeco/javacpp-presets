@@ -29,5 +29,8 @@ public class npy_cdouble extends Pointer {
     @Override public npy_cdouble position(long position) {
         return (npy_cdouble)super.position(position);
     }
+    @Override public npy_cdouble getPointer(long i) {
+        return new npy_cdouble(this).position(position + i);
+    }
  public native double real(); public native npy_cdouble real(double setter);
 public native double imag(); public native npy_cdouble imag(double setter); }

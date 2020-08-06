@@ -29,6 +29,9 @@ public class dnnl_memory_desc_t extends Pointer {
     @Override public dnnl_memory_desc_t position(long position) {
         return (dnnl_memory_desc_t)super.position(position);
     }
+    @Override public dnnl_memory_desc_t getPointer(long i) {
+        return new dnnl_memory_desc_t(this).position(position + i);
+    }
 
     /** Number of dimensions */
     

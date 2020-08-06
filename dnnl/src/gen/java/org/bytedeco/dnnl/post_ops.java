@@ -42,6 +42,9 @@ public class post_ops extends dnnl_post_ops_handle {
     @Override public post_ops position(long position) {
         return (post_ops)super.position(position);
     }
+    @Override public post_ops getPointer(long i) {
+        return new post_ops(this).position(position + i);
+    }
 
 
     /** Constructs an empty sequence of post-ops. */
@@ -53,6 +56,8 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param index Index of the post-op to return the kind for.
      *  @return Primitive kind of the post-op at the specified index. */
     
+    ///
+    ///
     ///
     ///
     ///
@@ -76,14 +81,24 @@ public class post_ops extends dnnl_post_ops_handle {
      *  the computations would be {@code dst[:] := scale * dst[:] + op(...)}
      *  instead of {@code dst[:] := op(...)}.
      * 
+     *  If \p data_type is specified, original dst tensor will be reinterpreted
+     *  as a tensor with provided data type. Since it is reinterpretation,
+     *  data_type and dst data type should have same size.
+     *  As a result, computations would be:
+     * 
+     *      dst[:] <- scale * as_data_type(dst[:]) + op(...)
+     *                                         // instead of dst[:] <- op(...)
+     * 
      *  \note
      *      This post-op executes in-place and does not change the
      *      destination layout.
      * 
-     *  @param scale Scaling factor. */
+     *  @param scale Scaling factor.
+     *  @param data_type Data type. */
     
     ///
-    public native void append_sum(float scale/*=1.*/);
+    public native void append_sum(float scale/*=1.f*/,
+                memory.data_type data_type/*=dnnl::memory::data_type::undef*/);
     public native void append_sum();
 
     /** Returns the parameters of an accumulation (sum) post-op.
@@ -92,11 +107,25 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param scale Scaling factor of the sum post-op. */
     
     ///
-    ///
-    ///
     public native void get_params_sum(int index, @ByRef FloatPointer scale);
     public native void get_params_sum(int index, @ByRef FloatBuffer scale);
     public native void get_params_sum(int index, @ByRef float[] scale);
+
+    /** Returns the parameters of an accumulation (sum) post-op.
+     * 
+     *  @param index Index of the sum post-op.
+     *  @param scale Scaling factor of the sum post-op.
+     *  @param data_type Data type of the sum post-op. */
+    
+    ///
+    ///
+    ///
+    public native void get_params_sum(
+                int index, @ByRef FloatPointer scale, memory.data_type data_type);
+    public native void get_params_sum(
+                int index, @ByRef FloatBuffer scale, memory.data_type data_type);
+    public native void get_params_sum(
+                int index, @ByRef float[] scale, memory.data_type data_type);
 
     /** Appends an elementwise post-op.
      * 
@@ -108,21 +137,21 @@ public class post_ops extends dnnl_post_ops_handle {
      *  parameters.
      * 
      *  @param scale Scaling factor.
-     *  @param algorithm Elementwise algorithm.
+     *  @param aalgorithm Elementwise algorithm.
      *  @param alpha Alpha parameter for the elementwise algorithm.
      *  @param beta Beta parameter for the elementwise algorithm. */
     
     ///
     public native void append_eltwise(
-                float scale, algorithm algorithm, float alpha, float beta);
+                float scale, algorithm aalgorithm, float alpha, float beta);
     public native void append_eltwise(
-                float scale, @Cast("dnnl::algorithm") int algorithm, float alpha, float beta);
+                float scale, @Cast("dnnl::algorithm") int aalgorithm, float alpha, float beta);
 
     /** Returns parameters of an elementwise post-up.
      * 
      *  @param index Index of the post-op.
      *  @param scale Output scaling factor.
-     *  @param algorithm Output elementwise algorithm kind.
+     *  @param aalgorithm Output elementwise algorithm kind.
      *  @param alpha Output alpha parameter for the elementwise algorithm.
      *  @param beta Output beta parameter for the elementwise algorithm. */
     
@@ -133,11 +162,11 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
-    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("dnnl::algorithm*") IntPointer algorithm,
+    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm,
                 @ByRef FloatPointer alpha, @ByRef FloatPointer beta);
-    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("dnnl::algorithm*") IntBuffer algorithm,
+    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm,
                 @ByRef FloatBuffer alpha, @ByRef FloatBuffer beta);
-    public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("dnnl::algorithm*") int[] algorithm,
+    public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm,
                 @ByRef float[] alpha, @ByRef float[] beta);
 
     /** Appends a depthwise post-op convolution with stride 1.

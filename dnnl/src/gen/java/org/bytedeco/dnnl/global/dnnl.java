@@ -272,182 +272,194 @@ public static final int
     dnnl_aBc4b = 36,
     dnnl_ABc4b16a4b = 37,
     dnnl_ABc2b8a4b = 38,
-    dnnl_ABc4b4a = 39,
-    dnnl_ABc8a16b2a = 40,
-    dnnl_ABc8a8b = 41,
-    dnnl_ABc8a4b = 42,
+    dnnl_ABc16b16a4b = 39,
+    dnnl_ABc16b16a2b = 40,
+    dnnl_ABc4b4a = 41,
+    dnnl_ABc8a16b2a = 42,
+    dnnl_ABc8a8b = 43,
+    dnnl_ABc8a4b = 44,
     /** 3D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBc8b = 43,
-    dnnl_ABc8b16a2b = 44,
-    dnnl_BAc8a16b2a = 45,
-    dnnl_ABc8b8a = 46,
-    dnnl_Abcd16a = 47,
-    dnnl_Abcd8a = 48,
-    dnnl_ABcd16a16b = 49,
-    dnnl_Abcd32a = 50,
-    dnnl_ABcd32a32b = 51,
+    dnnl_aBc8b = 45,
+    dnnl_ABc8b16a2b = 46,
+    dnnl_BAc8a16b2a = 47,
+    dnnl_ABc8b8a = 48,
+    dnnl_Abcd16a = 49,
+    dnnl_Abcd8a = 50,
+    dnnl_ABcd16a16b = 51,
+    dnnl_Abcd32a = 52,
+    dnnl_ABcd32a32b = 53,
     /** 4D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcd16b = 52,
-    dnnl_ABcd16b16a = 53,
-    dnnl_aBCd16b16c = 54,
-    dnnl_aBCd16c16b = 55,
-    dnnl_Abcd4a = 56,
+    dnnl_aBcd16b = 54,
+    dnnl_ABcd16b16a = 55,
+    dnnl_aBCd16b16c = 56,
+    dnnl_aBCd16c16b = 57,
+    dnnl_Abcd4a = 58,
     /** 4D tensor blocked by 2nd dimension with block size 32 */
-    dnnl_aBcd32b = 57,
+    dnnl_aBcd32b = 59,
     /** 4D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcd4b = 58,
-    dnnl_ABcd4b16a4b = 59,
-    dnnl_ABcd4b4a = 60,
-    dnnl_ABcd4a4b = 61,
-    dnnl_aBCd2c4b2c = 62,
-    dnnl_aBCd4b8c2b = 63,
-    dnnl_aBCd4c16b4c = 64,
-    dnnl_aBCd2c8b4c = 65,
-    dnnl_aBCd4c4b = 66,
-    dnnl_aBCd4b4c = 67,
-    dnnl_ABcd8a16b2a = 68,
-    dnnl_ABcd2b8a4b = 69,
-    dnnl_ABcd8a8b = 70,
-    dnnl_ABcd8a4b = 71,
+    dnnl_aBcd4b = 60,
+    dnnl_ABcd4b16a4b = 61,
+    dnnl_ABcd16b16a4b = 62,
+    dnnl_ABcd16b16a2b = 63,
+    dnnl_ABcd4b4a = 64,
+    dnnl_ABcd4a4b = 65,
+    dnnl_aBCd2c4b2c = 66,
+    dnnl_aBCd4b8c2b = 67,
+    dnnl_aBCd4c16b4c = 68,
+    dnnl_aBCd2c8b4c = 69,
+    dnnl_aBCd16c16b4c = 70,
+    dnnl_aBCd16c16b2c = 71,
+    dnnl_aBCd4c4b = 72,
+    dnnl_aBCd4b4c = 73,
+    dnnl_ABcd8a16b2a = 74,
+    dnnl_ABcd2b8a4b = 75,
+    dnnl_ABcd8a8b = 76,
+    dnnl_ABcd8a4b = 77,
     /** 4D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBcd8b = 72,
-    dnnl_aBCd4c8b2c = 73,
-    dnnl_ABcd8b16a2b = 74,
-    dnnl_aBCd8b16c2b = 75,
-    dnnl_BAcd8a16b2a = 76,
+    dnnl_aBcd8b = 78,
+    dnnl_aBCd4c8b2c = 79,
+    dnnl_ABcd8b16a2b = 80,
+    dnnl_aBCd8b16c2b = 81,
+    dnnl_BAcd8a16b2a = 82,
     /** 4D tensor blocked by 1st and 2nd dimension with block size 8 */
-    dnnl_ABcd8b8a = 77,
-    dnnl_aBCd8b8c = 78,
-    dnnl_aBCd8b4c = 79,
-    dnnl_aBCd8c16b2c = 80,
-    dnnl_ABcde8a16b2a = 81,
-    dnnl_aCBd8b16c2b = 82,
-    dnnl_aBCd8c8b = 83,
-    dnnl_Abcde16a = 84,
-    dnnl_Abcde32a = 85,
-    dnnl_ABcde16a16b = 86,
-    dnnl_BAcde8a16b2a = 87,
+    dnnl_ABcd8b8a = 83,
+    dnnl_aBCd8b8c = 84,
+    dnnl_aBCd8b4c = 85,
+    dnnl_aBCd8c16b2c = 86,
+    dnnl_ABcde8a16b2a = 87,
+    dnnl_aCBd8b16c2b = 88,
+    dnnl_aBCd8c8b = 89,
+    dnnl_Abcde16a = 90,
+    dnnl_Abcde32a = 91,
+    dnnl_ABcde16a16b = 92,
+    dnnl_BAcde8a16b2a = 93,
     /** 4D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCd2b4c2b = 88,
+    dnnl_aBCd2b4c2b = 94,
     /** 5D tensor blocked by 1st dimension with block size 16 */
-    dnnl_ABcde4b16a4b = 89,
+    dnnl_ABcde4b16a4b = 95,
     /** 5D tensor blocked by 1st dimension with block size 8 */
-    dnnl_ABcde2b8a4b = 90,
+    dnnl_ABcde2b8a4b = 96,
     /** 5D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcde16b = 91,
-    dnnl_ABcde16b16a = 92,
-    dnnl_aBCde16b16c = 93,
-    dnnl_aBCde16c16b = 94,
-    dnnl_aBCde2c8b4c = 95,
-    dnnl_Abcde4a = 96,
+    dnnl_aBcde16b = 97,
+    dnnl_ABcde16b16a = 98,
+    dnnl_aBCde16b16c = 99,
+    dnnl_aBCde16c16b = 100,
+    dnnl_aBCde2c8b4c = 101,
+    dnnl_Abcde4a = 102,
     /** 5D tensor blocked by 2nd dimension with block size 32 */
-    dnnl_aBcde32b = 97,
+    dnnl_aBcde32b = 103,
     /** 5D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcde4b = 98,
-    dnnl_ABcde4b4a = 99,
-    dnnl_ABcde4a4b = 100,
-    dnnl_aBCde4b4c = 101,
-    dnnl_aBCde2c4b2c = 102,
-    dnnl_aBCde4b8c2b = 103,
-    dnnl_aBCde4c16b4c = 104,
-    dnnl_aBCde4c4b = 105,
-    dnnl_Abcde8a = 106,
-    dnnl_ABcde8a8b = 107,
-    dnnl_ABcde8a4b = 108,
-    dnnl_BAcde16b16a = 109,
+    dnnl_aBcde4b = 104,
+    dnnl_ABcde4b4a = 105,
+    dnnl_ABcde4a4b = 106,
+    dnnl_aBCde4b4c = 107,
+    dnnl_aBCde2c4b2c = 108,
+    dnnl_aBCde4b8c2b = 109,
+    dnnl_aBCde4c16b4c = 110,
+    dnnl_aBCde16c16b4c = 111,
+    dnnl_aBCde16c16b2c = 112,
+    dnnl_aBCde4c4b = 113,
+    dnnl_Abcde8a = 114,
+    dnnl_ABcde8a8b = 115,
+    dnnl_ABcde8a4b = 116,
+    dnnl_BAcde16b16a = 117,
     /** 5D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBcde8b = 110,
-    dnnl_ABcde8b16a2b = 111,
-    dnnl_aBCde8b16c2b = 112,
-    dnnl_aBCde4c8b2c = 113,
-    dnnl_aCBde8b16c2b = 114,
-    dnnl_ABcde8b8a = 115,
-    dnnl_ABcde32a32b = 116,
-    dnnl_aBCde8b8c = 117,
-    dnnl_aBCde8b4c = 118,
-    dnnl_ABc4a8b8a4b = 119,
-    dnnl_ABcd4a8b8a4b = 120,
-    dnnl_ABcde4a8b8a4b = 121,
-    dnnl_BAc4b8a8b4a = 122,
-    dnnl_BAcd4b8a8b4a = 123,
-    dnnl_BAcde4b8a8b4a = 124,
-    dnnl_ABcd2a8b8a2b = 125,
-    dnnl_aBCd4b8c8b4c = 126,
-    dnnl_aBCde4b8c8b4c = 127,
-    dnnl_aBCde2b8c8b2c = 128,
-    dnnl_aBCde8c16b2c = 129,
-    dnnl_aBCde8c8b = 130,
+    dnnl_aBcde8b = 118,
+    dnnl_ABcde8b16a2b = 119,
+    dnnl_aBCde8b16c2b = 120,
+    dnnl_aBCde4c8b2c = 121,
+    dnnl_aCBde8b16c2b = 122,
+    dnnl_ABcde8b8a = 123,
+    dnnl_ABcde32a32b = 124,
+    dnnl_aBCde8b8c = 125,
+    dnnl_aBCde8b4c = 126,
+    dnnl_ABc4a8b8a4b = 127,
+    dnnl_ABcd4a8b8a4b = 128,
+    dnnl_ABcde4a8b8a4b = 129,
+    dnnl_BAc4b8a8b4a = 130,
+    dnnl_BAcd4b8a8b4a = 131,
+    dnnl_BAcde4b8a8b4a = 132,
+    dnnl_ABcd2a8b8a2b = 133,
+    dnnl_aBCd4b8c8b4c = 134,
+    dnnl_aBCde4b8c8b4c = 135,
+    dnnl_aBCde2b8c8b2c = 136,
+    dnnl_aBCde8c16b2c = 137,
+    dnnl_aBCde8c8b = 138,
     /** 5D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCde2b4c2b = 131,
+    dnnl_aBCde2b4c2b = 139,
     /** 6D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcdef16b = 132,
-    dnnl_aBCdef16b16c = 133,
-    dnnl_aBCdef16c16b = 134,
-    dnnl_aBCdef4c16b4c = 135,
+    dnnl_aBcdef16b = 140,
+    dnnl_aBCdef16b16c = 141,
+    dnnl_aBCdef16c16b = 142,
+    dnnl_aBCdef4c16b4c = 143,
     /** 6D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBCdef2c8b4c = 136,
-    dnnl_aBCdef4c8b2c = 137,
+    dnnl_aBCdef2c8b4c = 144,
+    dnnl_aBCdef4c8b2c = 145,
     /** 6D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCdef2b4c2b = 138,
+    dnnl_aBCdef2b4c2b = 146,
     /** 6D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcdef4b = 139,
-    dnnl_aBCdef4c4b = 140,
-    dnnl_aBCdef4b4c = 141,
-    dnnl_aBCdef2c4b2c = 142,
-    dnnl_aBCdef4b8c2b = 143,
-    dnnl_aBCdef8b8c = 144,
-    dnnl_aBCdef8b4c = 145,
-    dnnl_aBCdef8c16b2c = 146,
-    dnnl_aBCdef4b8c8b4c = 147,
-    dnnl_aBCdef8b16c2b = 148,
-    dnnl_aCBdef8b16c2b = 149,
-    dnnl_aBCdef8c8b = 150,
-    dnnl_aBdc16b = 151,
-    dnnl_aBdC16b2c = 152,
-    dnnl_aBdc4b = 153,
-    dnnl_aBdc8b = 154,
-    dnnl_aBdec16b = 155,
-    dnnl_aBdeC16b2c = 156,
-    dnnl_aBdec32b = 157,
-    dnnl_aBdec4b = 158,
-    dnnl_aBdec8b = 159,
-    dnnl_aBdefc16b = 160,
-    dnnl_aBdefC16b2c = 161,
-    dnnl_aCBdef16c16b = 162,
-    dnnl_aBdefc4b = 163,
-    dnnl_aBdefc8b = 164,
-    dnnl_Abcdef16a = 165,
-    dnnl_Abcdef32a = 166,
-    dnnl_Acb16a = 167,
-    dnnl_AcB16a2b = 168,
-    dnnl_Acb4a = 169,
-    dnnl_Acb8a = 170,
-    dnnl_aCBd16b16c = 171,
-    dnnl_aCBd16c16b = 172,
-    dnnl_aCBde16b16c = 173,
-    dnnl_aCBde16c16b = 174,
-    dnnl_Acdb16a = 175,
-    dnnl_AcdB16a2b = 176,
-    dnnl_Acdb32a = 177,
-    dnnl_Acdb4a = 178,
-    dnnl_Acdb8a = 179,
-    dnnl_Acdeb16a = 180,
-    dnnl_AcdeB16a2b = 181,
-    dnnl_Acdeb4a = 182,
-    dnnl_Acdeb8a = 183,
-    dnnl_BAc16a16b = 184,
-    dnnl_BAc16b16a = 185,
-    dnnl_BAcd16a16b = 186,
-    dnnl_BAcd16b16a = 187,
-    dnnl_aCBd4c8b8c4b = 188,
-    dnnl_aCBde4c8b8c4b = 189,
-    dnnl_aCBdef4c8b8c4b = 190,
-    dnnl_BAcde16a16b = 191,
-    dnnl_aCBdef16b16c = 192,
+    dnnl_aBcdef4b = 147,
+    dnnl_aBCdef4c4b = 148,
+    dnnl_aBCdef4b4c = 149,
+    dnnl_aBCdef2c4b2c = 150,
+    dnnl_aBCdef4b8c2b = 151,
+    dnnl_aBCdef8b8c = 152,
+    dnnl_aBCdef8b4c = 153,
+    dnnl_aBCdef8c16b2c = 154,
+    dnnl_aBCdef4b8c8b4c = 155,
+    dnnl_aBCdef8b16c2b = 156,
+    dnnl_aCBdef8b16c2b = 157,
+    dnnl_aBCdef8c8b = 158,
+    dnnl_aBdc16b = 159,
+    dnnl_aBdC16b2c = 160,
+    dnnl_aBdC16b4c = 161,
+    dnnl_aBdc4b = 162,
+    dnnl_aBdc8b = 163,
+    dnnl_aBdec16b = 164,
+    dnnl_aBdeC16b2c = 165,
+    dnnl_aBdeC16b4c = 166,
+    dnnl_aBdec32b = 167,
+    dnnl_aBdec4b = 168,
+    dnnl_aBdec8b = 169,
+    dnnl_aBdefc16b = 170,
+    dnnl_aBdefC16b2c = 171,
+    dnnl_aCBdef16c16b = 172,
+    dnnl_aBdefc4b = 173,
+    dnnl_aBdefc8b = 174,
+    dnnl_Abcdef16a = 175,
+    dnnl_Abcdef32a = 176,
+    dnnl_Acb16a = 177,
+    dnnl_AcB16a2b = 178,
+    dnnl_AcB16a4b = 179,
+    dnnl_Acb4a = 180,
+    dnnl_Acb8a = 181,
+    dnnl_aCBd16b16c = 182,
+    dnnl_aCBd16c16b = 183,
+    dnnl_aCBde16b16c = 184,
+    dnnl_aCBde16c16b = 185,
+    dnnl_Acdb16a = 186,
+    dnnl_AcdB16a2b = 187,
+    dnnl_AcdB16a4b = 188,
+    dnnl_Acdb32a = 189,
+    dnnl_Acdb4a = 190,
+    dnnl_Acdb8a = 191,
+    dnnl_Acdeb16a = 192,
+    dnnl_AcdeB16a2b = 193,
+    dnnl_Acdeb4a = 194,
+    dnnl_Acdeb8a = 195,
+    dnnl_BAc16a16b = 196,
+    dnnl_BAc16b16a = 197,
+    dnnl_BAcd16a16b = 198,
+    dnnl_BAcd16b16a = 199,
+    dnnl_aCBd4c8b8c4b = 200,
+    dnnl_aCBde4c8b8c4b = 201,
+    dnnl_aCBdef4c8b8c4b = 202,
+    dnnl_BAcde16a16b = 203,
+    dnnl_aCBdef16b16c = 204,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 193,
+    dnnl_format_tag_last = 205,
 
     // Aliases
 
@@ -621,6 +633,8 @@ public static final int
     dnnl_Oiw16o = dnnl_Abc16a,
     dnnl_OIw4i16o4i = dnnl_ABc4b16a4b,
     dnnl_OIw2i8o4i = dnnl_ABc2b8a4b,
+    dnnl_OIw16i16o4i = dnnl_ABc16b16a4b,
+    dnnl_OIw16i16o2i = dnnl_ABc16b16a2b,
     dnnl_OIw4i4o = dnnl_ABc4b4a,
     dnnl_OIw4o4i = dnnl_ABc4a4b,
     dnnl_Oiw4o = dnnl_Abc4a,
@@ -632,6 +646,7 @@ public static final int
     dnnl_OIw8o4i = dnnl_ABc8a4b,
     dnnl_Owi16o = dnnl_Acb16a,
     dnnl_OwI16o2i = dnnl_AcB16a2b,
+    dnnl_OwI16o4i = dnnl_AcB16a4b,
     dnnl_Owi4o = dnnl_Acb4a,
     dnnl_Owi8o = dnnl_Acb8a,
 
@@ -640,6 +655,7 @@ public static final int
     dnnl_IOhw16o16i = dnnl_BAcd16a16b,
     dnnl_Ohwi16o = dnnl_Acdb16a,
     dnnl_OhwI16o2i = dnnl_AcdB16a2b,
+    dnnl_OhwI16o4i = dnnl_AcdB16a4b,
     dnnl_Ohwi32o = dnnl_Acdb32a,
     dnnl_Ohwi4o = dnnl_Acdb4a,
     dnnl_Ohwi8o = dnnl_Acdb8a,
@@ -647,6 +663,8 @@ public static final int
     dnnl_OIhw16o16i = dnnl_ABcd16a16b,
     dnnl_Oihw16o = dnnl_Abcd16a,
     dnnl_OIhw4i16o4i = dnnl_ABcd4b16a4b,
+    dnnl_OIhw16i16o4i = dnnl_ABcd16b16a4b,
+    dnnl_OIhw16i16o2i = dnnl_ABcd16b16a2b,
     dnnl_OIhw4i4o = dnnl_ABcd4b4a,
     dnnl_OIhw4o4i = dnnl_ABcd4a4b,
     dnnl_Oihw4o = dnnl_Abcd4a,
@@ -691,6 +709,8 @@ public static final int
     dnnl_gOiw16o = dnnl_aBcd16b,
     dnnl_gOIw4i16o4i = dnnl_aBCd4c16b4c,
     dnnl_gOIw2i8o4i = dnnl_aBCd2c8b4c,
+    dnnl_gOIw16i16o4i = dnnl_aBCd16c16b4c,
+    dnnl_gOIw16i16o2i = dnnl_aBCd16c16b2c,
     dnnl_gOIw4i4o = dnnl_aBCd4c4b,
     dnnl_gOIw4o4i = dnnl_aBCd4b4c,
     dnnl_gOiw4o = dnnl_aBcd4b,
@@ -702,6 +722,7 @@ public static final int
     dnnl_gOIw8o4i = dnnl_aBCd8b4c,
     dnnl_gOwi16o = dnnl_aBdc16b,
     dnnl_gOwI16o2i = dnnl_aBdC16b2c,
+    dnnl_gOwI16o4i = dnnl_aBdC16b4c,
     dnnl_gOwi4o = dnnl_aBdc4b,
     dnnl_gOwi8o = dnnl_aBdc8b,
     dnnl_Goiw32g = dnnl_Abcd32a,
@@ -715,6 +736,7 @@ public static final int
     dnnl_gIOhw16o16i = dnnl_aCBde16b16c,
     dnnl_gOhwi16o = dnnl_aBdec16b,
     dnnl_gOhwI16o2i = dnnl_aBdeC16b2c,
+    dnnl_gOhwI16o4i = dnnl_aBdeC16b4c,
     dnnl_gOhwi32o = dnnl_aBdec32b,
     dnnl_gOhwi4o = dnnl_aBdec4b,
     dnnl_gOhwi8o = dnnl_aBdec8b,
@@ -724,6 +746,8 @@ public static final int
     dnnl_gOihw16o = dnnl_aBcde16b,
     dnnl_gOIhw2i8o4i = dnnl_aBCde2c8b4c,
     dnnl_gOIhw4i16o4i = dnnl_aBCde4c16b4c,
+    dnnl_gOIhw16i16o4i = dnnl_aBCde16c16b4c,
+    dnnl_gOIhw16i16o2i = dnnl_aBCde16c16b2c,
     dnnl_gOIhw4i4o = dnnl_aBCde4c4b,
     dnnl_gOIhw4o4i = dnnl_aBCde4b4c,
     dnnl_gOihw4o = dnnl_aBcde4b,
@@ -859,7 +883,11 @@ public static final int
     /** A matrix multiplication primitive. */
     dnnl_matmul = 18,
     /** A resampling primitive. */
-    dnnl_resampling = 19;
+    dnnl_resampling = 19,
+
+    /** Parameter to allow internal only primitives without undefined behavior.
+     *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
+    dnnl_primitive_kind_max = 0x7fff;
 
 /** Kinds of algorithms. */
 /** enum dnnl_alg_kind_t */
@@ -916,6 +944,8 @@ public static final int
     dnnl_eltwise_pow = 0x20,
     /** Eltwise: erf-based gelu */
     dnnl_eltwise_gelu_erf = 0x30,
+    /** Eltwise: round */
+    dnnl_eltwise_round = 0x40,
     /** Eltwise: ReLU (dst for backward) */
     dnnl_eltwise_relu_use_dst_for_bwd = 0x100,
     /** Eltwise: hyperbolic tangent non-linearity (tanh) (dst for backward) */
@@ -1635,7 +1665,10 @@ public static final int
     /** scratchpad memory desc */
     dnnl_query_scratchpad_md = 136,
     /** memory desc of an execute argument */
-    dnnl_query_exec_arg_md = 255;
+    dnnl_query_exec_arg_md = 255,
+
+    // Max value to prevent UB for internal use only dnnl_query_t
+    dnnl_query_max = 0x7fff;
 
 /** \} dnnl_api_primitives_common
  <p>
@@ -1716,7 +1749,7 @@ public static final long DNNL_JIT_PROFILE_LINUX_PERF =
 /** CPU instruction set flags */
 /** enum dnnl_cpu_isa_t */
 public static final int
-    /** Any ISA (no restrictions) */
+    /** Any ISA (excepting those listed as initial support) */
     dnnl_cpu_isa_all = 0x0,
 
     /** Intel Streaming SIMD Extensions 4.1 (Intel SSE4.1) */
@@ -1748,7 +1781,12 @@ public static final int
     /** Intel AVX-512, Intel DL Boost and bfloat16 support
      *  for Intel Xeon Scalable processor family
      *  and Intel Core processor family. */
-    dnnl_cpu_isa_avx512_core_bf16 = 0xe7;
+    dnnl_cpu_isa_avx512_core_bf16 = 0xe7,
+
+    /** Intel AVX-512, Intel DL Boost and bfloat16 support and
+     *  Intel AMX with 8-bit integer and bfloat16 support
+     *  (initial support) */
+    dnnl_cpu_isa_avx512_core_amx = 0x3e7;
 
 /** \} dnnl_api_service
  <p>
@@ -1875,7 +1913,7 @@ public static final long DNNL_GPU_RUNTIME = DNNL_RUNTIME_NONE;
 public static final int DNNL_VERSION_MAJOR = 1;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 5;
+public static final int DNNL_VERSION_MINOR = 6;
 
 /** Patch version */
 public static final int DNNL_VERSION_PATCH = 0;
@@ -2663,8 +2701,51 @@ public static native @Cast("dnnl_primitive_kind_t") int dnnl_post_ops_get_kind(
  *      otherwise. */
 
 ///
+///
+///
+///
+///
+///
+///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_sum(
         dnnl_post_ops post_ops, float scale);
+
+/** Appends an accumulation v2 (sum) to post-ops. Prior to accumulating the
+ *  result, the previous value is multiplied by a scale.
+ * 
+ *  The kind of this post-op is #dnnl_sum.
+ * 
+ *  This feature may improve performance for cases like residual learning
+ *  blocks, where the result of convolution is accumulated to the previously
+ *  computed activations. The parameter \p scale may be used for the
+ *  integer-based computations when the result and previous activations have
+ *  different logical scaling factors.
+ * 
+ *  In the simplest case when the accumulation is the only post-op, the
+ *  computations would be:
+ * 
+ *      dst[:] <- scale * dst[:] + op(...) // instead of dst[:] <- op(...)
+ * 
+ *  If \p data_type is specified, original dst tensor will be reinterpreted
+ *  as a tensor with provided data type. Since it is reinterpretation,
+ *  data_type and dst data type should have same size.
+ *  As a result, computations would be:
+ * 
+ *      dst[:] <- scale * as_data_type(dst[:]) + op(...)
+ *                                         // instead of dst[:] <- op(...)
+ *  \note
+ *      This post-op executes in-place and does not change the
+ *      destination layout.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param scale Accumulation scaling factor.
+ *  @param data_type Accumulation data_type.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_sum_v2(
+        dnnl_post_ops post_ops, float scale, @Cast("dnnl_data_type_t") int data_type);
 
 /** Returns the parameters of an accumulation (sum) post-op.
  * 
@@ -2677,16 +2758,37 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_sum(
  *      post-op. */
 
 ///
-///
-///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum(
         @Const dnnl_post_ops post_ops, int index, FloatPointer scale);
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum(
         @Const dnnl_post_ops post_ops, int index, FloatBuffer scale);
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum(
         @Const dnnl_post_ops post_ops, int index, float[] scale);
+
+/** Returns the parameters of an accumulation (sum) post-op with
+ *  a data type parameter.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param index Index of the sum post-op.
+ *  @param scale Output accumulation scaling factor.
+ *  @param data_type Data type for accumulation.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+///
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v2(
+        @Const dnnl_post_ops post_ops, int index, FloatPointer scale,
+        @Cast("dnnl_data_type_t*") IntPointer data_type);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v2(
+        @Const dnnl_post_ops post_ops, int index, FloatBuffer scale,
+        @Cast("dnnl_data_type_t*") IntBuffer data_type);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v2(
+        @Const dnnl_post_ops post_ops, int index, float[] scale,
+        @Cast("dnnl_data_type_t*") int[] data_type);
 
 /** Appends an elementwise post-op.
  * 
@@ -3342,8 +3444,6 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_set_data_handle_v2(
  *      otherwise. */
 
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_memory_destroy(dnnl_memory memory);
 
 /** \} dnnl_api_memory
@@ -3356,12 +3456,6 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_destroy(dnnl_memory 
  <p>
  *  Creates a primitive descriptor for a reorder primitive.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param reorder_primitive_desc Output primitive descriptor.
  *  @param src_desc Source memory descriptor.
  *  @param src_engine Engine on which the source memory object will be
@@ -3373,8 +3467,6 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_destroy(dnnl_memory 
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_reorder_primitive_desc_create(
         @ByPtrPtr dnnl_primitive_desc reorder_primitive_desc,
@@ -3395,15 +3487,6 @@ public static native @Cast("dnnl_status_t") int dnnl_reorder_primitive_desc_crea
  *  Creates a primitive descriptor for an out-of-place concatenation
  *  primitive.
  * 
- *  Inputs:
- *   - {@code src[0]} (#dnnl_query_src_md, {@code 0})
- *   - {@code src[1]} (#dnnl_query_src_md, {@code 1})
- *   - ...
- *   - {@code src[n - 1]} (#dnnl_query_src_md, {@code n - 1})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param concat_primitive_desc Output primitive descriptor.
  *  @param dst_desc Destination memory descriptor.
  *  @param n Number of source parameters.
@@ -3416,8 +3499,6 @@ public static native @Cast("dnnl_status_t") int dnnl_reorder_primitive_desc_crea
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_concat_primitive_desc_create(
         @ByPtrPtr dnnl_primitive_desc concat_primitive_desc,
@@ -3437,15 +3518,6 @@ public static native @Cast("dnnl_status_t") int dnnl_concat_primitive_desc_creat
  <p>
  *  Creates a primitive descriptor for an (out-of-place) sum primitive.
  * 
- *  Inputs:
- *   - {@code src[0]} (#dnnl_query_src_md, {@code 0})
- *   - {@code src[1]} (#dnnl_query_src_md, {@code 1})
- *   - ...
- *   - {@code src[n - 1]} (#dnnl_query_src_md, {@code n - 1})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param sum_primitive_desc Output primitive descriptor.
  *  @param dst_desc Destination memory descriptor.
  *  @param n Number of source parameters.
@@ -3457,8 +3529,6 @@ public static native @Cast("dnnl_status_t") int dnnl_concat_primitive_desc_creat
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -3509,13 +3579,6 @@ public static native @Cast("dnnl_status_t") int dnnl_sum_primitive_desc_create(
  *      Element broadcasting is supported for memory descriptor \p src1_desc
  *      and are applied to \ src1_desc dimensions that have size equal to 1.
  * 
- *  Inputs:
- *   - {@code src0} (#dnnl_query_src_md, {@code 0})
- *   - {@code src1} (#dnnl_query_src_md, {@code 1})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param binary_desc Output descriptor for a binary primitive.
  *  @param alg_kind Algorithm kind. Valid values are #dnnl_binary_add,
  *      #dnnl_binary_mul, #dnnl_binary_max and #dnnl_binary_min.
@@ -3525,8 +3588,6 @@ public static native @Cast("dnnl_status_t") int dnnl_sum_primitive_desc_create(
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -3545,14 +3606,6 @@ public static native @Cast("dnnl_status_t") int dnnl_binary_desc_init(dnnl_binar
  *  \note
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
- * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 1}), if created with bias
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
  * 
  *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
  *  spatial dimensions only and hence must have the same number of elements as
@@ -3580,8 +3633,6 @@ public static native @Cast("dnnl_status_t") int dnnl_binary_desc_init(dnnl_binar
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -3614,14 +3665,6 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_forward_desc_in
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 1}), if created with bias
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
  *  values for spatial dimensions only and hence must have the same number of
  *  elements as there are spatial dimensions. The order of values is the same
@@ -3654,8 +3697,6 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_forward_desc_in
 ///
 ///
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_forward_desc_init(
         dnnl_convolution_desc_t conv_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src_desc,
@@ -3684,13 +3725,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_forward
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
- * 
  *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
  *  spatial dimensions only and hence must have the same number of elements as
  *  there are spatial dimensions. The order of values is the same as in the
@@ -3712,8 +3746,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_forward
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -3743,13 +3775,6 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_data_d
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
- * 
  *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
  *  values for spatial dimensions only and hence must have the same number of
  *  elements as there are spatial dimensions. The order of values is the same
@@ -3774,8 +3799,6 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_data_d
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -3807,14 +3830,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
- * 
  *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
  *  spatial dimensions only and hence must have the same number of elements as
  *  there are spatial dimensions. The order of values is the same as in the
@@ -3839,8 +3854,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -3873,14 +3886,6 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_weight
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
- * 
  *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
  *  values for spatial dimensions only and hence must have the same number of
  *  elements as there are spatial dimensions. The order of values is the same
@@ -3908,8 +3913,6 @@ public static native @Cast("dnnl_status_t") int dnnl_convolution_backward_weight
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -3949,14 +3952,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 1}), if created with bias
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
  *  spatial dimensions only and hence must have the same number of elements as
  *  there are spatial dimensions. The order of values is the same as in the
@@ -3982,8 +3977,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_convolution_backwar
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -4016,14 +4009,6 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_forward_desc_
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 1}), if created with bias
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
  *  values for spatial dimensions only and hence must have the same number of
  *  elements as there are spatial dimensions. The order of values is the same
@@ -4055,8 +4040,6 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_forward_desc_
 ///
 ///
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_forward_desc_init(
         @Cast("dnnl_deconvolution_desc_t*") dnnl_convolution_desc_t deconv_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src_desc,
@@ -4085,13 +4068,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_forwa
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
- * 
  *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
  *  spatial dimensions only and hence must have the same number of elements as
  *  there are spatial dimensions. The order of values is the same as in the
@@ -4112,8 +4088,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_forwa
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -4143,13 +4117,6 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_data
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
- * 
  *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
  *  values for spatial dimensions only and hence must have the same number of
  *  elements as there are spatial dimensions. The order of values is the same
@@ -4173,8 +4140,6 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_data
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -4206,14 +4171,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_backw
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
- * 
  *  Arrays \p strides, \p padding_l, and \p padding_r contain values for
  *  spatial dimensions only and hence must have the same number of elements as
  *  there are spatial dimensions. The order of values is the same as in the
@@ -4237,8 +4194,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_backw
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -4271,14 +4226,6 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_weig
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
- * 
  *  Arrays \p strides, \p dilates, \p padding_l, and \p padding_r contain
  *  values for spatial dimensions only and hence must have the same number of
  *  elements as there are spatial dimensions. The order of values is the same
@@ -4305,8 +4252,6 @@ public static native @Cast("dnnl_status_t") int dnnl_deconvolution_backward_weig
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_backward_weights_desc_init(
         @Cast("dnnl_deconvolution_desc_t*") dnnl_convolution_desc_t deconv_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
@@ -4340,12 +4285,6 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_backw
  <p>
  *  Initializes a descriptor for shuffle forward propagation primitive.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param shuffle_desc Output descriptor for a shuffle primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4356,19 +4295,11 @@ public static native @Cast("dnnl_status_t") int dnnl_dilated_deconvolution_backw
  *      otherwise. */
 
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_shuffle_forward_desc_init(
         dnnl_shuffle_desc_t shuffle_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Const dnnl_memory_desc_t data_desc, int axis, @Cast("dnnl_dim_t") long group_size);
 
 /** Initializes a descriptor for shuffle backward propagation primitive.
- * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
  *  @param shuffle_desc Output descriptor for a shuffle primitive.
  *  @param diff_data_desc Diff source and diff destination memory descriptor.
@@ -4377,8 +4308,6 @@ public static native @Cast("dnnl_status_t") int dnnl_shuffle_forward_desc_init(
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_shuffle_backward_desc_init(
         dnnl_shuffle_desc_t shuffle_desc,
@@ -4392,12 +4321,6 @@ public static native @Cast("dnnl_status_t") int dnnl_shuffle_backward_desc_init(
  <p>
  *  Initializes a descriptor for eltwise forward propagation primitive.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param eltwise_desc Output descriptor for an eltwise primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4411,21 +4334,12 @@ public static native @Cast("dnnl_status_t") int dnnl_shuffle_backward_desc_init(
  *      otherwise. */
 
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_eltwise_forward_desc_init(
         dnnl_eltwise_desc_t eltwise_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t data_desc,
         float alpha, float beta);
 
 /** Initializes a descriptor for eltwise backward propagation primitive.
- * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
  *  @param eltwise_desc Output descriptor for an eltwise primitive.
  *  @param alg_kind Elementwise algorithm kind.
@@ -4438,8 +4352,6 @@ public static native @Cast("dnnl_status_t") int dnnl_eltwise_forward_desc_init(
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_eltwise_backward_desc_init(
         dnnl_eltwise_desc_t eltwise_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
@@ -4453,12 +4365,6 @@ public static native @Cast("dnnl_status_t") int dnnl_eltwise_backward_desc_init(
  <p>
  *  Initializes a descriptor for softmax forward propagation primitive.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param softmax_desc Output descriptor for a softmax primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4468,20 +4374,11 @@ public static native @Cast("dnnl_status_t") int dnnl_eltwise_backward_desc_init(
  *      otherwise. */
 
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_softmax_forward_desc_init(
         dnnl_softmax_desc_t softmax_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Const dnnl_memory_desc_t data_desc, int softmax_axis);
 
 /** Initializes a descriptor for softmax backward propagation primitive.
- * 
- *  Inputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
  *  @param softmax_desc Output descriptor for a softmax primitive.
  *  @param diff_data_desc Diff source and diff destination memory descriptors.
@@ -4490,8 +4387,6 @@ public static native @Cast("dnnl_status_t") int dnnl_softmax_forward_desc_init(
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_softmax_backward_desc_init(
         dnnl_softmax_desc_t softmax_desc,
@@ -4505,12 +4400,6 @@ public static native @Cast("dnnl_status_t") int dnnl_softmax_backward_desc_init(
  <p>
  *  Initializes a descriptor for logsoftmax forward propagation primitive.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param logsoftmax_desc Output descriptor for a logsoftmax primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4520,20 +4409,11 @@ public static native @Cast("dnnl_status_t") int dnnl_softmax_backward_desc_init(
  *      otherwise. */
 
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_forward_desc_init(
         @Cast("dnnl_logsoftmax_desc_t*") dnnl_softmax_desc_t logsoftmax_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Const dnnl_memory_desc_t data_desc, int logsoftmax_axis);
 
 /** Initializes a descriptor for logsoftmax backward propagation primitive.
- * 
- *  Inputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
  *  @param logsoftmax_desc Output descriptor for a logsoftmax primitive.
  *  @param diff_data_desc Diff source and diff destination memory descriptors.
@@ -4542,8 +4422,6 @@ public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_forward_desc_ini
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_backward_desc_init(
@@ -4557,17 +4435,6 @@ public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_backward_desc_in
  *  \{
  <p>
  *  Initializes a descriptor for pooling forward propagation primitive.
- * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if \p alg_kind = #dnnl_pooling_max and
- *      \p prop_kind = #dnnl_forward_training; must be queried for using \ref
- *      dnnl_primitive_desc_query_md() after a corresponding primitive
- *      descriptor is created
  * 
  *  Arrays \p strides, \p kernel, \p padding_l, and \p padding_r contain values
  *  for spatial dimensions only and hence must have the same number of elements
@@ -4594,8 +4461,6 @@ public static native @Cast("dnnl_status_t") int dnnl_logsoftmax_backward_desc_in
 
 ///
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_pooling_forward_desc_init(
         dnnl_pooling_desc_t pool_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src_desc,
@@ -4616,16 +4481,6 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_forward_desc_init(
         @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a descriptor for pooling backward propagation primitive.
- * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if \p alg_kind = #dnnl_pooling_max; must be queried for using \ref
- *      dnnl_primitive_desc_query_md() after a corresponding primitive
- *      descriptor is created
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
  *  Arrays \p strides, \p kernel, \p padding_l, and \p padding_r contain values
  *  for spatial dimensions only and hence must have the same number of elements
@@ -4648,8 +4503,6 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_forward_desc_init(
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_pooling_backward_desc_init(
         dnnl_pooling_desc_t pool_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
@@ -4677,16 +4530,6 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_backward_desc_init(
  <p>
  *  Initializes a descriptor for LRN forward propagation primitive.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if the underlying implementation requires it; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param lrn_desc Output descriptor for a LRN primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4701,25 +4544,12 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_backward_desc_init(
  *      otherwise. */
 
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_lrn_forward_desc_init(dnnl_lrn_desc_t lrn_desc,
         @Cast("dnnl_prop_kind_t") int prop_kind, @Cast("dnnl_alg_kind_t") int alg_kind,
         @Const dnnl_memory_desc_t data_desc, @Cast("dnnl_dim_t") long local_size, float alpha,
         float beta, float k);
 
 /** Initializes a descriptor for LRN backward propagation primitive.
- * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if the underlying implementation requires it; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
  *  @param lrn_desc Output descriptor for a LRN primitive.
  *  @param alg_kind LRN algorithm kind: either #dnnl_lrn_across_channels or
@@ -4733,8 +4563,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lrn_forward_desc_init(dnnl_
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_lrn_backward_desc_init(dnnl_lrn_desc_t lrn_desc,
@@ -4754,29 +4582,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lrn_backward_desc_init(dnnl
  *      In-place operation is supported: the dst can refer to the same memory
  *      as the src.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code mean} (#dnnl_query_src_md, {@code 1}),
- *      if #dnnl_use_global_stats bit-flag is set in \p flags
- *   - {@code variance} (#dnnl_query_src_md, {@code 2}),
- *      if #dnnl_use_global_stats bit-flag is set in \p flags
- *   - {@code scale_and_shift} (#dnnl_query_weights_md, {@code 0}),
- *      if #dnnl_use_scaleshift bit-flag is set in \p flags
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- *   - {@code mean} (#dnnl_query_dst_md, {@code 1}),
- *      if #dnnl_use_global_stats bit-flag is not set in \p flags
- *      and \p prop_kind = #dnnl_forward_training
- *   - {@code variance} (#dnnl_query_dst_md, {@code 2}),
- *      if #dnnl_use_global_stats bit-flag is not set in \p flags
- *      and \p prop_kind = #dnnl_forward_training
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if #dnnl_fuse_norm_relu bit-flag is set in \p flags
- *      and \p prop_kind = #dnnl_forward_training; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param bnrm_desc Output descriptor for batch normalization primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4786,8 +4591,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lrn_backward_desc_init(dnnl
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_batch_normalization_forward_desc_init(
@@ -4801,22 +4604,6 @@ public static native @Cast("dnnl_status_t") int dnnl_batch_normalization_forward
  *      In-place operation is supported: the diff_dst can refer to the same
  *      memory as the diff_src.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code mean} (#dnnl_query_src_md, {@code 1})
- *   - {@code variance} (#dnnl_query_src_md, {@code 2})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code scale_and_shift} (#dnnl_query_weights_md, {@code 0}),
- *      if #dnnl_use_scaleshift bit-flag is set in \p flags
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if #dnnl_fuse_norm_relu bit-flag is set in \p flags
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
- *   - {@code diff_scale_and_shift} (#dnnl_query_diff_weights_md, {@code 0}),
- *      if #dnnl_use_scaleshift bit-flag is set in \p flags
- *      and \p prop_kind = #dnnl_backward
- * 
  *  @param bnrm_desc Output descriptor for batch normalization primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_backward_data and #dnnl_backward (diffs for all parameters are
@@ -4828,8 +4615,6 @@ public static native @Cast("dnnl_status_t") int dnnl_batch_normalization_forward
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_batch_normalization_backward_desc_init(
@@ -4849,24 +4634,6 @@ public static native @Cast("dnnl_status_t") int dnnl_batch_normalization_backwar
  *      In-place operation is supported: the dst can refer to the same memory
  *      as the src.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code mean} (#dnnl_query_src_md, {@code 1}),
- *      if #dnnl_use_global_stats bit-flag is set in \p flags
- *   - {@code variance} (#dnnl_query_src_md, {@code 2}),
- *      if #dnnl_use_global_stats bit-flag is set in \p flags
- *   - {@code scale_and_shift} (#dnnl_query_weights_md, {@code 0}),
- *      if #dnnl_use_scaleshift bit-flag is set in \p flags
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- *   - {@code mean} (#dnnl_query_dst_md, {@code 1}),
- *      if #dnnl_use_global_stats bit-flag is not set in \p flags
- *      and \p prop_kind = #dnnl_forward_training
- *   - {@code variance} (#dnnl_query_dst_md, {@code 2}),
- *      if #dnnl_use_global_stats bit-flag is not set in \p flags
- *      and \p prop_kind = #dnnl_forward_training
- * 
  *  @param lnrm_desc Output descriptor for layer normalization primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4883,8 +4650,6 @@ public static native @Cast("dnnl_status_t") int dnnl_batch_normalization_backwar
 
 ///
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_forward_desc_init(
         dnnl_layer_normalization_desc_t lnrm_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Const dnnl_memory_desc_t data_desc,
@@ -4896,20 +4661,6 @@ public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_forward
  *  \note
  *      In-place operation is supported: the diff_dst can refer to the same
  *      memory as the diff_src.
- * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code mean} (#dnnl_query_src_md, {@code 1})
- *   - {@code variance} (#dnnl_query_src_md, {@code 2})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code scale_and_shift} (#dnnl_query_weights_md, {@code 0}),
- *      if #dnnl_use_scaleshift bit-flag is set in \p flags
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
- *   - {@code diff_scale_and_shift} (#dnnl_query_diff_weights_md, {@code 0}),
- *      if #dnnl_use_scaleshift bit-flag is set in \p flags
- *      and \p prop_kind = #dnnl_backward
  * 
  *  @param lnrm_desc Output descriptor for layer normalization primitive.
  *  @param prop_kind Propagation kind. Possible values are
@@ -4929,8 +4680,6 @@ public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_forward
 
 ///
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_backward_desc_init(
         dnnl_layer_normalization_desc_t lnrm_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Const dnnl_memory_desc_t diff_data_desc,
@@ -4948,14 +4697,6 @@ public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_backwar
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 1}), if created with bias
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param ip_desc Output descriptor for inner product primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -4968,8 +4709,6 @@ public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_backwar
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_inner_product_forward_desc_init(
@@ -4985,13 +4724,6 @@ public static native @Cast("dnnl_status_t") int dnnl_inner_product_forward_desc_
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
- * 
  *  @param ip_desc Output descriptor for inner product primitive.
  *  @param diff_src_desc Diff source memory descriptor.
  *  @param weights_desc Weights memory descriptor.
@@ -4999,8 +4731,6 @@ public static native @Cast("dnnl_status_t") int dnnl_inner_product_forward_desc_
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_inner_product_backward_data_desc_init(
@@ -5014,14 +4744,6 @@ public static native @Cast("dnnl_status_t") int dnnl_inner_product_backward_data
  *  \note
  *      Memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
- * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_weights} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 1}), if created with bias
  * 
  *  @param ip_desc Output descriptor for inner product primitive.
  *  @param src_desc Source memory descriptor.
@@ -5132,8 +4854,6 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_data
 ///
 ///
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_weights_qparams(
         dnnl_primitive_attr attr, @Cast("dnnl_dim_t") long count, int mask,
         @Const FloatPointer scales);
@@ -5164,21 +4884,6 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_weig
  *      All memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- * 
- *  Outputs:
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if \p prop_kind equals #dnnl_forward_training; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param rnn_desc Output descriptor for vanilla RNN primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -5203,8 +4908,6 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rnn_weig
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -5235,25 +4938,6 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_forward_desc_in
  *  \note
  *      All memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
- * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code diff_dst_layer} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code diff_dst_iter} (#dnnl_query_diff_dst_md, {@code 1}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src_layer} (#dnnl_query_diff_src_md, {@code 0})
- *   - {@code diff_src_iter} (#dnnl_query_diff_src_md, {@code 1}), if used
- *   - {@code diff_weights_layer} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_weights_iter} (#dnnl_query_diff_weights_md, {@code 1})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 2}), if used
  * 
  *  @param rnn_desc Output descriptor for vanilla RNN primitive.
  *  @param prop_kind Propagation kind. Must be #dnnl_backward.
@@ -5290,8 +4974,6 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_forward_desc_in
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -5336,23 +5018,6 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_backward_desc_i
  *  @see dnnl_lstm_forward_desc_init_v3 to initialize forward LSTM with and
  *      without peephole / recurrent projection layer
  * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code src_iter_c} (#dnnl_query_src_md, {@code 2}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- * 
- *  Outputs:
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code dst_iter_c} (#dnnl_query_dst_md, {@code 2}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if \p prop_kind equals #dnnl_forward_training; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param rnn_desc Output descriptor for LSTM primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -5377,8 +5042,6 @@ public static native @Cast("dnnl_status_t") int dnnl_vanilla_rnn_backward_desc_i
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -5416,25 +5079,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init(dnnl
  *  @see dnnl_lstm_forward_desc_init_v3 to initialize forward LSTM with and
  *      without peephole / recurrent projection layer
  * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code src_iter_c} (#dnnl_query_src_md, {@code 2}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code weights_peephole} (#dnnl_query_weights_md, {@code 2}), if used
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used and LSTM is without peephole
- *   - {@code bias} (#dnnl_query_weights_md, {@code 3}), if used and LSTM is with peephole
- * 
- *  Outputs:
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code dst_iter_c} (#dnnl_query_dst_md, {@code 2}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if \p prop_kind equals #dnnl_forward_training; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param rnn_desc Output descriptor for LSTM primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -5461,8 +5105,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init(dnnl
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -5502,30 +5144,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v2(d
  *      All memory descriptors can be initialized with #dnnl_format_tag_any or
  *      with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - src_layer (#dnnl_query_src_md, 0)
- *   - src_iter (#dnnl_query_src_md, 1), if used
- *   - src_iter_c (#dnnl_query_src_md, 2), if used
- *   - weights_layer (#dnnl_query_weights_md, 0)
- *   - weights_iter (#dnnl_query_weights_md, 1)
- *   - weights_peephole (#dnnl_query_weights_md, 2), if used
- *   - weights_projection (#dnnl_query_weights_md, index), if used and index is:
- *     - 2, if there is no weights_peephole
- *     - 3, otherwise
- *   - bias (#dnnl_query_weights_md, index), if used and index is:
- *     - 2, if neither weights_peephole nor weights_projection is used
- *     - 3, if one of weights_peephole or weights_projection is used
- *     - 4, if both weights_peephole and weights_projection are used
- * 
- *  Outputs:
- *   - dst_layer (#dnnl_query_dst_md, 0)
- *   - dst_iter (#dnnl_query_dst_md, 1), if used
- *   - dst_iter_c (#dnnl_query_dst_md, 2), if used
- *   - workspace (#dnnl_query_workspace_md, 0),
- *      if \p prop_kind equals #dnnl_forward_training; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param rnn_desc Output descriptor for LSTM primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -5555,8 +5173,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v2(d
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -5598,29 +5214,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v3(d
  *  @see dnnl_lstm_backward_desc_init_v3 to initialize backward LSTM with and
  *      without peephole / recurrent projection layer
  * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code src_iter_c} (#dnnl_query_src_md, {@code 2}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code dst_iter_c} (#dnnl_query_dst_md, {@code 2}), if used
- *   - {@code diff_dst_layer} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code diff_dst_iter} (#dnnl_query_diff_dst_md, {@code 1}), if used
- *   - {@code diff_dst_iter_c} (#dnnl_query_diff_dst_md, {@code 2}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src_layer} (#dnnl_query_diff_src_md, {@code 0})
- *   - {@code diff_src_iter} (#dnnl_query_diff_src_md, {@code 1}), if used
- *   - {@code diff_src_iter_c} (#dnnl_query_diff_src_md, {@code 2}), if used
- *   - {@code diff_weights_layer} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_weights_iter} (#dnnl_query_diff_weights_md, {@code 1})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 2}), if used
- * 
  *  @param rnn_desc Output descriptor for LSTM primitive.
  *  @param prop_kind Propagation kind. Must be #dnnl_backward.
  *  @param direction RNN direction. See \ref dnnl_rnn_direction_t for more
@@ -5660,8 +5253,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_forward_desc_init_v3(d
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -5710,35 +5301,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init(dnn
  *  @see dnnl_lstm_backward_desc_init_v3 to initialize backward LSTM with and
  *      without peephole / recurrent projection layer
  * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code src_iter_c} (#dnnl_query_src_md, {@code 2}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code weights_peephole} (#dnnl_query_weights_md, {@code 2}), if used
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used and LSTM is without peephole
- *   - {@code bias} (#dnnl_query_weights_md, {@code 3}), if used and LSTM is with peephole
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code dst_iter_c} (#dnnl_query_dst_md, {@code 2}), if used
- *   - {@code diff_dst_layer} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code diff_dst_iter} (#dnnl_query_diff_dst_md, {@code 1}), if used
- *   - {@code diff_dst_iter_c} (#dnnl_query_diff_dst_md, {@code 2}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src_layer} (#dnnl_query_diff_src_md, {@code 0})
- *   - {@code diff_src_iter} (#dnnl_query_diff_src_md, {@code 1}), if used
- *   - {@code diff_src_iter_c} (#dnnl_query_diff_src_md, {@code 2}), if used
- *   - {@code diff_weights_layer} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_weights_iter} (#dnnl_query_diff_weights_md, {@code 1})
- *   - {@code diff_weights_peephole} (#dnnl_query_weights_md, {@code 2}), if used
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 2}), if used and LSTM is without
- *      peephole
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 3}), if used and LSTM is with
- *      peephole
- * 
  *  @param rnn_desc Output descriptor for LSTM primitive.
  *  @param prop_kind Propagation kind. Must be #dnnl_backward.
  *  @param direction RNN direction. See \ref dnnl_rnn_direction_t for more
@@ -5782,8 +5344,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init(dnn
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -5836,44 +5396,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v2(
  *  \note
  *      All memory descriptors can be initialized with #dnnl_format_tag_any or
  *      with format_kind set to #dnnl_format_kind_any.
- * 
- *  Inputs:
- *   - src_layer (#dnnl_query_src_md, 0)
- *   - src_iter (#dnnl_query_src_md, 1), if used
- *   - src_iter_c (#dnnl_query_src_md, 2), if used
- *   - weights_layer (#dnnl_query_weights_md, 0)
- *   - weights_iter (#dnnl_query_weights_md, 1)
- *   - weights_peephole (#dnnl_query_weights_md, 2), if used
- *   - weights_projection (#dnnl_query_weights_md, index), if used and index is:
- *     - 2, if there is no weights_peephole
- *     - 3, otherwise
- *   - bias (#dnnl_query_weights_md, index), if used and index is:
- *     - 2, if neither weights_peephole nor weights_projection is used
- *     - 3, if one of weights_peephole or weights_projection is used
- *     - 4, if both weights_peephole and weights_projection are used
- *   - dst_layer (#dnnl_query_dst_md, 0)
- *   - dst_iter (#dnnl_query_dst_md, 1), if used
- *   - dst_iter_c (#dnnl_query_dst_md, 2), if used
- *   - diff_dst_layer (#dnnl_query_diff_dst_md, 0)
- *   - diff_dst_iter (#dnnl_query_diff_dst_md, 1), if used
- *   - diff_dst_iter_c (#dnnl_query_diff_dst_md, 2), if used
- *   - workspace (#dnnl_query_workspace_md, 0)
- * 
- *  Outputs:
- *   - diff_src_layer (#dnnl_query_diff_src_md, 0)
- *   - diff_src_iter (#dnnl_query_diff_src_md, 1), if used
- *   - diff_src_iter_c (#dnnl_query_diff_src_md, 2), if used
- *   - diff_weights_layer (#dnnl_query_diff_weights_md, 0)
- *   - diff_weights_iter (#dnnl_query_diff_weights_md, 1)
- *   - diff_weights_peephole (#dnnl_query_weights_md, 2), if used
- *   - diff_weights_projection (#dnnl_query_weights_md, index), if used and
- *     index is:
- *     - 2, if there is no diff_weights_peephole
- *     - 3, otherwise
- *   - diff_bias (#dnnl_query_diff_weights_md, index), if used and index is:
- *     - 2, if neither diff_weights_peephole nor diff_weights_projection is used
- *     - 3, if one of diff_weights_peephole or diff_weights_projection is used
- *     - 4, if both diff_weights_peephole and diff_weights_projection are used
  * 
  *  @param rnn_desc Output descriptor for LSTM primitive.
  *  @param prop_kind Propagation kind. Must be #dnnl_backward.
@@ -5928,8 +5450,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v2(
 ///
 ///
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v3(
         dnnl_rnn_desc_t rnn_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_rnn_direction_t") int direction,
@@ -5971,21 +5491,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v3(
  *      All memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- * 
- *  Outputs:
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if \p prop_kind equals #dnnl_forward_training; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param rnn_desc Output descriptor for GRU primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -6006,8 +5511,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lstm_backward_desc_init_v3(
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -6036,25 +5539,6 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_forward_desc_init(dnnl_
  *  \note
  *      All memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
- * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code diff_dst_layer} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code diff_dst_iter} (#dnnl_query_diff_dst_md, {@code 1}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src_layer} (#dnnl_query_diff_src_md, {@code 0})
- *   - {@code diff_src_iter} (#dnnl_query_diff_src_md, {@code 1}), if used
- *   - {@code diff_weights_layer} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_weights_iter} (#dnnl_query_diff_weights_md, {@code 1})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 2}), if used
  * 
  *  @param rnn_desc Output descriptor for GRU primitive.
  *  @param prop_kind Propagation kind. Must be #dnnl_backward.
@@ -6087,8 +5571,6 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_forward_desc_init(dnnl_
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -6120,21 +5602,6 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_backward_desc_init(dnnl
  *  This would then indicate that the LBR GRU forward propagation primitive
  *  should not use them and should default to zero values instead.
  * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- * 
- *  Outputs:
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0}),
- *      if \p prop_kind equals #dnnl_forward_training; must be queried for
- *      using \ref dnnl_primitive_desc_query_md() after a corresponding
- *      primitive descriptor is created
- * 
  *  @param rnn_desc Output descriptor for LBR GRU primitive.
  *  @param prop_kind Propagation kind. Possible values are
  *      #dnnl_forward_training and #dnnl_forward_inference.
@@ -6155,8 +5622,6 @@ public static native @Cast("dnnl_status_t") int dnnl_gru_backward_desc_init(dnnl
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -6185,25 +5650,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lbr_gru_forward_desc_init(d
  *  \note
  *      All memory descriptors can be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
- * 
- *  Inputs:
- *   - {@code src_layer} (#dnnl_query_src_md, {@code 0})
- *   - {@code src_iter} (#dnnl_query_src_md, {@code 1}), if used
- *   - {@code weights_layer} (#dnnl_query_weights_md, {@code 0})
- *   - {@code weights_iter} (#dnnl_query_weights_md, {@code 1})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 2}), if used
- *   - {@code dst_layer} (#dnnl_query_dst_md, {@code 0})
- *   - {@code dst_iter} (#dnnl_query_dst_md, {@code 1}), if used
- *   - {@code diff_dst_layer} (#dnnl_query_diff_dst_md, {@code 0})
- *   - {@code diff_dst_iter} (#dnnl_query_diff_dst_md, {@code 1}), if used
- *   - {@code workspace} (#dnnl_query_workspace_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src_layer} (#dnnl_query_diff_src_md, {@code 0})
- *   - {@code diff_src_iter} (#dnnl_query_diff_src_md, {@code 1}), if used
- *   - {@code diff_weights_layer} (#dnnl_query_diff_weights_md, {@code 0})
- *   - {@code diff_weights_iter} (#dnnl_query_diff_weights_md, {@code 1})
- *   - {@code diff_bias} (#dnnl_query_diff_weights_md, {@code 2}), if used
  * 
  *  @param rnn_desc Output descriptor for LBR GRU primitive.
  *  @param prop_kind Propagation kind. Must be #dnnl_backward.
@@ -6237,8 +5683,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lbr_gru_forward_desc_init(d
  *      otherwise. */
 
 ///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_lbr_gru_backward_desc_init(
         dnnl_rnn_desc_t rnn_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
         @Cast("dnnl_rnn_direction_t") int direction,
@@ -6264,14 +5708,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lbr_gru_backward_desc_init(
  <p>
  *  Initializes a matrix multiplication descriptor.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- *   - {@code weights} (#dnnl_query_weights_md, {@code 0})
- *   - {@code bias} (#dnnl_query_weights_md, {@code 1})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  *  @param matmul_desc Output descriptor for matmul primitive.
  *  @param src_desc Source memory descriptor (matrix A)
  *  @param weights_desc Weights memory descriptor (matrix B)
@@ -6282,8 +5718,6 @@ public static native @Cast("dnnl_status_t") int dnnl_lbr_gru_backward_desc_init(
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 ///
@@ -6304,12 +5738,6 @@ public static native @Cast("dnnl_status_t") int dnnl_matmul_desc_init(dnnl_matmu
  *      Destination memory descriptor is allowed to be initialized with
  *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
  * 
- *  Inputs:
- *   - {@code src} (#dnnl_query_src_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code dst} (#dnnl_query_dst_md, {@code 0})
- * 
  * 
  *  @param resampling_desc Output descriptor for a resampling primitive.
  *  @param prop_kind Propagation kind. Possible values are
@@ -6322,8 +5750,6 @@ public static native @Cast("dnnl_status_t") int dnnl_matmul_desc_init(dnnl_matmu
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
-///
-///
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_resampling_forward_desc_init(
@@ -6340,12 +5766,6 @@ public static native @Cast("dnnl_status_t") int dnnl_resampling_forward_desc_ini
         @Const dnnl_memory_desc_t src_desc, @Const dnnl_memory_desc_t dst_desc);
 
 /** Initializes a descriptor for resampling backward propagation primitive.
- * 
- *  Inputs:
- *   - {@code diff_dst} (#dnnl_query_diff_dst_md, {@code 0})
- * 
- *  Outputs:
- *   - {@code diff_src} (#dnnl_query_diff_src_md, {@code 0})
  * 
  *  @param resampling_desc Output descriptor for a resampling primitive.
  *  @param alg_kind resamplinging algorithm kind: either
@@ -6675,12 +6095,14 @@ public static native @Cast("dnnl_status_t") int dnnl_set_jit_profiling_jitdumpdi
  *      The ISAs are only partially ordered:
  *          - SSE41 < AVX < AVX2,
  *          - AVX2 < AVX512_MIC < AVX512_MIC_4OPS,
- *          - AVX2 < AVX512_CORE < AVX512_CORE_VNNI < AVX512_CORE_BF16.
+ *          - AVX2 < AVX512_CORE < AVX512_CORE_VNNI < AVX512_CORE_BF16
+ *            < AVX512_CORE_AMX.
  * 
  *  @see \ref dev_guide_cpu_dispatcher_control for more details
  * 
  *  @param isa Maximal ISA the library should dispatch to. Pass
- *      #dnnl_cpu_isa_all/#dnnl::cpu_isa::all to remove ISA restrictions.
+ *      #dnnl_cpu_isa_all/#dnnl::cpu_isa::all to remove ISA restrictions
+ *      (except for ISAs with initial support in the library).
  *  @return #dnnl_success/#dnnl::status::success on success and a
  *      #dnnl_invalid_arguments/#dnnl::status::invalid_arguments if the \p isa
  *      parameter is invalid or the ISA cannot be changed at this time.
@@ -6690,11 +6112,24 @@ public static native @Cast("dnnl_status_t") int dnnl_set_jit_profiling_jitdumpdi
 
 ///
 ///
-///
-///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_set_max_cpu_isa(@Cast("dnnl_cpu_isa_t") int isa);
+
+/** Gets the maximal ISA the library can dispatch to on the CPU. See
+ *  #dnnl_cpu_isa_t and #dnnl::cpu_isa for the list of the values returned by
+ *  the C and C++ API functions respectively.
+ * 
+ *  @see \ref dev_guide_cpu_dispatcher_control for more details
+ * 
+ *  @return #dnnl_cpu_isa_t value reflecting the maximal ISA the library may
+ *      dispatch to. */
+
+///
+///
+///
+///
+///
+///
+public static native @Cast("dnnl_cpu_isa_t") int dnnl_get_effective_cpu_isa();
 
 /** \} dnnl_api_service
  <p>
@@ -7048,9 +6483,9 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 /** Converts primitive kind enum value from C++ API to C API type.
  * 
- *  @param kind C++ API primitive kind enum value.
+ *  @param akind C++ API primitive kind enum value.
  *  @return Corresponding C API primitive kind enum value. */
-@Namespace("dnnl") public static native @Cast("dnnl_primitive_kind_t") int convert_to_c(primitive.kind kind);
+@Namespace("dnnl") public static native @Cast("dnnl_primitive_kind_t") int convert_to_c(primitive.kind akind);
 
 
 
@@ -7144,9 +6579,9 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 /** Converts propagation kind enum value from C++ API to C API type.
  * 
- *  @param kind C++ API propagation kind enum value.
+ *  @param akind C++ API propagation kind enum value.
  *  @return Corresponding C API propagation kind enum value. */
-@Namespace("dnnl") public static native @Cast("dnnl_prop_kind_t") int convert_to_c(prop_kind kind);
+@Namespace("dnnl") public static native @Cast("dnnl_prop_kind_t") int convert_to_c(prop_kind akind);
 
 /** Kinds of algorithms. */
 @Namespace("dnnl") public enum algorithm {
@@ -7200,6 +6635,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     eltwise_clip(dnnl_eltwise_clip),
     /** Elementwise: pow */
     eltwise_pow(dnnl_eltwise_pow),
+    /** Elementwise: round */
+    eltwise_round(dnnl_eltwise_round),
     /** Elementwise: rectified linar unit (ReLU) (dst for backward) */
     eltwise_relu_use_dst_for_bwd(dnnl_eltwise_relu_use_dst_for_bwd),
     /** Elementwise: hyperbolic tangent non-linearity (tanh) (dst for backward) */
@@ -7258,9 +6695,9 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 }
 
 /** Converts algorithm kind enum value from C++ API to C API type.
- *  @param algorithm C++ API algorithm kind enum value.
+ *  @param aalgorithm C++ API algorithm kind enum value.
  *  @return Corresponding C API algorithm kind enum value. */
-@Namespace("dnnl") public static native @Cast("dnnl_alg_kind_t") int convert_to_c(algorithm algorithm);
+@Namespace("dnnl") public static native @Cast("dnnl_alg_kind_t") int convert_to_c(algorithm aalgorithm);
 
 /** \} dnnl_api_attributes
  <p>
@@ -7563,13 +7000,13 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 }
 
 /** Converts query enum value from C++ API to C API type.
- *  @param query C++ API query enum value.
+ *  @param aquery C++ API query enum value.
  *  @return Corresponding C API query enum value. */
 
 ///
 ///
 ///
-@Namespace("dnnl") public static native @Cast("dnnl_query_t") int convert_to_c(query query);
+@Namespace("dnnl") public static native @Cast("dnnl_query_t") int convert_to_c(query aquery);
 
 /** \} dnnl_api_primitives_common
  <p>
@@ -7593,13 +7030,13 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 /** Converts engine kind enum value from C++ API to C API type.
  * 
- *  @param kind C++ API engine kind enum value.
+ *  @param akind C++ API engine kind enum value.
  *  @return Corresponding C API engine kind enum value. */
 
 ///
 ///
 ///
-@Namespace("dnnl") public static native @Cast("dnnl_engine_kind_t") int convert_to_c(engine.kind kind);
+@Namespace("dnnl") public static native @Cast("dnnl_engine_kind_t") int convert_to_c(engine.kind akind);
 
 /** \} dnnl_api_engine
  <p>
@@ -7898,7 +7335,9 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     /** \copydoc dnnl_cpu_isa_avx512_core_vnni */
     avx512_core_vnni(dnnl_cpu_isa_avx512_core_vnni),
     /** \copydoc dnnl_cpu_isa_avx512_core_bf16 */
-    avx512_core_bf16(dnnl_cpu_isa_avx512_core_bf16);
+    avx512_core_bf16(dnnl_cpu_isa_avx512_core_bf16),
+    /** \copydoc dnnl_cpu_isa_avx512_core_amx */
+    avx512_core_amx(dnnl_cpu_isa_avx512_core_amx);
 
     public final int value;
     private cpu_isa(int v) { this.value = v; }
@@ -7908,11 +7347,14 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 }
 
 /** \copydoc dnnl_set_max_cpu_isa() */
+@Namespace("dnnl") public static native status set_max_cpu_isa(cpu_isa isa);
+@Namespace("dnnl") public static native @Cast("dnnl::status") int set_max_cpu_isa(@Cast("dnnl::cpu_isa") int isa);
+
+/** \copydoc dnnl_get_effective_cpu_isa() */
 
 ///
 ///
-@Namespace("dnnl") public static native status set_max_cpu_isa(cpu_isa isa);
-@Namespace("dnnl") public static native @Cast("dnnl::status") int set_max_cpu_isa(@Cast("dnnl::cpu_isa") int isa);
+@Namespace("dnnl") public static native cpu_isa get_effective_cpu_isa();
 
 /** \} dnnl_api_service
  <p>

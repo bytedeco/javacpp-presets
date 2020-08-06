@@ -29,6 +29,9 @@ public class PyArrayIterObject extends PyObject {
     @Override public PyArrayIterObject position(long position) {
         return (PyArrayIterObject)super.position(position);
     }
+    @Override public PyArrayIterObject getPointer(long i) {
+        return new PyArrayIterObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyArrayIterObject ob_base(PyObject setter);
         public native int nd_m1(); public native PyArrayIterObject nd_m1(int setter);            /* number of dimensions - 1 */
