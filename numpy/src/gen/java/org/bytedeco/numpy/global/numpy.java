@@ -901,6 +901,7 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
  *              NPY_CPU_ARCEL
  *              NPY_CPU_ARCEB
  *              NPY_CPU_RISCV64
+ *              NPY_CPU_WASM
  */
 // #ifndef _NPY_CPUARCH_H_
 // #define _NPY_CPUARCH_H_
@@ -985,6 +986,9 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #define NPY_CPU_ARCEB
 // #elif defined(__riscv) && defined(__riscv_xlen) && __riscv_xlen == 64
 //     #define NPY_CPU_RISCV64
+// #elif defined(__EMSCRIPTEN__)
+    /* __EMSCRIPTEN__ is defined by emscripten: an LLVM-to-Web compiler */
+//     #define NPY_CPU_WASM
 // #else
 //     #error Unknown CPU, please report this to numpy maintainers with
 //     information about your platform (OS, CPU and compiler)
@@ -1047,6 +1051,7 @@ public static final int NPY_CPU_HAVE_UNALIGNED_ACCESS = 1;
 //             || defined(NPY_CPU_PPC64LE)
 //             || defined(NPY_CPU_ARCEL)
 //             || defined(NPY_CPU_RISCV64)
+//             || defined(NPY_CPU_WASM)
 //     #elif defined(NPY_CPU_PPC)
 //             || defined(NPY_CPU_SPARC)
 //             || defined(NPY_CPU_S390)

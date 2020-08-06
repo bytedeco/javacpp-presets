@@ -27,6 +27,9 @@ public class dnnl_exec_arg_t extends Pointer {
     @Override public dnnl_exec_arg_t position(long position) {
         return (dnnl_exec_arg_t)super.position(position);
     }
+    @Override public dnnl_exec_arg_t getPointer(long i) {
+        return new dnnl_exec_arg_t(this).position(position + i);
+    }
 
     /** An argument index, e.g. DNNL_ARG_SRC */
     public native int arg(); public native dnnl_exec_arg_t arg(int setter);

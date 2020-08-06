@@ -36,6 +36,9 @@ public class stream_attr extends dnnl_stream_attr_handle {
     @Override public stream_attr position(long position) {
         return (stream_attr)super.position(position);
     }
+    @Override public stream_attr getPointer(long i) {
+        return new stream_attr(this).position(position + i);
+    }
 
 
     /** Constructs default (empty) stream attributes. */
@@ -43,11 +46,11 @@ public class stream_attr extends dnnl_stream_attr_handle {
     /** Constructs stream attributes for a stream that runs on an engine of a
      *  particular kind.
      * 
-     *  @param kind Target engine kind. */
-    public stream_attr(engine.kind kind) { super((Pointer)null); allocate(kind); }
-    private native void allocate(engine.kind kind);
-    public stream_attr(@Cast("dnnl::engine::kind") int kind) { super((Pointer)null); allocate(kind); }
-    private native void allocate(@Cast("dnnl::engine::kind") int kind);
+     *  @param akind Target engine kind. */
+    public stream_attr(engine.kind akind) { super((Pointer)null); allocate(akind); }
+    private native void allocate(engine.kind akind);
+    public stream_attr(@Cast("dnnl::engine::kind") int akind) { super((Pointer)null); allocate(akind); }
+    private native void allocate(@Cast("dnnl::engine::kind") int akind);
 
 // #if DNNL_CPU_THREADING_RUNTIME == DNNL_RUNTIME_THREADPOOL
 // #endif

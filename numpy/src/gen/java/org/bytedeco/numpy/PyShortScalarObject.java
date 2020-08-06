@@ -30,6 +30,9 @@ public class PyShortScalarObject extends Pointer {
     @Override public PyShortScalarObject position(long position) {
         return (PyShortScalarObject)super.position(position);
     }
+    @Override public PyShortScalarObject getPointer(long i) {
+        return new PyShortScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyShortScalarObject ob_base(PyObject setter);
         public native short obval(); public native PyShortScalarObject obval(short setter);

@@ -42,6 +42,9 @@ public class primitive_desc extends primitive_desc_base {
     @Override public primitive_desc position(long position) {
         return (primitive_desc)super.position(position);
     }
+    @Override public primitive_desc getPointer(long i) {
+        return new primitive_desc(this).position(position + i);
+    }
 
 
     /** Constructs a primitive descriptor.
@@ -58,7 +61,7 @@ public class primitive_desc extends primitive_desc_base {
      *  @param desc Constant C API operation descriptor.
      *  @param attr Pointer to primitive attributes. It is safe to pass
      *      nullptr to indicate absence of attributes.
-     *  @param engine Engine to use.
+     *  @param aengine Engine to use.
      *  @param hint_fwd_pd C API primitive descriptor for a forward
      *      propagation primitive. It is used as a hint for deciding which
      *      memory format to use for backward propagation or weights gradient.
@@ -69,15 +72,15 @@ public class primitive_desc extends primitive_desc_base {
     
     ///
     public primitive_desc(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd,
-                @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
+                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd,
+                @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, aengine, hint_fwd_pd, allow_empty); }
     private native void allocate(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd,
+                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd,
                 @Cast("bool") boolean allow_empty/*=false*/);
     public primitive_desc(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
+                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, aengine, hint_fwd_pd); }
     private native void allocate(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd);
+                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd);
 
     /** Advances the primitive iterator to the next implementation.
      * 

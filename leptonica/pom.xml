@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>leptonica</artifactId>
-  <version>1.79.0-${project.parent.version}</version>
+  <version>1.80.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Leptonica</name>
 
   <dependencies>

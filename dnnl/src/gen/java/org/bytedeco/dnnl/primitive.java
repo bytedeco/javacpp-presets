@@ -45,6 +45,9 @@ public class primitive extends dnnl_primitive_handle {
     @Override public primitive position(long position) {
         return (primitive)super.position(position);
     }
+    @Override public primitive getPointer(long i) {
+        return new primitive(this).position(position + i);
+    }
 
     /** Kinds of primitives supported by the library. */
     public enum kind {
@@ -137,9 +140,9 @@ public class primitive extends dnnl_primitive_handle {
      *  primitive_desc::query_md(#query::exec_arg_md, index) unless using
      *  dynamic shapes (see #DNNL_RUNTIME_DIM_VAL).
      * 
-     *  @param stream Stream object. The stream must belong to the same engine
+     *  @param astream Stream object. The stream must belong to the same engine
      *      as the primitive.
      *  @param args Arguments map. */
-    public native void execute(@Const @ByRef stream stream,
+    public native void execute(@Const @ByRef stream astream,
                 @Const @ByRef IntMemoryMap args);
 }

@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = javacpp.class, target = "org.bytedeco.leptonica", global = "org.bytedeco.leptonica.global.lept", value = {
     @Platform(include = {"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/rbtree.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
-        "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
+        "leptonica/colorfill.h", "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
         "leptonica/recog.h", "leptonica/regutils.h", "leptonica/stringcode.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"},
         link = "lept@.5", resource = {"include", "lib"}),
     @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = "gomp@.1"),
@@ -57,6 +57,7 @@ public class lept implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LEPT_DLL", "LIBJP2K_HEADER", "L_END_LIST").cppTypes().annotations())
+               .put(new Info("LEPTONICA_INTERCEPT_ALLOC").define(false))
                .put(new Info("PIX_NOT").cppTypes("int", "int"))
                .put(new Info("L_WallTimer").pointerTypes("L_WALLTIMER"))
                .put(new Info("Numa").pointerTypes("NUMA"))
@@ -82,6 +83,7 @@ public class lept implements InfoMapper {
                .put(new Info("L_Bmf").pointerTypes("L_BMF"))
                .put(new Info("CCBord").pointerTypes("CCBORD"))
                .put(new Info("CCBorda").pointerTypes("CCBORDA"))
+               .put(new Info("L_Colorfill").pointerTypes("L_COLORFILL"))
                .put(new Info("L_Dewarpa").pointerTypes("L_DEWARPA"))
                .put(new Info("L_Dewarp").pointerTypes("L_DEWARP"))
                .put(new Info("GPlot").pointerTypes("GPLOT"))

@@ -24,6 +24,9 @@ public class concat extends primitive {
     @Override public concat position(long position) {
         return (concat)super.position(position);
     }
+    @Override public concat getPointer(long i) {
+        return new concat(this).position(position + i);
+    }
 
     /** Primitive descriptor for a concat primitive. */
     public static class primitive_desc extends primitive_desc_base {
@@ -49,6 +52,9 @@ public class concat extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
 
         /** Default constructor. Produces an empty object. */
@@ -56,35 +62,26 @@ public class concat extends primitive {
         /** Constructs a primitive descriptor for an out-of-place concatenation
          *  primitive.
          * 
-         *  Inputs:
-         *   - {@code src[0]} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code src[1]} (#dnnl::primitive_desc_base::src_desc({@code 1}))
-         *   - ...
-         *   - {@code src[n - 1]} (#dnnl::primitive_desc_base::src_desc({@code n - 1}))
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         * 
          *  @param dst Destination memory descriptor.
          *  @param concat_dimension Source tensors will be concatenated over
          *      dimension with this index. Note that order of dimensions does
          *      not depend on memory format.
          *  @param srcs Vector of source memory descriptors.
-         *  @param engine Engine to perform the operation on.
+         *  @param aengine Engine to perform the operation on.
          *  @param attr Primitive attributes to use (optional). */
         
         ///
         ///
         public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, concat_dimension, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, concat_dimension, srcs, aengine, attr); }
         private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(dst, concat_dimension, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, concat_dimension, srcs, aengine); }
         private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for an out-of-place concatenation
          *  primitive.
@@ -96,20 +93,20 @@ public class concat extends primitive {
          *      dimension with this index. Note that order of dimensions does
          *      not depend on memory format.
          *  @param srcs Vector of source memory descriptors.
-         *  @param engine Engine to perform the operation on.
+         *  @param aengine Engine to perform the operation on.
          *  @param attr Primitive attributes to use (optional). */
         
         ///
         public primitive_desc(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(concat_dimension, srcs, engine, attr); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(concat_dimension, srcs, aengine, attr); }
         private native void allocate(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
         public primitive_desc(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine) { super((Pointer)null); allocate(concat_dimension, srcs, engine); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(concat_dimension, srcs, aengine); }
         private native void allocate(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine engine);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for concat primitive from a C
          *  API primitive descriptor which must have a matching kind.

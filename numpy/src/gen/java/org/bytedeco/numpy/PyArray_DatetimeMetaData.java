@@ -29,6 +29,9 @@ public class PyArray_DatetimeMetaData extends Pointer {
     @Override public PyArray_DatetimeMetaData position(long position) {
         return (PyArray_DatetimeMetaData)super.position(position);
     }
+    @Override public PyArray_DatetimeMetaData getPointer(long i) {
+        return new PyArray_DatetimeMetaData(this).position(position + i);
+    }
 
     public native @Cast("NPY_DATETIMEUNIT") int base(); public native PyArray_DatetimeMetaData base(int setter);
     public native int num(); public native PyArray_DatetimeMetaData num(int setter);

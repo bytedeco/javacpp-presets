@@ -30,6 +30,9 @@ public class PyLongScalarObject extends Pointer {
     @Override public PyLongScalarObject position(long position) {
         return (PyLongScalarObject)super.position(position);
     }
+    @Override public PyLongScalarObject getPointer(long i) {
+        return new PyLongScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyLongScalarObject ob_base(PyObject setter);
         public native long obval(); public native PyLongScalarObject obval(long setter);

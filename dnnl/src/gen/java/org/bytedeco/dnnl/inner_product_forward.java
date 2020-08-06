@@ -33,6 +33,9 @@ public class inner_product_forward extends primitive {
     @Override public inner_product_forward position(long position) {
         return (inner_product_forward)super.position(position);
     }
+    @Override public inner_product_forward getPointer(long i) {
+        return new inner_product_forward(this).position(position + i);
+    }
 
     /** Descriptor for an inner product forward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -43,26 +46,16 @@ public class inner_product_forward extends primitive {
         
         ///
         ///
-        ///
-        ///
         public native @ByRef dnnl_inner_product_desc_t data(); public native desc data(dnnl_inner_product_desc_t setter);
 
         /** Constructs a descriptor for an inner product forward propagation
          *  primitive with bias.
          * 
-         *  Inputs:
-         *   - {@code src} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code weights} (#dnnl::primitive_desc_base::weights_desc({@code 0}))
-         *   - {@code bias} (#dnnl::primitive_desc_base::weights_desc({@code 1}))
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         * 
          *  \note
          *      All the memory descriptors may be initialized with the
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
-         *  @param prop_kind Propagation kind. Possible values are
+         *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param src_desc Memory descriptor for src.
@@ -72,51 +65,42 @@ public class inner_product_forward extends primitive {
         
         ///
         ///
-        ///
-        ///
-        public desc(prop_kind prop_kind, @Const @ByRef memory.desc src_desc,
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(prop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
-        private native void allocate(prop_kind prop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(prop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc);
 
         /** Constructs a descriptor for an inner product forward propagation
          *  primitive without bias.
          * 
-         *  Inputs:
-         *   - {@code src} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code weights} (#dnnl::primitive_desc_base::weights_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         * 
          *  \note
          *      All the memory descriptors may be initialized with the
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
-         *  @param prop_kind Propagation kind. Possible values are
+         *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param src_desc Memory descriptor for src.
          *  @param weights_desc Memory descriptor for diff weights.
          *  @param dst_desc Memory descriptor for dst. */
-        public desc(prop_kind prop_kind, @Const @ByRef memory.desc src_desc,
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(prop_kind, src_desc, weights_desc, dst_desc); }
-        private native void allocate(prop_kind prop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, dst_desc); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc src_desc,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(prop_kind, src_desc, weights_desc, dst_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, dst_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc);
     }
@@ -132,6 +116,9 @@ public class inner_product_forward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -142,43 +129,43 @@ public class inner_product_forward extends primitive {
         /** Constructs a primitive descriptor for an inner product forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for an inner product forward propagation
+         *  @param adesc Descriptor for an inner product forward propagation
          *      primitive.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for an inner product forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for an inner product forward propagation
+         *  @param adesc Descriptor for an inner product forward propagation
          *      primitive.
          *  @param attr Primitive attributes to use.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, attr, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for an inner product forward
          *  propagation primitive from a C API primitive descriptor that must

@@ -29,6 +29,9 @@ public class PyDatetimeScalarObject extends Pointer {
     @Override public PyDatetimeScalarObject position(long position) {
         return (PyDatetimeScalarObject)super.position(position);
     }
+    @Override public PyDatetimeScalarObject getPointer(long i) {
+        return new PyDatetimeScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyDatetimeScalarObject ob_base(PyObject setter);
         public native @Cast("npy_datetime") long obval(); public native PyDatetimeScalarObject obval(long setter);

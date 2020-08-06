@@ -29,6 +29,9 @@ public class PyArrayNeighborhoodIterObject extends Pointer {
     @Override public PyArrayNeighborhoodIterObject position(long position) {
         return (PyArrayNeighborhoodIterObject)super.position(position);
     }
+    @Override public PyArrayNeighborhoodIterObject getPointer(long i) {
+        return new PyArrayNeighborhoodIterObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyArrayNeighborhoodIterObject ob_base(PyObject setter);
 

@@ -23,6 +23,9 @@ public class logsoftmax_backward extends primitive {
     @Override public logsoftmax_backward position(long position) {
         return (logsoftmax_backward)super.position(position);
     }
+    @Override public logsoftmax_backward getPointer(long i) {
+        return new logsoftmax_backward(this).position(position + i);
+    }
 
     /** Descriptor for a logsoftmax backward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -35,26 +38,20 @@ public class logsoftmax_backward extends primitive {
         @Override public desc position(long position) {
             return (desc)super.position(position);
         }
+        @Override public desc getPointer(long i) {
+            return new desc(this).position(position + i);
+        }
     
         public native @ByRef @Cast("dnnl_logsoftmax_desc_t*") dnnl_softmax_desc_t data(); public native desc data(dnnl_softmax_desc_t setter);
 
         /** Default constructor. Produces an empty object. */
         
         ///
-        ///
-        ///
         public desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /** Constructs a descriptor for a logsoftmax backward propagation
          *  primitive.
-         * 
-         *  Inputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         *   - {@code diff_dst} (#dnnl::primitive_desc_base::diff_dst_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code diff_src} (#dnnl::primitive_desc_base::diff_src_desc({@code 0}))
          * 
          *  @param diff_data_desc Diff source and diff destination memory
          *      descriptors.
@@ -77,6 +74,9 @@ public class logsoftmax_backward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -87,9 +87,9 @@ public class logsoftmax_backward extends primitive {
         /** Constructs a primitive descriptor for a logsoftmax backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a logsoftmax backward propagation
+         *  @param adesc Descriptor for a logsoftmax backward propagation
          *      primitive.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a logsoftmax forward
          *      propagation primitive. It is used as a hint for deciding which
          *      memory format to use.
@@ -99,24 +99,24 @@ public class logsoftmax_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for a logsoftmax backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a logsoftmax backward propagation
+         *  @param adesc Descriptor for a logsoftmax backward propagation
          *      primitive.
          *  @param attr Primitive attributes to use.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a logsoftmax forward
          *      propagation primitive. It is used as a hint for deciding which
          *      memory format to use.
@@ -126,19 +126,19 @@ public class logsoftmax_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
-                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
+                        @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef logsoftmax_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for a logsoftmax backward

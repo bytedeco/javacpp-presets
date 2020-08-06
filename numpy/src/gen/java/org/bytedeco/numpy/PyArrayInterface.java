@@ -35,6 +35,9 @@ public class PyArrayInterface extends Pointer {
     @Override public PyArrayInterface position(long position) {
         return (PyArrayInterface)super.position(position);
     }
+    @Override public PyArrayInterface getPointer(long i) {
+        return new PyArrayInterface(this).position(position + i);
+    }
 
     public native int two(); public native PyArrayInterface two(int setter);              /*
                            * contains the integer 2 as a sanity

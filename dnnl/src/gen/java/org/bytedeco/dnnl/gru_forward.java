@@ -23,6 +23,9 @@ public class gru_forward extends primitive {
     @Override public gru_forward position(long position) {
         return (gru_forward)super.position(position);
     }
+    @Override public gru_forward getPointer(long i) {
+        return new gru_forward(this).position(position + i);
+    }
 
     /** Descriptor for a GRU forward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -31,8 +34,6 @@ public class gru_forward extends primitive {
         public desc(Pointer p) { super(p); }
     
         
-        ///
-        ///
         ///
         ///
         ///
@@ -49,28 +50,12 @@ public class gru_forward extends primitive {
          *  This would then indicate that the GRU forward propagation primitive
          *  should not use them and should default to zero values instead.
          * 
-         *  Inputs:
-         *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code src_iter} (#dnnl::primitive_desc_base::src_desc({@code 1})), if used
-         *   - {@code weights_layer} (#dnnl::primitive_desc_base::weights_desc({@code 0}))
-         *   - {@code weights_iter} (#dnnl::primitive_desc_base::weights_desc({@code 1}))
-         *   - {@code bias} (#dnnl::primitive_desc_base::weights_desc({@code 2})), if used
-         * 
-         *  Outputs:
-         *   - {@code dst_layer} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         *   - {@code dst_iter} (#dnnl::primitive_desc_base::dst_desc({@code 1})), if used
-         *   - {@code workspace} (#dnnl::primitive_desc_base::workspace_desc({@code 0})),
-         *      if \p prop_kind equals #dnnl::prop_kind::forward_training;
-         *      must be queried for using \ref
-         *      dnnl::primitive_desc_base::query_md() after a corresponding
-         *      primitive descriptor is created
-         * 
          *  \note
          *      All memory descriptors except \p src_iter_desc may be
          *      initialized with an #dnnl::memory::format_tag::any value of \p
          *      format_tag.
          * 
-         *  @param prop_kind Propagation kind. Possible values are
+         *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param direction RNN direction. See \ref dnnl::rnn_direction for
@@ -87,7 +72,7 @@ public class gru_forward extends primitive {
          *  @param dst_iter_desc Memory descriptor for the output recurrent
          *      hidden state vector.
          *  @param flags Unused. */
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
@@ -95,8 +80,8 @@ public class gru_forward extends primitive {
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_layer_desc,
                         @Const @ByRef memory.desc dst_iter_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, flags); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, flags); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
@@ -105,15 +90,15 @@ public class gru_forward extends primitive {
                         @Const @ByRef memory.desc dst_layer_desc,
                         @Const @ByRef memory.desc dst_iter_desc,
                         rnn_flags flags/*=dnnl::rnn_flags::undef*/);
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc dst_iter_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
@@ -121,7 +106,7 @@ public class gru_forward extends primitive {
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_layer_desc,
                         @Const @ByRef memory.desc dst_iter_desc);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
@@ -129,8 +114,8 @@ public class gru_forward extends primitive {
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_layer_desc,
                         @Const @ByRef memory.desc dst_iter_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
@@ -139,15 +124,15 @@ public class gru_forward extends primitive {
                         @Const @ByRef memory.desc dst_layer_desc,
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc dst_iter_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
@@ -168,6 +153,9 @@ public class gru_forward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -178,41 +166,41 @@ public class gru_forward extends primitive {
         /** Constructs a primitive descriptor for a GRU forward propagation
          *  primitive.
          * 
-         *  @param desc Descriptor for a GRU forward propagation primitive.
-         *  @param engine Engine to use.
+         *  @param adesc Descriptor for a GRU forward propagation primitive.
+         *  @param aengine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a GRU forward propagation
          *  primitive.
          * 
-         *  @param desc Descriptor for a GRU forward propagation primitive.
+         *  @param adesc Descriptor for a GRU forward propagation primitive.
          *  @param attr Primitive attributes to use.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, attr, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a GRU forward propagation
          *  primitive from a C API primitive descriptor that must have a

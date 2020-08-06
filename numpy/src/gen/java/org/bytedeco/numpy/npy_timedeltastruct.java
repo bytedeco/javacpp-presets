@@ -30,6 +30,9 @@ public class npy_timedeltastruct extends Pointer {
     @Override public npy_timedeltastruct position(long position) {
         return (npy_timedeltastruct)super.position(position);
     }
+    @Override public npy_timedeltastruct getPointer(long i) {
+        return new npy_timedeltastruct(this).position(position + i);
+    }
 
         public native @Cast("npy_int64") long day(); public native npy_timedeltastruct day(long setter);
         public native @Cast("npy_int32") int sec(); public native npy_timedeltastruct sec(int setter);

@@ -47,6 +47,9 @@ public class layer_normalization_forward extends primitive {
     @Override public layer_normalization_forward position(long position) {
         return (layer_normalization_forward)super.position(position);
     }
+    @Override public layer_normalization_forward getPointer(long i) {
+        return new layer_normalization_forward(this).position(position + i);
+    }
 
     /** Descriptor for a layer normalization forward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -56,37 +59,12 @@ public class layer_normalization_forward extends primitive {
     
         
         ///
-        ///
-        ///
         public native @ByRef dnnl_layer_normalization_desc_t data(); public native desc data(dnnl_layer_normalization_desc_t setter);
 
         /** Constructs a descriptor for layer normalization forward
          *  propagation primitive.
          * 
-         *  Inputs:
-         *   - {@code src} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code mean} (#dnnl::primitive_desc_base::src_desc({@code 1})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      set in \p flags
-         *   - {@code variance} (#dnnl::primitive_desc_base::src_desc({@code 2})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      set in \p flags
-         *   - {@code scale_and_shift} (#dnnl::primitive_desc_base::weights_desc({@code 0})),
-         *      if #dnnl::normalization_flags::use_scale_shift bit-flag is set
-         *      in \p flags
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         *   - {@code mean} (#dnnl::primitive_desc_base::dst_desc({@code 1})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      not set in \p flags and \p prop_kind =
-         *      #dnnl::prop_kind::forward_training
-         *   - {@code variance} (#dnnl::primitive_desc_base::dst_desc({@code 2})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      not set in \p flags and \p prop_kind =
-         *      #dnnl::prop_kind::forward_training
-         * 
-         *  @param prop_kind Propagation kind. Possible values are
+         *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param data_desc Source and destination memory descriptor.
@@ -96,61 +74,36 @@ public class layer_normalization_forward extends primitive {
          *      dnnl::normalization_flags). */
         
         ///
-        ///
-        ///
-        public desc(prop_kind prop_kind, @Const @ByRef memory.desc data_desc,
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
                         @Const @ByRef memory.desc stat_desc, float epsilon,
-                        normalization_flags flags) { super((Pointer)null); allocate(prop_kind, data_desc, stat_desc, epsilon, flags); }
-        private native void allocate(prop_kind prop_kind, @Const @ByRef memory.desc data_desc,
+                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, data_desc, stat_desc, epsilon, flags); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
                         @Const @ByRef memory.desc stat_desc, float epsilon,
                         normalization_flags flags);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc data_desc,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
                         @Const @ByRef memory.desc stat_desc, float epsilon,
-                        @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(prop_kind, data_desc, stat_desc, epsilon, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc data_desc,
+                        @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, data_desc, stat_desc, epsilon, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
                         @Const @ByRef memory.desc stat_desc, float epsilon,
                         @Cast("dnnl::normalization_flags") int flags);
 
         /** Constructs a descriptor for layer normalization forward
          *  propagation primitive.
          * 
-         *  Inputs:
-         *   - {@code src} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code mean} (#dnnl::primitive_desc_base::src_desc({@code 1})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      set in \p flags
-         *   - {@code variance} (#dnnl::primitive_desc_base::src_desc({@code 2})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      set in \p flags
-         *   - {@code scale_and_shift} (#dnnl::primitive_desc_base::weights_desc({@code 0})),
-         *      if #dnnl::normalization_flags::use_scale_shift bit-flag is set
-         *      in \p flags
-         * 
-         *  Outputs:
-         *   - {@code dst} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         *   - {@code mean} (#dnnl::primitive_desc_base::dst_desc({@code 1})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      not set in \p flags and \p prop_kind =
-         *      #dnnl::prop_kind::forward_training
-         *   - {@code variance} (#dnnl::primitive_desc_base::dst_desc({@code 2})),
-         *      if #dnnl::normalization_flags::use_global_stats bit-flag is
-         *      not set in \p flags and \p prop_kind =
-         *      #dnnl::prop_kind::forward_training
-         * 
-         *  @param prop_kind Propagation kind. Possible values are
+         *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param data_desc Source and destination memory descriptor.
          *  @param epsilon Layer normalization epsilon parameter.
          *  @param flags Layer normalization flags (\ref
          *      dnnl::normalization_flags). */
-        public desc(prop_kind prop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
-                        normalization_flags flags) { super((Pointer)null); allocate(prop_kind, data_desc, epsilon, flags); }
-        private native void allocate(prop_kind prop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
+                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, data_desc, epsilon, flags); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
                         normalization_flags flags);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
-                        @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(prop_kind, data_desc, epsilon, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
+                        @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, data_desc, epsilon, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc, float epsilon,
                         @Cast("dnnl::normalization_flags") int flags);
     }
 
@@ -166,6 +119,9 @@ public class layer_normalization_forward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -176,43 +132,43 @@ public class layer_normalization_forward extends primitive {
         /** Constructs a primitive descriptor for a layer normalization forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a layer normalization forward propagation
+         *  @param adesc Descriptor for a layer normalization forward propagation
          *      primitive.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a layer normalization forward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a layer normalization forward propagation
+         *  @param adesc Descriptor for a layer normalization forward propagation
          *      primitive.
          *  @param attr Primitive attributes to use.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine) { super((Pointer)null); allocate(desc, attr, engine); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine);
 
         /** Constructs a primitive descriptor for a layer normalization
          *  forward propagation primitive from a C API primitive descriptor

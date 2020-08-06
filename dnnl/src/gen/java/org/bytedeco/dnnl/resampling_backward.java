@@ -23,6 +23,9 @@ public class resampling_backward extends primitive {
     @Override public resampling_backward position(long position) {
         return (resampling_backward)super.position(position);
     }
+    @Override public resampling_backward getPointer(long i) {
+        return new resampling_backward(this).position(position + i);
+    }
 
     /** Descriptor for a resampling backward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -32,86 +35,70 @@ public class resampling_backward extends primitive {
     
         
         ///
-        ///
-        ///
         public native @ByRef dnnl_resampling_desc_t data(); public native desc data(dnnl_resampling_desc_t setter);
 
         /** Constructs a descriptor for a resampling backward propagation
          *  primitive using source and destination memory descriptors.
          * 
-         *  Inputs:
-         *   - {@code diff_dst} (#dnnl::primitive_desc_base::diff_dst_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code diff_src} (#dnnl::primitive_desc_base::diff_src_desc({@code 0}))
-         * 
-         *  @param algorithm resampling algorithm kind: either
+         *  @param aalgorithm resampling algorithm kind: either
          *      #dnnl::algorithm::resampling_nearest, or
          *      #dnnl::algorithm::resampling_linear
          *  @param diff_src_desc Diff source memory descriptor.
          *  @param diff_dst_desc Diff destination memory descriptor. */
         
         ///
-        ///
-        ///
-        public desc(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc); }
-        private native void allocate(algorithm algorithm, @Const @ByRef memory.desc diff_src_desc,
+        public desc(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc); }
+        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc);
-        public desc(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, diff_src_desc, diff_dst_desc); }
-        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @Const @ByRef memory.desc diff_src_desc,
+        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, diff_src_desc, diff_dst_desc); }
+        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc);
 
         /** Constructs a descriptor for resampling backward propagation
          *  primitive.
          * 
-         *  Inputs:
-         *   - {@code diff_dst} (#dnnl::primitive_desc_base::diff_dst_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code diff_src} (#dnnl::primitive_desc_base::diff_src_desc({@code 0}))
-         * 
-         *  @param algorithm resampling algorithm kind: either
+         *  @param aalgorithm resampling algorithm kind: either
          *      #dnnl::algorithm::resampling_nearest, or
          *      #dnnl::algorithm::resampling_linear
          *  @param factors Vector of scaling factors for spatial dimension.
          *  @param diff_src_desc Diff source memory descriptor.
          *  @param diff_dst_desc Diff destination memory descriptor. */
-        public desc(algorithm algorithm, @StdVector FloatPointer factors,
+        public desc(algorithm aalgorithm, @StdVector FloatPointer factors,
                         @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, factors, diff_src_desc, diff_dst_desc); }
-        private native void allocate(algorithm algorithm, @StdVector FloatPointer factors,
-                        @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc);
-        public desc(@Cast("dnnl::algorithm") int algorithm, @StdVector FloatBuffer factors,
-                        @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, factors, diff_src_desc, diff_dst_desc); }
-        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @StdVector FloatBuffer factors,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, factors, diff_src_desc, diff_dst_desc); }
+        private native void allocate(algorithm aalgorithm, @StdVector FloatPointer factors,
                         @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc);
-        public desc(algorithm algorithm, @StdVector float[] factors,
+        public desc(@Cast("dnnl::algorithm") int aalgorithm, @StdVector FloatBuffer factors,
                         @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, factors, diff_src_desc, diff_dst_desc); }
-        private native void allocate(algorithm algorithm, @StdVector float[] factors,
-                        @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc);
-        public desc(@Cast("dnnl::algorithm") int algorithm, @StdVector FloatPointer factors,
-                        @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, factors, diff_src_desc, diff_dst_desc); }
-        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @StdVector FloatPointer factors,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, factors, diff_src_desc, diff_dst_desc); }
+        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @StdVector FloatBuffer factors,
                         @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc);
-        public desc(algorithm algorithm, @StdVector FloatBuffer factors,
+        public desc(algorithm aalgorithm, @StdVector float[] factors,
                         @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, factors, diff_src_desc, diff_dst_desc); }
-        private native void allocate(algorithm algorithm, @StdVector FloatBuffer factors,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, factors, diff_src_desc, diff_dst_desc); }
+        private native void allocate(algorithm aalgorithm, @StdVector float[] factors,
                         @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc);
-        public desc(@Cast("dnnl::algorithm") int algorithm, @StdVector float[] factors,
+        public desc(@Cast("dnnl::algorithm") int aalgorithm, @StdVector FloatPointer factors,
                         @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(algorithm, factors, diff_src_desc, diff_dst_desc); }
-        private native void allocate(@Cast("dnnl::algorithm") int algorithm, @StdVector float[] factors,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, factors, diff_src_desc, diff_dst_desc); }
+        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @StdVector FloatPointer factors,
+                        @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc);
+        public desc(algorithm aalgorithm, @StdVector FloatBuffer factors,
+                        @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, factors, diff_src_desc, diff_dst_desc); }
+        private native void allocate(algorithm aalgorithm, @StdVector FloatBuffer factors,
+                        @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc);
+        public desc(@Cast("dnnl::algorithm") int aalgorithm, @StdVector float[] factors,
+                        @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc) { super((Pointer)null); allocate(aalgorithm, factors, diff_src_desc, diff_dst_desc); }
+        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @StdVector float[] factors,
                         @Const @ByRef memory.desc diff_src_desc,
                         @Const @ByRef memory.desc diff_dst_desc);
     }
@@ -127,6 +114,9 @@ public class resampling_backward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -137,9 +127,9 @@ public class resampling_backward extends primitive {
         /** Constructs a primitive descriptor for a resampling backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a resampling backward propagation
+         *  @param adesc Descriptor for a resampling backward propagation
          *      primitive.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a resampling forward
          *      propagation primitive. It is used as a hint for deciding which
          *      memory format to use.
@@ -149,24 +139,24 @@ public class resampling_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for a resampling backward
          *  propagation primitive.
          * 
-         *  @param desc Descriptor for a resampling backward propagation
+         *  @param adesc Descriptor for a resampling backward propagation
          *      primitive.
          *  @param attr Primitive attributes to use.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for a resampling forward
          *      propagation primitive. It is used as a hint for deciding which
          *      memory format to use.
@@ -176,19 +166,19 @@ public class resampling_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
-                        @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
+                        @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef resampling_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for a resampling backward

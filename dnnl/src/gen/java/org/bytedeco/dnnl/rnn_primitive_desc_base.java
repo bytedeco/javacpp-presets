@@ -43,15 +43,15 @@ public class rnn_primitive_desc_base extends org.bytedeco.dnnl.primitive_desc {
         
         ///
         public rnn_primitive_desc_base(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                    @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd,
-                    @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
+                    @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd,
+                    @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, aengine, hint_fwd_pd, allow_empty); }
         private native void allocate(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                    @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd,
+                    @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd,
                     @Cast("bool") boolean allow_empty/*=false*/);
         public rnn_primitive_desc_base(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                    @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
+                    @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, aengine, hint_fwd_pd); }
         private native void allocate(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                    @Const @ByRef engine engine, @Const dnnl_primitive_desc hint_fwd_pd);
+                    @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public rnn_primitive_desc_base(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -59,6 +59,9 @@ public class rnn_primitive_desc_base extends org.bytedeco.dnnl.primitive_desc {
     private native void allocateArray(long size);
     @Override public rnn_primitive_desc_base position(long position) {
         return (rnn_primitive_desc_base)super.position(position);
+    }
+    @Override public rnn_primitive_desc_base getPointer(long i) {
+        return new rnn_primitive_desc_base(this).position(position + i);
     }
 
 
@@ -69,16 +72,16 @@ public class rnn_primitive_desc_base extends org.bytedeco.dnnl.primitive_desc {
      *  primitive by comparing propagation and primitive kinds.
      * 
      *  @param pd C API primitive descriptor.
-     *  @param prop_kind Expected propagation kind.
+     *  @param aprop_kind Expected propagation kind.
      *  @param cell_kind Expected cell kind. */
-    public rnn_primitive_desc_base(dnnl_primitive_desc pd, prop_kind prop_kind,
-                algorithm cell_kind) { super((Pointer)null); allocate(pd, prop_kind, cell_kind); }
-    private native void allocate(dnnl_primitive_desc pd, prop_kind prop_kind,
-                algorithm cell_kind);
-    public rnn_primitive_desc_base(dnnl_primitive_desc pd, @Cast("dnnl::prop_kind") int prop_kind,
-                @Cast("dnnl::algorithm") int cell_kind) { super((Pointer)null); allocate(pd, prop_kind, cell_kind); }
-    private native void allocate(dnnl_primitive_desc pd, @Cast("dnnl::prop_kind") int prop_kind,
-                @Cast("dnnl::algorithm") int cell_kind);
+    public rnn_primitive_desc_base(dnnl_primitive_desc pd,
+                prop_kind aprop_kind, algorithm cell_kind) { super((Pointer)null); allocate(pd, aprop_kind, cell_kind); }
+    private native void allocate(dnnl_primitive_desc pd,
+                prop_kind aprop_kind, algorithm cell_kind);
+    public rnn_primitive_desc_base(dnnl_primitive_desc pd,
+                @Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int cell_kind) { super((Pointer)null); allocate(pd, aprop_kind, cell_kind); }
+    private native void allocate(dnnl_primitive_desc pd,
+                @Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int cell_kind);
 
     /** Returns source layer memory descriptor.
      *  @return Source layer memory descriptor. */

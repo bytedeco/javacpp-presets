@@ -205,7 +205,7 @@ public class CpuCnnInferenceInt8 {
         src_attr.set_output_scales(src_mask, src_scales);
         reorder.primitive_desc src_reorder_pd = new reorder.primitive_desc(cpu_engine,
                 user_src_memory.get_desc(), cpu_engine,
-                conv_src_memory.get_desc(), src_attr);
+                conv_src_memory.get_desc(), src_attr, false);
         reorder src_reorder = new reorder(src_reorder_pd);
         src_reorder.execute(s, user_src_memory, conv_src_memory);
 
@@ -214,7 +214,7 @@ public class CpuCnnInferenceInt8 {
         weight_attr.set_output_scales(weight_mask, weight_scales);
         reorder.primitive_desc weight_reorder_pd = new reorder.primitive_desc(cpu_engine,
                 user_weights_memory.get_desc(), cpu_engine,
-                conv_weights_memory.get_desc(), weight_attr);
+                conv_weights_memory.get_desc(), weight_attr, false);
         reorder weight_reorder = new reorder(weight_reorder_pd);
         weight_reorder.execute(s, user_weights_memory, conv_weights_memory);
 
@@ -223,7 +223,7 @@ public class CpuCnnInferenceInt8 {
         bias_attr.set_output_scales(bias_mask, bias_scales);
         reorder.primitive_desc bias_reorder_pd = new reorder.primitive_desc(cpu_engine,
                 user_bias_memory.get_desc(), cpu_engine,
-                conv_bias_memory.get_desc(), bias_attr);
+                conv_bias_memory.get_desc(), bias_attr, false);
         reorder bias_reorder = new reorder(bias_reorder_pd);
         bias_reorder.execute(s, user_bias_memory, conv_bias_memory);
 //[Quantize data and weights]
@@ -259,7 +259,7 @@ public class CpuCnnInferenceInt8 {
         dst_attr.set_output_scales(dst_mask, dst_scales);
         reorder.primitive_desc dst_reorder_pd = new reorder.primitive_desc(cpu_engine,
                 conv_dst_memory.get_desc(), cpu_engine,
-                user_dst_memory.get_desc(), dst_attr);
+                user_dst_memory.get_desc(), dst_attr, false);
         reorder dst_reorder = new reorder(dst_reorder_pd);
         dst_reorder.execute(s, conv_dst_memory, user_dst_memory);
 //[Dequantize the result]

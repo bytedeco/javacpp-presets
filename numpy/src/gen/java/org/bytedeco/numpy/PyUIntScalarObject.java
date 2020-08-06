@@ -30,6 +30,9 @@ public class PyUIntScalarObject extends Pointer {
     @Override public PyUIntScalarObject position(long position) {
         return (PyUIntScalarObject)super.position(position);
     }
+    @Override public PyUIntScalarObject getPointer(long i) {
+        return new PyUIntScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyUIntScalarObject ob_base(PyObject setter);
         public native @Cast("unsigned int") int obval(); public native PyUIntScalarObject obval(int setter);

@@ -23,6 +23,9 @@ public class lstm_backward extends primitive {
     @Override public lstm_backward position(long position) {
         return (lstm_backward)super.position(position);
     }
+    @Override public lstm_backward getPointer(long i) {
+        return new lstm_backward(this).position(position + i);
+    }
 
     /** Descriptor for an LSTM backward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
@@ -31,8 +34,6 @@ public class lstm_backward extends primitive {
         public desc(Pointer p) { super(p); }
     
         
-        ///
-        ///
         ///
         ///
         ///
@@ -66,62 +67,7 @@ public class lstm_backward extends primitive {
          *      All memory descriptors can be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
-         *  Inputs:
-         *   - src_layer (#dnnl::primitive_desc_base::src_desc (0))
-         *   - src_iter (#dnnl::primitive_desc_base::src_desc (1)), if used
-         *   - src_iter_c (#dnnl::primitive_desc_base::src_desc (2)), if used
-         *   - weights_layer (#dnnl::primitive_desc_base::weights_desc (0))
-         *   - weights_iter (#dnnl::primitive_desc_base::weights_desc (1))
-         *   - weights_peephole (#dnnl::primitive_desc_base::weights_desc (2)),
-         *     if used
-         *   - weights_projection
-         *     (#dnnl::primitive_desc_base::weights_desc (index)), if used and
-         *     index is:
-         *     - 2, if there is no weights_peephole
-         *     - 3, otherwise
-         *   - bias (#dnnl::primitive_desc_base::weights_desc (index)), if used
-         *     and index is:
-         *     - 2, if neither weights_peephole nor weights_projection is used
-         *     - 3, if one of weights_peephole or weights_projection is used
-         *     - 4, if both weights_peephole and weights_projection are used
-         *   - dst_layer (#dnnl::primitive_desc_base::dst_desc (0))
-         *   - dst_iter (#dnnl::primitive_desc_base::dst_desc (1)), if used
-         *   - dst_iter_c (#dnnl::primitive_desc_base::dst_desc (2)), if used
-         *   - diff_dst_layer (#dnnl::primitive_desc_base::diff_dst_desc (0))
-         *   - diff_dst_iter
-         *      (#dnnl::primitive_desc_base::diff_dst_desc (1)), if used
-         *   - diff_dst_iter_c
-         *      (#dnnl::primitive_desc_base::diff_dst_desc (2)), if used
-         *   - workspace (#dnnl::primitive_desc_base::workspace_desc (0))
-         * 
-         *  Outputs:
-         *   - diff_src_layer (#dnnl::primitive_desc_base::diff_src_desc (0))
-         *   - diff_src_iter
-         *      (#dnnl::primitive_desc_base::diff_src_desc (1)), if used
-         *   - diff_src_iter_c
-         *      (#dnnl::primitive_desc_base::diff_src_desc (2)), if used
-         *   - diff_weights_layer
-         *      (#dnnl::primitive_desc_base::diff_weights_desc (0))
-         *   - diff_weights_iter
-         *      (#dnnl::primitive_desc_base::diff_weights_desc (1))
-         *   - diff_weights_peephole
-         *     (#dnnl::primitive_desc_base::diff_weights_desc (2)), if used
-         *   - diff_weights_projection
-         *     (#dnnl::primitive_desc_base::diff_weights_desc (index)), if used
-         *     and index is:
-         *     - 2, if there is no diff_weights_peephole
-         *     - 3, otherwise
-         *   - diff_bias
-         *     (#dnnl::primitive_desc_base::diff_weights_desc (index)), if used
-         *     and index is:
-         *     - 2, if neither diff_weights_peephole nor
-         *          diff_weights_projection is used
-         *     - 3, if one of diff_weights_peephole or diff_weights_projection
-         *          is used
-         *     - 4, if both diff_weights_peephole and diff_weights_projection
-         *          are used
-         * 
-         *  @param prop_kind Propagation kind. Must be
+         *  @param aprop_kind Propagation kind. Must be
          *      #dnnl::prop_kind::backward.
          *  @param direction RNN direction. See \ref dnnl::rnn_direction for
          *      more info.
@@ -175,9 +121,7 @@ public class lstm_backward extends primitive {
         ///
         ///
         ///
-        ///
-        ///
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -200,8 +144,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -225,7 +169,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
                         rnn_flags flags/*=dnnl::rnn_flags::undef*/);
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -247,8 +191,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -271,7 +215,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -294,8 +238,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -319,7 +263,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
                         @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -341,8 +285,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_weights_projection_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -387,46 +331,7 @@ public class lstm_backward extends primitive {
          *      All memory descriptors may be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
-         *  Inputs:
-         *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code src_iter} (#dnnl::primitive_desc_base::src_desc({@code 1})), if used
-         *   - {@code src_iter_c} (#dnnl::primitive_desc_base::src_desc({@code 2})), if used
-         *   - {@code weights_layer} (#dnnl::primitive_desc_base::weights_desc({@code 0}))
-         *   - {@code weights_iter} (#dnnl::primitive_desc_base::weights_desc({@code 1}))
-         *   - {@code weights_peephole} (#dnnl::primitive_desc_base::weights_desc({@code 2})),
-         *     if used
-         *   - {@code bias} (#dnnl::primitive_desc_base::weights_desc({@code 2})), if used and
-         *     LSTM is without peephole
-         *   - {@code bias} (#dnnl::primitive_desc_base::weights_desc({@code 3})), if used and
-         *     LSTM is with peephole
-         *   - {@code dst_layer} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         *   - {@code dst_iter} (#dnnl::primitive_desc_base::dst_desc({@code 1})), if used
-         *   - {@code dst_iter_c} (#dnnl::primitive_desc_base::dst_desc({@code 2})), if used
-         *   - {@code diff_dst_layer} (#dnnl::primitive_desc_base::diff_dst_desc({@code 0}))
-         *   - {@code diff_dst_iter}
-         *      (#dnnl::primitive_desc_base::diff_dst_desc({@code 1})), if used
-         *   - {@code diff_dst_iter_c}
-         *      (#dnnl::primitive_desc_base::diff_dst_desc({@code 2})), if used
-         *   - {@code workspace} (#dnnl::primitive_desc_base::workspace_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code diff_src_layer} (#dnnl::primitive_desc_base::diff_src_desc({@code 0}))
-         *   - {@code diff_src_iter}
-         *      (#dnnl::primitive_desc_base::diff_src_desc({@code 1})), if used
-         *   - {@code diff_src_iter_c}
-         *      (#dnnl::primitive_desc_base::diff_src_desc({@code 2})), if used
-         *   - {@code diff_weights_layer}
-         *      (#dnnl::primitive_desc_base::diff_weights_desc({@code 0}))
-         *   - {@code diff_weights_iter}
-         *      (#dnnl::primitive_desc_base::diff_weights_desc({@code 1}))
-         *   - {@code diff_weights_peephole}
-         *     (#dnnl::primitive_desc_base::diff_weights_desc({@code 2})), if used
-         *   - {@code diff_bias} (#dnnl::primitive_desc_base::diff_weights_desc({@code 2})),
-         *     if used and LSTM is without peephole
-         *   - {@code diff_bias} (#dnnl::primitive_desc_base::diff_weights_desc({@code 3})),
-         *     if used and LSTM is with peephole
-         * 
-         *  @param prop_kind Propagation kind. Must be
+         *  @param aprop_kind Propagation kind. Must be
          *      #dnnl::prop_kind::backward.
          *  @param direction RNN direction. See \ref dnnl::rnn_direction for
          *      more info.
@@ -474,9 +379,7 @@ public class lstm_backward extends primitive {
         ///
         ///
         ///
-        ///
-        ///
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -497,8 +400,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -520,7 +423,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
                         rnn_flags flags/*=dnnl::rnn_flags::undef*/);
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -540,8 +443,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -562,7 +465,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -583,8 +486,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -606,7 +509,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
                         @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -626,8 +529,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_weights_peephole_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -667,37 +570,7 @@ public class lstm_backward extends primitive {
          *      All memory descriptors may be initialized with
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
-         *  Inputs:
-         *   - {@code src_layer} (#dnnl::primitive_desc_base::src_desc({@code 0}))
-         *   - {@code src_iter} (#dnnl::primitive_desc_base::src_desc({@code 1})), if used
-         *   - {@code src_iter_c} (#dnnl::primitive_desc_base::src_desc({@code 2})), if used
-         *   - {@code weights_layer} (#dnnl::primitive_desc_base::weights_desc({@code 0}))
-         *   - {@code weights_iter} (#dnnl::primitive_desc_base::weights_desc({@code 1}))
-         *   - {@code bias} (#dnnl::primitive_desc_base::weights_desc({@code 2})), if used
-         *   - {@code dst_layer} (#dnnl::primitive_desc_base::dst_desc({@code 0}))
-         *   - {@code dst_iter} (#dnnl::primitive_desc_base::dst_desc({@code 1})), if used
-         *   - {@code dst_iter_c} (#dnnl::primitive_desc_base::dst_desc({@code 2})), if used
-         *   - {@code diff_dst_layer} (#dnnl::primitive_desc_base::diff_dst_desc({@code 0}))
-         *   - {@code diff_dst_iter}
-         *      (#dnnl::primitive_desc_base::diff_dst_desc({@code 1})), if used
-         *   - {@code diff_dst_iter_c}
-         *      (#dnnl::primitive_desc_base::diff_dst_desc({@code 2})), if used
-         *   - {@code workspace} (#dnnl::primitive_desc_base::workspace_desc({@code 0}))
-         * 
-         *  Outputs:
-         *   - {@code diff_src_layer} (#dnnl::primitive_desc_base::diff_src_desc({@code 0}))
-         *   - {@code diff_src_iter}
-         *      (#dnnl::primitive_desc_base::diff_src_desc({@code 1})), if used
-         *   - {@code diff_src_iter_c}
-         *      (#dnnl::primitive_desc_base::diff_src_desc({@code 2})), if used
-         *   - {@code diff_weights_layer}
-         *      (#dnnl::primitive_desc_base::diff_weights_desc({@code 0}))
-         *   - {@code diff_weights_iter}
-         *      (#dnnl::primitive_desc_base::diff_weights_desc({@code 1}))
-         *   - {@code diff_bias}
-         *      (#dnnl::primitive_desc_base::diff_weights_desc({@code 2})), if used
-         * 
-         *  @param prop_kind Propagation kind. Must be
+         *  @param aprop_kind Propagation kind. Must be
          *      #dnnl::prop_kind::backward.
          *  @param direction RNN direction. See \ref dnnl::rnn_direction for
          *      more info.
@@ -734,7 +607,7 @@ public class lstm_backward extends primitive {
          *  @param diff_dst_iter_c_desc Memory descriptor for the diff of
          *      output recurrent cell state vector.
          *  @param flags Unused. */
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -753,8 +626,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -774,7 +647,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
                         rnn_flags flags/*=dnnl::rnn_flags::undef*/);
-        public desc(prop_kind prop_kind, rnn_direction direction,
+        public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -792,8 +665,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
-        private native void allocate(prop_kind prop_kind, rnn_direction direction,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -812,7 +685,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -831,8 +704,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -852,7 +725,7 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc,
                         @Const @ByRef memory.desc diff_dst_iter_c_desc,
                         @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
-        public desc(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -870,8 +743,8 @@ public class lstm_backward extends primitive {
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(prop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int prop_kind, @Cast("dnnl::rnn_direction") int direction,
+                        @Const @ByRef memory.desc diff_dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, diff_src_layer_desc, diff_src_iter_desc, diff_src_iter_c_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, diff_dst_iter_c_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
                         @Const @ByRef memory.desc src_iter_c_desc,
@@ -903,6 +776,9 @@ public class lstm_backward extends primitive {
         @Override public primitive_desc position(long position) {
             return (primitive_desc)super.position(position);
         }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc(this).position(position + i);
+        }
     
         /** Default constructor. Produces an empty object. */
         
@@ -913,8 +789,8 @@ public class lstm_backward extends primitive {
         /** Constructs a primitive descriptor for an LSTM backward propagation
          *  primitive.
          * 
-         *  @param desc Descriptor for LSTM backward propagation primitive.
-         *  @param engine Engine to use.
+         *  @param adesc Descriptor for LSTM backward propagation primitive.
+         *  @param aengine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for an LSTM
          *      forward propagation primitive. It is used as a hint for
          *      deciding which memory format to use.
@@ -924,23 +800,23 @@ public class lstm_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine engine,
-                        @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, engine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
                         @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for an LSTM backward propagation
          *  primitive.
          * 
-         *  @param desc Descriptor for an LSTM backward propagation primitive.
+         *  @param adesc Descriptor for an LSTM backward propagation primitive.
          *  @param attr Primitive attributes to use.
-         *  @param engine Engine to use.
+         *  @param aengine Engine to use.
          *  @param hint_fwd_pd Primitive descriptor for an LSTM
          *      forward propagation primitive. It is used as a hint for
          *      deciding which memory format to use.
@@ -950,19 +826,19 @@ public class lstm_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd, allow_empty); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
-                        @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, engine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine engine,
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
+                        @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine aengine,
                         @Const @ByRef lstm_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for an LSTM backward propagation

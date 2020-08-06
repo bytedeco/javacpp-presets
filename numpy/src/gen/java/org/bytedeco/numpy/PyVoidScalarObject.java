@@ -30,6 +30,9 @@ public class PyVoidScalarObject extends Pointer {
     @Override public PyVoidScalarObject position(long position) {
         return (PyVoidScalarObject)super.position(position);
     }
+    @Override public PyVoidScalarObject getPointer(long i) {
+        return new PyVoidScalarObject(this).position(position + i);
+    }
 
         public native @ByRef PyVarObject ob_base(); public native PyVoidScalarObject ob_base(PyVarObject setter);
         public native @Cast("char*") BytePointer obval(); public native PyVoidScalarObject obval(BytePointer setter);

@@ -29,6 +29,9 @@ public class PyArray_ArrFuncs extends Pointer {
     @Override public PyArray_ArrFuncs position(long position) {
         return (PyArray_ArrFuncs)super.position(position);
     }
+    @Override public PyArray_ArrFuncs getPointer(long i) {
+        return new PyArray_ArrFuncs(this).position(position + i);
+    }
 
         /*
          * Functions to cast to most other standard types

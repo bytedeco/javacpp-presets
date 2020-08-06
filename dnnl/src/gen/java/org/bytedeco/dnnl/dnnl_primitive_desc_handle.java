@@ -21,6 +21,9 @@ public class dnnl_primitive_desc_handle extends Pointer {
     @Override public dnnl_primitive_desc_handle position(long position) {
         return (dnnl_primitive_desc_handle)super.position(position);
     }
+    @Override public dnnl_primitive_desc_handle getPointer(long i) {
+        return new dnnl_primitive_desc_handle(this).position(position + i);
+    }
 
     /** Constructs an empty handle object.
      * 
@@ -80,9 +83,9 @@ public class dnnl_primitive_desc_handle extends Pointer {
     ///
     public native @Name("operator dnnl_primitive_desc_t") dnnl_primitive_desc asDnnl_primitive_desc();
 
-    /** Checks whether the object is empty.
+    /** Checks whether the object is not empty.
      * 
-     *  @return Whether the object is empty. */
+     *  @return Whether the object is not empty. */
     
     ///
     public native @Cast("bool") @Name("operator bool") boolean asBoolean();

@@ -27,6 +27,9 @@ public class dnnl_version_t extends Pointer {
     @Override public dnnl_version_t position(long position) {
         return (dnnl_version_t)super.position(position);
     }
+    @Override public dnnl_version_t getPointer(long i) {
+        return new dnnl_version_t(this).position(position + i);
+    }
 
     /** Major version */
     public native int major(); public native dnnl_version_t major(int setter);

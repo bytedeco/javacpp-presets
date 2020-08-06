@@ -40,6 +40,9 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
     @Override public primitive_desc_base position(long position) {
         return (primitive_desc_base)super.position(position);
     }
+    @Override public primitive_desc_base getPointer(long i) {
+        return new primitive_desc_base(this).position(position + i);
+    }
 
 
     /** Default constructor. Produces an empty object. */
@@ -84,42 +87,42 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
      *  @param idx Source index.
      *  @return Source memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
-     *      source parameter with index \p pdx. */
+     *      source parameter with index \p idx. */
     public native @ByVal memory.desc src_desc(int idx);
 
     /** Returns a destination memory descriptor.
      *  @param idx Destination index.
      *  @return Destination memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
-     *      destination parameter with index \p pdx. */
+     *      destination parameter with index \p idx. */
     public native @ByVal memory.desc dst_desc(int idx);
 
     /** Returns a weights memory descriptor.
      *  @param idx Weights index.
      *  @return Weights memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
-     *      weights parameter with index \p pdx. */
+     *      weights parameter with index \p idx. */
     public native @ByVal memory.desc weights_desc(int idx);
 
     /** Returns a diff source memory descriptor.
      *  @param idx Diff source index.
      *  @return Diff source memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
-     *      diff source parameter with index \p pdx. */
+     *      diff source parameter with index \p idx. */
     public native @ByVal memory.desc diff_src_desc(int idx);
 
     /** Returns a diff destination memory descriptor.
      *  @param idx Diff destination index.
      *  @return Diff destination memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
-     *      diff destination parameter with index \p pdx. */
+     *      diff destination parameter with index \p idx. */
     public native @ByVal memory.desc diff_dst_desc(int idx);
 
     /** Returns a diff weights memory descriptor.
      *  @param idx Diff weights index.
      *  @return Diff weights memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
-     *      diff weights parameter with index \p pdx. */
+     *      diff weights parameter with index \p idx. */
     public native @ByVal memory.desc diff_weights_desc(int idx);
 
     // Separate versions without the index argument for documentation

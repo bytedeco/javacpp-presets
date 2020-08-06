@@ -31,6 +31,9 @@ public class PyArray_Chunk extends Pointer {
     @Override public PyArray_Chunk position(long position) {
         return (PyArray_Chunk)super.position(position);
     }
+    @Override public PyArray_Chunk getPointer(long i) {
+        return new PyArray_Chunk(this).position(position + i);
+    }
 
         public native @ByRef PyObject ob_base(); public native PyArray_Chunk ob_base(PyObject setter);
         public native PyObject base(); public native PyArray_Chunk base(PyObject setter);
