@@ -27,6 +27,9 @@ public class cudnnConvolutionFwdAlgoPerf_t extends Pointer {
     @Override public cudnnConvolutionFwdAlgoPerf_t position(long position) {
         return (cudnnConvolutionFwdAlgoPerf_t)super.position(position);
     }
+    @Override public cudnnConvolutionFwdAlgoPerf_t getPointer(long i) {
+        return new cudnnConvolutionFwdAlgoPerf_t(this).position(position + i);
+    }
 
     public native @Cast("cudnnConvolutionFwdAlgo_t") int algo(); public native cudnnConvolutionFwdAlgoPerf_t algo(int setter);
     public native @Cast("cudnnStatus_t") int status(); public native cudnnConvolutionFwdAlgoPerf_t status(int setter);

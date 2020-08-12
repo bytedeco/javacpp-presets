@@ -32,6 +32,9 @@ public class __half_raw extends Pointer {
     @Override public __half_raw position(long position) {
         return (__half_raw)super.position(position);
     }
+    @Override public __half_raw getPointer(long i) {
+        return new __half_raw(this).position(position + i);
+    }
 
     public native @Cast("unsigned short") short x(); public native __half_raw x(short setter);
 }

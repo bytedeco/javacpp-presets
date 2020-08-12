@@ -28,6 +28,9 @@ public class CUstreamAttrValue extends Pointer {
     @Override public CUstreamAttrValue position(long position) {
         return (CUstreamAttrValue)super.position(position);
     }
+    @Override public CUstreamAttrValue getPointer(long i) {
+        return new CUstreamAttrValue(this).position(position + i);
+    }
 
     /** Attribute ::CUaccessPolicyWindow. */
     public native @ByRef CUaccessPolicyWindow accessPolicyWindow(); public native CUstreamAttrValue accessPolicyWindow(CUaccessPolicyWindow setter);

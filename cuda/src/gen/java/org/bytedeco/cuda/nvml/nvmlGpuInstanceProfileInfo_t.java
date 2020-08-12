@@ -27,6 +27,9 @@ public class nvmlGpuInstanceProfileInfo_t extends Pointer {
     @Override public nvmlGpuInstanceProfileInfo_t position(long position) {
         return (nvmlGpuInstanceProfileInfo_t)super.position(position);
     }
+    @Override public nvmlGpuInstanceProfileInfo_t getPointer(long i) {
+        return new nvmlGpuInstanceProfileInfo_t(this).position(position + i);
+    }
 
     /** Unique profile ID within the device */
     public native @Cast("unsigned int") int id(); public native nvmlGpuInstanceProfileInfo_t id(int setter);

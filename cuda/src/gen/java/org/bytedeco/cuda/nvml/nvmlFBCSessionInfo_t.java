@@ -30,6 +30,9 @@ public class nvmlFBCSessionInfo_t extends Pointer {
     @Override public nvmlFBCSessionInfo_t position(long position) {
         return (nvmlFBCSessionInfo_t)super.position(position);
     }
+    @Override public nvmlFBCSessionInfo_t getPointer(long i) {
+        return new nvmlFBCSessionInfo_t(this).position(position + i);
+    }
 
     /** Unique session ID */
     public native @Cast("unsigned int") int sessionId(); public native nvmlFBCSessionInfo_t sessionId(int setter);

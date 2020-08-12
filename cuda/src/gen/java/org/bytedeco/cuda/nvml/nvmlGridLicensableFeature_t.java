@@ -30,6 +30,9 @@ public class nvmlGridLicensableFeature_t extends Pointer {
     @Override public nvmlGridLicensableFeature_t position(long position) {
         return (nvmlGridLicensableFeature_t)super.position(position);
     }
+    @Override public nvmlGridLicensableFeature_t getPointer(long i) {
+        return new nvmlGridLicensableFeature_t(this).position(position + i);
+    }
 
     /** Licensed feature code */
     public native @Cast("nvmlGridLicenseFeatureCode_t") int featureCode(); public native nvmlGridLicensableFeature_t featureCode(int setter);

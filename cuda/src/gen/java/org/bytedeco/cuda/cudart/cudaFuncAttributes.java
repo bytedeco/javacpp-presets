@@ -28,6 +28,9 @@ public class cudaFuncAttributes extends Pointer {
     @Override public cudaFuncAttributes position(long position) {
         return (cudaFuncAttributes)super.position(position);
     }
+    @Override public cudaFuncAttributes getPointer(long i) {
+        return new cudaFuncAttributes(this).position(position + i);
+    }
 
    /**
     * The size in bytes of statically-allocated shared memory per block

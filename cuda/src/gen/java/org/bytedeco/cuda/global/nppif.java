@@ -21366,6 +21366,9 @@ public static class NppiBufferDescriptor extends Pointer {
     @Override public NppiBufferDescriptor position(long position) {
         return (NppiBufferDescriptor)super.position(position);
     }
+    @Override public NppiBufferDescriptor getPointer(long i) {
+        return new NppiBufferDescriptor(this).position(position + i);
+    }
 
     public native Pointer pData(); public native NppiBufferDescriptor pData(Pointer setter);  // per image device memory pointer to the corresponding buffer
     public native int nBufferSize(); public native NppiBufferDescriptor nBufferSize(int setter);  // step size

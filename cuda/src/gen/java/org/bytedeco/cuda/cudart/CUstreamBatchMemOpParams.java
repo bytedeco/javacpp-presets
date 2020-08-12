@@ -28,6 +28,9 @@ public class CUstreamBatchMemOpParams extends Pointer {
     @Override public CUstreamBatchMemOpParams position(long position) {
         return (CUstreamBatchMemOpParams)super.position(position);
     }
+    @Override public CUstreamBatchMemOpParams getPointer(long i) {
+        return new CUstreamBatchMemOpParams(this).position(position + i);
+    }
 
     public native @Cast("CUstreamBatchMemOpType") int operation(); public native CUstreamBatchMemOpParams operation(int setter);
         @Name("waitValue.operation") public native @Cast("CUstreamBatchMemOpType") int waitValue_operation(); public native CUstreamBatchMemOpParams waitValue_operation(int setter);

@@ -30,6 +30,9 @@ public class cudaPos extends Pointer {
     @Override public cudaPos position(long position) {
         return (cudaPos)super.position(position);
     }
+    @Override public cudaPos getPointer(long i) {
+        return new cudaPos(this).position(position + i);
+    }
 
     /** x */
     public native @Cast("size_t") long x(); public native cudaPos x(long setter);

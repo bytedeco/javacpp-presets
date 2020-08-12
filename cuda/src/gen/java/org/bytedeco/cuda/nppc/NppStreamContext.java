@@ -33,6 +33,9 @@ public class NppStreamContext extends Pointer {
     @Override public NppStreamContext position(long position) {
         return (NppStreamContext)super.position(position);
     }
+    @Override public NppStreamContext getPointer(long i) {
+        return new NppStreamContext(this).position(position + i);
+    }
 
     public native CUstream_st hStream(); public native NppStreamContext hStream(CUstream_st setter);
     public native int nCudaDeviceId(); public native NppStreamContext nCudaDeviceId(int setter); /* From cudaGetDevice() */

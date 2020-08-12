@@ -30,6 +30,9 @@ public class nvmlBAR1Memory_t extends Pointer {
     @Override public nvmlBAR1Memory_t position(long position) {
         return (nvmlBAR1Memory_t)super.position(position);
     }
+    @Override public nvmlBAR1Memory_t getPointer(long i) {
+        return new nvmlBAR1Memory_t(this).position(position + i);
+    }
 
     /** Total BAR1 Memory (in bytes) */
     public native @Cast("unsigned long long") long bar1Total(); public native nvmlBAR1Memory_t bar1Total(long setter);

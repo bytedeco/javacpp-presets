@@ -32,6 +32,9 @@ public class NppiImageDescriptor extends Pointer {
     @Override public NppiImageDescriptor position(long position) {
         return (NppiImageDescriptor)super.position(position);
     }
+    @Override public NppiImageDescriptor getPointer(long i) {
+        return new NppiImageDescriptor(this).position(position + i);
+    }
 
     public native Pointer pData(); public native NppiImageDescriptor pData(Pointer setter);  // device memory pointer to the image
     public native int nStep(); public native NppiImageDescriptor nStep(int setter);  // step size

@@ -32,6 +32,9 @@ public class NppiSize extends Pointer {
     @Override public NppiSize position(long position) {
         return (NppiSize)super.position(position);
     }
+    @Override public NppiSize getPointer(long i) {
+        return new NppiSize(this).position(position + i);
+    }
 
     /**  Rectangle width. */
     public native int width(); public native NppiSize width(int setter);

@@ -29,6 +29,9 @@ public class cublasLtMatmulPreferenceOpaque_t extends Pointer {
     @Override public cublasLtMatmulPreferenceOpaque_t position(long position) {
         return (cublasLtMatmulPreferenceOpaque_t)super.position(position);
     }
+    @Override public cublasLtMatmulPreferenceOpaque_t getPointer(long i) {
+        return new cublasLtMatmulPreferenceOpaque_t(this).position(position + i);
+    }
 
     public native @Cast("uint64_t") long data(int i); public native cublasLtMatmulPreferenceOpaque_t data(int i, long setter);
     @MemberGetter public native @Cast("uint64_t*") LongPointer data();

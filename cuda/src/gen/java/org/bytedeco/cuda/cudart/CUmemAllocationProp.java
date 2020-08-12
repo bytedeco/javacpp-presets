@@ -28,6 +28,9 @@ public class CUmemAllocationProp extends Pointer {
     @Override public CUmemAllocationProp position(long position) {
         return (CUmemAllocationProp)super.position(position);
     }
+    @Override public CUmemAllocationProp getPointer(long i) {
+        return new CUmemAllocationProp(this).position(position + i);
+    }
 
     /** Allocation type */
     public native @Cast("CUmemAllocationType") int type(); public native CUmemAllocationProp type(int setter);

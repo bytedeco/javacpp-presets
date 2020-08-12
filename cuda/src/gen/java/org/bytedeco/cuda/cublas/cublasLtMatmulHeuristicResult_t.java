@@ -31,6 +31,9 @@ public class cublasLtMatmulHeuristicResult_t extends Pointer {
     @Override public cublasLtMatmulHeuristicResult_t position(long position) {
         return (cublasLtMatmulHeuristicResult_t)super.position(position);
     }
+    @Override public cublasLtMatmulHeuristicResult_t getPointer(long i) {
+        return new cublasLtMatmulHeuristicResult_t(this).position(position + i);
+    }
 
     /** Matmul algorithm descriptor.
      *

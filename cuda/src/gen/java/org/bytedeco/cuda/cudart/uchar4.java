@@ -25,6 +25,9 @@ public class uchar4 extends Pointer {
     @Override public uchar4 position(long position) {
         return (uchar4)super.position(position);
     }
+    @Override public uchar4 getPointer(long i) {
+        return new uchar4(this).position(position + i);
+    }
 
     public native @Cast("unsigned char") byte x(); public native uchar4 x(byte setter);
     public native @Cast("unsigned char") byte y(); public native uchar4 y(byte setter);

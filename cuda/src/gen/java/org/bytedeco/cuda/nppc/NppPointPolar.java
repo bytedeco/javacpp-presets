@@ -30,6 +30,9 @@ public class NppPointPolar extends Pointer {
     @Override public NppPointPolar position(long position) {
         return (NppPointPolar)super.position(position);
     }
+    @Override public NppPointPolar getPointer(long i) {
+        return new NppPointPolar(this).position(position + i);
+    }
 
     public native @Cast("Npp32f") float rho(); public native NppPointPolar rho(float setter);
     public native @Cast("Npp32f") float theta(); public native NppPointPolar theta(float setter);

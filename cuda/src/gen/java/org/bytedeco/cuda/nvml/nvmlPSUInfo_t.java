@@ -42,6 +42,9 @@ public class nvmlPSUInfo_t extends Pointer {
     @Override public nvmlPSUInfo_t position(long position) {
         return (nvmlPSUInfo_t)super.position(position);
     }
+    @Override public nvmlPSUInfo_t getPointer(long i) {
+        return new nvmlPSUInfo_t(this).position(position + i);
+    }
 
     /** The power supply state */
     public native @Cast("char") byte state(int i); public native nvmlPSUInfo_t state(int i, byte setter);

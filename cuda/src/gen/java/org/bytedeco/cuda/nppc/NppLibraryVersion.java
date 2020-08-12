@@ -27,6 +27,9 @@ public class NppLibraryVersion extends Pointer {
     @Override public NppLibraryVersion position(long position) {
         return (NppLibraryVersion)super.position(position);
     }
+    @Override public NppLibraryVersion getPointer(long i) {
+        return new NppLibraryVersion(this).position(position + i);
+    }
 
     /**  Major version number */
     public native int major(); public native NppLibraryVersion major(int setter);

@@ -28,6 +28,9 @@ public class fftw_iodim extends Pointer {
     @Override public fftw_iodim position(long position) {
         return (fftw_iodim)super.position(position);
     }
+    @Override public fftw_iodim getPointer(long i) {
+        return new fftw_iodim(this).position(position + i);
+    }
 
     public native int n(); public native fftw_iodim n(int setter);
     public native int is(); public native fftw_iodim is(int setter);

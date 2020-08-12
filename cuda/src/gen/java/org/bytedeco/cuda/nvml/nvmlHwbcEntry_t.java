@@ -30,6 +30,9 @@ public class nvmlHwbcEntry_t extends Pointer {
     @Override public nvmlHwbcEntry_t position(long position) {
         return (nvmlHwbcEntry_t)super.position(position);
     }
+    @Override public nvmlHwbcEntry_t getPointer(long i) {
+        return new nvmlHwbcEntry_t(this).position(position + i);
+    }
 
     public native @Cast("unsigned int") int hwbcId(); public native nvmlHwbcEntry_t hwbcId(int setter);
     public native @Cast("char") byte firmwareVersion(int i); public native nvmlHwbcEntry_t firmwareVersion(int i, byte setter);

@@ -31,6 +31,9 @@ public class Npp64fc extends Pointer {
     @Override public Npp64fc position(long position) {
         return (Npp64fc)super.position(position);
     }
+    @Override public Npp64fc getPointer(long i) {
+        return new Npp64fc(this).position(position + i);
+    }
 
     /**  Real part */
     public native @Cast("Npp64f") double re(); public native Npp64fc re(double setter);

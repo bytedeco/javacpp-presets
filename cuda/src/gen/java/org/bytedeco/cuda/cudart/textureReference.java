@@ -28,6 +28,9 @@ public class textureReference extends Pointer {
     @Override public textureReference position(long position) {
         return (textureReference)super.position(position);
     }
+    @Override public textureReference getPointer(long i) {
+        return new textureReference(this).position(position + i);
+    }
 
     /**
      * Indicates whether texture reads are normalized or not

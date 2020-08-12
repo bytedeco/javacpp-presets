@@ -28,6 +28,9 @@ public class cudaMemcpy3DParms extends Pointer {
     @Override public cudaMemcpy3DParms position(long position) {
         return (cudaMemcpy3DParms)super.position(position);
     }
+    @Override public cudaMemcpy3DParms getPointer(long i) {
+        return new cudaMemcpy3DParms(this).position(position + i);
+    }
 
     /** Source memory address */
     public native cudaArray srcArray(); public native cudaMemcpy3DParms srcArray(cudaArray setter);

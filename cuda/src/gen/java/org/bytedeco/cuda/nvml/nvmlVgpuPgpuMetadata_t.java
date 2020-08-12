@@ -30,6 +30,9 @@ public class nvmlVgpuPgpuMetadata_t extends Pointer {
     @Override public nvmlVgpuPgpuMetadata_t position(long position) {
         return (nvmlVgpuPgpuMetadata_t)super.position(position);
     }
+    @Override public nvmlVgpuPgpuMetadata_t getPointer(long i) {
+        return new nvmlVgpuPgpuMetadata_t(this).position(position + i);
+    }
 
     /** Current version of the structure */
     public native @Cast("unsigned int") int version(); public native nvmlVgpuPgpuMetadata_t version(int setter);

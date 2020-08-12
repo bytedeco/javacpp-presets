@@ -28,6 +28,9 @@ public class CUDA_MEMSET_NODE_PARAMS extends Pointer {
     @Override public CUDA_MEMSET_NODE_PARAMS position(long position) {
         return (CUDA_MEMSET_NODE_PARAMS)super.position(position);
     }
+    @Override public CUDA_MEMSET_NODE_PARAMS getPointer(long i) {
+        return new CUDA_MEMSET_NODE_PARAMS(this).position(position + i);
+    }
 
     /** Destination device pointer */
     public native @Cast("CUdeviceptr") long dst(); public native CUDA_MEMSET_NODE_PARAMS dst(long setter);

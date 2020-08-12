@@ -28,6 +28,9 @@ public class float3 extends Pointer {
     @Override public float3 position(long position) {
         return (float3)super.position(position);
     }
+    @Override public float3 getPointer(long i) {
+        return new float3(this).position(position + i);
+    }
 
     public native float x(); public native float3 x(float setter);
     public native float y(); public native float3 y(float setter);

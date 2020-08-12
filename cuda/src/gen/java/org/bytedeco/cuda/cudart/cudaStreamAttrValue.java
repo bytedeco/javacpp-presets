@@ -28,6 +28,9 @@ public class cudaStreamAttrValue extends Pointer {
     @Override public cudaStreamAttrValue position(long position) {
         return (cudaStreamAttrValue)super.position(position);
     }
+    @Override public cudaStreamAttrValue getPointer(long i) {
+        return new cudaStreamAttrValue(this).position(position + i);
+    }
 
     public native @ByRef cudaAccessPolicyWindow accessPolicyWindow(); public native cudaStreamAttrValue accessPolicyWindow(cudaAccessPolicyWindow setter);
     public native @Cast("cudaSynchronizationPolicy") int syncPolicy(); public native cudaStreamAttrValue syncPolicy(int setter);

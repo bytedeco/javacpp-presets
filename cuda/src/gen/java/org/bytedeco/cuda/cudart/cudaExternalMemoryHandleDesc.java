@@ -28,6 +28,9 @@ public class cudaExternalMemoryHandleDesc extends Pointer {
     @Override public cudaExternalMemoryHandleDesc position(long position) {
         return (cudaExternalMemoryHandleDesc)super.position(position);
     }
+    @Override public cudaExternalMemoryHandleDesc getPointer(long i) {
+        return new cudaExternalMemoryHandleDesc(this).position(position + i);
+    }
 
     /**
      * Type of the handle

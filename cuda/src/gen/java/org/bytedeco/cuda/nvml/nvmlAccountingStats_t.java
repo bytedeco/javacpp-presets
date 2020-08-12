@@ -45,6 +45,9 @@ public class nvmlAccountingStats_t extends Pointer {
     @Override public nvmlAccountingStats_t position(long position) {
         return (nvmlAccountingStats_t)super.position(position);
     }
+    @Override public nvmlAccountingStats_t getPointer(long i) {
+        return new nvmlAccountingStats_t(this).position(position + i);
+    }
 
     /** Percent of time over the process's lifetime during which one or more kernels was executing on the GPU. */
     public native @Cast("unsigned int") int gpuUtilization(); public native nvmlAccountingStats_t gpuUtilization(int setter);

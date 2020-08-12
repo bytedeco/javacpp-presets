@@ -28,6 +28,9 @@ public class surfaceReference extends Pointer {
     @Override public surfaceReference position(long position) {
         return (surfaceReference)super.position(position);
     }
+    @Override public surfaceReference getPointer(long i) {
+        return new surfaceReference(this).position(position + i);
+    }
 
     /**
      * Channel descriptor for surface reference

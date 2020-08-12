@@ -30,6 +30,9 @@ public class nvmlBridgeChipInfo_t extends Pointer {
     @Override public nvmlBridgeChipInfo_t position(long position) {
         return (nvmlBridgeChipInfo_t)super.position(position);
     }
+    @Override public nvmlBridgeChipInfo_t getPointer(long i) {
+        return new nvmlBridgeChipInfo_t(this).position(position + i);
+    }
 
     /** Type of Bridge Chip  */
     public native @Cast("nvmlBridgeChipType_t") int type(); public native nvmlBridgeChipInfo_t type(int setter);

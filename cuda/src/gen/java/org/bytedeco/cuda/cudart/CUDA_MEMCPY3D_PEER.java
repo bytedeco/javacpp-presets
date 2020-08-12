@@ -28,6 +28,9 @@ public class CUDA_MEMCPY3D_PEER extends Pointer {
     @Override public CUDA_MEMCPY3D_PEER position(long position) {
         return (CUDA_MEMCPY3D_PEER)super.position(position);
     }
+    @Override public CUDA_MEMCPY3D_PEER getPointer(long i) {
+        return new CUDA_MEMCPY3D_PEER(this).position(position + i);
+    }
 
     /** Source X in bytes */
     public native @Cast("size_t") long srcXInBytes(); public native CUDA_MEMCPY3D_PEER srcXInBytes(long setter);

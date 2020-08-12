@@ -24,6 +24,9 @@ public class uint2 extends Pointer {
     @Override public uint2 position(long position) {
         return (uint2)super.position(position);
     }
+    @Override public uint2 getPointer(long i) {
+        return new uint2(this).position(position + i);
+    }
  
     public native @Cast("unsigned int") int x(); public native uint2 x(int setter); public native @Cast("unsigned int") int y(); public native uint2 y(int setter);
 }

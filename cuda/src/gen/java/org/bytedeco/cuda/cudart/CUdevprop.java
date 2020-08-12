@@ -28,6 +28,9 @@ public class CUdevprop extends Pointer {
     @Override public CUdevprop position(long position) {
         return (CUdevprop)super.position(position);
     }
+    @Override public CUdevprop getPointer(long i) {
+        return new CUdevprop(this).position(position + i);
+    }
 
     /** Maximum number of threads per block */
     public native int maxThreadsPerBlock(); public native CUdevprop maxThreadsPerBlock(int setter);

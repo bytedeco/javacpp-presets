@@ -39,6 +39,9 @@ public class nvmlVgpuVersion_t extends Pointer {
     @Override public nvmlVgpuVersion_t position(long position) {
         return (nvmlVgpuVersion_t)super.position(position);
     }
+    @Override public nvmlVgpuVersion_t getPointer(long i) {
+        return new nvmlVgpuVersion_t(this).position(position + i);
+    }
 
     /** Minimum vGPU version. */
     public native @Cast("unsigned int") int minVersion(); public native nvmlVgpuVersion_t minVersion(int setter);

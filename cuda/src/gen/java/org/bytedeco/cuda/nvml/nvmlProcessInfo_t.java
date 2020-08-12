@@ -30,6 +30,9 @@ public class nvmlProcessInfo_t extends Pointer {
     @Override public nvmlProcessInfo_t position(long position) {
         return (nvmlProcessInfo_t)super.position(position);
     }
+    @Override public nvmlProcessInfo_t getPointer(long i) {
+        return new nvmlProcessInfo_t(this).position(position + i);
+    }
 
     /** Process ID */
     public native @Cast("unsigned int") int pid(); public native nvmlProcessInfo_t pid(int setter);

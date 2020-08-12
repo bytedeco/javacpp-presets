@@ -71,10 +71,10 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "update-ca-certificates -f"
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
    cd $HOME/
-   curl -L http://developer.download.nvidia.com/compute/cuda/11.0.2/local_installers/cuda-repo-ubuntu1804-11-0-local_11.0.2-450.51.05-1_ppc64el.deb -o $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.2-450.51.05-1_ppc64el.deb
-   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.1/cudnn-11.0-linux-ppc64le-v8.0.1.13.tgz -o $HOME/cudnn-11.0-linux-ppc64le-v8.0.1.13.tgz
-   curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.6-1+cuda11.0_ppc64le.txz -o $HOME/nccl_ppc64le.txz
-   ar vx $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.2-450.51.05-1_ppc64el.deb
+   curl -L https://developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda-repo-ubuntu1804-11-0-local_11.0.3-450.51.06-1_ppc64el.deb -o $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.3-450.51.06-1_ppc64el.deb
+   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.2/cudnn-11.0-linux-ppc64le-v8.0.2.39.tgz -o $HOME/cudnn-11.0-linux-ppc64le-v8.0.2.39.tgz
+   curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.8-1+cuda11.0_ppc64le.txz -o $HOME/nccl_ppc64le.txz
+   ar vx $HOME/cuda-repo-ubuntu1804-11-0-local_11.0.3-450.51.06-1_ppc64el.deb
    tar xvf data.tar.xz
    mkdir $HOME/cudaFS
    cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/cudaFS; done
@@ -84,7 +84,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda-11.0 /usr/local/cuda"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-ppc64le-v8.0.1.13.tgz -C /usr/local/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-ppc64le-v8.0.2.39.tgz -C /usr/local/"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_ppc64le.txz --strip-components=1 -C /usr/local/cuda/"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
    # work around issues with CUDA 10.2/11.0

@@ -28,6 +28,9 @@ public class CUDA_TEXTURE_DESC extends Pointer {
     @Override public CUDA_TEXTURE_DESC position(long position) {
         return (CUDA_TEXTURE_DESC)super.position(position);
     }
+    @Override public CUDA_TEXTURE_DESC getPointer(long i) {
+        return new CUDA_TEXTURE_DESC(this).position(position + i);
+    }
 
     /** Address modes */
     public native @Cast("CUaddress_mode") int addressMode(int i); public native CUDA_TEXTURE_DESC addressMode(int i, int setter);

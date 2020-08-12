@@ -28,6 +28,9 @@ public class cudaExternalSemaphoreHandleDesc extends Pointer {
     @Override public cudaExternalSemaphoreHandleDesc position(long position) {
         return (cudaExternalSemaphoreHandleDesc)super.position(position);
     }
+    @Override public cudaExternalSemaphoreHandleDesc getPointer(long i) {
+        return new cudaExternalSemaphoreHandleDesc(this).position(position + i);
+    }
 
     /**
      * Type of the handle

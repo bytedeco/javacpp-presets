@@ -30,6 +30,9 @@ public class nvmlViolationTime_t extends Pointer {
     @Override public nvmlViolationTime_t position(long position) {
         return (nvmlViolationTime_t)super.position(position);
     }
+    @Override public nvmlViolationTime_t getPointer(long i) {
+        return new nvmlViolationTime_t(this).position(position + i);
+    }
 
     /** referenceTime represents CPU timestamp in microseconds */
     public native @Cast("unsigned long long") long referenceTime(); public native nvmlViolationTime_t referenceTime(long setter);

@@ -26,6 +26,9 @@ public class char2 extends Pointer {
     @Override public char2 position(long position) {
         return (char2)super.position(position);
     }
+    @Override public char2 getPointer(long i) {
+        return new char2(this).position(position + i);
+    }
 
     public native byte x(); public native char2 x(byte setter);
     public native byte y(); public native char2 y(byte setter);

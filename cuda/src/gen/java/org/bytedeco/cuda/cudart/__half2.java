@@ -27,6 +27,9 @@ public class __half2 extends Pointer {
     @Override public __half2 position(long position) {
         return (__half2)super.position(position);
     }
+    @Override public __half2 getPointer(long i) {
+        return new __half2(this).position(position + i);
+    }
 
     public native @ByRef __half x(); public native __half2 x(__half setter);
     public native @ByRef __half y(); public native __half2 y(__half setter);

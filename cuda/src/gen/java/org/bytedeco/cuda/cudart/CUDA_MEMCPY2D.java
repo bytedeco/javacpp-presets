@@ -28,6 +28,9 @@ public class CUDA_MEMCPY2D extends Pointer {
     @Override public CUDA_MEMCPY2D position(long position) {
         return (CUDA_MEMCPY2D)super.position(position);
     }
+    @Override public CUDA_MEMCPY2D getPointer(long i) {
+        return new CUDA_MEMCPY2D(this).position(position + i);
+    }
 
     /** Source X in bytes */
     public native @Cast("size_t") long srcXInBytes(); public native CUDA_MEMCPY2D srcXInBytes(long setter);

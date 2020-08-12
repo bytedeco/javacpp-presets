@@ -28,6 +28,9 @@ public class cudnnDebug_t extends Pointer {
     @Override public cudnnDebug_t position(long position) {
         return (cudnnDebug_t)super.position(position);
     }
+    @Override public cudnnDebug_t getPointer(long i) {
+        return new cudnnDebug_t(this).position(position + i);
+    }
 
     public native @Cast("unsigned") int cudnn_version(); public native cudnnDebug_t cudnn_version(int setter);
     public native @Cast("cudnnStatus_t") int cudnnStatus(); public native cudnnDebug_t cudnnStatus(int setter);

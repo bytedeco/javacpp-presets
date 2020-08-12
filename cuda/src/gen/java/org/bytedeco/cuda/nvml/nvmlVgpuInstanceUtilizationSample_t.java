@@ -30,6 +30,9 @@ public class nvmlVgpuInstanceUtilizationSample_t extends Pointer {
     @Override public nvmlVgpuInstanceUtilizationSample_t position(long position) {
         return (nvmlVgpuInstanceUtilizationSample_t)super.position(position);
     }
+    @Override public nvmlVgpuInstanceUtilizationSample_t getPointer(long i) {
+        return new nvmlVgpuInstanceUtilizationSample_t(this).position(position + i);
+    }
 
     /** vGPU Instance */
     public native @Cast("nvmlVgpuInstance_t") int vgpuInstance(); public native nvmlVgpuInstanceUtilizationSample_t vgpuInstance(int setter);

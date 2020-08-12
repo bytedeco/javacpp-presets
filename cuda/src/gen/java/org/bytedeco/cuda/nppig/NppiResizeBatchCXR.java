@@ -107,6 +107,9 @@ public class NppiResizeBatchCXR extends Pointer {
     @Override public NppiResizeBatchCXR position(long position) {
         return (NppiResizeBatchCXR)super.position(position);
     }
+    @Override public NppiResizeBatchCXR getPointer(long i) {
+        return new NppiResizeBatchCXR(this).position(position + i);
+    }
 
     public native @Const Pointer pSrc(); public native NppiResizeBatchCXR pSrc(Pointer setter);  /* device memory pointer */
     public native int nSrcStep(); public native NppiResizeBatchCXR nSrcStep(int setter);

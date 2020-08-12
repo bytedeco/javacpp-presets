@@ -28,6 +28,9 @@ public class CUDA_EXTERNAL_MEMORY_BUFFER_DESC extends Pointer {
     @Override public CUDA_EXTERNAL_MEMORY_BUFFER_DESC position(long position) {
         return (CUDA_EXTERNAL_MEMORY_BUFFER_DESC)super.position(position);
     }
+    @Override public CUDA_EXTERNAL_MEMORY_BUFFER_DESC getPointer(long i) {
+        return new CUDA_EXTERNAL_MEMORY_BUFFER_DESC(this).position(position + i);
+    }
 
     /**
      * Offset into the memory object where the buffer's base is

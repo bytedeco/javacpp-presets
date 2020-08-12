@@ -28,6 +28,9 @@ public class CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC extends Pointer {
     @Override public CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC position(long position) {
         return (CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC)super.position(position);
     }
+    @Override public CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC getPointer(long i) {
+        return new CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC(this).position(position + i);
+    }
 
     /**
      * Offset into the memory object where the base level of the

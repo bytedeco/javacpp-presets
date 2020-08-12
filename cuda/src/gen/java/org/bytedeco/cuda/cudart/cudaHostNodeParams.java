@@ -28,6 +28,9 @@ public class cudaHostNodeParams extends Pointer {
     @Override public cudaHostNodeParams position(long position) {
         return (cudaHostNodeParams)super.position(position);
     }
+    @Override public cudaHostNodeParams getPointer(long i) {
+        return new cudaHostNodeParams(this).position(position + i);
+    }
 
     /** The function to call when the node executes */
     public native cudaHostFn_t fn(); public native cudaHostNodeParams fn(cudaHostFn_t setter);

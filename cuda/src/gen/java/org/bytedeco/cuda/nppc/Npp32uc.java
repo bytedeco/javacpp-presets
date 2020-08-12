@@ -31,6 +31,9 @@ public class Npp32uc extends Pointer {
     @Override public Npp32uc position(long position) {
         return (Npp32uc)super.position(position);
     }
+    @Override public Npp32uc getPointer(long i) {
+        return new Npp32uc(this).position(position + i);
+    }
 
     /**  Real part */
     public native @Cast("Npp32u") int re(); public native Npp32uc re(int setter);

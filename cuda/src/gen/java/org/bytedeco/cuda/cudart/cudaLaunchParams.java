@@ -28,6 +28,9 @@ public class cudaLaunchParams extends Pointer {
     @Override public cudaLaunchParams position(long position) {
         return (cudaLaunchParams)super.position(position);
     }
+    @Override public cudaLaunchParams getPointer(long i) {
+        return new cudaLaunchParams(this).position(position + i);
+    }
 
     /** Device function symbol */
     public native Pointer func(); public native cudaLaunchParams func(Pointer setter);

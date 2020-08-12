@@ -28,6 +28,9 @@ public class CUDA_RESOURCE_DESC extends Pointer {
     @Override public CUDA_RESOURCE_DESC position(long position) {
         return (CUDA_RESOURCE_DESC)super.position(position);
     }
+    @Override public CUDA_RESOURCE_DESC getPointer(long i) {
+        return new CUDA_RESOURCE_DESC(this).position(position + i);
+    }
 
     /** Resource type */
     public native @Cast("CUresourcetype") int resType(); public native CUDA_RESOURCE_DESC resType(int setter);
