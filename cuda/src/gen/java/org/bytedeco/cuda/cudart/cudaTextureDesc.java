@@ -28,6 +28,9 @@ public class cudaTextureDesc extends Pointer {
     @Override public cudaTextureDesc position(long position) {
         return (cudaTextureDesc)super.position(position);
     }
+    @Override public cudaTextureDesc getPointer(long i) {
+        return new cudaTextureDesc(this).position(position + i);
+    }
 
     /**
      * Texture address mode for up to 3 dimensions

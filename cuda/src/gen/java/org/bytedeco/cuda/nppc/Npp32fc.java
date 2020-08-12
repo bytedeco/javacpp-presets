@@ -31,6 +31,9 @@ public class Npp32fc extends Pointer {
     @Override public Npp32fc position(long position) {
         return (Npp32fc)super.position(position);
     }
+    @Override public Npp32fc getPointer(long i) {
+        return new Npp32fc(this).position(position + i);
+    }
 
     /**  Real part */
     public native @Cast("Npp32f") float re(); public native Npp32fc re(float setter);

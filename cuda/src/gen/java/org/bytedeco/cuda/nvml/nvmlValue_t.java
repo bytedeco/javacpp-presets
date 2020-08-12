@@ -31,6 +31,9 @@ public class nvmlValue_t extends Pointer {
     @Override public nvmlValue_t position(long position) {
         return (nvmlValue_t)super.position(position);
     }
+    @Override public nvmlValue_t getPointer(long i) {
+        return new nvmlValue_t(this).position(position + i);
+    }
 
     /** If the value is double */
     public native double dVal(); public native nvmlValue_t dVal(double setter);

@@ -32,6 +32,9 @@ public class NppiHOGConfig extends Pointer {
     @Override public NppiHOGConfig position(long position) {
         return (NppiHOGConfig)super.position(position);
     }
+    @Override public NppiHOGConfig getPointer(long i) {
+        return new NppiHOGConfig(this).position(position + i);
+    }
 
     /**  square cell size (pixels). */
     public native int cellSize(); public native NppiHOGConfig cellSize(int setter);

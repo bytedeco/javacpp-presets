@@ -101,9 +101,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 11;
-public static final int CUBLAS_VER_MINOR = 1;
+public static final int CUBLAS_VER_MINOR = 2;
 public static final int CUBLAS_VER_PATCH = 0;
-public static final int CUBLAS_VER_BUILD = 229;
+public static final int CUBLAS_VER_BUILD = 252;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
@@ -262,6 +262,8 @@ public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("librar
 public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
 public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, int[] value);
 public static native @Cast("size_t") long cublasGetCudartVersion();
+
+public static native @Cast("cublasStatus_t") int cublasSetWorkspace_v2(cublasContext handle, Pointer workspace, @Cast("size_t") long workspaceSizeInBytes);
 
 public static native @Cast("cublasStatus_t") int cublasSetStream_v2(cublasContext handle, CUstream_st streamId); 
 public static native @Cast("cublasStatus_t") int cublasGetStream_v2(cublasContext handle, @ByPtrPtr CUstream_st streamId); 
@@ -7133,6 +7135,7 @@ public static native void cublasZtrmm(@Cast("char") byte side, @Cast("char") byt
 
 // #include <stdint.h>
 // #include <stddef.h>
+// #include <stdio.h>
 
 // #if defined(__cplusplus)
 // Targeting ../cublas/cublasLtContext.java
@@ -8374,7 +8377,76 @@ public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoConfigGetAttr
         Pointer buf,
         @Cast("size_t") long sizeInBytes,
         @Cast("size_t*") SizeTPointer sizeWritten);
+// Targeting ../cublas/cublasLtLoggerCallback_t.java
 
+
+
+/** Experimental: Logger callback setter.
+ *
+ * @param callback [in]                     a user defined callback function to be called by the logger
+ *
+ * \retval     CUBLAS_STATUS_SUCCESS        if callback was set successfully
+ */
+public static native @Cast("cublasStatus_t") int cublasLtLoggerSetCallback(
+        cublasLtLoggerCallback_t callback);
+
+/** Experimental: Log file setter.
+ *
+ * @param file [in]                         an open file with write permissions
+ *
+ * \retval     CUBLAS_STATUS_SUCCESS        if log file was set successfully
+ */
+public static native @Cast("cublasStatus_t") int cublasLtLoggerSetFile(
+        @Cast("FILE*") Pointer file);
+
+/** Experimental: Open log file.
+ *
+ * @param logFile [in]                      log file path. if the log file does not exist, it will be created
+ *
+ * \retval     CUBLAS_STATUS_SUCCESS        if log file was created successfully
+ */
+public static native @Cast("cublasStatus_t") int cublasLtLoggerOpenFile(
+        @Cast("const char*") BytePointer logFile);
+public static native @Cast("cublasStatus_t") int cublasLtLoggerOpenFile(
+        String logFile);
+
+/** Experimental: Log level setter.
+ *
+ * @param level [in]                        log level, should be one of the following:
+ *                                          0. Off
+ *                                          1. Errors
+ *                                          2. Performance Trace
+ *                                          3. Performance Hints
+ *                                          4. Heuristics Trace
+ *                                          5. API Trace
+ *
+ * \retval     CUBLAS_STATUS_INVALID_VALUE  if log level is not one of the above levels
+ * 
+ * \retval     CUBLAS_STATUS_SUCCESS        if log level was set successfully
+ */
+public static native @Cast("cublasStatus_t") int cublasLtLoggerSetLevel(
+        int level);
+
+/** Experimental: Log mask setter.
+ *
+ * @param mask [in]                         log mask, should be a combination of the following masks:
+ *                                          0.  Off
+ *                                          1.  Errors
+ *                                          2.  Performance Trace
+ *                                          4.  Performance Hints
+ *                                          8.  Heuristics Trace
+ *                                          16. API Trace
+ * 
+ * \retval     CUBLAS_STATUS_SUCCESS        if log mask was set successfully
+ */
+public static native @Cast("cublasStatus_t") int cublasLtLoggerSetMask(
+        int mask);
+
+/** Experimental: Disable logging for the entire session.
+ * 
+ * \retval     CUBLAS_STATUS_SUCCESS        if disabled logging
+ */
+public static native @Cast("cublasStatus_t") int cublasLtLoggerForceDisable();
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */

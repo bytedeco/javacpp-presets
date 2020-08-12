@@ -30,6 +30,9 @@ public class nvmlVgpuPgpuCompatibility_t extends Pointer {
     @Override public nvmlVgpuPgpuCompatibility_t position(long position) {
         return (nvmlVgpuPgpuCompatibility_t)super.position(position);
     }
+    @Override public nvmlVgpuPgpuCompatibility_t getPointer(long i) {
+        return new nvmlVgpuPgpuCompatibility_t(this).position(position + i);
+    }
 
     /** Compatibility of vGPU VM. See \ref nvmlVgpuVmCompatibility_t */
     public native @Cast("nvmlVgpuVmCompatibility_t") int vgpuVmCompatibility(); public native nvmlVgpuPgpuCompatibility_t vgpuVmCompatibility(int setter);

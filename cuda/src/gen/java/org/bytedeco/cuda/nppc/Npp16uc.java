@@ -31,6 +31,9 @@ public class Npp16uc extends Pointer {
     @Override public Npp16uc position(long position) {
         return (Npp16uc)super.position(position);
     }
+    @Override public Npp16uc getPointer(long i) {
+        return new Npp16uc(this).position(position + i);
+    }
 
     /**  Real part */
     public native @Cast("Npp16u") short re(); public native Npp16uc re(short setter);

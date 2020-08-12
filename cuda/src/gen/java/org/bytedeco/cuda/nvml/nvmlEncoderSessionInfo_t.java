@@ -30,6 +30,9 @@ public class nvmlEncoderSessionInfo_t extends Pointer {
     @Override public nvmlEncoderSessionInfo_t position(long position) {
         return (nvmlEncoderSessionInfo_t)super.position(position);
     }
+    @Override public nvmlEncoderSessionInfo_t getPointer(long i) {
+        return new nvmlEncoderSessionInfo_t(this).position(position + i);
+    }
 
     /** Unique session ID */
     public native @Cast("unsigned int") int sessionId(); public native nvmlEncoderSessionInfo_t sessionId(int setter);

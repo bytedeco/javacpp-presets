@@ -28,6 +28,9 @@ public class CUmemAccessDesc extends Pointer {
     @Override public CUmemAccessDesc position(long position) {
         return (CUmemAccessDesc)super.position(position);
     }
+    @Override public CUmemAccessDesc getPointer(long i) {
+        return new CUmemAccessDesc(this).position(position + i);
+    }
 
     /** Location on which the request is to change it's accessibility */
     public native @ByRef CUmemLocation location(); public native CUmemAccessDesc location(CUmemLocation setter);

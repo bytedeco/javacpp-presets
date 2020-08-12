@@ -28,6 +28,9 @@ public class CUipcEventHandle extends Pointer {
     @Override public CUipcEventHandle position(long position) {
         return (CUipcEventHandle)super.position(position);
     }
+    @Override public CUipcEventHandle getPointer(long i) {
+        return new CUipcEventHandle(this).position(position + i);
+    }
 
     public native @Cast("char") byte reserved(int i); public native CUipcEventHandle reserved(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer reserved();

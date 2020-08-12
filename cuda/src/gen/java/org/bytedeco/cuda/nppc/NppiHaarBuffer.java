@@ -27,6 +27,9 @@ public class NppiHaarBuffer extends Pointer {
     @Override public NppiHaarBuffer position(long position) {
         return (NppiHaarBuffer)super.position(position);
     }
+    @Override public NppiHaarBuffer getPointer(long i) {
+        return new NppiHaarBuffer(this).position(position + i);
+    }
 
     /**  size of the buffer */
     public native int haarBufferSize(); public native NppiHaarBuffer haarBufferSize(int setter);

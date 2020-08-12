@@ -28,6 +28,9 @@ public class cudaExternalMemoryMipmappedArrayDesc extends Pointer {
     @Override public cudaExternalMemoryMipmappedArrayDesc position(long position) {
         return (cudaExternalMemoryMipmappedArrayDesc)super.position(position);
     }
+    @Override public cudaExternalMemoryMipmappedArrayDesc getPointer(long i) {
+        return new cudaExternalMemoryMipmappedArrayDesc(this).position(position + i);
+    }
 
     /**
      * Offset into the memory object where the base level of the

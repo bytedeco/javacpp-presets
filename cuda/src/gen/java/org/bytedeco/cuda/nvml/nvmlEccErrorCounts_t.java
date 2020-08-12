@@ -33,6 +33,9 @@ public class nvmlEccErrorCounts_t extends Pointer {
     @Override public nvmlEccErrorCounts_t position(long position) {
         return (nvmlEccErrorCounts_t)super.position(position);
     }
+    @Override public nvmlEccErrorCounts_t getPointer(long i) {
+        return new nvmlEccErrorCounts_t(this).position(position + i);
+    }
 
     /** L1 cache errors */
     public native @Cast("unsigned long long") long l1Cache(); public native nvmlEccErrorCounts_t l1Cache(long setter);

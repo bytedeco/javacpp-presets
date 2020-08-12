@@ -29,6 +29,9 @@ public class cublasLtMatrixTransformDescOpaque_t extends Pointer {
     @Override public cublasLtMatrixTransformDescOpaque_t position(long position) {
         return (cublasLtMatrixTransformDescOpaque_t)super.position(position);
     }
+    @Override public cublasLtMatrixTransformDescOpaque_t getPointer(long i) {
+        return new cublasLtMatrixTransformDescOpaque_t(this).position(position + i);
+    }
 
     public native @Cast("uint64_t") long data(int i); public native cublasLtMatrixTransformDescOpaque_t data(int i, long setter);
     @MemberGetter public native @Cast("uint64_t*") LongPointer data();

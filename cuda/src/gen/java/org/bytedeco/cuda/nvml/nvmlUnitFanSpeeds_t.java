@@ -30,6 +30,9 @@ public class nvmlUnitFanSpeeds_t extends Pointer {
     @Override public nvmlUnitFanSpeeds_t position(long position) {
         return (nvmlUnitFanSpeeds_t)super.position(position);
     }
+    @Override public nvmlUnitFanSpeeds_t getPointer(long i) {
+        return new nvmlUnitFanSpeeds_t(this).position(position + i);
+    }
 
     /** Fan speed data for each fan */
     public native @ByRef nvmlUnitFanInfo_t fans(int i); public native nvmlUnitFanSpeeds_t fans(int i, nvmlUnitFanInfo_t setter);

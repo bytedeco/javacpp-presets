@@ -28,6 +28,9 @@ public class cudnnAlgorithm_t extends Pointer {
     @Override public cudnnAlgorithm_t position(long position) {
         return (cudnnAlgorithm_t)super.position(position);
     }
+    @Override public cudnnAlgorithm_t getPointer(long i) {
+        return new cudnnAlgorithm_t(this).position(position + i);
+    }
 
         @Name("algo.convFwdAlgo") public native @Cast("cudnnConvolutionFwdAlgo_t") int algo_convFwdAlgo(); public native cudnnAlgorithm_t algo_convFwdAlgo(int setter);
         @Name("algo.convBwdFilterAlgo") public native @Cast("cudnnConvolutionBwdFilterAlgo_t") int algo_convBwdFilterAlgo(); public native cudnnAlgorithm_t algo_convBwdFilterAlgo(int setter);

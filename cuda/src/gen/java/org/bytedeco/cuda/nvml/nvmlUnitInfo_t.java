@@ -30,6 +30,9 @@ public class nvmlUnitInfo_t extends Pointer {
     @Override public nvmlUnitInfo_t position(long position) {
         return (nvmlUnitInfo_t)super.position(position);
     }
+    @Override public nvmlUnitInfo_t getPointer(long i) {
+        return new nvmlUnitInfo_t(this).position(position + i);
+    }
 
     /** Product name */
     public native @Cast("char") byte name(int i); public native nvmlUnitInfo_t name(int i, byte setter);

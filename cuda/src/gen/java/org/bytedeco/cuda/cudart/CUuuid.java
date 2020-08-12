@@ -24,6 +24,9 @@ public class CUuuid extends Pointer {
     @Override public CUuuid position(long position) {
         return (CUuuid)super.position(position);
     }
+    @Override public CUuuid getPointer(long i) {
+        return new CUuuid(this).position(position + i);
+    }
 
     public native @Cast("char") byte bytes(int i); public native CUuuid bytes(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer bytes();

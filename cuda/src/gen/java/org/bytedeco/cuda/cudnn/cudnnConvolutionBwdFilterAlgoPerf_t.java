@@ -30,6 +30,9 @@ public class cudnnConvolutionBwdFilterAlgoPerf_t extends Pointer {
     @Override public cudnnConvolutionBwdFilterAlgoPerf_t position(long position) {
         return (cudnnConvolutionBwdFilterAlgoPerf_t)super.position(position);
     }
+    @Override public cudnnConvolutionBwdFilterAlgoPerf_t getPointer(long i) {
+        return new cudnnConvolutionBwdFilterAlgoPerf_t(this).position(position + i);
+    }
 
     public native @Cast("cudnnConvolutionBwdFilterAlgo_t") int algo(); public native cudnnConvolutionBwdFilterAlgoPerf_t algo(int setter);
     public native @Cast("cudnnStatus_t") int status(); public native cudnnConvolutionBwdFilterAlgoPerf_t status(int setter);

@@ -25,6 +25,9 @@ public class ulonglong3 extends Pointer {
     @Override public ulonglong3 position(long position) {
         return (ulonglong3)super.position(position);
     }
+    @Override public ulonglong3 getPointer(long i) {
+        return new ulonglong3(this).position(position + i);
+    }
 
     public native @Cast("unsigned long long int") long x(); public native ulonglong3 x(long setter);
     public native @Cast("unsigned long long int") long y(); public native ulonglong3 y(long setter);

@@ -28,6 +28,9 @@ public class cudaPointerAttributes extends Pointer {
     @Override public cudaPointerAttributes position(long position) {
         return (cudaPointerAttributes)super.position(position);
     }
+    @Override public cudaPointerAttributes getPointer(long i) {
+        return new cudaPointerAttributes(this).position(position + i);
+    }
 
     /**
      * The type of memory - ::cudaMemoryTypeUnregistered, ::cudaMemoryTypeHost,

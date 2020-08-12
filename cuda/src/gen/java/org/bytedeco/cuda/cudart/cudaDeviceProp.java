@@ -28,6 +28,9 @@ public class cudaDeviceProp extends Pointer {
     @Override public cudaDeviceProp position(long position) {
         return (cudaDeviceProp)super.position(position);
     }
+    @Override public cudaDeviceProp getPointer(long i) {
+        return new cudaDeviceProp(this).position(position + i);
+    }
 
     /** ASCII string identifying device */
     public native @Cast("char") byte name(int i); public native cudaDeviceProp name(int i, byte setter);

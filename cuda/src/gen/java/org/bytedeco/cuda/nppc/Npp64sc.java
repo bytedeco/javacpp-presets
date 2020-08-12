@@ -31,6 +31,9 @@ public class Npp64sc extends Pointer {
     @Override public Npp64sc position(long position) {
         return (Npp64sc)super.position(position);
     }
+    @Override public Npp64sc getPointer(long i) {
+        return new Npp64sc(this).position(position + i);
+    }
 
     /**  Real part */
     public native @Cast("Npp64s") long re(); public native Npp64sc re(long setter);

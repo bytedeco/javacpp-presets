@@ -28,6 +28,9 @@ public class CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS extends Pointer {
     @Override public CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS position(long position) {
         return (CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS)super.position(position);
     }
+    @Override public CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS getPointer(long i) {
+        return new CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS(this).position(position + i);
+    }
 
         /**
          * Parameters for fence objects

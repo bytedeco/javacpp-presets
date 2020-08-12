@@ -28,6 +28,9 @@ public class CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS extends Pointer {
     @Override public CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS position(long position) {
         return (CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS)super.position(position);
     }
+    @Override public CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS getPointer(long i) {
+        return new CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS(this).position(position + i);
+    }
 
         /**
          * Parameters for fence objects

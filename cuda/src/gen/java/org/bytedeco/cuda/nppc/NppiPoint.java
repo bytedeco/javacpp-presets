@@ -31,6 +31,9 @@ public class NppiPoint extends Pointer {
     @Override public NppiPoint position(long position) {
         return (NppiPoint)super.position(position);
     }
+    @Override public NppiPoint getPointer(long i) {
+        return new NppiPoint(this).position(position + i);
+    }
 
     /**  x-coordinate. */
     public native int x(); public native NppiPoint x(int setter);

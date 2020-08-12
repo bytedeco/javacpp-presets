@@ -28,6 +28,9 @@ public class dim3 extends Pointer {
     @Override public dim3 position(long position) {
         return (dim3)super.position(position);
     }
+    @Override public dim3 getPointer(long i) {
+        return new dim3(this).position(position + i);
+    }
 
     public native @Cast("unsigned int") int x(); public native dim3 x(int setter);
     public native @Cast("unsigned int") int y(); public native dim3 y(int setter);

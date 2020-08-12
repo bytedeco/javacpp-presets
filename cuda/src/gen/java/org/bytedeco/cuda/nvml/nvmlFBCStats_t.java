@@ -30,6 +30,9 @@ public class nvmlFBCStats_t extends Pointer {
     @Override public nvmlFBCStats_t position(long position) {
         return (nvmlFBCStats_t)super.position(position);
     }
+    @Override public nvmlFBCStats_t getPointer(long i) {
+        return new nvmlFBCStats_t(this).position(position + i);
+    }
 
     /** Total no of sessions */
     public native @Cast("unsigned int") int sessionsCount(); public native nvmlFBCStats_t sessionsCount(int setter);

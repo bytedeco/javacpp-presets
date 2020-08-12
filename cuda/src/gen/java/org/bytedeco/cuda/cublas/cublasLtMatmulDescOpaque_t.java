@@ -29,6 +29,9 @@ public class cublasLtMatmulDescOpaque_t extends Pointer {
     @Override public cublasLtMatmulDescOpaque_t position(long position) {
         return (cublasLtMatmulDescOpaque_t)super.position(position);
     }
+    @Override public cublasLtMatmulDescOpaque_t getPointer(long i) {
+        return new cublasLtMatmulDescOpaque_t(this).position(position + i);
+    }
 
     public native @Cast("uint64_t") long data(int i); public native cublasLtMatmulDescOpaque_t data(int i, long setter);
     @MemberGetter public native @Cast("uint64_t*") LongPointer data();

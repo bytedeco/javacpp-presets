@@ -25,6 +25,9 @@ public class int2 extends Pointer {
     @Override public int2 position(long position) {
         return (int2)super.position(position);
     }
+    @Override public int2 getPointer(long i) {
+        return new int2(this).position(position + i);
+    }
  
     public native int x(); public native int2 x(int setter); public native int y(); public native int2 y(int setter);
 }

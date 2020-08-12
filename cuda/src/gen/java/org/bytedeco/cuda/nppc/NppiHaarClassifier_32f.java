@@ -27,6 +27,9 @@ public class NppiHaarClassifier_32f extends Pointer {
     @Override public NppiHaarClassifier_32f position(long position) {
         return (NppiHaarClassifier_32f)super.position(position);
     }
+    @Override public NppiHaarClassifier_32f getPointer(long i) {
+        return new NppiHaarClassifier_32f(this).position(position + i);
+    }
 
     /**  number of classifiers */
     public native int numClassifiers(); public native NppiHaarClassifier_32f numClassifiers(int setter);

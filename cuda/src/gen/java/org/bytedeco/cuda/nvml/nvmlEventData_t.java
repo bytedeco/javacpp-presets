@@ -31,6 +31,9 @@ public class nvmlEventData_t extends Pointer {
     @Override public nvmlEventData_t position(long position) {
         return (nvmlEventData_t)super.position(position);
     }
+    @Override public nvmlEventData_t getPointer(long i) {
+        return new nvmlEventData_t(this).position(position + i);
+    }
 
     /** Specific device where the event occurred */
     public native nvmlDevice_st device(); public native nvmlEventData_t device(nvmlDevice_st setter);

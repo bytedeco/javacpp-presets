@@ -28,6 +28,9 @@ public class cudaExternalSemaphoreWaitParams extends Pointer {
     @Override public cudaExternalSemaphoreWaitParams position(long position) {
         return (cudaExternalSemaphoreWaitParams)super.position(position);
     }
+    @Override public cudaExternalSemaphoreWaitParams getPointer(long i) {
+        return new cudaExternalSemaphoreWaitParams(this).position(position + i);
+    }
 
         /**
         * Parameters for fence objects

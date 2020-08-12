@@ -28,6 +28,9 @@ public class cudaExternalSemaphoreSignalParams extends Pointer {
     @Override public cudaExternalSemaphoreSignalParams position(long position) {
         return (cudaExternalSemaphoreSignalParams)super.position(position);
     }
+    @Override public cudaExternalSemaphoreSignalParams getPointer(long i) {
+        return new cudaExternalSemaphoreSignalParams(this).position(position + i);
+    }
 
         /**
          * Parameters for fence objects

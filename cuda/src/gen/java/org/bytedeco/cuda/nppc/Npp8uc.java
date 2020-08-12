@@ -32,6 +32,9 @@ public class Npp8uc extends Pointer {
     @Override public Npp8uc position(long position) {
         return (Npp8uc)super.position(position);
     }
+    @Override public Npp8uc getPointer(long i) {
+        return new Npp8uc(this).position(position + i);
+    }
 
     /**  Real part */
     public native @Cast("Npp8u") byte re(); public native Npp8uc re(byte setter);

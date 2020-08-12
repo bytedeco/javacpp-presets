@@ -30,6 +30,9 @@ public class nvmlSample_t extends Pointer {
     @Override public nvmlSample_t position(long position) {
         return (nvmlSample_t)super.position(position);
     }
+    @Override public nvmlSample_t getPointer(long i) {
+        return new nvmlSample_t(this).position(position + i);
+    }
 
     /** CPU Timestamp in microseconds */
     public native @Cast("unsigned long long") long timeStamp(); public native nvmlSample_t timeStamp(long setter);

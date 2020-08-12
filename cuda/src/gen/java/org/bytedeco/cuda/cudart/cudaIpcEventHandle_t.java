@@ -28,6 +28,9 @@ public class cudaIpcEventHandle_t extends Pointer {
     @Override public cudaIpcEventHandle_t position(long position) {
         return (cudaIpcEventHandle_t)super.position(position);
     }
+    @Override public cudaIpcEventHandle_t getPointer(long i) {
+        return new cudaIpcEventHandle_t(this).position(position + i);
+    }
 
     public native @Cast("char") byte reserved(int i); public native cudaIpcEventHandle_t reserved(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer reserved();

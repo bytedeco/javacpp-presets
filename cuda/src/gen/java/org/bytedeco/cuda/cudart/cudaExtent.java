@@ -30,6 +30,9 @@ public class cudaExtent extends Pointer {
     @Override public cudaExtent position(long position) {
         return (cudaExtent)super.position(position);
     }
+    @Override public cudaExtent getPointer(long i) {
+        return new cudaExtent(this).position(position + i);
+    }
 
     /** Width in elements when referring to array memory, in bytes when referring to linear memory */
     public native @Cast("size_t") long width(); public native cudaExtent width(long setter);

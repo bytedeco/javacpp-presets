@@ -28,6 +28,9 @@ public class cudaKernelNodeParams extends Pointer {
     @Override public cudaKernelNodeParams position(long position) {
         return (cudaKernelNodeParams)super.position(position);
     }
+    @Override public cudaKernelNodeParams getPointer(long i) {
+        return new cudaKernelNodeParams(this).position(position + i);
+    }
 
     /** Kernel to launch */
     public native Pointer func(); public native cudaKernelNodeParams func(Pointer setter);

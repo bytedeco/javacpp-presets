@@ -31,6 +31,9 @@ public class nvmlUtilization_t extends Pointer {
     @Override public nvmlUtilization_t position(long position) {
         return (nvmlUtilization_t)super.position(position);
     }
+    @Override public nvmlUtilization_t getPointer(long i) {
+        return new nvmlUtilization_t(this).position(position + i);
+    }
 
     /** Percent of time over the past sample period during which one or more kernels was executing on the GPU */
     public native @Cast("unsigned int") int gpu(); public native nvmlUtilization_t gpu(int setter);

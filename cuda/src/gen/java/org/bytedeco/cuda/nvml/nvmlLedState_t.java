@@ -31,6 +31,9 @@ public class nvmlLedState_t extends Pointer {
     @Override public nvmlLedState_t position(long position) {
         return (nvmlLedState_t)super.position(position);
     }
+    @Override public nvmlLedState_t getPointer(long i) {
+        return new nvmlLedState_t(this).position(position + i);
+    }
 
     /** If amber, a text description of the cause */
     public native @Cast("char") byte cause(int i); public native nvmlLedState_t cause(int i, byte setter);

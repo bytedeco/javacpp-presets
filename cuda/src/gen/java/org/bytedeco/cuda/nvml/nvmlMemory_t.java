@@ -30,6 +30,9 @@ public class nvmlMemory_t extends Pointer {
     @Override public nvmlMemory_t position(long position) {
         return (nvmlMemory_t)super.position(position);
     }
+    @Override public nvmlMemory_t getPointer(long i) {
+        return new nvmlMemory_t(this).position(position + i);
+    }
 
     /** Total installed FB memory (in bytes) */
     public native @Cast("unsigned long long") long total(); public native nvmlMemory_t total(long setter);

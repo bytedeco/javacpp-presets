@@ -1,6 +1,6 @@
-diff -ruN oneDNN-1.5/include/dnnl.hpp oneDNN-1.5-patch/include/dnnl.hpp
---- oneDNN-1.5/include/dnnl.hpp	2020-06-06 06:56:56.000000000 +0900
-+++ oneDNN-1.5-patch/include/dnnl.hpp	2020-06-22 12:10:40.068732540 +0900
+diff -ruN oneDNN-1.6.1/include/dnnl.hpp oneDNN-1.6.1-patch/include/dnnl.hpp
+--- oneDNN-1.6.1/include/dnnl.hpp	2020-08-06 12:36:08.000000000 +0900
++++ oneDNN-1.6.1-patch/include/dnnl.hpp	2020-08-12 21:20:57.036028684 +0900
 @@ -110,6 +110,8 @@
      static void wrap_c_api(dnnl_status_t status, const char *message) {
          if (status != dnnl_success) DNNL_THROW_ERROR(status, message);
@@ -10,10 +10,10 @@ diff -ruN oneDNN-1.5/include/dnnl.hpp oneDNN-1.5-patch/include/dnnl.hpp
  };
  
  /// @cond DO_NOT_DOCUMENT_THIS
-diff -ruN oneDNN-1.5/src/CMakeLists.txt oneDNN-1.5-patch/src/CMakeLists.txt
---- oneDNN-1.5/src/CMakeLists.txt	2020-06-06 06:56:56.000000000 +0900
-+++ oneDNN-1.5-patch/src/CMakeLists.txt	2020-06-22 12:13:16.991436434 +0900
-@@ -134,52 +134,6 @@
+diff -ruN oneDNN-1.6.1/src/CMakeLists.txt oneDNN-1.6.1-patch/src/CMakeLists.txt
+--- oneDNN-1.6.1/src/CMakeLists.txt	2020-08-06 12:36:08.000000000 +0900
++++ oneDNN-1.6.1-patch/src/CMakeLists.txt	2020-08-12 21:21:26.555225428 +0900
+@@ -142,54 +142,6 @@
      -DDIR=\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake
      -P ${PROJECT_SOURCE_DIR}/cmake/gen_mkldnn_compat_cmakes.cmake)")
  
@@ -34,6 +34,8 @@ diff -ruN oneDNN-1.5/src/CMakeLists.txt oneDNN-1.5-patch/src/CMakeLists.txt
 -        ${CMAKE_COMMAND} -E copy
 -        $<TARGET_FILE_DIR:${LIB_NAME}>/${prefix}dnnl.${ext}
 -        $<TARGET_FILE_DIR:${LIB_NAME}>/${prefix}mkldnn.${ext}
+-        # Workaround for MSB8065 warning.
+-        COMMAND ${CMAKE_COMMAND} -E touch "CMakeFiles/compat_libs"
 -        DEPENDS ${LIB_NAME})
 -    install(FILES $<TARGET_FILE_DIR:${LIB_NAME}>/${prefix}mkldnn.${ext}
 -        DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
@@ -66,9 +68,9 @@ diff -ruN oneDNN-1.5/src/CMakeLists.txt oneDNN-1.5-patch/src/CMakeLists.txt
  # Install custom find modules for transitive dependencies
  set(LIB_CONFIG_INSTALL_DIR_COMPAT "${CMAKE_INSTALL_LIBDIR}/cmake/mkldnn")
  if(DNNL_CPU_RUNTIME STREQUAL "TBB")
-diff -ruN oneDNN-1.5/src/cpu/cpu_engine.cpp oneDNN-1.5-patch/src/cpu/cpu_engine.cpp
---- oneDNN-1.5/src/cpu/cpu_engine.cpp	2020-06-06 06:56:56.000000000 +0900
-+++ oneDNN-1.5-patch/src/cpu/cpu_engine.cpp	2020-06-22 12:10:44.035750679 +0900
+diff -ruN oneDNN-1.6.1/src/cpu/cpu_engine.cpp oneDNN-1.6.1-patch/src/cpu/cpu_engine.cpp
+--- oneDNN-1.6.1/src/cpu/cpu_engine.cpp	2020-08-06 12:36:08.000000000 +0900
++++ oneDNN-1.6.1-patch/src/cpu/cpu_engine.cpp	2020-08-12 21:21:01.357057484 +0900
 @@ -23,10 +23,31 @@
  #include "cpu/cpu_memory_storage.hpp"
  #include "cpu/cpu_stream.hpp"
@@ -101,9 +103,9 @@ diff -ruN oneDNN-1.5/src/cpu/cpu_engine.cpp oneDNN-1.5-patch/src/cpu/cpu_engine.
  status_t cpu_engine_t::create_memory_storage(
          memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
      auto _storage = new cpu_memory_storage_t(this);
-diff -ruN oneDNN-1.5/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp oneDNN-1.5-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp
---- oneDNN-1.5/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-06-06 06:56:56.000000000 +0900
-+++ oneDNN-1.5-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-06-22 12:12:40.523283312 +0900
+diff -ruN oneDNN-1.6.1/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp oneDNN-1.6.1-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp
+--- oneDNN-1.6.1/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-08-06 12:36:08.000000000 +0900
++++ oneDNN-1.6.1-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-08-12 21:21:01.357057484 +0900
 @@ -264,11 +264,6 @@
          scratchpad.book<float>(key_conv_padded_bias, jcp.oc);
  }

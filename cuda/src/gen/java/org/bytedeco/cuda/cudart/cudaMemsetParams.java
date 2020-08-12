@@ -28,6 +28,9 @@ public class cudaMemsetParams extends Pointer {
     @Override public cudaMemsetParams position(long position) {
         return (cudaMemsetParams)super.position(position);
     }
+    @Override public cudaMemsetParams getPointer(long i) {
+        return new cudaMemsetParams(this).position(position + i);
+    }
 
     /** Destination device pointer */
     public native Pointer dst(); public native cudaMemsetParams dst(Pointer setter);

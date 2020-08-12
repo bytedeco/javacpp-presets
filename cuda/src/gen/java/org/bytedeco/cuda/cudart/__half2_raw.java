@@ -25,6 +25,9 @@ public class __half2_raw extends Pointer {
     @Override public __half2_raw position(long position) {
         return (__half2_raw)super.position(position);
     }
+    @Override public __half2_raw getPointer(long i) {
+        return new __half2_raw(this).position(position + i);
+    }
 
     public native @Cast("unsigned short") short x(); public native __half2_raw x(short setter);
     public native @Cast("unsigned short") short y(); public native __half2_raw y(short setter);

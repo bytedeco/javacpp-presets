@@ -65,6 +65,9 @@ public class NppiColorTwistBatchCXR extends Pointer {
     @Override public NppiColorTwistBatchCXR position(long position) {
         return (NppiColorTwistBatchCXR)super.position(position);
     }
+    @Override public NppiColorTwistBatchCXR getPointer(long i) {
+        return new NppiColorTwistBatchCXR(this).position(position + i);
+    }
 
     public native @Const Pointer pSrc(); public native NppiColorTwistBatchCXR pSrc(Pointer setter);  /* device memory pointer */
     public native int nSrcStep(); public native NppiColorTwistBatchCXR nSrcStep(int setter);

@@ -30,6 +30,9 @@ public class nvmlPciInfo_t extends Pointer {
     @Override public nvmlPciInfo_t position(long position) {
         return (nvmlPciInfo_t)super.position(position);
     }
+    @Override public nvmlPciInfo_t getPointer(long i) {
+        return new nvmlPciInfo_t(this).position(position + i);
+    }
 
     /** The legacy tuple domain:bus:device.function PCI identifier (&amp; NULL terminator) */
     public native @Cast("char") byte busIdLegacy(int i); public native nvmlPciInfo_t busIdLegacy(int i, byte setter);

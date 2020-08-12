@@ -28,6 +28,9 @@ public class CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC extends Pointer {
     @Override public CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC position(long position) {
         return (CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC)super.position(position);
     }
+    @Override public CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC getPointer(long i) {
+        return new CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC(this).position(position + i);
+    }
 
     /**
      * Type of the handle

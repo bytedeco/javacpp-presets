@@ -28,6 +28,9 @@ public class CUDA_POINTER_ATTRIBUTE_P2P_TOKENS extends Pointer {
     @Override public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS position(long position) {
         return (CUDA_POINTER_ATTRIBUTE_P2P_TOKENS)super.position(position);
     }
+    @Override public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS getPointer(long i) {
+        return new CUDA_POINTER_ATTRIBUTE_P2P_TOKENS(this).position(position + i);
+    }
 
     public native @Cast("unsigned long long") long p2pToken(); public native CUDA_POINTER_ATTRIBUTE_P2P_TOKENS p2pToken(long setter);
     public native @Cast("unsigned int") int vaSpaceToken(); public native CUDA_POINTER_ATTRIBUTE_P2P_TOKENS vaSpaceToken(int setter);

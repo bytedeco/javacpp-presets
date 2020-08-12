@@ -31,6 +31,9 @@ public class Npp16sc extends Pointer {
     @Override public Npp16sc position(long position) {
         return (Npp16sc)super.position(position);
     }
+    @Override public Npp16sc getPointer(long i) {
+        return new Npp16sc(this).position(position + i);
+    }
 
     /**  Real part */
     public native @Cast("Npp16s") short re(); public native Npp16sc re(short setter);

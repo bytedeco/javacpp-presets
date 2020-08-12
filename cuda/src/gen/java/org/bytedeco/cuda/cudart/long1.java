@@ -25,6 +25,9 @@ public class long1 extends Pointer {
     @Override public long1 position(long position) {
         return (long1)super.position(position);
     }
+    @Override public long1 getPointer(long i) {
+        return new long1(this).position(position + i);
+    }
 
     public native long x(); public native long1 x(long setter);
 }

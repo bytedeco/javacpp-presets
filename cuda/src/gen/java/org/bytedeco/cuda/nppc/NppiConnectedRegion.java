@@ -27,6 +27,9 @@ public class NppiConnectedRegion extends Pointer {
     @Override public NppiConnectedRegion position(long position) {
         return (NppiConnectedRegion)super.position(position);
     }
+    @Override public NppiConnectedRegion getPointer(long i) {
+        return new NppiConnectedRegion(this).position(position + i);
+    }
 
 	/**  x, y, width, height == left, top, right, and bottom pixel coordinates */
 	public native @ByRef NppiRect oBoundingBox(); public native NppiConnectedRegion oBoundingBox(NppiRect setter);

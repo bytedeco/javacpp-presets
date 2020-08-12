@@ -25,6 +25,9 @@ public class short2 extends Pointer {
     @Override public short2 position(long position) {
         return (short2)super.position(position);
     }
+    @Override public short2 getPointer(long i) {
+        return new short2(this).position(position + i);
+    }
 
     public native short x(); public native short2 x(short setter);
     public native short y(); public native short2 y(short setter);
