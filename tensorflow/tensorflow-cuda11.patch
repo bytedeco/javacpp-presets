@@ -751,6 +751,32 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cusparse_9_0.inc ten
  cusparseStatus_t CUSPARSEAPI cusparseXcsr2bsrNnz(
      cusparseHandle_t handle, cusparseDirection_t dirA, int m, int n,
      const cusparseMatDescr_t descrA, const int *csrSortedRowPtrA,
+diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/platform/default/dso_loader.cc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/platform/default/dso_loader.cc
+--- tensorflow-1.15.3/tensorflow/stream_executor/platform/default/dso_loader.cc	2020-05-15 07:21:31.000000000 +0900
++++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/platform/default/dso_loader.cc	2020-08-17 14:14:07.727590567 +0900
+@@ -81,11 +81,11 @@
+ }
+ 
+ port::StatusOr<void*> GetCufftDsoHandle() {
+-  return GetDsoHandle("cufft", GetCudaLibVersion());
++  return GetDsoHandle("cufft", "10");
+ }
+ 
+ port::StatusOr<void*> GetCusolverDsoHandle() {
+-  return GetDsoHandle("cusolver", GetCudaLibVersion());
++  return GetDsoHandle("cusolver", "10");
+ }
+ 
+ port::StatusOr<void*> GetCusparseDsoHandle() {
+@@ -93,7 +93,7 @@
+ }
+ 
+ port::StatusOr<void*> GetCurandDsoHandle() {
+-  return GetDsoHandle("curand", GetCudaLibVersion());
++  return GetDsoHandle("curand", "10");
+ }
+ 
+ port::StatusOr<void*> GetCuptiDsoHandle() {
 diff -ruN tensorflow-1.15.3/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl tensorflow-1.15.3-cuda11/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl
 --- tensorflow-1.15.3/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl	2020-05-15 07:21:31.000000000 +0900
 +++ tensorflow-1.15.3-cuda11/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl	2020-06-13 08:59:25.687890600 +0900
