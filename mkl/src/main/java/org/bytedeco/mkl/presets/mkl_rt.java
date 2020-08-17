@@ -42,7 +42,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",
         "mkl_dnn_types.h", "mkl_dnn.h", "mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
               compiler = {"fastfpu", "nodeprecated"}, includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
-              preload = {"iomp5", "libiomp5md", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread", "mkl_core",
+              preload = {"mkl_core", "iomp5", "libiomp5md", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread",
                          "mkl_def", "mkl_mc", "mkl_mc3", "mkl_p4", "mkl_p4m", "mkl_p4m3", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
                          "mkl_vml_def", "mkl_vml_ia", "mkl_vml_mc", "mkl_vml_mc2", "mkl_vml_mc3", "mkl_vml_p4", "mkl_vml_p4m", "mkl_vml_p4m2", "mkl_vml_p4m3",
                          "mkl_vml_avx", "mkl_vml_avx2", "mkl_vml_avx512", "mkl_vml_avx512_mic", "mkl_vml_cmpt"}),
