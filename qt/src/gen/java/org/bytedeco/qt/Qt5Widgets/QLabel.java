@@ -27,6 +27,9 @@ public class QLabel extends QFrame {
     @Override public QLabel position(long position) {
         return (QLabel)super.position(position);
     }
+    @Override public QLabel getPointer(long i) {
+        return new QLabel(this).position(position + i);
+    }
 
     public QLabel(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(parent, f); }
     private native void allocate(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f);

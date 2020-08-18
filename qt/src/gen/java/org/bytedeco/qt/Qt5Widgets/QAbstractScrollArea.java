@@ -27,6 +27,9 @@ public class QAbstractScrollArea extends QFrame {
     @Override public QAbstractScrollArea position(long position) {
         return (QAbstractScrollArea)super.position(position);
     }
+    @Override public QAbstractScrollArea getPointer(long i) {
+        return new QAbstractScrollArea(this).position(position + i);
+    }
 
     public QAbstractScrollArea(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent/*=nullptr*/);

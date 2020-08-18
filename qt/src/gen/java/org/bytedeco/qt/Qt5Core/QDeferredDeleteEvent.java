@@ -22,6 +22,9 @@ public class QDeferredDeleteEvent extends QEvent {
     @Override public QDeferredDeleteEvent position(long position) {
         return (QDeferredDeleteEvent)super.position(position);
     }
+    @Override public QDeferredDeleteEvent getPointer(long i) {
+        return new QDeferredDeleteEvent(this).position(position + i);
+    }
 
     public QDeferredDeleteEvent() { super((Pointer)null); allocate(); }
     private native void allocate();

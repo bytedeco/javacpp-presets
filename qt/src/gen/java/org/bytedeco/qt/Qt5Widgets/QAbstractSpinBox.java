@@ -27,6 +27,9 @@ public class QAbstractSpinBox extends QWidget {
     @Override public QAbstractSpinBox position(long position) {
         return (QAbstractSpinBox)super.position(position);
     }
+    @Override public QAbstractSpinBox getPointer(long i) {
+        return new QAbstractSpinBox(this).position(position + i);
+    }
 
     public QAbstractSpinBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent/*=nullptr*/);

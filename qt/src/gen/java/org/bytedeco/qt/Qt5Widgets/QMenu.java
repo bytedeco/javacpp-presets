@@ -27,6 +27,9 @@ public class QMenu extends QWidget {
     @Override public QMenu position(long position) {
         return (QMenu)super.position(position);
     }
+    @Override public QMenu getPointer(long i) {
+        return new QMenu(this).position(position + i);
+    }
 
     public QMenu(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent/*=nullptr*/);

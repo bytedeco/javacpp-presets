@@ -23,6 +23,9 @@ public class QString extends AbstractQString {
     @Override public QString position(long position) {
         return (QString)super.position(position);
     }
+    @Override public QString getPointer(long i) {
+        return new QString(this).position(position + i);
+    }
 
 
     public QString() { super((Pointer)null); allocate(); }

@@ -27,6 +27,9 @@ public class QSizePolicy extends Pointer {
     @Override public QSizePolicy position(long position) {
         return (QSizePolicy)super.position(position);
     }
+    @Override public QSizePolicy getPointer(long i) {
+        return new QSizePolicy(this).position(position + i);
+    }
 
     /** enum QSizePolicy::PolicyFlag */
     public static final int

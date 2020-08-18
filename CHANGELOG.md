@@ -1,4 +1,5 @@
 
+ * Virtualize `QObject` and `QCoreApplication` from Qt to allow customization ([issue bytedeco/javacpp#419](https://github.com/bytedeco/javacpp/issues/419))
  * Bundle programs from Clang and LLVM, executable via `Loader.load()` for convenience ([issue #833](https://github.com/bytedeco/javacpp-presets/issues/833))
  * Include `nnvm/c_api.h` header file in presets for MXNet ([issue #912](https://github.com/bytedeco/javacpp-presets/issues/912))
  * Enable OpenMP for DNNL on Mac using same library name as MKL to prevent conflicts ([issue #907](https://github.com/bytedeco/javacpp-presets/issues/907))

@@ -27,6 +27,9 @@ public class QComboBox extends QWidget {
     @Override public QComboBox position(long position) {
         return (QComboBox)super.position(position);
     }
+    @Override public QComboBox getPointer(long i) {
+        return new QComboBox(this).position(position + i);
+    }
 
     public QComboBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent/*=nullptr*/);

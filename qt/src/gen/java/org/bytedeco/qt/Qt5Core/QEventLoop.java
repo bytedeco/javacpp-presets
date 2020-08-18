@@ -23,6 +23,9 @@ public class QEventLoop extends QObject {
     @Override public QEventLoop position(long position) {
         return (QEventLoop)super.position(position);
     }
+    @Override public QEventLoop getPointer(long i) {
+        return new QEventLoop(this).position(position + i);
+    }
 
     public QEventLoop(QObject parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QObject parent/*=nullptr*/);

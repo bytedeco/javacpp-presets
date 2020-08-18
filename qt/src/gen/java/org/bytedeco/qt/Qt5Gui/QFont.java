@@ -25,6 +25,9 @@ public class QFont extends Pointer {
     @Override public QFont position(long position) {
         return (QFont)super.position(position);
     }
+    @Override public QFont getPointer(long i) {
+        return new QFont(this).position(position + i);
+    }
 
     /** enum QFont::StyleHint */
     public static final int

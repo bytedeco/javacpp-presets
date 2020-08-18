@@ -27,6 +27,9 @@ public class QTextEdit extends QAbstractScrollArea {
     @Override public QTextEdit position(long position) {
         return (QTextEdit)super.position(position);
     }
+    @Override public QTextEdit getPointer(long i) {
+        return new QTextEdit(this).position(position + i);
+    }
 
     /** enum QTextEdit::LineWrapMode */
     public static final int
@@ -141,6 +144,9 @@ public class QTextEdit extends QAbstractScrollArea {
         private native void allocateArray(long size);
         @Override public ExtraSelection position(long position) {
             return (ExtraSelection)super.position(position);
+        }
+        @Override public ExtraSelection getPointer(long i) {
+            return new ExtraSelection(this).position(position + i);
         }
     
     }

@@ -27,6 +27,9 @@ public class QWidget extends QObject {
     @Override public QWidget position(long position) {
         return (QWidget)super.position(position);
     }
+    @Override public QWidget getPointer(long i) {
+        return new QWidget(this).position(position + i);
+    }
     public QPaintDevice asQPaintDevice() { return asQPaintDevice(this); }
     @Namespace public static native @Name("static_cast<QPaintDevice*>") QPaintDevice asQPaintDevice(QWidget pointer);
 

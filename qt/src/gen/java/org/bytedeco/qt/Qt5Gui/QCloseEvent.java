@@ -25,6 +25,9 @@ public class QCloseEvent extends QEvent {
     @Override public QCloseEvent position(long position) {
         return (QCloseEvent)super.position(position);
     }
+    @Override public QCloseEvent getPointer(long i) {
+        return new QCloseEvent(this).position(position + i);
+    }
 
     public QCloseEvent() { super((Pointer)null); allocate(); }
     private native void allocate();

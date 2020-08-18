@@ -27,6 +27,9 @@ public class QCheckBox extends QAbstractButton {
     @Override public QCheckBox position(long position) {
         return (QCheckBox)super.position(position);
     }
+    @Override public QCheckBox getPointer(long i) {
+        return new QCheckBox(this).position(position + i);
+    }
 
     public QCheckBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent/*=nullptr*/);

@@ -75,7 +75,7 @@ public class QCoreApplication extends QObject {
     public static native QAbstractEventDispatcher eventDispatcher();
     public static native void setEventDispatcher(QAbstractEventDispatcher eventDispatcher);
 
-    public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
+    @Virtual public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
 
     public static native @Cast("bool") boolean startingUp();
     public static native @Cast("bool") boolean closingDown();
@@ -115,4 +115,6 @@ public class QCoreApplication extends QObject {
     public static native @Cast("bool") boolean isQuitLockEnabled();
     public static native void setQuitLockEnabled(@Cast("bool") boolean enabled);
     public static native void quit();
+
+    @Virtual protected native @Cast("bool") boolean compressEvent(QEvent arg0, QObject receiver, @Cast("QPostEventList*") Pointer arg2);
 }

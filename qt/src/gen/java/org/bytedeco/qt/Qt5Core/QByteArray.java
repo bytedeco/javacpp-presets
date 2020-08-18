@@ -23,6 +23,9 @@ public class QByteArray extends Pointer {
     @Override public QByteArray position(long position) {
         return (QByteArray)super.position(position);
     }
+    @Override public QByteArray getPointer(long i) {
+        return new QByteArray(this).position(position + i);
+    }
 
     public enum Base64Option {
         Base64Encoding(0),

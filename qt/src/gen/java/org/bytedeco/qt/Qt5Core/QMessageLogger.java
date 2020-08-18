@@ -21,6 +21,9 @@ public class QMessageLogger extends Pointer {
     @Override public QMessageLogger position(long position) {
         return (QMessageLogger)super.position(position);
     }
+    @Override public QMessageLogger getPointer(long i) {
+        return new QMessageLogger(this).position(position + i);
+    }
 
      public QMessageLogger() { super((Pointer)null); allocate(); }
 private native void allocate();

@@ -346,4 +346,19 @@ public class Qt5Core extends QtInfoMapper {
         "std::reverse_iterator"
     };
   }
+
+  @Override
+  protected String[] virtual() {
+    return new String[]{
+        "QObject",
+        "QCoreApplication",
+    };
+  }
+
+  @Override
+  protected String[] pointer() {
+    return new String[]{
+        "QPostEventList"
+    };
+  }
 }

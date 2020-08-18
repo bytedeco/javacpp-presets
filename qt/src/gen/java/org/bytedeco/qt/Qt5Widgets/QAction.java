@@ -27,6 +27,9 @@ public class QAction extends QObject {
     @Override public QAction position(long position) {
         return (QAction)super.position(position);
     }
+    @Override public QAction getPointer(long i) {
+        return new QAction(this).position(position + i);
+    }
 
     // note this is copied into qplatformmenu.h, which must stay in sync
     /** enum QAction::MenuRole */

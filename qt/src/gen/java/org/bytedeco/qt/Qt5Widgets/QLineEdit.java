@@ -27,6 +27,9 @@ public class QLineEdit extends QWidget {
     @Override public QLineEdit position(long position) {
         return (QLineEdit)super.position(position);
     }
+    @Override public QLineEdit getPointer(long i) {
+        return new QLineEdit(this).position(position + i);
+    }
 
     /** enum QLineEdit::ActionPosition */
     public static final int
