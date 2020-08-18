@@ -26,6 +26,9 @@ public class QHBoxLayout extends QBoxLayout {
     @Override public QHBoxLayout position(long position) {
         return (QHBoxLayout)super.position(position);
     }
+    @Override public QHBoxLayout getPointer(long i) {
+        return new QHBoxLayout(this).position(position + i);
+    }
 
     public QHBoxLayout() { super((Pointer)null); allocate(); }
     private native void allocate();

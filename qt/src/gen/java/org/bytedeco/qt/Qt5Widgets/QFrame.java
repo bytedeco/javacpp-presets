@@ -27,6 +27,9 @@ public class QFrame extends QWidget {
     @Override public QFrame position(long position) {
         return (QFrame)super.position(position);
     }
+    @Override public QFrame getPointer(long i) {
+        return new QFrame(this).position(position + i);
+    }
 
     public QFrame(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(parent, f); }
     private native void allocate(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f);

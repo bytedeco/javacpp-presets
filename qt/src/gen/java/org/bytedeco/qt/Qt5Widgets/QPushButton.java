@@ -27,6 +27,9 @@ public class QPushButton extends QAbstractButton {
     @Override public QPushButton position(long position) {
         return (QPushButton)super.position(position);
     }
+    @Override public QPushButton getPointer(long i) {
+        return new QPushButton(this).position(position + i);
+    }
 
     public QPushButton(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent/*=nullptr*/);

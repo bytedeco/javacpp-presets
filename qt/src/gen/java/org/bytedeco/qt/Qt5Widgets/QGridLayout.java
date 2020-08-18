@@ -27,6 +27,9 @@ public class QGridLayout extends QLayout {
     @Override public QGridLayout position(long position) {
         return (QGridLayout)super.position(position);
     }
+    @Override public QGridLayout getPointer(long i) {
+        return new QGridLayout(this).position(position + i);
+    }
 
     public QGridLayout(QWidget parent) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent);

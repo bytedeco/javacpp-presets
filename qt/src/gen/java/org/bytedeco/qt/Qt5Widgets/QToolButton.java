@@ -27,6 +27,9 @@ public class QToolButton extends QAbstractButton {
     @Override public QToolButton position(long position) {
         return (QToolButton)super.position(position);
     }
+    @Override public QToolButton getPointer(long i) {
+        return new QToolButton(this).position(position + i);
+    }
 
     /** enum QToolButton::ToolButtonPopupMode */
     public static final int

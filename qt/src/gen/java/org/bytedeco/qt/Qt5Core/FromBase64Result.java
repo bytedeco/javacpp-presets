@@ -24,6 +24,9 @@ public class FromBase64Result extends Pointer {
     @Override public FromBase64Result position(long position) {
         return (FromBase64Result)super.position(position);
     }
+    @Override public FromBase64Result getPointer(long i) {
+        return new FromBase64Result(this).position(position + i);
+    }
 
     public native @ByRef QByteArray decoded(); public native FromBase64Result decoded(QByteArray setter);
     public native @Cast("QByteArray::Base64DecodingStatus") int decodingStatus(); public native FromBase64Result decodingStatus(int setter);

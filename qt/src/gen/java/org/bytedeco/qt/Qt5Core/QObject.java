@@ -23,14 +23,17 @@ public class QObject extends Pointer {
     @Override public QObject position(long position) {
         return (QObject)super.position(position);
     }
+    @Override public QObject getPointer(long i) {
+        return new QObject(this).position(position + i);
+    }
 
     public QObject(QObject parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QObject parent/*=nullptr*/);
     public QObject() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    public native @Cast("bool") boolean event(QEvent event);
-    public native @Cast("bool") boolean eventFilter(QObject watched, QEvent event);
+    @Virtual public native @Cast("bool") boolean event(QEvent event);
+    @Virtual public native @Cast("bool") boolean eventFilter(QObject watched, QEvent event);
 
 // #if defined(QT_NO_TRANSLATION) || defined(Q_CLANG_QDOC)
     public static native @ByVal QString tr(@Cast("const char*") BytePointer sourceText, @Cast("const char*") BytePointer arg1/*=nullptr*/, int arg2/*=-1*/);
@@ -110,5 +113,9 @@ public class QObject extends Pointer {
     public native @Cast("bool") boolean inherits(@Cast("const char*") BytePointer classname);
     public native @Cast("bool") boolean inherits(String classname);
     public native void deleteLater();
+
+    @Virtual protected native void timerEvent(QTimerEvent event);
+    @Virtual protected native void childEvent(QChildEvent event);
+    @Virtual protected native void customEvent(QEvent event);
 
 }

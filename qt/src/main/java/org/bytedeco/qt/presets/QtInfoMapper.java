@@ -146,6 +146,9 @@ abstract class QtInfoMapper implements InfoMapper, LoadEnabled {
 
     // Virtual
     infoMap.put(new Info(virtual()).virtualize());
+
+    // Pointer
+    infoMap.put(new Info(pointer()).cast().pointerTypes("Pointer"));
   }
 
   // ----
@@ -212,6 +215,13 @@ abstract class QtInfoMapper implements InfoMapper, LoadEnabled {
    * C++ names of classes with virtual members
    */
   protected String[] virtual() {
+    return new String[0];
+  }
+
+  /**
+   * C++ names of classes with undefined types
+   */
+  protected String[] pointer() {
     return new String[0];
   }
 

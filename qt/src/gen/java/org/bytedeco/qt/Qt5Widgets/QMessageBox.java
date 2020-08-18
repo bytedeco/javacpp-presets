@@ -27,6 +27,9 @@ public class QMessageBox extends QDialog {
     @Override public QMessageBox position(long position) {
         return (QMessageBox)super.position(position);
     }
+    @Override public QMessageBox getPointer(long i) {
+        return new QMessageBox(this).position(position + i);
+    }
 
     /** enum QMessageBox::Icon */
     public static final int

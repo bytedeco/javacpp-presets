@@ -22,6 +22,9 @@ public class QMessageLogContext extends Pointer {
     @Override public QMessageLogContext position(long position) {
         return (QMessageLogContext)super.position(position);
     }
+    @Override public QMessageLogContext getPointer(long i) {
+        return new QMessageLogContext(this).position(position + i);
+    }
 
      public QMessageLogContext() { super((Pointer)null); allocate(); }
 @NoException private native void allocate();

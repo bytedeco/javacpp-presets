@@ -27,6 +27,9 @@ public class QGroupBox extends QWidget {
     @Override public QGroupBox position(long position) {
         return (QGroupBox)super.position(position);
     }
+    @Override public QGroupBox getPointer(long i) {
+        return new QGroupBox(this).position(position + i);
+    }
 
     public QGroupBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QWidget parent/*=nullptr*/);

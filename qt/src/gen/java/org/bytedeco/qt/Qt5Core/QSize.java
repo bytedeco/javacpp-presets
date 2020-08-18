@@ -23,6 +23,9 @@ public class QSize extends Pointer {
     @Override public QSize position(long position) {
         return (QSize)super.position(position);
     }
+    @Override public QSize getPointer(long i) {
+        return new QSize(this).position(position + i);
+    }
 
      public QSize() { super((Pointer)null); allocate(); }
 @NoException private native void allocate();

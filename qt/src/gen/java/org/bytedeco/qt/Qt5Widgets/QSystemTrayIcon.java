@@ -27,6 +27,9 @@ public class QSystemTrayIcon extends QObject {
     @Override public QSystemTrayIcon position(long position) {
         return (QSystemTrayIcon)super.position(position);
     }
+    @Override public QSystemTrayIcon getPointer(long i) {
+        return new QSystemTrayIcon(this).position(position + i);
+    }
 
     public QSystemTrayIcon(QObject parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
     private native void allocate(QObject parent/*=nullptr*/);

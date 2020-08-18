@@ -26,6 +26,9 @@ public class QVBoxLayout extends QBoxLayout {
     @Override public QVBoxLayout position(long position) {
         return (QVBoxLayout)super.position(position);
     }
+    @Override public QVBoxLayout getPointer(long i) {
+        return new QVBoxLayout(this).position(position + i);
+    }
 
     public QVBoxLayout() { super((Pointer)null); allocate(); }
     private native void allocate();

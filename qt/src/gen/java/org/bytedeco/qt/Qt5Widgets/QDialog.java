@@ -27,6 +27,9 @@ public class QDialog extends QWidget {
     @Override public QDialog position(long position) {
         return (QDialog)super.position(position);
     }
+    @Override public QDialog getPointer(long i) {
+        return new QDialog(this).position(position + i);
+    }
 
     public QDialog(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(parent, f); }
     private native void allocate(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f);

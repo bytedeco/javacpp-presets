@@ -25,6 +25,9 @@ public class QIcon extends Pointer {
     @Override public QIcon position(long position) {
         return (QIcon)super.position(position);
     }
+    @Override public QIcon getPointer(long i) {
+        return new QIcon(this).position(position + i);
+    }
 
     /** enum QIcon::Mode */
     public static final int Normal = 0, Disabled = 1, Active = 2, Selected = 3;
