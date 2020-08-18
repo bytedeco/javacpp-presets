@@ -18,7 +18,7 @@ rm -f dependencies.txt
 for DIR in *; do
     for POM in $(find $DIR/platform/ -iname pom.xml); do
         JAVACPP_ARGS=
-        if [[ $POM =~ arrow/platform|tensorflow/platform/python ]]; then
+        if [[ $POM =~ tensorflow/platform/python ]]; then
             # Skip over currently broken builds on Windows
             JAVACPP_ARGS="-Djavacpp.platform.windows-x86_64="
         fi
