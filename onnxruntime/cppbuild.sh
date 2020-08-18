@@ -93,8 +93,8 @@ cp -r orttraining/orttraining/models/runner/training_runner.h ../include
 cp -r orttraining/orttraining/models/runner/training_util.h ../include
 cp -r java/src/main/java/* ../java
 cp -a ../build/Release/lib* ../lib || true
-cp ../build/Release/Release/onnxruntime.dll ../bin || true
-cp ../build/Release/Release/onnxruntime.lib ../lib || true
+cp ../build/Release/Release/onnxruntime*.dll ../bin || true
+cp ../build/Release/Release/onnxruntime*.lib ../lib || true
 
 # fix library with the same name for OpenMP as MKL on Mac
 case $PLATFORM in
