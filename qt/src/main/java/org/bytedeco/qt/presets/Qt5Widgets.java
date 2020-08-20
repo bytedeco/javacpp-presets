@@ -76,6 +76,8 @@ public class Qt5Widgets extends QtInfoMapper {
         .put(new Info("Q_WIDGETS_EXPORT").cppTypes().annotations())
 
         // Java methods
+        .put(new Info("QAbstractSpinBox::event")
+            .javaText("@Virtual protected native @Cast(\"bool\") boolean event(QEvent event);"))
         .put(new Info("QToolButton::sizeHint").javaText(
             "@Virtual public native @ByVal @Const({false, false, true}) QSize sizeHint();"))
 
@@ -184,6 +186,7 @@ public class Qt5Widgets extends QtInfoMapper {
         "QWidgetList",
 
         // Members
+        "QAbstractSpinBox::StepEnabled",
         "QWidget::changeEvent",
         "QWidget::enterEvent",
         "QWidget::focusNextPrevChild",
@@ -206,6 +209,29 @@ public class Qt5Widgets extends QtInfoMapper {
   @Override
   protected String[] virtual() {
     return new String[]{
+        "QAbstractButton",
+        "QAbstractScrollArea",
+        "QAbstractSpinBox",
+        "QAction",
+        "QApplication",
+        "QCheckBox",
+        "QComboBox",
+        "QDialog",
+        "QFrame",
+//        "QGridLayout",
+        "QGroupBox",
+        "QLabel",
+//        "QLayout",
+        "QLineEdit",
+        "QMenu",
+        "QMessageBox",
+        "QPushButton",
+        "QSizePolicy",
+        "QSpinBox",
+//        "QStyle",
+        "QSystemTrayIcon",
+        "QTextEdit",
+        "QToolButton",
         "QWidget"
     };
   }

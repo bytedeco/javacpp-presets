@@ -132,7 +132,7 @@ public class QTextEdit extends QAbstractScrollArea {
     public native @Cast("bool") boolean acceptRichText();
     public native void setAcceptRichText(@Cast("bool") boolean accept);
 
-    public static class ExtraSelection extends Pointer {
+    @Const public static class ExtraSelection extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
         public ExtraSelection() { super((Pointer)null); allocate(); }
@@ -197,4 +197,11 @@ public class QTextEdit extends QAbstractScrollArea {
     public native void zoomIn();
     public native void zoomOut(int range/*=1*/);
     public native void zoomOut();
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void timerEvent(QTimerEvent e);
+    @Virtual protected native void paintEvent(QPaintEvent e);
+    @Virtual protected native @Cast("bool") boolean focusNextPrevChild(@Cast("bool") boolean next);
+    @Virtual protected native void changeEvent(QEvent e);
+
+    @Virtual protected native void scrollContentsBy(int dx, int dy);
 }

@@ -41,7 +41,7 @@ public class QDialog extends QWidget {
 
     public native int result();
 
-    public native void setVisible(@Cast("bool") boolean visible);
+    @Virtual public native void setVisible(@Cast("bool") boolean visible);
 
 // #if QT_DEPRECATED_SINCE(5, 13)
 // #endif
@@ -54,9 +54,11 @@ public class QDialog extends QWidget {
 
     public native void setModal(@Cast("bool") boolean modal);
     public native void setResult(int r);
-    public native void open();
-    public native int exec();
-    public native void done(int arg0);
-    public native void accept();
-    public native void reject();
+    @Virtual public native void open();
+    @Virtual public native int exec();
+    @Virtual public native void done(int arg0);
+    @Virtual public native void accept();
+    @Virtual public native void reject();
+    @Virtual protected native void closeEvent(QCloseEvent arg0);
+    @Virtual protected native @Cast("bool") boolean eventFilter(QObject arg0, QEvent arg1);
 }

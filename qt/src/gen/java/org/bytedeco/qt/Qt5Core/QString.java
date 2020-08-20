@@ -360,11 +360,11 @@ public static native @ByVal QString fromWCharArray(@Cast("const wchar_t*") IntPo
     public native void push_front(@Const @ByRef QString s);
     public native void shrink_to_fit();
 
-    public static native @ByVal QString fromStdString(@StdString BytePointer s);
-    public static native @ByVal QString fromStdString(@StdString String s);
+    public static native @ByVal QString fromStdString(@Const @StdString @ByRef BytePointer s);
+    public static native @ByVal QString fromStdString(@Const @StdString @ByRef String s);
     public native @StdString String toStdString();
-    public static native @ByVal QString fromStdWString(@StdWString CharPointer s);
-    public static native @ByVal QString fromStdWString(@StdWString IntPointer s);
+    public static native @ByVal QString fromStdWString(@Const @StdWString @ByRef CharPointer s);
+    public static native @ByVal QString fromStdWString(@Const @StdWString @ByRef IntPointer s);
     public native @StdWString CharPointer toStdWString();
 
 // #if defined(Q_STDLIB_UNICODE_STRINGS) || defined(Q_QDOC)

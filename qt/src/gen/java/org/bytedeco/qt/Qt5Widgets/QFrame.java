@@ -75,4 +75,7 @@ public class QFrame extends QWidget {
 
     public native int midLineWidth();
     public native void setMidLineWidth(int arg0);
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
+    @Virtual protected native void changeEvent(QEvent arg0);
 }

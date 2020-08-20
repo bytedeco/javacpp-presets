@@ -85,12 +85,12 @@ public class QAbstractSpinBox extends QWidget {
     public native @ByVal QSize sizeHint();
     public native @ByVal QSize minimumSizeHint();
     public native void interpretText();
-    public native @Cast("bool") boolean event(QEvent event);
+    @Virtual protected native @Cast("bool") boolean event(QEvent event);
 
     public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
-    public native void fixup(@ByRef QString input);
+    @Virtual public native @Const({false, false, true}) void fixup(@ByRef QString input);
 
-    public native void stepBy(int steps);
+    @Virtual public native void stepBy(int steps);
 
     public enum StepType {
         DefaultStepType(0),
@@ -105,5 +105,9 @@ public class QAbstractSpinBox extends QWidget {
     public native void stepUp();
     public native void stepDown();
     public native void selectAll();
-    public native void clear();
+    @Virtual public native void clear();
+    @Virtual protected native void changeEvent(QEvent event);
+    @Virtual protected native void closeEvent(QCloseEvent event);
+    @Virtual protected native void timerEvent(QTimerEvent event);
+    @Virtual protected native void paintEvent(QPaintEvent event);
 }

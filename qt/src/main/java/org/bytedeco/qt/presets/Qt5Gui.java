@@ -151,4 +151,13 @@ public class Qt5Gui extends QtInfoMapper {
         "QFont::resolve"
     };
   }
+
+  @Override
+  protected String[] virtual() {
+    return new String[]{
+        "QFont",
+        "QIcon",
+        "QGuiApplication"
+    };
+  }
 }

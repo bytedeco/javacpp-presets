@@ -100,7 +100,7 @@ public class QApplication extends QGuiApplication {
 // #endif
 
     public static native int exec();
-    public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
+    @Virtual public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
     public native @ByVal QString styleSheet();
 // #ifndef QT_NO_STYLE_STYLESHEET
     public native void setStyleSheet(@Const @ByRef QString sheet);
@@ -109,4 +109,5 @@ public class QApplication extends QGuiApplication {
     public native @Cast("bool") boolean autoSipEnabled();
     public static native void closeAllWindows();
     public static native void aboutQt();
+    @Virtual protected native @Cast("bool") boolean event(QEvent arg0);
 }

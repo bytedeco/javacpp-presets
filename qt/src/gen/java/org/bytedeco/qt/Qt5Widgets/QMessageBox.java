@@ -259,5 +259,8 @@ public class QMessageBox extends QDialog {
 
     public native void setWindowTitle(@Const @ByRef QString title);
     public native void setWindowModality(@Cast("Qt::WindowModality") int windowModality);
-    public native int exec();
+    @Virtual public native int exec();
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void closeEvent(QCloseEvent event);
+    @Virtual protected native void changeEvent(QEvent event);
 }

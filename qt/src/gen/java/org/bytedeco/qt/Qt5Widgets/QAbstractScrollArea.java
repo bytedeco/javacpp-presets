@@ -62,8 +62,17 @@ public class QAbstractScrollArea extends QFrame {
 
     public native @ByVal QSize sizeHint();
 
-    public native void setupViewport(QWidget viewport);
+    @Virtual public native void setupViewport(QWidget viewport);
 
     public native @Cast("QAbstractScrollArea::SizeAdjustPolicy") int sizeAdjustPolicy();
     public native void setSizeAdjustPolicy(@Cast("QAbstractScrollArea::SizeAdjustPolicy") int policy);
+
+    @Virtual protected native @Cast("bool") boolean eventFilter(QObject arg0, QEvent arg1);
+    @Virtual protected native @Cast("bool") boolean event(QEvent arg0);
+    @Virtual protected native @Cast("bool") boolean viewportEvent(QEvent arg0);
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
+
+    @Virtual protected native void scrollContentsBy(int dx, int dy);
+
+    @Virtual protected native @ByVal @Const({false, false, true}) QSize viewportSizeHint();
 }

@@ -328,8 +328,8 @@ public static native @ByVal QByteArray fromPercentEncoding(@Const @ByRef QByteAr
     public native void push_front(@Const @ByRef QByteArray a);
     public native void shrink_to_fit();
 
-    public static native @ByVal QByteArray fromStdString(@StdString BytePointer s);
-    public static native @ByVal QByteArray fromStdString(@StdString String s);
+    public static native @ByVal QByteArray fromStdString(@Const @StdString @ByRef BytePointer s);
+    public static native @ByVal QByteArray fromStdString(@Const @StdString @ByRef String s);
     public native @StdString BytePointer toStdString();
 
     public native int count();

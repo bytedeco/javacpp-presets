@@ -21,7 +21,20 @@ public class QAbstractButton extends QWidget {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QAbstractButton(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QAbstractButton(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QAbstractButton position(long position) {
+        return (QAbstractButton)super.position(position);
+    }
+    @Override public QAbstractButton getPointer(long i) {
+        return new QAbstractButton(this).position(position + i);
+    }
 
+    public QAbstractButton(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QAbstractButton() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     public native void setText(@Const @ByRef QString text);
     public native @ByVal QString text();
@@ -61,4 +74,11 @@ public class QAbstractButton extends QWidget {
     public native void click();
     public native void toggle();
     public native void setChecked(@Cast("bool") boolean arg0);
+    @Virtual(true) protected native void paintEvent(QPaintEvent e);
+    @Virtual protected native void checkStateSet();
+    @Virtual protected native void nextCheckState();
+
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void changeEvent(QEvent e);
+    @Virtual protected native void timerEvent(QTimerEvent e);
 }

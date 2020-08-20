@@ -85,4 +85,5 @@ public class QSystemTrayIcon extends QObject {
     public native void showMessage(@Const @ByRef QString title, @Const @ByRef QString msg,
                          MessageIcon icon/*=QSystemTrayIcon::Information*/, int msecs/*=10000*/);
     public native void showMessage(@Const @ByRef QString title, @Const @ByRef QString msg);
+    @Virtual protected native @Cast("bool") boolean event(QEvent event);
 }

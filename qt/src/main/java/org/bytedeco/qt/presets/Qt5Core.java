@@ -70,7 +70,7 @@ public class Qt5Core extends QtInfoMapper {
         .put(new Info("QT_ASCII_CAST_WARN", "QT_DEPRECATED", "QT_DEPRECATED_VERSION_5_14").cppTypes().annotations("@Deprecated"))
 
         // Helper classes
-        .put(new Info("QString").base("AbstractQString"))
+        .put(new Info("QString").base("AbstractQString").virtualize())
 
         // Line patterns
         .put(new Info("qabstracteventdispatcher.h").linePatterns(
@@ -105,6 +105,10 @@ public class Qt5Core extends QtInfoMapper {
         .put(new Info("QVariant::toString").javaNames("toQString"))
 
         // Methods
+        .put(new Info("QObject::event")
+            .javaText("@Virtual protected native @Cast(\"bool\") boolean event(QEvent event);"))
+        .put(new Info("QObject::eventFilter")
+            .javaText("@Virtual protected native @Cast(\"bool\") boolean eventFilter(QObject watched, QEvent event);"))
         .put(new Info("QString::toStdString")
             .javaText("public native @StdString String toStdString();"));
   }
@@ -295,10 +299,12 @@ public class Qt5Core extends QtInfoMapper {
         "QMargins",
         "QMetaMethod",
         "QMetaObject::Connection",
+        "QMimeData",
         "QModelIndex",
         "QObjectList",
         "QObjectUserData",
         "QPersistentModelIndex",
+        "QPostEventList",
         "QPoint",
         "QPointF",
         "QRect",
@@ -350,15 +356,17 @@ public class Qt5Core extends QtInfoMapper {
   @Override
   protected String[] virtual() {
     return new String[]{
-        "QObject",
+//        "QAbstractEventDispatcher",
+        "QByteArray",
         "QCoreApplication",
-    };
-  }
-
-  @Override
-  protected String[] pointer() {
-    return new String[]{
-        "QPostEventList"
+        "QCoreEvent",
+        "QEventLoop",
+        "QObject",
+        "QSize",
+//        "QString",
+        "QStringList",
+        "QThread",
+        "QVariant"
     };
   }
 }

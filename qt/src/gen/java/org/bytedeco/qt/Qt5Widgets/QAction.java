@@ -123,6 +123,7 @@ public class QAction extends QObject {
 
     public native QWidget parentWidget();
 // #if QT_CONFIG(graphicsview)
+    @Virtual protected native @Cast("bool") boolean event(QEvent arg0);
     public native void trigger();
     public native void hover();
     public native void setChecked(@Cast("bool") boolean arg0);
