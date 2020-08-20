@@ -330,6 +330,7 @@ public class QWidget extends QObject {
 
     public native @Cast("bool") boolean autoFillBackground();
     public native void setAutoFillBackground(@Cast("bool") boolean enabled);
+    @Virtual protected native @Cast("bool") boolean event(QEvent event);
     @Virtual protected native void closeEvent(QCloseEvent event);
     
 }

@@ -97,4 +97,8 @@ public class QLabel extends QFrame {
     public native void setNum(int arg0);
     public native void setNum(double arg0);
     public native void clear();
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
+    @Virtual protected native void changeEvent(QEvent arg0);
+    @Virtual protected native @Cast("bool") boolean focusNextPrevChild(@Cast("bool") boolean next);
 }

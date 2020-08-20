@@ -140,10 +140,10 @@ public class QComboBox extends QWidget {
     public native @ByVal QSize sizeHint();
     public native @ByVal QSize minimumSizeHint();
 
-    public native void showPopup();
-    public native void hidePopup();
+    @Virtual public native void showPopup();
+    @Virtual public native void hidePopup();
 
-    public native @Cast("bool") boolean event(QEvent event);
+    @Virtual public native @Cast("bool") boolean event(QEvent event);
     public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
     public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int query, @Const @ByRef QVariant argument);
     public native void clear();
@@ -151,4 +151,6 @@ public class QComboBox extends QWidget {
     public native void setEditText(@Const @ByRef QString text);
     public native void setCurrentIndex(int index);
     public native void setCurrentText(@Const @ByRef QString text);
+    @Virtual protected native void changeEvent(QEvent e);
+    @Virtual protected native void paintEvent(QPaintEvent e);
 }

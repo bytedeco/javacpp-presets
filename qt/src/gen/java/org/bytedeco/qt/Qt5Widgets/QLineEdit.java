@@ -139,7 +139,9 @@ public class QLineEdit extends QWidget {
     public native void insert(@Const @ByRef QString arg0);
 // #ifndef QT_NO_CONTEXTMENU
     public native QMenu createStandardContextMenu();
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
+    @Virtual protected native void changeEvent(QEvent arg0);
     public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
     public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int property, @ByVal QVariant argument);
-    public native @Cast("bool") boolean event(QEvent arg0);
+    @Virtual public native @Cast("bool") boolean event(QEvent arg0);
 }

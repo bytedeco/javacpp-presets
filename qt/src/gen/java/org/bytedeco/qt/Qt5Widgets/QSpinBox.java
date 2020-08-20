@@ -62,5 +62,8 @@ public class QSpinBox extends QAbstractSpinBox {
 
     public native int displayIntegerBase();
     public native void setDisplayIntegerBase(int base);
+    @Virtual protected native @Cast("bool") boolean event(QEvent event);
+    @Virtual protected native @Const({false, false, true}) int valueFromText(@Const @ByRef QString text);
+    @Virtual protected native @ByVal @Const({false, false, true}) QString textFromValue(int val);
     public native void setValue(int val);
 }

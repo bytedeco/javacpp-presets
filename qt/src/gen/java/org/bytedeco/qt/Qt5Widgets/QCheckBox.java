@@ -49,4 +49,8 @@ public class QCheckBox extends QAbstractButton {
 
     public native @Cast("Qt::CheckState") int checkState();
     public native void setCheckState(@Cast("Qt::CheckState") int state);
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void checkStateSet();
+    @Virtual protected native void nextCheckState();
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
 }

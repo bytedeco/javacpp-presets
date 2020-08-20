@@ -61,4 +61,6 @@ public class QPushButton extends QAbstractButton {
     public native @Cast("bool") boolean isFlat();
 // #if QT_CONFIG(menu)
     public native void showMenu();
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
 }

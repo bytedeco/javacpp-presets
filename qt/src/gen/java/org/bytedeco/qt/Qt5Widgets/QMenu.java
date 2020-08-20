@@ -106,4 +106,12 @@ public class QMenu extends QWidget {
 
     public native @Cast("bool") boolean toolTipsVisible();
     public native void setToolTipsVisible(@Cast("bool") boolean visible);
+
+    @Virtual protected native void changeEvent(QEvent arg0);
+    @Virtual protected native void enterEvent(QEvent arg0);
+    @Virtual protected native void leaveEvent(QEvent arg0);
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
+    @Virtual protected native void timerEvent(QTimerEvent arg0);
+    @Virtual protected native @Cast("bool") boolean event(QEvent arg0);
+    @Virtual protected native @Cast("bool") boolean focusNextPrevChild(@Cast("bool") boolean next);
 }

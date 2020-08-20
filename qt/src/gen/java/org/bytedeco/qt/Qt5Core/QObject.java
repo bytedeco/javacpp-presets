@@ -32,8 +32,8 @@ public class QObject extends Pointer {
     public QObject() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    @Virtual public native @Cast("bool") boolean event(QEvent event);
-    @Virtual public native @Cast("bool") boolean eventFilter(QObject watched, QEvent event);
+    @Virtual protected native @Cast("bool") boolean event(QEvent event);
+    @Virtual protected native @Cast("bool") boolean eventFilter(QObject watched, QEvent event);
 
 // #if defined(QT_NO_TRANSLATION) || defined(Q_CLANG_QDOC)
     public static native @ByVal QString tr(@Cast("const char*") BytePointer sourceText, @Cast("const char*") BytePointer arg1/*=nullptr*/, int arg2/*=-1*/);

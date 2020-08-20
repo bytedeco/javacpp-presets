@@ -68,5 +68,13 @@ public class QToolButton extends QAbstractButton {
 // #endif
     public native void setToolButtonStyle(@Cast("Qt::ToolButtonStyle") int style);
     public native void setDefaultAction(QAction arg0);
+    @Virtual protected native @Cast("bool") boolean event(QEvent e);
+    @Virtual protected native void paintEvent(QPaintEvent arg0);
+
+    @Virtual protected native void enterEvent(QEvent arg0);
+    @Virtual protected native void leaveEvent(QEvent arg0);
+    @Virtual protected native void timerEvent(QTimerEvent arg0);
+    @Virtual protected native void changeEvent(QEvent arg0);
+    @Virtual protected native void nextCheckState();
 
 }

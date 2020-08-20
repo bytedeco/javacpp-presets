@@ -76,7 +76,7 @@ public class QGuiApplication extends QCoreApplication {
     public static native @Cast("Qt::HighDpiScaleFactorRoundingPolicy") int highDpiScaleFactorRoundingPolicy();
 
     public static native int exec();
-    public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
+    @Virtual public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
 
 // #ifndef QT_NO_SESSIONMANAGER
     // session management
@@ -90,4 +90,5 @@ public class QGuiApplication extends QCoreApplication {
 // #endif
 
     public static native void sync();
+    @Virtual protected native @Cast("bool") boolean event(QEvent arg0);
 }

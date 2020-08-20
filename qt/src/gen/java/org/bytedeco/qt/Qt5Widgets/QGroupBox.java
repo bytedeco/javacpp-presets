@@ -54,4 +54,8 @@ public class QGroupBox extends QWidget {
     public native void setCheckable(@Cast("bool") boolean checkable);
     public native @Cast("bool") boolean isChecked();
     public native void setChecked(@Cast("bool") boolean checked);
+    @Virtual protected native @Cast("bool") boolean event(QEvent event);
+    @Virtual protected native void childEvent(QChildEvent event);
+    @Virtual protected native void paintEvent(QPaintEvent event);
+    @Virtual protected native void changeEvent(QEvent event);
 }

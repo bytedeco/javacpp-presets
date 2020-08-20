@@ -115,6 +115,5 @@ public class QCoreApplication extends QObject {
     public static native @Cast("bool") boolean isQuitLockEnabled();
     public static native void setQuitLockEnabled(@Cast("bool") boolean enabled);
     public static native void quit();
-
-    @Virtual protected native @Cast("bool") boolean compressEvent(QEvent arg0, QObject receiver, @Cast("QPostEventList*") Pointer arg2);
+    @Virtual protected native @Cast("bool") boolean event(QEvent arg0);
 }

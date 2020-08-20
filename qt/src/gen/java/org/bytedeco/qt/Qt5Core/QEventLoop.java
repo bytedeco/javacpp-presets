@@ -58,6 +58,6 @@ public class QEventLoop extends QObject {
 
     public native void wakeUp();
 
-    public native @Cast("bool") boolean event(QEvent event);
+    @Virtual public native @Cast("bool") boolean event(QEvent event);
     public native void quit();
 }
