@@ -26,6 +26,9 @@ public class node extends Pointer {
     @Override public node position(long position) {
         return (node)super.position(position);
     }
+    @Override public node getPointer(long i) {
+        return new node(this).position(position + i);
+    }
 
     public native short n_type(); public native node n_type(short setter);
     public native @Cast("char*") BytePointer n_str(); public native node n_str(BytePointer setter);

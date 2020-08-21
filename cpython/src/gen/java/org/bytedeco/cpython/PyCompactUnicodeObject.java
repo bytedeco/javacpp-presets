@@ -28,6 +28,9 @@ public class PyCompactUnicodeObject extends Pointer {
     @Override public PyCompactUnicodeObject position(long position) {
         return (PyCompactUnicodeObject)super.position(position);
     }
+    @Override public PyCompactUnicodeObject getPointer(long i) {
+        return new PyCompactUnicodeObject(this).position(position + i);
+    }
 
     public native @ByRef PyASCIIObject _base(); public native PyCompactUnicodeObject _base(PyASCIIObject setter);
     public native @Cast("Py_ssize_t") long utf8_length(); public native PyCompactUnicodeObject utf8_length(long setter);     /* Number of bytes in utf8, excluding the

@@ -25,6 +25,9 @@ public class PyType_Spec extends Pointer {
     @Override public PyType_Spec position(long position) {
         return (PyType_Spec)super.position(position);
     }
+    @Override public PyType_Spec getPointer(long i) {
+        return new PyType_Spec(this).position(position + i);
+    }
 
     public native @Cast("const char*") BytePointer name(); public native PyType_Spec name(BytePointer setter);
     public native int basicsize(); public native PyType_Spec basicsize(int setter);

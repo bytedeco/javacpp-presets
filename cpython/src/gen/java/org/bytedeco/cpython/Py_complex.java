@@ -27,6 +27,9 @@ public class Py_complex extends Pointer {
     @Override public Py_complex position(long position) {
         return (Py_complex)super.position(position);
     }
+    @Override public Py_complex getPointer(long i) {
+        return new Py_complex(this).position(position + i);
+    }
 
     public native double real(); public native Py_complex real(double setter);
     public native double imag(); public native Py_complex imag(double setter);

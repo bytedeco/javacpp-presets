@@ -46,6 +46,9 @@ public class _Py_HashSecret_t extends Pointer {
     @Override public _Py_HashSecret_t position(long position) {
         return (_Py_HashSecret_t)super.position(position);
     }
+    @Override public _Py_HashSecret_t getPointer(long i) {
+        return new _Py_HashSecret_t(this).position(position + i);
+    }
 
     /* ensure 24 bytes */
     public native @Cast("unsigned char") byte uc(int i); public native _Py_HashSecret_t uc(int i, byte setter);

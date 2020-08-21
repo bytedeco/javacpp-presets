@@ -34,6 +34,9 @@ public class PySliceObject extends Pointer {
     @Override public PySliceObject position(long position) {
         return (PySliceObject)super.position(position);
     }
+    @Override public PySliceObject getPointer(long i) {
+        return new PySliceObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PySliceObject ob_base(PyObject setter);
     public native PyObject start(); public native PySliceObject start(PyObject setter);

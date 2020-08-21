@@ -24,6 +24,9 @@ public class _expr extends Pointer {
     @Override public _expr position(long position) {
         return (_expr)super.position(position);
     }
+    @Override public _expr getPointer(long i) {
+        return new _expr(this).position(position + i);
+    }
 
     public native @Cast("_expr_kind") int kind(); public native _expr kind(int setter);
             @Name("v.BoolOp.op") public native @Cast("boolop_ty") int v_BoolOp_op(); public native _expr v_BoolOp_op(int setter);

@@ -25,6 +25,9 @@ public class PyOSErrorObject extends Pointer {
     @Override public PyOSErrorObject position(long position) {
         return (PyOSErrorObject)super.position(position);
     }
+    @Override public PyOSErrorObject getPointer(long i) {
+        return new PyOSErrorObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyOSErrorObject ob_base(PyObject setter); public native PyObject dict(); public native PyOSErrorObject dict(PyObject setter);
              public native PyObject args(); public native PyOSErrorObject args(PyObject setter); public native PyObject traceback(); public native PyOSErrorObject traceback(PyObject setter);

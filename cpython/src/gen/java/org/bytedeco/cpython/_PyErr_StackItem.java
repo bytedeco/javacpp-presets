@@ -26,6 +26,9 @@ public class _PyErr_StackItem extends Pointer {
     @Override public _PyErr_StackItem position(long position) {
         return (_PyErr_StackItem)super.position(position);
     }
+    @Override public _PyErr_StackItem getPointer(long i) {
+        return new _PyErr_StackItem(this).position(position + i);
+    }
 
     /* This struct represents an entry on the exception stack, which is a
      * per-coroutine state. (Coroutine in the computer science sense,

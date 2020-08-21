@@ -25,6 +25,9 @@ public class _withitem extends Pointer {
     @Override public _withitem position(long position) {
         return (_withitem)super.position(position);
     }
+    @Override public _withitem getPointer(long i) {
+        return new _withitem(this).position(position + i);
+    }
 
     public native _expr context_expr(); public native _withitem context_expr(_expr setter);
     public native _expr optional_vars(); public native _withitem optional_vars(_expr setter);

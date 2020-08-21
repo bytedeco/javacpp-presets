@@ -33,6 +33,9 @@ public class asdl_seq extends Pointer {
     @Override public asdl_seq position(long position) {
         return (asdl_seq)super.position(position);
     }
+    @Override public asdl_seq getPointer(long i) {
+        return new asdl_seq(this).position(position + i);
+    }
 
     public native @Cast("Py_ssize_t") long size(); public native asdl_seq size(long setter);
     public native Pointer elements(int i); public native asdl_seq elements(int i, Pointer setter);

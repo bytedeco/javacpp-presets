@@ -25,6 +25,9 @@ public class PyMappingMethods extends Pointer {
     @Override public PyMappingMethods position(long position) {
         return (PyMappingMethods)super.position(position);
     }
+    @Override public PyMappingMethods getPointer(long i) {
+        return new PyMappingMethods(this).position(position + i);
+    }
 
     public native lenfunc mp_length(); public native PyMappingMethods mp_length(lenfunc setter);
     public native binaryfunc mp_subscript(); public native PyMappingMethods mp_subscript(binaryfunc setter);

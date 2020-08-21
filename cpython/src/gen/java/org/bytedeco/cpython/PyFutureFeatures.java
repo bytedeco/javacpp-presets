@@ -28,6 +28,9 @@ public class PyFutureFeatures extends Pointer {
     @Override public PyFutureFeatures position(long position) {
         return (PyFutureFeatures)super.position(position);
     }
+    @Override public PyFutureFeatures getPointer(long i) {
+        return new PyFutureFeatures(this).position(position + i);
+    }
 
     public native int ff_features(); public native PyFutureFeatures ff_features(int setter);      /* flags set by future statements */
     public native int ff_lineno(); public native PyFutureFeatures ff_lineno(int setter);        /* line number of last future statement */

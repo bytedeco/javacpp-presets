@@ -37,6 +37,9 @@ public class PyByteArrayObject extends Pointer {
     @Override public PyByteArrayObject position(long position) {
         return (PyByteArrayObject)super.position(position);
     }
+    @Override public PyByteArrayObject getPointer(long i) {
+        return new PyByteArrayObject(this).position(position + i);
+    }
 
     public native @ByRef PyVarObject ob_base(); public native PyByteArrayObject ob_base(PyVarObject setter);
     public native @Cast("Py_ssize_t") long ob_alloc(); public native PyByteArrayObject ob_alloc(long setter); /* How many bytes allocated in ob_bytes */

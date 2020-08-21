@@ -24,6 +24,9 @@ public class _stmt extends Pointer {
     @Override public _stmt position(long position) {
         return (_stmt)super.position(position);
     }
+    @Override public _stmt getPointer(long i) {
+        return new _stmt(this).position(position + i);
+    }
 
     public native @Cast("_stmt_kind") int kind(); public native _stmt kind(int setter);
             @Name("v.FunctionDef.name") public native @Cast("identifier") PyObject v_FunctionDef_name(); public native _stmt v_FunctionDef_name(PyObject setter);

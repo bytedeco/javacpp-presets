@@ -26,6 +26,9 @@ public class PyModuleDef_Base extends Pointer {
     @Override public PyModuleDef_Base position(long position) {
         return (PyModuleDef_Base)super.position(position);
     }
+    @Override public PyModuleDef_Base getPointer(long i) {
+        return new PyModuleDef_Base(this).position(position + i);
+    }
 
   public native @ByRef PyObject ob_base(); public native PyModuleDef_Base ob_base(PyObject setter);
   public static class PyObject_M_init extends FunctionPointer {

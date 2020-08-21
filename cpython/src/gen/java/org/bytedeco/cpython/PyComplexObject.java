@@ -33,6 +33,9 @@ public class PyComplexObject extends Pointer {
     @Override public PyComplexObject position(long position) {
         return (PyComplexObject)super.position(position);
     }
+    @Override public PyComplexObject getPointer(long i) {
+        return new PyComplexObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyComplexObject ob_base(PyObject setter);
     public native @ByRef Py_complex cval(); public native PyComplexObject cval(Py_complex setter);

@@ -26,6 +26,9 @@ public class PyModuleDef_Slot extends Pointer {
     @Override public PyModuleDef_Slot position(long position) {
         return (PyModuleDef_Slot)super.position(position);
     }
+    @Override public PyModuleDef_Slot getPointer(long i) {
+        return new PyModuleDef_Slot(this).position(position + i);
+    }
 
     public native int slot(); public native PyModuleDef_Slot slot(int setter);
     public native Pointer value(); public native PyModuleDef_Slot value(Pointer setter);

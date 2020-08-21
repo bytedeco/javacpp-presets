@@ -29,6 +29,9 @@ public class _PyBytesWriter extends Pointer {
     @Override public _PyBytesWriter position(long position) {
         return (_PyBytesWriter)super.position(position);
     }
+    @Override public _PyBytesWriter getPointer(long i) {
+        return new _PyBytesWriter(this).position(position + i);
+    }
 
     /* bytes, bytearray or NULL (when the small buffer is used) */
     public native PyObject buffer(); public native _PyBytesWriter buffer(PyObject setter);

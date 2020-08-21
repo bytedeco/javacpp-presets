@@ -28,6 +28,9 @@ public class PyCodeObject extends Pointer {
     @Override public PyCodeObject position(long position) {
         return (PyCodeObject)super.position(position);
     }
+    @Override public PyCodeObject getPointer(long i) {
+        return new PyCodeObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyCodeObject ob_base(PyObject setter);
     public native int co_argcount(); public native PyCodeObject co_argcount(int setter);            /* #arguments, except *args */

@@ -46,6 +46,9 @@ public class _Py_Identifier extends Pointer {
     @Override public _Py_Identifier position(long position) {
         return (_Py_Identifier)super.position(position);
     }
+    @Override public _Py_Identifier getPointer(long i) {
+        return new _Py_Identifier(this).position(position + i);
+    }
 
     public native _Py_Identifier next(); public native _Py_Identifier next(_Py_Identifier setter);
     public native @Cast("const char*") BytePointer string(); public native _Py_Identifier string(BytePointer setter);

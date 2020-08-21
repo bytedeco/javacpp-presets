@@ -27,6 +27,9 @@ public class PyDescrObject extends Pointer {
     @Override public PyDescrObject position(long position) {
         return (PyDescrObject)super.position(position);
     }
+    @Override public PyDescrObject getPointer(long i) {
+        return new PyDescrObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyDescrObject ob_base(PyObject setter);
     public native PyTypeObject d_type(); public native PyDescrObject d_type(PyTypeObject setter);

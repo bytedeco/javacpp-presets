@@ -25,6 +25,9 @@ public class _PyDictViewObject extends Pointer {
     @Override public _PyDictViewObject position(long position) {
         return (_PyDictViewObject)super.position(position);
     }
+    @Override public _PyDictViewObject getPointer(long i) {
+        return new _PyDictViewObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native _PyDictViewObject ob_base(PyObject setter);
     public native PyDictObject dv_dict(); public native _PyDictViewObject dv_dict(PyDictObject setter);

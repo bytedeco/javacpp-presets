@@ -26,6 +26,9 @@ public class _PyCoreConfig extends Pointer {
     @Override public _PyCoreConfig position(long position) {
         return (_PyCoreConfig)super.position(position);
     }
+    @Override public _PyCoreConfig getPointer(long i) {
+        return new _PyCoreConfig(this).position(position + i);
+    }
 
     public native int install_signal_handlers(); public native _PyCoreConfig install_signal_handlers(int setter);  /* Install signal handlers? -1 means unset */
 

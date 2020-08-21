@@ -30,6 +30,9 @@ public class PyObject extends Pointer {
     @Override public PyObject position(long position) {
         return (PyObject)super.position(position);
     }
+    @Override public PyObject getPointer(long i) {
+        return new PyObject(this).position(position + i);
+    }
 
     public native @Cast("Py_ssize_t") long ob_refcnt(); public native PyObject ob_refcnt(long setter);
     public native @Cast("_typeobject*") PyTypeObject ob_type(); public native PyObject ob_type(PyTypeObject setter);

@@ -26,6 +26,9 @@ public class PyThreadState extends Pointer {
     @Override public PyThreadState position(long position) {
         return (PyThreadState)super.position(position);
     }
+    @Override public PyThreadState getPointer(long i) {
+        return new PyThreadState(this).position(position + i);
+    }
 
     /* See Python/ceval.c for comments explaining most fields */
 

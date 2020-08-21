@@ -27,6 +27,9 @@ public class PyGC_Head extends Pointer {
     @Override public PyGC_Head position(long position) {
         return (PyGC_Head)super.position(position);
     }
+    @Override public PyGC_Head getPointer(long i) {
+        return new PyGC_Head(this).position(position + i);
+    }
 
         @Name("gc.gc_next") public native @Cast("_gc_head*") PyGC_Head gc_gc_next(); public native PyGC_Head gc_gc_next(PyGC_Head setter);
         @Name("gc.gc_prev") public native @Cast("_gc_head*") PyGC_Head gc_gc_prev(); public native PyGC_Head gc_gc_prev(PyGC_Head setter);

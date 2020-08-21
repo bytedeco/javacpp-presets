@@ -30,6 +30,9 @@ public class _PyMainInterpreterConfig extends Pointer {
     @Override public _PyMainInterpreterConfig position(long position) {
         return (_PyMainInterpreterConfig)super.position(position);
     }
+    @Override public _PyMainInterpreterConfig getPointer(long i) {
+        return new _PyMainInterpreterConfig(this).position(position + i);
+    }
 
     public native int install_signal_handlers(); public native _PyMainInterpreterConfig install_signal_handlers(int setter);   /* Install signal handlers? -1 means unset */
     public native PyObject argv(); public native _PyMainInterpreterConfig argv(PyObject setter);                /* sys.argv list, can be NULL */

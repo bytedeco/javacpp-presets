@@ -27,6 +27,9 @@ public class _PyArg_Parser extends Pointer {
     @Override public _PyArg_Parser position(long position) {
         return (_PyArg_Parser)super.position(position);
     }
+    @Override public _PyArg_Parser getPointer(long i) {
+        return new _PyArg_Parser(this).position(position + i);
+    }
 
     public native @Cast("const char*") BytePointer format(); public native _PyArg_Parser format(BytePointer setter);
     @MemberGetter public native @Cast("const char*") BytePointer keywords(int i);

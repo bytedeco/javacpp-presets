@@ -36,6 +36,9 @@ public class PySetObject extends Pointer {
     @Override public PySetObject position(long position) {
         return (PySetObject)super.position(position);
     }
+    @Override public PySetObject getPointer(long i) {
+        return new PySetObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PySetObject ob_base(PyObject setter);
 

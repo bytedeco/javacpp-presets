@@ -26,6 +26,9 @@ public class PyAddrPair extends Pointer {
     @Override public PyAddrPair position(long position) {
         return (PyAddrPair)super.position(position);
     }
+    @Override public PyAddrPair getPointer(long i) {
+        return new PyAddrPair(this).position(position + i);
+    }
 
         public native int ap_lower(); public native PyAddrPair ap_lower(int setter);
         public native int ap_upper(); public native PyAddrPair ap_upper(int setter);

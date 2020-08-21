@@ -37,6 +37,9 @@ public class PyFunctionObject extends Pointer {
     @Override public PyFunctionObject position(long position) {
         return (PyFunctionObject)super.position(position);
     }
+    @Override public PyFunctionObject getPointer(long i) {
+        return new PyFunctionObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyFunctionObject ob_base(PyObject setter);
     public native PyObject func_code(); public native PyFunctionObject func_code(PyObject setter);        /* A code object, the __code__ attribute */

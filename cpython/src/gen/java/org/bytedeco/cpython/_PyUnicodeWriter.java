@@ -26,6 +26,9 @@ public class _PyUnicodeWriter extends Pointer {
     @Override public _PyUnicodeWriter position(long position) {
         return (_PyUnicodeWriter)super.position(position);
     }
+    @Override public _PyUnicodeWriter getPointer(long i) {
+        return new _PyUnicodeWriter(this).position(position + i);
+    }
 
     public native PyObject buffer(); public native _PyUnicodeWriter buffer(PyObject setter);
     public native Pointer data(); public native _PyUnicodeWriter data(Pointer setter);

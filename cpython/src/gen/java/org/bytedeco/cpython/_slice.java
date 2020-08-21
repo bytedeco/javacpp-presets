@@ -24,6 +24,9 @@ public class _slice extends Pointer {
     @Override public _slice position(long position) {
         return (_slice)super.position(position);
     }
+    @Override public _slice getPointer(long i) {
+        return new _slice(this).position(position + i);
+    }
 
     public native @Cast("_slice_kind") int kind(); public native _slice kind(int setter);
             @Name("v.Slice.lower") public native _expr v_Slice_lower(); public native _slice v_Slice_lower(_expr setter);

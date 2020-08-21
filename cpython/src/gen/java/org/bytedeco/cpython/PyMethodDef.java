@@ -26,6 +26,9 @@ public class PyMethodDef extends Pointer {
     @Override public PyMethodDef position(long position) {
         return (PyMethodDef)super.position(position);
     }
+    @Override public PyMethodDef getPointer(long i) {
+        return new PyMethodDef(this).position(position + i);
+    }
 
     public native @Cast("const char*") BytePointer ml_name(); public native PyMethodDef ml_name(BytePointer setter);   /* The name of the built-in function/method */
     public native PyCFunction ml_meth(); public native PyMethodDef ml_meth(PyCFunction setter);    /* The C function that implements it */

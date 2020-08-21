@@ -24,6 +24,9 @@ public class _PyManagedBufferObject extends Pointer {
     @Override public _PyManagedBufferObject position(long position) {
         return (_PyManagedBufferObject)super.position(position);
     }
+    @Override public _PyManagedBufferObject getPointer(long i) {
+        return new _PyManagedBufferObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native _PyManagedBufferObject ob_base(PyObject setter);
     public native int flags(); public native _PyManagedBufferObject flags(int setter);          /* state flags */

@@ -28,6 +28,9 @@ public class PyModuleDef extends Pointer {
     @Override public PyModuleDef position(long position) {
         return (PyModuleDef)super.position(position);
     }
+    @Override public PyModuleDef getPointer(long i) {
+        return new PyModuleDef(this).position(position + i);
+    }
 
   public native @ByRef PyModuleDef_Base m_base(); public native PyModuleDef m_base(PyModuleDef_Base setter);
   public native @Cast("const char*") BytePointer m_name(); public native PyModuleDef m_name(BytePointer setter);

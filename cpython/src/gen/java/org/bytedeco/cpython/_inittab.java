@@ -25,6 +25,9 @@ public class _inittab extends Pointer {
     @Override public _inittab position(long position) {
         return (_inittab)super.position(position);
     }
+    @Override public _inittab getPointer(long i) {
+        return new _inittab(this).position(position + i);
+    }
 
     public native @Cast("const char*") BytePointer name(); public native _inittab name(BytePointer setter);           /* ASCII encoded string */
     public static class PyObject_Initfunc extends FunctionPointer {

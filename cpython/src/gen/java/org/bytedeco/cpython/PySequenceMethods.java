@@ -25,6 +25,9 @@ public class PySequenceMethods extends Pointer {
     @Override public PySequenceMethods position(long position) {
         return (PySequenceMethods)super.position(position);
     }
+    @Override public PySequenceMethods getPointer(long i) {
+        return new PySequenceMethods(this).position(position + i);
+    }
 
     public native lenfunc sq_length(); public native PySequenceMethods sq_length(lenfunc setter);
     public native binaryfunc sq_concat(); public native PySequenceMethods sq_concat(binaryfunc setter);

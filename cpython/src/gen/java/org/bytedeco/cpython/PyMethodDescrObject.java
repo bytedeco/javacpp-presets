@@ -25,6 +25,9 @@ public class PyMethodDescrObject extends Pointer {
     @Override public PyMethodDescrObject position(long position) {
         return (PyMethodDescrObject)super.position(position);
     }
+    @Override public PyMethodDescrObject getPointer(long i) {
+        return new PyMethodDescrObject(this).position(position + i);
+    }
 
     public native @ByRef PyDescrObject d_common(); public native PyMethodDescrObject d_common(PyDescrObject setter);
     public native PyMethodDef d_method(); public native PyMethodDescrObject d_method(PyMethodDef setter);

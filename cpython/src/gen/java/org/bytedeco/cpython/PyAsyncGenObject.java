@@ -27,6 +27,9 @@ public class PyAsyncGenObject extends Pointer {
     @Override public PyAsyncGenObject position(long position) {
         return (PyAsyncGenObject)super.position(position);
     }
+    @Override public PyAsyncGenObject getPointer(long i) {
+        return new PyAsyncGenObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyAsyncGenObject ob_base(PyObject setter);
     /* Note: gi_frame can be NULL if the generator is "finished" */

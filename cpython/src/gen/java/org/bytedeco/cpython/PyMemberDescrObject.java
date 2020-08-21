@@ -25,6 +25,9 @@ public class PyMemberDescrObject extends Pointer {
     @Override public PyMemberDescrObject position(long position) {
         return (PyMemberDescrObject)super.position(position);
     }
+    @Override public PyMemberDescrObject getPointer(long i) {
+        return new PyMemberDescrObject(this).position(position + i);
+    }
 
     public native @ByRef PyDescrObject d_common(); public native PyMemberDescrObject d_common(PyDescrObject setter);
     public native PyMemberDef d_member(); public native PyMemberDescrObject d_member(PyMemberDef setter);
