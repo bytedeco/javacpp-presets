@@ -30,6 +30,9 @@ public class _Py_tss_t extends Pointer {
     @Override public _Py_tss_t position(long position) {
         return (_Py_tss_t)super.position(position);
     }
+    @Override public _Py_tss_t getPointer(long i) {
+        return new _Py_tss_t(this).position(position + i);
+    }
 
     public native int _is_initialized(); public native _Py_tss_t _is_initialized(int setter);
     public native @Cast("unsigned long") long _key(); public native _Py_tss_t _key(long setter);

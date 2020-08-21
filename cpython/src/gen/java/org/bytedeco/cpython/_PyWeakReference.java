@@ -29,6 +29,9 @@ public class _PyWeakReference extends Pointer {
     @Override public _PyWeakReference position(long position) {
         return (_PyWeakReference)super.position(position);
     }
+    @Override public _PyWeakReference getPointer(long i) {
+        return new _PyWeakReference(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native _PyWeakReference ob_base(PyObject setter);
 

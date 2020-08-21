@@ -27,6 +27,9 @@ public class PyListObject extends Pointer {
     @Override public PyListObject position(long position) {
         return (PyListObject)super.position(position);
     }
+    @Override public PyListObject getPointer(long i) {
+        return new PyListObject(this).position(position + i);
+    }
 
     public native @ByRef PyVarObject ob_base(); public native PyListObject ob_base(PyVarObject setter);
     /* Vector of pointers to list elements.  list[0] is ob_item[0], etc. */

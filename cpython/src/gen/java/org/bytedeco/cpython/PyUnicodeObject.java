@@ -28,6 +28,9 @@ public class PyUnicodeObject extends Pointer {
     @Override public PyUnicodeObject position(long position) {
         return (PyUnicodeObject)super.position(position);
     }
+    @Override public PyUnicodeObject getPointer(long i) {
+        return new PyUnicodeObject(this).position(position + i);
+    }
 
     public native @ByRef PyCompactUnicodeObject _base(); public native PyUnicodeObject _base(PyCompactUnicodeObject setter);
         @Name("data.any") public native Pointer data_any(); public native PyUnicodeObject data_any(Pointer setter);

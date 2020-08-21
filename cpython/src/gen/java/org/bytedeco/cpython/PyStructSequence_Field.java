@@ -26,6 +26,9 @@ public class PyStructSequence_Field extends Pointer {
     @Override public PyStructSequence_Field position(long position) {
         return (PyStructSequence_Field)super.position(position);
     }
+    @Override public PyStructSequence_Field getPointer(long i) {
+        return new PyStructSequence_Field(this).position(position + i);
+    }
 
     public native @Cast("const char*") BytePointer name(); public native PyStructSequence_Field name(BytePointer setter);
     public native @Cast("const char*") BytePointer doc(); public native PyStructSequence_Field doc(BytePointer setter);

@@ -26,6 +26,9 @@ public class PyInterpreterState extends Pointer {
     @Override public PyInterpreterState position(long position) {
         return (PyInterpreterState)super.position(position);
     }
+    @Override public PyInterpreterState getPointer(long i) {
+        return new PyInterpreterState(this).position(position + i);
+    }
 
 
     public native _is next(); public native PyInterpreterState next(_is setter);

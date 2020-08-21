@@ -25,6 +25,9 @@ public class _comprehension extends Pointer {
     @Override public _comprehension position(long position) {
         return (_comprehension)super.position(position);
     }
+    @Override public _comprehension getPointer(long i) {
+        return new _comprehension(this).position(position + i);
+    }
 
     public native _expr target(); public native _comprehension target(_expr setter);
     public native _expr iter(); public native _comprehension iter(_expr setter);

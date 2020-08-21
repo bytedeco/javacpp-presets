@@ -25,6 +25,9 @@ public class PySyntaxErrorObject extends Pointer {
     @Override public PySyntaxErrorObject position(long position) {
         return (PySyntaxErrorObject)super.position(position);
     }
+    @Override public PySyntaxErrorObject getPointer(long i) {
+        return new PySyntaxErrorObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PySyntaxErrorObject ob_base(PyObject setter); public native PyObject dict(); public native PySyntaxErrorObject dict(PyObject setter);
              public native PyObject args(); public native PySyntaxErrorObject args(PyObject setter); public native PyObject traceback(); public native PySyntaxErrorObject traceback(PyObject setter);

@@ -25,6 +25,9 @@ public class PyImportErrorObject extends Pointer {
     @Override public PyImportErrorObject position(long position) {
         return (PyImportErrorObject)super.position(position);
     }
+    @Override public PyImportErrorObject getPointer(long i) {
+        return new PyImportErrorObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyImportErrorObject ob_base(PyObject setter); public native PyObject dict(); public native PyImportErrorObject dict(PyObject setter);
              public native PyObject args(); public native PyImportErrorObject args(PyObject setter); public native PyObject traceback(); public native PyImportErrorObject traceback(PyObject setter);

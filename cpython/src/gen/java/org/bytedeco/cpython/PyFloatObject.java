@@ -27,6 +27,9 @@ public class PyFloatObject extends Pointer {
     @Override public PyFloatObject position(long position) {
         return (PyFloatObject)super.position(position);
     }
+    @Override public PyFloatObject getPointer(long i) {
+        return new PyFloatObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyFloatObject ob_base(PyObject setter);
     public native double ob_fval(); public native PyFloatObject ob_fval(double setter);

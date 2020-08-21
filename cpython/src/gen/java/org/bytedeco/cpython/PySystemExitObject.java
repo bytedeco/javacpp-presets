@@ -25,6 +25,9 @@ public class PySystemExitObject extends Pointer {
     @Override public PySystemExitObject position(long position) {
         return (PySystemExitObject)super.position(position);
     }
+    @Override public PySystemExitObject getPointer(long i) {
+        return new PySystemExitObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PySystemExitObject ob_base(PyObject setter); public native PyObject dict(); public native PySystemExitObject dict(PyObject setter);
              public native PyObject args(); public native PySystemExitObject args(PyObject setter); public native PyObject traceback(); public native PySystemExitObject traceback(PyObject setter);

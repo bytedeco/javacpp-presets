@@ -34,6 +34,9 @@ public class PyASCIIObject extends Pointer {
     @Override public PyASCIIObject position(long position) {
         return (PyASCIIObject)super.position(position);
     }
+    @Override public PyASCIIObject getPointer(long i) {
+        return new PyASCIIObject(this).position(position + i);
+    }
 
     /* There are 4 forms of Unicode strings:
 

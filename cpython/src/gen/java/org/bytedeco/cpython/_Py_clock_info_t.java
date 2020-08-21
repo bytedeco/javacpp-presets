@@ -27,6 +27,9 @@ public class _Py_clock_info_t extends Pointer {
     @Override public _Py_clock_info_t position(long position) {
         return (_Py_clock_info_t)super.position(position);
     }
+    @Override public _Py_clock_info_t getPointer(long i) {
+        return new _Py_clock_info_t(this).position(position + i);
+    }
 
     public native @Cast("const char*") BytePointer implementation(); public native _Py_clock_info_t implementation(BytePointer setter);
     public native int monotonic(); public native _Py_clock_info_t monotonic(int setter);

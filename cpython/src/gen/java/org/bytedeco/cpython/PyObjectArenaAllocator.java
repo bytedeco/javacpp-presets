@@ -54,6 +54,9 @@ public class PyObjectArenaAllocator extends Pointer {
     @Override public PyObjectArenaAllocator position(long position) {
         return (PyObjectArenaAllocator)super.position(position);
     }
+    @Override public PyObjectArenaAllocator getPointer(long i) {
+        return new PyObjectArenaAllocator(this).position(position + i);
+    }
 
     /* user context passed as the first argument to the 2 functions */
     public native Pointer ctx(); public native PyObjectArenaAllocator ctx(Pointer setter);

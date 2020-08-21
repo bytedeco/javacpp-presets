@@ -27,6 +27,9 @@ public class PyCFunctionObject extends Pointer {
     @Override public PyCFunctionObject position(long position) {
         return (PyCFunctionObject)super.position(position);
     }
+    @Override public PyCFunctionObject getPointer(long i) {
+        return new PyCFunctionObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyCFunctionObject ob_base(PyObject setter);
     public native PyMethodDef m_ml(); public native PyCFunctionObject m_ml(PyMethodDef setter); /* Description of the C function to call */

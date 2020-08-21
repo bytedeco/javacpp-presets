@@ -25,6 +25,9 @@ public class PyUnicodeErrorObject extends Pointer {
     @Override public PyUnicodeErrorObject position(long position) {
         return (PyUnicodeErrorObject)super.position(position);
     }
+    @Override public PyUnicodeErrorObject getPointer(long i) {
+        return new PyUnicodeErrorObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyUnicodeErrorObject ob_base(PyObject setter); public native PyObject dict(); public native PyUnicodeErrorObject dict(PyObject setter);
              public native PyObject args(); public native PyUnicodeErrorObject args(PyObject setter); public native PyObject traceback(); public native PyUnicodeErrorObject traceback(PyObject setter);

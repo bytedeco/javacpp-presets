@@ -26,6 +26,9 @@ public class PyType_Slot extends Pointer {
     @Override public PyType_Slot position(long position) {
         return (PyType_Slot)super.position(position);
     }
+    @Override public PyType_Slot getPointer(long i) {
+        return new PyType_Slot(this).position(position + i);
+    }
 
     public native int slot(); public native PyType_Slot slot(int setter);    /* slot id, see below */
     public native Pointer pfunc(); public native PyType_Slot pfunc(Pointer setter); /* function pointer */

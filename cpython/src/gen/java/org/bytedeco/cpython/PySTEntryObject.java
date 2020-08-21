@@ -25,6 +25,9 @@ public class PySTEntryObject extends Pointer {
     @Override public PySTEntryObject position(long position) {
         return (PySTEntryObject)super.position(position);
     }
+    @Override public PySTEntryObject getPointer(long i) {
+        return new PySTEntryObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PySTEntryObject ob_base(PyObject setter);
     public native PyObject ste_id(); public native PySTEntryObject ste_id(PyObject setter);        /* int: key in ste_table->st_blocks */

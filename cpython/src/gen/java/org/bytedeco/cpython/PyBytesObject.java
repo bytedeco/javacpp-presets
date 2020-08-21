@@ -44,6 +44,9 @@ public class PyBytesObject extends Pointer {
     @Override public PyBytesObject position(long position) {
         return (PyBytesObject)super.position(position);
     }
+    @Override public PyBytesObject getPointer(long i) {
+        return new PyBytesObject(this).position(position + i);
+    }
 
     public native @ByRef PyVarObject ob_base(); public native PyBytesObject ob_base(PyVarObject setter);
     public native @Cast("Py_hash_t") long ob_shash(); public native PyBytesObject ob_shash(long setter);

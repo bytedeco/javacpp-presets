@@ -28,6 +28,9 @@ public class PyHeapTypeObject extends Pointer {
     @Override public PyHeapTypeObject position(long position) {
         return (PyHeapTypeObject)super.position(position);
     }
+    @Override public PyHeapTypeObject getPointer(long i) {
+        return new PyHeapTypeObject(this).position(position + i);
+    }
 
     /* Note: there's a dependency on the order of these members
        in slotptr() in typeobject.c . */

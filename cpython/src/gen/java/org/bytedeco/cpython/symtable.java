@@ -25,6 +25,9 @@ public class symtable extends Pointer {
     @Override public symtable position(long position) {
         return (symtable)super.position(position);
     }
+    @Override public symtable getPointer(long i) {
+        return new symtable(this).position(position + i);
+    }
 
     public native PyObject st_filename(); public native symtable st_filename(PyObject setter);          /* name of file being compiled,
                                        decoded from the filesystem encoding */

@@ -26,6 +26,9 @@ public class PyMethodObject extends Pointer {
     @Override public PyMethodObject position(long position) {
         return (PyMethodObject)super.position(position);
     }
+    @Override public PyMethodObject getPointer(long i) {
+        return new PyMethodObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyMethodObject ob_base(PyObject setter);
     public native PyObject im_func(); public native PyMethodObject im_func(PyObject setter);   /* The callable object implementing the method */

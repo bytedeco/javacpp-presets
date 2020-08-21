@@ -24,6 +24,9 @@ public class _mod extends Pointer {
     @Override public _mod position(long position) {
         return (_mod)super.position(position);
     }
+    @Override public _mod getPointer(long i) {
+        return new _mod(this).position(position + i);
+    }
 
     public native @Cast("_mod_kind") int kind(); public native _mod kind(int setter);
             @Name("v.Module.body") public native asdl_seq v_Module_body(); public native _mod v_Module_body(asdl_seq setter);

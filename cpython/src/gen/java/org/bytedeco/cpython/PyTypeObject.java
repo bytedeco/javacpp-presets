@@ -25,6 +25,9 @@ public class PyTypeObject extends Pointer {
     @Override public PyTypeObject position(long position) {
         return (PyTypeObject)super.position(position);
     }
+    @Override public PyTypeObject getPointer(long i) {
+        return new PyTypeObject(this).position(position + i);
+    }
 
     public native @ByRef PyVarObject ob_base(); public native PyTypeObject ob_base(PyVarObject setter);
     public native @Cast("const char*") BytePointer tp_name(); public native PyTypeObject tp_name(BytePointer setter); /* For printing, in format "<module>.<name>" */

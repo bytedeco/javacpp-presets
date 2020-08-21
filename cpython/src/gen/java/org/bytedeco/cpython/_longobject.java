@@ -41,6 +41,9 @@ public class _longobject extends Pointer {
     @Override public _longobject position(long position) {
         return (_longobject)super.position(position);
     }
+    @Override public _longobject getPointer(long i) {
+        return new _longobject(this).position(position + i);
+    }
 
     public native @ByRef PyVarObject ob_base(); public native _longobject ob_base(PyVarObject setter);
     public native @Cast("digit") int ob_digit(int i); public native _longobject ob_digit(int i, int setter);

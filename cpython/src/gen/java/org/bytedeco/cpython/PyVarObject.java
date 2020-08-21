@@ -25,6 +25,9 @@ public class PyVarObject extends Pointer {
     @Override public PyVarObject position(long position) {
         return (PyVarObject)super.position(position);
     }
+    @Override public PyVarObject getPointer(long i) {
+        return new PyVarObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyVarObject ob_base(PyObject setter);
     public native @Cast("Py_ssize_t") long ob_size(); public native PyVarObject ob_size(long setter); /* Number of items in variable part */

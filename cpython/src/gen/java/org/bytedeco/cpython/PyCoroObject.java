@@ -26,6 +26,9 @@ public class PyCoroObject extends Pointer {
     @Override public PyCoroObject position(long position) {
         return (PyCoroObject)super.position(position);
     }
+    @Override public PyCoroObject getPointer(long i) {
+        return new PyCoroObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyCoroObject ob_base(PyObject setter);
     /* Note: gi_frame can be NULL if the generator is "finished" */

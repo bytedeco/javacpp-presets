@@ -24,6 +24,9 @@ public class _excepthandler extends Pointer {
     @Override public _excepthandler position(long position) {
         return (_excepthandler)super.position(position);
     }
+    @Override public _excepthandler getPointer(long i) {
+        return new _excepthandler(this).position(position + i);
+    }
 
     public native @Cast("_excepthandler_kind") int kind(); public native _excepthandler kind(int setter);
             @Name("v.ExceptHandler.type") public native _expr v_ExceptHandler_type(); public native _excepthandler v_ExceptHandler_type(_expr setter);

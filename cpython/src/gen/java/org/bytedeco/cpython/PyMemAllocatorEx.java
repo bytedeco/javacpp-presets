@@ -25,6 +25,9 @@ public class PyMemAllocatorEx extends Pointer {
     @Override public PyMemAllocatorEx position(long position) {
         return (PyMemAllocatorEx)super.position(position);
     }
+    @Override public PyMemAllocatorEx getPointer(long i) {
+        return new PyMemAllocatorEx(this).position(position + i);
+    }
 
     /* user context passed as the first argument to the 4 functions */
     public native Pointer ctx(); public native PyMemAllocatorEx ctx(Pointer setter);

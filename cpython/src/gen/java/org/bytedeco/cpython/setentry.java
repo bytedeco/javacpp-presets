@@ -25,6 +25,9 @@ public class setentry extends Pointer {
     @Override public setentry position(long position) {
         return (setentry)super.position(position);
     }
+    @Override public setentry getPointer(long i) {
+        return new setentry(this).position(position + i);
+    }
 
     public native PyObject key(); public native setentry key(PyObject setter);
     public native @Cast("Py_hash_t") long hash(); public native setentry hash(long setter);             /* Cached hash code of the key */

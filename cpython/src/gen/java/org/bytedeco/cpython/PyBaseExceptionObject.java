@@ -25,6 +25,9 @@ public class PyBaseExceptionObject extends Pointer {
     @Override public PyBaseExceptionObject position(long position) {
         return (PyBaseExceptionObject)super.position(position);
     }
+    @Override public PyBaseExceptionObject getPointer(long i) {
+        return new PyBaseExceptionObject(this).position(position + i);
+    }
 
     public native @ByRef PyObject ob_base(); public native PyBaseExceptionObject ob_base(PyObject setter); public native PyObject dict(); public native PyBaseExceptionObject dict(PyObject setter);
              public native PyObject args(); public native PyBaseExceptionObject args(PyObject setter); public native PyObject traceback(); public native PyBaseExceptionObject traceback(PyObject setter);
