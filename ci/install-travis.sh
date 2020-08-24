@@ -228,6 +228,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    brew upgrade cmake
    brew install ccache curl swig autoconf-archive libomp libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
 
+   brew tap AdoptOpenJDK/openjdk
+   brew cask install adoptopenjdk8
+   export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
+
    # Try to use ccache to speed up the build and work around issue with Sectigo CA root certificate
    export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/curl/bin/:/usr/local/opt/gpg1/libexec/gpgbin/:/usr/local/opt/bison/bin/:/usr/local/opt/flex/bin/:$PATH
 
