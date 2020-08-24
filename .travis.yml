@@ -130,33 +130,33 @@ jobs:
         script: ./ci/install-travis.sh
 
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=opencv OS=ios-arm64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=openblas OS=ios-arm64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=skia OS=ios-arm64
         install: true
         script: ./ci/install-travis.sh
 
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=opencv OS=ios-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=openblas OS=ios-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=skia OS=ios-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -467,132 +467,132 @@ jobs:
         script: ./ci/install-travis.sh
 
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark,gym OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=ffmpeg OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=libdc1394,libfreenect,libfreenect2,librealsense,librealsense2 OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=arrow OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=hdf5 OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=hyperscan OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=mkl OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=mkl-dnn,dnnl OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=openblas OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=cpython,numpy,scipy OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=llvm OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=libpostal OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=leptonica,tesseract OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=caffe,openpose OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
 #      - os: osx
-#        osx_image: xcode9.3
+#        osx_image: xcode10.1
 #        env: PROJ=cuda OS=macosx-x86_64
 #        install: true
 #        script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=mxnet OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=tensorflow OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=ale OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=onnx OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=ngraph OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=onnxruntime OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=liquidfun OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=skia OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=qt OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=cpu_features,systems OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -627,37 +627,37 @@ jobs:
         script: ./ci/install-travis.sh
 
 #      - os: osx
-#        osx_image: xcode9.3
+#        osx_image: xcode10.1
 #        env: PROJ=opencv OS=macosx-x86_64 EXT=-gpu
 #        install: true
 #        script: ./ci/install-travis.sh
 #      - os: osx
-#        osx_image: xcode9.3
+#        osx_image: xcode10.1
 #        env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
 #        install: true
 #        script: ./ci/install-travis.sh
 #      - os: osx
-#        osx_image: xcode9.3
+#        osx_image: xcode10.1
 #        env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
 #        install: true
 #        script: ./ci/install-travis.sh
 #      - os: osx
-#        osx_image: xcode9.3
+#        osx_image: xcode10.1
 #        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
 #        install: true
 #        script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python
         install: true
         script: ./ci/install-travis.sh
 #      - os: osx
-#        osx_image: xcode9.3
+#        osx_image: xcode10.1
 #        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-python-gpu
 #        install: true
 #        script: ./ci/install-travis.sh
 #      - os: osx
-#        osx_image: xcode9.3
+#        osx_image: xcode10.1
 #        env: PROJ=onnxruntime OS=macosx-x86_64 EXT=-gpu
 #        install: true
 #        script: ./ci/install-travis.sh
