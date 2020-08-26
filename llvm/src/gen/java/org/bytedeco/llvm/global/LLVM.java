@@ -10613,4 +10613,134 @@ public static native void createOptimizedJITCompilerForModule(
 // #endif
 
 
+// Parsed from <TargetStubs.h>
+
+/*
+ * Copyright (C) 2015-2020 Mats Larsen
+ *
+ * Licensed either under the Apache License, Version 2.0, or (at your option)
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (subject to the "Classpath" exception),
+ * either version 2, or any later version (collectively, the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.gnu.org/licenses/
+ *     http://www.gnu.org/software/classpath/license.html
+ *
+ * or as provided in the LICENSE.txt file that accompanied this code.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Stubs for all LLVM Target initialization routines
+ *
+ * See #935 https://github.com/bytedeco/javacpp-presets/issues/935
+ */
+// #define LLVM_TARGET(TargetName)
+// void LLVMInitialize##TargetName##TargetInfo(void);
+// void LLVMInitialize##TargetName##Target(void);
+// void LLVMInitialize##TargetName##TargetMC(void);
+// void LLVMInitialize##TargetName##AsmPrinter(void);
+// void LLVMInitialize##TargetName##AsmParser(void);
+// void LLVMInitialize##TargetName##Disassembler(void);
+
+public static native void LLVMInitializeAArch64TargetInfo();
+public static native void LLVMInitializeAArch64Target();
+public static native void LLVMInitializeAArch64TargetMC();
+public static native void LLVMInitializeAArch64AsmPrinter();
+public static native void LLVMInitializeAArch64AsmParser();
+public static native void LLVMInitializeAArch64Disassembler();
+public static native void LLVMInitializeAMDGPUTargetInfo();
+public static native void LLVMInitializeAMDGPUTarget();
+public static native void LLVMInitializeAMDGPUTargetMC();
+public static native void LLVMInitializeAMDGPUAsmPrinter();
+public static native void LLVMInitializeAMDGPUAsmParser();
+public static native void LLVMInitializeAMDGPUDisassembler();
+//LLVM_TARGET(ARC)
+public static native void LLVMInitializeARMTargetInfo();
+public static native void LLVMInitializeARMTarget();
+public static native void LLVMInitializeARMTargetMC();
+public static native void LLVMInitializeARMAsmPrinter();
+public static native void LLVMInitializeARMAsmParser();
+public static native void LLVMInitializeARMDisassembler();
+//LLVM_TARGET(AVR)
+public static native void LLVMInitializeBPFTargetInfo();
+public static native void LLVMInitializeBPFTarget();
+public static native void LLVMInitializeBPFTargetMC();
+public static native void LLVMInitializeBPFAsmPrinter();
+public static native void LLVMInitializeBPFAsmParser();
+public static native void LLVMInitializeBPFDisassembler();
+public static native void LLVMInitializeHexagonTargetInfo();
+public static native void LLVMInitializeHexagonTarget();
+public static native void LLVMInitializeHexagonTargetMC();
+public static native void LLVMInitializeHexagonAsmPrinter();
+public static native void LLVMInitializeHexagonAsmParser();
+public static native void LLVMInitializeHexagonDisassembler();
+public static native void LLVMInitializeLanaiTargetInfo();
+public static native void LLVMInitializeLanaiTarget();
+public static native void LLVMInitializeLanaiTargetMC();
+public static native void LLVMInitializeLanaiAsmPrinter();
+public static native void LLVMInitializeLanaiAsmParser();
+public static native void LLVMInitializeLanaiDisassembler();
+public static native void LLVMInitializeMSP430TargetInfo();
+public static native void LLVMInitializeMSP430Target();
+public static native void LLVMInitializeMSP430TargetMC();
+public static native void LLVMInitializeMSP430AsmPrinter();
+public static native void LLVMInitializeMSP430AsmParser();
+public static native void LLVMInitializeMSP430Disassembler();
+public static native void LLVMInitializeMipsTargetInfo();
+public static native void LLVMInitializeMipsTarget();
+public static native void LLVMInitializeMipsTargetMC();
+public static native void LLVMInitializeMipsAsmPrinter();
+public static native void LLVMInitializeMipsAsmParser();
+public static native void LLVMInitializeMipsDisassembler();
+//LLVM_TARGET(NVPTX)
+public static native void LLVMInitializePowerPCTargetInfo();
+public static native void LLVMInitializePowerPCTarget();
+public static native void LLVMInitializePowerPCTargetMC();
+public static native void LLVMInitializePowerPCAsmPrinter();
+public static native void LLVMInitializePowerPCAsmParser();
+public static native void LLVMInitializePowerPCDisassembler();
+public static native void LLVMInitializeRISCVTargetInfo();
+public static native void LLVMInitializeRISCVTarget();
+public static native void LLVMInitializeRISCVTargetMC();
+public static native void LLVMInitializeRISCVAsmPrinter();
+public static native void LLVMInitializeRISCVAsmParser();
+public static native void LLVMInitializeRISCVDisassembler();
+public static native void LLVMInitializeSparcTargetInfo();
+public static native void LLVMInitializeSparcTarget();
+public static native void LLVMInitializeSparcTargetMC();
+public static native void LLVMInitializeSparcAsmPrinter();
+public static native void LLVMInitializeSparcAsmParser();
+public static native void LLVMInitializeSparcDisassembler();
+public static native void LLVMInitializeSystemZTargetInfo();
+public static native void LLVMInitializeSystemZTarget();
+public static native void LLVMInitializeSystemZTargetMC();
+public static native void LLVMInitializeSystemZAsmPrinter();
+public static native void LLVMInitializeSystemZAsmParser();
+public static native void LLVMInitializeSystemZDisassembler();
+//LLVM_TARGET(VE)
+public static native void LLVMInitializeWebAssemblyTargetInfo();
+public static native void LLVMInitializeWebAssemblyTarget();
+public static native void LLVMInitializeWebAssemblyTargetMC();
+public static native void LLVMInitializeWebAssemblyAsmPrinter();
+public static native void LLVMInitializeWebAssemblyAsmParser();
+public static native void LLVMInitializeWebAssemblyDisassembler();
+public static native void LLVMInitializeX86TargetInfo();
+public static native void LLVMInitializeX86Target();
+public static native void LLVMInitializeX86TargetMC();
+public static native void LLVMInitializeX86AsmPrinter();
+public static native void LLVMInitializeX86AsmParser();
+public static native void LLVMInitializeX86Disassembler();
+//LLVM_TARGET(XCore)
+
+// #undef LLVM_TARGET
+
+
 }

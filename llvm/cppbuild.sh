@@ -89,33 +89,39 @@ case $PLATFORM in
         cp lib/LLVMPolly.so ../../lib/libLLVMPolly.so
         ;;
     windows-x86)
-        $CMAKE -G "Visual Studio 15 2017" -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
-        cd Release/lib/
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        $CMAKE -G "Ninja" -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
+        ninja -j $MAKEJ
+        cd lib/
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
-        cd ../..
-        $CMAKE -G "Visual Studio 15 2017" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        cd ..
+        $CMAKE -G "Ninja" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
+        ninja -j $MAKEJ
+        ninja install
         cd ../../lib
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
-        [ -f LTO.lib ] || cp ../llvm-$LLVM_VERSION.src/build/Release/lib/LTO.lib .
+        [ -f LTO.lib ] || cp ../llvm-$LLVM_VERSION.src/build/lib/LTO.lib .
         cd ../llvm-$LLVM_VERSION.src/build
         ;;
     windows-x86_64)
-        $CMAKE -G "Visual Studio 15 2017 Win64" -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
-        cd Release/lib/
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        $CMAKE -G "Ninja" -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
+        ninja -j $MAKEJ
+        cd lib/
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
-        cd ../..
-        $CMAKE -G "Visual Studio 15 2017 Win64" -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        cd ..
+        $CMAKE -G "Ninja" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DLLVM_POLLY_LINK_INTO_TOOLS=ON ..
+        ninja -j $MAKEJ
+        ninja install
         cd ../../lib
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
-        [ -f LTO.lib ] || cp ../llvm-$LLVM_VERSION.src/build/Release/lib/LTO.lib .
+        [ -f LTO.lib ] || cp ../llvm-$LLVM_VERSION.src/build/lib/LTO.lib .
         cd ../llvm-$LLVM_VERSION.src/build
         ;;
     *)
