@@ -33,24 +33,40 @@ void LLVMInitialize##TargetName##AsmPrinter(void); \
 void LLVMInitialize##TargetName##AsmParser(void); \
 void LLVMInitialize##TargetName##Disassembler(void);
 
+// Stable Targets
 LLVM_TARGET(AArch64)
 LLVM_TARGET(AMDGPU)
-//LLVM_TARGET(ARC)
 LLVM_TARGET(ARM)
-//LLVM_TARGET(AVR)
 LLVM_TARGET(BPF)
 LLVM_TARGET(Hexagon)
 LLVM_TARGET(Lanai)
 LLVM_TARGET(MSP430)
 LLVM_TARGET(Mips)
-//LLVM_TARGET(NVPTX)
 LLVM_TARGET(PowerPC)
 LLVM_TARGET(RISCV)
 LLVM_TARGET(Sparc)
 LLVM_TARGET(SystemZ)
-//LLVM_TARGET(VE)
 LLVM_TARGET(WebAssembly)
 LLVM_TARGET(X86)
-//LLVM_TARGET(XCore)
 
+// XCore Target - Does not ship AsmParser
+void LLVMInitializeXCoreTargetInfo(void);
+void LLVMInitializeXCoreTarget(void);
+void LLVMInitializeXCoreTargetMC(void);
+void LLVMInitializeXCoreAsmPrinter(void);
+void LLVMInitializeXCoreDisassembler(void);
+
+// NVPTX Target - Does not ship with AsmParser or Disassembler
+void LLVMInitializeNVPTXTargetInfo(void);
+void LLVMInitializeNVPTXTarget(void);
+void LLVMInitializeNVPTXTargetMC(void);
+void LLVMInitializeNVPTXAsmPrinter(void);
+
+/*
+JavaCPP Presets does currently not build experimental targets.
+
+LLVM_TARGET(ARC)
+LLVM_TARGET(AVR)
+LLVM_TARGET(VE)
+*/
 #undef LLVM_TARGET

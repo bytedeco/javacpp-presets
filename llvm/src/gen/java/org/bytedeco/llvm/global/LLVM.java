@@ -10650,6 +10650,7 @@ public static native void createOptimizedJITCompilerForModule(
 // void LLVMInitialize##TargetName##AsmParser(void);
 // void LLVMInitialize##TargetName##Disassembler(void);
 
+// Stable Targets
 public static native void LLVMInitializeAArch64TargetInfo();
 public static native void LLVMInitializeAArch64Target();
 public static native void LLVMInitializeAArch64TargetMC();
@@ -10662,14 +10663,12 @@ public static native void LLVMInitializeAMDGPUTargetMC();
 public static native void LLVMInitializeAMDGPUAsmPrinter();
 public static native void LLVMInitializeAMDGPUAsmParser();
 public static native void LLVMInitializeAMDGPUDisassembler();
-//LLVM_TARGET(ARC)
 public static native void LLVMInitializeARMTargetInfo();
 public static native void LLVMInitializeARMTarget();
 public static native void LLVMInitializeARMTargetMC();
 public static native void LLVMInitializeARMAsmPrinter();
 public static native void LLVMInitializeARMAsmParser();
 public static native void LLVMInitializeARMDisassembler();
-//LLVM_TARGET(AVR)
 public static native void LLVMInitializeBPFTargetInfo();
 public static native void LLVMInitializeBPFTarget();
 public static native void LLVMInitializeBPFTargetMC();
@@ -10700,7 +10699,6 @@ public static native void LLVMInitializeMipsTargetMC();
 public static native void LLVMInitializeMipsAsmPrinter();
 public static native void LLVMInitializeMipsAsmParser();
 public static native void LLVMInitializeMipsDisassembler();
-//LLVM_TARGET(NVPTX)
 public static native void LLVMInitializePowerPCTargetInfo();
 public static native void LLVMInitializePowerPCTarget();
 public static native void LLVMInitializePowerPCTargetMC();
@@ -10725,7 +10723,6 @@ public static native void LLVMInitializeSystemZTargetMC();
 public static native void LLVMInitializeSystemZAsmPrinter();
 public static native void LLVMInitializeSystemZAsmParser();
 public static native void LLVMInitializeSystemZDisassembler();
-//LLVM_TARGET(VE)
 public static native void LLVMInitializeWebAssemblyTargetInfo();
 public static native void LLVMInitializeWebAssemblyTarget();
 public static native void LLVMInitializeWebAssemblyTargetMC();
@@ -10738,8 +10735,27 @@ public static native void LLVMInitializeX86TargetMC();
 public static native void LLVMInitializeX86AsmPrinter();
 public static native void LLVMInitializeX86AsmParser();
 public static native void LLVMInitializeX86Disassembler();
-//LLVM_TARGET(XCore)
 
+// XCore Target - Does not ship AsmParser
+public static native void LLVMInitializeXCoreTargetInfo();
+public static native void LLVMInitializeXCoreTarget();
+public static native void LLVMInitializeXCoreTargetMC();
+public static native void LLVMInitializeXCoreAsmPrinter();
+public static native void LLVMInitializeXCoreDisassembler();
+
+// NVPTX Target - Does not ship with AsmParser or Disassembler
+public static native void LLVMInitializeNVPTXTargetInfo();
+public static native void LLVMInitializeNVPTXTarget();
+public static native void LLVMInitializeNVPTXTargetMC();
+public static native void LLVMInitializeNVPTXAsmPrinter();
+
+/*
+JavaCPP Presets does currently not build experimental targets.
+
+LLVM_TARGET(ARC)
+LLVM_TARGET(AVR)
+LLVM_TARGET(VE)
+*/
 // #undef LLVM_TARGET
 
 
