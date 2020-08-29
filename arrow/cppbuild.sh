@@ -16,7 +16,7 @@ LLVM_VERSION=10.0.1
 OPENSSL_VERSION=1.1.1g
 ZLIB_VERSION=1.2.11
 PROTO_VERSION=3.7.1
-ARROW_VERSION=1.0.0
+ARROW_VERSION=1.0.1
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang-$LLVM_VERSION.src.tar.xz clang-$LLVM_VERSION.src.tar.xz
 download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
@@ -160,8 +160,11 @@ case $PLATFORM in
         make install/strip
         ;;
     windows-x86)
-        "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
+        ninja -j $MAKEJ
+        ninja install
         cd ../..
         unzip -o ../cpython-bin-deps-openssl-bin.zip
         cd cpython-bin-deps-openssl-bin/
@@ -173,19 +176,24 @@ case $PLATFORM in
         cp *.h ../include
         cp zlib.lib ../lib
         cd ../protobuf-$PROTO_VERSION
-        "$CMAKE" -G "Visual Studio 15 2017" -Dprotobuf_MSVC_STATIC_RUNTIME=OFF -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_LIB="$INSTALL_PATH/lib" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" cmake
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        "$CMAKE" -G "Ninja" -Dprotobuf_MSVC_STATIC_RUNTIME=OFF -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_LIB="$INSTALL_PATH/lib" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" cmake
+        ninja -j $MAKEJ
+        ninja install
         cd ..
         sedinplace 's/PROTOBUF_USE_DLLS/DISABLE_PROTOBUF_USE_DLLS/g' include/google/protobuf/*.h include/google/protobuf/*.inc include/google/protobuf/stubs/*
         sedinplace 's/bin\/grpc_cpp_plugin/bin\/grpc_cpp_plugin.exe/g' apache-arrow-$ARROW_VERSION/cpp/cmake_modules/ThirdpartyToolchain.cmake
         sedinplace "s:Ws2_32.lib:../../../lib/zlib Ws2_32.lib:g" apache-arrow-$ARROW_VERSION/cpp/src/arrow/flight/CMakeLists.txt
-        "$CMAKE" -G "Visual Studio 15 2017" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" apache-arrow-$ARROW_VERSION/cpp
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        "$CMAKE" -G "Ninja" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" apache-arrow-$ARROW_VERSION/cpp
+        ninja -j $MAKEJ
+        ninja install
         cd apache-arrow-$ARROW_VERSION/cpp
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
+        ninja -j $MAKEJ
+        ninja install
         cd ../..
         unzip -o ../cpython-bin-deps-openssl-bin.zip
         cd cpython-bin-deps-openssl-bin/
@@ -197,14 +205,16 @@ case $PLATFORM in
         cp *.h ../include
         cp zlib.lib ../lib
         cd ../protobuf-$PROTO_VERSION
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -Dprotobuf_MSVC_STATIC_RUNTIME=OFF -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_LIB="$INSTALL_PATH/lib" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" cmake
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        "$CMAKE" -G "Ninja" -Dprotobuf_MSVC_STATIC_RUNTIME=OFF -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_LIB="$INSTALL_PATH/lib" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" cmake
+        ninja -j $MAKEJ
+        ninja install
         cd ..
         sedinplace 's/PROTOBUF_USE_DLLS/DISABLE_PROTOBUF_USE_DLLS/g' include/google/protobuf/*.h include/google/protobuf/*.inc include/google/protobuf/stubs/*
         sedinplace 's/bin\/grpc_cpp_plugin/bin\/grpc_cpp_plugin.exe/g' apache-arrow-$ARROW_VERSION/cpp/cmake_modules/ThirdpartyToolchain.cmake
         sedinplace "s:Ws2_32.lib:../../../lib/zlib Ws2_32.lib:g" apache-arrow-$ARROW_VERSION/cpp/src/arrow/flight/CMakeLists.txt
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" apache-arrow-$ARROW_VERSION/cpp
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        "$CMAKE" -G "Ninja" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" apache-arrow-$ARROW_VERSION/cpp
+        ninja -j $MAKEJ
+        ninja install
         cd apache-arrow-$ARROW_VERSION/cpp
         ;;
     *)

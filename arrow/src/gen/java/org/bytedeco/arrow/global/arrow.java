@@ -151,20 +151,20 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 
 public static final int ARROW_VERSION_MAJOR = 1;
 public static final int ARROW_VERSION_MINOR = 0;
-public static final int ARROW_VERSION_PATCH = 0;
+public static final int ARROW_VERSION_PATCH = 1;
 public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VERSION_MINOR) * 1000 + ARROW_VERSION_PATCH;
 
-public static final String ARROW_VERSION_STRING = "1.0.0";
+public static final String ARROW_VERSION_STRING = "1.0.1";
 
 public static final String ARROW_SO_VERSION = "100";
-public static final String ARROW_FULL_SO_VERSION = "100.0.0";
+public static final String ARROW_FULL_SO_VERSION = "100.1.0";
 
 public static final String ARROW_CXX_COMPILER_ID = "GNU";
 public static final String ARROW_CXX_COMPILER_VERSION = "9.3.1";
 public static final String ARROW_CXX_COMPILER_FLAGS = "-std=c++11 -m64 -fdiagnostics-color=always -O3 -DNDEBUG";
 
-public static final String ARROW_GIT_ID = "cc708f44cfef500905e3b70015a9d194e60e8e65";
-public static final String ARROW_GIT_DESCRIPTION = "1.5.3-50-gcc708f44cf-dirty";
+public static final String ARROW_GIT_ID = "48e7263f213cb178a06501a2334343572cab48da";
+public static final String ARROW_GIT_DESCRIPTION = "1.5.3-65-g48e7263f21-dirty";
 
 public static final String ARROW_PACKAGE_KIND = "";
 
@@ -3333,15 +3333,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 
-/** \}
- <p>
- *  \defgroup scalar-factories Scalar factory functions
- * 
- *  \{
- <p>
- *  \brief Scalar factory for null scalars */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeNullScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
 /** \} */
 
 @Namespace("arrow::internal") public static native @ByVal Status CheckBufferLength();
@@ -3351,11 +3342,14 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
   // namespace internal
 
-/** \addtogroup scalar-factories
+/** \defgroup scalar-factories Scalar factory functions
  * 
  *  \{
  <p>
- *  \brief Scalar factory for non-null scalars */
+ *  \brief Scalar factory for null scalars */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar MakeNullScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+
+/** \brief Scalar factory for non-null scalars */
 
 /** \brief Type-inferring scalar factory for non-null scalars
  * 
@@ -3668,6 +3662,15 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/util/checked_cast.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
+
+// ----------------------------------------------------------------------
+// ListArray
+
+// Private helper for ListArray::SetData.
+// Unfortunately, trying to define BaseListArray::SetData outside of this header
+// doesn't play well with MSVC.
+
+
 // Targeting ../BaseListArray.java
 
 

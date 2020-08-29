@@ -167,6 +167,9 @@ public class ArrayData extends Pointer {
 
   public native @Const @Name("GetValues<double>") DoublePointer GetValuesDouble(int i);
 
+  // Like GetValues, but returns NULLPTR instead of aborting if the underlying
+  // buffer is not a CPU buffer.
+
   // Access a buffer's data as a typed C pointer
 
   /** \brief Construct a zero-copy slice of the data with the given offset and length */

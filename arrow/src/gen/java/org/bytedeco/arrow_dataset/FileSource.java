@@ -64,12 +64,14 @@ public class FileSource extends Pointer {
                         @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(buffer, compression); }
   private native void allocate(@SharedPtr ArrowBuffer buffer,
                         @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/);
-  public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpen*") Pointer open) { super((Pointer)null); allocate(open); }
-  private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpen*") Pointer open);
+  public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpen*") CustomOpenWithCompression open) { super((Pointer)null); allocate(open); }
+  private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpen*") CustomOpenWithCompression open);
   public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
                         Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(open_with_compression, compression); }
   private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
                         Compression.type compression/*=arrow::Compression::UNCOMPRESSED*/);
+  public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression) { super((Pointer)null); allocate(open_with_compression); }
+  private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression);
   public FileSource(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
                         @Cast("arrow::Compression::type") int compression/*=arrow::Compression::UNCOMPRESSED*/) { super((Pointer)null); allocate(open_with_compression, compression); }
   private native void allocate(@ByVal @Cast("arrow::dataset::FileSource::CustomOpenWithCompression*") Pointer open_with_compression,
