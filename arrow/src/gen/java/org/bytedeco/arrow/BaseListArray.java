@@ -9,10 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-
-
-// ----------------------------------------------------------------------
-// ListArray
+  // namespace internal
 
 /** Base class for variable-sized list arrays, regardless of offset size. */
 @Name("arrow::BaseListArray<arrow::ListType>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)

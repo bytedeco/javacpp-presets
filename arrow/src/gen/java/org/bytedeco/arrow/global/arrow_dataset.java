@@ -889,6 +889,16 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 
 
+/** \brief Visit each subexpression of an arbitrarily nested conjunction.
+ * 
+ *  | given                          | visit                                       |
+ *  |--------------------------------|---------------------------------------------|
+ *  | a and b                        | visit(a), visit(b)                          |
+ *  | c                              | visit(c)                                    |
+ *  | (a and b) and ((c or d) and e) | visit(a), visit(b), visit(c or d), visit(e) | */
+@Namespace("arrow::dataset") public static native @ByVal Status VisitConjunctionMembers(
+    @Const @ByRef Expression expr, @Const @ByRef ExpressionVisitor visitor);
+
 /** \brief Insert CastExpressions where necessary to make a valid expression. */
 @Namespace("arrow::dataset") public static native @ByVal ExpressionResult InsertImplicitCasts(
     @Const @ByRef Expression expr, @Const @ByRef Schema schema);

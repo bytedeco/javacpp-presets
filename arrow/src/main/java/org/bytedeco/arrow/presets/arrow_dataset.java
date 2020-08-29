@@ -22,7 +22,12 @@
 
 package org.bytedeco.arrow.presets;
 
+import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.ByRef;
+import org.bytedeco.javacpp.annotation.ByVal;
+import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -65,6 +70,7 @@ public class arrow_dataset implements InfoMapper {
         infoMap.put(new Info("ARROW_DS_EXPORT").cppTypes().annotations())
                .put(new Info("std::enable_shared_from_this<arrow::dataset::Dataset>",
                              "std::enable_shared_from_this<arrow::dataset::FileFormat>",
+                             "arrow::dataset::FileSource::CustomOpenWithCompression",
                              "arrow::util::EqualityComparable<arrow::dataset::RowGroupInfo>",
                              "arrow::util::EqualityComparable<arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> > >",
                              "arrow::util::EqualityComparable<arrow::Iterator<std::unique_ptr<arrow::dataset::ScanTask> > >",
@@ -85,7 +91,7 @@ public class arrow_dataset implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<std::shared_ptr<arrow::dataset::Fragment> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<std::unique_ptr<arrow::dataset::ScanTask> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> > > >",
-                             "arrow::util::EqualityComparable<arrow::Result<arrow::dataset::ScanTaskIterator> >").pointerTypes("Pointer"))
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::dataset::ScanTaskIterator> >").cast().pointerTypes("Pointer"))
                .put(new Info("std::unordered_set<std::string>").pointerTypes("StringUnorderedSet").define())
                .put(new Info("std::shared_ptr<arrow::dataset::Dataset>").annotations("@SharedPtr").pointerTypes("Dataset"))
                .put(new Info("std::shared_ptr<arrow::dataset::DatasetFactory>").annotations("@SharedPtr").pointerTypes("DatasetFactory"))
@@ -149,6 +155,28 @@ public class arrow_dataset implements InfoMapper {
                              "arrow::dataset::ExpressionImpl<arrow::dataset::BinaryExpression,ComparisonExpression,arrow::dataset::ExpressionType::COMPARISON>").pointerTypes("ComparisonExpressionImpl").define())
                .put(new Info("arrow::dataset::DiscoverSource", "arrow::dataset::RowGroupStatisticsAsExpression",
                              "arrow::dataset::WritePlan::fragment_or_partition_expressions", "arrow::dataset::string_literals::operator \"\"_")/*.javaNames("quote")*/.skip())
+               .put(new Info("std::function<arrow::Result<std::shared_ptr<arrow::io::RandomAccessFile> >(arrow::Compression::type)>",
+                             "std::function<arrow::Result<std::shared_ptr<io::RandomAccessFile> >(Compression::type)>").pointerTypes("CustomOpenWithCompression").define())
+               .put(new Info("std::function<arrow::Status(const arrow::dataset::Expression&)>",
+                             "std::function<arrow::Status(const Expression&)>").pointerTypes("ExpressionVisitor").define())
         ;
+    }
+
+    public static class CustomOpenWithCompression extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    CustomOpenWithCompression(Pointer p) { super(p); }
+        protected CustomOpenWithCompression() { allocate(); }
+        private native void allocate();
+        public native @ByVal @Cast("arrow::Result<std::shared_ptr<arrow::io::RandomAccessFile> >*") Pointer call(@Cast("arrow::Compression::type") int type);
+    }
+
+    public static class ExpressionVisitor extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    ExpressionVisitor(Pointer p) { super(p); }
+        protected ExpressionVisitor() { allocate(); }
+        private native void allocate();
+        public native @ByVal @Cast("arrow::Status*") Pointer call(@ByRef @Cast("const arrow::dataset::Expression*") Pointer node);
     }
 }

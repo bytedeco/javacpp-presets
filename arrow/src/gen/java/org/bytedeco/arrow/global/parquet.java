@@ -305,7 +305,6 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // #include <sstream>
 // #include <string>
 
-// #include "arrow/util/int_util.h"
 // #include "arrow/util/string_view.h"
 
 // #include "parquet/platform.h"
