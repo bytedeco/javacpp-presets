@@ -10,17 +10,22 @@ This directory contains the JavaCPP Presets module for:
 libpostal is a C library for parsing/normalizing street addresses around the world using statistical NLP and open data.
 The goal of this project is to understand location-based strings in every language, everywhere.
 
+
 Data Files
 ----------
-
 libpostal needs to download a few gigabytes of data from S3. The basic files are on-disk representations of the data structures necessary to perform expansion.
 For address parsing, since model training takes a few days, the libpostal team publishes the fully trained model to S3 and will update it automatically as new addresses get added to OSM, OpenAddresses, etc.
 Same goes for the language classifier model. Data files are automatically downloaded when you run the build with enabled data download.
 To check for and download any new data files, you can either run ```make```, or run:
 
-```libpostal_data download all $YOUR_DATA_DIR```
+```java
+String libpostal_data = Loader.load(org.bytedeco.libpostal.libpostal_data.class);
+ProcessBuilder pb = new ProcessBuilder("bash", libpostal_data, "download", "all", "/path/to/libpostal/data/");
+pb.inheritIO().start().waitFor();
+```
 
-Replace $YOUR_DATA_DIR with the path where the training data should be stored.
+Replace `"/path/to/libpostal/data/"` with the path where the training data should be stored.
+
 
 Documentation
 -------------
@@ -36,7 +41,7 @@ Here is a simple example of the libpostal parser and normalization functionality
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries.
 To run this sample code, after creating the `pom.xml` and `Example.java` source files below, simply execute on the command line:
 ```bash
- $ mvn compile exec:java -Dexec.args="/PATH_TO_LIBPOSTAL_TRAINING_DATA_DIRECTORY"
+ $ mvn compile exec:java
 ```
 
 ### The `pom.xml` build file
@@ -45,7 +50,7 @@ To run this sample code, after creating the `pom.xml` and `Example.java` source 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libpostal</groupId>
     <artifactId>example</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
@@ -53,7 +58,7 @@ To run this sample code, after creating the `pom.xml` and `Example.java` source 
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libpostal-platform</artifactId>
-            <version>1.1-alpha-1.5.3</version>
+            <version>1.1-alpha-1.5.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -70,7 +75,11 @@ import static org.bytedeco.libpostal.global.postal.*;
 
 public class Example {
     public static void main(String[] args) throws Exception {
-        String dataDir = args.length >= 1 ? new String(args[0]) : "/PATH_TO_LIBPOSTAL_TRAINING_DATA_DIRECTORY";
+        String dataDir = args.length >= 1 ? new String(args[0]) : "data/";
+        String libpostal_data = Loader.load(org.bytedeco.libpostal.libpostal_data.class);
+        ProcessBuilder pb = new ProcessBuilder("bash", libpostal_data, "download", "all", dataDir);
+        pb.inheritIO().start().waitFor();
+
         boolean setup1 = libpostal_setup_datadir(dataDir);
         boolean setup2 = libpostal_setup_parser_datadir(dataDir);
         boolean setup3 = libpostal_setup_language_classifier_datadir(dataDir);
