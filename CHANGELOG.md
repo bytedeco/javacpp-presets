@@ -1,4 +1,5 @@
 
+ * Bundle `libpostal_data` program, executable via `Loader.load()` for convenience ([issue #939](https://github.com/bytedeco/javacpp-presets/issues/939))
  * Enable all stable target architectures in the presets for LLVM ([pull #937](https://github.com/bytedeco/javacpp-presets/pull/937))
  * Virtualize `QObject` and its subclasses from Qt to allow customization ([issue bytedeco/javacpp#419](https://github.com/bytedeco/javacpp/issues/419))
  * Bundle programs from Clang and LLVM, executable via `Loader.load()` for convenience ([issue #833](https://github.com/bytedeco/javacpp-presets/issues/833))
