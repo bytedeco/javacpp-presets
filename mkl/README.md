@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL 2020.2  https://software.intel.com/intel-mkl
+ * MKL 2020.3  https://software.intel.com/intel-mkl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,14 +44,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2020.2-1.5.4-SNAPSHOT</version>
+            <version>2020.3-1.5.4-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2020.2-1.5.4-SNAPSHOT</version>
+            <version>2020.3-1.5.4-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
