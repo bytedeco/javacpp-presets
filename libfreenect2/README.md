@@ -32,7 +32,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libfreenect</groupId>
     <artifactId>freenect2Example</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4</version>
     <properties>
         <exec.mainClass>freenect2Example</exec.mainClass>
     </properties>
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libfreenect2-platform</artifactId>
-            <version>0.2.0-1.5.3</version>
+            <version>0.2.0-1.5.4</version>
         </dependency>
     </dependencies>
     <build>

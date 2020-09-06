@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.systems</groupId>
     <artifactId>testavx</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4</version>
     <properties>
         <exec.mainClass>TestAVX</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>systems-platform</artifactId>
-            <version>1.5.3</version>
+            <version>1.5.4</version>
         </dependency>
     </dependencies>
     <build>

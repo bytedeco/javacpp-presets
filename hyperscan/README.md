@@ -37,7 +37,7 @@ Be aware that flag `-Djavacpp.platform` can be used to specify the target platfo
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.hyperscan</groupId>
     <artifactId>HyperscanTest</artifactId>
-    <version>1.5.4-SNAPSHOT</version>
+    <version>1.5.4</version>
     <properties>
         <exec.mainClass>HyperscanTest</exec.mainClass>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -47,7 +47,7 @@ Be aware that flag `-Djavacpp.platform` can be used to specify the target platfo
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hyperscan-platform</artifactId>
-            <version>5.3.0-1.5.4-SNAPSHOT</version>
+            <version>5.3.0-1.5.4</version>
         </dependency>
     </dependencies>
     <build>

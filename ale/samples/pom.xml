@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.ale</groupId>
     <artifactId>sharedlibraryinterfaceexample</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4</version>
     <properties>
         <exec.mainClass>SharedLibraryInterfaceExample</exec.mainClass>
     </properties>
@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ale-platform</artifactId>
-            <version>0.6.1-1.5.3</version>
+            <version>0.6.1-1.5.4</version>
         </dependency>
     </dependencies>
     <build>

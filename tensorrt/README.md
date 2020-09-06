@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorrt</groupId>
     <artifactId>samplegooglenet</artifactId>
-    <version>1.5.4-SNAPSHOT</version>
+    <version>1.5.4</version>
     <properties>
         <exec.mainClass>SampleGoogleNet</exec.mainClass>
     </properties>
@@ -50,19 +50,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>7.1-1.5.4-SNAPSHOT</version>
+            <version>7.1-1.5.4</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.0-8.0-1.5.4-SNAPSHOT</version>
+            <version>11.0-8.0-1.5.4</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>7.1-1.5.4-SNAPSHOT</version>
+            <version>7.1-1.5.4</version>
         </dependency>
 
     </dependencies>

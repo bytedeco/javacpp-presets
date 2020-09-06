@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.Logger;
  * @author Samuel Audet
  */
 @Properties(inherit = javacpp.class, value = {@Platform(value = "macosx-x86", define = "__STDC_WANT_LIB_EXT1__ 1",
-    include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "_locale.h", "langinfo.h", "locale.h",
+    include = {"cpuid.h", "dlfcn.h", "nl_types.h", "_xlocale.h", "xlocale.h", "_locale.h", "langinfo.h", "locale.h",
                "sys/uio.h", "sys/_types/_iovec_t.h", "sys/socket.h", "sys/errno.h", "string.h", "stdlib.h", /*"sys/types.h",*/
                "sys/_types/_timespec.h", "sys/_types/_timeval.h", "sys/time.h", "time.h", "utime.h",
                "sys/_types/_s_ifmt.h", "sys/_types/_filesec_t.h", "sys/stat.h", "fcntl.h", "sys/file.h", "grp.h", "pwd.h",

@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.ngraph</groupId>
     <artifactId>abc</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4</version>
     <properties>
         <exec.mainClass>ABC</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ngraph-platform</artifactId>
-            <version>0.26.0-1.5.3</version>
+            <version>0.26.0-1.5.4</version>
         </dependency>
     </dependencies>
     <build>
