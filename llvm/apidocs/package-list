@@ -2,3 +2,4 @@ org.bytedeco.llvm.LLVM
 org.bytedeco.llvm.clang
 org.bytedeco.llvm.global
 org.bytedeco.llvm.presets
+org.bytedeco.llvm.program

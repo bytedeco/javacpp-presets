@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>CustomOpBwdDepFunc - JavaCPP Presets for MXNet 1.6.0-1.5.3 API - org.bytedeco.mxnet.CustomOpBwdDepFunc</title>
-          <meta name="description" content="CustomOpBwdDepFunc - JavaCPP Presets for MXNet 1.6.0 - 1.5.3 API - org.bytedeco.mxnet.CustomOpBwdDepFunc" />
-          <meta name="keywords" content="CustomOpBwdDepFunc JavaCPP Presets for MXNet 1.6.0 1.5.3 API org.bytedeco.mxnet.CustomOpBwdDepFunc" />
+          <title>CustomOpBwdDepFunc - JavaCPP Presets for MXNet 1.7.0-1.5.4 API - org.bytedeco.mxnet.CustomOpBwdDepFunc</title>
+          <meta name="description" content="CustomOpBwdDepFunc - JavaCPP Presets for MXNet 1.7.0 - 1.5.4 API - org.bytedeco.mxnet.CustomOpBwdDepFunc" />
+          <meta name="keywords" content="CustomOpBwdDepFunc JavaCPP Presets for MXNet 1.7.0 1.5.4 API org.bytedeco.mxnet.CustomOpBwdDepFunc" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -251,18 +251,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.bytedeco.mxnet.CustomOpBwdDepFunc#call" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="call(arg0:org.bytedeco.javacpp.IntPointer,arg1:org.bytedeco.javacpp.IntPointer,arg2:org.bytedeco.javacpp.IntPointer,arg3:org.bytedeco.javacpp.IntPointer,arg4:org.bytedeco.javacpp.IntPointer,arg5:org.bytedeco.javacpp.Pointer):Int"></a>
-      <a id="call(IntPointer,IntPointer,IntPointer,IntPointer,IntPointer,Pointer):Int"></a>
+      <a id="call(arg0:org.bytedeco.javacpp.IntPointer,arg1:org.bytedeco.javacpp.IntPointer,arg2:org.bytedeco.javacpp.IntPointer,arg3:org.bytedeco.javacpp.IntPointer,arg4:org.bytedeco.javacpp.PointerPointer,arg5:org.bytedeco.javacpp.Pointer):Int"></a>
+      <a id="call(IntPointer,IntPointer,IntPointer,IntPointer,PointerPointer,Pointer):Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">call</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg1">arg1: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg2">arg2: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg3">arg3: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg4">arg4: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg5">arg5: <span class="extype" name="org.bytedeco.javacpp.Pointer">Pointer</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">call</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg1">arg1: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg2">arg2: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg3">arg3: <span class="extype" name="org.bytedeco.javacpp.IntPointer">IntPointer</span></span>, <span name="arg4">arg4: <span class="extype" name="org.bytedeco.javacpp.PointerPointer">PointerPointer</span></span>, <span name="arg5">arg5: <span class="extype" name="org.bytedeco.javacpp.Pointer">Pointer</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.bytedeco.mxnet.CustomOpBwdDepFunc@call(arg0:org.bytedeco.javacpp.IntPointer,arg1:org.bytedeco.javacpp.IntPointer,arg2:org.bytedeco.javacpp.IntPointer,arg3:org.bytedeco.javacpp.IntPointer,arg4:org.bytedeco.javacpp.IntPointer,arg5:org.bytedeco.javacpp.Pointer):Int" title="Permalink" target="_top">
+      <a href="../../../index.html#org.bytedeco.mxnet.CustomOpBwdDepFunc@call(arg0:org.bytedeco.javacpp.IntPointer,arg1:org.bytedeco.javacpp.IntPointer,arg2:org.bytedeco.javacpp.IntPointer,arg3:org.bytedeco.javacpp.IntPointer,arg4:org.bytedeco.javacpp.PointerPointer,arg5:org.bytedeco.javacpp.Pointer):Int" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -503,6 +503,74 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.bytedeco.javacpp.Pointer#getPointer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getPointer[P&lt;:org.bytedeco.javacpp.Pointer](x$1:Class[P],x$2:Long):P"></a>
+      <a id="getPointer[P&lt;:Pointer](Class[P],Long):P"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getPointer</span><span class="tparams">[<span name="P">P &lt;: <span class="extype" name="org.bytedeco.javacpp.Pointer">Pointer</span></span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Class">Class</span>[<span class="extype" name="org.bytedeco.javacpp.Pointer.getPointer.P">P</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="org.bytedeco.javacpp.Pointer.getPointer.P">P</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.bytedeco.mxnet.CustomOpBwdDepFunc@getPointer[P&lt;:org.bytedeco.javacpp.Pointer](x$1:Class[P],x$2:Long):P" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Pointer</dd></dl></div>
+    </li><li name="org.bytedeco.javacpp.Pointer#getPointer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getPointer[P&lt;:org.bytedeco.javacpp.Pointer](x$1:Class[P]):P"></a>
+      <a id="getPointer[P&lt;:Pointer](Class[P]):P"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getPointer</span><span class="tparams">[<span name="P">P &lt;: <span class="extype" name="org.bytedeco.javacpp.Pointer">Pointer</span></span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Class">Class</span>[<span class="extype" name="org.bytedeco.javacpp.Pointer.getPointer.P">P</span>]</span>)</span><span class="result">: <span class="extype" name="org.bytedeco.javacpp.Pointer.getPointer.P">P</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.bytedeco.mxnet.CustomOpBwdDepFunc@getPointer[P&lt;:org.bytedeco.javacpp.Pointer](x$1:Class[P]):P" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Pointer</dd></dl></div>
+    </li><li name="org.bytedeco.javacpp.Pointer#getPointer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getPointer[P&lt;:org.bytedeco.javacpp.Pointer](x$1:Long):P"></a>
+      <a id="getPointer[P&lt;:Pointer](Long):P"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getPointer</span><span class="tparams">[<span name="P">P &lt;: <span class="extype" name="org.bytedeco.javacpp.Pointer">Pointer</span></span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="org.bytedeco.javacpp.Pointer.getPointer.P">P</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.bytedeco.mxnet.CustomOpBwdDepFunc@getPointer[P&lt;:org.bytedeco.javacpp.Pointer](x$1:Long):P" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Pointer</dd></dl></div>
+    </li><li name="org.bytedeco.javacpp.Pointer#getPointer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getPointer[P&lt;:org.bytedeco.javacpp.Pointer]():P"></a>
+      <a id="getPointer[P&lt;:Pointer]():P"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getPointer</span><span class="tparams">[<span name="P">P &lt;: <span class="extype" name="org.bytedeco.javacpp.Pointer">Pointer</span></span>]</span><span class="params">()</span><span class="result">: <span class="extype" name="org.bytedeco.javacpp.Pointer.getPointer.P">P</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.bytedeco.mxnet.CustomOpBwdDepFunc@getPointer[P&lt;:org.bytedeco.javacpp.Pointer]():P" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Pointer</dd></dl></div>
     </li><li name="org.bytedeco.javacpp.Pointer#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
