@@ -11,11 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.librealsense2.global.realsense2.*;
 
 @Properties(inherit = org.bytedeco.librealsense2.presets.realsense2.class)
-public class rs2_frame_processor_callback_ptr extends FunctionPointer {
+public class rs2_calibration_change_callback_ptr extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    rs2_frame_processor_callback_ptr(Pointer p) { super(p); }
-    protected rs2_frame_processor_callback_ptr() { allocate(); }
+    public    rs2_calibration_change_callback_ptr(Pointer p) { super(p); }
+    protected rs2_calibration_change_callback_ptr() { allocate(); }
     private native void allocate();
-    public native void call(rs2_frame arg0, rs2_source arg1, Pointer arg2);
+    public native void call(@Cast("rs2_calibration_status") int arg0, Pointer arg);
 }
