@@ -69,6 +69,7 @@ public class realsense2 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("rs2_camera_info", "rs2_stream").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("RS2_API_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
+               .put(new Info("RS2_API_FULL_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
                .put(new Info("rs2_create_playback_device").skip());
     }
 }
