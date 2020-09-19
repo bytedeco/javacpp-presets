@@ -164,7 +164,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>1.6.2-${project.version}</version>
+      <version>1.6.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -199,7 +199,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.19.1-${project.version}</version>
+      <version>1.19.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -289,7 +289,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>qt-platform</artifactId>
-      <version>5.15.0-${project.version}</version>
+      <version>5.15.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
