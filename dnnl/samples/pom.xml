@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.dnnl</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>CpuCnnInferenceInt8</exec.mainClass>
     </properties>
@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>1.6.2-1.5.4</version>
+            <version>1.6.3-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

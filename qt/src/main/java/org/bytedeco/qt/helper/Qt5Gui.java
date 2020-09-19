@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.annotation.Opaque;
 public class Qt5Gui extends org.bytedeco.qt.presets.Qt5Gui {
 
 //  static {
-//    File framework = new File("/usr/local/Cellar/qt/5.15.0/lib/QtGui.framework/QtGui");
+//    File framework = new File("/usr/local/Cellar/qt/5.15.1/lib/QtGui.framework/QtGui");
 //    if (framework.exists()) {
 //      System.load(framework.getAbsolutePath());
 //    }

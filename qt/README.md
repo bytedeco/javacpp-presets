@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Qt 5.15.0  https://www.qt.io/
+ * Qt 5.15.1  https://www.qt.io/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ Please see the samples directory for more Qt examples ported to Java from C++.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.qt</groupId>
     <artifactId>gettingstarted</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>GettingStarted</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ Please see the samples directory for more Qt examples ported to Java from C++.
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>qt-platform</artifactId>
-            <version>5.15.0-1.5.4</version>
+            <version>5.15.1-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
