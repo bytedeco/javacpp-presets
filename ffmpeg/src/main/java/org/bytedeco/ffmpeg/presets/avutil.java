@@ -59,7 +59,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/spherical.h>", "<libavutil/threadmessage.h>", "<libavutil/timecode.h>", "<libavutil/timestamp.h>", "<libavutil/tree.h>",
             "<libavutil/tx.h>", "log_callback.h"},
             includepath = {"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
-            link = "avutil@.56", compiler = {"default", "nodeprecated"}),
+            link = "avutil@.56", compiler = {"default", "nodeprecated"},
+            extension = "-nogpl"),
         @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-56")
     }
 )

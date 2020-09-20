@@ -39,7 +39,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(cinclude = {"<libavcodec/codec_id.h>", "<libavcodec/codec_desc.h>", "<libavcodec/codec_par.h>", "<libavcodec/packet.h>",
                               "<libavcodec/bsf.h>", "<libavcodec/codec.h>", "<libavcodec/avcodec.h>", "<libavcodec/jni.h>", "<libavcodec/avfft.h>"},
-                  link = "avcodec@.58"),
+                  link = "avcodec@.58",
+                  extension = "-nogpl"),
         @Platform(value = "linux-arm", preload = {"asound@.2", "vchiq_arm", "vcos", "vcsm", "bcm_host", "mmal_core", "mmal_util", "mmal_vc_client"}),
         @Platform(value = "windows", preload = "avcodec-58")
     }
