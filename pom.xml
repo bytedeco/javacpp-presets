@@ -580,6 +580,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>flycapture</module>
         <module>spinnaker</module>
         <module>libdc1394</module>
@@ -754,6 +755,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
@@ -801,6 +803,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
@@ -848,6 +851,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
@@ -895,6 +899,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
@@ -1074,6 +1079,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>flycapture</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
@@ -1128,6 +1134,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>flycapture</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
@@ -1182,6 +1189,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>artoolkitplus</module>
@@ -1236,6 +1244,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>flycapture</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
@@ -1300,6 +1309,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>flycapture</module>
         <module>spinnaker</module>
         <module>libdc1394</module>
@@ -1376,6 +1386,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
@@ -1449,6 +1460,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>flycapture</module>
         <module>spinnaker</module>
         <module>libdc1394</module>
@@ -1510,6 +1522,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>ffmpeg_nogpl</module>
         <module>flycapture</module>
         <module>spinnaker</module>
         <module>libdc1394</module>
