@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for FFmpeg</name>
 
   <properties>
-    <!-- <javacpp.platform.extension>-nogpl</javacpp.platform.extension> -->
+    <!-- <javacpp.platform.extension>-gpl</javacpp.platform.extension> -->
   </properties>
 
   <dependencies>
@@ -36,23 +36,6 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <executions>
-          <execution>
-            <id>javacpp-setup-source</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
-            <configuration>
-              <buildCommand>
-                <program>bash</program>
-                <argument>./setup-source.sh</argument>
-                <argument>${javacpp.platform.extension}</argument>
-              </buildCommand>
-              <workingDirectory>${project.basedir}</workingDirectory>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -103,15 +86,15 @@
     </profile>
 
     <profile>
-      <id>ffmpeg-nogpl</id>
+      <id>ffmpeg-gpl</id>
       <activation>
         <property>
           <name>javacpp.platform.extension</name>
-          <value>-nogpl</value>
+          <value>-gpl</value>
         </property>
       </activation>
       <properties>
-        <javacpp.platform.extension>-nogpl</javacpp.platform.extension>
+        <javacpp.platform.extension>-gpl</javacpp.platform.extension>
       </properties>
     </profile>
   </profiles>
