@@ -36,6 +36,23 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <executions>
+          <execution>
+            <id>javacpp-setup-source</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <buildCommand>
+                <program>bash</program>
+                <argument>./setup-source.sh</argument>
+                <argument>${javacpp.platform.extension}</argument>
+              </buildCommand>
+              <workingDirectory>${project.basedir}</workingDirectory>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
