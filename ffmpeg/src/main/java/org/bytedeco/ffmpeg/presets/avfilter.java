@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(
-    inherit = {avformat.class, postproc.class, swresample.class, swscale.class},
+    inherit = {avformat.class, /*postproc.class,*/ swresample.class, swscale.class},
     target = "org.bytedeco.ffmpeg.avfilter",
     global = "org.bytedeco.ffmpeg.global.avfilter",
     value = {
