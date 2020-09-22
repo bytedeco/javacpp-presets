@@ -37,8 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.swscale",
     value = {
         @Platform(cinclude = "<libswscale/swscale.h>", link = "swscale@.5"),
-        @Platform(value = "windows", preload = "swscale-5"),
-        @Platform(extension = "-gpl")
+        @Platform(value = "windows", preload = "swscale-5")
     }
 )
 public class swscale implements InfoMapper {
