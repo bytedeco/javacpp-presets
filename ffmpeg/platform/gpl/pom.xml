@@ -160,18 +160,18 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm;
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm64;
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86;
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86_64;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.armhf;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
-                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
-                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86;
-                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm.gpl;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm64.gpl;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86.gpl;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86_64.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.armhf.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86.gpl;
+                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64.gpl;
                     }
                   </moduleInfoSource>
                 </module>

@@ -14,10 +14,6 @@
   <version>4.3.1-${project.parent.version}</version>
   <name>JavaCPP Presets for FFmpeg</name>
 
-  <properties>
-    <!-- <javacpp.platform.extension>-gpl</javacpp.platform.extension> -->
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
