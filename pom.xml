@@ -1072,6 +1072,7 @@
         </property>
       </activation>
       <modules>
+		<module>librealsense2</module>
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
@@ -1126,6 +1127,7 @@
         </property>
       </activation>
       <modules>
+		<module>librealsense2</module>
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
