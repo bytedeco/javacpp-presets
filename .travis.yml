@@ -22,6 +22,10 @@ jobs:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=ffmpeg OS=android-arm EXT=-gpl
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=openblas OS=android-arm
         install: true
         script: ./ci/install-travis.sh
@@ -48,6 +52,10 @@ jobs:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=ffmpeg OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=android-arm64 EXT=-gpl
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -80,6 +88,10 @@ jobs:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=ffmpeg OS=android-x86 EXT=-gpl
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=openblas OS=android-x86
         install: true
         script: ./ci/install-travis.sh
@@ -106,6 +118,10 @@ jobs:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=ffmpeg OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=android-x86_64 EXT=-gpl
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -170,6 +186,10 @@ jobs:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=ffmpeg OS=linux-armhf EXT=-gpl
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=flycapture,libdc1394,libfreenect OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
@@ -211,6 +231,10 @@ jobs:
         install: true
         script: ./ci/install-arm.sh
       - os: linux
+        env: PROJ=ffmpeg OS=linux-arm64 EXT=-gpl
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
         env: PROJ=flycapture,libdc1394,libfreenect OS=linux-arm64
         install: true
         script: ./ci/install-arm.sh
@@ -249,6 +273,10 @@ jobs:
         script: ./ci/install-ppc.sh
       - os: linux
         env: PROJ=ffmpeg OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=linux-ppc64le EXT=-gpl
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -294,6 +322,10 @@ jobs:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=ffmpeg OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=linux-x86 EXT=-gpl
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -363,6 +395,10 @@ jobs:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=ffmpeg OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=linux-x86_64 EXT=-gpl
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -474,6 +510,11 @@ jobs:
       - os: osx
         osx_image: xcode10.1
         env: PROJ=ffmpeg OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode10.1
+        env: PROJ=ffmpeg OS=macosx-x86_64 EXT=-gpl
         install: true
         script: ./ci/install-travis.sh
       - os: osx

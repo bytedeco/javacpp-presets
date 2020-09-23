@@ -106,6 +106,12 @@ environment:
     - PROJ: "onnxruntime"
       OS: windows-x86_64
       EXT: -gpu
+    - PROJ: "ffmpeg"
+      OS: windows-x86
+      EXT: -gpl
+    - PROJ: "ffmpeg"
+      OS: windows-x86_64
+      EXT: -gpl
 
 for:
 -
