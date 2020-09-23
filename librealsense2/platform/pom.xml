@@ -129,7 +129,7 @@
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
-                  }
+                    }
                   </moduleInfoSource>
                 </module>
               </modules>
