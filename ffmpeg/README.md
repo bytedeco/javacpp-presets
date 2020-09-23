@@ -45,14 +45,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>4.3.1-1.5.5-SNAPSHOT</version>
         </dependency>
 
-        <!-- Or use GPL build with (almost) everything enabled -->
-        <!--
+        <!-- Optional GPL builds with (almost) everything enabled -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform-gpl</artifactId>
             <version>4.3.1-1.5.5-SNAPSHOT</version>
         </dependency>
-        -->
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>
