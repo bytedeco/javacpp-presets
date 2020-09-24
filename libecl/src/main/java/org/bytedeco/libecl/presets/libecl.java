@@ -276,5 +276,6 @@ public class libecl implements InfoMapper, LoadEnabled {
         infoMap.put(new Info("ECL_CHAR").cppTypes("int"));
         infoMap.put(new Info("std::array<int,3>").cast().pointerTypes("IntPointer", "IntBuffer", "int[]"));
         infoMap.put(new Info("tm").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("jmp_buf").cast().pointerTypes("Pointer"));
     }
 }
