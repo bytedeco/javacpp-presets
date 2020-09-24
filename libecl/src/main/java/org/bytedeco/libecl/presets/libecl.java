@@ -274,6 +274,10 @@ public class libecl implements InfoMapper, LoadEnabled {
         infoMap.put(new Info("true").javaNames("TRUE").javaText("public static final int TRUE = 1;"));
         infoMap.put(new Info("false").javaNames("FALSE").javaText("public static final int FALSE = 0;"));
         infoMap.put(new Info("ECL_CHAR").cppTypes("int"));
+        infoMap.put(new Info("ECLIPSE_BYTE_ORDER").javaText(
+                "public static final int __LITTLE_ENDIAN = 1234;" + System.lineSeparator()
+                + "public static final int __BIG_ENDIAN = 4321;" + System.lineSeparator()
+                + "public static final int ECLIPSE_BYTE_ORDER = __BIG_ENDIAN;"));
         infoMap.put(new Info("std::array<int,3>").cast().pointerTypes("IntPointer", "IntBuffer", "int[]"));
         infoMap.put(new Info("tm").cast().pointerTypes("Pointer"));
         infoMap.put(new Info("jmp_buf").cast().pointerTypes("Pointer"));
