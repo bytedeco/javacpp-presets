@@ -1,5 +1,6 @@
 package org.bytedeco.libecl.presets;
 
+import java.util.List;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
@@ -18,6 +19,7 @@ import org.bytedeco.javacpp.tools.*;
                         "windows-x86",
                         "windows-x86_64"
                     },
+                    includepath = { /* XXX: added at runtime "$INSTALL_PATH/libecl-$LIBECL_VERSION/lib/private-include" */},
                     include = {
                         //<editor-fold defaultstate="collapsed" desc=" ... ">
                         // "wchar.h",
@@ -252,6 +254,19 @@ public class libecl implements InfoMapper, LoadEnabled {
 
     @Override
     public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> includePaths = properties.get("platform.includepath");
+        if (!includePaths.isEmpty()) {
+            String include = includePaths.get(0);
+            if (include.endsWith("/" + platform + "/include/")) {
+                String privateInclude = include.replace("/include/", "/libecl-2.9.1/lib/private-include/");
+                if (!includePaths.contains(privateInclude)) {
+                    includePaths.add(privateInclude);
+                }
+            }
+        }
+//        System.out.println("XXXXX includePaths = ");
+//        includePaths.stream().forEach(System.out::println);
     }
 
     @Override
