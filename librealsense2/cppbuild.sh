@@ -35,6 +35,16 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
+    linux-arm64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++-8 CFLAGS="-march=armv8-a -mcpu=cortex-a57" CXXFLAGS="-march=armv8-a -mcpu=cortex-a57" CPPFLAGS="-march=armv8-a -mcpu=cortex-a57" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu --disable-udev
+		make -j $MAKEJ
+        make install
+        cd ../librealsense-$LIBREALSENSE2_VERSION
+		CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++-8 "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     linux-x86)
         cd ../libusb-$LIBUSB_VERSION
         CC="gcc -m32" CXX="g++ -m32" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-udev
