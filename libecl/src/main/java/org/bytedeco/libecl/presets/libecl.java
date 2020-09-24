@@ -279,6 +279,7 @@ public class libecl implements InfoMapper, LoadEnabled {
         infoMap.put(new Info("jmp_buf").cast().pointerTypes("Pointer"));
         infoMap.put(new Info("std::ios_base::openmode").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"));
         infoMap.put(new Info("INT_MAX").javaNames("Integer.MAX_VALUE"));
+        infoMap.put(new Info("HUGE_VAL").javaNames("Integer.MAX_VALUE"));
         infoMap.put(new Info("ECL_UNITS_CUBIC").cppTypes("double", "double"));
         infoMap.put(new Info("ECL_UNITS_MILLI").cppTypes("double", "double"));
         infoMap.put(new Info("ECL_UNITS_MEGA").cppTypes("double", "double"));
