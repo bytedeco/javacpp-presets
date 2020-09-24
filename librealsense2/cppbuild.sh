@@ -28,10 +28,10 @@ case $PLATFORM in
     linux-armhf)
         cd ../libusb-$LIBUSB_VERSION
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
-		make -j $MAKEJ
+	make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE2_VERSION
-        CC=arm-linux-gnueabihf-gcc $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
