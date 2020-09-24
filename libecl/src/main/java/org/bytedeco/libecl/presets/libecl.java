@@ -273,5 +273,6 @@ public class libecl implements InfoMapper, LoadEnabled {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("true").javaNames("TRUE").javaText("public static final int TRUE = 1;"));
         infoMap.put(new Info("false").javaNames("FALSE").javaText("public static final int FALSE = 0;"));
+        infoMap.put(new Info("ECL_CHAR").cppTypes("int"));
     }
 }
