@@ -115,7 +115,7 @@ import org.bytedeco.javacpp.tools.*;
                         "ert/util/ecl_version.h",
                         "ert/util/build_config.h",
                         "ert/util/build_config.hpp",
-                        "ert/util/buffer_string.h",
+                        //"ert/util/buffer_string.h",
                         // "buffer_string.h",
                         "ert/util/buffer.hpp",
                         "ert/util/buffer.h",
