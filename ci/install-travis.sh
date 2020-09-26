@@ -62,7 +62,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install centos-release-scl-rh epel-release"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y repolist"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install rh-java-common-ant $SCL_ENABLE boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch make autoconf-archive libtool bison flex perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install rh-java-common-ant $SCL_ENABLE boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch make autoconf-archive libtool bison flex perl nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y install"
@@ -191,7 +191,7 @@ if [ "$OS" == "linux-armhf" ]; then
     sudo dpkg --add-architecture i386
     sudo apt-get update
     sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
-    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool bison flex perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev zlib1g-dev
+    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool bison flex perl nasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev zlib1g-dev
     curl -L https://github.com/raspberrypi/tools/archive/master.tar.gz -o $HOME/tools-master.tar.gz
     curl -L https://github.com/raspberrypi/userland/archive/master.tar.gz -o $HOME/userland-master.tar.gz
     mkdir -p $HOME/tools $HOME/userland
@@ -226,7 +226,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update
    brew upgrade cmake
-   brew install ccache curl swig autoconf-archive libomp libtool libusb xz sdl gpg1 bison flex perl nasm yasm ragel
+   brew install ccache curl swig autoconf-archive libomp libtool libusb xz sdl gpg1 bison flex perl nasm ragel
 
    brew tap AdoptOpenJDK/openjdk
    brew cask install adoptopenjdk8
