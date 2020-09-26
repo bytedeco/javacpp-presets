@@ -32,7 +32,7 @@ if "%APPVEYOR_PULL_REQUEST_NUMBER%" == "" if "%APPVEYOR_REPO_BRANCH%" == "releas
 
 rem C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm"
 rem C:\msys64\usr\bin\bash -lc "pacman -Su --noconfirm"
-C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
+C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm pkg-config unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL mingw-w64-x86_64-ragel"
 
 SET "PATH=C:\Program Files\Python37;C:\Program Files (x86)\CMake\bin;C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"

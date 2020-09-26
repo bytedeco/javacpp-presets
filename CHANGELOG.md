@@ -1,4 +1,5 @@
 
+ * License default builds of FFmpeg under LGPL v3 and move GPL-enabled builds to `-gpl` extension ([pull #950](https://github.com/bytedeco/javacpp-presets/pull/950))
  * Upgrade presets for DNNL 1.6.3, NumPy 1.19.2, Qt 5.15.1
 
 ### September 9, 2020 version 1.5.4
