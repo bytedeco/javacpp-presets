@@ -1,0 +1,24 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.libecl</groupId>
+    <artifactId>KeywordsList</artifactId>
+    <version>1.5.5-SNAPSHOT</version>
+    <name>JavaCPP Presets Sample for libecl</name>
+    <properties>
+        <exec.mainClass>KeywordsList</exec.mainClass>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>libecl-platform</artifactId>
+            <version>2.9.1-1.5.5-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
+
