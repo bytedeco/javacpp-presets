@@ -1,4 +1,5 @@
 
+ * Add sample presets for zlib from wiki/Create-New-Presets
  * License default builds of FFmpeg under LGPL v3 and move GPL-enabled builds to `-gpl` extension ([pull #950](https://github.com/bytedeco/javacpp-presets/pull/950))
  * Upgrade presets for DNNL 1.6.3, NumPy 1.19.2, Qt 5.15.1, cpu_features 0.5.0, and their dependencies
 

@@ -625,6 +625,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
@@ -764,6 +765,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -811,6 +813,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -858,6 +861,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -905,6 +909,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -1268,6 +1273,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1344,6 +1350,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1417,6 +1424,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1478,6 +1486,7 @@
         <module>liquidfun</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1550,6 +1559,7 @@
         <module>qt</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>zlib</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>

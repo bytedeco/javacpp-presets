@@ -306,6 +306,11 @@
       <artifactId>systems-platform</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>zlib-platform</artifactId>
+      <version>1.2.11-${project.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
