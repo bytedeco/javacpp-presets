@@ -192,7 +192,7 @@ jobs:
       - os: linux
         env: PROJ=flycapture,libdc1394,libfreenect,librealsense2 OS=linux-armhf
         install: true
-        script: ./ci/install-travis.sh
+        script: ./ci/install-arm.sh
       - os: linux
         env: PROJ=hdf5 OS=linux-armhf
         install: true

@@ -101,8 +101,8 @@ if [[ "$PROJ" =~ cuda ]]; then
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \${f:0:-1}1; done"
 fi
 
-if [ "$OS" == "linux-arm64" ]; then
-    if [[ "$PROJ" =~ flycapture ]]; then
+if [[ "$PROJ" =~ flycapture ]]; then
+    if [ "$OS" == "linux-arm64" ]; then
       if [[ $(find $HOME/downloads/flycapture.2.13.3.31_arm64.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
         echo "Found flycap-arm64 in cache and size seems ok"
       else
@@ -110,6 +110,14 @@ if [ "$OS" == "linux-arm64" ]; then
         python $TRAVIS_BUILD_DIR/ci/gDownload.py 1LhnuRMT3urYsApCcuBEcaotGRK8h4kJv $HOME/downloads/flycapture.2.13.3.31_arm64.tar.gz
       fi
       cp $HOME/downloads/flycapture.2.13.3.31_arm64.tar.gz $TRAVIS_BUILD_DIR/downloads/
+   elif [ "$OS" == "linux-armhf" ]; then
+      if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found flycap-armhf in cache and size seems ok" 
+      else
+          echo "Downloading flycap-armhf as not found in cache or too small" 
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz
+      fi
+      cp $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
    fi
 fi
 

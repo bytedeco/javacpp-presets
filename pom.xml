@@ -1072,12 +1072,12 @@
         </property>
       </activation>
       <modules>
-		<module>librealsense2</module>
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
+        <module>librealsense2</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
@@ -1127,12 +1127,12 @@
         </property>
       </activation>
       <modules>
-		<module>librealsense2</module>
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
+        <module>librealsense2</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
