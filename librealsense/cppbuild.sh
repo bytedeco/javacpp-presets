@@ -24,13 +24,33 @@ cd librealsense-$LIBREALSENSE_VERSION
 patch -Np1 --binary < ../../../librealsense.patch || true
 
 case $PLATFORM in
+    linux-armhf)
+        cd ../libusb-$LIBUSB_VERSION
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../librealsense-$LIBREALSENSE_VERSION
+        PKG_CONFIG_PATH="../lib/pkgconfig" CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    linux-arm64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ CFLAGS="-march=armv8-a -mcpu=cortex-a57" CXXFLAGS="-march=armv8-a -mcpu=cortex-a57" CPPFLAGS="-march=armv8-a -mcpu=cortex-a57" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../librealsense-$LIBREALSENSE_VERSION
+        PKG_CONFIG_PATH="../lib/pkgconfig" CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     linux-x86)
         cd ../libusb-$LIBUSB_VERSION
         CC="gcc -m32" CXX="g++ -m32" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-udev
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE_VERSION
-        CC="gcc -m32" CXX="g++ -m32 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
+        PKG_CONFIG_PATH="../lib/pkgconfig" CC="gcc -m32" CXX="g++ -m32 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -40,23 +60,23 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE_VERSION
-        CC="gcc -m64" CXX="g++ -m64 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
+        PKG_CONFIG_PATH="../lib/pkgconfig" CC="gcc -m64" CXX="g++ -m64 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-x86_64)
-        "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF .
+        PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     windows-x86)
-        "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
+        PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
         cp -a include/* ../include/
         cp -a Release/* ../lib/
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
+        PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
         cp -a include/* ../include/
         cp -a Release/* ../lib/
