@@ -209,7 +209,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.17.2-${project.version}</version>
+      <version>0.17.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -254,7 +254,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.15.3-${project.version}</version>
+      <version>1.15.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -279,7 +279,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.4.0-${project.version}</version>
+      <version>1.5.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
