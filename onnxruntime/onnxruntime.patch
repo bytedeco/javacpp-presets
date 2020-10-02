@@ -1,8 +1,8 @@
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index af70328fb..3b6ad2b5e 100644
+index bd7114bd0..672d92a44 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -688,8 +688,8 @@ if (WIN32)
+@@ -860,8 +860,8 @@ if (WIN32)
  else()
    add_definitions(-DPLATFORM_POSIX)
    # Enable warning and enable space optimization in Linux
@@ -14,10 +14,10 @@ index af70328fb..3b6ad2b5e 100644
    if(onnxruntime_DEV_MODE)
      string(APPEND CMAKE_CXX_FLAGS " -Werror")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 2c0768d9c..4728b2aa4 100644
+index 512367174..50878c3eb 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -52,9 +52,9 @@ endif()
+@@ -56,9 +56,9 @@ endif()
  
  if(UNIX)
    if (APPLE)
@@ -29,19 +29,6 @@ index 2c0768d9c..4728b2aa4 100644
    endif()
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
-diff --git a/include/onnxruntime/core/session/onnxruntime_c_api.h b/include/onnxruntime/core/session/onnxruntime_c_api.h
-index c94631620..aa72ca004 100644
---- a/include/onnxruntime/core/session/onnxruntime_c_api.h
-+++ b/include/onnxruntime/core/session/onnxruntime_c_api.h
-@@ -73,7 +73,7 @@ extern "C" {
- // Windows users should use unicode paths when possible to bypass the MAX_PATH limitation
- // Every pointer marked with _In_ or _Out_, cannot be NULL. Caller should ensure that.
- // for ReleaseXXX(...) functions, they can accept NULL pointer.
--#define NO_EXCEPTION noexcept
-+#define NO_EXCEPTION
- #else
- #define NO_EXCEPTION
- #endif
 diff --git a/java/src/main/native/ai_onnxruntime_OrtSession.c b/java/src/main/native/ai_onnxruntime_OrtSession.c
 index 79a2abc2e..a742571e9 100644
 --- a/java/src/main/native/ai_onnxruntime_OrtSession.c
@@ -54,10 +41,10 @@ index 79a2abc2e..a742571e9 100644
 +  return (jstring)metadataJava;
  }
 diff --git a/onnxruntime/core/framework/provider_bridge_ort.cc b/onnxruntime/core/framework/provider_bridge_ort.cc
-index c269070ea..8b7f8a864 100644
+index 425d24b65..887db9348 100644
 --- a/onnxruntime/core/framework/provider_bridge_ort.cc
 +++ b/onnxruntime/core/framework/provider_bridge_ort.cc
-@@ -502,9 +502,24 @@ struct ProviderHostImpl : ProviderHost {
+@@ -610,9 +610,24 @@ struct ProviderHostImpl : ProviderHost {
  
  } provider_host_;
  
@@ -65,8 +52,26 @@ index c269070ea..8b7f8a864 100644
 +#include <mach-o/dyld.h>
 +#endif
 +
- struct ProviderLibrary {
-   ProviderLibrary(const char* filename) {
+ struct ProviderSharedLibrary {
+   ProviderSharedLibrary() {
+     std::string full_path = Env::Default().GetRuntimePath() + std::string(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION);
++#ifdef __APPLE__
++size_t len1 = strlen(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION);
++for (uint32_t i = 0; i < _dyld_image_count(); i++) {
++    const char *libname = _dyld_get_image_name(i);
++    size_t len2 = strlen(libname);
++    if (len2 > len1 && strcmp(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION, libname + len2 - len1) == 0) {
++        full_path = libname;
++        break;
++    }
++}
++#endif
+     auto error = Env::Default().LoadDynamicLibrary(full_path, &handle_);
+     if (!error.IsOK()) {
+       LOGS_DEFAULT(ERROR) << error.ErrorMessage();
+@@ -645,6 +660,17 @@ struct ProviderLibrary {
+       return;
+ 
      std::string full_path = Env::Default().GetRuntimePath() + std::string(filename);
 +#ifdef __APPLE__
 +size_t len1 = strlen(filename);
@@ -79,9 +84,9 @@ index c269070ea..8b7f8a864 100644
 +    }
 +}
 +#endif
-     Env::Default().LoadDynamicLibrary(full_path, &handle_);
-     if (!handle_)
-       return;
+     auto error = Env::Default().LoadDynamicLibrary(full_path, &handle_);
+     if (!error.IsOK()) {
+       LOGS_DEFAULT(ERROR) << error.ErrorMessage();
 diff --git a/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S b/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S
 index f874710c1..d21eb958e 100644
 --- a/onnxruntime/core/mlas/lib/x86/SgemmKernelAvx.S
@@ -789,7 +794,7 @@ index 200fa352a..71f2acb98 100644
  
  template<>
 diff --git a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
-index aa4a5f6c0..2a223dd51 100644
+index 8173855da..c2bfda9f9 100644
 --- a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
 +++ b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
 @@ -2,6 +2,7 @@
@@ -801,15 +806,15 @@ index aa4a5f6c0..2a223dd51 100644
  #include "core/providers/dnnl/dnnl_fwd.h"
  #include "core/providers/dnnl/dnnl_execution_provider.h"
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 6b0519d39..ee8e13e41 100755
+index b24cf6bcb..b7a48cb4d 100755
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -556,9 +556,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
+@@ -569,9 +569,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
          "-Donnxruntime_BUILD_WINML_TESTS=" + (
              "OFF" if args.skip_winml_tests else "ON"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
 -        "-Donnxruntime_DEV_MODE=" + (
--            "OFF" if args.android or args.use_acl or args.use_armnn or
+-            "OFF" if args.use_acl or args.use_armnn or args.use_winml or
 -            (args.ios and is_macOS()) else "ON"),
 +        "-Donnxruntime_DEV_MODE=OFF",
 +        "-Donnxruntime_ENABLE_LTO=OFF",

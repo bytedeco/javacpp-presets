@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.15.3</tensorflow.version>
+    <tensorflow.version>1.15.4</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
     <javacpp.nativeRequires>
       requires org.bytedeco.mkldnn.${javacpp.platform.module};
