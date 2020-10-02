@@ -1,4 +1,5 @@
 
+ * Add `linux-armhf` and `linux-arm64` builds for librealsense and librealsense2 ([pull #951](https://github.com/bytedeco/javacpp-presets/pull/951))
  * Upgrade presets for DNNL 1.6.3, NumPy 1.19.2, Qt 5.15.1
 
 ### September 9, 2020 version 1.5.4
