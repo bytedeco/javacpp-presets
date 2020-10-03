@@ -69,7 +69,7 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/deb http/deb [arc
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:$ARM libasound2-dev:$ARM libusb-dev:$ARM libusb-1.0-0-dev:$ARM libffi-dev:$ARM zlib1g-dev:$ARM libxcb1-dev:$ARM"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARM-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool bison flex perl nasm yasm curl cmake libffi-dev zlib1g-dev"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARM-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev zlib1g-dev"
 
 # Fix issue with Sectigo CA root certificate on Ubuntu Xenial
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i '/AddTrust_External_Root/d' /etc/ca-certificates.conf"
@@ -137,12 +137,12 @@ echo "Running install for $PROJ"
 echo "container id is $DOCKER_CONTAINER_ID"
  if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
      echo "Not a pull request so attempting to deploy using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
      if [ $BUILD_STATUS -eq 0 ]; then
        echo "Deploying platform"
        for i in ${PROJ//,/ }
        do
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS"; export BUILD_STATUS=$?
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/${EXT:1}/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT"; export BUILD_STATUS=$?
         if [ $BUILD_STATUS -ne 0 ]; then
          echo "Build Failed"
          exit $BUILD_STATUS
@@ -152,7 +152,7 @@ echo "container id is $DOCKER_CONTAINER_ID"
 
    else
      echo "Pull request so install using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
  fi
 
  echo "Build status $BUILD_STATUS"

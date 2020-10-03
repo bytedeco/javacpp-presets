@@ -50,8 +50,8 @@ import org.bytedeco.dnnl.presets.*;
                 "onnxruntime/core/providers/cuda/cuda_provider_factory.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
             },
-            link = "onnxruntime@.1.4.0",
-            preload = {"onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
+            link = "onnxruntime@.1.5.1",
+            preload = {"onnxruntime_providers_shared", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -98,6 +98,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ORTCHAR_T").cppText("").cppTypes().cast().pointerTypes("Pointer"))
                .put(new Info("ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
+               .put(new Info("ORT_API_MANUAL_INIT").define(false))
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api").skip())
                .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
@@ -126,9 +127,16 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::Value::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
                .put(new Info("Ort::Value::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
                .put(new Info("Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
+               .put(new Info("Ort::Unowned<Ort::SequenceTypeInfo>").pointerTypes("UnownedSequenceTypeInfo").purify())
+               .put(new Info("Ort::Unowned<Ort::MapTypeInfo>").pointerTypes("UnownedMapTypeInfo").purify())
+               .put(new Info("Ort::MemoryAllocation").purify())
+               .put(new Info("Ort::MemoryAllocation::operator =").skip())
                .put(new Info("Ort::RunOptions::GetRunLogSeverityLevel").skip())
                .put(new Info("Ort::Exception").pointerTypes("OrtException"))
-               .put(new Info("Ort::Base<OrtMemoryInfo>").pointerTypes("BaseMemoryInfo"))
+               .put(new Info("Ort::Base<OrtAllocator>").pointerTypes("BaseAllocator"))
+               .put(new Info("Ort::Base<OrtIoBinding>").pointerTypes("BaseIoBinding"))
+               .put(new Info("Ort::Base<OrtMemoryInfo>", "Ort::BaseMemoryInfo<Ort::Base<OrtMemoryInfo> >",
+                                                         "Ort::BaseMemoryInfo<Ort::Base<const OrtMemoryInfo> >").pointerTypes("BaseMemoryInfo"))
                .put(new Info("Ort::Base<OrtModelMetadata>").pointerTypes("BaseModelMetadata"))
                .put(new Info("Ort::Base<OrtCustomOpDomain>").pointerTypes("BaseCustomOpDomain"))
                .put(new Info("Ort::Base<OrtEnv>").pointerTypes("BaseEnv"))
@@ -136,6 +144,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::Base<OrtSession>").pointerTypes("BaseSession"))
                .put(new Info("Ort::Base<OrtSessionOptions>").pointerTypes("BaseSessionOptions"))
                .put(new Info("Ort::Base<OrtTensorTypeAndShapeInfo>").pointerTypes("BaseTensorTypeAndShapeInfo"))
+               .put(new Info("Ort::Base<OrtSequenceTypeInfo>").pointerTypes("BaseSequenceTypeInfo"))
+               .put(new Info("Ort::Base<OrtMapTypeInfo>").pointerTypes("BaseMapTypeInfo"))
                .put(new Info("Ort::Base<OrtTypeInfo>").pointerTypes("BaseTypeInfo"))
                .put(new Info("Ort::Base<OrtValue>").pointerTypes("BaseValue"))
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_CUDA").annotations("@Platform(extension=\"-gpu\")").javaNames("OrtSessionOptionsAppendExecutionProvider_CUDA"));
