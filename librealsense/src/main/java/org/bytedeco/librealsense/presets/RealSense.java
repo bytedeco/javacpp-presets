@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Jérémy Laviole
  */
 @Properties(inherit = javacpp.class, target = "org.bytedeco.librealsense", global = "org.bytedeco.librealsense.global.RealSense", value = {
-    @Platform(value = {"linux-x86", "macosx-x86", "windows-x86"}, compiler = "cpp11",
+    @Platform(value = {"linux-armhf", "linux-arm64", "linux-x86", "macosx-x86", "windows-x86"}, compiler = "cpp11",
          include = {"<librealsense/rs.h>", "<librealsense/rs.hpp>", "<librealsense/rscore.hpp>", "<librealsense/rsutil.h>"},
          link = "realsense@.1"),
     @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/") })
