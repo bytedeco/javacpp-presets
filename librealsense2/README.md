@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.librealsense2</groupId>
     <artifactId>rsdistance</artifactId>
-    <version>1.5.5</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>RsDistance</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>librealsense2-platform</artifactId>
-            <version>2.38.1-1.5.5</version>
+            <version>2.38.1-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
