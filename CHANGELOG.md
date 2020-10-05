@@ -1,4 +1,8 @@
 
+ * Add `linux-armhf` and `linux-arm64` builds for librealsense and librealsense2 ([pull #951](https://github.com/bytedeco/javacpp-presets/pull/951))
+ * License default builds of FFmpeg under LGPL v3 and move GPL-enabled builds to `-gpl` extension ([pull #950](https://github.com/bytedeco/javacpp-presets/pull/950))
+ * Upgrade presets for DNNL 1.6.3, NumPy 1.19.2, Gym 0.17.3, TensorFlow 1.15.4, ONNX Runtime 1.5.1, Qt 5.15.1, cpu_features 0.5.0, and their dependencies
+
 ### September 9, 2020 version 1.5.4
  * Bundle `libpostal_data` program, executable via `Loader.load()` for convenience ([issue #939](https://github.com/bytedeco/javacpp-presets/issues/939))
  * Enable all stable target architectures in the presets for LLVM ([pull #937](https://github.com/bytedeco/javacpp-presets/pull/937))

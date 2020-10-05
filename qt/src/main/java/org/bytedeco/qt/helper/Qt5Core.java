@@ -31,7 +31,7 @@ public class Qt5Core extends org.bytedeco.qt.presets.Qt5Core {
 
   static {
 //    // Load macOS framework
-//    File framework = new File("/usr/local/Cellar/qt/5.15.0/lib/QtCore.framework/QtCore");
+//    File framework = new File("/usr/local/Cellar/qt/5.15.1/lib/QtCore.framework/QtCore");
 //    if (framework.exists()) {
 //      System.load(framework.getAbsolutePath());
 //    }

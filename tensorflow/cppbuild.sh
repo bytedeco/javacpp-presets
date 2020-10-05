@@ -44,7 +44,7 @@ export TF_CUDA_COMPUTE_CAPABILITIES=3.5
 export TF_SET_ANDROID_WORKSPACE=0
 #export TF_IGNORE_MAX_BAZEL_VERSION=1
 
-TENSORFLOW_VERSION=1.15.3
+TENSORFLOW_VERSION=1.15.4
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -236,6 +236,7 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-java.patch
         # https://github.com/tensorflow/tensorflow/issues/25213
         patch -Np1 < ../../../tensorflow-windows.patch
+        sedinplace 's/"10"/"64_10"/g' tensorflow/stream_executor/platform/default/dso_loader.cc
         sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
         if [[ ! -f $PYTHON_BIN_PATH ]]; then
             export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"

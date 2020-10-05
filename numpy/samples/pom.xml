@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.numpy</groupId>
     <artifactId>matmul</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>MatMul</exec.mainClass>
     </properties>
@@ -10,14 +10,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.19.1-1.5.4</version>
+            <version>1.19.2-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2020.3-1.5.4</version>
+            <version>2020.3-1.5.5-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

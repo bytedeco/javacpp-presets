@@ -11,7 +11,7 @@ export DNNL_CPU_RUNTIME="OMP" # or TBB
 export DNNL_GPU_RUNTIME="OCL"
 
 TBB_VERSION=2020.3
-MKLDNN_VERSION=1.6.2
+MKLDNN_VERSION=1.6.3
 download https://github.com/oneapi-src/oneTBB/archive/v$TBB_VERSION.tar.gz oneTBB-$TBB_VERSION.tar.bz2
 download https://github.com/oneapi-src/oneDNN/archive/v$MKLDNN_VERSION.tar.gz oneDNN-$MKLDNN_VERSION.tar.bz2
 
