@@ -1666,7 +1666,7 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
     public static final int
         RS2_AMBIENT_LIGHT_NO_AMBIENT = 1,
         RS2_AMBIENT_LIGHT_LOW_AMBIENT = 2;
-    public static native @Cast("const char*") BytePointer rs2_ambient_light_to_string(@Cast("rs2_ambient_light") int preset);
+    
 
     /** \brief values for RS2_OPTION_TRIGGER_CAMERA_ACCURACY_HEALTH option. */
     /** enum rs2_cah_trigger */
@@ -1679,7 +1679,7 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
         RS2_CAH_TRIGGER_AUTO   = 2,
         /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
         RS2_CAH_TRIGGER_COUNT = 3;
-    public static native @Cast("const char*") BytePointer rs2_cah_trigger_to_string( @Cast("rs2_cah_trigger") int preset );
+    
 
     /**
     * check if an option is read-only

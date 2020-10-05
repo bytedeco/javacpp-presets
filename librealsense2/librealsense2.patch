@@ -1,6 +1,6 @@
-diff -ruN librealsense-2.25.0/src/linux/backend-v4l2.cpp librealsense-2.25.0-patch/src/linux/backend-v4l2.cpp
---- librealsense-2.25.0/src/linux/backend-v4l2.cpp	2019-08-01 22:36:18.000000000 +0900
-+++ librealsense-2.25.0-patch/src/linux/backend-v4l2.cpp	2019-09-19 13:41:49.373474731 +0900
+diff -ruN librealsense-2.38.1/src/linux/backend-v4l2.cpp librealsense-2.38.1-patch/src/linux/backend-v4l2.cpp
+--- librealsense-2.38.1/src/linux/backend-v4l2.cpp	2020-08-28 18:54:59.000000000 +0900
++++ librealsense-2.38.1-patch/src/linux/backend-v4l2.cpp	2020-10-05 15:03:19.496611859 +0900
 @@ -35,9 +35,9 @@
  #include <sys/mman.h>
  #include <sys/ioctl.h>
@@ -11,12 +11,12 @@ diff -ruN librealsense-2.25.0/src/linux/backend-v4l2.cpp librealsense-2.25.0-pat
 +#include "video.h"
 +#include "uvcvideo.h"
 +#include "videodev2.h"
- #include <fts.h>
  #include <regex>
  #include <list>
-diff -ruN librealsense-2.25.0/src/linux/backend-v4l2.h librealsense-2.25.0-patch/src/linux/backend-v4l2.h
---- librealsense-2.25.0/src/linux/backend-v4l2.h	2019-08-01 22:36:18.000000000 +0900
-+++ librealsense-2.25.0-patch/src/linux/backend-v4l2.h	2019-09-19 13:41:44.901471657 +0900
+ 
+diff -ruN librealsense-2.38.1/src/linux/backend-v4l2.h librealsense-2.38.1-patch/src/linux/backend-v4l2.h
+--- librealsense-2.38.1/src/linux/backend-v4l2.h	2020-08-28 18:54:59.000000000 +0900
++++ librealsense-2.38.1-patch/src/linux/backend-v4l2.h	2020-10-05 15:03:01.983584430 +0900
 @@ -33,9 +33,9 @@
  #include <sys/stat.h>
  #include <sys/mman.h>
@@ -27,12 +27,12 @@ diff -ruN librealsense-2.25.0/src/linux/backend-v4l2.h librealsense-2.25.0-patch
 +#include "video.h"
 +#include "uvcvideo.h"
 +#include "videodev2.h"
- #include <fts.h>
  #include <regex>
  #include <list>
-diff -ruN librealsense-2.25.0/src/linux/uvcvideo.h librealsense-2.25.0-patch/src/linux/uvcvideo.h
---- librealsense-2.25.0/src/linux/uvcvideo.h	1970-01-01 09:00:00.000000000 +0900
-+++ librealsense-2.25.0-patch/src/linux/uvcvideo.h	2019-08-08 14:53:25.000000000 +0900
+ 
+diff -ruN librealsense-2.38.1/src/linux/uvcvideo.h librealsense-2.38.1-patch/src/linux/uvcvideo.h
+--- librealsense-2.38.1/src/linux/uvcvideo.h	1970-01-01 09:00:00.000000000 +0900
++++ librealsense-2.38.1-patch/src/linux/uvcvideo.h	2019-08-08 14:53:25.000000000 +0900
 @@ -0,0 +1,99 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +#ifndef __LINUX_UVCVIDEO_H_
@@ -133,9 +133,9 @@ diff -ruN librealsense-2.25.0/src/linux/uvcvideo.h librealsense-2.25.0-patch/src
 +} __attribute__((packed));
 +
 +#endif
-diff -ruN librealsense-2.25.0/src/linux/v4l2-common.h librealsense-2.25.0-patch/src/linux/v4l2-common.h
---- librealsense-2.25.0/src/linux/v4l2-common.h	1970-01-01 09:00:00.000000000 +0900
-+++ librealsense-2.25.0-patch/src/linux/v4l2-common.h	2019-08-08 14:53:25.000000000 +0900
+diff -ruN librealsense-2.38.1/src/linux/v4l2-common.h librealsense-2.38.1-patch/src/linux/v4l2-common.h
+--- librealsense-2.38.1/src/linux/v4l2-common.h	1970-01-01 09:00:00.000000000 +0900
++++ librealsense-2.38.1-patch/src/linux/v4l2-common.h	2019-08-08 14:53:25.000000000 +0900
 @@ -0,0 +1,108 @@
 +/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -245,9 +245,9 @@ diff -ruN librealsense-2.25.0/src/linux/v4l2-common.h librealsense-2.25.0-patch/
 +#define V4L2_SUBDEV_SEL_FLAG_KEEP_CONFIG V4L2_SEL_FLAG_KEEP_CONFIG
 +
 +#endif /* __V4L2_COMMON__ */
-diff -ruN librealsense-2.25.0/src/linux/v4l2-controls.h librealsense-2.25.0-patch/src/linux/v4l2-controls.h
---- librealsense-2.25.0/src/linux/v4l2-controls.h	1970-01-01 09:00:00.000000000 +0900
-+++ librealsense-2.25.0-patch/src/linux/v4l2-controls.h	2019-08-08 14:53:25.000000000 +0900
+diff -ruN librealsense-2.38.1/src/linux/v4l2-controls.h librealsense-2.38.1-patch/src/linux/v4l2-controls.h
+--- librealsense-2.38.1/src/linux/v4l2-controls.h	1970-01-01 09:00:00.000000000 +0900
++++ librealsense-2.38.1-patch/src/linux/v4l2-controls.h	2019-08-08 14:53:25.000000000 +0900
 @@ -0,0 +1,1107 @@
 +/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -1356,9 +1356,9 @@ diff -ruN librealsense-2.25.0/src/linux/v4l2-controls.h librealsense-2.25.0-patc
 +#define V4L2_CID_DETECT_MD_REGION_GRID		(V4L2_CID_DETECT_CLASS_BASE + 4)
 +
 +#endif
-diff -ruN librealsense-2.25.0/src/linux/videodev2.h librealsense-2.25.0-patch/src/linux/videodev2.h
---- librealsense-2.25.0/src/linux/videodev2.h	1970-01-01 09:00:00.000000000 +0900
-+++ librealsense-2.25.0-patch/src/linux/videodev2.h	2019-09-19 13:35:44.641220634 +0900
+diff -ruN librealsense-2.38.1/src/linux/videodev2.h librealsense-2.38.1-patch/src/linux/videodev2.h
+--- librealsense-2.38.1/src/linux/videodev2.h	1970-01-01 09:00:00.000000000 +0900
++++ librealsense-2.38.1-patch/src/linux/videodev2.h	2019-09-19 13:35:44.641220634 +0900
 @@ -0,0 +1,2501 @@
 +/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause) */
 +/*
@@ -3861,9 +3861,9 @@ diff -ruN librealsense-2.25.0/src/linux/videodev2.h librealsense-2.25.0-patch/sr
 +#define BASE_VIDIOC_PRIVATE	192		/* 192-255 are private */
 +
 +#endif /* __LINUX_VIDEODEV2_H */
-diff -ruN librealsense-2.25.0/src/linux/video.h librealsense-2.25.0-patch/src/linux/video.h
---- librealsense-2.25.0/src/linux/video.h	1970-01-01 09:00:00.000000000 +0900
-+++ librealsense-2.25.0-patch/src/linux/video.h	2019-08-08 14:53:16.000000000 +0900
+diff -ruN librealsense-2.38.1/src/linux/video.h librealsense-2.38.1-patch/src/linux/video.h
+--- librealsense-2.38.1/src/linux/video.h	1970-01-01 09:00:00.000000000 +0900
++++ librealsense-2.38.1-patch/src/linux/video.h	2019-08-08 14:53:16.000000000 +0900
 @@ -0,0 +1,570 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +/*
