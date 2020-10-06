@@ -114,7 +114,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
- * librealsense2 2.29.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.38.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags

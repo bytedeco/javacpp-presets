@@ -11,9 +11,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.librealsense2.global.realsense2.*;
 
 @Opaque @Properties(inherit = org.bytedeco.librealsense2.presets.realsense2.class)
-public class rs2_error extends Pointer {
+public class rs2_firmware_log_parsed_message extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public rs2_error() { super((Pointer)null); }
+    public rs2_firmware_log_parsed_message() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public rs2_error(Pointer p) { super(p); }
+    public rs2_firmware_log_parsed_message(Pointer p) { super(p); }
 }
