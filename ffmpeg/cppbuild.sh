@@ -1224,7 +1224,7 @@ EOF
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar USE_ASM=No install-static
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-asm
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265/build/linux
