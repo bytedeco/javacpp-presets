@@ -23,6 +23,7 @@
 package org.bytedeco.fftw.presets;
 
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -61,4 +62,7 @@ public class fftw3 implements InfoMapper {
                .put(new Info("FFTW_DEFINE_API(FFTW_MANGLE_LONG_DOUBLE, long double, fftwl_complex)",
                              "FFTW_DEFINE_API(FFTW_MANGLE_QUAD, __float128, fftwq_complex)").skip());
     }
+
+    /** To be used only with fftw_export_wisdom_to_string(). */
+    public native static void free(Pointer p);
 }
