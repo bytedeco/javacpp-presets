@@ -1,4 +1,5 @@
 
+ * Include all missing header files from the `opencv_ximgproc` module ([issue #958](https://github.com/bytedeco/javacpp-presets/issues/958))
  * Disable assembly optimizations for libx264 with FFmpeg on Mac to work around crashes ([issue bytedeco/javacv#1519](https://github.com/bytedeco/javacv/issues/1519))
  * Add `linux-armhf` and `linux-arm64` builds for librealsense and librealsense2 ([pull #951](https://github.com/bytedeco/javacpp-presets/pull/951))
  * License default builds of FFmpeg under LGPL v3 and move GPL-enabled builds to `-gpl` extension ([pull #950](https://github.com/bytedeco/javacpp-presets/pull/950))
