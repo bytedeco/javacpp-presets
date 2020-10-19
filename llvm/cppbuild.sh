@@ -18,8 +18,6 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives... (ignore any symlink errors)"
 tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
 cd llvm-$LLVM_VERSION.src
-SED_REPLACEMENT='function(get_source_info path revision repository)\n  message(WARNING "Git not found. Version cannot be determined.")\nendfunction()'
-sedinplace "s/include(VersionFromVCS)/$SED_REPLACEMENT/" CMakeLists.txt
 mkdir -p build tools
 cd tools
 tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz
