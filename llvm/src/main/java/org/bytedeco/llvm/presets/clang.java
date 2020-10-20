@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.tools.*;
     value = {"linux", "macosx", "windows"},
     include = {"<clang-c/Platform.h>", "<clang-c/CXErrorCode.h>", "<clang-c/CXString.h>", "<clang-c/CXCompilationDatabase.h>",
                "<clang-c/BuildSystem.h>", "<clang-c/Index.h>", "<clang-c/Documentation.h>"},
-    compiler = "cpp14", link = "clang@.10"), @Platform(value = "windows", link = "libclang") })
+    compiler = "cpp14", link = "clang@.11"), @Platform(value = "windows", link = "libclang") })
 public class clang implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVM_CLANG_C_EXTERN_C_BEGIN").cppText("#define LLVM_CLANG_C_EXTERN_C_BEGIN").cppTypes())

@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
                "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<TargetStubs.h>"},
-    compiler = "cpp14", link = {"LLVM-10", "LTO@.10", /*"LLVMPolly",*/ "Remarks@.10"}),
+    compiler = "cpp14", link = {"LLVM-11", "LTO@.11", /*"LLVMPolly",*/ "Remarks@.11"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", /*"Polly", "PollyISL", "PollyPPCG",*/ "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Polly", "PollyISL", "PollyPPCG", "Remarks"})})
 public class LLVM implements InfoMapper {

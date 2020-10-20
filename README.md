@@ -134,7 +134,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.19.x  https://github.com/numpy/numpy
  * SciPy 1.5.x  https://github.com/scipy/scipy
  * Gym 0.17.x  https://github.com/openai/gym
- * LLVM 10.0.x  http://llvm.org/releases/download.html
+ * LLVM 11.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.80.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
