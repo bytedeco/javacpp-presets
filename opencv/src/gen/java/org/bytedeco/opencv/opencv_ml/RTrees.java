@@ -78,6 +78,15 @@ public class RTrees extends DTrees {
     public native void getVotes(@ByVal UMat samples, @ByVal UMat results, int flags);
     public native void getVotes(@ByVal GpuMat samples, @ByVal GpuMat results, int flags);
 
+    /** Returns the OOB error value, computed at the training stage when calcOOBError is set to true.
+     * If this flag was set to false, 0 is returned. The OOB error is also scaled by sample weighting.
+     */
+// #if CV_VERSION_MAJOR == 4
+    public native double getOOBError();
+// #else
+    /*CV_WRAP*/
+// #endif
+
     /** Creates the empty model.
     Use StatModel::train to train the model, StatModel::train to create and train the model,
     Algorithm::load to load the pre-trained model.

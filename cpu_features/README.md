@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * cpu_features 0.5.0  https://github.com/google/cpu_features
+ * cpu_features 0.6.0  https://github.com/google/cpu_features
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpu_features-platform</artifactId>
-            <version>0.5.0-1.5.5-SNAPSHOT</version>
+            <version>0.6.0-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

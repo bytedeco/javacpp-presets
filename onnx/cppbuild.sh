@@ -41,7 +41,7 @@ make -j $MAKEJ V=0
 make install
 
 cd ../onnx-$ONNX
-rm -df third_party/pybind11
+rm -Rf third_party/pybind11
 ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
 # work around issue in Xcode's version of Clang
 sedinplace 's/const std::string /std::string /g' onnx/defs/schema.h

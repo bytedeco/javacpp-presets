@@ -56,7 +56,7 @@ public class TrackerGOTURN extends Tracker {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrackerGOTURN(Pointer p) { super(p); }
 
-  public static class Params extends Pointer {
+  @NoOffset public static class Params extends Pointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Params(Pointer p) { super(p); }
@@ -74,6 +74,8 @@ public class TrackerGOTURN extends Tracker {
     private native void allocate();
     public native void read(@Const @ByRef FileNode arg0);
     public native void write(@ByRef FileStorage arg0);
+    public native @Str BytePointer modelTxt(); public native Params modelTxt(BytePointer setter);
+    public native @Str BytePointer modelBin(); public native Params modelBin(BytePointer setter);
   }
 
   /** \brief Constructor

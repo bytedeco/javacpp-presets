@@ -62,4 +62,5 @@ public class UMatData extends Pointer {
     public native int allocatorFlags_(); public native UMatData allocatorFlags_(int setter);
     public native int mapcount(); public native UMatData mapcount(int setter);
     public native UMatData originalUMatData(); public native UMatData originalUMatData(UMatData setter);
+    public native @ByRef @Cast("std::shared_ptr<void>*") Pointer allocatorContext(); public native UMatData allocatorContext(Pointer setter);
 }

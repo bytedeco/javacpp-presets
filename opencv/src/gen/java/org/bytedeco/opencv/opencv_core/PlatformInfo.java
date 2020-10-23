@@ -28,6 +28,9 @@ public class PlatformInfo extends Pointer {
 
     public PlatformInfo() { super((Pointer)null); allocate(); }
     private native void allocate();
+    /**
+     * @param id pointer cl_platform_id (cl_platform_id*)
+     */
     public PlatformInfo(Pointer id) { super((Pointer)null); allocate(id); }
     private native void allocate(Pointer id);
 
@@ -40,4 +43,12 @@ public class PlatformInfo extends Pointer {
     public native @Str BytePointer version();
     public native int deviceNumber();
     public native void getDevice(@ByRef Device device, int d);
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native @Cast("bool") boolean empty();
 }

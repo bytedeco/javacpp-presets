@@ -47,4 +47,5 @@ public class Queue extends Pointer {
     /** \brief Returns OpenCL command queue with enable profiling mode support */
     public native @Const @ByRef Queue getProfilingQueue();
     public native @Cast("cv::ocl::Queue::Impl*") Pointer getImpl();
+    public native @Cast("bool") boolean empty();
 }

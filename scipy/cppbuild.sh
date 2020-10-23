@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SCIPY_VERSION=1.5.2
+SCIPY_VERSION=1.5.3
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -73,7 +73,7 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; 
     "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv cython numpy pybind11
     "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.7/numpy/core/lib/libnpymath.a"
-    cp -a "$CPYTHON_HOST_PATH/lib/python3.7/include" "$PYTHON_LIB_PATH"
+#    cp -a "$CPYTHON_HOST_PATH/lib/python3.7/include" "$PYTHON_LIB_PATH"
     source crossenv/bin/activate
     cross-expose cython numpy pybind11
     PYTHON_BIN_PATH="python"

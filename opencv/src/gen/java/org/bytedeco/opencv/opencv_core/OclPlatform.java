@@ -13,6 +13,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 
 
+/** @deprecated */
 @Name("cv::ocl::Platform") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class OclPlatform extends Pointer {
     static { Loader.load(); }
@@ -35,7 +36,16 @@ public class OclPlatform extends Pointer {
     public native @ByRef @Name("operator =") OclPlatform put(@Const @ByRef OclPlatform p);
 
     public native Pointer ptr();
+
+    /** @deprecated */
     public static native @ByRef OclPlatform getDefault();
 
-    
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl getImpl();
+    public native @Cast("bool") boolean empty();
 }

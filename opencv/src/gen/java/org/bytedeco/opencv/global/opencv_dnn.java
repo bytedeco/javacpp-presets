@@ -126,7 +126,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20200609;
+public static final int OPENCV_DNN_API_VERSION = 20200908;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)

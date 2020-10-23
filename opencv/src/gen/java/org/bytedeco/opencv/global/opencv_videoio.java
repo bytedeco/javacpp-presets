@@ -245,8 +245,12 @@ public static final int
        CAP_PROP_CODEC_PIXEL_FORMAT = 46,
        /** (read-only) Video bitrate in kbits/s */
        CAP_PROP_BITRATE       = 47,
+       /** (read-only) Frame rotation defined by stream meta (applicable for FFmpeg back-end only) */
+       CAP_PROP_ORIENTATION_META = 48,
+       /** if true - rotates output frames of CvCapture considering video file's metadata  (applicable for FFmpeg back-end only) (https://github.com/opencv/opencv/issues/15499) */
+       CAP_PROP_ORIENTATION_AUTO = 49,
 // #ifndef CV_DOXYGEN
-       CV__CAP_PROP_LATEST = 48;
+       CV__CAP_PROP_LATEST = 50;
 // #endif
 
 /** \brief %VideoWriter generic properties identifier.

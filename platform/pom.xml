@@ -74,7 +74,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>4.4.0-${project.version}</version>
+      <version>4.5.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -164,7 +164,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>1.6.3-${project.version}</version>
+      <version>1.6.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -204,7 +204,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
-      <version>1.5.2-${project.version}</version>
+      <version>1.5.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -279,7 +279,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.5.1-${project.version}</version>
+      <version>1.5.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -299,7 +299,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpu_features-platform</artifactId>
-      <version>0.5.0-${project.version}</version>
+      <version>0.6.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -150,4 +150,5 @@ public class ProgramSource extends Pointer {
     //        const unsigned char* binary, const size_t size,
     //        const cv::String& buildOptions = cv::String());
     public native @Cast("cv::ocl::ProgramSource::Impl*") Pointer getImpl();
+    public native @Cast("bool") boolean empty();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Sam Carlberg, Samuel Audet
+ * Copyright (C) 2020 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -29,26 +29,17 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = opencv_core.class,
+    inherit = {opencv_calib3d.class, opencv_dnn.class},
     value = {
-        @Platform(
-            include = "<opencv2/cudaarithm.hpp>",
-            link = "opencv_cudaarithm@.4.5",
-            extension = "-gpu"
-        ),
-        @Platform(
-            value = "windows",
-            link = "opencv_cudaarithm450",
-            extension = "-gpu"
-        )
+        @Platform(include = {"<opencv2/mcc.hpp>", "<opencv2/mcc/checker_model.hpp>", "<opencv2/mcc/checker_detector.hpp>"}, link = "opencv_mcc@.4.5"),
+        @Platform(value = "ios", preload = "libopencv_mcc"),
+        @Platform(value = "windows", link = "opencv_mcc450")
     },
-    target = "org.bytedeco.opencv.opencv_cudaarithm",
-    global = "org.bytedeco.opencv.global.opencv_cudaarithm"
+    global = "org.bytedeco.opencv.global.opencv_mcc"
 )
-public class opencv_cudaarithm implements InfoMapper {
-
-    @Override
-    public void map(InfoMap infoMap) {
+public class opencv_mcc implements InfoMapper {
+    @Override public void map(InfoMap infoMap) {
 
     }
 }
+

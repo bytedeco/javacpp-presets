@@ -69,6 +69,7 @@ public class cpu_features implements InfoMapper {
                              "CPU_FEATURES_COMPILED_X86_SSE3", "CPU_FEATURES_COMPILED_X86_SSSE3",
                              "CPU_FEATURES_COMPILED_X86_SSE4_1", "CPU_FEATURES_COMPILED_X86_SSE4_2",
                              "CPU_FEATURES_COMPILED_X86_AVX", "CPU_FEATURES_COMPILED_x86_AVX2",
-                             "CPU_FEATURES_COMPILED_ANY_ARM_NEON", "CPU_FEATURES_COMPILED_MIPS_MSA").cppTypes().annotations());
+                             "CPU_FEATURES_COMPILED_ANY_ARM_NEON", "CPU_FEATURES_COMPILED_MIPS_MSA").cppTypes().annotations())
+               .put(new Info("cpu_features::CpuFeatures_IsHwCapsSet").skip());
     }
 }

@@ -30,6 +30,8 @@ public class SearchParams extends IndexParams {
         return new SearchParams(this).position(position + i);
     }
 
+    public SearchParams( int checks, float eps, @Cast("bool") boolean sorted, @Cast("bool") boolean explore_all_trees ) { super((Pointer)null); allocate(checks, eps, sorted, explore_all_trees); }
+    private native void allocate( int checks, float eps, @Cast("bool") boolean sorted, @Cast("bool") boolean explore_all_trees );
     public SearchParams( int checks/*=32*/, float eps/*=0*/, @Cast("bool") boolean sorted/*=true*/ ) { super((Pointer)null); allocate(checks, eps, sorted); }
     private native void allocate( int checks/*=32*/, float eps/*=0*/, @Cast("bool") boolean sorted/*=true*/ );
     public SearchParams( ) { super((Pointer)null); allocate(); }

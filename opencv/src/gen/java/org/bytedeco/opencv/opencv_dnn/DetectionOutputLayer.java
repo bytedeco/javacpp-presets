@@ -17,6 +17,14 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
 
 
+    /**
+     * \brief Detection output layer.
+     *
+     * The layer size is: {@code  (1 \times 1 \times N \times 7) }
+     *    where N is [keep_top_k] parameter multiplied by batch size. Each row is:
+     *    [image_id, label, confidence, xmin, ymin, xmax, ymax]
+     *    where image_id is the index of image input in the batch.
+     */
     @Namespace("cv::dnn") @Properties(inherit = org.bytedeco.opencv.presets.opencv_dnn.class)
 public class DetectionOutputLayer extends Layer {
         static { Loader.load(); }
