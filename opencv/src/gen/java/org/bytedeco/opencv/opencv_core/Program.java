@@ -63,6 +63,7 @@ public class Program extends Pointer {
     public native void getBinary(@Cast("char*") @StdVector ByteBuffer binary);
     public native void getBinary(@Cast("char*") @StdVector byte[] binary);
     public native @Cast("cv::ocl::Program::Impl*") Pointer getImpl();
+    public native @Cast("bool") boolean empty();
 // #ifndef OPENCV_REMOVE_DEPRECATED_API
     // TODO Remove this
     public native @Cast("bool") @Deprecated boolean read(@Str BytePointer buf, @Str BytePointer buildflags);

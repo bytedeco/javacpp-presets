@@ -47,12 +47,10 @@ else
     MAVEN_RELEASE="-Dmaven.javadoc.skip=true"
 fi
 
-if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
-
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-7 rh-python36 python27"
-  if [[ "hyperscan tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "hyperscan tensorflow ngraph qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="devtoolset-7"
   fi
@@ -231,6 +229,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    brew tap AdoptOpenJDK/openjdk
    brew cask install adoptopenjdk8
    export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
+   export _JAVA_OPTIONS=-Xmx2048m
 
    # Try to use ccache to speed up the build and work around issue with Sectigo CA root certificate
    export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/curl/bin/:/usr/local/opt/gpg1/libexec/gpgbin/:/usr/local/opt/bison/bin/:/usr/local/opt/flex/bin/:$PATH

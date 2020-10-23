@@ -536,6 +536,8 @@ public static final int CV_CPU_MSA =              150;
 public static final int CV_CPU_VSX =              200;
 public static final int CV_CPU_VSX3 =             201;
 
+public static final int CV_CPU_RVV =              210;
+
 // CPU features groups
 public static final int CV_CPU_AVX512_SKX =       256;
 public static final int CV_CPU_AVX512_COMMON =    257;
@@ -588,6 +590,8 @@ public static final int
 
     CPU_VSX             = 200,
     CPU_VSX3            = 201,
+
+    CPU_RVV             = 210,
 
     /** Skylake-X with AVX-512F/CD/BW/DQ/VL */
     CPU_AVX512_SKX      = 256,
@@ -1941,7 +1945,7 @@ public static native int cvIsInf( float value );
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    4;
-public static final int CV_VERSION_MINOR =    4;
+public static final int CV_VERSION_MINOR =    5;
 public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
@@ -9267,7 +9271,9 @@ elements.
                             double minVal/*=-DBL_MAX*/, double maxVal/*=DBL_MAX*/);
 @Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal GpuMat a);
 
-/** \brief converts NaN's to the given number
+/** \brief converts NaNs to the given number
+@param a input/output matrix (CV_32F type).
+@param val value to convert the NaNs
 */
 @Namespace("cv") public static native void patchNaNs(@ByVal Mat a, double val/*=0*/);
 @Namespace("cv") public static native void patchNaNs(@ByVal Mat a);
@@ -10589,6 +10595,7 @@ public static final int
 @Namespace("cv::ocl") public static native void convertFromImage(Pointer cl_mem_image, @ByRef UMat dst);
 
 // TODO Move to internal header
+/** @deprecated */
 
 // Targeting ../opencv_core/Queue.java
 
@@ -10747,6 +10754,11 @@ public static final int
 
 
 @Namespace("cv::ocl") public static native MatAllocator getOpenCLAllocator();
+// Targeting ../opencv_core/OpenCLExecutionContext.java
+
+
+// Targeting ../opencv_core/OpenCLExecutionContextScope.java
+
 
 
 // #ifdef __OPENCV_BUILD

@@ -132,6 +132,9 @@ to easily switch between different algorithms solving the same problem. This sec
 computing descriptors represented as vectors in a multidimensional space. All objects that implement
 the vector descriptor extractors inherit the DescriptorExtractor interface.
  */
+// Targeting ../opencv_features2d/AffineFeature.java
+
+
 // Targeting ../opencv_features2d/SIFT.java
 
 

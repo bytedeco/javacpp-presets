@@ -22,30 +22,50 @@ public class Context extends Pointer {
 
     public Context() { super((Pointer)null); allocate(); }
     private native void allocate();
+    /** @deprecated */
     public Context(int dtype) { super((Pointer)null); allocate(dtype); }
     private native void allocate(int dtype);
     public Context(@Const @ByRef Context c) { super((Pointer)null); allocate(c); }
     private native void allocate(@Const @ByRef Context c);
     public native @ByRef @Name("operator =") Context put(@Const @ByRef Context c);
 
+    /** @deprecated */
     public native @Cast("bool") boolean create();
+    /** @deprecated */
     public native @Cast("bool") boolean create(int dtype);
+
     public native @Cast("size_t") long ndevices();
-    public native @Const @ByRef Device device(@Cast("size_t") long idx);
+    public native @ByRef Device device(@Cast("size_t") long idx);
     public native @ByVal Program getProg(@Const @ByRef ProgramSource prog,
                         @Str BytePointer buildopt, @Str BytePointer errmsg);
     public native @ByVal Program getProg(@Const @ByRef ProgramSource prog,
                         @Str String buildopt, @Str String errmsg);
     public native void unloadProg(@ByRef Program prog);
 
+
+    /** Get thread-local OpenCL context (initialize if necessary) */
+// #if 0  // OpenCV 5.0
+// #else
     public static native @ByRef Context getDefault(@Cast("bool") boolean initialize/*=true*/);
     public static native @ByRef Context getDefault();
+// #endif
+
+    /** @return cl_context value */
     public native Pointer ptr();
 
-    
 
     public native @Cast("bool") boolean useSVM();
     public native void setUseSVM(@Cast("bool") boolean enabled);
+
+    /**
+     * @param context OpenCL handle (cl_context). clRetainContext() is called on success
+     */
+    public static native @ByVal Context fromHandle(Pointer context);
+    public static native @ByVal Context fromDevice(@Const @ByRef Device device);
+    public static native @ByVal Context create(@StdString BytePointer configuration);
+    public static native @ByVal Context create(@StdString String configuration);
+
+    public native void release();
 
     @Opaque public static class Impl extends Pointer {
         /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -54,6 +74,8 @@ public class Context extends Pointer {
         public Impl(Pointer p) { super(p); }
     }
     public native Impl getImpl();
+    public native @Cast("bool") boolean empty();
+// TODO OpenCV 5.0
 //protected:
     public native Impl p(); public native Context p(Impl setter);
 }

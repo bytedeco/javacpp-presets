@@ -1,5 +1,5 @@
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index bd7114bd0..672d92a44 100644
+index 853651ac5..b3aa88b17 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
 @@ -860,8 +860,8 @@ if (WIN32)
@@ -41,7 +41,7 @@ index 79a2abc2e..a742571e9 100644
 +  return (jstring)metadataJava;
  }
 diff --git a/onnxruntime/core/framework/provider_bridge_ort.cc b/onnxruntime/core/framework/provider_bridge_ort.cc
-index 425d24b65..887db9348 100644
+index 425d24b65..9b119241e 100644
 --- a/onnxruntime/core/framework/provider_bridge_ort.cc
 +++ b/onnxruntime/core/framework/provider_bridge_ort.cc
 @@ -610,9 +610,24 @@ struct ProviderHostImpl : ProviderHost {
@@ -806,16 +806,14 @@ index 8173855da..c2bfda9f9 100644
  #include "core/providers/dnnl/dnnl_fwd.h"
  #include "core/providers/dnnl/dnnl_execution_provider.h"
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index b24cf6bcb..b7a48cb4d 100755
+index a2629ff63..0ac396981 100755
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -569,9 +569,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
+@@ -579,7 +579,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
          "-Donnxruntime_BUILD_WINML_TESTS=" + (
              "OFF" if args.skip_winml_tests else "ON"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
--        "-Donnxruntime_DEV_MODE=" + (
--            "OFF" if args.use_acl or args.use_armnn or args.use_winml or
--            (args.ios and is_macOS()) else "ON"),
+-        "-Donnxruntime_DEV_MODE=" + use_dev_mode(args),
 +        "-Donnxruntime_DEV_MODE=OFF",
 +        "-Donnxruntime_ENABLE_LTO=OFF",
 +        "-Donnxruntime_BUILD_UNIT_TESTS=OFF",

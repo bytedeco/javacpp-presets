@@ -15,7 +15,7 @@ public class cpu_features extends org.bytedeco.cpu_features.presets.cpu_features
 
 // Parsed from cpu_features/cpu_features_macros.h
 
-// Copyright 2017 Google Inc.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -94,6 +94,10 @@ public class cpu_features extends org.bytedeco.cpu_features.presets.cpu_features
 
 // #if (defined(_WIN64) || defined(_WIN32))
 // #define CPU_FEATURES_OS_WINDOWS
+// #endif
+
+// #if (defined(__apple__) || defined(__APPLE__) || defined(__MACH__))
+// #define CPU_FEATURES_OS_DARWIN
 // #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +232,7 @@ public static final int CPU_FEATURES_COMPILED_X86_AVX2 = 1;
 
 // Parsed from cpu_features/cpu_features_cache_info.h
 
-// Copyright 2017 Google Inc.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -274,7 +278,7 @@ public static final int CPU_FEATURES_MAX_CACHE_LEVEL = 10;
 
 // Parsed from cpu_features/internal/hwcaps.h
 
-// Copyright 2017 Google Inc.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -293,7 +297,9 @@ public static final int CPU_FEATURES_MAX_CACHE_LEVEL = 10;
 // #ifndef CPU_FEATURES_INCLUDE_INTERNAL_HWCAPS_H_
 // #define CPU_FEATURES_INCLUDE_INTERNAL_HWCAPS_H_
 
+// #include <stdbool.h>
 // #include <stdint.h>
+
 // #include "cpu_features/cpu_features_macros.h"
 
 // To avoid depending on the linux kernel we reproduce the architecture specific
@@ -440,6 +446,7 @@ public static final int PPC_FEATURE2_HTM_NO_SUSPEND = 0x00080000;
 
 
 @Namespace("cpu_features") public static native @ByVal HardwareCapabilities CpuFeatures_GetHardwareCapabilities();
+
 // Targeting ../PlatformType.java
 
 
@@ -455,7 +462,7 @@ public static final int PPC_FEATURE2_HTM_NO_SUSPEND = 0x00080000;
 
 // Parsed from cpu_features/cpuinfo_aarch64.h
 
-// Copyright 2017 Google Inc.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -472,8 +479,8 @@ public static final int PPC_FEATURE2_HTM_NO_SUSPEND = 0x00080000;
 // #ifndef CPU_FEATURES_INCLUDE_CPUINFO_AARCH64_H_
 // #define CPU_FEATURES_INCLUDE_CPUINFO_AARCH64_H_
 
-// #include "cpu_features_macros.h"
 // #include "cpu_features_cache_info.h"
+// #include "cpu_features_macros.h"
 // Targeting ../Aarch64Features.java
 
 
@@ -554,7 +561,7 @@ public static final int
 
 // Parsed from cpu_features/cpuinfo_arm.h
 
-// Copyright 2017 Google Inc.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -572,8 +579,9 @@ public static final int
 // #define CPU_FEATURES_INCLUDE_CPUINFO_ARM_H_
 
 // #include <stdint.h>  // uint32_t
-// #include "cpu_features_macros.h"
+
 // #include "cpu_features_cache_info.h"
+// #include "cpu_features_macros.h"
 // Targeting ../ArmFeatures.java
 
 
@@ -636,7 +644,7 @@ public static final int
 
 // Parsed from cpu_features/cpuinfo_mips.h
 
-// Copyright 2017 Google Inc.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -653,8 +661,8 @@ public static final int
 // #ifndef CPU_FEATURES_INCLUDE_CPUINFO_MIPS_H_
 // #define CPU_FEATURES_INCLUDE_CPUINFO_MIPS_H_
 
-// #include "cpu_features_macros.h"
 // #include "cpu_features_cache_info.h"
+// #include "cpu_features_macros.h"
 // Targeting ../MipsFeatures.java
 
 
@@ -705,8 +713,8 @@ public static final int
 // #ifndef CPU_FEATURES_INCLUDE_CPUINFO_PPC_H_
 // #define CPU_FEATURES_INCLUDE_CPUINFO_PPC_H_
 
-// #include "cpu_features_macros.h"
 // #include "cpu_features_cache_info.h"
+// #include "cpu_features_macros.h"
 // #include "internal/hwcaps.h"
 // Targeting ../PPCFeatures.java
 
@@ -785,7 +793,7 @@ public static final int
 
 // Parsed from cpu_features/cpuinfo_x86.h
 
-// Copyright 2017 Google Inc.
+// Copyright 2017 Google LLC
 // Copyright 2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

@@ -37,9 +37,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/version.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
             "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
-            link = "opencv_dnn@.4.4"),
+            link = "opencv_dnn@.4.5"),
         @Platform(value = "ios", preload = "libopencv_dnn"),
-        @Platform(value = "windows", link = "opencv_dnn440")},
+        @Platform(value = "windows", link = "opencv_dnn450")},
     target = "org.bytedeco.opencv.opencv_dnn",
     global = "org.bytedeco.opencv.global.opencv_dnn"
 )

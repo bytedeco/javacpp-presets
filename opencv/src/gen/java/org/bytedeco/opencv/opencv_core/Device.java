@@ -181,4 +181,18 @@ public class Device extends Pointer {
     public native @Cast("size_t") long profilingTimerResolution();
 
     public static native @Const @ByRef Device getDefault();
+
+    /**
+     * @param d OpenCL handle (cl_device_id). clRetainDevice() is called on success.
+     */
+    public static native @ByVal Device fromHandle(Pointer d);
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl getImpl();
+    public native @Cast("bool") boolean empty();
 }
