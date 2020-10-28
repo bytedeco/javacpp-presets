@@ -63,6 +63,15 @@ Further, in the case of Android, the JavaCPP Presets also rely on:
 
  * Android SDK API 21 or newer  http://developer.android.com/sdk/
 
+Usage
+-------------------
+Javacpp presents repo documentations have a two layer concept.This documentation readme you are reading is the upper layer,or simply Javacpp layer.
+However,each packages have some extra notes about usages,setup etc.As not every project have the same code quality,style,layout.
+Each (folder or packages)will have a respective readme.
+Once again:
+This document is the upper layer,(Javacpp-presents).It will mentions about javacpp wide layer settings like java runtime.Build,etc...
+The package is the lower layer,(eg.Opencv).It will mention about code,pom setting,required binary,package related documentations.
+
 
 Manual Installation
 -------------------
