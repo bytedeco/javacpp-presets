@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>openblas</artifactId>
-  <version>0.3.10-${project.parent.version}</version>
+  <version>0.3.12-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenBLAS</name>
 
   <properties>

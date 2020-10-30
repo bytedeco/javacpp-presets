@@ -47,6 +47,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/types.h",
                 "parquet/deprecated_io.h",
                 "parquet/exception.h",
+                "parquet/level_comparison.h",
+                "parquet/level_conversion.h",
                 "parquet/schema.h",
                 "parquet/column_reader.h",
                 "parquet/column_scanner.h",
@@ -61,7 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/arrow/reader.h",
                 "parquet/arrow/writer.h",
             },
-            link = "parquet@.100"
+            link = "parquet@.200"
         ),
     },
     target = "org.bytedeco.parquet",
@@ -71,7 +73,8 @@ public class parquet implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "parquet"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("PARQUET_EXPORT", "PARQUET_TEMPLATE_EXPORT", "PARQUET_NORETURN", "PARQUET_DISALLOW_COPY_AND_ASSIGN").cppTypes().annotations())
+        infoMap.put(new Info("PARQUET_EXPORT", "PARQUET_TEMPLATE_EXPORT", "PARQUET_NORETURN", "PARQUET_DISALLOW_COPY_AND_ASSIGN",
+                             "BEGIN_PARQUET_CATCH_EXCEPTIONS", "END_PARQUET_CATCH_EXCEPTIONS").cppTypes().annotations())
                .put(new Info("parquet::DEFAULT_BUFFER_SIZE").javaText("@Namespace(\"parquet\") @MemberGetter public static native @Cast(\"int64_t\") long DEFAULT_BUFFER_SIZE();"))
                .put(new Info("parquet::DEFAULT_USE_BUFFERED_STREAM").javaText("@Namespace(\"parquet\") @MemberGetter public static native @Cast(\"bool\") boolean DEFAULT_USE_BUFFERED_STREAM();"))
 
@@ -89,7 +92,8 @@ public class parquet implements InfoMapper {
                .put(new Info("std::map<parquet::Encoding::type,int32_t>").pointerTypes("EncodingIntMap").define())
                .put(new Info("std::map<std::string,std::shared_ptr<parquet::ColumnDecryptionProperties> >").pointerTypes("ColumnDecryptionPropertiesStringMap").define())
                .put(new Info("arrow::Result<std::shared_ptr<parquet::Buffer> >").pointerTypes("BufferResult"))
-               .put(new Info("parquet::Encryptor", "parquet::FooterSigningEncryptor", "parquet::OutputStream", "parquet::internal::GetReadCodec", "parquet::internal::GetWriteCodec").skip())
+               .put(new Info("parquet::Encryptor", "parquet::FooterSigningEncryptor", "parquet::OutputStream",
+                             "parquet::internal::GetReadCodec", "parquet::internal::GetWriteCodec", "parquet::internal::FindMinMax").skip())
         ;
     }
 }
