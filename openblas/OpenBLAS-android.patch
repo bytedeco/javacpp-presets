@@ -1,6 +1,6 @@
-diff -ruN OpenBLAS-0.3.10/common.h OpenBLAS-0.3.10-android/common.h
---- OpenBLAS-0.3.10/common.h	2020-06-15 05:03:04.000000000 +0900
-+++ OpenBLAS-0.3.10-android/common.h	2020-06-22 13:24:57.800095510 +0900
+diff -ruN OpenBLAS-0.3.12/common.h OpenBLAS-0.3.12-android/common.h
+--- OpenBLAS-0.3.12/common.h	2020-10-24 20:03:28.000000000 +0900
++++ OpenBLAS-0.3.12-android/common.h	2020-10-27 15:41:57.656517104 +0900
 @@ -102,9 +102,9 @@
  #ifdef OS_ANDROID
  #define NO_SYSV_IPC
@@ -13,15 +13,17 @@ diff -ruN OpenBLAS-0.3.10/common.h OpenBLAS-0.3.10-android/common.h
  #endif
  
  #ifdef OS_HAIKU
-diff -ruN OpenBLAS-0.3.10/Makefile.system OpenBLAS-0.3.10-android/Makefile.system
---- OpenBLAS-0.3.10/Makefile.system	2020-06-15 05:03:04.000000000 +0900
-+++ OpenBLAS-0.3.10-android/Makefile.system	2020-06-22 13:28:28.192347596 +0900
-@@ -1186,8 +1186,10 @@
+diff -ruN OpenBLAS-0.3.12/Makefile.system OpenBLAS-0.3.12-android/Makefile.system
+--- OpenBLAS-0.3.12/Makefile.system	2020-10-24 20:03:28.000000000 +0900
++++ OpenBLAS-0.3.12-android/Makefile.system	2020-10-27 15:42:49.156575704 +0900
+@@ -1278,10 +1278,10 @@
  
  include $(TOPDIR)/Makefile.$(ARCH)
  
+-ifneq ($(C_COMPILER), PGI)
 +ifneq ($(TOPDIR),.)
  CCOMMON_OPT     += -UASMNAME -UASMFNAME -UNAME -UCNAME -UCHAR_NAME -UCHAR_CNAME
+-endif
  CCOMMON_OPT	+= -DASMNAME=$(FU)$(*F) -DASMFNAME=$(FU)$(*F)$(BU) -DNAME=$(*F)$(BU) -DCNAME=$(*F) -DCHAR_NAME=\"$(*F)$(BU)\" -DCHAR_CNAME=\"$(*F)\"
 +endif
  

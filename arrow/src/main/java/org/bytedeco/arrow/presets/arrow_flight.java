@@ -47,7 +47,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/flight/server_auth.h",
                 "arrow/flight/server.h",
             },
-            link = "arrow_flight@.100",
+            link = "arrow_flight@.200",
             preload = {"libcrypto-1_1", "libssl-1_1"}
         ),
     },

@@ -119,13 +119,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
- * Arrow 1.0.x  https://arrow.apache.org/install/
+ * Arrow 2.0.0  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.3.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 1.6.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.10  http://www.openblas.net/
+ * OpenBLAS 0.3.12  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html

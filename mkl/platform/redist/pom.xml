@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl-platform-redist</artifactId>
-  <version>2020.3-${project.parent.version}</version>
+  <version>2020.4-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Redist for MKL</name>
 
   <properties>

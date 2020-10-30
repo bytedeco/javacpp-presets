@@ -107,7 +107,7 @@ fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16896/w_mkl_2020.3.279.exe"
+       curl -L  -o mkl.exe "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/17173/w_mkl_2020.4.311.exe"
        ./mkl.exe --s --x --f .
        ./install.exe install --output=mkllog.txt -eula=accept
        sleep 60
@@ -154,34 +154,8 @@ cp -a "/c/Python37-x64" "/C/Program Files/Python37"
 cp -a "/c/Python38-x64" "/C/Program Files/Python38"
 
 # install an older less buggy version of GCC
-curl -L -o mingw-w64-i686-gcc-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-gcc-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-gcc-ada-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-gcc-ada-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-gcc-objc-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-gcc-objc-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-gcc-libs-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-gcc-libs-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/i686/mingw-w64-i686-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-gcc-libs-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-gcc-libs-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz https://mirror.yandex.ru/mirrors/msys2/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
+/c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1CmH1Eq0LoAQQ5mWaqYiU9kYOfMGjLXlz /c/Downloads/mingw-w64-old.tar
+tar xvf /c/Downloads/mingw-w64-old.tar
 pacman -U --noconfirm *.pkg.tar.xz
 
 # get rid of some stuff we don't use to avoid running out of disk space and that may actually interfere with our builds

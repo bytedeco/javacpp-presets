@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>fac</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Fac</exec.mainClass>
     </properties>
@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>10.0.1-1.5.4</version>
+            <version>11.0.0-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

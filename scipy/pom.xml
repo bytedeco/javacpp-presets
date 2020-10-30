@@ -52,7 +52,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.10-${project.parent.version}</version>
+            <version>0.3.12-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>

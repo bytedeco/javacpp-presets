@@ -57,7 +57,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/dataset/file_parquet.h",
                 "arrow/dataset/filter.h",
             },
-            link = "arrow_dataset@.100"
+            link = "arrow_dataset@.200"
         ),
     },
     target = "org.bytedeco.arrow_dataset",
@@ -79,6 +79,7 @@ public class arrow_dataset implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::Expression> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::FileSystemDataset> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::FileFragment> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::FileWriter> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::Fragment> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::Scanner> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::ScannerBuilder> > >",
@@ -87,7 +88,7 @@ public class arrow_dataset implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::Source> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::SourceFactory> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::UnionDataset> > >",
-                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::WriteTask> > >",
+//                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::dataset::WriteTask> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<std::shared_ptr<arrow::dataset::Fragment> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::vector<std::unique_ptr<arrow::dataset::ScanTask> > > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> > > >",
@@ -119,6 +120,7 @@ public class arrow_dataset implements InfoMapper {
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::Expression> >").pointerTypes("ExpressionResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::FileSystemDataset> >").pointerTypes("FileSystemDatasetResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::FileFragment> >").pointerTypes("FileFragmentResult").define())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::FileWriter> >").pointerTypes("FileWriterResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::Fragment> >").pointerTypes("FragmentResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::Scanner> >").pointerTypes("ScannerResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::ScannerBuilder> >").pointerTypes("ScannerBuilderResult").define())
@@ -132,7 +134,7 @@ public class arrow_dataset implements InfoMapper {
 //               .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::Source> >").pointerTypes("SourceResult").define())
 //               .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::SourceFactory> >").pointerTypes("SourceFactoryResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::UnionDataset> >").pointerTypes("UnionDatasetResult").define())
-               .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::WriteTask> >").pointerTypes("WriteTaskResult").define())
+//               .put(new Info("arrow::Result<std::shared_ptr<arrow::dataset::WriteTask> >").pointerTypes("WriteTaskResult").define())
                .put(new Info("arrow::Result<arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> > >", "arrow::Result<arrow::dataset::FragmentIterator>").pointerTypes("FragmentIteratorResult").define())
                .put(new Info("arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> >").pointerTypes("FragmentIterator").define())
                .put(new Info("arrow::Iterator<std::shared_ptr<arrow::dataset::Fragment> >::RangeIterator").pointerTypes("FragmentIterator.RangeIterator").define())

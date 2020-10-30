@@ -30,7 +30,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.10-${project.parent.version}</version>
+      <version>0.3.12-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -86,7 +86,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.10-${project.parent.version}</version>
+            <version>0.3.12-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -97,7 +97,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.10-${project.parent.version}</version>
+            <version>0.3.12-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->
@@ -311,7 +311,7 @@
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>openblas</artifactId>
-                <version>0.3.10-${project.parent.version}</version>
+                <version>0.3.12-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>

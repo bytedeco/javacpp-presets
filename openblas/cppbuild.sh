@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.10
+OPENBLAS_VERSION=0.3.12
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -25,6 +25,9 @@ cp lapack-netlib/LAPACKE/include/*.h ../include
 
 # remove broken cross-compiler workaround on Mac
 sedinplace '/if (($os eq "Darwin")/,/}/d' c_check ../OpenBLAS-$OPENBLAS_VERSION-nolapack/c_check
+
+# fix AVX512 on Linux
+sedinplace 's/_mm512_abs_pd(_mm512_load_pd/_mm512_abs_pd((__m512)_mm512_load_pd/g' kernel/x86_64/dasum_microk_skylakex-2.c ../OpenBLAS-$OPENBLAS_VERSION-nolapack/kernel/x86_64/dasum_microk_skylakex-2.c
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export FEXTRALIB="-lgfortran"

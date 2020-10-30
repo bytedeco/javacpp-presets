@@ -139,7 +139,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>arrow-platform</artifactId>
-      <version>1.0.1-${project.version}</version>
+      <version>2.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -154,7 +154,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-platform</artifactId>
-      <version>2020.3-${project.version}</version>
+      <version>2020.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -169,7 +169,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.10-${project.version}</version>
+      <version>0.3.12-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
