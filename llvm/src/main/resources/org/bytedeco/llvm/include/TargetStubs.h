@@ -48,6 +48,7 @@ LLVM_TARGET(Sparc)
 LLVM_TARGET(SystemZ)
 LLVM_TARGET(WebAssembly)
 LLVM_TARGET(X86)
+LLVM_TARGET(AVR)
 
 // XCore Target - Does not ship AsmParser
 void LLVMInitializeXCoreTargetInfo(void);
@@ -66,7 +67,6 @@ void LLVMInitializeNVPTXAsmPrinter(void);
 JavaCPP Presets does currently not build experimental targets.
 
 LLVM_TARGET(ARC)
-LLVM_TARGET(AVR)
 LLVM_TARGET(VE)
 */
 #undef LLVM_TARGET
