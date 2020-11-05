@@ -37,6 +37,7 @@ void LLVMInitialize##TargetName##Disassembler(void);
 LLVM_TARGET(AArch64)
 LLVM_TARGET(AMDGPU)
 LLVM_TARGET(ARM)
+LLVM_TARGET(AVR)
 LLVM_TARGET(BPF)
 LLVM_TARGET(Hexagon)
 LLVM_TARGET(Lanai)
@@ -48,7 +49,6 @@ LLVM_TARGET(Sparc)
 LLVM_TARGET(SystemZ)
 LLVM_TARGET(WebAssembly)
 LLVM_TARGET(X86)
-LLVM_TARGET(AVR)
 
 // XCore Target - Does not ship AsmParser
 void LLVMInitializeXCoreTargetInfo(void);
