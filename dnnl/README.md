@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * DNNL 1.6.4  https://01.org/dnnl
+ * DNNL 1.7  https://01.org/dnnl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>1.6.4-1.5.5-SNAPSHOT</version>
+            <version>1.7-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

@@ -210,7 +210,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      hold: {@code zero\_points.size() = \prod\limits_{d \in mask}
      *      argument.dims[d].} If the zero points are not known at the time
      *      of the call, this vector must contain a single
-     *      #DNNL_RUNTIME_F32_VAL value and the zero points must be passed at
+     *      #DNNL_RUNTIME_S32_VAL value and the zero points must be passed at
      *      execution time as an argument with index
      *      #DNNL_ARG_ATTR_ZERO_POINTS. */
     
@@ -257,18 +257,14 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *  floating-point data to unsigned integer and must be passed to the RNN
      *  primitive using attributes.
      * 
-     *  The quantization formula is {@code scale * (data + shift)}.
-     * 
-     *  \note
-     *      Quantization scale and shift are common for src_layer, src_iter,
-     *      dst_iter, and dst_layer.
+     *  The quantization formula is {@code scale * data + shift}.
      * 
      *  Example usage:
      *  <pre>{@code
      *      // RNN parameters
      *      int l = 2, t = 2, mb = 32, sic = 32, slc = 32, dic = 32, dlc = 32;
      *      // Activations quantization parameters
-     *      float scale = 2.0f, shift = 0.5f;
+     *      float scale = 63.f, shift = 64.f;
      * 
      *      primitive_attr attr;
      * 
@@ -279,6 +275,10 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      vanilla_rnn_forward::desc rnn_d(/* arguments * /);
      *      vanilla_rnn_forward::primitive_desc rnn_d(rnn_d, attr, engine);
      *  }</pre>
+     * 
+     *  \note
+     *      Quantization scale and shift are common for src_layer, src_iter,
+     *      dst_iter, and dst_layer.
      * 
      *  @param scale The value to scale the data by.
      *  @param shift The value to shift the data by. */

@@ -1,6 +1,6 @@
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/bincount_op_gpu.cu.cc tensorflow-1.15.3-cuda11/tensorflow/core/kernels/bincount_op_gpu.cu.cc
---- tensorflow-1.15.3/tensorflow/core/kernels/bincount_op_gpu.cu.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/bincount_op_gpu.cu.cc	2020-06-13 08:56:51.785446100 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/bincount_op_gpu.cu.cc tensorflow-1.15.4-cuda11/tensorflow/core/kernels/bincount_op_gpu.cu.cc
+--- tensorflow-1.15.4/tensorflow/core/kernels/bincount_op_gpu.cu.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/bincount_op_gpu.cu.cc	2020-11-06 15:13:40.717418966 +0900
 @@ -18,7 +18,7 @@
  #define EIGEN_USE_GPU
  
@@ -10,9 +10,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/bincount_op_gpu.cu.cc tensor
  #elif TENSORFLOW_USE_ROCM
  #include "external/rocprim_archive/hipcub/include/hipcub/hipcub.hpp"
  #endif
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/BUILD tensorflow-1.15.3-cuda11/tensorflow/core/kernels/BUILD
---- tensorflow-1.15.3/tensorflow/core/kernels/BUILD	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/BUILD	2020-06-13 08:53:43.025172700 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/BUILD tensorflow-1.15.4-cuda11/tensorflow/core/kernels/BUILD
+--- tensorflow-1.15.4/tensorflow/core/kernels/BUILD	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/BUILD	2020-11-06 15:13:40.721418973 +0900
 @@ -1339,8 +1339,6 @@
      ],
      deps = if_cuda_or_rocm([
@@ -137,7 +137,7 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/BUILD tensorflow-1.15.3-cuda
      ]) + if_rocm([
          "@rocprim_archive//:rocprim",
      ]),
-@@ -5637,8 +5626,6 @@
+@@ -5655,8 +5644,6 @@
          "//tensorflow/core:lib_internal",
      ] + if_cuda_or_rocm([
          ":reduction_ops",
@@ -146,9 +146,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/BUILD tensorflow-1.15.3-cuda
      ]) + if_rocm([
          "@rocprim_archive//:rocprim",
      ]),
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/cuda_sparse.cc tensorflow-1.15.3-cuda11/tensorflow/core/kernels/cuda_sparse.cc
---- tensorflow-1.15.3/tensorflow/core/kernels/cuda_sparse.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/cuda_sparse.cc	2020-06-13 08:56:52.055022000 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/cuda_sparse.cc tensorflow-1.15.4-cuda11/tensorflow/core/kernels/cuda_sparse.cc
+--- tensorflow-1.15.4/tensorflow/core/kernels/cuda_sparse.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/cuda_sparse.cc	2020-11-06 15:13:40.723418976 +0900
 @@ -188,7 +188,7 @@
  // to immutable arguments, while the actual headers have them as expected.
  // Check the actual declarations in the cusparse.h header file.
@@ -167,9 +167,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/cuda_sparse.cc tensorflow-1.
  template <typename Scalar, typename SparseFn>
  static inline Status Gtsv2Impl(SparseFn op, cusparseHandle_t cusparse_handle,
                                 int m, int n, const Scalar* dl, const Scalar* d,
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc tensorflow-1.15.3-cuda11/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc
---- tensorflow-1.15.3/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc	2020-06-13 08:56:52.819630500 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc tensorflow-1.15.4-cuda11/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc
+--- tensorflow-1.15.4/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.cc	2020-11-06 15:13:40.724418977 +0900
 @@ -36,10 +36,10 @@
  #define EIGEN_USE_GPU
  
@@ -185,9 +185,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/dynamic_partition_op_gpu.cu.
  #elif TENSORFLOW_USE_ROCM
  #include "external/rocprim_archive/hipcub/include/hipcub/hipcub.hpp"
  #endif
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/histogram_op_gpu.cu.cc tensorflow-1.15.3-cuda11/tensorflow/core/kernels/histogram_op_gpu.cu.cc
---- tensorflow-1.15.3/tensorflow/core/kernels/histogram_op_gpu.cu.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/histogram_op_gpu.cu.cc	2020-06-13 08:56:53.089243000 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/histogram_op_gpu.cu.cc tensorflow-1.15.4-cuda11/tensorflow/core/kernels/histogram_op_gpu.cu.cc
+--- tensorflow-1.15.4/tensorflow/core/kernels/histogram_op_gpu.cu.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/histogram_op_gpu.cu.cc	2020-11-06 15:13:40.724418977 +0900
 @@ -19,7 +19,7 @@
  
  #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
@@ -197,9 +197,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/histogram_op_gpu.cu.cc tenso
  #elif TENSORFLOW_USE_ROCM
  #include "external/rocprim_archive/hipcub/include/hipcub/hipcub.hpp"
  #endif
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/non_max_suppression_op.cu.cc tensorflow-1.15.3-cuda11/tensorflow/core/kernels/non_max_suppression_op.cu.cc
---- tensorflow-1.15.3/tensorflow/core/kernels/non_max_suppression_op.cu.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/non_max_suppression_op.cu.cc	2020-06-13 08:56:53.421364500 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/non_max_suppression_op.cu.cc tensorflow-1.15.4-cuda11/tensorflow/core/kernels/non_max_suppression_op.cu.cc
+--- tensorflow-1.15.4/tensorflow/core/kernels/non_max_suppression_op.cu.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/non_max_suppression_op.cu.cc	2020-11-06 15:13:40.725418979 +0900
 @@ -19,9 +19,9 @@
  
  #include "absl/strings/str_cat.h"
@@ -213,9 +213,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/non_max_suppression_op.cu.cc
  #include "tensorflow/core/framework/numeric_types.h"
  #include "tensorflow/core/framework/op_kernel.h"
  #include "tensorflow/core/framework/tensor_types.h"
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/reduction_gpu_kernels.cu.h tensorflow-1.15.3-cuda11/tensorflow/core/kernels/reduction_gpu_kernels.cu.h
---- tensorflow-1.15.3/tensorflow/core/kernels/reduction_gpu_kernels.cu.h	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/reduction_gpu_kernels.cu.h	2020-06-13 08:54:57.862648000 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/reduction_gpu_kernels.cu.h tensorflow-1.15.4-cuda11/tensorflow/core/kernels/reduction_gpu_kernels.cu.h
+--- tensorflow-1.15.4/tensorflow/core/kernels/reduction_gpu_kernels.cu.h	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/reduction_gpu_kernels.cu.h	2020-11-06 15:13:40.727418982 +0900
 @@ -24,11 +24,11 @@
  
  #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
@@ -233,9 +233,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/reduction_gpu_kernels.cu.h t
  #include "third_party/gpus/cuda/include/cuComplex.h"
  #elif TENSORFLOW_USE_ROCM
  #include "external/rocprim_archive/hipcub/include/hipcub/hipcub.hpp"
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/scan_ops_gpu.h tensorflow-1.15.3-cuda11/tensorflow/core/kernels/scan_ops_gpu.h
---- tensorflow-1.15.3/tensorflow/core/kernels/scan_ops_gpu.h	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/scan_ops_gpu.h	2020-06-13 08:54:50.786563200 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/scan_ops_gpu.h tensorflow-1.15.4-cuda11/tensorflow/core/kernels/scan_ops_gpu.h
+--- tensorflow-1.15.4/tensorflow/core/kernels/scan_ops_gpu.h	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/scan_ops_gpu.h	2020-11-06 15:13:40.728418984 +0900
 @@ -25,11 +25,11 @@
  #endif  // CUDA_VERSION >= 9000
  
@@ -253,9 +253,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/scan_ops_gpu.h tensorflow-1.
  #include "third_party/gpus/cuda/include/cuComplex.h"
  #elif TENSORFLOW_USE_ROCM
  #include "external/rocprim_archive/hipcub/include/hipcub/hipcub.hpp"
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/topk_op_gpu.h tensorflow-1.15.3-cuda11/tensorflow/core/kernels/topk_op_gpu.h
---- tensorflow-1.15.3/tensorflow/core/kernels/topk_op_gpu.h	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/topk_op_gpu.h	2020-06-13 08:54:50.886825000 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/topk_op_gpu.h tensorflow-1.15.4-cuda11/tensorflow/core/kernels/topk_op_gpu.h
+--- tensorflow-1.15.4/tensorflow/core/kernels/topk_op_gpu.h	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/topk_op_gpu.h	2020-11-06 15:13:40.729418985 +0900
 @@ -23,9 +23,9 @@
  #include <vector>
  
@@ -269,9 +269,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/topk_op_gpu.h tensorflow-1.1
  #include "tensorflow/core/framework/op_kernel.h"
  #include "tensorflow/core/framework/register_types.h"
  #include "tensorflow/core/framework/tensor.h"
-diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/where_op_gpu.cu.h tensorflow-1.15.3-cuda11/tensorflow/core/kernels/where_op_gpu.cu.h
---- tensorflow-1.15.3/tensorflow/core/kernels/where_op_gpu.cu.h	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/core/kernels/where_op_gpu.cu.h	2020-06-13 08:54:57.878272200 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/core/kernels/where_op_gpu.cu.h tensorflow-1.15.4-cuda11/tensorflow/core/kernels/where_op_gpu.cu.h
+--- tensorflow-1.15.4/tensorflow/core/kernels/where_op_gpu.cu.h	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/core/kernels/where_op_gpu.cu.h	2020-11-06 15:13:40.730418987 +0900
 @@ -22,10 +22,10 @@
  
  #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
@@ -287,9 +287,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/core/kernels/where_op_gpu.cu.h tensorflow
  #elif TENSORFLOW_USE_ROCM
  #include "external/rocprim_archive/hipcub/include/hipcub/hipcub.hpp"
  #endif
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cublas_10_0.inc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cublas_10_0.inc
---- tensorflow-1.15.3/tensorflow/stream_executor/cuda/cublas_10_0.inc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cublas_10_0.inc	2020-06-13 08:52:31.229682000 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/cuda/cublas_10_0.inc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cublas_10_0.inc
+--- tensorflow-1.15.4/tensorflow/stream_executor/cuda/cublas_10_0.inc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cublas_10_0.inc	2020-11-06 15:13:40.733418992 +0900
 @@ -2227,9 +2227,9 @@
                                                        void *C,
                                                        cudaDataType Ctype,
@@ -326,9 +326,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cublas_10_0.inc tens
    static auto func_ptr = LoadSymbol<FuncPtr>("cublasGemmStridedBatchedEx");
    if (!func_ptr) return GetSymbolNotFoundError();
    return func_ptr(handle, transa, transb, m, n, k, alpha, A, Atype, lda, strideA, B, Btype, ldb, strideB, beta, C, Ctype, ldc, strideC, batchCount, computeType, algo);
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_blas.cc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cuda_blas.cc
---- tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_blas.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cuda_blas.cc	2020-06-13 08:56:59.864015200 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/cuda/cuda_blas.cc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cuda_blas.cc
+--- tensorflow-1.15.4/tensorflow/stream_executor/cuda/cuda_blas.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cuda_blas.cc	2020-11-06 15:13:40.734418993 +0900
 @@ -1944,7 +1944,7 @@
      return false;
    }
@@ -383,9 +383,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_blas.cc tensorf
        if (ok) {
          return true;
        }
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_dnn.cc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cuda_dnn.cc
---- tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_dnn.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cuda_dnn.cc	2020-06-13 08:56:59.879636400 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/cuda/cuda_dnn.cc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cuda_dnn.cc
+--- tensorflow-1.15.4/tensorflow/stream_executor/cuda/cuda_dnn.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cuda_dnn.cc	2020-11-06 15:13:40.737418998 +0900
 @@ -1208,7 +1208,7 @@
    cudnnRNNMode_t mode;
    cudnnRNNAlgo_t algo;
@@ -454,9 +454,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_dnn.cc tensorfl
  }
  
  port::StatusOr<DeviceMemory<uint8>> AllocateCudnnConvolutionForwardWorkspace(
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_driver.cc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cuda_driver.cc
---- tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_driver.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cuda_driver.cc	2020-06-13 08:56:59.879636400 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/cuda/cuda_driver.cc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cuda_driver.cc
+--- tensorflow-1.15.4/tensorflow/stream_executor/cuda/cuda_driver.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cuda_driver.cc	2020-11-06 15:13:40.738419000 +0900
 @@ -178,7 +178,7 @@
    // If we failed, reset cuda error status to avoid poisoning cuda streams.
    if (err != cudaSuccess) cudaGetLastError();
@@ -466,9 +466,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cuda_driver.cc tenso
    CHECK_EQ(is_host_ptr, points_to_host_memory) << absl::StreamFormat(
        "%s pointer is not actually on %s: %p", name, is_host_ptr ? "CPU" : "GPU",
        reinterpret_cast<const void*>(ptr));
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cudnn_7_6.inc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cudnn_7_6.inc
---- tensorflow-1.15.3/tensorflow/stream_executor/cuda/cudnn_7_6.inc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cudnn_7_6.inc	2020-06-13 08:52:31.251830000 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/cuda/cudnn_7_6.inc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cudnn_7_6.inc
+--- tensorflow-1.15.4/tensorflow/stream_executor/cuda/cudnn_7_6.inc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cudnn_7_6.inc	2020-11-06 15:13:40.739419001 +0900
 @@ -759,7 +759,7 @@
    if (!func_ptr) return GetSymbolNotFoundError();
    return func_ptr(handle, xDesc, x, wDesc, w, convDesc, yDesc, y, requestedAlgoCount, returnedAlgoCount, perfResults, workSpace, workSpaceSizeInBytes);
@@ -550,9 +550,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cudnn_7_6.inc tensor
      cudnnCTCLossAlgo_t algo, /* algorithm selected, supported now 0 and 1 */
      cudnnCTCLossDescriptor_t ctcLossDesc,
      void *workspace,              /* pointer to the workspace, in GPU memory */
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cudnn_stub.cc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cudnn_stub.cc
---- tensorflow-1.15.3/tensorflow/stream_executor/cuda/cudnn_stub.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cudnn_stub.cc	2020-06-13 08:56:59.910853200 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/cuda/cudnn_stub.cc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cudnn_stub.cc
+--- tensorflow-1.15.4/tensorflow/stream_executor/cuda/cudnn_stub.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cudnn_stub.cc	2020-11-06 15:13:40.740419003 +0900
 @@ -47,18 +47,18 @@
  cudnnStatus_t GetSymbolNotFoundError() { return CUDNN_STATUS_INTERNAL_ERROR; }
  }  // namespace
@@ -586,9 +586,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cudnn_stub.cc tensor
  #include "tensorflow/stream_executor/cuda/cudnn_7_6.inc"
 -#endif
 +//#endif
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cusparse_9_0.inc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cusparse_9_0.inc
---- tensorflow-1.15.3/tensorflow/stream_executor/cuda/cusparse_9_0.inc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/cuda/cusparse_9_0.inc	2020-06-13 08:52:31.251830000 +0900
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/cuda/cusparse_9_0.inc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cusparse_9_0.inc
+--- tensorflow-1.15.4/tensorflow/stream_executor/cuda/cusparse_9_0.inc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/cuda/cusparse_9_0.inc	2020-11-06 15:13:40.743419008 +0900
 @@ -128,7 +128,7 @@
    if (!func_ptr) return GetSymbolNotFoundError();
    return func_ptr(descrA, base);
@@ -751,10 +751,19 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/cuda/cusparse_9_0.inc ten
  cusparseStatus_t CUSPARSEAPI cusparseXcsr2bsrNnz(
      cusparseHandle_t handle, cusparseDirection_t dirA, int m, int n,
      const cusparseMatDescr_t descrA, const int *csrSortedRowPtrA,
-diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/platform/default/dso_loader.cc tensorflow-1.15.3-cuda11/tensorflow/stream_executor/platform/default/dso_loader.cc
---- tensorflow-1.15.3/tensorflow/stream_executor/platform/default/dso_loader.cc	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/tensorflow/stream_executor/platform/default/dso_loader.cc	2020-08-17 14:14:07.727590567 +0900
-@@ -81,11 +81,11 @@
+diff -ruN tensorflow-1.15.4/tensorflow/stream_executor/platform/default/dso_loader.cc tensorflow-1.15.4-cuda11/tensorflow/stream_executor/platform/default/dso_loader.cc
+--- tensorflow-1.15.4/tensorflow/stream_executor/platform/default/dso_loader.cc	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/tensorflow/stream_executor/platform/default/dso_loader.cc	2020-11-06 15:14:22.076484557 +0900
+@@ -73,7 +73,7 @@
+ }
+ 
+ port::StatusOr<void*> GetCudaRuntimeDsoHandle() {
+-  return GetDsoHandle("cudart", GetCudaVersion());
++  return GetDsoHandle("cudart", "11.0");
+ }
+ 
+ port::StatusOr<void*> GetCublasDsoHandle() {
+@@ -81,7 +81,7 @@
  }
  
  port::StatusOr<void*> GetCufftDsoHandle() {
@@ -763,11 +772,6 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/platform/default/dso_load
  }
  
  port::StatusOr<void*> GetCusolverDsoHandle() {
--  return GetDsoHandle("cusolver", GetCudaLibVersion());
-+  return GetDsoHandle("cusolver", "10");
- }
- 
- port::StatusOr<void*> GetCusparseDsoHandle() {
 @@ -93,7 +93,7 @@
  }
  
@@ -777,9 +781,9 @@ diff -ruN tensorflow-1.15.3/tensorflow/stream_executor/platform/default/dso_load
  }
  
  port::StatusOr<void*> GetCuptiDsoHandle() {
-diff -ruN tensorflow-1.15.3/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl tensorflow-1.15.3-cuda11/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl
---- tensorflow-1.15.3/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl	2020-06-13 08:59:25.687890600 +0900
+diff -ruN tensorflow-1.15.4/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl tensorflow-1.15.4-cuda11/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl
+--- tensorflow-1.15.4/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/third_party/gpus/crosstool/windows/msvc_wrapper_for_nvcc.py.tpl	2020-11-06 15:13:40.743419008 +0900
 @@ -143,7 +143,7 @@
    nvccopts += undefines
    nvccopts += defines
@@ -789,9 +793,9 @@ diff -ruN tensorflow-1.15.3/third_party/gpus/crosstool/windows/msvc_wrapper_for_
    nvccopts += ['-x', 'cu'] + opt + includes + out + ['-c'] + src_files
    # If we don't specify --keep-dir, nvcc will generate intermediate files under TEMP
    # Put them under NVCC_TEMP_DIR instead, then Bazel can ignore files under NVCC_TEMP_DIR during dependency check
-diff -ruN tensorflow-1.15.3/third_party/gpus/cuda_configure.bzl tensorflow-1.15.3-cuda11/third_party/gpus/cuda_configure.bzl
---- tensorflow-1.15.3/third_party/gpus/cuda_configure.bzl	2020-05-15 07:21:31.000000000 +0900
-+++ tensorflow-1.15.3-cuda11/third_party/gpus/cuda_configure.bzl	2020-06-13 08:52:31.267459300 +0900
+diff -ruN tensorflow-1.15.4/third_party/gpus/cuda_configure.bzl tensorflow-1.15.4-cuda11/third_party/gpus/cuda_configure.bzl
+--- tensorflow-1.15.4/third_party/gpus/cuda_configure.bzl	2020-09-22 10:53:53.000000000 +0900
++++ tensorflow-1.15.4-cuda11/third_party/gpus/cuda_configure.bzl	2020-11-06 15:13:40.744419009 +0900
 @@ -1053,8 +1053,28 @@
      copy_rules.append(make_copy_files_rule(
          repository_ctx,

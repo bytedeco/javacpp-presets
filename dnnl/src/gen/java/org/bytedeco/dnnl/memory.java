@@ -47,11 +47,11 @@ import static org.bytedeco.dnnl.global.dnnl.*;
  *      checking whether it is necessary to reorder data from the user's data
  *      format to a primitive's format.
  * 
- *  2. **Memory object** -- an engine-specific object that handles the data
- *      and its description (a memory descriptor). For the CPU aengine, the
- *      data handle is simply a pointer to \c void. The data handle can be
- *      queried using #dnnl::memory::get_data_handle() and set using
- *      #dnnl::memory::set_data_handle(). A memory object can also be
+ *  2. **Memory object** -- an engine-specific object that handles the memory
+ *      buffer and its description (a memory descriptor). For the CPU engine,
+ *      the memory buffer handle is simply a pointer to \c void. The memory
+ *      buffer can be queried using #dnnl::memory::get_data_handle() and set
+ *      using #dnnl::memory::set_data_handle(). A memory object can also be
  *      queried for the underlying memory descriptor and for its engine using
  *      #dnnl::memory::get_desc() and dnnl::memory::get_engine().
  * 
@@ -73,14 +73,14 @@ import static org.bytedeco.dnnl.global.dnnl.*;
  *    library because there is no clear definition of what the output values
  *    should be.
  * 
- *  Data handle of a zero-volume memory is never accessed.
+ *  Memory buffer of a zero-volume memory is never accessed.
  * 
  *  \{
  <p>
  *  Memory object.
  * 
  *  A memory object encapsulates a handle to a memory buffer allocated on a
- *  specific aengine, tensor dimensions, data type, and memory format, which is
+ *  specific engine, tensor dimensions, data type, and memory format, which is
  *  the way tensor indices map to offsets in linear memory space. Memory
  *  objects are passed to primitives during execution. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
@@ -115,11 +115,12 @@ public class memory extends dnnl_memory_handle {
     public enum data_type {
         /** Undefined data type (used for empty memory descriptors). */
         undef(dnnl_data_type_undef),
-        /** 16-bit/half-precision floating point. */
+        /** [16-bit/half-precision floating point](https://en.wikipedia.org/wiki/Half-precision_floating-point_format). */
         f16(dnnl_f16),
-        /** non-standard 16-bit floating point with 7-bit mantissa. */
+        /** non-standard
+         *  [16-bit floating point with 7-bit mantissa](https://en.wikipedia.org/wiki/Bfloat16_floating-point_format). */
         bf16(dnnl_bf16),
-        /** 32-bit/single-precision floating point. */
+        /** [32-bit/single-precision floating point](https://en.wikipedia.org/wiki/Single-precision_floating-point_format). */
         f32(dnnl_f32),
         /** 32-bit signed integer. */
         s32(dnnl_s32),
@@ -164,7 +165,7 @@ public class memory extends dnnl_memory_handle {
      * 
      *   - Domain-agnostic names, i.e. names that do not depend on the tensor
      *     usage in the specific primitive. These names use letters from {@code a}
-     *     to {@code l} to denote logical dimensions and form the order in which the
+     *     to {@code f} to denote logical dimensions and form the order in which the
      *     dimensions are laid in memory. For example,
      *     #dnnl::memory::format_tag::ab is used to denote a 2D tensor where the
      *     second logical dimension (denoted as {@code b}) is the innermost, i.e.
@@ -882,7 +883,7 @@ public class memory extends dnnl_memory_handle {
          *     dimension has no padding (i.e.
          *     {@code padded_dims[dim] == dims[dim] && dims[dim] == 1}).
          *  3. Split a dimension into multiple ones. This is possible only if
-         *     the product of all tensor diumensions stays constant and the
+         *     the product of all tensor dimensions stays constant and the
          *     dimension being split does not have padding (i.e.
          *     {@code padded_dims[dim] = dims[dim]}).
          *  4. Join multiple consecutive dimensions into a single one. As in
@@ -891,9 +892,9 @@ public class memory extends dnnl_memory_handle {
          *     memory these dimensions are dense and have the same order as
          *     their logical counterparts. This also assumes that these
          *     dimensions are not blocked.
-         *     - Here, dense means:
+         *     - Here, 'dense' means:
          *       {@code stride for dim[i] == (stride for dim[i + 1]) * dim[i + 1]};
-         *     - And same order means:
+         *     - And 'same order' means:
          *       {@code i < j} if and only if {@code stride for dim[j] <= stride for dim[i]}.
          * 
          *  \warning
@@ -926,7 +927,8 @@ public class memory extends dnnl_memory_handle {
          * 
          *  The physical memory layout representation is adjusted accordingly
          *  to maintain the consistency between the logical and physical parts
-         *  of the memory descriptor.
+         *  of the memory descriptor. The new memory descriptor inherits the
+         *  data type.
          * 
          *  The new memory descriptor inherits the data type. This operation is
          *  valid only for memory descriptors that have format_kind set to
@@ -1023,7 +1025,7 @@ public class memory extends dnnl_memory_handle {
 
     /** Constructs a memory object.
      * 
-     *  Unless \p handle is equal to DNNL_MEMORY_NONE, the constructed memory
+     *  Unless \p handle is equal to #DNNL_MEMORY_NONE, the constructed memory
      *  object will have the underlying buffer set. In this case, the buffer
      *  will be initialized as if #dnnl::memory::set_data_handle() had been
      *  called.
@@ -1032,14 +1034,13 @@ public class memory extends dnnl_memory_handle {
      * 
      *  @param md Memory descriptor.
      *  @param aengine Engine to store the data on.
-     *  @param handle Handle of the memory buffer to use as an underlying
-     *      storage.
+     *  @param handle Handle of the memory buffer to use.
      *      - A pointer to the user-allocated buffer. In this case the library
      *        doesn't own the buffer.
-     *      - The DNNL_MEMORY_ALLOCATE special value. Instructs the library to
+     *      - The #DNNL_MEMORY_ALLOCATE special value. Instructs the library to
      *        allocate the buffer for the memory object. In this case the
      *        library owns the buffer.
-     *      - DNNL_MEMORY_NONE to create dnnl_memory without an underlying
+     *      - #DNNL_MEMORY_NONE to create dnnl::memory without an underlying
      *        buffer. */
     
     ///
@@ -1049,7 +1050,7 @@ public class memory extends dnnl_memory_handle {
 
     /** Constructs a memory object.
      * 
-     *  The underlying storage for the memory will be allocated by the library.
+     *  The underlying buffer for the memory will be allocated by the library.
      * 
      *  @param md Memory descriptor.
      *  @param aengine Engine to store the data on. */
@@ -1097,8 +1098,10 @@ public class memory extends dnnl_memory_handle {
      *      zeroes to the padding area if it exists. Hence, the \p handle
      *      parameter cannot and does not have a const qualifier.
      * 
-     *  @param handle Data handle. For the CPU aengine, the data handle
-     *      is a pointer to the actual data. For OpenCL it is a cl_mem.
+     *  @param handle Memory buffer to use. For the CPU engine, the memory
+     *      buffer is a pointer to the actual data. For OpenCL it is a cl_mem.
+     *      It must have at least #dnnl::memory::desc::get_size() bytes
+     *      allocated.
      *  @param astream Stream to use to execute padding in. */
     
     ///
@@ -1111,8 +1114,10 @@ public class memory extends dnnl_memory_handle {
      *  #dnnl::memory::set_data_handle(void *, const stream &) const
      *  for more information.
      * 
-     *  @param handle Data handle. For the CPU aengine, the data handle
-     *      is a pointer to the actual data. For OpenCL it is a cl_mem. */
+     *  @param handle Memory buffer to use. For the CPU engine, the memory
+     *      buffer is a pointer to the actual data. For OpenCL it is a cl_mem.
+     *      It must have at least #dnnl::memory::desc::get_size() bytes
+     *      allocated. */
     
     ///
     ///
@@ -1128,11 +1133,12 @@ public class memory extends dnnl_memory_handle {
      *  engines that do not support direct memory access.
      * 
      *  Mapping is an exclusive operation - a memory object cannot be used in
-     *  other operations until it is unmapped via memory::unmap_data() call.
+     *  other operations until it is unmapped via #dnnl::memory::unmap_data()
+     *  call.
      * 
      *  \note
      *      Any primitives working with the memory should be completed before
-     *      the memory is mapped. Use stream::wait() to synchronize the
+     *      the memory is mapped. Use #dnnl::stream::wait() to synchronize the
      *      corresponding execution stream.
      * 
      *  \note
@@ -1143,14 +1149,15 @@ public class memory extends dnnl_memory_handle {
      *  @return Pointer to the mapped memory. */
 
     /** Unmaps a memory object and writes back any changes made to the
-     *  previously mapped memory buffer. The pointer to the mapped buffer
-     *  must be obtained via the dnnl::memory::map_data() call.
+     *  previously mapped memory buffer.
      * 
      *  \note
      *      The map_data and unmap_data functions are provided mainly for
-     *      debug and testing purposes and their performance may be suboptimal.
+     *      debug and testing purposes and their performance may be
+     *      suboptimal.
      * 
-     *  @param mapped_ptr A pointer previously returned by map_data(). */
+     *  @param mapped_ptr A pointer previously returned by
+     *      #dnnl::memory::map_data(). */
     public native void unmap_data(Pointer mapped_ptr);
 
 // #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL

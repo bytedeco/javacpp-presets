@@ -62,7 +62,6 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
-    ///
     public native primitive.kind kind(int index);
 
     /** Appends an accumulation (sum) post-op. Prior to accumulating the
@@ -81,13 +80,11 @@ public class post_ops extends dnnl_post_ops_handle {
      *  the computations would be {@code dst[:] := scale * dst[:] + op(...)}
      *  instead of {@code dst[:] := op(...)}.
      * 
-     *  If \p data_type is specified, original dst tensor will be reinterpreted
-     *  as a tensor with provided data type. Since it is reinterpretation,
-     *  data_type and dst data type should have same size.
-     *  As a result, computations would be:
-     * 
-     *      dst[:] <- scale * as_data_type(dst[:]) + op(...)
-     *                                         // instead of dst[:] <- op(...)
+     *  If \p data_type is specified, the original dst tensor will be
+     *  reinterpreted as a tensor with the provided data type. Because it is a
+     *  reinterpretation, data_type and dst data type should have the same size.
+     *  As a result, computations would be {@code dst[:] <- scale *
+     *  as_data_type(dst[:]) + op(...)} instead of {@code dst[:] <- op(...)}.
      * 
      *  \note
      *      This post-op executes in-place and does not change the
@@ -147,7 +144,7 @@ public class post_ops extends dnnl_post_ops_handle {
     public native void append_eltwise(
                 float scale, @Cast("dnnl::algorithm") int aalgorithm, float alpha, float beta);
 
-    /** Returns parameters of an elementwise post-up.
+    /** Returns parameters of an elementwise post-op.
      * 
      *  @param index Index of the post-op.
      *  @param scale Output scaling factor.
@@ -301,6 +298,12 @@ public class post_ops extends dnnl_post_ops_handle {
      *      tensor.
      *  @param scales Output pointer to a constant array of float scaling
      *      factors. */
+    
+    ///
+    ///
+    ///
+    ///
+    ///
     public native void get_params_dw_k3s2p1(int index, memory.data_type weights_data_type,
                 memory.data_type bias_data_type, memory.data_type dst_data_type,
                 @ByRef IntPointer mask, @StdVector FloatPointer scales);
@@ -310,4 +313,35 @@ public class post_ops extends dnnl_post_ops_handle {
     public native void get_params_dw_k3s2p1(int index, memory.data_type weights_data_type,
                 memory.data_type bias_data_type, memory.data_type dst_data_type,
                 @ByRef int[] mask, @StdVector float[] scales);
+
+    /** Appends a binary post-op.
+     * 
+     *  The kind of this post operation is #dnnl_binary.
+     * 
+     *  In the simplest case when the binary is the only post operation, the
+     *  computations would be:
+     * 
+     *      dst[:] <- binary_op (dst[:], another_input[:])
+     * 
+     *  where binary_op is configured with the given parameters. binary_op
+     *  supports broadcast semantics for a second operand.
+     * 
+     *  @param aalgorithm Binary algorithm for the post-op.
+     *  @param src1_desc Memory descriptor of a second operand. */
+    
+    ///
+    public native void append_binary(algorithm aalgorithm, @Const @ByRef memory.desc src1_desc);
+    public native void append_binary(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src1_desc);
+
+    /** Returns the parameters of a binary post-op.
+     * 
+     *  @param index Index of the binary post-op.
+     *  @param aalgorithm Output binary algorithm kind.
+     *  @param src1_desc Output memory descriptor of a second operand. */
+    public native void get_params_binary(
+                int index, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm, @ByRef memory.desc src1_desc);
+    public native void get_params_binary(
+                int index, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm, @ByRef memory.desc src1_desc);
+    public native void get_params_binary(
+                int index, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm, @ByRef memory.desc src1_desc);
 }

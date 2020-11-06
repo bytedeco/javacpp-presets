@@ -155,22 +155,23 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda, cudnn, and nccl.."
-        curl -L https://developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda-repo-rhel7-11-0-local-11.0.3_450.51.06-1.x86_64.rpm -o $HOME/cuda-repo-rhel7-11-0-local-11.0.3_450.51.06-1.x86_64.rpm
-        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.3/cudnn-11.0-linux-x64-v8.0.3.33.tgz -o $HOME/cudnn-11.0-linux-x64-v8.0.3.33.tgz
-        curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.8-1+cuda11.0_x86_64.txz -o $HOME/nccl_x86_64.txz
+        curl -L https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda-repo-rhel7-11-1-local-11.1.1_455.32.00-1.x86_64.rpm -o $HOME/cuda-repo-rhel7-11-1-local-11.1.1_455.32.00-1.x86_64.rpm
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.4/cudnn-11.1-linux-x64-v8.0.4.30.tgz -o $HOME/cudnn-11.1-linux-x64-v8.0.4.30.tgz
+        curl -L https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.8-1+cuda11.1_x86_64.txz -o $HOME/nccl_x86_64.txz
 
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i $HOME/cuda-repo-rhel7-11-0-local-11.0.3_450.51.06-1.x86_64.rpm"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /var/cuda-repo-rhel7-11-0-local/; rpm -i --nodeps cuda*.rpm libc*.rpm libn*.rpm"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i $HOME/cuda-repo-rhel7-11-1-local-11.1.1_455.32.00-1.x86_64.rpm"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /var/cuda-repo-rhel7-11-1-local/; rpm -i --nodeps cuda*.rpm libc*.rpm libn*.rpm"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.0-linux-x64-v8.0.3.33.tgz -C /usr/local/"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-11.1-linux-x64-v8.0.4.30.tgz -C /usr/local/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
-        # work around issues with CUDA 10.2/11.0
+        # work around issues with CUDA 10.2/11.x
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.2; done"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \${f:0:-1}1; done"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libnvidia-ml.so.1"
 
@@ -179,7 +180,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "chmod 755 /usr/local/cuda/bin/nvcccache"
   fi
   if [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1xHWJHMNJ6g29YnMNeFKwJZF1KdRl_N3e $HOME/downloads/tensorrt.tar.gz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1-SQo1jZZ6FM6PWbAt9YLZisWQolCxbxX $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi

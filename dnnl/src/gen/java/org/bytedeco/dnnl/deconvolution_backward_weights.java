@@ -130,8 +130,8 @@ public class deconvolution_backward_weights extends primitive {
                         @Const @ByRef memory.desc diff_dst_desc, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_l, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] padding_r);
 
-        /** Constructs a descriptor for a deconvolution weights gradient primitive
-         *  without bias.
+        /** Constructs a descriptor for a deconvolution weights gradient
+         *  primitive without bias.
          * 
          *  \note
          *      All the memory descriptors may be initialized with the

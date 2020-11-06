@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>onnxruntime</artifactId>
-  <version>1.5.2-${project.parent.version}</version>
+  <version>1.5.3-${project.parent.version}</version>
   <name>JavaCPP Presets for ONNX Runtime</name>
 
   <properties>
@@ -25,7 +25,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl</artifactId>
-      <version>1.6.4-${project.parent.version}</version>
+      <version>1.7-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -52,7 +52,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>1.6.4-${project.parent.version}</version>
+            <version>1.7-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>

@@ -124,7 +124,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.3.x  https://github.com/intel/hyperscan
  * MKL 2020.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 1.6.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 1.7.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.12  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -140,7 +140,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.6.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.0.x  https://developer.nvidia.com/cuda-downloads
+ * CUDA 11.1.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.0.x  https://developer.nvidia.com/cudnn
    * NCCL 2.7.x  https://developer.nvidia.com/nccl
  * MXNet 1.7.0  https://github.com/apache/incubator-mxnet

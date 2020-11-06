@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorrt</artifactId>
-  <version>7.1-${project.parent.version}</version>
+  <version>7.2-${project.parent.version}</version>
   <name>JavaCPP Presets for TensorRT</name>
 
   <properties>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
-      <version>11.0-8.0-${project.parent.version}</version>
+      <version>11.1-8.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -47,7 +47,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>11.0-8.0-${project.parent.version}</version>
+            <version>11.1-8.0-${project.parent.version}</version>
           </dependency>
         </dependencies>
       </plugin>

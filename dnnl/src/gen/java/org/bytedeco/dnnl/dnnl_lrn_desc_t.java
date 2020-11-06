@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_pooling
+/** \} dnnl_api_pooling_v2
  <p>
  *  \addtogroup dnnl_api_lrn
  *  \{

@@ -51,9 +51,9 @@ import org.bytedeco.opencv.presets.*;
     @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
         define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0", "MXNET_USE_TVM_OP 0"},
         link = {"cudart@.11.0#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.1", "libmxnet", "mxnet_35"},
-        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/include/"},
-        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/lib/x64/"},
-        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/bin/"}, extension = "-gpu") })
+        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.1/include/"},
+        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.1/lib/x64/"},
+        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.1/bin/"}, extension = "-gpu") })
 public class mxnet implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "mxnet"); }
 
@@ -83,16 +83,16 @@ public class mxnet implements LoadEnabled, InfoMapper {
             if (platform.startsWith("linux")) {
                 lib += lib.startsWith("cudnn") ? "@.8"
                      : lib.equals("nccl") ? "@.2"
-                     : lib.equals("cufft") || lib.equals("curand") || lib.equals("cusolver") ? "@.10"
+                     : lib.equals("cufft") || lib.equals("curand") ? "@.10"
                      : lib.equals("cudart") ? "@.11.0"
-                     : lib.equals("nvrtc") ? "@.11.0"
+                     : lib.equals("nvrtc") ? "@.11.1"
                      : "@.11";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8"
                      : lib.equals("nccl") ? "64_2"
-                     : lib.equals("cufft") || lib.equals("curand") || lib.equals("cusolver") ? "64_10"
+                     : lib.equals("cufft") || lib.equals("curand") ? "64_10"
                      : lib.equals("cudart") ? "64_110"
-                     : lib.equals("nvrtc") ? "64_110_0"
+                     : lib.equals("nvrtc") ? "64_111_0"
                      : "64_11";
             } else {
                 continue; // no CUDA

@@ -11,6 +11,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
+// XXX: next define should have a (1 << 20) = 1048576 value to preserve 5 bits
+// for DNNL_ARG_ATTR_MULTIPLE_POST_OP argument.
+
 /** A structure that contains an index and a memory object, and is used to pass
  *  arguments to dnnl_primitive_execute(). */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)

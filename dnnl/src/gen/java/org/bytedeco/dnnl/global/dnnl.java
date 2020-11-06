@@ -208,286 +208,290 @@ public static final int
     dnnl_abc = 4,
     /** plain 4D tensor */
     dnnl_abcd = 5,
+    /** plain 4D tensor */
+    dnnl_acbd = 6,
     /** plain 5D tensor */
-    dnnl_abcde = 6,
+    dnnl_abcde = 7,
     /** plain 6D tensor */
-    dnnl_abcdef = 7,
+    dnnl_abcdef = 8,
     /** plain 7D tensor */
-    dnnl_abcdefg = 8,
+    dnnl_abcdefg = 9,
     /** plain 8D tensor */
-    dnnl_abcdefgh = 9,
+    dnnl_abcdefgh = 10,
     /** plain 9D tensor */
-    dnnl_abcdefghi = 10,
+    dnnl_abcdefghi = 11,
     /** plain 10D tensor */
-    dnnl_abcdefghij = 11,
+    dnnl_abcdefghij = 12,
     /** plain 11D tensor */
-    dnnl_abcdefghijk = 12,
+    dnnl_abcdefghijk = 13,
     /** plain 12D tensor */
-    dnnl_abcdefghijkl = 13,
+    dnnl_abcdefghijkl = 14,
 
     // Permuted plain formats
 
     /** permuted 4D tensor */
-    dnnl_abdc = 14,
+    dnnl_abdc = 15,
     /** permuted 5D tensor */
-    dnnl_abdec = 15,
+    dnnl_abdec = 16,
     /** permuted 3D tensor */
-    dnnl_acb = 16,
+    dnnl_acb = 17,
     /** permuted 5D tensor */
-    dnnl_acbde = 17,
+    dnnl_acbde = 18,
     /** permuted 6D tensor */
-    dnnl_acbdef = 18,
+    dnnl_acbdef = 19,
     /** permuted 4D tensor */
-    dnnl_acdb = 19,
+    dnnl_acdb = 20,
     /** permuted 5D tensor */
-    dnnl_acdeb = 20,
+    dnnl_acdeb = 21,
     /** permuted 2D tensor */
-    dnnl_ba = 21,
+    dnnl_ba = 22,
     /** permuted 3D tensor */
-    dnnl_bac = 22,
+    dnnl_bac = 23,
     /** permuted 4D tensor */
-    dnnl_bacd = 23,
+    dnnl_bacd = 24,
     /** permuted 5D tensor */
-    dnnl_bacde = 24,
+    dnnl_bacde = 25,
     /** permuted 3D tensor */
-    dnnl_bca = 25,
+    dnnl_bca = 26,
     /** permuted 4D tensor */
-    dnnl_bcda = 26,
+    dnnl_bcda = 27,
     /** permuted 5D tensor */
-    dnnl_bcdea = 27,
+    dnnl_bcdea = 28,
     /** permuted 3D tensor */
-    dnnl_cba = 28,
+    dnnl_cba = 29,
     /** permuted 4D tensor */
-    dnnl_cdba = 29,
+    dnnl_cdba = 30,
     /** permuted 4D tensor */
-    dnnl_dcab = 30,
+    dnnl_dcab = 31,
     /** permuted 5D tensor */
-    dnnl_cdeba = 31,
+    dnnl_cdeba = 32,
     /** permuted 5D tensor */
-    dnnl_decab = 32,
+    dnnl_decab = 33,
     /** permuted 6D tensor */
-    dnnl_defcab = 33,
+    dnnl_defcab = 34,
     /** permuted 5D tensor */
-    dnnl_abced = 34,
+    dnnl_abced = 35,
     /** permuted 6D tensor */
-    dnnl_abcdfe = 35,
+    dnnl_abcdfe = 36,
     /** permuted 7D tensor */
-    dnnl_abcdegf = 36,
+    dnnl_abcdegf = 37,
     /** permuted 8D tensor */
-    dnnl_abcdefhg = 37,
+    dnnl_abcdefhg = 38,
     /** permuted 9D tensor */
-    dnnl_abcdefgih = 38,
+    dnnl_abcdefgih = 39,
     /** permuted 10D tensor */
-    dnnl_abcdefghji = 39,
+    dnnl_abcdefghji = 40,
     /** permuted 11D tensor */
-    dnnl_abcdefghikj = 40,
+    dnnl_abcdefghikj = 41,
     /** permuted 12D tensor */
-    dnnl_abcdefghijlk = 41,
+    dnnl_abcdefghijlk = 42,
 
     // Opaque blocked formats
 
-    dnnl_Abc16a = 42,
-    dnnl_ABc16a16b = 43,
-    dnnl_ABc32a32b = 44,
-    dnnl_ABc4a4b = 45,
+    dnnl_Abc16a = 43,
+    dnnl_ABc16a16b = 44,
+    dnnl_ABc32a32b = 45,
+    dnnl_ABc4a4b = 46,
     /** 3D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBc16b = 46,
-    dnnl_ABc16b16a = 47,
-    dnnl_Abc4a = 48,
+    dnnl_aBc16b = 47,
+    dnnl_ABc16b16a = 48,
+    dnnl_Abc4a = 49,
     /** 3D tensor blocked by 2nd dimension with block size 32 */
-    dnnl_aBc32b = 49,
+    dnnl_aBc32b = 50,
     /** 3D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBc4b = 50,
-    dnnl_ABc4b16a4b = 51,
-    dnnl_ABc2b8a4b = 52,
-    dnnl_ABc16b16a4b = 53,
-    dnnl_ABc16b16a2b = 54,
-    dnnl_ABc4b4a = 55,
-    dnnl_ABc8a16b2a = 56,
-    dnnl_ABc8a8b = 57,
-    dnnl_ABc8a4b = 58,
+    dnnl_aBc4b = 51,
+    dnnl_ABc4b16a4b = 52,
+    dnnl_ABc2b8a4b = 53,
+    dnnl_ABc16b16a4b = 54,
+    dnnl_ABc16b16a2b = 55,
+    dnnl_ABc4b4a = 56,
+    dnnl_ABc8a16b2a = 57,
+    dnnl_ABc8a8b = 58,
+    dnnl_ABc8a4b = 59,
     /** 3D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBc8b = 59,
-    dnnl_ABc8b16a2b = 60,
-    dnnl_BAc8a16b2a = 61,
-    dnnl_ABc8b8a = 62,
-    dnnl_Abcd16a = 63,
-    dnnl_Abcd8a = 64,
-    dnnl_ABcd16a16b = 65,
-    dnnl_Abcd32a = 66,
-    dnnl_ABcd32a32b = 67,
+    dnnl_aBc8b = 60,
+    dnnl_ABc8b16a2b = 61,
+    dnnl_BAc8a16b2a = 62,
+    dnnl_ABc8b8a = 63,
+    dnnl_Abcd16a = 64,
+    dnnl_Abcd8a = 65,
+    dnnl_ABcd16a16b = 66,
+    dnnl_Abcd32a = 67,
+    dnnl_ABcd32a32b = 68,
     /** 4D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcd16b = 68,
-    dnnl_ABcd16b16a = 69,
-    dnnl_aBCd16b16c = 70,
-    dnnl_aBCd16c16b = 71,
-    dnnl_Abcd4a = 72,
+    dnnl_aBcd16b = 69,
+    dnnl_ABcd16b16a = 70,
+    dnnl_aBCd16b16c = 71,
+    dnnl_aBCd16c16b = 72,
+    dnnl_Abcd4a = 73,
     /** 4D tensor blocked by 2nd dimension with block size 32 */
-    dnnl_aBcd32b = 73,
+    dnnl_aBcd32b = 74,
     /** 4D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcd4b = 74,
-    dnnl_ABcd4b16a4b = 75,
-    dnnl_ABcd16b16a4b = 76,
-    dnnl_ABcd16b16a2b = 77,
-    dnnl_ABcd4b4a = 78,
-    dnnl_ABcd4a4b = 79,
-    dnnl_aBCd2c4b2c = 80,
-    dnnl_aBCd4b8c2b = 81,
-    dnnl_aBCd4c16b4c = 82,
-    dnnl_aBCd2c8b4c = 83,
-    dnnl_aBCd16c16b4c = 84,
-    dnnl_aBCd16c16b2c = 85,
-    dnnl_aBCd4c4b = 86,
-    dnnl_aBCd4b4c = 87,
-    dnnl_ABcd8a16b2a = 88,
-    dnnl_ABcd2b8a4b = 89,
-    dnnl_ABcd8a8b = 90,
-    dnnl_ABcd8a4b = 91,
+    dnnl_aBcd4b = 75,
+    dnnl_ABcd4b16a4b = 76,
+    dnnl_ABcd16b16a4b = 77,
+    dnnl_ABcd16b16a2b = 78,
+    dnnl_ABcd4b4a = 79,
+    dnnl_ABcd4a4b = 80,
+    dnnl_aBCd2c4b2c = 81,
+    dnnl_aBCd4b8c2b = 82,
+    dnnl_aBCd4c16b4c = 83,
+    dnnl_aBCd2c8b4c = 84,
+    dnnl_aBCd16c16b4c = 85,
+    dnnl_aBCd16c16b2c = 86,
+    dnnl_aBCd4c4b = 87,
+    dnnl_aBCd4b4c = 88,
+    dnnl_ABcd8a16b2a = 89,
+    dnnl_ABcd2b8a4b = 90,
+    dnnl_ABcd8a8b = 91,
+    dnnl_ABcd8a4b = 92,
     /** 4D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBcd8b = 92,
-    dnnl_aBCd4c8b2c = 93,
-    dnnl_ABcd8b16a2b = 94,
-    dnnl_aBCd8b16c2b = 95,
-    dnnl_BAcd8a16b2a = 96,
+    dnnl_aBcd8b = 93,
+    dnnl_aBCd4c8b2c = 94,
+    dnnl_ABcd8b16a2b = 95,
+    dnnl_aBCd8b16c2b = 96,
+    dnnl_BAcd8a16b2a = 97,
     /** 4D tensor blocked by 1st and 2nd dimension with block size 8 */
-    dnnl_ABcd8b8a = 97,
-    dnnl_aBCd8b8c = 98,
-    dnnl_aBCd8b4c = 99,
-    dnnl_aBCd8c16b2c = 100,
-    dnnl_ABcde8a16b2a = 101,
-    dnnl_aCBd8b16c2b = 102,
-    dnnl_aBCd8c8b = 103,
-    dnnl_Abcde16a = 104,
-    dnnl_Abcde32a = 105,
-    dnnl_ABcde16a16b = 106,
-    dnnl_BAcde8a16b2a = 107,
+    dnnl_ABcd8b8a = 98,
+    dnnl_aBCd8b8c = 99,
+    dnnl_aBCd8b4c = 100,
+    dnnl_aBCd8c16b2c = 101,
+    dnnl_ABcde8a16b2a = 102,
+    dnnl_aCBd8b16c2b = 103,
+    dnnl_aBCd8c8b = 104,
+    dnnl_Abcde16a = 105,
+    dnnl_Abcde32a = 106,
+    dnnl_ABcde16a16b = 107,
+    dnnl_BAcde8a16b2a = 108,
     /** 4D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCd2b4c2b = 108,
+    dnnl_aBCd2b4c2b = 109,
     /** 5D tensor blocked by 1st dimension with block size 16 */
-    dnnl_ABcde4b16a4b = 109,
+    dnnl_ABcde4b16a4b = 110,
     /** 5D tensor blocked by 1st dimension with block size 8 */
-    dnnl_ABcde2b8a4b = 110,
+    dnnl_ABcde2b8a4b = 111,
     /** 5D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcde16b = 111,
-    dnnl_ABcde16b16a = 112,
-    dnnl_aBCde16b16c = 113,
-    dnnl_aBCde16c16b = 114,
-    dnnl_aBCde2c8b4c = 115,
-    dnnl_Abcde4a = 116,
+    dnnl_aBcde16b = 112,
+    dnnl_ABcde16b16a = 113,
+    dnnl_aBCde16b16c = 114,
+    dnnl_aBCde16c16b = 115,
+    dnnl_aBCde2c8b4c = 116,
+    dnnl_Abcde4a = 117,
     /** 5D tensor blocked by 2nd dimension with block size 32 */
-    dnnl_aBcde32b = 117,
+    dnnl_aBcde32b = 118,
     /** 5D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcde4b = 118,
-    dnnl_ABcde4b4a = 119,
-    dnnl_ABcde4a4b = 120,
-    dnnl_aBCde4b4c = 121,
-    dnnl_aBCde2c4b2c = 122,
-    dnnl_aBCde4b8c2b = 123,
-    dnnl_aBCde4c16b4c = 124,
-    dnnl_aBCde16c16b4c = 125,
-    dnnl_aBCde16c16b2c = 126,
-    dnnl_aBCde4c4b = 127,
-    dnnl_Abcde8a = 128,
-    dnnl_ABcde8a8b = 129,
-    dnnl_ABcde8a4b = 130,
-    dnnl_BAcde16b16a = 131,
+    dnnl_aBcde4b = 119,
+    dnnl_ABcde4b4a = 120,
+    dnnl_ABcde4a4b = 121,
+    dnnl_aBCde4b4c = 122,
+    dnnl_aBCde2c4b2c = 123,
+    dnnl_aBCde4b8c2b = 124,
+    dnnl_aBCde4c16b4c = 125,
+    dnnl_aBCde16c16b4c = 126,
+    dnnl_aBCde16c16b2c = 127,
+    dnnl_aBCde4c4b = 128,
+    dnnl_Abcde8a = 129,
+    dnnl_ABcde8a8b = 130,
+    dnnl_ABcde8a4b = 131,
+    dnnl_BAcde16b16a = 132,
     /** 5D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBcde8b = 132,
-    dnnl_ABcde8b16a2b = 133,
-    dnnl_aBCde8b16c2b = 134,
-    dnnl_aBCde4c8b2c = 135,
-    dnnl_aCBde8b16c2b = 136,
-    dnnl_ABcde8b8a = 137,
-    dnnl_ABcde32a32b = 138,
-    dnnl_aBCde8b8c = 139,
-    dnnl_aBCde8b4c = 140,
-    dnnl_ABc4a8b8a4b = 141,
-    dnnl_ABcd4a8b8a4b = 142,
-    dnnl_ABcde4a8b8a4b = 143,
-    dnnl_BAc4b8a8b4a = 144,
-    dnnl_BAcd4b8a8b4a = 145,
-    dnnl_BAcde4b8a8b4a = 146,
-    dnnl_ABcd2a8b8a2b = 147,
-    dnnl_aBCd4b8c8b4c = 148,
-    dnnl_aBCde4b8c8b4c = 149,
-    dnnl_aBCde2b8c8b2c = 150,
-    dnnl_aBCde8c16b2c = 151,
-    dnnl_aBCde8c8b = 152,
+    dnnl_aBcde8b = 133,
+    dnnl_ABcde8b16a2b = 134,
+    dnnl_aBCde8b16c2b = 135,
+    dnnl_aBCde4c8b2c = 136,
+    dnnl_aCBde8b16c2b = 137,
+    dnnl_ABcde8b8a = 138,
+    dnnl_ABcde32a32b = 139,
+    dnnl_aBCde8b8c = 140,
+    dnnl_aBCde8b4c = 141,
+    dnnl_ABc4a8b8a4b = 142,
+    dnnl_ABcd4a8b8a4b = 143,
+    dnnl_ABcde4a8b8a4b = 144,
+    dnnl_BAc4b8a8b4a = 145,
+    dnnl_BAcd4b8a8b4a = 146,
+    dnnl_BAcde4b8a8b4a = 147,
+    dnnl_ABcd2a8b8a2b = 148,
+    dnnl_aBCd4b8c8b4c = 149,
+    dnnl_aBCde4b8c8b4c = 150,
+    dnnl_aBCde2b8c8b2c = 151,
+    dnnl_aBCde8c16b2c = 152,
+    dnnl_aBCde8c8b = 153,
     /** 5D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCde2b4c2b = 153,
+    dnnl_aBCde2b4c2b = 154,
     /** 6D tensor blocked by 2nd dimension with block size 16 */
-    dnnl_aBcdef16b = 154,
-    dnnl_aBCdef16b16c = 155,
-    dnnl_aBCdef16c16b = 156,
-    dnnl_aBCdef4c16b4c = 157,
+    dnnl_aBcdef16b = 155,
+    dnnl_aBCdef16b16c = 156,
+    dnnl_aBCdef16c16b = 157,
+    dnnl_aBCdef4c16b4c = 158,
     /** 6D tensor blocked by 2nd dimension with block size 8 */
-    dnnl_aBCdef2c8b4c = 158,
-    dnnl_aBCdef4c8b2c = 159,
+    dnnl_aBCdef2c8b4c = 159,
+    dnnl_aBCdef4c8b2c = 160,
     /** 6D tensor blocked by 3rd dimension with block size 4 */
-    dnnl_aBCdef2b4c2b = 160,
+    dnnl_aBCdef2b4c2b = 161,
     /** 6D tensor blocked by 2nd dimension with block size 4 */
-    dnnl_aBcdef4b = 161,
-    dnnl_aBCdef4c4b = 162,
-    dnnl_aBCdef4b4c = 163,
-    dnnl_aBCdef2c4b2c = 164,
-    dnnl_aBCdef4b8c2b = 165,
-    dnnl_aBCdef8b8c = 166,
-    dnnl_aBCdef8b4c = 167,
-    dnnl_aBCdef8c16b2c = 168,
-    dnnl_aBCdef4b8c8b4c = 169,
-    dnnl_aBCdef8b16c2b = 170,
-    dnnl_aCBdef8b16c2b = 171,
-    dnnl_aBCdef8c8b = 172,
-    dnnl_aBdc16b = 173,
-    dnnl_aBdC16b2c = 174,
-    dnnl_aBdC16b4c = 175,
-    dnnl_aBdc4b = 176,
-    dnnl_aBdc8b = 177,
-    dnnl_aBdec16b = 178,
-    dnnl_aBdeC16b2c = 179,
-    dnnl_aBdeC16b4c = 180,
-    dnnl_aBdec32b = 181,
-    dnnl_aBdec4b = 182,
-    dnnl_aBdec8b = 183,
-    dnnl_aBdefc16b = 184,
-    dnnl_aBdefC16b2c = 185,
-    dnnl_aCBdef16c16b = 186,
-    dnnl_aBdefc4b = 187,
-    dnnl_aBdefc8b = 188,
-    dnnl_Abcdef16a = 189,
-    dnnl_Abcdef32a = 190,
-    dnnl_Acb16a = 191,
-    dnnl_AcB16a2b = 192,
-    dnnl_AcB16a4b = 193,
-    dnnl_Acb4a = 194,
-    dnnl_Acb8a = 195,
-    dnnl_aCBd16b16c = 196,
-    dnnl_aCBd16c16b = 197,
-    dnnl_aCBde16b16c = 198,
-    dnnl_aCBde16c16b = 199,
-    dnnl_Acdb16a = 200,
-    dnnl_AcdB16a2b = 201,
-    dnnl_AcdB16a4b = 202,
-    dnnl_Acdb32a = 203,
-    dnnl_Acdb4a = 204,
-    dnnl_Acdb8a = 205,
-    dnnl_Acdeb16a = 206,
-    dnnl_AcdeB16a2b = 207,
-    dnnl_Acdeb4a = 208,
-    dnnl_Acdeb8a = 209,
-    dnnl_BAc16a16b = 210,
-    dnnl_BAc16b16a = 211,
-    dnnl_BAcd16a16b = 212,
-    dnnl_BAcd16b16a = 213,
-    dnnl_aCBd4c8b8c4b = 214,
-    dnnl_aCBde4c8b8c4b = 215,
-    dnnl_aCBdef4c8b8c4b = 216,
-    dnnl_BAcde16a16b = 217,
-    dnnl_aCBdef16b16c = 218,
+    dnnl_aBcdef4b = 162,
+    dnnl_aBCdef4c4b = 163,
+    dnnl_aBCdef4b4c = 164,
+    dnnl_aBCdef2c4b2c = 165,
+    dnnl_aBCdef4b8c2b = 166,
+    dnnl_aBCdef8b8c = 167,
+    dnnl_aBCdef8b4c = 168,
+    dnnl_aBCdef8c16b2c = 169,
+    dnnl_aBCdef4b8c8b4c = 170,
+    dnnl_aBCdef8b16c2b = 171,
+    dnnl_aCBdef8b16c2b = 172,
+    dnnl_aBCdef8c8b = 173,
+    dnnl_aBdc16b = 174,
+    dnnl_aBdC16b2c = 175,
+    dnnl_aBdC16b4c = 176,
+    dnnl_aBdc4b = 177,
+    dnnl_aBdc8b = 178,
+    dnnl_aBdec16b = 179,
+    dnnl_aBdeC16b2c = 180,
+    dnnl_aBdeC16b4c = 181,
+    dnnl_aBdec32b = 182,
+    dnnl_aBdec4b = 183,
+    dnnl_aBdec8b = 184,
+    dnnl_aBdefc16b = 185,
+    dnnl_aBdefC16b2c = 186,
+    dnnl_aCBdef16c16b = 187,
+    dnnl_aBdefc4b = 188,
+    dnnl_aBdefc8b = 189,
+    dnnl_Abcdef16a = 190,
+    dnnl_Abcdef32a = 191,
+    dnnl_aBedc16b = 192,
+    dnnl_Acb16a = 193,
+    dnnl_AcB16a2b = 194,
+    dnnl_AcB16a4b = 195,
+    dnnl_Acb4a = 196,
+    dnnl_Acb8a = 197,
+    dnnl_aCBd16b16c = 198,
+    dnnl_aCBd16c16b = 199,
+    dnnl_aCBde16b16c = 200,
+    dnnl_aCBde16c16b = 201,
+    dnnl_Acdb16a = 202,
+    dnnl_AcdB16a2b = 203,
+    dnnl_AcdB16a4b = 204,
+    dnnl_Acdb32a = 205,
+    dnnl_Acdb4a = 206,
+    dnnl_Acdb8a = 207,
+    dnnl_Acdeb16a = 208,
+    dnnl_AcdeB16a2b = 209,
+    dnnl_Acdeb4a = 210,
+    dnnl_Acdeb8a = 211,
+    dnnl_Adcb16a = 212,
+    dnnl_BAc16a16b = 213,
+    dnnl_BAc16b16a = 214,
+    dnnl_BAcd16a16b = 215,
+    dnnl_BAcd16b16a = 216,
+    dnnl_aCBd4c8b8c4b = 217,
+    dnnl_aCBde4c8b8c4b = 218,
+    dnnl_aCBdef4c8b8c4b = 219,
+    dnnl_BAcde16a16b = 220,
+    dnnl_aCBdef16b16c = 221,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 219,
+    dnnl_format_tag_last = 222,
 
     // Aliases
 
@@ -703,6 +707,7 @@ public static final int
     dnnl_IOhw8o16i2o = dnnl_BAcd8a16b2a,
     dnnl_OIhw8o8i = dnnl_ABcd8a8b,
     dnnl_OIhw8o4i = dnnl_ABcd8a4b,
+    dnnl_Owhi16o = dnnl_Adcb16a,
 
     // weights, 5D
     dnnl_Odhwi16o = dnnl_Acdeb16a,
@@ -730,6 +735,7 @@ public static final int
     // weights w/ groups, 3D
     dnnl_Goiw16g = dnnl_Abcd16a,
     dnnl_Goiw8g = dnnl_Abcd8a,
+    dnnl_Goiw4g = dnnl_Abcd4a,
     dnnl_gIOw16o16i = dnnl_aCBd16b16c,
     dnnl_gIOw16i16o = dnnl_aCBd16c16b,
     dnnl_gOIw16i16o = dnnl_aBCd16c16b,
@@ -780,6 +786,7 @@ public static final int
     dnnl_gOIhw4o4i = dnnl_aBCde4b4c,
     dnnl_gOihw4o = dnnl_aBcde4b,
     dnnl_Goihw8g = dnnl_Abcde8a,
+    dnnl_Goihw4g = dnnl_Abcde4a,
     dnnl_gOIhw8i16o2i = dnnl_aBCde8c16b2c,
     dnnl_gOIhw8i8o = dnnl_aBCde8c8b,
     dnnl_gOIhw8o16i2o = dnnl_aBCde8b16c2b,
@@ -787,6 +794,7 @@ public static final int
     dnnl_gOIhw8o8i = dnnl_aBCde8b8c,
     dnnl_gOIhw8o4i = dnnl_aBCde8b4c,
     dnnl_Goihw32g = dnnl_Abcde32a,
+    dnnl_gOwhi16o = dnnl_aBedc16b,
 
     dnnl_OIw4o8i8o4i = dnnl_ABc4a8b8a4b,
     dnnl_OIhw4o8i8o4i = dnnl_ABcd4a8b8a4b,
@@ -912,6 +920,10 @@ public static final int
     dnnl_matmul = 18,
     /** A resampling primitive. */
     dnnl_resampling = 19,
+    /** A pooling version 2 primitive (pooling with dilation support). */
+    dnnl_pooling_v2 = 20,
+    /** A reduction primitive. */
+    dnnl_reduction = 21,
 
     /** Parameter to allow internal only primitives without undefined behavior.
      *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
@@ -1022,10 +1034,30 @@ public static final int
     dnnl_binary_max = 0x1fff2,
     /** Binary min */
     dnnl_binary_min = 0x1fff3,
+    /** Binary div */
+    dnnl_binary_div = 0x1fff4,
     /** Nearest Neighbor Resampling Method */
     dnnl_resampling_nearest = 0x2fff0,
     /** Linear Resampling Method */
-    dnnl_resampling_linear = 0x2fff1;
+    dnnl_resampling_linear = 0x2fff1,
+    /** Reduction using max */
+    dnnl_reduction_max = 0x2fff1 + 1,
+    /** Reduction using min */
+    dnnl_reduction_min = 0x2fff1 + 2,
+    /** Reduction using sum */
+    dnnl_reduction_sum = 0x2fff1 + 3,
+    /** Reduction using mul */
+    dnnl_reduction_mul = 0x2fff1 + 4,
+    /** Reduction using mean */
+    dnnl_reduction_mean = 0x2fff1 + 5,
+    /** Reduction using lp norm */
+    dnnl_reduction_norm_lp_max = 0x2fff1 + 6,
+    /** Reduction using lp norm */
+    dnnl_reduction_norm_lp_sum = 0x2fff1 + 7,
+    /** Reduction using lp norm without final pth-root */
+    dnnl_reduction_norm_lp_power_p_max = 0x2fff1 + 8,
+    /** Reduction using lp norm without final pth-root */
+    dnnl_reduction_norm_lp_power_p_sum = 0x2fff1 + 9;
 
 /** Flags for normalization primitives. */
 /** enum dnnl_normalization_flags_t */
@@ -1186,7 +1218,8 @@ public static final int
      *   -128 * SUM(ic : 0,IC; kh : 0,KH; kw : 0,KW){ weights(oc, ic, kh, kw) } */
     dnnl_memory_extra_flag_compensation_conv_s8s8 = 0x1,
     dnnl_memory_extra_flag_scale_adjust = 0x2,
-    dnnl_memory_extra_flag_gpu_rnn_u8s8_compensation = 0x4;
+    dnnl_memory_extra_flag_gpu_rnn_u8s8_compensation = 0x4,
+    dnnl_memory_extra_flag_compensation_conv_asymmetric_src = 0x8;
 // Targeting ../dnnl_memory_extra_desc_t.java
 
 
@@ -1201,7 +1234,12 @@ public static final int
 
 /** A constant memory handle. */
 
+/** Special pointer value that indicates that a memory object should not have
+ *  an underlying buffer. */
 // #define DNNL_MEMORY_NONE (NULL)
+
+/** Special pointer value that indicates that the library needs to allocate an
+ *  underlying buffer for a memory object. */
 // #define DNNL_MEMORY_ALLOCATE ((void *)(size_t)-1)
 // Targeting ../dnnl_op_desc_t.java
 
@@ -1237,6 +1275,9 @@ public static final int
  *  A descriptor of a LogSoftmax operation. An alias of Softmax structure, but
  *  primitive_kind must be #dnnl_logsoftmax. */
 // Targeting ../dnnl_pooling_desc_t.java
+
+
+// Targeting ../dnnl_pooling_v2_desc_t.java
 
 
 // Targeting ../dnnl_lrn_desc_t.java
@@ -1290,8 +1331,11 @@ public static final int
 // Targeting ../dnnl_resampling_desc_t.java
 
 
+// Targeting ../dnnl_reduction_desc_t.java
 
-/** \} dnnl_api_resampling
+
+
+/** \} dnnl_api_reduction
  <p>
  *  \} dnnl_api_primitives
  <p>
@@ -1559,6 +1603,14 @@ public static final int DNNL_ARG_ATTR_ZERO_POINTS = 4096;
 /** Arguments for fused depthwise convolution.
  *  See \ref dev_guide_attributes_post_ops_depthwise_fusion */
 public static final int DNNL_ARG_ATTR_POST_OP_DW = 8192;
+
+/** Starting point for a binary post operation. */
+public static final int DNNL_ARG_ATTR_MULTIPLE_POST_OP_BASE = 16384;
+
+/** Arguments for a binary post operation. Up to 32 arguments are supported.
+ *  See \ref dev_guide_attributes_post_ops_binary_fusion */
+// #define DNNL_ARG_ATTR_MULTIPLE_POST_OP(idx)
+//     (DNNL_ARG_ATTR_MULTIPLE_POST_OP_BASE * ((idx) + 1))
 // Targeting ../dnnl_exec_arg_t.java
 
 
@@ -1672,6 +1724,10 @@ public static final int
     dnnl_query_matmul_d = 80,
     /** resampling descriptor */
     dnnl_query_resampling_d = 81,
+    /** pooling version 2 descriptor */
+    dnnl_query_pooling_v2_d = 82,
+    /** reduction descriptor */
+    dnnl_query_reduction_d = 83,
 
     // memory descriptor section
     /** stub */
@@ -1941,10 +1997,10 @@ public static final long DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 public static final int DNNL_VERSION_MAJOR = 1;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 6;
+public static final int DNNL_VERSION_MINOR = 7;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 4;
+public static final int DNNL_VERSION_PATCH = 0;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -2841,7 +2897,7 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v2(
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_eltwise(dnnl_post_ops post_ops,
         float scale, @Cast("dnnl_alg_kind_t") int alg_kind, float alpha, float beta);
 
-/** Returns the parameters of an elementwise post-up.
+/** Returns the parameters of an elementwise post-op.
  * 
  *  @param post_ops Post-ops.
  *  @param index Index of the elementwise post-op.
@@ -3029,6 +3085,9 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_dw_k3s2p1(d
 
 ///
 ///
+///
+///
+///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_dw_k3s2p1(
         @Const dnnl_post_ops post_ops, int index,
         @Cast("dnnl_data_type_t*") IntPointer weights_data_type, @Cast("dnnl_data_type_t*") IntPointer bias_data_type,
@@ -3049,6 +3108,54 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_dw_k3s2
         @Cast("dnnl_data_type_t*") int[] weights_data_type, @Cast("dnnl_data_type_t*") int[] bias_data_type,
         @Cast("dnnl_data_type_t*") int[] dst_data_type, @Cast("dnnl_dim_t*") long[] count, int[] mask,
         @Const @ByPtrPtr float[] scales);
+
+/** Appends a binary post-op.
+ * 
+ *  The kind of this post operation is #dnnl_binary.
+ * 
+ *  In the simplest case when the binary is the only post operation, the
+ *  computations would be:
+ * 
+ *      dst[:] <- binary_op (dst[:], another_input[:])
+ * 
+ *  where binary_op is configured with the given parameters. binary_op supports
+ *  broadcast semantics for a second operand.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param alg_kind Binary algorithm for the post-op.
+ *  @param src1_desc Memory descriptor of a second operand.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_binary(dnnl_post_ops post_ops,
+        @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src1_desc);
+
+/** Returns the parameters of a binary post-op.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param index Index of the binary post-op.
+ *  @param alg_kind Output binary algorithm kind.
+ *  @param src1_desc Output memory descriptor of a second operand.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise.
+ *  @return #dnnl_invalid_arguments if \p index does not refer to a binary
+ *      post-op. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_binary(
+        @Const dnnl_post_ops post_ops, int index, @Cast("dnnl_alg_kind_t*") IntPointer alg_kind,
+        @Cast("const dnnl_memory_desc_t**") PointerPointer src1_desc);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_binary(
+        @Const dnnl_post_ops post_ops, int index, @Cast("dnnl_alg_kind_t*") IntPointer alg_kind,
+        @Const @ByPtrPtr dnnl_memory_desc_t src1_desc);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_binary(
+        @Const dnnl_post_ops post_ops, int index, @Cast("dnnl_alg_kind_t*") IntBuffer alg_kind,
+        @Const @ByPtrPtr dnnl_memory_desc_t src1_desc);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_binary(
+        @Const dnnl_post_ops post_ops, int index, @Cast("dnnl_alg_kind_t*") int[] alg_kind,
+        @Const @ByPtrPtr dnnl_memory_desc_t src1_desc);
 
 /** \} dnnl_api_attributes
  <p>
@@ -4532,6 +4639,7 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_forward_desc_init(
  *      otherwise. */
 
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_pooling_backward_desc_init(
         dnnl_pooling_desc_t pool_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
         @Const dnnl_memory_desc_t diff_src_desc,
@@ -4550,6 +4658,101 @@ public static native @Cast("dnnl_status_t") int dnnl_pooling_backward_desc_init(
         @Const dnnl_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
         @Cast("const int64_t*") long[] kernel, @Cast("const int64_t*") long[] padding_l,
         @Cast("const int64_t*") long[] padding_r);
+
+/** Initializes a descriptor for pooling v2 (pooling with dilation support)
+ *  forward propagation primitive.
+ * 
+ *  Arrays \p strides, \p kernel, \p dilation, \p padding_l and \p padding_r
+ *  contain values for spatial dimensions only and hence must have the same
+ *  number of elements as there are spatial dimensions. The order of values
+ *  is the same as in the tensor: depth (for 3D tensors),
+ *  height (for 3D and 2D tensors), and width.
+ * 
+ *  @param pool_desc Output descriptor for a pooling primitive.
+ *  @param prop_kind Propagation kind. Possible values are
+ *      #dnnl_forward_training and #dnnl_forward_inference.
+ *  @param alg_kind Pooling algorithm kind: either #dnnl_pooling_max,
+ *      #dnnl_pooling_avg_include_padding, or #dnnl_pooling_avg (same as
+ *      #dnnl_pooling_avg_exclude_padding).
+ *  @param src_desc Source memory descriptor.
+ *  @param dst_desc Destination memory descriptor.
+ *  @param strides Array of strides for spatial dimension.
+ *  @param kernel Array of kernel spatial dimensions.
+ *  @param dilation Array of dilations for spatial dimension.
+ *  @param padding_l Array of padding values for low indices for each spatial
+ *      dimension {@code ([[front,] top,] left)}.
+ *  @param padding_r Array of padding values for high indices for each spatial
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_pooling_v2_forward_desc_init(
+        dnnl_pooling_v2_desc_t pool_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
+        @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src_desc,
+        @Const dnnl_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer kernel, @Cast("const int64_t*") LongPointer dilation,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("dnnl_status_t") int dnnl_pooling_v2_forward_desc_init(
+        dnnl_pooling_v2_desc_t pool_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
+        @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src_desc,
+        @Const dnnl_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer kernel, @Cast("const int64_t*") LongBuffer dilation,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("dnnl_status_t") int dnnl_pooling_v2_forward_desc_init(
+        dnnl_pooling_v2_desc_t pool_desc, @Cast("dnnl_prop_kind_t") int prop_kind,
+        @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src_desc,
+        @Const dnnl_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] kernel, @Cast("const int64_t*") long[] dilation,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
+
+/** Initializes a descriptor for pooling v2 (pooling with dilation support)
+ *  backward propagation primitive.
+ * 
+ *  Arrays \p strides, \p kernel, \p dilation, \p padding_l and \p padding_r
+ *  contain values for spatial dimensions only and hence must have the same
+ *  number of elements as there are spatial dimensions. The order of values
+ *  is the same as in the tensor: depth (for 3D tensors),
+ *  height (for 3D and 2D tensors), and width.
+ * 
+ *  @param pool_desc Output descriptor for a pooling primitive.
+ *  @param alg_kind Pooling algorithm kind: either #dnnl_pooling_max,
+ *      #dnnl_pooling_avg_include_padding, or #dnnl_pooling_avg (same as
+ *      #dnnl_pooling_avg_exclude_padding).
+ *  @param diff_src_desc Diff source memory descriptor.
+ *  @param diff_dst_desc Diff destination memory descriptor.
+ *  @param strides Array of strides for spatial dimension.
+ *  @param kernel Array of kernel spatial dimensions.
+ *  @param dilation Array of dilations for spatial dimension.
+ *  @param padding_l Array of padding values for low indices for each spatial
+ *      dimension {@code ([[front,] top,] left)}.
+ *  @param padding_r Array of padding values for high indices for each spatial
+ *      dimension {@code ([[back,] bottom,] right)}. Can be NULL in which case
+ *      padding is considered to be symmetrical.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_pooling_v2_backward_desc_init(
+        dnnl_pooling_v2_desc_t pool_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
+        @Const dnnl_memory_desc_t diff_src_desc,
+        @Const dnnl_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer kernel, @Cast("const int64_t*") LongPointer dilation,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("dnnl_status_t") int dnnl_pooling_v2_backward_desc_init(
+        dnnl_pooling_v2_desc_t pool_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
+        @Const dnnl_memory_desc_t diff_src_desc,
+        @Const dnnl_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer kernel, @Cast("const int64_t*") LongBuffer dilation,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("dnnl_status_t") int dnnl_pooling_v2_backward_desc_init(
+        dnnl_pooling_v2_desc_t pool_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
+        @Const dnnl_memory_desc_t diff_src_desc,
+        @Const dnnl_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] kernel, @Cast("const int64_t*") long[] dilation,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** \} dnnl_api_pooling
  <p>
@@ -4810,7 +5013,7 @@ public static native @Cast("dnnl_status_t") int dnnl_inner_product_backward_weig
  *  floating-point data to unsigned integer and must be passed to the RNN
  *  primitive using attributes.
  * 
- *  The quantization formula is {@code scale * (data + shift)}.
+ *  The quantization formula is {@code scale * data + shift}.
  * 
  *  \note
  *      Quantization scale and shift are common for src_layer, src_iter,
@@ -4821,7 +5024,7 @@ public static native @Cast("dnnl_status_t") int dnnl_inner_product_backward_weig
  *      // RNN parameters
  *      int l = 2, t = 2, mb = 32, sic = 32, slc = 32, dic = 32, dlc = 32;
  *      // Activations quantization parameters
- *      float scale = ..., shift = ..;
+ *      float scale = 63.f, shift = 64.f;
  * 
  *      dnnl_primitive_attr_t rnn_attr;
  *      // Create default attributes
@@ -5806,6 +6009,9 @@ public static native @Cast("dnnl_status_t") int dnnl_resampling_forward_desc_ini
  *  */
 
 ///
+///
+///
+///
 public static native @Cast("dnnl_status_t") int dnnl_resampling_backward_desc_init(
         dnnl_resampling_desc_t resampling_desc, @Cast("dnnl_alg_kind_t") int alg_kind,
         @Const FloatPointer factors, @Const dnnl_memory_desc_t diff_src_desc,
@@ -5820,6 +6026,37 @@ public static native @Cast("dnnl_status_t") int dnnl_resampling_backward_desc_in
         @Const dnnl_memory_desc_t diff_dst_desc);
 
 /** \} dnnl_api_resampling
+ <p>
+ *  \addtogroup dnnl_api_reduction Reduction
+ *  \{
+ <p>
+ *  Initializes a descriptor for a reduction primitive.
+ * 
+ *  \note
+ *      Destination memory descriptor is allowed to be initialized with
+ *      #dnnl_format_tag_any or with format_kind set to #dnnl_format_kind_any.
+ * 
+ * 
+ *  @param desc Output descriptor for a reduction primitive.
+ *  @param alg_kind reduction algorithm kind. Possible values:
+ *      #dnnl_reduction_max, #dnnl_reduction_min, #dnnl_reduction_sum,
+ *      #dnnl_reduction_mul, #dnnl_reduction_mean, #dnnl_reduction_norm_lp_max,
+ *      #dnnl_reduction_norm_lp_sum, #dnnl_reduction_norm_lp_power_p_max,
+ *      #dnnl_reduction_norm_lp_power_p_sum.
+ *  @param p Algorithm specific parameter.
+ *  @param eps Algorithm specific parameter.
+ *  @param src_desc Source memory descriptor.
+ *  @param dst_desc Destination memory descriptor.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise.
+ *  */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_reduction_desc_init(dnnl_reduction_desc_t desc,
+        @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc_t src_desc,
+        @Const dnnl_memory_desc_t dst_desc, float p, float eps);
+
+/** \} dnnl_api_reduction
  <p>
  *  \} dnnl_api_primitives
  <p>
@@ -5938,6 +6175,22 @@ public static native @Cast("dnnl_status_t") int dnnl_stream_create_v2(@ByPtrPtr 
         dnnl_engine engine, @Cast("unsigned") int flags, @Const dnnl_stream_attr attr);
 public static native @Cast("dnnl_status_t") int dnnl_stream_create_v2(@Cast("dnnl_stream_t*") PointerPointer stream,
         dnnl_engine engine, @Cast("unsigned") int flags, @Const dnnl_stream_attr attr);
+
+// #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
+// #endif
+
+/** Returns the engine of a stream object.
+ * 
+ *  @param stream Stream object.
+ *  @param engine Output engine on which the stream is created.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_stream_get_engine(
+        @Const dnnl_stream stream, @ByPtrPtr dnnl_engine engine);
+public static native @Cast("dnnl_status_t") int dnnl_stream_get_engine(
+        @Const dnnl_stream stream, @Cast("dnnl_engine_t*") PointerPointer engine);
 
 // #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
 // #endif
@@ -6710,10 +6963,30 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     binary_max(dnnl_binary_max),
     /** Binary min */
     binary_min(dnnl_binary_min),
+    /** Binary div */
+    binary_div(dnnl_binary_div),
     /** Nearest Neighbor resampling method */
     resampling_nearest(dnnl_resampling_nearest),
     /** Linear (Bilinear, Trilinear) resampling method */
-    resampling_linear(dnnl_resampling_linear);
+    resampling_linear(dnnl_resampling_linear),
+    /** Reduction using max operation */
+    reduction_max(dnnl_reduction_max),
+    /** Reduction using min operation */
+    reduction_min(dnnl_reduction_min),
+    /** Reduction using sum operation */
+    reduction_sum(dnnl_reduction_sum),
+    /** Reduction using mul operation */
+    reduction_mul(dnnl_reduction_mul),
+    /** Reduction using mean operation */
+    reduction_mean(dnnl_reduction_mean),
+    /** Reduction using norm_lp_max operation */
+    reduction_norm_lp_max(dnnl_reduction_norm_lp_max),
+    /** Reduction using norm_lp_sum operation */
+    reduction_norm_lp_sum(dnnl_reduction_norm_lp_sum),
+    /** Reduction using norm_lp_power_p_max operation */
+    reduction_norm_lp_power_p_max(dnnl_reduction_norm_lp_power_p_max),
+    /** Reduction using norm_lp_power_p_sum operation */
+    reduction_norm_lp_power_p_sum(dnnl_reduction_norm_lp_power_p_sum);
 
     public final int value;
     private algorithm(int v) { this.value = v; }
@@ -7000,6 +7273,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     matmul_d(dnnl_query_matmul_d),
     /** resampling descriptor */
     resampling_d(dnnl_query_resampling_d),
+    /** reduction descriptor */
+    reduction_d(dnnl_query_reduction_d),
 
     /** source memory desc */
     src_md(dnnl_query_src_md),
@@ -7291,8 +7566,17 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 // Targeting ../resampling_backward.java
 
 
+// Targeting ../pooling_v2_forward.java
 
-/** \} dnnl_api_resampling
+
+// Targeting ../pooling_v2_backward.java
+
+
+// Targeting ../reduction.java
+
+
+
+/** \} dnnl_api_reduction
  <p>
  *  \} dnnl_api_primitives
  <p>
