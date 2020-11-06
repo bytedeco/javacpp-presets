@@ -29,11 +29,11 @@ export TF_NEED_MPI=0
 export TF_NEED_ROCM=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
-export TF_CUDA_VERSION=11.0
+export TF_CUDA_VERSION=11.1
 export TF_CUDNN_VERSION=8
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=2.7
-export TF_TENSORRT_VERSION=7.1
+export TF_TENSORRT_VERSION=7.2
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
@@ -129,7 +129,7 @@ sedinplace 's/std::vector<TensorShape> value/std::vector<TensorShape>* value/g' 
 sedinplace 's/NvInferRTSafe.h/NvInferRuntimeCommon.h/g' third_party/tensorrt/tensorrt_configure.bzl
 sedinplace 's/NvInferRTExt.h/NvInferRuntime.h/g' third_party/tensorrt/tensorrt_configure.bzl
 
-# Fix support for CUDA 11.0
+# Fix support for CUDA 11.x
 sedinplace 's/cudnn.h/cudnn_version.h/g' third_party/gpus/find_cuda_config.py
 sedinplace 's/if check_soname/if False/g' third_party/gpus/cuda_configure.bzl
 patch -Np1 < ../../../tensorflow-cuda11.patch
@@ -237,6 +237,7 @@ case $PLATFORM in
         # https://github.com/tensorflow/tensorflow/issues/25213
         patch -Np1 < ../../../tensorflow-windows.patch
         sedinplace 's/"10"/"64_10"/g' tensorflow/stream_executor/platform/default/dso_loader.cc
+        sedinplace 's/"11.0"/"64_110"/g' tensorflow/stream_executor/platform/default/dso_loader.cc
         sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
         if [[ ! -f $PYTHON_BIN_PATH ]]; then
             export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"

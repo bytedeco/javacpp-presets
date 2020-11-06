@@ -41,10 +41,10 @@ index 79a2abc2e..a742571e9 100644
 +  return (jstring)metadataJava;
  }
 diff --git a/onnxruntime/core/framework/provider_bridge_ort.cc b/onnxruntime/core/framework/provider_bridge_ort.cc
-index 425d24b65..9b119241e 100644
+index 75bade5da..7468073ae 100644
 --- a/onnxruntime/core/framework/provider_bridge_ort.cc
 +++ b/onnxruntime/core/framework/provider_bridge_ort.cc
-@@ -610,9 +610,24 @@ struct ProviderHostImpl : ProviderHost {
+@@ -611,12 +611,27 @@ struct ProviderHostImpl : ProviderHost {
  
  } provider_host_;
  
@@ -53,7 +53,10 @@ index 425d24b65..9b119241e 100644
 +#endif
 +
  struct ProviderSharedLibrary {
-   ProviderSharedLibrary() {
+   bool Ensure() {
+     if (handle_)
+       return true;
+ 
      std::string full_path = Env::Default().GetRuntimePath() + std::string(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION);
 +#ifdef __APPLE__
 +size_t len1 = strlen(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION);
@@ -69,16 +72,16 @@ index 425d24b65..9b119241e 100644
      auto error = Env::Default().LoadDynamicLibrary(full_path, &handle_);
      if (!error.IsOK()) {
        LOGS_DEFAULT(ERROR) << error.ErrorMessage();
-@@ -645,6 +660,17 @@ struct ProviderLibrary {
-       return;
+@@ -660,6 +675,17 @@ struct ProviderLibrary {
+       return nullptr;
  
-     std::string full_path = Env::Default().GetRuntimePath() + std::string(filename);
+     std::string full_path = Env::Default().GetRuntimePath() + std::string(filename_);
 +#ifdef __APPLE__
-+size_t len1 = strlen(filename);
++size_t len1 = strlen(filename_);
 +for (uint32_t i = 0; i < _dyld_image_count(); i++) {
 +    const char *libname = _dyld_get_image_name(i);
 +    size_t len2 = strlen(libname);
-+    if (len2 > len1 && strcmp(filename, libname + len2 - len1) == 0) {
++    if (len2 > len1 && strcmp(filename_, libname + len2 - len1) == 0) {
 +        full_path = libname;
 +        break;
 +    }

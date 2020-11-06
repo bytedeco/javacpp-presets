@@ -37,6 +37,8 @@ public class dnnl_memory_extra_desc_t extends Pointer {
     public native int compensation_mask(); public native dnnl_memory_extra_desc_t compensation_mask(int setter);
     /** Scale applied to the data */
     public native float scale_adjust(); public native dnnl_memory_extra_desc_t scale_adjust(float setter);
+    /** Compensation mask for asymmetric quantization */
+    public native int asymm_compensation_mask(); public native dnnl_memory_extra_desc_t asymm_compensation_mask(int setter);
     /** For future backwards compatibility */
     public native @Cast("char") byte reserved(int i); public native dnnl_memory_extra_desc_t reserved(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer reserved();

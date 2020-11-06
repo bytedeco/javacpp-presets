@@ -78,6 +78,12 @@ public class stream extends dnnl_stream_handle {
 // #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
 // #endif
 
+    /** Returns the associated engine. */
+    public native @ByVal engine get_engine();
+
+// #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
+// #endif
+
     /** Waits for all primitives executing in the stream to finish.
      *  @return The stream itself. */
     public native @ByRef @Name("wait") stream _wait();

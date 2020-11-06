@@ -88,7 +88,11 @@ public class primitive extends dnnl_primitive_handle {
         /** A matmul (matrix multiplication) primitive. */
         matmul(dnnl_matmul),
         /** A resampling primitive. */
-        resampling(dnnl_resampling);
+        resampling(dnnl_resampling),
+        /** A pooling version 2 primitive. */
+        pooling_v2(dnnl_pooling_v2),
+        /** A reduction primitive. */
+        reduction(dnnl_reduction);
 
         public final int value;
         private kind(int v) { this.value = v; }

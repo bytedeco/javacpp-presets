@@ -39,8 +39,8 @@ public class dnnl_binary_desc_t extends Pointer {
      *  descriptor. Must be #dnnl_binary. */
     public native @Cast("dnnl_primitive_kind_t") int primitive_kind(); public native dnnl_binary_desc_t primitive_kind(int setter);
     /** The kind of the binary algorithm. Possible values:
-     *  #dnnl_binary_add, #dnnl_binary_mul, #dnnl_binary_max and
-     *  #dnnl_binary_min. */
+     *  #dnnl_binary_add, #dnnl_binary_mul, #dnnl_binary_max, #dnnl_binary_min
+     *  and #dnnl_binary_div. */
     public native @Cast("dnnl_alg_kind_t") int alg_kind(); public native dnnl_binary_desc_t alg_kind(int setter);
     /** Source memory descriptors. */
     public native @ByRef dnnl_memory_desc_t src_desc(int i); public native dnnl_binary_desc_t src_desc(int i, dnnl_memory_desc_t setter);
