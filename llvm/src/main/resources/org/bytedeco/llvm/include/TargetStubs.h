@@ -37,6 +37,7 @@ void LLVMInitialize##TargetName##Disassembler(void);
 LLVM_TARGET(AArch64)
 LLVM_TARGET(AMDGPU)
 LLVM_TARGET(ARM)
+LLVM_TARGET(AVR)
 LLVM_TARGET(BPF)
 LLVM_TARGET(Hexagon)
 LLVM_TARGET(Lanai)
@@ -66,7 +67,6 @@ void LLVMInitializeNVPTXAsmPrinter(void);
 JavaCPP Presets does currently not build experimental targets.
 
 LLVM_TARGET(ARC)
-LLVM_TARGET(AVR)
 LLVM_TARGET(VE)
 */
 #undef LLVM_TARGET
