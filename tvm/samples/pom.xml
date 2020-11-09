@@ -1,0 +1,41 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.tvm</groupId>
+    <artifactId>howtodeploy</artifactId>
+    <version>1.5.5-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>HowtoDeploy</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tvm-platform</artifactId>
+            <version>0.7.0-1.5.5-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tvm-platform-gpu</artifactId>
+            <version>0.7.0-1.5.5-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform-redist</artifactId>
+            <version>11.1-8.0-1.5.5-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled full version of MKL -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl-platform-redist</artifactId>
+            <version>2020.4-1.5.5-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

@@ -35,6 +35,34 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <configuration>
+              <includes>
+                <include>org/bytedeco/llvm/**</include>
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacpp-${javacpp.platform}</id>
+            <phase>package</phase>
+            <configuration>
+              <excludes>
+                <exclude>${javacpp.platform.library.path}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/*.exp</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/*.lib</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/*.obj</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/bin/*</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/lib/*.a</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/lib/clang.lib</exclude>
+                <exclude>org/bytedeco/llvm/${javacpp.platform}/lib/LLVM.lib</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.moditect</groupId>

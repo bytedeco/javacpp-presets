@@ -816,8 +816,8 @@ public static final int
  * LLVMAttributeFunctionIndex or a parameter number from 1 to N.
  */
 /** enum  */
-public static final long
-  LLVMAttributeReturnIndex = 0L,
+public static final int
+  LLVMAttributeReturnIndex = 0,
   // ISO C restricts enumerator values to range of 'int'
   // (4294967295 is too large)
   // LLVMAttributeFunctionIndex = ~0U,
@@ -10825,7 +10825,6 @@ public static native void LLVMInitializeNVPTXAsmPrinter();
 JavaCPP Presets does currently not build experimental targets.
 
 LLVM_TARGET(ARC)
-LLVM_TARGET(AVR)
 LLVM_TARGET(VE)
 */
 // #undef LLVM_TARGET

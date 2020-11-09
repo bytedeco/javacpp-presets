@@ -82,6 +82,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "onnxruntime"
       OS: windows-x86_64
+    - PROJ: "tvm"
+      OS: windows-x86_64
     - PROJ: "liquidfun"
       OS: windows-x86_64
     - PROJ: "qt"
@@ -110,6 +112,9 @@ environment:
 #      OS: windows-x86_64
 #      EXT: -python-gpu
     - PROJ: "onnxruntime"
+      OS: windows-x86_64
+      EXT: -gpu
+    - PROJ: "tvm"
       OS: windows-x86_64
       EXT: -gpu
 

@@ -150,6 +150,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX 1.7.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.5.x  https://github.com/microsoft/onnxruntime
+ * TVM 0.7.0  https://github.com/apache/incubator-tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia

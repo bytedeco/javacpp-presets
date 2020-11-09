@@ -1,4 +1,5 @@
 
+ * Add presets for TVM 0.7.0
  * Include `free()` in presets for FTTW as required by `fftw_export_wisdom_to_string()` ([issue bytedeco/javacpp#429](https://github.com/bytedeco/javacpp/issues/429))
  * Include all missing header files from the `opencv_ximgproc` module ([issue #958](https://github.com/bytedeco/javacpp-presets/issues/958))
  * Disable assembly optimizations for libx264 with FFmpeg on Mac to work around crashes ([issue bytedeco/javacv#1519](https://github.com/bytedeco/javacv/issues/1519))

@@ -486,6 +486,10 @@ jobs:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=tvm OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=liquidfun OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -619,6 +623,11 @@ jobs:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode10.1
+        env: PROJ=tvm OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode10.1
         env: PROJ=liquidfun OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -664,6 +673,10 @@ jobs:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=onnxruntime OS=linux-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tvm OS=linux-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
 
