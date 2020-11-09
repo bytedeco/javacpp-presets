@@ -289,7 +289,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "arrow mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]]; then
+      if [[ "arrow mxnet tensorflow onnx ngraph onnxruntime tvm " =~ "$PROJ " ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /

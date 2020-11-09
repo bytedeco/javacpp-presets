@@ -620,6 +620,7 @@
         <module>onnx</module>
         <module>ngraph</module>
         <module>onnxruntime</module>
+        <module>tvm</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1343,6 +1344,7 @@
         <module>onnx</module>
         <module>ngraph</module>
         <module>onnxruntime</module>
+        <module>tvm</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1416,6 +1418,7 @@
         <module>onnx</module>
         <module>ngraph</module>
         <module>onnxruntime</module>
+        <module>tvm</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1550,6 +1553,7 @@
         <module>tensorrt</module>
         <module>ale</module>
         <module>onnxruntime</module>
+        <module>tvm</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>cpu_features</module>

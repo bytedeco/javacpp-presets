@@ -57,6 +57,7 @@
     <module>../onnx/platform</module>
     <module>../ngraph/platform</module>
     <module>../onnxruntime/platform</module>
+    <module>../tvm/platform</module>
     <module>../liquidfun/platform</module>
     <module>../qt/platform</module>
     <module>../skia/platform</module>
@@ -280,6 +281,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
       <version>1.5.3-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>tvm-platform</artifactId>
+      <version>0.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
