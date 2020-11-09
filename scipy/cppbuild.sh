@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SCIPY_VERSION=1.5.3
+SCIPY_VERSION=1.5.4
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM

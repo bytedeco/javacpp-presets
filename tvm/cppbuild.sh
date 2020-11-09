@@ -62,6 +62,7 @@ export TVM_LIBRARY_PATH=`pwd`
 
 # Fix compiler errors
 sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can_overflow/g' include/tvm/runtime/ndarray.h
+sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 
 # Work around issues with llvm-config
 f=($LLVM_PATH/llvm-config*)
@@ -125,7 +126,7 @@ case $PLATFORM in
         "$PYTHON_BIN_PATH" setup.py install --prefix $INSTALL_PATH
         cd ..
         # need to add RPATH so it can find MKL in cache
-        for f in $(find ../ -iname *.dylib); do install_name_tool -add_rpath @loader_path/../../ $f || true; done
+        for f in $(find ../ -iname '*.dylib'); do install_name_tool -add_rpath @loader_path/../../ $f || true; done
         ;;
     windows-x86_64)
         export CC="cl.exe"

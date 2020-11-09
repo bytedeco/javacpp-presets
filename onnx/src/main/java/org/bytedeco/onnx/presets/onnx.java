@@ -40,6 +40,7 @@ import org.bytedeco.javacpp.Pointer;
         "onnx/defs/operator_sets_training.h",
         "onnx/defs/data_type_utils.h",
         "onnx/defs/shape_inference.h",
+        "onnx/onnx-data.pb.h",
         "onnx/onnx-operators-ml.pb.h",
         "onnx/onnx-ml.pb.h",
         "google/protobuf/arena.h",
@@ -78,7 +79,7 @@ public class onnx implements InfoMapper {
                              "PROTOBUF_ATTRIBUTE_REINITIALIZES", "PROTOBUF_NOINLINE", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE",
                              "ONNX_UNUSED", "ONNX_API", "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC", "ONNX_IMPORT", "ONNX_EXPORT").cppTypes().annotations())
                .put(new Info("GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER").define(false))
-               .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType",
+               .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType", "onnx::SequenceProto::DataType",
                              "onnx::OpSchema::UseType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("onnx::OpSchema::SinceVersion").annotations("@Function"))
                .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
@@ -93,7 +94,8 @@ public class onnx implements InfoMapper {
                              "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard", "onnx::GraphInferencer",
                              "onnx::shape_inference::GraphInferenceContext", "onnx::optimization::FullGraphBasedPass", "onnx::optimization::ImmutablePass",
                              "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2doperators_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2doperators_2dml_2eproto",
-                             "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2dml_2eproto").skip())
+                             "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2dml_2eproto",
+                             "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2ddata_2eproto").skip())
                .put(new Info("onnx::shape_inference::InferenceContextImpl").skip())
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
                .put(new Info("onnx::optimization::Pass").purify(true))
@@ -120,7 +122,8 @@ public class onnx implements InfoMapper {
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
                              "google::protobuf::internal::MergePartialFromImpl", "google::protobuf::internal::UnknownFieldParse", "google::protobuf::internal::WriteLengthDelimited",
-                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "onnx::_TypeProto_default_instance_",
+                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "google::protobuf::UnknownField::LengthDelimited",
+                             "google::protobuf::internal::empty_string_once_init_", "google::protobuf::SourceLocation::leading_detached_comments", "onnx::_TypeProto_default_instance_",
                              "onnx::_TypeProto_Map_default_instance_", "onnx::_TypeProto_Sequence_default_instance_", "onnx::_SparseTensorProto_default_instance_",
                              "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_", "onnx::_TrainingInfoProto_default_instance_",
                              "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",
@@ -128,8 +131,8 @@ public class onnx implements InfoMapper {
                              "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_FunctionProto_default_instance_",
                              "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_", "onnx::RegisterOneFunctionBuilder", "BuildFunction",
                              "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
-                             "onnx::_AttributeProto_default_instance_", "onnx::_TensorAnnotation_default_instance_", "google::protobuf::UnknownField::LengthDelimited",
-                             "google::protobuf::internal::empty_string_once_init_", "google::protobuf::SourceLocation::leading_detached_comments").skip())
+                             "onnx::_AttributeProto_default_instance_", "onnx::_TensorAnnotation_default_instance_", "onnx::_MapProto_default_instance_",
+                             "onnx::_SequenceProto_default_instance_").skip())
 
                .put(new Info("onnx::DataType").annotations("@StdString").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
@@ -153,6 +156,7 @@ public class onnx implements InfoMapper {
                .put(new Info("std::set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::vector<onnx::OpSchema>").pointerTypes("OpSchemaVector").define())
                .put(new Info("std::vector<onnx::OpSchema::FormalParameter>").pointerTypes("FormalParameterVector").define())
+               .put(new Info("std::vector<onnx::TypeProto*>").pointerTypes("TypeProtoVector").define())
                .put(new Info("const std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define())
                .put(new Info("onnx::TensorShapeProto").pointerTypes("TensorShapeProto"))
                .put(new Info("std::vector<const onnx::TensorShapeProto*>").pointerTypes("TensorShapeProtoVector").define())
