@@ -30,7 +30,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy</artifactId>
-      <version>1.5.3-${project.parent.version}</version>
+      <version>1.5.4-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -91,7 +91,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy</artifactId>
-            <version>1.5.3-${project.parent.version}</version>
+            <version>1.5.4-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -120,7 +120,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy</artifactId>
-            <version>1.5.3-${project.parent.version}</version>
+            <version>1.5.4-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -170,6 +170,7 @@
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/numpy/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/scipy/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/opencv/${javacpp.platform}/</buildResource>
           </buildResources>
           <includeResources>

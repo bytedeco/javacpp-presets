@@ -147,7 +147,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.7.0  https://github.com/onnx/onnx
+ * ONNX 1.8.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.5.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/incubator-tvm
