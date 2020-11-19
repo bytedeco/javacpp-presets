@@ -26,9 +26,6 @@ cp lapack-netlib/LAPACKE/include/*.h ../include
 # remove broken cross-compiler workaround on Mac
 sedinplace '/if (($os eq "Darwin")/,/}/d' c_check ../OpenBLAS-$OPENBLAS_VERSION-nolapack/c_check
 
-# fix AVX512 on Linux
-sedinplace 's/_mm512_abs_pd(_mm512_load_pd/_mm512_abs_pd((__m512)_mm512_load_pd/g' kernel/x86_64/dasum_microk_skylakex-2.c ../OpenBLAS-$OPENBLAS_VERSION-nolapack/kernel/x86_64/dasum_microk_skylakex-2.c
-
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export FEXTRALIB="-lgfortran"
 export CROSS_SUFFIX=
@@ -36,6 +33,7 @@ export HOSTCC=gcc
 export NO_LAPACK=0
 export NUM_THREADS=64
 export NO_AFFINITY=1
+export NO_AVX512=1
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../OpenBLAS-android.patch
@@ -157,6 +155,7 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export TARGET=NEHALEM
+        export NO_AVX512=0
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
@@ -232,12 +231,12 @@ case $PLATFORM in
         ;;
 esac
 
-make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_AVX512=$NO_AVX512
 make install "PREFIX=$INSTALL_PATH"
 
 unset DYNAMIC_ARCH
 cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
-make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_LAPACK=1 LIBNAMESUFFIX=nolapack
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_AVX512=$NO_AVX512 NO_LAPACK=1 LIBNAMESUFFIX=nolapack
 make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=nolapack
 
 unset CC
