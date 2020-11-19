@@ -70,6 +70,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i --force --nodeps $HOME/*.rpm"
     fi
   fi
+  # https://gcc.gnu.org/legacy-ml/gcc-patches/2018-01/msg01962.html
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/_mm512_abs_pd (__m512 __A)/_mm512_abs_pd (__m512d __A)/g' /opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/include/avx512fintrin.h"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3*" # not required for GCC 7+
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
