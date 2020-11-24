@@ -240,7 +240,7 @@ case $PLATFORM in
         sedinplace 's/"11.0"/"64_110"/g' tensorflow/stream_executor/platform/default/dso_loader.cc
         sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
         if [[ ! -f $PYTHON_BIN_PATH ]]; then
-            export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
+            export PYTHON_BIN_PATH="$(which python.exe)"
         fi
         export BAZEL_VC="${VCINSTALLDIR:-}"
         export BAZEL_VC_FULL_VERSION="${VCToolsVersion:-}"

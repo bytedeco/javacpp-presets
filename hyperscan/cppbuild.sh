@@ -41,8 +41,10 @@ case $PLATFORM in
         make install/strip
         ;;
     windows-x86_64)
-        CXXFLAGS="/Wv:17" "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' .
-        MSBuild.exe hyperscan.sln //p:Configuration=Release //p:Platform=x64
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        CXXFLAGS="/Wv:17" "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' .
+        ninja -j $MAKEJ
         cp -r src/* $INSTALL_PATH/include/hs/
         cp lib/*.lib $INSTALL_PATH/lib
         ;;

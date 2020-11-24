@@ -35,19 +35,21 @@ case $PLATFORM in
         ;;
     windows-x86)
         cd liquidfun/Box2D
-        CXXFLAGS="/Wv:17" $CMAKE -G "Visual Studio 15 2017" -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF .
-        MSBuild.exe Box2D.sln //p:Configuration=Release //p:Platform=Win32 //p:CL_MPCount=$MAKEJ
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        CXXFLAGS="/Wv:17" $CMAKE -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF .
+        ninja -j $MAKEJ
         cp -r Box2D $INSTALL_PATH/include
-        cp Box2D/Release/*.lib $INSTALL_PATH/lib
-        cp Box2D/Release/*.dll $INSTALL_PATH/bin
+        cp Box2D/*.lib $INSTALL_PATH/lib
         ;;
     windows-x86_64)
         cd liquidfun/Box2D
-        CXXFLAGS="/Wv:17" $CMAKE -G "Visual Studio 15 2017 Win64" -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF .
-        MSBuild.exe Box2D.sln //p:Configuration=Release //p:Platform=x64 //p:CL_MPCount=$MAKEJ
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        CXXFLAGS="/Wv:17" $CMAKE -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF .
+        ninja -j $MAKEJ
         cp -r Box2D $INSTALL_PATH/include
-        cp Box2D/Release/*.lib $INSTALL_PATH/lib
-        cp Box2D/Release/*.dll $INSTALL_PATH/bin
+        cp Box2D/*.lib $INSTALL_PATH/lib
         ;;
     macosx-*)
         cd liquidfun/Box2D

@@ -1,6 +1,6 @@
 version: '{build}'
 
-os: Visual Studio 2017
+os: Visual Studio 2019
 
 cache:
   - C:\Users\appveyor\.m2 -> .appveyor.yml
@@ -73,7 +73,6 @@ environment:
       OS: windows-x86_64
     - PROJ: "mxnet"
       OS: windows-x86_64
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - PROJ: "tensorflow"
       OS: windows-x86_64
     - PROJ: "tensorrt"
@@ -97,7 +96,6 @@ environment:
     - PROJ: "mxnet"
       OS: windows-x86_64
       EXT: -gpu
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 #    - PROJ: "tensorflow"
 #      OS: windows-x86_64
 #      EXT: -gpu

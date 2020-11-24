@@ -154,9 +154,9 @@ cp -a "/c/Python37-x64" "/C/Program Files/Python37"
 cp -a "/c/Python38-x64" "/C/Program Files/Python38"
 
 # install an older less buggy version of GCC
-/c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1CmH1Eq0LoAQQ5mWaqYiU9kYOfMGjLXlz /c/Downloads/mingw-w64-old.tar
-tar xvf /c/Downloads/mingw-w64-old.tar
-pacman -U --noconfirm *.pkg.tar.xz
+#/c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1CmH1Eq0LoAQQ5mWaqYiU9kYOfMGjLXlz /c/Downloads/mingw-w64-old.tar
+#tar xvf /c/Downloads/mingw-w64-old.tar
+#pacman -U --noconfirm *.pkg.tar.xz
 
 # get rid of some stuff we don't use to avoid running out of disk space and that may actually interfere with our builds
 rm -Rf /c/go*
@@ -172,6 +172,15 @@ rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Tools/MSVC/14.12*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Redist/MSVC/14.12*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Auxiliary/Build/14.12/
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/14.16*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Redist/MSVC/14.16*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Auxiliary/Build/14.16/
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/14.2[01234567]*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Redist/MSVC/14.2[01234567]*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Auxiliary/Build/14.2[01234567]/
+ls -l /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/
+ls -l /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Redist/MSVC/
+ls -l /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/VC/Auxiliary/Build/
 rm -Rf /usr/bin/link.exe
 pacman -Rc --noconfirm python python2 mingw-w64-i686-python3 mingw-w64-x86_64-python3
 df -h

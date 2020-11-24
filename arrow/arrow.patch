@@ -1,7 +1,7 @@
-diff -ruN apache-arrow-1.0.0/cpp/cmake_modules/ThirdpartyToolchain.cmake apache-arrow-1.0.0-patch/cpp/cmake_modules/ThirdpartyToolchain.cmake
---- apache-arrow-1.0.0/cpp/cmake_modules/ThirdpartyToolchain.cmake	2020-07-21 06:14:01.000000000 +0900
-+++ apache-arrow-1.0.0-patch/cpp/cmake_modules/ThirdpartyToolchain.cmake	2020-07-28 11:04:06.266711222 +0900
-@@ -1030,6 +1030,7 @@
+diff -ruN apache-arrow-2.0.0/cpp/cmake_modules/ThirdpartyToolchain.cmake apache-arrow-2.0.0-patch/cpp/cmake_modules/ThirdpartyToolchain.cmake
+--- apache-arrow-2.0.0/cpp/cmake_modules/ThirdpartyToolchain.cmake	2020-10-13 09:04:59.000000000 +0900
++++ apache-arrow-2.0.0-patch/cpp/cmake_modules/ThirdpartyToolchain.cmake	2020-11-21 23:43:42.659393097 +0900
+@@ -1084,6 +1084,7 @@
    set(GLOG_CMAKE_ARGS
        ${EP_COMMON_CMAKE_ARGS}
        "-DCMAKE_INSTALL_PREFIX=${GLOG_BUILD_DIR}"
@@ -9,10 +9,10 @@ diff -ruN apache-arrow-1.0.0/cpp/cmake_modules/ThirdpartyToolchain.cmake apache-
        -DBUILD_SHARED_LIBS=OFF
        -DBUILD_TESTING=OFF
        -DWITH_GFLAGS=OFF
-diff -ruN apache-arrow-1.0.0/cpp/src/arrow/compute/kernel.h apache-arrow-1.0.0-patch/cpp/src/arrow/compute/kernel.h
---- apache-arrow-1.0.0/cpp/src/arrow/compute/kernel.h	2020-07-21 06:14:02.000000000 +0900
-+++ apache-arrow-1.0.0-patch/cpp/src/arrow/compute/kernel.h	2020-08-04 13:03:02.258780909 +0900
-@@ -627,7 +627,7 @@
+diff -ruN apache-arrow-2.0.0/cpp/src/arrow/compute/kernel.h apache-arrow-2.0.0-patch/cpp/src/arrow/compute/kernel.h
+--- apache-arrow-2.0.0/cpp/src/arrow/compute/kernel.h	2020-10-13 09:05:00.000000000 +0900
++++ apache-arrow-2.0.0-patch/cpp/src/arrow/compute/kernel.h	2020-11-21 23:43:42.660393132 +0900
+@@ -626,7 +626,7 @@
          finalize(std::move(finalize)) {}
  
    VectorKernel(std::shared_ptr<KernelSignature> sig, ArrayKernelExec exec,
@@ -21,3 +21,26 @@ diff -ruN apache-arrow-1.0.0/cpp/src/arrow/compute/kernel.h apache-arrow-1.0.0-p
        : ArrayKernel(std::move(sig), std::move(exec), std::move(init)),
          finalize(std::move(finalize)) {}
  
+diff -ruN apache-arrow-2.0.0/cpp/src/arrow/vendored/datetime/date.h apache-arrow-2.0.0-patch/cpp/src/arrow/vendored/datetime/date.h
+--- apache-arrow-2.0.0/cpp/src/arrow/vendored/datetime/date.h	2020-10-13 09:05:00.000000000 +0900
++++ apache-arrow-2.0.0-patch/cpp/src/arrow/vendored/datetime/date.h	2020-11-22 17:15:47.247032875 +0900
+@@ -109,7 +109,7 @@
+ #    define CONSTDATA const
+ #    define CONSTCD11
+ #    define CONSTCD14
+-#    define NOEXCEPT _NOEXCEPT
++#    define NOEXCEPT
+ #  else
+ //   VS2017 and later
+ #    define CONSTDATA constexpr const
+diff -ruN apache-arrow-2.0.0/cpp/src/gandiva/engine.cc apache-arrow-2.0.0-patch/cpp/src/gandiva/engine.cc
+--- apache-arrow-2.0.0/cpp/src/gandiva/engine.cc	2020-10-13 09:05:00.000000000 +0900
++++ apache-arrow-2.0.0-patch/cpp/src/gandiva/engine.cc	2020-11-21 23:44:23.656925805 +0900
+@@ -53,6 +53,7 @@
+ #include <llvm/Linker/Linker.h>
+ #include <llvm/MC/SubtargetFeature.h>
+ #include <llvm/Support/DynamicLibrary.h>
++#include <llvm/Support/Host.h>
+ #include <llvm/Support/TargetRegistry.h>
+ #include <llvm/Support/TargetSelect.h>
+ #include <llvm/Support/raw_ostream.h>

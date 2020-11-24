@@ -29,7 +29,8 @@ export AUTOHEADER=:
 export AUTOMAKE=:
 export ACLOCAL=:
 
-# Disable external dependencies on libarchive and libtiff
+# Disable external dependencies on asciidoc, libarchive and libtiff
+sedinplace 's/ac_cv_prog_have_asciidoc="true"/ac_cv_prog_have_asciidoc="false"/g' configure
 sedinplace 's/"libarchive"//g' configure
 sedinplace 's/-ltiff//g' src/api/Makefile.in
 
