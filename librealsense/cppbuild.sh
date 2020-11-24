@@ -70,16 +70,20 @@ case $PLATFORM in
         make install/strip
         ;;
     windows-x86)
-        PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
+        ninja -j $MAKEJ
         cp -a include/* ../include/
-        cp -a Release/* ../lib/
+        cp -a *.lib *.dll ../lib/
         ;;
     windows-x86_64)
-        PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
+        ninja -j $MAKEJ
         cp -a include/* ../include/
-        cp -a Release/* ../lib/
+        cp -a *.lib *.dll ../lib/
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

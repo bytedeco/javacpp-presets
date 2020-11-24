@@ -16,7 +16,7 @@ export OPENMP_FLAGS="--use_openmp"
 case $PLATFORM in
     macosx-*)
         # disable OpenMP on Mac until it's fixed
-        OPENMP_FLAGS=
+        export OPENMP_FLAGS=
         ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
@@ -24,6 +24,8 @@ case $PLATFORM in
             export CUDA_HOME="$CUDA_PATH"
             export CUDNN_HOME="$CUDA_PATH"
         fi
+        export CC="cl.exe"
+        export CXX="cl.exe"
         export PYTHON_BIN_PATH=$(which python.exe)
         ;;
 esac
@@ -51,6 +53,7 @@ git submodule foreach --recursive 'git reset --hard'
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
+sedinplace "s/default='Visual Studio 15 2017'/default='Ninja'/g" tools/ci_build/build.py
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
 sedinplace 's/cudnnSetRNNDescriptor(/cudnnSetRNNDescriptor_v6(/g' onnxruntime/core/providers/cuda/rnn/cudnn_rnn_base.h
@@ -95,8 +98,8 @@ cp -r orttraining/orttraining/models/runner/training_runner.h ../include
 cp -r orttraining/orttraining/models/runner/training_util.h ../include
 cp -r java/src/main/java/* ../java
 cp -a ../build/Release/lib* ../lib || true
-cp ../build/Release/Release/onnxruntime*.dll ../bin || true
-cp ../build/Release/Release/onnxruntime*.lib ../lib || true
+cp ../build/Release/onnxruntime*.dll ../bin || true
+cp ../build/Release/onnxruntime*.lib ../lib || true
 
 # fix library with the same name for OpenMP as MKL on Mac
 case $PLATFORM in

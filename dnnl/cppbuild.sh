@@ -68,6 +68,8 @@ case $PLATFORM in
         install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libdnnl.dylib
         ;;
     windows-x86_64)
+        export CC="cl.exe"
+        export CXX="cl.exe"
         if [[ "$DNNL_CPU_RUNTIME" == "TBB" ]]; then
             cd ../oneTBB-$TBB_VERSION
             patch -Np1 < ../../../tbb-windows.patch
@@ -81,8 +83,9 @@ case $PLATFORM in
             cp -a build/*debug/tbb_debug.lib ../lib/intel64/vc14/
             cd ../oneDNN-$MKLDNN_VERSION
         fi
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH .
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH .
+        ninja -j $MAKEJ
+        ninja install
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

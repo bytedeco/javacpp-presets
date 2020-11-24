@@ -73,20 +73,24 @@ case $PLATFORM in
     windows-x86)
         mkdir -p build
         cd build
-        "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
+        ninja -j $MAKEJ
         cd ..
         cp -a include/* ../include/
-        cp -a build/Release/* ../lib/
+        cp -a build/* ../lib/
         ;;
     windows-x86_64)
         mkdir -p build
         cd build
-        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
+        ninja -j $MAKEJ
         cd ..
         cp -a include/* ../include/
-        cp -a build/Release/* ../lib/
+        cp -a build/* ../lib/
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

@@ -94,12 +94,12 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=i686-w64-mingw32
+        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -fallow-argument-mismatch -m32 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=i686-w64-mingw32
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
-        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=x86_64-w64-mingw32
+        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -fallow-argument-mismatch -m64 -static-libgcc -static-libgfortran -Wl,-Bstatic,--whole-archive,--allow-multiple-definition -lwinpthread -lquadmath -lgfortran -Wl,-Bdynamic,--no-whole-archive" F77="$FC" FLIBS="-lgfortran" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --build=x86_64-w64-mingw32
         make -j $MAKEJ
         make install-strip
         ;;
