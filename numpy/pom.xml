@@ -107,6 +107,7 @@
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/cpython/${os.name}-${os.arch}/</buildResource>
           </buildResources>
           <includeResources>
             <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
@@ -160,5 +161,33 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- We need a host version of CPython when cross-compiling -->
+  <profiles>
+    <profile>
+      <id>numpy-cross-compile</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.compiler</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>cpython</artifactId>
+                <version>3.7.9-${project.parent.version}</version>
+                <classifier>${os.name}-${os.arch}</classifier>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

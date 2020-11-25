@@ -23,7 +23,12 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ $(find "$P" -name Python.h) ]]; then
-            CPYTHON_PATH="$P"
+            if [[ "$(basename $P)" == "$PLATFORM_HOST" ]]; then
+                CPYTHON_HOST_PATH="$P"
+            fi
+            if [[ "$(basename $P)" == "$PLATFORM" ]]; then
+                CPYTHON_PATH="$P"
+            fi
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
         fi
@@ -31,6 +36,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
+CPYTHON_HOST_PATH="${CPYTHON_HOST_PATH//\\//}"
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 
@@ -65,6 +71,8 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.7"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
     "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv cython
     "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate

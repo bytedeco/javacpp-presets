@@ -1,4 +1,5 @@
 
+ * Fix builds for NumPy and SciPy when using a cross compiler
  * Update presets for Visual Studio 2019 on Windows
  * Add presets for TVM 0.7.0
  * Include `free()` in presets for FTTW as required by `fftw_export_wisdom_to_string()` ([issue bytedeco/javacpp#429](https://github.com/bytedeco/javacpp/issues/429))
