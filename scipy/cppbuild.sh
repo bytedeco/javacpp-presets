@@ -24,7 +24,12 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ $(find "$P" -name Python.h) ]]; then
-            CPYTHON_PATH="$P"
+            if [[ "$(basename $P)" == "$PLATFORM_HOST" ]]; then
+                CPYTHON_HOST_PATH="$P"
+            fi
+            if [[ "$(basename $P)" == "$PLATFORM" ]]; then
+                CPYTHON_PATH="$P"
+            fi
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
         elif [[ -f "$P/python/numpy/core/include/numpy/numpyconfig.h" ]]; then
@@ -34,6 +39,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
+CPYTHON_HOST_PATH="${CPYTHON_HOST_PATH//\\//}"
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
@@ -70,6 +76,8 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.7"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
     "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv cython numpy pybind11
     "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.7/numpy/core/lib/libnpymath.a"
@@ -78,6 +86,14 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; 
     cross-expose cython numpy pybind11
     PYTHON_BIN_PATH="python"
     export NUMPY_MADVISE_HUGEPAGE=1
+
+    # For some reason, setup.py fails if the Python installations are not at their original prefixes
+    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.7-config)
+    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.7-config)
+    mkdir -p $PREFIX_HOST_PATH
+    mkdir -p $PREFIX_PATH
+    cp -a $CPYTHON_HOST_PATH/* $PREFIX_HOST_PATH
+    cp -a $CPYTHON_PATH/* $PREFIX_PATH
 fi
 
 case $PLATFORM in
