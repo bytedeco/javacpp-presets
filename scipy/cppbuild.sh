@@ -87,12 +87,16 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; 
     PYTHON_BIN_PATH="python"
     export NUMPY_MADVISE_HUGEPAGE=1
 
-    # For some reason, setup.py fails if the Python installations are not at their original prefixes
+    # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
     PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.7-config)
-    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.7-config)
     mkdir -p $PREFIX_HOST_PATH
-    mkdir -p $PREFIX_PATH
     cp -a $CPYTHON_HOST_PATH/* $PREFIX_HOST_PATH
+fi
+
+if [[ $PLATFORM == linux* ]]; then
+    # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
+    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.7-config)
+    mkdir -p $PREFIX_PATH
     cp -a $CPYTHON_PATH/* $PREFIX_PATH
 fi
 
