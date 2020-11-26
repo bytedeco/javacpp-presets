@@ -302,12 +302,34 @@ fi
 
 # prevent Bazel from exceeding maximum command line length on Windows
 while read -r l; do
-    if [[ $l == ANDROID_* ]] || [[ $l == APPVEYOR_* ]] || [[ $l == BUILD_* ]] || [[ $l == MAVEN_* ]] || [[ $l == ORIGINAL_* ]] || [[ $l == PLATFORM_* ]]; then
+    if [[ $l == ANDROID_* ]] || [[ $l == APPVEYOR_* ]] || [[ $l == BUILD_* ]] || [[ $l == CI_DEPLOY_* ]] || [[ $l == GITHUB_* ]] || [[ $l == GOROOT* ]] || [[ $l == JAVA_HOME_* ]] || [[ $l == MAVEN_* ]] || [[ $l == ORIGINAL_* ]] || [[ $l == PG* ]] || [[ $l == PLATFORM_* ]] || [[ $l == RUNNER_* ]]; then
         unset ${l%%=*}
     fi
 done < <(env)
+unset AZURE_EXTENSION_DIR
+unset MonAgentClientLocation
 unset PSModulePath
 unset __VSCMD_PREINIT_PATH
+
+echo Reducing PATH size by removing duplicates and truncating to satisfy Bazel
+PREVIFS="$IFS"
+NEWPATH="${PATH%%:*}"
+IFS=":"
+for P in $PATH; do
+    FOUND=0
+    for P2 in $NEWPATH; do
+        if [[ "$P" == "$P2" ]]; then
+            FOUND=1
+        fi
+    done
+    if [[ "$FOUND" == "0" ]] && [[ ${#NEWPATH} -lt 3000 ]]; then
+        NEWPATH=$NEWPATH:$P
+    fi
+done
+IFS="$PREVIFS"
+echo ${#PATH}
+echo ${#NEWPATH}
+export PATH=$NEWPATH
 
 bash configure
 bazel build -c opt $BUILDTARGETS --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
