@@ -21,7 +21,8 @@ if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
 
-# Work around build issues on Windows
+# Work around build issues on Mac and Windows
+sedinplace 's/-Werror=format-security/-Wno-implicit-function-declaration/g' src/Makefile.am
 sedinplace '/_rand48_/d' src/klib/drand48.h
 
 case $PLATFORM in

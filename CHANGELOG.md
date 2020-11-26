@@ -1,5 +1,6 @@
 
- * Fix builds for NumPy and SciPy when using a cross compiler
+ * Fix builds for libpostal on Mac and Windows ([issue #903](https://github.com/bytedeco/javacpp-presets/issues/903))
+ * Fix builds for NumPy and SciPy on Linux when using a cross compiler or not
  * Update presets for Visual Studio 2019 on Windows
  * Add presets for TVM 0.7.0
  * Include `free()` in presets for FTTW as required by `fftw_export_wisdom_to_string()` ([issue bytedeco/javacpp#429](https://github.com/bytedeco/javacpp/issues/429))
