@@ -58,7 +58,7 @@ sedinplace '/find_package(Protobuf REQUIRED/d' CMakeLists.txt
 
 case $PLATFORM in
     linux-x86_64)
-        CC="gcc -m64 -I$OPENBLAS_PATH/include" CXX="g++ -m64 -I$OPENBLAS_PATH/include" $CMAKE \
+        CC="gcc -m64 -I/usr/local/include -I$OPENBLAS_PATH/include" CXX="g++ -m64 -I/usr/local/include -I$OPENBLAS_PATH/include" $CMAKE \
             -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
             -DCMAKE_INSTALL_LIBDIR="lib" \
             -DGFLAGS_FOUND:BOOL=ON \
@@ -85,7 +85,7 @@ case $PLATFORM in
             .
         ;;
     macosx-*)
-        CC="clang -I$OPENBLAS_PATH/include -undefined dynamic_lookup" CXX="clang++ -I$OPENBLAS_PATH/include -undefined dynamic_lookup" $CMAKE \
+        CC="clang -I/usr/local/include -I$OPENBLAS_PATH/include -undefined dynamic_lookup" CXX="clang++ -I/usr/local/include -I$OPENBLAS_PATH/include -undefined dynamic_lookup" $CMAKE \
             -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
             -DCMAKE_INSTALL_LIBDIR="lib" \
             -DGFLAGS_FOUND:BOOL=ON \
