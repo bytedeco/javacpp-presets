@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TVM 0.7.0  http://tvm.incubator.apache.org/
+ * TVM 0.7.0  http://tvm.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of TVM ported to Java from these source files in Python and C++:
 
- * https://github.com/apache/incubator-tvm/tree/v0.7/apps/howto_deploy/
+ * https://github.com/apache/tvm/tree/v0.7/apps/howto_deploy/
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `HowtoDeploy.java` source files below, simply execute on the command line:
 ```bash
