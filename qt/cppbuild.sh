@@ -40,9 +40,9 @@ case $PLATFORM in
         ;;
     windows-x86_64)
         # Qt can only be built from very short paths on Windows
-        PLATFORM= cmd.exe //c "mklink /j c:\\qt ."
-        PLATFORM= cmd.exe //c "cd c:\\qt & configure.bat -prefix $(cygpath -w $INSTALL_PATH) $QT_OPTIONS & nmake & nmake install"
-        PLATFORM= cmd.exe //c "rmdir c:\\qt"
+        PLATFORM= cmd.exe //c "mklink /j \\qt ."
+        PLATFORM= cmd.exe //c "cd \\qt & configure.bat -prefix $(cygpath -w $INSTALL_PATH) $QT_OPTIONS & nmake & nmake install"
+        PLATFORM= cmd.exe //c "rmdir \\qt"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
