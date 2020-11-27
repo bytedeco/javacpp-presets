@@ -119,7 +119,7 @@ case $PLATFORM in
         cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
         chmod +w ../lib/libiomp5.dylib
         install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=$OPENBLAS_PATH/include -DCMAKE_LIBRARY_PATH=$OPENBLAS_PATH/lib -DUSE_BLAS=openblas -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENMP=intel -DOpenMP_C_FLAGS="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DOpenMP_CXX_FLAGS="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=$OPENBLAS_PATH/include -DCMAKE_LIBRARY_PATH=$OPENBLAS_PATH/lib -DUSE_BLAS=openblas -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENMP=intel -DOpenMP_C_FLAGS="-Xclang -fopenmp" -DOpenMP_CXX_FLAGS="-Xclang -fopenmp" -DCMAKE_C_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DCMAKE_CXX_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" .
         make -j $MAKEJ
         make install/strip
         cd python

@@ -45,7 +45,9 @@ import org.bytedeco.javacpp.tools.Logger;
                "sys/_types/_sigaltstack.h", "sys/signal.h", "signal.h", /*"sys/_types/_ucontext.h", "sys/ucontext.h", "ucontext.h",*/
                "sched.h", "mach/machine.h", "spawn.h", "sys/_types/_seek_set.h", "sys/unistd.h", "unistd.h",
                "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h"},
-    includepath = "/usr/include")}, target = "org.bytedeco.systems.macosx", global = "org.bytedeco.systems.global.macosx")
+    includepath = {"/usr/include/", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/",
+                   "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"})},
+    target = "org.bytedeco.systems.macosx", global = "org.bytedeco.systems.global.macosx")
 @NoException
 public class macosx implements BuildEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "systems"); }
@@ -85,7 +87,7 @@ public class macosx implements BuildEnabled, InfoMapper {
                              "_STRUCT_TIMESPEC", "_STRUCT_TIMEVAL", "_STRUCT_SIGALTSTACK", "_STRUCT_UCONTEXT",
                              "__extension__", "__header_always_inline", "__inline", "__mode__",
                              "__nonnull", "_Nullable", "__restrict", "__CLOCK_AVAILABILITY", "__OS_AVAILABILITY_MSG",
-                             "__IOS_PROHIBITED", "__TVOS_PROHIBITED", "__WATCHOS_PROHIBITED",
+                             "__DYLDDL_DRIVERKIT_UNAVAILABLE", "__IOS_PROHIBITED", "__TVOS_PROHIBITED", "__WATCHOS_PROHIBITED",
                              "ru_first", "ru_last", "sv_onstack").annotations().cppTypes())
 
                .put(new Info("_POSIX2_VERSION", "_POSIX2_C_VERSION", "_POSIX2_C_BIND",
@@ -132,7 +134,7 @@ public class macosx implements BuildEnabled, InfoMapper {
                .put(new Info("union wait").pointerTypes("wait"))
 
                .put(new Info("LC_ALL_MASK").cppTypes("int").translate(false))
-               .put(new Info("LC_GLOBAL_LOCALE").cppTypes("locale_t").translate(false))
+               .put(new Info("LC_GLOBAL_LOCALE", "LC_C_LOCALE").cppTypes("locale_t").translate(false))
                .put(new Info("PF_VLAN", "PF_BOND").cppTypes("int").translate(false))
                .put(new Info("RTLD_NEXT", "RTLD_DEFAULT", "RTLD_SELF", "RTLD_MAIN_ONLY").cppTypes("void*").translate(false))
                .put(new Info("SAE_ASSOCID_ANY", "SAE_ASSOCID_ALL", "SAE_CONNID_ANY", "SAE_CONNID_ALL").cppTypes("long").translate(false))
@@ -147,6 +149,6 @@ public class macosx implements BuildEnabled, InfoMapper {
 
                .put(new Info("memchr").javaText("public static native Pointer memchr(Pointer __s, int __c, @Cast(\"size_t\") long __n);"))
 
-               .put(new Info("getwd", "mkstemp_dprotected_np").skip());
+               .put(new Info("getwd", "mkstemp_dprotected_np", "posix_spawnattr_setsuidcredport_np").skip());
     }
 }
