@@ -13,7 +13,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
 fi
 
 TVM_VERSION=0.7.0
-download https://dist.apache.org/repos/dist/release/incubator/tvm/tvm-v$TVM_VERSION/apache-tvm-src-v$TVM_VERSION-incubating.tar.gz apache-tvm-src-v$TVM_VERSION-incubating.tar.gz
+download https://dist.apache.org/repos/dist/release/tvm/tvm-v$TVM_VERSION/apache-tvm-src-v$TVM_VERSION-incubating.tar.gz apache-tvm-src-v$TVM_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
