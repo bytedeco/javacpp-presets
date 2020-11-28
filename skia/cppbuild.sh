@@ -43,7 +43,7 @@ case $PLATFORM in
 esac
 
 # Must be kept in sync with skia.version in pom.xml
-SKIA_VERSION=2.80.1
+SKIA_VERSION=2.80.2
 download https://chromium.googlesource.com/chromium/tools/depot_tools.git/+archive/master.tar.gz depot_tools.tar.gz
 download https://github.com/mono/skia/archive/v$SKIA_VERSION.tar.gz skia-$SKIA_VERSION.tar.gz
 

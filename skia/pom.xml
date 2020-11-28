@@ -16,7 +16,7 @@
 
   <properties>
     <!-- Must be kept in sync with SKIA_VERSION in cppbuild.sh -->
-    <skia.version>2.80.1</skia.version>
+    <skia.version>2.80.2</skia.version>
   </properties>
 
   <dependencies>
