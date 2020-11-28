@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>skia-platform</artifactId>
-  <version>2.80.1-${project.parent.version}</version>
+  <version>2.80.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Skia</name>
 
   <properties>

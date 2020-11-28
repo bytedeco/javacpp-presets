@@ -10,10 +10,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.skia.global.Skia.*;
 
+
 @Opaque @Properties(inherit = org.bytedeco.skia.presets.Skia.class)
-public class sk_fontstyle_t extends Pointer {
+public class sk_tracememorydump_t extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public sk_fontstyle_t() { super((Pointer)null); }
+    public sk_tracememorydump_t() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public sk_fontstyle_t(Pointer p) { super(p); }
+    public sk_tracememorydump_t(Pointer p) { super(p); }
 }
