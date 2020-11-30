@@ -83,6 +83,7 @@ sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_o
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
 sedinplace 's/-Xcompiler "$(CFLAGS)/"-Xcompiler=$(CFLAGS)/g' Makefile
 sedinplace '/CHECK(mshadow::DataType<DType>::kFlag == type_flag_)/{N;N;N;d;}' include/mxnet/tensor_blob.h
+sedinplace 's/std::pow/powf/g' src/operator/contrib/multi_lamb.cu
 
 sedinplace '/#include <opencv2\/opencv.hpp>/a\
 #include <opencv2/imgproc/types_c.h>\
