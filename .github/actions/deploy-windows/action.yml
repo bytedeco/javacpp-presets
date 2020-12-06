@@ -1,0 +1,173 @@
+name: Deploy on Windows
+runs:
+  using: composite
+  steps:
+    - name: Install environment
+      shell: cmd
+      run: |
+        cd /d %USERPROFILE%
+
+        echo Installing MSYS2
+        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar pkg-config unzip p7zip zip autoconf autoconf-archive automake make patch gnupg"
+        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL mingw-w64-x86_64-ragel"
+        set "PATH=C:\msys64\usr\bin;%PATH%"
+
+        echo Installing Windows SDK 8.1
+        curl -Lo sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
+        sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
+
+        echo Removing broken stuff from WSL and MSYS2
+        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/mingw64/bin/cmake.exe" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe"
+
+        python -m pip install gdown
+
+        if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
+          echo Installing Bazel
+          curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-windows-x86_64.exe -o C:/msys64/mingw64/bin/bazel.exe
+
+          echo Removing old versions of MSVC that interfere with Bazel
+          bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' \( -name '14.1*' -or -name '14.2[01234567]*' \) -prune -exec rm -Rf {} \;"
+          dir /s /a "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\14.*"
+        )
+
+        rem if not "%CI_DEPLOY_NEED_GCC%"=="" (
+        rem   echo Installing an older less buggy version of GCC
+        rem   python -m gdown.cli https://drive.google.com/uc?id=1CmH1Eq0LoAQQ5mWaqYiU9kYOfMGjLXlz
+        rem   tar -xvf mingw-w64-old.tar
+        rem   bash -c "pacman -U --noconfirm *.pkg.tar.xz"
+        rem   sed -i "/#include <avx512/d" "C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/immintrin.h"
+        rem )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
+          echo Installing CUDA, cuDNN, etc
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda_11.1.1_456.81_win10.exe
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.4/cudnn-11.1-windows-x64-v8.0.4.30.zip
+          cuda_11.1.1_456.81_win10.exe -s
+          unzip cudnn-11.1-windows-x64-v8.0.4.30.zip
+          move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin"
+          move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include"
+          move cuda\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1\lib\x64"
+        )
+
+        if "%CI_DEPLOY_MODULE%"=="tensorrt" (
+          python -m gdown.cli https://drive.google.com/uc?id=1wp0W7FyEFpEI92uIDWWRvgEsvqMhqXEe
+          unzip TensorRT-7.2.1.6.Windows10.x86_64.cuda-11.1.cudnn8.0.zip
+          move TensorRT-7.2.1.6 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+        )
+
+        if "%CI_DEPLOY_MODULE%"=="mkl" (
+          echo Installing MKL
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/17173/w_mkl_2020.4.311.exe
+          w_mkl_2020.4.311.exe --s --x --f .
+          install.exe install --output=mkllog.txt -eula=accept
+          type mkllog.txt
+        )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (
+          echo Installing FlyCapture x86
+          python -m gdown.cli https://drive.google.com/uc?id=1ctSSAMF5IkxTKWiiLtID-ltmm27pHFdr
+          rem We can get this msi file by starting the installation from the exe file
+          cmd.exe /c "msiexec /quiet /i FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL"
+        )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="flycapture" (
+          echo Installing FlyCapture x64
+          python -m gdown.cli https://drive.google.com/uc?id=14QM7W5RHhvZanF1UBobgEIvwdy6VwTht
+          rem We can get this msi file by starting the installation from the exe file
+          cmd.exe /c "msiexec /quiet /i FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL"
+        )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
+          echo Installing Spinnaker x86
+          python -m gdown.cli https://drive.google.com/uc?id=1kufOTKKEGXbaQemjRi8Zy2H98FkL-k6W
+          python -m gdown.cli https://drive.google.com/uc?id=1FNweWcn-keLqvy56xqz3Ve_T3adz43rW
+          rem We can get these msi files by starting the installation from the exe file
+          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_Binaries_v140_x86.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_SourceCode_v140_x86.msi ADDLOCAL=ALL"
+        )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
+          echo Installing Spinnaker x64
+          python -m gdown.cli https://drive.google.com/uc?id=1xIqjBwl3Q9GnEPcs9JdZBJNmOSWD8gRE
+          python -m gdown.cli https://drive.google.com/uc?id=1l74LjV8rANk_P_CvXZOMSzi7J02YVkfD
+          rem We can get these msi files by starting the installation from the exe file
+          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_Binaries_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_SourceCode_v140_x64.msi ADDLOCAL=ALL"
+        )
+
+    - name: Build project
+      shell: cmd
+      run: |
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+          set MSYSTEM=MINGW64
+        )
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86" (
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86
+          set MSYSTEM=MINGW32
+        )
+        if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
+          echo Shorten work paths to prevent Bazel from reaching MAX_PATH limit
+          set "TEST_TMPDIR=C:\tmp"
+          set "TMPDIR=C:\tmp"
+          set "TEMP=C:\tmp"
+          set "TMP=C:\tmp"
+          mkdir C:\tmp
+          C:/msys64/mingw64/bin/bazel.exe version
+        )
+        if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
+          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1"
+          set "CUDA_PATH_V11_1=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1"
+          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1\libnvvp;%PATH%"
+          echo CUDA Version 11.1.182>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.1\version.txt"
+        )
+        set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
+
+        bash --version
+        git --version
+        cl
+        gcc --version
+        call mvn -version
+        cmake --version
+        gpg --version
+        df -h
+        wmic pagefile list /format:list
+
+        echo Fetching %GITHUB_REPOSITORY%@%GITHUB_SHA%
+        git init
+        git fetch --depth 1 https://github.com/%GITHUB_REPOSITORY% %GITHUB_SHA%
+        git checkout %GITHUB_SHA%
+
+        mkdir %USERPROFILE%\.m2
+        if "${{ github.event_name }}"=="pull_request" (set MAVEN_PHASE=install) else (set MAVEN_PHASE=deploy)
+        echo ^<settings^> > %USERPROFILE%\.m2\settings.xml
+        echo ^<mirrors^>^<mirror^>^<id^>google-maven-central^</id^>^<name^>GCS Maven Central mirror^</name^>^<url^>https://maven-central.storage-download.googleapis.com/maven2/^</url^>^<mirrorOf^>central^</mirrorOf^>^</mirror^>^</mirrors^> >> %USERPROFILE%\.m2\settings.xml
+        echo ^<servers^>^<server^>^<id^>sonatype-nexus-snapshots^</id^>^<username^>%CI_DEPLOY_USERNAME%^</username^>^<password^>%CI_DEPLOY_PASSWORD%^</password^>^</server^>^<server^>^<id^>sonatype-nexus-staging^</id^>^<username^>%CI_DEPLOY_USERNAME%^</username^>^<password^>%CI_DEPLOY_PASSWORD%^</password^>^</server^>^</servers^> >> %USERPROFILE%\.m2\settings.xml
+        echo ^</settings^> >> %USERPROFILE%\.m2\settings.xml
+
+        set /a "SECONDS=%RANDOM% %% 300"
+        echo Sleeping %SECONDS% seconds to help avoid race conditions with Maven
+        timeout %SECONDS% > nul
+
+        set MAKEJ=%NUMBER_OF_PROCESSORS%
+        echo Executing Maven %MAVEN_PHASE% on %MAKEJ% processors
+        set EXT=${{ matrix.ext }}
+        if "%EXT%" == "" (set EXT2=) else (set EXT2=%EXT:~1%)
+        set "MAVEN_OPTIONS=clean %MAVEN_PHASE% -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% %MAVEN_OPTIONS%"
+
+        setlocal enabledelayedexpansion
+        for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE% && goto :done || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
+        exit /b !STATUS!
+        :done
+        for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE%/platform/%EXT2%/pom.xml && goto :done2 || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
+        exit /b !STATUS!
+        :done2
+        df -h
+        wmic pagefile list /format:list
+
+    - name: Clean up
+      shell: cmd
+      run: |
+        cd /d %USERPROFILE%
+        set "PATH=C:\msys64\usr\bin;%PATH%"
+        bash -c "rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')"

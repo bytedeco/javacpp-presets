@@ -1,0 +1,117 @@
+# Redeploys in one shot main and secondary artifacts to get consistent timestamps among them as required by Gradle, sbt, etc
+name: Redeploy on Linux
+runs:
+  using: composite
+  steps:
+    - name: Install environment
+      shell: bash
+      run: |
+        cd $HOME
+
+        echo ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL
+        echo ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN
+        echo ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL
+        curl -LO https://nodejs.org/dist/latest-v10.x/node-v10.23.0-linux-x64.tar.xz
+        tar --totals -xf node-v10.23.0-linux-x64.tar.xz
+        export PATH=$HOME/node-v10.23.0-linux-x64/bin:$PATH
+        echo "PATH=$PATH" >> $GITHUB_ENV
+        npm install @actions/cache
+
+        CACHE_PATH="$HOME/.m2/repository"
+        CACHE_KEY="${{ runner.os }}"
+
+        echo "cache = require('@actions/cache');"          > cache.ts
+        echo "paths = ['$CACHE_PATH'];"                   >> cache.ts
+        echo "key = '$CACHE_KEY';"                        >> cache.ts
+        echo "switch (process.argv[2]) {"                 >> cache.ts
+        echo "case 'restore':"                            >> cache.ts
+        echo "    cache.restoreCache(paths, key); break;" >> cache.ts
+        echo "case 'save':"                               >> cache.ts
+        echo "    cache.saveCache(paths, key); break;"    >> cache.ts
+        echo "}"                                          >> cache.ts
+
+    - name: Restore cache
+      shell: bash
+      run: |
+        cd $HOME
+        node cache.ts restore
+
+    - name: Downloading and uploading artifacts
+      shell: bash
+      run: |
+        if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
+            # We are not deploying snapshots
+            exit 0
+        fi
+
+        git --version
+        mvn -version
+        df -h
+
+        echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
+        git init
+        git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
+        git checkout $GITHUB_SHA
+
+        mkdir -p $HOME/.m2
+        echo "<settings>" > $HOME/.m2/settings.xml
+        echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
+        echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
+        echo "</settings>" >> $HOME/.m2/settings.xml
+
+        GROUP="org.bytedeco"
+        REPOSITORY_ID="sonatype-nexus-snapshots"
+        REPOSITORY_URL="https://oss.sonatype.org/content/repositories/snapshots/"
+        MAVEN_OPTIONS="-N -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3"
+
+        rm -f dependencies.txt
+        for POM in $(find $CI_DEPLOY_MODULE/platform/ -iname pom.xml); do
+            if [[ $POM =~ tensorflow/platform/python ]]; then
+                continue # Skip over TensorFlow builds with Python taking more than 6 hours on GitHub Actions
+            fi
+            for i in {1..5}; do
+                STATUS=0
+                mvn dependency:list $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM && break || STATUS=$? && sleep 60
+            done
+            (exit $STATUS)
+        done
+
+        for LINE in $(sort -u dependencies.txt); do
+            if [[ $LINE =~ $GROUP:([^:]*):jar:([^:]*):compile ]]; then
+                ARTIFACT=${BASH_REMATCH[1]}
+                VERSION=${BASH_REMATCH[2]}
+                FILES=
+                TYPES=
+                CLASSIFIERS=
+                for LINE2 in $(sort -u dependencies.txt); do
+                    if [[ $LINE2 =~ $GROUP:$ARTIFACT:jar:([^:]*):$VERSION:compile ]]; then
+                        CLASSIFIER=${BASH_REMATCH[1]}
+                        FILE=$ARTIFACT-$VERSION-$CLASSIFIER.jar
+                        cp -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
+                        [[ -n $FILES ]] && FILES=$FILES,$FILE || FILES=$FILE
+                        [[ -n $TYPES ]] && TYPES=$TYPES,jar || TYPES=jar
+                        [[ -n $CLASSIFIERS ]] && CLASSIFIERS=$CLASSIFIERS,$CLASSIFIER || CLASSIFIERS=$CLASSIFIER
+                    fi
+                done
+                if [[ -n $FILES ]]; then
+                    FILE=$ARTIFACT-$VERSION.jar
+                    cp -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
+                    unzip -o $FILE META-INF/maven/$GROUP/$ARTIFACT/pom.xml
+                    for i in {1..5}; do
+                        STATUS=0
+                        mvn deploy:deploy-file $MAVEN_OPTIONS -DrepositoryId=$REPOSITORY_ID -Durl=$REPOSITORY_URL -DpomFile=META-INF/maven/$GROUP/$ARTIFACT/pom.xml \
+                            -Dfile=$FILE -DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION -Dfiles=$FILES -Dtypes=$TYPES -Dclassifiers=$CLASSIFIERS && break || STATUS=$? && sleep 60
+                    done
+                    (exit $STATUS)
+                fi
+            fi
+        done
+        df -h
+
+    - name: Save cache
+      shell: bash
+      run: |
+        cd $HOME
+        # Prevent all this from getting cached by the CI server
+        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
+        node cache.ts save

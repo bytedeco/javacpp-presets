@@ -1,0 +1,33 @@
+name: spinnaker
+on:
+  push:
+    paths:
+      - spinnaker/**
+  pull_request:
+    paths:
+      - spinnaker/**
+  workflow_dispatch:
+env:
+  CI_DEPLOY_MODULE: ${{ github.workflow }}
+  CI_DEPLOY_PLATFORM: ${{ github.job }}
+  CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+  CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+jobs:
+  linux-x86_64:
+    runs-on: ubuntu-16.04
+    container: centos:6
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+  windows-x86:
+    runs-on: windows-2019
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+  windows-x86_64:
+    runs-on: windows-2019
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+  redeploy:
+    needs: [linux-x86_64, windows-x86, windows-x86_64]
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

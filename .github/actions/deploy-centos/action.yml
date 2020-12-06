@@ -1,0 +1,171 @@
+name: Deploy on CentOS
+runs:
+  using: composite
+  steps:
+    - name: Install environment
+      shell: bash
+      run: |
+        cd /root
+
+        SCL_ENABLE="devtoolset-7"
+        CENTOS_VERSION=$(rpm --eval '%{centos_ver}')
+        if [[ "$CENTOS_VERSION" == "6" ]]; then
+            find /etc/yum.repos.d/ -name *.repo | xargs -i sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/$releasever/6.10/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' {}
+            SCL_ENABLE="devtoolset-7 rh-python36 python27"
+        fi
+        echo "SCL_ENABLE=$SCL_ENABLE" >> $GITHUB_ENV
+
+        yum -y update
+        yum -y install centos-release-scl-rh epel-release
+        if [[ "$CENTOS_VERSION" == "6" ]]; then
+            sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/6\/sclo/6.10\/sclo/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
+        fi
+        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel
+        # https://gcc.gnu.org/legacy-ml/gcc-patches/2018-01/msg01962.html
+        sed -i 's/_mm512_abs_pd (__m512 __A)/_mm512_abs_pd (__m512d __A)/g' /opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/include/avx512fintrin.h
+        source scl_source enable $SCL_ENABLE || true
+
+        curl -LO https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
+        curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
+        tar -xzf cmake-3.16.6-Linux-x86_64.tar.gz -C /opt/
+        tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+        tar -xzf git-2.18.3.tar.gz
+        pushd git-2.18.3; make -j2 prefix=/usr/local/; make -j2 prefix=/usr/local/ install; popd
+        ln -sf /usr/bin/python3.6 /usr/bin/python3
+        ln -sf /opt/cmake-3.16.6-Linux-x86_64/bin/* /usr/bin/
+        ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
+
+        python3 -m pip install gdown
+
+        if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
+          curl -LO https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
+          unzip -qq android-ndk-r18b-linux-x86_64.zip
+          ln -sf android-ndk-r18b android-ndk
+          echo "MAVEN_OPTIONS=-Djavacpp.platform.root=$(pwd)/android-ndk/ -Djava.library.path=" >> $GITHUB_ENV
+        fi
+
+        if [[ $CI_DEPLOY_PLATFORM == "linux-x86" ]]; then
+          rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y install
+          wget --no-directories --no-parent -r https://www.repo.cloudlinux.com/cloudlinux/$CENTOS_VERSION/sclo/devtoolset-7/i386/
+          rpm -i --force --nodeps *.rpm
+        fi
+
+        if [[ -n ${CI_DEPLOY_NEED_BAZEL:-} ]]; then
+          echo Installing Bazel
+          curl -LO https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-installer-linux-x86_64.sh
+          bash bazel-0.25.3-installer-linux-x86_64.sh
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
+          echo Installing CUDA, cuDNN, etc
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda-repo-rhel7-11-1-local-11.1.1_455.32.00-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.4/cudnn-11.1-linux-x64-v8.0.4.30.tgz
+          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.8-1+cuda11.1_x86_64.txz
+
+          rpm -i cuda-repo-rhel7-11-1-local-11.1.1_455.32.00-1.x86_64.rpm
+          pushd /var/cuda-repo-rhel7-11-1-local/; rpm -i --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
+          ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
+          tar -hxvf cudnn-11.1-linux-x64-v8.0.4.30.tgz -C /usr/local/
+          tar -hxvf nccl_2.7.8-1+cuda11.1_x86_64.txz --strip-components=1 -C /usr/local/cuda/
+          mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
+
+          # Work around issues with CUDA 10.2/11.x
+          mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/ || true
+          mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/ || true
+          for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f $f.2; done
+          for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f ${f:0:${#f}-1}1; done
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
+          cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
+          cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
+          cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
+          cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
+
+          # Remove downloaded archives and unused libraries to avoid running out of disk space
+          rm -f *.rpm *.tgz *.txz *.tar.*
+          rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a)
+        fi
+
+        if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
+          python3 -m gdown.cli https://drive.google.com/uc?id=1-SQo1jZZ6FM6PWbAt9YLZisWQolCxbxX
+          tar -hxvf TensorRT-7.2.1.6.CentOS-7.6.x86_64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
+          ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+        fi
+
+        if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
+          echo Installing MKL
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16917/l_mkl_2020.4.304.tgz
+          tar -xzvf l_mkl_2020.4.304.tgz
+          sed -i -e 's/decline/accept/g' l_mkl_2020.4.304/silent.cfg
+          l_mkl_2020.4.304/install.sh -s l_mkl_2020.4.304/silent.cfg
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
+          echo Installing FlyCapture i386
+          python3 -m gdown.cli https://drive.google.com/uc?id=1BOpSik1Fndagzjf4ykwzermt2qlTzsWI
+          tar -xzvf flycapture2-2.13.3.31-i386-pkg_xenial.tgz
+          find -name *.deb | while read f; do ar -xv $f; tar --totals -xf data.tar.xz -C /; done;
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
+          echo Installing FlyCapture amd64
+          python3 -m gdown.cli https://drive.google.com/uc?id=1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd
+          tar -xzvf flycapture2-2.13.3.31-amd64-pkg_xenial.tgz
+          find -name *.deb | while read f; do ar -xv $f; tar --totals -xf data.tar.xz -C /; done;
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "spinnaker" ]]; then
+          echo Installing Spinnaker amd64
+          python3 -m gdown.cli https://drive.google.com/uc?id=1DiI8mG1fyewEGWxW7keg-dqXk0rLwmAK
+          tar -xzvf spinnaker-1.27.0.48-Ubuntu16.04-amd64-pkg.tar.gz
+          find -name *.deb | while read f; do ar -xv $f; tar --totals -xf data.tar.xz -C /; done;
+          ln -s libSpinnaker_C.so.1.27.0.48 /usr/lib/libSpinnaker_C.so.1
+          ln -s libSpinnaker.so.1.27.0.48 /usr/lib/libSpinnaker.so.1
+        fi
+
+        rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3* # not required for GCC 7+
+
+    - name: Build project
+      shell: bash
+      run: |
+        source scl_source enable $SCL_ENABLE || true
+        git --version
+        gcc --version
+        mvn -version
+        cmake --version
+        gpg --version
+        df -h
+
+        echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
+        git init
+        git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
+        git checkout $GITHUB_SHA
+
+        echo "Fixing HOME to /root (was '$HOME')"
+        export HOME=/root
+        mkdir -p $HOME/.m2
+        [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
+        echo "<settings>" > $HOME/.m2/settings.xml
+        echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
+        echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
+        echo "</settings>" >> $HOME/.m2/settings.xml
+
+        SECONDS=$(( RANDOM % 300 ))
+        echo Sleeping $SECONDS seconds to help avoid race conditions with Maven
+        sleep $SECONDS
+
+        export MAKEJ=$(getconf _NPROCESSORS_ONLN)
+        echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
+        export EXT=${{ matrix.ext }}
+        export EXT2=${EXT:1}
+        export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
+        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+        df -h
+
+    - name: Clean up
+      shell: bash
+      run: |
+        cd /root
+        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')

@@ -1,0 +1,96 @@
+name: Deploy on Mac OS X
+runs:
+  using: composite
+  steps:
+    - name: Install environment
+      shell: bash
+      run: |
+        cd $HOME
+
+        export MACOSX_DEPLOYMENT_TARGET=10.13
+        echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
+
+        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel
+
+        if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
+          brew install gcc@7
+          brew link --overwrite gcc@7
+
+          echo Removing "fixed" header files that are actually broken
+          sudo rm -Rf $(find /usr/local/Cellar/gcc@7/ -iname include-fixed)
+
+          echo Fixing up some binaries to support rpath
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libstdc++.6.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgfortran.4.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
+          sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.5.0_2/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
+        fi
+
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL-1.2.0.dylib /usr/local/lib/libSDL-1.2.0.dylib
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/lib/libusb-1.0.0.dylib
+
+        python3 -m pip install gdown
+
+        if [[ -n ${CI_DEPLOY_NEED_BAZEL:-} ]]; then
+          echo Installing Bazel
+          curl -LO https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-installer-darwin-x86_64.sh
+          sudo bash bazel-0.25.3-installer-darwin-x86_64.sh
+        fi
+
+        if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
+          echo Installing MKL
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/17172/m_mkl_2020.4.301.dmg
+          hdiutil mount m_mkl_2020.4.301.dmg
+          cp /Volumes/m_mkl_2020.4.301/m_mkl_2020.4.301.app/Contents/MacOS/silent.cfg .
+          sed -i -e 's/decline/accept/g' silent.cfg
+          sudo /Volumes/m_mkl_2020.4.301/m_mkl_2020.4.301.app/Contents/MacOS/install.sh -s silent.cfg
+        fi
+
+    - name: Build project
+      shell: bash
+      run: |
+        git --version
+        clang --version
+        /usr/local/bin/gcc-? --version
+        mvn -version
+        cmake --version
+        gpg --version
+        df -h
+
+        echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
+        git init
+        git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
+        git checkout $GITHUB_SHA
+
+        mkdir -p $HOME/.m2
+        [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
+        echo "<settings>" > $HOME/.m2/settings.xml
+        echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
+        echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
+        echo "</settings>" >> $HOME/.m2/settings.xml
+
+        SECONDS=$(( RANDOM % 300 ))
+        echo Sleeping $SECONDS seconds to help avoid race conditions with Maven
+        sleep $SECONDS
+
+        export MAKEJ=$(getconf _NPROCESSORS_ONLN)
+        echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
+        export EXT=${{ matrix.ext }}
+        export EXT2=${EXT:1}
+        export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
+        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+        df -h
+
+    - name: Clean up
+      shell: bash
+      run: |
+        cd $HOME
+        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
