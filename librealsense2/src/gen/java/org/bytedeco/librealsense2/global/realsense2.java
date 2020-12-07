@@ -200,7 +200,10 @@ public static final int
     RS2_EXTENSION_AUTO_CALIBRATION_FILTER = 48,
     RS2_EXTENSION_DEVICE_CALIBRATION = 49,
     RS2_EXTENSION_CALIBRATED_SENSOR = 50,
-    RS2_EXTENSION_COUNT = 51;
+    RS2_EXTENSION_HDR_MERGE = 51,
+    RS2_EXTENSION_SEQUENCE_ID_FILTER = 52,
+    RS2_EXTENSION_MAX_USABLE_RANGE_SENSOR = 53,
+    RS2_EXTENSION_COUNT = 54;
 public static native @Cast("const char*") BytePointer rs2_extension_type_to_string(@Cast("rs2_extension") int type);
 public static native @Cast("const char*") BytePointer rs2_extension_to_string(@Cast("rs2_extension") int type);
 
@@ -437,7 +440,7 @@ public static native void rs2_set_devices_changed_callback(@Const rs2_context co
 public static native rs2_device rs2_context_add_device(rs2_context ctx, @Cast("const char*") BytePointer file, @Cast("rs2_error**") PointerPointer error);
 public static native rs2_device rs2_context_add_device(rs2_context ctx, @Cast("const char*") BytePointer file, @ByPtrPtr rs2_error error);
 public static native rs2_device rs2_context_add_device(rs2_context ctx, String file, @ByPtrPtr rs2_error error);
-    
+
 /**
  * Add an instance of software device to the context
  * @param ctx   The context to which the new device will be added
@@ -459,9 +462,9 @@ public static native void rs2_context_remove_device(rs2_context ctx, String file
 
 /**
  * Removes tracking module.
- * function query_devices() locks the tracking module in the tm_context object. 
+ * function query_devices() locks the tracking module in the tm_context object.
  * If the tracking module device is not used it should be removed using this function, so that other applications could find it.
- * This function can be used both before the call to query_device() to prevent enabling tracking modules or afterwards to 
+ * This function can be used both before the call to query_device() to prevent enabling tracking modules or afterwards to
  * release them.
  */
 public static native void rs2_context_unload_tracking_module(rs2_context ctx, @Cast("rs2_error**") PointerPointer error);
@@ -705,7 +708,7 @@ public static native void rs2_disconnect_tm2_controller(@Const rs2_device device
 public static native void rs2_disconnect_tm2_controller(@Const rs2_device device, int id, @ByPtrPtr rs2_error error);
 
 
-/** 
+/**
 * Reset device to factory calibration
 * @param device [in]       The RealSense device
 * @param error [out]       If non-null, receives any error that occurs during this call, otherwise, errors are ignored
@@ -1107,7 +1110,13 @@ public static final int
     RS2_FRAME_METADATA_RAW_FRAME_SIZE = 31,
     /** GPIO input data */
     RS2_FRAME_METADATA_GPIO_INPUT_DATA = 32,
-    RS2_FRAME_METADATA_COUNT = 33;
+    /** sub-preset id */
+    RS2_FRAME_METADATA_SEQUENCE_NAME = 33,
+    /** sub-preset sequence id */
+    RS2_FRAME_METADATA_SEQUENCE_ID = 34,
+    /** sub-preset sequence size */
+    RS2_FRAME_METADATA_SEQUENCE_SIZE = 35,
+    RS2_FRAME_METADATA_COUNT = 36;
 public static native @Cast("const char*") BytePointer rs2_frame_metadata_to_string(@Cast("rs2_frame_metadata_value") int metadata);
 public static native @Cast("const char*") BytePointer rs2_frame_metadata_value_to_string(@Cast("rs2_frame_metadata_value") int metadata);
 
@@ -1538,7 +1547,7 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
         RS2_OPTION_ZERO_ORDER_POINT_X = 47,
         /** Zero order point y*/
         RS2_OPTION_ZERO_ORDER_POINT_Y = 48,
-        /** LLD temperature*/
+        /** LDD temperature*/
         RS2_OPTION_LLD_TEMPERATURE = 49,
         /** MC temperature*/
         RS2_OPTION_MC_TEMPERATURE = 50,
@@ -1578,19 +1587,41 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
         RS2_OPTION_NOISE_FILTERING = 67,
         /** Enable\disable pixel invalidation */
         RS2_OPTION_INVALIDATION_BYPASS = 68,
-        /** Change the depth ambient light see rs2_ambient_light for values */
+        /** DEPRECATED! - Use RS2_OPTION_DIGITAL_GAIN instead. */
         RS2_OPTION_AMBIENT_LIGHT = 69,
+        /** Change the depth digital gain see rs2_digital_gain for values */
+        RS2_OPTION_DIGITAL_GAIN = RS2_OPTION_AMBIENT_LIGHT,
         /** The resolution mode: see rs2_sensor_mode for values */
-        RS2_OPTION_SENSOR_MODE = 70,
+        RS2_OPTION_SENSOR_MODE = RS2_OPTION_AMBIENT_LIGHT + 1,
         /** Enable Laser On constantly (GS SKU Only) */
-        RS2_OPTION_EMITTER_ALWAYS_ON = 71,
+        RS2_OPTION_EMITTER_ALWAYS_ON = RS2_OPTION_AMBIENT_LIGHT + 2,
         /** Depth Thermal Compensation for selected D400 SKUs */
-        RS2_OPTION_THERMAL_COMPENSATION = 72,
+        RS2_OPTION_THERMAL_COMPENSATION = RS2_OPTION_AMBIENT_LIGHT + 3,
         /** Enable depth & color frame sync with periodic calibration for proper alignment */
-        RS2_OPTION_TRIGGER_CAMERA_ACCURACY_HEALTH = 73,
-        RS2_OPTION_RESET_CAMERA_ACCURACY_HEALTH = 74,
+        RS2_OPTION_TRIGGER_CAMERA_ACCURACY_HEALTH = RS2_OPTION_AMBIENT_LIGHT + 4,
+        RS2_OPTION_RESET_CAMERA_ACCURACY_HEALTH = RS2_OPTION_AMBIENT_LIGHT + 5,
+        /** Set host performance mode to optimize device settings so host can keep up with workload, for example, USB transaction granularity, setting option to low performance host leads to larger USB transaction size and reduced number of transactions which improves performance and stability if host is relatively weak as compared to workload */
+        RS2_OPTION_HOST_PERFORMANCE = RS2_OPTION_AMBIENT_LIGHT + 6,
+        /** Enable / disable HDR */
+        RS2_OPTION_HDR_ENABLED = RS2_OPTION_AMBIENT_LIGHT + 7,
+        /** HDR Sequence name */
+        RS2_OPTION_SEQUENCE_NAME = RS2_OPTION_AMBIENT_LIGHT + 8,
+        /** HDR Sequence size */
+        RS2_OPTION_SEQUENCE_SIZE = RS2_OPTION_AMBIENT_LIGHT + 9,
+        /** HDR Sequence ID - 0 is not HDR; sequence ID for HDR configuration starts from 1 */
+        RS2_OPTION_SEQUENCE_ID = RS2_OPTION_AMBIENT_LIGHT + 10,
+        /** Humidity temperature [Deg Celsius]*/
+        RS2_OPTION_HUMIDITY_TEMPERATURE = RS2_OPTION_AMBIENT_LIGHT + 11,
+        /** Turn on/off the maximum usable depth sensor range given the amount of ambient light in the scene */
+        RS2_OPTION_ENABLE_MAX_USABLE_RANGE = RS2_OPTION_AMBIENT_LIGHT + 12,
+        /** Turn on/off the alternate IR, When enabling alternate IR, the IR image is holding the amplitude of the depth correlation. */
+        RS2_OPTION_ALTERNATE_IR = RS2_OPTION_AMBIENT_LIGHT + 13,
+        /** Noise estimation - indicates the noise on the IR image */
+        RS2_OPTION_NOISE_ESTIMATION = RS2_OPTION_AMBIENT_LIGHT + 14,
+        /** Enables data collection for calculating IR pixel reflectivity  */
+        RS2_OPTION_ENABLE_IR_REFLECTIVITY = RS2_OPTION_AMBIENT_LIGHT + 15,
         /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
-        RS2_OPTION_COUNT = 75;
+        RS2_OPTION_COUNT = RS2_OPTION_AMBIENT_LIGHT + 16;
 
     // This function is being deprecated. For existing options it will return option name, but for future API additions the user should call rs2_get_option_name instead.
     public static native @Cast("const char*") BytePointer rs2_option_to_string(@Cast("rs2_option") int option);
@@ -1661,11 +1692,18 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
         RS2_SENSOR_MODE_COUNT = 3;
     public static native @Cast("const char*") BytePointer rs2_sensor_mode_to_string(@Cast("rs2_sensor_mode") int preset);
 
-    /** \brief ambient light for RS2_OPTION_AMBIENT_LIGHT option. */
+    /** \brief  DEPRECATED! - Use RS2_OPTION_DIGITAL_GAIN instead. */
     /** enum rs2_ambient_light */
     public static final int
         RS2_AMBIENT_LIGHT_NO_AMBIENT = 1,
         RS2_AMBIENT_LIGHT_LOW_AMBIENT = 2;
+    
+
+    /** \brief digital gain for RS2_OPTION_DIGITAL_GAIN option. */
+    /** enum rs2_digital_gain */
+    public static final int
+        RS2_DIGITAL_GAIN_HIGH = 1,
+        RS2_DIGITAL_GAIN_LOW = 2;
     
 
     /** \brief values for RS2_OPTION_TRIGGER_CAMERA_ACCURACY_HEALTH option. */
@@ -1680,6 +1718,19 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
         /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
         RS2_CAH_TRIGGER_COUNT = 3;
     
+
+    /** \brief values for RS2_OPTION_HOST_PERFORMANCE option. */
+    /** enum rs2_host_perf_mode */
+    public static final int
+        /** no change in settings, use device defaults */
+        RS2_HOST_PERF_DEFAULT = 0,
+        /** low performance host mode, if host cannot keep up with workload, this option may improve stability, for example, it sets larger USB transaction granularity, reduces number of transactions and improve performance and stability on relatively weak hosts as compared to the workload */
+        RS2_HOST_PERF_LOW = 1,
+        /** high performance host mode, if host is strong as compared to the work and can handle workload without delay, this option sets smaller USB transactions granularity and as result larger number of transactions and workload on host, but reduces chance in device frame drops */
+        RS2_HOST_PERF_HIGH = 2,
+        /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
+        RS2_HOST_PERF_COUNT = 3;
+    public static native @Cast("const char*") BytePointer rs2_host_perf_mode_to_string( @Cast("rs2_host_perf_mode") int perf );
 
     /**
     * check if an option is read-only
@@ -2081,6 +2132,22 @@ public static native rs2_processing_block rs2_create_zero_order_invalidation_blo
 */
 public static native rs2_processing_block rs2_create_huffman_depth_decompress_block(@Cast("rs2_error**") PointerPointer error);
 public static native rs2_processing_block rs2_create_huffman_depth_decompress_block(@ByPtrPtr rs2_error error);
+
+/**
+* Creates a hdr_merge processing block. 
+* The block merges between two depth frames with different exposure values
+* @param error [out]  if non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native rs2_processing_block rs2_create_hdr_merge_processing_block(@Cast("rs2_error**") PointerPointer error);
+public static native rs2_processing_block rs2_create_hdr_merge_processing_block(@ByPtrPtr rs2_error error);
+
+/**
+* Creates a sequence_id_filter processing block.
+* The block lets frames with the selected sequence id pass and blocks frames with other values
+* @param error [out]  if non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native rs2_processing_block rs2_create_sequence_id_filter(@Cast("rs2_error**") PointerPointer error);
+public static native rs2_processing_block rs2_create_sequence_id_filter(@ByPtrPtr rs2_error error);
 
 /**
 * Retrieve processing block specific information, like name.
@@ -2920,7 +2987,7 @@ public static native void rs2_get_video_stream_intrinsics(@Const rs2_stream_prof
 public static native void rs2_get_video_stream_intrinsics(@Const rs2_stream_profile mode, rs2_intrinsics intrinsics, @ByPtrPtr rs2_error error);
 
 /**
- * Returns the list of recommended processing blocks for a specific sensor. 
+ * Returns the list of recommended processing blocks for a specific sensor.
  * Order and configuration of the blocks are decided by the sensor
  * @param sensor [in]          input sensor
  * @param error [out]  if non-null, receives any error that occurs during this call, otherwise, errors are ignored
@@ -3108,6 +3175,13 @@ public static native void rs2_reset_sensor_calibration( @Const rs2_sensor sensor
 public static native void rs2_set_motion_device_intrinsics(@Const rs2_sensor sensor, @Const rs2_stream_profile profile, @Const rs2_motion_device_intrinsic intrinsics, @Cast("rs2_error**") PointerPointer error);
 public static native void rs2_set_motion_device_intrinsics(@Const rs2_sensor sensor, @Const rs2_stream_profile profile, @Const rs2_motion_device_intrinsic intrinsics, @ByPtrPtr rs2_error error);
 
+/** When called on a depth sensor, this method will return the maximum range of the camera given the amount of ambient light in the scene
+* @param sensor [in]      depth sensor
+* @param error [out]      if non-null, receives any error that occurs during this call, otherwise, errors are ignored
+* @return                the max usable range in meters
+*/
+public static native float rs2_get_max_usable_depth_range(@Const rs2_sensor sensor, @Cast("rs2_error**") PointerPointer error);
+public static native float rs2_get_max_usable_depth_range(@Const rs2_sensor sensor, @ByPtrPtr rs2_error error);
 
 // #ifdef __cplusplus
 // #endif
@@ -3500,7 +3574,7 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
     * Start the pipeline streaming with its default configuration.
     * The pipeline captures samples from the device, and delivers them to the through the provided frame callback.
     * Starting the pipeline is possible only when it is not started. If the pipeline was started, an exception is raised.
-    * When starting the pipeline with a callback both \c wait_for_frames() or \c poll_for_frames() will throw exception. 
+    * When starting the pipeline with a callback both \c wait_for_frames() or \c poll_for_frames() will throw exception.
     *
     * @param pipe [in]     A pointer to an instance of the pipeline
     * @param callback [in] callback object created from c++ application. ownership over the callback object is moved into the relevant streaming lock
@@ -3692,8 +3766,8 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
 // #include "h/rs_sensor.h"
 
 public static final int RS2_API_MAJOR_VERSION =    2;
-public static final int RS2_API_MINOR_VERSION =    38;
-public static final int RS2_API_PATCH_VERSION =    1;
+public static final int RS2_API_MINOR_VERSION =    40;
+public static final int RS2_API_PATCH_VERSION =    0;
 public static final int RS2_API_BUILD_VERSION =    0;
 
 // #ifndef STRINGIFY

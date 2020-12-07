@@ -70,6 +70,6 @@ public class realsense2 implements InfoMapper {
         infoMap.put(new Info("rs2_camera_info", "rs2_stream").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("RS2_API_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
                .put(new Info("RS2_API_FULL_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
-               .put(new Info("rs2_create_playback_device", "rs2_cah_trigger_to_string", "rs2_ambient_light_to_string").skip());
+               .put(new Info("rs2_create_playback_device", "rs2_cah_trigger_to_string", "rs2_ambient_light_to_string", "rs2_digital_gain_to_string").skip());
     }
 }
