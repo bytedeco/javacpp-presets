@@ -163,7 +163,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
- * librealsense2 2.38.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.40.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
@@ -188,7 +188,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Leptonica 1.80.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
- * OpenPose 1.6.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
+ * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.1.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.0.x  https://developer.nvidia.com/cudnn
    * NCCL 2.7.x  https://developer.nvidia.com/nccl

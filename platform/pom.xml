@@ -240,7 +240,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openpose-platform</artifactId>
-      <version>1.6.0-${project.version}</version>
+      <version>1.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -295,7 +295,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>qt-platform</artifactId>
-      <version>5.15.1-${project.version}</version>
+      <version>5.15.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

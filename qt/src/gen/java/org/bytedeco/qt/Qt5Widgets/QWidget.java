@@ -137,8 +137,8 @@ public class QWidget extends QObject {
 // #endif // QT_CONFIG(graphicseffect)
 
 // #ifndef QT_NO_GESTURES
-    public native void grabGesture(@Cast("Qt::GestureType") long type);
-    public native void ungrabGesture(@Cast("Qt::GestureType") long type);
+    public native void grabGesture(@Cast("Qt::GestureType") int type);
+    public native void ungrabGesture(@Cast("Qt::GestureType") int type);
     public native void setWindowTitle(@Const @ByRef QString arg0);
 // #ifndef QT_NO_STYLE_STYLESHEET
     public native void setStyleSheet(@Const @ByRef QString styleSheet);
