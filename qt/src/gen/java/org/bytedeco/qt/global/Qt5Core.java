@@ -119,8 +119,9 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         NoButton        (0x00000000),
         LeftButton      (0x00000001),
         RightButton     (0x00000002),
-        MidButton       (0x00000004), // ### Qt 6: remove me
-        MiddleButton    (MidButton),
+        MiddleButton    (0x00000004),
+// #if QT_DEPRECATED_SINCE(5, 15) // commented as such since 4.7.0
+// #endif
         BackButton      (0x00000008),
         XButton1        (BackButton),
         ExtraButton1    (XButton1),
@@ -1694,7 +1695,7 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         GestureCanceled = 4;
 
     /** enum Qt::GestureType */
-    public static final long
+    public static final int
         TapGesture        = 1,
         TapAndHoldGesture = 2,
         PanGesture        = 3,
@@ -1703,7 +1704,7 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
 
         CustomGesture     = 0x0100,
 
-        LastGestureType   = ~0L;
+        LastGestureType   = ~0;
 
     @Namespace("Qt") public enum GestureFlag {
         DontStartGestureOnChildren(0x01),

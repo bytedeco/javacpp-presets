@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENPOSE_VERSION=1.6.0
+OPENPOSE_VERSION=1.7.0
 
 download https://github.com/CMU-Perceptual-Computing-Lab/openpose/archive/v$OPENPOSE_VERSION.tar.gz openpose-$OPENPOSE_VERSION.tar.gz
 
