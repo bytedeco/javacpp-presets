@@ -44,7 +44,7 @@ public class rs2_intrinsics extends Pointer {
     public native float fy(); public native rs2_intrinsics fy(float setter);
     /** Distortion model of the image */
     public native @Cast("rs2_distortion") int model(); public native rs2_intrinsics model(int setter);
-    /** Distortion coefficients */
+    /** Distortion coefficients. Order for Brown-Conrady: [k1, k2, p1, p2, k3]. Order for F-Theta Fish-eye: [k1, k2, k3, k4, 0]. Other models are subject to their own interpretations */
     public native float coeffs(int i); public native rs2_intrinsics coeffs(int i, float setter);
     @MemberGetter public native FloatPointer coeffs();
 }

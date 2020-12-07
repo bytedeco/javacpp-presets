@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * librealsense2 2.38.1  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.40.0  https://github.com/IntelRealSense/librealsense
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -29,7 +29,7 @@ Here is a simple example of librealsense2 ported to Java from this C source file
 
  * https://github.com/IntelRealSense/librealsense/blob/master/examples/C/distance/rs-distance.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `TestConnection.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `RsDistance.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -48,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>librealsense2-platform</artifactId>
-            <version>2.38.1-1.5.5-SNAPSHOT</version>
+            <version>2.40.0-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
