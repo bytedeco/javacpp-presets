@@ -25,7 +25,7 @@ Here is a simple example of librealsense2 ported to Java from this C source file
 
  * https://github.com/IntelRealSense/librealsense/blob/master/examples/C/distance/rs-distance.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `TestConnection.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `RsDistance.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```

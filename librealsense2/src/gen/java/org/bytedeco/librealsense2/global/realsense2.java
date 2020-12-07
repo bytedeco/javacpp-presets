@@ -90,10 +90,10 @@ public static final int
     /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
     RS2_DISTORTION_COUNT = 6;
 public static native @Cast("const char*") BytePointer rs2_distortion_to_string(@Cast("rs2_distortion") int distortion);
-// Targeting ..\rs2_intrinsics.java
+// Targeting ../rs2_intrinsics.java
 
 
-// Targeting ..\rs2_dsm_params.java
+// Targeting ../rs2_dsm_params.java
 
 
 
@@ -106,22 +106,22 @@ public static final int
     /** Thermal-over-aging; aging-induced error changes alongside temperature */
     RS2_DSM_CORRECTION_TOA = 2,
     RS2_DSM_CORRECTION_COUNT = 3;
-// Targeting ..\rs2_motion_device_intrinsic.java
+// Targeting ../rs2_motion_device_intrinsic.java
 
 
-// Targeting ..\rs2_vertex.java
+// Targeting ../rs2_vertex.java
 
 
-// Targeting ..\rs2_pixel.java
+// Targeting ../rs2_pixel.java
 
 
-// Targeting ..\rs2_vector.java
+// Targeting ../rs2_vector.java
 
 
-// Targeting ..\rs2_quaternion.java
+// Targeting ../rs2_quaternion.java
 
 
-// Targeting ..\rs2_pose.java
+// Targeting ../rs2_pose.java
 
 
 
@@ -232,133 +232,133 @@ public static final int
    RS2_MATCHER_DEFAULT = 6, //the default matcher compare all the streams based on closest timestamp
 
    RS2_MATCHER_COUNT = 7;
-// Targeting ..\rs2_device_info.java
+// Targeting ../rs2_device_info.java
 
 
-// Targeting ..\rs2_device.java
+// Targeting ../rs2_device.java
 
 
-// Targeting ..\rs2_error.java
+// Targeting ../rs2_error.java
 
 
-// Targeting ..\rs2_log_message.java
+// Targeting ../rs2_log_message.java
 
 
-// Targeting ..\rs2_raw_data_buffer.java
+// Targeting ../rs2_raw_data_buffer.java
 
 
-// Targeting ..\rs2_frame.java
+// Targeting ../rs2_frame.java
 
 
-// Targeting ..\rs2_frame_queue.java
+// Targeting ../rs2_frame_queue.java
 
 
-// Targeting ..\rs2_pipeline.java
+// Targeting ../rs2_pipeline.java
 
 
-// Targeting ..\rs2_pipeline_profile.java
+// Targeting ../rs2_pipeline_profile.java
 
 
-// Targeting ..\rs2_config.java
+// Targeting ../rs2_config.java
 
 
-// Targeting ..\rs2_device_list.java
+// Targeting ../rs2_device_list.java
 
 
-// Targeting ..\rs2_stream_profile_list.java
+// Targeting ../rs2_stream_profile_list.java
 
 
-// Targeting ..\rs2_processing_block_list.java
+// Targeting ../rs2_processing_block_list.java
 
 
-// Targeting ..\rs2_stream_profile.java
+// Targeting ../rs2_stream_profile.java
 
 
-// Targeting ..\rs2_frame_callback.java
+// Targeting ../rs2_frame_callback.java
 
 
-// Targeting ..\rs2_log_callback.java
+// Targeting ../rs2_log_callback.java
 
 
-// Targeting ..\rs2_syncer.java
+// Targeting ../rs2_syncer.java
 
 
-// Targeting ..\rs2_device_serializer.java
+// Targeting ../rs2_device_serializer.java
 
 
-// Targeting ..\rs2_source.java
+// Targeting ../rs2_source.java
 
 
-// Targeting ..\rs2_processing_block.java
+// Targeting ../rs2_processing_block.java
 
 
-// Targeting ..\rs2_frame_processor_callback.java
+// Targeting ../rs2_frame_processor_callback.java
 
 
-// Targeting ..\rs2_playback_status_changed_callback.java
+// Targeting ../rs2_playback_status_changed_callback.java
 
 
-// Targeting ..\rs2_update_progress_callback.java
+// Targeting ../rs2_update_progress_callback.java
 
 
-// Targeting ..\rs2_context.java
+// Targeting ../rs2_context.java
 
 
-// Targeting ..\rs2_device_hub.java
+// Targeting ../rs2_device_hub.java
 
 
-// Targeting ..\rs2_sensor_list.java
+// Targeting ../rs2_sensor_list.java
 
 
-// Targeting ..\rs2_sensor.java
+// Targeting ../rs2_sensor.java
 
 
-// Targeting ..\rs2_options.java
+// Targeting ../rs2_options.java
 
 
-// Targeting ..\rs2_options_list.java
+// Targeting ../rs2_options_list.java
 
 
-// Targeting ..\rs2_devices_changed_callback.java
+// Targeting ../rs2_devices_changed_callback.java
 
 
-// Targeting ..\rs2_notification.java
+// Targeting ../rs2_notification.java
 
 
-// Targeting ..\rs2_notifications_callback.java
+// Targeting ../rs2_notifications_callback.java
 
 
-// Targeting ..\rs2_firmware_log_message.java
+// Targeting ../rs2_firmware_log_message.java
 
 
-// Targeting ..\rs2_firmware_log_parsed_message.java
+// Targeting ../rs2_firmware_log_parsed_message.java
 
 
-// Targeting ..\rs2_firmware_log_parser.java
+// Targeting ../rs2_firmware_log_parser.java
 
 
-// Targeting ..\rs2_terminal_parser.java
+// Targeting ../rs2_terminal_parser.java
 
 
-// Targeting ..\rs2_log_callback_ptr.java
+// Targeting ../rs2_log_callback_ptr.java
 
 
-// Targeting ..\rs2_notification_callback_ptr.java
+// Targeting ../rs2_notification_callback_ptr.java
 
 
-// Targeting ..\rs2_software_device_destruction_callback_ptr.java
+// Targeting ../rs2_software_device_destruction_callback_ptr.java
 
 
-// Targeting ..\rs2_devices_changed_callback_ptr.java
+// Targeting ../rs2_devices_changed_callback_ptr.java
 
 
-// Targeting ..\rs2_frame_callback_ptr.java
+// Targeting ../rs2_frame_callback_ptr.java
 
 
-// Targeting ..\rs2_frame_processor_callback_ptr.java
+// Targeting ../rs2_frame_processor_callback_ptr.java
 
 
-// Targeting ..\rs2_update_progress_callback_ptr.java
+// Targeting ../rs2_update_progress_callback_ptr.java
 
 
 
@@ -921,10 +921,10 @@ public static final int
     RS2_CALIBRATION_STATUS_LAST    = 4,
     RS2_CALIBRATION_STATUS_COUNT = RS2_CALIBRATION_STATUS_LAST - RS2_CALIBRATION_STATUS_FIRST + 1;
 public static native @Cast("const char*") BytePointer rs2_calibration_status_to_string( @Cast("rs2_calibration_status") int arg0 );
-// Targeting ..\rs2_calibration_change_callback.java
+// Targeting ../rs2_calibration_change_callback.java
 
 
-// Targeting ..\rs2_calibration_change_callback_ptr.java
+// Targeting ../rs2_calibration_change_callback_ptr.java
 
 
 
@@ -2216,7 +2216,7 @@ public static final int
     RS2_PLAYBACK_STATUS_COUNT = 4;
 
 public static native @Cast("const char*") BytePointer rs2_playback_status_to_string(@Cast("rs2_playback_status") int status);
-// Targeting ..\rs2_playback_status_changed_callback_ptr.java
+// Targeting ../rs2_playback_status_changed_callback_ptr.java
 
 
 
@@ -2546,7 +2546,7 @@ public static final int
     /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
     RS2_FORMAT_COUNT = 29;
 public static native @Cast("const char*") BytePointer rs2_format_to_string(@Cast("rs2_format") int format);
-// Targeting ..\rs2_extrinsics.java
+// Targeting ../rs2_extrinsics.java
 
 
 
@@ -3690,43 +3690,43 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
 // #define RS2_ADVANCED_MODE_COMMAND_H
 
 // #include <stdint.h>
-// Targeting ..\STDepthControlGroup.java
+// Targeting ../STDepthControlGroup.java
 
 
-// Targeting ..\STRsm.java
+// Targeting ../STRsm.java
 
 
-// Targeting ..\STRauSupportVectorControl.java
+// Targeting ../STRauSupportVectorControl.java
 
 
-// Targeting ..\STColorControl.java
+// Targeting ../STColorControl.java
 
 
-// Targeting ..\STRauColorThresholdsControl.java
+// Targeting ../STRauColorThresholdsControl.java
 
 
-// Targeting ..\STSloColorThresholdsControl.java
+// Targeting ../STSloColorThresholdsControl.java
 
 
-// Targeting ..\STSloPenaltyControl.java
+// Targeting ../STSloPenaltyControl.java
 
 
-// Targeting ..\STHdad.java
+// Targeting ../STHdad.java
 
 
-// Targeting ..\STColorCorrection.java
+// Targeting ../STColorCorrection.java
 
 
-// Targeting ..\STAEControl.java
+// Targeting ../STAEControl.java
 
 
-// Targeting ..\STDepthTableControl.java
+// Targeting ../STDepthTableControl.java
 
 
-// Targeting ..\STCensusRadius.java
+// Targeting ../STCensusRadius.java
 
 
-// Targeting ..\STAFactor.java
+// Targeting ../STAFactor.java
 
 
 
