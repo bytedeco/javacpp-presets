@@ -45,6 +45,7 @@ case $ARCH in
 esac
 PLATFORM=$OS-$ARCH
 EXTENSION=
+EXCLUDE=
 echo "Detected platform \"$PLATFORM\""
 
 while [[ $# > 0 ]]; do
@@ -62,6 +63,13 @@ while [[ $# > 0 ]]; do
         -extension)
             shift
             EXTENSION="$1"
+            ;;
+        -exclude=*)
+            EXCLUDE="${1#-exclude=}"
+            ;;
+        -exclude)
+            shift
+            EXCLUDE="$1"
             ;;
         install)
             OPERATION=install

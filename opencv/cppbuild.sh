@@ -45,7 +45,10 @@ export PYTHON3_INCLUDE_DIR=
 export PYTHON3_LIBRARY=
 export PYTHON3_PACKAGES_PATH=
 if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
-    export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
+    export LD_LIBRARY_PATH="$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
+    if [[ "$EXCLUDE" != *openblas ]]; then
+        export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:${LD_LIBRARY_PATH:-}"
+    fi
     export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.7"
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.7m/"
     export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.7/"
@@ -55,7 +58,10 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
     OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
     NUMPY_PATH=$(cygpath $NUMPY_PATH)
-    export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
+    export PATH="$CPYTHON_PATH:$NUMPY_PATH:$PATH"
+    if [[ "$EXCLUDE" != *openblas ]]; then
+        export PATH="$OPENBLAS_PATH:$PATH"
+    fi
     export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python.exe"
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
     export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python37.lib"
@@ -123,6 +129,14 @@ BUILD_CONTRIB_X="-DBUILD_opencv_stereo=OFF -DBUILD_opencv_plot=ON -DBUILD_opencv
 GPU_FLAGS="-DWITH_CUDA=OFF"
 if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=11.0 -DCUDNN_VERSION=8.0 -DCUDA_ARCH_BIN='3.5' -DCUDA_ARCH_PTX='3.5' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
+fi
+
+# exclude openblas dependencies
+if [[ "$EXCLUDE" == *openblas ]]; then
+    export OpenBLAS_HOME=""
+    cd ../../../
+    patch -s -p0 < ./opencv_exclude-openblas.patch
+    cd cppbuild/"$PLATFORM$EXTENSION"/opencv-$OPENCV_VERSION
 fi
 
 case $PLATFORM in
