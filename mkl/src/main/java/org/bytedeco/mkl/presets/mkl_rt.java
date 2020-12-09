@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               preload = {"mkl_core", "iomp5", "libiomp5md", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread",
                          "mkl_def", "mkl_mc", "mkl_mc3", "mkl_p4", "mkl_p4m", "mkl_p4m3", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
                          "mkl_vml_def", "mkl_vml_ia", "mkl_vml_mc", "mkl_vml_mc2", "mkl_vml_mc3", "mkl_vml_p4", "mkl_vml_p4m", "mkl_vml_p4m2", "mkl_vml_p4m3",
-                         "mkl_vml_avx", "mkl_vml_avx2", "mkl_vml_avx512", "mkl_vml_avx512_mic", "mkl_vml_cmpt"}),
+                         "mkl_vml_avx", "mkl_vml_avx2", "mkl_vml_avx512", "mkl_vml_avx512_mic", "mkl_vml_cmpt"}, resource = {"include", "lib"}),
     @Platform(value = "linux-x86",    linkpath = {"/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
     @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
     @Platform(value = "windows",     includepath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include/"),
