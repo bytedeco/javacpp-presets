@@ -32,6 +32,11 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>mkl-platform</artifactId>
+      <version>2020.4-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
       <version>1.5.4-${project.parent.version}</version>
     </dependency>

@@ -35,6 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 import org.bytedeco.dnnl.presets.*;
 import org.bytedeco.llvm.presets.*;
+import org.bytedeco.mkl.presets.*;
 import org.bytedeco.scipy.presets.*;
 
 /**
@@ -42,11 +43,13 @@ import org.bytedeco.scipy.presets.*;
  * @author Samuel Audet
  */
 @Properties(
-    inherit = {dnnl.class, LLVM.class, scipy.class},
+    inherit = {dnnl.class, LLVM.class, mkl_rt.class, scipy.class},
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
-            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>"},
+            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>",
+                       "openblas_config.h", "cblas.h", "lapacke_config.h",
+                       "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             resource = "python"
         ),
         @Platform(

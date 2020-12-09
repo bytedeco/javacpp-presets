@@ -1,0 +1,81 @@
+diff -ruN apache-tvm-src-v0.7.0.rc0-incubating/python/tvm/relay/op/strategy/x86.py apache-tvm-src-v0.7.0.rc0-incubating-patch/python/tvm/relay/op/strategy/x86.py
+--- apache-tvm-src-v0.7.0.rc0-incubating/python/tvm/relay/op/strategy/x86.py	2020-10-03 03:13:38.000000000 +0900
++++ apache-tvm-src-v0.7.0.rc0-incubating-patch/python/tvm/relay/op/strategy/x86.py	2020-12-08 20:52:58.377336269 +0900
+@@ -368,6 +368,13 @@
+             name="batch_matmul_cblas.x86",
+             plevel=15,
+         )
++    if "mkl" in target.libs:
++        strategy.add_implementation(
++            wrap_compute_batch_matmul(topi.x86.batch_matmul_mkl),
++            wrap_topi_schedule(topi.x86.schedule_batch_matmul_mkl),
++            name="batch_matmul_mkl.x86",
++            plevel=15,
++        )
+     return strategy
+ 
+ 
+diff -ruN apache-tvm-src-v0.7.0.rc0-incubating/python/tvm/topi/x86/batch_matmul.py apache-tvm-src-v0.7.0.rc0-incubating-patch/python/tvm/topi/x86/batch_matmul.py
+--- apache-tvm-src-v0.7.0.rc0-incubating/python/tvm/topi/x86/batch_matmul.py	2020-10-03 03:13:38.000000000 +0900
++++ apache-tvm-src-v0.7.0.rc0-incubating-patch/python/tvm/topi/x86/batch_matmul.py	2020-12-08 20:57:52.883989301 +0900
+@@ -19,7 +19,7 @@
+ from tvm import te
+ from tvm import autotvm
+ from tvm.autotvm.task.space import SplitEntity
+-from tvm.contrib import cblas
++from tvm.contrib import cblas, mkl
+ from .. import generic
+ from ..util import traverse_inline, get_const_tuple, get_max_power2_factor
+ 
+@@ -128,10 +128,9 @@
+     cfg["tile_y"] = SplitEntity([M // y_bn, y_bn])
+ 
+ 
+-@autotvm.register_topi_compute("batch_matmul_cblas.x86")
+-def batch_matmul_cblas(cfg, x, y):
++def batch_matmul_blas_common(cfg, x, y, lib):
+     """Computes batch matrix multiplication of `x` and `y` when `x` and `y` are
+-    data in batch.
++    data in batch, using one of BLAS libraries.
+ 
+     Parameters
+     ----------
+@@ -141,6 +140,8 @@
+         3-D with shape [batch, M, K]
+     y : tvm.te.Tensor
+         3-D with shape [batch, N, K]
++    lib : A contrib module which implements batch_matmul funtion
++        cblas and mkl are supported
+     Returns
+     -------
+     output : tvm.te.Tensor
+@@ -152,9 +153,28 @@
+     assert XB == YB, "batch dimension doesn't match"
+     assert XK == YK, "shapes of x and y is inconsistant"
+     cfg.add_flop(XB * M * N * XK * 2)
+-    return cblas.batch_matmul(x, y, False, True)
++    return lib.batch_matmul(x, y, False, True)
++
++
++@autotvm.register_topi_compute("batch_matmul_cblas.x86")
++def batch_matmul_cblas(cfg, x, y):
++    """Compute batch_matmul using cblas"""
++    return batch_matmul_blas_common(cfg, x, y, cblas)
+ 
+ 
+ @autotvm.register_topi_schedule("batch_matmul_cblas.x86")
+ def schedule_batch_matmul_cblas(_, outs):
++    """Create schedule for batch_matmul_cblas"""
++    return generic.schedule_extern(outs)
++
++
++@autotvm.register_topi_compute("batch_matmul_mkl.x86")
++def batch_matmul_mkl(cfg, x, y):
++    """Compute batch_matmul using mkl"""
++    return batch_matmul_blas_common(cfg, x, y, mkl)
++
++
++@autotvm.register_topi_schedule("batch_matmul_mkl.x86")
++def schedule_batch_matmul_mkl(_, outs):
++    """Create schedule for batch_matmul_mul"""
+     return generic.schedule_extern(outs)

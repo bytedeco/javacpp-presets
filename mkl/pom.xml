@@ -65,6 +65,16 @@
               </includes>
               <excludes>
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/*jni*</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/bin/*</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/*.a</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_core.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_intel_ilp64.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_intel_lp64.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_intel_thread.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_sequential.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_tbb_thread.lib</exclude>
               </excludes>
             </configuration>
           </execution>
