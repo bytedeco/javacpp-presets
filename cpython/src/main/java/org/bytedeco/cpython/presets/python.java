@@ -24,7 +24,13 @@ package org.bytedeco.cpython.presets;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
@@ -146,14 +152,50 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class python implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "cpython"); }
 
-    /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/")}. */
+    /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform())} and monkey patches files accordingly. */
     public static File cachePackage() throws IOException {
-        return Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/");
+        File pythonFile = Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform());
+        File configDir = new File(pythonFile, "lib/python3.7/");
+        if (configDir.exists()) {
+            String pythonPath = pythonFile.getAbsolutePath();
+            Pattern pattern = Pattern.compile("'prefix': '(.*)'");
+            for (File f : configDir.listFiles()) {
+                if (f.getName().startsWith("_sysconfigdata")) {
+                    Path path = f.toPath();
+                    List<String> lines = Files.readAllLines(path);
+                    String prefix = null;
+                    for (String l : lines) {
+                        Matcher m = pattern.matcher(l);
+                        if (m.find()) {
+                            prefix = m.group(1);
+                            break;
+                        }
+                    }
+                    ArrayList<String> newLines = new ArrayList<String>(lines.size());
+                    if (prefix != null) {
+                        for (String l : lines) {
+                            newLines.add(l.replace(prefix, pythonPath));
+                        }
+                        Files.write(path, newLines);
+                    }
+                }
+            }
+
+            // Also create symbolic links for native libraries found there.
+            File[] files = pythonFile.listFiles();
+            if (files != null) {
+                ClassProperties p = Loader.loadProperties((Class)null, Loader.loadProperties(), false);
+                for (File file : files) {
+                    Loader.createLibraryLink(file.getAbsolutePath(), p, null, pythonPath + "/lib");
+                }
+            }
+        }
+        return pythonFile;
     }
 
-    /** Returns {@code {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")}} where {@code File f = cachePackage()}. */
+    /** Returns {@code {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
     public static File[] cachePackages() throws IOException {
-        File f = cachePackage();
+        File f = new File(cachePackage(), "lib");
         return new File[] {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")};
     }
 
