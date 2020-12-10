@@ -1,4 +1,5 @@
 
+ * Introduce monkey patching when loading presets for CPython to relocate home more reliably
  * Add display sample for librealsense2 ([pull #978](https://github.com/bytedeco/javacpp-presets/pull/978))
  * Fix builds for libpostal on Mac and Windows ([issue #903](https://github.com/bytedeco/javacpp-presets/issues/903))
  * Fix builds for NumPy and SciPy on Linux when using a cross compiler or not
