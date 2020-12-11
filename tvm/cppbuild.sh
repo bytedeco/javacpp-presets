@@ -165,4 +165,17 @@ for MODULE in ${MODULES[@]}; do
 done
 rm -Rf $(find ../ -iname __pycache__)
 
+# Copy/adjust Java source files
+mkdir -p ../java
+cp -r jvm/core/src/main/java/* ../java
+cp -r jvm/native/src/main/native/* ../include
+sedinplace '/dlfcn.h/d' ../include/org_apache_tvm_native_c_api.cc
+sedinplace '/org_apache_tvm_native_c_api.h/d' ../include/org_apache_tvm_native_c_api.cc
+sedinplace '/if (_tvmHandle/,/^  }/d' ../include/org_apache_tvm_native_c_api.cc
+sedinplace 's/reinterpret_cast<int>/static_cast<int>/g' ../include/org_apache_tvm_native_c_api.cc
+sedinplace '/#include "jni_helper_func.h"/i\
+extern "C" {
+' ../include/org_apache_tvm_native_c_api.cc
+echo "}" >> ../include/org_apache_tvm_native_c_api.cc
+
 cd ../..
