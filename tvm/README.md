@@ -20,6 +20,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/tvm/apidocs/
 
+&lowast; Call `Loader.load(org.bytedeco.tvm.presets.tvm_runtime.class)` before using the API in the `org.apache.tvm` package.
+
 
 Sample Usage
 ------------
