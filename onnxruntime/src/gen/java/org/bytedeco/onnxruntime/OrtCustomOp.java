@@ -44,7 +44,7 @@ public class OrtCustomOp extends Pointer {
       public    CreateKernel_OrtCustomOp_OrtApi_OrtKernelInfo(Pointer p) { super(p); }
       protected CreateKernel_OrtCustomOp_OrtApi_OrtKernelInfo() { allocate(); }
       private native void allocate();
-      public native Pointer call(OrtCustomOp op, @Const OrtApi api,
+      public native Pointer call(@Const OrtCustomOp op, @Const OrtApi api,
                                       @Const OrtKernelInfo info);
   }
   public native CreateKernel_OrtCustomOp_OrtApi_OrtKernelInfo CreateKernel(); public native OrtCustomOp CreateKernel(CreateKernel_OrtCustomOp_OrtApi_OrtKernelInfo setter);
@@ -56,7 +56,7 @@ public class OrtCustomOp extends Pointer {
       public    GetName_OrtCustomOp(Pointer p) { super(p); }
       protected GetName_OrtCustomOp() { allocate(); }
       private native void allocate();
-      public native @Cast("const char*") BytePointer call(OrtCustomOp op);
+      public native @Cast("const char*") BytePointer call(@Const OrtCustomOp op);
   }
   public native GetName_OrtCustomOp GetName(); public native OrtCustomOp GetName(GetName_OrtCustomOp setter);
 
@@ -67,7 +67,7 @@ public class OrtCustomOp extends Pointer {
       public    GetExecutionProviderType_OrtCustomOp(Pointer p) { super(p); }
       protected GetExecutionProviderType_OrtCustomOp() { allocate(); }
       private native void allocate();
-      public native @Cast("const char*") BytePointer call(OrtCustomOp op);
+      public native @Cast("const char*") BytePointer call(@Const OrtCustomOp op);
   }
   public native GetExecutionProviderType_OrtCustomOp GetExecutionProviderType(); public native OrtCustomOp GetExecutionProviderType(GetExecutionProviderType_OrtCustomOp setter);
 
@@ -78,7 +78,7 @@ public class OrtCustomOp extends Pointer {
       public    GetInputType_OrtCustomOp_long(Pointer p) { super(p); }
       protected GetInputType_OrtCustomOp_long() { allocate(); }
       private native void allocate();
-      public native @Cast("ONNXTensorElementDataType") int call(OrtCustomOp op, @Cast("size_t") long index);
+      public native @Cast("ONNXTensorElementDataType") int call(@Const OrtCustomOp op, @Cast("size_t") long index);
   }
   public native GetInputType_OrtCustomOp_long GetInputType(); public native OrtCustomOp GetInputType(GetInputType_OrtCustomOp_long setter);
   public static class GetInputTypeCount_OrtCustomOp extends FunctionPointer {
@@ -87,7 +87,7 @@ public class OrtCustomOp extends Pointer {
       public    GetInputTypeCount_OrtCustomOp(Pointer p) { super(p); }
       protected GetInputTypeCount_OrtCustomOp() { allocate(); }
       private native void allocate();
-      public native @Cast("size_t") long call(OrtCustomOp op);
+      public native @Cast("size_t") long call(@Const OrtCustomOp op);
   }
   public native GetInputTypeCount_OrtCustomOp GetInputTypeCount(); public native OrtCustomOp GetInputTypeCount(GetInputTypeCount_OrtCustomOp setter);
   public static class GetOutputType_OrtCustomOp_long extends FunctionPointer {
@@ -96,7 +96,7 @@ public class OrtCustomOp extends Pointer {
       public    GetOutputType_OrtCustomOp_long(Pointer p) { super(p); }
       protected GetOutputType_OrtCustomOp_long() { allocate(); }
       private native void allocate();
-      public native @Cast("ONNXTensorElementDataType") int call(OrtCustomOp op, @Cast("size_t") long index);
+      public native @Cast("ONNXTensorElementDataType") int call(@Const OrtCustomOp op, @Cast("size_t") long index);
   }
   public native GetOutputType_OrtCustomOp_long GetOutputType(); public native OrtCustomOp GetOutputType(GetOutputType_OrtCustomOp_long setter);
   public static class GetOutputTypeCount_OrtCustomOp extends FunctionPointer {
@@ -105,7 +105,7 @@ public class OrtCustomOp extends Pointer {
       public    GetOutputTypeCount_OrtCustomOp(Pointer p) { super(p); }
       protected GetOutputTypeCount_OrtCustomOp() { allocate(); }
       private native void allocate();
-      public native @Cast("size_t") long call(OrtCustomOp op);
+      public native @Cast("size_t") long call(@Const OrtCustomOp op);
   }
   public native GetOutputTypeCount_OrtCustomOp GetOutputTypeCount(); public native OrtCustomOp GetOutputTypeCount(GetOutputTypeCount_OrtCustomOp setter);
 

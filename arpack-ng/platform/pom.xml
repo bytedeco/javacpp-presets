@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>arpack-ng-platform</artifactId>
-  <version>3.7.0-${project.parent.version}</version>
+  <version>3.8.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for ARPACK-NG</name>
 
   <properties>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.12-${project.parent.version}</version>
+      <version>0.3.13-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

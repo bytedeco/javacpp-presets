@@ -12,8 +12,6 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
-
-// This is used internally by the C++ API. This is the common base class used by the wrapper objects.
 @Name("Ort::Base<OrtAllocator>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class BaseAllocator extends Pointer {
     static { Loader.load(); }

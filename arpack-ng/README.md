@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ARPACK-NG 3.7.0  https://scilab.io/arpack-ng/
+ * ARPACK-NG 3.8.0  https://scilab.io/arpack-ng/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.arpack</groupId>
     <artifactId>icbarpackc</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>IcbArpackC</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>arpack-ng-platform</artifactId>
-            <version>3.7.0-1.5.4</version>
+            <version>3.8.0-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

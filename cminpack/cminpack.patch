@@ -1,6 +1,6 @@
-diff -ruN cminpack-1.3.6/cminpack.h cminpack-1.3.6-patch/cminpack.h
---- cminpack-1.3.6/cminpack.h	2017-02-25 00:09:31.000000000 +0900
-+++ cminpack-1.3.6-patch/cminpack.h	2018-03-03 20:19:34.897627900 +0900
+diff -ruN cminpack-1.3.7/cminpack.h cminpack-1.3.7-patch/cminpack.h
+--- cminpack-1.3.7/cminpack.h	2020-12-10 12:46:30.000000000 +0900
++++ cminpack-1.3.7-patch/cminpack.h	2020-12-14 09:56:21.103983672 +0900
 @@ -36,38 +36,7 @@
  extern "C" {
  #endif /* __cplusplus */
@@ -40,9 +40,9 @@ diff -ruN cminpack-1.3.6/cminpack.h cminpack-1.3.6-patch/cminpack.h
  
  #if defined(__CUDA_ARCH__) || defined(__CUDACC__)
  #define __cminpack_attr__ __device__
-diff -ruN cminpack-1.3.6/cminpackP.h cminpack-1.3.6-patch/cminpackP.h
---- cminpack-1.3.6/cminpackP.h	2017-02-25 00:09:31.000000000 +0900
-+++ cminpack-1.3.6-patch/cminpackP.h	2018-03-03 20:19:08.831974800 +0900
+diff -ruN cminpack-1.3.7/cminpackP.h cminpack-1.3.7-patch/cminpackP.h
+--- cminpack-1.3.7/cminpackP.h	2020-12-10 12:46:30.000000000 +0900
++++ cminpack-1.3.7-patch/cminpackP.h	2020-12-14 09:56:01.382967467 +0900
 @@ -11,20 +11,20 @@
  #endif
  
@@ -56,7 +56,7 @@ diff -ruN cminpack-1.3.6/cminpackP.h cminpack-1.3.6-patch/cminpackP.h
  #include <cblas.h>
 -#endif
 +//#endif
- #define __cminpack_enorm__(n,x) cblas_dnrm2(n,x,1)
+ #define __cminpack_enorm__(n,x) __cminpack_cblas__(nrm2)(n,x,1)
  #else
  #define __cminpack_enorm__(n,x) __cminpack_func__(enorm)(n,x)
  #endif
@@ -71,18 +71,18 @@ diff -ruN cminpack-1.3.6/cminpackP.h cminpack-1.3.6-patch/cminpackP.h
  #if defined(__LP64__) /* In LP64 match sizes with the 32 bit ABI */
  typedef int 		__CLPK_integer;
  typedef int 		__CLPK_logical;
-@@ -51,7 +51,7 @@
- int dgeqrf_(__CLPK_integer *m, __CLPK_integer *n, __CLPK_doublereal *a, __CLPK_integer *
-             lda, __CLPK_doublereal *tau, __CLPK_doublereal *work, __CLPK_integer *lwork, __CLPK_integer *info);
+@@ -47,7 +47,7 @@
+   __CLPK_integer *m, __CLPK_integer *n, __cminpack_real__ *a, __CLPK_integer * lda,
+   __cminpack_real__ *tau, __cminpack_real__ *work, __CLPK_integer *lwork, __CLPK_integer *info);
  #endif
 -#endif
 +//#endif
  
  #include "minpackP.h"
  
-diff -ruN cminpack-1.3.6/Makefile cminpack-1.3.6-patch/Makefile
---- cminpack-1.3.6/Makefile	2017-02-25 00:09:31.000000000 +0900
-+++ cminpack-1.3.6-patch/Makefile	2018-03-03 20:19:08.847604700 +0900
+diff -ruN cminpack-1.3.7/Makefile cminpack-1.3.7-patch/Makefile
+--- cminpack-1.3.7/Makefile	2020-12-10 12:46:30.000000000 +0900
++++ cminpack-1.3.7-patch/Makefile	2020-12-14 09:55:58.464965069 +0900
 @@ -11,7 +11,7 @@
  #LIBSUFFIX=s
  #CFLAGS="-O3 -g -Wall -Wextra -DUSE_CBLAS -DUSE_LAPACK"
@@ -92,12 +92,12 @@ diff -ruN cminpack-1.3.6/Makefile cminpack-1.3.6-patch/Makefile
  
  ### configuration for the long double version:
  ## make LIBSUFFIX=s CFLAGS="-O3 -g -Wall -Wextra -D__cminpack_long_double__"
-@@ -109,7 +109,7 @@
- install: libcminpack$(LIBSUFFIX).a
- 	cp libcminpack$(LIBSUFFIX).a ${DESTDIR}/lib
- 	chmod 644 ${DESTDIR}/lib/libcminpack$(LIBSUFFIX).a
--	ranlib -t ${DESTDIR}/lib/libcminpack$(LIBSUFFIX).a # might be unnecessary
-+#	ranlib -t ${DESTDIR}/lib/libcminpack$(LIBSUFFIX).a # might be unnecessary
+@@ -91,7 +91,7 @@
+ install: $(LIB)
+ 	cp $(LIB) ${DESTDIR}/lib
+ 	chmod 644 ${DESTDIR}/lib/$(LIB)
+-	$(RANLIB) -t ${DESTDIR}/lib/$(LIB) # might be unnecessary
++#	$(RANLIB) -t ${DESTDIR}/lib/$(LIB) # might be unnecessary
  	cp minpack.h ${DESTDIR}/include
  	chmod 644 ${DESTDIR}/include/minpack.h
  	cp cminpack.h ${DESTDIR}/include

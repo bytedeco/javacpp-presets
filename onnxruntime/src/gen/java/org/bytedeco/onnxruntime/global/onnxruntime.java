@@ -30,10 +30,9 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <string.h>
-// #include "onnxruntime_session_options_config_keys.h"
 
 // This value is used in structures passed to ORT so that a newer version of ORT will still work with them
-public static final int ORT_API_VERSION = 5;
+public static final int ORT_API_VERSION = 6;
 
 // #ifdef __cplusplus
 // #endif
@@ -114,7 +113,7 @@ public static final int ORT_API_VERSION = 5;
 // #endif
 
 // Copied from TensorProto::DataType
-// Currently, Ort doesn't support complex64, complex128, bfloat16 types
+// Currently, Ort doesn't support complex64, complex128
 /** enum ONNXTensorElementDataType */
 public static final int
   ONNX_TENSOR_ELEMENT_DATA_TYPE_UNDEFINED = 0,
@@ -167,9 +166,6 @@ public static final int
   ORT_NOT_IMPLEMENTED = 9,
   ORT_INVALID_GRAPH = 10,
   ORT_EP_FAIL = 11;
-// Targeting ../OrtArenaCfg.java
-
-
 
 // #define ORT_RUNTIME_CLASS(X)
 //   struct Ort##X;
@@ -222,6 +218,9 @@ public static final int
 // Targeting ../OrtThreadingOptions.java
 
 
+// Targeting ../OrtArenaCfg.java
+
+
 
 // #ifdef _WIN32
 // #else
@@ -272,7 +271,8 @@ public static final int
   ORT_PROJECTION_CSHARP = 2,
   ORT_PROJECTION_PYTHON = 3,
   ORT_PROJECTION_JAVA = 4,
-  ORT_PROJECTION_WINML = 5;
+  ORT_PROJECTION_WINML = 5,
+  ORT_PROJECTION_NODEJS = 6;
 // Targeting ../OrtKernelInfo.java
 
 
@@ -296,6 +296,18 @@ public static final int
   OrtMemTypeCPUOutput = -1,             // CPU accessible memory outputted by non-CPU execution provider, i.e. CUDA_PINNED
   OrtMemTypeCPU = OrtMemTypeCPUOutput,  // temporary CPU accessible memory allocated by non-CPU execution provider, i.e. CUDA_PINNED
   OrtMemTypeDefault = 0;                // the default allocator for execution provider
+
+/** enum OrtCudnnConvAlgoSearch */
+public static final int
+  EXHAUSTIVE = 0,  // expensive exhaustive benchmarking using cudnnFindConvolutionForwardAlgorithmEx
+  HEURISTIC = 1,   // lightweight heuristic based search using cudnnGetConvolutionForwardAlgorithm_v7
+  DEFAULT = 2;     // default algorithm using CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_PRECOMP_GEMM
+// Targeting ../OrtCUDAProviderOptions.java
+
+
+// Targeting ../OrtOpenVINOProviderOptions.java
+
+
 // Targeting ../OrtApiBase.java
 
 
@@ -406,6 +418,16 @@ public static native @Const OrtApiBase OrtGetApiBase();
 @Namespace("Ort") public static native void OrtRelease(OrtModelMetadata ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtThreadingOptions ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtIoBinding ptr);
+@Namespace("Ort") public static native void OrtRelease(OrtArenaCfg ptr);
+// Targeting ../Float16_t.java
+
+
+// Targeting ../BFloat16_t.java
+
+
+// Targeting ../BaseArenaCfg.java
+
+
 // Targeting ../BaseAllocator.java
 
 
@@ -506,6 +528,9 @@ public static native @Const OrtApiBase OrtGetApiBase();
 
 
 // Targeting ../IoBinding.java
+
+
+// Targeting ../ArenaCfg.java
 
 
 // Targeting ../CustomOpApi.java

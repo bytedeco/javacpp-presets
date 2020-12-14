@@ -62,4 +62,9 @@ public class SessionOptions extends BaseSessionOptions {
 
   public native @ByRef SessionOptions AddConfigEntry(@Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
   public native @ByRef SessionOptions AddConfigEntry(String config_key, String config_value);
+  public native @ByRef SessionOptions AddInitializer(@Cast("const char*") BytePointer name, @Const OrtValue ort_val);
+  public native @ByRef SessionOptions AddInitializer(String name, @Const OrtValue ort_val);
+
+  public native @ByRef SessionOptions AppendExecutionProvider_CUDA(@Const @ByRef OrtCUDAProviderOptions provider_options);
+  public native @ByRef SessionOptions AppendExecutionProvider_OpenVINO(@Const @ByRef OrtOpenVINOProviderOptions provider_options);
 }
