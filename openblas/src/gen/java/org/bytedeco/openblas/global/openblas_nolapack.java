@@ -45,7 +45,7 @@ public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 65536;
 public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
-public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.12 ";
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.13 ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -710,6 +710,7 @@ public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Ca
 /* convert BFLOAT16 array to double array */
 
 /* dot production of BFLOAT16 input arrays, and output as float */
+
 
 
 // #ifdef __cplusplus

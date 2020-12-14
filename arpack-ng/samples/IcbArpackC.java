@@ -34,7 +34,7 @@ public class IcbArpackC {
       int[] iparam = new int[11];
       int[] ipntr = new int[14];
       double[] workd = new double[3*N];
-      boolean rvec = true;
+      int rvec = 1;
       byte[] howmny = {'A'};
       double[] d = new double[nev+1];
       int[] select = new int[ncv];
@@ -101,7 +101,7 @@ public class IcbArpackC {
       int[] iparam = new int[11];
       int[] ipntr = new int[14];
       double[] workd = new double[2 * 3*N];
-      boolean rvec = true;
+      int rvec = 1;
       byte[] howmny = {'A'};
       double[] d = new double[2 * (nev+1)];
       int[] select = new int[ncv];

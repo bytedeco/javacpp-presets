@@ -50,7 +50,7 @@ import org.bytedeco.dnnl.presets.*;
                 "onnxruntime/core/providers/cuda/cuda_provider_factory.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
             },
-            link = "onnxruntime@.1.5.3",
+            link = "onnxruntime@.1.6.0",
             preload = {"onnxruntime_providers_shared", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
         @Platform(
@@ -133,6 +133,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::MemoryAllocation::operator =").skip())
                .put(new Info("Ort::RunOptions::GetRunLogSeverityLevel").skip())
                .put(new Info("Ort::Exception").pointerTypes("OrtException"))
+               .put(new Info("Ort::Base<OrtArenaCfg>").pointerTypes("BaseArenaCfg"))
                .put(new Info("Ort::Base<OrtAllocator>").pointerTypes("BaseAllocator"))
                .put(new Info("Ort::Base<OrtIoBinding>").pointerTypes("BaseIoBinding"))
                .put(new Info("Ort::Base<OrtMemoryInfo>", "Ort::BaseMemoryInfo<Ort::Base<OrtMemoryInfo> >",

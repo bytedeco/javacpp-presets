@@ -28,22 +28,32 @@ public class Env extends BaseEnv {
         return new Env(this).position(position + i);
     }
 
-  public Env(@Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(default_logging_level, logid); }
-  private native void allocate(@Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/);
+  public Env(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(logging_level, logid); }
+  private native void allocate(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/);
   public Env() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public Env(@Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(default_logging_level, logid); }
-  private native void allocate(@Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
-  public Env(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(tp_options, default_logging_level, logid); }
-  private native void allocate(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/);
+  public Env(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(logging_level, logid); }
+  private native void allocate(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
+  public Env(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_level, logid); }
+  private native void allocate(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/);
   public Env(@Const OrtThreadingOptions tp_options) { super((Pointer)null); allocate(tp_options); }
   private native void allocate(@Const OrtThreadingOptions tp_options);
-  public Env(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(tp_options, default_logging_level, logid); }
-  private native void allocate(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int default_logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
-  public Env(@Cast("OrtLoggingLevel") int default_logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(default_logging_level, logid, logging_function, logger_param); }
-  private native void allocate(@Cast("OrtLoggingLevel") int default_logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param);
-  public Env(@Cast("OrtLoggingLevel") int default_logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(default_logging_level, logid, logging_function, logger_param); }
-  private native void allocate(@Cast("OrtLoggingLevel") int default_logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param);
+  public Env(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_level, logid); }
+  private native void allocate(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
+  public Env(@Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(logging_level, logid, logging_function, logger_param); }
+  private native void allocate(@Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param);
+  public Env(@Cast("OrtLoggingLevel") int logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(logging_level, logid, logging_function, logger_param); }
+  private native void allocate(@Cast("OrtLoggingLevel") int logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param);
+  public Env(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
+        @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_function, logger_param, logging_level, logid); }
+  private native void allocate(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
+        @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/);
+  public Env(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(tp_options, logging_function, logger_param); }
+  private native void allocate(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param);
+  public Env(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
+        @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_function, logger_param, logging_level, logid); }
+  private native void allocate(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
+        @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
   public Env(OrtEnv p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtEnv p);
 

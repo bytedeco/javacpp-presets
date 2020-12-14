@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ARPACK_NG_VERSION=3.7.0
+ARPACK_NG_VERSION=3.8.0
 download https://github.com/opencollab/arpack-ng/archive/$ARPACK_NG_VERSION.tar.gz arpack-ng-$ARPACK_NG_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -28,6 +28,7 @@ sedinplace 's/internal::s/s/g' ICB/arpack.hpp
 sedinplace 's/internal::d/d/g' ICB/arpack.hpp
 sedinplace 's/internal::cn/cn/g' ICB/arpack.hpp
 sedinplace 's/internal::z/z/g' ICB/arpack.hpp
+cp SRC/arpack.pc.in .
 
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 

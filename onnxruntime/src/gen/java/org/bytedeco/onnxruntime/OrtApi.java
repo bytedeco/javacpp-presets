@@ -77,7 +77,7 @@ public class OrtApi extends Pointer {
       public    CreateEnv_int_BytePointer_PointerPointer(Pointer p) { super(p); }
       protected CreateEnv_int_BytePointer_PointerPointer() { allocate(); }
       private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtLoggingLevel") int default_logging_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
   }
   public native CreateEnv_int_BytePointer_PointerPointer CreateEnv(); public native OrtApi CreateEnv(CreateEnv_int_BytePointer_PointerPointer setter);
 
@@ -91,7 +91,7 @@ public class OrtApi extends Pointer {
       protected CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer() { allocate(); }
       private native void allocate();
       public native @Cast("OrtStatusPtr") OrtStatus call( OrtLoggingFunction logging_function, Pointer logger_param,
-                    @Cast("OrtLoggingLevel") int default_warning_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
+                    @Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
   }
   public native CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer CreateEnvWithCustomLogger(); public native OrtApi CreateEnvWithCustomLogger(CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer setter);
 
@@ -364,7 +364,7 @@ public class OrtApi extends Pointer {
       public    CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp(Pointer p) { super(p); }
       protected CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp() { allocate(); }
       private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtCustomOpDomain custom_op_domain, OrtCustomOp op);
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtCustomOpDomain custom_op_domain, @Const OrtCustomOp op);
   }
   public native CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp CustomOpDomain_Add(); public native OrtApi CustomOpDomain_Add(CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp setter);
 
@@ -1535,12 +1535,10 @@ public class OrtApi extends Pointer {
       public    CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer(Pointer p) { super(p); }
       protected CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer() { allocate(); }
       private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtLoggingLevel") int default_logging_level, @Cast("const char*") BytePointer logid,
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid,
                     @Const OrtThreadingOptions t_options, @Cast("OrtEnv**") PointerPointer out);
   }
   public native CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer CreateEnvWithGlobalThreadPools(); public native OrtApi CreateEnvWithGlobalThreadPools(CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer setter);
-
-  /* TODO: Should there be a version of CreateEnvWithGlobalThreadPools with custom logging function? */
 
   /*
   * Calling this API will make the session use the global threadpools shared across sessions.
@@ -1956,6 +1954,8 @@ public class OrtApi extends Pointer {
   public native SetLanguageProjection_OrtEnv_int SetLanguageProjection(); public native OrtApi SetLanguageProjection(SetLanguageProjection_OrtEnv_int setter);
 
   /**
+   * On some platforms, this timer may not be as precise as nanoseconds
+   * For instance, on Windows and MacOS, the precision will be ~100ns
    * @param out is set to the nanoseconds of profiling's start time
    */
   public static class SessionGetProfilingStartTimeNs_OrtSession_LongPointer extends FunctionPointer {
@@ -1969,10 +1969,10 @@ public class OrtApi extends Pointer {
   public native SessionGetProfilingStartTimeNs_OrtSession_LongPointer SessionGetProfilingStartTimeNs(); public native OrtApi SessionGetProfilingStartTimeNs(SessionGetProfilingStartTimeNs_OrtSession_LongPointer setter);
 
   /**
- * Use this API to configure the global thread pool options to be used in the call to CreateEnvWithGlobalThreadPools.
- * A value of 0 means ORT will pick the default.
- * A value of 1 means the invoking thread will be used; no threads will be created in the thread pool.
- */
+   * Use this API to configure the global thread pool options to be used in the call to CreateEnvWithGlobalThreadPools.
+   * A value of 0 means ORT will pick the default.
+   * A value of 1 means the invoking thread will be used; no threads will be created in the thread pool.
+   */
   public static class SetGlobalIntraOpNumThreads_OrtThreadingOptions_int extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -2009,4 +2009,121 @@ public class OrtApi extends Pointer {
       public native @Cast("OrtStatusPtr") OrtStatus call( OrtThreadingOptions tp_options, int allow_spinning);
   }
   public native SetGlobalSpinControl_OrtThreadingOptions_int SetGlobalSpinControl(); public native OrtApi SetGlobalSpinControl(SetGlobalSpinControl_OrtThreadingOptions_int setter);
+
+  /**
+   * Add a pre-allocated initializer to a session. If a model contains an initializer with a name
+   * that is same as the name passed to this API call, ORT will use this initializer instance
+   * instead of deserializing one from the model file. This is useful when you want to share
+   * the same initializer across sessions.
+   * @param name name of the initializer
+   * @param val OrtValue containing the initializer. Lifetime of 'val' and the underlying initializer buffer must be
+   * managed by the user (created using the CreateTensorWithDataAsOrtValue API) and it must outlive the session object
+   * to which it is added.
+   */
+  public static class AddInitializer_OrtSessionOptions_BytePointer_OrtValue extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    AddInitializer_OrtSessionOptions_BytePointer_OrtValue(Pointer p) { super(p); }
+      protected AddInitializer_OrtSessionOptions_BytePointer_OrtValue() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, @Cast("const char*") BytePointer name,
+                    @Const OrtValue val);
+  }
+  public native AddInitializer_OrtSessionOptions_BytePointer_OrtValue AddInitializer(); public native OrtApi AddInitializer(AddInitializer_OrtSessionOptions_BytePointer_OrtValue setter);
+
+  /**
+   * Creates a custom environment with global threadpools and logger that will be shared across sessions.
+   * Use this in conjunction with DisablePerSessionThreads API or else the session will use
+   * its own thread pools.
+   *
+   * @param out should be freed by {@code OrtReleaseEnv} after use
+   */
+  public static class CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer(Pointer p) { super(p); }
+      protected CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtLoggingFunction logging_function, Pointer logger_param, @Cast("OrtLoggingLevel") int logging_level,
+                    @Cast("const char*") BytePointer logid, @Const OrtThreadingOptions tp_options, @Cast("OrtEnv**") PointerPointer out);
+  }
+  public native CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer CreateEnvWithCustomLoggerAndGlobalThreadPools(); public native OrtApi CreateEnvWithCustomLoggerAndGlobalThreadPools(CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer setter);
+
+  /**
+   * Append CUDA execution provider to the session options
+   * If CUDA is not available (due to a non cuda enabled build), this function will return failure.
+   */
+  public static class SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions(Pointer p) { super(p); }
+      protected SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call(
+                    OrtSessionOptions options, @Const OrtCUDAProviderOptions cuda_options);
+  }
+  public native SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions SessionOptionsAppendExecutionProvider_CUDA(); public native OrtApi SessionOptionsAppendExecutionProvider_CUDA(SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions setter);
+
+  /**
+   * Append OpenVINO execution provider to the session options
+   * If OpenVINO is not available (due to the OpenVINO provider shared library or its dependencies not being installed), this function will fail.
+   */
+  public static class SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions(Pointer p) { super(p); }
+      protected SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call(
+                    OrtSessionOptions options, @Const OrtOpenVINOProviderOptions provider_options);
+  }
+  public native SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions SessionOptionsAppendExecutionProvider_OpenVINO(); public native OrtApi SessionOptionsAppendExecutionProvider_OpenVINO(SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions setter);
+
+  /**
+   * Use this API to configure the global thread pool options to be used in the call to CreateEnvWithGlobalThreadPools.
+   * When this API is called, flush-to-zero and denormal-as-zero are applied to threads in both intra and inter global thread pool.
+   * Note that an alternative way not using this option at runtime is to train and export a model without denormals
+   * and that's recommended because turning this option on may hurt model accuracy.
+   */
+  public static class SetGlobalDenormalAsZero_OrtThreadingOptions extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SetGlobalDenormalAsZero_OrtThreadingOptions(Pointer p) { super(p); }
+      protected SetGlobalDenormalAsZero_OrtThreadingOptions() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtThreadingOptions tp_options);
+  }
+  public native SetGlobalDenormalAsZero_OrtThreadingOptions SetGlobalDenormalAsZero(); public native OrtApi SetGlobalDenormalAsZero(SetGlobalDenormalAsZero_OrtThreadingOptions setter);
+
+  /**
+  * Use this API to create the configuration of an arena that can eventually be used to define 
+  * an arena based allocator's behavior
+  * @param max_mem - use 0 to allow ORT to choose the default
+  * @param arena_extend_strategy -  use -1 to allow ORT to choose the default, 0 = kNextPowerOfTwo, 1 = kSameAsRequested
+  * @param initial_chunk_size_bytes - use -1 to allow ORT to choose the default
+  * @param max_dead_bytes_per_chunk - use -1 to allow ORT to choose the default
+  * @param out - a pointer to an OrtArenaCfg instance
+  * @return a nullptr in case of success or a pointer to an OrtStatus instance in case of failure
+  * See docs/C_API.md for details on what the following parameters mean and how to choose these values
+  */
+  public static class CreateArenaCfg_long_int_int_int_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateArenaCfg_long_int_int_int_PointerPointer(Pointer p) { super(p); }
+      protected CreateArenaCfg_long_int_int_int_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("size_t") long max_mem, int arena_extend_strategy, int initial_chunk_size_bytes,
+                    int max_dead_bytes_per_chunk, @Cast("OrtArenaCfg**") PointerPointer out);
+  }
+  public native CreateArenaCfg_long_int_int_int_PointerPointer CreateArenaCfg(); public native OrtApi CreateArenaCfg(CreateArenaCfg_long_int_int_int_PointerPointer setter);
+
+  public static class ReleaseArenaCfg_OrtArenaCfg extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseArenaCfg_OrtArenaCfg(Pointer p) { super(p); }
+      protected ReleaseArenaCfg_OrtArenaCfg() { allocate(); }
+      private native void allocate();
+      public native void call(OrtArenaCfg input);
+  }
+  public native ReleaseArenaCfg_OrtArenaCfg ReleaseArenaCfg(); public native OrtApi ReleaseArenaCfg(ReleaseArenaCfg_OrtArenaCfg setter);
 }
