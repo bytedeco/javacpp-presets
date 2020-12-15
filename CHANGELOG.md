@@ -1,10 +1,11 @@
 
+ * Enable OpenCL acceleration for DNNL ([issue #938](https://github.com/bytedeco/javacpp-presets/issues/938))
  * Introduce monkey patching when loading presets for CPython to relocate home more reliably
  * Add display sample for librealsense2 ([pull #978](https://github.com/bytedeco/javacpp-presets/pull/978))
  * Fix builds for libpostal on Mac and Windows ([issue #903](https://github.com/bytedeco/javacpp-presets/issues/903))
  * Fix builds for NumPy and SciPy on Linux when using a cross compiler or not
  * Update presets for Visual Studio 2019 on Windows
- * Add presets for TVM 0.7.0 and bundle its official Java API (TVM4J) via the `jnitvm_runtime` library
+ * Add presets for OpenCL 3.0, TVM 0.7.0 and bundle its official Java API (TVM4J) via the `jnitvm_runtime` library
  * Include `free()` in presets for FTTW as required by `fftw_export_wisdom_to_string()` ([issue bytedeco/javacpp#429](https://github.com/bytedeco/javacpp/issues/429))
  * Include all missing header files from the `opencv_ximgproc` module ([issue #958](https://github.com/bytedeco/javacpp-presets/issues/958))
  * Disable assembly optimizations for libx264 with FFmpeg on Mac to work around crashes ([issue bytedeco/javacv#1519](https://github.com/bytedeco/javacv/issues/1519))

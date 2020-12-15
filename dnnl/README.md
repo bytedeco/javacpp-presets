@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of DNNL ported to Java from this C++ source file:
 
-* https://github.com/intel/mkl-dnn/blob/master/examples/cpu_cnn_inference_int8.cpp
+ * https://github.com/intel/mkl-dnn/blob/master/examples/cpu_cnn_inference_int8.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `CpuCnnInferenceInt8.java` source files below, simply execute on the command line:
 ```bash

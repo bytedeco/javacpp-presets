@@ -50,6 +50,7 @@
     <module>../caffe/platform</module>
     <module>../openpose/platform</module>
     <module>../cuda/platform</module>
+    <module>../opencl/platform</module>
     <module>../mxnet/platform</module>
     <module>../tensorflow/platform</module>
     <module>../tensorrt/platform</module>
@@ -246,6 +247,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
       <version>11.1-8.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>opencl-platform</artifactId>
+      <version>3.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

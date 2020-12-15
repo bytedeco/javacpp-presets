@@ -22,6 +22,11 @@
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>opencl-platform</artifactId>
+      <version>3.0-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>javacpp-platform</artifactId>
       <version>${project.parent.version}</version>
     </dependency>

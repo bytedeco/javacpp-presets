@@ -38,6 +38,7 @@ JavaCPP Presets
 &emsp;[![caffe](https://github.com/bytedeco/javacpp-presets/workflows/caffe/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acaffe)  
 &emsp;[![openpose](https://github.com/bytedeco/javacpp-presets/workflows/openpose/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopenpose)  
 &emsp;[![cuda](https://github.com/bytedeco/javacpp-presets/workflows/cuda/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acuda)  
+&emsp;[![opencl](https://github.com/bytedeco/javacpp-presets/workflows/opencl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencl)  
 &emsp;[![mxnet](https://github.com/bytedeco/javacpp-presets/workflows/mxnet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amxnet)  
 &emsp;[![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)  
 &emsp;[![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)  
@@ -192,6 +193,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 11.1.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.0.x  https://developer.nvidia.com/cudnn
    * NCCL 2.7.x  https://developer.nvidia.com/nccl
+ * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.7.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt

@@ -19,6 +19,22 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 mkdir -p include lib bin
 INSTALL_PATH=`pwd`
+
+OPENCL_PATH="$INSTALL_PATH/../../../opencl/cppbuild/$PLATFORM/"
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -f "$P/include/CL/cl.h" ]]; then
+            OPENCL_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
+OPENCL_PATH="${OPENCL_PATH//\\//}"
+
 echo "Decompressing archives..."
 tar --totals -xf ../oneTBB-$TBB_VERSION.tar.bz2
 tar --totals -xf ../oneDNN-$MKLDNN_VERSION.tar.bz2
@@ -27,6 +43,11 @@ patch -Np1 < ../../../mkl-dnn.patch
 
 sedinplace 's/-fvisibility=internal//g' cmake/platform.cmake
 sedinplace 's/-fvisibility-inlines-hidden//g' cmake/platform.cmake
+sedinplace 's:Headers/cl.h:CL/cl.h:g' cmake/FindOpenCL.cmake
+
+if [[ -d "$OPENCL_PATH" ]]; then
+    export OPENCLROOT="$OPENCL_PATH"
+fi
 
 case $PLATFORM in
     linux-x86_64)
@@ -83,7 +104,7 @@ case $PLATFORM in
             cp -a build/*debug/tbb_debug.lib ../lib/intel64/vc14/
             cd ../oneDNN-$MKLDNN_VERSION
         fi
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH .
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DDNNL_GPU_RUNTIME=$DNNL_GPU_RUNTIME .
         ninja -j $MAKEJ
         ninja install
         ;;
