@@ -9,6 +9,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 public class dnnl extends org.bytedeco.dnnl.presets.dnnl {
     static { Loader.load(); }
@@ -1790,44 +1792,44 @@ public static final int
  *  \{
  <p>
  *  No runtime (disabled) */
-public static final long DNNL_RUNTIME_NONE = 0L;
+public static final int DNNL_RUNTIME_NONE = 0;
 
 /** Sequential runtime (CPU only) */
-public static final long DNNL_RUNTIME_SEQ = 1L;
+public static final int DNNL_RUNTIME_SEQ = 1;
 
 /** OpenMP runtime (CPU only) */
-public static final long DNNL_RUNTIME_OMP = 2L;
+public static final int DNNL_RUNTIME_OMP = 2;
 
 /** TBB runtime (CPU only) */
-public static final long DNNL_RUNTIME_TBB = 4L;
+public static final int DNNL_RUNTIME_TBB = 4;
 
 /** Threadpool runtime (CPU only) */
-public static final long DNNL_RUNTIME_THREADPOOL = 8L;
+public static final int DNNL_RUNTIME_THREADPOOL = 8;
 
 /** OpenCL runtime */
-public static final long DNNL_RUNTIME_OCL = 256L;
+public static final int DNNL_RUNTIME_OCL = 256;
 // Targeting ../dnnl_version_t.java
 
 
 
 /** Disable profiling completely */
-public static final long DNNL_JIT_PROFILE_NONE = 0L;
+public static final int DNNL_JIT_PROFILE_NONE = 0;
 
 /** Enable VTune Amplifier integration */
-public static final long DNNL_JIT_PROFILE_VTUNE = 1L;
+public static final int DNNL_JIT_PROFILE_VTUNE = 1;
 
 /** Enable Linux perf integration via perfmap files */
-public static final long DNNL_JIT_PROFILE_LINUX_PERFMAP = 2L;
+public static final int DNNL_JIT_PROFILE_LINUX_PERFMAP = 2;
 
 /** Enable Linux perf integration via jitdump files */
-public static final long DNNL_JIT_PROFILE_LINUX_JITDUMP = 4L;
+public static final int DNNL_JIT_PROFILE_LINUX_JITDUMP = 4;
 
 /** Instruct Linux perf integration via jitdump files to use TSC. \ref
  *  DNNL_JIT_PROFILE_LINUX_JITDUMP must be set too for this to take effect. */
-public static final long DNNL_JIT_PROFILE_LINUX_JITDUMP_USE_TSC = 8L;
+public static final int DNNL_JIT_PROFILE_LINUX_JITDUMP_USE_TSC = 8;
 
 /** Enable Linux perf integration (both jitdump and perfmap) */
-public static final long DNNL_JIT_PROFILE_LINUX_PERF = 
+public static final int DNNL_JIT_PROFILE_LINUX_PERF = 
     (DNNL_JIT_PROFILE_LINUX_JITDUMP | DNNL_JIT_PROFILE_LINUX_PERFMAP);
 
 /** CPU instruction set flags */
@@ -1944,13 +1946,13 @@ public static final int
 // clang-format off
 
 // oneDNN CPU threading runtime
-public static final long DNNL_CPU_THREADING_RUNTIME = DNNL_RUNTIME_OMP;
+public static final int DNNL_CPU_THREADING_RUNTIME = DNNL_RUNTIME_OMP;
 
 // oneDNN CPU engine runtime
-public static final long DNNL_CPU_RUNTIME = DNNL_RUNTIME_OMP;
+public static final int DNNL_CPU_RUNTIME = DNNL_RUNTIME_OMP;
 
 // oneDNN GPU engine runtime
-public static final long DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
+public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 
 // clang-format on
 

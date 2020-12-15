@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.opencl</groupId>
+    <artifactId>vecadd</artifactId>
+    <version>1.5.5-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>VecAdd</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencl-platform</artifactId>
+            <version>3.0-1.5.5-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

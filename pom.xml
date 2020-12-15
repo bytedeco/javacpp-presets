@@ -613,6 +613,7 @@
         <module>caffe</module>
         <module>openpose</module>
         <module>cuda</module>
+        <module>opencl</module>
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>tensorrt</module>
@@ -1337,6 +1338,7 @@
         <module>caffe</module>
         <module>openpose</module>
         <module>cuda</module>
+        <module>opencl</module>
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>tensorrt</module>
@@ -1412,6 +1414,7 @@
         <module>caffe</module>
         <module>openpose</module>
 <!--        <module>cuda</module>-->
+        <module>opencl</module>
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>ale</module>
@@ -1548,6 +1551,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>opencl</module>
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>tensorrt</module>

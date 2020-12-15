@@ -14,7 +14,18 @@
   <version>1.7-${project.parent.version}</version>
   <name>JavaCPP Presets for DNNL</name>
 
+  <properties>
+    <javacpp.nativeRequires>
+      requires org.bytedeco.opencl.${javacpp.platform.module};
+    </javacpp.nativeRequires>
+  </properties>
+
   <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>opencl</artifactId>
+      <version>3.0-${project.parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
@@ -32,6 +43,49 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencl-platform</artifactId>
+            <version>3.0-${project.parent.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <classPaths>
+            <classPath>${basedir}/../opencl/target/classes/</classPath>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
+          <includePaths>
+            <includePath>${basedir}/../opencl/target/classes/org/bytedeco/opencl/include/</includePath>
+            <includePath>${basedir}/../opencl/src/main/resources/org/bytedeco/opencl/include/</includePath>
+            <includePath>${basedir}/../opencl/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/../opencl/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/../opencl/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
+          </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/opencl/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/opencl/include/</includeResource>
+            <includeResource>/org/bytedeco/opencl/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/opencl/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/opencl/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

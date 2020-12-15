@@ -31,12 +31,14 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import org.bytedeco.opencl.presets.*;
+
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = javacpp.class,
+    inherit = OpenCL.class,
     value = {
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
