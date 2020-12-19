@@ -129,7 +129,18 @@ fi
 if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
     echo "Exclude OpenBLAS dependencies"
     cd ../../../
-    patch -s -p0 < ./opencv_exclude-openblas.patch
+    # need to sed before apply patch
+    ex_word=openblas
+    for f in {pom.xml,platform/pom.xml,platform/gpu/pom.xml}
+    do
+        ln=`grep -n ${ex_word} ${f} | sed -e 's/:.*//g'`
+        for l in $ln
+        do
+            nextl=`expr $l + 1`
+            sed -i -e "${nextl} s/<version>.*\${project\.parent\.version}<\/version>/<version>\${project.parent.version}<\/\version>/g" $f
+        done
+    done
+    patch -Np1 < ./opencv_exclude-openblas.patch
     cd cppbuild/"$PLATFORM$EXTENSION"/opencv-$OPENCV_VERSION
 fi
 
