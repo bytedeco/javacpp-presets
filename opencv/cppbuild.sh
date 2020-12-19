@@ -137,7 +137,7 @@ if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
         for l in $ln
         do
             nextl=`expr $l + 1`
-            sed -i -e "${nextl} s/<version>.*\${project\.parent\.version}<\/version>/<version>\${project.parent.version}<\/\version>/g" $f
+            sed -i -e "${nextl} s/<version>.*\${project\.parent\.version}<\/version>/<version>\${project.parent.version}<\/version>/g" $f
         done
     done
     patch -Np1 < ./opencv_exclude-openblas.patch
