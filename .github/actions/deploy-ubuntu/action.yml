@@ -108,6 +108,12 @@ runs:
           ln -s $(pwd)/flycapture.2.13.3.31_arm64_xenial.tar.gz $GITHUB_WORKSPACE/downloads/flycapture.2.13.3.31_arm64.tar.gz
         fi
 
+        if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
+          curl -LO https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
+          unzip gradle-6.7.1-bin.zip -d /opt/
+          ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
+        fi
+
     - name: Build project
       shell: bash
       run: |
@@ -125,24 +131,32 @@ runs:
 
         echo "Fixing HOME to /root (was '$HOME')"
         export HOME=/root
-        mkdir -p $HOME/.m2
-        [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
-        echo "<settings>" > $HOME/.m2/settings.xml
-        echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
-        echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
-        echo "</settings>" >> $HOME/.m2/settings.xml
-
-        SECONDS=$(( RANDOM % 300 ))
-        echo Sleeping $SECONDS seconds to help avoid race conditions with Maven
-        sleep $SECONDS
-
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)
-        echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
-        export EXT=${{ matrix.ext }}
-        export EXT2=${EXT:1}
-        export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
-        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
-        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+
+        if [[ -n $CI_DEPLOY_NEED_GRADLE ]]; then
+          [[ "${{ github.event_name }}" == "pull_request" ]] && GRADLE_TASK=build || GRADLE_TASK=publish
+          export GRADLE_OPTIONS="clean $GRADLE_TASK --info"
+          gradle $GRADLE_OPTIONS
+        else
+          mkdir -p $HOME/.m2
+          [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
+          echo "<settings>" > $HOME/.m2/settings.xml
+          echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
+          echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
+          echo "</settings>" >> $HOME/.m2/settings.xml
+
+          SECONDS=$(( RANDOM % 300 ))
+          echo Sleeping $SECONDS seconds to help avoid race conditions with Maven
+          sleep $SECONDS
+
+          echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
+          export EXT=${{ matrix.ext }}
+          export EXT2=${EXT:1}
+          export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+        fi
+
         df -h
 
     - name: Clean up
