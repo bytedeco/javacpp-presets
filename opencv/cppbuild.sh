@@ -134,7 +134,7 @@ if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
         ln=`grep -n $ex_word $fname | sed -n -e 's/:.*//gp'`
         cnt=0
         for l in $ln; do
-            sed -i -e "`expr ${l} - ${cnt}`d" $fname
+            sedinplace "`expr ${l} - ${cnt}`d" $fname
             cnt=`expr ${cnt} + 1`
         done
     }
@@ -155,7 +155,7 @@ if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
             start_line=`expr ${ls} - $srl + 1`
             end_line=`expr ${ls} + $erl - 1`
             cnt=`expr $cnt + ${end_line} - ${start_line}`
-            sed -i -e "${start_line},${end_line}d" $fname
+            sedinplace "${start_line},${end_line}d" $fname
         done
     }
 
@@ -168,7 +168,7 @@ if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
         add_tag_line_num=`grep -n "${key1}" $fname | sed -n -e 's/:.*//gp' | head -n 1`
         add_line_num=`sed -n "${add_tag_line_num},\\$p" $fname | grep -n "${key2}" | sed -e 's/:.*//gp' | head -n 1`
         l=`expr ${add_tag_line_num} + ${add_line_num}`
-        sed -i -e "${l}i ${add_line}" $fname
+        sedinplace "${l}i ${add_line}" $fname
     }
 
     echo "Exclude OpenBLAS dependencies"
@@ -185,7 +185,7 @@ if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
     add_line_after_keyword $ex_file "<phase>package</phase>" "<configuration>" "<classifier>\${javacpp.platform}\${javacpp.platform.extension}-noopenblas<\/classifier>"
     add_line_after_keyword $ex_file "<groupId>org.moditect</groupId>" "<artifactId>moditect-maven-plugin</artifactId>" "<executions><execution><id>add-module-infos<\/id><configuration><modules><module><file>\${project.build.directory}\/\${project.artifactId}-\${javacpp.platform}\${javacpp.platform.extension}-noopenblas.jar<\/file><\/module><\/modules><\/configuration><\/execution><\/executions>"
     ex_file=src/main/java/org/bytedeco/opencv/presets/opencv_core.java
-    sed -i -e 's/\"openblas_config.h\", \"cblas.h\",\ //' $ex_file
+    sedinplace 's/\"openblas_config.h\", \"cblas.h\",\ //' $ex_file
     for run in {1..2}; do del_keyword_line $ex_file $ex_word; done
     ex_file=src/main/java9/module-info.java
     del_keyword_line $ex_file $ex_word
