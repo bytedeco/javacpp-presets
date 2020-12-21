@@ -30,10 +30,6 @@ runs:
           dir /s /a "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\14.*"
         )
 
-        if not "%CI_DEPLOY_NEED_GRADLE%"=="" (
-          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm gradle
-        )
-
         rem if not "%CI_DEPLOY_NEED_GCC%"=="" (
         rem   echo Installing an older less buggy version of GCC
         rem   python -m gdown.cli https://drive.google.com/uc?id=1CmH1Eq0LoAQQ5mWaqYiU9kYOfMGjLXlz

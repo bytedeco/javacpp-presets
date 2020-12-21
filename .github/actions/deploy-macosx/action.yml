@@ -10,7 +10,7 @@ runs:
         export MACOSX_DEPLOYMENT_TARGET=10.13
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils
+        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           brew install gcc@7
@@ -44,10 +44,6 @@ runs:
           sudo bash bazel-0.25.3-installer-darwin-x86_64.sh
         fi
 
-        if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
-          brew install gradle
-        fi
-
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
           curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/17172/m_mkl_2020.4.301.dmg
@@ -55,10 +51,6 @@ runs:
           cp /Volumes/m_mkl_2020.4.301/m_mkl_2020.4.301.app/Contents/MacOS/silent.cfg .
           sed -i -e 's/decline/accept/g' silent.cfg
           sudo /Volumes/m_mkl_2020.4.301/m_mkl_2020.4.301.app/Contents/MacOS/install.sh -s silent.cfg
-        fi
-
-        if [[ "$CI_DEPLOY_MODULE" == "gcc" ]]; then
-          brew install gmp isl libmpc mpfr
         fi
 
     - name: Build project
