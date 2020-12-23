@@ -59,22 +59,27 @@ runs:
         git --version
         clang --version
         /usr/local/bin/gcc-? --version
-        mvn -version
         cmake --version
+        gradle --version
+        mvn -version
         gpg --version
         df -h
 
+        export MAKEJ=$(getconf _NPROCESSORS_ONLN)
         echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
         git init
         git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
         git checkout $GITHUB_SHA
+        git submodule update --init --recursive
+        git submodule foreach --recursive 'git reset --hard'
 
-        export MAKEJ=$(getconf _NPROCESSORS_ONLN)
-
-        if [[ -n $CI_DEPLOY_NEED_GRADLE ]]; then
-          [[ "${{ github.event_name }}" == "pull_request" ]] && GRADLE_TASK=build || GRADLE_TASK=publish
-          export GRADLE_OPTIONS="clean $GRADLE_TASK --info"
-          gradle $GRADLE_OPTIONS
+        if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
+          [[ "${{ github.event_name }}" == "pull_request" ]] && GRADLE_TASK=publishToMavenLocal || GRADLE_TASK=publish
+          echo Executing Gradle $GRADLE_TASK ${{ matrix.options }} on $MAKEJ processors
+          export GRADLE_OPTIONS="-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=$CI_DEPLOY_PLATFORM -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
+          gradle clean build $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle
+          echo Publishing only now to help avoid race conditions with Gradle
+          gradle $GRADLE_TASK $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle --refresh-dependencies
         else
           mkdir -p $HOME/.m2
           [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
@@ -94,7 +99,6 @@ runs:
           for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
           for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
         fi
-
         df -h
 
     - name: Clean up
