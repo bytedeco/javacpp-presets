@@ -125,6 +125,73 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=11.0 -DCUDNN_VERSION=8.0 -DCUDA_ARCH_BIN='3.5' -DCUDA_ARCH_PTX='3.5' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
 fi
 
+# exclude openblas dependencies
+if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
+    # arguments: <file name> <exclude key word>
+    function del_keyword_line {
+        fname=$1
+        ex_word=$2
+        ln=`grep -n $ex_word $fname | sed -n -e 's/:.*//gp'`
+        cnt=0
+        for l in $ln; do
+            sedinplace "`expr ${l} - ${cnt}`d" $fname
+            cnt=`expr ${cnt} + 1`
+        done
+    }
+
+    # arguments: <file name> <exclude key word> <exclude tag name>
+    function del_keyword_tags {
+        fname=$1
+        ex_word=$2
+        ex_start_tag="<$3>"
+        ex_end_tag="</$3>"
+        ln=`grep -n $ex_word $fname | sed -n -e 's/:.*//gp'`
+        cnt=0
+        for l in $ln; do
+            ls=`expr ${l} - ${cnt}`
+            srl=`head -n ${ls} $fname | tac | grep -n $ex_start_tag | sed -e 's/:.*//gp' | head -n 1`
+            erl=`sed -n "${ls},\\$p" $fname | grep -n $ex_end_tag | sed -e 's/:.*//gp' | head -n 1`
+            if [ ! "${srl:+srl}" -o ! "${erl:+erl}" ]; then continue; fi
+            start_line=`expr ${ls} - $srl + 1`
+            end_line=`expr ${ls} + $erl - 1`
+            cnt=`expr $cnt + ${end_line} - ${start_line}`
+            sedinplace "${start_line},${end_line}d" $fname
+        done
+    }
+
+    # arguments: <file name> <key word 1> <key word 2> <add line>
+    function add_line_after_keyword {
+        fname=$1
+        key1=$2
+        key2=$3
+        add_line=$4
+        add_tag_line_num=`grep -n "${key1}" $fname | sed -n -e 's/:.*//gp' | head -n 1`
+        add_line_num=`sed -n "${add_tag_line_num},\\$p" $fname | grep -n "${key2}" | sed -e 's/:.*//gp' | head -n 1`
+        l=`expr ${add_tag_line_num} + ${add_line_num}`
+        sedinplace "${l}i ${add_line}" $fname
+    }
+
+    echo "Exclude OpenBLAS dependencies"
+    cd ../../../
+    ex_word=openblas
+    ex_tag=dependency
+    for ex_file in {pom.xml,platform/pom.xml,platform/gpu/pom.xml}; do
+        del_keyword_tags $ex_file $ex_word $ex_tag
+    done
+    ex_file=pom.xml
+    ex_tag=properties
+    del_keyword_tags $ex_file $ex_word $ex_tag
+    del_keyword_line $ex_file $ex_word
+    add_line_after_keyword $ex_file "<phase>package</phase>" "<configuration>" "<classifier>\${javacpp.platform}\${javacpp.platform.extension}-noopenblas<\/classifier>"
+    add_line_after_keyword $ex_file "<groupId>org.moditect</groupId>" "<artifactId>moditect-maven-plugin</artifactId>" "<executions><execution><id>add-module-infos<\/id><configuration><modules><module><file>\${project.build.directory}\/\${project.artifactId}-\${javacpp.platform}\${javacpp.platform.extension}-noopenblas.jar<\/file><\/module><\/modules><\/configuration><\/execution><\/executions>"
+    ex_file=src/main/java/org/bytedeco/opencv/presets/opencv_core.java
+    sedinplace 's/\"openblas_config.h\", \"cblas.h\",\ //' $ex_file
+    for run in {1..2}; do del_keyword_line $ex_file $ex_word; done
+    ex_file=src/main/java9/module-info.java
+    del_keyword_line $ex_file $ex_word
+    cd cppbuild/"$PLATFORM$EXTENSION"/opencv-$OPENCV_VERSION
+fi
+
 case $PLATFORM in
     android-arm)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 -DANDROID_STL=c++_static -DANDROID_NATIVE_API_LEVEL=21 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
