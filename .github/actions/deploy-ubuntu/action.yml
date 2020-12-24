@@ -60,8 +60,11 @@ runs:
 
         find /usr/lib/jvm/default-java/
         curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        curl -LO https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
         tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+        unzip gradle-6.7.1-bin.zip -d /opt/
         ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
+        ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
 
         python3 -m pip install gdown
 
@@ -113,36 +116,49 @@ runs:
       run: |
         git --version
         $PREFIX-gcc --version
-        mvn -version
         cmake --version
+        gradle --version
+        mvn -version
         gpg --version
         df -h
 
+        export MAKEJ=$(getconf _NPROCESSORS_ONLN)
         echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
         git init
         git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
         git checkout $GITHUB_SHA
+        git submodule update --init --recursive
+        git submodule foreach --recursive 'git reset --hard'
 
         echo "Fixing HOME to /root (was '$HOME')"
         export HOME=/root
-        mkdir -p $HOME/.m2
-        [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
-        echo "<settings>" > $HOME/.m2/settings.xml
-        echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
-        echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
-        echo "</settings>" >> $HOME/.m2/settings.xml
 
-        SECONDS=$(( RANDOM % 300 ))
-        echo Sleeping $SECONDS seconds to help avoid race conditions with Maven
-        sleep $SECONDS
+        if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
+          [[ "${{ github.event_name }}" == "pull_request" ]] && GRADLE_TASK=publishToMavenLocal || GRADLE_TASK=publish
+          echo Executing Gradle $GRADLE_TASK ${{ matrix.options }} on $MAKEJ processors
+          export GRADLE_OPTIONS="-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=$CI_DEPLOY_PLATFORM -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
+          gradle clean build $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle
+          echo Publishing only now to help avoid race conditions with Gradle
+          gradle $GRADLE_TASK $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle --refresh-dependencies
+        else
+          mkdir -p $HOME/.m2
+          [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
+          echo "<settings>" > $HOME/.m2/settings.xml
+          echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
+          echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
+          echo "</settings>" >> $HOME/.m2/settings.xml
 
-        export MAKEJ=$(getconf _NPROCESSORS_ONLN)
-        echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
-        export EXT=${{ matrix.ext }}
-        export EXT2=${EXT:1}
-        export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
-        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
-        for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+          SECONDS=$(( RANDOM % 300 ))
+          echo Sleeping $SECONDS seconds to help avoid race conditions with Maven
+          sleep $SECONDS
+
+          echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
+          export EXT=${{ matrix.ext }}
+          export EXT2=${EXT:1}
+          export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+        fi
         df -h
 
     - name: Clean up

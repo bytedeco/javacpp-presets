@@ -127,17 +127,35 @@ runs:
         git --version
         cl
         gcc --version
-        call mvn -version
         cmake --version
+        gradle --version
+        call mvn -version
         gpg --version
         df -h
         wmic pagefile list /format:list
 
+        set MAKEJ=%NUMBER_OF_PROCESSORS%
         echo Fetching %GITHUB_REPOSITORY%@%GITHUB_SHA%
         git init
         git fetch --depth 1 https://github.com/%GITHUB_REPOSITORY% %GITHUB_SHA%
         git checkout %GITHUB_SHA%
+        git submodule update --init --recursive
+        git submodule foreach --recursive "git reset --hard"
 
+        if not "%CI_DEPLOY_NEED_GRADLE%"=="" (goto :gradle) else (goto :maven)
+
+        :gradle
+        if "${{ github.event_name }}"=="pull_request" (set GRADLE_TASK=publishToMavenLocal) else (set GRADLE_TASK=publish)
+        echo Executing Gradle %GRADLE_TASK% ${{ matrix.options }} on %MAKEJ% processors
+        set "GRADLE_OPTIONS=-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=%CI_DEPLOY_PLATFORM% -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
+        gradle clean build %GRADLE_OPTIONS% -b %CI_DEPLOY_MODULE%/build.gradle
+        if ERRORLEVEL 1 exit /b
+        echo Publishing only now to help avoid race conditions with Gradle
+        gradle %GRADLE_TASK% %GRADLE_OPTIONS% -b %CI_DEPLOY_MODULE%/build.gradle --refresh-dependencies
+        if ERRORLEVEL 1 exit /b
+        goto :done2
+
+        :maven
         mkdir %USERPROFILE%\.m2
         if "${{ github.event_name }}"=="pull_request" (set MAVEN_PHASE=install) else (set MAVEN_PHASE=deploy)
         echo ^<settings^> > %USERPROFILE%\.m2\settings.xml
@@ -149,7 +167,6 @@ runs:
         echo Sleeping %SECONDS% seconds to help avoid race conditions with Maven
         timeout %SECONDS% > nul
 
-        set MAKEJ=%NUMBER_OF_PROCESSORS%
         echo Executing Maven %MAVEN_PHASE% on %MAKEJ% processors
         set EXT=${{ matrix.ext }}
         if "%EXT%" == "" (set EXT2=) else (set EXT2=%EXT:~1%)
