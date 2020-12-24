@@ -1,4 +1,5 @@
 
+ * Build OpenCV without OpenBLAS when environment variable `NOOPENBLAS=yes` ([pull #987](https://github.com/bytedeco/javacpp-presets/pull/987))
  * Enable OpenCL acceleration for DNNL ([issue #938](https://github.com/bytedeco/javacpp-presets/issues/938))
  * Introduce monkey patching when loading presets for CPython to relocate home more reliably
  * Add display sample for librealsense2 ([pull #978](https://github.com/bytedeco/javacpp-presets/pull/978))
