@@ -62,16 +62,16 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda-repo-rhel7-11-1-local-11.1.1_455.32.00-1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.4/cudnn-11.1-linux-x64-v8.0.4.30.tgz
-          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.7/nccl_2.7.8-1+cuda11.1_x86_64.txz
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda-repo-rhel7-11-2-local-11.2.0_460.27.04-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.5/cudnn-11.1-linux-x64-v8.0.5.39.tgz
+          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/nccl_2.8.3-1+cuda11.1_x86_64.txz
 
-          rpm -i cuda-repo-rhel7-11-1-local-11.1.1_455.32.00-1.x86_64.rpm
-          pushd /var/cuda-repo-rhel7-11-1-local/; rpm -i --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-2-local-11.2.0_460.27.04-1.x86_64.rpm
+          pushd /var/cuda-repo-rhel7-11-2-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
-          tar -hxvf cudnn-11.1-linux-x64-v8.0.4.30.tgz -C /usr/local/
-          tar -hxvf nccl_2.7.8-1+cuda11.1_x86_64.txz --strip-components=1 -C /usr/local/cuda/
+          tar -hxvf cudnn-11.1-linux-x64-v8.0.5.39.tgz -C /usr/local/
+          tar -hxvf nccl_2.8.3-1+cuda11.1_x86_64.txz --strip-components=1 -C /usr/local/cuda/
           mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
 
           # Work around issues with CUDA 10.2/11.x
@@ -80,6 +80,7 @@ runs:
           for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f $f.2; done
           for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f ${f:0:${#f}-1}1; done
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.2
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
@@ -91,8 +92,8 @@ runs:
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
-          python3 -m gdown.cli https://drive.google.com/uc?id=1-SQo1jZZ6FM6PWbAt9YLZisWQolCxbxX
-          tar -hxvf TensorRT-7.2.1.6.CentOS-7.6.x86_64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1lps5XRB7tlf8rfpYM6202dwUmBTYAsJA
+          tar -hxvf TensorRT-7.2.2.3.CentOS-7.8.x86_64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

@@ -102,8 +102,8 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 
 public static final int CUBLAS_VER_MAJOR = 11;
 public static final int CUBLAS_VER_MINOR = 3;
-public static final int CUBLAS_VER_PATCH = 0;
-public static final int CUBLAS_VER_BUILD = 106;
+public static final int CUBLAS_VER_PATCH = 1;
+public static final int CUBLAS_VER_BUILD = 68;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
@@ -7576,7 +7576,7 @@ public static final int
 
     /** Transform of matrix C, see cublasOperation_t.
      *
-     * Must be CUBLAS_OP_N if performing matrix multiplication in place (when C == D).
+     * Currently only CUBLAS_OP_N is supported.
      *
      * int32_t, default: CUBLAS_OP_N
      */

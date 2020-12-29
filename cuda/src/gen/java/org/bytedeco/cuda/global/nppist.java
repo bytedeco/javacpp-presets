@@ -17,7 +17,7 @@ public class nppist extends org.bytedeco.cuda.presets.nppist {
 
 // Parsed from <nppi_statistics_functions.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2020 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -27585,7 +27585,7 @@ public static native @Cast("NppStatus") int nppiAverageRelativeErrorGetBufferHos
  * @param pSrc2 \ref source_image_pointer.
  * @param nSrc2Step \ref source_image_line_step.
  * @param oSizeROI \ref roi_specification.
- * @param pMSE Pointer to the computed MSE of two images. 
+ * @param pMSE Device memory pointer to the computed MSE of two images. 
  * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
@@ -27611,6 +27611,40 @@ public static native @Cast("NppStatus") int nppiMSE_8u_C1R(@Cast("const Npp8u*")
                          @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSE, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
+ * Three-channel 8-bit unsigned image MSE.
+ *
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pSrc2 \ref source_image_pointer.
+ * @param nSrc2Step \ref source_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param pMSE Device memory pointer to the computed MSE of two images. 
+ * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes.
+*/
+
+public static native @Cast("NppStatus") int nppiMSE_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                             @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                             @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSE, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSE_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                             @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                             @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSE_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                             @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                             @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSE, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiMSE_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                         @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                         @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSE, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiMSE_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                         @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                         @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiMSE_8u_C3R(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                         @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                         @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSE, @Cast("Npp8u*") byte[] pDeviceBuffer);
+
+/**
  * One-channel 8-bit unsigned image PSNR.
  *
  * @param pSrc1 \ref source_image_pointer.
@@ -27618,7 +27652,7 @@ public static native @Cast("NppStatus") int nppiMSE_8u_C1R(@Cast("const Npp8u*")
  * @param pSrc2 \ref source_image_pointer.
  * @param nSrc2Step \ref source_image_line_step.
  * @param oSizeROI \ref roi_specification.
- * @param pPSNR Pointer to the computed PSNR of two images. 
+ * @param pPSNR Device memory pointer to the computed PSNR of two images. 
  * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
@@ -27644,6 +27678,39 @@ public static native @Cast("NppStatus") int nppiPSNR_8u_C1R(@Cast("const Npp8u*"
                           @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pPSNR, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
+ * Three-channel 8-bit unsigned image PSNR.
+ *
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pSrc2 \ref source_image_pointer.
+ * @param nSrc2Step \ref source_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param pPSNR Device memory pointer to the computed PSNR of two images. 
+ * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes.
+*/
+public static native @Cast("NppStatus") int nppiPSNR_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                              @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                              @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNR_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                              @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                              @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNR_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                              @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                              @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pPSNR, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNR_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                          @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                          @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiPSNR_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                          @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                          @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiPSNR_8u_C3R(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                          @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                          @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pPSNR, @Cast("Npp8u*") byte[] pDeviceBuffer);
+
+/**
  * One-channel 8-bit unsigned image SSIM.
  *
  * @param pSrc1 \ref source_image_pointer.
@@ -27651,7 +27718,7 @@ public static native @Cast("NppStatus") int nppiPSNR_8u_C1R(@Cast("const Npp8u*"
  * @param pSrc2 \ref source_image_pointer.
  * @param nSrc2Step \ref source_image_line_step.
  * @param oSizeROI \ref roi_specification.
- * @param pSSIM Pointer to the computed SSIM of two images. 
+ * @param pSSIM Device memory pointer to the computed SSIM of two images. 
  * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
@@ -27677,14 +27744,48 @@ public static native @Cast("NppStatus") int nppiSSIM_8u_C1R(@Cast("const Npp8u*"
                           @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
 /**
- * One-channel 8-bit unsigned image MS-SSIM*.
+ * Three-channel 8-bit unsigned image SSIM.
  *
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
  * @param pSrc2 \ref source_image_pointer.
  * @param nSrc2Step \ref source_image_line_step.
  * @param oSizeROI \ref roi_specification.
- * @param pMSSSIM Pointer to the computed MS-SSIM of two images. 
+ * @param pSSIM Device memory pointer to the computed SSIM of two images. 
+ * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes.
+*/
+public static native @Cast("NppStatus") int nppiSSIM_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                              @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                              @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pSSIM, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIM_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                              @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                              @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pSSIM, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIM_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                              @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                              @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiSSIM_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                          @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                          @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pSSIM, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiSSIM_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                          @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                          @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pSSIM, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiSSIM_8u_C3R(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                          @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                          @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer);
+
+/**
+ * One-channel 8-bit unsigned image MS-SSIM*.
+ * This function will be deprecated in a future release use the nppiWMSSSIM functions instead.
+ *
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pSrc2 \ref source_image_pointer.
+ * @param nSrc2Step \ref source_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param pMSSSIM Device memory pointer to the computed MS-SSIM of two images. 
  * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
@@ -27709,6 +27810,84 @@ public static native @Cast("NppStatus") int nppiMSSSIM_8u_C1R(@Cast("const Npp8u
                             @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
                             @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer);
 
+/**
+ * One-channel 8-bit unsigned image MS-SSIM*.
+ * This function uses the algorithm described in the paper by Wang et. al.
+ * Wang, Z., Simoncelli, E.P., Bovik, A.C. Multiscale Structural Similarity for Image Quality Assessment. In: The
+ * Thirty-Seventh Asilomar Conference on Signals, Systems & Computers, 2003, 13981402. Pacific Grove, CA, USA: IEEE,
+ * 2003. https://doi.org/10.1109/ACSSC.2003.1292216.
+ * NOTE: this API call can only process oSizeROI dimensions 16px by 16px and above. Any oSizeROI dimensions less than 16px by 16px
+ * will result in undefined behaviour.
+ *
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pSrc2 \ref source_image_pointer.
+ * @param nSrc2Step \ref source_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param pMSSSIM Device memory pointer to the computed MS-SSIM of two images. 
+ * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes.
+*/
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                                @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                                @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSSSIM, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                                @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                                @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSSSIM, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                                @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                                @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                            @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                            @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSSSIM, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                            @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                            @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSSSIM, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C1R(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                            @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                            @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer);
+
+/**
+ * Three-channel 8-bit unsigned image MS-SSIM*.
+ * This function uses the algorithm described in the paper by Wang et. al.
+ * Wang, Z., Simoncelli, E.P., Bovik, A.C. Multiscale Structural Similarity for Image Quality Assessment. In: The
+ * Thirty-Seventh Asilomar Conference on Signals, Systems & Computers, 2003, 13981402. Pacific Grove, CA, USA: IEEE,
+ * 2003. https://doi.org/10.1109/ACSSC.2003.1292216.
+ * NOTE: this API call can only process oSizeROI dimensions 16px by 16px and above. Any oSizeROI dimensions less than 16px by 16px
+ * will result in undefined behaviour.
+ *
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pSrc2 \ref source_image_pointer.
+ * @param nSrc2Step \ref source_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param pMSSSIM Device memory pointer to the computed MS-SSIM of two images. 
+ * @param pDeviceBuffer Pointer to the required device memory allocation, \ref general_scratch_buffer. 
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes.
+*/
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                                @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                                @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSSSIM, @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                                @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                                @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSSSIM, @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                                @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                                @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, 
+                            @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, 
+                            @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSSSIM, @Cast("Npp8u*") BytePointer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, 
+                            @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, 
+                            @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSSSIM, @Cast("Npp8u*") ByteBuffer pDeviceBuffer);
+public static native @Cast("NppStatus") int nppiWMSSSIM_8u_C3R(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, 
+                            @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, 
+                            @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSSSIM, @Cast("Npp8u*") byte[] pDeviceBuffer);
+
 /** 
  * Buffer size for \ref nppiMSE_8u_C1R.
  * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
@@ -27720,6 +27899,18 @@ public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C1R_Ctx(
 public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
 public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
 public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** 
+ * Buffer size for \ref nppiMSE_8u_C3R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiMSEGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
 
 /** 
  * Buffer size for \ref nppiPSNR_8u_C1R.
@@ -27734,6 +27925,18 @@ public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C1R(@By
 public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
 
 /** 
+ * Buffer size for \ref nppiPSNR_8u_C3R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiPSNRGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** 
  * Buffer size for \ref nppiSSIM_8u_C1R.
  * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
  */
@@ -27744,6 +27947,18 @@ public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C1R_Ctx
 public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
 public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
 public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** 
+ * Buffer size for \ref nppiSSIM_8u_C3R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiSSIMGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
 
 /** 
  * Buffer size for \ref nppiMSSSIM_8u_C1R.
@@ -27757,9 +27972,723 @@ public static native @Cast("NppStatus") int nppiMSSSIMGetBufferHostSize_8u_C1R(@
 public static native @Cast("NppStatus") int nppiMSSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
 public static native @Cast("NppStatus") int nppiMSSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
 
+/** 
+ * Buffer size for \ref nppiWMSSSIM_8u_C1R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** 
+ * Buffer size for \ref nppiWMSSSIM_8u_C3R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
 /** \} MSE */
 
 /** \} image_quality_assessment */
+
+/** \defgroup batch_image_quality_assessment IQABatch
+ * Primitives for computing the image quality for a batch of image pairs, such as MSE, PSNR, SSIM, and MS-SSIM with a single \ref
+ * roi_specification for all pairs of input images
+ * \{
+ */
+/** \name MSE
+ * \{
+ */
+
+/**
+ * 1 channel 8-bit unsigned MSE for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pMSE Device memory pointer to output array of the computed MSE for nBatchSize * sizeof(Npp32f) * 1 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiMSEBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                                  NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                                  NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                                  NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                              @Const NppiImageDescriptor pSrc2BatchList, 
+                              int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                              NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                              @Const NppiImageDescriptor pSrc2BatchList, 
+                              int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                              NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                              @Const NppiImageDescriptor pSrc2BatchList, 
+                              int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                              NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 3 channel 8-bit unsigned MSE for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pMSE Device memory pointer to output array of the computed MSE for nBatchSize * sizeof(Npp32f) * 3 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiMSEBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                                  NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                                  NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                                  NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                              @Const NppiImageDescriptor pSrc2BatchList, 
+                              int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                              NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                              @Const NppiImageDescriptor pSrc2BatchList, 
+                              int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                              NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                              @Const NppiImageDescriptor pSrc2BatchList, 
+                              int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                              NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 1 channel 8-bit unsigned PSNR for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pPSNR Device memory pointer to output array of the computed PSNR for nBatchSize * sizeof(Npp32f) * 1 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiPSNRBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                               NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 3 channel 8-bit unsigned PSNR for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pPSNR Device memory pointer to output array of the computed PSNR for nBatchSize * sizeof(Npp32f) * 3 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiPSNRBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                               NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 1 channel 8-bit unsigned SSIM for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pSSIM Device memory pointer to output array of the computed SSIM for nBatchSize * sizeof(Npp32f) * 1 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiSSIMBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pSSIM, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pSSIM, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pSSIM, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pSSIM, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pSSIM, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pSSIM, 
+                               NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 3 channel 8-bit unsigned SSIM for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pSSIM Device memory pointer to output array of the computed SSIM for nBatchSize * sizeof(Npp32f) * 3 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiSSIMBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pSSIM, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pSSIM, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                   @Const NppiImageDescriptor pSrc2BatchList, 
+                                   int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pSSIM, 
+                                   NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pSSIM, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pSSIM, 
+                               NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiSSIMBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                               @Const NppiImageDescriptor pSrc2BatchList, 
+                               int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pSSIM, 
+                               NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 1 channel 8-bit unsigned WMSSSIM for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ * NOTE: this API call can only process oSizeROI dimensions 16 pixels by 16 pixels and above. Any oSizeROI dimensions less than 16 pixels by 16 pixels
+ * will result in undefined behaviour.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pWMSSSIM Device memory pointer to output array of the computed WMSSSIM for nBatchSize * sizeof(Npp32f) * 1 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiWMSSSIMBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                      @Const NppiImageDescriptor pSrc2BatchList, 
+                                      int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                      NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                      @Const NppiImageDescriptor pSrc2BatchList, 
+                                      int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                      NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                      @Const NppiImageDescriptor pSrc2BatchList, 
+                                      int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                      NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                  NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                  NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                  NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 3 channel 8-bit unsigned WMSSSIM for a batch of image pairs for a single ROI.
+ * Provided oSizeROI will be used for all images passed in pSrc1BatchList and pSrc2BatchList
+ * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
+ * NOTE: this API call can only process ROI dimensions 16 pixels by 16 pixels and above. Any ROI dimensions less than 16 pixels by 16 pixels
+ * will result in undefined behaviour.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors, per image oSize must be initialized.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oSizeROI \ref roi_specification ROI width and height of ALL images in the batch, MUST match the ROI used when the label markers UF image was generated.
+ * @param pWMSSSIM Device memory pointer to output array of the computed WMSSSIM for nBatchSize * sizeof(Npp32f) * 3 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiWMSSSIMBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                      @Const NppiImageDescriptor pSrc2BatchList, 
+                                      int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                      NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                      @Const NppiImageDescriptor pSrc2BatchList, 
+                                      int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                      NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                      @Const NppiImageDescriptor pSrc2BatchList, 
+                                      int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                      NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                  NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                  NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R(@Const NppiImageDescriptor pSrc1BatchList, 
+                                  @Const NppiImageDescriptor pSrc2BatchList, 
+                                  int nBatchSize, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                  NppiBufferDescriptor pDeviceBufferList);
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiMSEBatch_8u_C1R
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiMSEBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiMSEBatch_8u_C3R
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiMSEBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+
+
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiPSNRBatch_8u_C1R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiPSNRBatch_8u_C3R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiPSNRBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiSSIMBatch_8u_C1R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiSSIMBatch_8u_C3R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiSSIMBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiWMSSSIMBatch_8u_C1R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** 
+ * Buffer size for a single image pair in the batch of image pairs for \ref nppiWMSSSIMBatch_8u_C3R.
+ * For common parameter descriptions, see \ref CommonGetBufferHostSizeParameters.
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, int[] hpBufferSize, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatchGetBufferHostSize_8u_C3R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
+
+/** \} MSE */
+
+/** \} batch_image_quality_assessment */
+
+
+/** \defgroup batch_image_quality_assessment_advanced IQABatchAdvanced
+ * Primitives for computing the image quality for a batch of image pairs, such as MSE, PSNR, SSIM, and MS-SSIM with per-image \ref
+ * roi_specification
+ * \{
+ */
+/** \name MSE
+ * \{
+ */
+
+/**
+ * 1 channel 8-bit unsigned MSE for a batch of image pairs with per-image ROI
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oMaxSizeROI \ref roi_specification maximum ROI width and height of ALL images in the batch.
+ * @param pMSE Device memory pointer to output array of the computed MSE for nBatchSize * sizeof(Npp32f * 1 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiMSEBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                                           NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                                           NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                                           NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                       @Const NppiImageDescriptor pSrc2BatchList, 
+                                       int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                                       NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                       @Const NppiImageDescriptor pSrc2BatchList, 
+                                       int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                                       NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                       @Const NppiImageDescriptor pSrc2BatchList, 
+                                       int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                                       NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 3 channel 8-bit unsigned MSE for a batch of image pairs with per-image ROI
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oMaxSizeROI \ref roi_specification maximum ROI width and height of ALL images in the batch.
+ * @param pMSE Device memory pointer to output array of the computed MSE for nBatchSize * sizeof(Npp32f) * 3 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiMSEBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                                           NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                                           NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                                           NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                       @Const NppiImageDescriptor pSrc2BatchList, 
+                                       int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pMSE, 
+                                       NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                       @Const NppiImageDescriptor pSrc2BatchList, 
+                                       int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pMSE, 
+                                       NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiMSEBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                       @Const NppiImageDescriptor pSrc2BatchList, 
+                                       int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pMSE, 
+                                       NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 1 channel 8-bit unsigned PSNR for a batch of image pairs with per-image ROI
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oMaxSizeROI \ref roi_specification maximum ROI width and height of ALL images in the batch.
+ * @param pPSNR Device memory pointer to output array of the computed PSNR for nBatchSize * sizeof(Npp32f) * 1 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiPSNRBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                            @Const NppiImageDescriptor pSrc2BatchList, 
+                                            int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                                            NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                            @Const NppiImageDescriptor pSrc2BatchList, 
+                                            int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                                            NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                            @Const NppiImageDescriptor pSrc2BatchList, 
+                                            int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                                            NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                        @Const NppiImageDescriptor pSrc2BatchList, 
+                                        int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                                        NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                        @Const NppiImageDescriptor pSrc2BatchList, 
+                                        int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                                        NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                        @Const NppiImageDescriptor pSrc2BatchList, 
+                                        int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                                        NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 3 channel 8-bit unsigned PSNR for a batch of image pairs with per-image ROI
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oMaxSizeROI \ref roi_specification maximum ROI width and height of ALL images in the batch.
+ * @param pPSNR Device memory pointer to output array of the computed PSNR for nBatchSize * sizeof(Npp32f) * 3 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiPSNRBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                            @Const NppiImageDescriptor pSrc2BatchList, 
+                                            int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                                            NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                            @Const NppiImageDescriptor pSrc2BatchList, 
+                                            int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                                            NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                            @Const NppiImageDescriptor pSrc2BatchList, 
+                                            int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                                            NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                        @Const NppiImageDescriptor pSrc2BatchList, 
+                                        int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pPSNR, 
+                                        NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                        @Const NppiImageDescriptor pSrc2BatchList, 
+                                        int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pPSNR, 
+                                        NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiPSNRBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                        @Const NppiImageDescriptor pSrc2BatchList, 
+                                        int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pPSNR, 
+                                        NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 1 channel 8-bit unsigned WMSSSIM for a batch of image pairs with per-image ROI
+ * NOTE: It is the user's responsibility to make sure the dimensions of per-image ROIs are 16 pixels by 16 pixels and above. Any per-image ROI dimensions less than 16 pixels by 16 pixels will result in undefined behaviour.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oMaxSizeROI \ref roi_specification maximum ROI width and height of ALL images in the batch.
+ * @param pWMSSSIM Device memory pointer to output array of the computed WMSSSIM for nBatchSize * sizeof(Npp32f) * 1 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiWMSSSIMBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                               @Const NppiImageDescriptor pSrc2BatchList, 
+                                               int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                               NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                               @Const NppiImageDescriptor pSrc2BatchList, 
+                                               int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                               NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                               @Const NppiImageDescriptor pSrc2BatchList, 
+                                               int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                               NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                           NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                           NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C1R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                           NppiBufferDescriptor pDeviceBufferList);
+
+/**
+ * 3 channel 8-bit unsigned WMSSSIM for a batch of image pairs with per-image ROI
+ * NOTE: It is the user's responsibility to make sure the dimensions of per-image ROIs are 16 pixels by 16 pixels and above. Any per-image ROI dimensions less than 16 pixels by 16 pixels will result in undefined behaviour.
+ *
+ * @param pSrc1BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param pSrc2BatchList \ref source_batch_images_pointer device memory pointer to the list of device memory image descriptors.
+ * @param nBatchSize Number of \ref NppiImageDescriptor, NppiBufferDescriptor, and new max number structures/values processed in this call (must be > 1).
+ * @param oMaxSizeROI \ref roi_specification maximum ROI width and height of ALL images in the batch.
+ * @param pWMSSSIM Device memory pointer to output array of the computed WMSSSIM for nBatchSize * sizeof(Npp32f) * 3 image pairs. 
+ * @param pDeviceBufferList Device memory pointer to the list of NppiBufferDescriptor buffer descriptors specifying per image device
+ * memory buffer pointers and size as returned by at least one nppiWMSSSIMBatchGetBufferHostSize call.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                               @Const NppiImageDescriptor pSrc2BatchList, 
+                                               int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                               NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                               @Const NppiImageDescriptor pSrc2BatchList, 
+                                               int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                               NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrc1BatchList, 
+                                               @Const NppiImageDescriptor pSrc2BatchList, 
+                                               int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                               NppiBufferDescriptor pDeviceBufferList, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatPointer pWMSSSIM, 
+                                           NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") FloatBuffer pWMSSSIM, 
+                                           NppiBufferDescriptor pDeviceBufferList);
+public static native @Cast("NppStatus") int nppiWMSSSIMBatch_8u_C3R_Advanced(@Const NppiImageDescriptor pSrc1BatchList, 
+                                           @Const NppiImageDescriptor pSrc2BatchList, 
+                                           int nBatchSize, @ByVal NppiSize oMaxSizeROI, @Cast("Npp32f*") float[] pWMSSSIM, 
+                                           NppiBufferDescriptor pDeviceBufferList);
+
+/** \} MSE */
+
+/** \} batch_image_quality_assessment_advanced */
 
 /** \} image_statistics_functions */
 

@@ -11,8 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 
+// #if defined(__CUDA_API_VERSION_INTERNAL)
+// #endif
+
 /**
- * External semaphore  signal parameters
+ * External semaphore signal parameters, compatible with driver type
  */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class cudaExternalSemaphoreSignalParams extends Pointer {
@@ -52,6 +55,8 @@ public class cudaExternalSemaphoreSignalParams extends Pointer {
              * Value of key to release the mutex with
              */
             @Name("params.keyedMutex.key") public native @Cast("unsigned long long") long params_keyedMutex_key(); public native cudaExternalSemaphoreSignalParams params_keyedMutex_key(long setter);
+        @Name("params.reserved") public native @Cast("unsigned int") int params_reserved(int i); public native cudaExternalSemaphoreSignalParams params_reserved(int i, int setter);
+        @Name("params.reserved") @MemberGetter public native @Cast("unsigned int*") IntPointer params_reserved();
     /**
      * Only when ::cudaExternalSemaphoreSignalParams is used to
      * signal a ::cudaExternalSemaphore_t of type
@@ -63,4 +68,6 @@ public class cudaExternalSemaphoreSignalParams extends Pointer {
      * For all other types of ::cudaExternalSemaphore_t, flags must be zero.
      */
     public native @Cast("unsigned int") int flags(); public native cudaExternalSemaphoreSignalParams flags(int setter);
+    public native @Cast("unsigned int") int reserved(int i); public native cudaExternalSemaphoreSignalParams reserved(int i, int setter);
+    @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 }

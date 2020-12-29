@@ -74,9 +74,9 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
  */
 
 public static final int NPP_VER_MAJOR = 11;
-public static final int NPP_VER_MINOR = 1;
-public static final int NPP_VER_PATCH = 2;
-public static final int NPP_VER_BUILD = 301;
+public static final int NPP_VER_MINOR = 2;
+public static final int NPP_VER_PATCH = 1;
+public static final int NPP_VER_BUILD = 68;
 
 public static final int NPP_VERSION = (NPP_VER_MAJOR * 1000 +     
                      NPP_VER_MINOR *  100 +     
@@ -640,6 +640,8 @@ public static final int
 
 // Targeting ../nppc/NppiImageDescriptor.java
 
+
+// Targeting ../nppc/NppiBufferDescriptor.java
 
 
 

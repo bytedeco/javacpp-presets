@@ -88,7 +88,7 @@ public class cudaDeviceProp extends Pointer {
     public native int maxTexture1D(); public native cudaDeviceProp maxTexture1D(int setter);
     /** Maximum 1D mipmapped texture size */
     public native int maxTexture1DMipmap(); public native cudaDeviceProp maxTexture1DMipmap(int setter);
-    /** Maximum size for 1D textures bound to linear memory */
+    /** Deprecated, do not use. Use cudaDeviceGetTexture1DLinearMaxWidth() or cuDeviceGetTexture1DLinearMaxWidth() instead. */
     public native int maxTexture1DLinear(); public native cudaDeviceProp maxTexture1DLinear(int setter);
     /** Maximum 2D texture dimensions */
     public native int maxTexture2D(int i); public native cudaDeviceProp maxTexture2D(int i, int setter);

@@ -80,8 +80,8 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 
 public static final int CUSPARSE_VER_MAJOR = 11;
 public static final int CUSPARSE_VER_MINOR = 3;
-public static final int CUSPARSE_VER_PATCH = 0;
-public static final int CUSPARSE_VER_BUILD = 10;
+public static final int CUSPARSE_VER_PATCH = 1;
+public static final int CUSPARSE_VER_BUILD = 68;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -12854,11 +12854,11 @@ public static native @Cast("cusparseStatus_t") int cusparseCreateCsc(@ByPtrPtr c
                   @Cast("int64_t") long rows,
                   @Cast("int64_t") long cols,
                   @Cast("int64_t") long nnz,
-                  Pointer csrColOffsets,
-                  Pointer csrRowInd,
-                  Pointer csrValues,
-                  @Cast("cusparseIndexType_t") int csrColOffsetsType,
-                  @Cast("cusparseIndexType_t") int csrRowIndType,
+                  Pointer cscColOffsets,
+                  Pointer cscRowInd,
+                  Pointer cscValues,
+                  @Cast("cusparseIndexType_t") int cscColOffsetsType,
+                  @Cast("cusparseIndexType_t") int cscRowIndType,
                   @Cast("cusparseIndexBase_t") int idxBase,
                   @Cast("cudaDataType") int valueType);
 
@@ -13108,7 +13108,7 @@ public static native @Cast("cusparseStatus_t") int cusparseConstrainedGeMM_buffe
                                    @Cast("cudaDataType") int computeType,
                                    @Cast("size_t*") SizeTPointer bufferSize);
 
-// #if defined(__cplusplus)
+// #if defined(__cplusplus) // extern "C"
 // #endif // defined(__cplusplus)
 
 // #undef CUSPARSE_DEPRECATED

@@ -110,6 +110,15 @@ public static native @Cast("const char*") BytePointer nvrtcGetErrorString(@Cast(
 public static native @Cast("nvrtcResult") int nvrtcVersion(IntPointer major, IntPointer minor);
 public static native @Cast("nvrtcResult") int nvrtcVersion(IntBuffer major, IntBuffer minor);
 public static native @Cast("nvrtcResult") int nvrtcVersion(int[] major, int[] minor);
+
+
+
+public static native @Cast("nvrtcResult") int nvrtcGetNumSupportedArchs(IntPointer numArchs);
+public static native @Cast("nvrtcResult") int nvrtcGetNumSupportedArchs(IntBuffer numArchs);
+public static native @Cast("nvrtcResult") int nvrtcGetNumSupportedArchs(int[] numArchs);
+public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(IntPointer supportedArchs);
+public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(IntBuffer supportedArchs);
+public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(int[] supportedArchs);
 // Targeting ../nvrtc/_nvrtcProgram.java
 
 
@@ -206,6 +215,20 @@ public static native @Cast("nvrtcResult") int nvrtcDestroyProgram(@Cast("_nvrtcP
 /**
  * \ingroup compilation
  * \brief   nvrtcCompileProgram compiles the given program.
+ *
+ * @param prog [in]       CUDA Runtime Compilation program.
+ * @param numOptions [in] Number of compiler options passed.
+ * @param options [in]    Compiler options in the form of C string array.\n
+ *                          \p options can be \c NULL when \p numOptions is 0.
+ *
+ * @return
+ *   - \link #nvrtcResult NVRTC_SUCCESS \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_OUT_OF_MEMORY \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_INVALID_INPUT \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_INVALID_PROGRAM \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_INVALID_OPTION \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_COMPILATION \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_BUILTIN_OPERATION_FAILURE \endlink
  *
  * It supports compile options listed in \ref options.
  */
@@ -514,8 +537,17 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       Make use of fast math operations.
  *       \c --use_fast_math implies \c --ftz=true \c --prec-div=false
  *       \c --prec-sqrt=false \c --fmad=true.
+ *     - \c --fassociative-math (\c -fassociative-math)\n
+ *       Allow re-association of floating point operations.\n
+ *       Note: '--use_fast_math' does not automatically turn on this flag.
  *     - \c --extra-device-vectorization (\c -extra-device-vectorization)\n
  *       Enables more aggressive device code vectorization in the NVVM optimizer.
+ *     - \c --modify-stack-limit={true|false} (\c -modify-stack-limit)\n
+ *       On Linux, during compilation, use \c setrlimit() to increase stack size 
+ *       to maximum allowed. The limit is reset to the previous value at the
+ *       end of compilation.
+ *       Note: \c setrlimit() changes the value for the entire process.
+ *       - Default: \c true
  *   - Preprocessing
  *     - \c --define-macro=\<def\> (\c -D)\n
  *       \c \<def\> can be either \c \<name\> or \c \<name=definitions\>.
@@ -556,20 +588,22 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       (\c -default-device)\n
  *       Treat entities with no execution space annotation as \c __device__
  *       entities.
+ *     - \c --optimization-info=\<kind\> (\c -opt-info)\n
+ *       Provide optimization reports for the specified kind of optimization.
+ *       The following kind tags are supported:
+ *         - \c inline : emit a remark when a function is inlined.
+ *     - \c --version-ident={true|false} (\c -dQ)\n
+ *       Embed used compiler's version info into generated PTX/CUBIN 
+ *       - Default: \c false
+ *     - \c --display-error-number (\c -err-no)\n
+ *       Display diagnostic number for warning messages.
+ *     - \c --diag-error=<error-number>,... (\c -diag-error)\n
+ *       Emit error for specified diagnostic message number(s). Message numbers can be separated by comma.
+ *     - \c --diag-suppress=<error-number>,... (\c -diag-suppress)\n
+ *       Suppress specified diagnostic message number(s). Message numbers can be separated by comma.
+ *     - \c --diag-warn=<error-number>,... (\c -diag-warn)\n
+ *       Emit warning for specified diagnostic message number(s). Message numbers can be separated by comma.
  *
- * @param prog [in]       CUDA Runtime Compilation program.
- * @param numOptions [in] Number of compiler options passed.
- * @param options [in]    Compiler options in the form of C string array.\n
- *                          \p options can be \c NULL when \p numOptions is 0.
- *
- * @return
- *   - \link #nvrtcResult NVRTC_SUCCESS \endlink
- *   - \link #nvrtcResult NVRTC_ERROR_OUT_OF_MEMORY \endlink
- *   - \link #nvrtcResult NVRTC_ERROR_INVALID_INPUT \endlink
- *   - \link #nvrtcResult NVRTC_ERROR_INVALID_PROGRAM \endlink
- *   - \link #nvrtcResult NVRTC_ERROR_INVALID_OPTION \endlink
- *   - \link #nvrtcResult NVRTC_ERROR_COMPILATION \endlink
- *   - \link #nvrtcResult NVRTC_ERROR_BUILTIN_OPERATION_FAILURE \endlink
  */
 
 
