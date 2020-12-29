@@ -39,4 +39,6 @@ public class nvmlComputeInstanceInfo_t extends Pointer {
     public native @Cast("unsigned int") int id(); public native nvmlComputeInstanceInfo_t id(int setter);
     /** Unique profile ID within the GPU instance */
     public native @Cast("unsigned int") int profileId(); public native nvmlComputeInstanceInfo_t profileId(int setter);
+    /** Placement for this instance within the GPU instance's slice range {0, sliceCount} */
+    public native @ByRef nvmlComputeInstancePlacement_t placement(); public native nvmlComputeInstanceInfo_t placement(nvmlComputeInstancePlacement_t setter);
 }

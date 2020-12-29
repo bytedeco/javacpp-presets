@@ -38,8 +38,9 @@ public class CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC extends Pointer {
     public native @Cast("CUexternalSemaphoreHandleType") int type(); public native CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC type(int setter);
         /**
          * File descriptor referencing the semaphore object. Valid
-         * when type is
-         * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD
+         * when type is one of the following:
+         * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD
+         * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_FD
          */
         @Name("handle.fd") public native int handle_fd(); public native CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC handle_fd(int setter);
         /**
@@ -50,10 +51,11 @@ public class CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC extends Pointer {
          * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE
          * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE
          * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX
+         * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32
          * Exactly one of 'handle' and 'name' must be non-NULL. If
          * type is one of the following:
-         * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT
-         * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX_KMT
+         * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT
+         * - ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX_KMT
          * then 'name' must be NULL.
          */
             /**

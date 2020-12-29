@@ -37,8 +37,10 @@ public class cudaExternalSemaphoreHandleDesc extends Pointer {
      */
     public native @Cast("cudaExternalSemaphoreHandleType") int type(); public native cudaExternalSemaphoreHandleDesc type(int setter);
         /**
-         * File descriptor referencing the semaphore object. Valid
-         * when type is ::cudaExternalSemaphoreHandleTypeOpaqueFd
+         * File descriptor referencing the semaphore object. Valid when
+         * type is one of the following:
+         * - ::cudaExternalSemaphoreHandleTypeOpaqueFd
+         * - ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreFd
          */
         @Name("handle.fd") public native int handle_fd(); public native cudaExternalSemaphoreHandleDesc handle_fd(int setter);
         /**
@@ -49,6 +51,7 @@ public class cudaExternalSemaphoreHandleDesc extends Pointer {
          * - ::cudaExternalSemaphoreHandleTypeD3D12Fence
          * - ::cudaExternalSemaphoreHandleTypeD3D11Fence
          * - ::cudaExternalSemaphoreHandleTypeKeyedMutex
+         * - ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32
          * Exactly one of 'handle' and 'name' must be non-NULL. If
          * type is one of the following:
          * ::cudaExternalSemaphoreHandleTypeOpaqueWin32Kmt

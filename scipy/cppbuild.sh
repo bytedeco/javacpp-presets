@@ -126,7 +126,7 @@ case $PLATFORM in
         export F90="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         # need to add RPATH so it can find MKL in cache
-        for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f || true; done
+        for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ -add_rpath @loader_path/../../../../ $f || true; done
         ;;
     windows-x86)
         # the build sometimes fails with multiple jobs

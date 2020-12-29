@@ -26,6 +26,7 @@ SCIPY_PATH="$INSTALL_PATH/../../../scipy/cppbuild/$PLATFORM/"
 LLVM_PATH="$INSTALL_PATH/../../../llvm/cppbuild/$PLATFORM/"
 MKL_PATH="$INSTALL_PATH/../../../mkl/cppbuild/$PLATFORM/"
 MKLDNN_PATH="$INSTALL_PATH/../../../dnnl/cppbuild/$PLATFORM/"
+OPENCL_PATH="$INSTALL_PATH/../../../opencl/cppbuild/$PLATFORM/"
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
@@ -45,6 +46,8 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             MKL_PATH="$P"
         elif [[ -f "$P/include/dnnl.h" ]]; then
             MKLDNN_PATH="$P"
+        elif [[ -f "$P/include/CL/cl.h" ]]; then
+            OPENCL_PATH="$P"
         fi
     done
     IFS="$PREVIFS"
@@ -57,6 +60,7 @@ SCIPY_PATH="${SCIPY_PATH//\\//}"
 LLVM_PATH="${LLVM_PATH//\\//}"
 MKL_PATH="${MKL_PATH//\\//}"
 MKLDNN_PATH="${MKLDNN_PATH//\\//}"
+OPENCL_PATH="${OPENCL_PATH//\\//}"
 
 echo "Decompressing archives..."
 tar --totals -xzf ../apache-tvm-src-v$TVM_VERSION-incubating.tar.gz
@@ -113,7 +117,7 @@ $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools
 
 case $PLATFORM in
     linux-x86_64)
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENMP=intel -DOMP_LIBRARY=$MKL_PATH/lib/libiomp5.so .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY=$MKL_PATH/lib/libiomp5.so .
         make -j $MAKEJ
         make install/strip
         cd python
@@ -126,7 +130,7 @@ case $PLATFORM in
         cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
         chmod +w ../lib/libiomp5.dylib
         install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENMP=intel -DOpenMP_C_FLAGS="-Xclang -fopenmp" -DOpenMP_CXX_FLAGS="-Xclang -fopenmp" -DCMAKE_C_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DCMAKE_CXX_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOpenMP_C_FLAGS="-Xclang -fopenmp" -DOpenMP_CXX_FLAGS="-Xclang -fopenmp" -DCMAKE_C_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DCMAKE_CXX_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" .
         make -j $MAKEJ
         make install/strip
         cd python
@@ -138,7 +142,7 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        $CMAKE -G "Ninja" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH $GPU_FLAGS -DUSE_OPENMP=intel -DOMP_LIBRARY= .
+        $CMAKE -G "Ninja" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY= .
         ninja -j $MAKEJ
         ninja install
         cd python
