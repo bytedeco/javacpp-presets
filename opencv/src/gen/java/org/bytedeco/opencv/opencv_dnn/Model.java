@@ -25,7 +25,7 @@ import static org.bytedeco.opencv.global.opencv_dnn.*;
       * sets preprocessing input and runs forward pass.
       */
      @Namespace("cv::dnn") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_dnn.class)
-public class Model extends Net {
+public class Model extends Pointer {
          static { Loader.load(); }
          /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
          public Model(Pointer p) { super(p); }
@@ -39,11 +39,12 @@ public class Model extends Net {
              return new Model(this).position(position + i);
          }
      
-         /**
-          * \brief Default constructor.
-          */
          public Model() { super((Pointer)null); allocate(); }
-         private native void allocate();
+         @Deprecated private native void allocate();
+
+         public Model(@Const @ByRef Model arg0) { super((Pointer)null); allocate(arg0); }
+         private native void allocate(@Const @ByRef Model arg0);
+         public native @ByRef @Name("operator =") Model put(@Const @ByRef Model arg0);
 
          /**
           * \brief Create model from deep learning network represented in one of the supported formats.
@@ -73,11 +74,9 @@ public class Model extends Net {
          */
          public native @ByRef Model setInputSize(@Const @ByRef Size size);
 
-         /** \brief Set input size for frame.
+         /** \overload
          *  @param width [in] New input width.
          *  @param height [in] New input height.
-         *  \note If shape of the new blob less than 0,
-         *  then frame size not change.
          */
          public native @ByRef Model setInputSize(int width, int height);
 
@@ -126,4 +125,30 @@ public class Model extends Net {
          public native void predict(@ByVal GpuMat frame, @ByVal MatVector outs);
          public native void predict(@ByVal GpuMat frame, @ByVal UMatVector outs);
          public native void predict(@ByVal GpuMat frame, @ByVal GpuMatVector outs);
+
+
+         // ============================== Net proxy methods ==============================
+         // Never expose methods with network implementation details, like:
+         // - addLayer, addLayerToPrev, connect, setInputsNames, setInputShape, setParam, getParam
+         // - getLayer*, getUnconnectedOutLayers, getUnconnectedOutLayersNames, getLayersShapes
+         // - forward* methods, setInput
+
+         /** @see Net::setPreferableBackend */
+         public native @ByRef Model setPreferableBackend(@Cast("cv::dnn::Backend") int backendId);
+         /** @see Net::setPreferableTarget */
+         public native @ByRef Model setPreferableTarget(@Cast("cv::dnn::Target") int targetId);
+
+         public native @Deprecated @ByRef @Name("operator cv::dnn::Net&") Net asNet();
+
+     //protected: - internal/tests usage only
+         public native @ByRef Net getNetwork_();
+
+         @Opaque public static class Impl extends Pointer {
+             /** Empty constructor. Calls {@code super((Pointer)null)}. */
+             public Impl() { super((Pointer)null); }
+             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+             public Impl(Pointer p) { super(p); }
+         }
+         public native Impl getImpl();
+         public native @ByRef Impl getImplRef();
      }

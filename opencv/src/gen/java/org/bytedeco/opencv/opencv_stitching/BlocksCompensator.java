@@ -26,6 +26,8 @@ import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
 import org.bytedeco.opencv.opencv_objdetect.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
+import org.bytedeco.opencv.opencv_dnn.*;
+import static org.bytedeco.opencv.global.opencv_dnn.*;
 import org.bytedeco.opencv.opencv_video.*;
 import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_ml.*;
@@ -53,6 +55,8 @@ public class BlocksCompensator extends ExposureCompensator {
     public native void setMatGains(@ByRef MatVector umv);
     public native void setNrFeeds(int nr_feeds);
     public native int getNrFeeds();
+    public native void setSimilarityThreshold(double similarity_threshold);
+    public native double getSimilarityThreshold();
     public native void setBlockSize(int width, int height);
     public native void setBlockSize(@ByVal Size size);
     public native @ByVal Size getBlockSize();

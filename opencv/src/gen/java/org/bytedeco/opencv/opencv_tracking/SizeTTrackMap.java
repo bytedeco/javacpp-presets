@@ -27,36 +27,38 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
-
-/**
- * \brief TrackerFeature based on LBP
- */
-@Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
-public class TrackerFeatureLBP extends TrackerFeature {
+@Name("std::unordered_map<size_t,cv::detail::tracking::tbm::Track>") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+public class SizeTTrackMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TrackerFeatureLBP(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TrackerFeatureLBP(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public TrackerFeatureLBP position(long position) {
-        return (TrackerFeatureLBP)super.position(position);
+    public SizeTTrackMap(Pointer p) { super(p); }
+    public SizeTTrackMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator =") @ByRef SizeTTrackMap put(@ByRef SizeTTrackMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @ByRef Track get(@Cast("size_t") long i);
+    public native SizeTTrackMap put(@Cast("size_t") long i, Track value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *().first") @MemberGetter @Cast("size_t") long first();
+        public native @Name("operator *().second") @MemberGetter @ByRef @Const Track second();
     }
-    @Override public TrackerFeatureLBP getPointer(long i) {
-        return new TrackerFeatureLBP(this).position(position + i);
-    }
-
-
-  public TrackerFeatureLBP() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public native void selection( @ByRef Mat response, int npoints );
-
 }
+

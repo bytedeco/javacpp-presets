@@ -29,6 +29,15 @@ public class DetectionModel extends Model {
          static { Loader.load(); }
          /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
          public DetectionModel(Pointer p) { super(p); }
+         /** Native array allocator. Access with {@link Pointer#position(long)}. */
+         public DetectionModel(long size) { super((Pointer)null); allocateArray(size); }
+         private native void allocateArray(long size);
+         @Override public DetectionModel position(long position) {
+             return (DetectionModel)super.position(position);
+         }
+         @Override public DetectionModel getPointer(long i) {
+             return new DetectionModel(this).position(position + i);
+         }
      
          /**
           * \brief Create detection model from network represented in one of the supported formats.
@@ -51,6 +60,23 @@ public class DetectionModel extends Model {
           */
          public DetectionModel(@Const @ByRef Net network) { super((Pointer)null); allocate(network); }
          private native void allocate(@Const @ByRef Net network);
+
+         public DetectionModel() { super((Pointer)null); allocate(); }
+         @Deprecated private native void allocate();
+
+         /**
+          * \brief nmsAcrossClasses defaults to false,
+          * such that when non max suppression is used during the detect() function, it will do so per-class.
+          * This function allows you to toggle this behaviour.
+          * @param value [in] The new value for nmsAcrossClasses
+          */
+         public native @ByRef DetectionModel setNmsAcrossClasses(@Cast("bool") boolean value);
+
+         /**
+          * \brief Getter for nmsAcrossClasses. This variable defaults to false,
+          * such that when non max suppression is used during the detect() function, it will do so only per-class
+          */
+         public native @Cast("bool") boolean getNmsAcrossClasses();
 
          /** \brief Given the \p input frame, create input blob, run net and return result detections.
           *  @param frame [in]  The input image.

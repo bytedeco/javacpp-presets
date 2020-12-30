@@ -265,7 +265,7 @@ public class VideoCapture extends Pointer {
     @throws Exception %Exception on stream errors (check .isOpened() to filter out malformed streams) or VideoCapture type is not supported
     <p>
     The primary use of the function is in multi-camera environments.
-    The method fills the ready state vector, grabbs video frame, if camera is ready.
+    The method fills the ready state vector, grabs video frame, if camera is ready.
     <p>
     After this call use VideoCapture::retrieve() to decode and fetch frame data.
     */

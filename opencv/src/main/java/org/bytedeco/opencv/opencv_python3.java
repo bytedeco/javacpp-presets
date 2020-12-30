@@ -59,12 +59,12 @@ import org.bytedeco.opencv.presets.*;
         opencv_quality.class,
     },
     value = {
-        @Platform(preload = {"opencv_cuda@.4.1", "opencv_cudaarithm@.4.1", "opencv_cudafilters@.4.1", "opencv_cudaimgproc@.4.1",
-                             "opencv_cudacodec@.4.1", "opencv_cudaobjdetect@.4.1", "opencv_cudabgsegm@4.1", "opencv_cudastereo@.4.1",
-                             "opencv_cudaoptflow@4.1", "opencv_cudawarping@.4.1", "opencv_cudalegacy@.4.1"}),
-        @Platform(value = "windows", preload = {"opencv_cuda412", "opencv_cudaarithm412", "opencv_cudafilters412", "opencv_cudaimgproc412",
-                             "opencv_cudacodec412", "opencv_cudaobjdetect412", "opencv_cudabgsegm412", "opencv_cudastereo412",
-                             "opencv_cudaoptflow412", "opencv_cudawarping412", "opencv_cudalegacy412"}),
+        @Platform(preload = {"opencv_cuda@.4.5", "opencv_cudaarithm@.4.5", "opencv_cudafilters@.4.5", "opencv_cudaimgproc@.4.5",
+                             "opencv_cudacodec@.4.5", "opencv_cudaobjdetect@.4.5", "opencv_cudabgsegm@.4.5", "opencv_cudastereo@.4.5",
+                             "opencv_cudaoptflow@.4.5", "opencv_cudawarping@.4.5", "opencv_cudalegacy@.4.5"}),
+        @Platform(value = "windows", preload = {"opencv_cuda451", "opencv_cudaarithm451", "opencv_cudafilters451", "opencv_cudaimgproc451",
+                             "opencv_cudacodec451", "opencv_cudaobjdetect451", "opencv_cudabgsegm451", "opencv_cudastereo451",
+                             "opencv_cudaoptflow451", "opencv_cudawarping451", "opencv_cudalegacy451"}),
     }
 )
 public class opencv_python3 {

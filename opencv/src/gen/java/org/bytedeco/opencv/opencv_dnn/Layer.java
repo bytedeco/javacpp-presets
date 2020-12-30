@@ -211,8 +211,11 @@ public class Layer extends Algorithm {
                                              int requiredOutputs,
                                              @ByRef MatShapeVector outputs,
                                              @ByRef MatShapeVector internals);
+
         public native @Cast("int64") long getFLOPS(@Const @ByRef MatShapeVector inputs,
                                        @Const @ByRef MatShapeVector outputs);
+
+        public native @Cast("bool") boolean updateMemoryShapes(@Const @ByRef MatShapeVector inputs);
 
         /** Name of the layer instance, can be used for logging or other internal purposes. */
         public native @Str BytePointer name(); public native Layer name(BytePointer setter);

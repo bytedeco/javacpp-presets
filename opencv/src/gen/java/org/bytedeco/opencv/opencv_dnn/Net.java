@@ -249,6 +249,7 @@ public class Net extends Pointer {
          * | DNN_TARGET_FPGA        |                    |                            + |                    |                   |
          * | DNN_TARGET_CUDA        |                    |                              |                    |                 + |
          * | DNN_TARGET_CUDA_FP16   |                    |                              |                    |                 + |
+         * | DNN_TARGET_HDDL        |                    |                            + |                    |                   |
          */
         public native void setPreferableTarget(int targetId);
 

@@ -27,27 +27,43 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
 
-/** \brief the MOSSE (Minimum Output Sum of Squared %Error) tracker
-<p>
-The implementation is based on \cite MOSSE Visual Object Tracking using Adaptive Correlation Filters
-\note this tracker works with grayscale images, if passed bgr ones, they will get converted internally.
-*/
 
-@Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
-public class TrackerMOSSE extends Tracker {
+/**
+ *  \brief The IDescriptorDistance class declares an interface for distance
+ *  computation between reidentification descriptors.
+ *  */
+@Namespace("cv::detail::tracking::tbm") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+public class IDescriptorDistance extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TrackerMOSSE(Pointer p) { super(p); }
+    public IDescriptorDistance(Pointer p) { super(p); }
 
-  /** \brief Constructor
-  */
-  public static native @Ptr TrackerMOSSE create();
+    /**
+     *  \brief Computes distance between two descriptors.
+     *  @param descr [in] 1 First descriptor.
+     *  @param descr [in] 2 Second descriptor.
+     *  @return Distance between two descriptors.
+     *  */
+    
+    
+    ///
+    ///
+    public native float compute(@Const @ByRef Mat descr1, @Const @ByRef Mat descr2);
+
+    /**
+     *  \brief Computes distances between two descriptors in batches.
+     *  @param descrs [in] 1 Batch of first descriptors.
+     *  @param descrs [in] 2 Batch of second descriptors.
+     *  @return Distances between descriptors.
+     *  */
+    public native @StdVector FloatPointer compute(@Const @ByRef MatVector descrs1,
+                                           @Const @ByRef MatVector descrs2);
 }

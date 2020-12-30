@@ -27,15 +27,15 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
 
-@Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+@Namespace("cv::detail::tracking::contrib_feature") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
 public class CvFeatureEvaluator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -45,7 +45,7 @@ public class CvFeatureEvaluator extends Pointer {
   public native void setImage( @Const @ByRef Mat img, @Cast("uchar") byte clsLabel, int idx );
   public native void writeFeatures( @ByRef FileStorage fs, @Const @ByRef Mat featureMap );
   public native @Name("operator ()") float apply( int featureIdx, int sampleIdx );
-  public static native @Ptr CvFeatureEvaluator create(@Cast("cv::CvFeatureParams::FeatureType") int type);
+  public static native @Ptr CvFeatureEvaluator create(@Cast("cv::detail::tracking::contrib_feature::CvFeatureParams::FeatureType") int type);
 
   public native int getNumFeatures();
   public native int getMaxCatCount();

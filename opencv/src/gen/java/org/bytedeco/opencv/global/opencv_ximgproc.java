@@ -26,6 +26,8 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
+import org.bytedeco.opencv.opencv_dnn.*;
+import static org.bytedeco.opencv.global.opencv_dnn.*;
 import org.bytedeco.opencv.opencv_video.*;
 import static org.bytedeco.opencv.global.opencv_video.*;
 
@@ -2008,8 +2010,9 @@ with a small 3 x 3 kernel and additional conversion into CieLAB color space.
                                          hysteresis procedure in Canny()
 @param _canny_th2           50         - Second threshold for
                                          hysteresis procedure in Canny()
-@param _canny_aperture_size 3          - Aperturesize for the sobel
-                                         operator in Canny()
+@param _canny_aperture_size 3          - Aperturesize for the sobel operator in Canny().
+                                         If zero, Canny() is not applied and the input
+                                         image is taken as an edge image.
 @param _do_merge            false      - If true, incremental merging of segments
                                          will be perfomred
 */

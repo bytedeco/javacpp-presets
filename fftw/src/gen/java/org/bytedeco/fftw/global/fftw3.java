@@ -438,10 +438,18 @@ public static class fftw_read_char_func_do_not_use_me extends FunctionPointer {
 // FFTW_CDECL X(plan_with_nthreads)(int nthreads);
 // 
 // FFTW_EXTERN int
+// FFTW_CDECL X(planner_nthreads)(void);
+// 
+// FFTW_EXTERN int
 // FFTW_CDECL X(init_threads)(void);
 // 
 // FFTW_EXTERN void
 // FFTW_CDECL X(cleanup_threads)(void);
+// 
+// FFTW_EXTERN void
+// FFTW_CDECL X(threads_set_callback)(
+//      void (*parallel_loop)(void *(*work)(char *),
+//      char *jobdata, size_t elsize, int njobs, void *data), void *data);
 // 
 // FFTW_EXTERN void
 // FFTW_CDECL X(make_planner_thread_safe)(void);
@@ -1007,9 +1015,69 @@ public static native void fftw_set_timelimit(double t);
 
 public static native void fftw_plan_with_nthreads(int nthreads);
 
+public static native int fftw_planner_nthreads();
+
 public static native int fftw_init_threads();
 
 public static native void fftw_cleanup_threads();
+
+public static class Work_BytePointer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Work_BytePointer(Pointer p) { super(p); }
+    protected Work_BytePointer() { allocate(); }
+    private native void allocate();
+    public native Pointer call(@Cast("char*") BytePointer arg0);
+}
+public static class Parallel_loop_Work_BytePointer_BytePointer_long_int_Pointer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Parallel_loop_Work_BytePointer_BytePointer_long_int_Pointer(Pointer p) { super(p); }
+    protected Parallel_loop_Work_BytePointer_BytePointer_long_int_Pointer() { allocate(); }
+    private native void allocate();
+    public native void call(Work_BytePointer work,
+     @Cast("char*") BytePointer jobdata, @Cast("size_t") long elsize, int njobs, Pointer data);
+}
+public static native void fftw_threads_set_callback(
+     Parallel_loop_Work_BytePointer_BytePointer_long_int_Pointer parallel_loop, Pointer data);
+public static class Work_ByteBuffer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Work_ByteBuffer(Pointer p) { super(p); }
+    protected Work_ByteBuffer() { allocate(); }
+    private native void allocate();
+    public native Pointer call(@Cast("char*") ByteBuffer arg0);
+}
+public static class Parallel_loop_Work_ByteBuffer_ByteBuffer_long_int_Pointer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Parallel_loop_Work_ByteBuffer_ByteBuffer_long_int_Pointer(Pointer p) { super(p); }
+    protected Parallel_loop_Work_ByteBuffer_ByteBuffer_long_int_Pointer() { allocate(); }
+    private native void allocate();
+    public native void call(Work_ByteBuffer work,
+     @Cast("char*") ByteBuffer jobdata, @Cast("size_t") long elsize, int njobs, Pointer data);
+}
+public static native void fftw_threads_set_callback(
+     Parallel_loop_Work_ByteBuffer_ByteBuffer_long_int_Pointer parallel_loop, Pointer data);
+public static class Work_byte__ extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Work_byte__(Pointer p) { super(p); }
+    protected Work_byte__() { allocate(); }
+    private native void allocate();
+    public native Pointer call(@Cast("char*") byte[] arg0);
+}
+public static class Parallel_loop_Work_byte___byte___long_int_Pointer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Parallel_loop_Work_byte___byte___long_int_Pointer(Pointer p) { super(p); }
+    protected Parallel_loop_Work_byte___byte___long_int_Pointer() { allocate(); }
+    private native void allocate();
+    public native void call(Work_byte__ work,
+     @Cast("char*") byte[] jobdata, @Cast("size_t") long elsize, int njobs, Pointer data);
+}
+public static native void fftw_threads_set_callback(
+     Parallel_loop_Work_byte___byte___long_int_Pointer parallel_loop, Pointer data);
 
 public static native void fftw_make_planner_thread_safe();
 
@@ -1563,9 +1631,18 @@ public static native void fftwf_set_timelimit(double t);
 
 public static native void fftwf_plan_with_nthreads(int nthreads);
 
+public static native int fftwf_planner_nthreads();
+
 public static native int fftwf_init_threads();
 
 public static native void fftwf_cleanup_threads();
+
+public static native void fftwf_threads_set_callback(
+     Parallel_loop_Work_BytePointer_BytePointer_long_int_Pointer parallel_loop, Pointer data);
+public static native void fftwf_threads_set_callback(
+     Parallel_loop_Work_ByteBuffer_ByteBuffer_long_int_Pointer parallel_loop, Pointer data);
+public static native void fftwf_threads_set_callback(
+     Parallel_loop_Work_byte___byte___long_int_Pointer parallel_loop, Pointer data);
 
 public static native void fftwf_make_planner_thread_safe();
 
@@ -1639,31 +1716,31 @@ public static final int FFTW_BACKWARD = (+1);
 public static final double FFTW_NO_TIMELIMIT = (-1.0);
 
 /* documented flags */
-public static final long FFTW_MEASURE = (0L);
-public static final long FFTW_DESTROY_INPUT = (1L << 0);
-public static final long FFTW_UNALIGNED = (1L << 1);
-public static final long FFTW_CONSERVE_MEMORY = (1L << 2);
-public static final long FFTW_EXHAUSTIVE = (1L << 3); /* NO_EXHAUSTIVE is default */
-public static final long FFTW_PRESERVE_INPUT = (1L << 4); /* cancels FFTW_DESTROY_INPUT */
-public static final long FFTW_PATIENT = (1L << 5); /* IMPATIENT is default */
-public static final long FFTW_ESTIMATE = (1L << 6);
-public static final long FFTW_WISDOM_ONLY = (1L << 21);
+public static final int FFTW_MEASURE = (0);
+public static final int FFTW_DESTROY_INPUT = (1 << 0);
+public static final int FFTW_UNALIGNED = (1 << 1);
+public static final int FFTW_CONSERVE_MEMORY = (1 << 2);
+public static final int FFTW_EXHAUSTIVE = (1 << 3); /* NO_EXHAUSTIVE is default */
+public static final int FFTW_PRESERVE_INPUT = (1 << 4); /* cancels FFTW_DESTROY_INPUT */
+public static final int FFTW_PATIENT = (1 << 5); /* IMPATIENT is default */
+public static final int FFTW_ESTIMATE = (1 << 6);
+public static final int FFTW_WISDOM_ONLY = (1 << 21);
 
 /* undocumented beyond-guru flags */
-public static final long FFTW_ESTIMATE_PATIENT = (1L << 7);
-public static final long FFTW_BELIEVE_PCOST = (1L << 8);
-public static final long FFTW_NO_DFT_R2HC = (1L << 9);
-public static final long FFTW_NO_NONTHREADED = (1L << 10);
-public static final long FFTW_NO_BUFFERING = (1L << 11);
-public static final long FFTW_NO_INDIRECT_OP = (1L << 12);
-public static final long FFTW_ALLOW_LARGE_GENERIC = (1L << 13); /* NO_LARGE_GENERIC is default */
-public static final long FFTW_NO_RANK_SPLITS = (1L << 14);
-public static final long FFTW_NO_VRANK_SPLITS = (1L << 15);
-public static final long FFTW_NO_VRECURSE = (1L << 16);
-public static final long FFTW_NO_SIMD = (1L << 17);
-public static final long FFTW_NO_SLOW = (1L << 18);
-public static final long FFTW_NO_FIXED_RADIX_LARGE_N = (1L << 19);
-public static final long FFTW_ALLOW_PRUNING = (1L << 20);
+public static final int FFTW_ESTIMATE_PATIENT = (1 << 7);
+public static final int FFTW_BELIEVE_PCOST = (1 << 8);
+public static final int FFTW_NO_DFT_R2HC = (1 << 9);
+public static final int FFTW_NO_NONTHREADED = (1 << 10);
+public static final int FFTW_NO_BUFFERING = (1 << 11);
+public static final int FFTW_NO_INDIRECT_OP = (1 << 12);
+public static final int FFTW_ALLOW_LARGE_GENERIC = (1 << 13); /* NO_LARGE_GENERIC is default */
+public static final int FFTW_NO_RANK_SPLITS = (1 << 14);
+public static final int FFTW_NO_VRANK_SPLITS = (1 << 15);
+public static final int FFTW_NO_VRECURSE = (1 << 16);
+public static final int FFTW_NO_SIMD = (1 << 17);
+public static final int FFTW_NO_SLOW = (1 << 18);
+public static final int FFTW_NO_FIXED_RADIX_LARGE_N = (1 << 19);
+public static final int FFTW_ALLOW_PRUNING = (1 << 20);
 
 // #ifdef __cplusplus  /* extern "C" */
 // #endif /* __cplusplus */

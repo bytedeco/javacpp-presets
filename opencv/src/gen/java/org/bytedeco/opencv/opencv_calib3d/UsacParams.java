@@ -26,16 +26,13 @@ import static org.bytedeco.opencv.global.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
 
 
-@Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_calib3d.class)
+@Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_calib3d.class)
 public class UsacParams extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public UsacParams() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public UsacParams(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UsacParams(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UsacParams(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public UsacParams position(long position) {
         return (UsacParams)super.position(position);
@@ -44,6 +41,8 @@ public class UsacParams extends Pointer {
         return new UsacParams(this).position(position + i);
     }
  // in alphabetical order
+    public UsacParams() { super((Pointer)null); allocate(); }
+    private native void allocate();
     public native double confidence(); public native UsacParams confidence(double setter);
     public native @Cast("bool") boolean isParallel(); public native UsacParams isParallel(boolean setter);
     public native int loIterations(); public native UsacParams loIterations(int setter);

@@ -79,6 +79,20 @@ public class QRCodeDetector extends Pointer {
     public native @StdString BytePointer decode(@ByVal GpuMat img, @ByVal GpuMat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
     public native @StdString BytePointer decode(@ByVal GpuMat img, @ByVal GpuMat points);
 
+    /** \brief Decodes QR code on a curved surface in image once it's found by the detect() method.
+     <p>
+     Returns UTF8-encoded output string or empty string if the code cannot be decoded.
+     @param img grayscale or color (BGR) image containing QR code.
+     @param points Quadrangle vertices found by detect() method (or some other algorithm).
+     @param straight_qrcode The optional output image containing rectified and binarized QR code
+     */
+    public native @Str BytePointer decodeCurved(@ByVal Mat img, @ByVal Mat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat straight_qrcode);
+    public native @Str BytePointer decodeCurved(@ByVal Mat img, @ByVal Mat points);
+    public native @Str String decodeCurved(@ByVal UMat img, @ByVal UMat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat straight_qrcode);
+    public native @Str String decodeCurved(@ByVal UMat img, @ByVal UMat points);
+    public native @Str BytePointer decodeCurved(@ByVal GpuMat img, @ByVal GpuMat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
+    public native @Str BytePointer decodeCurved(@ByVal GpuMat img, @ByVal GpuMat points);
+
     /** \brief Both detects and decodes QR code
      <p>
      @param img grayscale or color (BGR) image containing QR code.
@@ -94,6 +108,23 @@ public class QRCodeDetector extends Pointer {
     public native @StdString BytePointer detectAndDecode(@ByVal GpuMat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat points,
                                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
     public native @StdString BytePointer detectAndDecode(@ByVal GpuMat img);
+
+    /** \brief Both detects and decodes QR code on a curved surface
+     <p>
+     @param img grayscale or color (BGR) image containing QR code.
+     @param points optional output array of vertices of the found QR code quadrangle. Will be empty if not found.
+     @param straight_qrcode The optional output image containing rectified and binarized QR code
+     */
+    public native @StdString BytePointer detectAndDecodeCurved(@ByVal Mat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat points,
+                                                  @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat straight_qrcode);
+    public native @StdString BytePointer detectAndDecodeCurved(@ByVal Mat img);
+    public native @StdString String detectAndDecodeCurved(@ByVal UMat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat points,
+                                                  @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat straight_qrcode);
+    public native @StdString String detectAndDecodeCurved(@ByVal UMat img);
+    public native @StdString BytePointer detectAndDecodeCurved(@ByVal GpuMat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat points,
+                                                  @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
+    public native @StdString BytePointer detectAndDecodeCurved(@ByVal GpuMat img);
+
     /** \brief Detects QR codes in image and returns the vector of the quadrangles containing the codes.
      @param img grayscale or color (BGR) image containing (or not) QR codes.
      @param points Output vector of vector of vertices of the minimum-area quadrangle containing the codes.
