@@ -28,13 +28,6 @@ public class PoolingLayer extends Layer {
         public native @Cast("size_t*") @StdVector SizeTPointer strides(); public native PoolingLayer strides(SizeTPointer setter);
         public native @Cast("size_t*") @StdVector SizeTPointer pads_begin(); public native PoolingLayer pads_begin(SizeTPointer setter);
         public native @Cast("size_t*") @StdVector SizeTPointer pads_end(); public native PoolingLayer pads_end(SizeTPointer setter);
-        public native @Deprecated @ByRef Size kernel(); public native PoolingLayer kernel(Size setter);
-        public native @Deprecated @ByRef Size stride(); public native PoolingLayer stride(Size setter);
-        public native @Deprecated @ByRef Size pad(); public native PoolingLayer pad(Size setter);
-        public native @Deprecated int pad_l(); public native PoolingLayer pad_l(int setter);
-        public native @Deprecated int pad_t(); public native PoolingLayer pad_t(int setter);
-        public native @Deprecated int pad_r(); public native PoolingLayer pad_r(int setter);
-        public native @Deprecated int pad_b(); public native PoolingLayer pad_b(int setter);
         /** Flag is true if at least one of the axes is global pooled. */
         public native @Cast("bool") boolean globalPooling(); public native PoolingLayer globalPooling(boolean setter);
         public native @Cast("bool*") @StdVector BoolPointer isGlobalPooling(); public native PoolingLayer isGlobalPooling(BoolPointer setter);

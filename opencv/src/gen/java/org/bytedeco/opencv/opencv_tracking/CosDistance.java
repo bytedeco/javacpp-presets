@@ -27,32 +27,54 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
 
 /**
- * \brief TrackerStateEstimator based on SVM
- */
-@Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
-public class TrackerStateEstimatorSVM extends TrackerStateEstimator {
+ *  \brief The CosDistance class allows computing cosine distance between two
+ *  reidentification descriptors.
+ *  */
+@Namespace("cv::detail::tracking::tbm") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+public class CosDistance extends IDescriptorDistance {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TrackerStateEstimatorSVM(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TrackerStateEstimatorSVM(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public TrackerStateEstimatorSVM position(long position) {
-        return (TrackerStateEstimatorSVM)super.position(position);
-    }
-    @Override public TrackerStateEstimatorSVM getPointer(long i) {
-        return new TrackerStateEstimatorSVM(this).position(position + i);
-    }
+    public CosDistance(Pointer p) { super(p); }
 
-  public TrackerStateEstimatorSVM() { super((Pointer)null); allocate(); }
-  private native void allocate();
+    /**
+     *  \brief CosDistance constructor.
+     *  @param descriptor_size [in] Descriptor size.
+     *  */
+    
+    
+    ///
+    ///
+    public CosDistance(@Const @ByRef Size descriptor_size) { super((Pointer)null); allocate(descriptor_size); }
+    private native void allocate(@Const @ByRef Size descriptor_size);
+
+    /**
+     *  \brief Computes distance between two descriptors.
+     *  @param descr1 First descriptor.
+     *  @param descr2 Second descriptor.
+     *  @return Distance between two descriptors.
+     *  */
+    
+    
+    ///
+    ///
+    public native float compute(@Const @ByRef Mat descr1, @Const @ByRef Mat descr2);
+
+    /**
+     *  \brief Computes distances between two descriptors in batches.
+     *  @param descrs [in] 1 Batch of first descriptors.
+     *  @param descrs [in] 2 Batch of second descriptors.
+     *  @return Distances between descriptors.
+     *  */
+    public native @StdVector FloatPointer compute(
+            @Const @ByRef MatVector descrs1,
+            @Const @ByRef MatVector descrs2);
 }

@@ -156,7 +156,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.0  https://opencv.org/releases.html
+ * OpenCV 4.5.1  https://opencv.org/releases.html
  * FFmpeg 4.3.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 1.27.x https://www.flir.com/products/spinnaker-sdk
@@ -178,12 +178,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenBLAS 0.3.13  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.7  https://github.com/devernay/cminpack
- * FFTW 3.3.8  http://www.fftw.org/download.html
+ * FFTW 3.3.9  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.9  https://www.python.org/downloads/
  * NumPy 1.19.x  https://github.com/numpy/numpy
  * SciPy 1.5.x  https://github.com/scipy/scipy
- * Gym 0.17.x  https://github.com/openai/gym
+ * Gym 0.18.x  https://github.com/openai/gym
  * LLVM 11.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.80.0  http://www.leptonica.org/download.html

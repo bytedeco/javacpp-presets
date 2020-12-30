@@ -27,15 +27,15 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
 
-@Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+@Namespace("cv::detail::tracking::online_boosting") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
 public class BaseClassifier extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -44,12 +44,12 @@ public class BaseClassifier extends Pointer {
 
   public BaseClassifier( int numWeakClassifier, int iterationInit ) { super((Pointer)null); allocate(numWeakClassifier, iterationInit); }
   private native void allocate( int numWeakClassifier, int iterationInit );
-  public BaseClassifier( int numWeakClassifier, int iterationInit, @Cast("cv::WeakClassifierHaarFeature**") PointerPointer weakCls ) { super((Pointer)null); allocate(numWeakClassifier, iterationInit, weakCls); }
-  private native void allocate( int numWeakClassifier, int iterationInit, @Cast("cv::WeakClassifierHaarFeature**") PointerPointer weakCls );
+  public BaseClassifier( int numWeakClassifier, int iterationInit, @Cast("cv::detail::tracking::online_boosting::WeakClassifierHaarFeature**") PointerPointer weakCls ) { super((Pointer)null); allocate(numWeakClassifier, iterationInit, weakCls); }
+  private native void allocate( int numWeakClassifier, int iterationInit, @Cast("cv::detail::tracking::online_boosting::WeakClassifierHaarFeature**") PointerPointer weakCls );
   public BaseClassifier( int numWeakClassifier, int iterationInit, @ByPtrPtr WeakClassifierHaarFeature weakCls ) { super((Pointer)null); allocate(numWeakClassifier, iterationInit, weakCls); }
   private native void allocate( int numWeakClassifier, int iterationInit, @ByPtrPtr WeakClassifierHaarFeature weakCls );
 
-  public native @Cast("cv::WeakClassifierHaarFeature**") PointerPointer getReferenceWeakClassifier();
+  public native @Cast("cv::detail::tracking::online_boosting::WeakClassifierHaarFeature**") PointerPointer getReferenceWeakClassifier();
   public native void trainClassifier( @Const @ByRef Mat image, int target, float importance, @Cast("bool*") @StdVector BoolPointer errorMask );
   public native void trainClassifier( @Const @ByRef Mat image, int target, float importance, @Cast("bool*") @StdVector boolean[] errorMask );
   public native int selectBestClassifier( @Cast("bool*") @StdVector BoolPointer errorMask, float importance, @StdVector FloatPointer errors );

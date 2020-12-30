@@ -82,13 +82,9 @@ public class UMat extends Pointer {
     private native void allocate(@Const @ByRef UMat m, @Const @ByRef Range rowRange);
     public UMat(@Const @ByRef UMat m, @Const @ByRef Rect roi) { super((Pointer)null); allocate(m, roi); }
     private native void allocate(@Const @ByRef UMat m, @Const @ByRef Rect roi);
-    /** builds matrix from std::vector with or without copying the data */
 
-    /** builds matrix from cv::Vec; the data is copied by default */
-    /** builds matrix from cv::Matx; the data is copied by default */
-    /** builds matrix from a 2D point */
-    /** builds matrix from a 3D point */
-    /** builds matrix from comma initializer */
+    // FIXIT copyData=false is not implemented, drop this in favor of cv::Mat (OpenCV 5.0)
+    /** builds matrix from std::vector with or without copying the data */
 
     /** destructor - calls release() */
     /** assignment operators */

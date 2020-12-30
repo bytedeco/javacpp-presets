@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
             link = "opencv_dnn@.4.5"),
         @Platform(value = "ios", preload = "libopencv_dnn"),
-        @Platform(value = "windows", link = "opencv_dnn450")},
+        @Platform(value = "windows", link = "opencv_dnn451")},
     target = "org.bytedeco.opencv.opencv_dnn",
     global = "org.bytedeco.opencv.global.opencv_dnn"
 )

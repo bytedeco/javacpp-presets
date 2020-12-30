@@ -31,9 +31,9 @@ public class PhaseUnwrapping extends Algorithm {
     /**
      * \brief Unwraps a 2D phase map.
      <p>
-     * @param wrappedPhaseMap The wrapped phase map that needs to be unwrapped.
+     * @param wrappedPhaseMap The wrapped phase map of type CV_32FC1 that needs to be unwrapped.
      * @param unwrappedPhaseMap The unwrapped phase map.
-     * @param shadowMask Optional parameter used when some pixels do not hold any phase information in the wrapped phase map.
+     * @param shadowMask Optional CV_8UC1 mask image used when some pixels do not hold any phase information in the wrapped phase map.
      */
     public native void unwrapPhaseMap( @ByVal Mat wrappedPhaseMap, @ByVal Mat unwrappedPhaseMap,
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat shadowMask );

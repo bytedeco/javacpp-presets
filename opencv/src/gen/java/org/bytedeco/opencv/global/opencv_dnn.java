@@ -126,7 +126,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20200908;
+public static final int OPENCV_DNN_API_VERSION = 20201117;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)
@@ -503,7 +503,8 @@ public static final int OPENCV_DNN_API_VERSION = 20200908;
         /** FPGA device with CPU fallbacks using Inference Engine's Heterogeneous plugin. */
         DNN_TARGET_FPGA = 5,
         DNN_TARGET_CUDA = 6,
-        DNN_TARGET_CUDA_FP16 = 7;
+        DNN_TARGET_CUDA_FP16 = 7,
+        DNN_TARGET_HDDL = 8;
 
     @Namespace("cv::dnn") public static native @ByVal @Cast("std::vector<std::pair<cv::dnn::Backend,cv::dnn::Target> >*") IntIntPairVector getAvailableBackends();
     @Namespace("cv::dnn") public static native @Cast("cv::dnn::Target*") @StdVector IntPointer getAvailableTargets(@Cast("cv::dnn::Backend") int be);
@@ -1056,6 +1057,18 @@ public static final int OPENCV_DNN_API_VERSION = 20200908;
 
 
 // Targeting ../opencv_dnn/DetectionModel.java
+
+
+// Targeting ../opencv_dnn/TextRecognitionModel.java
+
+
+// Targeting ../opencv_dnn/TextDetectionModel.java
+
+
+// Targeting ../opencv_dnn/TextDetectionModel_EAST.java
+
+
+// Targeting ../opencv_dnn/TextDetectionModel_DB.java
 
 
 

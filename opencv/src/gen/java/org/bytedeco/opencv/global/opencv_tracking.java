@@ -29,318 +29,51 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 public class opencv_tracking extends org.bytedeco.opencv.presets.opencv_tracking {
     static { Loader.load(); }
 
-// Targeting ../opencv_tracking/TrackerVector.java
+// Targeting ../opencv_tracking/TrackedObjectDeque.java
 
 
-// Targeting ../opencv_tracking/ConfidenceMapVector.java
+// Targeting ../opencv_tracking/SizeTPointVectorMap.java
 
 
-// Targeting ../opencv_tracking/ConfidenceMap.java
-
-
-// Targeting ../opencv_tracking/StringTrackerFeaturePairVector.java
-
-
-// Targeting ../opencv_tracking/StringTrackerSamplerAlgorithmPairVector.java
-
-
-// Targeting ../opencv_tracking/Trajectory.java
+// Targeting ../opencv_tracking/SizeTTrackMap.java
 
 
 // Parsed from <opencv2/tracking.hpp>
 
-/*M///////////////////////////////////////////////////////////////////////////////////////
- //
- //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
- //
- //  By downloading, copying, installing or using the software you agree to this license.
- //  If you do not agree to this license, do not download, install,
- //  copy or use the software.
- //
- //
- //                           License Agreement
- //                For Open Source Computer Vision Library
- //
- // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
- // Third party copyrights are property of their respective owners.
- //
- // Redistribution and use in source and binary forms, with or without modification,
- // are permitted provided that the following conditions are met:
- //
- //   * Redistribution's of source code must retain the above copyright notice,
- //     this list of conditions and the following disclaimer.
- //
- //   * Redistribution's in binary form must reproduce the above copyright notice,
- //     this list of conditions and the following disclaimer in the documentation
- //     and/or other materials provided with the distribution.
- //
- //   * The name of the copyright holders may not be used to endorse or promote products
- //     derived from this software without specific prior written permission.
- //
- // This software is provided by the copyright holders and contributors "as is" and
- // any express or implied warranties, including, but not limited to, the implied
- // warranties of merchantability and fitness for a particular purpose are disclaimed.
- // In no event shall the Intel Corporation or contributors be liable for any direct,
- // indirect, incidental, special, exemplary, or consequential damages
- // (including, but not limited to, procurement of substitute goods or services;
- // loss of use, data, or profits; or business interruption) however caused
- // and on any theory of liability, whether in contract, strict liability,
- // or tort (including negligence or otherwise) arising in any way out of
- // the use of this software, even if advised of the possibility of such damage.
- //
- //M*/
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
 
-// #ifndef __OPENCV_TRACKING_HPP__
-// #define __OPENCV_TRACKING_HPP__
+// #ifndef OPENCV_CONTRIB_TRACKING_HPP
+// #define OPENCV_CONTRIB_TRACKING_HPP
 
-// #include "opencv2/core/cvdef.h"
+// #include "opencv2/core.hpp"
+// #include "opencv2/video/tracking.hpp"
+// #ifndef CV_DOXYGEN
+// Targeting ../opencv_tracking/TrackerCSRT.java
 
-/** \defgroup tracking Tracking API
-<p>
-Long-term optical tracking API
-------------------------------
-<p>
-Long-term optical tracking is an important issue for many computer vision applications in
-real world scenario. The development in this area is very fragmented and this API is an unique
-interface useful for plug several algorithms and compare them. This work is partially based on
-\cite AAM and \cite AMVOT .
-<p>
-These algorithms start from a bounding box of the target and with their internal representation they
-avoid the drift during the tracking. These long-term trackers are able to evaluate online the
-quality of the location of the target in the new frame, without ground truth.
-<p>
-There are three main components: the TrackerSampler, the TrackerFeatureSet and the TrackerModel. The
-first component is the object that computes the patches over the frame based on the last target
-location. The TrackerFeatureSet is the class that manages the Features, is possible plug many kind
-of these (HAAR, HOG, LBP, Feature2D, etc). The last component is the internal representation of the
-target, it is the appearance model. It stores all state candidates and compute the trajectory (the
-most likely target states). The class TrackerTargetState represents a possible state of the target.
-The TrackerSampler and the TrackerFeatureSet are the visual representation of the target, instead
-the TrackerModel is the statistical model.
-<p>
-A recent benchmark between these algorithms can be found in \cite OOT
-<p>
-Creating Your Own %Tracker
---------------------
-<p>
-If you want to create a new tracker, here's what you have to do. First, decide on the name of the class
-for the tracker (to meet the existing style, we suggest something with prefix "tracker", e.g.
-trackerMIL, trackerBoosting) -- we shall refer to this choice as to "classname" in subsequent.
-<p>
--   Declare your tracker in modules/tracking/include/opencv2/tracking/tracker.hpp. Your tracker should inherit from
-    Tracker (please, see the example below). You should declare the specialized Param structure,
-    where you probably will want to put the data, needed to initialize your tracker. You should
-    get something similar to :
-<pre>{@code
-        class CV_EXPORTS_W TrackerMIL : public Tracker
-        {
-         public:
-          struct CV_EXPORTS Params
-          {
-            Params();
-            //parameters for sampler
-            float samplerInitInRadius;  // radius for gathering positive instances during init
-            int samplerInitMaxNegNum;  // # negative samples to use during init
-            float samplerSearchWinSize;  // size of search window
-            float samplerTrackInRadius;  // radius for gathering positive instances during tracking
-            int samplerTrackMaxPosNum;  // # positive samples to use during tracking
-            int samplerTrackMaxNegNum;  // # negative samples to use during tracking
-            int featureSetNumFeatures;  // #features
 
-            void read( const FileNode& fn );
-            void write( FileStorage& fs ) const;
-          };
-}</pre>
-    of course, you can also add any additional methods of your choice. It should be pointed out,
-    however, that it is not expected to have a constructor declared, as creation should be done via
-    the corresponding create() method.
--   Finally, you should implement the function with signature :
-<pre>{@code
-        Ptr<classname> classname::create(const classname::Params &parameters){
-            ...
-        }
-}</pre>
-    That function can (and probably will) return a pointer to some derived class of "classname",
-    which will probably have a real constructor.
-<p>
-Every tracker has three component TrackerSampler, TrackerFeatureSet and TrackerModel. The first two
-are instantiated from Tracker base class, instead the last component is abstract, so you must
-implement your TrackerModel.
-<p>
-### TrackerSampler
-<p>
-TrackerSampler is already instantiated, but you should define the sampling algorithm and add the
-classes (or single class) to TrackerSampler. You can choose one of the ready implementation as
-TrackerSamplerCSC or you can implement your sampling method, in this case the class must inherit
-TrackerSamplerAlgorithm. Fill the samplingImpl method that writes the result in "sample" output
-argument.
-<p>
-Example of creating specialized TrackerSamplerAlgorithm TrackerSamplerCSC : :
-<pre>{@code
-    class CV_EXPORTS_W TrackerSamplerCSC : public TrackerSamplerAlgorithm
-    {
-     public:
-      TrackerSamplerCSC( const TrackerSamplerCSC::Params &parameters = TrackerSamplerCSC::Params() );
-      ~TrackerSamplerCSC();
-      ...
+// Targeting ../opencv_tracking/TrackerKCF.java
 
-     protected:
-      bool samplingImpl( const Mat& image, Rect boundingBox, std::vector<Mat>& sample );
-      ...
 
-    };
-}</pre>
-<p>
-Example of adding TrackerSamplerAlgorithm to TrackerSampler : :
-<pre>{@code
-    //sampler is the TrackerSampler
-    Ptr<TrackerSamplerAlgorithm> CSCSampler = new TrackerSamplerCSC( CSCparameters );
-    if( !sampler->addTrackerSamplerAlgorithm( CSCSampler ) )
-     return false;
 
-    //or add CSC sampler with default parameters
-    //sampler->addTrackerSamplerAlgorithm( "CSC" );
-}</pre>
-@see
-   TrackerSamplerCSC, TrackerSamplerAlgorithm
-<p>
-### TrackerFeatureSet
-<p>
-TrackerFeatureSet is already instantiated (as first) , but you should define what kinds of features
-you'll use in your tracker. You can use multiple feature types, so you can add a ready
-implementation as TrackerFeatureHAAR in your TrackerFeatureSet or develop your own implementation.
-In this case, in the computeImpl method put the code that extract the features and in the selection
-method optionally put the code for the refinement and selection of the features.
-<p>
-Example of creating specialized TrackerFeature TrackerFeatureHAAR : :
-<pre>{@code
-    class CV_EXPORTS_W TrackerFeatureHAAR : public TrackerFeature
-    {
-     public:
-      TrackerFeatureHAAR( const TrackerFeatureHAAR::Params &parameters = TrackerFeatureHAAR::Params() );
-      ~TrackerFeatureHAAR();
-      void selection( Mat& response, int npoints );
-      ...
 
-     protected:
-      bool computeImpl( const std::vector<Mat>& images, Mat& response );
-      ...
+/** \} */
 
-    };
-}</pre>
-Example of adding TrackerFeature to TrackerFeatureSet : :
-<pre>{@code
-    //featureSet is the TrackerFeatureSet
-    Ptr<TrackerFeature> trackerFeature = new TrackerFeatureHAAR( HAARparameters );
-    featureSet->addTrackerFeature( trackerFeature );
-}</pre>
-@see
-   TrackerFeatureHAAR, TrackerFeatureSet
-<p>
-### TrackerModel
-<p>
-TrackerModel is abstract, so in your implementation you must develop your TrackerModel that inherit
-from TrackerModel. Fill the method for the estimation of the state "modelEstimationImpl", that
-estimates the most likely target location, see \cite AAM table I (ME) for further information. Fill
-"modelUpdateImpl" in order to update the model, see \cite AAM table I (MU). In this class you can use
-the :cConfidenceMap and :cTrajectory to storing the model. The first represents the model on the all
-possible candidate states and the second represents the list of all estimated states.
-<p>
-Example of creating specialized TrackerModel TrackerMILModel : :
-<pre>{@code
-    class TrackerMILModel : public TrackerModel
-    {
-     public:
-      TrackerMILModel( const Rect& boundingBox );
-      ~TrackerMILModel();
-      ...
+// #ifndef CV_DOXYGEN
 
-     protected:
-      void modelEstimationImpl( const std::vector<Mat>& responses );
-      void modelUpdateImpl();
-      ...
+// #endif
+  // namespace
 
-    };
-}</pre>
-And add it in your Tracker : :
-<pre>{@code
-    bool TrackerMIL::initImpl( const Mat& image, const Rect2d& boundingBox )
-    {
-      ...
-      //model is the general TrackerModel field of the general Tracker
-      model = new TrackerMILModel( boundingBox );
-      ...
-    }
-}</pre>
-In the last step you should define the TrackerStateEstimator based on your implementation or you can
-use one of ready class as TrackerStateEstimatorMILBoosting. It represent the statistical part of the
-model that estimates the most likely target state.
-<p>
-Example of creating specialized TrackerStateEstimator TrackerStateEstimatorMILBoosting : :
-<pre>{@code
-    class CV_EXPORTS_W TrackerStateEstimatorMILBoosting : public TrackerStateEstimator
-    {
-     class TrackerMILTargetState : public TrackerTargetState
-     {
-     ...
-     };
-
-     public:
-      TrackerStateEstimatorMILBoosting( int nFeatures = 250 );
-      ~TrackerStateEstimatorMILBoosting();
-      ...
-
-     protected:
-      Ptr<TrackerTargetState> estimateImpl( const std::vector<ConfidenceMap>& confidenceMaps );
-      void updateImpl( std::vector<ConfidenceMap>& confidenceMaps );
-      ...
-
-    };
-}</pre>
-And add it in your TrackerModel : :
-<pre>{@code
-    //model is the TrackerModel of your Tracker
-    Ptr<TrackerStateEstimatorMILBoosting> stateEstimator = new TrackerStateEstimatorMILBoosting( params.featureSetNumFeatures );
-    model->setTrackerStateEstimator( stateEstimator );
-}</pre>
-@see
-   TrackerModel, TrackerStateEstimatorMILBoosting, TrackerTargetState
-<p>
-During this step, you should define your TrackerTargetState based on your implementation.
-TrackerTargetState base class has only the bounding box (upper-left position, width and height), you
-can enrich it adding scale factor, target rotation, etc.
-<p>
-Example of creating specialized TrackerTargetState TrackerMILTargetState : :
-<pre>{@code
-    class TrackerMILTargetState : public TrackerTargetState
-    {
-     public:
-      TrackerMILTargetState( const Point2f& position, int targetWidth, int targetHeight, bool foreground, const Mat& features );
-      ~TrackerMILTargetState();
-      ...
-
-     private:
-      bool isTarget;
-      Mat targetFeatures;
-      ...
-
-    };
-}</pre>
-<p>
-*/
-
-// #include <opencv2/tracking/tracker.hpp>
-// #include <opencv2/tracking/tldDataset.hpp>
-
-// #endif //__OPENCV_TRACKING_HPP__
+// #endif // OPENCV_CONTRIB_TRACKING_HPP
 
 
 // Parsed from <opencv2/tracking/feature.hpp>
@@ -400,7 +133,7 @@ Example of creating specialized TrackerTargetState TrackerMILTargetState : :
  * TODO Changed CvHaarEvaluator based on ADABOOSTING implementation (Grabner et al.)
  */
 
-/** \addtogroup tracking
+/** \addtogroup tracking_detail
  *  \{ */
 
 public static final String FEATURES = "features";
@@ -477,9 +210,11 @@ public static final int N_CELLS = 4;
 
 
 
+  // namespace
+
 /** \} */
 
- /* namespace cv */
+  // namespace cv
 
 // #endif
 
@@ -532,6 +267,9 @@ public static final int N_CELLS = 4;
 
 // #include "opencv2/core.hpp"
 // #include <limits>
+
+/** \addtogroup tracking_detail
+ *  \{ */
 // Targeting ../opencv_tracking/UnscentedKalmanFilter.java
 
 
@@ -551,7 +289,7 @@ public static final int N_CELLS = 4;
 * @param params - an object of the UnscentedKalmanFilterParams class containing UKF parameters.
 * @return pointer to the object of the UnscentedKalmanFilterImpl class implementing UnscentedKalmanFilter.
 */
-@Namespace("cv::tracking") public static native @Ptr UnscentedKalmanFilter createUnscentedKalmanFilter( @Const @ByRef UnscentedKalmanFilterParams params );
+@Namespace("cv::detail::tracking::kalman_filters") public static native @Ptr UnscentedKalmanFilter createUnscentedKalmanFilter( @Const @ByRef UnscentedKalmanFilterParams params );
 /** \brief Augmented Unscented Kalman Filter factory method
 <p>
 * The class implements an Augmented Unscented Kalman filter http://becs.aalto.fi/en/research/bayes/ekfukf/documentation.pdf, page 31-33.
@@ -559,72 +297,13 @@ public static final int N_CELLS = 4;
 * @param params - an object of the AugmentedUnscentedKalmanFilterParams class containing AUKF parameters.
 * @return pointer to the object of the AugmentedUnscentedKalmanFilterImpl class implementing UnscentedKalmanFilter.
 */
-@Namespace("cv::tracking") public static native @Ptr UnscentedKalmanFilter createAugmentedUnscentedKalmanFilter( @Const @ByRef AugmentedUnscentedKalmanFilterParams params );
+@Namespace("cv::detail::tracking::kalman_filters") public static native @Ptr UnscentedKalmanFilter createAugmentedUnscentedKalmanFilter( @Const @ByRef AugmentedUnscentedKalmanFilterParams params );
 
- // tracking
- // cv
-
-// #endif
-
-
-// Parsed from <opencv2/tracking/onlineMIL.hpp>
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
- //
- //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
- //
- //  By downloading, copying, installing or using the software you agree to this license.
- //  If you do not agree to this license, do not download, install,
- //  copy or use the software.
- //
- //
- //                           License Agreement
- //                For Open Source Computer Vision Library
- //
- // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
- // Third party copyrights are property of their respective owners.
- //
- // Redistribution and use in source and binary forms, with or without modification,
- // are permitted provided that the following conditions are met:
- //
- //   * Redistribution's of source code must retain the above copyright notice,
- //     this list of conditions and the following disclaimer.
- //
- //   * Redistribution's in binary form must reproduce the above copyright notice,
- //     this list of conditions and the following disclaimer in the documentation
- //     and/or other materials provided with the distribution.
- //
- //   * The name of the copyright holders may not be used to endorse or promote products
- //     derived from this software without specific prior written permission.
- //
- // This software is provided by the copyright holders and contributors "as is" and
- // any express or implied warranties, including, but not limited to, the implied
- // warranties of merchantability and fitness for a particular purpose are disclaimed.
- // In no event shall the Intel Corporation or contributors be liable for any direct,
- // indirect, incidental, special, exemplary, or consequential damages
- // (including, but not limited to, procurement of substitute goods or services;
- // loss of use, data, or profits; or business interruption) however caused
- // and on any theory of liability, whether in contract, strict liability,
- // or tort (including negligence or otherwise) arising in any way out of
- // the use of this software, even if advised of the possibility of such damage.
- //
- //M*/
-
-// #ifndef __OPENCV_ONLINEMIL_HPP__
-// #define __OPENCV_ONLINEMIL_HPP__
-
-// #include "opencv2/core.hpp"
-// #include <limits>
-// Targeting ../opencv_tracking/ClfMilBoost.java
-
-
-// Targeting ../opencv_tracking/ClfOnlineStump.java
-
-
+  // namespace
 
 /** \} */
 
- /* namespace cv */
+  // namespace
 
 // #endif
 
@@ -676,6 +355,9 @@ public static final int N_CELLS = 4;
 // #define __OPENCV_ONLINEBOOSTING_HPP__
 
 // #include "opencv2/core.hpp"
+
+/** \addtogroup tracking_detail
+ *  \{ */
 // Targeting ../opencv_tracking/StrongClassifierDirectSelection.java
 
 
@@ -695,9 +377,11 @@ public static final int N_CELLS = 4;
 
 
 
+  // namespace
+
 /** \} */
 
- /* namespace cv */
+  // namespace
 
 // #endif
 
@@ -749,182 +433,94 @@ public static final int N_CELLS = 4;
 // #define OPENCV_TLD_DATASET
 
 // #include "opencv2/core.hpp"
-		@Namespace("cv::tld") public static native @ByVal Rect2d tld_InitDataset(int videoInd, @Cast("const char*") BytePointer rootPath/*="TLD_dataset"*/, int datasetInd/*=0*/);
-		@Namespace("cv::tld") public static native @ByVal Rect2d tld_InitDataset(int videoInd);
-		@Namespace("cv::tld") public static native @ByVal Rect2d tld_InitDataset(int videoInd, String rootPath/*="TLD_dataset"*/, int datasetInd/*=0*/);
-		@Namespace("cv::tld") public static native @Str BytePointer tld_getNextDatasetFrame();
+
+/** \addtogroup tracking_detail
+ *  \{ */
+		@Namespace("cv::detail::tracking::tld") public static native @ByVal Rect2d tld_InitDataset(int videoInd, @Cast("const char*") BytePointer rootPath/*="TLD_dataset"*/, int datasetInd/*=0*/);
+		@Namespace("cv::detail::tracking::tld") public static native @ByVal Rect2d tld_InitDataset(int videoInd);
+		@Namespace("cv::detail::tracking::tld") public static native @ByVal Rect2d tld_InitDataset(int videoInd, String rootPath/*="TLD_dataset"*/, int datasetInd/*=0*/);
+		@Namespace("cv::detail::tracking::tld") public static native @Str BytePointer tld_getNextDatasetFrame();
 	
 
+/** \} */
+
+
 
 // #endif
 
 
-// Parsed from <opencv2/tracking/tracker.hpp>
+// Parsed from <opencv2/tracking/tracking_by_matching.hpp>
 
-/*M///////////////////////////////////////////////////////////////////////////////////////
- //
- //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
- //
- //  By downloading, copying, installing or using the software you agree to this license.
- //  If you do not agree to this license, do not download, install,
- //  copy or use the software.
- //
- //
- //                           License Agreement
- //                For Open Source Computer Vision Library
- //
- // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
- // Third party copyrights are property of their respective owners.
- //
- // Redistribution and use in source and binary forms, with or without modification,
- // are permitted provided that the following conditions are met:
- //
- //   * Redistribution's of source code must retain the above copyright notice,
- //     this list of conditions and the following disclaimer.
- //
- //   * Redistribution's in binary form must reproduce the above copyright notice,
- //     this list of conditions and the following disclaimer in the documentation
- //     and/or other materials provided with the distribution.
- //
- //   * The name of the copyright holders may not be used to endorse or promote products
- //     derived from this software without specific prior written permission.
- //
- // This software is provided by the copyright holders and contributors "as is" and
- // any express or implied warranties, including, but not limited to, the implied
- // warranties of merchantability and fitness for a particular purpose are disclaimed.
- // In no event shall the Intel Corporation or contributors be liable for any direct,
- // indirect, incidental, special, exemplary, or consequential damages
- // (including, but not limited to, procurement of substitute goods or services;
- // loss of use, data, or profits; or business interruption) however caused
- // and on any theory of liability, whether in contract, strict liability,
- // or tort (including negligence or otherwise) arising in any way out of
- // the use of this software, even if advised of the possibility of such damage.
- //
- //M*/
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
 
-// #ifndef __OPENCV_TRACKER_HPP__
-// #define __OPENCV_TRACKER_HPP__
+// #ifndef __OPENCV_TRACKING_TRACKING_BY_MATCHING_HPP__
+// #define __OPENCV_TRACKING_TRACKING_BY_MATCHING_HPP__
+
+// #include <deque>
+// #include <iostream>
+// #include <string>
+// #include <unordered_map>
+// #include <vector>
+// #include <memory>
+// #include <map>
+// #include <tuple>
+// #include <set>
 
 // #include "opencv2/core.hpp"
-// #include "opencv2/imgproc/types_c.h"
-// #include "feature.hpp"
-// #include "onlineMIL.hpp"
-// #include "onlineBoosting.hpp"
+// #include "opencv2/imgproc.hpp"
 
-/*
- * Partially based on:
- * ====================================================================================================================
- *   - [AAM] S. Salti, A. Cavallaro, L. Di Stefano, Adaptive Appearance Modeling for Video Tracking: Survey and Evaluation
- *  - [AMVOT] X. Li, W. Hu, C. Shen, Z. Zhang, A. Dick, A. van den Hengel, A Survey of Appearance Models in Visual Object Tracking
- *
- * This Tracking API has been designed with PlantUML. If you modify this API please change UML files under modules/tracking/doc/uml
- *
- */
-// Targeting ../opencv_tracking/TrackerFeature.java
-
-
-// Targeting ../opencv_tracking/TrackerFeatureSet.java
-
-
-// Targeting ../opencv_tracking/TrackerSamplerAlgorithm.java
-
-
-// Targeting ../opencv_tracking/TrackerSampler.java
-
-
-// Targeting ../opencv_tracking/TrackerTargetState.java
+/** \addtogroup tracking_detail
+ *  \{ */
+// Targeting ../opencv_tracking/TrackedObject.java
 
 
 
-/** \brief Represents the model of the target at frame {@code k} (all states and scores)
-<p>
-See \cite AAM The set of the pair {@code \langle \hat{x}^{i}_{k}, C^{i}_{k} \rangle}
-@see TrackerTargetState
- */
-
-/** \brief Represents the estimate states for all frames
-<p>
-\cite AAM {@code x_{k}} is the trajectory of the target up to time {@code k}
-<p>
-@see TrackerTargetState
- */
-// Targeting ../opencv_tracking/TrackerStateEstimator.java
 
 
-// Targeting ../opencv_tracking/TrackerModel.java
+/** (object id, detected objects) pairs collection. */
 
 
-// Targeting ../opencv_tracking/Tracker.java
+///
+///
+// Targeting ../opencv_tracking/IImageDescriptor.java
 
 
-// Targeting ../opencv_tracking/TrackerStateEstimatorMILBoosting.java
+// Targeting ../opencv_tracking/ResizedImageDescriptor.java
 
 
-// Targeting ../opencv_tracking/TrackerStateEstimatorAdaBoosting.java
+// Targeting ../opencv_tracking/IDescriptorDistance.java
 
 
-// Targeting ../opencv_tracking/TrackerStateEstimatorSVM.java
+// Targeting ../opencv_tracking/CosDistance.java
 
 
-// Targeting ../opencv_tracking/TrackerSamplerCSC.java
+// Targeting ../opencv_tracking/MatchTemplateDistance.java
 
 
-// Targeting ../opencv_tracking/TrackerSamplerCS.java
+// Targeting ../opencv_tracking/TrackerParams.java
 
 
-// Targeting ../opencv_tracking/TrackerSamplerPF.java
+// Targeting ../opencv_tracking/Track.java
 
 
-// Targeting ../opencv_tracking/TrackerFeatureFeature2d.java
+// Targeting ../opencv_tracking/ITrackerByMatching.java
 
 
-// Targeting ../opencv_tracking/TrackerFeatureHOG.java
 
+/**
+ *  \brief The factory to create Tracker-by-Matching algorithm implementation.
+ *  */
+@Namespace("cv::detail::tracking::tbm") public static native @Ptr ITrackerByMatching createTrackerByMatching(@Const @ByRef(nullValue = "cv::detail::tracking::tbm::TrackerParams()") TrackerParams params);
+@Namespace("cv::detail::tracking::tbm") public static native @Ptr ITrackerByMatching createTrackerByMatching();
 
-// Targeting ../opencv_tracking/TrackerFeatureHAAR.java
-
-
-// Targeting ../opencv_tracking/TrackerFeatureLBP.java
-
-
-// Targeting ../opencv_tracking/TrackerMIL.java
-
-
-// Targeting ../opencv_tracking/TrackerBoosting.java
-
-
-// Targeting ../opencv_tracking/TrackerMedianFlow.java
-
-
-// Targeting ../opencv_tracking/TrackerTLD.java
-
-
-// Targeting ../opencv_tracking/TrackerKCF.java
-
-
-// Targeting ../opencv_tracking/TrackerGOTURN.java
-
-
-// Targeting ../opencv_tracking/TrackerMOSSE.java
-
-
-// Targeting ../opencv_tracking/MultiTracker.java
-
-
-// Targeting ../opencv_tracking/MultiTracker_Alt.java
-
-
-// Targeting ../opencv_tracking/MultiTrackerTLD.java
-
-
-// Targeting ../opencv_tracking/TrackerCSRT.java
-
-
+ // namespace tbm
 
 /** \} */
- /* namespace cv */
 
-// #endif
+  // namespace
+// #endif // #ifndef __OPENCV_TRACKING_TRACKING_BY_MATCHING_HPP__
 
 
 }

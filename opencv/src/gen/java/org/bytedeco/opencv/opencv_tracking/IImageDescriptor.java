@@ -27,39 +27,50 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
-@Name("std::vector<std::pair<cv::Ptr<cv::TrackerTargetState>,float> >") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
-public class ConfidenceMap extends Pointer {
+
+/**
+ *  \brief The IImageDescriptor class declares base class for image
+ *  descriptor.
+ *  */
+@Namespace("cv::detail::tracking::tbm") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+public class IImageDescriptor extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ConfidenceMap(Pointer p) { super(p); }
-    public ConfidenceMap(TrackerTargetState[] firstValue, float[] secondValue) { this(Math.min(firstValue.length, secondValue.length)); put(firstValue, secondValue); }
-    public ConfidenceMap()       { allocate();  }
-    public ConfidenceMap(long n) { allocate(n); }
-    private native void allocate();
-    private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator =") @ByRef ConfidenceMap put(@ByRef ConfidenceMap x);
+    public IImageDescriptor(Pointer p) { super(p); }
 
-    public boolean empty() { return size() == 0; }
-    public native long size();
-    public void clear() { resize(0); }
-    public native void resize(@Cast("size_t") long n);
+    /**
+     *  \brief Descriptor size getter.
+     *  @return Descriptor size.
+     *  */
+    
+    
+    ///
+    ///
+    public native @ByVal Size size();
 
-    @Index(function = "at") public native @Ptr TrackerTargetState first(@Cast("size_t") long i); public native ConfidenceMap first(@Cast("size_t") long i, TrackerTargetState first);
-    @Index(function = "at") public native float second(@Cast("size_t") long i);  public native ConfidenceMap second(@Cast("size_t") long i, float second);
+    /**
+     *  \brief Computes image descriptor.
+     *  @param mat [in] Color image.
+     *  @param descr [out] Computed descriptor.
+     *  */
+    
+    
+    ///
+    ///
+    public native void compute(@Const @ByRef Mat mat, @ByRef Mat descr);
 
-    public ConfidenceMap put(TrackerTargetState[] firstValue, float[] secondValue) {
-        for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
-            first(i, firstValue[i]);
-            second(i, secondValue[i]);
-        }
-        return this;
-    }
+    /**
+     *  \brief Computes image descriptors in batches.
+     *  @param mats [in] Images of interest.
+     *  @param descrs [out] Matrices to store the computed descriptors.
+     *  */
+    public native void compute(@Const @ByRef MatVector mats,
+                             @ByRef MatVector descrs);
 }
-

@@ -40,7 +40,12 @@ public class PlatformInfo extends Pointer {
 
     public native @Str BytePointer name();
     public native @Str BytePointer vendor();
+
+    /** See CL_PLATFORM_VERSION */
     public native @Str BytePointer version();
+    public native int versionMajor();
+    public native int versionMinor();
+
     public native int deviceNumber();
     public native void getDevice(@ByRef Device device, int d);
 

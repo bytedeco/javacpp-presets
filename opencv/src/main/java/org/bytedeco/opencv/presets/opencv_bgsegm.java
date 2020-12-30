@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_bgsegm@.4.5"
         ),
         @Platform(value = "ios", preload = "libopencv_bgsegm"),
-        @Platform(value = "windows", link = "opencv_bgsegm450")
+        @Platform(value = "windows", link = "opencv_bgsegm451")
     },
     target = "org.bytedeco.opencv.opencv_bgsegm",
     global = "org.bytedeco.opencv.global.opencv_bgsegm"

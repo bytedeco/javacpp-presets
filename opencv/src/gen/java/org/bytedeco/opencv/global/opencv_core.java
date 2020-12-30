@@ -387,7 +387,7 @@ public static final int CV_HAL_GEMM_3_T = 4;
 // #ifdef CV_Func
 // #elif defined __GNUC__ || (defined (__cpluscplus) && (__cpluscplus >= 201103))
 // #define CV_Func __func__
-// #elif defined __clang__ && (__clang_minor__ * 100 + __clang_major >= 305)
+// #elif defined __clang__ && (__clang_minor__ * 100 + __clang_major__ >= 305)
 // #define CV_Func __func__
 // #elif defined(__STDC_VERSION__) && (__STDC_VERSION >= 199901)
 // #define CV_Func __func__
@@ -1946,7 +1946,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    5;
-public static final int CV_VERSION_REVISION = 0;
+public static final int CV_VERSION_REVISION = 1;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -7486,7 +7486,10 @@ public static final int
         single-column vector in this case.*/
     COVAR_COLS      = 16;
 
-/** k-Means flags */
+/** \addtogroup core_cluster
+ *   \{
+ <p>
+ *  k-Means flags */
 /** enum cv::KmeansFlags */
 public static final int
     /** Select random initial centers in each attempt.*/
@@ -7499,6 +7502,11 @@ public static final int
         to specify the exact method.*/
     KMEANS_USE_INITIAL_LABELS = 1;
 
+/** \} core_cluster
+ <p>
+ *  \addtogroup core_array
+ *  \{ */
+
 /** enum cv::ReduceTypes */
 public static final int /** the output is the sum of all rows/columns of the matrix. */
  REDUCE_SUM = 0,
@@ -7509,7 +7517,8 @@ public static final int /** the output is the sum of all rows/columns of the mat
                    /** the output is the minimum (column/row-wise) of all rows/columns of the matrix. */
                    REDUCE_MIN = 3;
 
-
+/** \} core_array
+<p>
 /** \brief Swaps two matrices
 */
 @Namespace("cv") public static native void swap(@ByRef Mat a, @ByRef Mat b);

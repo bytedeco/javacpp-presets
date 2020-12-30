@@ -170,37 +170,43 @@ public class OCRBeamSearchDecoder extends BaseOCR {
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString BytePointer vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);                              // Size of the beam in Beam Search algorithm                              // Size of the beam in Beam Search algorithm
+                                         int beam_size/*=500*/
+        );
 
     /** \brief Creates an instance of the OCRBeamSearchDecoder class. Initializes HMMDecoder from the specified path.
     <p>
@@ -211,36 +217,42 @@ public class OCRBeamSearchDecoder extends BaseOCR {
                                          @Str BytePointer vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
                                          @Str String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
                                          @Str String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
                                          @Str BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
                                          @Str BytePointer vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/
+        );
     public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
                                          @Str String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/
+        );
 }

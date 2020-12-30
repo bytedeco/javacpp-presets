@@ -76,7 +76,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>4.5.0-${project.version}</version>
+      <version>4.5.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -186,7 +186,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>fftw-platform</artifactId>
-      <version>3.3.8-${project.version}</version>
+      <version>3.3.9-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -211,7 +211,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.17.3-${project.version}</version>
+      <version>0.18.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

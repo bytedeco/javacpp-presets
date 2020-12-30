@@ -26,6 +26,8 @@ import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
 import org.bytedeco.opencv.opencv_objdetect.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
+import org.bytedeco.opencv.opencv_dnn.*;
+import static org.bytedeco.opencv.global.opencv_dnn.*;
 import org.bytedeco.opencv.opencv_video.*;
 import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_ml.*;
@@ -69,6 +71,17 @@ public class AffineWarper extends DetailPlaneWarper {
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat H);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat H);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat H);
+
+    /** \brief Projects the image point backward.
+    <p>
+    @param pt Projected point
+    @param K Camera intrinsic parameters
+    @param H Camera extrinsic parameters
+    @return Backward-projected point
+    */
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat H);
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat H);
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat H);
 
     /** \brief Builds the projection maps according to the given camera data.
     <p>

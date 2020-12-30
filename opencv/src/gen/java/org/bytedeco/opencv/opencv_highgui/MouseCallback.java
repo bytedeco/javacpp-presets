@@ -20,6 +20,8 @@ import static org.bytedeco.opencv.global.opencv_videoio.*;
 import static org.bytedeco.opencv.global.opencv_highgui.*;
 
 
+/** \} highgui_qt
+<p>
 /** \brief Callback function for mouse events. see cv::setMouseCallback
 @param event one of the cv::MouseEventTypes constants.
 @param x The x-coordinate of the mouse event.

@@ -1,6 +1,6 @@
-diff -ruN opencv_contrib-4.4.0/modules/bgsegm/src/bgfg_gsoc.cpp opencv_contrib-4.4.0-patch/modules/bgsegm/src/bgfg_gsoc.cpp
---- opencv_contrib-4.4.0/modules/bgsegm/src/bgfg_gsoc.cpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/bgsegm/src/bgfg_gsoc.cpp	2020-10-16 12:17:28.364135701 +0900
+diff -ruN opencv_contrib-4.5.1/modules/bgsegm/src/bgfg_gsoc.cpp opencv_contrib-4.5.1-patch/modules/bgsegm/src/bgfg_gsoc.cpp
+--- opencv_contrib-4.5.1/modules/bgsegm/src/bgfg_gsoc.cpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/bgsegm/src/bgfg_gsoc.cpp	2020-12-30 00:01:17.605076328 +0900
 @@ -265,7 +265,7 @@
  
  class BackgroundModelGSOC : public BackgroundModel<BackgroundSampleGSOC> {
@@ -19,9 +19,9 @@ diff -ruN opencv_contrib-4.4.0/modules/bgsegm/src/bgfg_gsoc.cpp opencv_contrib-4
  
      int countMatches(int i, int j, const Point3f& color, int desc, float threshold, int descThreshold, float& minDist) const {
          const int end = i * stride + (j + 1) * nSamples;
-diff -ruN opencv_contrib-4.4.0/modules/face/include/opencv2/face/facemarkLBF.hpp opencv_contrib-4.4.0-patch/modules/face/include/opencv2/face/facemarkLBF.hpp
---- opencv_contrib-4.4.0/modules/face/include/opencv2/face/facemarkLBF.hpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/face/include/opencv2/face/facemarkLBF.hpp	2020-10-16 12:17:28.365135702 +0900
+diff -ruN opencv_contrib-4.5.1/modules/face/include/opencv2/face/facemarkLBF.hpp opencv_contrib-4.5.1-patch/modules/face/include/opencv2/face/facemarkLBF.hpp
+--- opencv_contrib-4.5.1/modules/face/include/opencv2/face/facemarkLBF.hpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/face/include/opencv2/face/facemarkLBF.hpp	2020-12-30 00:01:17.606076334 +0900
 @@ -93,7 +93,7 @@
  
      };
@@ -31,9 +31,9 @@ diff -ruN opencv_contrib-4.4.0/modules/face/include/opencv2/face/facemarkLBF.hpp
      public:
          BBox();
          ~BBox();
-diff -ruN opencv_contrib-4.4.0/modules/quality/include/opencv2/quality/qualitymse.hpp opencv_contrib-4.4.0-patch/modules/quality/include/opencv2/quality/qualitymse.hpp
---- opencv_contrib-4.4.0/modules/quality/include/opencv2/quality/qualitymse.hpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/quality/include/opencv2/quality/qualitymse.hpp	2020-10-16 12:17:28.365135702 +0900
+diff -ruN opencv_contrib-4.5.1/modules/quality/include/opencv2/quality/qualitymse.hpp opencv_contrib-4.5.1-patch/modules/quality/include/opencv2/quality/qualitymse.hpp
+--- opencv_contrib-4.5.1/modules/quality/include/opencv2/quality/qualitymse.hpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/quality/include/opencv2/quality/qualitymse.hpp	2020-12-30 00:01:17.606076334 +0900
 @@ -22,7 +22,7 @@
      @param cmpImgs Comparison image(s)
      @returns cv::Scalar with per-channel quality values.  Values range from 0 (best) to potentially max float (worst)
@@ -50,10 +50,10 @@ diff -ruN opencv_contrib-4.4.0/modules/quality/include/opencv2/quality/qualityms
 -#endif
 \ No newline at end of file
 +#endif
-diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature.hpp opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/feature.hpp
---- opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature.hpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/feature.hpp	2020-10-16 12:17:28.366135704 +0900
-@@ -100,8 +100,6 @@
+diff -ruN opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/feature.hpp opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/feature.hpp
+--- opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/feature.hpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/feature.hpp	2020-12-30 00:01:17.607076341 +0900
+@@ -103,8 +103,6 @@
      (p3) = (rect).x + (rect).width - (rect).height                        \
             + (step) * ((rect).y + (rect).width + (rect).height);
  
@@ -62,7 +62,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
  template<class Feature>
  void _writeFeatures( const std::vector<Feature> features, FileStorage &fs, const Mat& featureMap )
  {
-@@ -117,7 +115,7 @@
+@@ -120,7 +118,7 @@
    fs << "]";
  }
  
@@ -71,7 +71,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
  {
   public:
    CvParams();
-@@ -134,7 +132,7 @@
+@@ -137,7 +135,7 @@
    std::string name;
  };
  
@@ -80,7 +80,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
  {
   public:
    enum FeatureType
-@@ -154,7 +152,7 @@
+@@ -157,7 +155,7 @@
    int numFeatures;
  };
  
@@ -89,7 +89,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
  {
   public:
    virtual ~CvFeatureEvaluator()
-@@ -196,7 +194,7 @@
+@@ -199,7 +197,7 @@
    Mat cls;
  };
  
@@ -98,7 +98,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
  {
   public:
  
-@@ -213,11 +211,11 @@
+@@ -216,11 +214,11 @@
    bool isIntegral;
  };
  
@@ -112,7 +112,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
    {
  
     public:
-@@ -290,12 +288,12 @@
+@@ -293,12 +291,12 @@
    Mat sum; /* sum images (each row represents image) */
  };
  
@@ -127,7 +127,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
  {
   public:
    virtual ~CvHOGEvaluator()
-@@ -356,13 +354,13 @@
+@@ -359,13 +357,13 @@
    return res;
  }
  
@@ -143,10 +143,10 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/feature
  {
   public:
    virtual ~CvLBPEvaluator() CV_OVERRIDE
-diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp
---- opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2020-10-16 12:17:28.367135706 +0900
-@@ -59,7 +59,7 @@
+diff -ruN opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp
+--- opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2020-12-30 00:01:17.608076348 +0900
+@@ -62,7 +62,7 @@
  class ClassifierThreshold;
  class Detector;
  
@@ -155,7 +155,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineB
  {
   public:
  
-@@ -106,7 +106,7 @@
+@@ -109,7 +109,7 @@
    int swappedClassifier;
  };
  
@@ -164,7 +164,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineB
  {
   public:
  
-@@ -148,7 +148,7 @@
+@@ -151,7 +151,7 @@
  
  };
  
@@ -173,7 +173,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineB
  {
   public:
  
-@@ -170,7 +170,7 @@
+@@ -173,7 +173,7 @@
    float m_R_sigma;
  };
  
@@ -182,7 +182,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineB
  {
  
   public:
-@@ -192,7 +192,7 @@
+@@ -195,7 +195,7 @@
  
  };
  
@@ -191,7 +191,7 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineB
  {
   public:
  
-@@ -260,7 +260,7 @@
+@@ -263,7 +263,7 @@
    cv::Mat_<unsigned char> m_confImageDisplay;
  };
  
@@ -200,96 +200,65 @@ diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineB
  {
   public:
  
-diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineMIL.hpp opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp
---- opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2020-10-16 12:17:28.367135706 +0900
-@@ -87,7 +87,7 @@
- 
- };
- 
--class ClfOnlineStump
-+class CV_EXPORTS ClfOnlineStump
- {
-  public:
-   float _mu0, _mu1, _sig0, _sig1;
-diff -ruN opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/tracker.hpp opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/tracker.hpp
---- opencv_contrib-4.4.0/modules/tracking/include/opencv2/tracking/tracker.hpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/tracking/include/opencv2/tracking/tracker.hpp	2020-10-16 12:17:28.368135708 +0900
-@@ -176,7 +176,7 @@
+diff -ruN opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/tracking_by_matching.hpp opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/tracking_by_matching.hpp
+--- opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/tracking_by_matching.hpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/tracking_by_matching.hpp	2020-12-30 12:12:08.477104867 +0900
+@@ -317,6 +317,7 @@
+ ///
+ class CV_EXPORTS Track {
+ public:
++    Track() {}
+     ///
+     /// \brief Track constructor.
+     /// \param objs Detected objects sequence.
+diff -ruN opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/tracking_internals.hpp opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/tracking_internals.hpp
+--- opencv_contrib-4.5.1/modules/tracking/include/opencv2/tracking/tracking_internals.hpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/tracking/include/opencv2/tracking/tracking_internals.hpp	2020-12-30 00:01:53.529319146 +0900
+@@ -363,7 +363,7 @@
    /** @overload
-     @param feature The TrackerFeature class
+     @param feature The TrackerContribFeature class
      */
--  bool addTrackerFeature( Ptr<TrackerFeature>& feature );
-+  bool addTrackerFeature( Ptr<TrackerFeature> feature );
+-  bool addTrackerFeature( Ptr<TrackerContribFeature>& feature );
++  bool addTrackerFeature( Ptr<TrackerContribFeature> feature );
  
-   /** @brief Get the TrackerFeature collection (TrackerFeature name, TrackerFeature pointer)
+   /** @brief Get the TrackerContribFeature collection (TrackerContribFeature name, TrackerContribFeature pointer)
       */
-@@ -309,7 +309,7 @@
+@@ -497,7 +497,7 @@
    /** @overload
-     @param sampler The TrackerSamplerAlgorithm
+     @param sampler The TrackerContribSamplerAlgorithm
      */
--  bool addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm>& sampler );
-+  bool addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm> sampler );
+-  bool addTrackerSamplerAlgorithm( Ptr<TrackerContribSamplerAlgorithm>& sampler );
++  bool addTrackerSamplerAlgorithm( Ptr<TrackerContribSamplerAlgorithm> sampler );
  
   private:
-   std::vector<std::pair<String, Ptr<TrackerSamplerAlgorithm> > > samplers;
-@@ -573,7 +573,7 @@
-   /**
-    * Implementation of the target state for TrackerStateEstimatorMILBoosting
-    */
--  class TrackerMILTargetState : public TrackerTargetState
-+  class CV_EXPORTS TrackerMILTargetState : public TrackerTargetState
-   {
- 
-    public:
-@@ -648,7 +648,7 @@
-  public:
-   /** @brief Implementation of the target state for TrackerAdaBoostingTargetState
-     */
--  class TrackerAdaBoostingTargetState : public TrackerTargetState
-+  class CV_EXPORTS TrackerAdaBoostingTargetState : public TrackerTargetState
-   {
- 
-    public:
-diff -ruN opencv_contrib-4.4.0/modules/tracking/src/onlineMIL.cpp opencv_contrib-4.4.0-patch/modules/tracking/src/onlineMIL.cpp
---- opencv_contrib-4.4.0/modules/tracking/src/onlineMIL.cpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/tracking/src/onlineMIL.cpp	2020-10-16 12:17:28.369135709 +0900
-@@ -364,7 +364,7 @@
-   return float( log_p1 - log_p0 );
- }
- 
--inline std::vector<float> ClfOnlineStump::classifySetF( const Mat& x )
-+CV_EXPORTS std::vector<float> ClfOnlineStump::classifySetF( const Mat& x )
- {
-   std::vector<float> res( x.rows );
- 
-diff -ruN opencv_contrib-4.4.0/modules/tracking/src/trackerFeatureSet.cpp opencv_contrib-4.4.0-patch/modules/tracking/src/trackerFeatureSet.cpp
---- opencv_contrib-4.4.0/modules/tracking/src/trackerFeatureSet.cpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/tracking/src/trackerFeatureSet.cpp	2020-10-16 12:17:28.369135709 +0900
-@@ -111,7 +111,7 @@
+   std::vector<std::pair<String, Ptr<TrackerContribSamplerAlgorithm> > > samplers;
+diff -ruN opencv_contrib-4.5.1/modules/tracking/src/trackerFeatureSet.cpp opencv_contrib-4.5.1-patch/modules/tracking/src/trackerFeatureSet.cpp
+--- opencv_contrib-4.5.1/modules/tracking/src/trackerFeatureSet.cpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/tracking/src/trackerFeatureSet.cpp	2020-12-30 00:04:12.670259622 +0900
+@@ -112,7 +112,7 @@
    return true;
  }
  
--bool TrackerFeatureSet::addTrackerFeature( Ptr<TrackerFeature>& feature )
-+bool TrackerFeatureSet::addTrackerFeature( Ptr<TrackerFeature> feature )
+-bool TrackerContribFeatureSet::addTrackerFeature( Ptr<TrackerContribFeature>& feature )
++bool TrackerContribFeatureSet::addTrackerFeature( Ptr<TrackerContribFeature> feature )
  {
    if( blockAddTrackerFeature )
    {
-diff -ruN opencv_contrib-4.4.0/modules/tracking/src/trackerSampler.cpp opencv_contrib-4.4.0-patch/modules/tracking/src/trackerSampler.cpp
---- opencv_contrib-4.4.0/modules/tracking/src/trackerSampler.cpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/tracking/src/trackerSampler.cpp	2020-10-16 12:17:28.371135713 +0900
-@@ -106,7 +106,7 @@
+diff -ruN opencv_contrib-4.5.1/modules/tracking/src/trackerSampler.cpp opencv_contrib-4.5.1-patch/modules/tracking/src/trackerSampler.cpp
+--- opencv_contrib-4.5.1/modules/tracking/src/trackerSampler.cpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/tracking/src/trackerSampler.cpp	2020-12-30 00:03:43.908065214 +0900
+@@ -107,7 +107,7 @@
    return true;
  }
  
--bool TrackerSampler::addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm>& sampler )
-+bool TrackerSampler::addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm> sampler )
+-bool TrackerContribSampler::addTrackerSamplerAlgorithm( Ptr<TrackerContribSamplerAlgorithm>& sampler )
++bool TrackerContribSampler::addTrackerSamplerAlgorithm( Ptr<TrackerContribSamplerAlgorithm> sampler )
  {
    if( blockAddTrackerSampler )
    {
-diff -ruN opencv_contrib-4.4.0/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp opencv_contrib-4.4.0-patch/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp
---- opencv_contrib-4.4.0/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp	2020-07-17 05:08:58.000000000 +0900
-+++ opencv_contrib-4.4.0-patch/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp	2020-10-16 12:28:48.773302559 +0900
+diff -ruN opencv_contrib-4.5.1/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp opencv_contrib-4.5.1-patch/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp
+--- opencv_contrib-4.5.1/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp	2020-12-22 03:14:07.000000000 +0900
++++ opencv_contrib-4.5.1-patch/modules/ximgproc/include/opencv2/ximgproc/brightedges.hpp	2020-12-30 00:01:17.610076361 +0900
 @@ -1,4 +1,4 @@
 -﻿/*M///////////////////////////////////////////////////////////////////////////////////////
 +/*M///////////////////////////////////////////////////////////////////////////////////////

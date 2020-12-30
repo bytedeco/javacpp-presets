@@ -26,6 +26,8 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
+import org.bytedeco.opencv.opencv_dnn.*;
+import static org.bytedeco.opencv.global.opencv_dnn.*;
 
 public class opencv_video extends org.bytedeco.opencv.presets.opencv_video {
     static { Loader.load(); }
@@ -604,6 +606,17 @@ computeECC, estimateAffine2D, estimateAffinePartial2D, findHomography
 
 
 // Targeting ../opencv_video/SparsePyrLKOpticalFlow.java
+
+
+// Targeting ../opencv_video/Tracker.java
+
+
+// Targeting ../opencv_video/TrackerMIL.java
+
+
+// Targeting ../opencv_video/TrackerGOTURN.java
+
+
 
 
 

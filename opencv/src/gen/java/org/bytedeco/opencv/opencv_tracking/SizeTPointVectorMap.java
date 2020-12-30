@@ -27,35 +27,38 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
-
-/************************************ Specific TrackerFeature Classes ************************************/
-
-/**
- * \brief TrackerFeature based on Feature2D
- */
-@Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
-public class TrackerFeatureFeature2d extends TrackerFeature {
+@Name("std::unordered_map<size_t,std::vector<cv::Point> >") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+public class SizeTPointVectorMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TrackerFeatureFeature2d(Pointer p) { super(p); }
+    public SizeTPointVectorMap(Pointer p) { super(p); }
+    public SizeTPointVectorMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator =") @ByRef SizeTPointVectorMap put(@ByRef SizeTPointVectorMap x);
 
+    public boolean empty() { return size() == 0; }
+    public native long size();
 
-  /**
-   * \brief Constructor
-   * @param detectorType string of FeatureDetector
-   * @param descriptorType string of DescriptorExtractor
-   */
-  public TrackerFeatureFeature2d( @Str BytePointer detectorType, @Str BytePointer descriptorType ) { super((Pointer)null); allocate(detectorType, descriptorType); }
-  private native void allocate( @Str BytePointer detectorType, @Str BytePointer descriptorType );
-  public TrackerFeatureFeature2d( @Str String detectorType, @Str String descriptorType ) { super((Pointer)null); allocate(detectorType, descriptorType); }
-  private native void allocate( @Str String detectorType, @Str String descriptorType );
+    @Index public native @ByRef PointVector get(@Cast("size_t") long i);
+    public native SizeTPointVectorMap put(@Cast("size_t") long i, PointVector value);
 
-  public native void selection( @ByRef Mat response, int npoints );
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator ++") @ByRef Iterator increment();
+        public native @Name("operator ==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator *().first") @MemberGetter @Cast("size_t") long first();
+        public native @Name("operator *().second") @MemberGetter @ByRef @Const PointVector second();
+    }
 }
+

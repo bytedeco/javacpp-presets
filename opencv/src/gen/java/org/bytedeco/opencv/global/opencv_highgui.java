@@ -471,6 +471,7 @@ It provides easy interface to:
 -   Add trackbars to the windows, handle simple mouse events as well as keyboard commands.
 <p>
 \{
+    \defgroup highgui_window_flags Flags related creating and manipulating HighGUI windows and mouse events
     \defgroup highgui_opengl OpenGL support
     \defgroup highgui_qt Qt New Functions
     <p>
@@ -498,7 +499,7 @@ It provides easy interface to:
 
 
             namedWindow("main1",WINDOW_NORMAL);
-            namedWindow("main2",WINDOW_AUTOSIZE | CV_GUI_NORMAL);
+            namedWindow("main2",WINDOW_AUTOSIZE | WINDOW_GUI_NORMAL);
             createTrackbar( "track1", "main1", &value, 255,  NULL);
 
             String nameb1 = "button1";
@@ -579,6 +580,9 @@ It provides easy interface to:
 ///////////////////////// graphical user interface //////////////////////////
 
 /** \addtogroup highgui
+ *  \{
+ <p>
+ *  \addtogroup highgui_window_flags
  *  \{
  <p>
  *  Flags for cv::namedWindow */
@@ -662,7 +666,12 @@ public static final int
        /** indicates that ALT Key is pressed. */
        EVENT_FLAG_ALTKEY    = 32;
 
-/** Qt font weight */
+/** \} highgui_window_flags
+ <p>
+ *  \addtogroup highgui_qt
+ *  \{
+ <p>
+ *  Qt font weight */
 /** enum cv::QtFontWeights */
 public static final int
         /** Weight of 25 */
@@ -833,7 +842,7 @@ videos, it will display the video frame-by-frame)
 @Namespace("cv") public static native void imshow(@Str BytePointer winname, @ByVal GpuMat mat);
 @Namespace("cv") public static native void imshow(@Str String winname, @ByVal GpuMat mat);
 
-/** \brief Resizes window to the specified size
+/** \brief Resizes the window to the specified size
 <p>
 \note
 <p>
@@ -854,7 +863,7 @@ videos, it will display the video frame-by-frame)
 @Namespace("cv") public static native void resizeWindow(@Str BytePointer winname, @Const @ByRef Size size);
 @Namespace("cv") public static native void resizeWindow(@Str String winname, @Const @ByRef Size size);
 
-/** \brief Moves window to the specified position
+/** \brief Moves the window to the specified position
 <p>
 @param winname Name of the window.
 @param x The new x-coordinate of the window.
@@ -930,8 +939,6 @@ For cv::EVENT_MOUSEWHEEL positive and negative values mean forward and backward 
 respectively. For cv::EVENT_MOUSEHWHEEL, where available, positive and negative values mean right and
 left scrolling, respectively.
 <p>
-With the C API, the macro CV_GET_WHEEL_DELTA(flags) can be used alternatively.
-<p>
 \note
 <p>
 Mouse-wheel events are currently supported only on Windows.
@@ -940,8 +947,9 @@ Mouse-wheel events are currently supported only on Windows.
  */
 @Namespace("cv") public static native int getMouseWheelDelta(int flags);
 
-/** \brief Selects ROI on the given image.
-Function creates a window and allows user to select a ROI using mouse.
+/** \brief Allows users to select a ROI on the given image.
+<p>
+The function creates a window and allows users to select a ROI using the mouse.
 Controls: use {@code space} or {@code enter} to finish selection, use key {@code c} to cancel selection (function will return the zero cv::Rect).
 <p>
 @param windowName name of the window where selection process will be shown.
@@ -976,8 +984,9 @@ After finish of work an empty callback will be set for the used window.
 @Namespace("cv") public static native @ByVal Rect selectROI(@ByVal GpuMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
 @Namespace("cv") public static native @ByVal Rect selectROI(@ByVal GpuMat img);
 
-/** \brief Selects ROIs on the given image.
-Function creates a window and allows user to select a ROIs using mouse.
+/** \brief Allows users to select multiple ROIs on the given image.
+<p>
+The function creates a window and allows users to select multiple ROIs using the mouse.
 Controls: use {@code space} or {@code enter} to finish current selection and start a new one,
 use {@code esc} to terminate multiple ROI selection process.
 <p>

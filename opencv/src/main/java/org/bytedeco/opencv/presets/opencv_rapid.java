@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = "<opencv2/rapid.hpp>", link = "opencv_rapid@.4.5"),
         @Platform(value = "ios", preload = "libopencv_rapid"),
-        @Platform(value = "windows", link = "opencv_rapid450")
+        @Platform(value = "windows", link = "opencv_rapid451")
     },
     global = "org.bytedeco.opencv.global.opencv_rapid"
 )

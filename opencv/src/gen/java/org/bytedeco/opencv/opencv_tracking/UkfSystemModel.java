@@ -27,10 +27,10 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
@@ -39,7 +39,7 @@ import static org.bytedeco.opencv.global.opencv_tracking.*;
 * The interface for dynamical system model. It contains functions for computing the next state and the measurement.
 * It must be inherited for using UKF.
 */
-@Namespace("cv::tracking") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+@Namespace("cv::detail::tracking::kalman_filters") @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
 public class UkfSystemModel extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

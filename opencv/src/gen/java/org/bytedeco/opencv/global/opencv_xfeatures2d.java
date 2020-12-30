@@ -114,6 +114,9 @@ This section describes the following matching strategies:
 // Targeting ../opencv_xfeatures2d/LATCH.java
 
 
+// Targeting ../opencv_xfeatures2d/BEBLID.java
+
+
 // Targeting ../opencv_xfeatures2d/DAISY.java
 
 
@@ -140,6 +143,8 @@ This section describes the following matching strategies:
 
 // Targeting ../opencv_xfeatures2d/AffineFeature2D.java
 
+
+// Targeting ../opencv_xfeatures2d/TBMR.java
 
 
 
