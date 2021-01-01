@@ -1,8 +1,8 @@
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index 853651ac5..b3aa88b17 100644
+index 5970505f5..fa6db1085 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -860,8 +860,8 @@ if (WIN32)
+@@ -944,8 +944,8 @@ if (WIN32)
  else()
    add_definitions(-DPLATFORM_POSIX)
    # Enable warning and enable space optimization in Linux
@@ -14,10 +14,10 @@ index 853651ac5..b3aa88b17 100644
    if(onnxruntime_DEV_MODE)
      string(APPEND CMAKE_CXX_FLAGS " -Werror")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 512367174..50878c3eb 100644
+index bc07f67bb..447652398 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -56,9 +56,9 @@ endif()
+@@ -59,9 +59,9 @@ endif()
  
  if(UNIX)
    if (APPLE)
@@ -29,22 +29,11 @@ index 512367174..50878c3eb 100644
    endif()
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
-diff --git a/java/src/main/native/ai_onnxruntime_OrtSession.c b/java/src/main/native/ai_onnxruntime_OrtSession.c
-index 79a2abc2e..a742571e9 100644
---- a/java/src/main/native/ai_onnxruntime_OrtSession.c
-+++ b/java/src/main/native/ai_onnxruntime_OrtSession.c
-@@ -428,5 +428,5 @@ JNIEXPORT jstring JNICALL Java_ai_onnxruntime_OrtSession_constructMetadata
-   // Release the metadata
-   api->ReleaseModelMetadata(metadata);
- 
--  return metadataJava;
-+  return (jstring)metadataJava;
- }
 diff --git a/onnxruntime/core/framework/provider_bridge_ort.cc b/onnxruntime/core/framework/provider_bridge_ort.cc
-index 75bade5da..7468073ae 100644
+index 14ac345d5..6d5a3c2b3 100644
 --- a/onnxruntime/core/framework/provider_bridge_ort.cc
 +++ b/onnxruntime/core/framework/provider_bridge_ort.cc
-@@ -611,12 +611,27 @@ struct ProviderHostImpl : ProviderHost {
+@@ -606,12 +606,27 @@ struct ProviderHostImpl : ProviderHost {
  
  } provider_host_;
  
@@ -72,7 +61,7 @@ index 75bade5da..7468073ae 100644
      auto error = Env::Default().LoadDynamicLibrary(full_path, &handle_);
      if (!error.IsOK()) {
        LOGS_DEFAULT(ERROR) << error.ErrorMessage();
-@@ -660,6 +675,17 @@ struct ProviderLibrary {
+@@ -657,6 +672,17 @@ struct ProviderLibrary {
        return nullptr;
  
      std::string full_path = Env::Default().GetRuntimePath() + std::string(filename_);
@@ -797,7 +786,7 @@ index 200fa352a..71f2acb98 100644
  
  template<>
 diff --git a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
-index 8173855da..c2bfda9f9 100644
+index 7e2654d6f..5bdf410e5 100644
 --- a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
 +++ b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
 @@ -2,6 +2,7 @@
@@ -808,11 +797,23 @@ index 8173855da..c2bfda9f9 100644
  #include "dnnl_types.h"
  #include "core/providers/dnnl/dnnl_fwd.h"
  #include "core/providers/dnnl/dnnl_execution_provider.h"
+diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
+index fe1527519..4b1041e1b 100644
+--- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
++++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
+@@ -125,6 +125,7 @@ std::string GetEnvironmentVar(const std::string& var_name) {
+ }
+ 
+ Provider_IExecutionProvider::Provider_IExecutionProvider(const std::string& type) {
++  g_host = Provider_GetHost();
+   p_ = g_host->Create_IExecutionProvider_Router(this, type).release();
+ }
+ 
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index a2629ff63..0ac396981 100755
+index 6168a960b..7dceb225c 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -579,7 +579,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
+@@ -665,7 +665,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
          "-Donnxruntime_BUILD_WINML_TESTS=" + (
              "OFF" if args.skip_winml_tests else "ON"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
