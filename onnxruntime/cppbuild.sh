@@ -14,10 +14,6 @@ export MAKEFLAGS="-j $MAKEJ"
 export PYTHON_BIN_PATH=$(which python3)
 export OPENMP_FLAGS="--use_openmp"
 case $PLATFORM in
-    macosx-*)
-        # disable OpenMP on Mac until it's fixed
-        export OPENMP_FLAGS=
-        ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
             export CUDACXX="$CUDA_PATH/bin/nvcc"
@@ -89,6 +85,7 @@ sedinplace '/static synchronized void init() throws IOException {/a\
 loaded = org.bytedeco.javacpp.Loader.load(org.bytedeco.onnxruntime.presets.onnxruntime.class) != null;\
 ortApiHandle = initialiseAPIBase(ORT_API_VERSION_1);\
 ' java/src/main/java/ai/onnxruntime/OnnxRuntime.java
+sedinplace 's/return metadataJava/return (jstring)metadataJava/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib --use_dnnl $OPENMP_FLAGS $GPU_FLAGS
@@ -106,7 +103,7 @@ cp ../build/Release/onnxruntime*.lib ../lib || true
 # fix library with the same name for OpenMP as MKL on Mac
 case $PLATFORM in
     macosx-*)
-        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libonnxruntime.dylib
+        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libonnxruntime.*.dylib
         ;;
 esac
 
