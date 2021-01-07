@@ -34,7 +34,7 @@ public class dnnl_eltwise_desc_t extends Pointer {
         return (dnnl_eltwise_desc_t)super.position(position);
     }
     @Override public dnnl_eltwise_desc_t getPointer(long i) {
-        return new dnnl_eltwise_desc_t(this).position(position + i);
+        return new dnnl_eltwise_desc_t((Pointer)this).position(position + i);
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
@@ -49,12 +49,14 @@ public class dnnl_eltwise_desc_t extends Pointer {
      *  #dnnl_eltwise_bounded_relu, #dnnl_eltwise_soft_relu,
      *  #dnnl_eltwise_logistic, #dnnl_eltwise_exp, #dnnl_eltwise_gelu_tanh,
      *  #dnnl_eltwise_swish, #dnnl_eltwise_log, #dnnl_eltwise_clip,
-     *  #dnnl_eltwise_pow, #dnnl_eltwise_gelu_erf, #dnnl_eltwise_round.
+     *  #dnnl_eltwise_clip_v2, #dnnl_eltwise_pow, #dnnl_eltwise_gelu_erf,
+     *  #dnnl_eltwise_round, #dnnl_eltwise_logsigmoid.
      *  Possible values for passing destination memory on backward:
      *  #dnnl_eltwise_relu_use_dst_for_bwd, #dnnl_eltwise_tanh_use_dst_for_bwd,
      *  #dnnl_eltwise_elu_use_dst_for_bwd, #dnnl_eltwise_sqrt_use_dst_for_bwd,
      *  #dnnl_eltwise_logistic_use_dst_for_bwd,
-     *  #dnnl_eltwise_exp_use_dst_for_bwd. */
+     *  #dnnl_eltwise_exp_use_dst_for_bwd,
+     *  #dnnl_eltwise_clip_v2_use_dst_for_bwd. */
     public native @Cast("dnnl_alg_kind_t") int alg_kind(); public native dnnl_eltwise_desc_t alg_kind(int setter);
     /** Source and destination memory descriptor. */
     public native @ByRef dnnl_memory_desc_t data_desc(); public native dnnl_eltwise_desc_t data_desc(dnnl_memory_desc_t setter);
@@ -77,9 +79,11 @@ public class dnnl_eltwise_desc_t extends Pointer {
      *   - #dnnl_eltwise_swish: \p alpha -- sigmoid arg scaling, \p beta ignored
      *   - #dnnl_eltwise_log: \p alpha and \p beta ignored
      *   - #dnnl_eltwise_clip: \p alpha -- lower bound, \p beta -- upper bound
+     *   - #dnnl_eltwise_clip_v2: \p alpha -- lower bound, \p beta -- upper bound
      *   - #dnnl_eltwise_pow: \p alpha -- scale, \p beta -- exponent
      *   - #dnnl_eltwise_gelu_erf: \p alpha and \p beta ignored
-     *   - #dnnl_eltwise_round: \p alpha and \p beta ignored */
+     *   - #dnnl_eltwise_round: \p alpha and \p beta ignored
+     *   - #dnnl_eltwise_logsigmoid \p alpha and \p beta ignored */
     public native float alpha(); public native dnnl_eltwise_desc_t alpha(float setter);
     public native float beta(); public native dnnl_eltwise_desc_t beta(float setter);
 }

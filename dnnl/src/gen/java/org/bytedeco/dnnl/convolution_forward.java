@@ -38,7 +38,7 @@ public class convolution_forward extends primitive {
         return (convolution_forward)super.position(position);
     }
     @Override public convolution_forward getPointer(long i) {
-        return new convolution_forward(this).position(position + i);
+        return new convolution_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a convolution forward propagation primitive. */
@@ -430,7 +430,7 @@ public class convolution_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

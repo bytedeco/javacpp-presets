@@ -57,10 +57,8 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/17173/w_mkl_2020.4.311.exe
-          w_mkl_2020.4.311.exe --s --x --f .
-          install.exe install --output=mkllog.txt -eula=accept
-          type mkllog.txt
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17404/w_onemkl_p_2021.1.1.52_offline.exe
+          w_onemkl_p_2021.1.1.52_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (

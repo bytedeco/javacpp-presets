@@ -13,7 +13,7 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_pooling_v2
+/** \} dnnl_api_prelu
  <p>
  *  \addtogroup dnnl_api_reduction Reduction
  * 
@@ -37,7 +37,7 @@ public class reduction extends primitive {
         return (reduction)super.position(position);
     }
     @Override public reduction getPointer(long i) {
-        return new reduction(this).position(position + i);
+        return new reduction((Pointer)this).position(position + i);
     }
 
     /** Descriptor for reduction. */
@@ -52,7 +52,7 @@ public class reduction extends primitive {
             return (desc)super.position(position);
         }
         @Override public desc getPointer(long i) {
-            return new desc(this).position(position + i);
+            return new desc((Pointer)this).position(position + i);
         }
     
         public native @ByRef dnnl_reduction_desc_t data(); public native desc data(dnnl_reduction_desc_t setter);
@@ -103,7 +103,7 @@ public class reduction extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

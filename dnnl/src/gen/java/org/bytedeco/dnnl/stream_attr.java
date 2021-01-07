@@ -39,7 +39,7 @@ public class stream_attr extends dnnl_stream_attr_handle {
         return (stream_attr)super.position(position);
     }
     @Override public stream_attr getPointer(long i) {
-        return new stream_attr(this).position(position + i);
+        return new stream_attr((Pointer)this).position(position + i);
     }
 
 

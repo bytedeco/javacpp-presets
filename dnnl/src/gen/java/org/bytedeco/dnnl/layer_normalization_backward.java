@@ -26,7 +26,7 @@ public class layer_normalization_backward extends primitive {
         return (layer_normalization_backward)super.position(position);
     }
     @Override public layer_normalization_backward getPointer(long i) {
-        return new layer_normalization_backward(this).position(position + i);
+        return new layer_normalization_backward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a layer normalization backward propagation primitive. */
@@ -106,7 +106,7 @@ public class layer_normalization_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

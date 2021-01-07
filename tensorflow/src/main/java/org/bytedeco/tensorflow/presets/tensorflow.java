@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2020 Samuel Audet
+ * Copyright (C) 2015-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -482,12 +482,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
         int i = 0;
         if (load.equals("mkl") || load.equals("mkl_rt")) {
-            String[] libs = {"iomp5", "libiomp5md", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
-                             "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_gnu_thread", "mkl_rt"};
+            String[] libs = {"iomp5", "libiomp5md", "mkl_core@.1", "mkl_avx@.1", "mkl_avx2@.1", "mkl_avx512@.1", "mkl_avx512_mic@.1",
+                             "mkl_def@.1", "mkl_mc@.1", "mkl_mc3@.1", "mkl_intel_lp64@.1", "mkl_intel_thread@.1", "mkl_gnu_thread@.1", "mkl_rt@.1"};
             for (i = 0; i < libs.length; i++) {
                 preloads.add(i, libs[i] + "#" + libs[i]);
             }
-            load = "mkl_rt";
+            load = "mkl_rt@.1";
             resources.add("/org/bytedeco/mkl/");
         }
 

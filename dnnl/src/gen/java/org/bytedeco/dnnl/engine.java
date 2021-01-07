@@ -40,7 +40,7 @@ public class engine extends dnnl_engine_handle {
         return (engine)super.position(position);
     }
     @Override public engine getPointer(long i) {
-        return new engine(this).position(position + i);
+        return new engine((Pointer)this).position(position + i);
     }
 
 

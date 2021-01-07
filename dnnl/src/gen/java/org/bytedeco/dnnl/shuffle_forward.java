@@ -36,7 +36,7 @@ public class shuffle_forward extends primitive {
         return (shuffle_forward)super.position(position);
     }
     @Override public shuffle_forward getPointer(long i) {
-        return new shuffle_forward(this).position(position + i);
+        return new shuffle_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a shuffle forward propagation primitive. */
@@ -80,7 +80,7 @@ public class shuffle_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

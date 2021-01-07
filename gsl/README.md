@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.gsl</groupId>
     <artifactId>demo</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Demo</exec.mainClass>
     </properties>
@@ -46,14 +46,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gsl-platform</artifactId>
-            <version>2.6-1.5.4</version>
+            <version>2.6-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2020.4-1.5.5-SNAPSHOT</version>
+            <version>2021.1-1.5.5-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

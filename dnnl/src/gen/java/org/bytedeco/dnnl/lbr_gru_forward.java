@@ -26,7 +26,7 @@ public class lbr_gru_forward extends primitive {
         return (lbr_gru_forward)super.position(position);
     }
     @Override public lbr_gru_forward getPointer(long i) {
-        return new lbr_gru_forward(this).position(position + i);
+        return new lbr_gru_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for an LBR GRU forward propagation primitive. */
@@ -157,7 +157,7 @@ public class lbr_gru_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

@@ -29,7 +29,7 @@ public class dnnl_memory_extra_desc_t extends Pointer {
         return (dnnl_memory_extra_desc_t)super.position(position);
     }
     @Override public dnnl_memory_extra_desc_t getPointer(long i) {
-        return new dnnl_memory_extra_desc_t(this).position(position + i);
+        return new dnnl_memory_extra_desc_t((Pointer)this).position(position + i);
     }
 
     /** The flags contain arbitrary extra information, such as compensation.

@@ -24,7 +24,7 @@ public class dnnl_memory_handle extends Pointer {
         return (dnnl_memory_handle)super.position(position);
     }
     @Override public dnnl_memory_handle getPointer(long i) {
-        return new dnnl_memory_handle(this).position(position + i);
+        return new dnnl_memory_handle((Pointer)this).position(position + i);
     }
 
     /** Constructs an empty handle object.

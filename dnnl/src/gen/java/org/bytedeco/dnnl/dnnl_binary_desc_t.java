@@ -34,15 +34,15 @@ public class dnnl_binary_desc_t extends Pointer {
         return (dnnl_binary_desc_t)super.position(position);
     }
     @Override public dnnl_binary_desc_t getPointer(long i) {
-        return new dnnl_binary_desc_t(this).position(position + i);
+        return new dnnl_binary_desc_t((Pointer)this).position(position + i);
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
      *  descriptor. Must be #dnnl_binary. */
     public native @Cast("dnnl_primitive_kind_t") int primitive_kind(); public native dnnl_binary_desc_t primitive_kind(int setter);
     /** The kind of the binary algorithm. Possible values:
-     *  #dnnl_binary_add, #dnnl_binary_mul, #dnnl_binary_max, #dnnl_binary_min
-     *  and #dnnl_binary_div. */
+     *  #dnnl_binary_add, #dnnl_binary_mul, #dnnl_binary_max, #dnnl_binary_min,
+     *  #dnnl_binary_div and #dnnl_binary_sub. */
     public native @Cast("dnnl_alg_kind_t") int alg_kind(); public native dnnl_binary_desc_t alg_kind(int setter);
     /** Source memory descriptors. */
     public native @ByRef dnnl_memory_desc_t src_desc(int i); public native dnnl_binary_desc_t src_desc(int i, dnnl_memory_desc_t setter);

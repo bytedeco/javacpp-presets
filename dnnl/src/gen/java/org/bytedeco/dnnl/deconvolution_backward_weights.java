@@ -26,7 +26,7 @@ public class deconvolution_backward_weights extends primitive {
         return (deconvolution_backward_weights)super.position(position);
     }
     @Override public deconvolution_backward_weights getPointer(long i) {
-        return new deconvolution_backward_weights(this).position(position + i);
+        return new deconvolution_backward_weights((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a deconvolution weights gradient primitive. */
@@ -414,7 +414,7 @@ public class deconvolution_backward_weights extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

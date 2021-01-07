@@ -26,7 +26,7 @@ public class eltwise_backward extends primitive {
         return (eltwise_backward)super.position(position);
     }
     @Override public eltwise_backward getPointer(long i) {
-        return new eltwise_backward(this).position(position + i);
+        return new eltwise_backward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for an elementwise backward propagation primitive. */
@@ -76,7 +76,7 @@ public class eltwise_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

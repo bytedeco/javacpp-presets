@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 Samuel Audet
+ * Copyright (C) 2016-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -45,19 +45,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               include = {"openblas_config.h", "cblas.h"},
               link    =  "openblas_nolapack@.0", resource = {"include", "lib"},
               preload = {"gcc_s@.1", "quadmath@.0", "gfortran@.5", "gfortran@.4", "gfortran@.3", "openblas@.0#openblas_nolapack@.0"},
-              preloadpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}),
+              preloadpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}),
     @Platform(value = "android", link = "openblas", preload = ""),
     @Platform(value = "macosx",  preloadpath = {"/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
     @Platform(value = "windows", preload = "libopenblas#libopenblas_nolapack"),
-    @Platform(value = "windows-x86",    preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/compiler/",
-                                                       "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/mkl/"}),
-    @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/compiler/",
-                                                       "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/mkl/"}),
+    @Platform(value = "windows-x86",    preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/ia32/",
+                                                       "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/ia32_win/compiler/"}),
+    @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/intel64/",
+                                                       "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/intel64_win/compiler/"}),
     @Platform(value = "linux",          preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
     @Platform(value = "linux-armhf",    preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-arm64",    preloadpath = {"/usr/aarch64-linux-gnu/lib/", "/usr/lib/aarch64-linux-gnu/"}),
-    @Platform(value = "linux-x86",      preloadpath = {"/lib32/", "/lib/", "/usr/lib32/", "/usr/lib/", "/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
-    @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/", "/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
+    @Platform(value = "linux-x86",      preloadpath = {"/lib32/", "/lib/", "/usr/lib32/", "/usr/lib/", "/opt/intel/oneapi/mkl/latest/lib/ia32/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin/"}),
+    @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/", "/opt/intel/oneapi/mkl/latest/lib/intel64/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin/"}),
     @Platform(value = "linux-ppc64",    preloadpath = {"/usr/powerpc64-linux-gnu/lib/", "/usr/powerpc64le-linux-gnu/lib/",
                                                        "/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
     @Platform(value = "ios", preload = "libopenblas") })
@@ -94,12 +94,12 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                 lib = platform.startsWith("linux") ? "mklml_intel" : "mklml";
                 resources.add("/org/bytedeco/mkldnn/");
             } else if (lib.equals("mkl") || lib.equals("mkl_rt")) {
-                String[] libs = {"iomp5", "libiomp5md", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
-                                 "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_gnu_thread", "mkl_rt"};
+                String[] libs = {"iomp5", "libiomp5md", "mkl_core@.1", "mkl_avx@.1", "mkl_avx2@.1", "mkl_avx512@.1", "mkl_avx512_mic@.1",
+                                 "mkl_def@.1", "mkl_mc@.1", "mkl_mc3@.1", "mkl_intel_lp64@.1", "mkl_intel_thread@.1", "mkl_gnu_thread@.1", "mkl_rt@.1"};
                 for (i = 0; i < libs.length; i++) {
                     preloads.add(i, libs[i] + "#" + libs[i]);
                 }
-                lib = "mkl_rt";
+                lib = "mkl_rt@.1";
                 resources.add("/org/bytedeco/mkl/");
             }
         }

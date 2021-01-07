@@ -34,7 +34,7 @@ public class dnnl_shuffle_desc_t extends Pointer {
         return (dnnl_shuffle_desc_t)super.position(position);
     }
     @Override public dnnl_shuffle_desc_t getPointer(long i) {
-        return new dnnl_shuffle_desc_t(this).position(position + i);
+        return new dnnl_shuffle_desc_t((Pointer)this).position(position + i);
     }
 
     /** The kind of primitive. Used for self-identifying the primitive

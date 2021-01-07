@@ -26,7 +26,7 @@ public class vanilla_rnn_backward extends primitive {
         return (vanilla_rnn_backward)super.position(position);
     }
     @Override public vanilla_rnn_backward getPointer(long i) {
-        return new vanilla_rnn_backward(this).position(position + i);
+        return new vanilla_rnn_backward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a vanilla RNN backward propagation primitive. */
@@ -236,7 +236,7 @@ public class vanilla_rnn_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

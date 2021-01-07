@@ -26,7 +26,7 @@ public class gru_backward extends primitive {
         return (gru_backward)super.position(position);
     }
     @Override public gru_backward getPointer(long i) {
-        return new gru_backward(this).position(position + i);
+        return new gru_backward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a GRU backward propagation primitive. */
@@ -224,7 +224,7 @@ public class gru_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

@@ -10,14 +10,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy-platform</artifactId>
-            <version>1.5.4-1.5.5-SNAPSHOT</version>
+            <version>1.6.0-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2020.4-1.5.5-SNAPSHOT</version>
+            <version>2021.1-1.5.5-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

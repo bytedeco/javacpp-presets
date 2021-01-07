@@ -24,7 +24,7 @@ public class dnnl_stream_attr_handle extends Pointer {
         return (dnnl_stream_attr_handle)super.position(position);
     }
     @Override public dnnl_stream_attr_handle getPointer(long i) {
-        return new dnnl_stream_attr_handle(this).position(position + i);
+        return new dnnl_stream_attr_handle((Pointer)this).position(position + i);
     }
 
     /** Constructs an empty handle object.
