@@ -38,7 +38,7 @@ public class resampling_forward extends primitive {
         return (resampling_forward)super.position(position);
     }
     @Override public resampling_forward getPointer(long i) {
-        return new resampling_forward(this).position(position + i);
+        return new resampling_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for resampling forward propagation. */
@@ -195,7 +195,7 @@ public class resampling_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

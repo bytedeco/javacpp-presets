@@ -26,7 +26,7 @@ public class pooling_v2_backward extends primitive {
         return (pooling_v2_backward)super.position(position);
     }
     @Override public pooling_v2_backward getPointer(long i) {
-        return new pooling_v2_backward(this).position(position + i);
+        return new pooling_v2_backward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a pooling backward propagation primitive. */
@@ -126,7 +126,7 @@ public class pooling_v2_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

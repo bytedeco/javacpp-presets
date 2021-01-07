@@ -45,7 +45,7 @@ public class primitive_desc extends primitive_desc_base {
         return (primitive_desc)super.position(position);
     }
     @Override public primitive_desc getPointer(long i) {
-        return new primitive_desc(this).position(position + i);
+        return new primitive_desc((Pointer)this).position(position + i);
     }
 
 

@@ -26,7 +26,7 @@ public class inner_product_backward_data extends primitive {
         return (inner_product_backward_data)super.position(position);
     }
     @Override public inner_product_backward_data getPointer(long i) {
-        return new inner_product_backward_data(this).position(position + i);
+        return new inner_product_backward_data((Pointer)this).position(position + i);
     }
 
     /** Descriptor for an inner product backward propagation primitive. */
@@ -71,7 +71,7 @@ public class inner_product_backward_data extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

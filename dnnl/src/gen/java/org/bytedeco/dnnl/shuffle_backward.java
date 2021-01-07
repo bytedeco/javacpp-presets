@@ -26,7 +26,7 @@ public class shuffle_backward extends primitive {
         return (shuffle_backward)super.position(position);
     }
     @Override public shuffle_backward getPointer(long i) {
-        return new shuffle_backward(this).position(position + i);
+        return new shuffle_backward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a shuffle primitive backward propagation
@@ -63,7 +63,7 @@ public class shuffle_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

@@ -11,7 +11,7 @@ runs:
         echo ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL
         echo ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN
         echo ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL
-        curl -LO https://nodejs.org/dist/latest-v10.x/node-v10.23.0-linux-x64.tar.xz
+        curl -LO https://nodejs.org/dist/v10.23.0/node-v10.23.0-linux-x64.tar.xz
         tar --totals -xf node-v10.23.0-linux-x64.tar.xz
         export PATH=$HOME/node-v10.23.0-linux-x64/bin:$PATH
         echo "PATH=$PATH" >> $GITHUB_ENV

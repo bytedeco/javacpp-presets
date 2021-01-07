@@ -26,7 +26,7 @@ public class lrn_backward extends primitive {
         return (lrn_backward)super.position(position);
     }
     @Override public lrn_backward getPointer(long i) {
-        return new lrn_backward(this).position(position + i);
+        return new lrn_backward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for an LRN backward propagation primitive. */
@@ -89,7 +89,7 @@ public class lrn_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

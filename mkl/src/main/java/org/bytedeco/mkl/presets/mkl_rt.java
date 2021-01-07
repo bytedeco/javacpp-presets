@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Samuel Audet
+ * Copyright (C) 2017-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,20 +41,21 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "mkl_df.h", "mkl_df_defines.h", "mkl_df_types.h", "mkl_df_functions.h",
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",
         "mkl_dnn_types.h", "mkl_dnn.h", "mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
-              compiler = {"fastfpu", "nodeprecated"}, includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
-              preload = {"mkl_core", "iomp5", "libiomp5md", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread",
-                         "mkl_def", "mkl_mc", "mkl_mc3", "mkl_p4", "mkl_p4m", "mkl_p4m3", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
-                         "mkl_vml_def", "mkl_vml_ia", "mkl_vml_mc", "mkl_vml_mc2", "mkl_vml_mc3", "mkl_vml_p4", "mkl_vml_p4m", "mkl_vml_p4m2", "mkl_vml_p4m3",
-                         "mkl_vml_avx", "mkl_vml_avx2", "mkl_vml_avx512", "mkl_vml_avx512_mic", "mkl_vml_cmpt"}, resource = {"include", "lib"}),
-    @Platform(value = "linux-x86",    linkpath = {"/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
-    @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
-    @Platform(value = "windows",     includepath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include/"),
-    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/ia32/",
-                                     preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/compiler/",
-                                                    "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/mkl/"}),
-    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/",
-                                     preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/compiler/",
-                                                    "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/mkl/"}) })
+              compiler = {"fastfpu", "nodeprecated"}, includepath = "/opt/intel/oneapi/mkl/latest/include/",
+              linkpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}, link = "mkl_rt@.1",
+              preload = {"mkl_core@.1", "iomp5", "libiomp5md", "mkl_gnu_thread@.1", "mkl_intel_lp64@.1", "mkl_intel_thread@.1",
+                         "mkl_def@.1", "mkl_mc@.1", "mkl_mc3@.1", "mkl_p4@.1", "mkl_p4m@.1", "mkl_p4m3@.1", "mkl_avx@.1", "mkl_avx2@.1", "mkl_avx512@.1", "mkl_avx512_mic@.1",
+                         "mkl_vml_def@.1", "mkl_vml_ia@.1", "mkl_vml_mc@.1", "mkl_vml_mc2@.1", "mkl_vml_mc3@.1", "mkl_vml_p4@.1", "mkl_vml_p4m@.1", "mkl_vml_p4m2@.1", "mkl_vml_p4m3@.1",
+                         "mkl_vml_avx@.1", "mkl_vml_avx2@.1", "mkl_vml_avx512@.1", "mkl_vml_avx512_mic@.1", "mkl_vml_cmpt@.1"}, resource = {"include", "lib"}),
+    @Platform(value = "linux-x86",    linkpath = {"/opt/intel/oneapi/mkl/latest/lib/ia32/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin/"}),
+    @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/oneapi/mkl/latest/lib/intel64/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin/"}),
+    @Platform(value = "windows",     includepath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/include/"),
+    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/lib/ia32/",
+                                     preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/ia32/",
+                                                    "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/ia32_win/compiler/"}),
+    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/lib/intel64/",
+                                     preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/intel64/",
+                                                    "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/intel64_win/compiler/"}) })
 @NoException
 public class mkl_rt implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "mkl"); }

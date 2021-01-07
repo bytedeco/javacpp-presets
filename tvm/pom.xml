@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl</artifactId>
-      <version>1.7-${project.parent.version}</version>
+      <version>1.8-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -37,12 +37,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl</artifactId>
-      <version>2020.4-${project.parent.version}</version>
+      <version>2021.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy</artifactId>
-      <version>1.5.4-${project.parent.version}</version>
+      <version>1.6.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -65,7 +65,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>1.7-${project.parent.version}</version>
+            <version>1.8-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -75,17 +75,17 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2020.4-${project.parent.version}</version>
+            <version>2021.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2020.4-${project.parent.version}</version>
+            <version>2021.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy-platform</artifactId>
-            <version>1.5.4-${project.parent.version}</version>
+            <version>1.6.0-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>

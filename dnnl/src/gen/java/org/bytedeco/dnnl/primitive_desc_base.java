@@ -43,7 +43,7 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
         return (primitive_desc_base)super.position(position);
     }
     @Override public primitive_desc_base getPointer(long i) {
-        return new primitive_desc_base(this).position(position + i);
+        return new primitive_desc_base((Pointer)this).position(position + i);
     }
 
 

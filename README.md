@@ -172,9 +172,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Arrow 2.0.0  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.3.x  https://github.com/intel/hyperscan
- * MKL 2020.x  https://software.intel.com/intel-mkl
+ * MKL 2021.x  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 1.7.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 1.8.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.13  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.7  https://github.com/devernay/cminpack
@@ -182,7 +182,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.9  https://www.python.org/downloads/
  * NumPy 1.19.x  https://github.com/numpy/numpy
- * SciPy 1.5.x  https://github.com/scipy/scipy
+ * SciPy 1.6.x  https://github.com/scipy/scipy
  * Gym 0.18.x  https://github.com/openai/gym
  * LLVM 11.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal

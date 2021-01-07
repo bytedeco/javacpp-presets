@@ -31,7 +31,7 @@ public class dnnl_blocking_desc_t extends Pointer {
         return (dnnl_blocking_desc_t)super.position(position);
     }
     @Override public dnnl_blocking_desc_t getPointer(long i) {
-        return new dnnl_blocking_desc_t(this).position(position + i);
+        return new dnnl_blocking_desc_t((Pointer)this).position(position + i);
     }
 
     /** The strides between the outermost blocks.

@@ -14,48 +14,48 @@ mkdir -p include lib bin
 
 case $PLATFORM in
     linux-x86)
-        if [[ ! -d "/opt/intel/mkl/" ]]; then
+        if [[ ! -d "/opt/intel/oneapi/mkl/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
         fi
-        cp -a /opt/intel/mkl/include/* include/
-        cp -a /opt/intel/lib/ia32/* /opt/intel/mkl/lib/ia32/* lib/
+        cp -a /opt/intel/oneapi/mkl/latest/include/* include/
+        cp -a /opt/intel/oneapi/mkl/latest/lib/ia32/* /opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin/* lib/
         ;;
     linux-x86_64)
-        if [[ ! -d "/opt/intel/mkl/" ]]; then
+        if [[ ! -d "/opt/intel/oneapi/mkl/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
         fi
-        cp -a /opt/intel/mkl/include/* include/
-        cp -a /opt/intel/lib/intel64/* /opt/intel/mkl/lib/intel64/* lib/
+        cp -a /opt/intel/oneapi/mkl/latest/include/* include/
+        cp -a /opt/intel/oneapi/mkl/latest/lib/intel64/* /opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin/* lib/
         ;;
     macosx-*)
-        if [[ ! -d "/opt/intel/mkl/" ]]; then
+        if [[ ! -d "/opt/intel/oneapi/mkl/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
         fi
-        cp -a /opt/intel/mkl/include/* include/
-        cp -a /opt/intel/lib/* /opt/intel/mkl/lib/* lib/
+        cp -a /opt/intel/oneapi/mkl/latest/include/* include/
+        cp -a /opt/intel/oneapi/mkl/latest/lib/* /opt/intel/oneapi/compiler/latest/mac/compiler/lib/* lib/
         ;;
     windows-x86)
-        if [[ ! -d "/C/Program Files (x86)/IntelSWTools/" ]]; then
+        if [[ ! -d "/C/Program Files (x86)/Intel/oneAPI/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
         fi
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/mkl/include/* include/
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/ia32/* lib/
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/compiler/* bin/
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/mkl/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/include/* include/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/lib/ia32/* lib/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/redist/ia32/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/compiler/latest/windows/redist/ia32_win/compiler/* bin/
         ;;
     windows-x86_64)
-        if [[ ! -d "/C/Program Files (x86)/IntelSWTools/" ]]; then
+        if [[ ! -d "/C/Program Files (x86)/Intel/oneAPI/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
         fi
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/mkl/include/* include/
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/* lib/
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/compiler/* bin/
-        cp -a /C/Program\ Files\ \(x86\)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/mkl/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/include/* include/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/lib/intel64/* lib/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/redist/intel64/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/compiler/latest/windows/redist/intel64_win/compiler/* bin/
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

@@ -70,14 +70,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2020.4-1.5.5-SNAPSHOT</version>
+            <version>2021.1-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional dependencies to load the Python module -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.19.4-1.5.5-SNAPSHOT</version>
+            <version>1.19.5-1.5.5-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

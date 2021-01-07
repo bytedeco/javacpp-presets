@@ -38,7 +38,7 @@ public class stream extends dnnl_stream_handle {
         return (stream)super.position(position);
     }
     @Override public stream getPointer(long i) {
-        return new stream(this).position(position + i);
+        return new stream((Pointer)this).position(position + i);
     }
 
 

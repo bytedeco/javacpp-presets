@@ -48,7 +48,7 @@ public class batch_normalization_forward extends primitive {
         return (batch_normalization_forward)super.position(position);
     }
     @Override public batch_normalization_forward getPointer(long i) {
-        return new batch_normalization_forward(this).position(position + i);
+        return new batch_normalization_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a batch normalization forward propagation primitive. */
@@ -99,7 +99,7 @@ public class batch_normalization_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

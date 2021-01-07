@@ -36,7 +36,7 @@ public class softmax_forward extends primitive {
         return (softmax_forward)super.position(position);
     }
     @Override public softmax_forward getPointer(long i) {
-        return new softmax_forward(this).position(position + i);
+        return new softmax_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a softmax forward propagation primitive. */
@@ -51,7 +51,7 @@ public class softmax_forward extends primitive {
             return (desc)super.position(position);
         }
         @Override public desc getPointer(long i) {
-            return new desc(this).position(position + i);
+            return new desc((Pointer)this).position(position + i);
         }
     
         public native @ByRef dnnl_softmax_desc_t data(); public native desc data(dnnl_softmax_desc_t setter);
@@ -92,7 +92,7 @@ public class softmax_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

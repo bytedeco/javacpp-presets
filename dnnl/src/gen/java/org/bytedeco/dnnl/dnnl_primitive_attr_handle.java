@@ -24,7 +24,7 @@ public class dnnl_primitive_attr_handle extends Pointer {
         return (dnnl_primitive_attr_handle)super.position(position);
     }
     @Override public dnnl_primitive_attr_handle getPointer(long i) {
-        return new dnnl_primitive_attr_handle(this).position(position + i);
+        return new dnnl_primitive_attr_handle((Pointer)this).position(position + i);
     }
 
     /** Constructs an empty handle object.
