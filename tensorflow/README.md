@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 1.15.4  http://www.tensorflow.org/
+ * TensorFlow 1.15.5  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -49,14 +49,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.15.4-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-gpu</artifactId>
-            <version>1.15.4-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
@@ -70,12 +70,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python</artifactId>
-            <version>1.15.4-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python-gpu</artifactId>
-            <version>1.15.4-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

@@ -26,6 +26,7 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/cpython/apidocs/
 
 &lowast; Call `Py_AddPath(cachePackages())` before calling `Py_Initialize()`.
+&lowast; To satisfy OpenSSL, we might need to set the `SSL_CERT_FILE` environment variable to the full path of `cacert.pem` extracted by default under `~/.javacpp/cache/`.
 
 
 Sample Usage
