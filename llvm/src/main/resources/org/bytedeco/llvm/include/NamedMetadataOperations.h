@@ -55,7 +55,6 @@ extern "C" unsigned NamedMDNodeGetOperandCount(LLVMNamedMDNodeRef NodeRef) {
  */
 extern "C" void NamedMDNodeGetOperands(
     LLVMNamedMDNodeRef NodeRef,
-    const char* Name,
     LLVMValueRef *Dest,
     LLVMContextRef InContext
 ) {
@@ -77,7 +76,6 @@ extern "C" void NamedMDNodeGetOperands(
  */
 extern "C" void NamedMDNodeAddOperand(
     LLVMNamedMDNodeRef NodeRef,
-    const char* Name,
     LLVMValueRef Val
 ) {
     assert(Val && "Expected not-null value Val");
