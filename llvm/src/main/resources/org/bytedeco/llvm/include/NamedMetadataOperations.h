@@ -39,7 +39,7 @@ namespace llvm {
  *
  * See /llvm/lib/IR/Core.cpp for original implementation
  */
-extern "C" unsigned NamedMDNodeGetOperandCount(LLVMNamedMDNodeRef NodeRef) {
+extern "C" unsigned getNamedMDNodeNumOperands(LLVMNamedMDNodeRef NodeRef) {
     NamedMDNode *N = unwrap(NodeRef);
     return N->getNumOperands();
 }
@@ -53,7 +53,7 @@ extern "C" unsigned NamedMDNodeGetOperandCount(LLVMNamedMDNodeRef NodeRef) {
  *
  * See /llvm/lib/IR/Core.cpp for original implementation
  */
-extern "C" void NamedMDNodeGetOperands(
+extern "C" void getNamedMDNodeOperands(
     LLVMNamedMDNodeRef NodeRef,
     LLVMValueRef *Dest,
     LLVMContextRef InContext
@@ -74,7 +74,7 @@ extern "C" void NamedMDNodeGetOperands(
  *
  * See /llvm/lib/IR/Core.cpp for original implementation
  */
-extern "C" void NamedMDNodeAddOperand(
+extern "C" void addNamedMDNodeOperand(
     LLVMNamedMDNodeRef NodeRef,
     LLVMValueRef Val
 ) {
