@@ -67,6 +67,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         </dependency>
 
         <!-- Optional dependencies to load Python-enabled builds -->
+<!--
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python</artifactId>
@@ -77,7 +78,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <artifactId>tensorflow-platform-python-gpu</artifactId>
             <version>1.15.5-1.5.5-SNAPSHOT</version>
         </dependency>
-
+-->
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>

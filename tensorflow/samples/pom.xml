@@ -30,6 +30,7 @@
         </dependency>
 
         <!-- Optional dependencies to load Python-enabled builds -->
+<!--
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python</artifactId>
@@ -40,9 +41,19 @@
             <artifactId>tensorflow-platform-python-gpu</artifactId>
             <version>1.15.5-1.5.5-SNAPSHOT</version>
         </dependency>
-
+-->
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <excludes>
+                <exclude>KerasMNIST.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
     </build>
 </project>

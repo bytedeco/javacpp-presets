@@ -76,7 +76,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.7.9-${project.parent.version}</version>
+            <version>3.8.7-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -102,7 +102,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.7.9-${project.parent.version}</version>
+            <version>3.8.7-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
@@ -141,8 +141,7 @@
             <includePath>${basedir}/../cpython/src/main/resources/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/target/classes/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.7/</includePath>
-            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.7m/</includePath>
+            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.8/</includePath>
             <includePath>${basedir}/../numpy/src/main/resources/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/target/classes/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/core/include/</includePath>
@@ -179,8 +178,7 @@
             <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/</includeResource>
-            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.7/</includeResource>
-            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.7m/</includeResource>
+            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.8/</includeResource>
             <includeResource>/org/bytedeco/numpy/include/</includeResource>
             <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/core/include/</includeResource>
             <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/core/include/numpy/</includeResource>

@@ -89,13 +89,13 @@ if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
 fi
 
-if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.8/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.7"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.7m/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.8"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.8/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.8/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.8/site-packages/"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)

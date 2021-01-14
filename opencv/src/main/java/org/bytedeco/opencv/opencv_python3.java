@@ -57,6 +57,10 @@ import org.bytedeco.opencv.presets.*;
         opencv_stitching.class,
         opencv_saliency.class,
         opencv_quality.class,
+        opencv_dnn_superres.class,
+        opencv_intensity_transform.class,
+        opencv_mcc.class,
+        opencv_rapid.class,
     },
     value = {
         @Platform(preload = {"opencv_cuda@.4.5", "opencv_cudaarithm@.4.5", "opencv_cudafilters@.4.5", "opencv_cudaimgproc@.4.5",

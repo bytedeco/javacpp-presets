@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cpython-platform</artifactId>
-  <version>3.7.9-${project.parent.version}</version>
+  <version>3.8.7-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for CPython</name>
 
   <properties>

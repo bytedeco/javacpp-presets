@@ -44,12 +44,12 @@ export PYTHON3_EXECUTABLE=
 export PYTHON3_INCLUDE_DIR=
 export PYTHON3_LIBRARY=
 export PYTHON3_PACKAGES_PATH=
-if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.8/Python.h" ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
-    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.7"
-    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.7m/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.7/"
-    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.8"
+    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.8/"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.8/"
+    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.8/site-packages/"
     chmod +x "$PYTHON3_EXECUTABLE"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -58,7 +58,7 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
     export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python.exe"
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python37.lib"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python38.lib"
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
 fi
 export PYTHONPATH="$NUMPY_PATH/python/:${PYTHONPATH:-}"
@@ -99,11 +99,13 @@ sedinplace '/typedef ::/d' modules/core/include/opencv2/core/cvdef.h
 sedinplace 's/__constant__//g' modules/core/include/opencv2/core/cuda/detail/color_detail.hpp
 
 # avoid issues when checking version of cross-compiled Python
+sedinplace 's/PythonInterp "${min_version}"/PythonInterp/g' cmake/OpenCVDetectPython.cmake
+sedinplace 's/PythonLibs "${_version_major_minor}.${_version_patch}" EXACT/PythonLibs/g' cmake/OpenCVDetectPython.cmake
 sedinplace '/if(PYTHONINTERP_FOUND)/a\
     if(" ${_python_version_major}" STREQUAL " 3")\
-      set(PYTHON_VERSION_STRING "3.7")\
+      set(PYTHON_VERSION_STRING "3.8")\
       set(PYTHON_VERSION_MAJOR "3")\
-      set(PYTHON_VERSION_MINOR "7")\
+      set(PYTHON_VERSION_MINOR "8")\
     endif()\
 ' cmake/OpenCVDetectPython.cmake
 sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
