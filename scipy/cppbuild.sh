@@ -53,13 +53,13 @@ echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
 echo "include_dirs = $OPENBLAS_PATH/include/"     >> site.cfg
 
-if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.8/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.7"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.7m/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.8"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.8/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.8/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.8/site-packages/"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -76,26 +76,26 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
-    chmod +x "$CPYTHON_HOST_PATH/bin/python3.7"
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.8"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv cython numpy pybind11
-    "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$PYTHON_BIN_PATH" crossenv
-    cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.7/numpy/core/lib/libnpymath.a"
-#    cp -a "$CPYTHON_HOST_PATH/lib/python3.7/include" "$PYTHON_LIB_PATH"
+    "$CPYTHON_HOST_PATH/bin/python3.8" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.8/" crossenv cython numpy pybind11
+    "$CPYTHON_HOST_PATH/bin/python3.8" -m crossenv "$PYTHON_BIN_PATH" crossenv
+    cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.8/numpy/core/lib/libnpymath.a"
+#    cp -a "$CPYTHON_HOST_PATH/lib/python3.8/include" "$PYTHON_LIB_PATH"
     source crossenv/bin/activate
     cross-expose cython numpy pybind11
     PYTHON_BIN_PATH="python"
     export NUMPY_MADVISE_HUGEPAGE=1
 
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.7-config)
+    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.8-config)
     mkdir -p $PREFIX_HOST_PATH
     cp -a $CPYTHON_HOST_PATH/* $PREFIX_HOST_PATH
 fi
 
 if [[ $PLATFORM == linux* ]]; then
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.7-config)
+    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.8-config)
     mkdir -p $PREFIX_PATH
     cp -a $CPYTHON_PATH/* $PREFIX_PATH
 fi
