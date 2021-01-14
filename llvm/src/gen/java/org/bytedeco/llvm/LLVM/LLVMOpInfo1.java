@@ -26,7 +26,7 @@ public class LLVMOpInfo1 extends Pointer {
         return (LLVMOpInfo1)super.position(position);
     }
     @Override public LLVMOpInfo1 getPointer(long i) {
-        return new LLVMOpInfo1(this).position(position + i);
+        return new LLVMOpInfo1((Pointer)this).position(position + i);
     }
 
   public native @ByRef LLVMOpInfoSymbol1 AddSymbol(); public native LLVMOpInfo1 AddSymbol(LLVMOpInfoSymbol1 setter);

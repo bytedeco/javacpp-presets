@@ -31,7 +31,7 @@ public class CXSourceRangeList extends Pointer {
         return (CXSourceRangeList)super.position(position);
     }
     @Override public CXSourceRangeList getPointer(long i) {
-        return new CXSourceRangeList(this).position(position + i);
+        return new CXSourceRangeList((Pointer)this).position(position + i);
     }
 
   /** The number of ranges in the \c ranges array. */

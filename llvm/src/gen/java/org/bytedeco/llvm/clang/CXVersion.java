@@ -31,7 +31,7 @@ public class CXVersion extends Pointer {
         return (CXVersion)super.position(position);
     }
     @Override public CXVersion getPointer(long i) {
-        return new CXVersion(this).position(position + i);
+        return new CXVersion((Pointer)this).position(position + i);
     }
 
   /**

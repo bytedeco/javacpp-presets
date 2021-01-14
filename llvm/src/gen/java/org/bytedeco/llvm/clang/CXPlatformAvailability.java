@@ -32,7 +32,7 @@ public class CXPlatformAvailability extends Pointer {
         return (CXPlatformAvailability)super.position(position);
     }
     @Override public CXPlatformAvailability getPointer(long i) {
-        return new CXPlatformAvailability(this).position(position + i);
+        return new CXPlatformAvailability((Pointer)this).position(position + i);
     }
 
   /**
