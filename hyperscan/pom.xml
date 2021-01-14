@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hyperscan</artifactId>
-  <version>5.3.0-${project.parent.version}</version>
+  <version>5.4.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Hyperscan</name>
   
   <dependencies>
