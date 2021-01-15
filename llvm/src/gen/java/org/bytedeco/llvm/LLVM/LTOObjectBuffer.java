@@ -39,7 +39,7 @@ public class LTOObjectBuffer extends Pointer {
         return (LTOObjectBuffer)super.position(position);
     }
     @Override public LTOObjectBuffer getPointer(long i) {
-        return new LTOObjectBuffer(this).position(position + i);
+        return new LTOObjectBuffer((Pointer)this).position(position + i);
     }
 
   public native @Cast("const char*") BytePointer Buffer(); public native LTOObjectBuffer Buffer(BytePointer setter);

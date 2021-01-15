@@ -34,7 +34,7 @@ public class CXSourceRange extends Pointer {
         return (CXSourceRange)super.position(position);
     }
     @Override public CXSourceRange getPointer(long i) {
-        return new CXSourceRange(this).position(position + i);
+        return new CXSourceRange((Pointer)this).position(position + i);
     }
 
   public native @Const Pointer ptr_data(int i); public native CXSourceRange ptr_data(int i, Pointer setter);

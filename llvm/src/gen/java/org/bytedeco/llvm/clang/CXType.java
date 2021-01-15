@@ -32,7 +32,7 @@ public class CXType extends Pointer {
         return (CXType)super.position(position);
     }
     @Override public CXType getPointer(long i) {
-        return new CXType(this).position(position + i);
+        return new CXType((Pointer)this).position(position + i);
     }
 
   public native @Cast("CXTypeKind") int kind(); public native CXType kind(int setter);

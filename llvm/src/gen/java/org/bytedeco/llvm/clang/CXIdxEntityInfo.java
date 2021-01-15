@@ -28,7 +28,7 @@ public class CXIdxEntityInfo extends Pointer {
         return (CXIdxEntityInfo)super.position(position);
     }
     @Override public CXIdxEntityInfo getPointer(long i) {
-        return new CXIdxEntityInfo(this).position(position + i);
+        return new CXIdxEntityInfo((Pointer)this).position(position + i);
     }
 
   public native @Cast("CXIdxEntityKind") int kind(); public native CXIdxEntityInfo kind(int setter);

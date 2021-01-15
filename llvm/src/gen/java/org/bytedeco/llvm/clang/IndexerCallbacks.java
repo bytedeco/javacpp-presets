@@ -32,7 +32,7 @@ public class IndexerCallbacks extends Pointer {
         return (IndexerCallbacks)super.position(position);
     }
     @Override public IndexerCallbacks getPointer(long i) {
-        return new IndexerCallbacks(this).position(position + i);
+        return new IndexerCallbacks((Pointer)this).position(position + i);
     }
 
   /**

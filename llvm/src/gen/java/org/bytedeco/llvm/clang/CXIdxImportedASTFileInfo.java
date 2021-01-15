@@ -31,7 +31,7 @@ public class CXIdxImportedASTFileInfo extends Pointer {
         return (CXIdxImportedASTFileInfo)super.position(position);
     }
     @Override public CXIdxImportedASTFileInfo getPointer(long i) {
-        return new CXIdxImportedASTFileInfo(this).position(position + i);
+        return new CXIdxImportedASTFileInfo((Pointer)this).position(position + i);
     }
 
   /**

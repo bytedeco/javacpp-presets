@@ -32,7 +32,7 @@ public class CXFileUniqueID extends Pointer {
         return (CXFileUniqueID)super.position(position);
     }
     @Override public CXFileUniqueID getPointer(long i) {
-        return new CXFileUniqueID(this).position(position + i);
+        return new CXFileUniqueID((Pointer)this).position(position + i);
     }
 
   public native @Cast("unsigned long long") long data(int i); public native CXFileUniqueID data(int i, long setter);
