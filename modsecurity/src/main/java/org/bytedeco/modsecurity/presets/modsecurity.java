@@ -45,18 +45,31 @@ public class modsecurity implements InfoMapper {
     }
     @Override
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("clock_t").cast().valueTypes("long").pointerTypes("SizeTPointer"));
+        infoMap.put(new Info("ostringstream").cast().pointerTypes("Pointer"));
         infoMap.put(new Info("std::list<std::string>").pointerTypes("StringList").define());
+        infoMap.put(new Info("std::basic_string<char>").pointerTypes("StdString").define());
+        infoMap.put(new Info("std::set<std::string>").pointerTypes("StringSet").define());
         infoMap.put(new Info("std::list<int>").pointerTypes("IntList").define());
         infoMap.put(new Info("std::list<std::pair<int,int> >").pointerTypes("IntIntPairList").define());
-        infoMap.put(new Info("std::list<std::pair<int,int> >").pointerTypes("IntIntPairList").define());
+        infoMap.put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define());
         infoMap.put(new Info("std::list<std::pair<std::string,std::string> >").pointerTypes("StringStringPairList").define());
-        infoMap.put(new Info("std::list<std::pair<std::string,std::string> >").pointerTypes("StringStringPairList").define());
+        infoMap.put(new Info("std::pair<std::string,std::string>").pointerTypes("StringStringPair").define());
         infoMap.put(new Info("std::list<std::pair<int,std::string> >").pointerTypes("IntStringPairList").define());
+        infoMap.put(new Info("std::pair<int,std::string>").pointerTypes("IntStringPair").define());
         infoMap.put(new Info("std::list<modsecurity::RuleMessage>").pointerTypes("RuleMessageList").define());
         infoMap.put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define());
         infoMap.put(new Info("std::shared_ptr<modsecurity::RequestBodyProcessor::MultipartPartTmpFile>").annotations("@SharedPtr").pointerTypes("MultipartPartTmpFile"));
         infoMap.put(new Info("std::shared_ptr<modsecurity::Rule>").annotations("@SharedPtr").pointerTypes("Rule"));
         infoMap.put(new Info("std::shared_ptr<modsecurity::actions::Action>").annotations("@SharedPtr").pointerTypes("Action"));
+        infoMap.put(new Info("std::unordered_multimap<std::string,VariableValue*,modsecurity::MyHash,modsecurity::MyEqual>").skip());
+        infoMap.put(new Info("std::vector<std::unique_ptr<modsecurity::variables::Variable> >").skip());
+        infoMap.put(new Info("std::vector<std::unique_ptr<modsecurity::actions::Action> >").skip());
+        infoMap.put(new Info("std::unordered_multimap<std::shared_ptr<std::string>,std::shared_ptr<modsecurity::variables::Variable> >").skip());
+        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::variables::Variable> >").skip());
+        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::variables::Variable> >").skip());
+        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::actions::Action> >").skip());
+
     }
 }
 
