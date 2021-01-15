@@ -26,7 +26,7 @@ public class LLVMMCJITCompilerOptions extends Pointer {
         return (LLVMMCJITCompilerOptions)super.position(position);
     }
     @Override public LLVMMCJITCompilerOptions getPointer(long i) {
-        return new LLVMMCJITCompilerOptions(this).position(position + i);
+        return new LLVMMCJITCompilerOptions((Pointer)this).position(position + i);
     }
 
   public native @Cast("unsigned") int OptLevel(); public native LLVMMCJITCompilerOptions OptLevel(int setter);

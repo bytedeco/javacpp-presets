@@ -41,7 +41,7 @@ public class CXComment extends Pointer {
         return (CXComment)super.position(position);
     }
     @Override public CXComment getPointer(long i) {
-        return new CXComment(this).position(position + i);
+        return new CXComment((Pointer)this).position(position + i);
     }
 
   public native @Const Pointer ASTNode(); public native CXComment ASTNode(Pointer setter);

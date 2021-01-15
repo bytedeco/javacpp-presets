@@ -35,7 +35,7 @@ public class CXUnsavedFile extends Pointer {
         return (CXUnsavedFile)super.position(position);
     }
     @Override public CXUnsavedFile getPointer(long i) {
-        return new CXUnsavedFile(this).position(position + i);
+        return new CXUnsavedFile((Pointer)this).position(position + i);
     }
 
   /**

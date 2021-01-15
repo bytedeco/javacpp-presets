@@ -28,7 +28,7 @@ public class CXIdxObjCProtocolRefListInfo extends Pointer {
         return (CXIdxObjCProtocolRefListInfo)super.position(position);
     }
     @Override public CXIdxObjCProtocolRefListInfo getPointer(long i) {
-        return new CXIdxObjCProtocolRefListInfo(this).position(position + i);
+        return new CXIdxObjCProtocolRefListInfo((Pointer)this).position(position + i);
     }
 
   @MemberGetter public native @Const CXIdxObjCProtocolRefInfo protocols(int i);

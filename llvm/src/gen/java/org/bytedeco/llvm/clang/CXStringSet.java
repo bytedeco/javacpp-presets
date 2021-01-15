@@ -28,7 +28,7 @@ public class CXStringSet extends Pointer {
         return (CXStringSet)super.position(position);
     }
     @Override public CXStringSet getPointer(long i) {
-        return new CXStringSet(this).position(position + i);
+        return new CXStringSet((Pointer)this).position(position + i);
     }
 
   public native CXString Strings(); public native CXStringSet Strings(CXString setter);

@@ -43,7 +43,7 @@ public class CXString extends Pointer {
         return (CXString)super.position(position);
     }
     @Override public CXString getPointer(long i) {
-        return new CXString(this).position(position + i);
+        return new CXString((Pointer)this).position(position + i);
     }
 
   public String getString() {

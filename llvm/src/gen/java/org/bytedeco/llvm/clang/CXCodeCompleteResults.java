@@ -35,7 +35,7 @@ public class CXCodeCompleteResults extends Pointer {
         return (CXCodeCompleteResults)super.position(position);
     }
     @Override public CXCodeCompleteResults getPointer(long i) {
-        return new CXCodeCompleteResults(this).position(position + i);
+        return new CXCodeCompleteResults((Pointer)this).position(position + i);
     }
 
   /**

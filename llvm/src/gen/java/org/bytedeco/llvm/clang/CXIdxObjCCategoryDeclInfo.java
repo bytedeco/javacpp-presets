@@ -28,7 +28,7 @@ public class CXIdxObjCCategoryDeclInfo extends Pointer {
         return (CXIdxObjCCategoryDeclInfo)super.position(position);
     }
     @Override public CXIdxObjCCategoryDeclInfo getPointer(long i) {
-        return new CXIdxObjCCategoryDeclInfo(this).position(position + i);
+        return new CXIdxObjCCategoryDeclInfo((Pointer)this).position(position + i);
     }
 
   public native @Const CXIdxObjCContainerDeclInfo containerInfo(); public native CXIdxObjCCategoryDeclInfo containerInfo(CXIdxObjCContainerDeclInfo setter);

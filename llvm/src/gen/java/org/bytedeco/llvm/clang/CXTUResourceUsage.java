@@ -31,7 +31,7 @@ public class CXTUResourceUsage extends Pointer {
         return (CXTUResourceUsage)super.position(position);
     }
     @Override public CXTUResourceUsage getPointer(long i) {
-        return new CXTUResourceUsage(this).position(position + i);
+        return new CXTUResourceUsage((Pointer)this).position(position + i);
     }
 
   /* Private data member, used for queries. */

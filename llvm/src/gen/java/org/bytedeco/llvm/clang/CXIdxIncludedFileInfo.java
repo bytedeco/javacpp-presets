@@ -31,7 +31,7 @@ public class CXIdxIncludedFileInfo extends Pointer {
         return (CXIdxIncludedFileInfo)super.position(position);
     }
     @Override public CXIdxIncludedFileInfo getPointer(long i) {
-        return new CXIdxIncludedFileInfo(this).position(position + i);
+        return new CXIdxIncludedFileInfo((Pointer)this).position(position + i);
     }
 
   /**

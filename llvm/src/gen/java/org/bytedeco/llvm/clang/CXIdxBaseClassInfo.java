@@ -28,7 +28,7 @@ public class CXIdxBaseClassInfo extends Pointer {
         return (CXIdxBaseClassInfo)super.position(position);
     }
     @Override public CXIdxBaseClassInfo getPointer(long i) {
-        return new CXIdxBaseClassInfo(this).position(position + i);
+        return new CXIdxBaseClassInfo((Pointer)this).position(position + i);
     }
 
   public native @Const CXIdxEntityInfo base(); public native CXIdxBaseClassInfo base(CXIdxEntityInfo setter);

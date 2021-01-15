@@ -28,7 +28,7 @@ public class CXIdxContainerInfo extends Pointer {
         return (CXIdxContainerInfo)super.position(position);
     }
     @Override public CXIdxContainerInfo getPointer(long i) {
-        return new CXIdxContainerInfo(this).position(position + i);
+        return new CXIdxContainerInfo((Pointer)this).position(position + i);
     }
 
   public native @ByRef CXCursor cursor(); public native CXIdxContainerInfo cursor(CXCursor setter);

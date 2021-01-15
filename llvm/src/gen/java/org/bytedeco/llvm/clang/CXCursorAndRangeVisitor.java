@@ -28,7 +28,7 @@ public class CXCursorAndRangeVisitor extends Pointer {
         return (CXCursorAndRangeVisitor)super.position(position);
     }
     @Override public CXCursorAndRangeVisitor getPointer(long i) {
-        return new CXCursorAndRangeVisitor(this).position(position + i);
+        return new CXCursorAndRangeVisitor((Pointer)this).position(position + i);
     }
 
   public native Pointer context(); public native CXCursorAndRangeVisitor context(Pointer setter);

@@ -28,7 +28,7 @@ public class CXIdxAttrInfo extends Pointer {
         return (CXIdxAttrInfo)super.position(position);
     }
     @Override public CXIdxAttrInfo getPointer(long i) {
-        return new CXIdxAttrInfo(this).position(position + i);
+        return new CXIdxAttrInfo((Pointer)this).position(position + i);
     }
 
   public native @Cast("CXIdxAttrKind") int kind(); public native CXIdxAttrInfo kind(int setter);

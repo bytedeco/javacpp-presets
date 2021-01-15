@@ -28,7 +28,7 @@ public class CXIdxIBOutletCollectionAttrInfo extends Pointer {
         return (CXIdxIBOutletCollectionAttrInfo)super.position(position);
     }
     @Override public CXIdxIBOutletCollectionAttrInfo getPointer(long i) {
-        return new CXIdxIBOutletCollectionAttrInfo(this).position(position + i);
+        return new CXIdxIBOutletCollectionAttrInfo((Pointer)this).position(position + i);
     }
 
   public native @Const CXIdxAttrInfo attrInfo(); public native CXIdxIBOutletCollectionAttrInfo attrInfo(CXIdxAttrInfo setter);

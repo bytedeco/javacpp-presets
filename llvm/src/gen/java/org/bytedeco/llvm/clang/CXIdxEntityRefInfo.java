@@ -31,7 +31,7 @@ public class CXIdxEntityRefInfo extends Pointer {
         return (CXIdxEntityRefInfo)super.position(position);
     }
     @Override public CXIdxEntityRefInfo getPointer(long i) {
-        return new CXIdxEntityRefInfo(this).position(position + i);
+        return new CXIdxEntityRefInfo((Pointer)this).position(position + i);
     }
 
   public native @Cast("CXIdxEntityRefKind") int kind(); public native CXIdxEntityRefInfo kind(int setter);

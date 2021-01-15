@@ -31,7 +31,7 @@ public class CXToken extends Pointer {
         return (CXToken)super.position(position);
     }
     @Override public CXToken getPointer(long i) {
-        return new CXToken(this).position(position + i);
+        return new CXToken((Pointer)this).position(position + i);
     }
 
   public native @Cast("unsigned") int int_data(int i); public native CXToken int_data(int i, int setter);

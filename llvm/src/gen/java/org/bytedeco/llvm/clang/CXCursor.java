@@ -46,7 +46,7 @@ public class CXCursor extends Pointer {
         return (CXCursor)super.position(position);
     }
     @Override public CXCursor getPointer(long i) {
-        return new CXCursor(this).position(position + i);
+        return new CXCursor((Pointer)this).position(position + i);
     }
 
   public native @Cast("CXCursorKind") int kind(); public native CXCursor kind(int setter);

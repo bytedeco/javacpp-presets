@@ -28,7 +28,7 @@ public class CXIdxObjCPropertyDeclInfo extends Pointer {
         return (CXIdxObjCPropertyDeclInfo)super.position(position);
     }
     @Override public CXIdxObjCPropertyDeclInfo getPointer(long i) {
-        return new CXIdxObjCPropertyDeclInfo(this).position(position + i);
+        return new CXIdxObjCPropertyDeclInfo((Pointer)this).position(position + i);
     }
 
   public native @Const CXIdxDeclInfo declInfo(); public native CXIdxObjCPropertyDeclInfo declInfo(CXIdxDeclInfo setter);
