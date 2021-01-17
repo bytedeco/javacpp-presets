@@ -52,7 +52,7 @@ public class CXSourceLocation extends Pointer {
         return (CXSourceLocation)super.position(position);
     }
     @Override public CXSourceLocation getPointer(long i) {
-        return new CXSourceLocation(this).position(position + i);
+        return new CXSourceLocation((Pointer)this).position(position + i);
     }
 
   public native @Const Pointer ptr_data(int i); public native CXSourceLocation ptr_data(int i, Pointer setter);

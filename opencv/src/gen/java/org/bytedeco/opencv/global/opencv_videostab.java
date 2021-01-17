@@ -28,6 +28,8 @@ import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
 import org.bytedeco.opencv.opencv_objdetect.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
+import org.bytedeco.opencv.opencv_dnn.*;
+import static org.bytedeco.opencv.global.opencv_dnn.*;
 import org.bytedeco.opencv.opencv_video.*;
 import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_ximgproc.*;

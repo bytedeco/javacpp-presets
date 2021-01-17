@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -34,7 +36,7 @@ public class logsoftmax_forward extends primitive {
         return (logsoftmax_forward)super.position(position);
     }
     @Override public logsoftmax_forward getPointer(long i) {
-        return new logsoftmax_forward(this).position(position + i);
+        return new logsoftmax_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a logsoftmax forward propagation primitive. */
@@ -49,7 +51,7 @@ public class logsoftmax_forward extends primitive {
             return (desc)super.position(position);
         }
         @Override public desc getPointer(long i) {
-            return new desc(this).position(position + i);
+            return new desc((Pointer)this).position(position + i);
         }
     
         public native @ByRef @Cast("dnnl_logsoftmax_desc_t*") dnnl_softmax_desc_t data(); public native desc data(dnnl_softmax_desc_t setter);
@@ -90,7 +92,7 @@ public class logsoftmax_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorflow-platform-python-gpu</artifactId>
-  <version>1.15.4-${project.parent.version}</version>
+  <version>1.15.5-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Python GPU for TensorFlow</name>
 
   <properties>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.19.4-${project.parent.version}</version>
+      <version>1.19.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.15.4</tensorflow.version>
+    <tensorflow.version>1.15.5</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
     <javacpp.nativeRequires>
       requires org.bytedeco.mkldnn.${javacpp.platform.module};
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy</artifactId>
-      <version>1.19.4-${project.parent.version}</version>
+      <version>1.19.5-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -97,7 +97,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.19.4-${project.parent.version}</version>
+            <version>1.19.5-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>

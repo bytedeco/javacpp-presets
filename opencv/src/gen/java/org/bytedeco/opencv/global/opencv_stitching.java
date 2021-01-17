@@ -28,6 +28,8 @@ import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
 import org.bytedeco.opencv.opencv_objdetect.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
+import org.bytedeco.opencv.opencv_dnn.*;
+import static org.bytedeco.opencv.global.opencv_dnn.*;
 import org.bytedeco.opencv.opencv_video.*;
 import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_ml.*;
@@ -582,7 +584,16 @@ public class opencv_stitching extends org.bytedeco.opencv.presets.opencv_stitchi
 /** enum cv::detail::WaveCorrectKind */
 public static final int
     WAVE_CORRECT_HORIZ = 0,
-    WAVE_CORRECT_VERT = 1;
+    WAVE_CORRECT_VERT = 1,
+    WAVE_CORRECT_AUTO = 2;
+
+/** \brief Tries to detect the wave correction kind depending
+on whether a panorama spans horizontally or vertically
+<p>
+@param rmats Camera rotation matrices.
+@return The correction kind to use for this panorama
+ */
+@Namespace("cv::detail") public static native @Cast("cv::detail::WaveCorrectKind") int autoDetectWaveCorrectKind(@Const @ByRef MatVector rmats);
 
 /** \brief Tries to make panorama more horizontal (or vertical).
 <p>

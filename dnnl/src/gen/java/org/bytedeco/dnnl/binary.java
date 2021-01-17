@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -34,7 +36,7 @@ public class binary extends primitive {
         return (binary)super.position(position);
     }
     @Override public binary getPointer(long i) {
-        return new binary(this).position(position + i);
+        return new binary((Pointer)this).position(position + i);
     }
 
     /** Descriptor for an elementwise binary operator primitive. */
@@ -49,7 +51,7 @@ public class binary extends primitive {
             return (desc)super.position(position);
         }
         @Override public desc getPointer(long i) {
-            return new desc(this).position(position + i);
+            return new desc((Pointer)this).position(position + i);
         }
     
         /** Underlying C operation descriptor. */
@@ -90,7 +92,7 @@ public class binary extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

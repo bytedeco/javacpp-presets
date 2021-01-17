@@ -41,6 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class nppist implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("nppiEvenLevelsHost_32s_Ctx", "nppiHistogramEvenGetBufferSize_16s_AC4R_Ctx",
+                             "nppiMSEBatchGetBufferHostSize_8u_C1R", "nppiMSEBatchGetBufferHostSize_8u_C3R",
                              "nppiHistogramEvenGetBufferSize_16s_C1R_Ctx", "nppiHistogramEvenGetBufferSize_16s_C3R_Ctx",
                              "nppiHistogramEvenGetBufferSize_16s_C4R_Ctx", "nppiHistogramEvenGetBufferSize_16u_AC4R_Ctx",
                              "nppiHistogramEvenGetBufferSize_16u_C1R_Ctx", "nppiHistogramEvenGetBufferSize_16u_C3R_Ctx",

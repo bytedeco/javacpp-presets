@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.5.0
+OPENCV_VERSION=4.5.1
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -44,12 +44,12 @@ export PYTHON3_EXECUTABLE=
 export PYTHON3_INCLUDE_DIR=
 export PYTHON3_LIBRARY=
 export PYTHON3_PACKAGES_PATH=
-if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.8/Python.h" ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
-    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.7"
-    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.7m/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.7/"
-    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.8"
+    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.8/"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.8/"
+    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.8/site-packages/"
     chmod +x "$PYTHON3_EXECUTABLE"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -58,7 +58,7 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
     export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python.exe"
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python37.lib"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python38.lib"
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
 fi
 export PYTHONPATH="$NUMPY_PATH/python/:${PYTHONPATH:-}"
@@ -99,11 +99,13 @@ sedinplace '/typedef ::/d' modules/core/include/opencv2/core/cvdef.h
 sedinplace 's/__constant__//g' modules/core/include/opencv2/core/cuda/detail/color_detail.hpp
 
 # avoid issues when checking version of cross-compiled Python
+sedinplace 's/PythonInterp "${min_version}"/PythonInterp/g' cmake/OpenCVDetectPython.cmake
+sedinplace 's/PythonLibs "${_version_major_minor}.${_version_patch}" EXACT/PythonLibs/g' cmake/OpenCVDetectPython.cmake
 sedinplace '/if(PYTHONINTERP_FOUND)/a\
     if(" ${_python_version_major}" STREQUAL " 3")\
-      set(PYTHON_VERSION_STRING "3.7")\
+      set(PYTHON_VERSION_STRING "3.8")\
       set(PYTHON_VERSION_MAJOR "3")\
-      set(PYTHON_VERSION_MINOR "7")\
+      set(PYTHON_VERSION_MINOR "8")\
     endif()\
 ' cmake/OpenCVDetectPython.cmake
 sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
@@ -123,6 +125,73 @@ BUILD_CONTRIB_X="-DBUILD_opencv_stereo=OFF -DBUILD_opencv_plot=ON -DBUILD_opencv
 GPU_FLAGS="-DWITH_CUDA=OFF"
 if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=11.0 -DCUDNN_VERSION=8.0 -DCUDA_ARCH_BIN='3.5' -DCUDA_ARCH_PTX='3.5' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
+fi
+
+# exclude openblas dependencies
+if [[ "${NOOPENBLAS:-no}" == "yes" ]]; then
+    # arguments: <file name> <exclude key word>
+    function del_keyword_line {
+        fname=$1
+        ex_word=$2
+        ln=`grep -n $ex_word $fname | sed -n -e 's/:.*//gp'`
+        cnt=0
+        for l in $ln; do
+            sedinplace "`expr ${l} - ${cnt}`d" $fname
+            cnt=`expr ${cnt} + 1`
+        done
+    }
+
+    # arguments: <file name> <exclude key word> <exclude tag name>
+    function del_keyword_tags {
+        fname=$1
+        ex_word=$2
+        ex_start_tag="<$3>"
+        ex_end_tag="</$3>"
+        ln=`grep -n $ex_word $fname | sed -n -e 's/:.*//gp'`
+        cnt=0
+        for l in $ln; do
+            ls=`expr ${l} - ${cnt}`
+            srl=`head -n ${ls} $fname | tac | grep -n $ex_start_tag | sed -e 's/:.*//gp' | head -n 1`
+            erl=`sed -n "${ls},\\$p" $fname | grep -n $ex_end_tag | sed -e 's/:.*//gp' | head -n 1`
+            if [ ! "${srl:+srl}" -o ! "${erl:+erl}" ]; then continue; fi
+            start_line=`expr ${ls} - $srl + 1`
+            end_line=`expr ${ls} + $erl - 1`
+            cnt=`expr $cnt + ${end_line} - ${start_line}`
+            sedinplace "${start_line},${end_line}d" $fname
+        done
+    }
+
+    # arguments: <file name> <key word 1> <key word 2> <add line>
+    function add_line_after_keyword {
+        fname=$1
+        key1=$2
+        key2=$3
+        add_line=$4
+        add_tag_line_num=`grep -n "${key1}" $fname | sed -n -e 's/:.*//gp' | head -n 1`
+        add_line_num=`sed -n "${add_tag_line_num},\\$p" $fname | grep -n "${key2}" | sed -e 's/:.*//gp' | head -n 1`
+        l=`expr ${add_tag_line_num} + ${add_line_num}`
+        sedinplace "${l}i ${add_line}" $fname
+    }
+
+    echo "Exclude OpenBLAS dependencies"
+    cd ../../../
+    ex_word=openblas
+    ex_tag=dependency
+    for ex_file in {pom.xml,platform/pom.xml,platform/gpu/pom.xml}; do
+        del_keyword_tags $ex_file $ex_word $ex_tag
+    done
+    ex_file=pom.xml
+    ex_tag=properties
+    del_keyword_tags $ex_file $ex_word $ex_tag
+    del_keyword_line $ex_file $ex_word
+    add_line_after_keyword $ex_file "<phase>package</phase>" "<configuration>" "<classifier>\${javacpp.platform}\${javacpp.platform.extension}-noopenblas<\/classifier>"
+    add_line_after_keyword $ex_file "<groupId>org.moditect</groupId>" "<artifactId>moditect-maven-plugin</artifactId>" "<executions><execution><id>add-module-infos<\/id><configuration><modules><module><file>\${project.build.directory}\/\${project.artifactId}-\${javacpp.platform}\${javacpp.platform.extension}-noopenblas.jar<\/file><\/module><\/modules><\/configuration><\/execution><\/executions>"
+    ex_file=src/main/java/org/bytedeco/opencv/presets/opencv_core.java
+    sedinplace 's/\"openblas_config.h\", \"cblas.h\",\ //' $ex_file
+    for run in {1..2}; do del_keyword_line $ex_file $ex_word; done
+    ex_file=src/main/java9/module-info.java
+    del_keyword_line $ex_file $ex_word
+    cd cppbuild/"$PLATFORM$EXTENSION"/opencv-$OPENCV_VERSION
 fi
 
 case $PLATFORM in

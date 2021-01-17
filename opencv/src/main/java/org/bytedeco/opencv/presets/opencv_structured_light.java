@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_structured_light@.4.5"
         ),
         @Platform(value = "ios", preload = "libopencv_structured_light"),
-        @Platform(value = "windows", link = "opencv_structured_light450")
+        @Platform(value = "windows", link = "opencv_structured_light451")
     },
     target = "org.bytedeco.opencv.opencv_structured_light",
     global = "org.bytedeco.opencv.global.opencv_structured_light"

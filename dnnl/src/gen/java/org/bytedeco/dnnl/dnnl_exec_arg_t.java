@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -31,7 +33,7 @@ public class dnnl_exec_arg_t extends Pointer {
         return (dnnl_exec_arg_t)super.position(position);
     }
     @Override public dnnl_exec_arg_t getPointer(long i) {
-        return new dnnl_exec_arg_t(this).position(position + i);
+        return new dnnl_exec_arg_t((Pointer)this).position(position + i);
     }
 
     /** An argument index, e.g. DNNL_ARG_SRC */

@@ -26,6 +26,5 @@ public class TypeInfo extends BaseTypeInfo {
   public native @ByVal UnownedSequenceTypeInfo GetSequenceTypeInfo();
   public native @ByVal UnownedMapTypeInfo GetMapTypeInfo();
 
-
   public native @Cast("ONNXType") int GetONNXType();
 }

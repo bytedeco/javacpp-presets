@@ -46,7 +46,7 @@ public class LLVMOpInfoSymbol1 extends Pointer {
         return (LLVMOpInfoSymbol1)super.position(position);
     }
     @Override public LLVMOpInfoSymbol1 getPointer(long i) {
-        return new LLVMOpInfoSymbol1(this).position(position + i);
+        return new LLVMOpInfoSymbol1((Pointer)this).position(position + i);
     }
 
   public native @Cast("uint64_t") long Present(); public native LLVMOpInfoSymbol1 Present(long setter);  /* 1 if this symbol is present */

@@ -27,15 +27,15 @@ import org.bytedeco.opencv.opencv_features2d.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_video.*;
-import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
+import org.bytedeco.opencv.opencv_video.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 import static org.bytedeco.opencv.global.opencv_tracking.*;
 
 
-@Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
+@Namespace("cv::detail::tracking::contrib_feature") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_tracking.class)
 public class CvFeatureParams extends CvParams {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -50,7 +50,7 @@ public class CvFeatureParams extends CvParams {
         return new CvFeatureParams(this).position(position + i);
     }
 
-  /** enum cv::CvFeatureParams::FeatureType */
+  /** enum cv::detail::tracking::contrib_feature::CvFeatureParams::FeatureType */
   public static final int
     HAAR = 0,
     LBP = 1,
@@ -61,7 +61,7 @@ public class CvFeatureParams extends CvParams {
   public native void init( @Const @ByRef CvFeatureParams fp );
   public native void write( @ByRef FileStorage fs );
   public native @Cast("bool") boolean read( @Const @ByRef FileNode node );
-  public static native @Ptr CvFeatureParams create(@Cast("cv::CvFeatureParams::FeatureType") int featureType);
+  public static native @Ptr CvFeatureParams create(@Cast("cv::detail::tracking::contrib_feature::CvFeatureParams::FeatureType") int featureType);
   public native int maxCatCount(); public native CvFeatureParams maxCatCount(int setter);  // 0 in case of numerical features
   public native int featSize(); public native CvFeatureParams featSize(int setter);  // 1 in case of simple features (HAAR, LBP) and N_BINS(9)*N_CELLS(4) in case of Dalal's HOG features
   public native int numFeatures(); public native CvFeatureParams numFeatures(int setter);

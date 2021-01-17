@@ -153,8 +153,8 @@ public class FileStorage extends Pointer {
 
     /**
      * \brief Simplified writing API to use with bindings.
-     * @param name Name of the written object
-     * @param val Value of the written object
+     * @param name Name of the written object. When writing to sequences (a.k.a. "arrays"), pass an empty string.
+     * @param val Value of the written object.
      */
     public native void write(@Str BytePointer name, int val);
     public native void write(@Str String name, int val);
@@ -196,9 +196,10 @@ public class FileStorage extends Pointer {
     public native void writeComment(@Str String comment);
 
     /** \brief Starts to write a nested structure (sequence or a mapping).
-    @param name name of the structure (if it's a member of parent mapping, otherwise it should be empty
+    @param name name of the structure. When writing to sequences (a.k.a. "arrays"), pass an empty string.
     @param flags type of the structure (FileNode::MAP or FileNode::SEQ (both with optional FileNode::FLOW)).
-    @param typeName usually an empty string
+    @param typeName optional name of the type you store. The effect of setting this depends on the storage format.
+    I.e. if the format has a specification for storing type information, this parameter is used.
     */
     public native void startWriteStruct(@Str BytePointer name, int flags, @Str BytePointer typeName/*=cv::String()*/);
     public native void startWriteStruct(@Str BytePointer name, int flags);

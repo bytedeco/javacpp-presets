@@ -28,7 +28,7 @@ public class CXTUResourceUsageEntry extends Pointer {
         return (CXTUResourceUsageEntry)super.position(position);
     }
     @Override public CXTUResourceUsageEntry getPointer(long i) {
-        return new CXTUResourceUsageEntry(this).position(position + i);
+        return new CXTUResourceUsageEntry((Pointer)this).position(position + i);
     }
 
   /* The memory usage category. */

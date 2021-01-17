@@ -55,6 +55,7 @@ mkdir -p depot_tools
 tar --totals -xzf ../depot_tools.tar.gz -C depot_tools
 tar --totals -xzf ../skia-$SKIA_VERSION.tar.gz
 
+sedinplace '/for thread in threads:/d' skia-$SKIA_VERSION/tools/git-sync-deps
 sedinplace 's/"HAVE_MEMMOVE"/"HAVE_MEMMOVE", "XML_DEV_URANDOM"/g' skia-$SKIA_VERSION/third_party/expat/BUILD.gn
 #sedinplace '/sources = tests_sources/,/}/d' skia-$SKIA_VERSION/BUILD.gn
 sedinplace /-ffp-contract=fast/d skia-$SKIA_VERSION/BUILD.gn

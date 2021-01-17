@@ -36,9 +36,9 @@ public class __half2 extends Pointer {
 // #if defined(__CPP_VERSION_AT_LEAST_11_FP16)
     public __half2() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public __half2(@ByVal __half2 src) { super((Pointer)null); allocate(src); }
-    private native void allocate(@ByVal __half2 src);
-    public native @ByRef @Name("operator =") __half2 put(@ByVal __half2 src);
+    public __half2(@Const @ByVal __half2 src) { super((Pointer)null); allocate(src); }
+    private native void allocate(@Const @ByVal __half2 src);
+    public native @ByRef @Name("operator =") __half2 put(@Const @ByVal __half2 src);
 // #else
 // #endif /* defined(__CPP_VERSION_AT_LEAST_11_FP16) */
     public __half2(@Const @ByRef __half a, @Const @ByRef __half b) { super((Pointer)null); allocate(a, b); }

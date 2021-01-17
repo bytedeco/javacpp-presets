@@ -19,7 +19,7 @@ public class nppig extends org.bytedeco.cuda.presets.nppig {
 
 // Parsed from <nppi_geometry_transforms.h>
 
- /* Copyright 2009-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2020 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -3330,6 +3330,7 @@ public static native @Cast("NppStatus") int nppiRotate_32f_AC4R(@Cast("const Npp
  *
  * \section mirror_error_codes Mirror Error Codes
  *         - ::NPP_MIRROR_FLIP_ERROR if flip has an illegal value.
+ *         - ::NPP_SIZE_ERROR if in_place ROI width or height are not even numbers.
  *
  * <h3><a name="CommonMirrorParameters">Common parameters for nppiMirror non-inplace and inplace functions include:</a></h3>
  *
@@ -3339,7 +3340,7 @@ public static native @Cast("NppStatus") int nppiRotate_32f_AC4R(@Cast("const Npp
  * @param nSrcStep \ref source_image_line_step for non-inplace functions.
  * @param pDst \ref destination_image_pointer for non-inplace functions.
  * @param nDstStep \ref destination_image_line_step for non-inplace functions.
- * @param oROI \ref roi_specification.
+ * @param oROI \ref roi_specification (in_place ROI widths and heights must be even numbers).
  * @param flip Specifies the axis about which the image is to be mirrored.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes, \ref mirror_error_codes

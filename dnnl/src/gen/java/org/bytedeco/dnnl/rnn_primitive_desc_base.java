@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -61,7 +63,7 @@ public class rnn_primitive_desc_base extends org.bytedeco.dnnl.primitive_desc {
         return (rnn_primitive_desc_base)super.position(position);
     }
     @Override public rnn_primitive_desc_base getPointer(long i) {
-        return new rnn_primitive_desc_base(this).position(position + i);
+        return new rnn_primitive_desc_base((Pointer)this).position(position + i);
     }
 
 

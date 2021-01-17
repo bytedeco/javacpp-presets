@@ -12,8 +12,8 @@ import static org.bytedeco.cuda.global.cudart.*;
 
 
 /**
-* External semaphore wait parameters
-*/
+ * External semaphore wait parameters, compatible with driver type
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class cudaExternalSemaphoreWaitParams extends Pointer {
     static { Loader.load(); }
@@ -56,6 +56,8 @@ public class cudaExternalSemaphoreWaitParams extends Pointer {
              * Timeout in milliseconds to wait to acquire the mutex
              */
             @Name("params.keyedMutex.timeoutMs") public native @Cast("unsigned int") int params_keyedMutex_timeoutMs(); public native cudaExternalSemaphoreWaitParams params_keyedMutex_timeoutMs(int setter);
+        @Name("params.reserved") public native @Cast("unsigned int") int params_reserved(int i); public native cudaExternalSemaphoreWaitParams params_reserved(int i, int setter);
+        @Name("params.reserved") @MemberGetter public native @Cast("unsigned int*") IntPointer params_reserved();
     /**
      * Only when ::cudaExternalSemaphoreSignalParams is used to
      * signal a ::cudaExternalSemaphore_t of type
@@ -67,4 +69,6 @@ public class cudaExternalSemaphoreWaitParams extends Pointer {
      * For all other types of ::cudaExternalSemaphore_t, flags must be zero.
      */
     public native @Cast("unsigned int") int flags(); public native cudaExternalSemaphoreWaitParams flags(int setter);
+    public native @Cast("unsigned int") int reserved(int i); public native cudaExternalSemaphoreWaitParams reserved(int i, int setter);
+    @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 }

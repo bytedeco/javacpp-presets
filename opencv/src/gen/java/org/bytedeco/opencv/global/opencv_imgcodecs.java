@@ -70,13 +70,18 @@ public class opencv_imgcodecs extends org.bytedeco.opencv.helper.opencv_imgcodec
   \defgroup imgcodecs Image file reading and writing
   \{
     \defgroup imgcodecs_c C API
+    \defgroup imgcodecs_flags Flags used for image file reading and writing
     \defgroup imgcodecs_ios iOS glue
+    \defgroup imgcodecs_macosx MacOS(OSX) glue
   \}
 */
 
 //////////////////////////////// image codec ////////////////////////////////
 
 /** \addtogroup imgcodecs
+ *  \{
+ <p>
+ *  \addtogroup imgcodecs_flags
  *  \{
  <p>
  *  Imread flags */
@@ -188,6 +193,8 @@ public static final int
        IMWRITE_PAM_FORMAT_RGB = 4,
        IMWRITE_PAM_FORMAT_RGB_ALPHA = 5;
 
+/** \} imgcodecs_flags
+<p>
 /** \brief Loads an image from a file.
 <p>
 \anchor imread
@@ -326,6 +333,26 @@ It also demonstrates how to save multiple images in a TIFF file:
               @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal GpuMat img,
               @StdVector int[] params/*=std::vector<int>()*/);
+
+/** \overload multi-image overload for bindings */
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str BytePointer filename, @ByVal MatVector img,
+                  @StdVector IntPointer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str BytePointer filename, @ByVal MatVector img);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str String filename, @ByVal UMatVector img,
+                  @StdVector IntBuffer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str String filename, @ByVal UMatVector img);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str BytePointer filename, @ByVal GpuMatVector img,
+                  @StdVector int[] params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str BytePointer filename, @ByVal GpuMatVector img);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str String filename, @ByVal MatVector img,
+                  @StdVector IntPointer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str String filename, @ByVal MatVector img);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str BytePointer filename, @ByVal UMatVector img,
+                  @StdVector IntBuffer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str BytePointer filename, @ByVal UMatVector img);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str String filename, @ByVal GpuMatVector img,
+                  @StdVector int[] params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwritemulti(@Str String filename, @ByVal GpuMatVector img);
 
 /** \brief Reads an image from a buffer in memory.
 <p>

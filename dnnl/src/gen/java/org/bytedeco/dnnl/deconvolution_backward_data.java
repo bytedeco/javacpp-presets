@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -24,7 +26,7 @@ public class deconvolution_backward_data extends primitive {
         return (deconvolution_backward_data)super.position(position);
     }
     @Override public deconvolution_backward_data getPointer(long i) {
-        return new deconvolution_backward_data(this).position(position + i);
+        return new deconvolution_backward_data((Pointer)this).position(position + i);
     }
 
     /** Descriptor for a deconvolution backward propagation primitive. */
@@ -216,7 +218,7 @@ public class deconvolution_backward_data extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

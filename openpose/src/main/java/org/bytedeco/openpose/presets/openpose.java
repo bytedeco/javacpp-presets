@@ -86,7 +86,7 @@ import org.bytedeco.hdf5.presets.*;
                 "openpose/wrapper/wrapper.hpp",
             },
             link = {
-                "openpose@.1.6.0",
+                "openpose@.1.7.0",
                 "openpose_3d",
                 "openpose_calibration",
                 "openpose_core",

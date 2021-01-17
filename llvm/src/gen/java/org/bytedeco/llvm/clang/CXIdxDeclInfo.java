@@ -28,7 +28,7 @@ public class CXIdxDeclInfo extends Pointer {
         return (CXIdxDeclInfo)super.position(position);
     }
     @Override public CXIdxDeclInfo getPointer(long i) {
-        return new CXIdxDeclInfo(this).position(position + i);
+        return new CXIdxDeclInfo((Pointer)this).position(position + i);
     }
 
   public native @Const CXIdxEntityInfo entityInfo(); public native CXIdxDeclInfo entityInfo(CXIdxEntityInfo setter);

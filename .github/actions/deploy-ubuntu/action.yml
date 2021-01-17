@@ -1,0 +1,170 @@
+name: Deploy on Ubuntu
+runs:
+  using: composite
+  steps:
+    - name: Install environment
+      shell: bash
+      run: |
+        cd /root
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]]; then
+          export ARCH=armhf
+          export PREFIX=arm-linux-gnueabihf
+        elif [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
+          export ARCH=arm64
+          export PREFIX=aarch64-linux-gnu
+        elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
+          export ARCH=ppc64el
+          export PREFIX=powerpc64le-linux-gnu
+        fi
+        echo "ARCH=$ARCH" >> $GITHUB_ENV
+        echo "PREFIX=$PREFIX" >> $GITHUB_ENV
+        echo "MAVEN_OPTIONS=-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/" >> $GITHUB_ENV
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ -z ${CI_DEPLOY_NEED_NOTOOLS:-} ]]; then
+          echo Setting up tools for linux-armhf build
+          dpkg --add-architecture i386
+          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main >> /etc/apt/sources.list
+          apt-get update
+          apt-get -y install python python2.7 python-minimal python2.7-minimal libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
+          apt-get -y install pkg-config ccache clang default-jre-headless openjdk-8-jdk-headless ant python python3-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev libbz2-dev zlib1g-dev
+          curl -LOJ https://github.com/raspberrypi/tools/archive/master.tar.gz
+          curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
+          mkdir -p tools userland
+          tar -xzf tools-master.tar.gz --strip-components=1 -C tools
+          tar -xzf userland-master.tar.gz --strip-components=1 -C userland
+          ln -s $(pwd)/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-gfortran $(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/
+          ln -s $(pwd)/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/libgfortran* $(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/
+          export PATH=$(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/:$PATH
+          echo "PATH=$PATH" >> $GITHUB_ENV
+          echo "MAVEN_OPTIONS=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++ -Djava.library.path=$(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/" >> $GITHUB_ENV
+
+          pushd userland
+          # https://github.com/raspberrypi/userland/issues/603
+          sed -i -e 's/"${INSTALL_TARGETS} vcilcs"/${INSTALL_TARGETS} vcilcs/g' interface/vmcs_host/CMakeLists.txt
+          bash buildme
+          popd
+        else
+          dpkg --add-architecture $ARCH
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse >> /etc/apt/sources.list
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse >> /etc/apt/sources.list
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse >> /etc/apt/sources.list
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse >> /etc/apt/sources.list
+          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main >> /etc/apt/sources.list
+          sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
+          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
+          apt-get update
+          apt-get -y install python python2.7 python-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
+          apt-get -y install pkg-config ccache clang gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch openjdk-8-jdk-headless ant python python3-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
+        fi
+
+        find /usr/lib/jvm/default-java/
+        curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        curl -LO https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
+        tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+        unzip gradle-6.7.1-bin.zip -d /opt/
+        ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
+        ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
+
+        python3 -m pip install gdown
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
+          echo Installing CUDA, cuDNN, etc
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda-repo-rhel8-11-2-local-11.2.0_460.27.04-1.ppc64le.rpm
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.4/cudnn-11.1-linux-ppc64le-v8.0.4.30.tgz
+          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/nccl_2.8.3-1+cuda11.1_ppc64le.txz
+
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel8-11-2-local-11.2.0_460.27.04-1.ppc64le.rpm
+          pushd /var/cuda-repo-rhel8-11-2-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
+          ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
+          tar -hxvf cudnn-11.1-linux-ppc64le-v8.0.4.30.tgz -C /usr/local/
+          tar -hxvf nccl_2.8.3-1+cuda11.1_ppc64le.txz --strip-components=1 -C /usr/local/cuda/
+          mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
+
+          # Work around issues with CUDA 10.2/11.x
+          mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/ || true
+          mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/ || true
+          for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f $f.2; done
+          for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f ${f:0:${#f}-1}1; done
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.2
+          cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
+          cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
+          cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
+          cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
+
+          # Remove downloaded archives and unused libraries to avoid running out of disk space
+          rm -f *.rpm *.tgz *.txz *.tar.*
+          rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a)
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
+          echo Installing FlyCapture amdhf
+          python3 -m gdown.cli https://drive.google.com/uc?id=16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI
+          mkdir -p $GITHUB_WORKSPACE/downloads
+          ln -s $(pwd)/flycapture.2.13.3.31_armhf_xenial.tar.gz $GITHUB_WORKSPACE/downloads/flycapture.2.13.3.31_armhf.tar.gz
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
+          echo Installing FlyCapture amd64
+          python3 -m gdown.cli https://drive.google.com/uc?id=1LhnuRMT3urYsApCcuBEcaotGRK8h4kJv
+          mkdir -p $GITHUB_WORKSPACE/downloads
+          ln -s $(pwd)/flycapture.2.13.3.31_arm64_xenial.tar.gz $GITHUB_WORKSPACE/downloads/flycapture.2.13.3.31_arm64.tar.gz
+        fi
+
+    - name: Build project
+      shell: bash
+      run: |
+        git --version
+        $PREFIX-gcc --version
+        cmake --version
+        gradle --version
+        mvn -version
+        gpg --version
+        df -h
+
+        export MAKEJ=$(getconf _NPROCESSORS_ONLN)
+        echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
+        git init
+        git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
+        git checkout $GITHUB_SHA
+        git submodule update --init --recursive
+        git submodule foreach --recursive 'git reset --hard'
+
+        echo "Fixing HOME to /root (was '$HOME')"
+        export HOME=/root
+
+        if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
+          [[ "${{ github.event_name }}" == "pull_request" ]] && GRADLE_TASK=publishToMavenLocal || GRADLE_TASK=publish
+          echo Executing Gradle $GRADLE_TASK ${{ matrix.options }} on $MAKEJ processors
+          export GRADLE_OPTIONS="-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=$CI_DEPLOY_PLATFORM -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
+          gradle clean build $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle
+          echo Publishing only now to help avoid race conditions with Gradle
+          gradle $GRADLE_TASK $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle --refresh-dependencies
+        else
+          mkdir -p $HOME/.m2
+          [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
+          echo "<settings>" > $HOME/.m2/settings.xml
+          echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
+          echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
+          echo "</settings>" >> $HOME/.m2/settings.xml
+
+          SECONDS=$(( RANDOM % 300 ))
+          echo Sleeping $SECONDS seconds to help avoid race conditions with Maven
+          sleep $SECONDS
+
+          echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
+          export EXT=${{ matrix.ext }}
+          export EXT2=${EXT:1}
+          export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+        fi
+        df -h
+
+    - name: Clean up
+      shell: bash
+      run: |
+        cd /root
+        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')

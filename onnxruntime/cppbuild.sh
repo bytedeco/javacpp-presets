@@ -14,10 +14,6 @@ export MAKEFLAGS="-j $MAKEJ"
 export PYTHON_BIN_PATH=$(which python3)
 export OPENMP_FLAGS="--use_openmp"
 case $PLATFORM in
-    macosx-*)
-        # disable OpenMP on Mac until it's fixed
-        export OPENMP_FLAGS=
-        ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
             export CUDACXX="$CUDA_PATH/bin/nvcc"
@@ -35,7 +31,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.5.3
+ONNXRUNTIME=1.6.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -56,7 +52,7 @@ patch -p1 < ../../../onnxruntime.patch
 sedinplace "s/default='Visual Studio 15 2017'/default='Ninja'/g" tools/ci_build/build.py
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
-sedinplace 's/CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
+sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
 sedinplace 's/cudnnSetRNNDescriptor(/cudnnSetRNNDescriptor_v6(/g' onnxruntime/core/providers/cuda/rnn/cudnn_rnn_base.h
 sedinplace 's/HOST_NAME_MAX/sysconf(_SC_HOST_NAME_MAX)/g' onnxruntime/core/providers/cuda/cuda_call.cc
 sedinplace 's/#define NO_EXCEPTION noexcept/#define NO_EXCEPTION/g' include/onnxruntime/core/session/onnxruntime_c_api.h
@@ -89,6 +85,7 @@ sedinplace '/static synchronized void init() throws IOException {/a\
 loaded = org.bytedeco.javacpp.Loader.load(org.bytedeco.onnxruntime.presets.onnxruntime.class) != null;\
 ortApiHandle = initialiseAPIBase(ORT_API_VERSION_1);\
 ' java/src/main/java/ai/onnxruntime/OnnxRuntime.java
+sedinplace 's/return metadataJava/return (jstring)metadataJava/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib --use_dnnl $OPENMP_FLAGS $GPU_FLAGS
@@ -97,6 +94,7 @@ which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 cp -r include/* ../include
 cp -r orttraining/orttraining/models/runner/training_runner.h ../include
 cp -r orttraining/orttraining/models/runner/training_util.h ../include
+sedinplace '/struct ProviderInfo_OpenVINO {/,/};/d' ../include/onnxruntime/core/providers/openvino/openvino_provider_factory.h
 cp -r java/src/main/java/* ../java
 cp -a ../build/Release/lib* ../lib || true
 cp ../build/Release/onnxruntime*.dll ../bin || true
@@ -105,7 +103,7 @@ cp ../build/Release/onnxruntime*.lib ../lib || true
 # fix library with the same name for OpenMP as MKL on Mac
 case $PLATFORM in
     macosx-*)
-        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libonnxruntime.dylib
+        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libonnxruntime.*.dylib
         ;;
 esac
 

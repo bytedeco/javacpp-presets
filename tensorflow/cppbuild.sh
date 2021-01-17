@@ -29,10 +29,10 @@ export TF_NEED_MPI=0
 export TF_NEED_ROCM=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
-export TF_CUDA_VERSION=11.1
+export TF_CUDA_VERSION=11.2
 export TF_CUDNN_VERSION=8
 export TF_DOWNLOAD_CLANG=0
-export TF_NCCL_VERSION=2.7
+export TF_NCCL_VERSION=2.8
 export TF_TENSORRT_VERSION=7.2
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
@@ -44,7 +44,7 @@ export TF_CUDA_COMPUTE_CAPABILITIES=3.5
 export TF_SET_ANDROID_WORKSPACE=0
 #export TF_IGNORE_MAX_BAZEL_VERSION=1
 
-TENSORFLOW_VERSION=1.15.4
+TENSORFLOW_VERSION=1.15.5
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -61,11 +61,11 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
-        if [[ -f "$P/include/python3.7m/Python.h" ]]; then
+        if [[ -f "$P/include/python3.8/Python.h" ]]; then
             CPYTHON_PATH="$P"
-            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.7"
-            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.7m/"
-            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
+            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.8"
+            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.8/"
+            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.8/"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
             chmod +x "$PYTHON_BIN_PATH"
         elif [[ -f "$P/include/Python.h" ]]; then

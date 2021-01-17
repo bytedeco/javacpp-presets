@@ -120,7 +120,7 @@ public class cudart extends org.bytedeco.cuda.presets.cudart {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 11010;
+public static final int CUDA_VERSION = 11020;
 
 // #ifdef __cplusplus
 // #endif
@@ -179,6 +179,9 @@ public static final int CUDA_VERSION = 11010;
 
 
 // Targeting ../cudart/CUgraphExec_st.java
+
+
+// Targeting ../cudart/CUmemPoolHandle_st.java
 
 
 
@@ -410,7 +413,9 @@ public static final int
     /** 16-bit floating point */
     CU_AD_FORMAT_HALF           = 0x10,
     /** 32-bit floating point */
-    CU_AD_FORMAT_FLOAT          = 0x20;
+    CU_AD_FORMAT_FLOAT          = 0x20,
+    /** 8-bit YUV planar format, with 4:2:0 sampling */
+    CU_AD_FORMAT_NV12           = 0xb0;
 
 /**
  * Texture reference addressing modes
@@ -587,7 +592,7 @@ public static final int
     CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACECUBEMAP_LAYERED_WIDTH = 67,
     /** Maximum layers in a cubemap layered surface */
     CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACECUBEMAP_LAYERED_LAYERS = 68,
-    /** Maximum 1D linear texture width */
+    /** Deprecated, do not use. Use cudaDeviceGetTexture1DLinearMaxWidth() or cuDeviceGetTexture1DLinearMaxWidth() instead. */
     CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_LINEAR_WIDTH = 69,
     /** Maximum 2D linear texture width */
     CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_LINEAR_WIDTH = 70,
@@ -653,8 +658,10 @@ public static final int
     CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES = 100,
     /** The host can directly access managed memory on the device without migration. */
     CU_DEVICE_ATTRIBUTE_DIRECT_MANAGED_MEM_ACCESS_FROM_HOST = 101,
-    /** Device supports virtual address management APIs like ::cuMemAddressReserve, ::cuMemCreate, ::cuMemMap and related APIs */
+    /** Deprecated, Use CU_DEVICE_ATTRIBUTE_VIRTUAL_MEMORY_MANAGEMENT_SUPPORTED*/
     CU_DEVICE_ATTRIBUTE_VIRTUAL_ADDRESS_MANAGEMENT_SUPPORTED = 102,
+    /** Device supports virtual memory management APIs like ::cuMemAddressReserve, ::cuMemCreate, ::cuMemMap and related APIs */
+    CU_DEVICE_ATTRIBUTE_VIRTUAL_MEMORY_MANAGEMENT_SUPPORTED = 102,
     /** Device supports exporting memory to a posix file descriptor with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate */
     CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR_SUPPORTED = 103,
     /** Device supports exporting memory to a Win32 NT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate */
@@ -677,7 +684,11 @@ public static final int
     CU_DEVICE_ATTRIBUTE_SPARSE_CUDA_ARRAY_SUPPORTED = 112,
     /** Device supports using the ::cuMemHostRegister flag CU_MEMHOSTERGISTER_READ_ONLY to register memory that must be mapped as read-only to the GPU */
     CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED = 113,
-    CU_DEVICE_ATTRIBUTE_MAX = 114;
+    /** External timeline semaphore interop is supported on the device */
+    CU_DEVICE_ATTRIBUTE_TIMELINE_SEMAPHORE_INTEROP_SUPPORTED = 114,
+    /** Device supports using the ::cuMemAllocAsync and ::cuMemPool family of APIs */
+    CU_DEVICE_ATTRIBUTE_MEMORY_POOLS_SUPPORTED = 115,
+    CU_DEVICE_ATTRIBUTE_MAX = 116;
 // Targeting ../cudart/CUdevprop.java
 
 
@@ -1278,21 +1289,25 @@ public static final int
 /** enum CUgraphNodeType_enum */
 public static final int
     /** GPU kernel node */
-    CU_GRAPH_NODE_TYPE_KERNEL       = 0,
+    CU_GRAPH_NODE_TYPE_KERNEL           = 0,
     /** Memcpy node */
-    CU_GRAPH_NODE_TYPE_MEMCPY       = 1,
+    CU_GRAPH_NODE_TYPE_MEMCPY           = 1,
     /** Memset node */
-    CU_GRAPH_NODE_TYPE_MEMSET       = 2,
+    CU_GRAPH_NODE_TYPE_MEMSET           = 2,
     /** Host (executable) node */
-    CU_GRAPH_NODE_TYPE_HOST         = 3,
+    CU_GRAPH_NODE_TYPE_HOST             = 3,
     /** Node which executes an embedded graph */
-    CU_GRAPH_NODE_TYPE_GRAPH        = 4,
+    CU_GRAPH_NODE_TYPE_GRAPH            = 4,
     /** Empty (no-op) node */
-    CU_GRAPH_NODE_TYPE_EMPTY        = 5,
+    CU_GRAPH_NODE_TYPE_EMPTY            = 5,
     /** External event wait node */
-    CU_GRAPH_NODE_TYPE_WAIT_EVENT   = 6,
+    CU_GRAPH_NODE_TYPE_WAIT_EVENT       = 6,
     /** External event record node */
-    CU_GRAPH_NODE_TYPE_EVENT_RECORD = 7;
+    CU_GRAPH_NODE_TYPE_EVENT_RECORD     = 7,
+    /** External semaphore signal node */
+    CU_GRAPH_NODE_TYPE_EXT_SEMAS_SIGNAL = 8,
+    /** External semaphore wait node */
+    CU_GRAPH_NODE_TYPE_EXT_SEMAS_WAIT   = 9;
 
 /** enum CUsynchronizationPolicy_enum */
 public static final int
@@ -1565,6 +1580,11 @@ public static final int
      */
 
     CUDA_ERROR_UNSUPPORTED_PTX_VERSION        = 222,
+
+    /**
+     * This indicates that the PTX JIT compilation was disabled.
+     */
+    CUDA_ERROR_JIT_COMPILATION_DISABLED       = 223,
 
     /**
      * This indicates that the device kernel source is invalid.
@@ -2208,7 +2228,15 @@ public static final int
     /**
      * Handle is a globally shared handle referencing a D3D11 keyed mutex object
      */
-    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX_KMT = 8;
+    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX_KMT = 8,
+    /**
+     * Handle is an opaque file descriptor referencing a timeline semaphore
+     */
+    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_FD = 9,
+    /**
+     * Handle is an opaque shared NT handle referencing a timeline semaphore
+     */
+    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32 = 10;
 // Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC.java
 
 
@@ -2218,12 +2246,20 @@ public static final int
 // Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS.java
 
 
+// Targeting ../cudart/CUDA_EXT_SEM_SIGNAL_NODE_PARAMS.java
+
+
+// Targeting ../cudart/CUDA_EXT_SEM_WAIT_NODE_PARAMS.java
+
+
 
 /**
  * Flags for specifying particular handle types
  */
 /** enum CUmemAllocationHandleType_enum */
 public static final int
+    /** Does not allow any export mechanism. > */
+    CU_MEM_HANDLE_TYPE_NONE                  = 0x0,
     /** Allows a file descriptor to be used for exporting. Permitted only on POSIX systems. (int) */
     CU_MEM_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR = 0x1,
     /** Allows a Win32 NT handle to be used for exporting. (HANDLE) */
@@ -2338,12 +2374,27 @@ public static final int
     CU_GRAPH_EXEC_UPDATE_ERROR_TOPOLOGY_CHANGED      = 0x2,
     /** The update failed because a node type changed */
     CU_GRAPH_EXEC_UPDATE_ERROR_NODE_TYPE_CHANGED     = 0x3,
-    /** The update failed because the function of a kernel node changed */
+    /** The update failed because the function of a kernel node changed (CUDA driver < 11.2) */
     CU_GRAPH_EXEC_UPDATE_ERROR_FUNCTION_CHANGED      = 0x4,
     /** The update failed because the parameters changed in a way that is not supported */
     CU_GRAPH_EXEC_UPDATE_ERROR_PARAMETERS_CHANGED    = 0x5,
     /** The update failed because something about the node is not supported */
-    CU_GRAPH_EXEC_UPDATE_ERROR_NOT_SUPPORTED         = 0x6;
+    CU_GRAPH_EXEC_UPDATE_ERROR_NOT_SUPPORTED         = 0x6,
+    /** The update failed because the function of a kernel node changed in an unsupported way */
+    CU_GRAPH_EXEC_UPDATE_ERROR_UNSUPPORTED_FUNCTION_CHANGE = 0x7;
+
+/** enum CUmemPool_attribute_enum */
+public static final int
+    CU_MEMPOOL_ATTR_REUSE_FOLLOW_EVENT_DEPENDENCIES = 1,
+    CU_MEMPOOL_ATTR_REUSE_ALLOW_OPPORTUNISTIC = 2,
+    CU_MEMPOOL_ATTR_REUSE_ALLOW_INTERNAL_DEPENDENCIES = 3,
+    CU_MEMPOOL_ATTR_RELEASE_THRESHOLD = 4;
+// Targeting ../cudart/CUmemPoolProps.java
+
+
+// Targeting ../cudart/CUmemPoolPtrExportData.java
+
+
 
 /**
  * If set, each kernel launched as part of ::cuLaunchCooperativeKernelMultiDevice only
@@ -3037,7 +3088,7 @@ public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@C
  * - ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES: Device accesses pageable memory via the host's
  *   page tables.
  * - ::CU_DEVICE_ATTRIBUTE_DIRECT_MANAGED_MEM_ACCESS_FROM_HOST: The host can directly access managed memory on the device without migration.
- * - ::CU_DEVICE_ATTRIBUTE_VIRTUAL_ADDRESS_MANAGEMENT_SUPPORTED:  Device supports virtual address management APIs like ::cuMemAddressReserve, ::cuMemCreate, ::cuMemMap and related APIs
+ * - ::CU_DEVICE_ATTRIBUTE_VIRTUAL_MEMORY_MANAGEMENT_SUPPORTED:  Device supports virtual memory management APIs like ::cuMemAddressReserve, ::cuMemCreate, ::cuMemMap and related APIs
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR_SUPPORTED: Device supports exporting memory to a posix file descriptor with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_HANDLE_SUPPORTED:  Device supports exporting memory to a Win32 NT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_KMT_HANDLE_SUPPORTED: Device supports exporting memory to a Win32 KMT handle with ::cuMemExportToShareableHandle, if requested ::cuMemCreate
@@ -3046,6 +3097,7 @@ public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@C
  * - ::CU_DEVICE_ATTRIBUTE_GENERIC_COMPRESSION_SUPPORTED: Device supports compressible memory allocation via ::cuMemCreate
  * - ::CU_DEVICE_ATTRIBUTE_RESERVED_SHARED_MEMORY_PER_BLOCK: Amount of shared memory per block reserved by CUDA driver in bytes.
  * - ::CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED: Device supports using the ::cuMemHostRegister flag CU_MEMHOSTERGISTER_READ_ONLY to register memory that must be mapped as read-only to the GPU
+ * - ::CU_DEVICE_ATTRIBUTE_MEMORY_POOLS_SUPPORTED: Device supports using the ::cuMemAllocAsync and ::cuMemPool family of APIs
  *
  * @param pi     - Returned device attribute value
  * @param attrib - Device attribute to query
@@ -3121,6 +3173,58 @@ public static native @Cast("CUresult") int cuDeviceGetAttribute(int[] pi, @Cast(
  * ::cuWaitExternalSemaphoresAsync
  */
 
+
+/**
+ * \brief Sets the current memory pool of a device
+ *
+ * The memory pool must be local to the specified device.
+ * ::cuMemAllocAsync allocates from the current mempool of the provided stream's device.
+ * By default, a device's current memory pool is its default memory pool.
+ *
+ * \note Use ::cuMemAllocFromPoolAsync to specify asynchronous allocations from a device different
+ * than the one the stream runs on. 
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate, ::cuMemPoolDestroy, ::cuMemAllocFromPoolAsync
+ */
+public static native @Cast("CUresult") int cuDeviceSetMemPool(@Cast("CUdevice") int dev, CUmemPoolHandle_st pool);
+
+/**
+ * \brief Gets the current mempool for a device
+ *
+ * Returns the last pool provided to ::cuDeviceSetMemPool for this device
+ * or the device's default memory pool if ::cuDeviceSetMemPool has never been called.
+ * By default the current mempool is the default mempool for a device.
+ * Otherwise the returned pool must have been set with ::cuDeviceSetMemPool.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see ::cuDeviceGetDefaultMemPool
+ */
+public static native @Cast("CUresult") int cuDeviceGetMemPool(@ByPtrPtr CUmemPoolHandle_st pool, @Cast("CUdevice") int dev);
+
+/**
+ * \brief Returns the default mempool of a device
+ *
+ * The default mempool of a device contains device memory from that device.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_NOT_SUPPORTED
+ * \notefnerr
+ *
+ * @see ::cuMemAllocAsync, ::cuMemPoolTrimTo, ::cuMemPoolGetAttribute, ::cuMemPoolSetAttribute, cuMemPoolSetAccess
+ */
+public static native @Cast("CUresult") int cuDeviceGetDefaultMemPool(@ByPtrPtr CUmemPoolHandle_st pool_out, @Cast("CUdevice") int dev);
 
 /** \} */ /* END CUDA_DEVICE */
 
@@ -3909,6 +4013,10 @@ public static native @Cast("CUresult") int cuCtxSynchronize();
  *   Values can range from 0B to 128B. This is purely a performence hint and
  *   it can be ignored or clamped depending on the platform.
  *
+ * - ::CU_LIMIT_PERSISTING_L2_CACHE_SIZE controls size in bytes availabe for
+ *   persisting L2 cache. This is purely a performance hint and it can be
+ *   ignored or clamped depending on the platform.
+ *
  * @param limit - Limit to set
  * @param value - Size of limit
  *
@@ -3951,6 +4059,7 @@ public static native @Cast("CUresult") int cuCtxSetLimit(@Cast("CUlimit") int _l
  * - ::CU_LIMIT_DEV_RUNTIME_PENDING_LAUNCH_COUNT: maximum number of outstanding
  *   device runtime launches that can be made from this context.
  * - ::CU_LIMIT_MAX_L2_FETCH_GRANULARITY: L2 cache fetch granularity.
+ * - ::CU_LIMIT_PERSISTING_L2_CACHE_SIZE: Persisting L2 cache size in bytes
  *
  * @param limit  - Limit to query
  * @param pvalue - Returned size of limit
@@ -8052,6 +8161,39 @@ public static native @Cast("CUresult") int cuArrayGetSparseProperties(CUDA_ARRAY
 public static native @Cast("CUresult") int cuMipmappedArrayGetSparseProperties(CUDA_ARRAY_SPARSE_PROPERTIES sparseProperties, CUmipmappedArray_st mipmap);
 
 /**
+ * \brief Gets a CUDA array plane from a CUDA array
+ *
+ * Returns in \p pPlaneArray a CUDA array that represents a single format plane
+ * of the CUDA array \p hArray.
+ *
+ * If \p planeIdx is greater than the maximum number of planes in this array or if the array does
+ * not have a multi-planar format e.g: ::CU_AD_FORMAT_NV12, then ::CUDA_ERROR_INVALID_VALUE is returned.
+ *
+ * Note that if the \p hArray has format ::CU_AD_FORMAT_NV12, then passing in 0 for \p planeIdx returns
+ * a CUDA array of the same size as \p hArray but with one channel and ::CU_AD_FORMAT_UNSIGNED_INT8 as its format.
+ * If 1 is passed for \p planeIdx, then the returned CUDA array has half the height and width
+ * of \p hArray with two channels and ::CU_AD_FORMAT_UNSIGNED_INT8 as its format.
+ *
+ * @param pPlaneArray   - Returned CUDA array referenced by the \p planeIdx
+ * @param hArray        - Multiplanar CUDA array
+ * @param planeIdx      - Plane index
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_HANDLE
+ * \notefnerr
+ *
+ * @see
+ * ::cuArrayCreate,
+ * ::cudaGetArrayPlane
+ */
+public static native @Cast("CUresult") int cuArrayGetPlane(@ByPtrPtr CUarray_st pPlaneArray, CUarray_st hArray, @Cast("unsigned int") int planeIdx);
+
+/**
  * \brief Destroys a CUDA array
  *
  * Destroys the CUDA array \p hArray.
@@ -9004,6 +9146,391 @@ public static native @Cast("CUresult") int cuMemGetAllocationPropertiesFromHandl
 
 
 /** \} */ /* END CUDA_VA */
+
+/**
+ * \defgroup CUDA_MALLOC_ASYNC Stream Ordered Memory Allocator
+ *
+ * ___MANBRIEF___ Functions for performing allocation and free operations in stream order.
+ *                Functions for controlling the behavior of the underlying allocator.
+ * (___CURRENT_FILE___) __ENDMANBRIEF__
+ *
+ * This section describes the stream ordered memory allocator exposed by the
+ * low-level CUDA driver application programming interface.
+ *
+ * \{
+ *
+ * \section CUDA_MALLOC_ASYNC_overview overview
+ *
+ * The asynchronous allocator allows the user to allocate and free in stream order.
+ * All asynchronous accesses of the allocation must happen between
+ * the stream executions of the allocation and the free. If the memory is accessed
+ * outside of the promised stream order, a use before allocation / use after free error
+ * will cause undefined behavior.
+ *
+ * The allocator is free to reallocate the memory as long as it can guarantee
+ * that compliant memory accesses will not overlap temporally.
+ * The allocator may refer to internal stream ordering as well as inter-stream dependencies
+ * (such as CUDA events and null stream dependencies) when establishing the temporal guarantee.
+ * The allocator may also insert inter-stream dependencies to establish the temporal guarantee. 
+ *
+ * \section CUDA_MALLOC_ASYNC_support Supported Platforms
+ *
+ * Whether or not a device supports the integrated stream ordered memory allocator
+ * may be queried by calling ::cuDeviceGetAttribute() with the device attribute
+ * ::CU_DEVICE_ATTRIBUTE_MEMORY_POOLS_SUPPORTED
+ */
+
+/**
+ * \brief Frees memory with stream ordered semantics
+ *
+ * Inserts a free operation into \p hStream.
+ * The allocation must not be accessed after stream execution reaches the free.
+ * After this API returns, accessing the memory from any subsequent work launched on the GPU
+ * or querying its pointer attributes results in undefined behavior.
+ * 
+ * @param dptr - memory to free
+ * @param hStream - The stream establishing the stream ordering contract. 
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT (default stream specified with no current context),
+ * ::CUDA_ERROR_NOT_SUPPORTED
+ */
+public static native @Cast("CUresult") int cuMemFreeAsync(@Cast("CUdeviceptr") long dptr, CUstream_st hStream);
+
+/**
+ * \brief Allocates memory with stream ordered semantics
+ *
+ * Inserts an allocation operation into \p hStream.
+ * A pointer to the allocated memory is returned immediately in *dptr.
+ * The allocation must not be accessed until the the allocation operation completes.
+ * The allocation comes from the memory pool current to the stream's device.
+ *
+ * \note The default memory pool of a device contains device memory from that device.
+ * \note Basic stream ordering allows future work submitted into the same stream to use the allocation.
+ *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
+ *       operation completes before work submitted in a separate stream runs. 
+ *
+ * @param dptr [out]    - Returned device pointer
+ * @param bytesize [in] - Number of bytes to allocate
+ * @param hStream [in]  - The stream establishing the stream ordering contract and the memory pool to allocate from
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT (default stream specified with no current context),
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ *
+ * @see ::cuMemAllocFromPoolAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool, ::cuDeviceSetMemPool, ::cuDeviceGetMemPool, ::cuMemPoolSetAccess, ::cuMemPoolSetAttribute
+ */
+public static native @Cast("CUresult") int cuMemAllocAsync(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t") long bytesize, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemAllocAsync(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t") long bytesize, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemAllocAsync(@Cast("CUdeviceptr*") long[] dptr, @Cast("size_t") long bytesize, CUstream_st hStream);
+
+/**
+ * \brief Tries to release memory back to the OS
+ *
+ * Releases memory back to the OS until the pool contains fewer than minBytesToKeep
+ * reserved bytes, or there is no more memory that the allocator can safely release.
+ * The allocator cannot release OS allocations that back outstanding asynchronous allocations.
+ * The OS allocations may happen at different granularity from the user allocations.
+ *
+ * \note: Allocations that have not been freed count as outstanding. 
+ * \note: Allocations that have been asynchronously freed but whose completion has
+ *        not been observed on the host (eg. by a synchronize) can count as outstanding.
+ *
+ * @param pool [in]           - The memory pool to trim
+ * @param minBytesToKeep [in] - If the pool has less than minBytesToKeep reserved,
+ * the TrimTo operation is a no-op.  Otherwise the pool will be guaranteed to have
+ * at least minBytesToKeep bytes reserved after the operation.
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync
+ */
+public static native @Cast("CUresult") int cuMemPoolTrimTo(CUmemPoolHandle_st pool, @Cast("size_t") long minBytesToKeep);
+
+/**
+ * \brief Sets attributes of a memory pool
+ *
+ * Supported attributes are:
+ * - ::CU_MEMPOOL_ATTR_RELEASE_THRESHOLD: (value type = cuuint64_t)
+ *                    Amount of reserved memory in bytes to hold onto before trying
+ *                    to release memory back to the OS. When more than the release
+ *                    threshold bytes of memory are held by the memory pool, the
+ *                    allocator will try to release memory back to the OS on the
+ *                    next call to stream, event or context synchronize. (default 0)
+ * - ::CU_MEMPOOL_ATTR_REUSE_FOLLOW_EVENT_DEPENDENCIES: (value type = int)
+ *                    Allow ::cuMemAllocAsync to use memory asynchronously freed
+ *                    in another stream as long as a stream ordering dependency
+ *                    of the allocating stream on the free action exists.
+ *                    Cuda events and null stream interactions can create the required
+ *                    stream ordered dependencies. (default enabled)
+ * - ::CU_MEMPOOL_ATTR_REUSE_ALLOW_OPPORTUNISTIC: (value type = int)
+ *                    Allow reuse of already completed frees when there is no dependency
+ *                    between the free and allocation. (default enabled)
+ * - ::CU_MEMPOOL_ATTR_REUSE_ALLOW_INTERNAL_DEPENDENCIES: (value type = int)
+ *                    Allow ::cuMemAllocAsync to insert new stream dependencies
+ *                    in order to establish the stream ordering required to reuse
+ *                    a piece of memory released by ::cuMemFreeAsync (default enabled).
+ *
+ * @param pool [in]  - The memory pool to modify
+ * @param attr [in]  - The attribute to modify
+ * @param value [in] - Pointer to the value to assign
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync
+ */
+public static native @Cast("CUresult") int cuMemPoolSetAttribute(CUmemPoolHandle_st pool, @Cast("CUmemPool_attribute") int attr, Pointer value);
+
+/**
+ * \brief Gets attributes of a memory pool
+ *
+ * Supported attributes are:
+ * - ::CU_MEMPOOL_ATTR_RELEASE_THRESHOLD: (value type = cuuint64_t)
+ *                    Amount of reserved memory in bytes to hold onto before trying
+ *                    to release memory back to the OS. When more than the release
+ *                    threshold bytes of memory are held by the memory pool, the
+ *                    allocator will try to release memory back to the OS on the
+ *                    next call to stream, event or context synchronize. (default 0)
+ * - ::CU_MEMPOOL_ATTR_REUSE_FOLLOW_EVENT_DEPENDENCIES: (value type = int)
+ *                    Allow ::cuMemAllocAsync to use memory asynchronously freed
+ *                    in another stream as long as a stream ordering dependency
+ *                    of the allocating stream on the free action exists.
+ *                    Cuda events and null stream interactions can create the required
+ *                    stream ordered dependencies. (default enabled)
+ * - ::CU_MEMPOOL_ATTR_REUSE_ALLOW_OPPORTUNISTIC: (value type = int)
+ *                    Allow reuse of already completed frees when there is no dependency
+ *                    between the free and allocation. (default enabled)
+ * - ::CU_MEMPOOL_ATTR_REUSE_ALLOW_INTERNAL_DEPENDENCIES: (value type = int)
+ *                    Allow ::cuMemAllocAsync to insert new stream dependencies
+ *                    in order to establish the stream ordering required to reuse
+ *                    a piece of memory released by ::cuMemFreeAsync (default enabled).
+ *
+ * @param pool [in]   - The memory pool to get attributes of
+ * @param attr [in]   - The attribute to get 
+ * @param value [out] - Retrieved value
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool
+ */
+public static native @Cast("CUresult") int cuMemPoolGetAttribute(CUmemPoolHandle_st pool, @Cast("CUmemPool_attribute") int attr, Pointer value);
+
+/**
+ * \brief Controls visibility of pools between devices
+ *
+ * @param pool [in]  - The pool being modified
+ * @param map [in]   - Array of access descriptors. Each descriptor instructs the access to enable for a single gpu.
+ * @param count [in] - Number of descriptors in the map array.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see ::cuMemAllocAsync, cuMemFreeAsync
+ */
+public static native @Cast("CUresult") int cuMemPoolSetAccess(CUmemPoolHandle_st pool, @Const CUmemAccessDesc map, @Cast("size_t") long count);
+
+/**
+ * \brief Returns the accessibility of a pool from a device
+ *
+ * Returns the accessibility of the pool's memory from the specified location. 
+ *
+ * @param flags [out]   - the accessibility of the pool from the specified location
+ * @param memPool [in]  - the pool being queried
+ * @param location [in] - the location accessing the pool
+ */
+public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") IntPointer flags, CUmemPoolHandle_st memPool, CUmemLocation location);
+public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") IntBuffer flags, CUmemPoolHandle_st memPool, CUmemLocation location);
+public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") int[] flags, CUmemPoolHandle_st memPool, CUmemLocation location);
+
+/**
+ * \brief Creates a memory pool
+ *
+ * Creates a CUDA memory pool and returns the handle in \p pool.  The \p poolProps determines
+ * the properties of the pool such as the backing device and IPC capabilities. 
+ *
+ * By default, the pool's memory will be accessible from the device it is allocated on.
+ *
+ * \note Specifying CU_MEM_HANDLE_TYPE_NONE creates a memory pool that will not support IPC.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_NOT_SUPPORTED
+ *
+ * @see ::cuDeviceSetMemPool, ::cuMemAllocFromPoolAsync, ::cuMemPoolExportToShareableHandle
+ */
+public static native @Cast("CUresult") int cuMemPoolCreate(@ByPtrPtr CUmemPoolHandle_st pool, @Const CUmemPoolProps poolProps);
+
+/**
+ * \brief Destroys the specified memory pool
+ *
+ * If any pointers obtained from this pool haven't been freed or
+ * the pool has free operations that haven't completed
+ * when ::cuMemPoolDestroy is invoked, the function will return immediately and the
+ * resources associated with the pool will be released automatically
+ * once there are no more outstanding allocations. 
+ *
+ * Destroying the current mempool of a device sets the default mempool of
+ * that device as the current mempool for that device.
+ *
+ * \note A device's default memory pool cannot be destroyed.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see ::cuMemFreeAsync, ::cuDeviceSetMemPool, ::cuDeviceGetMemPool, ::cuDeviceGetDefaultMemPool
+ */
+public static native @Cast("CUresult") int cuMemPoolDestroy(CUmemPoolHandle_st pool);
+
+/**
+ * \brief Allocates memory from a specified pool with stream ordered semantics.
+ *
+ * Inserts an allocation operation into \p hStream.
+ * A pointer to the allocated memory is returned immediately in *dptr.
+ * The allocation must not be accessed until the the allocation operation completes.
+ * The allocation comes from the specified memory pool.
+ *
+ * \note
+ *    -  The specified memory pool may be from a device different than that of the specified \p hStream. 
+ * 
+ *    -  Basic stream ordering allows future work submitted into the same stream to use the allocation.
+ *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
+ *       operation completes before work submitted in a separate stream runs. 
+ *
+ * @param dptr [out]    - Returned device pointer
+ * @param bytesize [in] - Number of bytes to allocate
+ * @param pool [in]     - The pool to allocate from 
+ * @param hStream [in]  - The stream establishing the stream ordering semantic
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT (default stream specified with no current context),
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ *
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate, ::cuMemPoolSetAccess, ::cuMemPoolSetAttribute
+ */
+public static native @Cast("CUresult") int cuMemAllocFromPoolAsync(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t") long bytesize, CUmemPoolHandle_st pool, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemAllocFromPoolAsync(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t") long bytesize, CUmemPoolHandle_st pool, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemAllocFromPoolAsync(@Cast("CUdeviceptr*") long[] dptr, @Cast("size_t") long bytesize, CUmemPoolHandle_st pool, CUstream_st hStream);
+
+/**
+ * \brief Exports a memory pool to the requested handle type.
+ *
+ * Given an IPC capable mempool, create an OS handle to share the pool with another process.
+ * A recipient process can convert the shareable handle into a mempool with ::cuMemPoolImportFromShareableHandle.
+ * Individual pointers can then be shared with the ::cuMemPoolExportPointer and ::cuMemPoolImportPointer APIs.
+ * The implementation of what the shareable handle is and how it can be transferred is defined by the requested
+ * handle type.
+ *
+ * \note: To create an IPC capable mempool, create a mempool with a CUmemAllocationHandleType other than CU_MEM_HANDLE_TYPE_NONE.
+ *
+ * @param handle_out [out]  - Returned OS handle 
+ * @param pool [in]         - pool to export 
+ * @param handleType [in]   - the type of handle to create 
+ * @param flags [in]        - must be 0 
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ */
+public static native @Cast("CUresult") int cuMemPoolExportToShareableHandle(Pointer handle_out, CUmemPoolHandle_st pool, @Cast("CUmemAllocationHandleType") int handleType, @Cast("unsigned long long") long flags);
+
+/**
+ * \brief imports a memory pool from a shared handle.
+ *
+ * Specific allocations can be imported from the imported pool with cuMemPoolImportPointer.
+ *
+ * \note Imported memory pools do not support creating new allocations.
+ *       As such imported memory pools may not be used in cuDeviceSetMemPool
+ *       or ::cuMemAllocFromPoolAsync calls.
+ *
+ * @param pool_out [out]    - Returned memory pool
+ * @param handle [in]       - OS handle of the pool to open 
+ * @param handleType [in]   - The type of handle being imported 
+ * @param flags [in]        - must be 0 
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ */
+public static native @Cast("CUresult") int cuMemPoolImportFromShareableHandle(
+        @ByPtrPtr CUmemPoolHandle_st pool_out,
+        Pointer handle,
+        @Cast("CUmemAllocationHandleType") int handleType,
+        @Cast("unsigned long long") long flags);
+
+/**
+ * \brief Export data to share a memory pool allocation between processes.
+ *
+ * Constructs \p shareData_out for sharing a specific allocation from an already shared memory pool.
+ * The recipient process can import the allocation with the ::cuMemPoolImportPointer api.
+ * The data is not a handle and may be shared through any IPC mechanism.
+ *
+ * @param shareData_out [out] - Returned export data  
+ * @param ptr [in]            - pointer to memory being exported
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ */
+public static native @Cast("CUresult") int cuMemPoolExportPointer(CUmemPoolPtrExportData shareData_out, @Cast("CUdeviceptr") long ptr);
+
+/**
+ * \brief Import a memory pool allocation from another process.
+ *
+ * Returns in \p ptr_out a pointer to the imported memory.
+ * The imported memory must not be accessed before the allocation operation completes
+ * in the exporting process. The imported memory must be freed from all importing processes before
+ * being freed in the exporting process. The pointer may be freed with cuMemFree
+ * or cuMemFreeAsync.  If cuMemFreeAsync is used, the free must be completed
+ * on the importing process before the free operation on the exporting process.
+ *
+ * \note The cuMemFreeAsync api may be used in the exporting process before
+ *       the cuMemFreeAsync operation completes in its stream as long as the
+ *       cuMemFreeAsync in the exporting process specifies a stream with
+ *       a stream dependency on the importing process's cuMemFreeAsync.
+ *
+ * @param ptr_out [out]  - pointer to imported memory
+ * @param pool [in]      - pool from which to import
+ * @param shareData [in] - data specifying the memory to import
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ */
+public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") LongPointer ptr_out, CUmemPoolHandle_st pool, CUmemPoolPtrExportData shareData);
+public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") LongBuffer ptr_out, CUmemPoolHandle_st pool, CUmemPoolPtrExportData shareData);
+public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") long[] ptr_out, CUmemPoolHandle_st pool, CUmemPoolPtrExportData shareData);
+
+/** \} */ /* END CUDA_MALLOC_ASYNC */
 
 /**
  * \defgroup CUDA_UNIFIED Unified Addressing
@@ -11028,14 +11555,16 @@ public static native @Cast("CUresult") int cuDestroyExternalMemory(CUextMemory_s
  *
  * <pre>{@code
         typedef enum CUexternalSemaphoreHandleType_enum {
-            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD             = 1,
-            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32          = 2,
-            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT      = 3,
-            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE           = 4,
-            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE           = 5,
-            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_NVSCISYNC             = 6,
-		    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX     = 7,
-            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX_KMT = 8
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD                = 1,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32             = 2,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT         = 3,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE              = 4,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE              = 5,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_NVSCISYNC                = 6,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX        = 7,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_KEYED_MUTEX_KMT    = 8,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_FD    = 9,
+            CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32 = 10
         } CUexternalSemaphoreHandleType;
  * }</pre>
  *
@@ -11087,7 +11616,7 @@ public static native @Cast("CUresult") int cuDestroyExternalMemory(CUextMemory_s
  * If ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::type is
  * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE, then
  * ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::handle
- * represents a valid shared NT handle that is returned by 
+ * represents a valid shared NT handle that is returned by
  * ID3D11Fence::CreateSharedHandle. If
  * ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::name
  * is not NULL, then it must name a valid synchronization object that
@@ -11112,8 +11641,29 @@ public static native @Cast("CUresult") int cuDestroyExternalMemory(CUextMemory_s
  * ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::handle
  * represents a valid shared KMT handle that
  * is returned by IDXGIResource::GetSharedHandle when referring to
- * a IDXGIKeyedMutex object and 
+ * a IDXGIKeyedMutex object and
  * ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::name must be NULL.
+ * 
+ * If ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::type is
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_FD, then
+ * ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::fd must be a valid
+ * file descriptor referencing a synchronization object. Ownership of
+ * the file descriptor is transferred to the CUDA driver when the
+ * handle is imported successfully. Performing any operations on the
+ * file descriptor after it is imported results in undefined behavior.
+ * 
+ * If ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::type is
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32, then exactly one
+ * of ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::handle and
+ * ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::name must not be
+ * NULL. If
+ * ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::handle
+ * is not NULL, then it must represent a valid shared NT handle that
+ * references a synchronization object. Ownership of this handle is
+ * not transferred to CUDA after the import operation, so the
+ * application must release the handle using the appropriate system
+ * call. If ::CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC::handle::win32::name
+ * is not NULL, then it must name a valid synchronization object.
  *
  * @param extSem_out    - Returned handle to an external semaphore
  * @param semHandleDesc - Semaphore import handle descriptor
@@ -11149,7 +11699,9 @@ public static native @Cast("CUresult") int cuImportExternalSemaphore(@ByPtrPtr C
  *
  * If the semaphore object is any one of the following types:
  * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE,
- * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE,
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_FD,
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32
  * then the semaphore will be set to the value specified in
  * ::CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS::params::fence::value.
  *
@@ -11217,7 +11769,9 @@ public static native @Cast("CUresult") int cuSignalExternalSemaphoresAsync(@Cast
  *
  * If the semaphore object is any one of the following types:
  * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE,
- * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE,
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_FD,
+ * ::CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32
  * then waiting on the semaphore will wait until the value of the
  * semaphore is greater than or equal to
  * ::CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS::params::fence::value.
@@ -13142,7 +13696,7 @@ public static native @Cast("CUresult") int cuGraphAddEmptyNode(@ByPtrPtr CUgraph
  * \brief Creates an event record node and adds it to a graph
  *
  * Creates a new event record node and adds it to \p hGraph with \p numDependencies
- * dependencies specified via \p dependencies and arguments specified in \p params.
+ * dependencies specified via \p dependencies and event specified in \p event.
  * It is possible for \p numDependencies to be 0, in which case the node will be placed
  * at the root of the graph. \p dependencies may not have any duplicate entries.
  * A handle to the new node will be returned in \p phGraphNode.
@@ -13233,7 +13787,7 @@ public static native @Cast("CUresult") int cuGraphEventRecordNodeSetEvent(CUgrap
  * \brief Creates an event wait node and adds it to a graph
  *
  * Creates a new event wait node and adds it to \p hGraph with \p numDependencies
- * dependencies specified via \p dependencies and arguments specified in \p params.
+ * dependencies specified via \p dependencies and event specified in \p event.
  * It is possible for \p numDependencies to be 0, in which case the node will be placed
  * at the root of the graph. \p dependencies may not have any duplicate entries.
  * A handle to the new node will be returned in \p phGraphNode.
@@ -13320,6 +13874,206 @@ public static native @Cast("CUresult") int cuGraphEventWaitNodeGetEvent(CUgraphN
  * ::cuStreamWaitEvent
  */
 public static native @Cast("CUresult") int cuGraphEventWaitNodeSetEvent(CUgraphNode_st hNode, CUevent_st event);
+
+/**
+ * \brief Creates an external semaphore signal node and adds it to a graph
+ *
+ * Creates a new external semaphore signal node and adds it to \p hGraph with \p
+ * numDependencies dependencies specified via \p dependencies and arguments specified
+ * in \p nodeParams. It is possible for \p numDependencies to be 0, in which case the
+ * node will be placed at the root of the graph. \p dependencies may not have any
+ * duplicate entries. A handle to the new node will be returned in \p phGraphNode.
+ *
+ * @param phGraphNode     - Returns newly created node
+ * @param hGraph          - Graph to which to add the node
+ * @param dependencies    - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param nodeParams      - Parameters for the node
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphExternalSemaphoresSignalNodeGetParams,
+ * ::cuGraphExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuImportExternalSemaphore,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync,
+ * ::cuGraphCreate,
+ * ::cuGraphDestroyNode,
+ * ::cuGraphAddEventRecordNode,
+ * ::cuGraphAddEventWaitNode,
+ * ::cuGraphAddChildGraphNode,
+ * ::cuGraphAddEmptyNode,
+ * ::cuGraphAddKernelNode,
+ * ::cuGraphAddMemcpyNode,
+ * ::cuGraphAddMemsetNode,
+ */
+public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresSignalNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS nodeParams);
+
+/**
+ * \brief Returns an external semaphore signal node's parameters
+ *
+ * Returns the parameters of an external semaphore signal node \p hNode in \p params_out.
+ * The \p extSemArray and \p paramsArray returned in \p params_out,
+ * are owned by the node.  This memory remains valid until the node is destroyed or its
+ * parameters are modified, and should not be modified
+ * directly. Use ::cuGraphExternalSemaphoresSignalNodeSetParams to update the
+ * parameters of this node.
+ *
+ * @param hNode      - Node to get the parameters for
+ * @param params_out - Pointer to return the parameters
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuLaunchKernel,
+ * ::cuGraphAddExternalSemaphoresSignalNode,
+ * ::cuGraphExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync
+ */
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeGetParams(CUgraphNode_st hNode, CUDA_EXT_SEM_SIGNAL_NODE_PARAMS params_out);
+
+/**
+ * \brief Sets an external semaphore signal node's parameters
+ *
+ * Sets the parameters of an external semaphore signal node \p hNode to \p nodeParams.
+ *
+ * @param hNode      - Node to set the parameters for
+ * @param nodeParams - Parameters to copy
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_HANDLE,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddExternalSemaphoresSignalNode,
+ * ::cuGraphExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync
+ */
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeSetParams(CUgraphNode_st hNode, @Const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS nodeParams);
+
+/**
+ * \brief Creates an external semaphore wait node and adds it to a graph
+ *
+ * Creates a new external semaphore wait node and adds it to \p hGraph with \p numDependencies
+ * dependencies specified via \p dependencies and arguments specified in \p nodeParams.
+ * It is possible for \p numDependencies to be 0, in which case the node will be placed
+ * at the root of the graph. \p dependencies may not have any duplicate entries. A handle
+ * to the new node will be returned in \p phGraphNode.
+ *
+ * @param phGraphNode     - Returns newly created node
+ * @param hGraph          - Graph to which to add the node
+ * @param dependencies    - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param nodeParams      - Parameters for the node
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphExternalSemaphoresWaitNodeGetParams,
+ * ::cuGraphExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphAddExternalSemaphoresSignalNode,
+ * ::cuImportExternalSemaphore,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync,
+ * ::cuGraphCreate,
+ * ::cuGraphDestroyNode,
+ * ::cuGraphAddEventRecordNode,
+ * ::cuGraphAddEventWaitNode,
+ * ::cuGraphAddChildGraphNode,
+ * ::cuGraphAddEmptyNode,
+ * ::cuGraphAddKernelNode,
+ * ::cuGraphAddMemcpyNode,
+ * ::cuGraphAddMemsetNode,
+ */
+public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresWaitNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_EXT_SEM_WAIT_NODE_PARAMS nodeParams);
+
+/**
+ * \brief Returns an external semaphore wait node's parameters
+ *
+ * Returns the parameters of an external semaphore wait node \p hNode in \p params_out.
+ * The \p extSemArray and \p paramsArray returned in \p params_out,
+ * are owned by the node.  This memory remains valid until the node is destroyed or its
+ * parameters are modified, and should not be modified
+ * directly. Use ::cuGraphExternalSemaphoresSignalNodeSetParams to update the
+ * parameters of this node.
+ *
+ * @param hNode      - Node to get the parameters for
+ * @param params_out - Pointer to return the parameters
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuLaunchKernel,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuGraphExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync
+ */
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeGetParams(CUgraphNode_st hNode, CUDA_EXT_SEM_WAIT_NODE_PARAMS params_out);
+
+/**
+ * \brief Sets an external semaphore wait node's parameters
+ *
+ * Sets the parameters of an external semaphore wait node \p hNode to \p nodeParams.
+ *
+ * @param hNode      - Node to set the parameters for
+ * @param nodeParams - Parameters to copy
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_HANDLE,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuGraphExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync
+ */
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeSetParams(CUgraphNode_st hNode, @Const CUDA_EXT_SEM_WAIT_NODE_PARAMS nodeParams);
 
 /**
  * \brief Clones a graph
@@ -13925,6 +14679,78 @@ public static native @Cast("CUresult") int cuGraphExecEventRecordNodeSetEvent(CU
 public static native @Cast("CUresult") int cuGraphExecEventWaitNodeSetEvent(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, CUevent_st event);
 
 /**
+ * \brief Sets the parameters for an external semaphore signal node in the given graphExec
+ *
+ * Sets the parameters of an external semaphore signal node in an executable graph \p hGraphExec.
+ * The node is identified by the corresponding node \p hNode in the
+ * non-executable graph, from which the executable graph was instantiated.
+ *
+ * \p hNode must not have been removed from the original graph.
+ *
+ * The modifications only affect future launches of \p hGraphExec. Already
+ * enqueued or running launches of \p hGraphExec are not affected by this call.
+ * \p hNode is also not modified by this call.
+ *
+ * Changing \p nodeParams->numExtSems is not supported.
+ *
+ * @param hGraphExec - The executable graph in which to set the specified node
+ * @param hNode      - semaphore signal node from the graph from which graphExec was instantiated
+ * @param nodeParams - Updated Parameters to set
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddExternalSemaphoresSignalNode,
+ * ::cuImportExternalSemaphore,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync,
+ * ::cuGraphCreate,
+ * ::cuGraphDestroyNode,
+ * ::cuGraphInstantiate
+ */
+public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresSignalNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS nodeParams);
+
+/**
+ * \brief Sets the parameters for an external semaphore wait node in the given graphExec
+ *
+ * Sets the parameters of an external semaphore wait node in an executable graph \p hGraphExec.
+ * The node is identified by the corresponding node \p hNode in the
+ * non-executable graph, from which the executable graph was instantiated.
+ *
+ * \p hNode must not have been removed from the original graph.
+ *
+ * The modifications only affect future launches of \p hGraphExec. Already
+ * enqueued or running launches of \p hGraphExec are not affected by this call.
+ * \p hNode is also not modified by this call.
+ *
+ * Changing \p nodeParams->numExtSems is not supported.
+ *
+ * @param hGraphExec - The executable graph in which to set the specified node
+ * @param hNode      - semaphore wait node from the graph from which graphExec was instantiated
+ * @param nodeParams - Updated Parameters to set
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuImportExternalSemaphore,
+ * ::cuSignalExternalSemaphoresAsync,
+ * ::cuWaitExternalSemaphoresAsync,
+ * ::cuGraphCreate,
+ * ::cuGraphDestroyNode,
+ * ::cuGraphInstantiate
+ */
+public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresWaitNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_EXT_SEM_WAIT_NODE_PARAMS nodeParams);
+
+/**
  * \brief Uploads an executable graph in a stream
  *
  * Uploads \p hGraphExec to the device in \p hStream without executing it. Uploads of
@@ -14029,7 +14855,9 @@ public static native @Cast("CUresult") int cuGraphDestroy(CUgraph_st hGraph);
  * Limitations:
  *
  * - Kernel nodes:
- *   - The function must not change (same restriction as cuGraphExecKernelNodeSetParams())
+ *   - The owning context of the function cannot change.
+ *   - A node whose function originally did not use CUDA dynamic parallelism cannot be updated
+ *     to a function which uses CDP
  * - Memset and memcpy nodes:
  *   - The CUDA device(s) to which the operand(s) was allocated/mapped cannot change.
  *   - The source/destination memory must be allocated from the same contexts as the original
@@ -14040,10 +14868,6 @@ public static native @Cast("CUresult") int cuGraphDestroy(CUgraph_st hGraph);
  *     CU_MEMORYTYPE_ARRAY, etc.) is not supported.
  *
  * Note:  The API may add further restrictions in future releases.  The return code should always be checked.
- *
- * Some node types are not currently supported:
- * - Empty graph nodes(CU_GRAPH_NODE_TYPE_EMPTY)
- * - Child graphs(CU_GRAPH_NODE_TYPE_GRAPH).
  *
  * cuGraphExecUpdate sets \p updateResult_out to CU_GRAPH_EXEC_UPDATE_ERROR_TOPOLOGY_CHANGED under
  * the following conditions:
@@ -14061,8 +14885,8 @@ public static native @Cast("CUresult") int cuGraphDestroy(CUgraph_st hGraph);
  * - CU_GRAPH_EXEC_UPDATE_ERROR_TOPOLOGY_CHANGED if the graph topology changed
  * - CU_GRAPH_EXEC_UPDATE_ERROR_NODE_TYPE_CHANGED if the type of a node changed, in which case
  *   \p hErrorNode_out is set to the node from \p hGraph.
- * - CU_GRAPH_EXEC_UPDATE_ERROR_FUNCTION_CHANGED if the func field of a kernel changed, in which
- *   case \p hErrorNode_out is set to the node from \p hGraph
+ * - CU_GRAPH_EXEC_UPDATE_ERROR_UNSUPPORTED_FUNCTION_CHANGE if the function changed in an unsupported
+ *   way(see note above), in which case \p hErrorNode_out is set to the node from \p hGraph
  * - CU_GRAPH_EXEC_UPDATE_ERROR_PARAMETERS_CHANGED if any parameters to a node changed in a way 
  *   that is not supported, in which case \p hErrorNode_out is set to the node from \p hGraph.
  * - CU_GRAPH_EXEC_UPDATE_ERROR_NOT_SUPPORTED if something about a node is unsupported, like 
@@ -16315,6 +17139,7 @@ public static native @Cast("CUresult") int cuFuncGetModule(@ByPtrPtr CUmod_st hm
 // #define __location__(a)
 //         __annotate__(a)
 // #define CUDARTAPI
+// #define CUDARTAPI_CDECL
 
 // #elif defined(_MSC_VER)
 
@@ -16351,6 +17176,8 @@ public static native @Cast("CUresult") int cuFuncGetModule(@ByPtrPtr CUmod_st hm
 //         __annotate__(__##a##__)
 // #define CUDARTAPI
 //         __stdcall
+// #define CUDARTAPI_CDECL
+//         __cdecl
 
 // #else /* __GNUC__ || __CUDA_LIBDEVICE__ || __CUDACC_RTC__ */
 
@@ -17138,9 +17965,18 @@ public static final int
     cudaErrorInvalidDevice                = 101,
 
     /**
-     * This indicates that the device doesn't have valid Grid License.
+     * This indicates that the device doesn't have a valid Grid License.
      */
     cudaErrorDeviceNotLicensed            = 102,
+
+   /**
+    * By default, the CUDA runtime may perform a minimal set of self-tests,
+    * as well as CUDA driver tests, to establish the validity of both.
+    * Introduced in CUDA 11.2, this error return indicates that at least one
+    * of these tests has failed and the validity of either the runtime
+    * or the driver could not be established.
+    */
+   cudaErrorSoftwareValidityNotEstablished  = 103,
 
     /**
      * This indicates an internal startup failure in the CUDA runtime.
@@ -17267,6 +18103,13 @@ public static final int
      * than what is supported by the CUDA driver and PTX JIT compiler.
      */
     cudaErrorUnsupportedPtxVersion        = 222,
+
+    /**
+     * This indicates that the JIT compilation was disabled. The JIT compilation compiles
+     * PTX. The runtime may fall back to compiling PTX if an application does not contain
+     * a suitable binary for the current device.
+     */
+    cudaErrorJitCompilationDisabled       = 223,
 
     /**
      * This indicates that the device kernel source is invalid.
@@ -17605,7 +18448,9 @@ public static final int
     /** Float channel format */
     cudaChannelFormatKindFloat            = 2,
     /** No channel format */
-    cudaChannelFormatKindNone             = 3;
+    cudaChannelFormatKindNone             = 3,
+    /** Unsigned 8-bit integers, planar 4:2:0 YUV format */
+    cudaChannelFormatKindNV12             = 4;
 // Targeting ../cudart/cudaChannelFormatDesc.java
 
 
@@ -18244,8 +19089,93 @@ public static final int
     cudaDevAttrReservedSharedMemoryPerBlock   = 111,
     /** Device supports sparse CUDA arrays and sparse CUDA mipmapped arrays */
     cudaDevAttrSparseCudaArraySupported       = 112,
-    /** Device supports using the ::cuMemHostRegister flag CU_MEMHOSTERGISTER_READ_ONLY to register memory that must be mapped as read-only to the GPU */
-    cudaDevAttrHostRegisterReadOnlySupported  = 113;
+    /** Device supports using the ::cudaHostRegister flag cudaHostRegisterReadOnly to register memory that must be mapped as read-only to the GPU */
+    cudaDevAttrHostRegisterReadOnlySupported  = 113,
+    /** External timeline semaphore interop is supported on the device */
+    cudaDevAttrMaxTimelineSemaphoreInteropSupported = 114,
+    /** Device supports using the ::cudaMallocAsync and ::cudaMemPool family of APIs */
+    cudaDevAttrMemoryPoolsSupported           = 115;
+
+/**
+ * CUDA memory pool attributes
+ */
+/** enum cudaMemPoolAttr */
+public static final int
+    /**
+     * (value type = cuuint64_t)
+     * Amount of reserved memory in bytes to hold onto before trying
+     * to release memory back to the OS. When more than the release
+     * threshold bytes of memory are held by the memory pool, the
+     * allocator will try to release memory back to the OS on the
+     * next call to stream, event or context synchronize. (default 0)
+     */
+    cudaMemPoolReuseFollowEventDependencies   = 0x1,
+
+    /**
+     * (value type = int)
+     * Allow cuMemAllocAsync to use memory asynchronously freed
+     * in another streams as long as a stream ordering dependency
+     * of the allocating stream on the free action exists.
+     * Cuda events and null stream interactions can create the required
+     * stream ordered dependencies. (default enabled)
+     */
+    cudaMemPoolReuseAllowOpportunistic        = 0x2,
+
+    /**
+     * (value type = int)
+     * Allow reuse of already completed frees when there is no dependency
+     * between the free and allocation. (default enabled)
+     */
+    cudaMemPoolReuseAllowInternalDependencies = 0x3,
+
+
+    /**
+     * (value type = int)
+     * Allow cuMemAllocAsync to insert new stream dependencies
+     * in order to establish the stream ordering required to reuse
+     * a piece of memory released by cuFreeAsync (default enabled).
+     */
+    cudaMemPoolAttrReleaseThreshold           = 0x4;
+
+/** enum cudaMemLocationType */
+public static final int
+    cudaMemLocationTypeInvalid = 0,
+    cudaMemLocationTypeDevice = 1;
+// Targeting ../cudart/cudaMemLocation.java
+
+
+
+/** enum cudaMemAccessFlags */
+public static final int
+    cudaMemAccessFlagsProtNone = 0,
+    cudaMemAccessFlagsProtRead = 1,
+    cudaMemAccessFlagsProtReadWrite = 3;
+// Targeting ../cudart/cudaMemAccessDesc.java
+
+
+
+/** enum cudaMemAllocationType */
+public static final int
+    cudaMemAllocationTypeInvalid = 0x0,
+    cudaMemAllocationTypePinned  = 0x1,
+    cudaMemAllocationTypeMax     = 0xFFFFFFFF;
+
+/** enum cudaMemAllocationHandleType */
+public static final int
+    /** Does not allow any export mechanism. > */
+    cudaMemHandleTypeNone                    = 0x0,
+    /** Allows a file descriptor to be used for exporting. Permitted only on POSIX systems. (int) */
+    cudaMemHandleTypePosixFileDescriptor     = 0x1,
+    /** Allows a Win32 NT handle to be used for exporting. (HANDLE) */
+    cudaMemHandleTypeWin32                   = 0x2,
+    /** Allows a Win32 KMT handle to be used for exporting. (D3DKMT_HANDLE) */
+    cudaMemHandleTypeWin32Kmt                = 0x4;
+// Targeting ../cudart/cudaMemPoolProps.java
+
+
+// Targeting ../cudart/cudaMemPoolPtrExportData.java
+
+
 
 /**
  * CUDA device P2P attributes
@@ -18469,7 +19399,7 @@ public static final int
      * Handle is an opaque shared NT handle
      */
     cudaExternalSemaphoreHandleTypeOpaqueWin32    = 2,
-    /** 
+    /**
      * Handle is an opaque, globally shared handle
      */
     cudaExternalSemaphoreHandleTypeOpaqueWin32Kmt = 3,
@@ -18492,7 +19422,15 @@ public static final int
     /**
      * Handle is a shared KMT handle referencing a D3D11 keyed mutex object
      */
-    cudaExternalSemaphoreHandleTypeKeyedMutexKmt  = 8;
+    cudaExternalSemaphoreHandleTypeKeyedMutexKmt  = 8,
+    /**
+     * Handle is an opaque handle file descriptor referencing a timeline semaphore
+     */
+    cudaExternalSemaphoreHandleTypeTimelineSemaphoreFd  = 9,
+    /**
+     * Handle is an opaque handle file descriptor referencing a timeline semaphore
+     */
+    cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32  = 10;
 // Targeting ../cudart/cudaExternalSemaphoreHandleDesc.java
 
 
@@ -18549,6 +19487,10 @@ public static final int
  */
 
 /**
+ * CUDA memory pool
+ */
+
+/**
  * CUDA cooperative group scope
  */
 /** enum cudaCGScope */
@@ -18563,6 +19505,12 @@ public static final int
 
 
 // Targeting ../cudart/cudaKernelNodeParams.java
+
+
+// Targeting ../cudart/cudaExternalSemaphoreSignalNodeParams.java
+
+
+// Targeting ../cudart/cudaExternalSemaphoreWaitNodeParams.java
 
 
 
@@ -18606,12 +19554,14 @@ public static final int
     cudaGraphExecUpdateErrorTopologyChanged   = 0x2,
     /** The update failed because a node type changed */
     cudaGraphExecUpdateErrorNodeTypeChanged   = 0x3,
-    /** The update failed because the function of a kernel node changed */
+    /** The update failed because the function of a kernel node changed (CUDA driver < 11.2) */
     cudaGraphExecUpdateErrorFunctionChanged   = 0x4,
     /** The update failed because the parameters changed in a way that is not supported */
     cudaGraphExecUpdateErrorParametersChanged = 0x5,
     /** The update failed because something about the node is not supported */
-    cudaGraphExecUpdateErrorNotSupported      = 0x6;
+    cudaGraphExecUpdateErrorNotSupported      = 0x6,
+    /** The update failed because the function of a kernel node changed in an unsupported way */
+    cudaGraphExecUpdateErrorUnsupportedFunctionChange = 0x7;
 
 /** \} */
 /** \} */ /* END CUDART_TYPES */
@@ -19260,6 +20210,8 @@ public static final int
  * Users Notice.
  */
 
+
+
 // #if !defined(__CUDA_RUNTIME_API_H__)
 // #define __CUDA_RUNTIME_API_H__
 
@@ -19346,7 +20298,7 @@ public static final int
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  11010;
+public static final int CUDART_VERSION =  11020;
 
 // #if defined(__CUDA_API_VER_MAJOR__) && defined(__CUDA_API_VER_MINOR__)
 public static native @MemberGetter int __CUDART_API_VERSION();
@@ -19360,13 +20312,11 @@ public static final int __CUDART_API_VERSION = __CUDART_API_VERSION();
 // #include "cuda_device_runtime_api.h"
 
 // #if defined(CUDA_API_PER_THREAD_DEFAULT_STREAM) || defined(__CUDA_API_VERSION_INTERNAL)
-//     #define __CUDART_API_PER_THREAD_DEFAULT_STREAM
-//     #define __CUDART_API_PTDS(api) api ## _ptds
-//     #define __CUDART_API_PTSZ(api) api ## _ptsz
 // #else
 //     #define __CUDART_API_PTDS(api) api
 //     #define __CUDART_API_PTSZ(api) api
 // #endif
+
 
 // #if defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)
 // #endif
@@ -19536,8 +20486,8 @@ public static native @Cast("cudaError_t") int cudaDeviceSynchronize();
  *   Values can range from 0B to 128B. This is purely a performance hint and
  *   it can be ignored or clamped depending on the platform.
  *
- * - cudaLimitPersistingL2CacheSize controls size of window in bytes available
- *   for ::cudaAccessPolicyWindow. This is purely a performance hint and it
+ * - ::cudaLimitPersistingL2CacheSize controls size in bytes available
+ *   for persisting L2 cache. This is purely a performance hint and it
  *   can be ignored or clamped depending on the platform.
  *
  * @param limit - Limit to set
@@ -19574,7 +20524,7 @@ public static native @Cast("cudaError_t") int cudaDeviceSetLimit(@Cast("cudaLimi
  * - ::cudaLimitDevRuntimePendingLaunchCount: maximum number of outstanding
  *   device runtime launches.
  * - ::cudaLimitMaxL2FetchGranularity: L2 cache fetch granularity.
- * - ::cudaLimitPersistingL2CacheSize: L2 cache persistings size in bytes
+ * - ::cudaLimitPersistingL2CacheSize: Persisting L2 cache size in bytes
  *
  * @param limit  - Limit to query
  * @param pValue - Returned size of the limit
@@ -19643,7 +20593,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetLimit(@Cast("size_t*"
  * \note_init_rt
  * \note_callback
  *
- * @see cudaDeviceSetCacheConfig,
+ * @see ::cudaDeviceSetCacheConfig,
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)",
  * ::cuCtxGetCacheConfig
@@ -20111,6 +21061,7 @@ public static native @Cast("cudaError_t") int cudaIpcCloseMemHandle(Pointer devP
 
 /** \} */ /* END CUDART_DEVICE */
 
+
 /**
  * \defgroup CUDART_THREAD_DEPRECATED Thread Management [DEPRECATED]
  *
@@ -20346,6 +21297,8 @@ public static native @Cast("cudaError_t") @Deprecated int cudaThreadSetCacheConf
 
 /** \} */ /* END CUDART_THREAD_DEPRECATED */
 
+
+
 /**
  * \defgroup CUDART_ERROR Error Handling
  *
@@ -20395,7 +21348,8 @@ public static native @Cast("cudaError_t") @Deprecated int cudaThreadSetCacheConf
  * ::cudaErrorInvalidPtx,
  * ::cudaErrorUnsupportedPtxVersion,
  * ::cudaErrorNoKernelImageForDevice,
- * ::cudaErrorJitCompilerNotFound
+ * ::cudaErrorJitCompilerNotFound,
+ * ::cudaErrorJitCompilationDisabled
  * \notefnerr
  * \note_init_rt
  * \note_callback
@@ -20442,7 +21396,8 @@ public static native @Cast("cudaError_t") int cudaGetLastError();
  * ::cudaErrorInvalidPtx,
  * ::cudaErrorUnsupportedPtxVersion,
  * ::cudaErrorNoKernelImageForDevice,
- * ::cudaErrorJitCompilerNotFound
+ * ::cudaErrorJitCompilerNotFound,
+ * ::cudaErrorJitCompilationDisabled
  * \notefnerr
  * \note_init_rt
  * \note_callback
@@ -20986,6 +21941,67 @@ public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(IntPointer 
 public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(IntBuffer value, @Cast("cudaDeviceAttr") int attr, int device);
 public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(int[] value, @Cast("cudaDeviceAttr") int attr, int device);
 
+/**
+ * \brief Returns the default mempool of a device
+ *
+ * The default mempool of a device contains device memory from that device.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidDevice,
+ * ::cudaErrorInvalidValue
+ * ::cudaErrorNotSupported
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see ::cuDeviceGetDefaultMemPool, ::cudaMallocAsync, ::cudaMemPoolTrimTo, ::cudaMemPoolGetAttribute, ::cudaMemPoolSetAttribute, ::cudaMemPoolSetAccess
+ */
+public static native @Cast("cudaError_t") int cudaDeviceGetDefaultMemPool(@ByPtrPtr CUmemPoolHandle_st memPool, int device);
+
+
+/**
+ * \brief Sets the current memory pool of a device
+ *
+ * The memory pool must be local to the specified device.
+ * Unless a mempool is specified in the ::cudaMallocAsync call,
+ * ::cudaMallocAsync allocates from the current mempool of the provided stream's device.
+ * By default, a device's current memory pool is its default memory pool.
+ *
+ * \note Use ::cudaMallocFromPoolAsync to specify asynchronous allocations from a device different
+ * than the one the stream runs on.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * ::cudaErrorInvalidDevice
+ * ::cudaErrorNotSupported
+ * \notefnerr
+ * \note_callback
+ *
+ * @see ::cuDeviceSetDefaultMemPool, ::cudaDeviceGetDefaultMemPool, ::cudaMemPoolCreate, ::cudaMemPoolDestroy, ::cudaMallocFromPoolAsync
+ */
+public static native @Cast("cudaError_t") int cudaDeviceSetMemPool(int device, CUmemPoolHandle_st memPool);
+
+/**
+ * \brief Gets the current mempool for a device
+ *
+ * Returns the last pool provided to ::cudaDeviceSetMemPool for this device
+ * or the device's default memory pool if ::cudaDeviceSetMemPool has never been called.
+ * By default the current mempool is the default mempool for a device,
+ * otherwise the returned pool must have been set with ::cuDeviceSetMemPool or ::cudaDeviceSetMemPool.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * ::cudaErrorNotSupported
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see ::cuDeviceGetMemPool
+ */
+public static native @Cast("cudaError_t") int cudaDeviceGetMemPool(@ByPtrPtr CUmemPoolHandle_st memPool, int device);
 
 /**
  * \brief Return NvSciSync attributes that this device can support.
@@ -21830,8 +22846,12 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  * @see ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamWaitEvent, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy, ::cudaMallocManaged,
  * ::cuStreamAttachMemAsync
  */
+// #if defined(__cplusplus)
 public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr, @Cast("size_t") long length/*=0*/, @Cast("unsigned int") int flags/*=cudaMemAttachSingle*/);
 public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr);
+// #else
+public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr, @Cast("unsigned int") int flags);
+// #endif
 
 /**
  * \brief Begins graph capture on a stream
@@ -22665,14 +23685,16 @@ public static native @Cast("cudaError_t") int cudaDestroyExternalMemory(CUextern
  *
  * <pre>{@code
         typedef enum cudaExternalSemaphoreHandleType_enum {
-            cudaExternalSemaphoreHandleTypeOpaqueFd       = 1,
-            cudaExternalSemaphoreHandleTypeOpaqueWin32    = 2,
-            cudaExternalSemaphoreHandleTypeOpaqueWin32Kmt = 3,
-            cudaExternalSemaphoreHandleTypeD3D12Fence     = 4,
-		    cudaExternalSemaphoreHandleTypeD3D11Fence     = 5,
-            cudaExternalSemaphoreHandleTypeNvSciSync      = 6,
-            cudaExternalSemaphoreHandleTypeKeyedMutex     = 7,
-            cudaExternalSemaphoreHandleTypeKeyedMutexKmt  = 8
+            cudaExternalSemaphoreHandleTypeOpaqueFd                = 1,
+            cudaExternalSemaphoreHandleTypeOpaqueWin32             = 2,
+            cudaExternalSemaphoreHandleTypeOpaqueWin32Kmt          = 3,
+            cudaExternalSemaphoreHandleTypeD3D12Fence              = 4,
+            cudaExternalSemaphoreHandleTypeD3D11Fence              = 5,
+            cudaExternalSemaphoreHandleTypeNvSciSync               = 6,
+            cudaExternalSemaphoreHandleTypeKeyedMutex              = 7,
+            cudaExternalSemaphoreHandleTypeKeyedMutexKmt           = 8,
+            cudaExternalSemaphoreHandleTypeTimelineSemaphoreFd     = 9,
+            cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32  = 10
         } cudaExternalSemaphoreHandleType;
  * }</pre>
  *
@@ -22738,7 +23760,7 @@ public static native @Cast("cudaError_t") int cudaDestroyExternalMemory(CUextern
  * ::cudaExternalSemaphoreHandleDesc::handle::win32::name must not be
  * NULL. If ::cudaExternalSemaphoreHandleDesc::handle::win32::handle
  * is not NULL, then it represent a valid shared NT handle that
- * is returned by IDXGIResource1::CreateSharedHandle when referring to  
+ * is returned by IDXGIResource1::CreateSharedHandle when referring to
  * a IDXGIKeyedMutex object.
  *
  * If ::cudaExternalSemaphoreHandleDesc::type is
@@ -22748,6 +23770,26 @@ public static native @Cast("cudaError_t") int cudaDestroyExternalMemory(CUextern
  * must be NULL. The handle specified must represent a valid KMT
  * handle that is returned by IDXGIResource::GetSharedHandle when
  * referring to a IDXGIKeyedMutex object.
+ *
+ * If ::cudaExternalSemaphoreHandleDesc::type is
+ * ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreFd, then
+ * ::cudaExternalSemaphoreHandleDesc::handle::fd must be a valid file
+ * descriptor referencing a synchronization object. Ownership of the
+ * file descriptor is transferred to the CUDA driver when the handle
+ * is imported successfully. Performing any operations on the file
+ * descriptor after it is imported results in undefined behavior.
+ *
+ * If ::cudaExternalSemaphoreHandleDesc::type is
+ * ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32, then exactly one of
+ * ::cudaExternalSemaphoreHandleDesc::handle::win32::handle and
+ * ::cudaExternalSemaphoreHandleDesc::handle::win32::name must not be
+ * NULL. If ::cudaExternalSemaphoreHandleDesc::handle::win32::handle
+ * is not NULL, then it must represent a valid shared NT handle that
+ * references a synchronization object. Ownership of this handle is
+ * not transferred to CUDA after the import operation, so the
+ * application must release the handle using the appropriate system
+ * call. If ::cudaExternalSemaphoreHandleDesc::handle::win32::name is
+ * not NULL, then it must name a valid synchronization object.
  *
  * @param extSem_out    - Returned handle to an external semaphore
  * @param semHandleDesc - Semaphore import handle descriptor
@@ -22783,7 +23825,9 @@ public static native @Cast("cudaError_t") int cudaImportExternalSemaphore(@ByPtr
  *
  * If the semaphore object is any one of the following types:
  * ::cudaExternalSemaphoreHandleTypeD3D12Fence,
- * ::cudaExternalSemaphoreHandleTypeD3D11Fence
+ * ::cudaExternalSemaphoreHandleTypeD3D11Fence,
+ * ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreFd,
+ * ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32
  * then the semaphore will be set to the value specified in
  * ::cudaExternalSemaphoreSignalParams::params::fence::value.
  *
@@ -22852,7 +23896,9 @@ public static native @Cast("cudaError_t") int cudaSignalExternalSemaphoresAsync(
  *
  * If the semaphore object is any one of the following types:
  * ::cudaExternalSemaphoreHandleTypeD3D12Fence,
- * ::cudaExternalSemaphoreHandleTypeD3D11Fence
+ * ::cudaExternalSemaphoreHandleTypeD3D11Fence,
+ * ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreFd,
+ * ::cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32
  * then waiting on the semaphore will wait until the value of the
  * semaphore is greater than or equal to
  * ::cudaExternalSemaphoreWaitParams::params::fence::value.
@@ -22983,7 +24029,8 @@ public static native @Cast("cudaError_t") int cudaDestroyExternalSemaphore(CUext
  * ::cudaErrorInvalidPtx,
  * ::cudaErrorUnsupportedPtxVersion,
  * ::cudaErrorNoKernelImageForDevice,
- * ::cudaErrorJitCompilerNotFound
+ * ::cudaErrorJitCompilerNotFound,
+ * ::cudaErrorJitCompilationDisabled
  * \note_null_stream
  * \notefnerr
  * \note_init_rt
@@ -23195,8 +24242,6 @@ public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernelMultiDe
  * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
  * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
- * ::cudaSetDoubleForDevice,
- * ::cudaSetDoubleForHost,
  * ::cudaThreadGetCacheConfig,
  * ::cudaThreadSetCacheConfig,
  * ::cuFuncSetCacheConfig
@@ -23287,8 +24332,6 @@ public static native @Cast("cudaError_t") int cudaFuncSetSharedMemConfig(@Const 
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, T*) "cudaFuncGetAttributes (C++ API)",
  * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
- * ::cudaSetDoubleForDevice,
- * ::cudaSetDoubleForHost,
  * ::cuFuncGetAttribute
  */
 public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttributes attr, @Const Pointer func);
@@ -23327,10 +24370,10 @@ public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttr
  * \ref ::cudaLaunchKernel(const T *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C++ API)",
  * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * ::cudaSetDoubleForDevice,
- * ::cudaSetDoubleForHost
  */
 public static native @Cast("cudaError_t") int cudaFuncSetAttribute(@Const Pointer func, @Cast("cudaFuncAttribute") int attr, int value);
+
+
 
 /**
  * \brief Converts a double argument to be executed on a device
@@ -23383,6 +24426,8 @@ public static native @Cast("cudaError_t") @Deprecated int cudaSetDoubleForDevice
 public static native @Cast("cudaError_t") @Deprecated int cudaSetDoubleForHost(DoublePointer d);
 public static native @Cast("cudaError_t") @Deprecated int cudaSetDoubleForHost(DoubleBuffer d);
 public static native @Cast("cudaError_t") @Deprecated int cudaSetDoubleForHost(double[] d);
+
+
 
 /**
  * \brief Enqueues a host function call in a stream
@@ -23703,10 +24748,12 @@ public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMul
  * ::cudaFreeHost, ::cudaHostAlloc, ::cudaDeviceGetAttribute, ::cudaStreamAttachMemAsync,
  * ::cuMemAllocManaged
  */
+// #if defined(__cplusplus)
 public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") PointerPointer devPtr, @Cast("size_t") long size, @Cast("unsigned int") int flags/*=cudaMemAttachGlobal*/);
 public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size);
 public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size, @Cast("unsigned int") int flags/*=cudaMemAttachGlobal*/);
-
+// #else
+// #endif
 
 /**
  * \brief Allocate memory on the device
@@ -24907,6 +25954,35 @@ public static native @Cast("cudaError_t") int cudaMemGetInfo(@Cast("size_t*") Si
 public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormatDesc desc, cudaExtent extent, @Cast("unsigned int*") IntPointer flags, cudaArray array);
 public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormatDesc desc, cudaExtent extent, @Cast("unsigned int*") IntBuffer flags, cudaArray array);
 public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormatDesc desc, cudaExtent extent, @Cast("unsigned int*") int[] flags, cudaArray array);
+
+/**
+ * \brief Gets a CUDA array plane from a CUDA array
+ *
+ * Returns in \p pPlaneArray a CUDA array that represents a single format plane
+ * of the CUDA array \p hArray.
+ *
+ * If \p planeIdx is greater than the maximum number of planes in this array or if the array does
+ * not have a multi-planar format e.g: ::cudaChannelFormatKindNV12, then ::cudaErrorInvalidValue is returned.
+ *
+ * Note that if the \p hArray has format ::cudaChannelFormatKindNV12, then passing in 0 for \p planeIdx returns
+ * a CUDA array of the same size as \p hArray but with one 8-bit channel and ::cudaChannelFormatKindUnsigned as its format kind.
+ * If 1 is passed for \p planeIdx, then the returned CUDA array has half the height and width
+ * of \p hArray with two 8-bit channels and ::cudaChannelFormatKindUnsigned as its format kind.
+ *
+ * @param pPlaneArray   - Returned CUDA array referenced by the \p planeIdx
+ * @param hArray        - CUDA array
+ * @param planeIdx      - Plane index
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * ::cudaErrorInvalidResourceHandle
+ * \notefnerr
+ *
+ * @see
+ * ::cuArrayGetPlane
+ */
+public static native @Cast("cudaError_t") int cudaArrayGetPlane(@ByPtrPtr cudaArray pPlaneArray, cudaArray hArray, @Cast("unsigned int") int planeIdx);
 
 /**
  * \brief Returns the layout properties of a sparse CUDA array
@@ -26548,6 +27624,400 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyFromArrayAsy
 /** \} */ /* END CUDART_MEMORY_DEPRECATED */
 
 /**
+ * \defgroup CUDART_MEMORY_POOLS Stream Ordered Memory Allocator 
+ *
+ * ___MANBRIEF___ Functions for performing allocation and free operations in stream order.
+ *                Functions for controlling the behavior of the underlying allocator.
+ * (___CURRENT_FILE___) ___ENDMANBRIEF___
+ * 
+ *
+ * \{
+ *
+ * \section CUDART_MEMORY_POOLS_overview overview
+ *
+ * The asynchronous allocator allows the user to allocate and free in stream order.
+ * All asynchronous accesses of the allocation must happen between
+ * the stream executions of the allocation and the free. If the memory is accessed
+ * outside of the promised stream order, a use before allocation / use after free error
+ * will cause undefined behavior.
+ *
+ * The allocator is free to reallocate the memory as long as it can guarantee
+ * that compliant memory accesses will not overlap temporally.
+ * The allocator may refer to internal stream ordering as well as inter-stream dependencies
+ * (such as CUDA events and null stream dependencies) when establishing the temporal guarantee.
+ * The allocator may also insert inter-stream dependencies to establish the temporal guarantee.
+ *
+ * \section CUDART_MEMORY_POOLS_support Supported Platforms
+ *
+ * Whether or not a device supports the integrated stream ordered memory allocator
+ * may be queried by calling ::cudaDeviceGetAttribute() with the device attribute
+ * ::cudaDevAttrMemoryPoolsSupported.
+ */
+
+/**
+ * \brief Allocates memory with stream ordered semantics
+ *
+ * Inserts an allocation operation into \p hStream.
+ * A pointer to the allocated memory is returned immediately in *dptr.
+ * The allocation must not be accessed until the the allocation operation completes.
+ * The allocation comes from the memory pool associated with the stream's device.
+ *
+ * \note The default memory pool of a device contains device memory from that device.
+ * \note Basic stream ordering allows future work submitted into the same stream to use the allocation.
+ *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
+ *       operation completes before work submitted in a separate stream runs.
+ *
+ * @param devPtr [out]  - Returned device pointer
+ * @param size [in]     - Number of bytes to allocate
+ * @param hStream [in]  - The stream establishing the stream ordering contract and the memory pool to allocate from
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorOutOfMemory,
+ * \notefnerr
+ * \note_null_stream
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see ::cuMemAllocAsync, ::cudaMallocFromPoolAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceSetMemPool, ::cudaDeviceGetMemPool, ::cudaMemPoolSetAccess, ::cudaMemPoolSetAttribute, ::cudaMemPoolGetAttribute
+ */
+public static native @Cast("cudaError_t") int cudaMallocAsync(@Cast("void**") PointerPointer devPtr, @Cast("size_t") long size, CUstream_st hStream);
+public static native @Cast("cudaError_t") int cudaMallocAsync(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size, CUstream_st hStream);
+
+/**
+ * \brief Frees memory with stream ordered semantics
+ *
+ * Inserts a free operation into \p hStream.
+ * The allocation must not be accessed after stream execution reaches the free.
+ * After this API returns, accessing the memory from any subsequent work launched on the GPU
+ * or querying its pointer attributes results in undefined behavior.
+ *
+ * @param dptr - memory to free
+ * @param hStream - The stream establishing the stream ordering promise
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotSupported
+ * \notefnerr
+ * \note_null_stream
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see ::cuMemFreeAsync, ::cudaMallocAsync
+ */
+public static native @Cast("cudaError_t") int cudaFreeAsync(Pointer devPtr, CUstream_st hStream);
+
+/**
+ * \brief Tries to release memory back to the OS
+ *
+ * Releases memory back to the OS until the pool contains fewer than minBytesToKeep
+ * reserved bytes, or there is no more memory that the allocator can safely release.
+ * The allocator cannot release OS allocations that back outstanding asynchronous allocations.
+ * The OS allocations may happen at different granularity from the user allocations.
+ *
+ * \note: Allocations that have not been freed count as outstanding.
+ * \note: Allocations that have been asynchronously freed but whose completion has
+ *        not been observed on the host (eg. by a synchronize) can count as outstanding.
+ *
+ * @param pool [in]           - The memory pool to trim
+ * @param minBytesToKeep [in] - If the pool has less than minBytesToKeep reserved,
+ * the TrimTo operation is a no-op.  Otherwise the pool will be guaranteed to have
+ * at least minBytesToKeep bytes reserved after the operation.
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * \note_callback
+ *
+ * @see ::cuMemPoolTrimTo, ::cudaMallocAsync, ::cudaFreeAsync
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolTrimTo(CUmemPoolHandle_st memPool, @Cast("size_t") long minBytesToKeep);
+
+/**
+ * \brief Sets attributes of a memory pool
+ *
+ * Supported attributes are:
+ * - ::cudaMemPoolAttrReleaseThreshold: (value type = cuuint64_t)
+ *                    Amount of reserved memory in bytes to hold onto before trying
+ *                    to release memory back to the OS. When more than the release
+ *                    threshold bytes of memory are held by the memory pool, the
+ *                    allocator will try to release memory back to the OS on the
+ *                    next call to stream, event or context synchronize. (default 0)
+ * - ::cudaMemPoolReuseFollowEventDependencies: (value type = int)
+ *                    Allow ::cudaMallocAsync to use memory asynchronously freed
+ *                    in another stream as long as a stream ordering dependency
+ *                    of the allocating stream on the free action exists.
+ *                    Cuda events and null stream interactions can create the required
+ *                    stream ordered dependencies. (default enabled)
+ * - ::cudaMemPoolReuseAllowOpportunistic: (value type = int)
+ *                    Allow reuse of already completed frees when there is no dependency
+ *                    between the free and allocation. (default enabled)
+ * - ::cudaMemPoolReuseAllowInternalDependencies: (value type = int)
+ *                    Allow ::cudaMallocAsync to insert new stream dependencies
+ *                    in order to establish the stream ordering required to reuse
+ *                    a piece of memory released by ::cudaFreeAsync (default enabled).
+ *
+ * @param pool [in]  - The memory pool to modify
+ * @param attr [in]  - The attribute to modify
+ * @param value [in] - Pointer to the value to assign
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * \note_callback
+ *
+ * @see ::cuMemPoolSetAttribute, ::cudaAllocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolSetAttribute(CUmemPoolHandle_st memPool, @Cast("cudaMemPoolAttr") int attr, Pointer value );
+
+/**
+ * \brief Sets attributes of a memory pool
+ *
+ * Supported attributes are:
+ * - ::cudaMemPoolAttrReleaseThreshold: (value type = cuuint64_t)
+ *                    Amount of reserved memory in bytes to hold onto before trying
+ *                    to release memory back to the OS. When more than the release
+ *                    threshold bytes of memory are held by the memory pool, the
+ *                    allocator will try to release memory back to the OS on the
+ *                    next call to stream, event or context synchronize. (default 0)
+ * - ::cudaMemPoolReuseFollowEventDependencies: (value type = int)
+ *                    Allow ::cudaMallocAsync to use memory asynchronously freed
+ *                    in another stream as long as a stream ordering dependency
+ *                    of the allocating stream on the free action exists.
+ *                    Cuda events and null stream interactions can create the required
+ *                    stream ordered dependencies. (default enabled)
+ * - ::cudaMemPoolReuseAllowOpportunistic: (value type = int)
+ *                    Allow reuse of already completed frees when there is no dependency
+ *                    between the free and allocation. (default enabled)
+ * - ::cudaMemPoolReuseAllowInternalDependencies: (value type = int)
+ *                    Allow ::cudaMallocAsync to insert new stream dependencies
+ *                    in order to establish the stream ordering required to reuse
+ *                    a piece of memory released by ::cudaFreeAsync (default enabled).
+ *
+ * @param pool [in]  - The memory pool to get attributes of 
+ * @param attr [in]  - The attribute to get
+ * @param value [in] - Retrieved value 
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * \note_callback
+ *
+ * @see ::cuMemPoolGetAttribute, ::cudaAllocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolGetAttribute(CUmemPoolHandle_st memPool, @Cast("cudaMemPoolAttr") int attr, Pointer value );
+
+/**
+ * \brief Controls visibility of pools between devices
+ *
+ * @param pool [in]  - The pool being modified
+ * @param map [in]   - Array of access descriptors. Each descriptor instructs the access to enable for a single gpu
+ * @param count [in] - Number of descriptors in the map array.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see ::cuMemPoolSetAccess, ::cudaMemPoolGetAcces, ::cudaMallocAsync, cudaMemFreeAsync
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolSetAccess(CUmemPoolHandle_st memPool, @Const cudaMemAccessDesc descList, @Cast("size_t") long count);
+
+/**
+ * \brief Returns the accessibility of a pool from a device
+ *
+ * Returns the accessibility of the pool's memory from the specified location.
+ *
+ * @param flags [out]   - the accessibility of the pool from the specified location
+ * @param memPool [in]  - the pool being queried
+ * @param location [in] - the location accessing the pool
+ *
+ * @see ::cuMemPoolGetAccess, ::cudaMemPoolSetAccess
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolGetAccess(@Cast("cudaMemAccessFlags*") IntPointer flags, CUmemPoolHandle_st memPool, cudaMemLocation location);
+public static native @Cast("cudaError_t") int cudaMemPoolGetAccess(@Cast("cudaMemAccessFlags*") IntBuffer flags, CUmemPoolHandle_st memPool, cudaMemLocation location);
+public static native @Cast("cudaError_t") int cudaMemPoolGetAccess(@Cast("cudaMemAccessFlags*") int[] flags, CUmemPoolHandle_st memPool, cudaMemLocation location);
+
+/**
+ * \brief Creates a memory pool
+ *
+ * Creates a CUDA memory pool and returns the handle in \p pool.  The \p poolProps determines
+ * the properties of the pool such as the backing device and IPC capabilities.
+ *
+ * By default, the pool's memory will be accessible from the device it is allocated on.
+ *
+ * \note Specifying cudaMemHandleTypeNone creates a memory pool that will not support IPC.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotSupported
+ *
+ * @see ::cuMemPoolCreate, ::cudaDeviceSetMemPool, ::cudaMallocFromPoolAsync, ::cudaMemPoolExportToShareableHandle
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolCreate(@ByPtrPtr CUmemPoolHandle_st memPool, @Const cudaMemPoolProps poolProps);
+
+/**
+ * \brief Destroys the specified memory pool 
+ *
+ * If any pointers obtained from this pool haven't been freed or
+ * the pool has free operations that haven't completed
+ * when ::cudaMemPoolDestroy is invoked, the function will return immediately and the
+ * resources associated with the pool will be released automatically
+ * once there are no more outstanding allocations.
+ *
+ * Destroying the current mempool of a device sets the default mempool of
+ * that device as the current mempool for that device.
+ *
+ * \note A device's default memory pool cannot be destroyed.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see cuMemPoolDestroy, ::cudaFreeAsync, ::cudaDeviceSetMemPool, ::cudaDeviceGetMemPool, ::cudaDeviceGetDefaultMemPool
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolDestroy(CUmemPoolHandle_st memPool);
+
+/**
+ * \brief Allocates memory from a specified pool with stream ordered semantics.
+ *
+ * Inserts an allocation operation into \p hStream.
+ * A pointer to the allocated memory is returned immediately in *dptr.
+ * The allocation must not be accessed until the the allocation operation completes.
+ * The allocation comes from the specified memory pool.
+ *
+ * \note
+ *    -  The specified memory pool may be from a device different than that of the specified \p hStream.
+ *
+ *    -  Basic stream ordering allows future work submitted into the same stream to use the allocation.
+ *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
+ *       operation completes before work submitted in a separate stream runs.
+ *
+ * @param ptr [out]     - Returned device pointer
+ * @param bytesize [in] - Number of bytes to allocate
+ * @param memPool [in]  - The pool to allocate from
+ * @param stream [in]   - The stream establishing the stream ordering semantic
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorOutOfMemory
+ *
+ * @see ::cuMemAllocFromPoolAsync, ::cudaMallocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaMemPoolCreate, ::cudaMemPoolSetAccess, ::cudaMemPoolSetAttribute
+ */
+public static native @Cast("cudaError_t") int cudaMallocFromPoolAsync(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size, CUmemPoolHandle_st memPool, CUstream_st stream);
+public static native @Cast("cudaError_t") int cudaMallocFromPoolAsync(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size, CUmemPoolHandle_st memPool, CUstream_st stream);
+
+/**
+ * \brief Exports a memory pool to the requested handle type.
+ *
+ * Given an IPC capable mempool, create an OS handle to share the pool with another process.
+ * A recipient process can convert the shareable handle into a mempool with ::cudaMemPoolImportFromShareableHandle.
+ * Individual pointers can then be shared with the ::cudaMemPoolExportPointer and ::cudaMemPoolImportPointer APIs.
+ * The implementation of what the shareable handle is and how it can be transferred is defined by the requested
+ * handle type.
+ *
+ * \note: To create an IPC capable mempool, create a mempool with a CUmemAllocationHandleType other than cudaMemHandleTypeNone.
+ *
+ * @param handle_out [out]  - Returned OS handle
+ * @param pool [in]         - pool to export
+ * @param handleType [in]   - the type of handle to create
+ * @param flags [in]        - must be 0
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorOutOfMemory
+ *
+ * @see ::cuMemPoolExportToShareableHandle, ::cudaMemPoolImportFromShareableHandle, ::cudaMemPoolExportPointer, ::cudaMemPoolImportPointer
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolExportToShareableHandle(
+    Pointer shareableHandle,
+    CUmemPoolHandle_st memPool,
+    @Cast("cudaMemAllocationHandleType") int handleType,
+    @Cast("unsigned int") int flags);
+
+/**
+ * \brief imports a memory pool from a shared handle.
+ *
+ * Specific allocations can be imported from the imported pool with ::cudaMemPoolImportPointer.
+ *
+ * \note Imported memory pools do not support creating new allocations.
+ *       As such imported memory pools may not be used in ::cudaDeviceSetMemPool
+ *       or ::cudaMallocFromPoolAsync calls.
+ *
+ * @param pool_out [out]    - Returned memory pool
+ * @param handle [in]       - OS handle of the pool to open
+ * @param handleType [in]   - The type of handle being imported
+ * @param flags [in]        - must be 0
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorOutOfMemory
+ *
+ * @see ::cuMemPoolImportFromShareableHandle, ::cudaMemPoolExportToShareableHandle, ::cudaMemPoolExportPointer, ::cudaMemPoolImportPointer
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolImportFromShareableHandle(
+    @ByPtrPtr CUmemPoolHandle_st memPool,
+    Pointer shareableHandle,
+    @Cast("cudaMemAllocationHandleType") int handleType,
+    @Cast("unsigned int") int flags);
+
+/**
+ * \brief Export data to share a memory pool allocation between processes.
+ *
+ * Constructs \p shareData_out for sharing a specific allocation from an already shared memory pool.
+ * The recipient process can import the allocation with the ::cudaMemPoolImportPointer api.
+ * The data is not a handle and may be shared through any IPC mechanism.
+ *
+ * @param shareData_out [out] - Returned export data
+ * @param ptr [in]            - pointer to memory being exported
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorOutOfMemory
+ *
+ * @see ::cuMemPoolExportPointer, ::cudaMemPoolExportToShareableHandle, ::cudaMemPoolImportFromShareableHandle, ::cudaMemPoolImportPointer
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolExportPointer(cudaMemPoolPtrExportData exportData, Pointer ptr);
+
+/**
+ * \brief Import a memory pool allocation from another process.
+ *
+ * Returns in \p ptr_out a pointer to the imported memory.
+ * The imported memory must not be accessed before the allocation operation completes
+ * in the exporting process. The imported memory must be freed from all importing processes before
+ * being freed in the exporting process. The pointer may be freed with cudaFree
+ * or cudaFreeAsync.  If ::cudaFreeAsync is used, the free must be completed
+ * on the importing process before the free operation on the exporting process.
+ *
+ * \note The ::cudaFreeAsync api may be used in the exporting process before
+ *       the ::cudaFreeAsync operation completes in its stream as long as the
+ *       ::cudaFreeAsync in the exporting process specifies a stream with
+ *       a stream dependency on the importing process's ::cudaMemFreeAsync.
+ *
+ * @param ptr_out [out]  - pointer to imported memory
+ * @param pool [in]      - pool from which to import
+ * @param shareData [in] - data specifying the memory to import
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ *
+ * @see ::cuMemPoolImportPointer, ::cudaMemPoolExportToShareableHandle, ::cudaMemPoolImportFromShareableHandle, ::cudaMemPoolExportPointer
+ */
+public static native @Cast("cudaError_t") int cudaMemPoolImportPointer(@Cast("void**") PointerPointer ptr, CUmemPoolHandle_st memPool, cudaMemPoolPtrExportData exportData);
+public static native @Cast("cudaError_t") int cudaMemPoolImportPointer(@Cast("void**") @ByPtrPtr Pointer ptr, CUmemPoolHandle_st memPool, cudaMemPoolPtrExportData exportData);
+
+/** \} */ /* END CUDART_MEMORY_POOLS */
+
+/**
  * \defgroup CUDART_UNIFIED Unified Addressing
  *
  * ___MANBRIEF___ unified addressing functions of the CUDA runtime API
@@ -26573,9 +28043,6 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyFromArrayAsy
  * property ::cudaDeviceProp::unifiedAddressing.
  *
  * Unified addressing is automatically enabled in 64-bit processes .
- *
- * Unified addressing is not yet supported on Windows Vista or
- * Windows 7 for devices that do not use the TCC driver model.
  *
  * \section CUDART_UNIFIED_lookup Looking Up Information from Pointer Values
  *
@@ -28950,7 +30417,7 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * \brief Creates an event record node and adds it to a graph
  *
  * Creates a new event record node and adds it to \p hGraph with \p numDependencies
- * dependencies specified via \p dependencies and arguments specified in \p params.
+ * dependencies specified via \p dependencies and event specified in \p event.
  * It is possible for \p numDependencies to be 0, in which case the node will be placed
  * at the root of the graph. \p dependencies may not have any duplicate entries.
  * A handle to the new node will be returned in \p phGraphNode.
@@ -29049,7 +30516,7 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * \brief Creates an event wait node and adds it to a graph
  *
  * Creates a new event wait node and adds it to \p hGraph with \p numDependencies
- * dependencies specified via \p dependencies and arguments specified in \p params.
+ * dependencies specified via \p dependencies and event specified in \p event.
  * It is possible for \p numDependencies to be 0, in which case the node will be placed
  * at the root of the graph. \p dependencies may not have any duplicate entries.
  * A handle to the new node will be returned in \p phGraphNode.
@@ -29144,6 +30611,218 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  */
 // #if __CUDART_API_VERSION >= 11010
  public static native @Cast("cudaError_t") int cudaGraphEventWaitNodeSetEvent(CUgraphNode_st node, CUevent_st event);
+// #endif
+
+/**
+ * \brief Creates an external semaphore signal node and adds it to a graph
+ *
+ * Creates a new external semaphore signal node and adds it to \p graph with \p
+ * numDependencies dependencies specified via \p dependencies and arguments specified
+ * in \p nodeParams. It is possible for \p numDependencies to be 0, in which case the
+ * node will be placed at the root of the graph. \p dependencies may not have any
+ * duplicate entries. A handle to the new node will be returned in \p pGraphNode.
+ *
+ * @param pGraphNode      - Returns newly created node
+ * @param graph           - Graph to which to add the node
+ * @param pDependencies   - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param nodeParams      - Parameters for the node
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphExternalSemaphoresSignalNodeGetParams,
+ * ::cudaGraphExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaImportExternalSemaphore,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync,
+ * ::cudaGraphCreate,
+ * ::cudaGraphDestroyNode,
+ * ::cudaGraphAddEventRecordNode,
+ * ::cudaGraphAddEventWaitNode,
+ * ::cudaGraphAddChildGraphNode,
+ * ::cudaGraphAddEmptyNode,
+ * ::cudaGraphAddKernelNode,
+ * ::cudaGraphAddMemcpyNode,
+ * ::cudaGraphAddMemsetNode,
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphAddExternalSemaphoresSignalNode(@ByPtrPtr CUgraphNode_st pGraphNode, CUgraph_st graph, @Cast("const cudaGraphNode_t*") @ByPtrPtr CUgraphNode_st pDependencies, @Cast("size_t") long numDependencies, @Const cudaExternalSemaphoreSignalNodeParams nodeParams);
+// #endif
+
+/**
+ * \brief Returns an external semaphore signal node's parameters
+ *
+ * Returns the parameters of an external semaphore signal node \p hNode in \p params_out.
+ * The \p extSemArray and \p paramsArray returned in \p params_out,
+ * are owned by the node.  This memory remains valid until the node is destroyed or its
+ * parameters are modified, and should not be modified
+ * directly. Use ::cuGraphExternalSemaphoresSignalNodeSetParams to update the
+ * parameters of this node.
+ *
+ * @param hNode      - Node to get the parameters for
+ * @param params_out - Pointer to return the parameters
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaLaunchKernel,
+ * ::cudaGraphAddExternalSemaphoresSignalNode,
+ * ::cudaGraphExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresSignalNodeGetParams(CUgraphNode_st hNode, cudaExternalSemaphoreSignalNodeParams params_out);
+// #endif
+
+/**
+ * \brief Sets an external semaphore signal node's parameters
+ *
+ * Sets the parameters of an external semaphore signal node \p hNode to \p nodeParams.
+ *
+ * @param hNode      - Node to set the parameters for
+ * @param nodeParams - Parameters to copy
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_HANDLE,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphAddExternalSemaphoresSignalNode,
+ * ::cudaGraphExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresSignalNodeSetParams(CUgraphNode_st hNode, @Const cudaExternalSemaphoreSignalNodeParams nodeParams);
+// #endif
+
+/**
+ * \brief Creates an external semaphore wait node and adds it to a graph
+ *
+ * Creates a new external semaphore wait node and adds it to \p graph with \p numDependencies
+ * dependencies specified via \p dependencies and arguments specified in \p nodeParams.
+ * It is possible for \p numDependencies to be 0, in which case the node will be placed
+ * at the root of the graph. \p dependencies may not have any duplicate entries. A handle
+ * to the new node will be returned in \p pGraphNode.
+ *
+ * @param pGraphNode      - Returns newly created node
+ * @param graph           - Graph to which to add the node
+ * @param pDependencies   - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param nodeParams      - Parameters for the node
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphExternalSemaphoresWaitNodeGetParams,
+ * ::cudaGraphExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphAddExternalSemaphoresSignalNode,
+ * ::cudaImportExternalSemaphore,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync,
+ * ::cudaGraphCreate,
+ * ::cudaGraphDestroyNode,
+ * ::cudaGraphAddEventRecordNode,
+ * ::cudaGraphAddEventWaitNode,
+ * ::cudaGraphAddChildGraphNode,
+ * ::cudaGraphAddEmptyNode,
+ * ::cudaGraphAddKernelNode,
+ * ::cudaGraphAddMemcpyNode,
+ * ::cudaGraphAddMemsetNode,
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphAddExternalSemaphoresWaitNode(@ByPtrPtr CUgraphNode_st pGraphNode, CUgraph_st graph, @Cast("const cudaGraphNode_t*") @ByPtrPtr CUgraphNode_st pDependencies, @Cast("size_t") long numDependencies, @Const cudaExternalSemaphoreWaitNodeParams nodeParams);
+// #endif
+
+/**
+ * \brief Returns an external semaphore wait node's parameters
+ *
+ * Returns the parameters of an external semaphore wait node \p hNode in \p params_out.
+ * The \p extSemArray and \p paramsArray returned in \p params_out,
+ * are owned by the node.  This memory remains valid until the node is destroyed or its
+ * parameters are modified, and should not be modified
+ * directly. Use ::cudaGraphExternalSemaphoresSignalNodeSetParams to update the
+ * parameters of this node.
+ *
+ * @param hNode      - Node to get the parameters for
+ * @param params_out - Pointer to return the parameters
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaLaunchKernel,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaGraphExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresWaitNodeGetParams(CUgraphNode_st hNode, cudaExternalSemaphoreWaitNodeParams params_out);
+// #endif
+
+/**
+ * \brief Sets an external semaphore wait node's parameters
+ *
+ * Sets the parameters of an external semaphore wait node \p hNode to \p nodeParams.
+ *
+ * @param hNode      - Node to set the parameters for
+ * @param nodeParams - Parameters to copy
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_HANDLE,
+ * ::CUDA_ERROR_OUT_OF_MEMORY
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaGraphExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresWaitNodeSetParams(CUgraphNode_st hNode, @Const cudaExternalSemaphoreWaitNodeParams nodeParams);
 // #endif
 
 /**
@@ -29955,6 +31634,82 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
 // #endif
 
 /**
+ * \brief Sets the parameters for an external semaphore signal node in the given graphExec
+ *
+ * Sets the parameters of an external semaphore signal node in an executable graph \p hGraphExec.
+ * The node is identified by the corresponding node \p hNode in the
+ * non-executable graph, from which the executable graph was instantiated.
+ *
+ * \p hNode must not have been removed from the original graph.
+ *
+ * The modifications only affect future launches of \p hGraphExec. Already
+ * enqueued or running launches of \p hGraphExec are not affected by this call.
+ * \p hNode is also not modified by this call.
+ *
+ * Changing \p nodeParams->numExtSems is not supported.
+ *
+ * @param hGraphExec - The executable graph in which to set the specified node
+ * @param hNode      - semaphore signal node from the graph from which graphExec was instantiated
+ * @param nodeParams - Updated Parameters to set
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphAddExternalSemaphoresSignalNode,
+ * ::cudaImportExternalSemaphore,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync,
+ * ::cudaGraphCreate,
+ * ::cudaGraphDestroyNode,
+ * ::cudaGraphInstantiate
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphExecExternalSemaphoresSignalNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const cudaExternalSemaphoreSignalNodeParams nodeParams);
+// #endif
+
+/**
+ * \brief Sets the parameters for an external semaphore wait node in the given graphExec
+ *
+ * Sets the parameters of an external semaphore wait node in an executable graph \p hGraphExec.
+ * The node is identified by the corresponding node \p hNode in the
+ * non-executable graph, from which the executable graph was instantiated.
+ *
+ * \p hNode must not have been removed from the original graph.
+ *
+ * The modifications only affect future launches of \p hGraphExec. Already
+ * enqueued or running launches of \p hGraphExec are not affected by this call.
+ * \p hNode is also not modified by this call.
+ *
+ * Changing \p nodeParams->numExtSems is not supported.
+ *
+ * @param hGraphExec - The executable graph in which to set the specified node
+ * @param hNode      - semaphore wait node from the graph from which graphExec was instantiated
+ * @param nodeParams - Updated Parameters to set
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaImportExternalSemaphore,
+ * ::cudaSignalExternalSemaphoresAsync,
+ * ::cudaWaitExternalSemaphoresAsync,
+ * ::cudaGraphCreate,
+ * ::cudaGraphDestroyNode,
+ * ::cudaGraphInstantiate
+ */
+// #if __CUDART_API_VERSION >= 11020
+public static native @Cast("cudaError_t") int cudaGraphExecExternalSemaphoresWaitNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const cudaExternalSemaphoreWaitNodeParams nodeParams);
+// #endif
+
+/**
  * \brief Check whether an executable graph can be updated with a graph and perform the update if possible
  *
  * Updates the node parameters in the instantiated graph specified by \p hGraphExec with the
@@ -29963,7 +31718,9 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * Limitations:
  *
  * - Kernel nodes:
- *   - The function must not change (same restriction as cudaGraphExecKernelNodeSetParams())
+ *   - The owning context of the function cannot change.
+ *   - A node whose function originally did not use CUDA dynamic parallelism cannot be updated
+ *     to a function which uses CDP
  * - Memset and memcpy nodes:
  *   - The CUDA device(s) to which the operand(s) was allocated/mapped cannot change.
  *   - The source/destination memory must be allocated from the same contexts as the original
@@ -29974,10 +31731,6 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  *     CU_MEMORYTYPE_ARRAY, etc.) is not supported.
  *
  * Note:  The API may add further restrictions in future releases.  The return code should always be checked.
- *
- * Some node types are not currently supported:
- * - Empty graph nodes(cudaGraphNodeTypeEmpty)
- * - Child graphs(cudaGraphNodeTypeGraph).
  *
  * cudaGraphExecUpdate sets \p updateResult_out to cudaGraphExecUpdateErrorTopologyChanged under
  * the following conditions:
@@ -29995,8 +31748,9 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * - cudaGraphExecUpdateErrorTopologyChanged if the graph topology changed
  * - cudaGraphExecUpdateErrorNodeTypeChanged if the type of a node changed, in which case
  *   \p hErrorNode_out is set to the node from \p hGraph.
- * - cudaGraphExecUpdateErrorFunctionChanged if the func field of a kernel changed, in which
- *   case \p hErrorNode_out is set to the node from \p hGraph
+ * - cudaGraphExecUpdateErrorFunctionChanged if the function of a kernel node changed (CUDA driver < 11.2)
+ * - cudaGraphExecUpdateErrorUnsupportedFunctionChange if the func field of a kernel changed in an
+ *   unsupported way(see note above), in which case \p hErrorNode_out is set to the node from \p hGraph
  * - cudaGraphExecUpdateErrorParametersChanged if any parameters to a node changed in a way 
  *   that is not supported, in which case \p hErrorNode_out is set to the node from \p hGraph
  * - cudaGraphExecUpdateErrorNotSupported if something about a node is unsupported, like 
@@ -30198,9 +31952,9 @@ public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const vo
  * Runtime API call on any thread which requires an active context will trigger the 
  * reinitialization of that device's primary context.
  *
- * Note that there is no reference counting of the primary context's lifetime.  It is
- * recommended that the primary context not be deinitialized except just before exit
- * or to recover from an unspecified launch failure.
+ * Note that primary contexts are shared resources. It is recommended that
+ * the primary context not be reset except just before exit or to recover from an
+ * unspecified launch failure.
  * 
  * \section CUDART_CUDA_context Context Interoperability
  *

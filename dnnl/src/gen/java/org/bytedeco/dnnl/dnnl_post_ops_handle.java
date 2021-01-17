@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -22,7 +24,7 @@ public class dnnl_post_ops_handle extends Pointer {
         return (dnnl_post_ops_handle)super.position(position);
     }
     @Override public dnnl_post_ops_handle getPointer(long i) {
-        return new dnnl_post_ops_handle(this).position(position + i);
+        return new dnnl_post_ops_handle((Pointer)this).position(position + i);
     }
 
     /** Constructs an empty handle object.

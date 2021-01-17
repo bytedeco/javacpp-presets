@@ -142,6 +142,8 @@ public static final int
        CAP_OPENNI2      = 1600,
        /** OpenNI2 (for Asus Xtion and Occipital Structure sensors) */
        CAP_OPENNI2_ASUS = 1610,
+       /** OpenNI2 (for Orbbec Astra) */
+       CAP_OPENNI2_ASTRA = 1620,
        /** gPhoto2 connection */
        CAP_GPHOTO2      = 1700,
        /** GStreamer */
@@ -157,7 +159,9 @@ public static final int
        /** Intel MediaSDK */
        CAP_INTEL_MFX    = 2300,
        /** XINE engine (Linux) */
-       CAP_XINE         = 2400;
+       CAP_XINE         = 2400,
+       /** uEye Camera API */
+       CAP_UEYE         = 2500;
 
 /** \brief %VideoCapture generic properties identifier.
  <p>
@@ -266,7 +270,9 @@ public static final int
   VIDEOWRITER_PROP_NSTRIPES = 3,
   /** If it is not zero, the encoder will expect and encode color frames, otherwise it
  *  will work with grayscale frames. */
-  VIDEOWRITER_PROP_IS_COLOR = 4;
+  VIDEOWRITER_PROP_IS_COLOR = 4,
+  /** Defaults to CV_8U. */
+  VIDEOWRITER_PROP_DEPTH = 5;
 
 /** \} videoio_flags_base
  <p>

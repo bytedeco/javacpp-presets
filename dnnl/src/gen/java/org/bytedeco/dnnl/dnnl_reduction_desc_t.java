@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -32,7 +34,7 @@ public class dnnl_reduction_desc_t extends Pointer {
         return (dnnl_reduction_desc_t)super.position(position);
     }
     @Override public dnnl_reduction_desc_t getPointer(long i) {
-        return new dnnl_reduction_desc_t(this).position(position + i);
+        return new dnnl_reduction_desc_t((Pointer)this).position(position + i);
     }
 
     /** The kind of primitive. Used for self-identifying the primitive

@@ -1,11 +1,15 @@
 JavaCPP Presets for Hyperscan
 =============================
 
+[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/hyperscan/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/hyperscan) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/hyperscan.svg)](http://bytedeco.org/builds/)  
+<sup>Build status for all platforms:</sup> [![hyperscan](https://github.com/bytedeco/javacpp-presets/workflows/hyperscan/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahyperscan)  <sup>Commercial support:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
+
+
 Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Hyperscan 5.3.0  https://www.hyperscan.io
+ * Hyperscan 5.4.0  https://www.hyperscan.io
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -37,7 +41,7 @@ Be aware that flag `-Djavacpp.platform` can be used to specify the target platfo
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.hyperscan</groupId>
     <artifactId>HyperscanTest</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>HyperscanTest</exec.mainClass>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -47,7 +51,7 @@ Be aware that flag `-Djavacpp.platform` can be used to specify the target platfo
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hyperscan-platform</artifactId>
-            <version>5.3.0-1.5.4</version>
+            <version>5.4.0-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

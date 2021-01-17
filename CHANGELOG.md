@@ -1,15 +1,20 @@
 
+ * Add `NamedMetadataOperations.h` implementing data retrieval operations for LLVM nodes ([pull #995](https://github.com/bytedeco/javacpp-presets/pull/995))
+ * Enable OpenMP for ONNX Runtime on Mac once again ([issue #917](https://github.com/bytedeco/javacpp-presets/issues/917))
+ * Build OpenCV without OpenBLAS when environment variable `NOOPENBLAS=yes` ([pull #987](https://github.com/bytedeco/javacpp-presets/pull/987))
+ * Enable OpenCL acceleration for DNNL ([issue #938](https://github.com/bytedeco/javacpp-presets/issues/938))
+ * Introduce monkey patching when loading presets for CPython to relocate home more reliably
  * Add display sample for librealsense2 ([pull #978](https://github.com/bytedeco/javacpp-presets/pull/978))
  * Fix builds for libpostal on Mac and Windows ([issue #903](https://github.com/bytedeco/javacpp-presets/issues/903))
  * Fix builds for NumPy and SciPy on Linux when using a cross compiler or not
  * Update presets for Visual Studio 2019 on Windows
- * Add presets for TVM 0.7.0
+ * Add presets for OpenCL 3.0, TVM 0.7.0 and bundle its official Java API (TVM4J) via the `jnitvm_runtime` library
  * Include `free()` in presets for FTTW as required by `fftw_export_wisdom_to_string()` ([issue bytedeco/javacpp#429](https://github.com/bytedeco/javacpp/issues/429))
  * Include all missing header files from the `opencv_ximgproc` module ([issue #958](https://github.com/bytedeco/javacpp-presets/issues/958))
  * Disable assembly optimizations for libx264 with FFmpeg on Mac to work around crashes ([issue bytedeco/javacv#1519](https://github.com/bytedeco/javacv/issues/1519))
  * Add `linux-armhf` and `linux-arm64` builds for librealsense and librealsense2 ([pull #951](https://github.com/bytedeco/javacpp-presets/pull/951))
  * License default builds of FFmpeg under LGPL v3 and move GPL-enabled builds to `-gpl` extension ([pull #950](https://github.com/bytedeco/javacpp-presets/pull/950))
- * Upgrade presets for OpenCV 4.5.0, Arrow 2.0.0, MKL 2020.4, OpenBLAS 0.3.12, librealsense2 2.40.0 ([pull #946](https://github.com/bytedeco/javacpp-presets/pull/946)), DNNL 1.7, NumPy 1.19.4, SciPy 1.5.4, Gym 0.17.3, LLVM 11.0.0 ([pull #955](https://github.com/bytedeco/javacpp-presets/pull/955)), CUDA 11.1.1, cuDNN 8.0.4, TensorFlow 1.15.4, TensorRT 7.2.1.6, ONNX 1.8.0, ONNX Runtime 1.5.3, Qt 5.15.1, Skia 2.80.2, cpu_features 0.6.0, and their dependencies
+ * Upgrade presets for OpenCV 4.5.1, Arrow 2.0.0, Hyperscan 5.4.0, MKL 2021.1, OpenBLAS 0.3.13, ARPACK-NG 3.8.0, CMINPACK 1.3.7, FFTW 3.3.9, librealsense2 2.40.0 ([pull #946](https://github.com/bytedeco/javacpp-presets/pull/946)), DNNL 1.8.1, CPython 3.8.7, NumPy 1.19.5, SciPy 1.6.0, Gym 0.18.0, LLVM 11.0.1 ([pull #955](https://github.com/bytedeco/javacpp-presets/pull/955)), OpenPose 1.7.0, CUDA 11.2.0, cuDNN 8.0.5, NCCL 2.8.3, TensorFlow 1.15.5, TensorRT 7.2.2.3, ONNX 1.8.0, ONNX Runtime 1.6.0, Qt 5.15.2, Skia 2.80.2, cpu_features 0.6.0, and their dependencies
 
 ### September 9, 2020 version 1.5.4
  * Bundle `libpostal_data` program, executable via `Loader.load()` for convenience ([issue #939](https://github.com/bytedeco/javacpp-presets/issues/939))

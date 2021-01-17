@@ -13946,7 +13946,9 @@ public static native @Cast("NppStatus") int nppiFilterGaussBorder_32f_AC4R(@Cast
  * Filters the image using a separable Gaussian filter kernel with user supplied floating point coefficients with border control.
  *
  * If any portion of the mask overlaps the source image boundary the requested border type operation is applied to all mask pixels
- * which fall outside of the source image.
+ * which fall outside of the source image. 
+ *  
+ * Note that the performance of these functions can drop significantly for filter kernels with a very large number of taps. 
  *
  * Currently only the NPP_BORDER_REPLICATE and NPP_BORDER_MIRROR border type operations are supported.
  *
@@ -18467,6 +18469,273 @@ public static native @Cast("NppStatus") int nppiGradientVectorSobelBorder_32f_C3
  *
  */
 
+/** \defgroup image_filter_distance_transform FilterDistanceTransform
+ *  Performs Exact Euclidean Distance Transform function using the Parallel Banding Algorithm (PBA+) defined by Tiow-Seng Tan, et al
+ *  paper named "Parallel Banding Algorithm to Compute Exact Distance Transform with the GPU" published dated August 8, 2019.
+ *  
+ *  Output for these functions is an optional 16-bit signed integer voronoi diagram (pairs of signed 16 bit integer x, y distance values)
+ *  and/or an optional true euclidean distance transform image generated from the internal voronoi diagram in either
+ *  unsigned 16-bit truncated integer format or 32-bit floating point format.  Minimum and maximum image ROI widths and heights are 64 and 32767.
+ *  
+ *  The nMinSiteValue and nMaxSiteValue parameters can be used to control which source image pixels are considered sites(traditionally 0) and non-sites (everything else).
+ *  
+ * \{
+ *
+ */
+
+/**
+ * Calculate scratch buffer size needed for the DistanceTransformPBA function based on destination image SizeROI width and height.
+ *
+ * @param oSizeROI \ref roi_specification.
+ * @param hpBufferSize Required buffer size. Important: hpBufferSize is a 
+ *        <em>host pointer.</em> \ref general_scratch_buffer.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+
+public static native @Cast("NppStatus") int nppiDistanceTransformPBAGetBufferSize(@ByVal NppiSize oSizeROI, @Cast("size_t*") SizeTPointer hpBufferSize);
+
+/**
+ * 1 channel 8-bit unsigned grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional unsigned 16-bit truncated integer transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step. 
+ * @param nMinSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp16u)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8u16u_C1R_Ctx(@Cast("Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u") byte nMinSiteValue, @Cast("Npp8u") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp16u*") ShortPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8u16u_C1R_Ctx(@Cast("Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u") byte nMinSiteValue, @Cast("Npp8u") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp16u*") ShortBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8u16u_C1R_Ctx(@Cast("Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u") byte nMinSiteValue, @Cast("Npp8u") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp16u*") short[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * 1 channel 8-bit signed grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional unsigned 16-bit truncated integer transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step. 
+ * @param nMinSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp16u)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8s16u_C1R_Ctx(@Cast("Npp8s*") BytePointer pSrc, int nSrcStep, @Cast("Npp8s") byte nMinSiteValue, @Cast("Npp8s") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp16u*") ShortPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8s16u_C1R_Ctx(@Cast("Npp8s*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8s") byte nMinSiteValue, @Cast("Npp8s") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp16u*") ShortBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8s16u_C1R_Ctx(@Cast("Npp8s*") byte[] pSrc, int nSrcStep, @Cast("Npp8s") byte nMinSiteValue, @Cast("Npp8s") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp16u*") short[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * 1 channel 16-bit unsigned grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional unsigned 16-bit truncated integer transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param nMinSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp16u)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16u16u_C1R_Ctx(@Cast("Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u") short nMinSiteValue, @Cast("Npp16u") short nMaxSiteValue,
+                                        @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp16u*") ShortPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16u16u_C1R_Ctx(@Cast("Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u") short nMinSiteValue, @Cast("Npp16u") short nMaxSiteValue,
+                                        @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp16u*") ShortBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16u16u_C1R_Ctx(@Cast("Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u") short nMinSiteValue, @Cast("Npp16u") short nMaxSiteValue,
+                                        @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp16u*") short[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * 1 channel 16-bit signed grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional unsigned 16-bit truncated integer transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param nMinSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp16u)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16s16u_C1R_Ctx(@Cast("Npp16s*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16s") short nMinSiteValue, @Cast("Npp16s") short nMaxSiteValue, 
+                                        @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp16u*") ShortPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16s16u_C1R_Ctx(@Cast("Npp16s*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16s") short nMinSiteValue, @Cast("Npp16s") short nMaxSiteValue, 
+                                        @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp16u*") ShortBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16s16u_C1R_Ctx(@Cast("Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s") short nMinSiteValue, @Cast("Npp16s") short nMaxSiteValue, 
+                                        @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp16u*") short[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * 1 channel 8-bit unsigned grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional 32-bit floating point transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param nMinSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp32f)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8u32f_C1R_Ctx(@Cast("Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u") byte nMinSiteValue, @Cast("Npp8u") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp32f*") FloatPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8u32f_C1R_Ctx(@Cast("Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u") byte nMinSiteValue, @Cast("Npp8u") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp32f*") FloatBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8u32f_C1R_Ctx(@Cast("Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u") byte nMinSiteValue, @Cast("Npp8u") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp32f*") float[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * 1 channel 8-bit signed grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional 32-bit floating point transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param nMinSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp32f)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8s32f_C1R_Ctx(@Cast("Npp8s*") BytePointer pSrc, int nSrcStep, @Cast("Npp8s") byte nMinSiteValue, @Cast("Npp8s") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp32f*") FloatPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8s32f_C1R_Ctx(@Cast("Npp8s*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8s") byte nMinSiteValue, @Cast("Npp8s") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp32f*") FloatBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_8s32f_C1R_Ctx(@Cast("Npp8s*") byte[] pSrc, int nSrcStep, @Cast("Npp8s") byte nMinSiteValue, @Cast("Npp8s") byte nMaxSiteValue,
+                                       @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                       @Cast("Npp32f*") float[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                       @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * 1 channel 16-bit unsigned grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional 32-bit floating point transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param nMinSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp32f)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16u32f_C1R_Ctx(@Cast("Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u") short nMinSiteValue, @Cast("Npp16u") short nMaxSiteValue,
+                                        @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp32f*") FloatPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16u32f_C1R_Ctx(@Cast("Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u") short nMinSiteValue, @Cast("Npp16u") short nMaxSiteValue,
+                                        @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp32f*") FloatBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16u32f_C1R_Ctx(@Cast("Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u") short nMinSiteValue, @Cast("Npp16u") short nMaxSiteValue,
+                                        @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp32f*") float[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * 1 channel 16-bit signed grayscale to optional 1 channel 16-bit signed integer euclidean distance voronoi diagram output and/or 
+ * optional 32-bit floating point transform.
+ *
+ * @param pSrc \ref device memory source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param nMinSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param nMaxSiteValue signed source image pixel values >= nMinSiteValue and <= nMaxSiteValue are considered sites (traditionally 0s).
+ * @param pDstVoronoi device memory voronoi diagram destination_image_pointer or NULL for no voronoi output.
+ * @param nDstVoronoiStep voronoi destination_image_line_step (must be at least oSizeROI.width * 2 * sizeof(Npp16s)).
+ * @param pDstTransform device memory true euclidean distance transform destination_image_pointer or NULL for no transform output.
+ * @param nDstTransformStep true euclidean distance transform destination_image_line_step (must be at least oSizeROI.width * sizeof(Npp32f)).
+ * @param oSizeROI \ref roi_specification.
+ * @param pDeviceBuffer pointer to scratch DEVICE memory buffer of size hpBufferSize (see nppiFilterCannyBorderGetBufferSize() above)
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16s32f_C1R_Ctx(@Cast("Npp16s*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16s") short nMinSiteValue, @Cast("Npp16s") short nMaxSiteValue,
+                                        @Cast("Npp16s*") ShortPointer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp32f*") FloatPointer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") BytePointer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16s32f_C1R_Ctx(@Cast("Npp16s*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16s") short nMinSiteValue, @Cast("Npp16s") short nMaxSiteValue,
+                                        @Cast("Npp16s*") ShortBuffer pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp32f*") FloatBuffer pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") ByteBuffer pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDistanceTransformPBA_16s32f_C1R_Ctx(@Cast("Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s") short nMinSiteValue, @Cast("Npp16s") short nMaxSiteValue,
+                                        @Cast("Npp16s*") short[] pDstVoronoi, int nDstVoronoiStep, 
+                                        @Cast("Npp32f*") float[] pDstTransform, int nDstTransformStep, @ByVal NppiSize oSizeROI, 
+                                        @Cast("Npp8u*") byte[] pDeviceBuffer, @ByVal NppStreamContext nppStreamCtx);
+
+/** \} image_filter_distance_transform */
+
 /** \defgroup image_filter_canny_border FilterCannyBorder
  *  Performs Canny edge detection on a single channel 8-bit grayscale image and outputs a single channel 8-bit image consisting of 0x00 and 0xFF
  *  values with 0xFF representing edge pixels.  
@@ -21352,27 +21621,6 @@ public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUF_32u_C1IR(
  * \{
  *
  */
-
-public static class NppiBufferDescriptor extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public NppiBufferDescriptor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public NppiBufferDescriptor(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public NppiBufferDescriptor(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public NppiBufferDescriptor position(long position) {
-        return (NppiBufferDescriptor)super.position(position);
-    }
-    @Override public NppiBufferDescriptor getPointer(long i) {
-        return new NppiBufferDescriptor(this).position(position + i);
-    }
-
-    public native Pointer pData(); public native NppiBufferDescriptor pData(Pointer setter);  // per image device memory pointer to the corresponding buffer
-    public native int nBufferSize(); public native NppiBufferDescriptor nBufferSize(int setter);  // step size
-}
 
 
 /**

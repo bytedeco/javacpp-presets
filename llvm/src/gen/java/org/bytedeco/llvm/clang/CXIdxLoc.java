@@ -31,7 +31,7 @@ public class CXIdxLoc extends Pointer {
         return (CXIdxLoc)super.position(position);
     }
     @Override public CXIdxLoc getPointer(long i) {
-        return new CXIdxLoc(this).position(position + i);
+        return new CXIdxLoc((Pointer)this).position(position + i);
     }
 
   public native Pointer ptr_data(int i); public native CXIdxLoc ptr_data(int i, Pointer setter);

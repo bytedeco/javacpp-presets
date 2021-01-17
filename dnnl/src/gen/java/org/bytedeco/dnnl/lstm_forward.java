@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -24,7 +26,7 @@ public class lstm_forward extends primitive {
         return (lstm_forward)super.position(position);
     }
     @Override public lstm_forward getPointer(long i) {
-        return new lstm_forward(this).position(position + i);
+        return new lstm_forward((Pointer)this).position(position + i);
     }
 
     /** Descriptor for an LSTM forward propagation primitive. */
@@ -468,7 +470,7 @@ public class lstm_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
         /** Default constructor. Produces an empty object. */

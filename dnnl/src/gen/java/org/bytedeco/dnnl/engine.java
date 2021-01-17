@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -38,7 +40,7 @@ public class engine extends dnnl_engine_handle {
         return (engine)super.position(position);
     }
     @Override public engine getPointer(long i) {
-        return new engine(this).position(position + i);
+        return new engine((Pointer)this).position(position + i);
     }
 
 

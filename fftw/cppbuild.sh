@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-FFTW_VERSION=3.3.8
+FFTW_VERSION=3.3.9
 download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
 
 mkdir -p $PLATFORM

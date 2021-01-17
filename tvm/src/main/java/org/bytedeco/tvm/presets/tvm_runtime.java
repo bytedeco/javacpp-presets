@@ -37,13 +37,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 import org.bytedeco.dnnl.presets.*;
 import org.bytedeco.llvm.presets.*;
+import org.bytedeco.mkl.presets.*;
 
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = {dnnl.class, LLVM.class},
+    inherit = {dnnl.class, LLVM.class, mkl_rt.class},
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -68,6 +69,7 @@ import org.bytedeco.llvm.presets.*;
                 "tvm/runtime/module.h",
                 "tvm/runtime/packed_func.h",
                 "tvm/runtime/registry.h",
+                "org_apache_tvm_native_c_api.cc",
             },
             link = "tvm_runtime#"
         ),
@@ -110,9 +112,9 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
                          "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.11.0" : lib.equals("nvrtc") ? "@.11.1" : "@.11";
+                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.11.0" : lib.equals("nvrtc") ? "@.11.2" : "@.11";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_110" : lib.equals("nvrtc") ? "64_111_0" : "64_11";
+                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_110" : lib.equals("nvrtc") ? "64_112_0" : "64_11";
             } else {
                 continue; // no CUDA
             }
@@ -126,7 +128,8 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
     }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("DLPACK_EXTERN_C", "DLPACK_DLL", "DMLC_STRICT_CXX11", "DMLC_CXX11_THREAD_LOCAL",
+        infoMap.put(new Info("org_apache_tvm_native_c_api.cc").skip())
+               .put(new Info("DLPACK_EXTERN_C", "DLPACK_DLL", "DMLC_STRICT_CXX11", "DMLC_CXX11_THREAD_LOCAL",
                              "DMLC_ATTRIBUTE_UNUSED", "DMLC_SUPPRESS_UBSAN", "DMLC_NO_INLINE", "TVM_WEAK", "TVM_DLL",
                              "TVM_ATTRIBUTE_UNUSED", "TVM_OBJECT_REG_VAR_DEF", "TVM_ADD_FILELINE", "TVM_ALWAYS_INLINE",
                              "TVM_FUNC_REG_VAR_DEF").cppTypes().annotations())

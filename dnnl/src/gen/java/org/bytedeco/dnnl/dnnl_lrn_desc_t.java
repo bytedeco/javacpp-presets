@@ -7,11 +7,13 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_pooling_v2
+/** \} dnnl_api_prelu
  <p>
  *  \addtogroup dnnl_api_lrn
  *  \{
@@ -32,7 +34,7 @@ public class dnnl_lrn_desc_t extends Pointer {
         return (dnnl_lrn_desc_t)super.position(position);
     }
     @Override public dnnl_lrn_desc_t getPointer(long i) {
-        return new dnnl_lrn_desc_t(this).position(position + i);
+        return new dnnl_lrn_desc_t((Pointer)this).position(position + i);
     }
 
     /** The kind of primitive. Used for self-identifying the primitive

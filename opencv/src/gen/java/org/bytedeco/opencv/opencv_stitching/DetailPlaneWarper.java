@@ -26,6 +26,8 @@ import org.bytedeco.opencv.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
 import org.bytedeco.opencv.opencv_objdetect.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
+import org.bytedeco.opencv.opencv_dnn.*;
+import static org.bytedeco.opencv.global.opencv_dnn.*;
 import org.bytedeco.opencv.opencv_video.*;
 import static org.bytedeco.opencv.global.opencv_video.*;
 import org.bytedeco.opencv.opencv_ml.*;
@@ -61,6 +63,13 @@ public class DetailPlaneWarper extends RotationWarper {
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T);
+
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R);
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T);
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T);
+    public native @ByVal Point2f warpPointBackward(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T);
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, @ByVal UMat xmap, @ByVal UMat ymap);

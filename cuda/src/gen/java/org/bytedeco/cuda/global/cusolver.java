@@ -92,8 +92,8 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
 
 public static final int CUSOLVER_VER_MAJOR = 11;
 public static final int CUSOLVER_VER_MINOR = 0;
-public static final int CUSOLVER_VER_PATCH = 1;
-public static final int CUSOLVER_VER_BUILD = 105;
+public static final int CUSOLVER_VER_PATCH = 2;
+public static final int CUSOLVER_VER_BUILD = 68;
 public static final int CUSOLVER_VERSION = (CUSOLVER_VER_MAJOR * 1000 + 
                         CUSOLVER_VER_MINOR *  100 + 
                         CUSOLVER_VER_PATCH);
@@ -5689,6 +5689,7 @@ public static native @Cast("cusolverStatus_t") int cusolverDnDsytri_bufferSize(
         int lda,
         @Const int[] ipiv,
         int[] lwork);
+
 public static native @Cast("cusolverStatus_t") int cusolverDnCsytri_bufferSize(
         cusolverDnContext handle,
         @Cast("cublasFillMode_t") int uplo,

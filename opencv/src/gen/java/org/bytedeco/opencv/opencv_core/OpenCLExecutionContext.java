@@ -39,9 +39,11 @@ public class OpenCLExecutionContext extends Pointer {
 
     /** Get associated ocl::Context */
     public native @ByRef Context getContext();
-    /** Get associated ocl::Device */
+    /** Get the single default associated ocl::Device */
     public native @ByRef Device getDevice();
-    /** Get associated ocl::Queue */
+    /** Get the single ocl::Queue that is associated with the ocl::Context and
+     *  the single default ocl::Device
+     */
     public native @ByRef Queue getQueue();
 
     public native @Cast("bool") boolean useOpenCL();

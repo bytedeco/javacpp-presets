@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.19.4
+NUMPY_VERSION=1.19.5
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -49,13 +49,13 @@ echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
 echo "include_dirs = $OPENBLAS_PATH/include/"     >> site.cfg
 
-if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.8/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.7"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.7m/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.8"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.8/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.8/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.8/site-packages/"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -71,10 +71,10 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
-    chmod +x "$CPYTHON_HOST_PATH/bin/python3.7"
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.8"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv cython
-    "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$PYTHON_BIN_PATH" crossenv
+    "$CPYTHON_HOST_PATH/bin/python3.8" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.8/" crossenv cython
+    "$CPYTHON_HOST_PATH/bin/python3.8" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate
     cross-expose cython
     PYTHON_BIN_PATH="python"

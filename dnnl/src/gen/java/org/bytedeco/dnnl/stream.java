@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -36,7 +38,7 @@ public class stream extends dnnl_stream_handle {
         return (stream)super.position(position);
     }
     @Override public stream getPointer(long i) {
-        return new stream(this).position(position + i);
+        return new stream((Pointer)this).position(position + i);
     }
 
 

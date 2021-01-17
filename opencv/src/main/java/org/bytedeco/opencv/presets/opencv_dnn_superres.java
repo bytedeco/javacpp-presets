@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = "<opencv2/dnn_superres.hpp>", link = "opencv_dnn_superres@.4.5"),
         @Platform(value = "ios", preload = "libopencv_dnn_superres"),
-        @Platform(value = "windows", link = "opencv_dnn_superres450")},
+        @Platform(value = "windows", link = "opencv_dnn_superres451")},
     target = "org.bytedeco.opencv.opencv_dnn_superres",
     global = "org.bytedeco.opencv.global.opencv_dnn_superres"
 )

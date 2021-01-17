@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {/*"<opencv2/imgcodecs/imgcodecs_c.h>",*/ "<opencv2/imgcodecs.hpp>"}, link = "opencv_imgcodecs@.4.5"),
         @Platform(value = "ios", preload = "libopencv_imgcodecs"),
-        @Platform(value = "windows", link = "opencv_imgcodecs450")},
+        @Platform(value = "windows", link = "opencv_imgcodecs451")},
     global = "org.bytedeco.opencv.global.opencv_imgcodecs",
     helper = "org.bytedeco.opencv.helper.opencv_imgcodecs"
 )

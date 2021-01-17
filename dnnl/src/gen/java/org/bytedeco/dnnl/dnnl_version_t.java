@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -28,7 +30,7 @@ public class dnnl_version_t extends Pointer {
         return (dnnl_version_t)super.position(position);
     }
     @Override public dnnl_version_t getPointer(long i) {
-        return new dnnl_version_t(this).position(position + i);
+        return new dnnl_version_t((Pointer)this).position(position + i);
     }
 
     /** Major version */

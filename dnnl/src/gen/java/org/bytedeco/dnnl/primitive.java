@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -46,7 +48,7 @@ public class primitive extends dnnl_primitive_handle {
         return (primitive)super.position(position);
     }
     @Override public primitive getPointer(long i) {
-        return new primitive(this).position(position + i);
+        return new primitive((Pointer)this).position(position + i);
     }
 
     /** Kinds of primitives supported by the library. */
@@ -92,7 +94,9 @@ public class primitive extends dnnl_primitive_handle {
         /** A pooling version 2 primitive. */
         pooling_v2(dnnl_pooling_v2),
         /** A reduction primitive. */
-        reduction(dnnl_reduction);
+        reduction(dnnl_reduction),
+        /** A PReLU primitive. */
+        prelu(dnnl_prelu);
 
         public final int value;
         private kind(int v) { this.value = v; }

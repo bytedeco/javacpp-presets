@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -35,7 +37,7 @@ public class reorder extends primitive {
         return (reorder)super.position(position);
     }
     @Override public reorder getPointer(long i) {
-        return new reorder(this).position(position + i);
+        return new reorder((Pointer)this).position(position + i);
     }
 
     /** Primitive descriptor for a reorder primitive. */
@@ -63,7 +65,7 @@ public class reorder extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc(this).position(position + i);
+            return new primitive_desc((Pointer)this).position(position + i);
         }
     
 

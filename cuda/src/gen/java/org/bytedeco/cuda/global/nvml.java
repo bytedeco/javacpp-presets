@@ -442,13 +442,22 @@ public static final int
  */
 /** enum nvmlTemperatureThresholds_enum */
 public static final int
-    NVML_TEMPERATURE_THRESHOLD_SHUTDOWN = 0,    // Temperature at which the GPU will shut down
-                                                // for HW protection
-    NVML_TEMPERATURE_THRESHOLD_SLOWDOWN = 1,    // Temperature at which the GPU will begin HW slowdown
-    NVML_TEMPERATURE_THRESHOLD_MEM_MAX  = 2,    // Memory Temperature at which the GPU will begin SW slowdown
-    NVML_TEMPERATURE_THRESHOLD_GPU_MAX  = 3,    // GPU Temperature at which the GPU can be throttled below base clock
+    NVML_TEMPERATURE_THRESHOLD_SHUTDOWN      = 0, // Temperature at which the GPU will
+                                                  // shut down for HW protection
+    NVML_TEMPERATURE_THRESHOLD_SLOWDOWN      = 1, // Temperature at which the GPU will
+                                                  // begin HW slowdown
+    NVML_TEMPERATURE_THRESHOLD_MEM_MAX       = 2, // Memory Temperature at which the GPU will
+                                                  // begin SW slowdown
+    NVML_TEMPERATURE_THRESHOLD_GPU_MAX       = 3, // GPU Temperature at which the GPU
+                                                  // can be throttled below base clock
+    NVML_TEMPERATURE_THRESHOLD_ACOUSTIC_MIN  = 4, // Minimum GPU Temperature that can be
+                                                  // set as acoustic threshold
+    NVML_TEMPERATURE_THRESHOLD_ACOUSTIC_CURR = 5, // Current temperature that is set as
+                                                  // acoustic threshold.
+    NVML_TEMPERATURE_THRESHOLD_ACOUSTIC_MAX  = 6, // Maximum GPU temperature that can be
+                                                  // set as acoustic threshold.
     // Keep this last
-    NVML_TEMPERATURE_THRESHOLD_COUNT = 4;
+    NVML_TEMPERATURE_THRESHOLD_COUNT = 7;
 
 /** 
  * Temperature sensors. 
@@ -874,6 +883,8 @@ public static final int NVML_VGPU_NAME_BUFFER_SIZE =          64;
 public static final int NVML_GRID_LICENSE_FEATURE_MAX_COUNT = 3;
 
 public static final int INVALID_GPU_INSTANCE_PROFILE_ID =     0xFFFFFFFF;
+
+public static final int INVALID_GPU_INSTANCE_ID =             0xFFFFFFFF;
 
 /**
  * Macros for vGPU instance's virtualization capabilities bitfield.
@@ -1305,8 +1316,14 @@ public static final int NVML_FI_DEV_REMAPPED_FAILURE =    145;
 /** Remote device NVLink ID */
 public static final int NVML_FI_DEV_NVLINK_REMOTE_NVLINK_ID =     146;
 
+/**
+ * NVSwitch: connected NVLink count
+ */
+/** Number of NVLinks connected to NVSwitch */
+public static final int NVML_FI_DEV_NVSWITCH_CONNECTED_LINK_COUNT =   147;
+
 /** One greater than the largest field ID defined above */
-public static final int NVML_FI_MAX = 147;
+public static final int NVML_FI_MAX = 148;
 // Targeting ../nvml/nvmlFieldValue_t.java
 
 
@@ -3475,6 +3492,28 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetTemperatureThreshold
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetTemperatureThreshold(nvmlDevice_st device, @Cast("nvmlTemperatureThresholds_t") int thresholdType, @Cast("unsigned int*") int[] temp);
 
 /**
+ * Sets the temperature threshold for the GPU with the specified threshold type in degrees C.
+ *
+ * For Maxwell &tm; or newer fully supported devices.
+ *
+ * See \ref nvmlTemperatureThresholds_t for details on available temperature thresholds.
+ *
+ * @param device                               The identifier of the target device
+ * @param thresholdType                        The type of threshold value to be set
+ * @param temp                                 Reference which hold the value to be set
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a temp has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, \a thresholdType is invalid or \a temp is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not have a temperature sensor or is unsupported
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetTemperatureThreshold(nvmlDevice_st device, @Cast("nvmlTemperatureThresholds_t") int thresholdType, IntPointer temp);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetTemperatureThreshold(nvmlDevice_st device, @Cast("nvmlTemperatureThresholds_t") int thresholdType, IntBuffer temp);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetTemperatureThreshold(nvmlDevice_st device, @Cast("nvmlTemperatureThresholds_t") int thresholdType, int[] temp);
+
+/**
  * Retrieves the current performance state for the device. 
  *
  * For Fermi &tm; or newer fully supported devices.
@@ -4128,6 +4167,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderCapacity(nvml
  *         - \ref NVML_ERROR_INVALID_ARGUMENT   if \a sessionCount, or \a device or \a averageFps,
  *                                              or \a averageLatency is NULL
  *         - \ref NVML_ERROR_GPU_IS_LOST        if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_NOT_SUPPORTED      if this query is not supported by \a device
  *         - \ref NVML_ERROR_UNKNOWN            on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderStats(nvmlDevice_st device, @Cast("unsigned int*") IntPointer sessionCount,
@@ -4161,6 +4201,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderStats(nvmlDev
  *         - \ref NVML_ERROR_INSUFFICIENT_SIZE  if \a sessionCount is too small, array element count is returned in \a sessionCount
  *         - \ref NVML_ERROR_INVALID_ARGUMENT   if \a sessionCount is NULL.
  *         - \ref NVML_ERROR_GPU_IS_LOST        if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_NOT_SUPPORTED      if this query is not supported by \a device
  *         - \ref NVML_ERROR_UNKNOWN            on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderSessions(nvmlDevice_st device, @Cast("unsigned int*") IntPointer sessionCount, nvmlEncoderSessionInfo_t sessionInfos);
@@ -6129,18 +6170,18 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuTypeGetName(@Cast("nvmlVg
 
 /**
  * Retrieve the GPU Instance Profile ID for the given vGPU type ID.
- * The API will return a valid profile ID for MIG backed vGPU types when GPU is configured in MIG mode, else INVALID_GPU_INSTANCE_PROFILE_ID
- * is returned.
+ * The API will return a valid GPU Instance Profile ID for the MIG capable vGPU types, else INVALID_GPU_INSTANCE_PROFILE_ID is
+ * returned.
  *
  * For Kepler &tm; or newer fully supported devices.
  *
  * @param vgpuTypeId               Handle to vGPU type
- * @param gpuInstanceProfileId     GPU instance Profile ID
+ * @param gpuInstanceProfileId     GPU Instance Profile ID
  *
  * @return
  *         - \ref NVML_SUCCESS                 successful completion
  *         - \ref NVML_ERROR_NOT_SUPPORTED     if \a device is not in vGPU Host virtualization mode
- *         - \ref NVML_ERROR_INVALID_ARGUMENT  if  \a device is invalid, \a vgpuTypeId is invalid, or \a gpuInstanceProfileId is NULL
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a vgpuTypeId is invalid, or \a gpuInstanceProfileId is NULL
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlVgpuTypeGetGpuInstanceProfileId(@Cast("nvmlVgpuTypeId_t") int vgpuTypeId, @Cast("unsigned int*") IntPointer gpuInstanceProfileId);
@@ -6663,6 +6704,26 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFBCStats(@Cast
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFBCSessions(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") IntPointer sessionCount, nvmlFBCSessionInfo_t sessionInfo);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFBCSessions(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") IntBuffer sessionCount, nvmlFBCSessionInfo_t sessionInfo);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFBCSessions(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") int[] sessionCount, nvmlFBCSessionInfo_t sessionInfo);
+
+/**
+* Retrieve the GPU Instance ID for the given vGPU Instance.
+* The API will return a valid GPU Instance ID for MIG backed vGPU Instance, else INVALID_GPU_INSTANCE_ID is returned.
+*
+* For Kepler &tm; or newer fully supported devices.
+*
+* @param vgpuInstance                      Identifier of the target vGPU instance
+* @param gpuInstanceId                     GPU Instance ID
+*
+* @return
+*         - \ref NVML_SUCCESS                  successful completion
+*         - \ref NVML_ERROR_UNINITIALIZED      if the library has not been successfully initialized
+*         - \ref NVML_ERROR_INVALID_ARGUMENT   if \a vgpuInstance is 0, or \a gpuInstanceId is NULL.
+*         - \ref NVML_ERROR_NOT_FOUND          if \a vgpuInstance does not match a valid active vGPU instance on the system
+*         - \ref NVML_ERROR_UNKNOWN            on any unexpected error
+*/
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") IntPointer gpuInstanceId);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") IntBuffer gpuInstanceId);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") int[] gpuInstanceId);
 // Targeting ../nvml/nvmlVgpuVersion_t.java
 
 
@@ -7195,6 +7256,9 @@ public static final int NVML_COMPUTE_INSTANCE_PROFILE_COUNT =   0x6;
 /** All the engines except multiprocessors would be shared */
 public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_SHARED = 0x0;
 public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_COUNT =  0x1;
+// Targeting ../nvml/nvmlComputeInstancePlacement_t.java
+
+
 // Targeting ../nvml/nvmlComputeInstanceProfileInfo_t.java
 
 
@@ -7209,7 +7273,6 @@ public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_COUNT =  0x1;
  * Set MIG mode for the device.
  *
  * For Ampere &tm; or newer fully supported devices.
- * Supported on Linux only.
  * Requires root user.
  *
  * This mode determines whether a GPU instance can be created.
@@ -7223,6 +7286,9 @@ public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_COUNT =  0x1;
  * \a activationStatus would return the appropriate error code upon unsuccessful activation. For example, if device
  * unbind fails because the device isn't idle, \ref NVML_ERROR_IN_USE would be returned. The caller of this API
  * is expected to idle the device and retry setting the \a mode.
+ *
+ * \note On Windows, only disabling MIG mode is supported. \a activationStatus would return \ref
+ *       NVML_ERROR_NOT_SUPPORTED as GPU reset is not supported on Windows through this API.
  *
  * @param device                               The identifier of the target device
  * @param mode                                 The mode to be set, \ref NVML_DEVICE_MIG_DISABLE or
@@ -7244,7 +7310,6 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceSetMigMode(nvmlDevice_s
  * Get MIG mode for the device.
  *
  * For Ampere &tm; or newer fully supported devices.
- * Supported on Linux only.
  *
  * Changing MIG modes may require device unbind or reset. The "pending" MIG mode refers to the target mode following the
  * next activation trigger.
@@ -7643,7 +7708,7 @@ public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetComputeInstance
  *         - \ref NVML_ERROR_INVALID_ARGUMENT  If \a computeInstance or \a info are invalid
  *         - \ref NVML_ERROR_NO_PERMISSION     If user doesn't have permission to perform the operation
  */
-public static native @Cast("nvmlReturn_t") int nvmlComputeInstanceGetInfo(nvmlComputeInstance_st computeInstance, nvmlComputeInstanceInfo_t info);
+public static native @Cast("nvmlReturn_t") int nvmlComputeInstanceGetInfo_v2(nvmlComputeInstance_st computeInstance, nvmlComputeInstanceInfo_t info);
 
 /**
  * Test if the given handle refers to a MIG device.
@@ -7794,6 +7859,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPciInfo_v2(nvmlDevic
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGridLicensableFeatures_v2(nvmlDevice_st device, nvmlGridLicensableFeatures_t pGridLicensableFeatures);
 public static native @Cast("nvmlReturn_t") int nvmlEventSetWait(nvmlEventSet_st set, nvmlEventData_t data, @Cast("unsigned int") int timeoutms);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetAttributes(nvmlDevice_st device, nvmlDeviceAttributes_t attributes);
+public static native @Cast("nvmlReturn_t") int nvmlComputeInstanceGetInfo(nvmlComputeInstance_st computeInstance, nvmlComputeInstanceInfo_t info);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_t infos);
@@ -7809,6 +7875,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProce
 // #undef nvmlDeviceGetGraphicsRunningProcesses
 // #undef nvmlDeviceGetComputeRunningProcesses
 // #undef nvmlDeviceGetAttributes
+// #undef nvmlComputeInstanceGetInfo
 // #undef nvmlEventSetWait
 // #undef nvmlDeviceGetGridLicensableFeatures
 // #undef nvmlDeviceRemoveGpu
