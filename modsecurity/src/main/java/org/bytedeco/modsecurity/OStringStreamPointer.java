@@ -1,4 +1,4 @@
-package org.bytedeco.modsecurity.presets;
+package org.bytedeco.modsecurity;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
