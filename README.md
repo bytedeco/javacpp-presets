@@ -60,6 +60,17 @@ The JavaCPP Presets modules contain Java configuration and interface classes for
 
 Please refer to the wiki page for more information about how to [create new presets](https://github.com/bytedeco/javacpp-presets/wiki/Create-New-Presets). Since additional documentation is currently lacking, please also feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project).
 
+Navigation,Javacpp presents repo documentations uses layering concept.
+There are two layer in this repo.
+1)This documentation readme you are reading is the upper layer,or simply Javacpp layer.
+2)The 2nd layer is those folders or packages.
+Now,you ARE reading the (upper layer/Javacpp layer) which means you should have enough info to resolve some javacpp issues.
+However,each (folder or packages)will have a respective readme.Which is some extra notes about usages,setup etc.As not every 3rd party ported project have the same code quality,style,layout.
+
+Summary:
+This document is the upper layer,(Javacpp-presents).It will mentions about javacpp wide layer settings like java runtime.Build,etc...
+The package is the lower layer,(eg.Opencv).It will mention about code,pom setting,required binary,package related documentations.
+
 
 Downloads
 ---------
