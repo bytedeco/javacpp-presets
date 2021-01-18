@@ -46,7 +46,7 @@ public class modsecurity implements InfoMapper {
     @Override
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("clock_t").cast().valueTypes("long").pointerTypes("SizeTPointer"));
-        infoMap.put(new Info("ostringstream").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("std::ostringstream").pointerTypes("OStringStreamPointer").define());
         infoMap.put(new Info("std::list<std::string>").pointerTypes("StringList").define());
         infoMap.put(new Info("std::basic_string<char>").pointerTypes("StdString").define());
         infoMap.put(new Info("std::set<std::string>").pointerTypes("StringSet").define());
@@ -62,13 +62,13 @@ public class modsecurity implements InfoMapper {
         infoMap.put(new Info("std::shared_ptr<modsecurity::RequestBodyProcessor::MultipartPartTmpFile>").annotations("@SharedPtr").pointerTypes("MultipartPartTmpFile"));
         infoMap.put(new Info("std::shared_ptr<modsecurity::Rule>").annotations("@SharedPtr").pointerTypes("Rule"));
         infoMap.put(new Info("std::shared_ptr<modsecurity::actions::Action>").annotations("@SharedPtr").pointerTypes("Action"));
-        infoMap.put(new Info("std::unordered_multimap<std::string,VariableValue*,modsecurity::MyHash,modsecurity::MyEqual>").skip());
-        infoMap.put(new Info("std::vector<std::unique_ptr<modsecurity::variables::Variable> >").skip());
-        infoMap.put(new Info("std::vector<std::unique_ptr<modsecurity::actions::Action> >").skip());
-        infoMap.put(new Info("std::unordered_multimap<std::shared_ptr<std::string>,std::shared_ptr<modsecurity::variables::Variable> >").skip());
-        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::variables::Variable> >").skip());
-        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::variables::Variable> >").skip());
-        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::actions::Action> >").skip());
+        infoMap.put(new Info("std::unordered_multimap<std::string,VariableValue*,modsecurity::MyHash,modsecurity::MyEqual>").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("std::vector<std::unique_ptr<modsecurity::variables::Variable> >").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("std::vector<std::unique_ptr<modsecurity::actions::Action> >").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("std::unordered_multimap<std::shared_ptr<std::string>,std::shared_ptr<modsecurity::variables::Variable> >").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::variables::Variable> >").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::variables::Variable> >").cast().pointerTypes("Pointer"));
+        infoMap.put(new Info("std::unordered_multimap<double,std::shared_ptr<modsecurity::actions::Action> >").cast().pointerTypes("Pointer"));
 
     }
 }
