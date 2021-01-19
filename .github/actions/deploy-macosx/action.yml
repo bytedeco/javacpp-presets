@@ -52,6 +52,22 @@ runs:
           sudo /Volumes/m_onemkl_p_2021.1.1.50_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
         fi
 
+        GRADLE_TASK=publishToMavenLocal
+        MAVEN_PHASE=install
+        if [[ -n ${CI_DEPLOY_USERNAME:-} ]] && [[ ! "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+          GRADLE_TASK=publish
+          MAVEN_PHASE=deploy
+          if [[ "${{ github.event.head_commit.message }}" == Release* ]]; then
+            python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
+            tar -xzf settings.tar.gz
+            MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
+          fi
+        fi
+        echo "GPG_PASSPHRASE=***" >> $GITHUB_ENV
+        echo "GRADLE_TASK=$GRADLE_TASK" >> $GITHUB_ENV
+        echo "MAVEN_PHASE=$MAVEN_PHASE" >> $GITHUB_ENV
+        echo "MAVEN_OPTIONS=$MAVEN_OPTIONS" >> $GITHUB_ENV
+
     - name: Build project
       shell: bash
       run: |
@@ -73,7 +89,6 @@ runs:
         git submodule foreach --recursive 'git reset --hard'
 
         if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
-          [[ "${{ github.event_name }}" == "pull_request" ]] && GRADLE_TASK=publishToMavenLocal || GRADLE_TASK=publish
           echo Executing Gradle $GRADLE_TASK ${{ matrix.options }} on $MAKEJ processors
           export GRADLE_OPTIONS="-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=$CI_DEPLOY_PLATFORM -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
           gradle clean build $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle
@@ -81,7 +96,6 @@ runs:
           gradle $GRADLE_TASK $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle --refresh-dependencies
         else
           mkdir -p $HOME/.m2
-          [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
           echo "<settings>" > $HOME/.m2/settings.xml
           echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
           echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml

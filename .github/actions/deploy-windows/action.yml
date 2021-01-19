@@ -93,6 +93,23 @@ runs:
           cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_SourceCode_v140_x64.msi ADDLOCAL=ALL"
         )
 
+        set GRADLE_TASK=publishToMavenLocal
+        set MAVEN_PHASE=install
+        set "MESSAGE=${{ github.event.head_commit.message }}"
+        if not "%CI_DEPLOY_USERNAME%"=="" if not "%GITHUB_EVENT_NAME%"=="pull_request" (
+          set GRADLE_TASK=publish
+          set MAVEN_PHASE=deploy
+          if "%MESSAGE:~0,7%"=="Release" (
+            python -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=%CI_DEPLOY_SETTINGS%
+            bash -c "tar -xzf settings.tar.gz -C $HOME"
+            set "MAVEN_OPTIONS=%MAVEN_OPTIONS% -DperformRelease -DstagingRepositoryId=%STAGING_REPOSITORY%"
+          )
+        )
+        echo GPG_PASSPHRASE=*** >> %GITHUB_ENV%
+        echo GRADLE_TASK=%GRADLE_TASK% >> %GITHUB_ENV%
+        echo MAVEN_PHASE=%MAVEN_PHASE% >> %GITHUB_ENV%
+        echo MAVEN_OPTIONS=%MAVEN_OPTIONS% >> %GITHUB_ENV%
+
     - name: Build project
       shell: cmd
       run: |
@@ -143,7 +160,6 @@ runs:
         if not "%CI_DEPLOY_NEED_GRADLE%"=="" (goto :gradle) else (goto :maven)
 
         :gradle
-        if "${{ github.event_name }}"=="pull_request" (set GRADLE_TASK=publishToMavenLocal) else (set GRADLE_TASK=publish)
         echo Executing Gradle %GRADLE_TASK% ${{ matrix.options }} on %MAKEJ% processors
         set "GRADLE_OPTIONS=-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=%CI_DEPLOY_PLATFORM% -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
         gradle clean build %GRADLE_OPTIONS% -b %CI_DEPLOY_MODULE%/build.gradle
@@ -155,7 +171,6 @@ runs:
 
         :maven
         mkdir %USERPROFILE%\.m2
-        if "${{ github.event_name }}"=="pull_request" (set MAVEN_PHASE=install) else (set MAVEN_PHASE=deploy)
         echo ^<settings^> > %USERPROFILE%\.m2\settings.xml
         echo ^<mirrors^>^<mirror^>^<id^>google-maven-central^</id^>^<name^>GCS Maven Central mirror^</name^>^<url^>https://maven-central.storage-download.googleapis.com/maven2/^</url^>^<mirrorOf^>central^</mirrorOf^>^</mirror^>^</mirrors^> >> %USERPROFILE%\.m2\settings.xml
         echo ^<servers^>^<server^>^<id^>sonatype-nexus-snapshots^</id^>^<username^>%CI_DEPLOY_USERNAME%^</username^>^<password^>%CI_DEPLOY_PASSWORD%^</password^>^</server^>^<server^>^<id^>sonatype-nexus-staging^</id^>^<username^>%CI_DEPLOY_USERNAME%^</username^>^<password^>%CI_DEPLOY_PASSWORD%^</password^>^</server^>^</servers^> >> %USERPROFILE%\.m2\settings.xml
