@@ -11,6 +11,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Artem Martynenko artem7mag@gmail.com
  **/
 @Properties(value = @Platform(
+        compiler = "cpp11",
         include = {
         "modsecurity/actions/action.h",
         "modsecurity/collection/collection.h",
@@ -51,7 +52,7 @@ public class modsecurity implements InfoMapper {
                 new Info("std::ostringstream").pointerTypes("org.bytedeco.modsecurity.OStringStreamPointer").define());
         infoMap.put(new Info("std::list<std::string>").pointerTypes("StringList").define());
         infoMap.put(new Info("ModSecurityIntervention_t").pointerTypes("ModSecurityIntervention").define());
-        infoMap.put(new Info("std::basic_string<char>").pointerTypes("StdString").define());
+        infoMap.put(new Info("std::basic_string<char>").annotations("@StdString").pointerTypes("BytePointer"));
         infoMap.put(new Info("std::set<std::string>").pointerTypes("StringSet").define());
         infoMap.put(new Info("std::list<int>").pointerTypes("IntList").define());
         infoMap.put(new Info("std::list<std::pair<int,int> >").pointerTypes("IntIntPairList").define());

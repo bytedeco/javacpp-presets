@@ -29,6 +29,12 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <compilerOptions>
+            <compilerOption>-std=c++11</compilerOption>
+            <option>-fpermissive</option>
+          </compilerOptions>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
