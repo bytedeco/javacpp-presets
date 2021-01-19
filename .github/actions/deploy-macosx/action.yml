@@ -13,6 +13,7 @@ runs:
         brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
+          brew uninstall gcc@8 gcc@9 gcc@10
           brew install gcc@7
           brew link --overwrite gcc@7
 
@@ -33,8 +34,8 @@ runs:
         fi
 
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL-1.2.0.dylib /usr/local/lib/libSDL-1.2.0.dylib
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/lib/libusb-1.0.0.dylib
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL-1.2.0.dylib /usr/local/opt/sdl/lib/libSDL-1.2.0.dylib
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/opt/libusb/lib/libusb-1.0.0.dylib
 
         python3 -m pip install gdown
 
