@@ -19,7 +19,6 @@ runs:
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
-        echo "MAVEN_OPTIONS=-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/" >> $GITHUB_ENV
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ -z ${CI_DEPLOY_NEED_NOTOOLS:-} ]]; then
           echo Setting up tools for linux-armhf build
@@ -35,9 +34,9 @@ runs:
           tar -xzf userland-master.tar.gz --strip-components=1 -C userland
           ln -s $(pwd)/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-gfortran $(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/
           ln -s $(pwd)/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/libgfortran* $(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/
+          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++ -Djava.library.path=$(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/"
           export PATH=$(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/:$PATH
           echo "PATH=$PATH" >> $GITHUB_ENV
-          echo "MAVEN_OPTIONS=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++ -Djava.library.path=$(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/" >> $GITHUB_ENV
 
           pushd userland
           # https://github.com/raspberrypi/userland/issues/603
@@ -56,6 +55,7 @@ runs:
           apt-get update
           apt-get -y install python python2.7 python-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
           apt-get -y install pkg-config ccache clang gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch openjdk-8-jdk-headless ant python python3-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
+          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/"
         fi
 
         find /usr/lib/jvm/default-java/
@@ -113,6 +113,22 @@ runs:
           ln -s $(pwd)/flycapture.2.13.3.31_arm64_xenial.tar.gz $GITHUB_WORKSPACE/downloads/flycapture.2.13.3.31_arm64.tar.gz
         fi
 
+        GRADLE_TASK=publishToMavenLocal
+        MAVEN_PHASE=install
+        if [[ -n ${CI_DEPLOY_USERNAME:-} ]] && [[ ! "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+          GRADLE_TASK=publish
+          MAVEN_PHASE=deploy
+          if [[ "${{ github.event.head_commit.message }}" == Release* ]]; then
+            python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
+            tar -xzf settings.tar.gz
+            MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
+          fi
+        fi
+        echo "GPG_PASSPHRASE=***" >> $GITHUB_ENV
+        echo "GRADLE_TASK=$GRADLE_TASK" >> $GITHUB_ENV
+        echo "MAVEN_PHASE=$MAVEN_PHASE" >> $GITHUB_ENV
+        echo "MAVEN_OPTIONS=$MAVEN_OPTIONS" >> $GITHUB_ENV
+
     - name: Build project
       shell: bash
       run: |
@@ -136,7 +152,6 @@ runs:
         export HOME=/root
 
         if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
-          [[ "${{ github.event_name }}" == "pull_request" ]] && GRADLE_TASK=publishToMavenLocal || GRADLE_TASK=publish
           echo Executing Gradle $GRADLE_TASK ${{ matrix.options }} on $MAKEJ processors
           export GRADLE_OPTIONS="-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=$CI_DEPLOY_PLATFORM -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
           gradle clean build $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle
@@ -144,7 +159,6 @@ runs:
           gradle $GRADLE_TASK $GRADLE_OPTIONS -b $CI_DEPLOY_MODULE/build.gradle --refresh-dependencies
         else
           mkdir -p $HOME/.m2
-          [[ "${{ github.event_name }}" == "pull_request" ]] && MAVEN_PHASE=install || MAVEN_PHASE=deploy
           echo "<settings>" > $HOME/.m2/settings.xml
           echo "<mirrors><mirror><id>google-maven-central</id><name>GCS Maven Central mirror</name><url>https://maven-central.storage-download.googleapis.com/maven2/</url><mirrorOf>central</mirrorOf></mirror></mirrors>" >> $HOME/.m2/settings.xml
           echo "<servers><server><id>sonatype-nexus-snapshots</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server><server><id>sonatype-nexus-staging</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml

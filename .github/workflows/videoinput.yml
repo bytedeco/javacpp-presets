@@ -10,8 +10,10 @@ on:
 env:
   CI_DEPLOY_MODULE: ${{ github.workflow }}
   CI_DEPLOY_PLATFORM: ${{ github.job }}
+  CI_DEPLOY_SETTINGS: ${{ secrets.CI_DEPLOY_SETTINGS }}
   CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
   CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+  STAGING_REPOSITORY: ${{ secrets.STAGING_REPOSITORY }}
 jobs:
   windows-x86:
     runs-on: windows-2019
