@@ -96,6 +96,8 @@ case $PLATFORM in
         $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. .
         make -j $MAKEJ
         make install
+        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libfreenect.dylib
+        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libfreenect_sync.dylib
         ;;
     windows-x86)
         "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DLIBUSB_1_INCLUDE_DIR="../libusb-win32-bin-1.2.6.0/include" -DLIBUSB_1_LIBRARY="../libusb-win32-bin-1.2.6.0/lib/msvc/libusb.lib" -DTHREADS_PTHREADS_INCLUDE_DIR="../pthreads-w32-2-9-1-release/Pre-built.2/include" -DTHREADS_PTHREADS_WIN32_LIBRARY="../pthreads-w32-2-9-1-release/Pre-built.2/lib/x86/pthreadVC2.lib" -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. .

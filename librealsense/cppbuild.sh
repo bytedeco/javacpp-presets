@@ -68,6 +68,7 @@ case $PLATFORM in
         PKG_CONFIG_PATH="../lib/pkgconfig" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
+        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense.dylib
         ;;
     windows-x86)
         export CC="cl.exe"

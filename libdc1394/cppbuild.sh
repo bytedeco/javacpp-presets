@@ -63,6 +63,7 @@ case $PLATFORM in
         LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0/ LIBUSB_LIBS="-L/usr/local/lib/ -lusb-1.0" ./configure --prefix=$INSTALL_PATH --disable-sdltest
         make -j4
         make install-strip
+        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libdc1394.dylib
         ;;
     windows-x86)
         cp ../1394camera/lib/1394camera.dll ../bin/
