@@ -27,7 +27,7 @@ public class IpcWriteOptions extends Pointer {
         return (IpcWriteOptions)super.position(position);
     }
     @Override public IpcWriteOptions getPointer(long i) {
-        return new IpcWriteOptions(this).position(position + i);
+        return new IpcWriteOptions((Pointer)this).position(position + i);
     }
 
   // If true, allow field lengths that don't fit in a signed 32-bit int.

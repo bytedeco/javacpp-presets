@@ -12,7 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Name("arrow::TemporalScalar<arrow::MonthIntervalType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BaseBaseMonthIntervalType extends Scalar {
+public class BaseBaseMonthIntervalType extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseBaseMonthIntervalType(Pointer p) { super(p); }

@@ -22,7 +22,7 @@ public class ResizableUniqueResult extends Pointer {
         return (ResizableUniqueResult)super.position(position);
     }
     @Override public ResizableUniqueResult getPointer(long i) {
-        return new ResizableUniqueResult(this).position(position + i);
+        return new ResizableUniqueResult((Pointer)this).position(position + i);
     }
 
   

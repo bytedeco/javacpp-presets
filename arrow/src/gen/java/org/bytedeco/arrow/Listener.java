@@ -34,7 +34,7 @@ public class Listener extends Pointer {
         return (Listener)super.position(position);
     }
     @Override public Listener getPointer(long i) {
-        return new Listener(this).position(position + i);
+        return new Listener((Pointer)this).position(position + i);
     }
 
 

@@ -30,7 +30,7 @@ public class ParquetFactoryOptions extends Pointer {
         return (ParquetFactoryOptions)super.position(position);
     }
     @Override public ParquetFactoryOptions getPointer(long i) {
-        return new ParquetFactoryOptions(this).position(position + i);
+        return new ParquetFactoryOptions((Pointer)this).position(position + i);
     }
 
   // Either an explicit Partitioning or a PartitioningFactory to discover one.

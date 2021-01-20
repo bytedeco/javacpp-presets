@@ -22,7 +22,7 @@ public class RecordBatchStreamReaderResult extends Pointer {
         return (RecordBatchStreamReaderResult)super.position(position);
     }
     @Override public RecordBatchStreamReaderResult getPointer(long i) {
-        return new RecordBatchStreamReaderResult(this).position(position + i);
+        return new RecordBatchStreamReaderResult((Pointer)this).position(position + i);
     }
 
   

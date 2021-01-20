@@ -26,7 +26,7 @@ public class UnionMode extends Pointer {
         return (UnionMode)super.position(position);
     }
     @Override public UnionMode getPointer(long i) {
-        return new UnionMode(this).position(position + i);
+        return new UnionMode((Pointer)this).position(position + i);
     }
 
   public enum type { SPARSE(0), DENSE(1);

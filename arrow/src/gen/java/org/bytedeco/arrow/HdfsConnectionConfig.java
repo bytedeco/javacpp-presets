@@ -26,7 +26,7 @@ public class HdfsConnectionConfig extends Pointer {
         return (HdfsConnectionConfig)super.position(position);
     }
     @Override public HdfsConnectionConfig getPointer(long i) {
-        return new HdfsConnectionConfig(this).position(position + i);
+        return new HdfsConnectionConfig((Pointer)this).position(position + i);
     }
 
   public native @StdString String host(); public native HdfsConnectionConfig host(String setter);

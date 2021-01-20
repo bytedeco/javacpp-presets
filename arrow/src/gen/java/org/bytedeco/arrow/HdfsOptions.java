@@ -24,7 +24,7 @@ public class HdfsOptions extends Pointer {
         return (HdfsOptions)super.position(position);
     }
     @Override public HdfsOptions getPointer(long i) {
-        return new HdfsOptions(this).position(position + i);
+        return new HdfsOptions((Pointer)this).position(position + i);
     }
 
   public HdfsOptions() { super((Pointer)null); allocate(); }

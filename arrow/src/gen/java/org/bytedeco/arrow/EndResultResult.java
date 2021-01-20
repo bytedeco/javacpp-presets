@@ -22,7 +22,7 @@ public class EndResultResult extends Pointer {
         return (EndResultResult)super.position(position);
     }
     @Override public EndResultResult getPointer(long i) {
-        return new EndResultResult(this).position(position + i);
+        return new EndResultResult((Pointer)this).position(position + i);
     }
 
   

@@ -26,7 +26,7 @@ public class MockFileInfo extends Pointer {
         return (MockFileInfo)super.position(position);
     }
     @Override public MockFileInfo getPointer(long i) {
-        return new MockFileInfo(this).position(position + i);
+        return new MockFileInfo((Pointer)this).position(position + i);
     }
 
   public native @StdString String full_path(); public native MockFileInfo full_path(String setter);

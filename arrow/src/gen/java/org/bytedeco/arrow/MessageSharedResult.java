@@ -22,7 +22,7 @@ public class MessageSharedResult extends Pointer {
         return (MessageSharedResult)super.position(position);
     }
     @Override public MessageSharedResult getPointer(long i) {
-        return new MessageSharedResult(this).position(position + i);
+        return new MessageSharedResult((Pointer)this).position(position + i);
     }
 
   

@@ -26,7 +26,7 @@ public class UnionDatasetResult extends Pointer {
         return (UnionDatasetResult)super.position(position);
     }
     @Override public UnionDatasetResult getPointer(long i) {
-        return new UnionDatasetResult(this).position(position + i);
+        return new UnionDatasetResult((Pointer)this).position(position + i);
     }
 
   

@@ -30,7 +30,7 @@ public class UnionArray extends Array {
         return (UnionArray)super.position(position);
     }
     @Override public UnionArray getPointer(long i) {
-        return new UnionArray(this).position(position + i);
+        return new UnionArray((Pointer)this).position(position + i);
     }
 
 

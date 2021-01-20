@@ -28,7 +28,7 @@ public class DecimalMetadata extends Pointer {
         return (DecimalMetadata)super.position(position);
     }
     @Override public DecimalMetadata getPointer(long i) {
-        return new DecimalMetadata(this).position(position + i);
+        return new DecimalMetadata((Pointer)this).position(position + i);
     }
 
   public native @Cast("bool") boolean isset(); public native DecimalMetadata isset(boolean setter);

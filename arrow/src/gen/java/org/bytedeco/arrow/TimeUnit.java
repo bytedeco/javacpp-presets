@@ -26,7 +26,7 @@ public class TimeUnit extends Pointer {
         return (TimeUnit)super.position(position);
     }
     @Override public TimeUnit getPointer(long i) {
-        return new TimeUnit(this).position(position + i);
+        return new TimeUnit((Pointer)this).position(position + i);
     }
 
   /** The unit for a time or timestamp DataType */

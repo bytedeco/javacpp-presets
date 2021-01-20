@@ -28,7 +28,7 @@ public class UniqueID extends Pointer {
         return (UniqueID)super.position(position);
     }
     @Override public UniqueID getPointer(long i) {
-        return new UniqueID(this).position(position + i);
+        return new UniqueID((Pointer)this).position(position + i);
     }
 
   public static native @ByVal UniqueID from_binary(@StdString String binary);

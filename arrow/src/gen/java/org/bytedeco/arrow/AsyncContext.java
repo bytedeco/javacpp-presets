@@ -24,7 +24,7 @@ public class AsyncContext extends Pointer {
         return (AsyncContext)super.position(position);
     }
     @Override public AsyncContext getPointer(long i) {
-        return new AsyncContext(this).position(position + i);
+        return new AsyncContext((Pointer)this).position(position + i);
     }
 
   public native Executor executor(); public native AsyncContext executor(Executor setter);

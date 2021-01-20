@@ -25,7 +25,7 @@ public class ReaderProperties extends Pointer {
         return (ReaderProperties)super.position(position);
     }
     @Override public ReaderProperties getPointer(long i) {
-        return new ReaderProperties(this).position(position + i);
+        return new ReaderProperties((Pointer)this).position(position + i);
     }
 
   public ReaderProperties(MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(pool); }

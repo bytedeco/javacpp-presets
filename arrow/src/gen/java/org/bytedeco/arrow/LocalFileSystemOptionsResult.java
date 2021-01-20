@@ -22,7 +22,7 @@ public class LocalFileSystemOptionsResult extends Pointer {
         return (LocalFileSystemOptionsResult)super.position(position);
     }
     @Override public LocalFileSystemOptionsResult getPointer(long i) {
-        return new LocalFileSystemOptionsResult(this).position(position + i);
+        return new LocalFileSystemOptionsResult((Pointer)this).position(position + i);
     }
 
   

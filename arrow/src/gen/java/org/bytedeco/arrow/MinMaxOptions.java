@@ -26,7 +26,7 @@ public class MinMaxOptions extends FunctionOptions {
         return (MinMaxOptions)super.position(position);
     }
     @Override public MinMaxOptions getPointer(long i) {
-        return new MinMaxOptions(this).position(position + i);
+        return new MinMaxOptions((Pointer)this).position(position + i);
     }
 
   public enum Mode {

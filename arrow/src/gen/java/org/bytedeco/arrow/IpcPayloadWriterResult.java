@@ -22,7 +22,7 @@ public class IpcPayloadWriterResult extends Pointer {
         return (IpcPayloadWriterResult)super.position(position);
     }
     @Override public IpcPayloadWriterResult getPointer(long i) {
-        return new IpcPayloadWriterResult(this).position(position + i);
+        return new IpcPayloadWriterResult((Pointer)this).position(position + i);
     }
 
   

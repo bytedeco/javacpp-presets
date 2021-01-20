@@ -26,7 +26,7 @@ public class FileReaderResult extends Pointer {
         return (FileReaderResult)super.position(position);
     }
     @Override public FileReaderResult getPointer(long i) {
-        return new FileReaderResult(this).position(position + i);
+        return new FileReaderResult((Pointer)this).position(position + i);
     }
 
   

@@ -27,7 +27,7 @@ public class ByteArray extends Pointer {
         return (ByteArray)super.position(position);
     }
     @Override public ByteArray getPointer(long i) {
-        return new ByteArray(this).position(position + i);
+        return new ByteArray((Pointer)this).position(position + i);
     }
 
   public ByteArray() { super((Pointer)null); allocate(); }

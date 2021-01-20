@@ -43,7 +43,7 @@ public class FieldPath extends Pointer {
         return (FieldPath)super.position(position);
     }
     @Override public FieldPath getPointer(long i) {
-        return new FieldPath(this).position(position + i);
+        return new FieldPath((Pointer)this).position(position + i);
     }
 
   public FieldPath() { super((Pointer)null); allocate(); }

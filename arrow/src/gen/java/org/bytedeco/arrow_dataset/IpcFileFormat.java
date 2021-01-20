@@ -31,7 +31,7 @@ public class IpcFileFormat extends FileFormat {
         return (IpcFileFormat)super.position(position);
     }
     @Override public IpcFileFormat getPointer(long i) {
-        return new IpcFileFormat(this).position(position + i);
+        return new IpcFileFormat((Pointer)this).position(position + i);
     }
 
   public native @StdString String type_name();

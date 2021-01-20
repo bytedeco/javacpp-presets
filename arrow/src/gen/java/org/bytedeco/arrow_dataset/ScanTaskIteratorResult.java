@@ -26,7 +26,7 @@ public class ScanTaskIteratorResult extends Pointer {
         return (ScanTaskIteratorResult)super.position(position);
     }
     @Override public ScanTaskIteratorResult getPointer(long i) {
-        return new ScanTaskIteratorResult(this).position(position + i);
+        return new ScanTaskIteratorResult((Pointer)this).position(position + i);
     }
 
   

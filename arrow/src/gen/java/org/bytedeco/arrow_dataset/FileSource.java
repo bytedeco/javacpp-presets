@@ -27,7 +27,7 @@ public class FileSource extends Pointer {
         return (FileSource)super.position(position);
     }
     @Override public FileSource getPointer(long i) {
-        return new FileSource(this).position(position + i);
+        return new FileSource((Pointer)this).position(position + i);
     }
 
   public FileSource(@StdString String path, @SharedPtr FileSystem filesystem,

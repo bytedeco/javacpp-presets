@@ -28,7 +28,7 @@ public class VectorKernel extends ArrayKernel {
         return (VectorKernel)super.position(position);
     }
     @Override public VectorKernel getPointer(long i) {
-        return new VectorKernel(this).position(position + i);
+        return new VectorKernel((Pointer)this).position(position + i);
     }
 
   public VectorKernel() { super((Pointer)null); allocate(); }

@@ -28,7 +28,7 @@ public class ParquetOutputWrapper extends OutputStream {
         return (ParquetOutputWrapper)super.position(position);
     }
     @Override public ParquetOutputWrapper getPointer(long i) {
-        return new ParquetOutputWrapper(this).position(position + i);
+        return new ParquetOutputWrapper((Pointer)this).position(position + i);
     }
 
 

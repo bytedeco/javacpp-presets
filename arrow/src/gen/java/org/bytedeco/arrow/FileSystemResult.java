@@ -22,7 +22,7 @@ public class FileSystemResult extends Pointer {
         return (FileSystemResult)super.position(position);
     }
     @Override public FileSystemResult getPointer(long i) {
-        return new FileSystemResult(this).position(position + i);
+        return new FileSystemResult((Pointer)this).position(position + i);
     }
 
   

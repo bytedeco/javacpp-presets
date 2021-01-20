@@ -28,7 +28,7 @@ public class call_traits extends Pointer {
         return (call_traits)super.position(position);
     }
     @Override public call_traits getPointer(long i) {
-        return new call_traits(this).position(position + i);
+        return new call_traits((Pointer)this).position(position + i);
     }
 
 

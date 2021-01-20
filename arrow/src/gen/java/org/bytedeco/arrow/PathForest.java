@@ -54,7 +54,7 @@ public class PathForest extends Pointer {
           return (Ref)super.position(position);
       }
       @Override public Ref getPointer(long i) {
-          return new Ref(this).position(position + i);
+          return new Ref((Pointer)this).position(position + i);
       }
   
     public native @Const @ByRef FileInfo info();

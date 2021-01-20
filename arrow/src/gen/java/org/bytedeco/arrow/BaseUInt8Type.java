@@ -12,7 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Name("arrow::NumericScalar<arrow::UInt8Type>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BaseUInt8Type extends Scalar {
+public class BaseUInt8Type extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseUInt8Type(Pointer p) { super(p); }
@@ -23,7 +23,7 @@ public class BaseUInt8Type extends Scalar {
         return (BaseUInt8Type)super.position(position);
     }
     @Override public BaseUInt8Type getPointer(long i) {
-        return new BaseUInt8Type(this).position(position + i);
+        return new BaseUInt8Type((Pointer)this).position(position + i);
     }
 
 

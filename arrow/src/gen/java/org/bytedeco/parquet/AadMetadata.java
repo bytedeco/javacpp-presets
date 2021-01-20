@@ -28,7 +28,7 @@ public class AadMetadata extends Pointer {
         return (AadMetadata)super.position(position);
     }
     @Override public AadMetadata getPointer(long i) {
-        return new AadMetadata(this).position(position + i);
+        return new AadMetadata((Pointer)this).position(position + i);
     }
 
   public native @StdString String aad_prefix(); public native AadMetadata aad_prefix(String setter);

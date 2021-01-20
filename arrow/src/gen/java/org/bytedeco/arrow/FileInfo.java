@@ -24,7 +24,7 @@ public class FileInfo extends Pointer {
         return (FileInfo)super.position(position);
     }
     @Override public FileInfo getPointer(long i) {
-        return new FileInfo(this).position(position + i);
+        return new FileInfo((Pointer)this).position(position + i);
     }
 
   public FileInfo() { super((Pointer)null); allocate(); }
@@ -97,7 +97,7 @@ public class FileInfo extends Pointer {
           return (ByPath)super.position(position);
       }
       @Override public ByPath getPointer(long i) {
-          return new ByPath(this).position(position + i);
+          return new ByPath((Pointer)this).position(position + i);
       }
   
     public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef FileInfo l, @Const @ByRef FileInfo r);

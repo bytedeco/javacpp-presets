@@ -77,7 +77,7 @@ public class FlightInfoResult extends Pointer {
         return (FlightInfoResult)super.position(position);
     }
     @Override public FlightInfoResult getPointer(long i) {
-        return new FlightInfoResult(this).position(position + i);
+        return new FlightInfoResult((Pointer)this).position(position + i);
     }
 
   

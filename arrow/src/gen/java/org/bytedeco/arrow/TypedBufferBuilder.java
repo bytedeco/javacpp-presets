@@ -24,7 +24,7 @@ public class TypedBufferBuilder extends Pointer {
         return (TypedBufferBuilder)super.position(position);
     }
     @Override public TypedBufferBuilder getPointer(long i) {
-        return new TypedBufferBuilder(this).position(position + i);
+        return new TypedBufferBuilder((Pointer)this).position(position + i);
     }
 
   public TypedBufferBuilder(MemoryPool pool/*=default_memory_pool()*/) { super((Pointer)null); allocate(pool); }

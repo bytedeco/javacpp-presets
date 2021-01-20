@@ -36,7 +36,7 @@ public class ExecBatch extends Pointer {
         return (ExecBatch)super.position(position);
     }
     @Override public ExecBatch getPointer(long i) {
-        return new ExecBatch(this).position(position + i);
+        return new ExecBatch((Pointer)this).position(position + i);
     }
 
   public ExecBatch() { super((Pointer)null); allocate(); }

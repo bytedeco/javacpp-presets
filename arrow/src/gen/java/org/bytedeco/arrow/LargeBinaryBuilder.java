@@ -35,7 +35,7 @@ public class LargeBinaryBuilder extends BaseLargeBinaryBuilder {
         return (LargeBinaryBuilder)super.position(position);
     }
     @Override public LargeBinaryBuilder getPointer(long i) {
-        return new LargeBinaryBuilder(this).position(position + i);
+        return new LargeBinaryBuilder((Pointer)this).position(position + i);
     }
 
 

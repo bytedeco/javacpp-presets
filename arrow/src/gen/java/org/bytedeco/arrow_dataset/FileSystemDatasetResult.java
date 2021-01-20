@@ -26,7 +26,7 @@ public class FileSystemDatasetResult extends Pointer {
         return (FileSystemDatasetResult)super.position(position);
     }
     @Override public FileSystemDatasetResult getPointer(long i) {
-        return new FileSystemDatasetResult(this).position(position + i);
+        return new FileSystemDatasetResult((Pointer)this).position(position + i);
     }
 
   

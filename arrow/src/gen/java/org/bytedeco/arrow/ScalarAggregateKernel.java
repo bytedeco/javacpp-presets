@@ -33,7 +33,7 @@ public class ScalarAggregateKernel extends Kernel {
         return (ScalarAggregateKernel)super.position(position);
     }
     @Override public ScalarAggregateKernel getPointer(long i) {
-        return new ScalarAggregateKernel(this).position(position + i);
+        return new ScalarAggregateKernel((Pointer)this).position(position + i);
     }
 
   public ScalarAggregateKernel() { super((Pointer)null); allocate(); }

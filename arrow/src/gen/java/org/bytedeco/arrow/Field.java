@@ -83,7 +83,7 @@ public class Field extends Fingerprintable {
           return (MergeOptions)super.position(position);
       }
       @Override public MergeOptions getPointer(long i) {
-          return new MergeOptions(this).position(position + i);
+          return new MergeOptions((Pointer)this).position(position + i);
       }
   
     /** If true, a Field of NullType can be unified with a Field of another type.

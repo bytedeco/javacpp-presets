@@ -22,7 +22,7 @@ public class ScalarAggregateKernelResult extends Pointer {
         return (ScalarAggregateKernelResult)super.position(position);
     }
     @Override public ScalarAggregateKernelResult getPointer(long i) {
-        return new ScalarAggregateKernelResult(this).position(position + i);
+        return new ScalarAggregateKernelResult((Pointer)this).position(position + i);
     }
 
   

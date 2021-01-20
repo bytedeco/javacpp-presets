@@ -25,7 +25,7 @@ public class CryptoContext extends Pointer {
         return (CryptoContext)super.position(position);
     }
     @Override public CryptoContext getPointer(long i) {
-        return new CryptoContext(this).position(position + i);
+        return new CryptoContext((Pointer)this).position(position + i);
     }
 
   public CryptoContext(@Cast("bool") boolean start_with_dictionary_page, short rg_ordinal, short col_ordinal,

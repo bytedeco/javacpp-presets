@@ -22,7 +22,7 @@ public class FlushResultResult extends Pointer {
         return (FlushResultResult)super.position(position);
     }
     @Override public FlushResultResult getPointer(long i) {
-        return new FlushResultResult(this).position(position + i);
+        return new FlushResultResult((Pointer)this).position(position + i);
     }
 
   

@@ -28,7 +28,7 @@ public class IpcPayload extends Pointer {
         return (IpcPayload)super.position(position);
     }
     @Override public IpcPayload getPointer(long i) {
-        return new IpcPayload(this).position(position + i);
+        return new IpcPayload((Pointer)this).position(position + i);
     }
 
   public native MessageType type(); public native IpcPayload type(MessageType setter);

@@ -31,7 +31,7 @@ public class FloatScalar extends BaseFloatScalar {
         return (FloatScalar)super.position(position);
     }
     @Override public FloatScalar getPointer(long i) {
-        return new FloatScalar(this).position(position + i);
+        return new FloatScalar((Pointer)this).position(position + i);
     }
 
 }

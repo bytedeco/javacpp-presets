@@ -22,7 +22,7 @@ public class MemoryMappedFileResult extends Pointer {
         return (MemoryMappedFileResult)super.position(position);
     }
     @Override public MemoryMappedFileResult getPointer(long i) {
-        return new MemoryMappedFileResult(this).position(position + i);
+        return new MemoryMappedFileResult((Pointer)this).position(position + i);
     }
 
   

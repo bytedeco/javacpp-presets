@@ -12,7 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Name("arrow::TemporalScalar<arrow::DayTimeIntervalType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BaseBaseDayTimeIntervalScalar extends Scalar {
+public class BaseBaseDayTimeIntervalScalar extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseBaseDayTimeIntervalScalar(Pointer p) { super(p); }

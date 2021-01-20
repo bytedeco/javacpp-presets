@@ -25,7 +25,7 @@ public class ParquetFileWriter extends Pointer {
         return (ParquetFileWriter)super.position(position);
     }
     @Override public ParquetFileWriter getPointer(long i) {
-        return new ParquetFileWriter(this).position(position + i);
+        return new ParquetFileWriter((Pointer)this).position(position + i);
     }
 
   // Forward declare a virtual class 'Contents' to aid dependency injection and more

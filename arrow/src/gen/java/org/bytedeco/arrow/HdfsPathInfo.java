@@ -26,7 +26,7 @@ public class HdfsPathInfo extends Pointer {
         return (HdfsPathInfo)super.position(position);
     }
     @Override public HdfsPathInfo getPointer(long i) {
-        return new HdfsPathInfo(this).position(position + i);
+        return new HdfsPathInfo((Pointer)this).position(position + i);
     }
 
   public native ObjectType.type kind(); public native HdfsPathInfo kind(ObjectType.type setter);

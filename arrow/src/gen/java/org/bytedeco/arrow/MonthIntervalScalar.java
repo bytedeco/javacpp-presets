@@ -35,7 +35,7 @@ public class MonthIntervalScalar extends BaseMonthIntervalScalar {
         return (MonthIntervalScalar)super.position(position);
     }
     @Override public MonthIntervalScalar getPointer(long i) {
-        return new MonthIntervalScalar(this).position(position + i);
+        return new MonthIntervalScalar((Pointer)this).position(position + i);
     }
 
 }

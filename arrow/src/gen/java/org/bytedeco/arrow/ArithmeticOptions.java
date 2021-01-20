@@ -27,7 +27,7 @@ public class ArithmeticOptions extends FunctionOptions {
         return (ArithmeticOptions)super.position(position);
     }
     @Override public ArithmeticOptions getPointer(long i) {
-        return new ArithmeticOptions(this).position(position + i);
+        return new ArithmeticOptions((Pointer)this).position(position + i);
     }
 
   public ArithmeticOptions() { super((Pointer)null); allocate(); }

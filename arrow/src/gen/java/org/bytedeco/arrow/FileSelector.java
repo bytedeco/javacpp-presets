@@ -24,7 +24,7 @@ public class FileSelector extends Pointer {
         return (FileSelector)super.position(position);
     }
     @Override public FileSelector getPointer(long i) {
-        return new FileSelector(this).position(position + i);
+        return new FileSelector((Pointer)this).position(position + i);
     }
 
   /** The directory in which to select files.

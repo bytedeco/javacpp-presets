@@ -26,7 +26,7 @@ public class ScalarVisitor extends Pointer {
         return (ScalarVisitor)super.position(position);
     }
     @Override public ScalarVisitor getPointer(long i) {
-        return new ScalarVisitor(this).position(position + i);
+        return new ScalarVisitor((Pointer)this).position(position + i);
     }
 
 

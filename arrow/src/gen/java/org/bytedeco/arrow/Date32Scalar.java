@@ -35,7 +35,7 @@ public class Date32Scalar extends BaseDate32Scalar {
         return (Date32Scalar)super.position(position);
     }
     @Override public Date32Scalar getPointer(long i) {
-        return new Date32Scalar(this).position(position + i);
+        return new Date32Scalar((Pointer)this).position(position + i);
     }
 
 }

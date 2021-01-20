@@ -23,7 +23,7 @@ public class NullBuilder extends ArrayBuilder {
         return (NullBuilder)super.position(position);
     }
     @Override public NullBuilder getPointer(long i) {
-        return new NullBuilder(this).position(position + i);
+        return new NullBuilder((Pointer)this).position(position + i);
     }
 
   public NullBuilder(MemoryPool pool/*=arrow::default_memory_pool()*/) { super((Pointer)null); allocate(pool); }

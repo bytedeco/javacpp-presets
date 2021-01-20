@@ -27,7 +27,7 @@ public class InputType extends Pointer {
         return (InputType)super.position(position);
     }
     @Override public InputType getPointer(long i) {
-        return new InputType(this).position(position + i);
+        return new InputType((Pointer)this).position(position + i);
     }
 
   /** \brief The kind of type-checking rule that the InputType contains. */

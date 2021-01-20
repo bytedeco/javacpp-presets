@@ -26,7 +26,7 @@ public class FileSystemGlobalOptions extends Pointer {
         return (FileSystemGlobalOptions)super.position(position);
     }
     @Override public FileSystemGlobalOptions getPointer(long i) {
-        return new FileSystemGlobalOptions(this).position(position + i);
+        return new FileSystemGlobalOptions((Pointer)this).position(position + i);
     }
 
   /** Path to a single PEM file holding all TLS CA certificates

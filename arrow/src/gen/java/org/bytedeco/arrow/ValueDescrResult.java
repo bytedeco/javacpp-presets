@@ -22,7 +22,7 @@ public class ValueDescrResult extends Pointer {
         return (ValueDescrResult)super.position(position);
     }
     @Override public ValueDescrResult getPointer(long i) {
-        return new ValueDescrResult(this).position(position + i);
+        return new ValueDescrResult((Pointer)this).position(position + i);
     }
 
   

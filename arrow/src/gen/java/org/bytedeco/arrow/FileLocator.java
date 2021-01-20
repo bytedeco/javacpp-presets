@@ -27,7 +27,7 @@ public class FileLocator extends Pointer {
         return (FileLocator)super.position(position);
     }
     @Override public FileLocator getPointer(long i) {
-        return new FileLocator(this).position(position + i);
+        return new FileLocator((Pointer)this).position(position + i);
     }
 
   public native @SharedPtr FileSystem filesystem(); public native FileLocator filesystem(FileSystem setter);

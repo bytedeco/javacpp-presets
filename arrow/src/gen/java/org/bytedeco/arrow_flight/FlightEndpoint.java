@@ -30,7 +30,7 @@ public class FlightEndpoint extends Pointer {
         return (FlightEndpoint)super.position(position);
     }
     @Override public FlightEndpoint getPointer(long i) {
-        return new FlightEndpoint(this).position(position + i);
+        return new FlightEndpoint((Pointer)this).position(position + i);
     }
 
   /** Opaque ticket identify; use with DoGet RPC */

@@ -29,7 +29,7 @@ public class IsValidExpressionImpl extends UnaryExpression {
         return (IsValidExpressionImpl)super.position(position);
     }
     @Override public IsValidExpressionImpl getPointer(long i) {
-        return new IsValidExpressionImpl(this).position(position + i);
+        return new IsValidExpressionImpl((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native ExpressionType.type expression_type();

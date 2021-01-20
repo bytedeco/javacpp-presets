@@ -28,7 +28,7 @@ public class NullHandling extends Pointer {
         return (NullHandling)super.position(position);
     }
     @Override public NullHandling getPointer(long i) {
-        return new NullHandling(this).position(position + i);
+        return new NullHandling((Pointer)this).position(position + i);
     }
 
   public enum type {

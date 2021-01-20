@@ -28,7 +28,7 @@ public class BaseDayTimeIntervalScalar extends BaseBaseDayTimeIntervalScalar {
         return (BaseDayTimeIntervalScalar)super.position(position);
     }
     @Override public BaseDayTimeIntervalScalar getPointer(long i) {
-        return new BaseDayTimeIntervalScalar(this).position(position + i);
+        return new BaseDayTimeIntervalScalar((Pointer)this).position(position + i);
     }
 
 

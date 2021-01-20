@@ -12,7 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Name("arrow::NumericScalar<arrow::HalfFloatType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BaseHalfFloatScalar extends Scalar {
+public class BaseHalfFloatScalar extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseHalfFloatScalar(Pointer p) { super(p); }
@@ -23,7 +23,7 @@ public class BaseHalfFloatScalar extends Scalar {
         return (BaseHalfFloatScalar)super.position(position);
     }
     @Override public BaseHalfFloatScalar getPointer(long i) {
-        return new BaseHalfFloatScalar(this).position(position + i);
+        return new BaseHalfFloatScalar((Pointer)this).position(position + i);
     }
 
 

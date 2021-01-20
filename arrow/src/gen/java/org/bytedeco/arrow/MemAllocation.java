@@ -28,7 +28,7 @@ public class MemAllocation extends Pointer {
         return (MemAllocation)super.position(position);
     }
     @Override public MemAllocation getPointer(long i) {
-        return new MemAllocation(this).position(position + i);
+        return new MemAllocation((Pointer)this).position(position + i);
     }
 
   public enum type {

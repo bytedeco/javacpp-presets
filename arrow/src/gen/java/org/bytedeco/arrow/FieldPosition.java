@@ -23,7 +23,7 @@ public class FieldPosition extends Pointer {
         return (FieldPosition)super.position(position);
     }
     @Override public FieldPosition getPointer(long i) {
-        return new FieldPosition(this).position(position + i);
+        return new FieldPosition((Pointer)this).position(position + i);
     }
 
   public FieldPosition() { super((Pointer)null); allocate(); }

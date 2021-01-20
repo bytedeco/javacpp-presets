@@ -24,7 +24,7 @@ public class NullType extends DataType {
         return (NullType)super.position(position);
     }
     @Override public NullType getPointer(long i) {
-        return new NullType(this).position(position + i);
+        return new NullType((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();

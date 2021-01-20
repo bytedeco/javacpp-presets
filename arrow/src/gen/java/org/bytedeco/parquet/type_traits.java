@@ -28,7 +28,7 @@ public class type_traits extends Pointer {
         return (type_traits)super.position(position);
     }
     @Override public type_traits getPointer(long i) {
-        return new type_traits(this).position(position + i);
+        return new type_traits((Pointer)this).position(position + i);
     }
 
 

@@ -25,7 +25,7 @@ public class ApplicationVersion extends Pointer {
         return (ApplicationVersion)super.position(position);
     }
     @Override public ApplicationVersion getPointer(long i) {
-        return new ApplicationVersion(this).position(position + i);
+        return new ApplicationVersion((Pointer)this).position(position + i);
     }
 
   // Known Versions with Issues

@@ -31,7 +31,7 @@ public class UInt16Scalar extends BaseUInt16Type {
         return (UInt16Scalar)super.position(position);
     }
     @Override public UInt16Scalar getPointer(long i) {
-        return new UInt16Scalar(this).position(position + i);
+        return new UInt16Scalar((Pointer)this).position(position + i);
     }
 
 }

@@ -25,7 +25,7 @@ public class LevelInfo extends Pointer {
         return (LevelInfo)super.position(position);
     }
     @Override public LevelInfo getPointer(long i) {
-        return new LevelInfo(this).position(position + i);
+        return new LevelInfo((Pointer)this).position(position + i);
     }
 
   public LevelInfo() { super((Pointer)null); allocate(); }

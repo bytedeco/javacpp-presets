@@ -25,7 +25,7 @@ public class ColumnPath extends Pointer {
         return (ColumnPath)super.position(position);
     }
     @Override public ColumnPath getPointer(long i) {
-        return new ColumnPath(this).position(position + i);
+        return new ColumnPath((Pointer)this).position(position + i);
     }
 
   public ColumnPath() { super((Pointer)null); allocate(); }

@@ -27,7 +27,7 @@ public class FlatArray extends Array {
         return (FlatArray)super.position(position);
     }
     @Override public FlatArray getPointer(long i) {
-        return new FlatArray(this).position(position + i);
+        return new FlatArray((Pointer)this).position(position + i);
     }
 
 }

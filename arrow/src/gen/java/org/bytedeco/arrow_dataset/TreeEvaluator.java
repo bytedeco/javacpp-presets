@@ -32,7 +32,7 @@ public class TreeEvaluator extends ExpressionEvaluator {
         return (TreeEvaluator)super.position(position);
     }
     @Override public TreeEvaluator getPointer(long i) {
-        return new TreeEvaluator(this).position(position + i);
+        return new TreeEvaluator((Pointer)this).position(position + i);
     }
 
   public native @ByVal DatumResult Evaluate(@Const @ByRef Expression expr, @Const @ByRef RecordBatch batch,

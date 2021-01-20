@@ -26,7 +26,7 @@ public class TypeIdTraits extends Pointer {
         return (TypeIdTraits)super.position(position);
     }
     @Override public TypeIdTraits getPointer(long i) {
-        return new TypeIdTraits(this).position(position + i);
+        return new TypeIdTraits((Pointer)this).position(position + i);
     }
 
   }

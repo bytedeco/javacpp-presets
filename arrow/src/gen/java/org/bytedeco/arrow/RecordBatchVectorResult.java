@@ -22,7 +22,7 @@ public class RecordBatchVectorResult extends Pointer {
         return (RecordBatchVectorResult)super.position(position);
     }
     @Override public RecordBatchVectorResult getPointer(long i) {
-        return new RecordBatchVectorResult(this).position(position + i);
+        return new RecordBatchVectorResult((Pointer)this).position(position + i);
     }
 
   

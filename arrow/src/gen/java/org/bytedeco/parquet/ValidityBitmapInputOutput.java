@@ -29,7 +29,7 @@ public class ValidityBitmapInputOutput extends Pointer {
         return (ValidityBitmapInputOutput)super.position(position);
     }
     @Override public ValidityBitmapInputOutput getPointer(long i) {
-        return new ValidityBitmapInputOutput(this).position(position + i);
+        return new ValidityBitmapInputOutput((Pointer)this).position(position + i);
     }
 
   // Input only.

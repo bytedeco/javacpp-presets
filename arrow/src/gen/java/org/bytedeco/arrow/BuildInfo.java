@@ -26,7 +26,7 @@ public class BuildInfo extends Pointer {
         return (BuildInfo)super.position(position);
     }
     @Override public BuildInfo getPointer(long i) {
-        return new BuildInfo(this).position(position + i);
+        return new BuildInfo((Pointer)this).position(position + i);
     }
 
   /** The packed version number, e.g. 1002003 (decimal) for Arrow 1.2.3 */

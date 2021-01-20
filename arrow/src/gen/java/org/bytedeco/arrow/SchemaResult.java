@@ -22,7 +22,7 @@ public class SchemaResult extends Pointer {
         return (SchemaResult)super.position(position);
     }
     @Override public SchemaResult getPointer(long i) {
-        return new SchemaResult(this).position(position + i);
+        return new SchemaResult((Pointer)this).position(position + i);
     }
 
   

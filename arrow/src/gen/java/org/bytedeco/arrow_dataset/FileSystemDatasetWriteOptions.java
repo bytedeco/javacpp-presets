@@ -30,7 +30,7 @@ public class FileSystemDatasetWriteOptions extends Pointer {
         return (FileSystemDatasetWriteOptions)super.position(position);
     }
     @Override public FileSystemDatasetWriteOptions getPointer(long i) {
-        return new FileSystemDatasetWriteOptions(this).position(position + i);
+        return new FileSystemDatasetWriteOptions((Pointer)this).position(position + i);
     }
 
   /** Options for individual fragment writing. */

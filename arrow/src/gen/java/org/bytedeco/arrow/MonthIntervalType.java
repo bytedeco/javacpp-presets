@@ -27,7 +27,7 @@ public class MonthIntervalType extends IntervalType {
         return (MonthIntervalType)super.position(position);
     }
     @Override public MonthIntervalType getPointer(long i) {
-        return new MonthIntervalType(this).position(position + i);
+        return new MonthIntervalType((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();

@@ -26,7 +26,7 @@ public class FileFragmentResult extends Pointer {
         return (FileFragmentResult)super.position(position);
     }
     @Override public FileFragmentResult getPointer(long i) {
-        return new FileFragmentResult(this).position(position + i);
+        return new FileFragmentResult((Pointer)this).position(position + i);
     }
 
   

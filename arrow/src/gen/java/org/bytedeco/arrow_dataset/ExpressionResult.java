@@ -26,7 +26,7 @@ public class ExpressionResult extends Pointer {
         return (ExpressionResult)super.position(position);
     }
     @Override public ExpressionResult getPointer(long i) {
-        return new ExpressionResult(this).position(position + i);
+        return new ExpressionResult((Pointer)this).position(position + i);
     }
 
   

@@ -47,7 +47,7 @@ public class Scalar extends Pointer {
           return (Hash)super.position(position);
       }
       @Override public Hash getPointer(long i) {
-          return new Hash(this).position(position + i);
+          return new Hash((Pointer)this).position(position + i);
       }
   
     public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef Scalar scalar);

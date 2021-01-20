@@ -30,7 +30,7 @@ public class IsValidExpression extends IsValidExpressionImpl {
         return (IsValidExpression)super.position(position);
     }
     @Override public IsValidExpression getPointer(long i) {
-        return new IsValidExpression(this).position(position + i);
+        return new IsValidExpression((Pointer)this).position(position + i);
     }
 
 

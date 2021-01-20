@@ -22,7 +22,7 @@ public class RecordBatchIterator extends Pointer {
         return (RecordBatchIterator)super.position(position);
     }
     @Override public RecordBatchIterator getPointer(long i) {
-        return new RecordBatchIterator(this).position(position + i);
+        return new RecordBatchIterator((Pointer)this).position(position + i);
     }
 
   /** \brief Iterator may be constructed from any type which has a member function
@@ -66,7 +66,7 @@ public class RecordBatchIterator extends Pointer {
           return (RangeIterator)super.position(position);
       }
       @Override public RangeIterator getPointer(long i) {
-          return new RangeIterator(this).position(position + i);
+          return new RangeIterator((Pointer)this).position(position + i);
       }
   
     public RangeIterator() { super((Pointer)null); allocate(); }

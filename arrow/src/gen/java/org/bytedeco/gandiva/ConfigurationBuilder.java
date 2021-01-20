@@ -32,7 +32,7 @@ public class ConfigurationBuilder extends Pointer {
         return (ConfigurationBuilder)super.position(position);
     }
     @Override public ConfigurationBuilder getPointer(long i) {
-        return new ConfigurationBuilder(this).position(position + i);
+        return new ConfigurationBuilder((Pointer)this).position(position + i);
     }
 
   public native @SharedPtr Configuration build();

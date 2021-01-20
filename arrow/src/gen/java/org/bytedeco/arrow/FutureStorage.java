@@ -28,7 +28,7 @@ public class FutureStorage extends FutureStorageBase {
         return (FutureStorage)super.position(position);
     }
     @Override public FutureStorage getPointer(long i) {
-        return new FutureStorage(this).position(position + i);
+        return new FutureStorage((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native @Cast("const bool") boolean HasValue();

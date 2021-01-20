@@ -22,7 +22,7 @@ public class RecordBatchFileReaderResult extends Pointer {
         return (RecordBatchFileReaderResult)super.position(position);
     }
     @Override public RecordBatchFileReaderResult getPointer(long i) {
-        return new RecordBatchFileReaderResult(this).position(position + i);
+        return new RecordBatchFileReaderResult((Pointer)this).position(position + i);
     }
 
   

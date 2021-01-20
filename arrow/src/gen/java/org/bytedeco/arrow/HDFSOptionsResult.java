@@ -22,7 +22,7 @@ public class HDFSOptionsResult extends Pointer {
         return (HDFSOptionsResult)super.position(position);
     }
     @Override public HDFSOptionsResult getPointer(long i) {
-        return new HDFSOptionsResult(this).position(position + i);
+        return new HDFSOptionsResult((Pointer)this).position(position + i);
     }
 
   

@@ -24,7 +24,7 @@ public class Date32Type extends DateType {
         return (Date32Type)super.position(position);
     }
     @Override public Date32Type getPointer(long i) {
-        return new Date32Type(this).position(position + i);
+        return new Date32Type((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();

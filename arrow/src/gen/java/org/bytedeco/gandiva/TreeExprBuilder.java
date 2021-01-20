@@ -29,7 +29,7 @@ public class TreeExprBuilder extends Pointer {
         return (TreeExprBuilder)super.position(position);
     }
     @Override public TreeExprBuilder getPointer(long i) {
-        return new TreeExprBuilder(this).position(position + i);
+        return new TreeExprBuilder((Pointer)this).position(position + i);
     }
 
   /** \brief create a node on a literal. */

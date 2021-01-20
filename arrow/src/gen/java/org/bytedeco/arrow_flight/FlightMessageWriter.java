@@ -34,7 +34,7 @@ public class FlightMessageWriter extends MetadataRecordBatchWriter {
         return (FlightMessageWriter)super.position(position);
     }
     @Override public FlightMessageWriter getPointer(long i) {
-        return new FlightMessageWriter(this).position(position + i);
+        return new FlightMessageWriter((Pointer)this).position(position + i);
     }
 
 }

@@ -22,7 +22,7 @@ public class DictionaryUnifierResult extends Pointer {
         return (DictionaryUnifierResult)super.position(position);
     }
     @Override public DictionaryUnifierResult getPointer(long i) {
-        return new DictionaryUnifierResult(this).position(position + i);
+        return new DictionaryUnifierResult((Pointer)this).position(position + i);
     }
 
   

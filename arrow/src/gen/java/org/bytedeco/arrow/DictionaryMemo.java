@@ -36,7 +36,7 @@ public class DictionaryMemo extends Pointer {
         return (DictionaryMemo)super.position(position);
     }
     @Override public DictionaryMemo getPointer(long i) {
-        return new DictionaryMemo(this).position(position + i);
+        return new DictionaryMemo((Pointer)this).position(position + i);
     }
 
   public DictionaryMemo() { super((Pointer)null); allocate(); }

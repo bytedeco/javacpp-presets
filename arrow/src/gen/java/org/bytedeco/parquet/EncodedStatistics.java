@@ -29,7 +29,7 @@ public class EncodedStatistics extends Pointer {
         return (EncodedStatistics)super.position(position);
     }
     @Override public EncodedStatistics getPointer(long i) {
-        return new EncodedStatistics(this).position(position + i);
+        return new EncodedStatistics((Pointer)this).position(position + i);
     }
 
   public EncodedStatistics() { super((Pointer)null); allocate(); }

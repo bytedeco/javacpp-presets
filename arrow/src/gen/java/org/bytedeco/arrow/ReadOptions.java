@@ -26,7 +26,7 @@ public class ReadOptions extends Pointer {
         return (ReadOptions)super.position(position);
     }
     @Override public ReadOptions getPointer(long i) {
-        return new ReadOptions(this).position(position + i);
+        return new ReadOptions((Pointer)this).position(position + i);
     }
 
   // Reader options

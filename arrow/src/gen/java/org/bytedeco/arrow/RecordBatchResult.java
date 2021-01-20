@@ -22,7 +22,7 @@ public class RecordBatchResult extends Pointer {
         return (RecordBatchResult)super.position(position);
     }
     @Override public RecordBatchResult getPointer(long i) {
-        return new RecordBatchResult(this).position(position + i);
+        return new RecordBatchResult((Pointer)this).position(position + i);
     }
 
   

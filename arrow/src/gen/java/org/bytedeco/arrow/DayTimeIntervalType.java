@@ -24,7 +24,7 @@ public class DayTimeIntervalType extends IntervalType {
         return (DayTimeIntervalType)super.position(position);
     }
     @Override public DayTimeIntervalType getPointer(long i) {
-        return new DayTimeIntervalType(this).position(position + i);
+        return new DayTimeIntervalType((Pointer)this).position(position + i);
     }
 
   public static class DayMilliseconds extends Pointer {
@@ -41,7 +41,7 @@ public class DayTimeIntervalType extends IntervalType {
           return (DayMilliseconds)super.position(position);
       }
       @Override public DayMilliseconds getPointer(long i) {
-          return new DayMilliseconds(this).position(position + i);
+          return new DayMilliseconds((Pointer)this).position(position + i);
       }
   
     public native int days(); public native DayMilliseconds days(int setter);

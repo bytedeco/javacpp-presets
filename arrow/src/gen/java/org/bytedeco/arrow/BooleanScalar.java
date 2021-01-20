@@ -16,7 +16,7 @@ import static org.bytedeco.arrow.global.arrow.*;
  *  \{ */
 
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BooleanScalar extends Scalar {
+public class BooleanScalar extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BooleanScalar(Pointer p) { super(p); }
@@ -27,7 +27,7 @@ public class BooleanScalar extends Scalar {
         return (BooleanScalar)super.position(position);
     }
     @Override public BooleanScalar getPointer(long i) {
-        return new BooleanScalar(this).position(position + i);
+        return new BooleanScalar((Pointer)this).position(position + i);
     }
 
 

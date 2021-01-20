@@ -29,7 +29,7 @@ public class OrExpressionImpl extends BinaryExpression {
         return (OrExpressionImpl)super.position(position);
     }
     @Override public OrExpressionImpl getPointer(long i) {
-        return new OrExpressionImpl(this).position(position + i);
+        return new OrExpressionImpl((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native ExpressionType.type expression_type();

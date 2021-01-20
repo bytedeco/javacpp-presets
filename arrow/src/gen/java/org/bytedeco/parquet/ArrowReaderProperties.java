@@ -26,7 +26,7 @@ public class ArrowReaderProperties extends Pointer {
         return (ArrowReaderProperties)super.position(position);
     }
     @Override public ArrowReaderProperties getPointer(long i) {
-        return new ArrowReaderProperties(this).position(position + i);
+        return new ArrowReaderProperties((Pointer)this).position(position + i);
     }
 
   public ArrowReaderProperties(@Cast("bool") boolean use_threads/*=parquet::kArrowDefaultUseThreads*/) { super((Pointer)null); allocate(use_threads); }

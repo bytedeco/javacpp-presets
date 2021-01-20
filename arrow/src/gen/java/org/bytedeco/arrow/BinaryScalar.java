@@ -29,7 +29,7 @@ public class BinaryScalar extends BaseBinaryScalar {
         return (BinaryScalar)super.position(position);
     }
     @Override public BinaryScalar getPointer(long i) {
-        return new BinaryScalar(this).position(position + i);
+        return new BinaryScalar((Pointer)this).position(position + i);
     }
 
 

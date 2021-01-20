@@ -26,7 +26,7 @@ public class Arity extends Pointer {
         return (Arity)super.position(position);
     }
     @Override public Arity getPointer(long i) {
-        return new Arity(this).position(position + i);
+        return new Arity((Pointer)this).position(position + i);
     }
 
   /** \brief A function taking no arguments */

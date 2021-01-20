@@ -26,7 +26,7 @@ public class ScanTaskResult extends Pointer {
         return (ScanTaskResult)super.position(position);
     }
     @Override public ScanTaskResult getPointer(long i) {
-        return new ScanTaskResult(this).position(position + i);
+        return new ScanTaskResult((Pointer)this).position(position + i);
     }
 
   

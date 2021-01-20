@@ -25,7 +25,7 @@ public class ExecContext extends Pointer {
         return (ExecContext)super.position(position);
     }
     @Override public ExecContext getPointer(long i) {
-        return new ExecContext(this).position(position + i);
+        return new ExecContext((Pointer)this).position(position + i);
     }
 
   // If no function registry passed, the default is used.

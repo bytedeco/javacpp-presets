@@ -28,7 +28,7 @@ public class KernelState extends Pointer {
         return (KernelState)super.position(position);
     }
     @Override public KernelState getPointer(long i) {
-        return new KernelState(this).position(position + i);
+        return new KernelState((Pointer)this).position(position + i);
     }
 
 }

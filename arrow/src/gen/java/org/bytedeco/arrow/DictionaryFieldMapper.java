@@ -28,7 +28,7 @@ public class DictionaryFieldMapper extends Pointer {
         return (DictionaryFieldMapper)super.position(position);
     }
     @Override public DictionaryFieldMapper getPointer(long i) {
-        return new DictionaryFieldMapper(this).position(position + i);
+        return new DictionaryFieldMapper((Pointer)this).position(position + i);
     }
 
   public DictionaryFieldMapper() { super((Pointer)null); allocate(); }

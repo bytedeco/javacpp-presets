@@ -28,7 +28,7 @@ public class TaskHints extends Pointer {
         return (TaskHints)super.position(position);
     }
     @Override public TaskHints getPointer(long i) {
-        return new TaskHints(this).position(position + i);
+        return new TaskHints((Pointer)this).position(position + i);
     }
 
   // The lower, the more urgent

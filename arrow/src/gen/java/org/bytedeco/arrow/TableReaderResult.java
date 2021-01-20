@@ -22,7 +22,7 @@ public class TableReaderResult extends Pointer {
         return (TableReaderResult)super.position(position);
     }
     @Override public TableReaderResult getPointer(long i) {
-        return new TableReaderResult(this).position(position + i);
+        return new TableReaderResult((Pointer)this).position(position + i);
     }
 
   

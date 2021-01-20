@@ -29,7 +29,7 @@ public class ActionType extends Pointer {
         return (ActionType)super.position(position);
     }
     @Override public ActionType getPointer(long i) {
-        return new ActionType(this).position(position + i);
+        return new ActionType((Pointer)this).position(position + i);
     }
 
   /** \brief The name of the action. */

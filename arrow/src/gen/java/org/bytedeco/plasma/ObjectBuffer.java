@@ -29,7 +29,7 @@ public class ObjectBuffer extends Pointer {
         return (ObjectBuffer)super.position(position);
     }
     @Override public ObjectBuffer getPointer(long i) {
-        return new ObjectBuffer(this).position(position + i);
+        return new ObjectBuffer((Pointer)this).position(position + i);
     }
 
   /** The data buffer. */

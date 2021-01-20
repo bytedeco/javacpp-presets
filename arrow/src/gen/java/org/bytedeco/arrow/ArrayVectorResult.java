@@ -22,7 +22,7 @@ public class ArrayVectorResult extends Pointer {
         return (ArrayVectorResult)super.position(position);
     }
     @Override public ArrayVectorResult getPointer(long i) {
-        return new ArrayVectorResult(this).position(position + i);
+        return new ArrayVectorResult((Pointer)this).position(position + i);
     }
 
   

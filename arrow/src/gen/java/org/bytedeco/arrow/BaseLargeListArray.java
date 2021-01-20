@@ -25,7 +25,7 @@ public class BaseLargeListArray extends Array {
         return (BaseLargeListArray)super.position(position);
     }
     @Override public BaseLargeListArray getPointer(long i) {
-        return new BaseLargeListArray(this).position(position + i);
+        return new BaseLargeListArray((Pointer)this).position(position + i);
     }
 
 

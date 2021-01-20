@@ -37,7 +37,7 @@ public class SortOrder extends Pointer {
         return (SortOrder)super.position(position);
     }
     @Override public SortOrder getPointer(long i) {
-        return new SortOrder(this).position(position + i);
+        return new SortOrder((Pointer)this).position(position + i);
     }
 
   public enum type { SIGNED(0), UNSIGNED(1), UNKNOWN(2);

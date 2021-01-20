@@ -26,7 +26,7 @@ public class ConvertOptions extends Pointer {
         return (ConvertOptions)super.position(position);
     }
     @Override public ConvertOptions getPointer(long i) {
-        return new ConvertOptions(this).position(position + i);
+        return new ConvertOptions((Pointer)this).position(position + i);
     }
 
   // Conversion options

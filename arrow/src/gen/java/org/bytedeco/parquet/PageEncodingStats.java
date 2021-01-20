@@ -29,7 +29,7 @@ public class PageEncodingStats extends Pointer {
         return (PageEncodingStats)super.position(position);
     }
     @Override public PageEncodingStats getPointer(long i) {
-        return new PageEncodingStats(this).position(position + i);
+        return new PageEncodingStats((Pointer)this).position(position + i);
     }
 
   public native PageType.type page_type(); public native PageEncodingStats page_type(PageType.type setter);

@@ -36,7 +36,7 @@ public class SchemaDescriptor extends Pointer {
         return (SchemaDescriptor)super.position(position);
     }
     @Override public SchemaDescriptor getPointer(long i) {
-        return new SchemaDescriptor(this).position(position + i);
+        return new SchemaDescriptor((Pointer)this).position(position + i);
     }
 
   public SchemaDescriptor() { super((Pointer)null); allocate(); }

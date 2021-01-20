@@ -27,7 +27,7 @@ public class BasicDecimal128 extends Pointer {
         return (BasicDecimal128)super.position(position);
     }
     @Override public BasicDecimal128 getPointer(long i) {
-        return new BasicDecimal128(this).position(position + i);
+        return new BasicDecimal128((Pointer)this).position(position + i);
     }
 
   /** \brief Create a BasicDecimal128 from the two's complement representation. */
