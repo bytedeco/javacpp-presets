@@ -26,7 +26,7 @@ public class CastOptions extends FunctionOptions {
         return (CastOptions)super.position(position);
     }
     @Override public CastOptions getPointer(long i) {
-        return new CastOptions(this).position(position + i);
+        return new CastOptions((Pointer)this).position(position + i);
     }
 
   public CastOptions() { super((Pointer)null); allocate(); }

@@ -26,7 +26,7 @@ public class ScanTaskIterator extends Pointer {
         return (ScanTaskIterator)super.position(position);
     }
     @Override public ScanTaskIterator getPointer(long i) {
-        return new ScanTaskIterator(this).position(position + i);
+        return new ScanTaskIterator((Pointer)this).position(position + i);
     }
 
   /** \brief Iterator may be constructed from any type which has a member function
@@ -70,7 +70,7 @@ public class ScanTaskIterator extends Pointer {
           return (RangeIterator)super.position(position);
       }
       @Override public RangeIterator getPointer(long i) {
-          return new RangeIterator(this).position(position + i);
+          return new RangeIterator((Pointer)this).position(position + i);
       }
   
     public RangeIterator() { super((Pointer)null); allocate(); }

@@ -32,7 +32,7 @@ public class ConcatenateTablesOptions extends Pointer {
         return (ConcatenateTablesOptions)super.position(position);
     }
     @Override public ConcatenateTablesOptions getPointer(long i) {
-        return new ConcatenateTablesOptions(this).position(position + i);
+        return new ConcatenateTablesOptions((Pointer)this).position(position + i);
     }
 
   /** If true, the schemas of the tables will be first unified with fields of

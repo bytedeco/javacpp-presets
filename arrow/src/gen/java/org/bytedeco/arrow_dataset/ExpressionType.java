@@ -30,7 +30,7 @@ public class ExpressionType extends Pointer {
         return (ExpressionType)super.position(position);
     }
     @Override public ExpressionType getPointer(long i) {
-        return new ExpressionType(this).position(position + i);
+        return new ExpressionType((Pointer)this).position(position + i);
     }
 
   public enum type {

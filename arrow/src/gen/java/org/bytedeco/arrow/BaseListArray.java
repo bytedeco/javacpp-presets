@@ -27,7 +27,7 @@ public class BaseListArray extends Array {
         return (BaseListArray)super.position(position);
     }
     @Override public BaseListArray getPointer(long i) {
-        return new BaseListArray(this).position(position + i);
+        return new BaseListArray((Pointer)this).position(position + i);
     }
 
 

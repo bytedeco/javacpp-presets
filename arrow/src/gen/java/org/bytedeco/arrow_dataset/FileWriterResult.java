@@ -26,7 +26,7 @@ public class FileWriterResult extends Pointer {
         return (FileWriterResult)super.position(position);
     }
     @Override public FileWriterResult getPointer(long i) {
-        return new FileWriterResult(this).position(position + i);
+        return new FileWriterResult((Pointer)this).position(position + i);
     }
 
   

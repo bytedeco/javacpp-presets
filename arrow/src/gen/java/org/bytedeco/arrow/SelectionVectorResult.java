@@ -22,7 +22,7 @@ public class SelectionVectorResult extends Pointer {
         return (SelectionVectorResult)super.position(position);
     }
     @Override public SelectionVectorResult getPointer(long i) {
-        return new SelectionVectorResult(this).position(position + i);
+        return new SelectionVectorResult((Pointer)this).position(position + i);
     }
 
   

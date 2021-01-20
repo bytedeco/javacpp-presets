@@ -31,7 +31,7 @@ public class Int32Scalar extends BaseInt32Type {
         return (Int32Scalar)super.position(position);
     }
     @Override public Int32Scalar getPointer(long i) {
-        return new Int32Scalar(this).position(position + i);
+        return new Int32Scalar((Pointer)this).position(position + i);
     }
 
 }

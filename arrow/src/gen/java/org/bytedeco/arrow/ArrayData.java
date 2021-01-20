@@ -57,7 +57,7 @@ public class ArrayData extends Pointer {
         return (ArrayData)super.position(position);
     }
     @Override public ArrayData getPointer(long i) {
-        return new ArrayData(this).position(position + i);
+        return new ArrayData((Pointer)this).position(position + i);
     }
 
   public ArrayData() { super((Pointer)null); allocate(); }

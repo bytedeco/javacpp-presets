@@ -25,7 +25,7 @@ public class FlightClientOptions extends Pointer {
         return (FlightClientOptions)super.position(position);
     }
     @Override public FlightClientOptions getPointer(long i) {
-        return new FlightClientOptions(this).position(position + i);
+        return new FlightClientOptions((Pointer)this).position(position + i);
     }
 
   public FlightClientOptions() { super((Pointer)null); allocate(); }

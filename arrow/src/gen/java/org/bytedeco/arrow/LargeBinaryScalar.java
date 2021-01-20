@@ -29,7 +29,7 @@ public class LargeBinaryScalar extends BaseBinaryScalar {
         return (LargeBinaryScalar)super.position(position);
     }
     @Override public LargeBinaryScalar getPointer(long i) {
-        return new LargeBinaryScalar(this).position(position + i);
+        return new LargeBinaryScalar((Pointer)this).position(position + i);
     }
 
 

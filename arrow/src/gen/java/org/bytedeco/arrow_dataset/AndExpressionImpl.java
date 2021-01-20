@@ -29,7 +29,7 @@ public class AndExpressionImpl extends BinaryExpression {
         return (AndExpressionImpl)super.position(position);
     }
     @Override public AndExpressionImpl getPointer(long i) {
-        return new AndExpressionImpl(this).position(position + i);
+        return new AndExpressionImpl((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native ExpressionType.type expression_type();

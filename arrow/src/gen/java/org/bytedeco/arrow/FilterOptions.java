@@ -26,7 +26,7 @@ public class FilterOptions extends FunctionOptions {
         return (FilterOptions)super.position(position);
     }
     @Override public FilterOptions getPointer(long i) {
-        return new FilterOptions(this).position(position + i);
+        return new FilterOptions((Pointer)this).position(position + i);
     }
 
   /** Configure the action taken when a slot of the selection mask is null */

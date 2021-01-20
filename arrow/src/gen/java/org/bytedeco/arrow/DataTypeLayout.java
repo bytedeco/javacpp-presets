@@ -42,7 +42,7 @@ public class DataTypeLayout extends Pointer {
           return (BufferSpec)super.position(position);
       }
       @Override public BufferSpec getPointer(long i) {
-          return new BufferSpec(this).position(position + i);
+          return new BufferSpec((Pointer)this).position(position + i);
       }
   
     public native BufferKind kind(); public native BufferSpec kind(BufferKind setter);

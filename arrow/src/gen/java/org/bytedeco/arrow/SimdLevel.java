@@ -29,7 +29,7 @@ public class SimdLevel extends Pointer {
         return (SimdLevel)super.position(position);
     }
     @Override public SimdLevel getPointer(long i) {
-        return new SimdLevel(this).position(position + i);
+        return new SimdLevel((Pointer)this).position(position + i);
     }
 
   public enum type { NONE(0), SSE4_2(1), AVX(2), AVX2(3), AVX512(4), NEON(5), MAX(6);

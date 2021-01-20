@@ -24,7 +24,7 @@ public class LargeBinaryType extends BaseBinaryType {
         return (LargeBinaryType)super.position(position);
     }
     @Override public LargeBinaryType getPointer(long i) {
-        return new LargeBinaryType(this).position(position + i);
+        return new LargeBinaryType((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();

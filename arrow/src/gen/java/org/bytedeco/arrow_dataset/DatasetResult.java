@@ -79,7 +79,7 @@ public class DatasetResult extends Pointer {
         return (DatasetResult)super.position(position);
     }
     @Override public DatasetResult getPointer(long i) {
-        return new DatasetResult(this).position(position + i);
+        return new DatasetResult((Pointer)this).position(position + i);
     }
 
   

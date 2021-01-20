@@ -22,7 +22,7 @@ public class FunctionResult extends Pointer {
         return (FunctionResult)super.position(position);
     }
     @Override public FunctionResult getPointer(long i) {
-        return new FunctionResult(this).position(position + i);
+        return new FunctionResult((Pointer)this).position(position + i);
     }
 
   

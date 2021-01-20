@@ -22,7 +22,7 @@ public class CodecResult extends Pointer {
         return (CodecResult)super.position(position);
     }
     @Override public CodecResult getPointer(long i) {
-        return new CodecResult(this).position(position + i);
+        return new CodecResult((Pointer)this).position(position + i);
     }
 
   

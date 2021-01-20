@@ -22,7 +22,7 @@ public class TensorResult extends Pointer {
         return (TensorResult)super.position(position);
     }
     @Override public TensorResult getPointer(long i) {
-        return new TensorResult(this).position(position + i);
+        return new TensorResult((Pointer)this).position(position + i);
     }
 
   

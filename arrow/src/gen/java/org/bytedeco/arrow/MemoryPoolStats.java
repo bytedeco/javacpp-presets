@@ -26,7 +26,7 @@ public class MemoryPoolStats extends Pointer {
         return (MemoryPoolStats)super.position(position);
     }
     @Override public MemoryPoolStats getPointer(long i) {
-        return new MemoryPoolStats(this).position(position + i);
+        return new MemoryPoolStats((Pointer)this).position(position + i);
     }
 
   public MemoryPoolStats() { super((Pointer)null); allocate(); }

@@ -22,7 +22,7 @@ public class ThreadPoolResult extends Pointer {
         return (ThreadPoolResult)super.position(position);
     }
     @Override public ThreadPoolResult getPointer(long i) {
-        return new ThreadPoolResult(this).position(position + i);
+        return new ThreadPoolResult((Pointer)this).position(position + i);
     }
 
   

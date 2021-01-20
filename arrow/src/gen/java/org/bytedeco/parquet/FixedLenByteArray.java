@@ -25,7 +25,7 @@ public class FixedLenByteArray extends Pointer {
         return (FixedLenByteArray)super.position(position);
     }
     @Override public FixedLenByteArray getPointer(long i) {
-        return new FixedLenByteArray(this).position(position + i);
+        return new FixedLenByteArray((Pointer)this).position(position + i);
     }
 
   public FixedLenByteArray() { super((Pointer)null); allocate(); }

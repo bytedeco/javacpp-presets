@@ -25,7 +25,7 @@ public class PlasmaClient extends Pointer {
         return (PlasmaClient)super.position(position);
     }
     @Override public PlasmaClient getPointer(long i) {
-        return new PlasmaClient(this).position(position + i);
+        return new PlasmaClient((Pointer)this).position(position + i);
     }
 
   public PlasmaClient() { super((Pointer)null); allocate(); }

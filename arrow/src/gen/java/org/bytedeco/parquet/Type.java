@@ -42,7 +42,7 @@ public class Type extends Pointer {
         return (Type)super.position(position);
     }
     @Override public Type getPointer(long i) {
-        return new Type(this).position(position + i);
+        return new Type((Pointer)this).position(position + i);
     }
 
   public enum type {

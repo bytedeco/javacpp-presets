@@ -52,7 +52,7 @@ public class Decimal128 extends BasicDecimal128 {
         return (Decimal128)super.position(position);
     }
     @Override public Decimal128 getPointer(long i) {
-        return new Decimal128(this).position(position + i);
+        return new Decimal128((Pointer)this).position(position + i);
     }
 
   /** \cond FALSE */

@@ -29,7 +29,7 @@ public class CollectListener extends Listener {
         return (CollectListener)super.position(position);
     }
     @Override public CollectListener getPointer(long i) {
-        return new CollectListener(this).position(position + i);
+        return new CollectListener((Pointer)this).position(position + i);
     }
 
   public CollectListener() { super((Pointer)null); allocate(); }

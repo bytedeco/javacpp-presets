@@ -26,7 +26,7 @@ public class ReadStats extends Pointer {
         return (ReadStats)super.position(position);
     }
     @Override public ReadStats getPointer(long i) {
-        return new ReadStats(this).position(position + i);
+        return new ReadStats((Pointer)this).position(position + i);
     }
 
   /** Number of IPC messages read. */

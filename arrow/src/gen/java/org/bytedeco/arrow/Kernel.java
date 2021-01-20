@@ -26,7 +26,7 @@ public class Kernel extends Pointer {
         return (Kernel)super.position(position);
     }
     @Override public Kernel getPointer(long i) {
-        return new Kernel(this).position(position + i);
+        return new Kernel((Pointer)this).position(position + i);
     }
 
   public Kernel() { super((Pointer)null); allocate(); }

@@ -647,7 +647,7 @@ public class arrow implements InfoMapper {
                              "arrow::internal::PrimitiveScalar<arrow::UInt64Type>",
                              "arrow::internal::PrimitiveScalar<arrow::HalfFloatType>",
                              "arrow::internal::PrimitiveScalar<arrow::FloatType>",
-                             "arrow::internal::PrimitiveScalar<arrow::DoubleType>").cast().pointerTypes("Scalar"))
+                             "arrow::internal::PrimitiveScalar<arrow::DoubleType>").cast().pointerTypes("PrimitiveScalarBase"))
                .put(new Info("arrow::compute::detail::FunctionImpl<arrow::compute::ScalarKernel>",
                              "arrow::compute::detail::FunctionImpl<arrow::compute::ScalarAggregateKernel>",
                              "arrow::compute::detail::FunctionImpl<arrow::compute::VectorKernel>").pointerTypes("Function"))

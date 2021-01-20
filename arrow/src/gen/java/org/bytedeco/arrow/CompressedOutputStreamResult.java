@@ -22,7 +22,7 @@ public class CompressedOutputStreamResult extends Pointer {
         return (CompressedOutputStreamResult)super.position(position);
     }
     @Override public CompressedOutputStreamResult getPointer(long i) {
-        return new CompressedOutputStreamResult(this).position(position + i);
+        return new CompressedOutputStreamResult((Pointer)this).position(position + i);
     }
 
   

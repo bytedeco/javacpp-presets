@@ -22,7 +22,7 @@ public class ListArrayResult extends Pointer {
         return (ListArrayResult)super.position(position);
     }
     @Override public ListArrayResult getPointer(long i) {
-        return new ListArrayResult(this).position(position + i);
+        return new ListArrayResult((Pointer)this).position(position + i);
     }
 
   

@@ -29,7 +29,7 @@ public class SharedExclusiveChecker extends Pointer {
         return (SharedExclusiveChecker)super.position(position);
     }
     @Override public SharedExclusiveChecker getPointer(long i) {
-        return new SharedExclusiveChecker(this).position(position + i);
+        return new SharedExclusiveChecker((Pointer)this).position(position + i);
     }
 
   public SharedExclusiveChecker() { super((Pointer)null); allocate(); }

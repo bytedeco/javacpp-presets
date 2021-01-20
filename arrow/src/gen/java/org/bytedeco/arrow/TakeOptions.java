@@ -23,7 +23,7 @@ public class TakeOptions extends FunctionOptions {
         return (TakeOptions)super.position(position);
     }
     @Override public TakeOptions getPointer(long i) {
-        return new TakeOptions(this).position(position + i);
+        return new TakeOptions((Pointer)this).position(position + i);
     }
 
   public TakeOptions(@Cast("bool") boolean boundscheck/*=true*/) { super((Pointer)null); allocate(boundscheck); }

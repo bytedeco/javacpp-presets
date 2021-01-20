@@ -27,7 +27,7 @@ public class ObjectType extends Pointer {
         return (ObjectType)super.position(position);
     }
     @Override public ObjectType getPointer(long i) {
-        return new ObjectType(this).position(position + i);
+        return new ObjectType((Pointer)this).position(position + i);
     }
 
   public enum type { FILE(0), DIRECTORY(1);

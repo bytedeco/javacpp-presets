@@ -30,7 +30,7 @@ public class FileSystemFactoryOptions extends Pointer {
         return (FileSystemFactoryOptions)super.position(position);
     }
     @Override public FileSystemFactoryOptions getPointer(long i) {
-        return new FileSystemFactoryOptions(this).position(position + i);
+        return new FileSystemFactoryOptions((Pointer)this).position(position + i);
     }
 
   // Either an explicit Partitioning or a PartitioningFactory to discover one.

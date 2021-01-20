@@ -22,7 +22,7 @@ public class MessageUniqueResult extends Pointer {
         return (MessageUniqueResult)super.position(position);
     }
     @Override public MessageUniqueResult getPointer(long i) {
-        return new MessageUniqueResult(this).position(position + i);
+        return new MessageUniqueResult((Pointer)this).position(position + i);
     }
 
   

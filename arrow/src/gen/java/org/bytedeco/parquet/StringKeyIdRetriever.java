@@ -29,7 +29,7 @@ public class StringKeyIdRetriever extends DecryptionKeyRetriever {
         return (StringKeyIdRetriever)super.position(position);
     }
     @Override public StringKeyIdRetriever getPointer(long i) {
-        return new StringKeyIdRetriever(this).position(position + i);
+        return new StringKeyIdRetriever((Pointer)this).position(position + i);
     }
 
   public native void PutKey(@StdString String key_id, @StdString String key);

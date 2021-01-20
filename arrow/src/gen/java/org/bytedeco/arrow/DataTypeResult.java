@@ -22,7 +22,7 @@ public class DataTypeResult extends Pointer {
         return (DataTypeResult)super.position(position);
     }
     @Override public DataTypeResult getPointer(long i) {
-        return new DataTypeResult(this).position(position + i);
+        return new DataTypeResult((Pointer)this).position(position + i);
     }
 
   

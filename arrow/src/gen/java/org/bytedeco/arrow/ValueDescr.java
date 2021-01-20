@@ -25,7 +25,7 @@ public class ValueDescr extends Pointer {
         return (ValueDescr)super.position(position);
     }
     @Override public ValueDescr getPointer(long i) {
-        return new ValueDescr(this).position(position + i);
+        return new ValueDescr((Pointer)this).position(position + i);
     }
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type(); public native ValueDescr type(DataType setter);

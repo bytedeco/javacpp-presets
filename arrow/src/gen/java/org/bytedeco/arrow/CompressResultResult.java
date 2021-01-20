@@ -22,7 +22,7 @@ public class CompressResultResult extends Pointer {
         return (CompressResultResult)super.position(position);
     }
     @Override public CompressResultResult getPointer(long i) {
-        return new CompressResultResult(this).position(position + i);
+        return new CompressResultResult((Pointer)this).position(position + i);
     }
 
   

@@ -29,7 +29,7 @@ public class ComparisonExpressionImpl extends BinaryExpression {
         return (ComparisonExpressionImpl)super.position(position);
     }
     @Override public ComparisonExpressionImpl getPointer(long i) {
-        return new ComparisonExpressionImpl(this).position(position + i);
+        return new ComparisonExpressionImpl((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native ExpressionType.type expression_type();

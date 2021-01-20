@@ -22,7 +22,7 @@ public class FileInfoVectorResult extends Pointer {
         return (FileInfoVectorResult)super.position(position);
     }
     @Override public FileInfoVectorResult getPointer(long i) {
-        return new FileInfoVectorResult(this).position(position + i);
+        return new FileInfoVectorResult((Pointer)this).position(position + i);
     }
 
   

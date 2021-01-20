@@ -31,7 +31,7 @@ public class Int8Scalar extends BaseInt8Type {
         return (Int8Scalar)super.position(position);
     }
     @Override public Int8Scalar getPointer(long i) {
-        return new Int8Scalar(this).position(position + i);
+        return new Int8Scalar((Pointer)this).position(position + i);
     }
 
 }

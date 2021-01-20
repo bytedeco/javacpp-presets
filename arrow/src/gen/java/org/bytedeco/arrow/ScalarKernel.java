@@ -44,7 +44,7 @@ public class ScalarKernel extends ArrayKernel {
         return (ScalarKernel)super.position(position);
     }
     @Override public ScalarKernel getPointer(long i) {
-        return new ScalarKernel(this).position(position + i);
+        return new ScalarKernel((Pointer)this).position(position + i);
     }
 
 

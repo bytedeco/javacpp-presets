@@ -29,7 +29,7 @@ public class FlightStreamChunk extends Pointer {
         return (FlightStreamChunk)super.position(position);
     }
     @Override public FlightStreamChunk getPointer(long i) {
-        return new FlightStreamChunk(this).position(position + i);
+        return new FlightStreamChunk((Pointer)this).position(position + i);
     }
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch data(); public native FlightStreamChunk data(RecordBatch setter);

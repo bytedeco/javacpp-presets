@@ -26,7 +26,7 @@ public class FlightCallOptions extends Pointer {
         return (FlightCallOptions)super.position(position);
     }
     @Override public FlightCallOptions getPointer(long i) {
-        return new FlightCallOptions(this).position(position + i);
+        return new FlightCallOptions((Pointer)this).position(position + i);
     }
 
   /** Create a default set of call options. */

@@ -23,7 +23,7 @@ public class BooleanBuilder extends ArrayBuilder {
         return (BooleanBuilder)super.position(position);
     }
     @Override public BooleanBuilder getPointer(long i) {
-        return new BooleanBuilder(this).position(position + i);
+        return new BooleanBuilder((Pointer)this).position(position + i);
     }
 
 

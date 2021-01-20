@@ -30,7 +30,7 @@ public class OrExpression extends OrExpressionImpl {
         return (OrExpression)super.position(position);
     }
     @Override public OrExpression getPointer(long i) {
-        return new OrExpression(this).position(position + i);
+        return new OrExpression((Pointer)this).position(position + i);
     }
 
 

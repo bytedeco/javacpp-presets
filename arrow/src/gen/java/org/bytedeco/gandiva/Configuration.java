@@ -28,7 +28,7 @@ public class Configuration extends Pointer {
         return (Configuration)super.position(position);
     }
     @Override public Configuration getPointer(long i) {
-        return new Configuration(this).position(position + i);
+        return new Configuration((Pointer)this).position(position + i);
     }
 
 

@@ -24,7 +24,7 @@ public class BufferIterator extends Pointer {
         return (BufferIterator)super.position(position);
     }
     @Override public BufferIterator getPointer(long i) {
-        return new BufferIterator(this).position(position + i);
+        return new BufferIterator((Pointer)this).position(position + i);
     }
 
   /** \brief Iterator may be constructed from any type which has a member function
@@ -68,7 +68,7 @@ public class BufferIterator extends Pointer {
           return (RangeIterator)super.position(position);
       }
       @Override public RangeIterator getPointer(long i) {
-          return new RangeIterator(this).position(position + i);
+          return new RangeIterator((Pointer)this).position(position + i);
       }
   
     public RangeIterator() { super((Pointer)null); allocate(); }

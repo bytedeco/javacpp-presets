@@ -29,7 +29,7 @@ public class CertKeyPair extends Pointer {
         return (CertKeyPair)super.position(position);
     }
     @Override public CertKeyPair getPointer(long i) {
-        return new CertKeyPair(this).position(position + i);
+        return new CertKeyPair((Pointer)this).position(position + i);
     }
 
   /** \brief The certificate in PEM format. */

@@ -25,7 +25,7 @@ public class LevelDecoder extends Pointer {
         return (LevelDecoder)super.position(position);
     }
     @Override public LevelDecoder getPointer(long i) {
-        return new LevelDecoder(this).position(position + i);
+        return new LevelDecoder((Pointer)this).position(position + i);
     }
 
   public LevelDecoder() { super((Pointer)null); allocate(); }

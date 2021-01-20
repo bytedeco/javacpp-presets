@@ -29,7 +29,7 @@ public class NoOpAuthHandler extends ServerAuthHandler {
         return (NoOpAuthHandler)super.position(position);
     }
     @Override public NoOpAuthHandler getPointer(long i) {
-        return new NoOpAuthHandler(this).position(position + i);
+        return new NoOpAuthHandler((Pointer)this).position(position + i);
     }
 
   public native @ByVal Status Authenticate(ServerAuthSender outgoing, ServerAuthReader incoming);

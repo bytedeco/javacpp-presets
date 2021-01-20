@@ -30,7 +30,7 @@ public class ParquetFileWriteOptions extends FileWriteOptions {
         return (ParquetFileWriteOptions)super.position(position);
     }
     @Override public ParquetFileWriteOptions getPointer(long i) {
-        return new ParquetFileWriteOptions(this).position(position + i);
+        return new ParquetFileWriteOptions((Pointer)this).position(position + i);
     }
 
   public native @SharedPtr WriterProperties writer_properties(); public native ParquetFileWriteOptions writer_properties(WriterProperties setter);

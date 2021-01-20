@@ -30,7 +30,7 @@ public class AndExpression extends AndExpressionImpl {
         return (AndExpression)super.position(position);
     }
     @Override public AndExpression getPointer(long i) {
-        return new AndExpression(this).position(position + i);
+        return new AndExpression((Pointer)this).position(position + i);
     }
 
 

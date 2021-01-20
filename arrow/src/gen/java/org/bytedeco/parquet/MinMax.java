@@ -28,7 +28,7 @@ public class MinMax extends Pointer {
         return (MinMax)super.position(position);
     }
     @Override public MinMax getPointer(long i) {
-        return new MinMax(this).position(position + i);
+        return new MinMax((Pointer)this).position(position + i);
     }
 
   public native short min(); public native MinMax min(short setter);

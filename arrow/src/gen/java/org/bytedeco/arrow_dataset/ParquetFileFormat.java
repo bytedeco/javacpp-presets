@@ -28,7 +28,7 @@ public class ParquetFileFormat extends FileFormat {
         return (ParquetFileFormat)super.position(position);
     }
     @Override public ParquetFileFormat getPointer(long i) {
-        return new ParquetFileFormat(this).position(position + i);
+        return new ParquetFileFormat((Pointer)this).position(position + i);
     }
 
   public ParquetFileFormat() { super((Pointer)null); allocate(); }

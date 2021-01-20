@@ -28,7 +28,7 @@ public class FilterIterator extends Pointer {
         return (FilterIterator)super.position(position);
     }
     @Override public FilterIterator getPointer(long i) {
-        return new FilterIterator(this).position(position + i);
+        return new FilterIterator((Pointer)this).position(position + i);
     }
 
   public enum Action { ACCEPT(0), REJECT(1);

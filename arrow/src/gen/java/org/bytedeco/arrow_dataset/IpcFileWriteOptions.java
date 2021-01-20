@@ -30,7 +30,7 @@ public class IpcFileWriteOptions extends FileWriteOptions {
         return (IpcFileWriteOptions)super.position(position);
     }
     @Override public IpcFileWriteOptions getPointer(long i) {
-        return new IpcFileWriteOptions(this).position(position + i);
+        return new IpcFileWriteOptions((Pointer)this).position(position + i);
     }
 
   /** Options passed to ipc::MakeFileWriter. use_threads is ignored */

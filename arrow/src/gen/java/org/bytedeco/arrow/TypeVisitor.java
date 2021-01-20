@@ -26,7 +26,7 @@ public class TypeVisitor extends Pointer {
         return (TypeVisitor)super.position(position);
     }
     @Override public TypeVisitor getPointer(long i) {
-        return new TypeVisitor(this).position(position + i);
+        return new TypeVisitor((Pointer)this).position(position + i);
     }
 
 

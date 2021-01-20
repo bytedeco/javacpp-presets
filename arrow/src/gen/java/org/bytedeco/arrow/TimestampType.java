@@ -55,7 +55,7 @@ public class TimestampType extends TemporalType {
         return (TimestampType)super.position(position);
     }
     @Override public TimestampType getPointer(long i) {
-        return new TimestampType(this).position(position + i);
+        return new TimestampType((Pointer)this).position(position + i);
     }
     public ParametricType asParametricType() { return asParametricType(this); }
     @Namespace public static native @Name("static_cast<arrow::ParametricType*>") ParametricType asParametricType(TimestampType pointer);

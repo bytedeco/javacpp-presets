@@ -22,7 +22,7 @@ public class FeatherReaderResult extends Pointer {
         return (FeatherReaderResult)super.position(position);
     }
     @Override public FeatherReaderResult getPointer(long i) {
-        return new FeatherReaderResult(this).position(position + i);
+        return new FeatherReaderResult((Pointer)this).position(position + i);
     }
 
   

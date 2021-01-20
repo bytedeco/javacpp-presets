@@ -30,7 +30,7 @@ public class FileDecryptionProperties extends Pointer {
           return (Builder)super.position(position);
       }
       @Override public Builder getPointer(long i) {
-          return new Builder(this).position(position + i);
+          return new Builder((Pointer)this).position(position + i);
       }
   
     public Builder() { super((Pointer)null); allocate(); }

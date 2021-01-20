@@ -25,7 +25,7 @@ public class ParquetFileReader extends Pointer {
         return (ParquetFileReader)super.position(position);
     }
     @Override public ParquetFileReader getPointer(long i) {
-        return new ParquetFileReader(this).position(position + i);
+        return new ParquetFileReader((Pointer)this).position(position + i);
     }
 
   // Declare a virtual class 'Contents' to aid dependency injection and more

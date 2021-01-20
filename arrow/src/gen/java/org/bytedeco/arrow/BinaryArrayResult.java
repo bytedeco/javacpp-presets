@@ -22,7 +22,7 @@ public class BinaryArrayResult extends Pointer {
         return (BinaryArrayResult)super.position(position);
     }
     @Override public BinaryArrayResult getPointer(long i) {
-        return new BinaryArrayResult(this).position(position + i);
+        return new BinaryArrayResult((Pointer)this).position(position + i);
     }
 
   

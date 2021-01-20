@@ -33,7 +33,7 @@ public class Comparator extends Pointer {
         return (Comparator)super.position(position);
     }
     @Override public Comparator getPointer(long i) {
-        return new Comparator(this).position(position + i);
+        return new Comparator((Pointer)this).position(position + i);
     }
 
 

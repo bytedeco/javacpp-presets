@@ -22,7 +22,7 @@ public class DictionaryVectorResult extends Pointer {
         return (DictionaryVectorResult)super.position(position);
     }
     @Override public DictionaryVectorResult getPointer(long i) {
-        return new DictionaryVectorResult(this).position(position + i);
+        return new DictionaryVectorResult((Pointer)this).position(position + i);
     }
 
   

@@ -31,7 +31,7 @@ public class Int16Scalar extends BaseInt16Type {
         return (Int16Scalar)super.position(position);
     }
     @Override public Int16Scalar getPointer(long i) {
-        return new Int16Scalar(this).position(position + i);
+        return new Int16Scalar((Pointer)this).position(position + i);
     }
 
 }

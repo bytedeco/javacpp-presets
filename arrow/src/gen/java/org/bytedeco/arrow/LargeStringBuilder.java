@@ -36,7 +36,7 @@ public class LargeStringBuilder extends LargeBinaryBuilder {
         return (LargeStringBuilder)super.position(position);
     }
     @Override public LargeStringBuilder getPointer(long i) {
-        return new LargeStringBuilder(this).position(position + i);
+        return new LargeStringBuilder((Pointer)this).position(position + i);
     }
 
 

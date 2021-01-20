@@ -22,7 +22,7 @@ public class RecordBatchWriterSharedResult extends Pointer {
         return (RecordBatchWriterSharedResult)super.position(position);
     }
     @Override public RecordBatchWriterSharedResult getPointer(long i) {
-        return new RecordBatchWriterSharedResult(this).position(position + i);
+        return new RecordBatchWriterSharedResult((Pointer)this).position(position + i);
     }
 
   

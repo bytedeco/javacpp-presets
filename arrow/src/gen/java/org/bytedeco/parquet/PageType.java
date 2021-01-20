@@ -29,7 +29,7 @@ public class PageType extends Pointer {
         return (PageType)super.position(position);
     }
     @Override public PageType getPointer(long i) {
-        return new PageType(this).position(position + i);
+        return new PageType((Pointer)this).position(position + i);
     }
 
   public enum type {

@@ -29,7 +29,7 @@ public class Criteria extends Pointer {
         return (Criteria)super.position(position);
     }
     @Override public Criteria getPointer(long i) {
-        return new Criteria(this).position(position + i);
+        return new Criteria((Pointer)this).position(position + i);
     }
 
   /** Opaque criteria expression, dependent on server implementation */

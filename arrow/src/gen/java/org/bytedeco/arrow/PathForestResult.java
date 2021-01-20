@@ -22,7 +22,7 @@ public class PathForestResult extends Pointer {
         return (PathForestResult)super.position(position);
     }
     @Override public PathForestResult getPointer(long i) {
-        return new PathForestResult(this).position(position + i);
+        return new PathForestResult((Pointer)this).position(position + i);
     }
 
   

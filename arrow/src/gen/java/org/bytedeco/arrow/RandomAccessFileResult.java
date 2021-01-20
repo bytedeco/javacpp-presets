@@ -22,7 +22,7 @@ public class RandomAccessFileResult extends Pointer {
         return (RandomAccessFileResult)super.position(position);
     }
     @Override public RandomAccessFileResult getPointer(long i) {
-        return new RandomAccessFileResult(this).position(position + i);
+        return new RandomAccessFileResult((Pointer)this).position(position + i);
     }
 
   

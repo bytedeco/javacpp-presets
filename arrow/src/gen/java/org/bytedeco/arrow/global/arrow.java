@@ -163,8 +163,8 @@ public static final String ARROW_CXX_COMPILER_ID = "GNU";
 public static final String ARROW_CXX_COMPILER_VERSION = "9.3.1";
 public static final String ARROW_CXX_COMPILER_FLAGS = "-std=c++11 -m64 -fdiagnostics-color=always -O3 -DNDEBUG";
 
-public static final String ARROW_GIT_ID = "d3e2a832acc924f6685261d76f11c7d291a915e9";
-public static final String ARROW_GIT_DESCRIPTION = "1.5.4-19-gd3e2a832ac-dirty";
+public static final String ARROW_GIT_ID = "c9a613c5e43a18a171a570bc9071c7cc50f27f77";
+public static final String ARROW_GIT_DESCRIPTION = "1.5.4-58-gc9a613c5e4-dirty";
 
 public static final String ARROW_PACKAGE_KIND = "";
 

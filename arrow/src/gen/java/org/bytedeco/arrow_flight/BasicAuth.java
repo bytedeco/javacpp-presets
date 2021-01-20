@@ -29,7 +29,7 @@ public class BasicAuth extends Pointer {
         return (BasicAuth)super.position(position);
     }
     @Override public BasicAuth getPointer(long i) {
-        return new BasicAuth(this).position(position + i);
+        return new BasicAuth((Pointer)this).position(position + i);
     }
 
   public native @StdString String username(); public native BasicAuth username(String setter);

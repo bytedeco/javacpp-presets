@@ -31,7 +31,7 @@ public class HalfFloatScalar extends BaseHalfFloatScalar {
         return (HalfFloatScalar)super.position(position);
     }
     @Override public HalfFloatScalar getPointer(long i) {
-        return new HalfFloatScalar(this).position(position + i);
+        return new HalfFloatScalar((Pointer)this).position(position + i);
     }
 
 }

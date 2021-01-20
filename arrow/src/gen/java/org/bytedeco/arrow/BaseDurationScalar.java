@@ -12,7 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Name("arrow::TemporalScalar<arrow::DurationType>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BaseDurationScalar extends Scalar {
+public class BaseDurationScalar extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseDurationScalar(Pointer p) { super(p); }

@@ -26,7 +26,7 @@ public class DatasetFactoryResult extends Pointer {
         return (DatasetFactoryResult)super.position(position);
     }
     @Override public DatasetFactoryResult getPointer(long i) {
-        return new DatasetFactoryResult(this).position(position + i);
+        return new DatasetFactoryResult((Pointer)this).position(position + i);
     }
 
   

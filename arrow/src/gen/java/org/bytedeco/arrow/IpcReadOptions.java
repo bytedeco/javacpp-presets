@@ -27,7 +27,7 @@ public class IpcReadOptions extends Pointer {
         return (IpcReadOptions)super.position(position);
     }
     @Override public IpcReadOptions getPointer(long i) {
-        return new IpcReadOptions(this).position(position + i);
+        return new IpcReadOptions((Pointer)this).position(position + i);
     }
 
   // The maximum permitted schema nesting depth.

@@ -24,7 +24,7 @@ public class KeyValueMetadata extends Pointer {
         return (KeyValueMetadata)super.position(position);
     }
     @Override public KeyValueMetadata getPointer(long i) {
-        return new KeyValueMetadata(this).position(position + i);
+        return new KeyValueMetadata((Pointer)this).position(position + i);
     }
 
   public KeyValueMetadata() { super((Pointer)null); allocate(); }

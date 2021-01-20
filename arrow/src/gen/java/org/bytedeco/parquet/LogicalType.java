@@ -34,7 +34,7 @@ public class LogicalType extends Pointer {
           return (Type)super.position(position);
       }
       @Override public Type getPointer(long i) {
-          return new Type(this).position(position + i);
+          return new Type((Pointer)this).position(position + i);
       }
   
     public enum type {
@@ -77,7 +77,7 @@ public class LogicalType extends Pointer {
           return (TimeUnit)super.position(position);
       }
       @Override public TimeUnit getPointer(long i) {
-          return new TimeUnit(this).position(position + i);
+          return new TimeUnit((Pointer)this).position(position + i);
       }
   
     public enum unit { UNKNOWN(0), MILLIS(1), MICROS(2), NANOS(3);

@@ -22,7 +22,7 @@ public class StructArrayResult extends Pointer {
         return (StructArrayResult)super.position(position);
     }
     @Override public StructArrayResult getPointer(long i) {
-        return new StructArrayResult(this).position(position + i);
+        return new StructArrayResult((Pointer)this).position(position + i);
     }
 
   

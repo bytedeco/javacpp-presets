@@ -22,7 +22,7 @@ public class BufferedOutputStreamResult extends Pointer {
         return (BufferedOutputStreamResult)super.position(position);
     }
     @Override public BufferedOutputStreamResult getPointer(long i) {
-        return new BufferedOutputStreamResult(this).position(position + i);
+        return new BufferedOutputStreamResult((Pointer)this).position(position + i);
     }
 
   

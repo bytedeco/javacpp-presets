@@ -30,7 +30,7 @@ public class SchemaBuilder extends Pointer {
         return (SchemaBuilder)super.position(position);
     }
     @Override public SchemaBuilder getPointer(long i) {
-        return new SchemaBuilder(this).position(position + i);
+        return new SchemaBuilder((Pointer)this).position(position + i);
     }
 
   // Indicate how field conflict(s) should be resolved when building a schema. A

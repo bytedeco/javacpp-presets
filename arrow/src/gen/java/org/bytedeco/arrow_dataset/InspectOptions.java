@@ -30,7 +30,7 @@ public class InspectOptions extends Pointer {
         return (InspectOptions)super.position(position);
     }
     @Override public InspectOptions getPointer(long i) {
-        return new InspectOptions(this).position(position + i);
+        return new InspectOptions((Pointer)this).position(position + i);
     }
 
   /** See {@code fragments} property. */

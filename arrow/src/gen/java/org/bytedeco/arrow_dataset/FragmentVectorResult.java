@@ -26,7 +26,7 @@ public class FragmentVectorResult extends Pointer {
         return (FragmentVectorResult)super.position(position);
     }
     @Override public FragmentVectorResult getPointer(long i) {
-        return new FragmentVectorResult(this).position(position + i);
+        return new FragmentVectorResult((Pointer)this).position(position + i);
     }
 
   

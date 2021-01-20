@@ -31,7 +31,7 @@ public class UInt32Scalar extends BaseUInt32Type {
         return (UInt32Scalar)super.position(position);
     }
     @Override public UInt32Scalar getPointer(long i) {
-        return new UInt32Scalar(this).position(position + i);
+        return new UInt32Scalar((Pointer)this).position(position + i);
     }
 
 }

@@ -25,7 +25,7 @@ public class ColumnOrder extends Pointer {
         return (ColumnOrder)super.position(position);
     }
     @Override public ColumnOrder getPointer(long i) {
-        return new ColumnOrder(this).position(position + i);
+        return new ColumnOrder((Pointer)this).position(position + i);
     }
 
   public enum type { UNDEFINED(0), TYPE_DEFINED_ORDER(1);

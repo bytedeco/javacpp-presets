@@ -75,7 +75,7 @@ public class BoolResult extends Pointer {
         return (BoolResult)super.position(position);
     }
     @Override public BoolResult getPointer(long i) {
-        return new BoolResult(this).position(position + i);
+        return new BoolResult((Pointer)this).position(position + i);
     }
 
   

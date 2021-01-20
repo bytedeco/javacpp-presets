@@ -40,7 +40,7 @@ public class LargeStringScalar extends LargeBinaryScalar {
         return (LargeStringScalar)super.position(position);
     }
     @Override public LargeStringScalar getPointer(long i) {
-        return new LargeStringScalar(this).position(position + i);
+        return new LargeStringScalar((Pointer)this).position(position + i);
     }
 
 

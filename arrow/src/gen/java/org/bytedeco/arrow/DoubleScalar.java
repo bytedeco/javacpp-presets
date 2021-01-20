@@ -31,7 +31,7 @@ public class DoubleScalar extends BaseDoubleScalar {
         return (DoubleScalar)super.position(position);
     }
     @Override public DoubleScalar getPointer(long i) {
-        return new DoubleScalar(this).position(position + i);
+        return new DoubleScalar((Pointer)this).position(position + i);
     }
 
 }

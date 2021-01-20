@@ -26,7 +26,7 @@ public class FutureStorageBase extends Pointer {
         return (FutureStorageBase)super.position(position);
     }
     @Override public FutureStorageBase getPointer(long i) {
-        return new FutureStorageBase(this).position(position + i);
+        return new FutureStorageBase((Pointer)this).position(position + i);
     }
 
   public FutureStorageBase() { super((Pointer)null); allocate(); }

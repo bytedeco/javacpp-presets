@@ -22,7 +22,7 @@ public class ChunkedArrayResult extends Pointer {
         return (ChunkedArrayResult)super.position(position);
     }
     @Override public ChunkedArrayResult getPointer(long i) {
-        return new ChunkedArrayResult(this).position(position + i);
+        return new ChunkedArrayResult((Pointer)this).position(position + i);
     }
 
   

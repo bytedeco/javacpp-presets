@@ -35,7 +35,7 @@ public class FlightInfo extends Pointer {
           return (Data)super.position(position);
       }
       @Override public Data getPointer(long i) {
-          return new Data(this).position(position + i);
+          return new Data((Pointer)this).position(position + i);
       }
   
     public native @StdString String schema(); public native Data schema(String setter);

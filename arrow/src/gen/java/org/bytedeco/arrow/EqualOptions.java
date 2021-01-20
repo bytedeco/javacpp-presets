@@ -27,7 +27,7 @@ public class EqualOptions extends Pointer {
         return (EqualOptions)super.position(position);
     }
     @Override public EqualOptions getPointer(long i) {
-        return new EqualOptions(this).position(position + i);
+        return new EqualOptions((Pointer)this).position(position + i);
     }
 
   /** Whether or not NaNs are considered equal. */

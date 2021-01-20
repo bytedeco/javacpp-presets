@@ -34,7 +34,7 @@ public class Decompressor extends Pointer {
           return (DecompressResult)super.position(position);
       }
       @Override public DecompressResult getPointer(long i) {
-          return new DecompressResult(this).position(position + i);
+          return new DecompressResult((Pointer)this).position(position + i);
       }
   
     // XXX is need_more_output necessary? (Brotli?)

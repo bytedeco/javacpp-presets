@@ -12,7 +12,7 @@ import static org.bytedeco.arrow.global.arrow.*;
 
 
 @Name("arrow::NumericScalar<arrow::UInt32Type>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class BaseUInt32Type extends Scalar {
+public class BaseUInt32Type extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseUInt32Type(Pointer p) { super(p); }

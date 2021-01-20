@@ -26,7 +26,7 @@ public class CacheOptions extends Pointer {
         return (CacheOptions)super.position(position);
     }
     @Override public CacheOptions getPointer(long i) {
-        return new CacheOptions(this).position(position + i);
+        return new CacheOptions((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native double kDefaultIdealBandwidthUtilizationFrac();

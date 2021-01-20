@@ -26,7 +26,7 @@ public class ArrayVisitor extends Pointer {
         return (ArrayVisitor)super.position(position);
     }
     @Override public ArrayVisitor getPointer(long i) {
-        return new ArrayVisitor(this).position(position + i);
+        return new ArrayVisitor((Pointer)this).position(position + i);
     }
 
 

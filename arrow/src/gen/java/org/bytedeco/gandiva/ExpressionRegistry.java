@@ -28,7 +28,7 @@ public class ExpressionRegistry extends Pointer {
         return (ExpressionRegistry)super.position(position);
     }
     @Override public ExpressionRegistry getPointer(long i) {
-        return new ExpressionRegistry(this).position(position + i);
+        return new ExpressionRegistry((Pointer)this).position(position + i);
     }
 
   public ExpressionRegistry() { super((Pointer)null); allocate(); }

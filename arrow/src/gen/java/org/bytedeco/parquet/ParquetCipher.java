@@ -28,7 +28,7 @@ public class ParquetCipher extends Pointer {
         return (ParquetCipher)super.position(position);
     }
     @Override public ParquetCipher getPointer(long i) {
-        return new ParquetCipher(this).position(position + i);
+        return new ParquetCipher((Pointer)this).position(position + i);
     }
 
   public enum type { AES_GCM_V1(0), AES_GCM_CTR_V1(1);

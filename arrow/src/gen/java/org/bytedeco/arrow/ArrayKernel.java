@@ -27,7 +27,7 @@ public class ArrayKernel extends Kernel {
         return (ArrayKernel)super.position(position);
     }
     @Override public ArrayKernel getPointer(long i) {
-        return new ArrayKernel(this).position(position + i);
+        return new ArrayKernel((Pointer)this).position(position + i);
     }
 
   public ArrayKernel() { super((Pointer)null); allocate(); }

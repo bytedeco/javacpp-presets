@@ -22,7 +22,7 @@ public class BufferResult extends Pointer {
         return (BufferResult)super.position(position);
     }
     @Override public BufferResult getPointer(long i) {
-        return new BufferResult(this).position(position + i);
+        return new BufferResult((Pointer)this).position(position + i);
     }
 
   

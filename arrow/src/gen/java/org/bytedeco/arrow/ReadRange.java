@@ -26,7 +26,7 @@ public class ReadRange extends Pointer {
         return (ReadRange)super.position(position);
     }
     @Override public ReadRange getPointer(long i) {
-        return new ReadRange(this).position(position + i);
+        return new ReadRange((Pointer)this).position(position + i);
     }
 
   public native @Cast("int64_t") long offset(); public native ReadRange offset(long setter);

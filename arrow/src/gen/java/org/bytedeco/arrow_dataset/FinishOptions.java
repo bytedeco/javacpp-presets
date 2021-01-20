@@ -30,7 +30,7 @@ public class FinishOptions extends Pointer {
         return (FinishOptions)super.position(position);
     }
     @Override public FinishOptions getPointer(long i) {
-        return new FinishOptions(this).position(position + i);
+        return new FinishOptions((Pointer)this).position(position + i);
     }
 
   /** Finalize the dataset with this given schema. If the schema is not

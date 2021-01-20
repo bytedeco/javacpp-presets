@@ -22,7 +22,7 @@ public class DecompressorResult extends Pointer {
         return (DecompressorResult)super.position(position);
     }
     @Override public DecompressorResult getPointer(long i) {
-        return new DecompressorResult(this).position(position + i);
+        return new DecompressorResult((Pointer)this).position(position + i);
     }
 
   

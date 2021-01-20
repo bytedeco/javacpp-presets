@@ -22,7 +22,7 @@ public class FieldRefResult extends Pointer {
         return (FieldRefResult)super.position(position);
     }
     @Override public FieldRefResult getPointer(long i) {
-        return new FieldRefResult(this).position(position + i);
+        return new FieldRefResult((Pointer)this).position(position + i);
     }
 
   

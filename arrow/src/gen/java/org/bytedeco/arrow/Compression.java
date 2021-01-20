@@ -26,7 +26,7 @@ public class Compression extends Pointer {
         return (Compression)super.position(position);
     }
     @Override public Compression getPointer(long i) {
-        return new Compression(this).position(position + i);
+        return new Compression((Pointer)this).position(position + i);
     }
 
   /** \brief Compression algorithm */

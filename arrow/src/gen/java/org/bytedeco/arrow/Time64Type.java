@@ -25,7 +25,7 @@ public class Time64Type extends TimeType {
         return (Time64Type)super.position(position);
     }
     @Override public Time64Type getPointer(long i) {
-        return new Time64Type(this).position(position + i);
+        return new Time64Type((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native @Cast("const arrow::Type::type") int type_id();

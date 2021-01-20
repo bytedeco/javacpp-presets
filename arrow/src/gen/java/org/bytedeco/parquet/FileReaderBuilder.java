@@ -27,7 +27,7 @@ public class FileReaderBuilder extends Pointer {
         return (FileReaderBuilder)super.position(position);
     }
     @Override public FileReaderBuilder getPointer(long i) {
-        return new FileReaderBuilder(this).position(position + i);
+        return new FileReaderBuilder((Pointer)this).position(position + i);
     }
 
   public FileReaderBuilder() { super((Pointer)null); allocate(); }

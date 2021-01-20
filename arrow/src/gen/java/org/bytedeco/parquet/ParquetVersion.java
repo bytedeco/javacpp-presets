@@ -38,7 +38,7 @@ public class ParquetVersion extends Pointer {
         return (ParquetVersion)super.position(position);
     }
     @Override public ParquetVersion getPointer(long i) {
-        return new ParquetVersion(this).position(position + i);
+        return new ParquetVersion((Pointer)this).position(position + i);
     }
 
   public enum type { PARQUET_1_0(0), PARQUET_2_0(1);

@@ -29,7 +29,7 @@ public class LocalFileSystem extends FileSystem {
         return (LocalFileSystem)super.position(position);
     }
     @Override public LocalFileSystem getPointer(long i) {
-        return new LocalFileSystem(this).position(position + i);
+        return new LocalFileSystem((Pointer)this).position(position + i);
     }
 
   public LocalFileSystem() { super((Pointer)null); allocate(); }

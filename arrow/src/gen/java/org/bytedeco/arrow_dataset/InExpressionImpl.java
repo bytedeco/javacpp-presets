@@ -29,7 +29,7 @@ public class InExpressionImpl extends UnaryExpression {
         return (InExpressionImpl)super.position(position);
     }
     @Override public InExpressionImpl getPointer(long i) {
-        return new InExpressionImpl(this).position(position + i);
+        return new InExpressionImpl((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native ExpressionType.type expression_type();

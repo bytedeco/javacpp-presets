@@ -30,7 +30,7 @@ public class NotExpression extends NotExpressionImpl {
         return (NotExpression)super.position(position);
     }
     @Override public NotExpression getPointer(long i) {
-        return new NotExpression(this).position(position + i);
+        return new NotExpression((Pointer)this).position(position + i);
     }
 
 

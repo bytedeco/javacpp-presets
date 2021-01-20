@@ -22,7 +22,7 @@ public class RecordBatchWriterUniqueResult extends Pointer {
         return (RecordBatchWriterUniqueResult)super.position(position);
     }
     @Override public RecordBatchWriterUniqueResult getPointer(long i) {
-        return new RecordBatchWriterUniqueResult(this).position(position + i);
+        return new RecordBatchWriterUniqueResult((Pointer)this).position(position + i);
     }
 
   

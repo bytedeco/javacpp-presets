@@ -28,7 +28,7 @@ public class NullScalar extends Scalar {
         return (NullScalar)super.position(position);
     }
     @Override public NullScalar getPointer(long i) {
-        return new NullScalar(this).position(position + i);
+        return new NullScalar((Pointer)this).position(position + i);
     }
 
 

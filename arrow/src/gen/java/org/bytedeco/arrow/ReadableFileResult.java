@@ -22,7 +22,7 @@ public class ReadableFileResult extends Pointer {
         return (ReadableFileResult)super.position(position);
     }
     @Override public ReadableFileResult getPointer(long i) {
-        return new ReadableFileResult(this).position(position + i);
+        return new ReadableFileResult((Pointer)this).position(position + i);
     }
 
   

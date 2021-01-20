@@ -27,7 +27,7 @@ public class Int96 extends Pointer {
           return (Int96)super.position(position);
       }
       @Override public Int96 getPointer(long i) {
-          return new Int96(this).position(position + i);
+          return new Int96((Pointer)this).position(position + i);
       }
    public native @Cast("uint32_t") int value(int i); public native Int96 value(int i, int setter);
 @MemberGetter public native @Cast("uint32_t*") IntPointer value(); }

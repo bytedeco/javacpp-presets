@@ -22,7 +22,7 @@ public class Decimal128PairResult extends Pointer {
         return (Decimal128PairResult)super.position(position);
     }
     @Override public Decimal128PairResult getPointer(long i) {
-        return new Decimal128PairResult(this).position(position + i);
+        return new Decimal128PairResult((Pointer)this).position(position + i);
     }
 
   

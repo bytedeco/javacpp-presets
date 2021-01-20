@@ -26,7 +26,7 @@ public class FragmentIteratorResult extends Pointer {
         return (FragmentIteratorResult)super.position(position);
     }
     @Override public FragmentIteratorResult getPointer(long i) {
-        return new FragmentIteratorResult(this).position(position + i);
+        return new FragmentIteratorResult((Pointer)this).position(position + i);
     }
 
   

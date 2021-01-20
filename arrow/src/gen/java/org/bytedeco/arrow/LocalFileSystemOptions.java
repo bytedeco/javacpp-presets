@@ -27,7 +27,7 @@ public class LocalFileSystemOptions extends Pointer {
         return (LocalFileSystemOptions)super.position(position);
     }
     @Override public LocalFileSystemOptions getPointer(long i) {
-        return new LocalFileSystemOptions(this).position(position + i);
+        return new LocalFileSystemOptions((Pointer)this).position(position + i);
     }
 
   /** Whether OpenInputStream and OpenInputFile return a mmap'ed file,

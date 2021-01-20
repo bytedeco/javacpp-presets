@@ -28,7 +28,7 @@ public class EncryptionAlgorithm extends Pointer {
         return (EncryptionAlgorithm)super.position(position);
     }
     @Override public EncryptionAlgorithm getPointer(long i) {
-        return new EncryptionAlgorithm(this).position(position + i);
+        return new EncryptionAlgorithm((Pointer)this).position(position + i);
     }
 
   public native ParquetCipher.type algorithm(); public native EncryptionAlgorithm algorithm(ParquetCipher.type setter);

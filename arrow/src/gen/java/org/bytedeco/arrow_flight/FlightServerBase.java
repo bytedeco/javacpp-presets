@@ -27,7 +27,7 @@ public class FlightServerBase extends Pointer {
         return (FlightServerBase)super.position(position);
     }
     @Override public FlightServerBase getPointer(long i) {
-        return new FlightServerBase(this).position(position + i);
+        return new FlightServerBase((Pointer)this).position(position + i);
     }
 
   public FlightServerBase() { super((Pointer)null); allocate(); }

@@ -1,4 +1,5 @@
 
+ * Rebase `PrimitiveScalar` on `PrimitiveScalarBase` in presets for Arrow for easy access to `data()` ([issue #998](https://github.com/bytedeco/javacpp-presets/issues/998))
  * Add `NamedMetadataOperations.h` implementing data retrieval operations for LLVM nodes ([pull #995](https://github.com/bytedeco/javacpp-presets/pull/995))
  * Enable OpenMP for ONNX Runtime on Mac once again ([issue #917](https://github.com/bytedeco/javacpp-presets/issues/917))
  * Build OpenCV without OpenBLAS when environment variable `NOOPENBLAS=yes` ([pull #987](https://github.com/bytedeco/javacpp-presets/pull/987))
