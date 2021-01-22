@@ -3,6 +3,7 @@ package org.bytedeco.modsecurity.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -10,8 +11,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 /**
  * @author Artem Martynenko artem7mag@gmail.com
  **/
-@Properties(value = @Platform(
-        compiler = "cpp11",
+@Properties(inherit = javacpp.class , value = @Platform(
+        define = {"UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
         include = {
         "modsecurity/actions/action.h",
         "modsecurity/collection/collection.h",
@@ -36,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "modsecurity/transaction.h",
         "modsecurity/variable_origin.h",
         "modsecurity/variable_value.h" },
-        cinclude = "modsecurity/intervention.h"),
+        cinclude = "modsecurity/intervention.h", includepath = {"lib","include"}, linkpath = {"lib","include"}, link = "modsecurity"),
 
         target = "org.bytedeco.modsecurity",
         global = "org.bytedeco.modsecurity.global")
@@ -52,7 +53,7 @@ public class modsecurity implements InfoMapper {
                 new Info("std::ostringstream").pointerTypes("org.bytedeco.modsecurity.OStringStreamPointer").define());
         infoMap.put(new Info("std::list<std::string>").pointerTypes("StringList").define());
         infoMap.put(new Info("ModSecurityIntervention_t").pointerTypes("ModSecurityIntervention").define());
-        infoMap.put(new Info("std::basic_string<char>").annotations("@StdString").pointerTypes("BytePointer"));
+        infoMap.put(new Info("std::basic_string<char>").annotations("@StdString").valueTypes("BytePointer").pointerTypes("@Cast({\"char*\"}) BytePointer"));
         infoMap.put(new Info("std::set<std::string>").pointerTypes("StringSet").define());
         infoMap.put(new Info("std::list<int>").pointerTypes("IntList").define());
         infoMap.put(new Info("std::list<std::pair<int,int> >").pointerTypes("IntIntPairList").define());
