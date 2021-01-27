@@ -29,4 +29,8 @@ public class TimestampArray extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::TimestampType>::value_type") long GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::TimestampType>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::TimestampType>::IteratorType*") Pointer end();
 }

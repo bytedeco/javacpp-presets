@@ -58,7 +58,7 @@ public class SchemaBuilder extends Pointer {
   }
 
   /** \brief Construct an empty SchemaBuilder
-   *  {@code field_merge_options} is only effecitive when {@code conflict_policy} == {@code CONFLICT_MERGE}. */
+   *  {@code field_merge_options} is only effective when {@code conflict_policy} == {@code CONFLICT_MERGE}. */
   public SchemaBuilder(
         ConflictPolicy conflict_policy/*=arrow::SchemaBuilder::CONFLICT_APPEND*/,
         @ByVal(nullValue = "arrow::Field::MergeOptions::Defaults()") Field.MergeOptions field_merge_options) { super((Pointer)null); allocate(conflict_policy, field_merge_options); }
@@ -74,7 +74,7 @@ public class SchemaBuilder extends Pointer {
         @Cast("arrow::SchemaBuilder::ConflictPolicy") int conflict_policy/*=arrow::SchemaBuilder::CONFLICT_APPEND*/,
         @ByVal(nullValue = "arrow::Field::MergeOptions::Defaults()") Field.MergeOptions field_merge_options);
   /** \brief Construct a SchemaBuilder from a list of fields
-   *  {@code field_merge_options} is only effecitive when {@code conflict_policy} == {@code CONFLICT_MERGE}. */
+   *  {@code field_merge_options} is only effective when {@code conflict_policy} == {@code CONFLICT_MERGE}. */
   public SchemaBuilder(
         @ByVal FieldVector fields,
         ConflictPolicy conflict_policy/*=arrow::SchemaBuilder::CONFLICT_APPEND*/,
@@ -96,7 +96,7 @@ public class SchemaBuilder extends Pointer {
         @Cast("arrow::SchemaBuilder::ConflictPolicy") int conflict_policy/*=arrow::SchemaBuilder::CONFLICT_APPEND*/,
         @ByVal(nullValue = "arrow::Field::MergeOptions::Defaults()") Field.MergeOptions field_merge_options);
   /** \brief Construct a SchemaBuilder from a schema, preserving the metadata
-   *  {@code field_merge_options} is only effecitive when {@code conflict_policy} == {@code CONFLICT_MERGE}. */
+   *  {@code field_merge_options} is only effective when {@code conflict_policy} == {@code CONFLICT_MERGE}. */
   public SchemaBuilder(
         @Const @SharedPtr @ByRef Schema schema,
         ConflictPolicy conflict_policy/*=arrow::SchemaBuilder::CONFLICT_APPEND*/,

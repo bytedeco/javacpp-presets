@@ -37,4 +37,6 @@ public class Decimal128Type extends DecimalType {
   public static final int kMinPrecision = kMinPrecision();
   @MemberGetter public static native int kMaxPrecision();
   public static final int kMaxPrecision = kMaxPrecision();
+  @MemberGetter public static native int kByteWidth();
+  public static final int kByteWidth = kByteWidth();
 }

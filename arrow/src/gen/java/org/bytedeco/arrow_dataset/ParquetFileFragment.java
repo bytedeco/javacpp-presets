@@ -24,8 +24,8 @@ import static org.bytedeco.arrow.global.arrow_dataset.*;
  *  number of scanned RowGroups, or to partition the scans across multiple
  *  threads.
  * 
- *  It can also attach optional statistics with each RowGroups, providing
- *  pushdown predicate benefits before invoking any heavy IO. This can induce
+ *  Metadata can be explicitly provided, enabling pushdown predicate benefits without
+ *  the potentially heavy IO of loading Metadata from the file system. This can induce
  *  significant performance boost when scanning high latency file systems. */
 @Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class ParquetFileFragment extends FileFragment {
@@ -33,30 +33,20 @@ public class ParquetFileFragment extends FileFragment {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParquetFileFragment(Pointer p) { super(p); }
 
-  public native @ByVal FragmentResult SplitByRowGroup(@Const @SharedPtr @ByRef Expression predicate);
+  public native @ByVal FragmentResult SplitByRowGroup(@ByVal Expression predicate);
 
-  /** \brief Return the RowGroups selected by this fragment, or nullptr
-   *  if all RowGroups in the parquet file are selected. */
-  public native @StdVector RowGroupInfo row_groups();
+  /** \brief Return the RowGroups selected by this fragment. */
+  public native @StdVector IntPointer row_groups();
 
-  /** \brief Return the number of row groups selected by this fragment. */
-  
-  ///
-  public native @ByVal IntResult GetNumRowGroups();
+  /** \brief Return the FileMetaData associated with this fragment. */
+  public native @SharedPtr FileMetaData metadata();
 
-  /** \brief Indicate if the attached statistics are complete and the physical schema
-   *  is cached.
-   * 
-   *  The statistics are complete if the provided RowGroups (see {@code row_groups()})
-   *  is not empty / and all RowGroup return true on {@code RowGroup::HasStatistics()}. */
-  public native @Cast("bool") boolean HasCompleteMetadata();
-
-  /** \brief Ensure attached statistics are complete and the physical schema is cached. */
+  /** \brief Ensure this fragment's FileMetaData is in memory. */
   public native @ByVal Status EnsureCompleteMetadata(FileReader reader/*=nullptr*/);
   public native @ByVal Status EnsureCompleteMetadata();
 
-  /** \brief Return a filtered subset of the ParquetFileFragment. */
-  public native @ByVal FragmentResult Subset(@Const @SharedPtr @ByRef Expression predicate);
+  /** \brief Return fragment which selects a filtered subset of this fragment's RowGroups. */
+  public native @ByVal FragmentResult Subset(@ByVal Expression predicate);
   public native @ByVal FragmentResult Subset(@StdVector IntPointer row_group_ids);
   public native @ByVal FragmentResult Subset(@StdVector IntBuffer row_group_ids);
   public native @ByVal FragmentResult Subset(@StdVector int[] row_group_ids);

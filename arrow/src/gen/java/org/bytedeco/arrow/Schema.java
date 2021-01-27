@@ -71,7 +71,7 @@ public class Schema extends Fingerprintable {
   /** \brief The custom key-value metadata, if any
    * 
    *  @return metadata may be null */
-  public native @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByVal KeyValueMetadata metadata();
+  public native @Const @Cast("const arrow::KeyValueMetadata*") @SharedPtr @ByRef KeyValueMetadata metadata();
 
   /** \brief Render a string representation of the schema suitable for debugging
    *  @param show_metadata [in] when true, if KeyValueMetadata is non-empty,

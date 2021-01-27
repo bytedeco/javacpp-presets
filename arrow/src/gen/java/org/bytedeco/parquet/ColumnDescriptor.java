@@ -49,7 +49,7 @@ public class ColumnDescriptor extends Pointer {
 
   public native @ByVal ColumnOrder column_order();
 
-  public native SortOrder.type sort_order();
+  public native org.bytedeco.parquet.SortOrder.type sort_order();
 
   public native @StdString String name();
 

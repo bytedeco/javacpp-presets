@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Arrow 2.0.0  https://arrow.apache.org/
+ * Arrow 3.0.0  https://arrow.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of Arrow ported to Java from this C++ source file:
 
- * https://github.com/apache/arrow/blob/apache-arrow-2.0.0/cpp/examples/arrow/row-wise-conversion-example.cc
+ * https://github.com/apache/arrow/blob/apache-arrow-3.0.0/cpp/examples/arrow/row-wise-conversion-example.cc
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SimpleExample.java` source files below, simply execute on the command line:
 ```bash
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>arrow-platform</artifactId>
-            <version>2.0.0-1.5.5-SNAPSHOT</version>
+            <version>3.0.0-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -147,7 +147,7 @@ public class RowWiseConversionExample {
         // Indicate the start of a new list row. This will memorise the current
         // offset in the values builder.
         THROW_ON_FAILURE(components_builder.Append());
-        // Store the actual values. The final nullptr argument tells the underyling
+        // Store the actual values. The final nullptr argument tells the underlying
         // builder that all added values are valid, i.e. non-null.
         THROW_ON_FAILURE(cost_components_builder.AppendValues(row.cost_components,
                                                               row.cost_components.length));

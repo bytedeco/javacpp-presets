@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "plasma/events.h",
                 "plasma/test_util.h",
             },
-            link = "plasma@.200"
+            link = "plasma@.300"
         ),
     },
     target = "org.bytedeco.plasma",

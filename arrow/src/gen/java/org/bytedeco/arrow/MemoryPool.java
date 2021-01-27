@@ -70,6 +70,6 @@ public class MemoryPool extends Pointer {
    *  returns -1 */
   public native @Cast("int64_t") long max_memory();
 
-  /** The name of the backend used by this MemoryPool (e.g. "system" or "jemalloc"); */
+  /** The name of the backend used by this MemoryPool (e.g. "system" or "jemalloc"). */
   public native @StdString String backend_name();
 }

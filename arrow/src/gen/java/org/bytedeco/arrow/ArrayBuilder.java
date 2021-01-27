@@ -67,8 +67,28 @@ public class ArrayBuilder extends Pointer {
   /** Reset the builder. */
   public native void Reset();
 
+  /** \brief Append a null value to builder */
   public native @ByVal Status AppendNull();
+  /** \brief Append a number of null values to builder */
+  
+  ///
   public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
+
+  /** \brief Append a non-null value to builder
+   * 
+   *  The appended value is an implementation detail, but the corresponding
+   *  memory slot is guaranteed to be initialized.
+   *  This method is useful when appending a null value to a parent nested type. */
+  
+  ///
+  public native @ByVal Status AppendEmptyValue();
+
+  /** \brief Append a number of non-null values to builder
+   * 
+   *  The appended values are an implementation detail, but the corresponding
+   *  memory slot is guaranteed to be initialized.
+   *  This method is useful when appending null values to a parent nested type. */
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
 
   /** For cases where raw data was memcpy'd into the internal buffers, allows us
    *  to advance the length of the builder. It is your responsibility to use

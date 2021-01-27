@@ -18,9 +18,18 @@ public class DecimalType extends FixedSizeBinaryType {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DecimalType(Pointer p) { super(p); }
 
-  public DecimalType(int byte_width, int precision, int scale) { super((Pointer)null); allocate(byte_width, precision, scale); }
-  private native void allocate(int byte_width, int precision, int scale);
+  public DecimalType(@Cast("arrow::Type::type") int type_id, int byte_width, int precision,
+                         int scale) { super((Pointer)null); allocate(type_id, byte_width, precision, scale); }
+  private native void allocate(@Cast("arrow::Type::type") int type_id, int byte_width, int precision,
+                         int scale);
 
   public native int precision();
+  
+  ///
   public native int scale();
+
+  /** \brief Returns the number of bytes needed for precision.
+   * 
+   *  precision must be >= 1 */
+  public static native int DecimalSize(int precision);
 }

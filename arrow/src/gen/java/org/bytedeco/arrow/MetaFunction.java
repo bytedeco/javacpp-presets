@@ -26,4 +26,6 @@ public class MetaFunction extends Function {
 
   public native @ByVal DatumResult Execute(@Const @ByRef DatumVector args, @Const FunctionOptions options,
                           ExecContext ctx);
+
+  public native @ByVal @Cast("arrow::Result<const arrow::compute::Kernel*>*") KernelResult DispatchExact(@Const @ByRef ValueDescrVector arg0);
 }

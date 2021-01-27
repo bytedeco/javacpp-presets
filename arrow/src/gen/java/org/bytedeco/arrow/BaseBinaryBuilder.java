@@ -29,9 +29,13 @@ public class BaseBinaryBuilder extends ArrayBuilder {
 
   public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
 
+  public native @ByVal Status AppendNull();
+
+  public native @ByVal Status AppendEmptyValue();
+
   
   ///
-  public native @ByVal Status AppendNull();
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
 
   /** \brief Append without checking capacity
    * 

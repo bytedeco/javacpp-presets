@@ -24,15 +24,13 @@ public class InMemoryFragment extends Fragment {
     public InMemoryFragment(Pointer p) { super(p); }
 
   public InMemoryFragment(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches,
-                     @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg2) { super((Pointer)null); allocate(schema, record_batches, arg2); }
+                     @ByVal(nullValue = "arrow::dataset::Expression(literal(true))") Expression arg2) { super((Pointer)null); allocate(schema, record_batches, arg2); }
   private native void allocate(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches,
-                     @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg2);
+                     @ByVal(nullValue = "arrow::dataset::Expression(literal(true))") Expression arg2);
   public InMemoryFragment(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches) { super((Pointer)null); allocate(schema, record_batches); }
   private native void allocate(@SharedPtr @ByVal Schema schema, @ByVal RecordBatchVector record_batches);
-  public InMemoryFragment(@ByVal RecordBatchVector record_batches,
-                              @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg1) { super((Pointer)null); allocate(record_batches, arg1); }
-  private native void allocate(@ByVal RecordBatchVector record_batches,
-                              @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression arg1);
+  public InMemoryFragment(@ByVal RecordBatchVector record_batches, @ByVal(nullValue = "arrow::dataset::Expression(literal(true))") Expression arg1) { super((Pointer)null); allocate(record_batches, arg1); }
+  private native void allocate(@ByVal RecordBatchVector record_batches, @ByVal(nullValue = "arrow::dataset::Expression(literal(true))") Expression arg1);
   public InMemoryFragment(@ByVal RecordBatchVector record_batches) { super((Pointer)null); allocate(record_batches); }
   private native void allocate(@ByVal RecordBatchVector record_batches);
 

@@ -219,6 +219,13 @@ public class StringResult extends Pointer {
   /** Apply a function to the internally stored value to produce a new result or propagate
    *  the stored error. */
 
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+  
+
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+
   public native @StdString @ByRef @Cast({"char*", "std::string*"}) BytePointer ValueUnsafe();
 
   

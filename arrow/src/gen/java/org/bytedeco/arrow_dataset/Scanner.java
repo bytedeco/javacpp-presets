@@ -53,7 +53,7 @@ public class Scanner extends Pointer {
   public native @ByVal TableResult ToTable();
 
   /** \brief GetFragments returns an iterator over all Fragments in this scan. */
-  public native @ByVal FragmentIterator GetFragments();
+  public native @ByVal FragmentIteratorResult GetFragments();
 
   public native @Const @SharedPtr @ByRef Schema schema();
 

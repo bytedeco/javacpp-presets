@@ -23,6 +23,8 @@ public class ColumnCryptoMetaData extends Pointer {
   public static native @UniquePtr ColumnCryptoMetaData Make(@Cast("const uint8_t*") ByteBuffer metadata);
   public static native @UniquePtr ColumnCryptoMetaData Make(@Cast("const uint8_t*") byte[] metadata);
 
+  public native @Cast("bool") boolean Equals(@Const @ByRef ColumnCryptoMetaData other);
+
   public native @SharedPtr ColumnPath path_in_schema();
   public native @Cast("bool") boolean encrypted_with_footer_key();
   public native @StdString String key_metadata();

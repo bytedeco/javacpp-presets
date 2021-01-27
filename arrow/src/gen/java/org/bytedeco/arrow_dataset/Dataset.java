@@ -31,14 +31,14 @@ public class Dataset extends Pointer {
   public native @ByVal ScannerBuilderResult NewScan();
 
   /** \brief GetFragments returns an iterator of Fragments given a predicate. */
-  public native @ByVal FragmentIterator GetFragments(@SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::dataset::Expression>(scalar(true))") Expression predicate);
-  public native @ByVal FragmentIterator GetFragments();
+  public native @ByVal FragmentIteratorResult GetFragments(@ByVal Expression predicate);
+  public native @ByVal FragmentIteratorResult GetFragments();
 
   public native @Const @SharedPtr @ByRef Schema schema();
 
   /** \brief An expression which evaluates to true for all data viewed by this Dataset.
    *  May be null, which indicates no information is available. */
-  public native @Const @SharedPtr @ByRef Expression partition_expression();
+  public native @Const @ByRef Expression partition_expression();
 
   /** \brief The name identifying the kind of Dataset */
   

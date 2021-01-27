@@ -34,13 +34,13 @@ public class ValidityBitmapInputOutput extends Pointer {
 
   // Input only.
   // The maximum number of values_read expected (actual
-  // values read must be less than or equal to this value.
+  // values read must be less than or equal to this value).
   // If this number is exceeded methods will throw a
   // ParquetException. Exceeding this limit indicates
   // either a corrupt or incorrectly written file.
   public native @Cast("int64_t") long values_read_upper_bound(); public native ValidityBitmapInputOutput values_read_upper_bound(long setter);
   // Output only. The number of values added to the encountered
-  // (this is logicallyt he count of the number of elements
+  // (this is logically the count of the number of elements
   // for an Arrow array).
   public native @Cast("int64_t") long values_read(); public native ValidityBitmapInputOutput values_read(long setter);
   // Input/Output. The number of nulls encountered.

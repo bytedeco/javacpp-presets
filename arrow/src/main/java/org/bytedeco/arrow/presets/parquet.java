@@ -63,7 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/arrow/reader.h",
                 "parquet/arrow/writer.h",
             },
-            link = "parquet@.200"
+            link = "parquet@.300"
         ),
     },
     target = "org.bytedeco.parquet",
@@ -83,6 +83,7 @@ public class parquet implements InfoMapper {
 
                .put(new Info("Compression::type").valueTypes("Compression.type", "@Cast(\"arrow::Compression::type\") int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("parquet::Encoding::type").valueTypes("Encoding.type", "@Cast(\"parquet::Encoding::type\") int").pointerTypes("IntPointer", "IntBuffer", "int[]").enumerate())
+               .put(new Info("parquet::SortOrder").pointerTypes("org.bytedeco.parquet.SortOrder"))
                .put(new Info("parquet::Type").pointerTypes("org.bytedeco.parquet.Type"))
                .put(new Info("std::list<int>").pointerTypes("IntList").define())
                .put(new Info("std::shared_ptr<parquet::ColumnDecryptionProperties>").annotations("@SharedPtr").pointerTypes("ColumnDecryptionProperties"))

@@ -29,4 +29,8 @@ public class HalfFloatArray extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::HalfFloatType>::value_type") short GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::HalfFloatType>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::HalfFloatType>::IteratorType*") Pointer end();
 }

@@ -45,6 +45,19 @@ public class FlightClient extends Pointer {
   public native @ByVal Status Authenticate(@Const @ByRef FlightCallOptions options,
                         @UniquePtr ClientAuthHandler auth_handler);
 
+  /** \brief Authenticate to the server using basic HTTP style authentication.
+   *  @param options [in] Per-RPC options
+   *  @param username [in] Username to use
+   *  @param password [in] Password to use
+   *  @return Arrow result with bearer token and status OK if client authenticated
+   *  sucessfully */
+  public native @ByVal StringPairResult AuthenticateBasicToken(
+        @Const @ByRef FlightCallOptions options, @StdString String username,
+        @StdString String password);
+  public native @ByVal StringPairResult AuthenticateBasicToken(
+        @Const @ByRef FlightCallOptions options, @StdString BytePointer username,
+        @StdString BytePointer password);
+
   /** \brief Perform the indicated action, returning an iterator to the stream
    *  of results, if any
    *  @param options [in] Per-RPC options

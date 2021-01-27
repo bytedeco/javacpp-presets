@@ -11,10 +11,28 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-@Namespace("arrow::compute") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
+/** \defgroup compute-functions Abstract compute function API
+ * 
+ *  \{
+ <p>
+ *  \brief Base class for specifying options configuring a function's behavior,
+ *  such as error handling. */
+@Namespace("arrow::compute") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class FunctionOptions extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public FunctionOptions() { super((Pointer)null); }
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public FunctionOptions() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FunctionOptions(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionOptions(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public FunctionOptions position(long position) {
+        return (FunctionOptions)super.position(position);
+    }
+    @Override public FunctionOptions getPointer(long i) {
+        return new FunctionOptions((Pointer)this).position(position + i);
+    }
+
 }

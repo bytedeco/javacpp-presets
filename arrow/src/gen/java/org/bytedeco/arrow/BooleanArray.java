@@ -42,4 +42,8 @@ public class BooleanArray extends PrimitiveArray {
   /** \brief Return the number of true (1) values among the valid
    *  values. Result is not cached. */
   public native @Cast("int64_t") long true_count();
+
+  public native @ByVal @Cast("arrow::BooleanArray::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::BooleanArray::IteratorType*") Pointer end();
 }

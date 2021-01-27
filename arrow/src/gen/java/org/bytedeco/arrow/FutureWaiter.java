@@ -31,9 +31,6 @@ public class FutureWaiter extends Pointer {
   @MemberGetter public static native double kInfinity();
   public static final double kInfinity = kInfinity();
 
-  public static native @UniquePtr FutureWaiter Make(Kind kind, @ByVal FutureImplVector futures);
-  public static native @UniquePtr FutureWaiter Make(@Cast("arrow::FutureWaiter::Kind") byte kind, @ByVal FutureImplVector futures);
-
   public native @Cast("bool") boolean Wait(double seconds/*=arrow::FutureWaiter::kInfinity*/);
   public native @Cast("bool") boolean Wait();
   public native int WaitAndFetchOne();

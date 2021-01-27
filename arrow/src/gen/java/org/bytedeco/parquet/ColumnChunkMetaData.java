@@ -29,6 +29,8 @@ public class ColumnChunkMetaData extends Pointer {
   public static native @UniquePtr ColumnChunkMetaData Make(
         @Const Pointer metadata, @Const ColumnDescriptor descr);
 
+  public native @Cast("bool") boolean Equals(@Const @ByRef ColumnChunkMetaData other);
+
   // column chunk
   public native @Cast("int64_t") long file_offset();
 

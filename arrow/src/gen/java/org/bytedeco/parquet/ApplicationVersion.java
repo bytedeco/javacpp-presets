@@ -79,7 +79,7 @@ public class ApplicationVersion extends Pointer {
 
   // Checks if the Version has the correct statistics for a given column
   public native @Cast("bool") boolean HasCorrectStatistics(org.bytedeco.parquet.Type.type primitive, @ByRef EncodedStatistics statistics,
-                              SortOrder.type sort_order/*=parquet::SortOrder::SIGNED*/);
+                              org.bytedeco.parquet.SortOrder.type sort_order/*=parquet::SortOrder::SIGNED*/);
   public native @Cast("bool") boolean HasCorrectStatistics(org.bytedeco.parquet.Type.type primitive, @ByRef EncodedStatistics statistics);
   public native @Cast("bool") boolean HasCorrectStatistics(@Cast("parquet::Type::type") int primitive, @ByRef EncodedStatistics statistics,
                               @Cast("parquet::SortOrder::type") int sort_order/*=parquet::SortOrder::SIGNED*/);

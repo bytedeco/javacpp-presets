@@ -18,8 +18,10 @@ public class SetLookupOptions extends FunctionOptions {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SetLookupOptions(Pointer p) { super(p); }
 
-  public SetLookupOptions(@ByVal Datum value_set, @Cast("bool") boolean skip_nulls) { super((Pointer)null); allocate(value_set, skip_nulls); }
-  private native void allocate(@ByVal Datum value_set, @Cast("bool") boolean skip_nulls);
+  public SetLookupOptions(@ByVal Datum value_set, @Cast("bool") boolean skip_nulls/*=false*/) { super((Pointer)null); allocate(value_set, skip_nulls); }
+  private native void allocate(@ByVal Datum value_set, @Cast("bool") boolean skip_nulls/*=false*/);
+  public SetLookupOptions(@ByVal Datum value_set) { super((Pointer)null); allocate(value_set); }
+  private native void allocate(@ByVal Datum value_set);
 
   /** The set of values to look up input values into. */
   

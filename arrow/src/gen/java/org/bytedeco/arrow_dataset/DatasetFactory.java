@@ -37,6 +37,6 @@ public class DatasetFactory extends Pointer {
   public native @ByVal DatasetResult Finish(@ByVal FinishOptions options);
 
   /** \brief Optional root partition for the resulting Dataset. */
-  public native @Const @SharedPtr @ByRef Expression root_partition();
-  public native @ByVal Status SetRootPartition(@SharedPtr @ByVal Expression partition);
+  public native @Const @ByRef Expression root_partition();
+  public native @ByVal Status SetRootPartition(@ByVal Expression partition);
 }

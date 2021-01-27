@@ -21,4 +21,7 @@ public class StructScalar extends Scalar {
   public native @ByRef ScalarVector value(); public native StructScalar value(ScalarVector setter);
 
   public native @ByVal ScalarResult field(@ByVal FieldRef ref);
+
+  public static native @ByVal StructScalarResult Make(@ByVal @Cast("arrow::StructScalar::ValueType*") ScalarVector value,
+                                                      @ByVal StringVector field_names);
 }

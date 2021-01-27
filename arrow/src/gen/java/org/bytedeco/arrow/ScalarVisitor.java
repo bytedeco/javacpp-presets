@@ -57,6 +57,7 @@ public class ScalarVisitor extends Pointer {
   public native @ByVal Status Visit(@Const @ByRef MonthIntervalScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef DurationScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef Decimal128Scalar scalar);
+  public native @ByVal Status Visit(@Const @ByRef Decimal256Scalar scalar);
   public native @ByVal Status Visit(@Const @ByRef ListScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef LargeListScalar scalar);
   public native @ByVal Status Visit(@Const @ByRef MapScalar scalar);

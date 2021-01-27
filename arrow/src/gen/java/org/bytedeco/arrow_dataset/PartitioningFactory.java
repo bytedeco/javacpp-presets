@@ -14,10 +14,26 @@ import static org.bytedeco.arrow.global.parquet.*;
 
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
-@Namespace("arrow::dataset") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
+
+/** \brief PartitioningFactory provides creation of a partitioning  when the
+ *  specific schema must be inferred from available paths (no explicit schema is known). */
+@Namespace("arrow::dataset") @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class PartitioningFactory extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public PartitioningFactory() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PartitioningFactory(Pointer p) { super(p); }
+
+
+  /** \brief The name identifying the kind of partitioning */
+  public native @StdString String type_name();
+
+  /** Get the schema for the resulting Partitioning.
+   *  This may reset internal state, for example dictionaries of unique representations. */
+  public native @ByVal SchemaResult Inspect(
+        @Const @ByRef StringVector paths);
+
+  /** Create a partitioning using the provided schema
+   *  (fields may be dropped). */
+  public native @ByVal PartitioningResult Finish(
+        @Const @SharedPtr @ByRef Schema schema);
 }

@@ -215,6 +215,13 @@ public class DatumResult extends Pointer {
   /** Apply a function to the internally stored value to produce a new result or propagate
    *  the stored error. */
 
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+  
+
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+
   public native @ByRef Datum ValueUnsafe();
 
   

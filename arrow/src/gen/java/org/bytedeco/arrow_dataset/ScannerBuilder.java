@@ -65,7 +65,7 @@ public class ScannerBuilder extends Pointer {
    * 
    *  @return Failure if any referenced columns does not exist in the dataset's
    *          Schema. */
-  public native @ByVal Status Filter(@SharedPtr @ByVal Expression filter);
+  public native @ByVal Status Filter(@Const @ByRef Expression filter);
 
   /** \brief Indicate if the Scanner should make use of the available
    *         ThreadPool found in ScanContext; */
@@ -86,5 +86,5 @@ public class ScannerBuilder extends Pointer {
   /** \brief Return the constructed now-immutable Scanner object */
   public native @ByVal ScannerResult Finish();
 
-  public native @SharedPtr @ByVal Schema schema();
+  public native @Const @SharedPtr @ByRef Schema schema();
 }

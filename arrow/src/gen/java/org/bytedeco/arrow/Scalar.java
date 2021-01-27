@@ -33,6 +33,10 @@ public class Scalar extends Pointer {
                 @Const @ByRef(nullValue = "arrow::EqualOptions::Defaults()") EqualOptions options);
   public native @Cast("bool") boolean Equals(@Const @ByRef Scalar other);
 
+  public native @Cast("bool") boolean ApproxEquals(@Const @ByRef Scalar other,
+                      @Const @ByRef(nullValue = "arrow::EqualOptions::Defaults()") EqualOptions options);
+  public native @Cast("bool") boolean ApproxEquals(@Const @ByRef Scalar other);
+
   public static class Hash extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */

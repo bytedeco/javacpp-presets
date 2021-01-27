@@ -45,6 +45,9 @@ public class FileSystemDatasetWriteOptions extends Pointer {
   /** Partitioning used to generate fragment paths. */
   public native @SharedPtr Partitioning partitioning(); public native FileSystemDatasetWriteOptions partitioning(Partitioning setter);
 
+  /** Maximum number of partitions any batch may be written into, default is 1K. */
+  public native int max_partitions(); public native FileSystemDatasetWriteOptions max_partitions(int setter);
+
   /** Template string used to generate fragment basenames.
    *  {i} will be replaced by an auto incremented integer. */
   public native @StdString String basename_template(); public native FileSystemDatasetWriteOptions basename_template(String setter);

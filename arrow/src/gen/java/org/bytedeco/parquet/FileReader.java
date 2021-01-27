@@ -222,6 +222,9 @@ public class FileReader extends Pointer {
    *  By default only one thread is used. */
   public native void set_use_threads(@Cast("bool") boolean use_threads);
 
+  /** Set number of records to read per batch for the RecordBatchReader. */
+  public native void set_batch_size(@Cast("int64_t") long batch_size);
+
   public native @Const @ByRef ArrowReaderProperties properties();
 
   public native @Const @ByRef SchemaManifest manifest();

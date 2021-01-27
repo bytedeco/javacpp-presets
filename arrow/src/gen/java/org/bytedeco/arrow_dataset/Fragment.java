@@ -60,5 +60,5 @@ public class Fragment extends Pointer {
 
   /** \brief An expression which evaluates to true for all data viewed by this
    *  Fragment. */
-  public native @Const @SharedPtr @ByRef Expression partition_expression();
+  public native @Const @ByRef Expression partition_expression();
 }

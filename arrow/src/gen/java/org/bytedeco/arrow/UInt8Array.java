@@ -29,4 +29,8 @@ public class UInt8Array extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::UInt8Type>::value_type") byte GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::UInt8Type>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::UInt8Type>::IteratorType*") Pointer end();
 }

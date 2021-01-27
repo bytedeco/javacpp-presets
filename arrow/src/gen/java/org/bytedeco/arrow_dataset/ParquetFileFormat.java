@@ -88,19 +88,21 @@ public class ParquetFileFormat extends FileFormat {
                                       @SharedPtr ScanContext context,
                                       FileFragment file);
 
-  /** \brief Create a Fragment, restricted to the specified row groups. */
-  public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
-        @StdVector RowGroupInfo row_groups,
-        @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Schema>(nullptr)") Schema physical_schema);
-  public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
-        @StdVector RowGroupInfo row_groups);
-
   /** \brief Create a Fragment targeting all RowGroups. */
   public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
+        @ByVal FileSource source, @ByVal Expression partition_expression,
         @SharedPtr @ByVal Schema physical_schema);
+
+  /** \brief Create a Fragment, restricted to the specified row groups. */
+  public native @ByVal ParquetFileFragmentResult MakeFragment(
+        @ByVal FileSource source, @ByVal Expression partition_expression,
+        @SharedPtr @ByVal Schema physical_schema, @StdVector IntPointer row_groups);
+  public native @ByVal ParquetFileFragmentResult MakeFragment(
+        @ByVal FileSource source, @ByVal Expression partition_expression,
+        @SharedPtr @ByVal Schema physical_schema, @StdVector IntBuffer row_groups);
+  public native @ByVal ParquetFileFragmentResult MakeFragment(
+        @ByVal FileSource source, @ByVal Expression partition_expression,
+        @SharedPtr @ByVal Schema physical_schema, @StdVector int[] row_groups);
 
   /** \brief Return a FileReader on the given source. */
   public native @ByVal FileReaderResult GetReader(

@@ -43,4 +43,7 @@ public class FlightCallOptions extends Pointer {
 
   /** \brief IPC writer options, if applicable for the call. */
   public native @ByRef IpcWriteOptions write_options(); public native FlightCallOptions write_options(IpcWriteOptions setter);
+
+  /** \brief Headers for client to add to context. */
+  public native @ByRef StringStringPairVector headers(); public native FlightCallOptions headers(StringStringPairVector setter);
 }

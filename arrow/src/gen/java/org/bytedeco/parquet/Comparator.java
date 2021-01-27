@@ -45,10 +45,10 @@ public class Comparator extends Pointer {
    *  SortOrder::UNSIGNED
    *  @param type_length [in] for FIXED_LEN_BYTE_ARRAY only */
   public static native @SharedPtr Comparator Make(org.bytedeco.parquet.Type.type physical_type,
-                                            SortOrder.type sort_order,
+                                            org.bytedeco.parquet.SortOrder.type sort_order,
                                             int type_length/*=-1*/);
   public static native @SharedPtr Comparator Make(org.bytedeco.parquet.Type.type physical_type,
-                                            SortOrder.type sort_order);
+                                            org.bytedeco.parquet.SortOrder.type sort_order);
   public static native @SharedPtr Comparator Make(@Cast("parquet::Type::type") int physical_type,
                                             @Cast("parquet::SortOrder::type") int sort_order,
                                             int type_length/*=-1*/);

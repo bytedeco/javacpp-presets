@@ -43,4 +43,7 @@ public class RecordBatchWriter extends Pointer {
    * 
    *  @return Status */
   public native @ByVal Status Close();
+
+  /** \brief Return current write statistics */
+  public native @ByVal WriteStats stats();
 }

@@ -29,4 +29,8 @@ public class MonthIntervalArray extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::MonthIntervalType>::value_type") int GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::MonthIntervalType>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::MonthIntervalType>::IteratorType*") Pointer end();
 }

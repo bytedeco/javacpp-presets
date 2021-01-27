@@ -272,6 +272,15 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // under the License.
 
 // #pragma once
+// Targeting ../../parquet/ParquetVersion.java
+
+
+// Targeting ../../parquet/WriterPropertiesBuilder.java
+
+
+// Targeting ../../parquet/ArrowWriterPropertiesBuilder.java
+
+
 
   // namespace arrow
   // namespace parquet
@@ -308,6 +317,7 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // #include "arrow/util/string_view.h"
 
 // #include "parquet/platform.h"
+// #include "parquet/type_fwd.h"
 
   // namespace util
   // namespace arrow
@@ -470,22 +480,19 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 @Namespace("parquet") public static native int GetTypeByteSize(org.bytedeco.parquet.Type.type t);
 @Namespace("parquet") public static native int GetTypeByteSize(@Cast("parquet::Type::type") int t);
 
-@Namespace("parquet") public static native SortOrder.type DefaultSortOrder(org.bytedeco.parquet.Type.type primitive);
+@Namespace("parquet") public static native org.bytedeco.parquet.SortOrder.type DefaultSortOrder(org.bytedeco.parquet.Type.type primitive);
 @Namespace("parquet") public static native @Cast("parquet::SortOrder::type") int DefaultSortOrder(@Cast("parquet::Type::type") int primitive);
 
-@Namespace("parquet") public static native SortOrder.type GetSortOrder(ConvertedType.type converted,
+@Namespace("parquet") public static native org.bytedeco.parquet.SortOrder.type GetSortOrder(ConvertedType.type converted,
                                             org.bytedeco.parquet.Type.type primitive);
 @Namespace("parquet") public static native @Cast("parquet::SortOrder::type") int GetSortOrder(@Cast("parquet::ConvertedType::type") int converted,
                                             @Cast("parquet::Type::type") int primitive);
 
-@Namespace("parquet") public static native SortOrder.type GetSortOrder(
+@Namespace("parquet") public static native org.bytedeco.parquet.SortOrder.type GetSortOrder(
     @Const @Cast("const parquet::LogicalType*") @SharedPtr @ByRef LogicalType logical_type, org.bytedeco.parquet.Type.type primitive);
 @Namespace("parquet") public static native @Cast("parquet::SortOrder::type") int GetSortOrder(
     @Const @Cast("const parquet::LogicalType*") @SharedPtr @ByRef LogicalType logical_type, @Cast("parquet::Type::type") int primitive);
 
-@Namespace("parquet::internal") public static native int DecimalSize(int precision);
-
-  // namespace internal
   // namespace parquet
 
 
@@ -562,6 +569,7 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // #include <utility>
 
 // #include "arrow/type_fwd.h"
+// #include "arrow/util/string_builder.h"
 // #include "parquet/platform.h"
 
 // PARQUET-1085
@@ -616,6 +624,11 @@ public class parquet extends org.bytedeco.arrow.presets.parquet {
 // Targeting ../../parquet/ParquetException.java
 
 
+
+// Support printing a ParquetException.
+// This is needed for clang-on-MSVC as there operator<< is not defined for
+// std::exception.
+@Namespace("parquet") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef ParquetException exception);
 // Targeting ../../parquet/ParquetStatusException.java
 
 
@@ -1166,7 +1179,6 @@ public static final int WRITE_BATCH_SIZE = WRITE_BATCH_SIZE();
 // #include <map>
 // #include <memory>
 // #include <string>
-// #include <unordered_map>
 // #include <utility>
 
 // #include "parquet/exception.h"
@@ -1256,10 +1268,19 @@ public static final int kAadFileUniqueLength = kAadFileUniqueLength();
 // #include "parquet/parquet_version.h"
 // #include "parquet/platform.h"
 // #include "parquet/schema.h"
+// #include "parquet/type_fwd.h"
 // #include "parquet/types.h"
-// Targeting ../../parquet/ParquetVersion.java
 
-
+/** Determines use of Parquet Format version >= 2.0.0 logical types. For
+ *  example, when writing from Arrow data structures, PARQUET_2_0 will enable
+ *  use of INT_* and UINT_* converted types as well as nanosecond timestamps
+ *  stored physically as INT64. Since some Parquet implementations do not
+ *  support the logical types added in the 2.0.0 format version, if you want to
+ *  maximize compatibility of your files you may want to use PARQUET_1_0.
+ * 
+ *  Note that the 2.x format version series also introduced new serialized
+ *  data page metadata and on disk data page layout. To enable this, use
+ *  ParquetDataPageVersion. */
 
 /** Controls serialization format of data pages.  parquet-format v2.0.0
  *  introduced a new data page metadata type DataPageV2 and serialized page

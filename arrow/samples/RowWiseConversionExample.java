@@ -88,7 +88,7 @@ public class RowWiseConversionExample {
         // Indicate the start of a new list row. This will memorise the current
         // offset in the values builder.
         THROW_ON_FAILURE(components_builder.Append());
-        // Store the actual values. The final nullptr argument tells the underyling
+        // Store the actual values. The final nullptr argument tells the underlying
         // builder that all added values are valid, i.e. non-null.
         THROW_ON_FAILURE(cost_components_builder.AppendValues(row.cost_components,
                                                               row.cost_components.length));

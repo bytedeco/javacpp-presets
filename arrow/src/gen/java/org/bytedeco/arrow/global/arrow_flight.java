@@ -46,6 +46,7 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 
 // #pragma once
 
+// #include <cstddef>
 // #include <new>
 // #include <string>
 // #include <type_traits>
@@ -53,6 +54,9 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 
 // #include "arrow/status.h"
 // #include "arrow/util/compare.h"
+// Targeting ../../arrow_flight/EnsureResult.java
+
+
 
 // #if __cplusplus >= 201703L
 // #else
@@ -77,6 +81,7 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 ///
 ///
 ///
+///
 // #define ARROW_ASSIGN_OR_RAISE_NAME(x, y) ARROW_CONCAT(x, y)
 
 /** \brief Execute an expression that returns a Result, extracting its value
@@ -91,7 +96,10 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
  * 
  *  WARNING: ARROW_ASSIGN_OR_RAISE expands into multiple statements;
  *  it cannot be used in a single statement (e.g. as the body of an if
- *  statement without {})! */
+ *  statement without {})!
+ * 
+ *  WARNING: ARROW_ASSIGN_OR_RAISE {@code std::move}s its right operand. If you have
+ *  an lvalue Result which you *don't* want to move out of cast appropriately. */
 // #define ARROW_ASSIGN_OR_RAISE(lhs, rexpr)
 //   ARROW_ASSIGN_OR_RAISE_IMPL(ARROW_ASSIGN_OR_RAISE_NAME(_error_or_value, __COUNTER__),
 //                              lhs, rexpr);
@@ -427,6 +435,7 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include "arrow/ipc/options.h"
 // #include "arrow/ipc/reader.h"
 // #include "arrow/ipc/writer.h"
+// #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/util/variant.h"
 

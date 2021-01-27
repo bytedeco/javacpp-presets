@@ -28,6 +28,8 @@ public class RowGroupMetaData extends Pointer {
   public static native @UniquePtr RowGroupMetaData Make(
         @Const Pointer metadata, @Const SchemaDescriptor schema);
 
+  public native @Cast("bool") boolean Equals(@Const @ByRef RowGroupMetaData other);
+
   /** \brief The number of columns in this row group. The order must match the
    *  parent's column ordering. */
   

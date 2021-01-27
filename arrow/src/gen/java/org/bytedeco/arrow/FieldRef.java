@@ -102,10 +102,35 @@ public class FieldRef extends Pointer {
   public native @StdString String ToString();
 
   public native @Cast("size_t") long hash();
+  public static class Hash extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Hash() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Hash(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Hash(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Hash position(long position) {
+          return (Hash)super.position(position);
+      }
+      @Override public Hash getPointer(long i) {
+          return new Hash((Pointer)this).position(position + i);
+      }
+  
+    public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef FieldRef ref);
+  }
+
+  public native @Cast("bool") @Name("operator bool") boolean asBoolean();
+  public native @Cast("bool") @Name("operator !") boolean not();
 
   public native @Cast("bool") boolean IsFieldPath();
   public native @Cast("bool") boolean IsName();
   public native @Cast("bool") boolean IsNested();
+
+  public native @Const FieldPath field_path();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer name();
 
   /** \brief Retrieve FieldPath of every child field which matches this FieldRef. */
   public native @StdVector FieldPath FindAll(@Const @ByRef Schema schema);
@@ -114,10 +139,9 @@ public class FieldRef extends Pointer {
   public native @StdVector FieldPath FindAll(@Const @ByRef FieldVector fields);
 
   /** \brief Convenience function which applies FindAll to arg's type or schema. */
+  public native @StdVector FieldPath FindAll(@Const @ByRef ArrayData array);
   public native @StdVector FieldPath FindAll(@Const @ByRef Array array);
-  public native @StdVector FieldPath FindAll(@Const @ByRef ChunkedArray array);
   public native @StdVector FieldPath FindAll(@Const @ByRef RecordBatch batch);
-  public native @StdVector FieldPath FindAll(@Const @ByRef Table table);
 
   /** \brief Convenience function: raise an error if matches is empty. */
 

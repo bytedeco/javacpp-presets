@@ -15,148 +15,150 @@ import static org.bytedeco.arrow.global.parquet.*;
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 
-/** Represents an expression tree */
+/** An unbound expression which maps a single Datum to another Datum.
+ *  An expression is one of
+ *  - A literal Datum.
+ *  - A reference to a single (potentially nested) field of the input Datum.
+ *  - A call to a compute function, with arguments specified by other Expressions. */
 @Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class Expression extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Expression(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Expression(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Expression position(long position) {
+        return (Expression)super.position(position);
+    }
+    @Override public Expression getPointer(long i) {
+        return new Expression((Pointer)this).position(position + i);
+    }
 
+  public static class Call extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Call() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Call(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Call(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Call position(long position) {
+          return (Call)super.position(position);
+      }
+      @Override public Call getPointer(long i) {
+          return new Call((Pointer)this).position(position + i);
+      }
+  
+    public native @StdString String function_name(); public native Call function_name(String setter);
+    public native @StdVector Expression arguments(); public native Call arguments(Expression setter);
+    public native @SharedPtr FunctionOptions options(); public native Call options(FunctionOptions setter);
 
-  /** Returns true iff the expressions are identical; does not check for equivalence.
-   *  For example, (A and B) is not equal to (B and A) nor is (A and not A) equal to
-   *  (false). */
+    // post-Bind properties:
+    public native @Const Kernel kernel(); public native Call kernel(Kernel setter);
+    public native @SharedPtr org.bytedeco.arrow.Function function(); public native Call function(org.bytedeco.arrow.Function setter);
+    public native @SharedPtr KernelState kernel_state(); public native Call kernel_state(KernelState setter);
+    public native @ByRef ValueDescr descr(); public native Call descr(ValueDescr setter);
+  }
+
+  public native @StdString String ToString();
   public native @Cast("bool") boolean Equals(@Const @ByRef Expression other);
-
-  /** Overload for the common case of checking for equality to a specific scalar. */
-
-  /** If true, this Expression is a ScalarExpression wrapping a null scalar. */
-  public native @Cast("bool") boolean IsNull();
-
-  /** Validate this expression for execution against a schema. This will check that all
-   *  reference fields are present (fields not in the schema will be replaced with null)
-   *  and all subexpressions are executable. Returns the type to which this expression
-   *  will evaluate. */
+  public native @Cast("size_t") long hash();
+  public static class Hash extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Hash() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Hash(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Hash(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Hash position(long position) {
+          return (Hash)super.position(position);
+      }
+      @Override public Hash getPointer(long i) {
+          return new Hash((Pointer)this).position(position + i);
+      }
   
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  public native @ByVal DataTypeResult Validate(@Const @ByRef Schema schema);
+    public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef Expression expr);
+  }
 
-  /** \brief Simplify to an equivalent Expression given assumed constraints on input.
-   *  This can be used to do less filtering work using predicate push down.
-   * 
-   *  Both expressions must pass validation against a schema before Assume may be used.
-   * 
-   *  Two expressions can be considered equivalent for a given subset of possible inputs
-   *  if they yield identical results. Formally, if given.Evaluate(input).Equals(input)
-   *  then Assume guarantees that:
-   *      expr.Assume(given).Evaluate(input).Equals(expr.Evaluate(input))
-   * 
-   *  For example if we are given that all inputs will
-   *  satisfy ("a"_ == 1) then the expression ("a"_ > 0 and "b"_ > 0) is equivalent to
-   *  ("b"_ > 0). It is impossible that the comparison ("a"_ > 0) will evaluate false
-   *  given ("a"_ == 1), so both expressions will yield identical results. Thus we can
-   *  write:
-   *      ("a"_ > 0 and "b"_ > 0).Assume("a"_ == 1).Equals("b"_ > 0)
-   * 
-   *  filter.Assume(partition) is trivial if filter and partition are disjoint or if
-   *  partition is a subset of filter. FIXME(bkietz) write this better
-   *  - If the two are disjoint, then (false) may be substituted for filter.
-   *  - If partition is a subset of filter then (true) may be substituted for filter.
-   * 
-   *  filter.Assume(partition) is straightforward if both filter and partition are simple
-   *  comparisons.
-   *  - filter may be a superset of partition, in which case the filter is
-   *    satisfied by all inputs:
-   *      ("a"_ > 0).Assume("a"_ == 1).Equals(true)
-   *  - filter may be disjoint with partition, in which case there are no inputs which
-   *    satisfy filter:
-   *      ("a"_ < 0).Assume("a"_ == 1).Equals(false)
-   *  - If neither of these is the case, partition provides no information which can
-   *    simplify filter:
-   *      ("a"_ == 1).Assume("a"_ > 0).Equals("a"_ == 1)
-   *      ("a"_ == 1).Assume("b"_ == 1).Equals("a"_ == 1)
-   * 
-   *  If filter is compound, Assume can be distributed across the boolean operator. To
-   *  prove this is valid, we again demonstrate that the simplified expression will yield
-   *  identical results. For conjunction of filters lhs and rhs:
-   *      (lhs.Assume(p) and rhs.Assume(p)).Evaluate(input)
-   *      == Intersection(lhs.Assume(p).Evaluate(input), rhs.Assume(p).Evaluate(input))
-   *      == Intersection(lhs.Evaluate(input), rhs.Evaluate(input))
-   *      == (lhs and rhs).Evaluate(input)
-   *  - The proof for disjunction is symmetric; just replace Intersection with Union. Thus
-   *    we can write:
-   *      (lhs and rhs).Assume(p).Equals(lhs.Assume(p) and rhs.Assume(p))
-   *      (lhs or rhs).Assume(p).Equals(lhs.Assume(p) or rhs.Assume(p))
-   *  - For negation:
-   *      (not e.Assume(p)).Evaluate(input)
-   *      == Difference(input, e.Assume(p).Evaluate(input))
-   *      == Difference(input, e.Evaluate(input))
-   *      == (not e).Evaluate(input)
-   *  - Thus we can write:
-   *      (not e).Assume(p).Equals(not e.Assume(p))
-   * 
-   *  If the partition expression is a conjunction then each of its subexpressions is
-   *  true for all input and can be used independently:
-   *      filter.Assume(lhs).Assume(rhs).Evaluate(input)
-   *      == filter.Assume(lhs).Evaluate(input)
-   *      == filter.Evaluate(input)
-   *  - Thus we can write:
-   *      filter.Assume(lhs and rhs).Equals(filter.Assume(lhs).Assume(rhs))
-   * 
-   *  FIXME(bkietz) disjunction proof
-   *      filter.Assume(lhs or rhs).Equals(filter.Assume(lhs) and filter.Assume(rhs))
-   *  - This may not result in a simpler expression so it is only used when
-   *      filter.Assume(lhs).Equals(filter.Assume(rhs))
-   * 
-   *  If the partition expression is a negation then we can use the above relations by
-   *  replacing comparisons with their complements and using the properties:
-   *      (not (a and b)).Equals(not a or not b)
-   *      (not (a or b)).Equals(not a and not b) */
-  public native @SharedPtr @ByVal Expression Assume(@Const @ByRef Expression given);
+  /** Bind this expression to the given input type, looking up Kernels and field types.
+   *  Some expression simplification may be performed and implicit casts will be inserted.
+   *  Any state necessary for execution will be initialized and returned. */
+  public native @ByVal ExpressionResult Bind(@ByVal ValueDescr in, ExecContext arg1/*=nullptr*/);
+  public native @ByVal ExpressionResult Bind(@ByVal ValueDescr in);
+  public native @ByVal ExpressionResult Bind(@Const @ByRef Schema in_schema, ExecContext arg1/*=nullptr*/);
+  public native @ByVal ExpressionResult Bind(@Const @ByRef Schema in_schema);
 
-  /** Indicates if the expression is satisfiable.
-   * 
-   *  This is a shortcut to check if the expression is neither null nor false. */
-  
-  ///
+  // XXX someday
+  // Clone all KernelState in this bound expression. If any function referenced by this
+  // expression has mutable KernelState, it is not safe to execute or apply simplification
+  // passes to it (or copies of it!) from multiple threads. Cloning state produces new
+  // KernelStates where necessary to ensure that Expressions may be manipulated safely
+  // on multiple threads.
+  // Result<ExpressionState> CloneState() const;
+  // Status SetState(ExpressionState);
+
+  /** Return true if all an expression's field references have explicit ValueDescr and all
+   *  of its functions' kernels are looked up. */
+  public native @Cast("bool") boolean IsBound();
+
+  /** Return true if this expression is composed only of Scalar literals, field
+   *  references, and calls to ScalarFunctions. */
+  public native @Cast("bool") boolean IsScalarExpression();
+
+  /** Return true if this expression is literal and entirely null. */
+  public native @Cast("bool") boolean IsNullLiteral();
+
+  /** Return true if this expression could evaluate to true. */
   public native @Cast("bool") boolean IsSatisfiable();
 
-  /** Indicates if the expression is satisfiable given an other expression.
-   * 
-   *  This behaves like IsSatisfiable, but it simplifies the current expression
-   *  with the given {@code other} information. */
-  public native @Cast("bool") boolean IsSatisfiableWith(@Const @ByRef Expression other);
+  // XXX someday
+  // Result<PipelineGraph> GetPipelines();
 
-  /** returns a debug string representing this expression */
-  public native @StdString String ToString();
+  /** Access a Call or return nullptr if this expression is not a call */
+  public native @Const Call call();
+  /** Access a Datum or return nullptr if this expression is not a literal */
+  public native @Const Datum literal();
+  /** Access a FieldRef or return nullptr if this expression is not a field_ref */
+  public native @Const FieldRef field_ref();
 
-  /** serialize/deserialize an Expression. */
-  public native @ByVal BufferResult Serialize();
-  public static native @ByVal ExpressionResult Deserialize(@Const @ByRef ArrowBuffer arg0);
+  /** The type and shape to which this expression will evaluate */
+  public native @ByVal ValueDescr descr();
+  // XXX someday
+  // NullGeneralization::type nullable() const;
 
-  /** \brief Return the expression's type identifier */
-  public native ExpressionType.type type();
+  public static class Parameter extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Parameter() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Parameter(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Parameter(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Parameter position(long position) {
+          return (Parameter)super.position(position);
+      }
+      @Override public Parameter getPointer(long i) {
+          return new Parameter((Pointer)this).position(position + i);
+      }
+  
+    public native @ByRef FieldRef ref(); public native Parameter ref(FieldRef setter);
+    public native @ByRef ValueDescr descr(); public native Parameter descr(ValueDescr setter);
+  }
 
-  /** Copy this expression into a shared pointer. */
-  public native @SharedPtr @ByVal Expression Copy();
-
-  public native @ByVal InExpression In(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array set);
-
-  public native @ByVal IsValidExpression IsValid();
-
-  public native @ByVal CastExpression CastTo(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
-                          @ByVal(nullValue = "arrow::compute::CastOptions()") CastOptions options);
-  public native @ByVal CastExpression CastTo(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
-
-  public native @ByVal CastExpression CastLike(@Const @ByRef Expression expr,
-                            @ByVal(nullValue = "arrow::compute::CastOptions()") CastOptions options);
-  public native @ByVal CastExpression CastLike(@Const @ByRef Expression expr);
+  public Expression() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public Expression(@ByVal Call call) { super((Pointer)null); allocate(call); }
+  private native void allocate(@ByVal Call call);
+  public Expression(@ByVal Datum literal) { super((Pointer)null); allocate(literal); }
+  private native void allocate(@ByVal Datum literal);
+  public Expression(@ByVal Parameter parameter) { super((Pointer)null); allocate(parameter); }
+  private native void allocate(@ByVal Parameter parameter);
 }

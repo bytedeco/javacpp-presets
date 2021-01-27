@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-  // namespace detail
+
 
 // Hints about a task that may be used by an Executor.
 // They are ignored by the provided ThreadPool implementation.
