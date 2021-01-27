@@ -28,6 +28,13 @@ public class Datum extends Pointer {
       @Override public String toString() { return intern().name(); }
   }
 
+  @Opaque public static class Empty extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public Empty() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Empty(Pointer p) { super(p); }
+  }
+
   // Datums variants may have a length. This special value indicate that the
   // current variant does not have a length.
   @MemberGetter public static native @Cast("const int64_t") long kUnknownLength();
@@ -38,6 +45,10 @@ public class Datum extends Pointer {
   /** \brief Empty datum, to be populated elsewhere */
   public Datum() { super((Pointer)null); allocate(); }
   private native void allocate();
+
+  public Datum(@Const @ByRef Datum other) { super((Pointer)null); allocate(other); }
+  private native void allocate(@Const @ByRef Datum other);
+  public native @ByRef @Name("operator =") Datum put(@Const @ByRef Datum other);
 
   public Datum(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value) { super((Pointer)null); allocate(value); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value);
@@ -76,13 +87,10 @@ public class Datum extends Pointer {
   private native void allocate(float value);
   public Datum(double value) { super((Pointer)null); allocate(value); }
   private native void allocate(double value);
-
-  public Datum(@Const @ByRef Datum other) { super((Pointer)null); allocate(other); }
-  @NoException private native void allocate(@Const @ByRef Datum other);
-
-  public native @ByRef @Name("operator =") @NoException Datum put(@Const @ByRef Datum other);
-
-  // Define move constructor and move assignment, for better performance
+  public Datum(@StdString String value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@StdString String value);
+  public Datum(@StdString BytePointer value) { super((Pointer)null); allocate(value); }
+  private native void allocate(@StdString BytePointer value);
 
   public native Kind kind();
 
@@ -132,6 +140,13 @@ public class Datum extends Pointer {
   ///
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type();
 
+  /** \brief The schema of the variant, if any
+   * 
+   *  @return nullptr if no schema */
+  
+  ///
+  public native @SharedPtr @ByVal Schema schema();
+
   /** \brief The value length of the variant, if any
    * 
    *  @return kUnknownLength if no type */
@@ -150,4 +165,6 @@ public class Datum extends Pointer {
   public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Datum other);
 
   public native @StdString String ToString();
+
+  
 }

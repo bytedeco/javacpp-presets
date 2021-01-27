@@ -17,9 +17,6 @@ import static org.bytedeco.arrow.global.parquet.*;
 public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
     static { Loader.load(); }
 
-// Targeting ../../arrow_dataset/ExpressionVector.java
-
-
 // Targeting ../../arrow_dataset/FileFragmentVector.java
 
 
@@ -129,6 +126,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 // #pragma once
 
+// #include <cstddef>
 // #include <new>
 // #include <string>
 // #include <type_traits>
@@ -136,6 +134,9 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 // #include "arrow/status.h"
 // #include "arrow/util/compare.h"
+// Targeting ../../arrow_dataset/EnsureResult.java
+
+
 
 // #if __cplusplus >= 201703L
 // #else
@@ -153,9 +154,6 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/DatasetFactoryResult.java
 
 
-// Targeting ../../arrow_dataset/ExpressionResult.java
-
-
 // Targeting ../../arrow_dataset/FileSystemDatasetResult.java
 
 
@@ -168,6 +166,12 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/FragmentResult.java
 
 
+// Targeting ../../arrow_dataset/ParquetFileFragmentResult.java
+
+
+// Targeting ../../arrow_dataset/PartitioningResult.java
+
+
 // Targeting ../../arrow_dataset/ScannerResult.java
 
 
@@ -178,6 +182,12 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 
 // Targeting ../../arrow_dataset/FileReaderResult.java
+
+
+// Targeting ../../arrow_dataset/ExpressionResult.java
+
+
+// Targeting ../../arrow_dataset/PartitionedBatchesResult.java
 
 
 // Targeting ../../arrow_dataset/UnionDatasetResult.java
@@ -205,6 +215,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 ///
 ///
 ///
+///
 // #define ARROW_ASSIGN_OR_RAISE_NAME(x, y) ARROW_CONCAT(x, y)
 
 /** \brief Execute an expression that returns a Result, extracting its value
@@ -219,7 +230,10 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
  * 
  *  WARNING: ARROW_ASSIGN_OR_RAISE expands into multiple statements;
  *  it cannot be used in a single statement (e.g. as the body of an if
- *  statement without {})! */
+ *  statement without {})!
+ * 
+ *  WARNING: ARROW_ASSIGN_OR_RAISE {@code std::move}s its right operand. If you have
+ *  an lvalue Result which you *don't* want to move out of cast appropriately. */
 // #define ARROW_ASSIGN_OR_RAISE(lhs, rexpr)
 //   ARROW_ASSIGN_OR_RAISE_IMPL(ARROW_ASSIGN_OR_RAISE_NAME(_error_or_value, __COUNTER__),
 //                              lhs, rexpr);
@@ -254,12 +268,155 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 // #include "arrow/dataset/dataset.h"
 // #include "arrow/dataset/discovery.h"
+// #include "arrow/dataset/expression.h"
 // #include "arrow/dataset/file_base.h"
 // #include "arrow/dataset/file_csv.h"
 // #include "arrow/dataset/file_ipc.h"
 // #include "arrow/dataset/file_parquet.h"
-// #include "arrow/dataset/filter.h"
 // #include "arrow/dataset/scanner.h"
+
+
+// Parsed from arrow/dataset/expression.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// This API is EXPERIMENTAL.
+
+// #pragma once
+
+// #include <atomic>
+// #include <memory>
+// #include <string>
+// #include <unordered_map>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/compute/type_fwd.h"
+// #include "arrow/dataset/type_fwd.h"
+// #include "arrow/dataset/visibility.h"
+// #include "arrow/datum.h"
+// #include "arrow/type_fwd.h"
+// #include "arrow/util/variant.h"
+// Targeting ../../arrow_dataset/Expression.java
+
+
+
+@Namespace("arrow::dataset") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Expression l, @Const @ByRef Expression r);
+@Namespace("arrow::dataset") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Expression l, @Const @ByRef Expression r);
+
+// Factories
+
+@Namespace("arrow::dataset") public static native @ByVal Expression literal(@ByVal Datum lit);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression field_ref(@ByVal FieldRef ref);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression call(@StdString String function, @StdVector Expression arguments,
+                @SharedPtr FunctionOptions options/*=nullptr*/);
+@Namespace("arrow::dataset") public static native @ByVal Expression call(@StdString String function, @StdVector Expression arguments);
+@Namespace("arrow::dataset") public static native @ByVal Expression call(@StdString BytePointer function, @StdVector Expression arguments,
+                @SharedPtr FunctionOptions options/*=nullptr*/);
+@Namespace("arrow::dataset") public static native @ByVal Expression call(@StdString BytePointer function, @StdVector Expression arguments);
+
+/** Assemble a list of all fields referenced by an Expression at any depth. */
+@Namespace("arrow::dataset") public static native @StdVector FieldRef FieldsInExpression(@Const @ByRef Expression arg0);
+
+/** Assemble a mapping from field references to known values. */
+
+///
+///
+@Namespace("arrow::dataset") public static native @ByVal FieldRefDatumMapResult ExtractKnownFieldValues(
+    @Const @ByRef Expression guaranteed_true_predicate);
+
+/** \defgroup expression-passes Functions for modification of Expressions
+ * 
+ *  \{
+ * 
+ *  These transform bound expressions. Some transforms utilize a guarantee, which is
+ *  provided as an Expression which is guaranteed to evaluate to true. The
+ *  guaranteed_true_predicate need not be bound, but canonicalization is currently
+ *  deferred to producers of guarantees. For example in order to be recognized as a
+ *  guarantee on a field value, an Expression must be a call to "equal" with field_ref LHS
+ *  and literal RHS. Flipping the arguments, "is_in" with a one-long value_set, ... or
+ *  other semantically identical Expressions will not be recognized.
+ <p>
+ *  Weak canonicalization which establishes guarantees for subsequent passes. Even
+ *  equivalent Expressions may result in different canonicalized expressions.
+ *  TODO this could be a strong canonicalization */
+@Namespace("arrow::dataset") public static native @ByVal ExpressionResult Canonicalize(@ByVal Expression arg0, ExecContext arg1/*=nullptr*/);
+@Namespace("arrow::dataset") public static native @ByVal ExpressionResult Canonicalize(@ByVal Expression arg0);
+
+/** Simplify Expressions based on literal arguments (for example, add(null, x) will always
+ *  be null so replace the call with a null literal). Includes early evaluation of all
+ *  calls whose arguments are entirely literal. */
+@Namespace("arrow::dataset") public static native @ByVal ExpressionResult FoldConstants(@ByVal Expression arg0);
+
+/** Simplify Expressions by replacing with known values of the fields which it references. */
+@Namespace("arrow::dataset") public static native @ByVal ExpressionResult ReplaceFieldsWithKnownValues(
+    @Const @ByRef FieldRefDatumMap known_values, @ByVal Expression arg1);
+
+/** Simplify an expression by replacing subexpressions based on a guarantee:
+ *  a boolean expression which is guaranteed to evaluate to {@code true}. For example, this is
+ *  used to remove redundant function calls from a filter expression or to replace a
+ *  reference to a constant-value field with a literal. */
+@Namespace("arrow::dataset") public static native @ByVal ExpressionResult SimplifyWithGuarantee(@ByVal Expression arg0,
+                                         @Const @ByRef Expression guaranteed_true_predicate);
+
+/** \} */
+
+// Execution
+
+/** Execute a scalar expression against the provided state and input Datum. This
+/** expression must be bound. */
+@Namespace("arrow::dataset") public static native @ByVal DatumResult ExecuteScalarExpression(@Const @ByRef Expression arg0, @Const @ByRef Datum input,
+                                      ExecContext arg2/*=nullptr*/);
+@Namespace("arrow::dataset") public static native @ByVal DatumResult ExecuteScalarExpression(@Const @ByRef Expression arg0, @Const @ByRef Datum input);
+
+// Serialization
+
+@Namespace("arrow::dataset") public static native @ByVal BufferResult Serialize(@Const @ByRef Expression arg0);
+
+@Namespace("arrow::dataset") public static native @ByVal ExpressionResult Deserialize(@SharedPtr ArrowBuffer arg0);
+
+// Convenience aliases for factories
+
+@Namespace("arrow::dataset") public static native @ByVal Expression project(@StdVector Expression values,
+                                   @ByVal StringVector names);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression equal(@ByVal Expression lhs, @ByVal Expression rhs);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression not_equal(@ByVal Expression lhs, @ByVal Expression rhs);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression less(@ByVal Expression lhs, @ByVal Expression rhs);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression less_equal(@ByVal Expression lhs, @ByVal Expression rhs);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression greater(@ByVal Expression lhs, @ByVal Expression rhs);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression greater_equal(@ByVal Expression lhs, @ByVal Expression rhs);
+
+@Namespace("arrow::dataset") public static native @ByVal Expression and_(@ByVal Expression lhs, @ByVal Expression rhs);
+@Namespace("arrow::dataset") public static native @ByVal Expression and_(@StdVector Expression arg0);
+@Namespace("arrow::dataset") public static native @ByVal Expression or_(@ByVal Expression lhs, @ByVal Expression rhs);
+@Namespace("arrow::dataset") public static native @ByVal Expression or_(@StdVector Expression arg0);
+@Namespace("arrow::dataset") public static native @ByVal Expression not_(@ByVal Expression operand);
+
+  // namespace dataset
+  // namespace arrow
 
 
 // Parsed from arrow/dataset/visibility.h
@@ -347,24 +504,6 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include "arrow/type_fwd.h"             // IWYU pragma: export
 
   // namespace compute
-// Targeting ../../arrow_dataset/CsvFileFormat.java
-
-
-
-/** forward declared to facilitate scalar(true) as a default for Expression parameters */
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression scalar(@Cast("bool") boolean arg0);
-// Targeting ../../arrow_dataset/Partitioning.java
-
-
-// Targeting ../../arrow_dataset/PartitioningFactory.java
-
-
-// Targeting ../../arrow_dataset/PartitioningOrFactory.java
-
-
-// Targeting ../../arrow_dataset/RecordBatchProjector.java
-
-
 
   // namespace dataset
   // namespace arrow
@@ -399,6 +538,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <utility>
 // #include <vector>
 
+// #include "arrow/dataset/expression.h"
 // #include "arrow/dataset/type_fwd.h"
 // #include "arrow/dataset/visibility.h"
 // #include "arrow/util/macros.h"
@@ -418,6 +558,147 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/UnionDataset.java
 
 
+
+  // namespace dataset
+  // namespace arrow
+
+
+// Parsed from arrow/dataset/partition.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// This API is EXPERIMENTAL.
+
+// #pragma once
+
+// #include <functional>
+// #include <memory>
+// #include <string>
+// #include <unordered_map>
+// #include <utility>
+// #include <vector>
+
+// #include "arrow/dataset/expression.h"
+// #include "arrow/dataset/type_fwd.h"
+// #include "arrow/dataset/visibility.h"
+// #include "arrow/util/optional.h"
+// Targeting ../../arrow_dataset/Partitioning.java
+
+
+// Targeting ../../arrow_dataset/PartitioningFactoryOptions.java
+
+
+// Targeting ../../arrow_dataset/PartitioningFactory.java
+
+
+// Targeting ../../arrow_dataset/KeyValuePartitioning.java
+
+
+// Targeting ../../arrow_dataset/DirectoryPartitioning.java
+
+
+// Targeting ../../arrow_dataset/HivePartitioning.java
+
+
+// Targeting ../../arrow_dataset/FunctionPartitioning.java
+
+
+
+/** \brief Remove a prefix and the filename of a path.
+ * 
+ *  e.g., {@code StripPrefixAndFilename("/data/year=2019/c.txt", "/data") -> "year=2019"} */
+@Namespace("arrow::dataset") public static native @StdString String StripPrefixAndFilename(@StdString String path,
+                                                   @StdString String prefix);
+@Namespace("arrow::dataset") public static native @StdString BytePointer StripPrefixAndFilename(@StdString BytePointer path,
+                                                   @StdString BytePointer prefix);
+
+/** \brief Vector version of StripPrefixAndFilename. */
+@Namespace("arrow::dataset") public static native @ByVal StringVector StripPrefixAndFilename(
+    @Const @ByRef StringVector paths, @StdString String prefix);
+@Namespace("arrow::dataset") public static native @ByVal StringVector StripPrefixAndFilename(
+    @Const @ByRef StringVector paths, @StdString BytePointer prefix);
+
+/** \brief Vector version of StripPrefixAndFilename. */
+@Namespace("arrow::dataset") public static native @ByVal StringVector StripPrefixAndFilename(
+    @StdVector FileInfo files, @StdString String prefix);
+@Namespace("arrow::dataset") public static native @ByVal StringVector StripPrefixAndFilename(
+    @StdVector FileInfo files, @StdString BytePointer prefix);
+// Targeting ../../arrow_dataset/PartitioningOrFactory.java
+
+
+
+/** \brief Assemble lists of indices of identical rows.
+ * 
+ *  @param by [in] A StructArray whose columns will be used as grouping criteria.
+ *                Top level nulls are invalid, as are empty criteria (no grouping
+ *                columns).
+ *  @return A array of type {@code struct<values: by.type, groupings: list<int64>>},
+ *          which is a mapping from unique rows (field "values") to lists of
+ *          indices into {@code by} where that row appears (field "groupings").
+ * 
+ *  For example,
+ *    MakeGroupings([
+ *        {"a": "ex",  "b": 0},
+ *        {"a": "ex",  "b": 0},
+ *        {"a": "why", "b": 0},
+ *        {"a": "why", "b": 0},
+ *        {"a": "ex",  "b": 0},
+ *        {"a": "why", "b": 1}
+ *    ]) == [
+ *        {"values": {"a": "ex",  "b": 0}, "groupings": [0, 1, 4]},
+ *        {"values": {"a": "why", "b": 0}, "groupings": [2, 3]},
+ *        {"values": {"a": "why", "b": 1}, "groupings": [5]}
+ *    ] */
+
+///
+@Namespace("arrow::dataset") public static native @ByVal StructArrayResult MakeGroupings(@Const @ByRef StructArray by);
+
+/** \brief Produce a ListArray whose slots are selections of {@code array} which correspond to
+ *  the provided groupings.
+ * 
+ *  For example,
+ *    ApplyGroupings([[0, 1, 4], [2, 3], [5]], [
+ *        {"a": "ex",  "b": 0, "passenger": 0},
+ *        {"a": "ex",  "b": 0, "passenger": 1},
+ *        {"a": "why", "b": 0, "passenger": 2},
+ *        {"a": "why", "b": 0, "passenger": 3},
+ *        {"a": "ex",  "b": 0, "passenger": 4},
+ *        {"a": "why", "b": 1, "passenger": 5}
+ *    ]) == [
+ *      [
+ *        {"a": "ex",  "b": 0, "passenger": 0},
+ *        {"a": "ex",  "b": 0, "passenger": 1},
+ *        {"a": "ex",  "b": 0, "passenger": 4},
+ *      ],
+ *      [
+ *        {"a": "why", "b": 0, "passenger": 2},
+ *        {"a": "why", "b": 0, "passenger": 3},
+ *      ],
+ *      [
+ *        {"a": "why", "b": 1, "passenger": 5}
+ *      ]
+ *    ] */
+@Namespace("arrow::dataset") public static native @ByVal ListArrayResult ApplyGroupings(@Const @ByRef ListArray groupings,
+                                                  @Const @ByRef Array array);
+
+/** \brief Produce selections of a RecordBatch which correspond to the provided groupings. */
+@Namespace("arrow::dataset") public static native @ByVal RecordBatchVectorResult ApplyGroupings(@Const @ByRef ListArray groupings,
+                                         @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch batch);
 
   // namespace dataset
   // namespace arrow
@@ -485,6 +766,48 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
   // namespace arrow
 
 
+// Parsed from arrow/dataset/projector.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// This API is EXPERIMENTAL.
+
+// #pragma once
+
+// #include <memory>
+// #include <vector>
+
+// #include "arrow/dataset/type_fwd.h"
+// #include "arrow/dataset/visibility.h"
+// #include "arrow/type_fwd.h"
+
+
+///
+///
+@Namespace("arrow::dataset") public static native @ByVal Status CheckProjectable(@Const @ByRef Schema from, @Const @ByRef Schema to);
+// Targeting ../../arrow_dataset/RecordBatchProjector.java
+
+
+
+  // namespace dataset
+  // namespace arrow
+
+
 // Parsed from arrow/dataset/scanner.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -510,11 +833,11 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 // #include <memory>
 // #include <string>
-// #include <unordered_set>
 // #include <utility>
 // #include <vector>
 
 // #include "arrow/dataset/dataset.h"
+// #include "arrow/dataset/expression.h"
 // #include "arrow/dataset/projector.h"
 // #include "arrow/dataset/type_fwd.h"
 // #include "arrow/dataset/visibility.h"
@@ -578,7 +901,6 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <functional>
 // #include <memory>
 // #include <string>
-// #include <unordered_map>
 // #include <utility>
 // #include <vector>
 
@@ -611,6 +933,43 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 
 // Targeting ../../arrow_dataset/FileSystemDatasetWriteOptions.java
+
+
+
+  // namespace dataset
+  // namespace arrow
+
+
+// Parsed from arrow/dataset/file_csv.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <memory>
+// #include <string>
+
+// #include "arrow/csv/options.h"
+// #include "arrow/dataset/file_base.h"
+// #include "arrow/dataset/type_fwd.h"
+// #include "arrow/dataset/visibility.h"
+// #include "arrow/status.h"
+// Targeting ../../arrow_dataset/CsvFileFormat.java
 
 
 
@@ -689,7 +1048,6 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 // #include <memory>
 // #include <string>
-// #include <unordered_map>
 // #include <unordered_set>
 // #include <utility>
 // #include <vector>
@@ -699,12 +1057,12 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include "arrow/dataset/type_fwd.h"
 // #include "arrow/dataset/visibility.h"
 // #include "arrow/util/optional.h"
+// Targeting ../../arrow_dataset/SchemaManifest.java
+
+
   // namespace arrow
   // namespace parquet
 // Targeting ../../arrow_dataset/ParquetFileFormat.java
-
-
-// Targeting ../../arrow_dataset/RowGroupInfo.java
 
 
 // Targeting ../../arrow_dataset/ParquetFileFragment.java
@@ -722,227 +1080,6 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/ParquetDatasetFactory.java
 
 
-
-  // namespace dataset
-  // namespace arrow
-
-
-// Parsed from arrow/dataset/filter.h
-
-// Licensed to the Apache Software Foundation (ASF) under one
-// or more contributor license agreements.  See the NOTICE file
-// distributed with this work for additional information
-// regarding copyright ownership.  The ASF licenses this file
-// to you under the Apache License, Version 2.0 (the
-// "License"); you may not use this file except in compliance
-// with the License.  You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
-// specific language governing permissions and limitations
-// under the License.
-
-// This API is EXPERIMENTAL.
-
-// #pragma once
-
-// #include <functional>
-// #include <memory>
-// #include <string>
-// #include <utility>
-// #include <vector>
-
-// #include "arrow/compute/api_scalar.h"
-// #include "arrow/compute/cast.h"
-// #include "arrow/dataset/type_fwd.h"
-// #include "arrow/dataset/visibility.h"
-// #include "arrow/datum.h"
-// #include "arrow/result.h"
-// #include "arrow/scalar.h"
-// #include "arrow/type_fwd.h"
-// #include "arrow/util/checked_cast.h"
-// #include "arrow/util/variant.h"
-// Targeting ../../arrow_dataset/ExpressionType.java
-
-
-// Targeting ../../arrow_dataset/Expression.java
-
-
-// Targeting ../../arrow_dataset/CastExpressionImpl.java
-
-
-// Targeting ../../arrow_dataset/InExpressionImpl.java
-
-
-// Targeting ../../arrow_dataset/IsValidExpressionImpl.java
-
-
-// Targeting ../../arrow_dataset/NotExpressionImpl.java
-
-
-// Targeting ../../arrow_dataset/OrExpressionImpl.java
-
-
-// Targeting ../../arrow_dataset/AndExpressionImpl.java
-
-
-// Targeting ../../arrow_dataset/ComparisonExpressionImpl.java
-
-
-// Targeting ../../arrow_dataset/UnaryExpression.java
-
-
-// Targeting ../../arrow_dataset/BinaryExpression.java
-
-
-// Targeting ../../arrow_dataset/ComparisonExpression.java
-
-
-// Targeting ../../arrow_dataset/AndExpression.java
-
-
-// Targeting ../../arrow_dataset/OrExpression.java
-
-
-// Targeting ../../arrow_dataset/NotExpression.java
-
-
-// Targeting ../../arrow_dataset/IsValidExpression.java
-
-
-// Targeting ../../arrow_dataset/InExpression.java
-
-
-// Targeting ../../arrow_dataset/CastExpression.java
-
-
-// Targeting ../../arrow_dataset/ScalarExpression.java
-
-
-// Targeting ../../arrow_dataset/FieldExpression.java
-
-
-// Targeting ../../arrow_dataset/CustomExpression.java
-
-
-
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression and_(@SharedPtr @ByVal Expression lhs,
-                                                 @SharedPtr @ByVal Expression rhs);
-
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression and_(@Const @ByRef ExpressionVector subexpressions);
-
-@Namespace("arrow::dataset") public static native @ByVal @Name("operator &&") AndExpression and(@Const @ByRef Expression lhs, @Const @ByRef Expression rhs);
-
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression or_(@SharedPtr @ByVal Expression lhs,
-                                                @SharedPtr @ByVal Expression rhs);
-
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression or_(@Const @ByRef ExpressionVector subexpressions);
-
-@Namespace("arrow::dataset") public static native @ByVal @Name("operator ||") OrExpression or(@Const @ByRef Expression lhs, @Const @ByRef Expression rhs);
-
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression not_(@SharedPtr @ByVal Expression operand);
-
-@Namespace("arrow::dataset") public static native @ByVal @Name("operator !") NotExpression not(@Const @ByRef Expression rhs);
-
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression scalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value);
-
-// #define COMPARISON_FACTORY(NAME, FACTORY_NAME, OP)
-//   inline std::shared_ptr<ComparisonExpression> FACTORY_NAME(
-//       const std::shared_ptr<Expression>& lhs, const std::shared_ptr<Expression>& rhs) {
-//     return std::make_shared<ComparisonExpression>(CompareOperator::NAME, lhs, rhs);
-//   }
-// 
-//   template <typename T, typename Enable = typename std::enable_if<!std::is_base_of<
-//                             Expression, typename std::decay<T>::type>::value>::type>
-//   ComparisonExpression operator OP(const Expression& lhs, T&& rhs) {
-//     return ComparisonExpression(CompareOperator::NAME, lhs.Copy(),
-//                                 scalar(std::forward<T>(rhs)));
-//   }
-// 
-//   inline ComparisonExpression operator OP(const Expression& lhs,
-//                                           const Expression& rhs) {
-//     return ComparisonExpression(CompareOperator::NAME, lhs.Copy(), rhs.Copy());
-//   }
-@Namespace("arrow::dataset") public static native @SharedPtr ComparisonExpression equal(
-      @Const @SharedPtr @ByRef Expression lhs, @Const @SharedPtr @ByRef Expression rhs);
-
-  @Namespace("arrow::dataset") public static native @ByVal @Name("operator ==") ComparisonExpression equals(@Const @ByRef Expression lhs,
-                                            @Const @ByRef Expression rhs);
-@Namespace("arrow::dataset") public static native @SharedPtr ComparisonExpression not_equal(
-      @Const @SharedPtr @ByRef Expression lhs, @Const @SharedPtr @ByRef Expression rhs);
-
-  @Namespace("arrow::dataset") public static native @ByVal @Name("operator !=") ComparisonExpression notEquals(@Const @ByRef Expression lhs,
-                                            @Const @ByRef Expression rhs);
-@Namespace("arrow::dataset") public static native @SharedPtr ComparisonExpression greater(
-      @Const @SharedPtr @ByRef Expression lhs, @Const @SharedPtr @ByRef Expression rhs);
-
-  @Namespace("arrow::dataset") public static native @ByVal @Name("operator >") ComparisonExpression greaterThan(@Const @ByRef Expression lhs,
-                                            @Const @ByRef Expression rhs);
-@Namespace("arrow::dataset") public static native @SharedPtr ComparisonExpression greater_equal(
-      @Const @SharedPtr @ByRef Expression lhs, @Const @SharedPtr @ByRef Expression rhs);
-
-  @Namespace("arrow::dataset") public static native @ByVal @Name("operator >=") ComparisonExpression greaterThanEquals(@Const @ByRef Expression lhs,
-                                            @Const @ByRef Expression rhs);
-@Namespace("arrow::dataset") public static native @SharedPtr ComparisonExpression less(
-      @Const @SharedPtr @ByRef Expression lhs, @Const @SharedPtr @ByRef Expression rhs);
-
-  @Namespace("arrow::dataset") public static native @ByVal @Name("operator <") ComparisonExpression lessThan(@Const @ByRef Expression lhs,
-                                            @Const @ByRef Expression rhs);
-@Namespace("arrow::dataset") public static native @SharedPtr ComparisonExpression less_equal(
-      @Const @SharedPtr @ByRef Expression lhs, @Const @SharedPtr @ByRef Expression rhs);
-
-  @Namespace("arrow::dataset") public static native @ByVal @Name("operator <=") ComparisonExpression lessThanEquals(@Const @ByRef Expression lhs,
-                                            @Const @ByRef Expression rhs);
-// #undef COMPARISON_FACTORY
-
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression field_ref(@StdString String name);
-@Namespace("arrow::dataset") public static native @SharedPtr @ByVal Expression field_ref(@StdString BytePointer name);
-// clang-format off
-
-  // namespace string_literals
-
-
-
-/** \brief Visit each subexpression of an arbitrarily nested conjunction.
- * 
- *  | given                          | visit                                       |
- *  |--------------------------------|---------------------------------------------|
- *  | a and b                        | visit(a), visit(b)                          |
- *  | c                              | visit(c)                                    |
- *  | (a and b) and ((c or d) and e) | visit(a), visit(b), visit(c or d), visit(e) | */
-@Namespace("arrow::dataset") public static native @ByVal Status VisitConjunctionMembers(
-    @Const @ByRef Expression expr, @Const @ByRef ExpressionVisitor visitor);
-
-/** \brief Insert CastExpressions where necessary to make a valid expression. */
-@Namespace("arrow::dataset") public static native @ByVal ExpressionResult InsertImplicitCasts(
-    @Const @ByRef Expression expr, @Const @ByRef Schema schema);
-
-/** \brief Returns field names referenced in the expression. */
-@Namespace("arrow::dataset") public static native @ByVal StringVector FieldsInExpression(@Const @ByRef Expression expr);
-// Targeting ../../arrow_dataset/ExpressionEvaluator.java
-
-
-// Targeting ../../arrow_dataset/TreeEvaluator.java
-
-
-
-/** \brief Assemble lists of indices of identical rows.
- * 
- *  @param by [in] A StructArray whose columns will be used as grouping criteria.
- *  @return A StructArray mapping unique rows (in field "values", represented as a
- *          StructArray with the same fields as {@code by}) to lists of indices where
- *          that row appears (in field "groupings"). */
-@Namespace("arrow::dataset") public static native @ByVal StructArrayResult MakeGroupings(@Const @ByRef StructArray by);
-
-/** \brief Produce slices of an Array which correspond to the provided groupings. */
-@Namespace("arrow::dataset") public static native @ByVal ListArrayResult ApplyGroupings(@Const @ByRef ListArray groupings,
-                                                  @Const @ByRef Array array);
-@Namespace("arrow::dataset") public static native @ByVal RecordBatchVectorResult ApplyGroupings(@Const @ByRef ListArray groupings,
-                                         @SharedPtr @Cast({"", "std::shared_ptr<arrow::RecordBatch>"}) RecordBatch batch);
 
   // namespace dataset
   // namespace arrow

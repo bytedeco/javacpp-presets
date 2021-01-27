@@ -25,6 +25,15 @@ public class CountOptions extends FunctionOptions {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CountOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CountOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CountOptions position(long position) {
+        return (CountOptions)super.position(position);
+    }
+    @Override public CountOptions getPointer(long i) {
+        return new CountOptions((Pointer)this).position(position + i);
+    }
 
   public enum Mode {
     /** Count all non-null values. */
@@ -39,10 +48,12 @@ public class CountOptions extends FunctionOptions {
       @Override public String toString() { return intern().name(); }
   }
 
-  public CountOptions(Mode count_mode) { super((Pointer)null); allocate(count_mode); }
-  private native void allocate(Mode count_mode);
-  public CountOptions(@Cast("arrow::compute::CountOptions::Mode") int count_mode) { super((Pointer)null); allocate(count_mode); }
-  private native void allocate(@Cast("arrow::compute::CountOptions::Mode") int count_mode);
+  public CountOptions(Mode count_mode/*=arrow::compute::CountOptions::COUNT_NON_NULL*/) { super((Pointer)null); allocate(count_mode); }
+  private native void allocate(Mode count_mode/*=arrow::compute::CountOptions::COUNT_NON_NULL*/);
+  public CountOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public CountOptions(@Cast("arrow::compute::CountOptions::Mode") int count_mode/*=arrow::compute::CountOptions::COUNT_NON_NULL*/) { super((Pointer)null); allocate(count_mode); }
+  private native void allocate(@Cast("arrow::compute::CountOptions::Mode") int count_mode/*=arrow::compute::CountOptions::COUNT_NON_NULL*/);
 
   public static native @ByVal CountOptions Defaults();
 

@@ -30,6 +30,9 @@ public class BasicDecimal128 extends Pointer {
         return new BasicDecimal128((Pointer)this).position(position + i);
     }
 
+  @MemberGetter public static native int bit_width();
+  public static final int bit_width = bit_width();
+
   /** \brief Create a BasicDecimal128 from the two's complement representation. */
   public BasicDecimal128(@Cast("int64_t") long high, @Cast("uint64_t") long low) { super((Pointer)null); allocate(high, low); }
   @NoException private native void allocate(@Cast("int64_t") long high, @Cast("uint64_t") long low);
@@ -99,10 +102,10 @@ public class BasicDecimal128 extends Pointer {
   public native @ByRef @Name("operator >>=") BasicDecimal128 shiftRightPut(@Cast("uint32_t") int bits);
 
   /** \brief Get the high bits of the two's complement representation of the number. */
-  public native @Cast("int64_t") long high_bits();
+  public native @Cast("const int64_t") long high_bits();
 
   /** \brief Get the low bits of the two's complement representation of the number. */
-  public native @Cast("uint64_t") long low_bits();
+  public native @Cast("const uint64_t") long low_bits();
 
   /** \brief Return the raw bytes of the value in native-endian byte order. */
   public native @ByVal Byte16Array ToBytes();

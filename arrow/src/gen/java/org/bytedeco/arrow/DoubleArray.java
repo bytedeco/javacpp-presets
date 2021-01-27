@@ -29,4 +29,8 @@ public class DoubleArray extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::DoubleType>::value_type") double GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::DoubleType>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::DoubleType>::IteratorType*") Pointer end();
 }

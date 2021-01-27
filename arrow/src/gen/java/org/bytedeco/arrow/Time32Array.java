@@ -29,4 +29,8 @@ public class Time32Array extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::Time32Type>::value_type") int GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::Time32Type>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::Time32Type>::IteratorType*") Pointer end();
 }

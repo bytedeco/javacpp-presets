@@ -58,4 +58,11 @@ public class ParquetFactoryOptions extends Pointer {
   // This is useful for partitioning which parses directory when ordering
   // is important, e.g. DirectoryPartitioning.
   public native @StdString String partition_base_dir(); public native ParquetFactoryOptions partition_base_dir(String setter);
+
+  // Assert that all ColumnChunk paths are consistent. The parquet spec allows for
+  // ColumnChunk data to be stored in multiple files, but ParquetDatasetFactory
+  // supports only a single file with all ColumnChunk data. If this flag is set
+  // construction of a ParquetDatasetFactory will raise an error if ColumnChunk
+  // data is not resident in a single file.
+  public native @Cast("bool") boolean validate_column_chunk_paths(); public native ParquetFactoryOptions validate_column_chunk_paths(boolean setter);
 }

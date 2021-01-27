@@ -31,6 +31,12 @@ public class UInt16Builder extends ArrayBuilder {
   /** \brief Append a single null element */
   public native @ByVal Status AppendNull();
 
+  /** \brief Append a empty element */
+  public native @ByVal Status AppendEmptyValue();
+
+  /** \brief Append several empty elements */
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
+
   public native @Cast("arrow::NumericBuilder<arrow::UInt16Type>::value_type") short GetValue(@Cast("int64_t") long index);
 
   public native void Reset();

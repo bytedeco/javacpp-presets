@@ -45,11 +45,11 @@ public class FileFormat extends Pointer {
 
   /** \brief Open a fragment */
   public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression,
+        @ByVal FileSource source, @ByVal Expression partition_expression,
         @SharedPtr @ByVal Schema physical_schema);
 
-  public native @ByVal FileFragmentResult MakeFragment(
-        @ByVal FileSource source, @SharedPtr @ByVal Expression partition_expression);
+  public native @ByVal FileFragmentResult MakeFragment(@ByVal FileSource source,
+                                                       @ByVal Expression partition_expression);
 
   public native @ByVal FileFragmentResult MakeFragment(
         @ByVal FileSource source, @SharedPtr @ByVal(nullValue = "std::shared_ptr<arrow::Schema>(nullptr)") Schema physical_schema);

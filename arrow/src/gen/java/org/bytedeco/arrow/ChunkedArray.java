@@ -53,6 +53,9 @@ public class ChunkedArray extends Pointer {
   public ChunkedArray(@ByVal ArrayVector chunks) { super((Pointer)null); allocate(chunks); }
   private native void allocate(@ByVal ArrayVector chunks);
 
+  
+  
+
   /** \brief Construct a chunked array from a single Array */
   
   ///

@@ -28,6 +28,8 @@ public class SparseUnionBuilder extends BasicUnionBuilder {
 
   /** Use this constructor to specify the type explicitly.
    *  You can still add child builders to the union after using this constructor */
+  
+  ///
   public SparseUnionBuilder(MemoryPool pool,
                        @Const @ByRef ArrayBuilderVector children,
                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(pool, children, type); }
@@ -35,16 +37,24 @@ public class SparseUnionBuilder extends BasicUnionBuilder {
                        @Const @ByRef ArrayBuilderVector children,
                        @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
-  /** \brief Append a null value. A null is added automatically to all the
-   *  children but the type id in the slot will be 0 */
+  /** \brief Append a null value.
+   * 
+   *  A null is appended to the first child, empty values to the other children. */
+  
+  ///
   public native @ByVal Status AppendNull();
 
-  /** \brief Append multiple null values. Nulls will be automatically appended
-   *  to all the children but the type ids will be all 0. */
+  /** \brief Append multiple null values.
+   * 
+   *  Nulls are appended to the first child, empty values to the other children. */
+  public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
+
+  public native @ByVal Status AppendEmptyValue();
+
   
   ///
   ///
-  public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
 
   /** \brief Append an element to the UnionArray. This must be followed
    *         by an append to the appropriate child builder.
@@ -52,6 +62,6 @@ public class SparseUnionBuilder extends BasicUnionBuilder {
    *  @param next_type [in] type_id of the child to which the next value will be appended.
    * 
    *  The corresponding child builder must be appended to independently after this method
-   *  is called, and all other child builders must have null appended */
+   *  is called, and all other child builders must have null or empty value appended. */
   public native @ByVal Status Append(byte next_type);
 }

@@ -39,7 +39,7 @@ public class FileSystemDataset extends Dataset {
    * 
    *  @return A constructed dataset. */
   public static native @ByVal FileSystemDatasetResult Make(
-        @SharedPtr @ByVal Schema schema, @SharedPtr @ByVal Expression root_partition,
+        @SharedPtr @ByVal Schema schema, @ByVal Expression root_partition,
         @SharedPtr FileFormat format, @SharedPtr FileSystem filesystem,
         @ByVal FileFragmentVector fragments);
 

@@ -89,9 +89,13 @@ public class MapBuilder extends ArrayBuilder {
 
   public native @ByVal Status AppendNull();
 
+  public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
+
+  public native @ByVal Status AppendEmptyValue();
+
   
   ///
-  public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
 
   /** \brief Get builder to append keys.
    * 

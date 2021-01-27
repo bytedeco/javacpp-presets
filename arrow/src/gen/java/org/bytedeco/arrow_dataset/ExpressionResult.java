@@ -14,7 +14,7 @@ import static org.bytedeco.arrow.global.parquet.*;
 
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
-@Name("arrow::Result<std::shared_ptr<arrow::dataset::Expression> >") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
+@Name("arrow::Result<arrow::dataset::Expression>") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class ExpressionResult extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -93,8 +93,8 @@ public class ExpressionResult extends Pointer {
   
   ///
   ///
-  public ExpressionResult(@SharedPtr @ByVal Expression value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal Expression value);
+  public ExpressionResult(@ByVal Expression value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByVal Expression value);
 
   /** Copy constructor.
    * 
@@ -184,11 +184,11 @@ public class ExpressionResult extends Pointer {
    *  (i.e. a call to ok() returns true), otherwise this call will abort.
    * 
    *  @return The stored {@code T} value. */
-  public native @SharedPtr @ByRef Expression ValueOrDie();
+  public native @ByRef Expression ValueOrDie();
   
   ///
   ///
-  public native @SharedPtr @ByRef @Name("operator *") Expression multiply();
+  public native @ByRef @Name("operator *") Expression multiply();
 
   /** Moves and returns the internally-stored {@code T} value.
    * 
@@ -221,9 +221,16 @@ public class ExpressionResult extends Pointer {
   /** Apply a function to the internally stored value to produce a new result or propagate
    *  the stored error. */
 
-  public native @SharedPtr @ByRef Expression ValueUnsafe();
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+  
+
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+
+  public native @ByRef Expression ValueUnsafe();
 
   
 
-  public native @SharedPtr @ByVal Expression MoveValueUnsafe();
+  public native @ByVal Expression MoveValueUnsafe();
 }

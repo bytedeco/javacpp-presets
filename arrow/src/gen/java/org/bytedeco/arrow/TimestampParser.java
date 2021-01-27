@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
+  // namespace detail
 
 @Namespace("arrow") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class TimestampParser extends Pointer {

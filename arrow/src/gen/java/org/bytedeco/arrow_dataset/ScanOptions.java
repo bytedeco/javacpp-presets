@@ -29,10 +29,7 @@ public class ScanOptions extends Pointer {
   public native @SharedPtr ScanOptions ReplaceSchema(@SharedPtr @ByVal Schema schema);
 
   // Filter
-  public native @SharedPtr @ByRef Expression filter(); public native ScanOptions filter(Expression setter);
-
-  // Evaluator for Filter
-  public native @SharedPtr ExpressionEvaluator evaluator(); public native ScanOptions evaluator(ExpressionEvaluator setter);
+  public native @ByRef Expression filter(); public native ScanOptions filter(Expression setter);
 
   // Schema to which record batches will be reconciled
   public native @Const @SharedPtr @ByRef Schema schema();

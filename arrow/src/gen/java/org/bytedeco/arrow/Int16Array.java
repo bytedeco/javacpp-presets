@@ -29,4 +29,8 @@ public class Int16Array extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::Int16Type>::value_type") short GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::Int16Type>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::Int16Type>::IteratorType*") Pointer end();
 }

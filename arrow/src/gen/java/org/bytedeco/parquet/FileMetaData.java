@@ -37,6 +37,10 @@ public class FileMetaData extends Pointer {
   public static native @SharedPtr FileMetaData Make(
         @Const Pointer serialized_metadata, @Cast("uint32_t*") int[] inout_metadata_len);
 
+  
+  ///
+  public native @Cast("bool") boolean Equals(@Const @ByRef FileMetaData other);
+
   /** \brief The number of top-level columns in the schema.
    * 
    *  Parquet thrift definition requires that nested schema elements are
@@ -142,4 +146,10 @@ public class FileMetaData extends Pointer {
    * 
    *  @throws ParquetException if schemas are not equal. */
   public native void AppendRowGroups(@Const @ByRef FileMetaData other);
+
+  /** \brief Return a FileMetaData containing a subset of the row groups in this
+   *  FileMetaData. */
+  public native @SharedPtr FileMetaData Subset(@StdVector IntPointer row_groups);
+  public native @SharedPtr FileMetaData Subset(@StdVector IntBuffer row_groups);
+  public native @SharedPtr FileMetaData Subset(@StdVector int[] row_groups);
 }

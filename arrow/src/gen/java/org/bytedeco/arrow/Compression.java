@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-
+  // namespace internal
 
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Compression extends Pointer {
@@ -48,7 +48,4 @@ public class Compression extends Pointer {
       public type intern() { for (type e : values()) if (e.value == value) return e; return this; }
       @Override public String toString() { return intern().name(); }
   }
-
-  @MemberGetter public static native int kUseDefaultCompressionLevel();
-  public static final int kUseDefaultCompressionLevel = kUseDefaultCompressionLevel();
 }

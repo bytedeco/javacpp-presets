@@ -217,6 +217,13 @@ public class RecordBatchWriterSharedResult extends Pointer {
   /** Apply a function to the internally stored value to produce a new result or propagate
    *  the stored error. */
 
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+  
+
+  /** Cast the internally stored value to produce a new result or propagate the stored
+   *  error. */
+
   public native @SharedPtr RecordBatchWriter ValueUnsafe();
 
   

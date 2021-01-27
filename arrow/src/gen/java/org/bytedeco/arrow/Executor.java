@@ -24,8 +24,6 @@ public class Executor extends Pointer {
   // will return the callable's result value once.
   // The callable's arguments are copied before execution.
 
-  // Like Submit(), but also returns a (failed) Future when submission fails
-
   // Return the level of parallelism (the number of tasks that may be executed
   // concurrently).  This may be an approximate number.
   public native int GetCapacity();

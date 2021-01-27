@@ -38,7 +38,7 @@ public class DataType extends Fingerprintable {
 
   public native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field child(int i);
 
-  /** Returns the the child-field at index i. */
+  /** Returns the child-field at index i. */
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Field>"}) Field field(int i);
 
   public native @Const @Deprecated @ByRef FieldVector children();

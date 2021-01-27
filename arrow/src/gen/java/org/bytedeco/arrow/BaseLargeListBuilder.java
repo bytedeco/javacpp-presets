@@ -54,6 +54,10 @@ public class BaseLargeListBuilder extends ArrayBuilder {
 
   public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
 
+  public native @ByVal Status AppendEmptyValue();
+
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
+
   public native @ByVal Status FinishInternal(@SharedPtr ArrayData out);
 
   public native @ByVal Status ValidateOverflow(@Cast("int64_t") long new_elements);

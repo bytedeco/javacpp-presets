@@ -169,7 +169,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
- * Arrow 2.0.0  https://arrow.apache.org/install/
+ * Arrow 3.0.0  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/intel-mkl

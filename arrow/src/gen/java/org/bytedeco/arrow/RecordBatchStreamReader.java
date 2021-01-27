@@ -11,8 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \class RecordBatchStreamReader
- *  \brief Synchronous batch stream reader that reads from io::InputStream
+/** \brief Synchronous batch stream reader that reads from io::InputStream
  * 
  *  This class reads the schema (plus any dictionaries) as the first messages
  *  in the stream, followed by record batches. For more granular zero-copy

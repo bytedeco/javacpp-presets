@@ -29,14 +29,15 @@ public class CastOptions extends FunctionOptions {
         return new CastOptions((Pointer)this).position(position + i);
     }
 
+  public CastOptions(@Cast("bool") boolean safe/*=true*/) { super((Pointer)null); allocate(safe); }
+  private native void allocate(@Cast("bool") boolean safe/*=true*/);
   public CastOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public CastOptions(@Cast("bool") boolean safe) { super((Pointer)null); allocate(safe); }
-  private native void allocate(@Cast("bool") boolean safe);
-
+  public static native @ByVal CastOptions Safe(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type/*=nullptr*/);
   public static native @ByVal CastOptions Safe();
 
+  public static native @ByVal CastOptions Unsafe(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to_type/*=nullptr*/);
   public static native @ByVal CastOptions Unsafe();
 
   // Type being casted to. May be passed separate to eager function

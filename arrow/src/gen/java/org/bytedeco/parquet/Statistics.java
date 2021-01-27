@@ -40,28 +40,40 @@ public class Statistics extends Pointer {
    *  @param null_count [in] number of null values
    *  @param distinct_count [in] number of distinct values
    *  @param has_min_max [in] whether the min/max statistics are set
+   *  @param has_null_count [in] whether the null_count statistics are set
+   *  @param has_distinct_count [in] whether the distinct_count statistics are set
    *  @param pool [in] a memory pool to use for any memory allocations, optional */
   public static native @SharedPtr Statistics Make(
         @Const ColumnDescriptor descr, @StdString String encoded_min,
         @StdString String encoded_max, @Cast("int64_t") long num_values, @Cast("int64_t") long null_count,
-        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max,
+        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max, @Cast("bool") boolean has_null_count,
+        @Cast("bool") boolean has_distinct_count,
         MemoryPool pool/*=arrow::default_memory_pool()*/);
   public static native @SharedPtr Statistics Make(
         @Const ColumnDescriptor descr, @StdString String encoded_min,
         @StdString String encoded_max, @Cast("int64_t") long num_values, @Cast("int64_t") long null_count,
-        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max);
+        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max, @Cast("bool") boolean has_null_count,
+        @Cast("bool") boolean has_distinct_count);
   public static native @SharedPtr Statistics Make(
         @Const ColumnDescriptor descr, @StdString BytePointer encoded_min,
         @StdString BytePointer encoded_max, @Cast("int64_t") long num_values, @Cast("int64_t") long null_count,
-        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max,
+        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max, @Cast("bool") boolean has_null_count,
+        @Cast("bool") boolean has_distinct_count,
         MemoryPool pool/*=arrow::default_memory_pool()*/);
   public static native @SharedPtr Statistics Make(
         @Const ColumnDescriptor descr, @StdString BytePointer encoded_min,
         @StdString BytePointer encoded_max, @Cast("int64_t") long num_values, @Cast("int64_t") long null_count,
-        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max);
+        @Cast("int64_t") long distinct_count, @Cast("bool") boolean has_min_max, @Cast("bool") boolean has_null_count,
+        @Cast("bool") boolean has_distinct_count);
+
+  /** \brief Return true if the count of null values is set */
+  public native @Cast("bool") boolean HasNullCount();
 
   /** \brief The number of null values, may not be set */
   public native @Cast("int64_t") long null_count();
+
+  /** \brief Return true if the count of distinct values is set */
+  public native @Cast("bool") boolean HasDistinctCount();
 
   /** \brief The number of distinct values, may not be set */
   public native @Cast("int64_t") long distinct_count();
@@ -90,4 +102,7 @@ public class Statistics extends Pointer {
 
   /** \brief The full type descriptor from the column schema */
   public native @Const ColumnDescriptor descr();
+
+  /** \brief Check two Statistics for equality */
+  public native @Cast("bool") boolean Equals(@Const @ByRef Statistics other);
 }

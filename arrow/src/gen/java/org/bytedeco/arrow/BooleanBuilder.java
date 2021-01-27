@@ -44,6 +44,10 @@ public class BooleanBuilder extends ArrayBuilder {
 
   public native @ByVal Status AppendNull();
 
+  public native @ByVal Status AppendEmptyValue();
+
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
+
   /** Scalar append */
   public native @ByVal Status Append(@Cast("const bool") boolean val);
 

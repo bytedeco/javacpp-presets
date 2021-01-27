@@ -60,11 +60,23 @@ public class Function extends Pointer {
    *  function accepts variable numbers of arguments. */
   public native @Const @ByRef Arity arity();
 
+  /** \brief Return the function documentation */
+  public native @Const @ByRef FunctionDoc doc();
+
   /** \brief Returns the number of registered kernels for this function. */
   
   ///
-  ///
   public native int num_kernels();
+
+  /** \brief Return a kernel that can execute the function given the exact
+   *  argument types (without implicit type casts or scalar->array promotions).
+   * 
+   *  NB: This function is overridden in CastFunction. */
+  
+  ///
+  ///
+  public native @ByVal @Cast("arrow::Result<const arrow::compute::Kernel*>*") KernelResult DispatchExact(
+        @Const @ByRef ValueDescrVector values);
 
   /** \brief Execute the function eagerly with the passed input arguments with
    *  kernel dispatch, batch iteration, and memory allocation details taken
@@ -83,4 +95,6 @@ public class Function extends Pointer {
    *  Whatever option semantics a Function has, implementations must guarantee
    *  that default_options() is valid to pass to Execute as options. */
   public native @Const FunctionOptions default_options();
+
+  public native @ByVal Status Validate();
 }

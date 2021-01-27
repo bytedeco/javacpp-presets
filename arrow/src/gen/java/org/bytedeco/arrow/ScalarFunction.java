@@ -23,18 +23,18 @@ public class ScalarFunction extends Function {
     public ScalarFunction(Pointer p) { super(p); }
 
 
-  public ScalarFunction(@StdString String name, @Const @ByRef Arity arity,
-                   @Const FunctionOptions default_options/*=nullptr*/) { super((Pointer)null); allocate(name, arity, default_options); }
-  private native void allocate(@StdString String name, @Const @ByRef Arity arity,
+  public ScalarFunction(@StdString String name, @Const @ByRef Arity arity, @Const FunctionDoc doc,
+                   @Const FunctionOptions default_options/*=nullptr*/) { super((Pointer)null); allocate(name, arity, doc, default_options); }
+  private native void allocate(@StdString String name, @Const @ByRef Arity arity, @Const FunctionDoc doc,
                    @Const FunctionOptions default_options/*=nullptr*/);
-  public ScalarFunction(@StdString String name, @Const @ByRef Arity arity) { super((Pointer)null); allocate(name, arity); }
-  private native void allocate(@StdString String name, @Const @ByRef Arity arity);
-  public ScalarFunction(@StdString BytePointer name, @Const @ByRef Arity arity,
-                   @Const FunctionOptions default_options/*=nullptr*/) { super((Pointer)null); allocate(name, arity, default_options); }
-  private native void allocate(@StdString BytePointer name, @Const @ByRef Arity arity,
+  public ScalarFunction(@StdString String name, @Const @ByRef Arity arity, @Const FunctionDoc doc) { super((Pointer)null); allocate(name, arity, doc); }
+  private native void allocate(@StdString String name, @Const @ByRef Arity arity, @Const FunctionDoc doc);
+  public ScalarFunction(@StdString BytePointer name, @Const @ByRef Arity arity, @Const FunctionDoc doc,
+                   @Const FunctionOptions default_options/*=nullptr*/) { super((Pointer)null); allocate(name, arity, doc, default_options); }
+  private native void allocate(@StdString BytePointer name, @Const @ByRef Arity arity, @Const FunctionDoc doc,
                    @Const FunctionOptions default_options/*=nullptr*/);
-  public ScalarFunction(@StdString BytePointer name, @Const @ByRef Arity arity) { super((Pointer)null); allocate(name, arity); }
-  private native void allocate(@StdString BytePointer name, @Const @ByRef Arity arity);
+  public ScalarFunction(@StdString BytePointer name, @Const @ByRef Arity arity, @Const FunctionDoc doc) { super((Pointer)null); allocate(name, arity, doc); }
+  private native void allocate(@StdString BytePointer name, @Const @ByRef Arity arity, @Const FunctionDoc doc);
 
   /** \brief Add a kernel with given input/output types, no required state
    *  initialization, preallocation for fixed-width types, and default null
@@ -46,14 +46,8 @@ public class ScalarFunction extends Function {
 
   /** \brief Add a kernel (function implementation). Returns error if the
    *  kernel's signature does not match the function's arity. */
-  
-  ///
   public native @ByVal Status AddKernel(@ByVal ScalarKernel kernel);
 
-  /** \brief Return a kernel that can execute the function given the exact
-   *  argument types (without implicit type casts or scalar->array promotions).
-   * 
-   *  NB: This function is overridden in CastFunction. */
-  public native @ByVal @Cast("arrow::Result<const arrow::compute::ScalarKernel*>*") ScalarKernelResult DispatchExact(
+  public native @ByVal @Cast("arrow::Result<const arrow::compute::Kernel*>*") KernelResult DispatchExact(
         @Const @ByRef ValueDescrVector values);
 }

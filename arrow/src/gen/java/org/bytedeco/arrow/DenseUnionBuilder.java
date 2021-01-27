@@ -37,10 +37,14 @@ public class DenseUnionBuilder extends BasicUnionBuilder {
 
   public native @ByVal Status AppendNull();
 
+  public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
+
+  public native @ByVal Status AppendEmptyValue();
+
   
   ///
   ///
-  public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
+  public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
 
   /** \brief Append an element to the UnionArray. This must be followed
    *         by an append to the appropriate child builder.

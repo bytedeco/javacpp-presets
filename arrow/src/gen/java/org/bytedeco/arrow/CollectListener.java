@@ -11,8 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \class CollectListener
- *  \brief Collect schema and record batches decoded by StreamDecoder.
+/** \brief Collect schema and record batches decoded by StreamDecoder.
  * 
  *  This API is EXPERIMENTAL.
  * 

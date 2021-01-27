@@ -73,4 +73,6 @@ public class ValueDescr extends Pointer {
   public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef ValueDescr other);
 
   public native @StdString String ToString();
+
+  
 }

@@ -192,7 +192,7 @@ public class LogicalType extends Pointer {
   public native Type.type type();
 
   /** \brief Return the appropriate sort order for this logical type. */
-  public native SortOrder.type sort_order();
+  public native org.bytedeco.parquet.SortOrder.type sort_order();
 
   // Type checks ...
   public native @Cast("bool") boolean is_string();

@@ -11,8 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \class StreamDecoder
- *  \brief Push style stream decoder that receives data from user.
+/** \brief Push style stream decoder that receives data from user.
  * 
  *  This class decodes the Apache Arrow IPC streaming format data.
  * 
@@ -33,9 +32,9 @@ public class StreamDecoder extends Pointer {
    *  Listener::OnRecordBatchDecoded() to receive decoded record batches
    *  @param options [in] any IPC reading options (optional) */
   public StreamDecoder(@SharedPtr Listener listener,
-                  @Const @ByRef(nullValue = "arrow::ipc::IpcReadOptions::Defaults()") IpcReadOptions options) { super((Pointer)null); allocate(listener, options); }
+                  @ByVal(nullValue = "arrow::ipc::IpcReadOptions::Defaults()") IpcReadOptions options) { super((Pointer)null); allocate(listener, options); }
   private native void allocate(@SharedPtr Listener listener,
-                  @Const @ByRef(nullValue = "arrow::ipc::IpcReadOptions::Defaults()") IpcReadOptions options);
+                  @ByVal(nullValue = "arrow::ipc::IpcReadOptions::Defaults()") IpcReadOptions options);
   public StreamDecoder(@SharedPtr Listener listener) { super((Pointer)null); allocate(listener); }
   private native void allocate(@SharedPtr Listener listener);
 
@@ -128,7 +127,7 @@ public class StreamDecoder extends Pointer {
    *    memcpy(buffer->mutable_data() + current_buffer_size,
    *           small_chunk,
    *           small_chunk_size);
-   *    if (buffer->size() < decoder.next_requied_size()) {
+   *    if (buffer->size() < decoder.next_required_size()) {
    *      continue;
    *    }
    *    std::shared_ptr<arrow::Buffer> chunk(buffer.release());
@@ -144,4 +143,7 @@ public class StreamDecoder extends Pointer {
    *  @return the number of bytes needed to advance the state of the
    *  decoder */
   public native @Cast("int64_t") long next_required_size();
+
+  /** \brief Return current read statistics */
+  public native @ByVal ReadStats stats();
 }

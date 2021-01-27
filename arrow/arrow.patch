@@ -33,14 +33,3 @@ diff -ruN apache-arrow-2.0.0/cpp/src/arrow/vendored/datetime/date.h apache-arrow
  #  else
  //   VS2017 and later
  #    define CONSTDATA constexpr const
-diff -ruN apache-arrow-2.0.0/cpp/src/gandiva/engine.cc apache-arrow-2.0.0-patch/cpp/src/gandiva/engine.cc
---- apache-arrow-2.0.0/cpp/src/gandiva/engine.cc	2020-10-13 09:05:00.000000000 +0900
-+++ apache-arrow-2.0.0-patch/cpp/src/gandiva/engine.cc	2020-11-21 23:44:23.656925805 +0900
-@@ -53,6 +53,7 @@
- #include <llvm/Linker/Linker.h>
- #include <llvm/MC/SubtargetFeature.h>
- #include <llvm/Support/DynamicLibrary.h>
-+#include <llvm/Support/Host.h>
- #include <llvm/Support/TargetRegistry.h>
- #include <llvm/Support/TargetSelect.h>
- #include <llvm/Support/raw_ostream.h>

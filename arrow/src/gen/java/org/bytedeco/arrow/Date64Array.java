@@ -29,4 +29,8 @@ public class Date64Array extends PrimitiveArray {
 
   // For API compatibility with BinaryArray etc.
   public native @Cast("arrow::NumericArray<arrow::Date64Type>::value_type") long GetView(@Cast("int64_t") long i);
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::Date64Type>::IteratorType*") Pointer begin();
+
+  public native @ByVal @Cast("arrow::NumericArray<arrow::Date64Type>::IteratorType*") Pointer end();
 }

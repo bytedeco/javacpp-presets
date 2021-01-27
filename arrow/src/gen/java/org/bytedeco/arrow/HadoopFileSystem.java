@@ -34,8 +34,8 @@ public class HadoopFileSystem extends IOFileSystem {
   public native @ByVal Status MakeDirectory(@StdString BytePointer path);
 
   // Delete file or directory
-  // @param path: absolute path to data
-  // @param recursive: if path is a directory, delete contents as well
+  // @param path absolute path to data
+  // @param recursive if path is a directory, delete contents as well
   // @returns error status on failure
   public native @ByVal Status Delete(@StdString String path, @Cast("bool") boolean recursive/*=false*/);
   public native @ByVal Status Delete(@StdString String path);
@@ -138,9 +138,9 @@ public class HadoopFileSystem extends IOFileSystem {
 
   // FileMode::WRITE options
   // @param path complete file path
-  // @param buffer_size, 0 for default
-  // @param replication, 0 for default
-  // @param default_block_size, 0 for default
+  // @param buffer_size 0 by default
+  // @param replication 0 by default
+  // @param default_block_size 0 by default
   public native @ByVal Status OpenWritable(@StdString String path, @Cast("bool") boolean append, int buffer_size,
                         short replication, @Cast("int64_t") long default_block_size,
                         @SharedPtr HdfsOutputStream file);

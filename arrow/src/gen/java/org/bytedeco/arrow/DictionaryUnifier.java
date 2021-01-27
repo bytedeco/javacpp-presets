@@ -44,4 +44,10 @@ public class DictionaryUnifier extends Pointer {
    *  after this is called */
   public native @ByVal Status GetResult(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>*"}) DataType out_type,
                              @SharedPtr Array out_dict);
+
+  /** \brief Return a unified dictionary with the given index type.  If
+   *  the index type is not large enough then an invalid status will be returned.
+   *  The unifier cannot be used after this is called */
+  public native @ByVal Status GetResultWithIndexType(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType index_type,
+                                          @SharedPtr Array out_dict);
 }

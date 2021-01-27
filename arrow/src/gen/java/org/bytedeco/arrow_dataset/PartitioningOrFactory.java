@@ -14,10 +14,27 @@ import static org.bytedeco.arrow.global.parquet.*;
 
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
-@Namespace("arrow::dataset") @Opaque @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
+
+/** \brief Either a Partitioning or a PartitioningFactory */
+@Namespace("arrow::dataset") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow_dataset.class)
 public class PartitioningOrFactory extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public PartitioningOrFactory() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PartitioningOrFactory(Pointer p) { super(p); }
+
+  public PartitioningOrFactory(@SharedPtr Partitioning partitioning) { super((Pointer)null); allocate(partitioning); }
+  private native void allocate(@SharedPtr Partitioning partitioning);
+
+  public PartitioningOrFactory(@SharedPtr PartitioningFactory factory) { super((Pointer)null); allocate(factory); }
+  private native void allocate(@SharedPtr PartitioningFactory factory);
+
+  public native @ByRef @Name("operator =") PartitioningOrFactory put(@SharedPtr Partitioning partitioning);
+
+  public native @ByRef @Name("operator =") PartitioningOrFactory put(@SharedPtr PartitioningFactory factory);
+
+  public native @SharedPtr Partitioning partitioning();
+
+  public native @SharedPtr PartitioningFactory factory();
+
+  public native @ByVal SchemaResult GetOrInferSchema(@Const @ByRef StringVector paths);
 }

@@ -95,7 +95,13 @@ public class Array extends Pointer {
   /** Compare if the range of slots specified are equal for the given array and
    *  this array.  end_idx exclusive.  This methods does not bounds check. */
   public native @Cast("bool") boolean RangeEquals(@Cast("int64_t") long start_idx, @Cast("int64_t") long end_idx, @Cast("int64_t") long other_start_idx,
+                     @Const @ByRef Array other,
+                     @Const @ByRef(nullValue = "arrow::EqualOptions::Defaults()") EqualOptions arg4);
+  public native @Cast("bool") boolean RangeEquals(@Cast("int64_t") long start_idx, @Cast("int64_t") long end_idx, @Cast("int64_t") long other_start_idx,
                      @Const @ByRef Array other);
+  public native @Cast("bool") boolean RangeEquals(@Const @ByRef Array other, @Cast("int64_t") long start_idx, @Cast("int64_t") long end_idx,
+                     @Cast("int64_t") long other_start_idx,
+                     @Const @ByRef(nullValue = "arrow::EqualOptions::Defaults()") EqualOptions arg4);
   public native @Cast("bool") boolean RangeEquals(@Const @ByRef Array other, @Cast("int64_t") long start_idx, @Cast("int64_t") long end_idx,
                      @Cast("int64_t") long other_start_idx);
 
