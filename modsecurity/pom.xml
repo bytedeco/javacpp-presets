@@ -18,6 +18,10 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <nexus.url>https://nexus.volvo.mito:8443</nexus.url>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -48,4 +52,15 @@
       </plugin>
     </plugins>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>c4isr.nexus.releases</id>
+      <url>${nexus.url}/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>c4isr.nexus.snapshots</id>
+      <url>${nexus.url}/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
