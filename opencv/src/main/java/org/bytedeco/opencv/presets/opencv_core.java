@@ -279,7 +279,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::Mat(int, int, int, void*, size_t)").javaText(
                        "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
                      + "private Pointer pointer; // a reference to prevent deallocation\n"
-                     + "private static int checkInt(long l) { if (l > Integer.MAX_VALUE) throw new IllegalArgumentException(\"Data is too large for a single-row matrix\"); else return (int) l; }\n"
+                     + "private static int checkInt(long l) { return l > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) l; }\n"
 
                      + "/** Constructs a Mat header pointing to the supplied data without copy. See {@link #Mat(int, int, int, Pointer, boolean) this warning}. */ public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.pointer = data; }\n"
                      + "/** Warning: if <code>copyData</code> is false, the data of the OpenCV Mat returned by this constructor is externally allocated from OpenCV point of view, so will not benefit from OpenCV reference counting feature. The data may be deallocated when the returned Mat is garbage collected, even if another Mat has been created pointing to the same data with, e.g., reshape, rowRange, etc... */ public Mat(int rows, int cols, int type, Pointer data, boolean copyData) { super((Pointer)null); if (copyData) { allocate(rows, cols, type); data().put(data); } else { allocate(rows, cols, type, data, AUTO_STEP); this.pointer = data; } }\n"
@@ -315,10 +315,10 @@ public class opencv_core implements LoadEnabled, InfoMapper {
 
                      + "/** Calls {@link #Mat(BytePointer, boolean) Mat(p, false)}. */public Mat(BytePointer p) { this(p, false); }\n"
                      + "/** Calls {@link #Mat(BytePointer, boolean, boolean) Mat(p, signed, false)}. */public Mat(BytePointer p, boolean signed) { this(p, false, false); }\n"
-                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat((signed ? CV_8SC1 : CV_8UC1), p, copyData)}. */public Mat(BytePointer p, boolean signed, boolean copyData) { this(signed ? CV_8SC1 : CV_8UC1, p, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(signed &#063; CV_8SC1 : CV_8UC1, p, copyData)}. */public Mat(BytePointer p, boolean signed, boolean copyData) { this(signed ? CV_8SC1 : CV_8UC1, p, copyData); }\n"
                      + "/** Calls {@link #Mat(ShortPointer, boolean) Mat(p, false)}. */public Mat(ShortPointer p) { this(p, false); }\n"
                      + "/** Calls {@link #Mat(ShortPointer, boolean, boolean) Mat(p, signed, false)}. */public Mat(ShortPointer p, boolean signed) { this(p, false, false); }\n"
-                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat((signed ? CV_16SC1 : CV_16UC1), p, copyData)}. */public Mat(ShortPointer p, boolean signed, boolean copyData) { this(signed ? CV_16SC1 : CV_16UC1, p, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat((signed &#063; CV_16SC1 : CV_16UC1), p, copyData)}. */public Mat(ShortPointer p, boolean signed, boolean copyData) { this(signed ? CV_16SC1 : CV_16UC1, p, copyData); }\n"
                      + "/** Calls {@link #Mat(IntPointer, boolean) Mat(p, false)}. */public Mat(IntPointer p) { this(p, false); }\n"
                      + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32SC1, p, copyData)}. */public Mat(IntPointer p, boolean copyData) { this(CV_32SC1, p, copyData); }\n"
                      + "/** Calls {@link #Mat(FloatPointer, boolean) Mat(p, false)}. */public Mat(FloatPointer p) { this(p, false); }\n"
