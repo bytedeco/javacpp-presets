@@ -361,8 +361,8 @@ public class Mat extends AbstractMat {
     public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
     public Mat(CvArr arr) { super(cvarrToMat(arr)); this.pointer = arr; }
     /** Warning: If {@code copyData} is false, the data of the OpenCV Mat returned by this constructor is externally allocated from OpenCV point of view,
-     *  and will not benefit from OpenCV reference counting feature. The data may be deallocated when the returned Mat is garbage collected,
-     *  even if another Mat has been created pointing to the same data with, e.g., reshape(), rowRange(), etc... */
+     *  and will not benefit from OpenCV reference counting feature. One must ensure that the data does not get implicitly or explicitly deallocated when
+     *  another Mat has been created pointing to the same data with, e.g., reshape(), rowRange(), etc... */
     public Mat(int rows, int cols, int type, Pointer data, boolean copyData) { super((Pointer)null);
         if (copyData) { allocate(rows, cols, type); data().put(data); } else { allocate(rows, cols, type, data, AUTO_STEP); this.pointer = data; }
     }
