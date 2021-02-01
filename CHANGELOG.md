@@ -1,4 +1,5 @@
 
+ * Add new array constructors to `opencv_core.Mat` that copy data for convenience ([pull #1002](https://github.com/bytedeco/javacpp-presets/pull/1002))
  * Rebase `PrimitiveScalar` on `PrimitiveScalarBase` in presets for Arrow for easy access to `data()` ([issue #998](https://github.com/bytedeco/javacpp-presets/issues/998))
  * Add `NamedMetadataOperations.h` implementing data retrieval operations for LLVM nodes ([pull #995](https://github.com/bytedeco/javacpp-presets/pull/995))
  * Enable OpenMP for ONNX Runtime on Mac once again ([issue #917](https://github.com/bytedeco/javacpp-presets/issues/917))
