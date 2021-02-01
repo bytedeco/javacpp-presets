@@ -358,6 +358,7 @@ public class Mat extends AbstractMat {
     public Mat(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.pointer = data; }
     private native void allocate(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/);
     private Pointer pointer; // a reference to prevent deallocation
+    /** Calls {@link #Mat(int, int, int, Pointer, long) Mat(rows, cols, type, data, AUTO_STEP)} as with {@link #Mat(int, int, int, Pointer, boolean) Mat(rows, cols, type, data, false)}. */
     public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
     public Mat(CvArr arr) { super(cvarrToMat(arr)); this.pointer = arr; }
     /** Warning: If {@code copyData} is false, the data of the OpenCV Mat returned by this constructor is externally allocated from OpenCV point of view,

@@ -280,6 +280,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                        "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.pointer = data; }\n"
                      + "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
                      + "private Pointer pointer; // a reference to prevent deallocation\n"
+                     + "/** Calls {@link #Mat(int, int, int, Pointer, long) Mat(rows, cols, type, data, AUTO_STEP)} as with {@link #Mat(int, int, int, Pointer, boolean) Mat(rows, cols, type, data, false)}. */\n"
                      + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"
 
                      + "public Mat(CvArr arr) { super(cvarrToMat(arr)); this.pointer = arr; }\n"
