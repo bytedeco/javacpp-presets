@@ -24,7 +24,7 @@ public class TensorAnnotation extends MessageLite {
         return (TensorAnnotation)super.position(position);
     }
     @Override public TensorAnnotation getPointer(long i) {
-        return new TensorAnnotation(this).position(position + i);
+        return new TensorAnnotation((Pointer)this).position(position + i);
     }
 
   public TensorAnnotation() { super((Pointer)null); allocate(); }

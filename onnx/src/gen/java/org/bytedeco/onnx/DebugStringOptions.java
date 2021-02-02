@@ -25,7 +25,7 @@ public class DebugStringOptions extends Pointer {
         return (DebugStringOptions)super.position(position);
     }
     @Override public DebugStringOptions getPointer(long i) {
-        return new DebugStringOptions(this).position(position + i);
+        return new DebugStringOptions((Pointer)this).position(position + i);
     }
 
   // include original user comments as recorded in SourceLocation entries. N.B.

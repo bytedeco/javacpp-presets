@@ -24,7 +24,7 @@ public class GraphProto extends MessageLite {
         return (GraphProto)super.position(position);
     }
     @Override public GraphProto getPointer(long i) {
-        return new GraphProto(this).position(position + i);
+        return new GraphProto((Pointer)this).position(position + i);
     }
 
   public GraphProto() { super((Pointer)null); allocate(); }

@@ -24,7 +24,7 @@ public class MapProto extends MessageLite {
         return (MapProto)super.position(position);
     }
     @Override public MapProto getPointer(long i) {
-        return new MapProto(this).position(position + i);
+        return new MapProto((Pointer)this).position(position + i);
     }
 
   public MapProto() { super((Pointer)null); allocate(); }

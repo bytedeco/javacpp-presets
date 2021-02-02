@@ -42,7 +42,7 @@ public class DataTypeUtils extends Pointer {
         return (DataTypeUtils)super.position(position);
     }
     @Override public DataTypeUtils getPointer(long i) {
-        return new DataTypeUtils(this).position(position + i);
+        return new DataTypeUtils((Pointer)this).position(position + i);
     }
 
   public static native @StdString @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString BytePointer type_str);

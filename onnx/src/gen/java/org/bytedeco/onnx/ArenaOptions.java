@@ -25,7 +25,7 @@ public class ArenaOptions extends Pointer {
         return (ArenaOptions)super.position(position);
     }
     @Override public ArenaOptions getPointer(long i) {
-        return new ArenaOptions(this).position(position + i);
+        return new ArenaOptions((Pointer)this).position(position + i);
     }
 
   // This defines the size of the first block requested from the system malloc.

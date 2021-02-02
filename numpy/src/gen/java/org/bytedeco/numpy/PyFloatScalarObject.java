@@ -31,7 +31,7 @@ public class PyFloatScalarObject extends Pointer {
         return (PyFloatScalarObject)super.position(position);
     }
     @Override public PyFloatScalarObject getPointer(long i) {
-        return new PyFloatScalarObject(this).position(position + i);
+        return new PyFloatScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyFloatScalarObject ob_base(PyObject setter);

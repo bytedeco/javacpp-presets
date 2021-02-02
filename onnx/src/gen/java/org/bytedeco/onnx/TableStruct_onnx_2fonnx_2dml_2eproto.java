@@ -27,7 +27,7 @@ public class TableStruct_onnx_2fonnx_2dml_2eproto extends Pointer {
         return (TableStruct_onnx_2fonnx_2dml_2eproto)super.position(position);
     }
     @Override public TableStruct_onnx_2fonnx_2dml_2eproto getPointer(long i) {
-        return new TableStruct_onnx_2fonnx_2dml_2eproto(this).position(position + i);
+        return new TableStruct_onnx_2fonnx_2dml_2eproto((Pointer)this).position(position + i);
     }
 
   @MemberGetter public static native @Cast("const google::protobuf::uint32") int offsets(int i);

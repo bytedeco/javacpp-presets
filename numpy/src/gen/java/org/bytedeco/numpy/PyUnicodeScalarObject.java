@@ -29,10 +29,11 @@ public class PyUnicodeScalarObject extends Pointer {
         return (PyUnicodeScalarObject)super.position(position);
     }
     @Override public PyUnicodeScalarObject getPointer(long i) {
-        return new PyUnicodeScalarObject(this).position(position + i);
+        return new PyUnicodeScalarObject((Pointer)this).position(position + i);
     }
 
         /* note that the PyObject_HEAD macro lives right here */
         public native @ByRef PyUnicodeObject base(); public native PyUnicodeScalarObject base(PyUnicodeObject setter);
         public native @Cast("Py_UCS4*") IntPointer obval(); public native PyUnicodeScalarObject obval(IntPointer setter);
+        public native @Cast("char*") BytePointer buffer_fmt(); public native PyUnicodeScalarObject buffer_fmt(BytePointer setter);
 }

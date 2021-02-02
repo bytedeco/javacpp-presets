@@ -31,7 +31,7 @@ public class PyHalfScalarObject extends Pointer {
         return (PyHalfScalarObject)super.position(position);
     }
     @Override public PyHalfScalarObject getPointer(long i) {
-        return new PyHalfScalarObject(this).position(position + i);
+        return new PyHalfScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyHalfScalarObject ob_base(PyObject setter);

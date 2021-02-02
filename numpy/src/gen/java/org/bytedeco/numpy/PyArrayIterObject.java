@@ -30,7 +30,7 @@ public class PyArrayIterObject extends PyObject {
         return (PyArrayIterObject)super.position(position);
     }
     @Override public PyArrayIterObject getPointer(long i) {
-        return new PyArrayIterObject(this).position(position + i);
+        return new PyArrayIterObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyArrayIterObject ob_base(PyObject setter);

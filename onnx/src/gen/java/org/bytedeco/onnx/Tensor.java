@@ -23,7 +23,7 @@ public class Tensor extends Pointer {
         return (Tensor)super.position(position);
     }
     @Override public Tensor getPointer(long i) {
-        return new Tensor(this).position(position + i);
+        return new Tensor((Pointer)this).position(position + i);
     }
 
   public Tensor() { super((Pointer)null); allocate(); }

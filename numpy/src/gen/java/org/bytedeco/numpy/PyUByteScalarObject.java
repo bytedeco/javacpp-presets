@@ -31,7 +31,7 @@ public class PyUByteScalarObject extends Pointer {
         return (PyUByteScalarObject)super.position(position);
     }
     @Override public PyUByteScalarObject getPointer(long i) {
-        return new PyUByteScalarObject(this).position(position + i);
+        return new PyUByteScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyUByteScalarObject ob_base(PyObject setter);

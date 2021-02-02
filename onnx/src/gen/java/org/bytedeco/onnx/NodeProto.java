@@ -24,7 +24,7 @@ public class NodeProto extends MessageLite {
         return (NodeProto)super.position(position);
     }
     @Override public NodeProto getPointer(long i) {
-        return new NodeProto(this).position(position + i);
+        return new NodeProto((Pointer)this).position(position + i);
     }
 
   public NodeProto() { super((Pointer)null); allocate(); }

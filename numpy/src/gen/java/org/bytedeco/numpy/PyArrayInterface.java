@@ -16,8 +16,8 @@ import static org.bytedeco.numpy.global.numpy.*;
 
 
 /************************************************************
- * This is the form of the struct that's returned pointed by the
- * PyCObject attribute of an array __array_struct__. See
+ * This is the form of the struct that's stored in the
+ * PyCapsule returned by an array's __array_struct__ attribute. See
  * https://docs.scipy.org/doc/numpy/reference/arrays.interface.html for the full
  * documentation.
  ************************************************************/
@@ -36,7 +36,7 @@ public class PyArrayInterface extends Pointer {
         return (PyArrayInterface)super.position(position);
     }
     @Override public PyArrayInterface getPointer(long i) {
-        return new PyArrayInterface(this).position(position + i);
+        return new PyArrayInterface((Pointer)this).position(position + i);
     }
 
     public native int two(); public native PyArrayInterface two(int setter);              /*

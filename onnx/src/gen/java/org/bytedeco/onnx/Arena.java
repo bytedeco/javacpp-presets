@@ -76,7 +76,7 @@ public class Arena extends Pointer {
         return (Arena)super.position(position);
     }
     @Override public Arena getPointer(long i) {
-        return new Arena(this).position(position + i);
+        return new Arena((Pointer)this).position(position + i);
     }
 
   // Arena constructor taking custom options. See ArenaOptions below for

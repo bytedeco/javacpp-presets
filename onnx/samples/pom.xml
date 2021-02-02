@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.8.0-1.5.5-SNAPSHOT</version>
+            <version>1.8.1-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

@@ -46,5 +46,6 @@ public class PyHeapTypeObject extends Pointer {
     public native PyObject ht_slots(); public native PyHeapTypeObject ht_slots(PyObject setter);
     public native PyObject ht_qualname(); public native PyHeapTypeObject ht_qualname(PyObject setter);
     public native @Cast("_dictkeysobject*") PyDictKeysObject ht_cached_keys(); public native PyHeapTypeObject ht_cached_keys(PyDictKeysObject setter);
+    public native PyObject ht_module(); public native PyHeapTypeObject ht_module(PyObject setter);
     /* here are optional user slots, followed by the members. */
 }

@@ -24,7 +24,7 @@ public class FunctionProto extends MessageLite {
         return (FunctionProto)super.position(position);
     }
     @Override public FunctionProto getPointer(long i) {
-        return new FunctionProto(this).position(position + i);
+        return new FunctionProto((Pointer)this).position(position + i);
     }
 
   public FunctionProto() { super((Pointer)null); allocate(); }

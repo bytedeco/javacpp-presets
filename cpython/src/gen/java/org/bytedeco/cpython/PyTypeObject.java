@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-@Properties(inherit = org.bytedeco.cpython.presets.python.class)
+@Name("_typeobject") @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyTypeObject extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -110,18 +110,4 @@ public class PyTypeObject extends Pointer {
 
     public native destructor tp_finalize(); public native PyTypeObject tp_finalize(destructor setter);
     public native vectorcallfunc tp_vectorcall(); public native PyTypeObject tp_vectorcall(vectorcallfunc setter);
-
-    /* bpo-37250: kept for backwards compatibility in CPython 3.8 only */
-    public static class Tp_print_PyObject_Pointer_int extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Tp_print_PyObject_Pointer_int(Pointer p) { super(p); }
-        protected Tp_print_PyObject_Pointer_int() { allocate(); }
-        private native void allocate();
-        public native @Deprecated int call(PyObject arg0, @Cast("FILE*") Pointer arg1, int arg2);
-    }
-    public native Tp_print_PyObject_Pointer_int tp_print(); public native PyTypeObject tp_print(Tp_print_PyObject_Pointer_int setter);
-
-// #ifdef COUNT_ALLOCS
-// #endif
 }

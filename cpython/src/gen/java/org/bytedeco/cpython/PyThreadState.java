@@ -38,7 +38,7 @@ public class PyThreadState extends Pointer {
     public native PyInterpreterState interp(); public native PyThreadState interp(PyInterpreterState setter);
 
     /* Borrowed reference to the current frame (it can be NULL) */
-    public native _frame frame(); public native PyThreadState frame(_frame setter);
+    public native PyFrameObject frame(); public native PyThreadState frame(PyFrameObject setter);
     public native int recursion_depth(); public native PyThreadState recursion_depth(int setter);
     public native @Cast("char") byte overflowed(); public native PyThreadState overflowed(byte setter); /* The stack has overflowed. Allow 50 more calls
                         to handle the runtime error. */

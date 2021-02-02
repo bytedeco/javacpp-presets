@@ -27,7 +27,7 @@ public class PostPassAnalysis extends Pointer {
         return (PostPassAnalysis)super.position(position);
     }
     @Override public PostPassAnalysis getPointer(long i) {
-        return new PostPassAnalysis(this).position(position + i);
+        return new PostPassAnalysis((Pointer)this).position(position + i);
     }
 
 }

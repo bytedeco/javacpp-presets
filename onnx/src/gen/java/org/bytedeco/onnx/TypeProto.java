@@ -24,7 +24,7 @@ public class TypeProto extends MessageLite {
         return (TypeProto)super.position(position);
     }
     @Override public TypeProto getPointer(long i) {
-        return new TypeProto(this).position(position + i);
+        return new TypeProto((Pointer)this).position(position + i);
     }
 
   public TypeProto() { super((Pointer)null); allocate(); }

@@ -30,7 +30,7 @@ public class PyDatetimeScalarObject extends Pointer {
         return (PyDatetimeScalarObject)super.position(position);
     }
     @Override public PyDatetimeScalarObject getPointer(long i) {
-        return new PyDatetimeScalarObject(this).position(position + i);
+        return new PyDatetimeScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyDatetimeScalarObject ob_base(PyObject setter);

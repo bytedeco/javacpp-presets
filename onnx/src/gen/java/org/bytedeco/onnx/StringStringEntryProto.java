@@ -24,7 +24,7 @@ public class StringStringEntryProto extends MessageLite {
         return (StringStringEntryProto)super.position(position);
     }
     @Override public StringStringEntryProto getPointer(long i) {
-        return new StringStringEntryProto(this).position(position + i);
+        return new StringStringEntryProto((Pointer)this).position(position + i);
     }
 
   public StringStringEntryProto() { super((Pointer)null); allocate(); }

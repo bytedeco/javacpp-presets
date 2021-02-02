@@ -30,7 +30,7 @@ public class LazyDescriptor extends Pointer {
         return (LazyDescriptor)super.position(position);
     }
     @Override public LazyDescriptor getPointer(long i) {
-        return new LazyDescriptor(this).position(position + i);
+        return new LazyDescriptor((Pointer)this).position(position + i);
     }
 
   // Init function to be called at init time of a descriptor containing

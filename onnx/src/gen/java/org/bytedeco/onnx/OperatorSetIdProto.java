@@ -24,7 +24,7 @@ public class OperatorSetIdProto extends MessageLite {
         return (OperatorSetIdProto)super.position(position);
     }
     @Override public OperatorSetIdProto getPointer(long i) {
-        return new OperatorSetIdProto(this).position(position + i);
+        return new OperatorSetIdProto((Pointer)this).position(position + i);
     }
 
   public OperatorSetIdProto() { super((Pointer)null); allocate(); }

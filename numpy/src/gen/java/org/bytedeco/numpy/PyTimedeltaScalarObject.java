@@ -30,7 +30,7 @@ public class PyTimedeltaScalarObject extends Pointer {
         return (PyTimedeltaScalarObject)super.position(position);
     }
     @Override public PyTimedeltaScalarObject getPointer(long i) {
-        return new PyTimedeltaScalarObject(this).position(position + i);
+        return new PyTimedeltaScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyTimedeltaScalarObject ob_base(PyObject setter);

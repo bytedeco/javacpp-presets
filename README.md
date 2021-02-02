@@ -187,8 +187,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CMINPACK 1.3.7  https://github.com/devernay/cminpack
  * FFTW 3.3.9  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.8.7  https://www.python.org/downloads/
- * NumPy 1.19.x  https://github.com/numpy/numpy
+ * CPython 3.9.1  https://www.python.org/downloads/
+ * NumPy 1.20.x  https://github.com/numpy/numpy
  * SciPy 1.6.x  https://github.com/scipy/scipy
  * Gym 0.18.x  https://github.com/openai/gym
  * LLVM 11.0.x  http://llvm.org/releases/download.html
@@ -205,7 +205,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.8.0  https://github.com/onnx/onnx
+ * ONNX 1.8.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.6.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/tvm

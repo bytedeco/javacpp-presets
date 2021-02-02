@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 OPENSSL=openssl-1.1.1i
-CPYTHON_VERSION=3.8.7
+CPYTHON_VERSION=3.9.1
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 
@@ -130,6 +130,8 @@ case $PLATFORM in
         make -s -j $MAKEJ
         make install_sw
         cd ../Python-$CPYTHON_VERSION
+        sedinplace 's/libintl.h//g' configure
+        sedinplace 's/ac_cv_lib_intl_textdomain=yes/ac_cv_lib_intl_textdomain=no/g' configure
         ./configure --prefix=$INSTALL_PATH --enable-shared --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,@loader_path/,-rpath,@loader_path/../,-rpath,@loader_path/../lib/'
         sedinplace 's:-install_name,$(prefix)/lib/:-install_name,@rpath/:g' Makefile
         make -j $MAKEJ
@@ -167,5 +169,6 @@ case $PLATFORM in
 esac
 
 rm -Rf $(find ../ -iname __pycache__)
+#$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH certifi --no-deps
 
 cd ../..

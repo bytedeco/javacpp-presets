@@ -10,9 +10,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #else
-/* PyTypeObject is defined in cpython/object.h */
-// #endif
 
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyType_Slot extends Pointer {

@@ -30,7 +30,7 @@ public class npy_clongdouble extends Pointer {
         return (npy_clongdouble)super.position(position);
     }
     @Override public npy_clongdouble getPointer(long i) {
-        return new npy_clongdouble(this).position(position + i);
+        return new npy_clongdouble((Pointer)this).position(position + i);
     }
  public native @Cast("npy_longdouble") double real(); public native npy_clongdouble real(double setter);
 public native @Cast("npy_longdouble") double imag(); public native npy_clongdouble imag(double setter); }

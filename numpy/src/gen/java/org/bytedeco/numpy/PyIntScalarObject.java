@@ -31,7 +31,7 @@ public class PyIntScalarObject extends Pointer {
         return (PyIntScalarObject)super.position(position);
     }
     @Override public PyIntScalarObject getPointer(long i) {
-        return new PyIntScalarObject(this).position(position + i);
+        return new PyIntScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyIntScalarObject ob_base(PyObject setter);

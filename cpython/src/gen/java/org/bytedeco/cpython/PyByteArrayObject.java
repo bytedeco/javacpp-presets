@@ -10,19 +10,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-
-/* Type PyByteArrayObject represents a mutable array of bytes.
- * The Python API is that of a sequence;
- * the bytes are mapped to ints in [0, 256).
- * Bytes are not characters; they may be used to encode characters.
- * The only way to go between bytes and str/unicode is via encoding
- * and decoding.
- * For the convenience of C programmers, the bytes type is considered
- * to contain a char pointer, not an unsigned char pointer.
- */
+// #endif
 
 /* Object layout */
-// #ifndef Py_LIMITED_API
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyByteArrayObject extends Pointer {
     static { Loader.load(); }
@@ -42,9 +32,8 @@ public class PyByteArrayObject extends Pointer {
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyByteArrayObject ob_base(PyVarObject setter);
-    public native @Cast("Py_ssize_t") long ob_alloc(); public native PyByteArrayObject ob_alloc(long setter); /* How many bytes allocated in ob_bytes */
-    public native @Cast("char*") BytePointer ob_bytes(); public native PyByteArrayObject ob_bytes(BytePointer setter);      /* Physical backing buffer */
-    public native @Cast("char*") BytePointer ob_start(); public native PyByteArrayObject ob_start(BytePointer setter);      /* Logical start inside ob_bytes */
-    /* XXX(nnorwitz): should ob_exports be Py_ssize_t? */
-    public native int ob_exports(); public native PyByteArrayObject ob_exports(int setter);      /* How many buffer exports */
+    public native @Cast("Py_ssize_t") long ob_alloc(); public native PyByteArrayObject ob_alloc(long setter);   /* How many bytes allocated in ob_bytes */
+    public native @Cast("char*") BytePointer ob_bytes(); public native PyByteArrayObject ob_bytes(BytePointer setter);        /* Physical backing buffer */
+    public native @Cast("char*") BytePointer ob_start(); public native PyByteArrayObject ob_start(BytePointer setter);        /* Logical start inside ob_bytes */
+    public native @Cast("Py_ssize_t") long ob_exports(); public native PyByteArrayObject ob_exports(long setter); /* How many buffer exports */
 }

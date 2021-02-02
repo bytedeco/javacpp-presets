@@ -24,7 +24,7 @@ public class TypeProto_Tensor extends MessageLite {
         return (TypeProto_Tensor)super.position(position);
     }
     @Override public TypeProto_Tensor getPointer(long i) {
-        return new TypeProto_Tensor(this).position(position + i);
+        return new TypeProto_Tensor((Pointer)this).position(position + i);
     }
 
   public TypeProto_Tensor() { super((Pointer)null); allocate(); }

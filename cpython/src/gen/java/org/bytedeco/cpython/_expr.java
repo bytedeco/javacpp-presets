@@ -95,7 +95,7 @@ public class _expr extends Pointer {
             @Name("v.Attribute.ctx") public native @Cast("expr_context_ty") int v_Attribute_ctx(); public native _expr v_Attribute_ctx(int setter);
 
             @Name("v.Subscript.value") public native _expr v_Subscript_value(); public native _expr v_Subscript_value(_expr setter);
-            @Name("v.Subscript.slice") public native _slice v_Subscript_slice(); public native _expr v_Subscript_slice(_slice setter);
+            @Name("v.Subscript.slice") public native _expr v_Subscript_slice(); public native _expr v_Subscript_slice(_expr setter);
             @Name("v.Subscript.ctx") public native @Cast("expr_context_ty") int v_Subscript_ctx(); public native _expr v_Subscript_ctx(int setter);
 
             @Name("v.Starred.value") public native _expr v_Starred_value(); public native _expr v_Starred_value(_expr setter);
@@ -109,6 +109,10 @@ public class _expr extends Pointer {
 
             @Name("v.Tuple.elts") public native asdl_seq v_Tuple_elts(); public native _expr v_Tuple_elts(asdl_seq setter);
             @Name("v.Tuple.ctx") public native @Cast("expr_context_ty") int v_Tuple_ctx(); public native _expr v_Tuple_ctx(int setter);
+
+            @Name("v.Slice.lower") public native _expr v_Slice_lower(); public native _expr v_Slice_lower(_expr setter);
+            @Name("v.Slice.upper") public native _expr v_Slice_upper(); public native _expr v_Slice_upper(_expr setter);
+            @Name("v.Slice.step") public native _expr v_Slice_step(); public native _expr v_Slice_step(_expr setter);
     public native int lineno(); public native _expr lineno(int setter);
     public native int col_offset(); public native _expr col_offset(int setter);
     public native int end_lineno(); public native _expr end_lineno(int setter);

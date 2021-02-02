@@ -35,5 +35,5 @@ public class PyObject extends Pointer {
     }
 
     public native @Cast("Py_ssize_t") long ob_refcnt(); public native PyObject ob_refcnt(long setter);
-    public native @Cast("_typeobject*") PyTypeObject ob_type(); public native PyObject ob_type(PyTypeObject setter);
+    public native PyTypeObject ob_type(); public native PyObject ob_type(PyTypeObject setter);
 }

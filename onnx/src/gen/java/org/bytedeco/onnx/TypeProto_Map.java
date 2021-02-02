@@ -24,7 +24,7 @@ public class TypeProto_Map extends MessageLite {
         return (TypeProto_Map)super.position(position);
     }
     @Override public TypeProto_Map getPointer(long i) {
-        return new TypeProto_Map(this).position(position + i);
+        return new TypeProto_Map((Pointer)this).position(position + i);
     }
 
   public TypeProto_Map() { super((Pointer)null); allocate(); }

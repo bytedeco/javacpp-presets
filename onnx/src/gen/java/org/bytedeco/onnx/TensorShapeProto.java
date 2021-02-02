@@ -24,7 +24,7 @@ public class TensorShapeProto extends MessageLite {
         return (TensorShapeProto)super.position(position);
     }
     @Override public TensorShapeProto getPointer(long i) {
-        return new TensorShapeProto(this).position(position + i);
+        return new TensorShapeProto((Pointer)this).position(position + i);
     }
 
   public TensorShapeProto() { super((Pointer)null); allocate(); }

@@ -24,7 +24,7 @@ public class ModelProto extends MessageLite {
         return (ModelProto)super.position(position);
     }
     @Override public ModelProto getPointer(long i) {
-        return new ModelProto(this).position(position + i);
+        return new ModelProto((Pointer)this).position(position + i);
     }
 
   public ModelProto() { super((Pointer)null); allocate(); }

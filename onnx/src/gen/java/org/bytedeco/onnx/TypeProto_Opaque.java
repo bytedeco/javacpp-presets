@@ -24,7 +24,7 @@ public class TypeProto_Opaque extends MessageLite {
         return (TypeProto_Opaque)super.position(position);
     }
     @Override public TypeProto_Opaque getPointer(long i) {
-        return new TypeProto_Opaque(this).position(position + i);
+        return new TypeProto_Opaque((Pointer)this).position(position + i);
     }
 
   public TypeProto_Opaque() { super((Pointer)null); allocate(); }

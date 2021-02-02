@@ -27,7 +27,7 @@ public class SourceLocation extends Pointer {
         return (SourceLocation)super.position(position);
     }
     @Override public SourceLocation getPointer(long i) {
-        return new SourceLocation(this).position(position + i);
+        return new SourceLocation((Pointer)this).position(position + i);
     }
 
   public native int start_line(); public native SourceLocation start_line(int setter);

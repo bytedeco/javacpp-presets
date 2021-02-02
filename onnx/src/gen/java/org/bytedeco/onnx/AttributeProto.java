@@ -24,7 +24,7 @@ public class AttributeProto extends MessageLite {
         return (AttributeProto)super.position(position);
     }
     @Override public AttributeProto getPointer(long i) {
-        return new AttributeProto(this).position(position + i);
+        return new AttributeProto((Pointer)this).position(position + i);
     }
 
   public AttributeProto() { super((Pointer)null); allocate(); }

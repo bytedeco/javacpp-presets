@@ -24,7 +24,7 @@ public class OperatorProto extends MessageLite {
         return (OperatorProto)super.position(position);
     }
     @Override public OperatorProto getPointer(long i) {
-        return new OperatorProto(this).position(position + i);
+        return new OperatorProto((Pointer)this).position(position + i);
     }
 
   public OperatorProto() { super((Pointer)null); allocate(); }

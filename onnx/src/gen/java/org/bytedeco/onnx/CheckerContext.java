@@ -23,7 +23,7 @@ public class CheckerContext extends Pointer {
         return (CheckerContext)super.position(position);
     }
     @Override public CheckerContext getPointer(long i) {
-        return new CheckerContext(this).position(position + i);
+        return new CheckerContext((Pointer)this).position(position + i);
     }
 
   public native int get_ir_version();

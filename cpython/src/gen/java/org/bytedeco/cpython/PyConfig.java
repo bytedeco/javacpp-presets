@@ -36,7 +36,7 @@ public class PyConfig extends Pointer {
 
     public native int isolated(); public native PyConfig isolated(int setter);         /* Isolated mode? see PyPreConfig.isolated */
     public native int use_environment(); public native PyConfig use_environment(int setter);  /* Use environment variables? see PyPreConfig.use_environment */
-    public native int dev_mode(); public native PyConfig dev_mode(int setter);         /* Development mode? See PyPreConfig.dev_mode */
+    public native int dev_mode(); public native PyConfig dev_mode(int setter);         /* Python Development Mode? See PyPreConfig.dev_mode */
 
     /* Install signal handlers? Yes by default. */
     public native int install_signal_handlers(); public native PyConfig install_signal_handlers(int setter);
@@ -48,13 +48,16 @@ public class PyConfig extends Pointer {
        Set to 1 by -X faulthandler and PYTHONFAULTHANDLER. -1 means unset. */
     public native int faulthandler(); public native PyConfig faulthandler(int setter);
 
+    /* Enable PEG parser?
+       1 by default, set to 0 by -X oldparser and PYTHONOLDPARSER */
+    public native int _use_peg_parser(); public native PyConfig _use_peg_parser(int setter);
+
     /* Enable tracemalloc?
        Set by -X tracemalloc=N and PYTHONTRACEMALLOC. -1 means unset */
     public native int tracemalloc(); public native PyConfig tracemalloc(int setter);
 
     public native int import_time(); public native PyConfig import_time(int setter);        /* PYTHONPROFILEIMPORTTIME, -X importtime */
     public native int show_ref_count(); public native PyConfig show_ref_count(int setter);     /* -X showrefcount */
-    public native int show_alloc_count(); public native PyConfig show_alloc_count(int setter);   /* -X showalloccount */
     public native int dump_refs(); public native PyConfig dump_refs(int setter);          /* PYTHONDUMPREFS */
     public native int malloc_stats(); public native PyConfig malloc_stats(int setter);       /* PYTHONMALLOCSTATS */
 
@@ -277,6 +280,7 @@ public class PyConfig extends Pointer {
     public native @Cast("wchar_t*") Pointer base_prefix(); public native PyConfig base_prefix(Pointer setter);       /* sys.base_prefix */
     public native @Cast("wchar_t*") Pointer exec_prefix(); public native PyConfig exec_prefix(Pointer setter);       /* sys.exec_prefix */
     public native @Cast("wchar_t*") Pointer base_exec_prefix(); public native PyConfig base_exec_prefix(Pointer setter);  /* sys.base_exec_prefix */
+    public native @Cast("wchar_t*") Pointer platlibdir(); public native PyConfig platlibdir(Pointer setter);        /* sys.platlibdir */
 
     /* --- Parameter only used by Py_Main() ---------- */
 
@@ -298,4 +302,16 @@ public class PyConfig extends Pointer {
 
     /* If equal to 0, stop Python initialization before the "main" phase */
     public native int _init_main(); public native PyConfig _init_main(int setter);
+
+    /* If non-zero, disallow threads, subprocesses, and fork.
+       Default: 0. */
+    public native int _isolated_interpreter(); public native PyConfig _isolated_interpreter(int setter);
+
+    /* Original command line arguments. If _orig_argv is empty and _argv is
+       not equal to [''], PyConfig_Read() copies the configuration 'argv' list
+       into '_orig_argv' list before modifying 'argv' list (if parse_argv
+       is non-zero).
+
+       _PyConfig_Write() initializes Py_GetArgcArgv() to this list. */
+    public native @ByRef PyWideStringList _orig_argv(); public native PyConfig _orig_argv(PyWideStringList setter);
 }
