@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * NumPy 1.19.5  http://www.numpy.org/
+ * NumPy 1.20.0  http://www.numpy.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -48,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.19.5-1.5.5-SNAPSHOT</version>
+            <version>1.20.0-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->

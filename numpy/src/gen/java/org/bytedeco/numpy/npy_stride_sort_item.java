@@ -34,7 +34,7 @@ public class npy_stride_sort_item extends Pointer {
         return (npy_stride_sort_item)super.position(position);
     }
     @Override public npy_stride_sort_item getPointer(long i) {
-        return new npy_stride_sort_item(this).position(position + i);
+        return new npy_stride_sort_item((Pointer)this).position(position + i);
     }
 
     public native @Cast("npy_intp") long perm(); public native npy_stride_sort_item perm(long setter);

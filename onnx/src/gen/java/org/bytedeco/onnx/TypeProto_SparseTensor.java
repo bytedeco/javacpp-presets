@@ -24,7 +24,7 @@ public class TypeProto_SparseTensor extends MessageLite {
         return (TypeProto_SparseTensor)super.position(position);
     }
     @Override public TypeProto_SparseTensor getPointer(long i) {
-        return new TypeProto_SparseTensor(this).position(position + i);
+        return new TypeProto_SparseTensor((Pointer)this).position(position + i);
     }
 
   public TypeProto_SparseTensor() { super((Pointer)null); allocate(); }

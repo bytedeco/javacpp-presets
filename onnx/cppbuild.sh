@@ -13,7 +13,7 @@ if [[ $PLATFORM == windows* ]]; then
     exit 1
 fi
 
-export ONNX=1.8.0
+export ONNX=1.8.1
 export PROTO=3.7.1
 export PYBIND=2.6.0
 

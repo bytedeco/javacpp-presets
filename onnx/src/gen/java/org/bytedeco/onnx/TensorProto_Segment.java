@@ -24,7 +24,7 @@ public class TensorProto_Segment extends MessageLite {
         return (TensorProto_Segment)super.position(position);
     }
     @Override public TensorProto_Segment getPointer(long i) {
-        return new TensorProto_Segment(this).position(position + i);
+        return new TensorProto_Segment((Pointer)this).position(position + i);
     }
 
   public TensorProto_Segment() { super((Pointer)null); allocate(); }

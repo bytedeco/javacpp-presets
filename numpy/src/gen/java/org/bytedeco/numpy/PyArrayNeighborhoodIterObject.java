@@ -30,7 +30,7 @@ public class PyArrayNeighborhoodIterObject extends Pointer {
         return (PyArrayNeighborhoodIterObject)super.position(position);
     }
     @Override public PyArrayNeighborhoodIterObject getPointer(long i) {
-        return new PyArrayNeighborhoodIterObject(this).position(position + i);
+        return new PyArrayNeighborhoodIterObject((Pointer)this).position(position + i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyArrayNeighborhoodIterObject ob_base(PyObject setter);

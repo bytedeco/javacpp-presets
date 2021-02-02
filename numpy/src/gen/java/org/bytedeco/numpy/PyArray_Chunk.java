@@ -32,7 +32,7 @@ public class PyArray_Chunk extends Pointer {
         return (PyArray_Chunk)super.position(position);
     }
     @Override public PyArray_Chunk getPointer(long i) {
-        return new PyArray_Chunk(this).position(position + i);
+        return new PyArray_Chunk((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyArray_Chunk ob_base(PyObject setter);

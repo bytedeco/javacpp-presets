@@ -33,7 +33,7 @@ public class PyUFunc_Loop1d extends Pointer {
         return (PyUFunc_Loop1d)super.position(position);
     }
     @Override public PyUFunc_Loop1d getPointer(long i) {
-        return new PyUFunc_Loop1d(this).position(position + i);
+        return new PyUFunc_Loop1d((Pointer)this).position(position + i);
     }
 
         public native PyUFuncGenericFunction func(); public native PyUFunc_Loop1d func(PyUFuncGenericFunction setter);

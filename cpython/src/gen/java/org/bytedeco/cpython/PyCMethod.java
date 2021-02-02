@@ -11,11 +11,12 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
-public class PyNoArgsFunction extends FunctionPointer {
+public class PyCMethod extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    PyNoArgsFunction(Pointer p) { super(p); }
-    protected PyNoArgsFunction() { allocate(); }
+    public    PyCMethod(Pointer p) { super(p); }
+    protected PyCMethod() { allocate(); }
     private native void allocate();
-    public native PyObject call(PyObject arg0);
+    public native PyObject call(PyObject arg0, PyTypeObject arg1, @Cast("PyObject*const*") PointerPointer arg2,
+                               @Cast("size_t") long arg3, PyObject arg4);
 }

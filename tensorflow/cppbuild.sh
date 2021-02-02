@@ -61,11 +61,11 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
-        if [[ -f "$P/include/python3.8/Python.h" ]]; then
+        if [[ -f "$P/include/python3.9/Python.h" ]]; then
             CPYTHON_PATH="$P"
-            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.8"
-            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.8/"
-            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.8/"
+            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
+            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
+            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
             chmod +x "$PYTHON_BIN_PATH"
         elif [[ -f "$P/include/Python.h" ]]; then

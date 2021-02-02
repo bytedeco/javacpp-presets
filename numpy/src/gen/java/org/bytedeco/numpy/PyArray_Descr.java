@@ -30,7 +30,7 @@ public class PyArray_Descr extends Pointer {
         return (PyArray_Descr)super.position(position);
     }
     @Override public PyArray_Descr getPointer(long i) {
-        return new PyArray_Descr(this).position(position + i);
+        return new PyArray_Descr((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyArray_Descr ob_base(PyObject setter);

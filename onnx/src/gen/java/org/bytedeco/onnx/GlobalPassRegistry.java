@@ -24,7 +24,7 @@ public class GlobalPassRegistry extends Pointer {
         return (GlobalPassRegistry)super.position(position);
     }
     @Override public GlobalPassRegistry getPointer(long i) {
-        return new GlobalPassRegistry(this).position(position + i);
+        return new GlobalPassRegistry((Pointer)this).position(position + i);
     }
 
   public native @ByRef StringPassMap passes(); public native GlobalPassRegistry passes(StringPassMap setter);

@@ -30,7 +30,7 @@ public class PyArray_ArrFuncs extends Pointer {
         return (PyArray_ArrFuncs)super.position(position);
     }
     @Override public PyArray_ArrFuncs getPointer(long i) {
-        return new PyArray_ArrFuncs(this).position(position + i);
+        return new PyArray_ArrFuncs((Pointer)this).position(position + i);
     }
 
         /*

@@ -24,7 +24,7 @@ public class TypeProto_Sequence extends MessageLite {
         return (TypeProto_Sequence)super.position(position);
     }
     @Override public TypeProto_Sequence getPointer(long i) {
-        return new TypeProto_Sequence(this).position(position + i);
+        return new TypeProto_Sequence((Pointer)this).position(position + i);
     }
 
   public TypeProto_Sequence() { super((Pointer)null); allocate(); }

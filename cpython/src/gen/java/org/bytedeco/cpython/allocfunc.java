@@ -17,5 +17,5 @@ public class allocfunc extends FunctionPointer {
     public    allocfunc(Pointer p) { super(p); }
     protected allocfunc() { allocate(); }
     private native void allocate();
-    public native PyObject call(@Cast("_typeobject*") PyTypeObject arg0, @Cast("Py_ssize_t") long arg1);
+    public native PyObject call(PyTypeObject arg0, @Cast("Py_ssize_t") long arg1);
 }

@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-// #ifndef Py_LIMITED_API
+
 /* The _PyBytesWriter structure is big: it contains an embedded "stack buffer".
    A _PyBytesWriter variable must be declared at the end of variables in a
    function to optimize the memory allocation on the stack. */

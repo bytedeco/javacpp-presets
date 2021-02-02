@@ -30,7 +30,7 @@ public class PyArray_Dims extends Pointer {
         return (PyArray_Dims)super.position(position);
     }
     @Override public PyArray_Dims getPointer(long i) {
-        return new PyArray_Dims(this).position(position + i);
+        return new PyArray_Dims((Pointer)this).position(position + i);
     }
 
         public native @Cast("npy_intp*") SizeTPointer ptr(); public native PyArray_Dims ptr(SizeTPointer setter);

@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>onnx</artifactId>
-  <version>1.8.0-${project.parent.version}</version>
+  <version>1.8.1-${project.parent.version}</version>
   <name>JavaCPP Presets for ONNX</name>
 
   <dependencies>

@@ -91,7 +91,11 @@ public class PyPreConfig extends Pointer {
        "POSIX", otherwise it is set to 0. Inherit Py_UTF8Mode value value. */
     public native int utf8_mode(); public native PyPreConfig utf8_mode(int setter);
 
-    public native int dev_mode(); public native PyPreConfig dev_mode(int setter);           /* Development mode. PYTHONDEVMODE, -X dev */
+    /* If non-zero, enable the Python Development Mode.
+
+       Set to 1 by the -X dev command line option. Set by the PYTHONDEVMODE
+       environment variable. */
+    public native int dev_mode(); public native PyPreConfig dev_mode(int setter);
 
     /* Memory allocator: PYTHONMALLOC env var.
        See PyMemAllocatorName for valid values. */

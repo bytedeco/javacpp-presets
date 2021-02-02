@@ -31,4 +31,8 @@ public class _keyword extends Pointer {
 
     public native @Cast("identifier") PyObject arg(); public native _keyword arg(PyObject setter);
     public native _expr value(); public native _keyword value(_expr setter);
+    public native int lineno(); public native _keyword lineno(int setter);
+    public native int col_offset(); public native _keyword col_offset(int setter);
+    public native int end_lineno(); public native _keyword end_lineno(int setter);
+    public native int end_col_offset(); public native _keyword end_col_offset(int setter);
 }

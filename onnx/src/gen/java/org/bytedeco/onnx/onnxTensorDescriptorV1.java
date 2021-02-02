@@ -26,7 +26,7 @@ public class onnxTensorDescriptorV1 extends Pointer {
         return (onnxTensorDescriptorV1)super.position(position);
     }
     @Override public onnxTensorDescriptorV1 getPointer(long i) {
-        return new onnxTensorDescriptorV1(this).position(position + i);
+        return new onnxTensorDescriptorV1((Pointer)this).position(position + i);
     }
 
   /**

@@ -26,7 +26,7 @@ public class FunctionBodyHelper extends Pointer {
         return (FunctionBodyHelper)super.position(position);
     }
     @Override public FunctionBodyHelper getPointer(long i) {
-        return new FunctionBodyHelper(this).position(position + i);
+        return new FunctionBodyHelper((Pointer)this).position(position + i);
     }
 
   @NoOffset public static class AttributeProtoWrapper extends Pointer {
@@ -40,7 +40,7 @@ public class FunctionBodyHelper extends Pointer {
           return (AttributeProtoWrapper)super.position(position);
       }
       @Override public AttributeProtoWrapper getPointer(long i) {
-          return new AttributeProtoWrapper(this).position(position + i);
+          return new AttributeProtoWrapper((Pointer)this).position(position + i);
       }
   
     public native @ByRef AttributeProto proto(); public native AttributeProtoWrapper proto(AttributeProto setter);

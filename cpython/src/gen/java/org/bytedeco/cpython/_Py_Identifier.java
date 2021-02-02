@@ -10,7 +10,10 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
+
+// #ifdef Py_REF_DEBUG
 // #endif
+
 
 /********************* String Literals ****************************************/
 /* This structure helps managing static strings. The basic usage goes like this:
@@ -26,7 +29,7 @@ import static org.bytedeco.cpython.global.python.*;
 
    PyId_foo is a static variable, either on block level or file level. On first
    usage, the string "foo" is interned, and the structures are linked. On interpreter
-   shutdown, all strings are released (through _PyUnicode_ClearStaticStrings).
+   shutdown, all strings are released.
 
    Alternatively, _Py_static_string allows choosing the variable name.
    _PyUnicode_FromId returns a borrowed reference to the interned string.

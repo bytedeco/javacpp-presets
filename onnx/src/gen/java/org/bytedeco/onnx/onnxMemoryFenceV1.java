@@ -26,7 +26,7 @@ public class onnxMemoryFenceV1 extends Pointer {
         return (onnxMemoryFenceV1)super.position(position);
     }
     @Override public onnxMemoryFenceV1 getPointer(long i) {
-        return new onnxMemoryFenceV1(this).position(position + i);
+        return new onnxMemoryFenceV1((Pointer)this).position(position + i);
     }
 
   /**

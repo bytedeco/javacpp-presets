@@ -27,7 +27,7 @@ public class OpSet_Onnx_ver4 extends Pointer {
         return (OpSet_Onnx_ver4)super.position(position);
     }
     @Override public OpSet_Onnx_ver4 getPointer(long i) {
-        return new OpSet_Onnx_ver4(this).position(position + i);
+        return new OpSet_Onnx_ver4((Pointer)this).position(position + i);
     }
 
 }

@@ -17,5 +17,5 @@ public class newfunc extends FunctionPointer {
     public    newfunc(Pointer p) { super(p); }
     protected newfunc() { allocate(); }
     private native void allocate();
-    public native PyObject call(@Cast("_typeobject*") PyTypeObject arg0, PyObject arg1, PyObject arg2);
+    public native PyObject call(PyTypeObject arg0, PyObject arg1, PyObject arg2);
 }

@@ -30,7 +30,7 @@ public class UnknownField extends Pointer {
         return (UnknownField)super.position(position);
     }
     @Override public UnknownField getPointer(long i) {
-        return new UnknownField(this).position(position + i);
+        return new UnknownField((Pointer)this).position(position + i);
     }
 
   /** enum google::protobuf::UnknownField::Type */

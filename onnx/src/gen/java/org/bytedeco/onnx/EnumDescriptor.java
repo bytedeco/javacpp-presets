@@ -88,7 +88,7 @@ public class EnumDescriptor extends Pointer {
           return (ReservedRange)super.position(position);
       }
       @Override public ReservedRange getPointer(long i) {
-          return new ReservedRange(this).position(position + i);
+          return new ReservedRange((Pointer)this).position(position + i);
       }
   
     public native int start(); public native ReservedRange start(int setter);  // inclusive

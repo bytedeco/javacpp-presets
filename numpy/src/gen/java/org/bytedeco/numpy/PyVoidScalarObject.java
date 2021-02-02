@@ -31,7 +31,7 @@ public class PyVoidScalarObject extends Pointer {
         return (PyVoidScalarObject)super.position(position);
     }
     @Override public PyVoidScalarObject getPointer(long i) {
-        return new PyVoidScalarObject(this).position(position + i);
+        return new PyVoidScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyVarObject ob_base(); public native PyVoidScalarObject ob_base(PyVarObject setter);
@@ -39,4 +39,5 @@ public class PyVoidScalarObject extends Pointer {
         public native PyArray_Descr descr(); public native PyVoidScalarObject descr(PyArray_Descr setter);
         public native int flags(); public native PyVoidScalarObject flags(int setter);
         public native PyObject base(); public native PyVoidScalarObject base(PyObject setter);
+        public native Pointer _buffer_info(); public native PyVoidScalarObject _buffer_info(Pointer setter);  /* private buffer info, tagged to allow warning */
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Samuel Audet
+ * Copyright (C) 2019-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,11 +41,11 @@ import org.bytedeco.javacpp.annotation.Properties;
     inherit = org.bytedeco.cpython.presets.python.class,
     value = {
         @Platform(
-            executable = "python3.8"
+            executable = "python3.9"
         ),
         @Platform(
             value = "macosx",
-            executable = "python3.8"
+            executable = "python3.9"
         ),
         @Platform(
             value = "windows",

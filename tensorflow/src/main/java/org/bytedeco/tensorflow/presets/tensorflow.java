@@ -260,7 +260,7 @@ import java.util.List;
                 value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64"},
                 extension = {"-gpu", "-python", "-python-gpu"},
                 link = "tensorflow_cc#",
-                preload = {"iomp5", "mklml", "mklml_intel", "python3.8@.1.0!", "tensorflow_framework", "tensorflow_cc:python/tensorflow/python/_pywrap_tensorflow_internal.so", "tensorflow_cc:libtensorflow_cc.so.1"},
+                preload = {"iomp5", "mklml", "mklml_intel", "python3.9@.1.0!", "tensorflow_framework", "tensorflow_cc:python/tensorflow/python/_pywrap_tensorflow_internal.so", "tensorflow_cc:libtensorflow_cc.so.1"},
                 resource = "python",
                 preloadresource = {"/org/bytedeco/cpython/", "/org/bytedeco/mkldnn/"}),
         @Platform(
@@ -271,7 +271,7 @@ import java.util.List;
 //                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
 //                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
 //                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main", "tf_python_protos_cc", "tf_c_python_api"},
-                preload = {"msvcr120", "libiomp5md", "mklml", "python38"}),
+                preload = {"msvcr120", "libiomp5md", "mklml", "python39"}),
         @Platform(
                 value = "windows-x86_64",
                 extension = {"-gpu", "-python", "-python-gpu"},

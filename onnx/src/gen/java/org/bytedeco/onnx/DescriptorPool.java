@@ -50,7 +50,7 @@ public class DescriptorPool extends Pointer {
         return (DescriptorPool)super.position(position);
     }
     @Override public DescriptorPool getPointer(long i) {
-        return new DescriptorPool(this).position(position + i);
+        return new DescriptorPool((Pointer)this).position(position + i);
     }
 
   // Create a normal, empty DescriptorPool.

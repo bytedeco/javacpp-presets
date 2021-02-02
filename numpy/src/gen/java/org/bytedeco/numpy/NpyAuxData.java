@@ -30,7 +30,7 @@ public class NpyAuxData extends PyObject {
         return (NpyAuxData)super.position(position);
     }
     @Override public NpyAuxData getPointer(long i) {
-        return new NpyAuxData(this).position(position + i);
+        return new NpyAuxData((Pointer)this).position(position + i);
     }
 
     public native @Name("free") NpyAuxData_FreeFunc _free(); public native NpyAuxData _free(NpyAuxData_FreeFunc setter);

@@ -41,7 +41,7 @@ public class PyArrayObject extends PyObject {
         return (PyArrayObject)super.position(position);
     }
     @Override public PyArrayObject getPointer(long i) {
-        return new PyArrayObject(this).position(position + i);
+        return new PyArrayObject((Pointer)this).position(position + i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyArrayObject ob_base(PyObject setter);
@@ -81,4 +81,5 @@ public class PyArrayObject extends PyObject {
     public native int flags(); public native PyArrayObject flags(int setter);
     /* For weak references */
     public native PyObject weakreflist(); public native PyArrayObject weakreflist(PyObject setter);
+    public native Pointer _buffer_info(); public native PyArrayObject _buffer_info(Pointer setter);  /* private buffer info, tagged to allow warning */
 }

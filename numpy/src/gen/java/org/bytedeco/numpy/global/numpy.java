@@ -49,7 +49,7 @@ public static final int NPY_RELAXED_STRIDES_CHECKING = 1;
 public static final int NPY_USE_C99_FORMATS = 1;
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
 public static final int NPY_ABI_VERSION = 0x01000009;
-public static final int NPY_API_VERSION = 0x0000000D;
+public static final int NPY_API_VERSION = 0x0000000E;
 
 // #ifndef __STDC_FORMAT_MACROS
 public static final int __STDC_FORMAT_MACROS = 1;
@@ -97,6 +97,7 @@ public static final int NPY_1_16_API_VERSION = 0x00000008;
 public static final int NPY_1_17_API_VERSION = 0x00000008;
 public static final int NPY_1_18_API_VERSION = 0x00000008;
 public static final int NPY_1_19_API_VERSION = 0x00000008;
+public static final int NPY_1_20_API_VERSION = 0x0000000e;
 
 // #endif
 
@@ -106,23 +107,20 @@ public static final int NPY_1_19_API_VERSION = 0x00000008;
 // #ifndef _NPY_COMMON_H_
 // #define _NPY_COMMON_H_
 
+/* need Python.h for npy_intp, npy_uintp */
+// #include <Python.h>
+
 /* numpconfig.h is auto-generated */
 // #include "numpyconfig.h"
 // #ifdef HAVE_NPY_CONFIG_H
 // #include <npy_config.h>
 // #endif
 
-/* need Python.h for npy_intp, npy_uintp */
-// #include <Python.h>
-
 /*
  * using static inline modifiers when defining npy_math functions
  * allows the compiler to make optimizations when possible
  */
 // #if defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD
-// #ifndef NPY_INLINE_MATH
-public static final int NPY_INLINE_MATH = 1;
-// #endif
 // #endif
 
 /*
@@ -169,6 +167,13 @@ public static final int NPY_INLINE_MATH = 1;
 // #define NPY_GCC_TARGET_AVX512F
 // #endif
 
+// #if defined HAVE_ATTRIBUTE_TARGET_AVX512_SKX && defined HAVE_LINK_AVX512_SKX
+// #define NPY_GCC_TARGET_AVX512_SKX __attribute__((target("avx512f,avx512dq,avx512vl,avx512bw,avx512cd")))
+// #elif defined HAVE_ATTRIBUTE_TARGET_AVX512_SKX_WITH_INTRINSICS
+// #define NPY_GCC_TARGET_AVX512_SKX __attribute__((target("avx512f,avx512dq,avx512vl,avx512bw,avx512cd")))
+// #else
+// #define NPY_GCC_TARGET_AVX512_SKX
+// #endif
 /*
  * mark an argument (starting from 1) that must not be NULL and is not checked
  * DO NOT USE IF FUNCTION CHECKS FOR NULL!! the compiler will remove the check
@@ -237,6 +242,14 @@ public static final int NPY_INLINE_MATH = 1;
 //     #endif
 // #else
 //     #define NPY_INLINE
+// #endif
+
+// #ifdef _MSC_VER
+//     #define NPY_FINLINE static __forceinline
+// #elif defined(__GNUC__)
+//     #define NPY_FINLINE static NPY_INLINE __attribute__((always_inline))
+// #else
+//     #define NPY_FINLINE static
 // #endif
 
 // #ifdef HAVE___THREAD
@@ -322,11 +335,10 @@ public static final String NPY_SSIZE_T_PYFMT = "n";
 // #define constchar char
 
 /* NPY_INTP_FMT Note:
- *      Unlike the other NPY_*_FMT macros which are used with
- *      PyOS_snprintf, NPY_INTP_FMT is used with PyErr_Format and
- *      PyString_Format. These functions use different formatting
- *      codes which are portably specified according to the Python
- *      documentation. See ticket #1795.
+ *      Unlike the other NPY_*_FMT macros, which are used with PyOS_snprintf,
+ *      NPY_INTP_FMT is used with PyErr_Format and PyUnicode_FromFormat. Those
+ *      functions use different formatting codes that are portably specified
+ *      according to the Python documentation. See issue gh-2388.
  */
 // #if NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_INT
 // #elif NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_LONG
@@ -907,7 +919,6 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 // #define _NPY_CPUARCH_H_
 
 // #include "numpyconfig.h"
-// #include <string.h> /* for memcpy */
 
 // #if defined( __i386__ ) || defined(i386) || defined(_M_IX86)
     /*
@@ -993,8 +1004,6 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #error Unknown CPU, please report this to numpy maintainers with
 //     information about your platform (OS, CPU and compiler)
 // #endif
-
-// #define NPY_COPY_PYOBJECT_PTR(dst, src) memcpy(dst, src, sizeof(PyObject *))
 
 // #if (defined(NPY_CPU_X86) || defined(NPY_CPU_AMD64))
 public static final int NPY_CPU_HAVE_UNALIGNED_ACCESS = 1;
@@ -1141,20 +1150,19 @@ public static final int NPY_CPU_HAVE_UNALIGNED_ACCESS = 1;
 // #ifdef __cplusplus
 // #endif
 
+// #include <numpy/npy_common.h>
+
 // #include <math.h>
 // #ifdef __SUNPRO_CC
 // #include <sunmath.h>
 // #endif
-// #ifdef HAVE_NPY_CONFIG_H
-// #include <npy_config.h>
-// #endif
-// #include <numpy/npy_common.h>
 
 /* By adding static inline specifiers to npy_math function definitions when
    appropriate, compiler is given the opportunity to optimize */
 // #if NPY_INLINE_MATH
 // #define NPY_INPLACE NPY_INLINE static
 // #else
+// #define NPY_INPLACE
 // #endif
 
 
@@ -1791,21 +1799,37 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 // #define __NUMPY_UTILS_HEADER__
 
 // #ifndef __COMP_NPY_UNUSED
-//         #if defined(__GNUC__)
-//                 #define __COMP_NPY_UNUSED __attribute__ ((__unused__))
-//         # elif defined(__ICC)
-//                 #define __COMP_NPY_UNUSED __attribute__ ((__unused__))
-//         # elif defined(__clang__)
-//                 #define __COMP_NPY_UNUSED __attribute__ ((unused))
-//         #else
-//                 #define __COMP_NPY_UNUSED
-//         #endif
+//     #if defined(__GNUC__)
+//         #define __COMP_NPY_UNUSED __attribute__ ((__unused__))
+//     #elif defined(__ICC)
+//         #define __COMP_NPY_UNUSED __attribute__ ((__unused__))
+//     #elif defined(__clang__)
+//         #define __COMP_NPY_UNUSED __attribute__ ((unused))
+//     #else
+//         #define __COMP_NPY_UNUSED
+//     #endif
+// #endif
+
+// #if defined(__GNUC__) || defined(__ICC) || defined(__clang__)
+//     #define NPY_DECL_ALIGNED(x) __attribute__ ((aligned (x)))
+// #elif defined(_MSC_VER)
+//     #define NPY_DECL_ALIGNED(x) __declspec(align(x))
+// #else
+//     #define NPY_DECL_ALIGNED(x)
 // #endif
 
 /* Use this to tag a variable as not used. It will remove unused variable
  * warning on support platforms (see __COM_NPY_UNUSED) and mangle the variable
  * to avoid accidental use */
 // #define NPY_UNUSED(x) (__NPY_UNUSED_TAGGED ## x) __COMP_NPY_UNUSED
+// #define NPY_EXPAND(x) x
+
+// #define NPY_STRINGIFY(x) #x
+// #define NPY_TOSTRING(x) NPY_STRINGIFY(x)
+
+// #define NPY_CAT__(a, b) a ## b
+// #define NPY_CAT_(a, b) NPY_CAT__(a, b)
+// #define NPY_CAT(a, b) NPY_CAT_(a, b)
 
 // #endif
 
@@ -1896,8 +1920,7 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 
 
 
-// #define PyStringScalarObject PyStringObject
-// #define PyStringScalarObject PyStringObject
+// #define PyStringScalarObject PyBytesObject
 // Targeting ../PyUnicodeScalarObject.java
 
 
@@ -2149,6 +2172,7 @@ public static final int
 /* For specifying allowed casting in operations which support it */
 /** enum NPY_CASTING */
 public static final int
+        _NPY_ERROR_OCCURRED_IN_CAST = -1,
         /* Only allow identical types */
         NPY_NO_CASTING = 0,
         /* Allow identical and byte swapped types */
@@ -2158,7 +2182,14 @@ public static final int
         /* Allow safe casts or casts within the same kind */
         NPY_SAME_KIND_CASTING = 3,
         /* Allow any casts */
-        NPY_UNSAFE_CASTING = 4;
+        NPY_UNSAFE_CASTING = 4,
+        /*
+         * Flag to allow signalling that a cast is a view, this flag is not
+         * valid when requesting a cast of specific safety.
+         * _NPY_CAST_IS_VIEW|NPY_EQUIV_CASTING means the same as NPY_NO_CASTING.
+         */
+        // TODO-DTYPES: Needs to be documented.
+        _NPY_CAST_IS_VIEW = 1 << 16;
 
 /** enum NPY_CLIPMODE */
 public static final int
@@ -2276,9 +2307,6 @@ public static final int
 
 // #define NPY_ERR(str) fprintf(stderr, #str); fflush(stderr);
 // #define NPY_ERR2(str) fprintf(stderr, str); fflush(stderr);
-
-// #define NPY_STRINGIFY(x) #x
-// #define NPY_TOSTRING(x) NPY_STRINGIFY(x)
 
   /*
    * Macros to define how array, and dimension/strides data is
@@ -2438,10 +2466,6 @@ public static final int NPY_OBJECT_DTYPE_FLAGS = (NPY_LIST_PICKLE | NPY_USE_GETI
  * PyArrayObject field access is deprecated as of NumPy 1.7.
  */
 // #else
-// #endif
-
-public static native @MemberGetter int NPY_SIZEOF_PYARRAYOBJECT();
-public static final int NPY_SIZEOF_PYARRAYOBJECT = NPY_SIZEOF_PYARRAYOBJECT();
 // Targeting ../PyArrayFlagsObject.java
 
 
@@ -3013,6 +3037,11 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 @NoException public static native PyObject PyArray_GETITEM(@Const PyArrayObject arr, @Cast("const char*") BytePointer itemptr);
 @NoException public static native PyObject PyArray_GETITEM(@Const PyArrayObject arr, String itemptr);
 
+/*
+ * SETITEM should only be used if it is known that the value is a scalar
+ * and of a type understood by the arrays dtype.
+ * Use `PyArray_Pack` if the value may be of a different dtype.
+ */
 @NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") BytePointer itemptr, PyObject v);
 @NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") ByteBuffer itemptr, PyObject v);
 @NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") byte[] itemptr, PyObject v);
@@ -3198,6 +3227,17 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
 
 // Targeting ../PyDataMem_EventHookFunc.java
 
+
+
+
+/*
+ * PyArray_DTypeMeta related definitions.
+ *
+ * As of now, this API is preliminary and will be extended as necessary.
+ */
+// #if defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD
+
+// #endif  /* NPY_INTERNAL_BUILD */
 
 
 /*
@@ -3472,6 +3512,7 @@ public static native @ByRef PyTypeObject PyBigArray_Type(); public static native
 public static native @ByRef PyTypeObject PyArray_Type(); public static native void PyArray_Type(PyTypeObject setter);
 
 public static native @ByRef PyTypeObject PyArrayDescr_Type(); public static native void PyArrayDescr_Type(PyTypeObject setter);
+// #define PyArrayDescr_Type (*(PyTypeObject *)(&PyArrayDescr_TypeFull))
 
 public static native @ByRef PyTypeObject PyArrayFlags_Type(); public static native void PyArrayFlags_Type(PyTypeObject setter);
 
@@ -3870,10 +3911,10 @@ public static native @ByRef PyTypeObject NpyIter_Type(); public static native vo
 @NoException public static native PyArrayObject PyArray_EinsteinSum(@Cast("char*") ByteBuffer arg0, @Cast("npy_intp") long arg1, @ByPtrPtr PyArrayObject arg2, PyArray_Descr arg3, @Cast("NPY_ORDER") int arg4, @Cast("NPY_CASTING") int arg5, PyArrayObject arg6);
 @NoException public static native PyArrayObject PyArray_EinsteinSum(@Cast("char*") byte[] arg0, @Cast("npy_intp") long arg1, @ByPtrPtr PyArrayObject arg2, PyArray_Descr arg3, @Cast("NPY_ORDER") int arg4, @Cast("NPY_CASTING") int arg5, PyArrayObject arg6);
 @NoException public static native PyObject PyArray_NewLikeArray(PyArrayObject arg0, @Cast("NPY_ORDER") int arg1, PyArray_Descr arg2, int arg3);
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject arg0, PyArray_Descr arg1, @Cast("npy_bool") byte arg2, @Cast("PyArray_Descr**") PointerPointer arg3, IntPointer arg4, @Cast("npy_intp*") SizeTPointer arg5, @Cast("PyArrayObject**") PointerPointer arg6, PyObject arg7);
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject arg0, PyArray_Descr arg1, @Cast("npy_bool") byte arg2, @ByPtrPtr PyArray_Descr arg3, IntPointer arg4, @Cast("npy_intp*") SizeTPointer arg5, @ByPtrPtr PyArrayObject arg6, PyObject arg7);
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject arg0, PyArray_Descr arg1, @Cast("npy_bool") byte arg2, @ByPtrPtr PyArray_Descr arg3, IntBuffer arg4, @Cast("npy_intp*") SizeTPointer arg5, @ByPtrPtr PyArrayObject arg6, PyObject arg7);
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject arg0, PyArray_Descr arg1, @Cast("npy_bool") byte arg2, @ByPtrPtr PyArray_Descr arg3, int[] arg4, @Cast("npy_intp*") SizeTPointer arg5, @ByPtrPtr PyArrayObject arg6, PyObject arg7);
+@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @Cast("PyArray_Descr**") PointerPointer __NPY_UNUSED_TAGGEDout_dtype, IntPointer __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @Cast("PyArrayObject**") PointerPointer __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
+@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @ByPtrPtr PyArray_Descr __NPY_UNUSED_TAGGEDout_dtype, IntPointer __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @ByPtrPtr PyArrayObject __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
+@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @ByPtrPtr PyArray_Descr __NPY_UNUSED_TAGGEDout_dtype, IntBuffer __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @ByPtrPtr PyArrayObject __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
+@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @ByPtrPtr PyArray_Descr __NPY_UNUSED_TAGGEDout_dtype, int[] __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @ByPtrPtr PyArrayObject __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
 @NoException public static native int PyArray_ConvertClipmodeSequence(PyObject arg0, @Cast("NPY_CLIPMODE*") IntPointer arg1, int arg2);
 @NoException public static native int PyArray_ConvertClipmodeSequence(PyObject arg0, @Cast("NPY_CLIPMODE*") IntBuffer arg1, int arg2);
 @NoException public static native int PyArray_ConvertClipmodeSequence(PyObject arg0, @Cast("NPY_CLIPMODE*") int[] arg1, int arg2);

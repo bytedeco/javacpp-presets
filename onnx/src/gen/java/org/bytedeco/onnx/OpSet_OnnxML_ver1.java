@@ -27,7 +27,7 @@ public class OpSet_OnnxML_ver1 extends Pointer {
         return (OpSet_OnnxML_ver1)super.position(position);
     }
     @Override public OpSet_OnnxML_ver1 getPointer(long i) {
-        return new OpSet_OnnxML_ver1(this).position(position + i);
+        return new OpSet_OnnxML_ver1((Pointer)this).position(position + i);
     }
 
 }

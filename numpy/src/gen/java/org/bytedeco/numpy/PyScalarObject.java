@@ -31,7 +31,7 @@ public class PyScalarObject extends Pointer {
         return (PyScalarObject)super.position(position);
     }
     @Override public PyScalarObject getPointer(long i) {
-        return new PyScalarObject(this).position(position + i);
+        return new PyScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyScalarObject ob_base(PyObject setter);

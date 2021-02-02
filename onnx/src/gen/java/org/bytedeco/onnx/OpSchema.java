@@ -42,7 +42,7 @@ public class OpSchema extends Pointer {
         return (OpSchema)super.position(position);
     }
     @Override public OpSchema getPointer(long i) {
-        return new OpSchema(this).position(position + i);
+        return new OpSchema((Pointer)this).position(position + i);
     }
 
   // Formal parameter options.
@@ -86,7 +86,7 @@ public class OpSchema extends Pointer {
           return (FormalParameter)super.position(position);
       }
       @Override public FormalParameter getPointer(long i) {
-          return new FormalParameter(this).position(position + i);
+          return new FormalParameter((Pointer)this).position(position + i);
       }
   
     // Constructor.

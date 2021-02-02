@@ -33,7 +33,7 @@ public class OpSchemaRegistry extends ISchemaRegistry {
           return (DomainToVersionRange)super.position(position);
       }
       @Override public DomainToVersionRange getPointer(long i) {
-          return new DomainToVersionRange(this).position(position + i);
+          return new DomainToVersionRange((Pointer)this).position(position + i);
       }
   
     public DomainToVersionRange() { super((Pointer)null); allocate(); }

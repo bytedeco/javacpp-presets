@@ -12,7 +12,6 @@ import static org.bytedeco.cpython.global.python.*;
 
 // #endif
 
-// #ifndef Py_LIMITED_API
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyListObject extends Pointer {
     static { Loader.load(); }

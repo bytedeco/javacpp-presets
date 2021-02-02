@@ -372,6 +372,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::Vec3d").cast().pointerTypes("Point3d"))
                .put(new Info("cv::Vec4i").cast().pointerTypes("Scalar4i"))
                .put(new Info("cv::Vec4f").cast().pointerTypes("Scalar4f"))
+               .put(new Info("cv::Vec4d").cast().pointerTypes("Scalar"))
 
                .put(new Info("defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)", "defined __GNUC__",
                              "defined WIN32 || defined _WIN32 || defined WINCE").define(false))

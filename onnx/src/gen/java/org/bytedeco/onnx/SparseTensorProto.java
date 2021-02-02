@@ -24,7 +24,7 @@ public class SparseTensorProto extends MessageLite {
         return (SparseTensorProto)super.position(position);
     }
     @Override public SparseTensorProto getPointer(long i) {
-        return new SparseTensorProto(this).position(position + i);
+        return new SparseTensorProto((Pointer)this).position(position + i);
     }
 
   public SparseTensorProto() { super((Pointer)null); allocate(); }

@@ -35,7 +35,7 @@ public class UnknownFieldSet extends Pointer {
         return (UnknownFieldSet)super.position(position);
     }
     @Override public UnknownFieldSet getPointer(long i) {
-        return new UnknownFieldSet(this).position(position + i);
+        return new UnknownFieldSet((Pointer)this).position(position + i);
     }
 
   public UnknownFieldSet() { super((Pointer)null); allocate(); }

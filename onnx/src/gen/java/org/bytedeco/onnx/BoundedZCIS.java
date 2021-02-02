@@ -26,7 +26,7 @@ public class BoundedZCIS extends Pointer {
         return (BoundedZCIS)super.position(position);
     }
     @Override public BoundedZCIS getPointer(long i) {
-        return new BoundedZCIS(this).position(position + i);
+        return new BoundedZCIS((Pointer)this).position(position + i);
     }
 
   public native ZeroCopyInputStream zcis(); public native BoundedZCIS zcis(ZeroCopyInputStream setter);

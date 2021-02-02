@@ -23,7 +23,7 @@ public class Status extends Pointer {
         return (Status)super.position(position);
     }
     @Override public Status getPointer(long i) {
-        return new Status(this).position(position + i);
+        return new Status((Pointer)this).position(position + i);
     }
 
   public Status() { super((Pointer)null); allocate(); }

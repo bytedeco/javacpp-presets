@@ -38,6 +38,4 @@ public class _mod extends Pointer {
 
             @Name("v.FunctionType.argtypes") public native asdl_seq v_FunctionType_argtypes(); public native _mod v_FunctionType_argtypes(asdl_seq setter);
             @Name("v.FunctionType.returns") public native _expr v_FunctionType_returns(); public native _mod v_FunctionType_returns(_expr setter);
-
-            @Name("v.Suite.body") public native asdl_seq v_Suite_body(); public native _mod v_Suite_body(asdl_seq setter);
 }

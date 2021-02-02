@@ -30,7 +30,7 @@ public class PyArray_DatetimeDTypeMetaData extends Pointer {
         return (PyArray_DatetimeDTypeMetaData)super.position(position);
     }
     @Override public PyArray_DatetimeDTypeMetaData getPointer(long i) {
-        return new PyArray_DatetimeDTypeMetaData(this).position(position + i);
+        return new PyArray_DatetimeDTypeMetaData((Pointer)this).position(position + i);
     }
 
     public native @ByRef NpyAuxData base(); public native PyArray_DatetimeDTypeMetaData base(NpyAuxData setter);

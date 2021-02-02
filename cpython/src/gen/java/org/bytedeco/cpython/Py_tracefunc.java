@@ -21,5 +21,5 @@ public class Py_tracefunc extends FunctionPointer {
     public    Py_tracefunc(Pointer p) { super(p); }
     protected Py_tracefunc() { allocate(); }
     private native void allocate();
-    public native int call(PyObject arg0, _frame arg1, int arg2, PyObject arg3);
+    public native int call(PyObject arg0, PyFrameObject arg1, int arg2, PyObject arg3);
 }

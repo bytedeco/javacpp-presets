@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.8.7-1.5.5-SNAPSHOT</version>
+            <version>3.9.1-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

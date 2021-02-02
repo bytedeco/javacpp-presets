@@ -30,7 +30,7 @@ public class npy_cfloat extends Pointer {
         return (npy_cfloat)super.position(position);
     }
     @Override public npy_cfloat getPointer(long i) {
-        return new npy_cfloat(this).position(position + i);
+        return new npy_cfloat((Pointer)this).position(position + i);
     }
  public native float real(); public native npy_cfloat real(float setter);
 public native float imag(); public native npy_cfloat imag(float setter); }

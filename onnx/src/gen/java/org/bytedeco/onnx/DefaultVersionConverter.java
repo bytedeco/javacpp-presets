@@ -23,7 +23,7 @@ public class DefaultVersionConverter extends BaseVersionConverter {
         return (DefaultVersionConverter)super.position(position);
     }
     @Override public DefaultVersionConverter getPointer(long i) {
-        return new DefaultVersionConverter(this).position(position + i);
+        return new DefaultVersionConverter((Pointer)this).position(position + i);
     }
 
     public DefaultVersionConverter() { super((Pointer)null); allocate(); }

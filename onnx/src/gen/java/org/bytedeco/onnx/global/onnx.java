@@ -4916,7 +4916,8 @@ public static final int
 @Namespace("onnx::shape_inference") public static native void InferShapes(
     @ByRef ModelProto m,
     @Cast("const bool") boolean check_type/*=false*/,
-    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/
+    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
+    int error_mode/*=0*/
     );
 @Namespace("onnx::shape_inference") public static native void InferShapes(
     @ByRef ModelProto m
@@ -4926,7 +4927,8 @@ public static final int
     GraphProto g,
     @Const @ByRef StringIntMap opset_imports,
     @Cast("const bool") boolean check_type/*=false*/,
-    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/
+    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
+    int error_mode/*=0*/
     );
 @Namespace("onnx::shape_inference") public static native void InferShapes(
     GraphProto g,
@@ -4937,7 +4939,8 @@ public static final int
     @StdString BytePointer model_path,
     @Cast("const bool") boolean check_type/*=false*/,
     @StdString BytePointer save_path/*=""*/,
-    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/
+    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
+    int error_mode/*=0*/
     );
 @Namespace("onnx::shape_inference") public static native void InferShapes(
     @StdString BytePointer model_path
@@ -4946,7 +4949,8 @@ public static final int
     @StdString String model_path,
     @Cast("const bool") boolean check_type/*=false*/,
     @StdString String save_path/*=""*/,
-    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/
+    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
+    int error_mode/*=0*/
     );
 @Namespace("onnx::shape_inference") public static native void InferShapes(
     @StdString String model_path

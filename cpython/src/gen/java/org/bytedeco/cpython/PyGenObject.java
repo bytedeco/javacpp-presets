@@ -32,7 +32,7 @@ public class PyGenObject extends Pointer {
     /* The gi_ prefix is intended to remind of generator-iterator. */
     public native @ByRef PyObject ob_base(); public native PyGenObject ob_base(PyObject setter);
     /* Note: gi_frame can be NULL if the generator is "finished" */
-    public native _frame gi_frame(); public native PyGenObject gi_frame(_frame setter);
+    public native PyFrameObject gi_frame(); public native PyGenObject gi_frame(PyFrameObject setter);
     /* True if generator is being executed. */
     public native @Cast("char") byte gi_running(); public native PyGenObject gi_running(byte setter);
     /* The code object backing the generator */

@@ -26,7 +26,7 @@ public class DbgOperatorSetTracker extends Pointer {
         return (DbgOperatorSetTracker)super.position(position);
     }
     @Override public DbgOperatorSetTracker getPointer(long i) {
-        return new DbgOperatorSetTracker(this).position(position + i);
+        return new DbgOperatorSetTracker((Pointer)this).position(position + i);
     }
 
   public static native @ByRef DbgOperatorSetTracker Instance();

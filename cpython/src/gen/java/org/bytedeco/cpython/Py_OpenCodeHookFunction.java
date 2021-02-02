@@ -10,10 +10,13 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-@Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.cpython.presets.python.class)
-public class PyThread_type_sema extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public PyThread_type_sema() { super((Pointer)null); }
+
+@Properties(inherit = org.bytedeco.cpython.presets.python.class)
+public class Py_OpenCodeHookFunction extends FunctionPointer {
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyThread_type_sema(Pointer p) { super(p); }
+    public    Py_OpenCodeHookFunction(Pointer p) { super(p); }
+    protected Py_OpenCodeHookFunction() { allocate(); }
+    private native void allocate();
+    public native PyObject call(PyObject arg0, Pointer arg1);
 }

@@ -32,7 +32,7 @@ public class PyTracebackObject extends Pointer {
 
     public native @ByRef PyObject ob_base(); public native PyTracebackObject ob_base(PyObject setter);
     public native @Cast("_traceback*") PyTracebackObject tb_next(); public native PyTracebackObject tb_next(PyTracebackObject setter);
-    public native _frame tb_frame(); public native PyTracebackObject tb_frame(_frame setter);
+    public native PyFrameObject tb_frame(); public native PyTracebackObject tb_frame(PyFrameObject setter);
     public native int tb_lasti(); public native PyTracebackObject tb_lasti(int setter);
     public native int tb_lineno(); public native PyTracebackObject tb_lineno(int setter);
 }

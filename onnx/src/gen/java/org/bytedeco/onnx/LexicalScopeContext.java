@@ -23,7 +23,7 @@ public class LexicalScopeContext extends Pointer {
         return (LexicalScopeContext)super.position(position);
     }
     @Override public LexicalScopeContext getPointer(long i) {
-        return new LexicalScopeContext(this).position(position + i);
+        return new LexicalScopeContext((Pointer)this).position(position + i);
     }
 
   public LexicalScopeContext() { super((Pointer)null); allocate(); }

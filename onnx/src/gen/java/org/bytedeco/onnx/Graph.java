@@ -23,7 +23,7 @@ public class Graph extends Pointer {
         return (Graph)super.position(position);
     }
     @Override public Graph getPointer(long i) {
-        return new Graph(this).position(position + i);
+        return new Graph((Pointer)this).position(position + i);
     }
 
 

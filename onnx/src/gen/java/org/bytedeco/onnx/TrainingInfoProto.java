@@ -24,7 +24,7 @@ public class TrainingInfoProto extends MessageLite {
         return (TrainingInfoProto)super.position(position);
     }
     @Override public TrainingInfoProto getPointer(long i) {
-        return new TrainingInfoProto(this).position(position + i);
+        return new TrainingInfoProto((Pointer)this).position(position + i);
     }
 
   public TrainingInfoProto() { super((Pointer)null); allocate(); }

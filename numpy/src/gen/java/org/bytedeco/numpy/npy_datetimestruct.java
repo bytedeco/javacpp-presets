@@ -34,7 +34,7 @@ public class npy_datetimestruct extends Pointer {
         return (npy_datetimestruct)super.position(position);
     }
     @Override public npy_datetimestruct getPointer(long i) {
-        return new npy_datetimestruct(this).position(position + i);
+        return new npy_datetimestruct((Pointer)this).position(position + i);
     }
 
         public native @Cast("npy_int64") long year(); public native npy_datetimestruct year(long setter);

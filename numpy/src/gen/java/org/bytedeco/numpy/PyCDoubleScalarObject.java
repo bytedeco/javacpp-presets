@@ -31,7 +31,7 @@ public class PyCDoubleScalarObject extends Pointer {
         return (PyCDoubleScalarObject)super.position(position);
     }
     @Override public PyCDoubleScalarObject getPointer(long i) {
-        return new PyCDoubleScalarObject(this).position(position + i);
+        return new PyCDoubleScalarObject((Pointer)this).position(position + i);
     }
 
         public native @ByRef PyObject ob_base(); public native PyCDoubleScalarObject ob_base(PyObject setter);

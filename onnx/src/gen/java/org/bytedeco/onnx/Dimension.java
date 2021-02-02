@@ -24,7 +24,7 @@ public class Dimension extends MessageLite {
         return (Dimension)super.position(position);
     }
     @Override public Dimension getPointer(long i) {
-        return new Dimension(this).position(position + i);
+        return new Dimension((Pointer)this).position(position + i);
     }
 
   public Dimension() { super((Pointer)null); allocate(); }

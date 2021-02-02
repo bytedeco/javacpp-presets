@@ -24,7 +24,7 @@ public class ValueInfoProto extends MessageLite {
         return (ValueInfoProto)super.position(position);
     }
     @Override public ValueInfoProto getPointer(long i) {
-        return new ValueInfoProto(this).position(position + i);
+        return new ValueInfoProto((Pointer)this).position(position + i);
     }
 
   public ValueInfoProto() { super((Pointer)null); allocate(); }
