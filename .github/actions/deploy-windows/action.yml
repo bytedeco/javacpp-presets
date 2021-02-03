@@ -41,9 +41,9 @@ runs:
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.0_460.89_win10.exe
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.0.5/cudnn-11.1-windows-x64-v8.0.5.39.zip
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.0/cudnn-11.2-windows-x64-v8.1.0.77.zip
           cuda_11.2.0_460.89_win10.exe -s
-          unzip cudnn-11.1-windows-x64-v8.0.5.39.zip
+          unzip cudnn-11.2-windows-x64-v8.1.0.77.zip
           move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin"
           move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include"
           move cuda\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\lib\x64"
@@ -167,7 +167,7 @@ runs:
         echo Publishing only now to help avoid race conditions with Gradle
         gradle %GRADLE_TASK% %GRADLE_OPTIONS% -b %CI_DEPLOY_MODULE%/build.gradle --refresh-dependencies
         if ERRORLEVEL 1 exit /b
-        goto :done2
+        goto :done3
 
         :maven
         mkdir %USERPROFILE%\.m2
@@ -192,6 +192,11 @@ runs:
         for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE%/platform/%EXT2%/pom.xml && goto :done2 || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
         exit /b !STATUS!
         :done2
+        if exist %CI_DEPLOY_MODULE%/platform/redist/pom.xml (
+          for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE%/platform/redist/pom.xml && goto :done3 || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
+          exit /b !STATUS!
+        )
+        :done3
         df -h
         wmic pagefile list /format:list
 

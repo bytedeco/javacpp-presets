@@ -29,7 +29,7 @@ public class CUmemAccessDesc extends Pointer {
         return (CUmemAccessDesc)super.position(position);
     }
     @Override public CUmemAccessDesc getPointer(long i) {
-        return new CUmemAccessDesc(this).position(position + i);
+        return new CUmemAccessDesc((Pointer)this).position(position + i);
     }
 
     /** Location on which the request is to change it's accessibility */

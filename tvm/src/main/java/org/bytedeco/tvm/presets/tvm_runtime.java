@@ -50,7 +50,7 @@ import org.bytedeco.mkl.presets.*;
             value = {"linux", "macosx", "windows"},
             compiler = "cpp14",
             define = {"GENERIC_EXCEPTION_CLASS std::exception", "GENERIC_EXCEPTION_TOSTRING what()"},
-            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>"},
+            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>"},
             include = {
                 "dlpack/dlpack.h",
                 "dmlc/base.h",

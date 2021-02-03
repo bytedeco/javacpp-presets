@@ -29,7 +29,7 @@ public class CUDA_LAUNCH_PARAMS extends Pointer {
         return (CUDA_LAUNCH_PARAMS)super.position(position);
     }
     @Override public CUDA_LAUNCH_PARAMS getPointer(long i) {
-        return new CUDA_LAUNCH_PARAMS(this).position(position + i);
+        return new CUDA_LAUNCH_PARAMS((Pointer)this).position(position + i);
     }
 
     /** Kernel to launch */

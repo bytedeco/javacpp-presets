@@ -38,7 +38,7 @@ public class CUaccessPolicyWindow extends Pointer {
         return (CUaccessPolicyWindow)super.position(position);
     }
     @Override public CUaccessPolicyWindow getPointer(long i) {
-        return new CUaccessPolicyWindow(this).position(position + i);
+        return new CUaccessPolicyWindow((Pointer)this).position(position + i);
     }
 
     /** Starting address of the access policy window. CUDA driver may align it. */

@@ -39,7 +39,7 @@ public class nvmlBlacklistDeviceInfo_t extends Pointer {
         return (nvmlBlacklistDeviceInfo_t)super.position(position);
     }
     @Override public nvmlBlacklistDeviceInfo_t getPointer(long i) {
-        return new nvmlBlacklistDeviceInfo_t(this).position(position + i);
+        return new nvmlBlacklistDeviceInfo_t((Pointer)this).position(position + i);
     }
 
     /** The PCI information for the blacklisted GPU */

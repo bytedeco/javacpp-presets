@@ -29,7 +29,7 @@ public class CUarrayMapInfo extends Pointer {
         return (CUarrayMapInfo)super.position(position);
     }
     @Override public CUarrayMapInfo getPointer(long i) {
-        return new CUarrayMapInfo(this).position(position + i);
+        return new CUarrayMapInfo((Pointer)this).position(position + i);
     }
     
     /** Resource type */

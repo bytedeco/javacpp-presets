@@ -33,7 +33,7 @@ public class NppiImageDescriptor extends Pointer {
         return (NppiImageDescriptor)super.position(position);
     }
     @Override public NppiImageDescriptor getPointer(long i) {
-        return new NppiImageDescriptor(this).position(position + i);
+        return new NppiImageDescriptor((Pointer)this).position(position + i);
     }
 
     public native Pointer pData(); public native NppiImageDescriptor pData(Pointer setter);  // device memory pointer to the image

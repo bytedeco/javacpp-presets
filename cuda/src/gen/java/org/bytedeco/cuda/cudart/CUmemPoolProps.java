@@ -26,7 +26,7 @@ public class CUmemPoolProps extends Pointer {
         return (CUmemPoolProps)super.position(position);
     }
     @Override public CUmemPoolProps getPointer(long i) {
-        return new CUmemPoolProps(this).position(position + i);
+        return new CUmemPoolProps((Pointer)this).position(position + i);
     }
 
     public native @Cast("CUmemAllocationType") int allocType(); public native CUmemPoolProps allocType(int setter);

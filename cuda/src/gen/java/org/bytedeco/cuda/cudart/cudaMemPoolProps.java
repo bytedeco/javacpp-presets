@@ -26,7 +26,7 @@ public class cudaMemPoolProps extends Pointer {
         return (cudaMemPoolProps)super.position(position);
     }
     @Override public cudaMemPoolProps getPointer(long i) {
-        return new cudaMemPoolProps(this).position(position + i);
+        return new cudaMemPoolProps((Pointer)this).position(position + i);
     }
 
     public native @Cast("cudaMemAllocationType") int allocType(); public native cudaMemPoolProps allocType(int setter);

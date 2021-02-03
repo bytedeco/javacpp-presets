@@ -29,7 +29,7 @@ public class CUDA_TEXTURE_DESC extends Pointer {
         return (CUDA_TEXTURE_DESC)super.position(position);
     }
     @Override public CUDA_TEXTURE_DESC getPointer(long i) {
-        return new CUDA_TEXTURE_DESC(this).position(position + i);
+        return new CUDA_TEXTURE_DESC((Pointer)this).position(position + i);
     }
 
     /** Address modes */

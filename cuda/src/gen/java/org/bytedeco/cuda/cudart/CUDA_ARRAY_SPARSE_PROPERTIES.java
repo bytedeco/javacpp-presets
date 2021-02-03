@@ -29,7 +29,7 @@ public class CUDA_ARRAY_SPARSE_PROPERTIES extends Pointer {
         return (CUDA_ARRAY_SPARSE_PROPERTIES)super.position(position);
     }
     @Override public CUDA_ARRAY_SPARSE_PROPERTIES getPointer(long i) {
-        return new CUDA_ARRAY_SPARSE_PROPERTIES(this).position(position + i);
+        return new CUDA_ARRAY_SPARSE_PROPERTIES((Pointer)this).position(position + i);
     }
 
         /** Width of sparse tile in elements */

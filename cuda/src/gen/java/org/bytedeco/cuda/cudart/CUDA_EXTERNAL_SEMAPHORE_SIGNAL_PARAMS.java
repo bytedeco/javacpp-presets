@@ -29,7 +29,7 @@ public class CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS extends Pointer {
         return (CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS)super.position(position);
     }
     @Override public CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS getPointer(long i) {
-        return new CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS(this).position(position + i);
+        return new CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS((Pointer)this).position(position + i);
     }
 
         /**

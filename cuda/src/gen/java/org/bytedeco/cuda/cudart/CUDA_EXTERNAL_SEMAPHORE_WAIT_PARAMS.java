@@ -29,7 +29,7 @@ public class CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS extends Pointer {
         return (CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS)super.position(position);
     }
     @Override public CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS getPointer(long i) {
-        return new CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS(this).position(position + i);
+        return new CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS((Pointer)this).position(position + i);
     }
 
         /**

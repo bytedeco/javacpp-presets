@@ -29,7 +29,7 @@ public class CUDA_HOST_NODE_PARAMS extends Pointer {
         return (CUDA_HOST_NODE_PARAMS)super.position(position);
     }
     @Override public CUDA_HOST_NODE_PARAMS getPointer(long i) {
-        return new CUDA_HOST_NODE_PARAMS(this).position(position + i);
+        return new CUDA_HOST_NODE_PARAMS((Pointer)this).position(position + i);
     }
 
     /** The function to call when the node executes */

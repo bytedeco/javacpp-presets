@@ -29,7 +29,7 @@ public class CUDA_ARRAY_DESCRIPTOR extends Pointer {
         return (CUDA_ARRAY_DESCRIPTOR)super.position(position);
     }
     @Override public CUDA_ARRAY_DESCRIPTOR getPointer(long i) {
-        return new CUDA_ARRAY_DESCRIPTOR(this).position(position + i);
+        return new CUDA_ARRAY_DESCRIPTOR((Pointer)this).position(position + i);
     }
 
     /** Width of array */
