@@ -29,7 +29,7 @@ public class NppiBufferDescriptor extends Pointer {
         return (NppiBufferDescriptor)super.position(position);
     }
     @Override public NppiBufferDescriptor getPointer(long i) {
-        return new NppiBufferDescriptor(this).position(position + i);
+        return new NppiBufferDescriptor((Pointer)this).position(position + i);
     }
 
     public native Pointer pData(); public native NppiBufferDescriptor pData(Pointer setter);  // per image device memory pointer to the corresponding buffer

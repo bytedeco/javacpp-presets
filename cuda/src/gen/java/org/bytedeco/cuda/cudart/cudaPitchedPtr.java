@@ -31,7 +31,7 @@ public class cudaPitchedPtr extends Pointer {
         return (cudaPitchedPtr)super.position(position);
     }
     @Override public cudaPitchedPtr getPointer(long i) {
-        return new cudaPitchedPtr(this).position(position + i);
+        return new cudaPitchedPtr((Pointer)this).position(position + i);
     }
 
     /** Pointer to allocated memory */

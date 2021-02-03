@@ -26,7 +26,7 @@ public class cudaMemLocation extends Pointer {
         return (cudaMemLocation)super.position(position);
     }
     @Override public cudaMemLocation getPointer(long i) {
-        return new cudaMemLocation(this).position(position + i);
+        return new cudaMemLocation((Pointer)this).position(position + i);
     }
 
     public native @Cast("cudaMemLocationType") int type(); public native cudaMemLocation type(int setter);

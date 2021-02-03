@@ -39,7 +39,7 @@ runs:
     - name: Downloading and uploading artifacts
       shell: bash
       run: |
-        if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "${{ github.event.head_commit.message }}" == Release* ]]; then
+        if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "${{ github.event.head_commit.message }}" == Release* ]]; then
             # We are not deploying snapshots
             exit 0
         fi
@@ -87,7 +87,7 @@ runs:
                     if [[ $LINE2 =~ $GROUP:$ARTIFACT:jar:([^:]*):$VERSION:compile ]]; then
                         CLASSIFIER=${BASH_REMATCH[1]}
                         FILE=$ARTIFACT-$VERSION-$CLASSIFIER.jar
-                        cp -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
+                        mv -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
                         [[ -n $FILES ]] && FILES=$FILES,$FILE || FILES=$FILE
                         [[ -n $TYPES ]] && TYPES=$TYPES,jar || TYPES=jar
                         [[ -n $CLASSIFIERS ]] && CLASSIFIERS=$CLASSIFIERS,$CLASSIFIER || CLASSIFIERS=$CLASSIFIER
@@ -95,7 +95,7 @@ runs:
                 done
                 if [[ -n $FILES ]]; then
                     FILE=$ARTIFACT-$VERSION.jar
-                    cp -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
+                    mv -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
                     unzip -o $FILE META-INF/maven/$GROUP/$ARTIFACT/pom.xml
                     for i in {1..5}; do
                         STATUS=0

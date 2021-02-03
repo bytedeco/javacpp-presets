@@ -26,7 +26,7 @@ public class cudaMemAccessDesc extends Pointer {
         return (cudaMemAccessDesc)super.position(position);
     }
     @Override public cudaMemAccessDesc getPointer(long i) {
-        return new cudaMemAccessDesc(this).position(position + i);
+        return new cudaMemAccessDesc((Pointer)this).position(position + i);
     }
 
     public native @ByRef cudaMemLocation location(); public native cudaMemAccessDesc location(cudaMemLocation setter);

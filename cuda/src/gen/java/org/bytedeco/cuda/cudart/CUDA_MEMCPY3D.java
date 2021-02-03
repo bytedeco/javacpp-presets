@@ -29,7 +29,7 @@ public class CUDA_MEMCPY3D extends Pointer {
         return (CUDA_MEMCPY3D)super.position(position);
     }
     @Override public CUDA_MEMCPY3D getPointer(long i) {
-        return new CUDA_MEMCPY3D(this).position(position + i);
+        return new CUDA_MEMCPY3D((Pointer)this).position(position + i);
     }
 
     /** Source X in bytes */

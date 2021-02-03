@@ -29,7 +29,7 @@ public class CUipcMemHandle extends Pointer {
         return (CUipcMemHandle)super.position(position);
     }
     @Override public CUipcMemHandle getPointer(long i) {
-        return new CUipcMemHandle(this).position(position + i);
+        return new CUipcMemHandle((Pointer)this).position(position + i);
     }
 
     public native @Cast("char") byte reserved(int i); public native CUipcMemHandle reserved(int i, byte setter);

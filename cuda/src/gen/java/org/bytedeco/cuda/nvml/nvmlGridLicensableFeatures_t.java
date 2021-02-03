@@ -31,7 +31,7 @@ public class nvmlGridLicensableFeatures_t extends Pointer {
         return (nvmlGridLicensableFeatures_t)super.position(position);
     }
     @Override public nvmlGridLicensableFeatures_t getPointer(long i) {
-        return new nvmlGridLicensableFeatures_t(this).position(position + i);
+        return new nvmlGridLicensableFeatures_t((Pointer)this).position(position + i);
     }
 
     /** Non-zero if GRID Software Licensing is supported on the system, otherwise zero */

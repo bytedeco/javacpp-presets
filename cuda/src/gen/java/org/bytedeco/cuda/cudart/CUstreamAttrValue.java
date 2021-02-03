@@ -29,7 +29,7 @@ public class CUstreamAttrValue extends Pointer {
         return (CUstreamAttrValue)super.position(position);
     }
     @Override public CUstreamAttrValue getPointer(long i) {
-        return new CUstreamAttrValue(this).position(position + i);
+        return new CUstreamAttrValue((Pointer)this).position(position + i);
     }
 
     /** Attribute ::CUaccessPolicyWindow. */

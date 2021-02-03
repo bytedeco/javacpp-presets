@@ -1154,6 +1154,7 @@
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>cuda</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>

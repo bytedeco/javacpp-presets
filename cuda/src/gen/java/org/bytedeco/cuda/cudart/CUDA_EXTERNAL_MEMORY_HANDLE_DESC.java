@@ -28,7 +28,7 @@ public class CUDA_EXTERNAL_MEMORY_HANDLE_DESC extends Pointer {
         return (CUDA_EXTERNAL_MEMORY_HANDLE_DESC)super.position(position);
     }
     @Override public CUDA_EXTERNAL_MEMORY_HANDLE_DESC getPointer(long i) {
-        return new CUDA_EXTERNAL_MEMORY_HANDLE_DESC(this).position(position + i);
+        return new CUDA_EXTERNAL_MEMORY_HANDLE_DESC((Pointer)this).position(position + i);
     }
 
     /**

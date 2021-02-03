@@ -29,7 +29,7 @@ public class CUkernelNodeAttrValue extends Pointer {
         return (CUkernelNodeAttrValue)super.position(position);
     }
     @Override public CUkernelNodeAttrValue getPointer(long i) {
-        return new CUkernelNodeAttrValue(this).position(position + i);
+        return new CUkernelNodeAttrValue((Pointer)this).position(position + i);
     }
 
     /** Attribute ::CUaccessPolicyWindow. */

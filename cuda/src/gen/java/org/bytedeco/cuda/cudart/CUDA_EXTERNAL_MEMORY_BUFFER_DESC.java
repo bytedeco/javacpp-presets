@@ -29,7 +29,7 @@ public class CUDA_EXTERNAL_MEMORY_BUFFER_DESC extends Pointer {
         return (CUDA_EXTERNAL_MEMORY_BUFFER_DESC)super.position(position);
     }
     @Override public CUDA_EXTERNAL_MEMORY_BUFFER_DESC getPointer(long i) {
-        return new CUDA_EXTERNAL_MEMORY_BUFFER_DESC(this).position(position + i);
+        return new CUDA_EXTERNAL_MEMORY_BUFFER_DESC((Pointer)this).position(position + i);
     }
 
     /**
