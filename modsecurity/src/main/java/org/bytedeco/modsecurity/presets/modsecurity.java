@@ -53,6 +53,9 @@ public class modsecurity implements InfoMapper {
         infoMap.put(new Info("std::map<std::string,std::string>").skip());
         infoMap.put(new Info("std::shared_ptr<modsecurity::RequestBodyProcessor::MultipartPartTmpFile>").skip());
         infoMap.put(new Info("AnchoredSetVariable").skip());
+        infoMap.put(new Info("AnchoredSetVariableTranslationProxycd").skip());
+        infoMap.put(new Info("TransactionSecMarkerManagement").skip());
+        infoMap.put(new Info("TransactionAnchoredVariables").skip());
         infoMap.put(new Info("AnchoredVariable").skip());
         infoMap.put(new Info("VariableOrigin").skip());
         infoMap.put(new Info("VariableValue").skip());
