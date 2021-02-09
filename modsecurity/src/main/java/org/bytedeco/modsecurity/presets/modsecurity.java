@@ -43,7 +43,7 @@ public class modsecurity implements InfoMapper {
         infoMap.put(new Info("clock_t").skip());
         infoMap.put(new Info("std::list<int>").skip());
         infoMap.put(new Info("std::list<std::pair<int,int> >").skip());
-        infoMap.put(new Info("std::list<std::string>").skip());
+        infoMap.put(new Info("std::list<std::string>").pointerTypes("StringList").define());
         infoMap.put(new Info("std::list<std::pair<std::string,std::string> >").skip());
         infoMap.put(new Info("std::list<std::pair<int,std::string> >").skip());
         infoMap.put(new Info("std::ostringstream").skip());
@@ -53,7 +53,7 @@ public class modsecurity implements InfoMapper {
         infoMap.put(new Info("std::map<std::string,std::string>").skip());
         infoMap.put(new Info("std::shared_ptr<modsecurity::RequestBodyProcessor::MultipartPartTmpFile>").skip());
         infoMap.put(new Info("AnchoredSetVariable").skip());
-        infoMap.put(new Info("AnchoredSetVariableTranslationProxycd").skip());
+        infoMap.put(new Info("AnchoredSetVariableTranslationProxy").skip());
         infoMap.put(new Info("TransactionSecMarkerManagement").skip());
         infoMap.put(new Info("TransactionAnchoredVariables").skip());
         infoMap.put(new Info("AnchoredVariable").skip());
