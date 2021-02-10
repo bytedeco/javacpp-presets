@@ -40,10 +40,14 @@ public class modsecurity implements InfoMapper {
     @Override
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("std::set<std::string>").pointerTypes("StringSet").define());
+        infoMap.put(new Info("std::list<std::string>").pointerTypes("StringList").define());
+        infoMap.put(new Info("std::list<modsecurity::RuleMessage>").pointerTypes("RuleMessageList").define());
+        infoMap.put(new Info("ModSecurityIntervention_t").pointerTypes("ModSecurityIntervention").define());
+        infoMap.put(new Info("std::basic_string<char>").annotations("@StdString").valueTypes("BytePointer").pointerTypes("@Cast({\"char*\", \"std::string\"}) BytePointer"));
+        infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"));
         infoMap.put(new Info("clock_t").skip());
         infoMap.put(new Info("std::list<int>").skip());
         infoMap.put(new Info("std::list<std::pair<int,int> >").skip());
-        infoMap.put(new Info("std::list<std::string>").pointerTypes("StringList").define());
         infoMap.put(new Info("std::list<std::pair<std::string,std::string> >").skip());
         infoMap.put(new Info("std::list<std::pair<int,std::string> >").skip());
         infoMap.put(new Info("std::ostringstream").skip());
@@ -68,9 +72,6 @@ public class modsecurity implements InfoMapper {
         infoMap.put(new Info("std::shared_ptr<RuleMessage>").skip());
         infoMap.put(new Info("std::unique_ptr<std::string>").skip());
         infoMap.put(new Info("std::shared_ptr<actions::Action>").skip());
-        infoMap.put(new Info("ModSecurityIntervention_t").pointerTypes("ModSecurityIntervention").define());
-        infoMap.put(new Info("std::basic_string<char>").annotations("@StdString").valueTypes("BytePointer").pointerTypes("@Cast({\"char*\", \"std::string\"}) BytePointer"));
-        infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"));
     }
 }
 
