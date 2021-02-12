@@ -1,4 +1,5 @@
 
+ * Fix compatibility of Leptonica with JavaFX by upgrading to libpng 1.6.37 ([pull #1007](https://github.com/bytedeco/javacpp-presets/pull/1007))
  * Introduce `linux-arm64` build for CUDA, cuDNN, and NCCL ([issue #735](https://github.com/bytedeco/javacpp-presets/issues/735))
  * Add new array constructors to `opencv_core.Mat` that copy data for convenience ([pull #1002](https://github.com/bytedeco/javacpp-presets/pull/1002))
  * Rebase `PrimitiveScalar` on `PrimitiveScalarBase` in presets for Arrow for easy access to `data()` ([issue #998](https://github.com/bytedeco/javacpp-presets/issues/998))
