@@ -27,7 +27,7 @@ Sample Usage
 ------------
 Here is a simple example of NumPy based on the information available here:
 
- * https://docs.scipy.org/doc/numpy/reference/c-api.html
+ * https://numpy.org/doc/stable/reference/c-api/
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `MatMul.java` source files below, simply execute on the command line:
 ```bash

@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of Tesseract ported to Java from this C++ source file and for this data:
 
- * https://github.com/tesseract-ocr/tesseract/wiki/APIExample
+ * https://tesseract-ocr.github.io/tessdoc/APIExample
  * https://github.com/tesseract-ocr/tessdata
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `BasicExample.java` source files below, simply execute on the command line:

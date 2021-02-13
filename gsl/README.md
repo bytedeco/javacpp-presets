@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of GSL ported to Java from this demo.c source file:
 
- * https://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distribution-Examples.html
+ * https://www.gnu.org/software/gsl/doc/html/randist.html#examples
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Demo.java` source files below, simply execute on the command line:
 ```bash
