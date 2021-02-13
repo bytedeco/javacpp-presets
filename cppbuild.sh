@@ -9,8 +9,8 @@ which cmake3 &> /dev/null && CMAKE3="cmake3" || CMAKE3="cmake"
 [[ -z ${OLDCXX:-} ]] && OLDCXX="g++"
 [[ -z ${OLDFC:-} ]] && OLDFC="gfortran"
 
-KERNEL=(`uname -s | tr [A-Z] [a-z]`)
-ARCH=(`uname -m | tr [A-Z] [a-z]`)
+KERNEL=(`uname -s | tr '[A-Z]' '[a-z]'`)
+ARCH=(`uname -m | tr '[A-Z]' '[a-z]'`)
 case $KERNEL in
     darwin)
         OS=macosx

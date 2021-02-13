@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ARPACK-NG 3.8.0  https://scilab.io/arpack-ng/
+ * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

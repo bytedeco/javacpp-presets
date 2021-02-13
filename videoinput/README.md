@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of videoInput ported to Java from the "Example Usage" in this C++ source file:
 
- * https://github.com/ofTheo/videoInput/blob/update2013/videoInputSrcAndDemos/libs/videoInput/videoInput.h
+ * https://github.com/ofTheo/videoInput/blob/master/videoInputSrcAndDemos/libs/videoInput/videoInput.h
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ExampleUsage.java` source files below, simply execute on the command line:
 ```bash

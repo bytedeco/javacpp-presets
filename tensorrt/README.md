@@ -10,7 +10,7 @@ License Agreements
 By downloading these archives, you agree to the terms of the license agreements for NVIDIA software included in the archives.
 
 ### TensorRT
-To view the license for TensorRT included in these archives, click [here](https://developer.download.nvidia.com/compute/machine-learning/tensorrt/docs/5.1/rc/TensorRT-SLA.pdf)
+To view the license for TensorRT included in these archives, click [here](https://docs.nvidia.com/deeplearning/tensorrt/sla/)
 
 
 Introduction

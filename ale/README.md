@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of ALE ported to Java from this C++ source file:
 
- * https://github.com/mgbellemare/Arcade-Learning-Environment/blob/master/doc/examples/sharedLibraryInterfaceExample.cpp
+ * https://github.com/mgbellemare/Arcade-Learning-Environment/blob/master/examples/cpp-interface/sharedLibraryInterfaceExample.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SharedLibraryInterfaceExample.java` source files below, simply execute on the command line:
 ```bash

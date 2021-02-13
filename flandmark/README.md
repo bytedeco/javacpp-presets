@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/
+ * flandmark 1.07  https://github.com/uricamic/flandmark
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

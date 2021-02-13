@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of HDF5 ported to Java from this C++ source file:
 
-* https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/c++/examples/h5tutr_cmprss.cpp
+* https://support.hdfgroup.org/ftp/HDF5/current18/src/unpacked/c++/examples/h5tutr_cmprss.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `H5tutrCmprss.java` source files below, simply execute on the command line:
 ```bash

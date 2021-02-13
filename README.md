@@ -65,7 +65,7 @@ For orientation purposes, the documentation of this repository can be thought of
 
 This parent README.md file contains general information applicable to all modules to solve issues concerning downloads, common requirements, installation procedures, and build instructions. The respective README.md files in each subdirectory contain extra information, links, and notes concerning API documentation, specific requirements, dependencies for `pom.xml` files, and sample usage code, for the presets and packages of each module. Please be aware that not all of the presets have the same level of maturity, and the style and layout may also differ from one to another since they are based on the APIs of third-party libraries.
 
-Please refer to the wiki page for more information about how to [create new presets](https://github.com/bytedeco/javacpp-presets/wiki/Create-New-Presets). Since additional documentation is currently lacking, please also feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project).
+Please refer to the wiki page for more information about how to [create new presets](https://github.com/bytedeco/javacpp-presets/wiki/Create-New-Presets). Since additional documentation is currently lacking, please also feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project) or [the discussion forum](https://github.com/bytedeco/javacpp-presets/discussions).
 
 
 Downloads
@@ -175,11 +175,11 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
- * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
+ * flandmark 1.07  https://github.com/uricamic/flandmark
  * Arrow 3.0.0  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
- * MKL 2021.x  https://software.intel.com/intel-mkl
+ * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 1.8.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.13  http://www.openblas.net/
@@ -264,7 +264,7 @@ How Can I Help?
 Contributions of any kind are highly welcome! At the moment, the `Parser` has limited capabilities, so I plan to improve it gradually to the point where it can successfully parse large C++ header files that are even more convoluted than the ones from OpenCV, Caffe, or TensorFlow, but the build system could also be improved. Consequently, I am looking for help especially with the five following tasks, in no particular order:
 
  * Setting up continuous integration, preferably free on the cloud ([Travis CI](https://travis-ci.org/)?)
- * Improving the `Parser` (by using the [presets for Clang](llvm/src/main/java/org/bytedeco/javacpp/clang.java)?)
+ * Improving the `Parser` (by using the [presets for LLVM and Clang](llvm)?)
  * Providing builds for more platforms, as with `linux-armhf` for [Raspberry Pi](https://www.raspberrypi.org/), etc.
  * Replacing the Bash/Maven build combo by something easier to use ([Gradle](http://gradle.org/)?)
  * Adding new presets as child modules for other C/C++ libraries (Caffe2, OpenNI, OpenMesh, PCL, etc.)
