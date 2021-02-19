@@ -184,7 +184,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DNNL 1.8.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.13  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
- * CMINPACK 1.3.7  https://github.com/devernay/cminpack
+ * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.9  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.9.1  https://www.python.org/downloads/

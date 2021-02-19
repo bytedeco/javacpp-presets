@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CMINPACK 1.3.7  http://devernay.free.fr/hacks/cminpack/
+ * CMINPACK 1.3.8  http://devernay.free.fr/hacks/cminpack/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cminpack-platform</artifactId>
-            <version>1.3.7-1.5.5-SNAPSHOT</version>
+            <version>1.3.8-1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

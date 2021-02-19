@@ -9152,7 +9152,7 @@ public static native @Cast("CUresult") int cuMemGetAllocationPropertiesFromHandl
  *
  * ___MANBRIEF___ Functions for performing allocation and free operations in stream order.
  *                Functions for controlling the behavior of the underlying allocator.
- * (___CURRENT_FILE___) __ENDMANBRIEF__
+ * (___CURRENT_FILE___) ___ENDMANBRIEF___
  *
  * This section describes the stream ordered memory allocator exposed by the
  * low-level CUDA driver application programming interface.
@@ -23196,7 +23196,7 @@ public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event);
  * ::cudaEventCreateWithFlags, ::cudaEventQuery,
  * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventElapsedTime,
  * ::cudaStreamWaitEvent,
- * ::cudaEventRecord
+ * ::cudaEventRecord,
  * ::cuEventRecord,
  */
 // #if __CUDART_API_VERSION >= 11010
@@ -23564,7 +23564,7 @@ public static native @Cast("cudaError_t") int cudaImportExternalMemory(@ByPtrPtr
  * \note_init_rt
  * \note_callback
  *
- * @see ::cudaImportExternalMemory
+ * @see ::cudaImportExternalMemory,
  * ::cudaDestroyExternalMemory,
  * ::cudaExternalMemoryGetMappedMipmappedArray
  */
@@ -23620,7 +23620,7 @@ public static native @Cast("cudaError_t") int cudaExternalMemoryGetMappedBuffer(
  * \note_init_rt
  * \note_callback
  *
- * @see ::cudaImportExternalMemory
+ * @see ::cudaImportExternalMemory,
  * ::cudaDestroyExternalMemory,
  * ::cudaExternalMemoryGetMappedBuffer
  *
@@ -23648,7 +23648,7 @@ public static native @Cast("cudaError_t") int cudaExternalMemoryGetMappedMipmapp
  * \note_callback
  * \note_destroy_ub
  *
- * @see ::cudaImportExternalMemory
+ * @see ::cudaImportExternalMemory,
  * ::cudaExternalMemoryGetMappedBuffer,
  * ::cudaExternalMemoryGetMappedMipmappedArray
  */
@@ -26456,7 +26456,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromSymbol(Pointer dst, 
  * ::cudaMemcpyFromSymbol, ::cudaMemcpy2DAsync,
  * ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
  * ::cuMemcpyAsync,
  * ::cuMemcpyDtoHAsync,
  * ::cuMemcpyHtoDAsync,
@@ -27363,7 +27363,7 @@ public static native @Cast("cudaError_t") int cudaMemRangeGetAttribute(Pointer d
  * \note_init_rt
  * \note_callback
  *
- * @see ::cudaMemRangeGetAttribute, ::cudaMemAdvise
+ * @see ::cudaMemRangeGetAttribute, ::cudaMemAdvise,
  * ::cudaMemPrefetchAsync,
  * ::cuMemRangeGetAttributes
  */
@@ -27772,7 +27772,7 @@ public static native @Cast("cudaError_t") int cudaMemPoolTrimTo(CUmemPoolHandle_
 public static native @Cast("cudaError_t") int cudaMemPoolSetAttribute(CUmemPoolHandle_st memPool, @Cast("cudaMemPoolAttr") int attr, Pointer value );
 
 /**
- * \brief Sets attributes of a memory pool
+ * \brief Gets attributes of a memory pool
  *
  * Supported attributes are:
  * - ::cudaMemPoolAttrReleaseThreshold: (value type = cuuint64_t)
@@ -28747,7 +28747,7 @@ public static native @Cast("cudaError_t") @Deprecated int cudaBindTextureToArray
  * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaUnbindTexture (C API)",
  * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)",
  * ::cuTexRefSetMipmappedArray,
- * ::cuTexRefSetMipmapFilterMode
+ * ::cuTexRefSetMipmapFilterMode,
  * ::cuTexRefSetMipmapLevelClamp,
  * ::cuTexRefSetMipmapLevelBias,
  * ::cuTexRefSetFormat,
@@ -30478,7 +30478,7 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * ::cudaGraphAddEventRecordNode,
  * ::cudaGraphEventRecordNodeSetEvent,
  * ::cudaGraphEventWaitNodeGetEvent,
- * ::cudaEventRecord,
+ * ::cudaEventRecordWithFlags,
  * ::cudaStreamWaitEvent
  */
 // #if __CUDART_API_VERSION >= 11010
@@ -30505,7 +30505,7 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * ::cudaGraphAddEventRecordNode,
  * ::cudaGraphEventRecordNodeGetEvent,
  * ::cudaGraphEventWaitNodeSetEvent,
- * ::cudaEventRecord,
+ * ::cudaEventRecordWithFlags,
  * ::cudaStreamWaitEvent
  */
 // #if __CUDART_API_VERSION >= 11010
@@ -30579,7 +30579,7 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * ::cudaGraphAddEventWaitNode,
  * ::cudaGraphEventWaitNodeSetEvent,
  * ::cudaGraphEventRecordNodeGetEvent,
- * ::cudaEventRecord,
+ * ::cudaEventRecordWithFlags,
  * ::cudaStreamWaitEvent
  */
 // #if __CUDART_API_VERSION >= 11010
@@ -30606,7 +30606,7 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * ::cudaGraphAddEventWaitNode,
  * ::cudaGraphEventWaitNodeGetEvent,
  * ::cudaGraphEventRecordNodeSetEvent,
- * ::cudaEventRecord,
+ * ::cudaEventRecordWithFlags,
  * ::cudaStreamWaitEvent
  */
 // #if __CUDART_API_VERSION >= 11010
@@ -30621,6 +30621,10 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * in \p nodeParams. It is possible for \p numDependencies to be 0, in which case the
  * node will be placed at the root of the graph. \p dependencies may not have any
  * duplicate entries. A handle to the new node will be returned in \p pGraphNode.
+ *
+ * Performs a signal operation on a set of externally allocated semaphore objects
+ * when the node is launched.  The operation(s) will occur after all of the node's
+ * dependencies have completed.
  *
  * @param pGraphNode      - Returns newly created node
  * @param graph           - Graph to which to add the node
@@ -30666,7 +30670,7 @@ public static native @Cast("cudaError_t") int cudaGraphAddExternalSemaphoresSign
  * The \p extSemArray and \p paramsArray returned in \p params_out,
  * are owned by the node.  This memory remains valid until the node is destroyed or its
  * parameters are modified, and should not be modified
- * directly. Use ::cuGraphExternalSemaphoresSignalNodeSetParams to update the
+ * directly. Use ::cudaGraphExternalSemaphoresSignalNodeSetParams to update the
  * parameters of this node.
  *
  * @param hNode      - Node to get the parameters for
@@ -30727,6 +30731,10 @@ public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresSignalN
  * It is possible for \p numDependencies to be 0, in which case the node will be placed
  * at the root of the graph. \p dependencies may not have any duplicate entries. A handle
  * to the new node will be returned in \p pGraphNode.
+ *
+ * Performs a wait operation on a set of externally allocated semaphore objects
+ * when the node is launched.  The node's dependencies will not be launched until
+ * the wait operation has completed.
  *
  * @param pGraphNode      - Returns newly created node
  * @param graph           - Graph to which to add the node
@@ -31230,6 +31238,15 @@ public static native @Cast("cudaError_t") int cudaGraphInstantiate(@ByPtrPtr CUg
  * @see
  * ::cudaGraphAddKernelNode,
  * ::cudaGraphKernelNodeSetParams,
+ * ::cudaGraphExecMemcpyNodeSetParams,
+ * ::cudaGraphExecMemsetNodeSetParams,
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
  * ::cudaGraphInstantiate
  */
 public static native @Cast("cudaError_t") int cudaGraphExecKernelNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st node, @Const cudaKernelNodeParams pNodeParams);
@@ -31268,13 +31285,19 @@ public static native @Cast("cudaError_t") int cudaGraphExecKernelNodeSetParams(C
  * @see
  * ::cudaGraphAddMemcpyNode,
  * ::cudaGraphMemcpyNodeSetParams,
- * ::cudaGraphInstantiate,
  * ::cudaGraphExecMemcpyNodeSetParamsToSymbol,
  * ::cudaGraphExecMemcpyNodeSetParamsFromSymbol,
  * ::cudaGraphExecMemcpyNodeSetParams1D,
  * ::cudaGraphExecKernelNodeSetParams,
  * ::cudaGraphExecMemsetNodeSetParams,
- * ::cudaGraphExecHostNodeSetParams
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
+ * ::cudaGraphInstantiate
  */
 public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st node, @Const cudaMemcpy3DParms pNodeParams);
 
@@ -31317,12 +31340,18 @@ public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParams(C
  * ::cudaGraphAddMemcpyNodeToSymbol,
  * ::cudaGraphMemcpyNodeSetParams,
  * ::cudaGraphMemcpyNodeSetParamsToSymbol,
- * ::cudaGraphInstantiate,
  * ::cudaGraphExecMemcpyNodeSetParams,
  * ::cudaGraphExecMemcpyNodeSetParamsFromSymbol,
  * ::cudaGraphExecKernelNodeSetParams,
  * ::cudaGraphExecMemsetNodeSetParams,
- * ::cudaGraphExecHostNodeSetParams
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
+ * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11010
  public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParamsToSymbol(
@@ -31374,12 +31403,18 @@ public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParams(C
  * ::cudaGraphAddMemcpyNodeFromSymbol,
  * ::cudaGraphMemcpyNodeSetParams,
  * ::cudaGraphMemcpyNodeSetParamsFromSymbol,
- * ::cudaGraphInstantiate,
  * ::cudaGraphExecMemcpyNodeSetParams,
  * ::cudaGraphExecMemcpyNodeSetParamsToSymbol,
  * ::cudaGraphExecKernelNodeSetParams,
  * ::cudaGraphExecMemsetNodeSetParams,
- * ::cudaGraphExecHostNodeSetParams
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
+ * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11010
  public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParamsFromSymbol(
@@ -31430,11 +31465,17 @@ public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParams(C
  * ::cudaGraphAddMemcpyNode1D,
  * ::cudaGraphMemcpyNodeSetParams,
  * ::cudaGraphMemcpyNodeSetParams1D,
- * ::cudaGraphInstantiate,
  * ::cudaGraphExecMemcpyNodeSetParams,
  * ::cudaGraphExecKernelNodeSetParams,
  * ::cudaGraphExecMemsetNodeSetParams,
- * ::cudaGraphExecHostNodeSetParams
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
+ * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11010
  public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParams1D(
@@ -31479,11 +31520,17 @@ public static native @Cast("cudaError_t") int cudaGraphExecMemcpyNodeSetParams(C
  *
  * @see
  * ::cudaGraphAddMemsetNode,
- * ::cudaGraphMemsetNodeSetParams
+ * ::cudaGraphMemsetNodeSetParams,
+ * ::cudaGraphExecKernelNodeSetParams,
+ * ::cudaGraphExecMemcpyNodeSetParams,
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
  * ::cudaGraphInstantiate
- * ::cudaGraphExecKernelNodeSetParams 
- * ::cudaGraphExecMemcpyNodeSetParams
- * ::cudaGraphExecHostNodeSetParams
  */
 public static native @Cast("cudaError_t") int cudaGraphExecMemsetNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st node, @Const cudaMemsetParams pNodeParams);
 
@@ -31512,11 +31559,17 @@ public static native @Cast("cudaError_t") int cudaGraphExecMemsetNodeSetParams(C
  *
  * @see
  * ::cudaGraphAddHostNode,
- * ::cudaGraphHostNodeSetParams
+ * ::cudaGraphHostNodeSetParams,
+ * ::cudaGraphExecKernelNodeSetParams,
+ * ::cudaGraphExecMemcpyNodeSetParams,
+ * ::cudaGraphExecMemsetNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
  * ::cudaGraphInstantiate
- * ::cudaGraphExecKernelNodeSetParams 
- * ::cudaGraphExecMemcpyNodeSetParams
- * ::cudaGraphExecMemsetNodeSetParams
  */
 public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st node, @Const cudaHostNodeParams pNodeParams);
 
@@ -31552,12 +31605,16 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * @see
  * ::cudaGraphAddChildGraphNode,
  * ::cudaGraphChildGraphNodeGetGraph,
- * ::cudaGraphInstantiate,
- * ::cudaGraphExecUpdate,
  * ::cudaGraphExecKernelNodeSetParams,
  * ::cudaGraphExecMemcpyNodeSetParams,
  * ::cudaGraphExecMemsetNodeSetParams,
- * ::cudaGraphExecHostNodeSetParams
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
+ * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11010
  public static native @Cast("cudaError_t") int cudaGraphExecChildGraphNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st node, CUgraph_st childGraph);
@@ -31588,10 +31645,17 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * ::cudaGraphAddEventRecordNode,
  * ::cudaGraphEventRecordNodeGetEvent,
  * ::cudaGraphEventWaitNodeSetEvent,
- * ::cudaEventRecord,
- * ::cudaStreamWaitEvent
- * ::cudaGraphCreate,
- * ::cudaGraphDestroyNode,
+ * ::cudaEventRecordWithFlags,
+ * ::cudaStreamWaitEvent,
+ * ::cudaGraphExecKernelNodeSetParams,
+ * ::cudaGraphExecMemcpyNodeSetParams,
+ * ::cudaGraphExecMemsetNodeSetParams,
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
  * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11010
@@ -31599,9 +31663,9 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
 // #endif
 
 /**
- * \brief Sets the event for an event record node in the given graphExec
+ * \brief Sets the event for an event wait node in the given graphExec
  *
- * Sets the event of an event record node in an executable graph \p hGraphExec.
+ * Sets the event of an event wait node in an executable graph \p hGraphExec.
  * The node is identified by the corresponding node \p hNode in the
  * non-executable graph, from which the executable graph was instantiated.
  *
@@ -31623,10 +31687,17 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * ::cudaGraphAddEventWaitNode,
  * ::cudaGraphEventWaitNodeGetEvent,
  * ::cudaGraphEventRecordNodeSetEvent,
- * ::cudaEventRecord,
- * ::cudaStreamWaitEvent
- * ::cudaGraphCreate,
- * ::cudaGraphDestroyNode,
+ * ::cudaEventRecordWithFlags,
+ * ::cudaStreamWaitEvent,
+ * ::cudaGraphExecKernelNodeSetParams,
+ * ::cudaGraphExecMemcpyNodeSetParams,
+ * ::cudaGraphExecMemsetNodeSetParams,
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
  * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11010
@@ -31663,8 +31734,15 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * ::cudaImportExternalSemaphore,
  * ::cudaSignalExternalSemaphoresAsync,
  * ::cudaWaitExternalSemaphoresAsync,
- * ::cudaGraphCreate,
- * ::cudaGraphDestroyNode,
+ * ::cudaGraphExecKernelNodeSetParams,
+ * ::cudaGraphExecMemcpyNodeSetParams,
+ * ::cudaGraphExecMemsetNodeSetParams,
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cudaGraphExecUpdate,
  * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11020
@@ -31701,8 +31779,15 @@ public static native @Cast("cudaError_t") int cudaGraphExecExternalSemaphoresSig
  * ::cudaImportExternalSemaphore,
  * ::cudaSignalExternalSemaphoresAsync,
  * ::cudaWaitExternalSemaphoresAsync,
- * ::cudaGraphCreate,
- * ::cudaGraphDestroyNode,
+ * ::cudaGraphExecKernelNodeSetParams,
+ * ::cudaGraphExecMemcpyNodeSetParams,
+ * ::cudaGraphExecMemsetNodeSetParams,
+ * ::cudaGraphExecHostNodeSetParams,
+ * ::cudaGraphExecChildGraphNodeSetParams,
+ * ::cudaGraphExecEventRecordNodeSetEvent,
+ * ::cudaGraphExecEventWaitNodeSetEvent,
+ * ::cudaGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cudaGraphExecUpdate,
  * ::cudaGraphInstantiate
  */
 // #if __CUDART_API_VERSION >= 11020

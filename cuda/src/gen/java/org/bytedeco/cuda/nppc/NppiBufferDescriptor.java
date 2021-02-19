@@ -32,6 +32,8 @@ public class NppiBufferDescriptor extends Pointer {
         return new NppiBufferDescriptor((Pointer)this).position(position + i);
     }
 
-    public native Pointer pData(); public native NppiBufferDescriptor pData(Pointer setter);  // per image device memory pointer to the corresponding buffer
-    public native int nBufferSize(); public native NppiBufferDescriptor nBufferSize(int setter);  // allocated buffer size
+    /** per image device memory pointer to the corresponding buffer */
+    public native Pointer pData(); public native NppiBufferDescriptor pData(Pointer setter);
+    /** allocated buffer size */
+    public native int nBufferSize(); public native NppiBufferDescriptor nBufferSize(int setter);
 }

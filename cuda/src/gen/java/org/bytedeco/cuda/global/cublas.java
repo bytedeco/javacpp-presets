@@ -101,9 +101,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 11;
-public static final int CUBLAS_VER_MINOR = 3;
+public static final int CUBLAS_VER_MINOR = 4;
 public static final int CUBLAS_VER_PATCH = 1;
-public static final int CUBLAS_VER_BUILD = 68;
+public static final int CUBLAS_VER_BUILD = 1026;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
@@ -7249,7 +7249,8 @@ public static final int
     CUBLASLT_MATMUL_STAGES_32x10     = 25,
     CUBLASLT_MATMUL_STAGES_8x4       = 26,
     CUBLASLT_MATMUL_STAGES_16x10     = 27,
-    CUBLASLT_MATMUL_STAGES_END = 28;
+    CUBLASLT_MATMUL_STAGES_8x5       = 28,
+    CUBLASLT_MATMUL_STAGES_END = 29;
 
 /** Pointer mode to use for alpha/beta */
 /** enum cublasLtPointerMode_t */

@@ -32,7 +32,10 @@ public class cudaExternalSemaphoreWaitNodeParams extends Pointer {
         return new cudaExternalSemaphoreWaitNodeParams((Pointer)this).position(position + i);
     }
 
+    /** Array of external semaphore handles. */
     public native @ByPtrPtr CUexternalSemaphore_st extSemArray(); public native cudaExternalSemaphoreWaitNodeParams extSemArray(CUexternalSemaphore_st setter);
+    /** Array of external semaphore wait parameters. */
     public native @Const cudaExternalSemaphoreWaitParams paramsArray(); public native cudaExternalSemaphoreWaitNodeParams paramsArray(cudaExternalSemaphoreWaitParams setter);
+    /** Number of handles and parameters supplied in extSemArray and paramsArray. */
     public native @Cast("unsigned int") int numExtSems(); public native cudaExternalSemaphoreWaitNodeParams numExtSems(int setter);
 }

@@ -36,7 +36,10 @@ public class NppiImageDescriptor extends Pointer {
         return new NppiImageDescriptor((Pointer)this).position(position + i);
     }
 
-    public native Pointer pData(); public native NppiImageDescriptor pData(Pointer setter);  // device memory pointer to the image
-    public native int nStep(); public native NppiImageDescriptor nStep(int setter);  // step size
-    public native @ByRef NppiSize oSize(); public native NppiImageDescriptor oSize(NppiSize setter);  // width and height of the image
+    /** device memory pointer to the image */
+    public native Pointer pData(); public native NppiImageDescriptor pData(Pointer setter);
+    /** step size */
+    public native int nStep(); public native NppiImageDescriptor nStep(int setter);
+    /** width and height of the image */
+    public native @ByRef NppiSize oSize(); public native NppiImageDescriptor oSize(NppiSize setter);
 }
