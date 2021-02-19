@@ -30,19 +30,32 @@ runs:
           dir /s /a "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\14.*"
         )
 
-        rem if not "%CI_DEPLOY_NEED_GCC%"=="" (
-        rem   echo Installing an older less buggy version of GCC
-        rem   python -m gdown.cli https://drive.google.com/uc?id=1CmH1Eq0LoAQQ5mWaqYiU9kYOfMGjLXlz
-        rem   tar -xvf mingw-w64-old.tar
-        rem   bash -c "pacman -U --noconfirm *.pkg.tar.xz"
-        rem   sed -i "/#include <avx512/d" "C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/immintrin.h"
-        rem )
+        if not "%CI_DEPLOY_NEED_GCC%"=="" (
+          echo Installing an older less buggy version of GCC
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.36-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.36-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-9.0.0.6090.ad98746a-1-any.pkg.tar.zst
+          bash -c "pacman -U --noconfirm *.pkg.tar.zst"
+        )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.0_460.89_win10.exe
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_461.09_win10.exe
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.0/cudnn-11.2-windows-x64-v8.1.0.77.zip
-          cuda_11.2.0_460.89_win10.exe -s
+          cuda_11.2.1_461.09_win10.exe -s
           unzip cudnn-11.2-windows-x64-v8.1.0.77.zip
           move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin"
           move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include"

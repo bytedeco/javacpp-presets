@@ -13,15 +13,15 @@ runs:
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
           export ARCH=arm64
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-2-local-11.2.0_460.27.04-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-11-2-local-11.2.1_460.32.03-1.aarch64.rpm
           export CUDNN=cudnn-11.2-linux-aarch64sbsa-v8.1.0.77.tgz
-          export NCCL=nccl_2.8.3-1+cuda11.1_aarch64.txz
+          export NCCL=nccl_2.8.4-1+cuda11.2_aarch64.txz
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-2-local-11.2.0_460.27.04-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-11-2-local-11.2.1_460.32.03-1.ppc64le.rpm
           export CUDNN=cudnn-11.2-linux-ppc64le-v8.1.0.77.tgz
-          export NCCL=nccl_2.8.3-1+cuda11.1_ppc64le.txz
+          export NCCL=nccl_2.8.4-1+cuda11.2_ppc64le.txz
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -76,7 +76,7 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.0/$CUDNN
           curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/$NCCL
 

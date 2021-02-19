@@ -74,9 +74,9 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
  */
 
 public static final int NPP_VER_MAJOR = 11;
-public static final int NPP_VER_MINOR = 2;
-public static final int NPP_VER_PATCH = 1;
-public static final int NPP_VER_BUILD = 68;
+public static final int NPP_VER_MINOR = 3;
+public static final int NPP_VER_PATCH = 2;
+public static final int NPP_VER_BUILD = 139;
 
 public static final int NPP_VERSION = (NPP_VER_MAJOR * 1000 +     
                      NPP_VER_MINOR *  100 +     
@@ -642,6 +642,38 @@ public static final int
 
 
 // Targeting ../nppc/NppiBufferDescriptor.java
+
+
+// Targeting ../nppc/NppiCompressedMarkerLabelsInfo.java
+
+
+
+/**
+ * Provides contour (boundary) direction info of uniquely labeled pixel regions returned 
+ * by CompressedLabelMarkersUF function. 
+ */
+
+public static final int NPP_CONTOUR_DIRECTION_SOUTH_EAST =    1;
+public static final int NPP_CONTOUR_DIRECTION_SOUTH =         2;
+public static final int NPP_CONTOUR_DIRECTION_SOUTH_WEST =    4;
+public static final int NPP_CONTOUR_DIRECTION_WEST =          8;
+public static final int NPP_CONTOUR_DIRECTION_EAST =         16;
+public static final int NPP_CONTOUR_DIRECTION_NORTH_EAST =   32;
+public static final int NPP_CONTOUR_DIRECTION_NORTH =        64;
+public static final int NPP_CONTOUR_DIRECTION_NORTH_WEST =  128;
+
+public static final int NPP_CONTOUR_DIRECTION_ANY_NORTH =  NPP_CONTOUR_DIRECTION_NORTH_EAST | NPP_CONTOUR_DIRECTION_NORTH | NPP_CONTOUR_DIRECTION_NORTH_WEST;
+public static final int NPP_CONTOUR_DIRECTION_ANY_WEST =   NPP_CONTOUR_DIRECTION_NORTH_WEST | NPP_CONTOUR_DIRECTION_WEST | NPP_CONTOUR_DIRECTION_SOUTH_WEST;
+public static final int NPP_CONTOUR_DIRECTION_ANY_SOUTH =  NPP_CONTOUR_DIRECTION_SOUTH_EAST | NPP_CONTOUR_DIRECTION_SOUTH | NPP_CONTOUR_DIRECTION_SOUTH_WEST;
+public static final int NPP_CONTOUR_DIRECtION_ANY_EAST =   NPP_CONTOUR_DIRECTION_NORTH_EAST | NPP_CONTOUR_DIRECTION_EAST | NPP_CONTOUR_DIRECTION_SOUTH_EAST;
+// Targeting ../nppc/NppiContourPixelDirectionInfo.java
+
+
+// Targeting ../nppc/NppiContourTotalsInfo.java
+
+
+// Targeting ../nppc/NppiContourPixelGeometryInfo.java
+
 
 
 

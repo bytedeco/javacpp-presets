@@ -83,7 +83,7 @@ import org.bytedeco.mkl.presets.*;
         ),
         @Platform(
             value = "windows",
-            preload = {"tvm_runtime:python/tvm/tvm.dll", "tvm_runtime:tvm_runtime.dll"}
+            preload = {"tvm_runtime:python/tvm/tvm.dll#tvm_runtime.dll", "tvm_runtime:tvm_runtime.dll"}
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
