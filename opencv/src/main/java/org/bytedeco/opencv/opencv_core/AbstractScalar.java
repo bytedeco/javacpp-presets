@@ -48,19 +48,19 @@ public abstract class AbstractScalar extends DoublePointer {
     }
 
     public static final Scalar
-            ZERO    = new Scalar(0.0, 0.0, 0.0, 0.0),
-            ONE     = new Scalar(1.0, 1.0, 1.0, 1.0),
-            ONEHALF = new Scalar(0.5, 0.5, 0.5, 0.5),
-            ALPHA1  = new Scalar(0.0, 0.0, 0.0, 1.0),
-            ALPHA255= new Scalar(0.0, 0.0, 0.0, 255.0),
+            ZERO    = new Scalar(0.0, 0.0, 0.0, 0.0).retainReference(),
+            ONE     = new Scalar(1.0, 1.0, 1.0, 1.0).retainReference(),
+            ONEHALF = new Scalar(0.5, 0.5, 0.5, 0.5).retainReference(),
+            ALPHA1  = new Scalar(0.0, 0.0, 0.0, 1.0).retainReference(),
+            ALPHA255= new Scalar(0.0, 0.0, 0.0, 255.0).retainReference(),
 
-            WHITE   = RGB(255, 255, 255),
-            GRAY    = RGB(128, 128, 128),
-            BLACK   = RGB(  0,   0,   0),
-            RED     = RGB(255,   0,   0),
-            GREEN   = RGB(  0, 255,   0),
-            BLUE    = RGB(  0,   0, 255),
-            CYAN    = RGB(  0, 255, 255),
-            MAGENTA = RGB(255,   0, 255),
-            YELLOW  = RGB(255, 255,   0);
+            WHITE   = RGB(255, 255, 255).retainReference(),
+            GRAY    = RGB(128, 128, 128).retainReference(),
+            BLACK   = RGB(  0,   0,   0).retainReference(),
+            RED     = RGB(255,   0,   0).retainReference(),
+            GREEN   = RGB(  0, 255,   0).retainReference(),
+            BLUE    = RGB(  0,   0, 255).retainReference(),
+            CYAN    = RGB(  0, 255, 255).retainReference(),
+            MAGENTA = RGB(255,   0, 255).retainReference(),
+            YELLOW  = RGB(255, 255,   0).retainReference();
 }

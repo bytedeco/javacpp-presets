@@ -98,5 +98,5 @@ public abstract class AbstractCvPoint extends IntPointer {
         }
     }
 
-    public static final CvPoint ZERO = new CvPoint().x(0).y(0);
+    public static final CvPoint ZERO = new CvPoint().x(0).y(0).retainReference();
 }
