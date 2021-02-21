@@ -60,19 +60,19 @@ public abstract class AbstractCvScalar extends DoublePointer {
     }
 
     public static final CvScalar
-            ZERO    = new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 0.0),
-            ONE     = new CvScalar().val(0, 1.0).val(1, 1.0).val(2, 1.0).val(3, 1.0),
-            ONEHALF = new CvScalar().val(0, 0.5).val(1, 0.5).val(2, 0.5).val(3, 0.5),
-            ALPHA1  = new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 1.0),
-            ALPHA255= new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 255.0),
+            ZERO    = new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 0.0).retainReference(),
+            ONE     = new CvScalar().val(0, 1.0).val(1, 1.0).val(2, 1.0).val(3, 1.0).retainReference(),
+            ONEHALF = new CvScalar().val(0, 0.5).val(1, 0.5).val(2, 0.5).val(3, 0.5).retainReference(),
+            ALPHA1  = new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 1.0).retainReference(),
+            ALPHA255= new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 255.0).retainReference(),
 
-            WHITE   = CV_RGB(255, 255, 255),
-            GRAY    = CV_RGB(128, 128, 128),
-            BLACK   = CV_RGB(  0,   0,   0),
-            RED     = CV_RGB(255,   0,   0),
-            GREEN   = CV_RGB(  0, 255,   0),
-            BLUE    = CV_RGB(  0,   0, 255),
-            CYAN    = CV_RGB(  0, 255, 255),
-            MAGENTA = CV_RGB(255,   0, 255),
-            YELLOW  = CV_RGB(255, 255,   0);
+            WHITE   = CV_RGB(255, 255, 255).retainReference(),
+            GRAY    = CV_RGB(128, 128, 128).retainReference(),
+            BLACK   = CV_RGB(  0,   0,   0).retainReference(),
+            RED     = CV_RGB(255,   0,   0).retainReference(),
+            GREEN   = CV_RGB(  0, 255,   0).retainReference(),
+            BLUE    = CV_RGB(  0,   0, 255).retainReference(),
+            CYAN    = CV_RGB(  0, 255, 255).retainReference(),
+            MAGENTA = CV_RGB(255,   0, 255).retainReference(),
+            YELLOW  = CV_RGB(255, 255,   0).retainReference();
 }

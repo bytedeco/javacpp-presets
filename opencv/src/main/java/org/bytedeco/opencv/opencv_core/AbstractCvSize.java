@@ -32,5 +32,5 @@ public abstract class AbstractCvSize extends IntPointer {
             return s;
         }
     }
-    public static final CvSize ZERO = new CvSize().width(0).height(0);
+    public static final CvSize ZERO = new CvSize().width(0).height(0).retainReference();
 }
