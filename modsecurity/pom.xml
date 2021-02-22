@@ -10,6 +10,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>modsecurity</artifactId>
+  <version>3.0.4-${project.parent.version}</version>
+  <name>JavaCPP Presets for ModSecurity</name>
 
   <dependencies>
     <dependency>
@@ -17,10 +19,6 @@
       <artifactId>javacpp</artifactId>
     </dependency>
   </dependencies>
-
-  <properties>
-    <nexus.url>https://nexus.volvo.mito:8443</nexus.url>
-  </properties>
 
   <build>
     <plugins>
@@ -53,14 +51,4 @@
     </plugins>
   </build>
 
-  <distributionManagement>
-    <repository>
-      <id>c4isr.nexus.releases</id>
-      <url>${nexus.url}/repository/maven-releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>c4isr.nexus.snapshots</id>
-      <url>${nexus.url}/repository/maven-snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>

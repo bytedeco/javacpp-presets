@@ -1,0 +1,19 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.bytedeco.modsecurity</groupId>
+  <artifactId>modsecurity-sample</artifactId>
+  <version>1.5.5-SNAPSHOT</version>
+  <properties>
+    <exec.mainClass>ModSecuritySimpleIntervention</exec.mainClass>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>modsecurity-platform</artifactId>
+      <version>3.0.4-1.5.5-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>.</sourceDirectory>
+  </build>
+</project>
