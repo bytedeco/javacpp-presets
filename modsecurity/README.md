@@ -20,6 +20,14 @@ Java API documentation is available here:
 
 * http://bytedeco.org/javacpp-presets/modsecurity/apidocs/
 
+Build Notes
+------------
+
+To Build JavaCPP ModSecurity Preset libraries requred by ModSecurity should be installed. 
+
+Detailed information can be found here:
+
+* https://github.com/SpiderLabs/ModSecurity/wiki/Compilation-recipes-for-v3.x
 
 Sample Usage
 ------------

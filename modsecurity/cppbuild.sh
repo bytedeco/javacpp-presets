@@ -7,8 +7,6 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-
-sudo apt-get install g++ flex bison curl doxygen libyajl-dev libgeoip-dev libtool dh-autoreconf libcurl4-gnutls-dev libxml2 libpcre++-dev libxml2-dev
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
@@ -25,12 +23,6 @@ else
 fi
 
 case $PLATFORM in
-    linux-x86)
-        sh build.sh
-        ./configure --prefix=$INSTALL_PATH
-        make
-        make install
-        ;;
     linux-x86_64)
         sh build.sh
         ./configure --prefix=$INSTALL_PATH
