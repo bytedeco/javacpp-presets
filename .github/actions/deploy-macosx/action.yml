@@ -10,7 +10,9 @@ runs:
         export MACOSX_DEPLOYMENT_TARGET=10.13
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr
+        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr zlib curl pcre libffi yajl ssdeep luarocks
+        brew install geoip --with-geoipupdate
+        brew install doxygen --with-llvm
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           brew install gcc@7
