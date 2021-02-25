@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -102,5 +102,11 @@ import org.bytedeco.javacpp.annotation.Properties;
     }
 )
 public class llvm {
-    static { Loader.load(); }
+    static {
+        try {
+            org.bytedeco.llvm.presets.LLVM.cachePackage();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
