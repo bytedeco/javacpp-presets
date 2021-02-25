@@ -32,6 +32,9 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
 public class HowtoDeploy {
 
     static void PrepareTestLibs() throws Exception {
+        String clang = Loader.load(org.bytedeco.llvm.program.clang.class).replace('\\', '/');
+        String clangPath = clang.substring(0, clang.lastIndexOf('/'));
+
         Py_AddPath(org.bytedeco.tvm.presets.tvm.cachePackages());
         Py_Initialize();
         if (_import_array() < 0) {
@@ -79,6 +82,7 @@ public class HowtoDeploy {
                 + "if __name__ == \"__main__\":\n"
                 + "    lib_path = os.path.join(os.getcwd(), \"lib\")\n"
                 + "    os.makedirs(lib_path, exist_ok = True)\n"
+                + "    os.environ[\"PATH\"] += os.pathsep + \"" + clangPath + "\"\n"
                 + "    prepare_test_libs(lib_path)\n"
                 + "    prepare_graph_lib(lib_path)\n",
 

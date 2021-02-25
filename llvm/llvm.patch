@@ -1,0 +1,15 @@
+diff -ruN llvm-project-11.0.1.src/clang/lib/Driver/Driver.cpp llvm-project-11.0.1.src-patch/clang/lib/Driver/Driver.cpp
+--- llvm-project-11.0.1.src/clang/lib/Driver/Driver.cpp	2020-12-19 04:57:38.000000000 +0900
++++ llvm-project-11.0.1.src-patch/clang/lib/Driver/Driver.cpp	2021-02-25 14:34:43.211484832 +0900
+@@ -115,6 +115,11 @@
+     P = llvm::sys::path::parent_path(Dir);
+     llvm::sys::path::append(P, Twine("lib") + CLANG_LIBDIR_SUFFIX, "clang",
+                             CLANG_VERSION_STRING);
++    if (!llvm::sys::fs::exists(P)) {
++        P = Dir;
++        llvm::sys::path::append(P, Twine("lib") + CLANG_LIBDIR_SUFFIX, "clang",
++                                CLANG_VERSION_STRING);
++    }
+   }
+ 
+   return std::string(P.str());

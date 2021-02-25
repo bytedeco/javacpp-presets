@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2020 Samuel Audet
+ * Copyright (C) 2014-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 
 package org.bytedeco.llvm.presets;
 
+import java.io.File;
+import java.io.IOException;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.presets.javacpp;
@@ -36,11 +38,16 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
                "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp14", link = {"LLVM-11", "LTO@.11", "Remarks@.11"}, resource = {"include", "lib"}),
+    compiler = "cpp14", link = {"LLVM-11", "LTO@.11", "Remarks@.11"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
+
+    /** Returns {@code Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform())}. */
+    public static File cachePackage() throws IOException {
+        return Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform());
+    }
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVMOpaqueContext").pointerTypes("LLVMContextRef"))

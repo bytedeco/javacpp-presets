@@ -1,4 +1,5 @@
 
+ * Bundle LLD executable in presets for LLVM as required by TVM on Windows
  * Prevent `public static final` objects from getting deallocated by `PointerScope` ([issue bytedeco/javacv#1599](https://github.com/bytedeco/javacv/issues/1599))
  * Fix compatibility of Leptonica with JavaFX by upgrading to libpng 1.6.37 ([pull #1007](https://github.com/bytedeco/javacpp-presets/pull/1007))
  * Introduce `linux-arm64` build for CUDA, cuDNN, and NCCL ([issue #735](https://github.com/bytedeco/javacpp-presets/issues/735))
