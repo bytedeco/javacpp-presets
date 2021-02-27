@@ -1,7 +1,7 @@
-diff -ruN oneDNN-1.6.4/include/dnnl.hpp oneDNN-1.6.4-patch/include/dnnl.hpp
---- oneDNN-1.6.4/include/dnnl.hpp	2020-10-01 05:58:58.000000000 +0900
-+++ oneDNN-1.6.4-patch/include/dnnl.hpp	2020-10-20 13:12:12.899881000 +0900
-@@ -110,6 +110,8 @@
+diff -ruN oneDNN-2.0/include/oneapi/dnnl/dnnl.hpp oneDNN-2.0-patch/include/oneapi/dnnl/dnnl.hpp
+--- oneDNN-2.0/include/oneapi/dnnl/dnnl.hpp	2020-11-17 01:17:45.000000000 +0900
++++ oneDNN-2.0-patch/include/oneapi/dnnl/dnnl.hpp	2020-12-13 09:06:33.868784287 +0900
+@@ -103,6 +103,8 @@
      static void wrap_c_api(dnnl_status_t status, const char *message) {
          if (status != dnnl_success) DNNL_THROW_ERROR(status, message);
      }
@@ -10,10 +10,10 @@ diff -ruN oneDNN-1.6.4/include/dnnl.hpp oneDNN-1.6.4-patch/include/dnnl.hpp
  };
  
  /// @cond DO_NOT_DOCUMENT_THIS
-diff -ruN oneDNN-1.6.4/src/CMakeLists.txt oneDNN-1.6.4-patch/src/CMakeLists.txt
---- oneDNN-1.6.4/src/CMakeLists.txt	2020-10-01 05:58:58.000000000 +0900
-+++ oneDNN-1.6.4-patch/src/CMakeLists.txt	2020-10-20 13:12:32.989881086 +0900
-@@ -142,54 +142,6 @@
+diff -ruN oneDNN-2.0/src/CMakeLists.txt oneDNN-2.0-patch/src/CMakeLists.txt
+--- oneDNN-2.0/src/CMakeLists.txt	2020-11-17 01:17:45.000000000 +0900
++++ oneDNN-2.0-patch/src/CMakeLists.txt	2020-12-13 09:05:47.426779818 +0900
+@@ -152,54 +152,6 @@
      -DDIR=\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake
      -P ${PROJECT_SOURCE_DIR}/cmake/gen_mkldnn_compat_cmakes.cmake)")
  
@@ -67,10 +67,10 @@ diff -ruN oneDNN-1.6.4/src/CMakeLists.txt oneDNN-1.6.4-patch/src/CMakeLists.txt
 -
  # Install custom find modules for transitive dependencies
  set(LIB_CONFIG_INSTALL_DIR_COMPAT "${CMAKE_INSTALL_LIBDIR}/cmake/mkldnn")
- if(DNNL_CPU_RUNTIME STREQUAL "TBB")
-diff -ruN oneDNN-1.6.4/src/cpu/cpu_engine.cpp oneDNN-1.6.4-patch/src/cpu/cpu_engine.cpp
---- oneDNN-1.6.4/src/cpu/cpu_engine.cpp	2020-10-01 05:58:58.000000000 +0900
-+++ oneDNN-1.6.4-patch/src/cpu/cpu_engine.cpp	2020-10-20 13:12:15.726881012 +0900
+ if(DNNL_CPU_THREADING_RUNTIME STREQUAL "TBB")
+diff -ruN oneDNN-2.0/src/cpu/cpu_engine.cpp oneDNN-2.0-patch/src/cpu/cpu_engine.cpp
+--- oneDNN-2.0/src/cpu/cpu_engine.cpp	2020-11-17 01:17:45.000000000 +0900
++++ oneDNN-2.0-patch/src/cpu/cpu_engine.cpp	2020-12-13 09:05:47.427779818 +0900
 @@ -23,10 +23,31 @@
  #include "cpu/cpu_memory_storage.hpp"
  #include "cpu/cpu_stream.hpp"
@@ -103,10 +103,10 @@ diff -ruN oneDNN-1.6.4/src/cpu/cpu_engine.cpp oneDNN-1.6.4-patch/src/cpu/cpu_eng
  status_t cpu_engine_t::create_memory_storage(
          memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
      auto _storage = new cpu_memory_storage_t(this);
-diff -ruN oneDNN-1.6.4/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp oneDNN-1.6.4-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp
---- oneDNN-1.6.4/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-10-01 05:58:58.000000000 +0900
-+++ oneDNN-1.6.4-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-10-20 13:12:15.727881012 +0900
-@@ -264,11 +264,6 @@
+diff -ruN oneDNN-2.0/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp oneDNN-2.0-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp
+--- oneDNN-2.0/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-11-17 01:17:45.000000000 +0900
++++ oneDNN-2.0-patch/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp	2020-12-13 09:05:47.428779818 +0900
+@@ -265,11 +265,6 @@
          scratchpad.book<float>(key_conv_padded_bias, jcp.oc);
  }
  
@@ -118,7 +118,7 @@ diff -ruN oneDNN-1.6.4/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp oneDNN-1.6.4
  template <cpu_isa_t isa, data_type_t kernel_dt>
  struct jit_uni_dw_conv_bwd_data_kernel {
  
-@@ -398,11 +393,6 @@
+@@ -400,11 +395,6 @@
      UNUSED(jcp);
  }
  
@@ -130,7 +130,7 @@ diff -ruN oneDNN-1.6.4/src/cpu/x64/jit_uni_dw_conv_kernel_utils.hpp oneDNN-1.6.4
  template <cpu_isa_t isa, data_type_t kernel_dt>
  struct jit_uni_dw_conv_bwd_weights_kernel {
  
-@@ -578,12 +568,6 @@
+@@ -581,12 +571,6 @@
      jcp.nthr = jcp.nthr_g * jcp.nthr_mb;
  }
  

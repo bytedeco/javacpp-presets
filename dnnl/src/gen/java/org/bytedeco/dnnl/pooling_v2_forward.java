@@ -15,11 +15,9 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 /** \} dnnl_api_resampling
  <p>
- *  \addtogroup dnnl_api_pooling Pooling
+ *  \addtogroup dnnl_api_pooling_v2 Pooling_v2
  * 
- *  Pooling version 2 (dilated pooling).
- * 
- *  A primitive to perform max or average pooling.
+ *  A primitive to perform max or average pooling with dilation.
  * 
  *  @see \ref dev_guide_pooling in developer guide
  * 

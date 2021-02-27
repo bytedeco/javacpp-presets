@@ -77,13 +77,12 @@ public class engine extends dnnl_engine_handle {
      *  @param akind The kind of engine to construct.
      *  @param index The index of the engine. Must be less than the value
      *      returned by #get_count() for this particular kind of engine. */
+    
+    ///
     public engine(kind akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
     private native void allocate(kind akind, @Cast("size_t") long index);
     public engine(@Cast("dnnl::engine::kind") int akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
     private native void allocate(@Cast("dnnl::engine::kind") int akind, @Cast("size_t") long index);
-
-// #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
-// #endif
 
     /** Constructs an engine based on a primitive from the primitive
      *  descriptor \p pd by querying its engine.
@@ -94,10 +93,9 @@ public class engine extends dnnl_engine_handle {
 
     /** Returns the kind of the engine.
      *  @return The kind of the engine. */
+    
+    ///
     public native kind get_kind();
-
-// #if DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL
-// #endif
 
     /** Returns the engine of a primitive descriptor.
      * 

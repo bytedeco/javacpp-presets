@@ -244,10 +244,10 @@ public class python implements InfoMapper {
         return pythonFile;
     }
 
-    /** Returns {@code {f, new File(f, "python3.9"), new File(f, "python3.9/lib-dynload"), new File(f, "python3.9/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
+    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.9"), new File(f, "python3.9/lib-dynload"), new File(f, "python3.9/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
     public static File[] cachePackages() throws IOException {
         File f = new File(cachePackage(), "lib");
-        return new File[] {f, new File(f, "python3.9"), new File(f, "python3.9/lib-dynload"), new File(f, "python3.9/site-packages")};
+        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.9"), new File(f, "python3.9/lib-dynload"), new File(f, "python3.9/site-packages")};
     }
 
     public void map(InfoMap infoMap) {
@@ -274,7 +274,7 @@ public class python implements InfoMapper {
                              "Py_ALLOW_RECURSION", "Py_END_ALLOW_RECURSION", "NATIVE_TSS_KEY_T",
                              "PYTHREAD_INVALID_THREAD_ID", "Py_BEGIN_ALLOW_THREADS", "Py_END_ALLOW_THREADS", "Py_BLOCK_THREADS", "Py_UNBLOCK_THREADS",
                              "_Py_COMP_DIAG_PUSH", "_Py_COMP_DIAG_IGNORE_DEPR_DECLS", "_Py_COMP_DIAG_POP", "Py_EXPORTED_SYMBOL",
-                             "_PyCompilerFlags_INIT", "_PyInterpreterState_Get", "PyOS_strnicmp", "PyOS_stricmp",
+                             "_PyCompilerFlags_INIT", "_PyInterpreterState_Get", "PyOS_strnicmp", "PyOS_stricmp", "Py_FrozenMain",
                              "_PyObject_Vectorcall", "_PyObject_VectorcallMethod", "_PyObject_FastCallDict", "_PyVectorcall_Function",
                              "_PyObject_CallOneArg", "_PyObject_CallMethodNoArgs", "_PyObject_CallMethodOneArg").cppTypes().annotations())
 
