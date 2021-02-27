@@ -199,12 +199,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        9;
-public static final int PY_MICRO_VERSION =        1;
+public static final int PY_MICRO_VERSION =        2;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.9.1";
+public static final String PY_VERSION =              "3.9.2";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -6791,7 +6791,7 @@ public static final int Py_UNICODE_REPLACEMENT_CHARACTER = ((int) 0xFFFD);
 
  */
 // #define Py_UNICODE_ISSPACE(ch)
-//     ((ch) < 128 ? _Py_ascii_whitespace[(ch)] : _PyUnicode_IsWhitespace(ch))
+//     ((Py_UCS4)(ch) < 128 ? _Py_ascii_whitespace[(ch)] : _PyUnicode_IsWhitespace(ch))
 
 // #define Py_UNICODE_ISLOWER(ch) _PyUnicode_IsLowercase(ch)
 // #define Py_UNICODE_ISUPPER(ch) _PyUnicode_IsUppercase(ch)
@@ -7337,13 +7337,6 @@ public static final int
 
    Use of this API is DEPRECATED since no size information can be
    extracted from the returned data.
-
-   *** This API is for interpreter INTERNAL USE ONLY and will likely
-   *** be removed or changed for Python 3.1.
-
-   *** If you need to access the Unicode object as UTF-8 bytes string,
-   *** please use PyUnicode_AsUTF8String() instead.
-
 */
 
 @NoException public static native @Cast("const char*") BytePointer PyUnicode_AsUTF8(PyObject unicode);
