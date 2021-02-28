@@ -10756,6 +10756,43 @@ public static native void createOptimizedJITCompilerForModule(
     LLVMValueRef Val
 );
 
+/**
+ * Inlined re-implementation of LLVMGetMDString without providing a wrapped
+ * MetadataAsValue instance
+ *
+ * See /llvm/lib/IR/Core.cpp for original implementation
+ */
+@Namespace("llvm") public static native @Cast("const char*") BytePointer getMDString(LLVMMetadataRef M, @Cast("unsigned*") IntPointer Length);
+@Namespace("llvm") public static native String getMDString(LLVMMetadataRef M, @Cast("unsigned*") IntBuffer Length);
+@Namespace("llvm") public static native @Cast("const char*") BytePointer getMDString(LLVMMetadataRef M, @Cast("unsigned*") int[] Length);
+
+/**
+ * Inlined re-implementation of LLVMGetMDNodeNumOperands
+ *
+ * See /llvm/lib/IR/Core.cpp for original implementation
+ */
+@Namespace("llvm") public static native @Cast("unsigned") int getMDNodeNumOperands(LLVMMetadataRef M);
+
+/**
+ * Inlined re-implementation of LLVMGetMDNodeOperands
+ *
+ * Accepts an additional LLVMContextRef argument in which all ConstantAsMetadata
+ * values will be unwrapped and stored in. (see C API implementation)
+ *
+ * This implementation inlines the statically defined "getMDNodeOperandsImpl" in
+ * Core.cpp which the original implementation uses.
+ *
+ * See /llvm/lib/IR/Core.cpp for original implementation
+ */
+@Namespace("llvm") public static native void getMDNodeOperands(
+    LLVMMetadataRef M,
+    LLVMContextRef C,
+    @ByPtrPtr LLVMValueRef Dest);
+@Namespace("llvm") public static native void getMDNodeOperands(
+    LLVMMetadataRef M,
+    LLVMContextRef C,
+    @Cast("LLVMValueRef*") PointerPointer Dest);
+
  // namespace llvm
 
 // #endif // NAMED_METADATA_OPERATIONS_H

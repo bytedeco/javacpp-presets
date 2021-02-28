@@ -94,6 +94,80 @@ extern "C" void addNamedMDNodeOperand(
     N->addOperand(Metadata);
 }
 
+/**
+ * Inlined re-implementation of LLVMGetMDString without providing a wrapped
+ * MetadataAsValue instance
+ *
+ * See /llvm/lib/IR/Core.cpp for original implementation
+ */
+extern "C" const char* getMDString(LLVMMetadataRef M, unsigned *Length) {
+    Metadata *MD = unwrap(M);
+
+    if (const MDString *S = dyn_cast<MDString>(MD)) {
+        *Length = S->getString().size();
+        return S->getString().data();
+    }
+    *Length = 0;
+    return nullptr;
+}
+
+/**
+ * Inlined re-implementation of LLVMGetMDNodeNumOperands
+ *
+ * See /llvm/lib/IR/Core.cpp for original implementation
+ */
+extern "C" unsigned getMDNodeNumOperands(LLVMMetadataRef M) {
+    Metadata *MD = unwrap(M);
+    if (isa<ValueAsMetadata>(MD)) {
+        return 1;
+    }
+    return cast<MDNode>(MD)->getNumOperands();
+}
+
+/**
+ * Inlined re-implementation of LLVMGetMDNodeOperands
+ *
+ * Accepts an additional LLVMContextRef argument in which all ConstantAsMetadata
+ * values will be unwrapped and stored in. (see C API implementation)
+ *
+ * This implementation inlines the statically defined "getMDNodeOperandsImpl" in
+ * Core.cpp which the original implementation uses.
+ *
+ * See /llvm/lib/IR/Core.cpp for original implementation
+ */
+extern "C" void getMDNodeOperands(
+    LLVMMetadataRef M,
+    LLVMContextRef C,
+    LLVMValueRef *Dest) {
+    Metadata *MD = unwrap(M);
+    LLVMContext *Context = unwrap(C);
+
+    if (auto *MDV = dyn_cast<ValueAsMetadata>(MD)) {
+        *Dest = wrap(MDV->getValue());
+        return;
+    }
+
+    const auto *N = cast<MDNode>(MD);
+    const unsigned numOperands = N->getNumOperands();
+
+    // Inlined code of "static LLVMValueRef getMDNodeOperandsImpl(LLVMContext &, const MDNode *, unsigned)"
+    for (unsigned i = 0; i < numOperands; i++) {
+        Metadata *Op = N->getOperand(i);
+
+        if (!Op) {
+            Dest[i] = nullptr;
+            continue;
+        }
+
+        if (auto *C = dyn_cast<ConstantAsMetadata>(Op)) {
+            Dest[i] = wrap(C->getValue());
+            continue;
+        }
+
+        Dest[i] = wrap(MetadataAsValue::get(*Context, Op));
+    }
+}
+
 } // namespace llvm
 
 #endif // NAMED_METADATA_OPERATIONS_H
