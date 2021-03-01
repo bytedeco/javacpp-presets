@@ -40,7 +40,7 @@ public class Matrix extends Pointer {
             return (Matrix)super.position(position);
         }
         @Override public Matrix getPointer(long i) {
-            return new Matrix(this).position(position + i);
+            return new Matrix((Pointer)this).position(position + i);
         }
     
         /**

@@ -38,7 +38,7 @@ public class FloatRectangle extends Pointer {
             return (FloatRectangle)super.position(position);
         }
         @Override public FloatRectangle getPointer(long i) {
-            return new FloatRectangle(this).position(position + i);
+            return new FloatRectangle((Pointer)this).position(position + i);
         }
     
         public native float x(); public native FloatRectangle x(float setter);

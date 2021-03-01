@@ -38,7 +38,7 @@ public class IntPoint extends Pointer {
             return (IntPoint)super.position(position);
         }
         @Override public IntPoint getPointer(long i) {
-            return new IntPoint(this).position(position + i);
+            return new IntPoint((Pointer)this).position(position + i);
         }
     
         public native int x(); public native IntPoint x(int setter);

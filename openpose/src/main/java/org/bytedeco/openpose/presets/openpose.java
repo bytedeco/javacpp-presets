@@ -52,6 +52,17 @@ import org.bytedeco.hdf5.presets.*;
                 "UNIQUE_PTR_NAMESPACE std",
                 "GPU_MODE CPU_ONLY"
             },
+            exclude = {
+                // prevent linking unnecessarily with Boost
+                "caffe/caffe.hpp",
+                "caffe/common.hpp",
+                "caffe/parallel.hpp",
+                "caffe/solver.hpp",
+                "caffe/util/blocking_queue.hpp",
+                "caffe/util/benchmark.hpp",
+                "caffe/util/io.hpp",
+                "caffe/util/rng.hpp"
+            },
             include = {
                 "openpose/utilities/enumClasses.hpp",
                 "openpose/thread/enumClasses.hpp",

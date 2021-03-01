@@ -41,7 +41,7 @@ public class WrapperStructGui extends Pointer {
             return (WrapperStructGui)super.position(position);
         }
         @Override public WrapperStructGui getPointer(long i) {
-            return new WrapperStructGui(this).position(position + i);
+            return new WrapperStructGui((Pointer)this).position(position + i);
         }
     
         /**

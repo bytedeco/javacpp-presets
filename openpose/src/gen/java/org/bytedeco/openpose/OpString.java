@@ -42,7 +42,7 @@ public class OpString extends Pointer {
             return (OpString)super.position(position);
         }
         @Override public OpString getPointer(long i) {
-            return new OpString(this).position(position + i);
+            return new OpString((Pointer)this).position(position + i);
         }
     
         public OpString() { super((Pointer)null); allocate(); }

@@ -43,7 +43,7 @@ public class WrapperStructFace extends Pointer {
             return (WrapperStructFace)super.position(position);
         }
         @Override public WrapperStructFace getPointer(long i) {
-            return new WrapperStructFace(this).position(position + i);
+            return new WrapperStructFace((Pointer)this).position(position + i);
         }
     
         /**
