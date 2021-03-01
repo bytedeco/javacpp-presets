@@ -6,11 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -32,7 +34,7 @@ public class ADTObj extends TVMObject {
         return (ADTObj)super.position(position);
     }
     @Override public ADTObj getPointer(long i) {
-        return new ADTObj(this).position(position + i);
+        return new ADTObj((Pointer)this).position(position + i);
     }
     public ADTObjBase asADTObjBase() { return asADTObjBase(this); }
     @Namespace public static native @Name("static_cast<tvm::runtime::InplaceArrayBase<tvm::runtime::ADTObj,tvm::runtime::ObjectRef>*>") ADTObjBase asADTObjBase(ADTObj pointer);

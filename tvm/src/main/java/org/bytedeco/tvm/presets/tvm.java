@@ -70,7 +70,9 @@ public class tvm {
             path = path.replace(File.separatorChar, '/');
             int i = path.indexOf("/org/bytedeco/tvm/" + Loader.getPlatform());
             int j = path.lastIndexOf("/");
-            return Loader.cacheResource(path.substring(i, j) + "/python/");
+            File f = Loader.cacheResource(path.substring(i, j) + "/python/");
+            Loader.load(tvm_runtime.class);
+            return f;
         }
         return null;
     }
