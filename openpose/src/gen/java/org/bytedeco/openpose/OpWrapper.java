@@ -53,7 +53,7 @@ public class OpWrapper extends Pointer {
             return (OpWrapper)super.position(position);
         }
         @Override public OpWrapper getPointer(long i) {
-            return new OpWrapper(this).position(position + i);
+            return new OpWrapper((Pointer)this).position(position + i);
         }
     
         /**

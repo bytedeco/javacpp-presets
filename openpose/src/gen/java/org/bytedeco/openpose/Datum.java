@@ -44,7 +44,7 @@ public class Datum extends Pointer {
             return (Datum)super.position(position);
         }
         @Override public Datum getPointer(long i) {
-            return new Datum(this).position(position + i);
+            return new Datum((Pointer)this).position(position + i);
         }
     
         // ---------------------------------------- ID parameters ---------------------------------------- //

@@ -43,7 +43,7 @@ public class WrapperStructExtra extends Pointer {
             return (WrapperStructExtra)super.position(position);
         }
         @Override public WrapperStructExtra getPointer(long i) {
-            return new WrapperStructExtra(this).position(position + i);
+            return new WrapperStructExtra((Pointer)this).position(position + i);
         }
     
         /**

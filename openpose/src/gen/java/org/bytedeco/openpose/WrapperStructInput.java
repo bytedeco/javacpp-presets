@@ -42,7 +42,7 @@ public class WrapperStructInput extends Pointer {
             return (WrapperStructInput)super.position(position);
         }
         @Override public WrapperStructInput getPointer(long i) {
-            return new WrapperStructInput(this).position(position + i);
+            return new WrapperStructInput((Pointer)this).position(position + i);
         }
     
         /**

@@ -43,7 +43,7 @@ public class WrapperStructHand extends Pointer {
             return (WrapperStructHand)super.position(position);
         }
         @Override public WrapperStructHand getPointer(long i) {
-            return new WrapperStructHand(this).position(position + i);
+            return new WrapperStructHand((Pointer)this).position(position + i);
         }
     
         /**

@@ -38,7 +38,7 @@ public class FloatPoint extends Pointer {
             return (FloatPoint)super.position(position);
         }
         @Override public FloatPoint getPointer(long i) {
-            return new FloatPoint(this).position(position + i);
+            return new FloatPoint((Pointer)this).position(position + i);
         }
     
         public native float x(); public native FloatPoint x(float setter);
