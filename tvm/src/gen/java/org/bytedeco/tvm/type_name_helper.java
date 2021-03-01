@@ -6,11 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -33,7 +35,7 @@ public class type_name_helper extends Pointer {
         return (type_name_helper)super.position(position);
     }
     @Override public type_name_helper getPointer(long i) {
-        return new type_name_helper(this).position(position + i);
+        return new type_name_helper((Pointer)this).position(position + i);
     }
 
     public static native @StdString BytePointer value();

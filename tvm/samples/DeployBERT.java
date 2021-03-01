@@ -5,6 +5,7 @@ import org.bytedeco.javacpp.indexer.*;
 import org.bytedeco.cpython.*;
 import org.bytedeco.numpy.*;
 import org.bytedeco.tvm.*;
+import org.bytedeco.tvm.Module;
 import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 import static org.bytedeco.tvm.global.tvm_runtime.*;

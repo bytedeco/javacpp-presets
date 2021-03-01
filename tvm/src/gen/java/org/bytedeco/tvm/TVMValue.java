@@ -6,11 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -35,7 +37,7 @@ public class TVMValue extends Pointer {
         return (TVMValue)super.position(position);
     }
     @Override public TVMValue getPointer(long i) {
-        return new TVMValue(this).position(position + i);
+        return new TVMValue((Pointer)this).position(position + i);
     }
 
   public native @Cast("int64_t") long v_int64(); public native TVMValue v_int64(long setter);

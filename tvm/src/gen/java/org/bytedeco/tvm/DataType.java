@@ -6,11 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -33,7 +35,7 @@ public class DataType extends Pointer {
         return (DataType)super.position(position);
     }
     @Override public DataType getPointer(long i) {
-        return new DataType(this).position(position + i);
+        return new DataType((Pointer)this).position(position + i);
     }
 
   /**

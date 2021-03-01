@@ -6,11 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -31,7 +33,7 @@ public class is_floating_point extends Pointer {
         return (is_floating_point)super.position(position);
     }
     @Override public is_floating_point getPointer(long i) {
-        return new is_floating_point(this).position(position + i);
+        return new is_floating_point((Pointer)this).position(position + i);
     }
 
     @MemberGetter public static native @Cast("const bool") boolean value();

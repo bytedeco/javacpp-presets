@@ -6,11 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -31,7 +33,7 @@ public class Handler extends Pointer {
         return (Handler)super.position(position);
     }
     @Override public Handler getPointer(long i) {
-        return new Handler(this).position(position + i);
+        return new Handler((Pointer)this).position(position + i);
     }
 
   public static native void Write(Stream strm, @Const @ByRef DLDataType dtype);
