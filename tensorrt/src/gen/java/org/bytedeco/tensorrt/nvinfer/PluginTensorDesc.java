@@ -44,7 +44,7 @@ public class PluginTensorDesc extends Pointer {
         return (PluginTensorDesc)super.position(position);
     }
     @Override public PluginTensorDesc getPointer(long i) {
-        return new PluginTensorDesc(this).position(position + i);
+        return new PluginTensorDesc((Pointer)this).position(position + i);
     }
 
     public native @ByRef Dims dims(); public native PluginTensorDesc dims(Dims setter);

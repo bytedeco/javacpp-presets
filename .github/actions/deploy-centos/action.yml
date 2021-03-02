@@ -92,8 +92,8 @@ runs:
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
-          python3 -m gdown.cli https://drive.google.com/uc?id=1lps5XRB7tlf8rfpYM6202dwUmBTYAsJA
-          tar -hxvf TensorRT-7.2.2.3.CentOS-7.8.x86_64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1jLcLA1ShUKodi_lGOZ7i233IDKJ-q2uY
+          tar -hxvf TensorRT-7.2.2.3.CentOS-7.8.x86_64-gnu.cuda-11.2.cudnn8.1.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

@@ -39,7 +39,7 @@ public class DynamicPluginTensorDesc extends Pointer {
         return (DynamicPluginTensorDesc)super.position(position);
     }
     @Override public DynamicPluginTensorDesc getPointer(long i) {
-        return new DynamicPluginTensorDesc(this).position(position + i);
+        return new DynamicPluginTensorDesc((Pointer)this).position(position + i);
     }
 
     /** Information required to interpret a pointer to tensor data, except that desc.dims has -1 in place of any runtime dimension. */

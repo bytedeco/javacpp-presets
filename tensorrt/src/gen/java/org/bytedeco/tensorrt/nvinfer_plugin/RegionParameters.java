@@ -36,7 +36,7 @@ public class RegionParameters extends Pointer {
         return (RegionParameters)super.position(position);
     }
     @Override public RegionParameters getPointer(long i) {
-        return new RegionParameters(this).position(position + i);
+        return new RegionParameters((Pointer)this).position(position + i);
     }
 
     public native int num(); public native RegionParameters num(int setter);

@@ -48,7 +48,7 @@ public class Dims extends Pointer {
         return (Dims)super.position(position);
     }
     @Override public Dims getPointer(long i) {
-        return new Dims(this).position(position + i);
+        return new Dims((Pointer)this).position(position + i);
     }
 
     /** The maximum number of dimensions supported for a tensor. */

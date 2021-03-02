@@ -35,7 +35,7 @@ public class Dims2 extends Dims {
         return (Dims2)super.position(position);
     }
     @Override public Dims2 getPointer(long i) {
-        return new Dims2(this).position(position + i);
+        return new Dims2((Pointer)this).position(position + i);
     }
 
     /**

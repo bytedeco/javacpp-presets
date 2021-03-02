@@ -38,7 +38,7 @@ public class IInt8MinMaxCalibrator extends IInt8Calibrator {
         return (IInt8MinMaxCalibrator)super.position(position);
     }
     @Override public IInt8MinMaxCalibrator getPointer(long i) {
-        return new IInt8MinMaxCalibrator(this).position(position + i);
+        return new IInt8MinMaxCalibrator((Pointer)this).position(position + i);
     }
 
     /**

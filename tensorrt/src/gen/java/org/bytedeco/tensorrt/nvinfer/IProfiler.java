@@ -44,7 +44,7 @@ public class IProfiler extends Pointer {
         return (IProfiler)super.position(position);
     }
     @Override public IProfiler getPointer(long i) {
-        return new IProfiler(this).position(position + i);
+        return new IProfiler((Pointer)this).position(position + i);
     }
 
     /**

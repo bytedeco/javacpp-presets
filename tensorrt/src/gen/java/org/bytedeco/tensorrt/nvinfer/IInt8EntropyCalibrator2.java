@@ -38,7 +38,7 @@ public class IInt8EntropyCalibrator2 extends IInt8Calibrator {
         return (IInt8EntropyCalibrator2)super.position(position);
     }
     @Override public IInt8EntropyCalibrator2 getPointer(long i) {
-        return new IInt8EntropyCalibrator2(this).position(position + i);
+        return new IInt8EntropyCalibrator2((Pointer)this).position(position + i);
     }
 
     /**

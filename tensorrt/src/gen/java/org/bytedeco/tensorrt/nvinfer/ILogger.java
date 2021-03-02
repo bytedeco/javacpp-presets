@@ -42,7 +42,7 @@ public class ILogger extends Pointer {
         return (ILogger)super.position(position);
     }
     @Override public ILogger getPointer(long i) {
-        return new ILogger(this).position(position + i);
+        return new ILogger((Pointer)this).position(position + i);
     }
 
     /**
