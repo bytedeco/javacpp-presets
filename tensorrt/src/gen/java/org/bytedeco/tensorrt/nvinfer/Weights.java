@@ -46,7 +46,7 @@ public class Weights extends Pointer {
         return (Weights)super.position(position);
     }
     @Override public Weights getPointer(long i) {
-        return new Weights(this).position(position + i);
+        return new Weights((Pointer)this).position(position + i);
     }
 
     /** The type of the weights. */

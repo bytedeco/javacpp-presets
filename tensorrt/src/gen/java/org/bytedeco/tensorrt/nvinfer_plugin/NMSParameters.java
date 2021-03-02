@@ -53,7 +53,7 @@ public class NMSParameters extends Pointer {
         return (NMSParameters)super.position(position);
     }
     @Override public NMSParameters getPointer(long i) {
-        return new NMSParameters(this).position(position + i);
+        return new NMSParameters((Pointer)this).position(position + i);
     }
 
     public native @Cast("bool") boolean shareLocation(); public native NMSParameters shareLocation(boolean setter);

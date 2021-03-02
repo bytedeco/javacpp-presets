@@ -45,7 +45,7 @@ public class IInt8Calibrator extends Pointer {
         return (IInt8Calibrator)super.position(position);
     }
     @Override public IInt8Calibrator getPointer(long i) {
-        return new IInt8Calibrator(this).position(position + i);
+        return new IInt8Calibrator((Pointer)this).position(position + i);
     }
 
     /**

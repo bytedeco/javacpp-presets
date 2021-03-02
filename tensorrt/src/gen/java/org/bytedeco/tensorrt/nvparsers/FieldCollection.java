@@ -36,7 +36,7 @@ public class FieldCollection extends Pointer {
         return (FieldCollection)super.position(position);
     }
     @Override public FieldCollection getPointer(long i) {
-        return new FieldCollection(this).position(position + i);
+        return new FieldCollection((Pointer)this).position(position + i);
     }
 
     public native int nbFields(); public native FieldCollection nbFields(int setter);

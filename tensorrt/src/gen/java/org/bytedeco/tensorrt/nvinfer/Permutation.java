@@ -34,7 +34,7 @@ public class Permutation extends Pointer {
         return (Permutation)super.position(position);
     }
     @Override public Permutation getPointer(long i) {
-        return new Permutation(this).position(position + i);
+        return new Permutation((Pointer)this).position(position + i);
     }
 
     /**

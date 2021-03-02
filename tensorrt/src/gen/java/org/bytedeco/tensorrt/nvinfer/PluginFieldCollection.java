@@ -34,7 +34,7 @@ public class PluginFieldCollection extends Pointer {
         return (PluginFieldCollection)super.position(position);
     }
     @Override public PluginFieldCollection getPointer(long i) {
-        return new PluginFieldCollection(this).position(position + i);
+        return new PluginFieldCollection((Pointer)this).position(position + i);
     }
 
     /** Number of PluginField entries */

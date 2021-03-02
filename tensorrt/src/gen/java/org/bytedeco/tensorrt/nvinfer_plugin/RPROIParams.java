@@ -49,7 +49,7 @@ public class RPROIParams extends Pointer {
         return (RPROIParams)super.position(position);
     }
     @Override public RPROIParams getPointer(long i) {
-        return new RPROIParams(this).position(position + i);
+        return new RPROIParams((Pointer)this).position(position + i);
     }
 
     public native int poolingH(); public native RPROIParams poolingH(int setter);

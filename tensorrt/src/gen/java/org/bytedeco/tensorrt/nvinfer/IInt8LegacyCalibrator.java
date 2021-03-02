@@ -38,7 +38,7 @@ public class IInt8LegacyCalibrator extends IInt8Calibrator {
         return (IInt8LegacyCalibrator)super.position(position);
     }
     @Override public IInt8LegacyCalibrator getPointer(long i) {
-        return new IInt8LegacyCalibrator(this).position(position + i);
+        return new IInt8LegacyCalibrator((Pointer)this).position(position + i);
     }
 
     /**

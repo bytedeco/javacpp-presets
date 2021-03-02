@@ -41,7 +41,7 @@ public class Quadruple extends Pointer {
         return (Quadruple)super.position(position);
     }
     @Override public Quadruple getPointer(long i) {
-        return new Quadruple(this).position(position + i);
+        return new Quadruple((Pointer)this).position(position + i);
     }
 
     public native int data(int i); public native Quadruple data(int i, int setter);

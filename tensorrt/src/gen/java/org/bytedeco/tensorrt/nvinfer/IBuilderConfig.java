@@ -498,7 +498,7 @@ public class IBuilderConfig extends Pointer {
     /**
      *  \brief Set Algorithm Selector.
      * 
-     *  @param selector The algorithm slector to be set in the build config. */
+     *  @param selector The algorithm selector to be set in the build config. */
     
     
     //!

@@ -52,7 +52,7 @@ public class softmaxTree extends Pointer {
         return (softmaxTree)super.position(position);
     }
     @Override public softmaxTree getPointer(long i) {
-        return new softmaxTree(this).position(position + i);
+        return new softmaxTree((Pointer)this).position(position + i);
     }
 
     public native IntPointer leaf(); public native softmaxTree leaf(IntPointer setter);

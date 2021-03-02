@@ -35,7 +35,7 @@ public class DimsHW extends Dims2 {
         return (DimsHW)super.position(position);
     }
     @Override public DimsHW getPointer(long i) {
-        return new DimsHW(this).position(position + i);
+        return new DimsHW((Pointer)this).position(position + i);
     }
 
     /**

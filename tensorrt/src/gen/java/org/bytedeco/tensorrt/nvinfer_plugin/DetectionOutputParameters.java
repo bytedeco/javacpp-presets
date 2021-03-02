@@ -54,7 +54,7 @@ public class DetectionOutputParameters extends Pointer {
         return (DetectionOutputParameters)super.position(position);
     }
     @Override public DetectionOutputParameters getPointer(long i) {
-        return new DetectionOutputParameters(this).position(position + i);
+        return new DetectionOutputParameters((Pointer)this).position(position + i);
     }
 
     public native @Cast("bool") boolean shareLocation(); public native DetectionOutputParameters shareLocation(boolean setter);

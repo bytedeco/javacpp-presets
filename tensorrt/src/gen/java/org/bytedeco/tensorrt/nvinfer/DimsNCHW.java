@@ -37,7 +37,7 @@ public class DimsNCHW extends Dims4 {
         return (DimsNCHW)super.position(position);
     }
     @Override public DimsNCHW getPointer(long i) {
-        return new DimsNCHW(this).position(position + i);
+        return new DimsNCHW((Pointer)this).position(position + i);
     }
 
     /**

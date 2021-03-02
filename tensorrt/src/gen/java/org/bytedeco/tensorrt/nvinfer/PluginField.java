@@ -38,7 +38,7 @@ public class PluginField extends Pointer {
         return (PluginField)super.position(position);
     }
     @Override public PluginField getPointer(long i) {
-        return new PluginField(this).position(position + i);
+        return new PluginField((Pointer)this).position(position + i);
     }
 
     /**

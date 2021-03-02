@@ -39,7 +39,7 @@ public class DimsExprs extends Pointer {
         return (DimsExprs)super.position(position);
     }
     @Override public DimsExprs getPointer(long i) {
-        return new DimsExprs(this).position(position + i);
+        return new DimsExprs((Pointer)this).position(position + i);
     }
 
     /** The number of dimensions. */

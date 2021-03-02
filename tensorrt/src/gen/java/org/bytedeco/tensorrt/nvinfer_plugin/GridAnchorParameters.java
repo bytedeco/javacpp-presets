@@ -49,7 +49,7 @@ public class GridAnchorParameters extends Pointer {
         return (GridAnchorParameters)super.position(position);
     }
     @Override public GridAnchorParameters getPointer(long i) {
-        return new GridAnchorParameters(this).position(position + i);
+        return new GridAnchorParameters((Pointer)this).position(position + i);
     }
 
     public native float minSize(); public native GridAnchorParameters minSize(float setter);
