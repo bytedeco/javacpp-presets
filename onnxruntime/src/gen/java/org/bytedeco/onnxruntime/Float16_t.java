@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -65,7 +67,7 @@ public class Float16_t extends Pointer {
         return (Float16_t)super.position(position);
     }
     @Override public Float16_t getPointer(long i) {
-        return new Float16_t(this).position(position + i);
+        return new Float16_t((Pointer)this).position(position + i);
     }
 
   public native @Cast("uint16_t") short value(); public native Float16_t value(short setter);

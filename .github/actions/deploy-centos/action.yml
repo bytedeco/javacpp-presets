@@ -63,14 +63,14 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda-repo-rhel7-11-2-local-11.2.1_460.32.03-1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.0/cudnn-11.2-linux-x64-v8.1.0.77.tgz
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/cudnn-11.2-linux-x64-v8.1.1.33.tgz
           curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/nccl_2.8.4-1+cuda11.2_x86_64.txz
 
           rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-2-local-11.2.1_460.32.03-1.x86_64.rpm
           pushd /var/cuda-repo-rhel7-11-2-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
-          tar -hxvf cudnn-11.2-linux-x64-v8.1.0.77.tgz -C /usr/local/
+          tar -hxvf cudnn-11.2-linux-x64-v8.1.1.33.tgz -C /usr/local/
           tar -hxvf nccl_2.8.4-1+cuda11.2_x86_64.txz --strip-components=1 -C /usr/local/cuda/
           mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
 
@@ -92,8 +92,8 @@ runs:
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
-          python3 -m gdown.cli https://drive.google.com/uc?id=1jLcLA1ShUKodi_lGOZ7i233IDKJ-q2uY
-          tar -hxvf TensorRT-7.2.2.3.CentOS-7.8.x86_64-gnu.cuda-11.2.cudnn8.1.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1iiQkP6R5KzBf_0KzMc9HKTJFO2l9gYC_
+          tar -hxvf TensorRT-7.2.3.4.CentOS-7.9.x86_64-gnu.cuda-11.2.cudnn8.1.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

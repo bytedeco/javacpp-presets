@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-16.04
     container: centos:6
     strategy:
+      fail-fast: false
       matrix:
         ext: ["", -gpu]
     steps:
@@ -32,6 +33,7 @@ jobs:
   macosx-x86_64:
     runs-on: macos-10.15
 #    strategy:
+#      fail-fast: false
 #      matrix:
 #        ext: ["", -gpu]
     steps:
@@ -39,6 +41,7 @@ jobs:
   windows-x86_64:
     runs-on: windows-2019
     strategy:
+      fail-fast: false
       matrix:
         ext: ["", -gpu]
     steps:

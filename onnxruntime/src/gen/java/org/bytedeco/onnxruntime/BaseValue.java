@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -24,7 +26,7 @@ public class BaseValue extends Pointer {
         return (BaseValue)super.position(position);
     }
     @Override public BaseValue getPointer(long i) {
-        return new BaseValue(this).position(position + i);
+        return new BaseValue((Pointer)this).position(position + i);
     }
 
 

@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -28,7 +30,7 @@ public class OrtOpenVINOProviderOptions extends Pointer {
         return (OrtOpenVINOProviderOptions)super.position(position);
     }
     @Override public OrtOpenVINOProviderOptions getPointer(long i) {
-        return new OrtOpenVINOProviderOptions(this).position(position + i);
+        return new OrtOpenVINOProviderOptions((Pointer)this).position(position + i);
     }
 
 // #ifdef __cplusplus

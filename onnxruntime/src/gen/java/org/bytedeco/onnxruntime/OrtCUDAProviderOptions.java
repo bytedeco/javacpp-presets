@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -31,7 +33,7 @@ public class OrtCUDAProviderOptions extends Pointer {
         return (OrtCUDAProviderOptions)super.position(position);
     }
     @Override public OrtCUDAProviderOptions getPointer(long i) {
-        return new OrtCUDAProviderOptions(this).position(position + i);
+        return new OrtCUDAProviderOptions((Pointer)this).position(position + i);
     }
 
   public native int device_id(); public native OrtCUDAProviderOptions device_id(int setter);                                  // cuda device with id=0 as default device.
@@ -39,4 +41,6 @@ public class OrtCUDAProviderOptions extends Pointer {
   public native @Cast("size_t") long cuda_mem_limit(); public native OrtCUDAProviderOptions cuda_mem_limit(long setter);                          // default cuda memory limitation to maximum finite value of size_t.
   public native int arena_extend_strategy(); public native OrtCUDAProviderOptions arena_extend_strategy(int setter);                      // default area extend strategy to KNextPowerOfTwo.
   public native int do_copy_in_default_stream(); public native OrtCUDAProviderOptions do_copy_in_default_stream(int setter);
+  public native int has_user_compute_stream(); public native OrtCUDAProviderOptions has_user_compute_stream(int setter);
+  public native Pointer user_compute_stream(); public native OrtCUDAProviderOptions user_compute_stream(Pointer setter);
 }

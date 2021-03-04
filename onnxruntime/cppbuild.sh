@@ -31,7 +31,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.6.0
+ONNXRUNTIME=1.7.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -106,6 +106,7 @@ cp ../build/Release/onnxruntime*.lib ../lib || true
 # fix library with the same name for OpenMP as MKL on Mac
 case $PLATFORM in
     macosx-*)
+        cp ../lib/libonnxruntime_providers_dnnl.so ../lib/libonnxruntime_providers_dnnl.dylib || true
         install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libonnxruntime.*.dylib
         ;;
 esac

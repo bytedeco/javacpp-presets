@@ -24,7 +24,7 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // Parsed from NvInferVersion.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -86,16 +86,16 @@ public static final int NV_TENSORRT_MAJOR = 7;
 /** TensorRT minor version. */
 public static final int NV_TENSORRT_MINOR = 2;
 /** TensorRT patch version. */
-public static final int NV_TENSORRT_PATCH = 2;
+public static final int NV_TENSORRT_PATCH = 3;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 3;
+public static final int NV_TENSORRT_BUILD = 4;
 
 /** Shared object library major version number. */
 public static final int NV_TENSORRT_SONAME_MAJOR = 7;
 /** Shared object library minor version number. */
 public static final int NV_TENSORRT_SONAME_MINOR = 2;
 /** Shared object library patch version number. */
-public static final int NV_TENSORRT_SONAME_PATCH = 2;
+public static final int NV_TENSORRT_SONAME_PATCH = 3;
 
 // #endif // NV_INFER_VERSION_H
 
@@ -103,7 +103,7 @@ public static final int NV_TENSORRT_SONAME_PATCH = 2;
 // Parsed from NvInferRuntimeCommon.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -815,7 +815,7 @@ public static native IPluginRegistry getPluginRegistry();
 // Parsed from NvInferRuntime.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -1119,7 +1119,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 // Parsed from NvInfer.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -2504,7 +2504,7 @@ public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int ver
 // Parsed from NvUtils.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *

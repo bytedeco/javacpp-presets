@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -26,6 +28,7 @@ public class ModelMetadata extends BaseModelMetadata {
   public native @Cast("char*") BytePointer GetGraphName(OrtAllocator allocator);
   public native @Cast("char*") BytePointer GetDomain(OrtAllocator allocator);
   public native @Cast("char*") BytePointer GetDescription(OrtAllocator allocator);
+  public native @Cast("char*") BytePointer GetGraphDescription(OrtAllocator allocator);
   public native @Cast("char**") PointerPointer GetCustomMetadataMapKeys(OrtAllocator allocator, @Cast("int64_t*") @ByRef LongPointer num_keys);
   public native @Cast("char**") @ByPtrPtr ByteBuffer GetCustomMetadataMapKeys(OrtAllocator allocator, @Cast("int64_t*") @ByRef LongBuffer num_keys);
   public native @Cast("char**") @ByPtrPtr byte[] GetCustomMetadataMapKeys(OrtAllocator allocator, @Cast("int64_t*") @ByRef long[] num_keys);

@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -25,7 +27,7 @@ public class RunOptions extends BaseRunOptions {
         return (RunOptions)super.position(position);
     }
     @Override public RunOptions getPointer(long i) {
-        return new RunOptions(this).position(position + i);
+        return new RunOptions((Pointer)this).position(position + i);
     }
 
   public RunOptions() { super((Pointer)null); allocate(); }

@@ -26,7 +26,7 @@ public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
 // Parsed from NvCaffeParser.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -151,7 +151,7 @@ public static native Pointer createNvCaffeParser_INTERNAL();
 // Parsed from NvUffParser.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *

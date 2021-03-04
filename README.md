@@ -201,13 +201,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * cuDNN 8.1.x  https://developer.nvidia.com/cudnn
    * NCCL 2.8.x  https://developer.nvidia.com/nccl
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
- * MXNet 1.7.0  https://github.com/apache/incubator-mxnet
+ * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.8.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.6.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.7.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
