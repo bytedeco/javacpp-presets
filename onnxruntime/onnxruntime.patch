@@ -1,8 +1,8 @@
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index 5970505f5..fa6db1085 100644
+index a07893771..192f81d04 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -944,8 +944,8 @@ if (WIN32)
+@@ -1023,8 +1023,8 @@ if (WIN32)
  else()
    add_definitions(-DPLATFORM_POSIX)
    # Enable warning and enable space optimization in Linux
@@ -14,10 +14,10 @@ index 5970505f5..fa6db1085 100644
    if(onnxruntime_DEV_MODE)
      string(APPEND CMAKE_CXX_FLAGS " -Werror")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index bc07f67bb..447652398 100644
+index 3b283767c..ec965bfe2 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -59,9 +59,9 @@ endif()
+@@ -58,9 +58,9 @@ endif()
  
  if(UNIX)
    if (APPLE)
@@ -30,10 +30,10 @@ index bc07f67bb..447652398 100644
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/framework/provider_bridge_ort.cc b/onnxruntime/core/framework/provider_bridge_ort.cc
-index 14ac345d5..6d5a3c2b3 100644
+index a12b5989d..a106e270a 100644
 --- a/onnxruntime/core/framework/provider_bridge_ort.cc
 +++ b/onnxruntime/core/framework/provider_bridge_ort.cc
-@@ -606,12 +606,27 @@ struct ProviderHostImpl : ProviderHost {
+@@ -578,12 +578,31 @@ struct ProviderHostImpl : ProviderHost {
  
  } provider_host_;
  
@@ -42,6 +42,9 @@ index 14ac345d5..6d5a3c2b3 100644
 +#endif
 +
  struct ProviderSharedLibrary {
++
++  std::string libpath;
++
    bool Ensure() {
      if (handle_)
        return true;
@@ -53,6 +56,7 @@ index 14ac345d5..6d5a3c2b3 100644
 +    const char *libname = _dyld_get_image_name(i);
 +    size_t len2 = strlen(libname);
 +    if (len2 > len1 && strcmp(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION, libname + len2 - len1) == 0) {
++        libpath.assign(libname, len2 - len1);
 +        full_path = libname;
 +        break;
 +    }
@@ -61,11 +65,12 @@ index 14ac345d5..6d5a3c2b3 100644
      auto error = Env::Default().LoadDynamicLibrary(full_path, &handle_);
      if (!error.IsOK()) {
        LOGS_DEFAULT(ERROR) << error.ErrorMessage();
-@@ -657,6 +672,17 @@ struct ProviderLibrary {
+@@ -629,6 +648,18 @@ struct ProviderLibrary {
        return nullptr;
  
      std::string full_path = Env::Default().GetRuntimePath() + std::string(filename_);
 +#ifdef __APPLE__
++full_path = s_library_shared.libpath + std::string(filename_);
 +size_t len1 = strlen(filename_);
 +for (uint32_t i = 0; i < _dyld_image_count(); i++) {
 +    const char *libname = _dyld_get_image_name(i);
@@ -773,7 +778,7 @@ index ae3712365..559af78ca 100644
          vmovups ymm3,YMMWORD PTR [r10+rdx*4]
          vmaskmovps ymm0,ymm3,YMMWORD PTR [rdi]
 diff --git a/onnxruntime/core/providers/cuda/cudnn_common.cc b/onnxruntime/core/providers/cuda/cudnn_common.cc
-index 200fa352a..71f2acb98 100644
+index 24f8220eb..91e7cc4b2 100644
 --- a/onnxruntime/core/providers/cuda/cudnn_common.cc
 +++ b/onnxruntime/core/providers/cuda/cudnn_common.cc
 @@ -117,7 +117,7 @@ cudnnDataType_t CudnnTensor::GetDataType() {
@@ -786,7 +791,7 @@ index 200fa352a..71f2acb98 100644
  
  template<>
 diff --git a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
-index 7e2654d6f..5bdf410e5 100644
+index 1ebe6301f..9b5d4c455 100644
 --- a/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
 +++ b/onnxruntime/core/providers/dnnl/subgraph/dnnl_conv_batchnorm.h
 @@ -2,6 +2,7 @@
@@ -798,24 +803,147 @@ index 7e2654d6f..5bdf410e5 100644
  #include "core/providers/dnnl/dnnl_fwd.h"
  #include "core/providers/dnnl/dnnl_execution_provider.h"
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index fe1527519..4b1041e1b 100644
+index fbb061472..7ac43be0e 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-@@ -125,6 +125,7 @@ std::string GetEnvironmentVar(const std::string& var_name) {
+@@ -42,28 +42,34 @@ struct OnUnload {
+ } g_on_unload;
+ 
+ AllocatorPtr CreateAllocator(const AllocatorCreationInfo& info) {
++  g_host = Provider_GetHost();
+   return g_host->CreateAllocator(info);
  }
  
- Provider_IExecutionProvider::Provider_IExecutionProvider(const std::string& type) {
+ void AllocatorManager__InsertAllocator(AllocatorManager* p, AllocatorPtr allocator) {
 +  g_host = Provider_GetHost();
-   p_ = g_host->Create_IExecutionProvider_Router(this, type).release();
+   return g_host->AllocatorManager__InsertAllocator(p, allocator);
+ }
+ 
+ AllocatorPtr AllocatorManager__GetAllocator(AllocatorManager* p, int id, OrtMemType mem_type) {
++  g_host = Provider_GetHost();
+   return g_host->AllocatorManager__GetAllocator(p, id, mem_type);
+ }
+ 
+ template <>
+ MLDataType DataTypeImpl::GetType<float>() {
++  g_host = Provider_GetHost();
+   return g_host->DataTypeImpl_GetType_float();
+ }
+ 
+ template <>
+ MLDataType DataTypeImpl::GetTensorType<float>() {
++  g_host = Provider_GetHost();
+   return g_host->DataTypeImpl_GetTensorType_float();
+ }
+ 
+ const std::vector<MLDataType>& DataTypeImpl::AllFixedSizeTensorTypes() {
++  g_host = Provider_GetHost();
+   return g_host->DataTypeImpl_AllFixedSizeTensorTypes();
+ }
+ 
+@@ -86,6 +92,7 @@ int64_t TensorShape::Size() const {
+ }
+ 
+ int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
++  g_host = Provider_GetHost();
+   return g_host->TensorShape__SizeHelper(this, start, end);
+ }
+ 
+@@ -99,58 +106,71 @@ TensorShape TensorShape::Slice(size_t dimstart) const {
+ }
+ 
+ std::string TensorShape::ToString() const {
++  g_host = Provider_GetHost();
+   return g_host->TensorShape__ToString(this);
+ }
+ 
+ AllocatorPtr CreateAllocator(AllocatorCreationInfo info) {
++  g_host = Provider_GetHost();
+   return g_host->CreateAllocator(info);
+ }
+ 
+ std::unique_ptr<IAllocator> CreateCPUAllocator(const OrtMemoryInfo& info) {
++  g_host = Provider_GetHost();
+   return g_host->CreateCPUAllocator(info);
+ }
+ 
+ bool IAllocator::CalcMemSizeForArrayWithAlignment(size_t nmemb, size_t size, size_t alignment, size_t* out) noexcept {
++  g_host = Provider_GetHost();
+   return g_host->IAllocator__CalcMemSizeForArrayWithAlignment(nmemb, size, alignment, out);
+ }
+ 
+ AllocatorPtr IExecutionProvider::GetAllocator(int id, OrtMemType mem_type) const {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProvider__GetAllocator(this, id, mem_type);
+ }
+ 
+ void IExecutionProvider::InsertAllocator(AllocatorPtr allocator) {
++  g_host = Provider_GetHost();
+   g_host->IExecutionProvider__InsertAllocator(this, allocator);
+ }
+ 
+ void IExecutionProvider::TryInsertAllocator(AllocatorPtr allocator) {
++  g_host = Provider_GetHost();
+   g_host->IExecutionProvider__TryInsertAllocator(this, allocator);
+ }
+ 
+ std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapability(const onnxruntime::GraphViewer& graph_viewer,
+                                                                                   const std::vector<const KernelRegistry*>& kernel_registries) const {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_registries);
+ }
+ 
+ common::Status IExecutionProvider::Compile(const std::vector<onnxruntime::Node*>& fused_nodes,
+                                            std::vector<NodeComputeInfo>& node_compute_funcs) {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProvider__Compile(this, fused_nodes, node_compute_funcs);
+ }
+ 
+ common::Status IExecutionProvider::Compile(const std::vector<onnxruntime::Node*>& fused_nodes,
+                                            std::string& dll_path) {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProvider__Compile(this, fused_nodes, dll_path);
+ }
+ 
+ common::Status IExecutionProvider::Compile(const std::vector<FusedNodeAndGraph>& fused_nodes_and_graphs,
+                                            std::vector<NodeComputeInfo>& node_compute_funcs) {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProvider__Compile(this, fused_nodes_and_graphs, node_compute_funcs);
+ }
+ 
+ int IExecutionProvider::GenerateMetaDefId(const onnxruntime::GraphViewer& graph_viewer, uint64_t& model_hash) const {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProvider__GenerateMetaDefId(this, graph_viewer, model_hash);
+ }
+ 
+ void IExecutionProvider::RegisterAllocator(std::shared_ptr<AllocatorManager> allocator_manager) {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProvider__RegisterAllocator(this, allocator_manager);
+ }
+ 
+@@ -169,6 +189,7 @@ std::unique_ptr<IDataTransfer> CreateGPUDataTransfer(void* stream) {
+ #endif
+ 
+ std::string GetEnvironmentVar(const std::string& var_name) {
++  g_host = Provider_GetHost();
+   return g_host->GetEnvironmentVar(var_name);
+ }
+ 
+@@ -218,6 +239,7 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+ 
+ void LogRuntimeError(uint32_t session_id, const common::Status& status,
+                      const char* file, const char* function, uint32_t line) {
++  g_host = Provider_GetHost();
+   return g_host->LogRuntimeError(session_id, status, file, function, line);
  }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 6168a960b..7dceb225c 100644
+index c580ef664..af0f9469d 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -665,7 +665,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
-         "-Donnxruntime_BUILD_WINML_TESTS=" + (
-             "OFF" if args.skip_winml_tests else "ON"),
+@@ -628,7 +628,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
+         "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
+         "-Donnxruntime_BUILD_WINML_TESTS=" + ("OFF" if args.skip_winml_tests else "ON"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
 -        "-Donnxruntime_DEV_MODE=" + use_dev_mode(args),
 +        "-Donnxruntime_DEV_MODE=OFF",

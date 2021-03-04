@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -25,7 +27,7 @@ public class Env extends BaseEnv {
         return (Env)super.position(position);
     }
     @Override public Env getPointer(long i) {
-        return new Env(this).position(position + i);
+        return new Env((Pointer)this).position(position + i);
     }
 
   public Env(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(logging_level, logid); }

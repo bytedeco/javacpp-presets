@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -28,7 +30,7 @@ public class OrtApiBase extends Pointer {
         return (OrtApiBase)super.position(position);
     }
     @Override public OrtApiBase getPointer(long i) {
-        return new OrtApiBase(this).position(position + i);
+        return new OrtApiBase((Pointer)this).position(position + i);
     }
 
   public static class GetApi_int extends FunctionPointer {

@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -24,7 +26,7 @@ public class BaseTypeInfo extends Pointer {
         return (BaseTypeInfo)super.position(position);
     }
     @Override public BaseTypeInfo getPointer(long i) {
-        return new BaseTypeInfo(this).position(position + i);
+        return new BaseTypeInfo((Pointer)this).position(position + i);
     }
 
 

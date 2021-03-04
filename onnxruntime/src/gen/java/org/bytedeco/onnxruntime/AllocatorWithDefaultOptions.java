@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -25,7 +27,7 @@ public class AllocatorWithDefaultOptions extends Pointer {
         return (AllocatorWithDefaultOptions)super.position(position);
     }
     @Override public AllocatorWithDefaultOptions getPointer(long i) {
-        return new AllocatorWithDefaultOptions(this).position(position + i);
+        return new AllocatorWithDefaultOptions((Pointer)this).position(position + i);
     }
 
   public AllocatorWithDefaultOptions() { super((Pointer)null); allocate(); }

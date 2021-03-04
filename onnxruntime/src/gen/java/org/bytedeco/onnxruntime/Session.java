@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -33,7 +35,7 @@ public class Session extends BaseSession {
                            @Cast("const char*const*") @ByPtrPtr ByteBuffer output_names, @Cast("size_t") long output_count);
   public native @StdMove ValueVector Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr byte[] input_names, @Const Value input_values, @Cast("size_t") long input_count,
                            @Cast("const char*const*") @ByPtrPtr byte[] output_names, @Cast("size_t") long output_count);
-  // Run for when there is a list of prealloated outputs
+  // Run for when there is a list of preallocated outputs
   public native void Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") PointerPointer input_names, @Const Value input_values, @Cast("size_t") long input_count,
              @Cast("const char*const*") PointerPointer output_names, Value output_values, @Cast("size_t") long output_count);
   public native void Run(@Const @ByRef RunOptions run_options, @Cast("const char*const*") @ByPtrPtr BytePointer input_names, @Const Value input_values, @Cast("size_t") long input_count,

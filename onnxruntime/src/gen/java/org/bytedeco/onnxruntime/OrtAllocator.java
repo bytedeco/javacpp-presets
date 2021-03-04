@@ -7,6 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import org.bytedeco.opencl.*;
+import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
@@ -30,7 +32,7 @@ public class OrtAllocator extends Pointer {
         return (OrtAllocator)super.position(position);
     }
     @Override public OrtAllocator getPointer(long i) {
-        return new OrtAllocator(this).position(position + i);
+        return new OrtAllocator((Pointer)this).position(position + i);
     }
 
   public native @Cast("uint32_t") int version(); public native OrtAllocator version(int setter);  // Initialize to ORT_API_VERSION
