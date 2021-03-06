@@ -14,7 +14,6 @@
  */
 
 import org.bytedeco.modsecurity.*;
-import org.bytedeco.javacpp.*;
 
 public class ModSecuritySimpleIntervention {
 
