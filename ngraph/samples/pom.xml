@@ -2,15 +2,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.ngraph</groupId>
     <artifactId>abc</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>ABC</exec.mainClass>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ngraph-platform</artifactId>
-            <version>0.26.0-1.5.4</version>
+            <version>0.26.0-1.5.5</version>
         </dependency>
     </dependencies>
     <build>
