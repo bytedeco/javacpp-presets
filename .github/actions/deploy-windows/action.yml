@@ -19,7 +19,7 @@ runs:
         echo Removing broken stuff from WSL and MSYS2
         rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/mingw64/bin/cmake.exe" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe"
 
-        python -m pip install gdown
+        python -m pip install gdown || python -m pip install gdown
 
         if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
           echo Installing Bazel
@@ -122,10 +122,12 @@ runs:
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
         set "MESSAGE=${{ github.event.head_commit.message }}"
+        if "%MESSAGE:~0,7%"=="Release" set DEPLOY=RELEASE
+        if "%GITHUB_REF:~11%"=="release" set DEPLOY=RELEASE
         if not "%CI_DEPLOY_USERNAME%"=="" if not "%GITHUB_EVENT_NAME%"=="pull_request" (
           set GRADLE_TASK=publish
           set MAVEN_PHASE=deploy
-          if "%MESSAGE:~0,7%"=="Release" (
+          if "%DEPLOY%"=="RELEASE" (
             python -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=%CI_DEPLOY_SETTINGS%
             bash -c "tar -xzf settings.tar.gz -C $HOME"
             set "MAVEN_OPTIONS=%MAVEN_OPTIONS% -DperformRelease -DstagingRepositoryId=%STAGING_REPOSITORY%"
@@ -212,7 +214,7 @@ runs:
         set "MAVEN_OPTIONS=clean %MAVEN_PHASE% -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% %MAVEN_OPTIONS%"
 
         setlocal enabledelayedexpansion
-        for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE% && goto :done || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
+        for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -pl .,%CI_DEPLOY_MODULE% && goto :done || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
         exit /b !STATUS!
         :done
         for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE%/platform/%EXT2%/pom.xml && goto :done2 || set STATUS=!ERRORLEVEL! && timeout 60 > nul)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -60,7 +60,12 @@ public class OpenCL implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CL_API_ENTRY", "CL_API_CALL", "CL_CALLBACK",
-                             "CL_PROGRAM_STRING_DEBUG_INFO", "__CL_ANON_STRUCT__").cppTypes().annotations())
+                             "CL_PROGRAM_STRING_DEBUG_INFO", "__CL_ANON_STRUCT__",
+                             "CL_API_SUFFIX_COMMON", "CL_API_PREFIX_COMMON",
+                             "CL_API_SUFFIX__VERSION_1_0", "CL_API_SUFFIX__VERSION_1_1",
+                             "CL_API_SUFFIX__VERSION_1_2", "CL_API_SUFFIX__VERSION_2_0",
+                             "CL_API_SUFFIX__VERSION_2_1", "CL_API_SUFFIX__VERSION_2_2",
+                             "CL_API_SUFFIX__VERSION_3_0", "CL_API_SUFFIX__EXPERIMENTAL").cppTypes().annotations())
                .put(new Info("CL_NAN", "CL_IMPORT_MEMORY_WHOLE_ALLOCATION_ARM").translate(false))
                .put(new Info("CL_HUGE_VAL", "nanf").skip())
 
@@ -78,6 +83,20 @@ public class OpenCL implements InfoMapper {
                .put(new Info("CL_EXT_PREFIX__VERSION_2_1_DEPRECATED").cppText("#define CL_EXT_PREFIX__VERSION_2_1_DEPRECATED deprecated").cppTypes())
                .put(new Info("CL_EXT_SUFFIX__VERSION_2_2_DEPRECATED").cppText("#define CL_EXT_SUFFIX__VERSION_2_2_DEPRECATED").cppTypes())
                .put(new Info("CL_EXT_PREFIX__VERSION_2_2_DEPRECATED").cppText("#define CL_EXT_PREFIX__VERSION_2_2_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CL_API_SUFFIX_DEPRECATED").cppText("#define CL_API_SUFFIX_DEPRECATED").cppTypes())
+               .put(new Info("CL_API_PREFIX_DEPRECATED").cppText("#define CL_API_PREFIX_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CL_API_SUFFIX__VERSION_1_0_DEPRECATED").cppText("#define CL_API_SUFFIX__VERSION_1_0_DEPRECATED").cppTypes())
+               .put(new Info("CL_API_PREFIX__VERSION_1_0_DEPRECATED").cppText("#define CL_API_PREFIX__VERSION_1_0_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CL_API_SUFFIX__VERSION_1_1_DEPRECATED").cppText("#define CL_API_SUFFIX__VERSION_1_1_DEPRECATED").cppTypes())
+               .put(new Info("CL_API_PREFIX__VERSION_1_1_DEPRECATED").cppText("#define CL_API_PREFIX__VERSION_1_1_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CL_API_SUFFIX__VERSION_1_2_DEPRECATED").cppText("#define CL_API_SUFFIX__VERSION_1_2_DEPRECATED").cppTypes())
+               .put(new Info("CL_API_PREFIX__VERSION_1_2_DEPRECATED").cppText("#define CL_API_PREFIX__VERSION_1_2_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CL_API_SUFFIX__VERSION_2_0_DEPRECATED").cppText("#define CL_API_SUFFIX__VERSION_2_0_DEPRECATED").cppTypes())
+               .put(new Info("CL_API_PREFIX__VERSION_2_0_DEPRECATED").cppText("#define CL_API_PREFIX__VERSION_2_0_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CL_API_SUFFIX__VERSION_2_1_DEPRECATED").cppText("#define CL_API_SUFFIX__VERSION_2_1_DEPRECATED").cppTypes())
+               .put(new Info("CL_API_PREFIX__VERSION_2_1_DEPRECATED").cppText("#define CL_API_PREFIX__VERSION_2_1_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CL_API_SUFFIX__VERSION_2_2_DEPRECATED").cppText("#define CL_API_SUFFIX__VERSION_2_2_DEPRECATED").cppTypes())
+               .put(new Info("CL_API_PREFIX__VERSION_2_2_DEPRECATED").cppText("#define CL_API_PREFIX__VERSION_2_2_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("__CL_HAS_ANON_STRUCT__", "defined( __cl_uchar2__)",

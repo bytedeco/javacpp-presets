@@ -2,15 +2,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.arpack</groupId>
     <artifactId>icbarpackc</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>IcbArpackC</exec.mainClass>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>arpack-ng-platform</artifactId>
-            <version>3.8.0-1.5.5-SNAPSHOT</version>
+            <version>3.8.0-1.5.5</version>
         </dependency>
     </dependencies>
     <build>

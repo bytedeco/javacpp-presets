@@ -39,7 +39,7 @@ runs:
         ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
         ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
 
-        python3 -m pip install gdown
+        python3 -m pip install gdown || python3 -m pip install gdown
 
         if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
           curl -LO https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
@@ -137,7 +137,7 @@ runs:
         if [[ -n ${CI_DEPLOY_USERNAME:-} ]] && [[ ! "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
           GRADLE_TASK=publish
           MAVEN_PHASE=deploy
-          if [[ "${{ github.event.head_commit.message }}" == Release* ]]; then
+          if [[ "${{ github.event.head_commit.message }}" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
             python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
             tar -xzf settings.tar.gz
             MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
@@ -192,7 +192,7 @@ runs:
           export EXT=${{ matrix.ext }}
           export EXT2=${EXT:1}
           export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
-          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -pl .,$CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
           for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
           if [[ -e $CI_DEPLOY_MODULE/platform/redist/pom.xml ]]; then
             for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/redist/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)

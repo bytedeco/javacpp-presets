@@ -48,8 +48,8 @@ import org.bytedeco.hdf5.presets.*;
             value = {"linux", "macosx"},
             compiler = "cpp11",
             define = {
-                "SHARED_PTR_NAMESPACE std",
-                "UNIQUE_PTR_NAMESPACE std",
+                "SHARED_PTR_NAMESPACE std // overrides boost",
+                "UNIQUE_PTR_NAMESPACE std // overrides boost",
                 "GPU_MODE CPU_ONLY"
             },
             exclude = {
