@@ -1,0 +1,6 @@
+org.apache.tvm
+org.apache.tvm.contrib
+org.apache.tvm.rpc
+org.bytedeco.tvm
+org.bytedeco.tvm.global
+org.bytedeco.tvm.presets
