@@ -1,4 +1,6 @@
 
+ * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))
+
 ### March 8, 2021 version 1.5.5
  * Bundle LLD executable in presets for LLVM as required by TVM on Windows
  * Prevent `public static final` objects from getting deallocated by `PointerScope` ([issue bytedeco/javacv#1599](https://github.com/bytedeco/javacv/issues/1599))
