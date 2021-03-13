@@ -110,6 +110,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cellobject.h",
                 "iterobject.h",
                 "genobject.h",
+                "genericaliasobject.h",
                 "warnings.h",
                 "weakrefobject.h",
                 "structseq.h",
@@ -122,6 +123,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "pyarena.h",
                 "pythread.h",
                 "pystate.h",
+                "context.h",
                 "cpython/initconfig.h",
                 "cpython/pystate.h",
                 "modsupport.h",
@@ -156,6 +158,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "fileutils.h",
                 "cpython/fileutils.h",
 //                "pyfpe.h",
+                "tracemalloc.h",
+
+                "datetime.h",
             },
             exclude = {
                 "cpython/pymem.h",
@@ -276,7 +281,8 @@ public class python implements InfoMapper {
                              "_Py_COMP_DIAG_PUSH", "_Py_COMP_DIAG_IGNORE_DEPR_DECLS", "_Py_COMP_DIAG_POP", "Py_EXPORTED_SYMBOL",
                              "_PyCompilerFlags_INIT", "_PyInterpreterState_Get", "PyOS_strnicmp", "PyOS_stricmp", "Py_FrozenMain",
                              "_PyObject_Vectorcall", "_PyObject_VectorcallMethod", "_PyObject_FastCallDict", "_PyVectorcall_Function",
-                             "_PyObject_CallOneArg", "_PyObject_CallMethodNoArgs", "_PyObject_CallMethodOneArg").cppTypes().annotations())
+                             "_PyObject_CallOneArg", "_PyObject_CallMethodNoArgs", "_PyObject_CallMethodOneArg", "_PyTZINFO_HEAD",
+                             "_PyDateTime_TIMEHEAD", "_PyDateTime_DATETIMEHEAD", "PyDateTime_IMPORT", "PyDateTime_TimeZone_UTC").cppTypes().annotations())
 
                .put(new Info("PyAPI_DATA").cppText("#define PyAPI_DATA(RTYPE) RTYPE"))
                .put(new Info("Py_DEPRECATED").cppText("#define Py_DEPRECATED() deprecated").cppTypes())
