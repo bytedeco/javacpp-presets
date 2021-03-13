@@ -1,4 +1,5 @@
 
+ * Include `genericaliasobject.h`, `context.h`, `tracemalloc.h`, and `datetime.h` for CPython ([issue #1017](https://github.com/bytedeco/javacpp-presets/issues/1017))
  * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))
 
 ### March 8, 2021 version 1.5.5
