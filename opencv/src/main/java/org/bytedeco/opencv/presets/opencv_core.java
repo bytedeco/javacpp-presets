@@ -234,6 +234,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("std::vector<cv::Scalar>").pointerTypes("ScalarVector").define())
                .put(new Info("std::vector<cv::KeyPoint>").pointerTypes("KeyPointVector").define())
                .put(new Info("std::vector<cv::DMatch>").pointerTypes("DMatchVector").define())
+               .put(new Info("std::vector<cv::Range>").pointerTypes("RangeVector").define())
                .put(new Info("std::vector<std::vector<cv::Point> >").pointerTypes("PointVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point2f> >").pointerTypes("Point2fVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point2d> >").pointerTypes("Point2dVectorVector").define())
