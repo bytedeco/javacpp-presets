@@ -21,7 +21,7 @@ import org.bytedeco.cuda.presets.cudart;
     inherit = cudart.class,
     value = {
         @Platform(
-            value = {"windows-x86_64"},
+            value = {"linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"cuviddec.h", "nvcuvid.h"},
             link = {"nvcuvid"}

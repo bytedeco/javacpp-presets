@@ -1344,6 +1344,7 @@
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>tensorrt</module>
+        <module>nvcodec</module>
         <module>ale</module>
         <module>onnx</module>
         <module>ngraph</module>

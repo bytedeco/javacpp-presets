@@ -1,4 +1,4 @@
-JavaCPP Presets for NVCodec (Windows Only!)
+JavaCPP Presets for NVCodec
 ============================
 
 [![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/nvcodec/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/nvcodec) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/nvcodec.svg)](http://bytedeco.org/builds/)
