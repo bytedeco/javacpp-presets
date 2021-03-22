@@ -84,9 +84,11 @@ public class NV_ENC_RC_PARAMS extends Pointer {
     public native @ByRef NV_ENC_QP maxQP(); public native NV_ENC_RC_PARAMS maxQP(NV_ENC_QP setter);
     /** [in]: Specifies the initial QP used for rate control. Client must set NV_ENC_CONFIG::enableInitialRCQP to 1. */
     public native @ByRef NV_ENC_QP initialRCQP(); public native NV_ENC_RC_PARAMS initialRCQP(NV_ENC_QP setter);
-    /** [in]: Specifies the temporal layers (as a bitmask) whose QPs have changed. Valid max bitmask is [2^NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS - 1] */
+    /** [in]: Specifies the temporal layers (as a bitmask) whose QPs have changed. Valid max bitmask is [2^NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS - 1].
+                                                                                                Applicable only for constant QP mode (NV_ENC_RC_PARAMS::rateControlMode = NV_ENC_PARAMS_RC_CONSTQP). */
     public native @Cast("uint32_t") int temporallayerIdxMask(); public native NV_ENC_RC_PARAMS temporallayerIdxMask(int setter);
-    /** [in]: Specifies the temporal layer QPs used for rate control. Temporal layer index is used as the array index */
+    /** [in]: Specifies the temporal layer QPs used for rate control. Temporal layer index is used as the array index.
+                                                                                                Applicable only for constant QP mode (NV_ENC_RC_PARAMS::rateControlMode = NV_ENC_PARAMS_RC_CONSTQP). */
     public native @Cast("uint8_t") byte temporalLayerQP(int i); public native NV_ENC_RC_PARAMS temporalLayerQP(int i, byte setter);
     @MemberGetter public native @Cast("uint8_t*") BytePointer temporalLayerQP();
     /** [in]: Target CQ (Constant Quality) level for VBR mode (range 0-51 with 0-automatic)  */
@@ -121,6 +123,9 @@ public class NV_ENC_RC_PARAMS extends Pointer {
     public native @Cast("NV_ENC_QP_MAP_MODE") int qpMapMode(); public native NV_ENC_RC_PARAMS qpMapMode(int setter);
     /** [in]: This flag is used to enable multi-pass encoding for a given ::NV_ENC_PARAMS_RC_MODE. This flag is not valid for H264 and HEVC MEOnly mode */
     public native @Cast("NV_ENC_MULTI_PASS") int multiPass(); public native NV_ENC_RC_PARAMS multiPass(int setter);
+    /** [in]: Specifies the ratio in which bitrate should be split between base and alpha layer. A value 'x' for this field will split the target bitrate in a ratio of x : 1 between base and alpha layer. 
+                                                                                                 The default split ratio is 15.*/
+    public native @Cast("uint32_t") int alphaLayerBitrateRatio(); public native NV_ENC_RC_PARAMS alphaLayerBitrateRatio(int setter);
     public native @Cast("uint32_t") int reserved(int i); public native NV_ENC_RC_PARAMS reserved(int i, int setter);
     @MemberGetter public native @Cast("uint32_t*") IntPointer reserved();
  }

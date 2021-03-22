@@ -13,7 +13,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.nvcodec.global.nvcuvid.*;
 
 
-
 /******************************************************************************************/
 /** \struct CUVIDPICPARAMS
 /** Picture parameters for decoding
@@ -77,6 +76,7 @@ public class CUVIDPICPARAMS extends Pointer {
         @Name("CodecSpecific.hevc") public native @ByRef CUVIDHEVCPICPARAMS CodecSpecific_hevc(); public native CUVIDPICPARAMS CodecSpecific_hevc(CUVIDHEVCPICPARAMS setter);
         @Name("CodecSpecific.vp8") public native @ByRef CUVIDVP8PICPARAMS CodecSpecific_vp8(); public native CUVIDPICPARAMS CodecSpecific_vp8(CUVIDVP8PICPARAMS setter);
         @Name("CodecSpecific.vp9") public native @ByRef CUVIDVP9PICPARAMS CodecSpecific_vp9(); public native CUVIDPICPARAMS CodecSpecific_vp9(CUVIDVP9PICPARAMS setter);
+        @Name("CodecSpecific.av1") public native @ByRef CUVIDAV1PICPARAMS CodecSpecific_av1(); public native CUVIDPICPARAMS CodecSpecific_av1(CUVIDAV1PICPARAMS setter);
         @Name("CodecSpecific.CodecReserved") public native @Cast("unsigned int") int CodecSpecific_CodecReserved(int i); public native CUVIDPICPARAMS CodecSpecific_CodecReserved(int i, int setter);
         @Name("CodecSpecific.CodecReserved") @MemberGetter public native @Cast("unsigned int*") IntPointer CodecSpecific_CodecReserved();
 }

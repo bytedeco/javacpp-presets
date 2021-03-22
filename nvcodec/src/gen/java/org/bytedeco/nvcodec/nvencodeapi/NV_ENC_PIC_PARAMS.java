@@ -104,6 +104,9 @@ public class NV_ENC_PIC_PARAMS extends Pointer {
                                                                                                 If not set, will internally infer distance of 1. Ignored for NV_ENC_INITALIZE_PARAMS::enablePTD = 0 */
     public native @Cast("uint16_t") short meHintRefPicDist(int i); public native NV_ENC_PIC_PARAMS meHintRefPicDist(int i, short setter);
     @MemberGetter public native @Cast("uint16_t*") ShortPointer meHintRefPicDist();
+    /** [in]: Specifies the input alpha buffer pointer. Client must use a pointer obtained from ::NvEncCreateInputBuffer() or ::NvEncMapInputResource() APIs.
+                                                                                                Applicable only when encoding hevc with alpha layer is enabled. */
+    public native NV_ENC_INPUT_PTR alphaBuffer(); public native NV_ENC_PIC_PARAMS alphaBuffer(NV_ENC_INPUT_PTR setter);
     /** [in]: Reserved and must be set to 0 */
     public native @Cast("uint32_t") int reserved3(int i); public native NV_ENC_PIC_PARAMS reserved3(int i, int setter);
     @MemberGetter public native @Cast("uint32_t*") IntPointer reserved3();

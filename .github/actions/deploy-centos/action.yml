@@ -97,6 +97,12 @@ runs:
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
+        if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
+          python3 -m gdown.cli https://drive.google.com/uc?id=1cBohhcptNDSF5pxsQ7n4-qcGsgiWUxga
+          unzip -qq Video_Codec_SDK_11.0.10.zip
+          ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
+        fi
+
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
           curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17402/l_onemkl_p_2021.1.1.52_offline.sh

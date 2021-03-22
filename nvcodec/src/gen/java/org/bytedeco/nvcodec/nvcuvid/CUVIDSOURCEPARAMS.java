@@ -40,6 +40,10 @@ public class CUVIDSOURCEPARAMS extends Pointer {
 
     /** IN: Time stamp units in Hz (0=default=10000000Hz)      */
     public native @Cast("unsigned int") int ulClockRate(); public native CUVIDSOURCEPARAMS ulClockRate(int setter);
+    /** IN: AV1 annexB stream                                  */
+    public native @Cast("unsigned int") @NoOffset int bAnnexb(); public native CUVIDSOURCEPARAMS bAnnexb(int setter);
+    /** Reserved for future use - set to zero                  */
+    public native @Cast("unsigned int") @NoOffset int uReserved(); public native CUVIDSOURCEPARAMS uReserved(int setter);
     /** Reserved for future use - set to zero                  */
     public native @Cast("unsigned int") int uReserved1(int i); public native CUVIDSOURCEPARAMS uReserved1(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer uReserved1();

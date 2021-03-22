@@ -90,6 +90,9 @@ public class CUVIDDECODECREATEINFO extends Pointer {
         @Name("target_rect.top") public native short target_rect_top(); public native CUVIDDECODECREATEINFO target_rect_top(short setter);
         @Name("target_rect.right") public native short target_rect_right(); public native CUVIDDECODECREATEINFO target_rect_right(short setter);
         @Name("target_rect.bottom") public native short target_rect_bottom(); public native CUVIDDECODECREATEINFO target_rect_bottom(short setter);
+
+    /** IN: enable histogram output, if supported */
+    public native @Cast("unsigned long") long enableHistogram(); public native CUVIDDECODECREATEINFO enableHistogram(long setter);
     /** Reserved for future use - set to zero */
     public native @Cast("unsigned long") long Reserved2(int i); public native CUVIDDECODECREATEINFO Reserved2(int i, long setter);
     @MemberGetter public native @Cast("unsigned long*") CLongPointer Reserved2();

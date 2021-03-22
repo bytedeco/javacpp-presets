@@ -88,6 +88,8 @@ public class NV_ENC_CONFIG_HEVC extends Pointer {
                                                                                    Constrained encoding works only with rectangular slices.
                                                                                    Check support for constrained encoding using ::NV_ENC_CAPS_SUPPORT_CONSTRAINED_ENCODING caps. */
     public native @Cast("uint32_t") @NoOffset int enableConstrainedEncoding(); public native NV_ENC_CONFIG_HEVC enableConstrainedEncoding(int setter);
+    /** [in]: Set this to 1 to enable HEVC encode with alpha layer. */
+    public native @Cast("uint32_t") @NoOffset int enableAlphaLayerEncoding(); public native NV_ENC_CONFIG_HEVC enableAlphaLayerEncoding(int setter);
     /** [in]: Reserved bitfields.*/
     public native @Cast("uint32_t") @NoOffset int reserved(); public native NV_ENC_CONFIG_HEVC reserved(int setter);
     /** [in]: Specifies the IDR interval. If not set, this is made equal to gopLength in NV_ENC_CONFIG. Low latency application client can set IDR interval to NVENC_INFINITE_GOPLENGTH so that IDR frames are not inserted automatically. */

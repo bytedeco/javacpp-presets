@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>nvcodec-platform</artifactId>
-  <version>10.0.26-${project.parent.version}</version>
+  <version>11.0.10-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for NVIDIA Video Codec</name>
 
   <properties>

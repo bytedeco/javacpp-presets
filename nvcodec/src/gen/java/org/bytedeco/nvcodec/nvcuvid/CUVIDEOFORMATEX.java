@@ -39,7 +39,8 @@ public class CUVIDEOFORMATEX extends Pointer {
 
     /** OUT: CUVIDEOFORMAT structure */
     public native @ByRef CUVIDEOFORMAT format(); public native CUVIDEOFORMATEX format(CUVIDEOFORMAT setter);
-    /** OUT: Sequence header data    */
-    public native @Cast("unsigned char") byte raw_seqhdr_data(int i); public native CUVIDEOFORMATEX raw_seqhdr_data(int i, byte setter);
-    @MemberGetter public native @Cast("unsigned char*") BytePointer raw_seqhdr_data();
+        public native @ByRef CUVIDAV1SEQHDR av1(); public native CUVIDEOFORMATEX av1(CUVIDAV1SEQHDR setter);
+        /** OUT: Sequence header data    */
+        public native @Cast("unsigned char") byte raw_seqhdr_data(int i); public native CUVIDEOFORMATEX raw_seqhdr_data(int i, byte setter);
+        @MemberGetter public native @Cast("unsigned char*") BytePointer raw_seqhdr_data();
 }

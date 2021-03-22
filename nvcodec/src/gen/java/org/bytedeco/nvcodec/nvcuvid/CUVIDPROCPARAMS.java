@@ -67,6 +67,8 @@ public class CUVIDPROCPARAMS extends Pointer {
     /** Reserved for future use (set to zero)                                      */
     public native @Cast("unsigned int") int Reserved(int i); public native CUVIDPROCPARAMS Reserved(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer Reserved();
+    /** OUT: Output CUdeviceptr for histogram extensions                           */
+    public native @Cast("unsigned long long*") LongPointer histogram_dptr(); public native CUVIDPROCPARAMS histogram_dptr(LongPointer setter);
     /** Reserved for future use (set to zero)                                      */
     public native Pointer Reserved2(int i); public native CUVIDPROCPARAMS Reserved2(int i, Pointer setter);
     @MemberGetter public native @Cast("void**") PointerPointer Reserved2();

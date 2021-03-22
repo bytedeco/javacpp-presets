@@ -48,6 +48,10 @@ public class CUVIDPARSERPARAMS extends Pointer {
     /** IN: Max display queue delay (improves pipelining of decode with display)
                                                              0=no delay (recommended values: 2..4)                               */
     public native @Cast("unsigned int") int ulMaxDisplayDelay(); public native CUVIDPARSERPARAMS ulMaxDisplayDelay(int setter);
+    /** IN: AV1 annexB stream                                                   */
+    public native @Cast("unsigned int") @NoOffset int bAnnexb(); public native CUVIDPARSERPARAMS bAnnexb(int setter);
+    /** Reserved for future use - set to zero                                   */
+    public native @Cast("unsigned int") @NoOffset int uReserved(); public native CUVIDPARSERPARAMS uReserved(int setter);
     /** IN: Reserved for future use - set to 0                                  */
     public native @Cast("unsigned int") int uReserved1(int i); public native CUVIDPARSERPARAMS uReserved1(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer uReserved1();
@@ -59,6 +63,9 @@ public class CUVIDPARSERPARAMS extends Pointer {
     public native PFNVIDDECODECALLBACK pfnDecodePicture(); public native CUVIDPARSERPARAMS pfnDecodePicture(PFNVIDDECODECALLBACK setter);
     /** IN: Called whenever a picture is ready to be displayed (display order)  */
     public native PFNVIDDISPLAYCALLBACK pfnDisplayPicture(); public native CUVIDPARSERPARAMS pfnDisplayPicture(PFNVIDDISPLAYCALLBACK setter);
+    /** IN: Called from AV1 sequence header to get operating point of a AV1 
+                                                             scalable bitstream                                                  */
+    public native PFNVIDOPPOINTCALLBACK pfnGetOperatingPoint(); public native CUVIDPARSERPARAMS pfnGetOperatingPoint(PFNVIDOPPOINTCALLBACK setter);
     /** Reserved for future use - set to NULL                                   */
     public native Pointer pvReserved2(int i); public native CUVIDPARSERPARAMS pvReserved2(int i, Pointer setter);
     @MemberGetter public native @Cast("void**") PointerPointer pvReserved2();

@@ -8,21 +8,30 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 import org.bytedeco.nvcodec.presets.*;
 
+/**
+ *
+ * @author StaticDefault
+ */
 @Properties(
     inherit = nvcuvid.class,
     value = {
         @Platform(
-            value = {"windows-x86_64"},
+            value = {"linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
-            include = {"nvEncodeAPI.h"},
-            link = {"nvcuvid", "nvencodeapi"}
+            include = {"nvEncodeAPI.h"}
+        ),
+        @Platform(
+            value = "linux-x86_64",
+            includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Interface/"},
+            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Lib/linux/stubs/x86_64/"},
+            link = {"nvidia-encode"}
         ),
         @Platform(
             value = "windows-x86_64",
-            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/Video_Codec_SDK_10.0.26/Interface",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/Video_Codec_SDK_10.0.26/Lib/x64/",
-            link = {"nvcuvid", "nvencodeapi"}
-        ),
+            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Interface/",
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/x64/",
+            link = {"nvencodeapi"}
+        )
     },
     target = "org.bytedeco.nvcodec.nvencodeapi",
     global = "org.bytedeco.nvcodec.global.nvencodeapi"

@@ -19,10 +19,13 @@ import static org.bytedeco.nvcodec.global.nvcuvid.*;
 /** is ready to be decoded and/or displayed. First argument in functions is "void *pUserData" member of structure CUVIDSOURCEPARAMS
 /** Return values from these callbacks are interpreted as below. If the callbacks return failure, it will be propagated by
 /** cuvidParseVideoData() to the application.
+/** Parser picks default operating point as 0 and outputAllLayers flag as 0 if PFNVIDOPPOINTCALLBACK is not set or return value is 
+/** -1 or invalid operating point.
 /** PFNVIDSEQUENCECALLBACK : 0: fail, 1: succeeded, > 1: override dpb size of parser (set by CUVIDPARSERPARAMS::ulMaxNumDecodeSurfaces
 /** while creating parser)
 /** PFNVIDDECODECALLBACK   : 0: fail, >=1: succeeded
 /** PFNVIDDISPLAYCALLBACK  : 0: fail, >=1: succeeded
+/** PFNVIDOPPOINTCALLBACK  : <0: fail, >=0: succeeded (bit 0-9: OperatingPoint, bit 10-10: outputAllLayers, bit 11-30: reserved)
 /***********************************************************************************************************************/
 @Convention("CUDAAPI") @Properties(inherit = org.bytedeco.nvcodec.presets.nvcuvid.class)
 public class PFNVIDSEQUENCECALLBACK extends FunctionPointer {

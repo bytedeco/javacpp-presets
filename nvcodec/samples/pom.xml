@@ -7,7 +7,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>10.0.26-1.5.5-SNAPSHOT</version>
+            <version>11.0.10-1.5.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and NVCodec -->
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform-redist</artifactId>
-            <version>10.0.26-1.5.5-SNAPSHOT</version>
+            <version>11.0.10-1.5.5-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

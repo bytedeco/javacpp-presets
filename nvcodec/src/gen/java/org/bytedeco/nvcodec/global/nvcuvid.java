@@ -47,7 +47,6 @@ public class nvcuvid extends org.bytedeco.nvcodec.presets.nvcuvid {
 /*****************************************************************************************************/
 /** \file cuviddec.h
 /** NVDECODE API provides video decoding interface to NVIDIA GPU devices.
-/** \date 2015-2019
 /** This file contains constants, structure definitions and function prototypes used for decoding.
 /*****************************************************************************************************/
 
@@ -100,8 +99,10 @@ public enum cudaVideoCodec_enum {
     cudaVideoCodec_VP8(9),
     /**  VP9               */
     cudaVideoCodec_VP9(10),
+    /**  AV1               */
+    cudaVideoCodec_AV1(11),
     /**  Max codecs        */
-    cudaVideoCodec_NumCodecs(11),
+    cudaVideoCodec_NumCodecs(12),
     // Uncompressed YUV
     /** Y,U,V (4:2:0)      */
     cudaVideoCodec_YUV420((('I'<<24)|('Y'<<16)|('U'<<8)|('V'))),
@@ -276,6 +277,9 @@ public static final int S_VOP = 3;
 // Targeting ..\nvcuvid\CUVIDVP9PICPARAMS.java
 
 
+// Targeting ..\nvcuvid\CUVIDAV1PICPARAMS.java
+
+
 // Targeting ..\nvcuvid\CUVIDPICPARAMS.java
 
 
@@ -399,6 +403,7 @@ public static native @Cast("CUresult") int cuvidUnmapVideoFrame64(CUvideodecoder
 // #endif
 
 
+
 /********************************************************************************************************************/
 /**
 /** Context-locking: to facilitate multi-threaded implementations, the following 4 functions
@@ -484,7 +489,7 @@ public static native @Cast("CUresult") int cuvidCtxUnlock(_CUcontextlock_st lck,
 /********************************************************************************************************************/
 /** \file nvcuvid.h
 /**   NVDECODE API provides video decoding interface to NVIDIA GPU devices.
-/** \date 2015-2019
+/** \date 2015-2020
 /**  This file contains the interface constants, structure definitions and function prototypes.
 /********************************************************************************************************************/
 
@@ -536,6 +541,12 @@ public static final int
     /** AAC Audio                  */
     cudaAudioCodec_AAC = 5;
 // Targeting ..\nvcuvid\CUVIDEOFORMAT.java
+
+
+// Targeting ..\nvcuvid\CUVIDOPERATINGPOINTINFO.java
+
+
+// Targeting ..\nvcuvid\CUVIDAV1SEQHDR.java
 
 
 // Targeting ..\nvcuvid\CUVIDEOFORMATEX.java
@@ -660,6 +671,9 @@ public static native @Cast("CUresult") int cuvidGetSourceAudioFormat(CUvideosour
 
 
 // Targeting ..\nvcuvid\PFNVIDDISPLAYCALLBACK.java
+
+
+// Targeting ..\nvcuvid\PFNVIDOPPOINTCALLBACK.java
 
 
 // Targeting ..\nvcuvid\CUVIDPARSERPARAMS.java

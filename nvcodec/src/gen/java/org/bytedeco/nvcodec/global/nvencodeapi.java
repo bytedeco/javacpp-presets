@@ -102,7 +102,7 @@ public class nvencodeapi extends org.bytedeco.nvcodec.presets.nvencodeapi {
 
 
 
-public static final int NVENCAPI_MAJOR_VERSION = 10;
+public static final int NVENCAPI_MAJOR_VERSION = 11;
 public static final int NVENCAPI_MINOR_VERSION = 0;
 
 public static final int NVENCAPI_VERSION = (NVENCAPI_MAJOR_VERSION | (NVENCAPI_MINOR_VERSION << 24));
@@ -156,9 +156,6 @@ public static final int NV_MAX_SEQ_HDR_LEN =  (512);
 
 // {40847BF5-33F7-4601-9084-E8FE3C1DB8B7}
 @MemberGetter public static native @Const @ByRef GUID NV_ENC_H264_PROFILE_STEREO_GUID();
-
-// {CE788D20-AAA9-4318-92BB-AC7E858C8D36}
-@MemberGetter public static native @Const @ByRef GUID NV_ENC_H264_PROFILE_SVC_TEMPORAL_SCALABILTY();
 
 // {B405AFAC-F32B-417B-89C4-9ABEED3E5978}
 @MemberGetter public static native @Const @ByRef GUID NV_ENC_H264_PROFILE_PROGRESSIVE_HIGH_GUID();
@@ -1277,10 +1274,22 @@ public enum _NV_ENC_CAPS {
      */
     NV_ENC_CAPS_SUPPORT_MULTIPLE_REF_FRAMES(47),
 
+    /**
+     * Indicates HW support for HEVC with alpha encoding.
+     * \n 0 : HEVC with alpha encoding not supported.
+     * \n 1 : HEVC with alpha encoding is supported.
+     */
+    NV_ENC_CAPS_SUPPORT_ALPHA_LAYER_ENCODING(48),
+
+    /**
+     * Indicates number of Encoding engines present on GPU.
+     */
+    NV_ENC_CAPS_NUM_ENCODER_ENGINES(49),
+
      /**
      * Reserved - Not to be used by clients.
      */
-    NV_ENC_CAPS_EXPOSED_COUNT(48);
+    NV_ENC_CAPS_EXPOSED_COUNT(50);
 
     public final int value;
     private _NV_ENC_CAPS(int v) { this.value = v; }

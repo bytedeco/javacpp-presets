@@ -47,8 +47,8 @@ public class CUVIDDECODECAPS extends Pointer {
 
     /** OUT: 1 if codec supported, 0 if not supported                      */
     public native @Cast("unsigned char") byte bIsSupported(); public native CUVIDDECODECAPS bIsSupported(byte setter);
-    /** Reserved for future use - set to zero                              */
-    public native @Cast("unsigned char") byte reserved2(); public native CUVIDDECODECAPS reserved2(byte setter);
+    /** OUT: Number of NVDECs that can support IN params                   */
+    public native @Cast("unsigned char") byte nNumNVDECs(); public native CUVIDDECODECAPS nNumNVDECs(byte setter);
     /** OUT: each bit represents corresponding cudaVideoSurfaceFormat enum */
     public native @Cast("unsigned short") short nOutputFormatMask(); public native CUVIDDECODECAPS nOutputFormatMask(short setter);
     /** OUT: Max supported coded width in pixels                           */
@@ -62,6 +62,14 @@ public class CUVIDDECODECAPS extends Pointer {
     public native @Cast("unsigned short") short nMinWidth(); public native CUVIDDECODECAPS nMinWidth(short setter);
     /** OUT: Min supported coded height in pixels                          */
     public native @Cast("unsigned short") short nMinHeight(); public native CUVIDDECODECAPS nMinHeight(short setter);
+    /** OUT: 1 if Y component histogram output is supported, 0 if not
+                                                                      Note: histogram is computed on original picture data before
+                                                                      any post-processing like scaling, cropping, etc. is applied   */
+    public native @Cast("unsigned char") byte bIsHistogramSupported(); public native CUVIDDECODECAPS bIsHistogramSupported(byte setter);
+    /** OUT: histogram counter bit depth                                   */
+    public native @Cast("unsigned char") byte nCounterBitDepth(); public native CUVIDDECODECAPS nCounterBitDepth(byte setter);
+    /** OUT: Max number of histogram bins                                  */
+    public native @Cast("unsigned short") short nMaxHistogramBins(); public native CUVIDDECODECAPS nMaxHistogramBins(short setter);
     /** Reserved for future use - set to zero                              */
     public native @Cast("unsigned int") int reserved3(int i); public native CUVIDDECODECAPS reserved3(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer reserved3();

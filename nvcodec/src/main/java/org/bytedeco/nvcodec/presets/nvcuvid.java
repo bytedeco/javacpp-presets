@@ -13,6 +13,10 @@ import java.util.List;
 
 import org.bytedeco.cuda.presets.cudart;
 
+/**
+ *
+ * @author StaticDefault
+ */
 @Properties(
     inherit = cudart.class,
     value = {
@@ -20,14 +24,18 @@ import org.bytedeco.cuda.presets.cudart;
             value = {"windows-x86_64"},
             compiler = "cpp11",
             include = {"cuviddec.h", "nvcuvid.h"},
-            link = "nvcuvid"
+            link = {"nvcuvid"}
+        ),
+        @Platform(
+            value = "linux-x86_64",
+            includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Interface/"},
+            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Lib/linux/stubs/x86_64/"}
         ),
         @Platform(
             value = "windows-x86_64",
-            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/Video_Codec_SDK_10.0.26/Interface",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/Video_Codec_SDK_10.0.26/Lib/x64/",
-            preload = "nvcuvid"
-        ),
+            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Interface/",
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/x64/"
+        )
     },
     target = "org.bytedeco.nvcodec.nvcuvid",
     global = "org.bytedeco.nvcodec.global.nvcuvid"

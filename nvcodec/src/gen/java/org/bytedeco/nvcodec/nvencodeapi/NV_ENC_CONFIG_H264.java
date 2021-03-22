@@ -38,8 +38,8 @@ public class NV_ENC_CONFIG_H264 extends Pointer {
         return new NV_ENC_CONFIG_H264((Pointer)this).position(position + i);
     }
 
-    /** [in]: Reserved and must be set to 0 */
-    public native @Cast("uint32_t") @NoOffset int reserved(); public native NV_ENC_CONFIG_H264 reserved(int setter);
+    /** [in]: Set to 1 to enable SVC temporal*/
+    public native @Cast("uint32_t") @NoOffset int enableTemporalSVC(); public native NV_ENC_CONFIG_H264 enableTemporalSVC(int setter);
     /** [in]: Set to 1 to enable stereo MVC*/
     public native @Cast("uint32_t") @NoOffset int enableStereoMVC(); public native NV_ENC_CONFIG_H264 enableStereoMVC(int setter);
     /** [in]: Set to 1 to enable hierarchical P Frames */
@@ -94,6 +94,12 @@ public class NV_ENC_CONFIG_H264 extends Pointer {
                                                                                    is currently not supported and will make ::NvEncInitializeEncoder()
                                                                                    return an error. */
     public native @Cast("uint32_t") @NoOffset int enableFillerDataInsertion(); public native NV_ENC_CONFIG_H264 enableFillerDataInsertion(int setter);
+    /** [in]: Set to 1 to disable writing of SVC Prefix NALU preceding each slice in bitstream.
+                                                                                   Applicable only when temporal SVC is enabled (NV_ENC_CONFIG_H264::enableTemporalSVC = 1). */
+    public native @Cast("uint32_t") @NoOffset int disableSVCPrefixNalu(); public native NV_ENC_CONFIG_H264 disableSVCPrefixNalu(int setter);
+    /** [in]: Set to 1 to enable writing of Scalability Information SEI message preceding each IDR picture in bitstream 
+                                                                                   Applicable only when temporal SVC is enabled (NV_ENC_CONFIG_H264::enableTemporalSVC = 1). */
+    public native @Cast("uint32_t") @NoOffset int enableScalabilityInfoSEI(); public native NV_ENC_CONFIG_H264 enableScalabilityInfoSEI(int setter);
     /** [in]: Reserved bitfields and must be set to 0 */
     public native @Cast("uint32_t") @NoOffset int reservedBitFields(); public native NV_ENC_CONFIG_H264 reservedBitFields(int setter);
     /** [in]: Specifies the encoding level. Client is recommended to set this to NV_ENC_LEVEL_AUTOSELECT in order to enable the NvEncodeAPI interface to select the correct level. */
@@ -108,7 +114,7 @@ public class NV_ENC_CONFIG_H264 extends Pointer {
                                                                                    block edges of the slice and specifies for which edges the filtering is disabled. See section
                                                                                    7.4.3 of H.264 specification for more details.*/
     public native @Cast("uint32_t") int disableDeblockingFilterIDC(); public native NV_ENC_CONFIG_H264 disableDeblockingFilterIDC(int setter);
-    /** [in]: Specifies max temporal layers to be used for hierarchical coding. Valid value range is [1,::NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS] */
+    /** [in]: Specifies number of temporal layers to be used for hierarchical coding / temporal SVC. Valid value range is [1,::NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS] */
     public native @Cast("uint32_t") int numTemporalLayers(); public native NV_ENC_CONFIG_H264 numTemporalLayers(int setter);
     /** [in]: Specifies the SPS id of the sequence header */
     public native @Cast("uint32_t") int spsId(); public native NV_ENC_CONFIG_H264 spsId(int setter);
@@ -159,8 +165,10 @@ public class NV_ENC_CONFIG_H264 extends Pointer {
     /** [in]: Specifies the chroma format. Should be set to 1 for yuv420 input, 3 for yuv444 input.
                                                                                    Check support for YUV444 encoding using ::NV_ENC_CAPS_SUPPORT_YUV444_ENCODE caps.*/
     public native @Cast("uint32_t") int chromaFormatIDC(); public native NV_ENC_CONFIG_H264 chromaFormatIDC(int setter);
-    /** [in]: Specifies the max temporal layer used for hierarchical coding. */
-    public native @Cast("uint32_t") int maxTemporalLayers(); public native NV_ENC_CONFIG_H264 maxTemporalLayers(int setter); 
+    /** [in]: Specifies the maximum temporal layer used for temporal SVC / hierarchical coding.
+                                                                                   Defaut value of this field is NV_ENC_CAPS::NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS. Note that the value NV_ENC_CONFIG_H264::maxNumRefFrames should
+                                                                                   be greater than or equal to (NV_ENC_CONFIG_H264::maxTemporalLayers - 2) * 2, for NV_ENC_CONFIG_H264::maxTemporalLayers >= 2.*/
+    public native @Cast("uint32_t") int maxTemporalLayers(); public native NV_ENC_CONFIG_H264 maxTemporalLayers(int setter);
     /** [in]: Specifies the B-Frame as reference mode. Check support for useBFramesAsRef mode using ::NV_ENC_CAPS_SUPPORT_BFRAME_REF_MODE caps.*/
     public native @Cast("NV_ENC_BFRAME_REF_MODE") int useBFramesAsRef(); public native NV_ENC_CONFIG_H264 useBFramesAsRef(int setter);
     /** [in]: Specifies max number of reference frames in reference picture list L0, that can be used by hardware for prediction of a frame. 

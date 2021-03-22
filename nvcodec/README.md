@@ -15,6 +15,6 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * NVIDIA Video Codec SDK 10.0.26  https://developer.nvidia.com/nvidia-video-codec-sdk
+ * NVIDIA Video Codec SDK 11.0.10  https://developer.nvidia.com/nvidia-video-codec-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.

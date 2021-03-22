@@ -58,7 +58,8 @@ public class NV_ENC_LOCK_BITSTREAM extends Pointer {
     public native @Cast("uint32_t") int hwEncodeStatus(); public native NV_ENC_LOCK_BITSTREAM hwEncodeStatus(int setter);
     /** [out]: Number of slices in the encoded picture. Will be reported only if NV_ENC_INITIALIZE_PARAMS::reportSliceOffsets set to 1. */
     public native @Cast("uint32_t") int numSlices(); public native NV_ENC_LOCK_BITSTREAM numSlices(int setter);
-    /** [out]: Actual number of bytes generated and copied to the memory pointed by bitstreamBufferPtr. */
+    /** [out]: Actual number of bytes generated and copied to the memory pointed by bitstreamBufferPtr. 
+                                                                         When HEVC alpha layer encoding is enabled, this field reports the total encoded size in bytes i.e it is the encoded size of the base plus the alpha layer. */
     public native @Cast("uint32_t") int bitstreamSizeInBytes(); public native NV_ENC_LOCK_BITSTREAM bitstreamSizeInBytes(int setter);
     /** [out]: Presentation timestamp associated with the encoded output. */
     public native @Cast("uint64_t") int outputTimeStamp(); public native NV_ENC_LOCK_BITSTREAM outputTimeStamp(int setter);
@@ -91,6 +92,9 @@ public class NV_ENC_LOCK_BITSTREAM extends Pointer {
     public native @Cast("int32_t") int averageMVX(); public native NV_ENC_LOCK_BITSTREAM averageMVX(int setter);
     /** [out]: Average Motion Vector in y direction for the encoded frame. Supported only if _NV_ENC_LOCK_BITSTREAM::getRCStats set to 1. */
     public native @Cast("int32_t") int averageMVY(); public native NV_ENC_LOCK_BITSTREAM averageMVY(int setter);
+    /** [out]: Number of bytes generated for the alpha layer in the encoded output. Applicable only when HEVC with alpha encoding is enabled. */
+    public native @Cast("uint32_t") int alphaLayerSizeInBytes(); public native NV_ENC_LOCK_BITSTREAM alphaLayerSizeInBytes(int setter); 
+
     /** [in]: Reserved and must be set to 0 */
     public native @Cast("uint32_t") int reserved1(int i); public native NV_ENC_LOCK_BITSTREAM reserved1(int i, int setter);
     @MemberGetter public native @Cast("uint32_t*") IntPointer reserved1();
