@@ -2,15 +2,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libfreenect</groupId>
     <artifactId>glpclview</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>GLPCLView</exec.mainClass>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libfreenect-platform</artifactId>
-            <version>0.5.7-1.5.4</version>
+            <version>0.5.7-1.5.5</version>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>

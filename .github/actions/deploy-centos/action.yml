@@ -39,7 +39,7 @@ runs:
         ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
         ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
 
-        python3 -m pip install gdown
+        python3 -m pip install gdown || python3 -m pip install gdown
 
         if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
           curl -LO https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
@@ -63,14 +63,14 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda-repo-rhel7-11-2-local-11.2.1_460.32.03-1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.0/cudnn-11.2-linux-x64-v8.1.0.77.tgz
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/cudnn-11.2-linux-x64-v8.1.1.33.tgz
           curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/nccl_2.8.4-1+cuda11.2_x86_64.txz
 
           rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-2-local-11.2.1_460.32.03-1.x86_64.rpm
           pushd /var/cuda-repo-rhel7-11-2-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
-          tar -hxvf cudnn-11.2-linux-x64-v8.1.0.77.tgz -C /usr/local/
+          tar -hxvf cudnn-11.2-linux-x64-v8.1.1.33.tgz -C /usr/local/
           tar -hxvf nccl_2.8.4-1+cuda11.2_x86_64.txz --strip-components=1 -C /usr/local/cuda/
           mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
 
@@ -93,8 +93,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing NVIDIA TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1lps5XRB7tlf8rfpYM6202dwUmBTYAsJA
-          tar -hxvf TensorRT-7.2.2.3.CentOS-7.8.x86_64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1iiQkP6R5KzBf_0KzMc9HKTJFO2l9gYC_
+          tar -hxvf TensorRT-7.2.3.4.CentOS-7.9.x86_64-gnu.cuda-11.2.cudnn8.1.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
@@ -145,7 +145,7 @@ runs:
         if [[ -n ${CI_DEPLOY_USERNAME:-} ]] && [[ ! "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
           GRADLE_TASK=publish
           MAVEN_PHASE=deploy
-          if [[ "${{ github.event.head_commit.message }}" == Release* ]]; then
+          if [[ "${{ github.event.head_commit.message }}" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
             python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
             tar -xzf settings.tar.gz
             MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
@@ -200,7 +200,7 @@ runs:
           export EXT=${{ matrix.ext }}
           export EXT2=${EXT:1}
           export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
-          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
+          for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -pl .,$CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
           for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
           if [[ -e $CI_DEPLOY_MODULE/platform/redist/pom.xml ]]; then
             for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/redist/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)

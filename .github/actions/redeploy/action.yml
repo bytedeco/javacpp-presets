@@ -39,7 +39,7 @@ runs:
     - name: Downloading and uploading artifacts
       shell: bash
       run: |
-        if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "${{ github.event.head_commit.message }}" == Release* ]]; then
+        if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "${{ github.event.head_commit.message }}" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
             # We are not deploying snapshots
             exit 0
         fi

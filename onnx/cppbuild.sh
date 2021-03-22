@@ -50,6 +50,7 @@ sedinplace 's/const std::string /std::string /g' onnx/defs/schema.h
 export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
+sedinplace "/setup_requires.append('pytest-runner')/d" setup.py
 python3 setup.py --quiet build
 
 mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/optimizer/passes ../include/onnx/version_converter ../include/onnx/version_converter/adapters ../include/onnx/shape_inference
