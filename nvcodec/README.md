@@ -18,3 +18,119 @@ This directory contains the JavaCPP Presets module for:
  * NVIDIA Video Codec SDK 11.0.10  https://developer.nvidia.com/nvidia-video-codec-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
+
+
+Documentation
+-------------
+Java API documentation is available here:
+
+ * http://bytedeco.org/javacpp-presets/nvcodec/apidocs/
+
+
+Sample Usage
+------------
+You can find encoder and decoder samples in the `samples` directory. this sample ported to Java from the `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` C++ samples included in `NVIDIA Video Codec SDK` available at:
+
+ * https://developer.nvidia.com/nvidia-video-codec-sdk/download
+
+Or, if you want a simple test, use the sample code below.
+
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SampleEncodeDecode.java` source files below, simply execute on the command line:
+```bash
+ $ mvn compile exec:java
+```
+
+### The `pom.xml` build file
+```xml
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.nvcodec</groupId>
+    <artifactId>sampleencodedecode</artifactId>
+    <version>1.5.6</version>
+    <properties>
+        <exec.mainClass>SampleEncodeDecode</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>nvcodec-platform</artifactId>
+            <version>11.0.10-1.5.6</version>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform-redist</artifactId>
+            <version>11.2-8.1-1.5.6</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
+```
+
+### The `SampleEncodeDecode.java` source file
+```java
+import org.bytedeco.cuda.cudart.CUctx_st;
+import org.bytedeco.javacpp.IntPointer;
+import org.bytedeco.nvcodec.nvcuvid.CUVIDDECODECAPS;
+
+import static org.bytedeco.cuda.global.cudart.*;
+import static org.bytedeco.nvcodec.global.nvcuvid.*;
+import static org.bytedeco.nvcodec.global.nvencodeapi.*;
+
+public class SampleEncodeDecode {
+    public static _NVENCSTATUS getNVENCSTATUSByValue(int value) {
+        _NVENCSTATUS[] statuses = _NVENCSTATUS.values();
+
+        for (_NVENCSTATUS status : statuses) {
+            if (status.value == value) {
+                return status;
+            }
+        }
+
+        return null;
+    }
+    public static void checkCudaApiCall(String functionName, int result) {
+        if (result != 0) {
+            System.err.printf("ERROR: %s returned '%d' \r\n", functionName, result);
+            System.exit(-1);
+        }
+    }
+
+    public static void main(String[] args) {
+        int targetGpu = 0; // Change to your own NVIDIA GPU number.
+
+        CUctx_st cuContext = new CUctx_st();
+
+        checkCudaApiCall("cuInit", cuInit(0));
+        checkCudaApiCall("cuCtxCreate", cuCtxCreate(cuContext, 0, targetGpu));
+
+        // Encoder max supported version check.
+        {
+            IntPointer version = new IntPointer(1);
+            _NVENCSTATUS status = getNVENCSTATUSByValue(NvEncodeAPIGetMaxSupportedVersion(version));
+
+            if (status != _NVENCSTATUS.NV_ENC_SUCCESS) {
+                System.err.printf("ERROR: NvEncodeAPIGetMaxSupportedVersion returned '%s' \r\n", status.toString());
+                System.exit(-1);
+            } else {
+                System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
+            }
+        }
+
+        // Decoder 'MPEG-1' capability check.
+        {
+            CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS();
+            decodeCaps.eCodecType(cudaVideoCodec_enum.cudaVideoCodec_HEVC.value);
+            decodeCaps.eChromaFormat(cudaVideoChromaFormat_enum.cudaVideoChromaFormat_420.value);
+            decodeCaps.nBitDepthMinus8(2); // 10 bit
+
+            checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
+
+            System.out.printf("Decoder MPEG-1 Capability\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+        }
+    }
+}
+```
