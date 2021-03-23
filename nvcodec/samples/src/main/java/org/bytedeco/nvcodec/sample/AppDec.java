@@ -268,7 +268,7 @@ public class AppDec {
             }
 
             CUctx_st cuContext = new CUctx_st();
-            cuCtxCreate(cuContext, gpu, 0);
+            cuCtxCreate(cuContext, 0, gpu);
 
             System.out.println("Decode with demuxing.");
             decodeMediaFile(cuContext, inputFilePath, outputFilePath, outPlanar, cropRectangle, resizeDimension);

@@ -322,7 +322,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
         CUVIDPARSERPARAMS parseParameter = new CUVIDPARSERPARAMS();
 
-        parseParameter.CodecType(cudaVideoCodec_H264.value);
+        parseParameter.CodecType(this.codec.value);
         parseParameter.ulMaxNumDecodeSurfaces(1);
         parseParameter.ulClockRate(clkRate);
         parseParameter.pUserData(this);
