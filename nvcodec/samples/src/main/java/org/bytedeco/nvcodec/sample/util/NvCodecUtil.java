@@ -5,9 +5,6 @@ import org.bytedeco.nvcodec.sample.exceptions.InvalidArgument;
 import org.bytedeco.nvcodec.sample.exceptions.NvCodecException;
 import org.bytedeco.nvcodec.nvencodeapi.GUID;
 
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoCodec_enum.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi.*;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,7 +42,7 @@ public class NvCodecUtil {
         }
     }
 
-    public final static Map<Codec, cudaVideoCodec_enum> codecs = new HashMap<Codec, cudaVideoCodec_enum>();
+    public final static Map<Codec, Integer> codecs = new HashMap<Codec, Integer>();
 
     static {
         codecs.put(H264, cudaVideoCodec_H264);
@@ -57,50 +54,14 @@ public class NvCodecUtil {
         codecs.put(VP9, cudaVideoCodec_VP9);
     }
 
-    public static cudaVideoCodec_enum convertToNvCodec(Codec codec) throws NvCodecException {
-        cudaVideoCodec_enum nvCodec = codecs.get(codec);
+    public static Integer convertToNvCodec(Codec codec) throws NvCodecException {
+        Integer nvCodec = codecs.get(codec);
 
         if (nvCodec == null) {
             throw new NvCodecException(String.format("%s codec not supported on NvCodec. %n", codec.name()), -1);
         }
 
         return nvCodec;
-    }
-
-    public static _NVENCSTATUS getNVENCSTATUSByValue(int value) {
-        _NVENCSTATUS[] statuses = _NVENCSTATUS.values();
-
-        for (_NVENCSTATUS status : statuses) {
-            if (status.value == value) {
-                return status;
-            }
-        }
-
-        return null;
-    }
-
-    public static cudaVideoCodec_enum getVideoCodecByValue(int value) {
-        cudaVideoCodec_enum[] codecs = cudaVideoCodec_enum.values();
-
-        for (cudaVideoCodec_enum codec : codecs) {
-            if (codec.value == value) {
-                return codec;
-            }
-        }
-
-        return null;
-    }
-
-    public static cudaVideoChromaFormat_enum getVideoChromaFormatByValue(int value) {
-        cudaVideoChromaFormat_enum[] codecs = cudaVideoChromaFormat_enum.values();
-
-        for (cudaVideoChromaFormat_enum codec : codecs) {
-            if (codec.value == value) {
-                return codec;
-            }
-        }
-
-        return null;
     }
 
     public static boolean compareGUID(GUID guid1, GUID guid2) {

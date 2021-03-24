@@ -13,27 +13,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import static org.bytedeco.nvcodec.global.nvencodeapi.NV_ENC_OUTPUT_MOTION_VECTOR;
 import static org.bytedeco.nvcodec.sample.util.CudaUtil.checkCudaApiCall;
 import static org.bytedeco.nvcodec.sample.util.NvCodecUtil.checkNvCodecApiCall;
 import static org.bytedeco.cuda.global.cudart.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi.NV_ENC_MAP_INPUT_RESOURCE_VER;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NVENCSTATUS.NV_ENC_ERR_NEED_MORE_INPUT;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NVENCSTATUS.NV_ENC_SUCCESS;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_FORMAT.NV_ENC_BUFFER_FORMAT_U8;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_USAGE.NV_ENC_OUTPUT_BITSTREAM;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_USAGE.NV_ENC_OUTPUT_MOTION_VECTOR;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_INPUT_RESOURCE_TYPE.NV_ENC_INPUT_RESOURCE_TYPE_CUDADEVICEPTR;
+import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 
 public class NvEncoderOutputInVidMemCuda extends NvEncoderCuda {
     private VectorEx<NV_ENC_OUTPUT_PTR> mappedOutputBuffers;
     private Vector<NV_ENC_OUTPUT_PTR> outputBuffers;
     private Vector<NV_ENC_REGISTERED_PTR> registeredResourcesOutputBuffer;
 
-    public NvEncoderOutputInVidMemCuda(CUctx_st cudaContext, int width, int height, _NV_ENC_BUFFER_FORMAT bufferFormat) {
+    public NvEncoderOutputInVidMemCuda(CUctx_st cudaContext, int width, int height, int bufferFormat) {
         this(cudaContext, width, height, bufferFormat, false);
     }
 
-    public NvEncoderOutputInVidMemCuda(CUctx_st cudaContext, int width, int height, _NV_ENC_BUFFER_FORMAT bufferFormat, boolean motionEstimationOnly) {
+    public NvEncoderOutputInVidMemCuda(CUctx_st cudaContext, int width, int height, int bufferFormat, boolean motionEstimationOnly) {
         super(cudaContext, width, height, bufferFormat, 0, motionEstimationOnly, true);
         this.mappedOutputBuffers = new VectorEx<>();
         this.outputBuffers = new Vector<>();
@@ -116,7 +111,7 @@ public class NvEncoderOutputInVidMemCuda extends NvEncoderCuda {
      * @brief This function is used to register output buffers with NvEncodeAPI.
      */
     private void registerOutputResources(int bfrSize) {
-        _NV_ENC_BUFFER_USAGE bufferUsage = this.motionEstimationOnly ? NV_ENC_OUTPUT_MOTION_VECTOR : NV_ENC_OUTPUT_BITSTREAM;
+        int bufferUsage = this.motionEstimationOnly ? NV_ENC_OUTPUT_MOTION_VECTOR : NV_ENC_OUTPUT_BITSTREAM;
 
         for (NV_ENC_OUTPUT_PTR pointer : this.outputBuffers) {
             if (pointer != null && !pointer.isNull()) {
@@ -207,7 +202,7 @@ public class NvEncoderOutputInVidMemCuda extends NvEncoderCuda {
 
         this.mapResources(index);
 
-        _NVENCSTATUS nvStatus = this.doEncode(this.mappedInputBuffers.get(index), this.mappedOutputBuffers.get(index), picParams);
+        int nvStatus = this.doEncode(this.mappedInputBuffers.get(index), this.mappedOutputBuffers.get(index), picParams);
 
         if (nvStatus == NV_ENC_SUCCESS || nvStatus == NV_ENC_ERR_NEED_MORE_INPUT) {
             this.toSend++;
@@ -252,7 +247,7 @@ public class NvEncoderOutputInVidMemCuda extends NvEncoderCuda {
 
             this.mapResources(index);
 
-            _NVENCSTATUS nvStatus = this.doMotionEstimation(this.mappedInputBuffers.get(index), this.mappedRefBuffers.get(index), this.mappedOutputBuffers.get(index));
+            int nvStatus = this.doMotionEstimation(this.mappedInputBuffers.get(index), this.mappedRefBuffers.get(index), this.mappedOutputBuffers.get(index));
 
             if (nvStatus == NV_ENC_SUCCESS) {
                 this.toSend++;

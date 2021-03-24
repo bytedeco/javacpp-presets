@@ -76,75 +76,63 @@ public class nvcuvid extends org.bytedeco.nvcodec.presets.nvcuvid {
 /** Video codec enums
 /** These enums are used in CUVIDDECODECREATEINFO and CUVIDDECODECAPS structures
 /*********************************************************************************/
-public enum cudaVideoCodec_enum {
+/** enum cudaVideoCodec_enum */
+public static final int
     /**  MPEG1             */
-    cudaVideoCodec_MPEG1(0),
+    cudaVideoCodec_MPEG1 = 0,
     /**  MPEG2             */
-    cudaVideoCodec_MPEG2(1),
+    cudaVideoCodec_MPEG2 = 1,
     /**  MPEG4             */
-    cudaVideoCodec_MPEG4(2),
+    cudaVideoCodec_MPEG4 = 2,
     /**  VC1               */
-    cudaVideoCodec_VC1(3),
+    cudaVideoCodec_VC1 = 3,
     /**  H264              */
-    cudaVideoCodec_H264(4),
+    cudaVideoCodec_H264 = 4,
     /**  JPEG              */
-    cudaVideoCodec_JPEG(5),
+    cudaVideoCodec_JPEG = 5,
     /**  H264-SVC          */
-    cudaVideoCodec_H264_SVC(6),
+    cudaVideoCodec_H264_SVC = 6,
     /**  H264-MVC          */
-    cudaVideoCodec_H264_MVC(7),
+    cudaVideoCodec_H264_MVC = 7,
     /**  HEVC              */
-    cudaVideoCodec_HEVC(8),
+    cudaVideoCodec_HEVC = 8,
     /**  VP8               */
-    cudaVideoCodec_VP8(9),
+    cudaVideoCodec_VP8 = 9,
     /**  VP9               */
-    cudaVideoCodec_VP9(10),
+    cudaVideoCodec_VP9 = 10,
     /**  AV1               */
-    cudaVideoCodec_AV1(11),
+    cudaVideoCodec_AV1 = 11,
     /**  Max codecs        */
-    cudaVideoCodec_NumCodecs(12),
+    cudaVideoCodec_NumCodecs = 12,
     // Uncompressed YUV
     /** Y,U,V (4:2:0)      */
-    cudaVideoCodec_YUV420((('I'<<24)|('Y'<<16)|('U'<<8)|('V'))),
+    cudaVideoCodec_YUV420 = (('I'<<24)|('Y'<<16)|('U'<<8)|('V')),
     /** Y,V,U (4:2:0)      */
-    cudaVideoCodec_YV12  ((('Y'<<24)|('V'<<16)|('1'<<8)|('2'))),
+    cudaVideoCodec_YV12   = (('Y'<<24)|('V'<<16)|('1'<<8)|('2')),
     /** Y,UV  (4:2:0)      */
-    cudaVideoCodec_NV12  ((('N'<<24)|('V'<<16)|('1'<<8)|('2'))),
+    cudaVideoCodec_NV12   = (('N'<<24)|('V'<<16)|('1'<<8)|('2')),
     /** YUYV/YUY2 (4:2:2)  */
-    cudaVideoCodec_YUYV  ((('Y'<<24)|('U'<<16)|('Y'<<8)|('V'))),
+    cudaVideoCodec_YUYV   = (('Y'<<24)|('U'<<16)|('Y'<<8)|('V')),
     /** UYVY (4:2:2)       */
-    cudaVideoCodec_UYVY  ((('U'<<24)|('Y'<<16)|('V'<<8)|('Y')));
-
-    public final int value;
-    private cudaVideoCodec_enum(int v) { this.value = v; }
-    private cudaVideoCodec_enum(cudaVideoCodec_enum e) { this.value = e.value; }
-    public cudaVideoCodec_enum intern() { for (cudaVideoCodec_enum e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    cudaVideoCodec_UYVY   = (('U'<<24)|('Y'<<16)|('V'<<8)|('Y'));
 
 /*********************************************************************************/
 /** \enum cudaVideoSurfaceFormat
 /** Video surface format enums used for output format of decoded output
 /** These enums are used in CUVIDDECODECREATEINFO structure
 /*********************************************************************************/
-public enum cudaVideoSurfaceFormat_enum {
+/** enum cudaVideoSurfaceFormat_enum */
+public static final int
     /** Semi-Planar YUV [Y plane followed by interleaved UV plane]     */
-    cudaVideoSurfaceFormat_NV12(0),
+    cudaVideoSurfaceFormat_NV12 = 0,
     /** 16 bit Semi-Planar YUV [Y plane followed by interleaved UV plane].
                                                  Can be used for 10 bit(6LSB bits 0), 12 bit (4LSB bits 0)      */
-    cudaVideoSurfaceFormat_P016(1),
+    cudaVideoSurfaceFormat_P016 = 1,
     /** Planar YUV [Y plane followed by U and V planes]                */
-    cudaVideoSurfaceFormat_YUV444(2),
+    cudaVideoSurfaceFormat_YUV444 = 2,
     /** 16 bit Planar YUV [Y plane followed by U and V planes]. 
                                                  Can be used for 10 bit(6LSB bits 0), 12 bit (4LSB bits 0)      */
-    cudaVideoSurfaceFormat_YUV444_16Bit(3);
-
-    public final int value;
-    private cudaVideoSurfaceFormat_enum(int v) { this.value = v; }
-    private cudaVideoSurfaceFormat_enum(cudaVideoSurfaceFormat_enum e) { this.value = e.value; }
-    public cudaVideoSurfaceFormat_enum intern() { for (cudaVideoSurfaceFormat_enum e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    cudaVideoSurfaceFormat_YUV444_16Bit = 3;
 
 /******************************************************************************************************************/
 /** \enum cudaVideoDeinterlaceMode
@@ -153,64 +141,46 @@ public enum cudaVideoSurfaceFormat_enum {
 /** Use cudaVideoDeinterlaceMode_Weave for progressive content and for content that doesn't need deinterlacing
 /** cudaVideoDeinterlaceMode_Adaptive needs more video memory than other DImodes
 /******************************************************************************************************************/
-public enum cudaVideoDeinterlaceMode_enum {
+/** enum cudaVideoDeinterlaceMode_enum */
+public static final int
     /** Weave both fields (no deinterlacing) */
-    cudaVideoDeinterlaceMode_Weave(0),
+    cudaVideoDeinterlaceMode_Weave = 0,
     /** Drop one field                       */
-    cudaVideoDeinterlaceMode_Bob(1),
+    cudaVideoDeinterlaceMode_Bob = 1,
     /** Adaptive deinterlacing               */
-    cudaVideoDeinterlaceMode_Adaptive(2);
-
-    public final int value;
-    private cudaVideoDeinterlaceMode_enum(int v) { this.value = v; }
-    private cudaVideoDeinterlaceMode_enum(cudaVideoDeinterlaceMode_enum e) { this.value = e.value; }
-    public cudaVideoDeinterlaceMode_enum intern() { for (cudaVideoDeinterlaceMode_enum e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    cudaVideoDeinterlaceMode_Adaptive = 2;
 
 /**************************************************************************************************************/
 /** \enum cudaVideoChromaFormat
 /** Chroma format enums
 /** These enums are used in CUVIDDECODECREATEINFO and CUVIDDECODECAPS structures
 /**************************************************************************************************************/
-public enum cudaVideoChromaFormat_enum {
+/** enum cudaVideoChromaFormat_enum */
+public static final int
     /** MonoChrome */
-    cudaVideoChromaFormat_Monochrome(0),
+    cudaVideoChromaFormat_Monochrome = 0,
     /** YUV 4:2:0  */
-    cudaVideoChromaFormat_420(1),
+    cudaVideoChromaFormat_420 = 1,
     /** YUV 4:2:2  */
-    cudaVideoChromaFormat_422(2),
+    cudaVideoChromaFormat_422 = 2,
     /** YUV 4:4:4  */
-    cudaVideoChromaFormat_444(3);
-
-    public final int value;
-    private cudaVideoChromaFormat_enum(int v) { this.value = v; }
-    private cudaVideoChromaFormat_enum(cudaVideoChromaFormat_enum e) { this.value = e.value; }
-    public cudaVideoChromaFormat_enum intern() { for (cudaVideoChromaFormat_enum e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    cudaVideoChromaFormat_444 = 3;
 
 /*************************************************************************************************************/
 /** \enum cudaVideoCreateFlags
 /** Decoder flag enums to select preferred decode path
 /** cudaVideoCreate_Default and cudaVideoCreate_PreferCUVID are most optimized, use these whenever possible
 /*************************************************************************************************************/
-public enum cudaVideoCreateFlags_enum {
+/** enum cudaVideoCreateFlags_enum */
+public static final int
     /** Default operation mode: use dedicated video engines                        */
-    cudaVideoCreate_Default    (0x00),
+    cudaVideoCreate_Default     = 0x00,
     /** Use CUDA-based decoder (requires valid vidLock object for multi-threading) */
-    cudaVideoCreate_PreferCUDA (0x01),
+    cudaVideoCreate_PreferCUDA  = 0x01,
     /** Go through DXVA internally if possible (requires D3D9 interop)             */
-    cudaVideoCreate_PreferDXVA (0x02),
+    cudaVideoCreate_PreferDXVA  = 0x02,
     /** Use dedicated video engines directly                                       */
-    cudaVideoCreate_PreferCUVID(0x04);
-
-    public final int value;
-    private cudaVideoCreateFlags_enum(int v) { this.value = v; }
-    private cudaVideoCreateFlags_enum(cudaVideoCreateFlags_enum e) { this.value = e.value; }
-    public cudaVideoCreateFlags_enum intern() { for (cudaVideoCreateFlags_enum e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    cudaVideoCreate_PreferCUVID = 0x04;
 
 
 /*************************************************************************/
@@ -218,20 +188,14 @@ public enum cudaVideoCreateFlags_enum {
 /** Decode status enums
 /** These enums are used in CUVIDGETDECODESTATUS structure
 /*************************************************************************/
-public enum cuvidDecodeStatus_enum {
-    cuvidDecodeStatus_Invalid        (0),   // Decode status is not valid
-    cuvidDecodeStatus_InProgress     (1),   // Decode is in progress
-    cuvidDecodeStatus_Success        (2),   // Decode is completed without any errors
+/** enum cuvidDecodeStatus_enum */
+public static final int
+    cuvidDecodeStatus_Invalid         = 0,   // Decode status is not valid
+    cuvidDecodeStatus_InProgress      = 1,   // Decode is in progress
+    cuvidDecodeStatus_Success         = 2,   // Decode is completed without any errors
     // 3 to 7 enums are reserved for future use
-    cuvidDecodeStatus_Error          (8),   // Decode is completed with an error (error is not concealed)
-    cuvidDecodeStatus_Error_Concealed(9);  // Decode is completed with an error and error is concealed 
-
-    public final int value;
-    private cuvidDecodeStatus_enum(int v) { this.value = v; }
-    private cuvidDecodeStatus_enum(cuvidDecodeStatus_enum e) { this.value = e.value; }
-    public cuvidDecodeStatus_enum intern() { for (cuvidDecodeStatus_enum e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    cuvidDecodeStatus_Error           = 8,   // Decode is completed with an error (error is not concealed)
+    cuvidDecodeStatus_Error_Concealed = 9;   // Decode is completed with an error and error is concealed 
 // Targeting ..\nvcuvid\CUVIDDECODECAPS.java
 
 

@@ -25,8 +25,6 @@ import static java.lang.System.exit;
 import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.cudart.cuDeviceGetName;
 import static org.bytedeco.nvcodec.global.nvencodeapi.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_FORMAT.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_CAPS.*;
 
 public class AppEncCuda {
     public static int iGpu = 0;
@@ -40,7 +38,7 @@ public class AppEncCuda {
     public static String szOutputFilePath = "";
 
     public static NvEncoderInitParam initParam;
-    public static _NV_ENC_BUFFER_FORMAT eFormat = NV_ENC_BUFFER_FORMAT_IYUV;
+    public static int eFormat = NV_ENC_BUFFER_FORMAT_IYUV;
 
     public static void showEncoderCapability() {
         StringBuilder sb = new StringBuilder();
@@ -180,7 +178,7 @@ public class AppEncCuda {
                     "iyuv", "nv12", "yv12", "yuv444", "p010", "yuv444p16", "bgra", "bgra10", "ayuv", "abgr", "abgr10"
             };
 
-            _NV_ENC_BUFFER_FORMAT[] aFormat =
+            int[] aFormat =
                     {
                             NV_ENC_BUFFER_FORMAT_IYUV,
                             NV_ENC_BUFFER_FORMAT_NV12,
@@ -247,7 +245,7 @@ public class AppEncCuda {
         initParam = new NvEncoderInitParam(sb.toString());
     }
 
-    public static void initializeEncoder(NvEncoder pEnc, NvEncoderInitParam encodeCLIOptions, _NV_ENC_BUFFER_FORMAT eFormat) {
+    public static void initializeEncoder(NvEncoder pEnc, NvEncoderInitParam encodeCLIOptions, int eFormat) {
         NV_ENC_INITIALIZE_PARAMS initializeParams = new NV_ENC_INITIALIZE_PARAMS();
         initializeParams.version(NV_ENC_INITIALIZE_PARAMS_VER);
 
@@ -266,7 +264,7 @@ public class AppEncCuda {
         pEnc.createEncoder(initializeParams);
     }
 
-    public static void encodeCuda(int nWidth, int nHeight, _NV_ENC_BUFFER_FORMAT eFormat, NvEncoderInitParam encodeCLIOptions, CUctx_st cuContext, FileInputStream input, FileOutputStream output) throws IOException {
+    public static void encodeCuda(int nWidth, int nHeight, int eFormat, NvEncoderInitParam encodeCLIOptions, CUctx_st cuContext, FileInputStream input, FileOutputStream output) throws IOException {
         NvEncoderCuda encoder = new NvEncoderCuda(cuContext, nWidth, nHeight, eFormat);
 
         initializeEncoder(encoder, encodeCLIOptions, eFormat);
@@ -321,7 +319,7 @@ public class AppEncCuda {
         System.out.println("Total frames encoded: " + nFrame);
     }
 
-    public static void encodeCudaOpInVidMem(int nWidth, int nHeight, _NV_ENC_BUFFER_FORMAT eFormat, NvEncoderInitParam encodeCLIOptions, CUctx_st cuContext, FileInputStream input, FileOutputStream output, int cuStreamType) throws IOException {
+    public static void encodeCudaOpInVidMem(int nWidth, int nHeight, int eFormat, NvEncoderInitParam encodeCLIOptions, CUctx_st cuContext, FileInputStream input, FileOutputStream output, int cuStreamType) throws IOException {
         NvEncoderOutputInVidMemCuda encoder = new NvEncoderOutputInVidMemCuda(cuContext, nWidth, nHeight, eFormat);
 
         initializeEncoder(encoder, encodeCLIOptions, eFormat);

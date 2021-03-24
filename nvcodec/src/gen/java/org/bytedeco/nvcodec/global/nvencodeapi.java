@@ -235,316 +235,257 @@ public static final int NV_MAX_SEQ_HDR_LEN =  (512);
 /**
  * Input frame encode modes
  */
-public enum _NV_ENC_PARAMS_FRAME_FIELD_MODE {
+/** enum _NV_ENC_PARAMS_FRAME_FIELD_MODE */
+public static final int
     /** Frame mode */
-    NV_ENC_PARAMS_FRAME_FIELD_MODE_FRAME(0x01),
+    NV_ENC_PARAMS_FRAME_FIELD_MODE_FRAME = 0x01,
     /** Field mode */
-    NV_ENC_PARAMS_FRAME_FIELD_MODE_FIELD(0x02),
+    NV_ENC_PARAMS_FRAME_FIELD_MODE_FIELD = 0x02,
     /** MB adaptive frame/field */
-    NV_ENC_PARAMS_FRAME_FIELD_MODE_MBAFF(0x03);
-
-    public final int value;
-    private _NV_ENC_PARAMS_FRAME_FIELD_MODE(int v) { this.value = v; }
-    private _NV_ENC_PARAMS_FRAME_FIELD_MODE(_NV_ENC_PARAMS_FRAME_FIELD_MODE e) { this.value = e.value; }
-    public _NV_ENC_PARAMS_FRAME_FIELD_MODE intern() { for (_NV_ENC_PARAMS_FRAME_FIELD_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_PARAMS_FRAME_FIELD_MODE_MBAFF = 0x03;
 
 /**
  * Rate Control Modes
  */
-public enum _NV_ENC_PARAMS_RC_MODE {
+/** enum _NV_ENC_PARAMS_RC_MODE */
+public static final int
     /** Constant QP mode */
-    NV_ENC_PARAMS_RC_CONSTQP               (0x0),
+    NV_ENC_PARAMS_RC_CONSTQP                = 0x0,
     /** Variable bitrate mode */
-    NV_ENC_PARAMS_RC_VBR                   (0x1),
+    NV_ENC_PARAMS_RC_VBR                    = 0x1,
     /** Constant bitrate mode */
-    NV_ENC_PARAMS_RC_CBR                   (0x2),
+    NV_ENC_PARAMS_RC_CBR                    = 0x2,
     /** Deprecated, use NV_ENC_PARAMS_RC_CBR + NV_ENC_TWO_PASS_QUARTER_RESOLUTION / NV_ENC_TWO_PASS_FULL_RESOLUTION +
                                                               lowDelayKeyFrameScale=1 */
-    NV_ENC_PARAMS_RC_CBR_LOWDELAY_HQ       (0x8),
+    NV_ENC_PARAMS_RC_CBR_LOWDELAY_HQ        = 0x8,
     /** Deprecated, use NV_ENC_PARAMS_RC_CBR + NV_ENC_TWO_PASS_QUARTER_RESOLUTION / NV_ENC_TWO_PASS_FULL_RESOLUTION */
-    NV_ENC_PARAMS_RC_CBR_HQ                (0x10),
+    NV_ENC_PARAMS_RC_CBR_HQ                 = 0x10,
     /** Deprecated, use NV_ENC_PARAMS_RC_VBR + NV_ENC_TWO_PASS_QUARTER_RESOLUTION / NV_ENC_TWO_PASS_FULL_RESOLUTION */
-    NV_ENC_PARAMS_RC_VBR_HQ                (0x20);
-
-    public final int value;
-    private _NV_ENC_PARAMS_RC_MODE(int v) { this.value = v; }
-    private _NV_ENC_PARAMS_RC_MODE(_NV_ENC_PARAMS_RC_MODE e) { this.value = e.value; }
-    public _NV_ENC_PARAMS_RC_MODE intern() { for (_NV_ENC_PARAMS_RC_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_PARAMS_RC_VBR_HQ                 = 0x20;
 
 /**
  * Multi Pass encoding
  */
-public enum _NV_ENC_MULTI_PASS {
+/** enum _NV_ENC_MULTI_PASS */
+public static final int
     /** Single Pass */
-    NV_ENC_MULTI_PASS_DISABLED             (0x0),
+    NV_ENC_MULTI_PASS_DISABLED              = 0x0,
     /** Two Pass encoding is enabled where first Pass is quarter resolution */
-    NV_ENC_TWO_PASS_QUARTER_RESOLUTION     (0x1),
+    NV_ENC_TWO_PASS_QUARTER_RESOLUTION      = 0x1,
     /** Two Pass encoding is enabled where first Pass is full resolution */
-    NV_ENC_TWO_PASS_FULL_RESOLUTION        (0x2);
-
-    public final int value;
-    private _NV_ENC_MULTI_PASS(int v) { this.value = v; }
-    private _NV_ENC_MULTI_PASS(_NV_ENC_MULTI_PASS e) { this.value = e.value; }
-    public _NV_ENC_MULTI_PASS intern() { for (_NV_ENC_MULTI_PASS e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_TWO_PASS_FULL_RESOLUTION         = 0x2;
 
 /**
  * Emphasis Levels
  */
-public enum _NV_ENC_EMPHASIS_MAP_LEVEL {
+/** enum _NV_ENC_EMPHASIS_MAP_LEVEL */
+public static final int
     /** Emphasis Map Level 0, for zero Delta QP value */
-    NV_ENC_EMPHASIS_MAP_LEVEL_0              (0x0),
+    NV_ENC_EMPHASIS_MAP_LEVEL_0               = 0x0,
     /** Emphasis Map Level 1, for very low Delta QP value */
-    NV_ENC_EMPHASIS_MAP_LEVEL_1              (0x1),
+    NV_ENC_EMPHASIS_MAP_LEVEL_1               = 0x1,
     /** Emphasis Map Level 2, for low Delta QP value */
-    NV_ENC_EMPHASIS_MAP_LEVEL_2              (0x2),
+    NV_ENC_EMPHASIS_MAP_LEVEL_2               = 0x2,
     /** Emphasis Map Level 3, for medium Delta QP value */
-    NV_ENC_EMPHASIS_MAP_LEVEL_3              (0x3),
+    NV_ENC_EMPHASIS_MAP_LEVEL_3               = 0x3,
     /** Emphasis Map Level 4, for high Delta QP value */
-    NV_ENC_EMPHASIS_MAP_LEVEL_4              (0x4),
+    NV_ENC_EMPHASIS_MAP_LEVEL_4               = 0x4,
     /** Emphasis Map Level 5, for very high Delta QP value */
-    NV_ENC_EMPHASIS_MAP_LEVEL_5              (0x5);
-
-    public final int value;
-    private _NV_ENC_EMPHASIS_MAP_LEVEL(int v) { this.value = v; }
-    private _NV_ENC_EMPHASIS_MAP_LEVEL(_NV_ENC_EMPHASIS_MAP_LEVEL e) { this.value = e.value; }
-    public _NV_ENC_EMPHASIS_MAP_LEVEL intern() { for (_NV_ENC_EMPHASIS_MAP_LEVEL e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_EMPHASIS_MAP_LEVEL_5               = 0x5;
 
 /**
  * QP MAP MODE
  */
-public enum _NV_ENC_QP_MAP_MODE {
+/** enum _NV_ENC_QP_MAP_MODE */
+public static final int
     /** Value in NV_ENC_PIC_PARAMS::qpDeltaMap have no effect. */
-    NV_ENC_QP_MAP_DISABLED              (0x0),
+    NV_ENC_QP_MAP_DISABLED               = 0x0,
     /** Value in NV_ENC_PIC_PARAMS::qpDeltaMap will be treated as Emphasis level. Currently this is only supported for H264 */
-    NV_ENC_QP_MAP_EMPHASIS              (0x1),
+    NV_ENC_QP_MAP_EMPHASIS               = 0x1,
     /** Value in NV_ENC_PIC_PARAMS::qpDeltaMap will be treated as QP delta map. */
-    NV_ENC_QP_MAP_DELTA                 (0x2),
+    NV_ENC_QP_MAP_DELTA                  = 0x2,
     /** Currently This is not supported. Value in NV_ENC_PIC_PARAMS::qpDeltaMap will be treated as QP value.   */
-    NV_ENC_QP_MAP                       (0x3);
-
-    public final int value;
-    private _NV_ENC_QP_MAP_MODE(int v) { this.value = v; }
-    private _NV_ENC_QP_MAP_MODE(_NV_ENC_QP_MAP_MODE e) { this.value = e.value; }
-    public _NV_ENC_QP_MAP_MODE intern() { for (_NV_ENC_QP_MAP_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_QP_MAP                        = 0x3;
 
 
 /**
  * Input picture structure
  */
-public enum _NV_ENC_PIC_STRUCT {
+/** enum _NV_ENC_PIC_STRUCT */
+public static final int
     /** Progressive frame */
-    NV_ENC_PIC_STRUCT_FRAME            (0x01),
+    NV_ENC_PIC_STRUCT_FRAME             = 0x01,
     /** Field encoding top field first */
-    NV_ENC_PIC_STRUCT_FIELD_TOP_BOTTOM (0x02),
+    NV_ENC_PIC_STRUCT_FIELD_TOP_BOTTOM  = 0x02,
     /** Field encoding bottom field first */
-    NV_ENC_PIC_STRUCT_FIELD_BOTTOM_TOP (0x03);
-
-    public final int value;
-    private _NV_ENC_PIC_STRUCT(int v) { this.value = v; }
-    private _NV_ENC_PIC_STRUCT(_NV_ENC_PIC_STRUCT e) { this.value = e.value; }
-    public _NV_ENC_PIC_STRUCT intern() { for (_NV_ENC_PIC_STRUCT e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_PIC_STRUCT_FIELD_BOTTOM_TOP  = 0x03;
 
 /**
  * Input picture type
  */
-public enum _NV_ENC_PIC_TYPE {
+/** enum _NV_ENC_PIC_TYPE */
+public static final int
     /** Forward predicted */
-    NV_ENC_PIC_TYPE_P              (0x0),
+    NV_ENC_PIC_TYPE_P               = 0x0,
     /** Bi-directionally predicted picture */
-    NV_ENC_PIC_TYPE_B              (0x01),
+    NV_ENC_PIC_TYPE_B               = 0x01,
     /** Intra predicted picture */
-    NV_ENC_PIC_TYPE_I              (0x02),
+    NV_ENC_PIC_TYPE_I               = 0x02,
     /** IDR picture */
-    NV_ENC_PIC_TYPE_IDR            (0x03),
+    NV_ENC_PIC_TYPE_IDR             = 0x03,
     /** Bi-directionally predicted with only Intra MBs */
-    NV_ENC_PIC_TYPE_BI             (0x04),
+    NV_ENC_PIC_TYPE_BI              = 0x04,
     /** Picture is skipped */
-    NV_ENC_PIC_TYPE_SKIPPED        (0x05),
+    NV_ENC_PIC_TYPE_SKIPPED         = 0x05,
     /** First picture in intra refresh cycle */
-    NV_ENC_PIC_TYPE_INTRA_REFRESH  (0x06),
+    NV_ENC_PIC_TYPE_INTRA_REFRESH   = 0x06,
     /** Non reference P picture */
-    NV_ENC_PIC_TYPE_NONREF_P       (0x07),            
+    NV_ENC_PIC_TYPE_NONREF_P        = 0x07,            
     /** Picture type unknown */
-    NV_ENC_PIC_TYPE_UNKNOWN        (0xFF);
-
-    public final int value;
-    private _NV_ENC_PIC_TYPE(int v) { this.value = v; }
-    private _NV_ENC_PIC_TYPE(_NV_ENC_PIC_TYPE e) { this.value = e.value; }
-    public _NV_ENC_PIC_TYPE intern() { for (_NV_ENC_PIC_TYPE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_PIC_TYPE_UNKNOWN         = 0xFF;
 
 /**
  * Motion vector precisions
  */
-public enum _NV_ENC_MV_PRECISION {
+/** enum _NV_ENC_MV_PRECISION */
+public static final int
     /** Driver selects Quarter-Pel motion vector precision by default */
-    NV_ENC_MV_PRECISION_DEFAULT    (0x0),
+    NV_ENC_MV_PRECISION_DEFAULT     = 0x0,
     /** Full-Pel motion vector precision */
-    NV_ENC_MV_PRECISION_FULL_PEL   (0x01),
+    NV_ENC_MV_PRECISION_FULL_PEL    = 0x01,
     /** Half-Pel motion vector precision */
-    NV_ENC_MV_PRECISION_HALF_PEL   (0x02),
+    NV_ENC_MV_PRECISION_HALF_PEL    = 0x02,
     /** Quarter-Pel motion vector precision */
-    NV_ENC_MV_PRECISION_QUARTER_PEL(0x03);
-
-    public final int value;
-    private _NV_ENC_MV_PRECISION(int v) { this.value = v; }
-    private _NV_ENC_MV_PRECISION(_NV_ENC_MV_PRECISION e) { this.value = e.value; }
-    public _NV_ENC_MV_PRECISION intern() { for (_NV_ENC_MV_PRECISION e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_MV_PRECISION_QUARTER_PEL = 0x03;
 
 
 /**
  * Input buffer formats
  */
-public enum _NV_ENC_BUFFER_FORMAT {
+/** enum _NV_ENC_BUFFER_FORMAT */
+public static final int
     /** Undefined buffer format */
-    NV_ENC_BUFFER_FORMAT_UNDEFINED                      (0x00000000),
+    NV_ENC_BUFFER_FORMAT_UNDEFINED                       = 0x00000000,
                                                                        
     /** Semi-Planar YUV [Y plane followed by interleaved UV plane] */
-    NV_ENC_BUFFER_FORMAT_NV12                           (0x00000001),
+    NV_ENC_BUFFER_FORMAT_NV12                            = 0x00000001,
     /** Planar YUV [Y plane followed by V and U planes] */
-    NV_ENC_BUFFER_FORMAT_YV12                           (0x00000010),
+    NV_ENC_BUFFER_FORMAT_YV12                            = 0x00000010,
     /** Planar YUV [Y plane followed by U and V planes] */
-    NV_ENC_BUFFER_FORMAT_IYUV                           (0x00000100),
+    NV_ENC_BUFFER_FORMAT_IYUV                            = 0x00000100,
     /** Planar YUV [Y plane followed by U and V planes] */
-    NV_ENC_BUFFER_FORMAT_YUV444                         (0x00001000),
+    NV_ENC_BUFFER_FORMAT_YUV444                          = 0x00001000,
     /** 10 bit Semi-Planar YUV [Y plane followed by interleaved UV plane]. Each pixel of size 2 bytes. Most Significant 10 bits contain pixel data. */
-    NV_ENC_BUFFER_FORMAT_YUV420_10BIT                   (0x00010000),
+    NV_ENC_BUFFER_FORMAT_YUV420_10BIT                    = 0x00010000,
     /** 10 bit Planar YUV444 [Y plane followed by U and V planes]. Each pixel of size 2 bytes. Most Significant 10 bits contain pixel data.  */
-    NV_ENC_BUFFER_FORMAT_YUV444_10BIT                   (0x00100000),
+    NV_ENC_BUFFER_FORMAT_YUV444_10BIT                    = 0x00100000,
     /** 8 bit Packed A8R8G8B8. This is a word-ordered format
                                                                              where a pixel is represented by a 32-bit word with B
                                                                              in the lowest 8 bits, G in the next 8 bits, R in the
                                                                              8 bits after that and A in the highest 8 bits. */
-    NV_ENC_BUFFER_FORMAT_ARGB                           (0x01000000),
+    NV_ENC_BUFFER_FORMAT_ARGB                            = 0x01000000,
     /** 10 bit Packed A2R10G10B10. This is a word-ordered format
                                                                              where a pixel is represented by a 32-bit word with B
                                                                              in the lowest 10 bits, G in the next 10 bits, R in the
                                                                              10 bits after that and A in the highest 2 bits. */
-    NV_ENC_BUFFER_FORMAT_ARGB10                         (0x02000000),
+    NV_ENC_BUFFER_FORMAT_ARGB10                          = 0x02000000,
     /** 8 bit Packed A8Y8U8V8. This is a word-ordered format
                                                                              where a pixel is represented by a 32-bit word with V
                                                                              in the lowest 8 bits, U in the next 8 bits, Y in the
                                                                              8 bits after that and A in the highest 8 bits. */
-    NV_ENC_BUFFER_FORMAT_AYUV                           (0x04000000),
+    NV_ENC_BUFFER_FORMAT_AYUV                            = 0x04000000,
     /** 8 bit Packed A8B8G8R8. This is a word-ordered format
                                                                              where a pixel is represented by a 32-bit word with R
                                                                              in the lowest 8 bits, G in the next 8 bits, B in the
                                                                              8 bits after that and A in the highest 8 bits. */
-    NV_ENC_BUFFER_FORMAT_ABGR                           (0x10000000),
+    NV_ENC_BUFFER_FORMAT_ABGR                            = 0x10000000,
     /** 10 bit Packed A2B10G10R10. This is a word-ordered format
                                                                              where a pixel is represented by a 32-bit word with R
                                                                              in the lowest 10 bits, G in the next 10 bits, B in the
                                                                              10 bits after that and A in the highest 2 bits. */
-    NV_ENC_BUFFER_FORMAT_ABGR10                         (0x20000000),
+    NV_ENC_BUFFER_FORMAT_ABGR10                          = 0x20000000,
     /** Buffer format representing one-dimensional buffer. 
                                                                              This format should be used only when registering the 
                                                                              resource as output buffer, which will be used to write
                                                                              the encoded bit stream or H.264 ME only mode output. */
-    NV_ENC_BUFFER_FORMAT_U8                             (0x40000000);
-
-    public final int value;
-    private _NV_ENC_BUFFER_FORMAT(int v) { this.value = v; }
-    private _NV_ENC_BUFFER_FORMAT(_NV_ENC_BUFFER_FORMAT e) { this.value = e.value; }
-    public _NV_ENC_BUFFER_FORMAT intern() { for (_NV_ENC_BUFFER_FORMAT e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_BUFFER_FORMAT_U8                              = 0x40000000;
 
 
 /**
  * Encoding levels
  */
-public enum _NV_ENC_LEVEL {
-    NV_ENC_LEVEL_AUTOSELECT        (0),
+/** enum _NV_ENC_LEVEL */
+public static final int
+    NV_ENC_LEVEL_AUTOSELECT         = 0,
     
-    NV_ENC_LEVEL_H264_1            (10),
-    NV_ENC_LEVEL_H264_1b           (9),
-    NV_ENC_LEVEL_H264_11           (11),
-    NV_ENC_LEVEL_H264_12           (12),
-    NV_ENC_LEVEL_H264_13           (13),
-    NV_ENC_LEVEL_H264_2            (20),
-    NV_ENC_LEVEL_H264_21           (21),
-    NV_ENC_LEVEL_H264_22           (22),
-    NV_ENC_LEVEL_H264_3            (30),
-    NV_ENC_LEVEL_H264_31           (31),
-    NV_ENC_LEVEL_H264_32           (32),
-    NV_ENC_LEVEL_H264_4            (40),
-    NV_ENC_LEVEL_H264_41           (41),
-    NV_ENC_LEVEL_H264_42           (42),
-    NV_ENC_LEVEL_H264_5            (50),
-    NV_ENC_LEVEL_H264_51           (51),
-    NV_ENC_LEVEL_H264_52           (52),
-    NV_ENC_LEVEL_H264_60           (60),
-    NV_ENC_LEVEL_H264_61           (61),
-    NV_ENC_LEVEL_H264_62           (62),
+    NV_ENC_LEVEL_H264_1             = 10,
+    NV_ENC_LEVEL_H264_1b            = 9,
+    NV_ENC_LEVEL_H264_11            = 11,
+    NV_ENC_LEVEL_H264_12            = 12,
+    NV_ENC_LEVEL_H264_13            = 13,
+    NV_ENC_LEVEL_H264_2             = 20,
+    NV_ENC_LEVEL_H264_21            = 21,
+    NV_ENC_LEVEL_H264_22            = 22,
+    NV_ENC_LEVEL_H264_3             = 30,
+    NV_ENC_LEVEL_H264_31            = 31,
+    NV_ENC_LEVEL_H264_32            = 32,
+    NV_ENC_LEVEL_H264_4             = 40,
+    NV_ENC_LEVEL_H264_41            = 41,
+    NV_ENC_LEVEL_H264_42            = 42,
+    NV_ENC_LEVEL_H264_5             = 50,
+    NV_ENC_LEVEL_H264_51            = 51,
+    NV_ENC_LEVEL_H264_52            = 52,
+    NV_ENC_LEVEL_H264_60            = 60,
+    NV_ENC_LEVEL_H264_61            = 61,
+    NV_ENC_LEVEL_H264_62            = 62,
 
-    NV_ENC_LEVEL_HEVC_1            (30),
-    NV_ENC_LEVEL_HEVC_2            (60),
-    NV_ENC_LEVEL_HEVC_21           (63),
-    NV_ENC_LEVEL_HEVC_3            (90),
-    NV_ENC_LEVEL_HEVC_31           (93),
-    NV_ENC_LEVEL_HEVC_4            (120),
-    NV_ENC_LEVEL_HEVC_41           (123),
-    NV_ENC_LEVEL_HEVC_5            (150),
-    NV_ENC_LEVEL_HEVC_51           (153),
-    NV_ENC_LEVEL_HEVC_52           (156),
-    NV_ENC_LEVEL_HEVC_6            (180),
-    NV_ENC_LEVEL_HEVC_61           (183),
-    NV_ENC_LEVEL_HEVC_62           (186),
+    NV_ENC_LEVEL_HEVC_1             = 30,
+    NV_ENC_LEVEL_HEVC_2             = 60,
+    NV_ENC_LEVEL_HEVC_21            = 63,
+    NV_ENC_LEVEL_HEVC_3             = 90,
+    NV_ENC_LEVEL_HEVC_31            = 93,
+    NV_ENC_LEVEL_HEVC_4             = 120,
+    NV_ENC_LEVEL_HEVC_41            = 123,
+    NV_ENC_LEVEL_HEVC_5             = 150,
+    NV_ENC_LEVEL_HEVC_51            = 153,
+    NV_ENC_LEVEL_HEVC_52            = 156,
+    NV_ENC_LEVEL_HEVC_6             = 180,
+    NV_ENC_LEVEL_HEVC_61            = 183,
+    NV_ENC_LEVEL_HEVC_62            = 186,
 
-    NV_ENC_TIER_HEVC_MAIN          (0),
-    NV_ENC_TIER_HEVC_HIGH          (1);
-
-    public final int value;
-    private _NV_ENC_LEVEL(int v) { this.value = v; }
-    private _NV_ENC_LEVEL(_NV_ENC_LEVEL e) { this.value = e.value; }
-    public _NV_ENC_LEVEL intern() { for (_NV_ENC_LEVEL e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_TIER_HEVC_MAIN           = 0,
+    NV_ENC_TIER_HEVC_HIGH           = 1;
 
 /**
  * Error Codes
  */
-public enum _NVENCSTATUS {
+/** enum _NVENCSTATUS */
+public static final int
     /**
      * This indicates that API call returned with no errors.
      */
-    NV_ENC_SUCCESS(0),
+    NV_ENC_SUCCESS = 0,
 
     /**
      * This indicates that no encode capable devices were detected.
      */
-    NV_ENC_ERR_NO_ENCODE_DEVICE(1),
+    NV_ENC_ERR_NO_ENCODE_DEVICE = 1,
 
     /**
      * This indicates that devices pass by the client is not supported.
      */
-    NV_ENC_ERR_UNSUPPORTED_DEVICE(2),
+    NV_ENC_ERR_UNSUPPORTED_DEVICE = 2,
 
     /**
      * This indicates that the encoder device supplied by the client is not 
      * valid.
      */
-    NV_ENC_ERR_INVALID_ENCODERDEVICE(3),
+    NV_ENC_ERR_INVALID_ENCODERDEVICE = 3,
 
     /**
      * This indicates that device passed to the API call is invalid.
      */
-    NV_ENC_ERR_INVALID_DEVICE(4),
+    NV_ENC_ERR_INVALID_DEVICE = 4,
 
     /**
      * This indicates that device passed to the API call is no longer available and 
@@ -552,36 +493,36 @@ public enum _NVENCSTATUS {
      * session by freeing the allocated input output buffers and destroying the device 
      * and create a new encoding session.
      */
-    NV_ENC_ERR_DEVICE_NOT_EXIST(5),
+    NV_ENC_ERR_DEVICE_NOT_EXIST = 5,
 
     /**
      * This indicates that one or more of the pointers passed to the API call
      * is invalid.
      */
-    NV_ENC_ERR_INVALID_PTR(6),
+    NV_ENC_ERR_INVALID_PTR = 6,
 
     /**
      * This indicates that completion event passed in ::NvEncEncodePicture() call
      * is invalid.
      */
-    NV_ENC_ERR_INVALID_EVENT(7),
+    NV_ENC_ERR_INVALID_EVENT = 7,
 
     /**
      * This indicates that one or more of the parameter passed to the API call
      * is invalid.
      */
-    NV_ENC_ERR_INVALID_PARAM(8),
+    NV_ENC_ERR_INVALID_PARAM = 8,
 
     /**
      * This indicates that an API call was made in wrong sequence/order.
      */
-    NV_ENC_ERR_INVALID_CALL(9),
+    NV_ENC_ERR_INVALID_CALL = 9,
 
     /**
      * This indicates that the API call failed because it was unable to allocate 
      * enough memory to perform the requested operation.
      */
-    NV_ENC_ERR_OUT_OF_MEMORY(10),
+    NV_ENC_ERR_OUT_OF_MEMORY = 10,
     
     /**
      * This indicates that the encoder has not been initialized with
@@ -589,12 +530,12 @@ public enum _NVENCSTATUS {
      * The client cannot allocate input or output buffers or do any encoding
      * related operation before successfully initializing the encoder.
      */
-    NV_ENC_ERR_ENCODER_NOT_INITIALIZED(11),
+    NV_ENC_ERR_ENCODER_NOT_INITIALIZED = 11,
 
     /**
      * This indicates that an unsupported parameter was passed by the client.
      */
-    NV_ENC_ERR_UNSUPPORTED_PARAM(12),
+    NV_ENC_ERR_UNSUPPORTED_PARAM = 12,
 
     /**
      * This indicates that the ::NvEncLockBitstream() failed to lock the output 
@@ -603,24 +544,24 @@ public enum _NVENCSTATUS {
      * This is not a fatal error and client should retry the same operation after
      * few milliseconds.
      */
-    NV_ENC_ERR_LOCK_BUSY(13),
+    NV_ENC_ERR_LOCK_BUSY = 13,
 
     /**
      * This indicates that the size of the user buffer passed by the client is 
      * insufficient for the requested operation.
      */
-    NV_ENC_ERR_NOT_ENOUGH_BUFFER(14),
+    NV_ENC_ERR_NOT_ENOUGH_BUFFER = 14,
 
     /**
      * This indicates that an invalid struct version was used by the client.
      */
-    NV_ENC_ERR_INVALID_VERSION(15),
+    NV_ENC_ERR_INVALID_VERSION = 15,
 
     /**
      * This indicates that ::NvEncMapInputResource() API failed to map the client
      * provided input resource.
      */
-    NV_ENC_ERR_MAP_FAILED(16),
+    NV_ENC_ERR_MAP_FAILED = 16,
 
     /**
      * This indicates encode driver requires more input buffers to produce an output
@@ -636,324 +577,246 @@ public enum _NVENCSTATUS {
      * ::NvEncLockBitstream() API on the output buffers in the same order in which
      * it has called ::NvEncEncodePicture().
      */
-    NV_ENC_ERR_NEED_MORE_INPUT(17),
+    NV_ENC_ERR_NEED_MORE_INPUT = 17,
 
     /**
      * This indicates that the HW encoder is busy encoding and is unable to encode  
      * the input. The client should call ::NvEncEncodePicture() again after few
      * milliseconds.
      */
-    NV_ENC_ERR_ENCODER_BUSY(18),
+    NV_ENC_ERR_ENCODER_BUSY = 18,
 
     /**
      * This indicates that the completion event passed in ::NvEncEncodePicture()
      * API has not been registered with encoder driver using ::NvEncRegisterAsyncEvent().
      */
-    NV_ENC_ERR_EVENT_NOT_REGISTERD(19),
+    NV_ENC_ERR_EVENT_NOT_REGISTERD = 19,
 
     /**
      * This indicates that an unknown internal error has occurred.
      */
-    NV_ENC_ERR_GENERIC(20),
+    NV_ENC_ERR_GENERIC = 20,
     
     /**
      * This indicates that the client is attempting to use a feature
      * that is not available for the license type for the current system.
      */
-    NV_ENC_ERR_INCOMPATIBLE_CLIENT_KEY(21),
+    NV_ENC_ERR_INCOMPATIBLE_CLIENT_KEY = 21,
     
     /**
      * This indicates that the client is attempting to use a feature
      * that is not implemented for the current version.
      */
-    NV_ENC_ERR_UNIMPLEMENTED(22),
+    NV_ENC_ERR_UNIMPLEMENTED = 22,
 
     /**
      * This indicates that the ::NvEncRegisterResource API failed to register the resource.
      */
-    NV_ENC_ERR_RESOURCE_REGISTER_FAILED(23),
+    NV_ENC_ERR_RESOURCE_REGISTER_FAILED = 23,
 
     /**
      * This indicates that the client is attempting to unregister a resource
      * that has not been successfully registered.
      */
-    NV_ENC_ERR_RESOURCE_NOT_REGISTERED(24),
+    NV_ENC_ERR_RESOURCE_NOT_REGISTERED = 24,
 
     /**
      * This indicates that the client is attempting to unmap a resource
      * that has not been successfully mapped.
      */
-    NV_ENC_ERR_RESOURCE_NOT_MAPPED(25);
-
-    public final int value;
-    private _NVENCSTATUS(int v) { this.value = v; }
-    private _NVENCSTATUS(_NVENCSTATUS e) { this.value = e.value; }
-    public _NVENCSTATUS intern() { for (_NVENCSTATUS e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_ERR_RESOURCE_NOT_MAPPED = 25;
 
 /**
  * Encode Picture encode flags.
  */
-public enum _NV_ENC_PIC_FLAGS {
+/** enum _NV_ENC_PIC_FLAGS */
+public static final int
     /** Encode the current picture as an Intra picture */
-    NV_ENC_PIC_FLAG_FORCEINTRA        (0x1),
+    NV_ENC_PIC_FLAG_FORCEINTRA         = 0x1,
     /** Encode the current picture as an IDR picture. 
                                                      This flag is only valid when Picture type decision is taken by the Encoder
                                                      [_NV_ENC_INITIALIZE_PARAMS::enablePTD == 1]. */
-    NV_ENC_PIC_FLAG_FORCEIDR          (0x2),
+    NV_ENC_PIC_FLAG_FORCEIDR           = 0x2,
     /** Write the sequence and picture header in encoded bitstream of the current picture */
-    NV_ENC_PIC_FLAG_OUTPUT_SPSPPS     (0x4),
+    NV_ENC_PIC_FLAG_OUTPUT_SPSPPS      = 0x4,
     /** Indicates end of the input stream */
-    NV_ENC_PIC_FLAG_EOS               (0x8);
-
-    public final int value;
-    private _NV_ENC_PIC_FLAGS(int v) { this.value = v; }
-    private _NV_ENC_PIC_FLAGS(_NV_ENC_PIC_FLAGS e) { this.value = e.value; }
-    public _NV_ENC_PIC_FLAGS intern() { for (_NV_ENC_PIC_FLAGS e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_PIC_FLAG_EOS                = 0x8;
 
 /**
  * Memory heap to allocate input and output buffers.
  */
-public enum _NV_ENC_MEMORY_HEAP {
+/** enum _NV_ENC_MEMORY_HEAP */
+public static final int
     /** Memory heap to be decided by the encoder driver based on the usage */
-    NV_ENC_MEMORY_HEAP_AUTOSELECT     (0),
+    NV_ENC_MEMORY_HEAP_AUTOSELECT      = 0,
     /** Memory heap is in local video memory */
-    NV_ENC_MEMORY_HEAP_VID            (1),
+    NV_ENC_MEMORY_HEAP_VID             = 1,
     /** Memory heap is in cached system memory */
-    NV_ENC_MEMORY_HEAP_SYSMEM_CACHED  (2),
+    NV_ENC_MEMORY_HEAP_SYSMEM_CACHED   = 2,
     /** Memory heap is in uncached system memory */
-    NV_ENC_MEMORY_HEAP_SYSMEM_UNCACHED(3);
-
-    public final int value;
-    private _NV_ENC_MEMORY_HEAP(int v) { this.value = v; }
-    private _NV_ENC_MEMORY_HEAP(_NV_ENC_MEMORY_HEAP e) { this.value = e.value; }
-    public _NV_ENC_MEMORY_HEAP intern() { for (_NV_ENC_MEMORY_HEAP e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_MEMORY_HEAP_SYSMEM_UNCACHED = 3;
 
 /**
  * B-frame used as reference modes
  */
-public enum _NV_ENC_BFRAME_REF_MODE {
+/** enum _NV_ENC_BFRAME_REF_MODE */
+public static final int
     /** B frame is not used for reference */
-    NV_ENC_BFRAME_REF_MODE_DISABLED(0x0),
+    NV_ENC_BFRAME_REF_MODE_DISABLED = 0x0,
     /** Each B-frame will be used for reference. currently not supported for H.264 */
-    NV_ENC_BFRAME_REF_MODE_EACH    (0x1),
+    NV_ENC_BFRAME_REF_MODE_EACH     = 0x1,
     /** Only(Number of B-frame)/2 th B-frame will be used for reference */
-    NV_ENC_BFRAME_REF_MODE_MIDDLE  (0x2);
-
-    public final int value;
-    private _NV_ENC_BFRAME_REF_MODE(int v) { this.value = v; }
-    private _NV_ENC_BFRAME_REF_MODE(_NV_ENC_BFRAME_REF_MODE e) { this.value = e.value; }
-    public _NV_ENC_BFRAME_REF_MODE intern() { for (_NV_ENC_BFRAME_REF_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_BFRAME_REF_MODE_MIDDLE   = 0x2;
 
 /**
  * H.264 entropy coding modes.
  */
-public enum _NV_ENC_H264_ENTROPY_CODING_MODE {
+/** enum _NV_ENC_H264_ENTROPY_CODING_MODE */
+public static final int
     /** Entropy coding mode is auto selected by the encoder driver */
-    NV_ENC_H264_ENTROPY_CODING_MODE_AUTOSELECT(0x0),
+    NV_ENC_H264_ENTROPY_CODING_MODE_AUTOSELECT = 0x0,
     /** Entropy coding mode is CABAC */
-    NV_ENC_H264_ENTROPY_CODING_MODE_CABAC     (0x1),
+    NV_ENC_H264_ENTROPY_CODING_MODE_CABAC      = 0x1,
     /** Entropy coding mode is CAVLC */
-    NV_ENC_H264_ENTROPY_CODING_MODE_CAVLC     (0x2);
-
-    public final int value;
-    private _NV_ENC_H264_ENTROPY_CODING_MODE(int v) { this.value = v; }
-    private _NV_ENC_H264_ENTROPY_CODING_MODE(_NV_ENC_H264_ENTROPY_CODING_MODE e) { this.value = e.value; }
-    public _NV_ENC_H264_ENTROPY_CODING_MODE intern() { for (_NV_ENC_H264_ENTROPY_CODING_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_H264_ENTROPY_CODING_MODE_CAVLC      = 0x2;
 
 /**
  * H.264 specific BDirect modes
  */
-public enum _NV_ENC_H264_BDIRECT_MODE {
+/** enum _NV_ENC_H264_BDIRECT_MODE */
+public static final int
     /** BDirect mode is auto selected by the encoder driver */
-    NV_ENC_H264_BDIRECT_MODE_AUTOSELECT(0x0),
+    NV_ENC_H264_BDIRECT_MODE_AUTOSELECT = 0x0,
     /** Disable BDirect mode */
-    NV_ENC_H264_BDIRECT_MODE_DISABLE   (0x1),
+    NV_ENC_H264_BDIRECT_MODE_DISABLE    = 0x1,
     /** Temporal BDirect mode */
-    NV_ENC_H264_BDIRECT_MODE_TEMPORAL  (0x2),
+    NV_ENC_H264_BDIRECT_MODE_TEMPORAL   = 0x2,
     /** Spatial BDirect mode */
-    NV_ENC_H264_BDIRECT_MODE_SPATIAL   (0x3);
-
-    public final int value;
-    private _NV_ENC_H264_BDIRECT_MODE(int v) { this.value = v; }
-    private _NV_ENC_H264_BDIRECT_MODE(_NV_ENC_H264_BDIRECT_MODE e) { this.value = e.value; }
-    public _NV_ENC_H264_BDIRECT_MODE intern() { for (_NV_ENC_H264_BDIRECT_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_H264_BDIRECT_MODE_SPATIAL    = 0x3;
 
 /**
  * H.264 specific FMO usage
  */
-public enum _NV_ENC_H264_FMO_MODE {
+/** enum _NV_ENC_H264_FMO_MODE */
+public static final int
     /** FMO usage is auto selected by the encoder driver */
-    NV_ENC_H264_FMO_AUTOSELECT         (0x0),
+    NV_ENC_H264_FMO_AUTOSELECT          = 0x0,
     /** Enable FMO */
-    NV_ENC_H264_FMO_ENABLE             (0x1),
+    NV_ENC_H264_FMO_ENABLE              = 0x1,
     /** Disable FMO */
-    NV_ENC_H264_FMO_DISABLE            (0x2);
-
-    public final int value;
-    private _NV_ENC_H264_FMO_MODE(int v) { this.value = v; }
-    private _NV_ENC_H264_FMO_MODE(_NV_ENC_H264_FMO_MODE e) { this.value = e.value; }
-    public _NV_ENC_H264_FMO_MODE intern() { for (_NV_ENC_H264_FMO_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_H264_FMO_DISABLE             = 0x2;
 
 /**
  * H.264 specific Adaptive Transform modes
  */
-public enum _NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE {
+/** enum _NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE */
+public static final int
     /** Adaptive Transform 8x8 mode is auto selected by the encoder driver*/
-    NV_ENC_H264_ADAPTIVE_TRANSFORM_AUTOSELECT(0x0),
+    NV_ENC_H264_ADAPTIVE_TRANSFORM_AUTOSELECT = 0x0,
     /** Adaptive Transform 8x8 mode disabled */
-    NV_ENC_H264_ADAPTIVE_TRANSFORM_DISABLE   (0x1),
+    NV_ENC_H264_ADAPTIVE_TRANSFORM_DISABLE    = 0x1,
     /** Adaptive Transform 8x8 mode should be used */
-    NV_ENC_H264_ADAPTIVE_TRANSFORM_ENABLE    (0x2);
-
-    public final int value;
-    private _NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE(int v) { this.value = v; }
-    private _NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE(_NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE e) { this.value = e.value; }
-    public _NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE intern() { for (_NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_H264_ADAPTIVE_TRANSFORM_ENABLE     = 0x2;
 
 /**
  * Stereo frame packing modes.
  */
-public enum _NV_ENC_STEREO_PACKING_MODE {
+/** enum _NV_ENC_STEREO_PACKING_MODE */
+public static final int
     /** No Stereo packing required */
-    NV_ENC_STEREO_PACKING_MODE_NONE            (0x0),
+    NV_ENC_STEREO_PACKING_MODE_NONE             = 0x0,
     /** Checkerboard mode for packing stereo frames */
-    NV_ENC_STEREO_PACKING_MODE_CHECKERBOARD    (0x1),
+    NV_ENC_STEREO_PACKING_MODE_CHECKERBOARD     = 0x1,
     /** Column Interleave mode for packing stereo frames */
-    NV_ENC_STEREO_PACKING_MODE_COLINTERLEAVE   (0x2),
+    NV_ENC_STEREO_PACKING_MODE_COLINTERLEAVE    = 0x2,
     /** Row Interleave mode for packing stereo frames */
-    NV_ENC_STEREO_PACKING_MODE_ROWINTERLEAVE   (0x3),
+    NV_ENC_STEREO_PACKING_MODE_ROWINTERLEAVE    = 0x3,
     /** Side-by-side mode for packing stereo frames */
-    NV_ENC_STEREO_PACKING_MODE_SIDEBYSIDE      (0x4),
+    NV_ENC_STEREO_PACKING_MODE_SIDEBYSIDE       = 0x4,
     /** Top-Bottom mode for packing stereo frames */
-    NV_ENC_STEREO_PACKING_MODE_TOPBOTTOM       (0x5),
+    NV_ENC_STEREO_PACKING_MODE_TOPBOTTOM        = 0x5,
     /** Frame Sequential mode for packing stereo frames */
-    NV_ENC_STEREO_PACKING_MODE_FRAMESEQ        (0x6);
-
-    public final int value;
-    private _NV_ENC_STEREO_PACKING_MODE(int v) { this.value = v; }
-    private _NV_ENC_STEREO_PACKING_MODE(_NV_ENC_STEREO_PACKING_MODE e) { this.value = e.value; }
-    public _NV_ENC_STEREO_PACKING_MODE intern() { for (_NV_ENC_STEREO_PACKING_MODE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_STEREO_PACKING_MODE_FRAMESEQ         = 0x6;
 
 /**
  *  Input Resource type
  */
-public enum _NV_ENC_INPUT_RESOURCE_TYPE {
+/** enum _NV_ENC_INPUT_RESOURCE_TYPE */
+public static final int
     /** input resource type is a directx9 surface*/
-    NV_ENC_INPUT_RESOURCE_TYPE_DIRECTX         (0x0),
+    NV_ENC_INPUT_RESOURCE_TYPE_DIRECTX          = 0x0,
     /** input resource type is a cuda device pointer surface*/
-    NV_ENC_INPUT_RESOURCE_TYPE_CUDADEVICEPTR   (0x1),
+    NV_ENC_INPUT_RESOURCE_TYPE_CUDADEVICEPTR    = 0x1,
     /** input resource type is a cuda array surface.
                                                               This array must be a 2D array and the CUDA_ARRAY3D_SURFACE_LDST
                                                               flag must have been specified when creating it. */
-    NV_ENC_INPUT_RESOURCE_TYPE_CUDAARRAY       (0x2),
+    NV_ENC_INPUT_RESOURCE_TYPE_CUDAARRAY        = 0x2,
     /** input resource type is an OpenGL texture */
-    NV_ENC_INPUT_RESOURCE_TYPE_OPENGL_TEX      (0x3);
-
-    public final int value;
-    private _NV_ENC_INPUT_RESOURCE_TYPE(int v) { this.value = v; }
-    private _NV_ENC_INPUT_RESOURCE_TYPE(_NV_ENC_INPUT_RESOURCE_TYPE e) { this.value = e.value; }
-    public _NV_ENC_INPUT_RESOURCE_TYPE intern() { for (_NV_ENC_INPUT_RESOURCE_TYPE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_INPUT_RESOURCE_TYPE_OPENGL_TEX       = 0x3;
 
 /**
  *  Buffer usage
  */
-public enum _NV_ENC_BUFFER_USAGE {
+/** enum _NV_ENC_BUFFER_USAGE */
+public static final int
     /** Registered surface will be used for input image */
-    NV_ENC_INPUT_IMAGE             (0x0),
+    NV_ENC_INPUT_IMAGE              = 0x0,
     /** Registered surface will be used for output of H.264 ME only mode. 
                                                          This buffer usage type is not supported for HEVC ME only mode. */
-    NV_ENC_OUTPUT_MOTION_VECTOR    (0x1),
+    NV_ENC_OUTPUT_MOTION_VECTOR     = 0x1,
     /** Registered surface will be used for output bitstream in encoding */
-    NV_ENC_OUTPUT_BITSTREAM        (0x2);
-
-    public final int value;
-    private _NV_ENC_BUFFER_USAGE(int v) { this.value = v; }
-    private _NV_ENC_BUFFER_USAGE(_NV_ENC_BUFFER_USAGE e) { this.value = e.value; }
-    public _NV_ENC_BUFFER_USAGE intern() { for (_NV_ENC_BUFFER_USAGE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_OUTPUT_BITSTREAM         = 0x2;
 
 /**
  *  Encoder Device type
  */
-public enum _NV_ENC_DEVICE_TYPE {
+/** enum _NV_ENC_DEVICE_TYPE */
+public static final int
     /** encode device type is a directx9 device */
-    NV_ENC_DEVICE_TYPE_DIRECTX         (0x0),
+    NV_ENC_DEVICE_TYPE_DIRECTX          = 0x0,
     /** encode device type is a cuda device */
-    NV_ENC_DEVICE_TYPE_CUDA            (0x1),
+    NV_ENC_DEVICE_TYPE_CUDA             = 0x1,
     /** encode device type is an OpenGL device.
                                                       Use of this device type is supported only on Linux */
-    NV_ENC_DEVICE_TYPE_OPENGL          (0x2);
-
-    public final int value;
-    private _NV_ENC_DEVICE_TYPE(int v) { this.value = v; }
-    private _NV_ENC_DEVICE_TYPE(_NV_ENC_DEVICE_TYPE e) { this.value = e.value; }
-    public _NV_ENC_DEVICE_TYPE intern() { for (_NV_ENC_DEVICE_TYPE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_DEVICE_TYPE_OPENGL           = 0x2;
 
 /**
  * Number of reference frames
  */
-public enum _NV_ENC_NUM_REF_FRAMES {
+/** enum _NV_ENC_NUM_REF_FRAMES */
+public static final int
     /** Number of reference frames is auto selected by the encoder driver */
-    NV_ENC_NUM_REF_FRAMES_AUTOSELECT      (0x0),
+    NV_ENC_NUM_REF_FRAMES_AUTOSELECT       = 0x0,
     /** Number of reference frames equal to 1 */
-    NV_ENC_NUM_REF_FRAMES_1               (0x1),
+    NV_ENC_NUM_REF_FRAMES_1                = 0x1,
     /** Number of reference frames equal to 2 */
-    NV_ENC_NUM_REF_FRAMES_2               (0x2),
+    NV_ENC_NUM_REF_FRAMES_2                = 0x2,
     /** Number of reference frames equal to 3 */
-    NV_ENC_NUM_REF_FRAMES_3               (0x3),
+    NV_ENC_NUM_REF_FRAMES_3                = 0x3,
     /** Number of reference frames equal to 4 */
-    NV_ENC_NUM_REF_FRAMES_4               (0x4),
+    NV_ENC_NUM_REF_FRAMES_4                = 0x4,
     /** Number of reference frames equal to 5 */
-    NV_ENC_NUM_REF_FRAMES_5               (0x5),
+    NV_ENC_NUM_REF_FRAMES_5                = 0x5,
     /** Number of reference frames equal to 6 */
-    NV_ENC_NUM_REF_FRAMES_6               (0x6),
+    NV_ENC_NUM_REF_FRAMES_6                = 0x6,
     /** Number of reference frames equal to 7 */
-    NV_ENC_NUM_REF_FRAMES_7               (0x7);
-
-    public final int value;
-    private _NV_ENC_NUM_REF_FRAMES(int v) { this.value = v; }
-    private _NV_ENC_NUM_REF_FRAMES(_NV_ENC_NUM_REF_FRAMES e) { this.value = e.value; }
-    public _NV_ENC_NUM_REF_FRAMES intern() { for (_NV_ENC_NUM_REF_FRAMES e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_NUM_REF_FRAMES_7                = 0x7;
 
 /**
  * Encoder capabilities enumeration.
  */
-public enum _NV_ENC_CAPS {
+/** enum _NV_ENC_CAPS */
+public static final int
     /**
      * Maximum number of B-Frames supported.
      */
-    NV_ENC_CAPS_NUM_MAX_BFRAMES(0),
+    NV_ENC_CAPS_NUM_MAX_BFRAMES = 0,
 
     /**
      * Rate control modes supported.
      * \n The API return value is a bitmask of the values in NV_ENC_PARAMS_RC_MODE.
      */
-    NV_ENC_CAPS_SUPPORTED_RATECONTROL_MODES(1),
+    NV_ENC_CAPS_SUPPORTED_RATECONTROL_MODES = 1,
 
     /** 
      * Indicates HW support for field mode encoding.
@@ -961,111 +824,111 @@ public enum _NV_ENC_CAPS {
      * \n 1 : Interlaced field mode encoding is supported.
      * \n 2 : Interlaced frame encoding and field mode encoding are both supported.
      */
-     NV_ENC_CAPS_SUPPORT_FIELD_ENCODING(2),
+     NV_ENC_CAPS_SUPPORT_FIELD_ENCODING = 2,
 
     /**
      * Indicates HW support for monochrome mode encoding.
      * \n 0 : Monochrome mode not supported.
      * \n 1 : Monochrome mode supported.
      */
-    NV_ENC_CAPS_SUPPORT_MONOCHROME(3),
+    NV_ENC_CAPS_SUPPORT_MONOCHROME = 3,
 
     /**
      * Indicates HW support for FMO.
      * \n 0 : FMO not supported.
      * \n 1 : FMO supported.
      */
-    NV_ENC_CAPS_SUPPORT_FMO(4),
+    NV_ENC_CAPS_SUPPORT_FMO = 4,
 
     /**
      * Indicates HW capability for Quarter pel motion estimation.
      * \n 0 : Quarter-Pel Motion Estimation not supported.
      * \n 1 : Quarter-Pel Motion Estimation supported.
      */
-    NV_ENC_CAPS_SUPPORT_QPELMV(5),
+    NV_ENC_CAPS_SUPPORT_QPELMV = 5,
 
     /**
      * H.264 specific. Indicates HW support for BDirect modes.
      * \n 0 : BDirect mode encoding not supported.
      * \n 1 : BDirect mode encoding supported.
      */
-    NV_ENC_CAPS_SUPPORT_BDIRECT_MODE(6),
+    NV_ENC_CAPS_SUPPORT_BDIRECT_MODE = 6,
 
     /**
      * H264 specific. Indicates HW support for CABAC entropy coding mode.
      * \n 0 : CABAC entropy coding not supported.
      * \n 1 : CABAC entropy coding supported.
      */
-    NV_ENC_CAPS_SUPPORT_CABAC(7),
+    NV_ENC_CAPS_SUPPORT_CABAC = 7,
 
     /**
      * Indicates HW support for Adaptive Transform.
      * \n 0 : Adaptive Transform not supported.
      * \n 1 : Adaptive Transform supported.
      */
-    NV_ENC_CAPS_SUPPORT_ADAPTIVE_TRANSFORM(8),
+    NV_ENC_CAPS_SUPPORT_ADAPTIVE_TRANSFORM = 8,
 
     /**
      * Indicates HW support for Multi View Coding.
      * \n 0 : Multi View Coding not supported.
      * \n 1 : Multi View Coding supported.
      */
-    NV_ENC_CAPS_SUPPORT_STEREO_MVC(9),
+    NV_ENC_CAPS_SUPPORT_STEREO_MVC = 9,
 
     /**
      * Indicates HW support for encoding Temporal layers.
      * \n 0 : Encoding Temporal layers not supported.
      * \n 1 : Encoding Temporal layers supported.
      */
-    NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS(10),
+    NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS = 10,
 
     /**
      * Indicates HW support for Hierarchical P frames.
      * \n 0 : Hierarchical P frames not supported.
      * \n 1 : Hierarchical P frames supported.
      */
-    NV_ENC_CAPS_SUPPORT_HIERARCHICAL_PFRAMES(11),
+    NV_ENC_CAPS_SUPPORT_HIERARCHICAL_PFRAMES = 11,
 
     /**
      * Indicates HW support for Hierarchical B frames.
      * \n 0 : Hierarchical B frames not supported.
      * \n 1 : Hierarchical B frames supported.
      */
-    NV_ENC_CAPS_SUPPORT_HIERARCHICAL_BFRAMES(12),
+    NV_ENC_CAPS_SUPPORT_HIERARCHICAL_BFRAMES = 12,
 
     /**
      * Maximum Encoding level supported (See ::NV_ENC_LEVEL for details).
      */
-    NV_ENC_CAPS_LEVEL_MAX(13),
+    NV_ENC_CAPS_LEVEL_MAX = 13,
  
     /**
      * Minimum Encoding level supported (See ::NV_ENC_LEVEL for details).
      */
-    NV_ENC_CAPS_LEVEL_MIN(14),
+    NV_ENC_CAPS_LEVEL_MIN = 14,
 
     /**
      * Indicates HW support for separate colour plane encoding.
      * \n 0 : Separate colour plane encoding not supported.
      * \n 1 : Separate colour plane encoding supported.
      */
-    NV_ENC_CAPS_SEPARATE_COLOUR_PLANE(15),
+    NV_ENC_CAPS_SEPARATE_COLOUR_PLANE = 15,
     
     /**
      * Maximum output width supported.
      */
-    NV_ENC_CAPS_WIDTH_MAX(16),
+    NV_ENC_CAPS_WIDTH_MAX = 16,
     
     /**
      * Maximum output height supported.
      */
-    NV_ENC_CAPS_HEIGHT_MAX(17),
+    NV_ENC_CAPS_HEIGHT_MAX = 17,
 
     /**
      * Indicates Temporal Scalability Support.
      * \n 0 : Temporal SVC encoding not supported.
      * \n 1 : Temporal SVC encoding supported.
      */
-    NV_ENC_CAPS_SUPPORT_TEMPORAL_SVC(18),
+    NV_ENC_CAPS_SUPPORT_TEMPORAL_SVC = 18,
 
     /**
      * Indicates Dynamic Encode Resolution Change Support.
@@ -1073,7 +936,7 @@ public enum _NV_ENC_CAPS {
      * \n 0 : Dynamic Encode Resolution Change not supported.
      * \n 1 : Dynamic Encode Resolution Change supported.
      */
-    NV_ENC_CAPS_SUPPORT_DYN_RES_CHANGE(19),
+    NV_ENC_CAPS_SUPPORT_DYN_RES_CHANGE = 19,
 
     /**
      * Indicates Dynamic Encode Bitrate Change Support.
@@ -1081,7 +944,7 @@ public enum _NV_ENC_CAPS {
      * \n 0 : Dynamic Encode bitrate change not supported.
      * \n 1 : Dynamic Encode bitrate change supported.
      */
-    NV_ENC_CAPS_SUPPORT_DYN_BITRATE_CHANGE(20),
+    NV_ENC_CAPS_SUPPORT_DYN_BITRATE_CHANGE = 20,
         
     /**
      * Indicates Forcing Constant QP On The Fly Support.
@@ -1089,21 +952,21 @@ public enum _NV_ENC_CAPS {
      * \n 0 : Forcing constant QP on the fly not supported.
      * \n 1 : Forcing constant QP on the fly supported.
      */
-    NV_ENC_CAPS_SUPPORT_DYN_FORCE_CONSTQP(21),
+    NV_ENC_CAPS_SUPPORT_DYN_FORCE_CONSTQP = 21,
 
     /**
      * Indicates Dynamic rate control mode Change Support.    
      * \n 0 : Dynamic rate control mode change not supported.
      * \n 1 : Dynamic rate control mode change supported.
      */
-    NV_ENC_CAPS_SUPPORT_DYN_RCMODE_CHANGE(22),
+    NV_ENC_CAPS_SUPPORT_DYN_RCMODE_CHANGE = 22,
 
     /**
      * Indicates Subframe readback support for slice-based encoding. If this feature is supported, it can be enabled by setting enableSubFrameWrite = 1.
      * \n 0 : Subframe readback not supported.
      * \n 1 : Subframe readback supported.
      */
-    NV_ENC_CAPS_SUPPORT_SUBFRAME_READBACK(23),
+    NV_ENC_CAPS_SUPPORT_SUBFRAME_READBACK = 23,
 
     /**
      * Indicates Constrained Encoding mode support.
@@ -1115,7 +978,7 @@ public enum _NV_ENC_CAPS {
      * in-loop filtering is disabled across slice boundaries and prediction vectors for inter
      * macroblocks in each slice will be restricted to the slice region.
      */
-    NV_ENC_CAPS_SUPPORT_CONSTRAINED_ENCODING(24),
+    NV_ENC_CAPS_SUPPORT_CONSTRAINED_ENCODING = 24,
 
     /**
      * Indicates Intra Refresh Mode Support.
@@ -1123,7 +986,7 @@ public enum _NV_ENC_CAPS {
      * \n 0 : Intra Refresh Mode not supported.
      * \n 1 : Intra Refresh Mode supported.
      */
-    NV_ENC_CAPS_SUPPORT_INTRA_REFRESH(25),
+    NV_ENC_CAPS_SUPPORT_INTRA_REFRESH = 25,
 
     /**
      * Indicates Custom VBV Buffer Size support. It can be used for capping frame size.
@@ -1131,7 +994,7 @@ public enum _NV_ENC_CAPS {
      * \n 0 : Custom VBV buffer size specification from client, not supported.
      * \n 1 : Custom VBV buffer size specification from client, supported.
      */
-    NV_ENC_CAPS_SUPPORT_CUSTOM_VBV_BUF_SIZE(26),
+    NV_ENC_CAPS_SUPPORT_CUSTOM_VBV_BUF_SIZE = 26,
 
     /**
      * Indicates Dynamic Slice Mode Support.
@@ -1139,7 +1002,7 @@ public enum _NV_ENC_CAPS {
      * \n 0 : Dynamic Slice Mode not supported.
      * \n 1 : Dynamic Slice Mode supported.
      */
-    NV_ENC_CAPS_SUPPORT_DYNAMIC_SLICE_MODE(27),
+    NV_ENC_CAPS_SUPPORT_DYNAMIC_SLICE_MODE = 27,
 
     /**
      * Indicates Reference Picture Invalidation Support.
@@ -1147,51 +1010,51 @@ public enum _NV_ENC_CAPS {
      * \n 0 : Reference Picture Invalidation not supported.
      * \n 1 : Reference Picture Invalidation supported.
      */
-    NV_ENC_CAPS_SUPPORT_REF_PIC_INVALIDATION(28),
+    NV_ENC_CAPS_SUPPORT_REF_PIC_INVALIDATION = 28,
     
     /**
      * Indicates support for Pre-Processing.
      * The API return value is a bitmask of the values defined in ::NV_ENC_PREPROC_FLAGS
      */
-    NV_ENC_CAPS_PREPROC_SUPPORT(29),
+    NV_ENC_CAPS_PREPROC_SUPPORT = 29,
 
     /**
     * Indicates support Async mode.
     * \n 0 : Async Encode mode not supported.
     * \n 1 : Async Encode mode supported.
     */
-    NV_ENC_CAPS_ASYNC_ENCODE_SUPPORT(30),
+    NV_ENC_CAPS_ASYNC_ENCODE_SUPPORT = 30,
 
     /**
      * Maximum MBs per frame supported.
      */
-    NV_ENC_CAPS_MB_NUM_MAX(31),
+    NV_ENC_CAPS_MB_NUM_MAX = 31,
 
     /**
      * Maximum aggregate throughput in MBs per sec.
      */
-    NV_ENC_CAPS_MB_PER_SEC_MAX(32),
+    NV_ENC_CAPS_MB_PER_SEC_MAX = 32,
 
     /**
      * Indicates HW support for YUV444 mode encoding.
      * \n 0 : YUV444 mode encoding not supported.
      * \n 1 : YUV444 mode encoding supported.
      */
-    NV_ENC_CAPS_SUPPORT_YUV444_ENCODE(33),
+    NV_ENC_CAPS_SUPPORT_YUV444_ENCODE = 33,
 
     /**
      * Indicates HW support for lossless encoding.
      * \n 0 : lossless encoding not supported.
      * \n 1 : lossless encoding supported.
      */
-    NV_ENC_CAPS_SUPPORT_LOSSLESS_ENCODE(34),
+    NV_ENC_CAPS_SUPPORT_LOSSLESS_ENCODE = 34,
     
      /**
      * Indicates HW support for Sample Adaptive Offset.
      * \n 0 : SAO not supported.
      * \n 1 : SAO encoding supported.
      */
-    NV_ENC_CAPS_SUPPORT_SAO(35),
+    NV_ENC_CAPS_SUPPORT_SAO = 35,
 
     /**
      * Indicates HW support for Motion Estimation Only Mode.
@@ -1199,38 +1062,38 @@ public enum _NV_ENC_CAPS {
      * \n 1 : MEOnly Mode supported for I and P frames.
      * \n 2 : MEOnly Mode supported for I, P and B frames.
      */
-    NV_ENC_CAPS_SUPPORT_MEONLY_MODE(36),
+    NV_ENC_CAPS_SUPPORT_MEONLY_MODE = 36,
 
     /**
      * Indicates HW support for lookahead encoding (enableLookahead=1).
      * \n 0 : Lookahead not supported.
      * \n 1 : Lookahead supported.
      */
-    NV_ENC_CAPS_SUPPORT_LOOKAHEAD(37),
+    NV_ENC_CAPS_SUPPORT_LOOKAHEAD = 37,
 
     /**
      * Indicates HW support for temporal AQ encoding (enableTemporalAQ=1).
      * \n 0 : Temporal AQ not supported.
      * \n 1 : Temporal AQ supported.
      */
-    NV_ENC_CAPS_SUPPORT_TEMPORAL_AQ(38),
+    NV_ENC_CAPS_SUPPORT_TEMPORAL_AQ = 38,
     /**
      * Indicates HW support for 10 bit encoding.
      * \n 0 : 10 bit encoding not supported.
      * \n 1 : 10 bit encoding supported.
      */
-    NV_ENC_CAPS_SUPPORT_10BIT_ENCODE(39),
+    NV_ENC_CAPS_SUPPORT_10BIT_ENCODE = 39,
     /**
      * Maximum number of Long Term Reference frames supported
      */
-    NV_ENC_CAPS_NUM_MAX_LTR_FRAMES(40),
+    NV_ENC_CAPS_NUM_MAX_LTR_FRAMES = 40,
 
     /**
      * Indicates HW support for Weighted Prediction.
      * \n 0 : Weighted Prediction not supported.
      * \n 1 : Weighted Prediction supported.
      */
-    NV_ENC_CAPS_SUPPORT_WEIGHTED_PREDICTION(41),
+    NV_ENC_CAPS_SUPPORT_WEIGHTED_PREDICTION = 41,
 
 
     /**
@@ -1242,7 +1105,7 @@ public enum _NV_ENC_CAPS {
      *
      * On bare metal (non-virtualized GPU) and linux platforms, this API always returns 100.
      */
-    NV_ENC_CAPS_DYNAMIC_QUERY_ENCODER_CAPACITY(42),
+    NV_ENC_CAPS_DYNAMIC_QUERY_ENCODER_CAPACITY = 42,
 
      /**
      * Indicates B as reference support.
@@ -1250,70 +1113,57 @@ public enum _NV_ENC_CAPS {
      * \n 1 : each B-Frame as reference is supported.
      * \n 2 : only Middle B-frame as reference is supported.
      */
-    NV_ENC_CAPS_SUPPORT_BFRAME_REF_MODE(43),
+    NV_ENC_CAPS_SUPPORT_BFRAME_REF_MODE = 43,
 
     /**
      * Indicates HW support for Emphasis Level Map based delta QP computation.
      * \n 0 : Emphasis Level Map based delta QP not supported.
      * \n 1 : Emphasis Level Map based delta QP is supported.
      */
-    NV_ENC_CAPS_SUPPORT_EMPHASIS_LEVEL_MAP(44),
+    NV_ENC_CAPS_SUPPORT_EMPHASIS_LEVEL_MAP = 44,
 
     /**
      * Minimum input width supported.
      */
-    NV_ENC_CAPS_WIDTH_MIN(45),
+    NV_ENC_CAPS_WIDTH_MIN = 45,
 
     /**
      * Minimum input height supported.
      */
-    NV_ENC_CAPS_HEIGHT_MIN(46),
+    NV_ENC_CAPS_HEIGHT_MIN = 46,
 
     /**
      * Indicates HW support for multiple reference frames.
      */
-    NV_ENC_CAPS_SUPPORT_MULTIPLE_REF_FRAMES(47),
+    NV_ENC_CAPS_SUPPORT_MULTIPLE_REF_FRAMES = 47,
 
     /**
      * Indicates HW support for HEVC with alpha encoding.
      * \n 0 : HEVC with alpha encoding not supported.
      * \n 1 : HEVC with alpha encoding is supported.
      */
-    NV_ENC_CAPS_SUPPORT_ALPHA_LAYER_ENCODING(48),
+    NV_ENC_CAPS_SUPPORT_ALPHA_LAYER_ENCODING = 48,
 
     /**
      * Indicates number of Encoding engines present on GPU.
      */
-    NV_ENC_CAPS_NUM_ENCODER_ENGINES(49),
+    NV_ENC_CAPS_NUM_ENCODER_ENGINES = 49,
 
      /**
      * Reserved - Not to be used by clients.
      */
-    NV_ENC_CAPS_EXPOSED_COUNT(50);
-
-    public final int value;
-    private _NV_ENC_CAPS(int v) { this.value = v; }
-    private _NV_ENC_CAPS(_NV_ENC_CAPS e) { this.value = e.value; }
-    public _NV_ENC_CAPS intern() { for (_NV_ENC_CAPS e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+    NV_ENC_CAPS_EXPOSED_COUNT = 50;
 
 /**
  *  HEVC CU SIZE
  */
-public enum _NV_ENC_HEVC_CUSIZE {
-    NV_ENC_HEVC_CUSIZE_AUTOSELECT(0),
-    NV_ENC_HEVC_CUSIZE_8x8       (1),
-    NV_ENC_HEVC_CUSIZE_16x16     (2),
-    NV_ENC_HEVC_CUSIZE_32x32     (3),
-    NV_ENC_HEVC_CUSIZE_64x64     (4);
-
-    public final int value;
-    private _NV_ENC_HEVC_CUSIZE(int v) { this.value = v; }
-    private _NV_ENC_HEVC_CUSIZE(_NV_ENC_HEVC_CUSIZE e) { this.value = e.value; }
-    public _NV_ENC_HEVC_CUSIZE intern() { for (_NV_ENC_HEVC_CUSIZE e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum _NV_ENC_HEVC_CUSIZE */
+public static final int
+    NV_ENC_HEVC_CUSIZE_AUTOSELECT = 0,
+    NV_ENC_HEVC_CUSIZE_8x8        = 1,
+    NV_ENC_HEVC_CUSIZE_16x16      = 2,
+    NV_ENC_HEVC_CUSIZE_32x32      = 3,
+    NV_ENC_HEVC_CUSIZE_64x64      = 4;
 // Targeting ..\nvencodeapi\NV_ENC_CAPS_PARAM.java
 
 

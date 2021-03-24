@@ -19,12 +19,14 @@ import org.jcodec.containers.mp4.demuxer.MP4Demuxer;
 
 import java.io.*;
 
+import static org.bytedeco.nvcodec.global.nvcuvid.*;
+import static org.bytedeco.nvcodec.global.nvencodeapi.*;
+import static org.bytedeco.cuda.global.cudart.*;
+
 import static org.bytedeco.nvcodec.sample.util.CudaUtil.checkCudaApiCall;
 import static org.bytedeco.nvcodec.sample.util.NvCodecUtil.checkInputFile;
-import static java.lang.System.exit;
-import static org.bytedeco.cuda.global.cudart.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoSurfaceFormat_enum.*;
 import static org.bytedeco.nvcodec.sample.util.NvCodecUtil.convertToNvCodec;
+import static java.lang.System.exit;
 
 public class AppDec {
     private static int gpu;
@@ -61,7 +63,7 @@ public class AppDec {
         try (FileOutputStream outputStream = new FileOutputStream(outFilePath)) {
             try (MP4Demuxer demuxer = MP4Demuxer.createMP4Demuxer(NIOUtils.readableChannel(new File(inFilePath)))) {
                 DemuxerTrack videoTrack = demuxer.getVideoTrack();
-                cudaVideoCodec_enum codec = convertToNvCodec(videoTrack.getMeta().getCodec());
+                int codec = convertToNvCodec(videoTrack.getMeta().getCodec());
 
                 NvDecoder nvDecoder = new NvDecoder(cuContext, false, codec, false, false, cropRectangle, resizeDimension, 0, 0, 1000);
 
@@ -122,7 +124,7 @@ public class AppDec {
                 }
 
                 System.out.println("Total frame decoded: " + frame);
-                System.out.println("Saved in file " + outFilePath + " in " + aszDecodeOutFormat[nvDecoder.getOutputFormat().value] + " format");
+                System.out.println("Saved in file " + outFilePath + " in " + aszDecodeOutFormat[nvDecoder.getOutputFormat()] + " format");
 
                 nvDecoder.dispose();
             }

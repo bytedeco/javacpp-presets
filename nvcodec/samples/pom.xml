@@ -17,14 +17,4 @@
             <version>11.2-8.1-1.5.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-    </build>
 </project>

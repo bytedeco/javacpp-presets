@@ -7,13 +7,10 @@ import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.nvcodec.global.nvcuvid.*;
 import org.bytedeco.nvcodec.nvcuvid.CUVIDDECODECAPS;
 
+import static org.bytedeco.nvcodec.global.nvcuvid.*;
+import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.nvcodec.sample.util.CudaUtil.checkCudaApiCall;
 import static java.lang.System.exit;
-import static org.bytedeco.cuda.global.cudart.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoChromaFormat_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoCodec_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoSurfaceFormat_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cuvidGetDecoderCaps;
 
 public class AppDecUtils {
     public static void showHelpAndExit(final String badOption, String outputFilePath, boolean verbose, int d3d) throws InvalidArgument {
@@ -97,19 +94,19 @@ public class AppDecUtils {
         if (outputFormatMask == 0) {
             outputFormats = "N/A";
         } else {
-            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_NV12.value)) != 0) {
+            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_NV12)) != 0) {
                 outputFormats += "NV12 ";
             }
 
-            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_P016.value)) != 0) {
+            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_P016)) != 0) {
                 outputFormats += "P016 ";
             }
 
-            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_YUV444.value)) != 0) {
+            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_YUV444)) != 0) {
                 outputFormats += "YUV444 ";
             }
 
-            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_YUV444_16Bit.value)) != 0) {
+            if ((outputFormatMask & (1 << cudaVideoSurfaceFormat_YUV444_16Bit)) != 0) {
                 outputFormats += "YUV444P16 ";
             }
         }
@@ -154,12 +151,12 @@ public class AppDecUtils {
 
             char[] strOutputFormats = new char[64];
 
-            cudaVideoCodec_enum aeCodec[] = {cudaVideoCodec_JPEG, cudaVideoCodec_MPEG1, cudaVideoCodec_MPEG2, cudaVideoCodec_MPEG4, cudaVideoCodec_H264, cudaVideoCodec_HEVC,
+            int aeCodec[] = {cudaVideoCodec_JPEG, cudaVideoCodec_MPEG1, cudaVideoCodec_MPEG2, cudaVideoCodec_MPEG4, cudaVideoCodec_H264, cudaVideoCodec_HEVC,
                     cudaVideoCodec_HEVC, cudaVideoCodec_HEVC, cudaVideoCodec_HEVC, cudaVideoCodec_HEVC, cudaVideoCodec_HEVC, cudaVideoCodec_VC1, cudaVideoCodec_VP8,
                     cudaVideoCodec_VP9, cudaVideoCodec_VP9, cudaVideoCodec_VP9};
             int anBitDepthMinus8[] = {0, 0, 0, 0, 0, 0, 2, 4, 0, 2, 4, 0, 0, 0, 2, 4};
 
-            cudaVideoChromaFormat_enum aeChromaFormat[] = {cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420,
+            int aeChromaFormat[] = {cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420,
                     cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_444, cudaVideoChromaFormat_444,
                     cudaVideoChromaFormat_444, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420, cudaVideoChromaFormat_420};
 
@@ -170,8 +167,8 @@ public class AppDecUtils {
 
                 for (int i = 0; i < aeCodec.length; i++) {
                     CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS();
-                    decodeCaps.eCodecType(aeCodec[i].value);
-                    decodeCaps.eChromaFormat(aeChromaFormat[i].value);
+                    decodeCaps.eCodecType(aeCodec[i]);
+                    decodeCaps.eChromaFormat(aeChromaFormat[i]);
                     decodeCaps.nBitDepthMinus8(anBitDepthMinus8[i]);
 
                     cuvidGetDecoderCaps(decodeCaps);

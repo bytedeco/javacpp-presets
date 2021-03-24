@@ -29,7 +29,7 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-You can find encoder and decoder samples in the `samples` directory. this sample ported to Java from the `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` C++ samples included in `NVIDIA Video Codec SDK` available at:
+You can find encoder and decoder samples in the `samples` directory. this sample ported to Java from the `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` C samples included in `NVIDIA Video Codec SDK` available at:
 
  * https://developer.nvidia.com/nvidia-video-codec-sdk/download
 
@@ -81,55 +81,46 @@ import static org.bytedeco.nvcodec.global.nvcuvid.*;
 import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 
 public class SampleEncodeDecode {
-    public static _NVENCSTATUS getNVENCSTATUSByValue(int value) {
-        _NVENCSTATUS[] statuses = _NVENCSTATUS.values();
-
-        for (_NVENCSTATUS status : statuses) {
-            if (status.value == value) {
-                return status;
-            }
+    public static void checkEncodeApiCall(String functionName, int result) {
+        if (result != NV_ENC_SUCCESS) {
+            System.err.printf("ERROR: %s returned '%d' \r\n", functionName, result);
+            System.exit(-1);
         }
-
-        return null;
     }
+
     public static void checkCudaApiCall(String functionName, int result) {
-        if (result != 0) {
+        if (result != CUDA_SUCCESS) {
             System.err.printf("ERROR: %s returned '%d' \r\n", functionName, result);
             System.exit(-1);
         }
     }
 
     public static void main(String[] args) {
-        int targetGpu = 0; // Change to your own NVIDIA GPU number.
+        int targetGpu = 0; // If you use NVIDIA GPU not '0', changing it.
 
         CUctx_st cuContext = new CUctx_st();
 
         checkCudaApiCall("cuInit", cuInit(0));
         checkCudaApiCall("cuCtxCreate", cuCtxCreate(cuContext, 0, targetGpu));
-
-        // Encoder max supported version check.
+        // Check encoder max supported version
         {
             IntPointer version = new IntPointer(1);
-            _NVENCSTATUS status = getNVENCSTATUSByValue(NvEncodeAPIGetMaxSupportedVersion(version));
 
-            if (status != _NVENCSTATUS.NV_ENC_SUCCESS) {
-                System.err.printf("ERROR: NvEncodeAPIGetMaxSupportedVersion returned '%s' \r\n", status.toString());
-                System.exit(-1);
-            } else {
-                System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
-            }
+            checkEncodeApiCall("NvEncodeAPIGetMaxSupportedVersion", NvEncodeAPIGetMaxSupportedVersion(version));
+
+            System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
         }
 
-        // Decoder 'MPEG-1' capability check.
+        // Query decoder capability 'MPEG-1' codec
         {
             CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS();
-            decodeCaps.eCodecType(cudaVideoCodec_enum.cudaVideoCodec_HEVC.value);
-            decodeCaps.eChromaFormat(cudaVideoChromaFormat_enum.cudaVideoChromaFormat_420.value);
+            decodeCaps.eCodecType(cudaVideoCodec_HEVC);
+            decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
             decodeCaps.nBitDepthMinus8(2); // 10 bit
 
             checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
 
-            System.out.printf("Decoder MPEG-1 Capability\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+            System.out.printf("Decoder Capability MPEG-1 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
         }
     }
 }

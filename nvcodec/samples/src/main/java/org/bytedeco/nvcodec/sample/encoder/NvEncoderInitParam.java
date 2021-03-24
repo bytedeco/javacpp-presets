@@ -6,10 +6,6 @@ import org.bytedeco.nvcodec.sample.exceptions.NvCodecException;
 import org.bytedeco.nvcodec.sample.util.NvCodecUtil;
 
 import static org.bytedeco.nvcodec.global.nvencodeapi.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_FORMAT.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_MULTI_PASS.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_PARAMS_RC_MODE.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_QP_MAP_MODE.*;
 
 public class NvEncoderInitParam {
     public static class InitFunction extends FunctionPointer {
@@ -76,7 +72,6 @@ public class NvEncoderInitParam {
             NV_ENC_H264_PROFILE_HIGH_GUID(),
             NV_ENC_H264_PROFILE_HIGH_444_GUID(),
             NV_ENC_H264_PROFILE_STEREO_GUID(),
-            NV_ENC_H264_PROFILE_SVC_TEMPORAL_SCALABILTY(),
             NV_ENC_H264_PROFILE_PROGRESSIVE_HIGH_GUID(),
             NV_ENC_H264_PROFILE_CONSTRAINED_HIGH_GUID(),
             NV_ENC_HEVC_PROFILE_MAIN_GUID(),
@@ -95,24 +90,24 @@ public class NvEncoderInitParam {
 
     private final String rcModeNames = "constqp vbr cbr";
     private Integer[] rcModes = new Integer[]{
-            NV_ENC_PARAMS_RC_CONSTQP.value,
-            NV_ENC_PARAMS_RC_VBR.value,
-            NV_ENC_PARAMS_RC_CBR.value
+            NV_ENC_PARAMS_RC_CONSTQP,
+            NV_ENC_PARAMS_RC_VBR,
+            NV_ENC_PARAMS_RC_CBR
     };
 
     private final String multiPassNames = "disabled qres fullres";
     private Integer[] multiPassValues = new Integer[]{
-            NV_ENC_MULTI_PASS_DISABLED.value,
-            NV_ENC_TWO_PASS_QUARTER_RESOLUTION.value,
-            NV_ENC_TWO_PASS_FULL_RESOLUTION.value
+            NV_ENC_MULTI_PASS_DISABLED,
+            NV_ENC_TWO_PASS_QUARTER_RESOLUTION,
+            NV_ENC_TWO_PASS_FULL_RESOLUTION
     };
 
     private final String qpMapModeNames = "disabled emphasis_level_map delta_qp_map qp_map";
     private Integer[] qpMapModes = new Integer[]{
-            NV_ENC_QP_MAP_DISABLED.value,
-            NV_ENC_QP_MAP_EMPHASIS.value,
-            NV_ENC_QP_MAP_DELTA.value,
-            NV_ENC_QP_MAP.value
+            NV_ENC_QP_MAP_DISABLED,
+            NV_ENC_QP_MAP_EMPHASIS,
+            NV_ENC_QP_MAP_DELTA,
+            NV_ENC_QP_MAP
     };
 
     private <T> T parseString(String optionValue, T[] values, String valueNames) {
@@ -361,7 +356,7 @@ public class NvEncoderInitParam {
                 .append("\n").append("\tbitdepth     : ").append((NvCodecUtil.compareGUID(pParams.encodeGUID(), NV_ENC_CODEC_H264_GUID()) ? 0 : pParams.encodeConfig().encodeCodecConfig().hevcConfig().pixelBitDepthMinus8()) + 8)
                 .append("\n").append("\trc           : ").append(this.convertValueToString(this.rcModes, this.rcModeNames, pParams.encodeConfig().rcParams().rateControlMode()));
 
-        if (pParams.encodeConfig().rcParams().rateControlMode() == NV_ENC_PARAMS_RC_CONSTQP.value) {
+        if (pParams.encodeConfig().rcParams().rateControlMode() == NV_ENC_PARAMS_RC_CONSTQP) {
             sb.append(" (P,B,I=").append(pParams.encodeConfig().rcParams().constQP().qpInterP()).append(",").append(pParams.encodeConfig().rcParams().constQP().qpInterB()).append(",").append(pParams.encodeConfig().rcParams().constQP().qpIntra()).append(")");
         }
 
@@ -385,7 +380,7 @@ public class NvEncoderInitParam {
         return sb.toString();
     }
 
-    public void setInitParams(NV_ENC_INITIALIZE_PARAMS pParams, _NV_ENC_BUFFER_FORMAT eBufferFormat) throws NvCodecException {
+    public void setInitParams(NV_ENC_INITIALIZE_PARAMS pParams, int eBufferFormat) throws NvCodecException {
         NV_ENC_CONFIG config = pParams.encodeConfig();
         for (int i = 0; i < this.tokens.length; i++) {
             {

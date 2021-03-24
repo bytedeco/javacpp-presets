@@ -13,12 +13,10 @@ import org.bytedeco.nvcodec.nvencodeapi.NV_ENC_CUSTREAM_PTR;
 
 import java.util.Vector;
 
-import static org.bytedeco.nvcodec.sample.util.CudaUtil.*;
-import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.nvcodec.global.nvencodeapi.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_FORMAT.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_DEVICE_TYPE.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_INPUT_RESOURCE_TYPE.NV_ENC_INPUT_RESOURCE_TYPE_CUDADEVICEPTR;
+import static org.bytedeco.cuda.global.cudart.*;
+
+import static org.bytedeco.nvcodec.sample.util.CudaUtil.*;
 
 public class NvEncoderCuda extends NvEncoder {
     private SizeTPointer cudaPitch;
@@ -28,11 +26,11 @@ public class NvEncoderCuda extends NvEncoder {
      * @brief This is a static function to copy input data from host memory to device memory.
      * This function assumes YUV plane is a single contiguous memory segment.
      */
-    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, _NV_ENC_BUFFER_FORMAT pixelFormat, final int[] dstChromaOffsets, int numChromaPlanes) {
+    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, int pixelFormat, final int[] dstChromaOffsets, int numChromaPlanes) {
         copyToDeviceFrame(device, srcFrame, srcPitch, dstFrame, dstPitch, width, height, srcMemoryType, pixelFormat, dstChromaOffsets, numChromaPlanes, false, null);
     }
 
-    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, _NV_ENC_BUFFER_FORMAT pixelFormat, final int[] dstChromaOffsets, int numChromaPlanes, boolean unAlignedDeviceCopy, CUstream_st stream) {
+    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, int pixelFormat, final int[] dstChromaOffsets, int numChromaPlanes, boolean unAlignedDeviceCopy, CUstream_st stream) {
         if (srcMemoryType != CU_MEMORYTYPE_HOST && srcMemoryType != CU_MEMORYTYPE_DEVICE) {
             System.err.println("Invalid source memory type for copy");
         }
@@ -120,11 +118,11 @@ public class NvEncoderCuda extends NvEncoder {
         }
     }
 
-    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, _NV_ENC_BUFFER_FORMAT pixelFormat, LongPointer[] dstChromaDevicePointers, int dstChromaPitch, int numChromaPlanes) {
+    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, int pixelFormat, LongPointer[] dstChromaDevicePointers, int dstChromaPitch, int numChromaPlanes) {
         copyToDeviceFrame(device, srcFrame, srcPitch, dstFrame, dstPitch, width, height, srcMemoryType, pixelFormat, dstChromaDevicePointers, dstChromaPitch, numChromaPlanes, false);
     }
 
-    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, _NV_ENC_BUFFER_FORMAT pixelFormat, LongPointer[] dstChromaDevicePointers, int dstChromaPitch, int numChromaPlanes, boolean unAlignedDeviceCopy) {
+    public static void copyToDeviceFrame(CUctx_st device, Pointer srcFrame, int srcPitch, LongPointer dstFrame, int dstPitch, int width, int height, int srcMemoryType, int pixelFormat, LongPointer[] dstChromaDevicePointers, int dstChromaPitch, int numChromaPlanes, boolean unAlignedDeviceCopy) {
         if (srcMemoryType != CU_MEMORYTYPE_HOST && srcMemoryType != CU_MEMORYTYPE_DEVICE) {
             System.err.println("Invalid source memory type for copy");
         }
@@ -207,12 +205,12 @@ public class NvEncoderCuda extends NvEncoder {
         }
     }
 
-    public NvEncoderCuda(CUctx_st cudaContext, int width, int height, _NV_ENC_BUFFER_FORMAT bufferFormat) {
+    public NvEncoderCuda(CUctx_st cudaContext, int width, int height, int bufferFormat) {
         this(cudaContext, width, height, bufferFormat, 3, false, false);
 
     }
 
-    public NvEncoderCuda(CUctx_st cudaContext, int width, int height, _NV_ENC_BUFFER_FORMAT bufferFormat, int extraOutputDelay, boolean motionEstimationOnly, boolean outputInVideoMemory) {
+    public NvEncoderCuda(CUctx_st cudaContext, int width, int height, int bufferFormat, int extraOutputDelay, boolean motionEstimationOnly, boolean outputInVideoMemory) {
         super(NV_ENC_DEVICE_TYPE_CUDA, cudaContext, width, height, bufferFormat, extraOutputDelay, motionEstimationOnly, outputInVideoMemory);
         this.cudaPitch = new SizeTPointer(1);
         this.cudaContext = cudaContext;
@@ -242,7 +240,7 @@ public class NvEncoderCuda extends NvEncoder {
                 e.printStackTrace();
             }
             Vector<Pointer> inputFrames = new Vector<>();
-            _NV_ENC_BUFFER_FORMAT pixelFormat = this.getPixelFormat();
+            int pixelFormat = this.getPixelFormat();
 
             for (int index = 0; index < numInputBuffers; index++) {
                 LongPointer deviceFramePointer = new LongPointer(1);

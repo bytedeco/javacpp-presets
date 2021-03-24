@@ -21,12 +21,6 @@ import java.util.*;
 
 import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.nvcodec.global.nvcuvid.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoChromaFormat_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoCodec_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoCreateFlags_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoSurfaceFormat_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cudaVideoDeinterlaceMode_enum.*;
-import static org.bytedeco.nvcodec.global.nvcuvid.cuvidDecodeStatus_enum.*;
 import static org.bytedeco.nvcodec.sample.util.CudaUtil.*;
 import static org.bytedeco.nvcodec.sample.util.NvCodecUtil.*;
 
@@ -51,9 +45,9 @@ public class NvDecoder extends Pointer implements Disposable {
     private int surfaceWidth;
     private int surfaceHeight;
 
-    private cudaVideoCodec_enum codec;
-    private cudaVideoChromaFormat_enum chromaFormat;
-    private cudaVideoSurfaceFormat_enum outputFormat;
+    private int codec;
+    private int chromaFormat;
+    private int outputFormat;
 
     private int bitDepthMinus8;
     private int bpp;
@@ -93,7 +87,7 @@ public class NvDecoder extends Pointer implements Disposable {
     private boolean reconfigExternal;
     private boolean reconfigExtPPChanged;
 
-    private static Map<cudaVideoCodec_enum, String> codecNames = new HashMap<cudaVideoCodec_enum, String>() {
+    private static Map<Integer, String> codecNames = new HashMap<Integer, String>() {
         {
             put(cudaVideoCodec_MPEG1, "MPEG-1");
             put(cudaVideoCodec_MPEG2, "MPEG-2");
@@ -115,7 +109,7 @@ public class NvDecoder extends Pointer implements Disposable {
         }
     };
 
-    private static Map<cudaVideoChromaFormat_enum, String> chromaFormatNames = new HashMap<cudaVideoChromaFormat_enum, String>() {
+    private static Map<Integer, String> chromaFormatNames = new HashMap<Integer, String>() {
         {
             put(cudaVideoChromaFormat_Monochrome, "YUV 400 (Monochrome)");
             put(cudaVideoChromaFormat_420, "YUV 420");
@@ -124,15 +118,15 @@ public class NvDecoder extends Pointer implements Disposable {
         }
     };
 
-    public static String getVideoCodecString(cudaVideoCodec_enum codec) {
+    public static String getVideoCodecString(int codec) {
         return codecNames.get(codec);
     }
 
-    public static String getVideoChromaFormatString(cudaVideoChromaFormat_enum chromaFormat) {
+    public static String getVideoChromaFormatString(int chromaFormat) {
         return chromaFormatNames.get(chromaFormat);
     }
 
-    public static float getChromaHeightFactor(cudaVideoSurfaceFormat_enum surfaceFormat) {
+    public static float getChromaHeightFactor(int surfaceFormat) {
         float factor = 0.5f;
 
         switch (surfaceFormat) {
@@ -151,7 +145,7 @@ public class NvDecoder extends Pointer implements Disposable {
         return factor;
     }
 
-    public static int getChromaPlaneCount(cudaVideoSurfaceFormat_enum surfaceFormat) {
+    public static int getChromaPlaneCount(int surfaceFormat) {
         int numPlane = 1;
 
         switch (surfaceFormat) {
@@ -236,7 +230,7 @@ public class NvDecoder extends Pointer implements Disposable {
     /**
      * @brief This function is used to get the YUV chroma format
      */
-    public cudaVideoSurfaceFormat_enum getOutputFormat() {
+    public int getOutputFormat() {
         return outputFormat;
     }
 
@@ -250,7 +244,7 @@ public class NvDecoder extends Pointer implements Disposable {
     /**
      * @brief This function is used to get codec string from codec id
      */
-    public String getCodecString(cudaVideoCodec_enum codec) {
+    public String getCodecString(int codec) {
         return getVideoCodecString(codec);
     }
 
@@ -266,7 +260,7 @@ public class NvDecoder extends Pointer implements Disposable {
      * Application must call this function to initialize the decoder, before
      * starting to decode any frames.
      */
-    public NvDecoder(CUctx_st cuContext, boolean useDeviceFrame, cudaVideoCodec_enum codec, boolean lowLatency, boolean deviceFramePitched, Rectangle cropRect, Dimension resizeDimension, int maxWidth, int maxHeight, int clkRate) {
+    public NvDecoder(CUctx_st cuContext, boolean useDeviceFrame, int codec, boolean lowLatency, boolean deviceFramePitched, Rectangle cropRect, Dimension resizeDimension, int maxWidth, int maxHeight, int clkRate) {
         this.vpFrameLock = new Object();
 
         this.ctxLock = new _CUcontextlock_st();
@@ -276,7 +270,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
         this.frameAlloc = 0;
         this.bpp = 1;
-        this.codec = cudaVideoCodec_enum.cudaVideoCodec_NumCodecs;
+        this.codec = cudaVideoCodec_NumCodecs;
 
         this.videoFormat = new CUVIDEOFORMAT();
 
@@ -322,7 +316,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
         CUVIDPARSERPARAMS parseParameter = new CUVIDPARSERPARAMS();
 
-        parseParameter.CodecType(this.codec.value);
+        parseParameter.CodecType(this.codec);
         parseParameter.ulMaxNumDecodeSurfaces(1);
         parseParameter.ulClockRate(clkRate);
         parseParameter.pUserData(this);
@@ -355,7 +349,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
         this.videoInfo.append("Video Input Information \n")
                 .append("\t Codec : ")
-                .append(getVideoCodecString(getVideoCodecByValue(videoFormat.codec())))
+                .append(getVideoCodecString(videoFormat.codec()))
                 .append("\n")
                 .append("\t Frame rate : ")
                 .append(String.format("%d / %d = %f fps \n", videoFormat.frame_rate_numerator(), videoFormat.frame_rate_denominator(), 1.0f * videoFormat.frame_rate_numerator() / videoFormat.frame_rate_denominator()))
@@ -367,7 +361,7 @@ public class NvDecoder extends Pointer implements Disposable {
                 .append("\t Display area : ")
                 .append(String.format("[%d, %d, %d, %d] \n", videoFormat.display_area_left(), videoFormat.display_area_top(), videoFormat.display_area_right(), videoFormat.display_area_bottom()))
                 .append("\t Chroma : ")
-                .append(getVideoChromaFormatString(getVideoChromaFormatByValue(videoFormat.chroma_format())))
+                .append(getVideoChromaFormatString(videoFormat.chroma_format()))
                 .append("\n")
                 .append("\t Bit depth : ")
                 .append(videoFormat.bit_depth_chroma_minus8() + 8)
@@ -410,31 +404,31 @@ public class NvDecoder extends Pointer implements Disposable {
             return reconfigureDecoder(videoFormat);
         }
 
-        this.codec = getVideoCodecByValue(videoFormat.codec());
-        this.chromaFormat = getVideoChromaFormatByValue(videoFormat.chroma_format());
+        this.codec = videoFormat.codec();
+        this.chromaFormat = videoFormat.chroma_format();
         this.bitDepthMinus8 = videoFormat.bit_depth_luma_minus8();
         this.bpp = this.bitDepthMinus8 > 0 ? 2 : 1;
 
         switch (this.chromaFormat) {
             case cudaVideoChromaFormat_420:
-                this.outputFormat = videoFormat.bit_depth_luma_minus8() == 1 ? cudaVideoSurfaceFormat_enum.cudaVideoSurfaceFormat_P016 : cudaVideoSurfaceFormat_NV12;
+                this.outputFormat = videoFormat.bit_depth_luma_minus8() == 1 ? cudaVideoSurfaceFormat_P016 : cudaVideoSurfaceFormat_NV12;
                 break;
             case cudaVideoChromaFormat_422:
                 this.outputFormat = cudaVideoSurfaceFormat_NV12;
                 break;
             case cudaVideoChromaFormat_444:
-                this.outputFormat = videoFormat.bit_depth_luma_minus8() == 1 ? cudaVideoSurfaceFormat_enum.cudaVideoSurfaceFormat_YUV444_16Bit : cudaVideoSurfaceFormat_enum.cudaVideoSurfaceFormat_YUV444;
+                this.outputFormat = videoFormat.bit_depth_luma_minus8() == 1 ? cudaVideoSurfaceFormat_YUV444_16Bit : cudaVideoSurfaceFormat_YUV444;
                 break;
         }
 
-        if ((decodecaps.nOutputFormatMask() & (1 << this.outputFormat.value)) == 0) {
-            if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_NV12.value)) == 1) {
+        if ((decodecaps.nOutputFormatMask() & (1 << this.outputFormat)) == 0) {
+            if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_NV12)) == 1) {
                 this.outputFormat = cudaVideoSurfaceFormat_NV12;
-            } else if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_P016.value)) == 1) {
+            } else if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_P016)) == 1) {
                 this.outputFormat = cudaVideoSurfaceFormat_P016;
-            } else if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_YUV444.value)) == 1) {
+            } else if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_YUV444)) == 1) {
                 this.outputFormat = cudaVideoSurfaceFormat_YUV444;
-            } else if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_YUV444_16Bit.value)) == 1) {
+            } else if ((decodecaps.nOutputFormatMask() & (1 << cudaVideoSurfaceFormat_YUV444_16Bit)) == 1) {
                 this.outputFormat = cudaVideoSurfaceFormat_YUV444_16Bit;
             } else {
                 System.err.println("No supported output format found");
@@ -446,20 +440,20 @@ public class NvDecoder extends Pointer implements Disposable {
         CUVIDDECODECREATEINFO videoDecodeCreateInfo = new CUVIDDECODECREATEINFO();
         videoDecodeCreateInfo.CodecType(videoFormat.codec());
         videoDecodeCreateInfo.ChromaFormat(videoFormat.chroma_format());
-        videoDecodeCreateInfo.OutputFormat(this.outputFormat.value);
+        videoDecodeCreateInfo.OutputFormat(this.outputFormat);
         videoDecodeCreateInfo.bitDepthMinus8(videoFormat.bit_depth_luma_minus8());
 
         if (videoFormat.progressive_sequence() == 1) {
-            videoDecodeCreateInfo.DeinterlaceMode(cudaVideoDeinterlaceMode_Weave.value);
+            videoDecodeCreateInfo.DeinterlaceMode(cudaVideoDeinterlaceMode_Weave);
         } else {
-            videoDecodeCreateInfo.DeinterlaceMode(cudaVideoDeinterlaceMode_Adaptive.value);
+            videoDecodeCreateInfo.DeinterlaceMode(cudaVideoDeinterlaceMode_Adaptive);
         }
 
         videoDecodeCreateInfo.ulNumOutputSurfaces(2);
 
         //With PreferCUVID, JPEG is still decoded by CUDA while video is decoded by NVDEC hardware
 
-        videoDecodeCreateInfo.ulCreationFlags(cudaVideoCreate_PreferCUVID.value);
+        videoDecodeCreateInfo.ulCreationFlags(cudaVideoCreate_PreferCUVID);
         videoDecodeCreateInfo.ulNumDecodeSurfaces(decodeSurface);
         videoDecodeCreateInfo.vidLock(this.ctxLock);
         videoDecodeCreateInfo.ulWidth(videoFormat.coded_width());
@@ -555,7 +549,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
         if ((videoFormat.coded_width() > this.maxWidth) || (videoFormat.coded_height() > this.maxHeight)) {
             // For VP9, let driver  handle the change if new width/height > maxwidth/maxheight
-            if ((this.codec.value != cudaVideoCodec_VP9.value) || this.reconfigExternal) {
+            if ((this.codec != cudaVideoCodec_VP9) || this.reconfigExternal) {
                 System.err.println("Reconfigure Not supported when width/height > maxwidth/maxheight");
             }
         }
@@ -749,7 +743,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
             int result = cuvidGetDecodeStatus(this.decoder, displayInfo.picture_index(), decodeStatus);
 
-            if (result == CUDA_SUCCESS && (decodeStatus.decodeStatus() == cuvidDecodeStatus_Error.value || decodeStatus.decodeStatus() == cuvidDecodeStatus_Error_Concealed.value)) {
+            if (result == CUDA_SUCCESS && (decodeStatus.decodeStatus() == cuvidDecodeStatus_Error || decodeStatus.decodeStatus() == cuvidDecodeStatus_Error_Concealed)) {
                 System.err.printf("Decode Error occurred for picture %d%n", this.picNumInDecodeOrder[displayInfo.picture_index()]);
             }
 

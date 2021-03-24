@@ -40,8 +40,7 @@ import org.bytedeco.nvcodec.presets.*;
 public class nvencodeapi implements InfoMapper {
     @Override
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info().enumerate())
-               .put(new Info("NVENCAPI").cppTypes().annotations())
+        infoMap.put(new Info("NVENCAPI").cppTypes().annotations())
 
                .put(new Info("NvEncInvalidateRefFrames").skip())
                .put(new Info("NvEncRegisterAsyncEvent").skip())

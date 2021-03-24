@@ -7,27 +7,20 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
-import org.bytedeco.nvcodec.global.nvencodeapi.*;
 import org.bytedeco.nvcodec.nvencodeapi.*;
 
 import java.util.Vector;
 
+import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 import static org.bytedeco.nvcodec.sample.util.NvCodecUtil.*;
 import static org.bytedeco.javacpp.Pointer.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NVENCSTATUS.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_FORMAT.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_BUFFER_USAGE.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_PARAMS_RC_MODE.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_PIC_FLAGS.*;
-import static org.bytedeco.nvcodec.global.nvencodeapi._NV_ENC_PIC_STRUCT.*;
 
 public abstract class NvEncoder implements Disposable {
     private int width;
     private int height;
-    private _NV_ENC_BUFFER_FORMAT bufferFormat;
+    private int bufferFormat;
     private Pointer device;
-    private _NV_ENC_DEVICE_TYPE deviceType;
+    private int deviceType;
     private NV_ENC_INITIALIZE_PARAMS initializeParams;
     private NV_ENC_CONFIG encodeConfig;
     private boolean encoderInitialized;
@@ -57,7 +50,7 @@ public abstract class NvEncoder implements Disposable {
     /**
      * @brief This a static function to get chroma offsets for YUV planar formats.
      */
-    public static void getChromaSubPlaneOffsets(final _NV_ENC_BUFFER_FORMAT bufferFormat, final int pitch, final int height, Vector<Integer> chromaOffsets) {
+    public static void getChromaSubPlaneOffsets(final int bufferFormat, final int pitch, final int height, Vector<Integer> chromaOffsets) {
         chromaOffsets.clear();
         switch (bufferFormat) {
             case NV_ENC_BUFFER_FORMAT_NV12:
@@ -95,7 +88,7 @@ public abstract class NvEncoder implements Disposable {
     /**
      * @brief This a static function to get the chroma plane pitch for YUV planar formats.
      */
-    public static int getChromaPitch(final _NV_ENC_BUFFER_FORMAT bufferFormat, final int lumaPitch) {
+    public static int getChromaPitch(final int bufferFormat, final int lumaPitch) {
         switch (bufferFormat) {
             case NV_ENC_BUFFER_FORMAT_NV12:
             case NV_ENC_BUFFER_FORMAT_YUV420_10BIT:
@@ -124,7 +117,7 @@ public abstract class NvEncoder implements Disposable {
     /**
      * @brief This a static function to get the number of chroma planes for YUV planar formats.
      */
-    public static int getNumChromaPlanes(final _NV_ENC_BUFFER_FORMAT bufferFormat) {
+    public static int getNumChromaPlanes(final int bufferFormat) {
         switch (bufferFormat) {
             case NV_ENC_BUFFER_FORMAT_NV12:
             case NV_ENC_BUFFER_FORMAT_YUV420_10BIT: {
@@ -153,7 +146,7 @@ public abstract class NvEncoder implements Disposable {
     /**
      * @brief This a static function to get the chroma plane width in bytes for YUV planar formats.
      */
-    public static int getChromaWidthInBytes(final _NV_ENC_BUFFER_FORMAT bufferFormat, final int lumaWidth) {
+    public static int getChromaWidthInBytes(final int bufferFormat, final int lumaWidth) {
         switch (bufferFormat) {
             case NV_ENC_BUFFER_FORMAT_YV12:
             case NV_ENC_BUFFER_FORMAT_IYUV: {
@@ -184,7 +177,7 @@ public abstract class NvEncoder implements Disposable {
     /**
      * @brief This a static function to get the chroma planes height in bytes for YUV planar formats.
      */
-    public static int getChromaHeight(final _NV_ENC_BUFFER_FORMAT bufferFormat, final int lumaHeight) {
+    public static int getChromaHeight(final int bufferFormat, final int lumaHeight) {
         switch (bufferFormat) {
             case NV_ENC_BUFFER_FORMAT_YV12:
             case NV_ENC_BUFFER_FORMAT_IYUV:
@@ -214,7 +207,7 @@ public abstract class NvEncoder implements Disposable {
      * @brief This a static function to get the width in bytes for the frame.
      * For YUV planar format this is the width in bytes of the luma plane.
      */
-    public static int getWidthInBytes(final _NV_ENC_BUFFER_FORMAT bufferFormat, final int width) {
+    public static int getWidthInBytes(final int bufferFormat, final int width) {
         switch (bufferFormat) {
             case NV_ENC_BUFFER_FORMAT_NV12:
             case NV_ENC_BUFFER_FORMAT_YV12:
@@ -250,7 +243,7 @@ public abstract class NvEncoder implements Disposable {
     /**
      * @brief This function is used to get the current device type which encoder is running.
      */
-    public _NV_ENC_DEVICE_TYPE getDeviceType() {
+    public int getDeviceType() {
         return deviceType;
     }
 
@@ -320,7 +313,7 @@ public abstract class NvEncoder implements Disposable {
     /**
      * @brief This function returns the current pixel format.
      */
-    protected _NV_ENC_BUFFER_FORMAT getPixelFormat() {
+    protected int getPixelFormat() {
         return this.bufferFormat;
     }
 
@@ -328,11 +321,11 @@ public abstract class NvEncoder implements Disposable {
         return nvEncodeApiFunctionList;
     }
 
-    public NvEncoder(_NV_ENC_DEVICE_TYPE deviceType, Pointer devicePointer, int width, int height, _NV_ENC_BUFFER_FORMAT bufferFormat, int outputDelay, boolean motionEstimationOnly) {
+    public NvEncoder(int deviceType, Pointer devicePointer, int width, int height, int bufferFormat, int outputDelay, boolean motionEstimationOnly) {
         this(deviceType, devicePointer, width, height, bufferFormat, outputDelay, motionEstimationOnly, false);
     }
 
-    public NvEncoder(_NV_ENC_DEVICE_TYPE deviceType, Pointer devicePointer, int width, int height, _NV_ENC_BUFFER_FORMAT bufferFormat, int outputDelay, boolean motionEstimationOnly, boolean outputInVideoMemory) {
+    public NvEncoder(int deviceType, Pointer devicePointer, int width, int height, int bufferFormat, int outputDelay, boolean motionEstimationOnly, boolean outputInVideoMemory) {
         this.device = devicePointer;
         this.deviceType = deviceType;
         this.width = width;
@@ -367,7 +360,7 @@ public abstract class NvEncoder implements Disposable {
         NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS encodeSessionExParams = new NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS();
         encodeSessionExParams.version(NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER);
         encodeSessionExParams.device(this.device);
-        encodeSessionExParams.deviceType(this.deviceType.value);
+        encodeSessionExParams.deviceType(this.deviceType);
         encodeSessionExParams.apiVersion(NVENCAPI_VERSION);
 
 
@@ -469,7 +462,7 @@ public abstract class NvEncoder implements Disposable {
         initializeParams.encodeConfig().frameIntervalP(1);
         initializeParams.encodeConfig().gopLength(NVENC_INFINITE_GOPLENGTH);
 
-        initializeParams.encodeConfig().rcParams().rateControlMode(NV_ENC_PARAMS_RC_CONSTQP.value);
+        initializeParams.encodeConfig().rcParams().rateControlMode(NV_ENC_PARAMS_RC_CONSTQP);
 
         if (!this.motionEstimationOnly) {
             initializeParams.tuningInfo(tuningInfo);
@@ -485,7 +478,7 @@ public abstract class NvEncoder implements Disposable {
             memcpy(configPointer, presetConfig2.presetCfg(), Pointer.sizeof(NV_ENC_CONFIG.class));
         } else {
             this.encodeConfig.version(NV_ENC_CONFIG_VER);
-            this.encodeConfig.rcParams().rateControlMode(NV_ENC_PARAMS_RC_CONSTQP.value);
+            this.encodeConfig.rcParams().rateControlMode(NV_ENC_PARAMS_RC_CONSTQP);
 
             NV_ENC_QP constQP = new NV_ENC_QP();
             constQP.qpInterP(28);
@@ -573,7 +566,7 @@ public abstract class NvEncoder implements Disposable {
                 memcpy(this.encodeConfig, presetConfig.presetCfg(), this.encodeConfig.sizeof());
             } else {
                 this.encodeConfig.version(NV_ENC_CONFIG_VER);
-                this.encodeConfig.rcParams().rateControlMode(NV_ENC_PARAMS_RC_CONSTQP.value);
+                this.encodeConfig.rcParams().rateControlMode(NV_ENC_PARAMS_RC_CONSTQP);
                 this.encodeConfig.rcParams().constQP(new NV_ENC_QP() {
                     {
                         qpInterP(28);
@@ -723,7 +716,7 @@ public abstract class NvEncoder implements Disposable {
 
         this.mapResources(index);
 
-        _NVENCSTATUS nvStatus = this.doEncode(this.mappedInputBuffers.get(index), this.bitstreamOutputBuffer.get(index), picParams);
+        int nvStatus = this.doEncode(this.mappedInputBuffers.get(index), this.bitstreamOutputBuffer.get(index), picParams);
         if (nvStatus == NV_ENC_SUCCESS || nvStatus == NV_ENC_ERR_NEED_MORE_INPUT) {
             this.toSend++;
             this.getEncodedPacket(this.bitstreamOutputBuffer, packet, true);
@@ -746,7 +739,7 @@ public abstract class NvEncoder implements Disposable {
 
             this.mapResources(index);
 
-            _NVENCSTATUS nvStatus = this.doMotionEstimation(this.mappedInputBuffers.get(index), this.mappedRefBuffers.get(index), this.mvDataOutputBuffer.get(index));
+            int nvStatus = this.doMotionEstimation(this.mappedInputBuffers.get(index), this.mappedRefBuffers.get(index), this.mvDataOutputBuffer.get(index));
 
             if (nvStatus == NV_ENC_SUCCESS) {
                 this.toSend++;
@@ -804,22 +797,21 @@ public abstract class NvEncoder implements Disposable {
      * @brief This function is used to submit the encode commands to the
      * NVENC hardware.
      */
-    protected _NVENCSTATUS doEncode(NV_ENC_INPUT_PTR inputBuffer, NV_ENC_OUTPUT_PTR outputBuffer, NV_ENC_PIC_PARAMS picParams) {
+    protected int doEncode(NV_ENC_INPUT_PTR inputBuffer, NV_ENC_OUTPUT_PTR outputBuffer, NV_ENC_PIC_PARAMS picParams) {
         if (picParams == null || picParams.isNull()) {
             picParams = new NV_ENC_PIC_PARAMS();
         }
 
         picParams.version(NV_ENC_PIC_PARAMS_VER);
-        picParams.pictureStruct(NV_ENC_PIC_STRUCT_FRAME.value);
+        picParams.pictureStruct(NV_ENC_PIC_STRUCT_FRAME);
         picParams.inputBuffer(inputBuffer);
-        picParams.bufferFmt(this.getPixelFormat().value);
+        picParams.bufferFmt(this.getPixelFormat());
         picParams.inputWidth(this.getEncodeWidth());
         picParams.inputHeight(this.getEncodeHeight());
         picParams.outputBitstream(outputBuffer);
         picParams.completionEvent(this.getCompletionEventPointer(this.toSend % this.encoderBuffer));
-        _NVENCSTATUS nvStatus = getNVENCSTATUSByValue(this.nvEncodeApiFunctionList.nvEncEncodePicture().call(this.encoder, picParams));
 
-        return nvStatus;
+        return this.nvEncodeApiFunctionList.nvEncEncodePicture().call(this.encoder, picParams);
     }
 
     /**
@@ -828,7 +820,7 @@ public abstract class NvEncoder implements Disposable {
     protected void sendEOS() {
         NV_ENC_PIC_PARAMS picParams = new NV_ENC_PIC_PARAMS();
         picParams.version(NV_ENC_PIC_PARAMS_VER);
-        picParams.encodePicFlags(NV_ENC_PIC_FLAG_EOS.value);
+        picParams.encodePicFlags(NV_ENC_PIC_FLAG_EOS);
         picParams.completionEvent(this.getCompletionEventPointer(this.toSend % this.encoderBuffer));
         try {
             checkNvCodecApiCall(this.nvEncodeApiFunctionList.nvEncEncodePicture().call(this.encoder, picParams));
@@ -956,23 +948,23 @@ public abstract class NvEncoder implements Disposable {
         return true;
     }
 
-    protected NV_ENC_REGISTERED_PTR registerResource(Pointer bufferPointer, _NV_ENC_INPUT_RESOURCE_TYPE resourceType, int width, int height, int pitch, _NV_ENC_BUFFER_FORMAT bufferFormat) {
+    protected NV_ENC_REGISTERED_PTR registerResource(Pointer bufferPointer, int resourceType, int width, int height, int pitch, int bufferFormat) {
         return this.registerResource(bufferPointer, resourceType, width, height, pitch, bufferFormat, NV_ENC_INPUT_IMAGE);
     }
 
     /**
      * @brief This function is used to register CUDA, D3D or OpenGL input or output buffers with NvEncodeAPI.
      */
-    protected NV_ENC_REGISTERED_PTR registerResource(Pointer bufferPointer, _NV_ENC_INPUT_RESOURCE_TYPE resourceType, int width, int height, int pitch, _NV_ENC_BUFFER_FORMAT bufferFormat, _NV_ENC_BUFFER_USAGE bufferUsage) {
+    protected NV_ENC_REGISTERED_PTR registerResource(Pointer bufferPointer, int resourceType, int width, int height, int pitch, int bufferFormat, int bufferUsage) {
         NV_ENC_REGISTER_RESOURCE registerResource = new NV_ENC_REGISTER_RESOURCE();
         registerResource.version(NV_ENC_REGISTER_RESOURCE_VER);
-        registerResource.resourceType(resourceType.value);
+        registerResource.resourceType(resourceType);
         registerResource.resourceToRegister(bufferPointer);
         registerResource.width(width);
         registerResource.height(height);
         registerResource.pitch(pitch);
-        registerResource.bufferFormat(bufferFormat.value);
-        registerResource.bufferUsage(bufferUsage.value);
+        registerResource.bufferFormat(bufferFormat);
+        registerResource.bufferUsage(bufferUsage);
 
         try {
             checkNvCodecApiCall(this.nvEncodeApiFunctionList.nvEncRegisterResource().call(this.encoder, registerResource));
@@ -988,7 +980,7 @@ public abstract class NvEncoder implements Disposable {
      * This is non public function and is called by derived class for allocating
      * and registering input buffers.
      */
-    protected void registerInputResources(Vector<Pointer> inputFrames, _NV_ENC_INPUT_RESOURCE_TYPE resourceType, int width, int height, int pitch, _NV_ENC_BUFFER_FORMAT bufferFormat, boolean referenceFrame) {
+    protected void registerInputResources(Vector<Pointer> inputFrames, int resourceType, int width, int height, int pitch, int bufferFormat, boolean referenceFrame) {
         for (int index = 0; index < inputFrames.size(); ++index) {
             NV_ENC_REGISTERED_PTR registeredPtr = this.registerResource(inputFrames.get(index), resourceType, width, height, pitch, bufferFormat, NV_ENC_INPUT_IMAGE);
 
@@ -1084,11 +1076,11 @@ public abstract class NvEncoder implements Disposable {
      * Applications can call this function to query capabilities like maximum encode
      * dimensions, support for lookahead or the ME-only mode etc.
      */
-    public int getCapabilityValue(GUID guidCodec, _NV_ENC_CAPS capsToQuery) {
+    public int getCapabilityValue(GUID guidCodec, int capsToQuery) {
         if (this.encoder != null && !this.encoder.isNull()) {
             NV_ENC_CAPS_PARAM capsParam = new NV_ENC_CAPS_PARAM();
             capsParam.version(NV_ENC_CAPS_PARAM_VER);
-            capsParam.capsToQuery(capsToQuery.value);
+            capsParam.capsToQuery(capsToQuery);
 
             IntPointer value = new IntPointer();
             this.nvEncodeApiFunctionList.nvEncGetEncodeCaps().call(this.encoder, guidCodec, capsParam, value);
@@ -1215,7 +1207,7 @@ public abstract class NvEncoder implements Disposable {
      * @brief This function is used to submit the encode commands to the
      * NVENC hardware for ME only mode.
      */
-    protected _NVENCSTATUS doMotionEstimation(NV_ENC_INPUT_PTR inputBuffer, NV_ENC_INPUT_PTR inputBufferForReference, NV_ENC_OUTPUT_PTR outputBuffer) {
+    protected int doMotionEstimation(NV_ENC_INPUT_PTR inputBuffer, NV_ENC_INPUT_PTR inputBufferForReference, NV_ENC_OUTPUT_PTR outputBuffer) {
         NV_ENC_MEONLY_PARAMS meParams = new NV_ENC_MEONLY_PARAMS();
         meParams.version(NV_ENC_MEONLY_PARAMS_VER);
         meParams.inputBuffer(inputBuffer);
@@ -1225,9 +1217,7 @@ public abstract class NvEncoder implements Disposable {
         meParams.mvBuffer(outputBuffer);
         meParams.completionEvent(this.getCompletionEventPointer(this.toSend % this.encoderBuffer));
 
-        _NVENCSTATUS nvStatus = getNVENCSTATUSByValue(this.nvEncodeApiFunctionList.nvEncRunMotionEstimationOnly().call(this.encoder, meParams));
-
-        return nvStatus;
+        return this.nvEncodeApiFunctionList.nvEncRunMotionEstimationOnly().call(this.encoder, meParams);
     }
 
     /**

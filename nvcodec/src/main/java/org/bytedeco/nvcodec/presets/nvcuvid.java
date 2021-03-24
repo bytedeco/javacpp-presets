@@ -72,8 +72,7 @@ public class nvcuvid implements LoadEnabled, InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info().enumerate())
-               .put(new Info("cuviddec.h").linePatterns("#define cuvidMapVideoFrame.*", "#define cuvidUnmapVideoFrame.*").skip())
+        infoMap.put(new Info("cuviddec.h").linePatterns("#define cuvidMapVideoFrame.*", "#define cuvidUnmapVideoFrame.*").skip())
 
                .put(new Info("NV_ENC_DEPRECATED").cppText("#define NV_ENC_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))

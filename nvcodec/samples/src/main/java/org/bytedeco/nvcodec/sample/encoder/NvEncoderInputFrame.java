@@ -9,8 +9,8 @@ public class NvEncoderInputFrame {
     private int numChromaPlanes;
     private int pitch;
     private int chromaPitch;
-    private _NV_ENC_BUFFER_FORMAT bufferFormat;
-    private _NV_ENC_INPUT_RESOURCE_TYPE resourceType;
+    private int bufferFormat;
+    private int resourceType;
 
     public NvEncoderInputFrame() {
         this.chromaOffsets = new int[2];
@@ -56,19 +56,19 @@ public class NvEncoderInputFrame {
         this.chromaPitch = chromaPitch;
     }
 
-    public _NV_ENC_BUFFER_FORMAT getBufferFormat() {
+    public int getBufferFormat() {
         return bufferFormat;
     }
 
-    public void setBufferFormat(_NV_ENC_BUFFER_FORMAT bufferFormat) {
+    public void setBufferFormat(int bufferFormat) {
         this.bufferFormat = bufferFormat;
     }
 
-    public _NV_ENC_INPUT_RESOURCE_TYPE getResourceType() {
+    public int getResourceType() {
         return resourceType;
     }
 
-    public void setResourceType(_NV_ENC_INPUT_RESOURCE_TYPE resourceType) {
+    public void setResourceType(int resourceType) {
         this.resourceType = resourceType;
     }
 }
