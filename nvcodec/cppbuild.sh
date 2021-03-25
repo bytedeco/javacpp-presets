@@ -10,13 +10,13 @@ fi
 case $PLATFORM in
     linux-x86_64)
         if [[ ! -d "/usr/local/videocodecsdk/" ]]; then
-            echo "Please install Video Codec SDK under the default installation directory or in /usr/local/videocodecsdk/"
+            echo "Please install the Video Codec SDK in /usr/local/videocodecsdk/"
             exit 1
         fi
         ;;
     windows-x86_64)
         if [[ ! -d "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/" ]]; then
-            echo "Please install Video Codec SDK under the default installation directory"
+            echo "Please install the Video Codec SDK in C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/"
             exit 1
         fi
         ;;

@@ -64,10 +64,10 @@ public class nvcuvid extends org.bytedeco.nvcodec.presets.nvcuvid {
 // #endif
 
 // #if defined(__cplusplus)
-// Targeting ..\nvcuvid\CUvideodecoder.java
+// Targeting ../nvcuvid/CUvideodecoder.java
 
 
-// Targeting ..\nvcuvid\_CUcontextlock_st.java
+// Targeting ../nvcuvid/_CUcontextlock_st.java
 
 
 
@@ -196,25 +196,25 @@ public static final int
     // 3 to 7 enums are reserved for future use
     cuvidDecodeStatus_Error           = 8,   // Decode is completed with an error (error is not concealed)
     cuvidDecodeStatus_Error_Concealed = 9;   // Decode is completed with an error and error is concealed 
-// Targeting ..\nvcuvid\CUVIDDECODECAPS.java
+// Targeting ../nvcuvid/CUVIDDECODECAPS.java
 
 
-// Targeting ..\nvcuvid\CUVIDDECODECREATEINFO.java
+// Targeting ../nvcuvid/CUVIDDECODECREATEINFO.java
 
 
-// Targeting ..\nvcuvid\CUVIDH264DPBENTRY.java
+// Targeting ../nvcuvid/CUVIDH264DPBENTRY.java
 
 
-// Targeting ..\nvcuvid\CUVIDH264MVCEXT.java
+// Targeting ../nvcuvid/CUVIDH264MVCEXT.java
 
 
-// Targeting ..\nvcuvid\CUVIDH264SVCEXT.java
+// Targeting ../nvcuvid/CUVIDH264SVCEXT.java
 
 
-// Targeting ..\nvcuvid\CUVIDH264PICPARAMS.java
+// Targeting ../nvcuvid/CUVIDH264PICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDMPEG2PICPARAMS.java
+// Targeting ../nvcuvid/CUVIDMPEG2PICPARAMS.java
 
 
 
@@ -223,37 +223,37 @@ public static final int I_VOP = 0;
 public static final int P_VOP = 1;
 public static final int B_VOP = 2;
 public static final int S_VOP = 3;
-// Targeting ..\nvcuvid\CUVIDMPEG4PICPARAMS.java
+// Targeting ../nvcuvid/CUVIDMPEG4PICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDVC1PICPARAMS.java
+// Targeting ../nvcuvid/CUVIDVC1PICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDJPEGPICPARAMS.java
+// Targeting ../nvcuvid/CUVIDJPEGPICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDHEVCPICPARAMS.java
+// Targeting ../nvcuvid/CUVIDHEVCPICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDVP8PICPARAMS.java
+// Targeting ../nvcuvid/CUVIDVP8PICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDVP9PICPARAMS.java
+// Targeting ../nvcuvid/CUVIDVP9PICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDAV1PICPARAMS.java
+// Targeting ../nvcuvid/CUVIDAV1PICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDPICPARAMS.java
+// Targeting ../nvcuvid/CUVIDPICPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDPROCPARAMS.java
+// Targeting ../nvcuvid/CUVIDPROCPARAMS.java
 
 
-// Targeting ..\nvcuvid\CUVIDGETDECODESTATUS.java
+// Targeting ../nvcuvid/CUVIDGETDECODESTATUS.java
 
 
-// Targeting ..\nvcuvid\CUVIDRECONFIGUREDECODERINFO.java
+// Targeting ../nvcuvid/CUVIDRECONFIGUREDECODERINFO.java
 
  
 
@@ -412,7 +412,7 @@ public static native @Cast("CUresult") int cuvidCtxUnlock(_CUcontextlock_st lck,
 
 
 // #if defined(__cplusplus)
-// Targeting ..\nvcuvid\CCtxAutoLock.java
+// Targeting ../nvcuvid/CCtxAutoLock.java
 
 
 // #endif /* __cplusplus */
@@ -463,10 +463,10 @@ public static native @Cast("CUresult") int cuvidCtxUnlock(_CUcontextlock_st lck,
 // #include "cuviddec.h"
 
 // #if defined(__cplusplus)
-// Targeting ..\nvcuvid\CUvideosource.java
+// Targeting ../nvcuvid/CUvideosource.java
 
 
-// Targeting ..\nvcuvid\CUvideoparser.java
+// Targeting ../nvcuvid/CUvideoparser.java
 
 
 
@@ -504,19 +504,19 @@ public static final int
     cudaAudioCodec_LPCM = 4,
     /** AAC Audio                  */
     cudaAudioCodec_AAC = 5;
-// Targeting ..\nvcuvid\CUVIDEOFORMAT.java
+// Targeting ../nvcuvid/CUVIDEOFORMAT.java
 
 
-// Targeting ..\nvcuvid\CUVIDOPERATINGPOINTINFO.java
+// Targeting ../nvcuvid/CUVIDOPERATINGPOINTINFO.java
 
 
-// Targeting ..\nvcuvid\CUVIDAV1SEQHDR.java
+// Targeting ../nvcuvid/CUVIDAV1SEQHDR.java
 
 
-// Targeting ..\nvcuvid\CUVIDEOFORMATEX.java
+// Targeting ../nvcuvid/CUVIDEOFORMATEX.java
 
 
-// Targeting ..\nvcuvid\CUAUDIOFORMAT.java
+// Targeting ../nvcuvid/CUAUDIOFORMAT.java
 
 
 
@@ -540,13 +540,13 @@ public static final int
                                            display callback will be invoked with null value of CUVIDPARSERDISPINFO which
                                            should be interpreted as end of the stream.                                   */
     CUVID_PKT_NOTIFY_EOS    = 0x10;
-// Targeting ..\nvcuvid\CUVIDSOURCEDATAPACKET.java
+// Targeting ../nvcuvid/CUVIDSOURCEDATAPACKET.java
 
 
-// Targeting ..\nvcuvid\PFNVIDSOURCECALLBACK.java
+// Targeting ../nvcuvid/PFNVIDSOURCECALLBACK.java
 
 
-// Targeting ..\nvcuvid\CUVIDSOURCEPARAMS.java
+// Targeting ../nvcuvid/CUVIDSOURCEPARAMS.java
 
 
 
@@ -625,22 +625,22 @@ public static native @Cast("CUresult") int cuvidGetSourceVideoFormat(CUvideosour
 /** containers. It's recommended to clients to use their own or third party demuxer if audio support is needed.
 /**************************************************************************************************************************/
 public static native @Cast("CUresult") int cuvidGetSourceAudioFormat(CUvideosource obj, CUAUDIOFORMAT paudfmt, @Cast("unsigned int") int flags);
-// Targeting ..\nvcuvid\CUVIDPARSERDISPINFO.java
+// Targeting ../nvcuvid/CUVIDPARSERDISPINFO.java
 
 
-// Targeting ..\nvcuvid\PFNVIDSEQUENCECALLBACK.java
+// Targeting ../nvcuvid/PFNVIDSEQUENCECALLBACK.java
 
 
-// Targeting ..\nvcuvid\PFNVIDDECODECALLBACK.java
+// Targeting ../nvcuvid/PFNVIDDECODECALLBACK.java
 
 
-// Targeting ..\nvcuvid\PFNVIDDISPLAYCALLBACK.java
+// Targeting ../nvcuvid/PFNVIDDISPLAYCALLBACK.java
 
 
-// Targeting ..\nvcuvid\PFNVIDOPPOINTCALLBACK.java
+// Targeting ../nvcuvid/PFNVIDOPPOINTCALLBACK.java
 
 
-// Targeting ..\nvcuvid\CUVIDPARSERPARAMS.java
+// Targeting ../nvcuvid/CUVIDPARSERPARAMS.java
 
 
 

@@ -83,22 +83,22 @@ public class nvencodeapi extends org.bytedeco.nvcodec.presets.nvencodeapi {
 // #define NVENCAPI     __stdcall
 // #else
 // #define NVENCAPI
-// Targeting ..\nvencodeapi\GUID.java
+// Targeting ../nvencodeapi/GUID.java
 
 
-// Targeting ..\nvencodeapi\RECT.java
+// Targeting ../nvencodeapi/RECT.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_INPUT_PTR.java
+// Targeting ../nvencodeapi/NV_ENC_INPUT_PTR.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_OUTPUT_PTR.java
+// Targeting ../nvencodeapi/NV_ENC_OUTPUT_PTR.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_REGISTERED_PTR.java
+// Targeting ../nvencodeapi/NV_ENC_REGISTERED_PTR.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CUSTREAM_PTR.java
+// Targeting ../nvencodeapi/NV_ENC_CUSTREAM_PTR.java
 
 
 
@@ -1164,85 +1164,85 @@ public static final int
     NV_ENC_HEVC_CUSIZE_16x16      = 2,
     NV_ENC_HEVC_CUSIZE_32x32      = 3,
     NV_ENC_HEVC_CUSIZE_64x64      = 4;
-// Targeting ..\nvencodeapi\NV_ENC_CAPS_PARAM.java
+// Targeting ../nvencodeapi/NV_ENC_CAPS_PARAM.java
 
 
 
 /** NV_ENC_CAPS_PARAM struct version. */
 public static native @MemberGetter int NV_ENC_CAPS_PARAM_VER();
 public static final int NV_ENC_CAPS_PARAM_VER = NV_ENC_CAPS_PARAM_VER();
-// Targeting ..\nvencodeapi\NV_ENC_ENCODE_OUT_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_ENCODE_OUT_PARAMS.java
 
 
 
 /** NV_ENC_ENCODE_OUT_PARAMS struct version. */
 public static native @MemberGetter int NV_ENC_ENCODE_OUT_PARAMS_VER();
 public static final int NV_ENC_ENCODE_OUT_PARAMS_VER = NV_ENC_ENCODE_OUT_PARAMS_VER();
-// Targeting ..\nvencodeapi\NV_ENC_CREATE_INPUT_BUFFER.java
+// Targeting ../nvencodeapi/NV_ENC_CREATE_INPUT_BUFFER.java
 
 
 
 /** NV_ENC_CREATE_INPUT_BUFFER struct version. */
 public static native @MemberGetter int NV_ENC_CREATE_INPUT_BUFFER_VER();
 public static final int NV_ENC_CREATE_INPUT_BUFFER_VER = NV_ENC_CREATE_INPUT_BUFFER_VER();
-// Targeting ..\nvencodeapi\NV_ENC_CREATE_BITSTREAM_BUFFER.java
+// Targeting ../nvencodeapi/NV_ENC_CREATE_BITSTREAM_BUFFER.java
 
 
 
 /** NV_ENC_CREATE_BITSTREAM_BUFFER struct version. */
 public static native @MemberGetter int NV_ENC_CREATE_BITSTREAM_BUFFER_VER();
 public static final int NV_ENC_CREATE_BITSTREAM_BUFFER_VER = NV_ENC_CREATE_BITSTREAM_BUFFER_VER();
-// Targeting ..\nvencodeapi\NV_ENC_MVECTOR.java
+// Targeting ../nvencodeapi/NV_ENC_MVECTOR.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_H264_MV_DATA.java
+// Targeting ../nvencodeapi/NV_ENC_H264_MV_DATA.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_HEVC_MV_DATA.java
+// Targeting ../nvencodeapi/NV_ENC_HEVC_MV_DATA.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CREATE_MV_BUFFER.java
+// Targeting ../nvencodeapi/NV_ENC_CREATE_MV_BUFFER.java
 
 
 
 /** NV_ENC_CREATE_MV_BUFFER struct version*/
 public static native @MemberGetter int NV_ENC_CREATE_MV_BUFFER_VER();
 public static final int NV_ENC_CREATE_MV_BUFFER_VER = NV_ENC_CREATE_MV_BUFFER_VER();
-// Targeting ..\nvencodeapi\NV_ENC_QP.java
+// Targeting ../nvencodeapi/NV_ENC_QP.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_RC_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_RC_PARAMS.java
 
 
 
 /** macro for constructing the version field of ::_NV_ENC_RC_PARAMS */
 public static native @MemberGetter int NV_ENC_RC_PARAMS_VER();
 public static final int NV_ENC_RC_PARAMS_VER = NV_ENC_RC_PARAMS_VER();
-// Targeting ..\nvencodeapi\NV_ENC_CONFIG_H264_VUI_PARAMETERS.java
+// Targeting ../nvencodeapi/NV_ENC_CONFIG_H264_VUI_PARAMETERS.java
 
 
-// Targeting ..\nvencodeapi\NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE.java
+// Targeting ../nvencodeapi/NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE.java
 
 
-// Targeting ..\nvencodeapi\NVENC_EXTERNAL_ME_HINT.java
+// Targeting ../nvencodeapi/NVENC_EXTERNAL_ME_HINT.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CONFIG_H264.java
+// Targeting ../nvencodeapi/NV_ENC_CONFIG_H264.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CONFIG_HEVC.java
+// Targeting ../nvencodeapi/NV_ENC_CONFIG_HEVC.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CONFIG_H264_MEONLY.java
+// Targeting ../nvencodeapi/NV_ENC_CONFIG_H264_MEONLY.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CONFIG_HEVC_MEONLY.java
+// Targeting ../nvencodeapi/NV_ENC_CONFIG_HEVC_MEONLY.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CODEC_CONFIG.java
+// Targeting ../nvencodeapi/NV_ENC_CODEC_CONFIG.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CONFIG.java
+// Targeting ../nvencodeapi/NV_ENC_CONFIG.java
 
 
 
@@ -1267,118 +1267,118 @@ public static final int
     NV_ENC_TUNING_INFO_LOSSLESS          = 4,
     /** Count number of tuningInfos. Invalid value. */
     NV_ENC_TUNING_INFO_COUNT = 5;
-// Targeting ..\nvencodeapi\NV_ENC_INITIALIZE_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_INITIALIZE_PARAMS.java
 
 
 
 /** macro for constructing the version field of ::_NV_ENC_INITIALIZE_PARAMS */
 public static native @MemberGetter int NV_ENC_INITIALIZE_PARAMS_VER();
 public static final int NV_ENC_INITIALIZE_PARAMS_VER = NV_ENC_INITIALIZE_PARAMS_VER();
-// Targeting ..\nvencodeapi\NV_ENC_RECONFIGURE_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_RECONFIGURE_PARAMS.java
 
 
 
 /** macro for constructing the version field of ::_NV_ENC_RECONFIGURE_PARAMS */
 public static native @MemberGetter int NV_ENC_RECONFIGURE_PARAMS_VER();
 public static final int NV_ENC_RECONFIGURE_PARAMS_VER = NV_ENC_RECONFIGURE_PARAMS_VER();
-// Targeting ..\nvencodeapi\NV_ENC_PRESET_CONFIG.java
+// Targeting ../nvencodeapi/NV_ENC_PRESET_CONFIG.java
 
 
 
 /** macro for constructing the version field of ::_NV_ENC_PRESET_CONFIG */
 public static native @MemberGetter int NV_ENC_PRESET_CONFIG_VER();
 public static final int NV_ENC_PRESET_CONFIG_VER = NV_ENC_PRESET_CONFIG_VER();
-// Targeting ..\nvencodeapi\NV_ENC_PIC_PARAMS_MVC.java
+// Targeting ../nvencodeapi/NV_ENC_PIC_PARAMS_MVC.java
 
 
 
 /** macro for constructing the version field of ::_NV_ENC_PIC_PARAMS_MVC */
 public static native @MemberGetter int NV_ENC_PIC_PARAMS_MVC_VER();
 public static final int NV_ENC_PIC_PARAMS_MVC_VER = NV_ENC_PIC_PARAMS_MVC_VER();
-// Targeting ..\nvencodeapi\NV_ENC_PIC_PARAMS_H264_EXT.java
+// Targeting ../nvencodeapi/NV_ENC_PIC_PARAMS_H264_EXT.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_SEI_PAYLOAD.java
+// Targeting ../nvencodeapi/NV_ENC_SEI_PAYLOAD.java
 
 
 
 // #define NV_ENC_H264_SEI_PAYLOAD NV_ENC_SEI_PAYLOAD
-// Targeting ..\nvencodeapi\NV_ENC_PIC_PARAMS_H264.java
+// Targeting ../nvencodeapi/NV_ENC_PIC_PARAMS_H264.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_PIC_PARAMS_HEVC.java
+// Targeting ../nvencodeapi/NV_ENC_PIC_PARAMS_HEVC.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_CODEC_PIC_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_CODEC_PIC_PARAMS.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_PIC_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_PIC_PARAMS.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_PIC_PARAMS */
 public static native @MemberGetter int NV_ENC_PIC_PARAMS_VER();
 public static final int NV_ENC_PIC_PARAMS_VER = NV_ENC_PIC_PARAMS_VER();
-// Targeting ..\nvencodeapi\NV_ENC_MEONLY_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_MEONLY_PARAMS.java
 
 
 
 /** NV_ENC_MEONLY_PARAMS struct version*/
 public static native @MemberGetter int NV_ENC_MEONLY_PARAMS_VER();
 public static final int NV_ENC_MEONLY_PARAMS_VER = NV_ENC_MEONLY_PARAMS_VER();
-// Targeting ..\nvencodeapi\NV_ENC_LOCK_BITSTREAM.java
+// Targeting ../nvencodeapi/NV_ENC_LOCK_BITSTREAM.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_LOCK_BITSTREAM */
 public static native @MemberGetter int NV_ENC_LOCK_BITSTREAM_VER();
 public static final int NV_ENC_LOCK_BITSTREAM_VER = NV_ENC_LOCK_BITSTREAM_VER();
-// Targeting ..\nvencodeapi\NV_ENC_LOCK_INPUT_BUFFER.java
+// Targeting ../nvencodeapi/NV_ENC_LOCK_INPUT_BUFFER.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_LOCK_INPUT_BUFFER */
 public static native @MemberGetter int NV_ENC_LOCK_INPUT_BUFFER_VER();
 public static final int NV_ENC_LOCK_INPUT_BUFFER_VER = NV_ENC_LOCK_INPUT_BUFFER_VER();
-// Targeting ..\nvencodeapi\NV_ENC_MAP_INPUT_RESOURCE.java
+// Targeting ../nvencodeapi/NV_ENC_MAP_INPUT_RESOURCE.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_MAP_INPUT_RESOURCE */
 public static native @MemberGetter int NV_ENC_MAP_INPUT_RESOURCE_VER();
 public static final int NV_ENC_MAP_INPUT_RESOURCE_VER = NV_ENC_MAP_INPUT_RESOURCE_VER();
-// Targeting ..\nvencodeapi\NV_ENC_INPUT_RESOURCE_OPENGL_TEX.java
+// Targeting ../nvencodeapi/NV_ENC_INPUT_RESOURCE_OPENGL_TEX.java
 
 
-// Targeting ..\nvencodeapi\NV_ENC_REGISTER_RESOURCE.java
+// Targeting ../nvencodeapi/NV_ENC_REGISTER_RESOURCE.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_REGISTER_RESOURCE */
 public static native @MemberGetter int NV_ENC_REGISTER_RESOURCE_VER();
 public static final int NV_ENC_REGISTER_RESOURCE_VER = NV_ENC_REGISTER_RESOURCE_VER();
-// Targeting ..\nvencodeapi\NV_ENC_STAT.java
+// Targeting ../nvencodeapi/NV_ENC_STAT.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_STAT */
 public static native @MemberGetter int NV_ENC_STAT_VER();
 public static final int NV_ENC_STAT_VER = NV_ENC_STAT_VER();
-// Targeting ..\nvencodeapi\NV_ENC_SEQUENCE_PARAM_PAYLOAD.java
+// Targeting ../nvencodeapi/NV_ENC_SEQUENCE_PARAM_PAYLOAD.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_SEQUENCE_PARAM_PAYLOAD */
 public static native @MemberGetter int NV_ENC_SEQUENCE_PARAM_PAYLOAD_VER();
 public static final int NV_ENC_SEQUENCE_PARAM_PAYLOAD_VER = NV_ENC_SEQUENCE_PARAM_PAYLOAD_VER();
-// Targeting ..\nvencodeapi\NV_ENC_EVENT_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_EVENT_PARAMS.java
 
 
 
 /** Macro for constructing the version field of ::_NV_ENC_EVENT_PARAMS */
 public static native @MemberGetter int NV_ENC_EVENT_PARAMS_VER();
 public static final int NV_ENC_EVENT_PARAMS_VER = NV_ENC_EVENT_PARAMS_VER();
-// Targeting ..\nvencodeapi\NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS.java
+// Targeting ../nvencodeapi/NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS.java
 
 
 /** Macro for constructing the version field of ::_NV_ENC_OPEN_ENCODE_SESSIONEX_PARAMS */
@@ -2904,127 +2904,127 @@ public static native @Cast("NVENCSTATUS") int NvEncodeAPIGetMaxSupportedVersion(
  *   Pointer to buffer containing the details of the last error encountered by the API.
  */
 
-// Targeting ..\nvencodeapi\PNVENCOPENENCODESESSION.java
+// Targeting ../nvencodeapi/PNVENCOPENENCODESESSION.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEGUIDCOUNT.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEGUIDCOUNT.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEGUIDS.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEGUIDS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEPROFILEGUIDCOUNT.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEPROFILEGUIDCOUNT.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEPROFILEGUIDS.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEPROFILEGUIDS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETINPUTFORMATCOUNT.java
+// Targeting ../nvencodeapi/PNVENCGETINPUTFORMATCOUNT.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETINPUTFORMATS.java
+// Targeting ../nvencodeapi/PNVENCGETINPUTFORMATS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODECAPS.java
+// Targeting ../nvencodeapi/PNVENCGETENCODECAPS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEPRESETCOUNT.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEPRESETCOUNT.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEPRESETGUIDS.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEPRESETGUIDS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEPRESETCONFIG.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEPRESETCONFIG.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODEPRESETCONFIGEX.java
+// Targeting ../nvencodeapi/PNVENCGETENCODEPRESETCONFIGEX.java
 
 
-// Targeting ..\nvencodeapi\PNVENCINITIALIZEENCODER.java
+// Targeting ../nvencodeapi/PNVENCINITIALIZEENCODER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCCREATEINPUTBUFFER.java
+// Targeting ../nvencodeapi/PNVENCCREATEINPUTBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCDESTROYINPUTBUFFER.java
+// Targeting ../nvencodeapi/PNVENCDESTROYINPUTBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCCREATEBITSTREAMBUFFER.java
+// Targeting ../nvencodeapi/PNVENCCREATEBITSTREAMBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCDESTROYBITSTREAMBUFFER.java
+// Targeting ../nvencodeapi/PNVENCDESTROYBITSTREAMBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCENCODEPICTURE.java
+// Targeting ../nvencodeapi/PNVENCENCODEPICTURE.java
 
 
-// Targeting ..\nvencodeapi\PNVENCLOCKBITSTREAM.java
+// Targeting ../nvencodeapi/PNVENCLOCKBITSTREAM.java
 
 
-// Targeting ..\nvencodeapi\PNVENCUNLOCKBITSTREAM.java
+// Targeting ../nvencodeapi/PNVENCUNLOCKBITSTREAM.java
 
 
-// Targeting ..\nvencodeapi\PNVENCLOCKINPUTBUFFER.java
+// Targeting ../nvencodeapi/PNVENCLOCKINPUTBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCUNLOCKINPUTBUFFER.java
+// Targeting ../nvencodeapi/PNVENCUNLOCKINPUTBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETENCODESTATS.java
+// Targeting ../nvencodeapi/PNVENCGETENCODESTATS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETSEQUENCEPARAMS.java
+// Targeting ../nvencodeapi/PNVENCGETSEQUENCEPARAMS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCREGISTERASYNCEVENT.java
+// Targeting ../nvencodeapi/PNVENCREGISTERASYNCEVENT.java
 
 
-// Targeting ..\nvencodeapi\PNVENCUNREGISTERASYNCEVENT.java
+// Targeting ../nvencodeapi/PNVENCUNREGISTERASYNCEVENT.java
 
 
-// Targeting ..\nvencodeapi\PNVENCMAPINPUTRESOURCE.java
+// Targeting ../nvencodeapi/PNVENCMAPINPUTRESOURCE.java
 
 
-// Targeting ..\nvencodeapi\PNVENCUNMAPINPUTRESOURCE.java
+// Targeting ../nvencodeapi/PNVENCUNMAPINPUTRESOURCE.java
 
 
-// Targeting ..\nvencodeapi\PNVENCDESTROYENCODER.java
+// Targeting ../nvencodeapi/PNVENCDESTROYENCODER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCINVALIDATEREFFRAMES.java
+// Targeting ../nvencodeapi/PNVENCINVALIDATEREFFRAMES.java
 
 
-// Targeting ..\nvencodeapi\PNVENCOPENENCODESESSIONEX.java
+// Targeting ../nvencodeapi/PNVENCOPENENCODESESSIONEX.java
 
 
-// Targeting ..\nvencodeapi\PNVENCREGISTERRESOURCE.java
+// Targeting ../nvencodeapi/PNVENCREGISTERRESOURCE.java
 
 
-// Targeting ..\nvencodeapi\PNVENCUNREGISTERRESOURCE.java
+// Targeting ../nvencodeapi/PNVENCUNREGISTERRESOURCE.java
 
 
-// Targeting ..\nvencodeapi\PNVENCRECONFIGUREENCODER.java
+// Targeting ../nvencodeapi/PNVENCRECONFIGUREENCODER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCCREATEMVBUFFER.java
+// Targeting ../nvencodeapi/PNVENCCREATEMVBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCDESTROYMVBUFFER.java
+// Targeting ../nvencodeapi/PNVENCDESTROYMVBUFFER.java
 
 
-// Targeting ..\nvencodeapi\PNVENCRUNMOTIONESTIMATIONONLY.java
+// Targeting ../nvencodeapi/PNVENCRUNMOTIONESTIMATIONONLY.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETLASTERROR.java
+// Targeting ../nvencodeapi/PNVENCGETLASTERROR.java
 
 
-// Targeting ..\nvencodeapi\PNVENCSETIOCUDASTREAMS.java
+// Targeting ../nvencodeapi/PNVENCSETIOCUDASTREAMS.java
 
 
-// Targeting ..\nvencodeapi\PNVENCGETSEQUENCEPARAMEX.java
+// Targeting ../nvencodeapi/PNVENCGETSEQUENCEPARAMEX.java
 
 
-// Targeting ..\nvencodeapi\NV_ENCODE_API_FUNCTION_LIST.java
+// Targeting ../nvencodeapi/NV_ENCODE_API_FUNCTION_LIST.java
 
 
 

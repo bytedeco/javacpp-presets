@@ -1,14 +1,16 @@
-JavaCPP Presets for NVCodec
-============================
+JavaCPP Presets for NVIDIA Video Codec SDK
+==========================================
 
-[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/nvcodec/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/nvcodec) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/nvcodec.svg)](http://bytedeco.org/builds/)
+[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/nvcodec/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/nvcodec) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/nvcodec.svg)](http://bytedeco.org/builds/)  
+<sup>Build status for all platforms:</sup> [![nvcodec](https://github.com/bytedeco/javacpp-presets/workflows/nvcodec/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Anvcodec)  <sup>Commercial support:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
+
 
 License Agreements
 ------------------
 By downloading these archives, you agree to the terms of the license agreements for NVIDIA software included in the archives.
 
-### NVCodec
-To view the license for NVCodec included in these archives, click [here](https://docs.nvidia.com/video-technologies/video-codec-sdk/license/)
+### NVIDIA Video Codec SDK
+To view the license for NVIDIA Video Codec SDK included in these archives, click [here](https://docs.nvidia.com/video-technologies/video-codec-sdk/license/)
 
 
 Introduction
@@ -29,16 +31,15 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-You can find encoder and decoder samples in the `samples` directory. this sample ported to Java from the `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` C samples included in `NVIDIA Video Codec SDK` available at:
+Here is a simple example ported to Java from C code based on `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` included in `Video_Codec_SDK_11.0.10.zip` available at:
 
  * https://developer.nvidia.com/nvidia-video-codec-sdk/download
-
-Or, if you want a simple test, use the sample code below.
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SampleEncodeDecode.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
+You can find more encoder and decoder samples in the [`samples`](samples) subdirectory.
 
 ### The `pom.xml` build file
 ```xml
@@ -46,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.nvcodec</groupId>
     <artifactId>sampleencodedecode</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.6-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SampleEncodeDecode</exec.mainClass>
     </properties>
@@ -54,14 +55,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>11.0.10-1.5.6</version>
+            <version>11.0.10-1.5.6-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.2-8.1-1.5.6</version>
+            <version>11.2-8.1-1.5.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
