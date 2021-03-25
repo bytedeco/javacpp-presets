@@ -3,38 +3,38 @@ name: Redeploy on Linux
 runs:
   using: composite
   steps:
-    - name: Install environment
-      shell: bash
-      run: |
-        cd $HOME
-
-        echo ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL
-        echo ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN
-        echo ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL
-        curl -LO https://nodejs.org/dist/v10.23.0/node-v10.23.0-linux-x64.tar.xz
-        tar --totals -xf node-v10.23.0-linux-x64.tar.xz
-        export PATH=$HOME/node-v10.23.0-linux-x64/bin:$PATH
-        echo "PATH=$PATH" >> $GITHUB_ENV
-        npm install @actions/cache
-
-        CACHE_PATH="$HOME/.m2/repository"
-        CACHE_KEY="${{ runner.os }}"
-
-        echo "cache = require('@actions/cache');"          > cache.ts
-        echo "paths = ['$CACHE_PATH'];"                   >> cache.ts
-        echo "key = '$CACHE_KEY';"                        >> cache.ts
-        echo "switch (process.argv[2]) {"                 >> cache.ts
-        echo "case 'restore':"                            >> cache.ts
-        echo "    cache.restoreCache(paths, key); break;" >> cache.ts
-        echo "case 'save':"                               >> cache.ts
-        echo "    cache.saveCache(paths, key); break;"    >> cache.ts
-        echo "}"                                          >> cache.ts
-
-    - name: Restore cache
-      shell: bash
-      run: |
-        cd $HOME
-        node cache.ts restore
+#    - name: Install environment
+#      shell: bash
+#      run: |
+#        cd $HOME
+#
+#        echo ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL
+#        echo ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN
+#        echo ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL
+#        curl -LO https://nodejs.org/dist/v10.23.0/node-v10.23.0-linux-x64.tar.xz
+#        tar --totals -xf node-v10.23.0-linux-x64.tar.xz
+#        export PATH=$HOME/node-v10.23.0-linux-x64/bin:$PATH
+#        echo "PATH=$PATH" >> $GITHUB_ENV
+#        npm install @actions/cache
+#
+#        CACHE_PATH="$HOME/.m2/repository"
+#        CACHE_KEY="${{ runner.os }}"
+#
+#        echo "cache = require('@actions/cache');"          > cache.ts
+#        echo "paths = ['$CACHE_PATH'];"                   >> cache.ts
+#        echo "key = '$CACHE_KEY';"                        >> cache.ts
+#        echo "switch (process.argv[2]) {"                 >> cache.ts
+#        echo "case 'restore':"                            >> cache.ts
+#        echo "    cache.restoreCache(paths, key); break;" >> cache.ts
+#        echo "case 'save':"                               >> cache.ts
+#        echo "    cache.saveCache(paths, key); break;"    >> cache.ts
+#        echo "}"                                          >> cache.ts
+#
+#    - name: Restore cache
+#      shell: bash
+#      run: |
+#        cd $HOME
+#        node cache.ts restore
 
     - name: Downloading and uploading artifacts
       shell: bash
@@ -108,10 +108,10 @@ runs:
         done
         df -h
 
-    - name: Save cache
-      shell: bash
-      run: |
-        cd $HOME
-        # Prevent all this from getting cached by the CI server
-        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
-        node cache.ts save
+#    - name: Save cache
+#      shell: bash
+#      run: |
+#        cd $HOME
+#        # Prevent all this from getting cached by the CI server
+#        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
+#        node cache.ts save
