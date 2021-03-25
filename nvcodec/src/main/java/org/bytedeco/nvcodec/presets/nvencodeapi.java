@@ -32,7 +32,7 @@ import org.bytedeco.nvcodec.presets.*;
 
 /**
  *
- * @author StaticDefault
+ * @author Park JeongHwan
  */
 @Properties(
     inherit = nvcuvid.class,

@@ -37,7 +37,7 @@ import org.bytedeco.cuda.presets.cudart;
 
 /**
  *
- * @author StaticDefault
+ * @author Park JeongHwan
  */
 @Properties(
     inherit = cudart.class,
