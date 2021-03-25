@@ -33521,9 +33521,7 @@ public static native @Cast("CUresult") int cuGraphicsGLRegisterImage(@ByPtrPtr C
  * ::cuGLSetBufferObjectMapFlags,
  * ::cudaWGLGetDevice
  */
-public static native @Cast("CUresult") int cuWGLGetDevice(@Cast("CUdevice*") IntPointer pDevice, HGPUNV hGpu);
-public static native @Cast("CUresult") int cuWGLGetDevice(@Cast("CUdevice*") IntBuffer pDevice, HGPUNV hGpu);
-public static native @Cast("CUresult") int cuWGLGetDevice(@Cast("CUdevice*") int[] pDevice, HGPUNV hGpu);
+
 // #endif /* _WIN32 */
 
 /**
@@ -34164,9 +34162,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsGLRegisterBuffer(@ByPt
  * ::WGL_NV_gpu_affinity,
  * ::cuWGLGetDevice
  */
-public static native @Cast("cudaError_t") int cudaWGLGetDevice(IntPointer device, HGPUNV hGpu);
-public static native @Cast("cudaError_t") int cudaWGLGetDevice(IntBuffer device, HGPUNV hGpu);
-public static native @Cast("cudaError_t") int cudaWGLGetDevice(int[] device, HGPUNV hGpu);
+
 // #endif
 
 /** \} */ /* END CUDART_OPENGL */

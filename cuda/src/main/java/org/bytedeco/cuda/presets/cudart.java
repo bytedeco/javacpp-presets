@@ -61,6 +61,9 @@ public class cudart implements InfoMapper {
                              "CUSPARSE_DEPRECATED_HINT").cppTypes().annotations().cppText(""))
 
                .put(new Info("cudaGL.h").linePatterns("#define cuGLCtxCreate.*", "#define cuGLGetDevices.*").skip())
+               .put(new Info("cudaWGLGetDevice").skip())
+               .put(new Info("cuWGLGetDevice").skip())
+
                .put(new Info("cuda_runtime_api.h").linePatterns("#define cudaSignalExternalSemaphoresAsync.*", "#define cudaWaitExternalSemaphoresAsync.*").skip())
                .put(new Info("cuda.h").linePatterns("#define cuDeviceTotalMem.*", "#define cuGraphInstantiate.*").skip())
 
