@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
                "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp14", link = {"LLVM-11", "LTO@.11", "Remarks@.11"}, resource = {"include", "lib", "libexec", "share"}),
+    compiler = "cpp14", link = {"LLVM-12", "LTO@.12", "Remarks@.12"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
 public class LLVM implements InfoMapper {
@@ -171,7 +171,6 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMErrorTypeId").annotations("@Const").valueTypes("LLVMErrorTypeId"))
                .put(new Info("defined(_MSC_VER) && !defined(inline)").define(false))
                .put(new Info("GPU_CODEGEN").define(false))
-               .put(new Info("LLVMDumpType", "LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMCreateOprofileJITEventListener",
-                             "llvm_optimize_modules", "llvm_destroy_optimizer", "llvm_read_object_file", "llvm_create_optimizer", "LLVMRemarkVersion").skip());
+               .put(new Info("LLVMDumpType", "LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMCreateOprofileJITEventListener", "LLVMRemarkVersion").skip());
     }
 }

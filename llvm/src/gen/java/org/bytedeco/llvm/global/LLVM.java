@@ -1533,7 +1533,7 @@ public static native LLVMContextRef LLVMGetTypeContext(LLVMTypeRef Ty);
  *
  * @see llvm::Type::dump()
  */
-
+public static native void LLVMDumpType(LLVMTypeRef Val);
 
 /**
  * Return a string representation of the type. Use
@@ -2696,14 +2696,22 @@ public static native LLVMValueRef LLVMConstGEP(LLVMValueRef ConstantVal,
                           @ByPtrPtr LLVMValueRef ConstantIndices, @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstGEP(LLVMValueRef ConstantVal,
                           @Cast("LLVMValueRef*") PointerPointer ConstantIndices, @Cast("unsigned") int NumIndices);
-
+public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                           @ByPtrPtr LLVMValueRef ConstantIndices, @Cast("unsigned") int NumIndices);
+public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                           @Cast("LLVMValueRef*") PointerPointer ConstantIndices, @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstInBoundsGEP(LLVMValueRef ConstantVal,
                                   @ByPtrPtr LLVMValueRef ConstantIndices,
                                   @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstInBoundsGEP(LLVMValueRef ConstantVal,
                                   @Cast("LLVMValueRef*") PointerPointer ConstantIndices,
                                   @Cast("unsigned") int NumIndices);
-
+public static native LLVMValueRef LLVMConstInBoundsGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                                   @ByPtrPtr LLVMValueRef ConstantIndices,
+                                   @Cast("unsigned") int NumIndices);
+public static native LLVMValueRef LLVMConstInBoundsGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                                   @Cast("LLVMValueRef*") PointerPointer ConstantIndices,
+                                   @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstTrunc(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
 public static native LLVMValueRef LLVMConstSExt(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
 public static native LLVMValueRef LLVMConstZExt(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
@@ -10095,7 +10103,7 @@ public static native void LLVMRemarkParserDispose(LLVMRemarkParserRef Parser);
  *
  * @since REMARKS_API_VERSION=0
  */
-
+public static native @Cast("uint32_t") int LLVMRemarkVersion();
 
 /**
  * \} // endgoup LLVMCREMARKS
