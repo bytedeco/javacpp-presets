@@ -38,6 +38,7 @@ JavaCPP Presets
 [![caffe](https://github.com/bytedeco/javacpp-presets/workflows/caffe/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acaffe)
 [![openpose](https://github.com/bytedeco/javacpp-presets/workflows/openpose/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopenpose)
 [![cuda](https://github.com/bytedeco/javacpp-presets/workflows/cuda/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acuda)
+[![nvcodec](https://github.com/bytedeco/javacpp-presets/workflows/nvcodec/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Anvcodec)
 [![opencl](https://github.com/bytedeco/javacpp-presets/workflows/opencl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencl)
 [![mxnet](https://github.com/bytedeco/javacpp-presets/workflows/mxnet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amxnet)
 [![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)
@@ -200,6 +201,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 11.2.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.1.x  https://developer.nvidia.com/cudnn
    * NCCL 2.8.x  https://developer.nvidia.com/nccl
+ * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow

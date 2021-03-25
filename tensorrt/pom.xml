@@ -43,6 +43,9 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <encoding>ISO-8859-1</encoding>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -121,6 +124,9 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <encoding>ISO-8859-1</encoding>
+        </configuration>
       </plugin>
     </plugins>
   </build>
