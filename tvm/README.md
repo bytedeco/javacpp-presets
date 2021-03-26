@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tvm</groupId>
     <artifactId>howtodeploy</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>HowtoDeploy</exec.mainClass>
     </properties>
@@ -48,28 +48,28 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tvm-platform</artifactId>
-            <version>0.7.0-1.5.5-SNAPSHOT</version>
+            <version>0.7.0-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tvm-platform-gpu</artifactId>
-            <version>0.7.0-1.5.5-SNAPSHOT</version>
+            <version>0.7.0-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.2-8.0-1.5.5-SNAPSHOT</version>
+            <version>11.2-8.1-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.1-1.5.5-SNAPSHOT</version>
+            <version>2021.1-1.5.5</version>
         </dependency>
 
     </dependencies>

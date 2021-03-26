@@ -12,11 +12,11 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=11.0.1
+LLVM_VERSION=11.1.0
 OPENSSL_VERSION=1.1.1i
 ZLIB_VERSION=1.2.11
-PROTO_VERSION=3.7.1
-ARROW_VERSION=2.0.0
+PROTO_VERSION=3.13.0
+ARROW_VERSION=3.0.0
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang-$LLVM_VERSION.src.tar.xz clang-$LLVM_VERSION.src.tar.xz
 download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
@@ -183,7 +183,6 @@ case $PLATFORM in
         ninja install
         cd ..
         sedinplace 's/PROTOBUF_USE_DLLS/DISABLE_PROTOBUF_USE_DLLS/g' include/google/protobuf/*.h include/google/protobuf/*.inc include/google/protobuf/stubs/*
-        sedinplace 's/bin\/grpc_cpp_plugin/bin\/grpc_cpp_plugin.exe/g' apache-arrow-$ARROW_VERSION/cpp/cmake_modules/ThirdpartyToolchain.cmake
         sedinplace "s:Ws2_32.lib:../../../lib/zlib Ws2_32.lib:g" apache-arrow-$ARROW_VERSION/cpp/src/arrow/flight/CMakeLists.txt
         "$CMAKE" -G "Ninja" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" apache-arrow-$ARROW_VERSION/cpp
         ninja -j $MAKEJ
@@ -212,7 +211,6 @@ case $PLATFORM in
         ninja install
         cd ..
         sedinplace 's/PROTOBUF_USE_DLLS/DISABLE_PROTOBUF_USE_DLLS/g' include/google/protobuf/*.h include/google/protobuf/*.inc include/google/protobuf/stubs/*
-        sedinplace 's/bin\/grpc_cpp_plugin/bin\/grpc_cpp_plugin.exe/g' apache-arrow-$ARROW_VERSION/cpp/cmake_modules/ThirdpartyToolchain.cmake
         sedinplace "s:Ws2_32.lib:../../../lib/zlib Ws2_32.lib:g" apache-arrow-$ARROW_VERSION/cpp/src/arrow/flight/CMakeLists.txt
         "$CMAKE" -G "Ninja" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" -DARROW_PROTOBUF_USE_SHARED=OFF -DProtobuf_SOURCE=SYSTEM -DZLIB_SOURCE=SYSTEM $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" apache-arrow-$ARROW_VERSION/cpp
         ninja -j $MAKEJ

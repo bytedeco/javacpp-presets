@@ -50,7 +50,7 @@ import org.bytedeco.mkl.presets.*;
             value = {"linux", "macosx", "windows"},
             compiler = "cpp14",
             define = {"GENERIC_EXCEPTION_CLASS std::exception", "GENERIC_EXCEPTION_TOSTRING what()"},
-            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>"},
+            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>"},
             include = {
                 "dlpack/dlpack.h",
                 "dmlc/base.h",
@@ -83,7 +83,7 @@ import org.bytedeco.mkl.presets.*;
         ),
         @Platform(
             value = "windows",
-            preload = {"tvm_runtime:python/tvm/tvm.dll", "tvm_runtime:tvm_runtime.dll"}
+            preload = {"tvm_runtime:python/tvm/tvm.dll#tvm_runtime.dll", "tvm_runtime:tvm_runtime.dll"}
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},

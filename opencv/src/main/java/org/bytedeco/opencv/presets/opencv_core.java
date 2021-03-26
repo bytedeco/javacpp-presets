@@ -234,6 +234,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("std::vector<cv::Scalar>").pointerTypes("ScalarVector").define())
                .put(new Info("std::vector<cv::KeyPoint>").pointerTypes("KeyPointVector").define())
                .put(new Info("std::vector<cv::DMatch>").pointerTypes("DMatchVector").define())
+               .put(new Info("std::vector<cv::Range>").pointerTypes("RangeVector").define())
                .put(new Info("std::vector<std::vector<cv::Point> >").pointerTypes("PointVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point2f> >").pointerTypes("Point2fVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point2d> >").pointerTypes("Point2dVectorVector").define())
@@ -280,31 +281,56 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                        "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.pointer = data; }\n"
                      + "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
                      + "private Pointer pointer; // a reference to prevent deallocation\n"
+                     + "/** Calls {@link #Mat(int, int, int, Pointer, long) Mat(rows, cols, type, data, AUTO_STEP)} as with {@link #Mat(int, int, int, Pointer, boolean) Mat(rows, cols, type, data, false)}. */\n"
                      + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"
+
                      + "public Mat(CvArr arr) { super(cvarrToMat(arr)); this.pointer = arr; }\n"
-                     + "public Mat(Point points) { this(1, Math.max(1, points.limit() - points.position()), CV_32SC2, points); this.pointer = points; }\n"
-                     + "public Mat(Point2f points) { this(1, Math.max(1, points.limit() - points.position()), CV_32FC2, points); this.pointer = points; }\n"
-                     + "public Mat(Point2d points) { this(1, Math.max(1, points.limit() - points.position()), CV_64FC2, points); this.pointer = points; }\n"
-                     + "public Mat(Point3i points) { this(1, Math.max(1, points.limit() - points.position()), CV_32SC3, points); this.pointer = points; }\n"
-                     + "public Mat(Point3f points) { this(1, Math.max(1, points.limit() - points.position()), CV_32FC3, points); this.pointer = points; }\n"
-                     + "public Mat(Point3d points) { this(1, Math.max(1, points.limit() - points.position()), CV_64FC3, points); this.pointer = points; }\n"
-                     + "public Mat(Scalar scalar) { this(1, Math.max(1, scalar.limit() - scalar.position()), CV_64FC4, scalar); this.pointer = scalar; }\n"
-                     + "public Mat(Scalar4i scalar) { this(1, Math.max(1, scalar.limit() - scalar.position()), CV_32SC4, scalar); this.pointer = scalar; }\n"
+                     + "/** Warning: If {@code copyData} is false, the data of the OpenCV Mat returned by this constructor is externally allocated from OpenCV point of view,\n"
+                     + " *  and will not benefit from OpenCV reference counting feature. One must ensure that the data does not get implicitly or explicitly deallocated when\n"
+                     + " *  another Mat has been created pointing to the same data with, e.g., reshape(), rowRange(), etc... */\n"
+                     + "public Mat(int rows, int cols, int type, Pointer data, boolean copyData) { super((Pointer)null);\n"
+                     + "    if (copyData) { allocate(rows, cols, type); data().put(data); } else { allocate(rows, cols, type, data, AUTO_STEP); this.pointer = data; }\n"
+                     + "}\n"
+                     + "/** Calls {@link #Mat(int, int, int, Pointer, boolean) Mat(1, (int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), type, data, copyData)}. */\n"
+                     + "public Mat(int type, Pointer data, boolean copyData) { this(1, (int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), type, data, copyData); }\n"
+
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32SC2, points, copyData)}. */ public Mat(Point points, boolean copyData) { this(CV_32SC2, points, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32FC2, points, copyData)}. */ public Mat(Point2f points, boolean copyData) { this(CV_32FC2, points, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_64FC2, points, copyData)}. */ public Mat(Point2d points, boolean copyData) { this(CV_64FC2, points, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32SC3, points, copyData)}. */ public Mat(Point3i points, boolean copyData) { this(CV_32SC3, points, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32FC3, points, copyData)}. */ public Mat(Point3f points, boolean copyData) { this(CV_32FC3, points, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_64FC3, points, copyData)}. */ public Mat(Point3d points, boolean copyData) { this(CV_64FC3, points, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_64FC4, scalar, copyData)}. */ public Mat(Scalar scalar, boolean copyData) { this(CV_64FC4, scalar, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32SC4, scalar, copyData)}. */ public Mat(Scalar4i scalar, boolean copyData) { this(CV_32SC4, scalar, copyData); }\n"
+                     + "/** Calls {@link #Mat(Point, boolean) Mat(points, false)}. */    public Mat(Point points)    { this(points, false); }\n"
+                     + "/** Calls {@link #Mat(Point2f, boolean) Mat(points, false)}. */  public Mat(Point2f points)  { this(points, false); }\n"
+                     + "/** Calls {@link #Mat(Point2d, boolean) Mat(points, false)}. */  public Mat(Point2d points)  { this(points, false); }\n"
+                     + "/** Calls {@link #Mat(Point3i, boolean) Mat(points, false)}. */  public Mat(Point3i points)  { this(points, false); }\n"
+                     + "/** Calls {@link #Mat(Point3f, boolean) Mat(points, false)}. */  public Mat(Point3f points)  { this(points, false); }\n"
+                     + "/** Calls {@link #Mat(Point3d, boolean) Mat(points, false)}. */  public Mat(Point3d points)  { this(points, false); }\n"
+                     + "/** Calls {@link #Mat(Scalar, boolean) Mat(scalar, false)}. */   public Mat(Scalar scalar)   { this(scalar, false); }\n"
+                     + "/** Calls {@link #Mat(Scalar4i, boolean) Mat(scalar, false)}. */ public Mat(Scalar4i scalar) { this(scalar, false); }\n"
+
                      + "public Mat(byte ... b) { this(b, false); }\n"
-                     + "public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }\n"
-                     + "public Mat(short ... s) { this(s, true); }\n"
-                     + "public Mat(short[] s, boolean signed) { this(new ShortPointer(s), signed); }\n"
-                     + "public Mat(int ... n) { this(new IntPointer(n)); }\n"
-                     + "public Mat(double ... d) { this(new DoublePointer(d)); }\n"
-                     + "public Mat(float ... f) { this(new FloatPointer(f)); }\n"
-                     + "private Mat(long rows, long cols, int type, Pointer data) { this((int)Math.min(rows, Integer.MAX_VALUE), (int)Math.min(cols, Integer.MAX_VALUE), type, data, AUTO_STEP); }\n"
-                     + "public Mat(BytePointer p) { this(p, false); }\n"
-                     + "public Mat(BytePointer p, boolean signed) { this(1, Math.max(1, p.limit() - p.position()), signed ? CV_8SC1 : CV_8UC1, p); }\n"
-                     + "public Mat(ShortPointer p) { this(p, false); }\n"
-                     + "public Mat(ShortPointer p, boolean signed) { this(1, Math.max(1, p.limit() - p.position()), signed ? CV_16SC1 : CV_16UC1, p); }\n"
-                     + "public Mat(IntPointer p) { this(1, Math.max(1, p.limit() - p.position()), CV_32SC1, p); }\n"
-                     + "public Mat(FloatPointer p) { this(1, Math.max(1, p.limit() - p.position()), CV_32FC1, p); }\n"
-                     + "public Mat(DoublePointer p) { this(1, Math.max(1, p.limit() - p.position()), CV_64FC1, p); }\n"))
+                     + "public Mat(short ... s) { this(s, false); }\n"
+                     + "public Mat(byte[] b, boolean signed) { this(1, b.length, signed ? CV_8SC1 : CV_8UC1); data().put(b); }\n"
+                     + "public Mat(short[] s, boolean signed) { this(1, s.length, signed ? CV_16SC1 : CV_16UC1); new ShortPointer(data()).put(s); }\n"
+                     + "public Mat(int ... n) { this(1, n.length, CV_32SC1); new IntPointer(data()).put(n); }\n"
+                     + "public Mat(double ... d) { this(1, d.length, CV_64FC1); new DoublePointer(data()).put(d); }\n"
+                     + "public Mat(float ... f) { this(1, f.length, CV_32FC1); new FloatPointer(data()).put(f); }\n"
+                     + "/** Calls {@link #Mat(BytePointer, boolean) Mat(p, false)}. */   public Mat(BytePointer p) { this(p, false); }\n"
+                     + "/** Calls {@link #Mat(ShortPointer, boolean) Mat(p, false)}. */  public Mat(ShortPointer p) { this(p, false); }\n"
+                     + "/** Calls {@link #Mat(BytePointer, boolean, boolean) Mat(p, signed, false)}. */  public Mat(BytePointer p, boolean signed) { this(p, signed, false); }\n"
+                     + "/** Calls {@link #Mat(ShortPointer, boolean, boolean) Mat(p, signed, false)}. */ public Mat(ShortPointer p, boolean signed) { this(p, signed, false); }\n"
+                     + "/** Calls {@link #Mat(IntPointer, boolean) Mat(p, false)}. */    public Mat(IntPointer p) { this(p, false); }\n"
+                     + "/** Calls {@link #Mat(FloatPointer, boolean) Mat(p, false)}. */  public Mat(FloatPointer p) { this(p, false); }\n"
+                     + "/** Calls {@link #Mat(DoublePointer, boolean) Mat(p, false)}. */ public Mat(DoublePointer p) { this(p, false); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(signed ? CV_8SC1 : CV_8UC1, p, copyData)}. */   public Mat(BytePointer p, boolean signed, boolean copyData) { this(signed ? CV_8SC1 : CV_8UC1, p, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(signed ? CV_16SC1 : CV_16UC1, p, copyData)}. */ public Mat(ShortPointer p, boolean signed, boolean copyData) { this(signed ? CV_16SC1 : CV_16UC1, p, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32SC1, p, copyData)}. */ public Mat(IntPointer p, boolean copyData) { this(CV_32SC1, p, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32FC1, p, copyData)}. */ public Mat(FloatPointer p, boolean copyData) { this(CV_32FC1, p, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_64FC1, p, copyData)}. */ public Mat(DoublePointer p, boolean copyData) { this(CV_64FC1, p, copyData); }\n"))
+
                .put(new Info("cv::Mat::zeros(int, int*, int)", "cv::Mat::ones(int, int*, int)").skip())
                .put(new Info("cv::Mat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
                .put(new Info("cv::Mat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native long step(int i);"))
@@ -347,6 +373,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::Vec3d").cast().pointerTypes("Point3d"))
                .put(new Info("cv::Vec4i").cast().pointerTypes("Scalar4i"))
                .put(new Info("cv::Vec4f").cast().pointerTypes("Scalar4f"))
+               .put(new Info("cv::Vec4d").cast().pointerTypes("Scalar"))
 
                .put(new Info("defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)", "defined __GNUC__",
                              "defined WIN32 || defined _WIN32 || defined WINCE").define(false))

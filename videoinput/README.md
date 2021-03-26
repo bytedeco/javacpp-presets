@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of videoInput ported to Java from the "Example Usage" in this C++ source file:
 
- * https://github.com/ofTheo/videoInput/blob/update2013/videoInputSrcAndDemos/libs/videoInput/videoInput.h
+ * https://github.com/ofTheo/videoInput/blob/master/videoInputSrcAndDemos/libs/videoInput/videoInput.h
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ExampleUsage.java` source files below, simply execute on the command line:
 ```bash
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.videoinput</groupId>
     <artifactId>exampleusage</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>ExampleUsage</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>videoinput-platform</artifactId>
-            <version>0.200-1.5.4</version>
+            <version>0.200-1.5.5</version>
         </dependency>
     </dependencies>
     <build>

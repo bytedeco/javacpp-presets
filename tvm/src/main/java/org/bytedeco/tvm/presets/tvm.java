@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ import org.bytedeco.scipy.presets.*;
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
-            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>",
+            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>",
                        "openblas_config.h", "cblas.h", "lapacke_config.h",
                        "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             resource = "python"
@@ -70,7 +70,9 @@ public class tvm {
             path = path.replace(File.separatorChar, '/');
             int i = path.indexOf("/org/bytedeco/tvm/" + Loader.getPlatform());
             int j = path.lastIndexOf("/");
-            return Loader.cacheResource(path.substring(i, j) + "/python/");
+            File f = Loader.cacheResource(path.substring(i, j) + "/python/");
+            Loader.load(tvm_runtime.class);
+            return f;
         }
         return null;
     }

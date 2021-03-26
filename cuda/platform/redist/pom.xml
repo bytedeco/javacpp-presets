@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.6-SNAPSHOT</version>
     <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cuda-platform-redist</artifactId>
-  <version>11.2-8.0-${project.parent.version}</version>
+  <version>11.2-8.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Redist for CUDA</name>
 
   <properties>
@@ -25,6 +25,12 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}-platform</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-arm64}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -62,7 +68,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64-redist.jar ${javacpp.moduleId}-linux-ppc64le-redist.jar ${javacpp.moduleId}-macosx-x86_64-redist.jar ${javacpp.moduleId}-windows-x86_64-redist.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64-redist.jar ${javacpp.moduleId}-linux-x86_64-redist.jar ${javacpp.moduleId}-linux-ppc64le-redist.jar ${javacpp.moduleId}-macosx-x86_64-redist.jar ${javacpp.moduleId}-windows-x86_64-redist.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -107,6 +113,7 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform.redist {
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.redist;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.redist;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le.redist;
 //                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64.redist;

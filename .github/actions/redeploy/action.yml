@@ -3,43 +3,43 @@ name: Redeploy on Linux
 runs:
   using: composite
   steps:
-    - name: Install environment
-      shell: bash
-      run: |
-        cd $HOME
-
-        echo ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL
-        echo ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN
-        echo ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL
-        curl -LO https://nodejs.org/dist/v10.23.0/node-v10.23.0-linux-x64.tar.xz
-        tar --totals -xf node-v10.23.0-linux-x64.tar.xz
-        export PATH=$HOME/node-v10.23.0-linux-x64/bin:$PATH
-        echo "PATH=$PATH" >> $GITHUB_ENV
-        npm install @actions/cache
-
-        CACHE_PATH="$HOME/.m2/repository"
-        CACHE_KEY="${{ runner.os }}"
-
-        echo "cache = require('@actions/cache');"          > cache.ts
-        echo "paths = ['$CACHE_PATH'];"                   >> cache.ts
-        echo "key = '$CACHE_KEY';"                        >> cache.ts
-        echo "switch (process.argv[2]) {"                 >> cache.ts
-        echo "case 'restore':"                            >> cache.ts
-        echo "    cache.restoreCache(paths, key); break;" >> cache.ts
-        echo "case 'save':"                               >> cache.ts
-        echo "    cache.saveCache(paths, key); break;"    >> cache.ts
-        echo "}"                                          >> cache.ts
-
-    - name: Restore cache
-      shell: bash
-      run: |
-        cd $HOME
-        node cache.ts restore
+#    - name: Install environment
+#      shell: bash
+#      run: |
+#        cd $HOME
+#
+#        echo ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL
+#        echo ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN
+#        echo ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL
+#        curl -LO https://nodejs.org/dist/v10.23.0/node-v10.23.0-linux-x64.tar.xz
+#        tar --totals -xf node-v10.23.0-linux-x64.tar.xz
+#        export PATH=$HOME/node-v10.23.0-linux-x64/bin:$PATH
+#        echo "PATH=$PATH" >> $GITHUB_ENV
+#        npm install @actions/cache
+#
+#        CACHE_PATH="$HOME/.m2/repository"
+#        CACHE_KEY="${{ runner.os }}"
+#
+#        echo "cache = require('@actions/cache');"          > cache.ts
+#        echo "paths = ['$CACHE_PATH'];"                   >> cache.ts
+#        echo "key = '$CACHE_KEY';"                        >> cache.ts
+#        echo "switch (process.argv[2]) {"                 >> cache.ts
+#        echo "case 'restore':"                            >> cache.ts
+#        echo "    cache.restoreCache(paths, key); break;" >> cache.ts
+#        echo "case 'save':"                               >> cache.ts
+#        echo "    cache.saveCache(paths, key); break;"    >> cache.ts
+#        echo "}"                                          >> cache.ts
+#
+#    - name: Restore cache
+#      shell: bash
+#      run: |
+#        cd $HOME
+#        node cache.ts restore
 
     - name: Downloading and uploading artifacts
       shell: bash
       run: |
-        if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
+        if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "${{ github.event.head_commit.message }}" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
             # We are not deploying snapshots
             exit 0
         fi
@@ -87,7 +87,7 @@ runs:
                     if [[ $LINE2 =~ $GROUP:$ARTIFACT:jar:([^:]*):$VERSION:compile ]]; then
                         CLASSIFIER=${BASH_REMATCH[1]}
                         FILE=$ARTIFACT-$VERSION-$CLASSIFIER.jar
-                        cp -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
+                        mv -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
                         [[ -n $FILES ]] && FILES=$FILES,$FILE || FILES=$FILE
                         [[ -n $TYPES ]] && TYPES=$TYPES,jar || TYPES=jar
                         [[ -n $CLASSIFIERS ]] && CLASSIFIERS=$CLASSIFIERS,$CLASSIFIER || CLASSIFIERS=$CLASSIFIER
@@ -95,7 +95,7 @@ runs:
                 done
                 if [[ -n $FILES ]]; then
                     FILE=$ARTIFACT-$VERSION.jar
-                    cp -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
+                    mv -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
                     unzip -o $FILE META-INF/maven/$GROUP/$ARTIFACT/pom.xml
                     for i in {1..5}; do
                         STATUS=0
@@ -108,10 +108,10 @@ runs:
         done
         df -h
 
-    - name: Save cache
-      shell: bash
-      run: |
-        cd $HOME
-        # Prevent all this from getting cached by the CI server
-        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
-        node cache.ts save
+#    - name: Save cache
+#      shell: bash
+#      run: |
+#        cd $HOME
+#        # Prevent all this from getting cached by the CI server
+#        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
+#        node cache.ts save

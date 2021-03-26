@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * DNNL 1.8  https://01.org/dnnl
+ * DNNL 2.1.1  https://01.org/dnnl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of DNNL ported to Java from this C++ source file:
 
- * https://github.com/intel/mkl-dnn/blob/master/examples/cpu_cnn_inference_int8.cpp
+ * https://github.com/oneapi-src/oneDNN/blob/v1.0/examples/cpu_cnn_inference_int8.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `CpuCnnInferenceInt8.java` source files below, simply execute on the command line:
 ```bash
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.dnnl</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>CpuCnnInferenceInt8</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>1.8-1.5.5-SNAPSHOT</version>
+            <version>2.1.1-1.5.5</version>
         </dependency>
     </dependencies>
     <build>

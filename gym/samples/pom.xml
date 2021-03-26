@@ -2,22 +2,24 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.gym</groupId>
     <artifactId>listenvs</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>ListEnvs</exec.mainClass>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gym-platform</artifactId>
-            <version>0.18.0-1.5.5-SNAPSHOT</version>
+            <version>0.18.0-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.1-1.5.5-SNAPSHOT</version>
+            <version>2021.1-1.5.5</version>
         </dependency>
 
     </dependencies>

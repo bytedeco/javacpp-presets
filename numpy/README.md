@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * NumPy 1.19.5  http://www.numpy.org/
+ * NumPy 1.20.1  http://www.numpy.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -27,7 +27,7 @@ Sample Usage
 ------------
 Here is a simple example of NumPy based on the information available here:
 
- * https://docs.scipy.org/doc/numpy/reference/c-api.html
+ * https://numpy.org/doc/stable/reference/c-api/
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `MatMul.java` source files below, simply execute on the command line:
 ```bash
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.numpy</groupId>
     <artifactId>matmul</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>MatMul</exec.mainClass>
     </properties>
@@ -48,14 +48,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.19.5-1.5.5-SNAPSHOT</version>
+            <version>1.20.1-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.1-1.5.5-SNAPSHOT</version>
+            <version>2021.1-1.5.5</version>
         </dependency>
 
     </dependencies>

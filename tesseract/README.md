@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of Tesseract ported to Java from this C++ source file and for this data:
 
- * https://github.com/tesseract-ocr/tesseract/wiki/APIExample
+ * https://tesseract-ocr.github.io/tessdoc/APIExample
  * https://github.com/tesseract-ocr/tessdata
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `BasicExample.java` source files below, simply execute on the command line:
@@ -39,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tesseract</groupId>
     <artifactId>BasicExample</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>BasicExample</exec.mainClass>
     </properties>
@@ -47,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tesseract-platform</artifactId>
-            <version>4.1.1-1.5.4</version>
+            <version>4.1.1-1.5.5</version>
         </dependency>
     </dependencies>
     <build>

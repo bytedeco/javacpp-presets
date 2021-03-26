@@ -10,14 +10,14 @@ License Agreements
 By downloading these archives, you agree to the terms of the license agreements for NVIDIA software included in the archives.
 
 ### TensorRT
-To view the license for TensorRT included in these archives, click [here](https://developer.download.nvidia.com/compute/machine-learning/tensorrt/docs/5.1/rc/TensorRT-SLA.pdf)
+To view the license for TensorRT included in these archives, click [here](https://docs.nvidia.com/deeplearning/tensorrt/sla/)
 
 
 Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorRT 7.2.2.3  https://developer.nvidia.com/tensorrt
+ * TensorRT 7.2.3.4  https://developer.nvidia.com/tensorrt
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorrt</groupId>
     <artifactId>samplegooglenet</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>SampleGoogleNet</exec.mainClass>
     </properties>
@@ -54,19 +54,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>7.2-1.5.5-SNAPSHOT</version>
+            <version>7.2-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.2-8.0-1.5.5-SNAPSHOT</version>
+            <version>11.2-8.1-1.5.5</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>7.2-1.5.5-SNAPSHOT</version>
+            <version>7.2-1.5.5</version>
         </dependency>
 
     </dependencies>

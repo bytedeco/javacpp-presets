@@ -13,7 +13,7 @@ if [[ $PLATFORM == windows* ]]; then
     exit 1
 fi
 
-export ONNX=1.8.0
+export ONNX=1.8.1
 export PROTO=3.7.1
 export PYBIND=2.6.0
 
@@ -50,6 +50,7 @@ sedinplace 's/const std::string /std::string /g' onnx/defs/schema.h
 export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
+sedinplace "/setup_requires.append('pytest-runner')/d" setup.py
 python3 setup.py --quiet build
 
 mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/optimizer/passes ../include/onnx/version_converter ../include/onnx/version_converter/adapters ../include/onnx/shape_inference

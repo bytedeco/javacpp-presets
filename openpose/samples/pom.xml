@@ -2,15 +2,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.openpose</groupId>
     <artifactId>openpose</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>openpose</exec.mainClass>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openpose-platform</artifactId>
-            <version>1.7.0-1.5.5-SNAPSHOT</version>
+            <version>1.7.0-1.5.5</version>
         </dependency>
     </dependencies>
     <build>

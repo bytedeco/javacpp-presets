@@ -41,7 +41,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -49,35 +49,36 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.15.5-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-gpu</artifactId>
-            <version>1.15.5-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.2-8.0-1.5.5-SNAPSHOT</version>
+            <version>11.2-8.1-1.5.5</version>
         </dependency>
 
         <!-- Optional dependencies to load Python-enabled builds -->
+<!--
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python</artifactId>
-            <version>1.15.5-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python-gpu</artifactId>
-            <version>1.15.5-1.5.5-SNAPSHOT</version>
+            <version>1.15.5-1.5.5</version>
         </dependency>
-
+-->
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>

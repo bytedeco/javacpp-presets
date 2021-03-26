@@ -5,6 +5,7 @@ import org.bytedeco.javacpp.indexer.*;
 import org.bytedeco.cpython.*;
 import org.bytedeco.numpy.*;
 import org.bytedeco.tvm.*;
+import org.bytedeco.tvm.Module;
 import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -17,6 +18,10 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
 public class DeployBERT {
 
     public static void OptimizeBERT() throws Exception {
+        // Extract to JavaCPP's cache the Clang compiler as required by TVM on Windows
+        String clang = Loader.load(org.bytedeco.llvm.program.clang.class).replace('\\', '/');
+        String clangPath = clang.substring(0, clang.lastIndexOf('/'));
+
         // Extract to JavaCPP's cache CPython and obtain the path to the executable file
         String python = Loader.load(org.bytedeco.cpython.python.class);
 
@@ -53,6 +58,9 @@ public class DeployBERT {
                 + "import tvm.testing\n"
                 + "from tvm import relay\n"
                 + "import tvm.contrib.graph_runtime as runtime\n"
+                + "import os\n"
+
+                + "os.environ[\"PATH\"] += os.pathsep + \"" + clangPath + "\"\n"
 
                 + "def timer(thunk, repeat=1, number=10, dryrun=3, min_repeat_ms=1000):\n"
                 + "    \"\"\"Helper function to time a function\"\"\"\n"

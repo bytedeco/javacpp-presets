@@ -9,8 +9,8 @@ which cmake3 &> /dev/null && CMAKE3="cmake3" || CMAKE3="cmake"
 [[ -z ${OLDCXX:-} ]] && OLDCXX="g++"
 [[ -z ${OLDFC:-} ]] && OLDFC="gfortran"
 
-KERNEL=(`uname -s | tr [A-Z] [a-z]`)
-ARCH=(`uname -m | tr [A-Z] [a-z]`)
+KERNEL=(`uname -s | tr '[A-Z]' '[a-z]'`)
+ARCH=(`uname -m | tr '[A-Z]' '[a-z]'`)
 case $KERNEL in
     darwin)
         OS=macosx
@@ -164,7 +164,7 @@ function sedinplace {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal leptonica tesseract caffe openpose cuda opencl mxnet tensorflow tensorrt ale onnx ngraph onnxruntime tvm liquidfun qt skia cpu_features systems modsecurity)
+    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal leptonica tesseract caffe openpose cuda nvcodec opencl mxnet tensorflow tensorrt ale onnx ngraph onnxruntime tvm liquidfun qt skia cpu_features systems modsecurity)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

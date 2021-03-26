@@ -36,6 +36,7 @@ case $PLATFORM in
         make -j $MAKEJ
         cp -r src/* ../include
         cp libale.so ../lib
+        install_name_tool -change /usr/local/opt/sdl/lib/libSDL-1.2.0.dylib @rpath/libSDL-1.2.0.dylib ../lib/libale.so
         ;;
     windows-x86)
         CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=.. -DUSE_SDL=ON -DUSE_RLGLUE=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_SHARED_LINKER_FLAGS="-static-libgcc -static-libstdc++ -Wl,-Bstatic,--whole-archive -lwinpthread" .

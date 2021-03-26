@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of ALE ported to Java from this C++ source file:
 
- * https://github.com/mgbellemare/Arcade-Learning-Environment/blob/master/doc/examples/sharedLibraryInterfaceExample.cpp
+ * https://github.com/mgbellemare/Arcade-Learning-Environment/blob/master/examples/cpp-interface/sharedLibraryInterfaceExample.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SharedLibraryInterfaceExample.java` source files below, simply execute on the command line:
 ```bash
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.ale</groupId>
     <artifactId>sharedlibraryinterfaceexample</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>SharedLibraryInterfaceExample</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ale-platform</artifactId>
-            <version>0.6.1-1.5.4</version>
+            <version>0.6.1-1.5.5</version>
         </dependency>
     </dependencies>
     <build>

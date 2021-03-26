@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/
+ * flandmark 1.07  https://github.com/uricamic/flandmark
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -39,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.flandmark</groupId>
     <artifactId>simpleexample</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>SimpleExample</exec.mainClass>
     </properties>
@@ -47,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>flandmark-platform</artifactId>
-            <version>1.07-1.5.4</version>
+            <version>1.07-1.5.5</version>
         </dependency>
     </dependencies>
     <build>

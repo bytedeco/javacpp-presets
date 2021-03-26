@@ -29,7 +29,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 fi
 
-MXNET_VERSION=1.7.0
+MXNET_VERSION=1.8.0
 download https://downloads.apache.org/incubator/mxnet/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 #download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
@@ -98,6 +98,7 @@ case $PLATFORM in
         export CC="$(which gcc) -m32"
         export CXX="$(which g++) -m32"
         export BLAS="openblas"
+        export USE_INTGEMM=0
         export USE_MKLDNN=0
         ;;
     linux-x86_64)

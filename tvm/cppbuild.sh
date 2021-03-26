@@ -89,13 +89,13 @@ if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
 fi
 
-if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.7"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.7m/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -117,7 +117,7 @@ $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools
 
 case $PLATFORM in
     linux-x86_64)
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY=$MKL_PATH/lib/libiomp5.so .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY=$MKL_PATH/lib/libiomp5.so -DCMAKE_C_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' .
         make -j $MAKEJ
         make install/strip
         cd python
@@ -137,7 +137,7 @@ case $PLATFORM in
         "$PYTHON_BIN_PATH" setup.py install --prefix $INSTALL_PATH
         cd ..
         # need to add RPATH so it can find MKL in cache
-        for f in $(find ../ -iname '*.dylib'); do install_name_tool -add_rpath @loader_path/../../ $f || true; done
+        for f in $(find ../ -iname '*.dylib'); do install_name_tool -add_rpath @loader_path/ -add_rpath @loader_path/../../ $f || true; done
         ;;
     windows-x86_64)
         export CC="cl.exe"

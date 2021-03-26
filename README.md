@@ -2,63 +2,71 @@ JavaCPP Presets
 ===============
 
 [![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/javacpp-presets.svg)](http://bytedeco.org/builds/)  
-<sup>Build status for all platforms (Android, iOS, Linux, Mac OS X, Windows):</sup>  
-&emsp;[![opencv](https://github.com/bytedeco/javacpp-presets/workflows/opencv/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencv)  
-&emsp;[![ffmpeg](https://github.com/bytedeco/javacpp-presets/workflows/ffmpeg/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Affmpeg)  
-&emsp;[![flycapture](https://github.com/bytedeco/javacpp-presets/workflows/flycapture/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aflycapture)  
-&emsp;[![spinnaker](https://github.com/bytedeco/javacpp-presets/workflows/spinnaker/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aspinnaker)  
-&emsp;[![libdc1394](https://github.com/bytedeco/javacpp-presets/workflows/libdc1394/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibdc1394)  
-&emsp;[![libfreenect](https://github.com/bytedeco/javacpp-presets/workflows/libfreenect/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibfreenect)  
-&emsp;[![libfreenect2](https://github.com/bytedeco/javacpp-presets/workflows/libfreenect2/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibfreenect2)  
-&emsp;[![librealsense](https://github.com/bytedeco/javacpp-presets/workflows/librealsense/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibrealsense)  
-&emsp;[![librealsense2](https://github.com/bytedeco/javacpp-presets/workflows/librealsense2/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibrealsense2)  
-&emsp;[![videoinput](https://github.com/bytedeco/javacpp-presets/workflows/videoinput/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Avideoinput)  
-&emsp;[![artoolkitplus](https://github.com/bytedeco/javacpp-presets/workflows/artoolkitplus/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aartoolkitplus)  
-&emsp;[![chilitags](https://github.com/bytedeco/javacpp-presets/workflows/chilitags/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Achilitags)  
-&emsp;[![flandmark](https://github.com/bytedeco/javacpp-presets/workflows/flandmark/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aflandmark)  
-&emsp;[![arrow](https://github.com/bytedeco/javacpp-presets/workflows/arrow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aarrow)  
-&emsp;[![hdf5](https://github.com/bytedeco/javacpp-presets/workflows/hdf5/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahdf5)  
-&emsp;[![hyperscan](https://github.com/bytedeco/javacpp-presets/workflows/hyperscan/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahyperscan)  
-&emsp;[![mkl](https://github.com/bytedeco/javacpp-presets/workflows/mkl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl)  
-&emsp;[![mkl-dnn](https://github.com/bytedeco/javacpp-presets/workflows/mkl-dnn/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl-dnn)  
-&emsp;[![dnnl](https://github.com/bytedeco/javacpp-presets/workflows/dnnl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adnnl)  
-&emsp;[![openblas](https://github.com/bytedeco/javacpp-presets/workflows/openblas/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopenblas)  
-&emsp;[![arpack-ng](https://github.com/bytedeco/javacpp-presets/workflows/arpack-ng/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aarpack-ng)  
-&emsp;[![cminpack](https://github.com/bytedeco/javacpp-presets/workflows/cminpack/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acminpack)  
-&emsp;[![fftw](https://github.com/bytedeco/javacpp-presets/workflows/fftw/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Afftw)  
-&emsp;[![gsl](https://github.com/bytedeco/javacpp-presets/workflows/gsl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Agsl)  
-&emsp;[![cpython](https://github.com/bytedeco/javacpp-presets/workflows/cpython/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acpython)  
-&emsp;[![numpy](https://github.com/bytedeco/javacpp-presets/workflows/numpy/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Anumpy)  
-&emsp;[![scipy](https://github.com/bytedeco/javacpp-presets/workflows/scipy/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ascipy)  
-&emsp;[![gym](https://github.com/bytedeco/javacpp-presets/workflows/gym/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Agym)  
-&emsp;[![llvm](https://github.com/bytedeco/javacpp-presets/workflows/llvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Allvm)  
-&emsp;[![libpostal](https://github.com/bytedeco/javacpp-presets/workflows/libpostal/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibpostal)  
-&emsp;[![leptonica](https://github.com/bytedeco/javacpp-presets/workflows/leptonica/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aleptonica)  
-&emsp;[![tesseract](https://github.com/bytedeco/javacpp-presets/workflows/tesseract/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atesseract)  
-&emsp;[![caffe](https://github.com/bytedeco/javacpp-presets/workflows/caffe/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acaffe)  
-&emsp;[![openpose](https://github.com/bytedeco/javacpp-presets/workflows/openpose/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopenpose)  
-&emsp;[![cuda](https://github.com/bytedeco/javacpp-presets/workflows/cuda/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acuda)  
-&emsp;[![opencl](https://github.com/bytedeco/javacpp-presets/workflows/opencl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencl)  
-&emsp;[![mxnet](https://github.com/bytedeco/javacpp-presets/workflows/mxnet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amxnet)  
-&emsp;[![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)  
-&emsp;[![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)  
-&emsp;[![ale](https://github.com/bytedeco/javacpp-presets/workflows/ale/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aale)  
-&emsp;[![onnx](https://github.com/bytedeco/javacpp-presets/workflows/onnx/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnx)  
-&emsp;[![ngraph](https://github.com/bytedeco/javacpp-presets/workflows/ngraph/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Angraph)  
-&emsp;[![onnxruntime](https://github.com/bytedeco/javacpp-presets/workflows/onnxruntime/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnxruntime)  
-&emsp;[![tvm](https://github.com/bytedeco/javacpp-presets/workflows/tvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atvm)  
-&emsp;[![liquidfun](https://github.com/bytedeco/javacpp-presets/workflows/liquidfun/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aliquidfun)  
-&emsp;[![qt](https://github.com/bytedeco/javacpp-presets/workflows/qt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aqt)  
-&emsp;[![skia](https://github.com/bytedeco/javacpp-presets/workflows/skia/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Askia)  
-&emsp;[![cpu_features](https://github.com/bytedeco/javacpp-presets/workflows/cpu_features/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acpu_features)  
-&emsp;[![systems](https://github.com/bytedeco/javacpp-presets/workflows/systems/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Asystems)  
-<sup>Commercial support and paid services for custom presets:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)  
+<sup>Build status for all platforms (Android, iOS, Linux, Mac OS X, Windows):</sup>
+[![opencv](https://github.com/bytedeco/javacpp-presets/workflows/opencv/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencv)
+[![ffmpeg](https://github.com/bytedeco/javacpp-presets/workflows/ffmpeg/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Affmpeg)
+[![flycapture](https://github.com/bytedeco/javacpp-presets/workflows/flycapture/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aflycapture)
+[![spinnaker](https://github.com/bytedeco/javacpp-presets/workflows/spinnaker/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aspinnaker)
+[![libdc1394](https://github.com/bytedeco/javacpp-presets/workflows/libdc1394/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibdc1394)
+[![libfreenect](https://github.com/bytedeco/javacpp-presets/workflows/libfreenect/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibfreenect)
+[![libfreenect2](https://github.com/bytedeco/javacpp-presets/workflows/libfreenect2/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibfreenect2)
+[![librealsense](https://github.com/bytedeco/javacpp-presets/workflows/librealsense/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibrealsense)
+[![librealsense2](https://github.com/bytedeco/javacpp-presets/workflows/librealsense2/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibrealsense2)
+[![videoinput](https://github.com/bytedeco/javacpp-presets/workflows/videoinput/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Avideoinput)
+[![artoolkitplus](https://github.com/bytedeco/javacpp-presets/workflows/artoolkitplus/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aartoolkitplus)
+[![chilitags](https://github.com/bytedeco/javacpp-presets/workflows/chilitags/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Achilitags)
+[![flandmark](https://github.com/bytedeco/javacpp-presets/workflows/flandmark/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aflandmark)
+[![arrow](https://github.com/bytedeco/javacpp-presets/workflows/arrow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aarrow)
+[![hdf5](https://github.com/bytedeco/javacpp-presets/workflows/hdf5/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahdf5)
+[![hyperscan](https://github.com/bytedeco/javacpp-presets/workflows/hyperscan/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahyperscan)
+[![mkl](https://github.com/bytedeco/javacpp-presets/workflows/mkl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl)
+[![mkl-dnn](https://github.com/bytedeco/javacpp-presets/workflows/mkl-dnn/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl-dnn)
+[![dnnl](https://github.com/bytedeco/javacpp-presets/workflows/dnnl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adnnl)
+[![openblas](https://github.com/bytedeco/javacpp-presets/workflows/openblas/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopenblas)
+[![arpack-ng](https://github.com/bytedeco/javacpp-presets/workflows/arpack-ng/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aarpack-ng)
+[![cminpack](https://github.com/bytedeco/javacpp-presets/workflows/cminpack/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acminpack)
+[![fftw](https://github.com/bytedeco/javacpp-presets/workflows/fftw/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Afftw)
+[![gsl](https://github.com/bytedeco/javacpp-presets/workflows/gsl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Agsl)
+[![cpython](https://github.com/bytedeco/javacpp-presets/workflows/cpython/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acpython)
+[![numpy](https://github.com/bytedeco/javacpp-presets/workflows/numpy/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Anumpy)
+[![scipy](https://github.com/bytedeco/javacpp-presets/workflows/scipy/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ascipy)
+[![gym](https://github.com/bytedeco/javacpp-presets/workflows/gym/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Agym)
+[![llvm](https://github.com/bytedeco/javacpp-presets/workflows/llvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Allvm)
+[![libpostal](https://github.com/bytedeco/javacpp-presets/workflows/libpostal/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibpostal)
+[![leptonica](https://github.com/bytedeco/javacpp-presets/workflows/leptonica/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aleptonica)
+[![tesseract](https://github.com/bytedeco/javacpp-presets/workflows/tesseract/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atesseract)
+[![caffe](https://github.com/bytedeco/javacpp-presets/workflows/caffe/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acaffe)
+[![openpose](https://github.com/bytedeco/javacpp-presets/workflows/openpose/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopenpose)
+[![cuda](https://github.com/bytedeco/javacpp-presets/workflows/cuda/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acuda)
+[![nvcodec](https://github.com/bytedeco/javacpp-presets/workflows/nvcodec/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Anvcodec)
+[![opencl](https://github.com/bytedeco/javacpp-presets/workflows/opencl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencl)
+[![mxnet](https://github.com/bytedeco/javacpp-presets/workflows/mxnet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amxnet)
+[![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)
+[![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)
+[![ale](https://github.com/bytedeco/javacpp-presets/workflows/ale/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aale)
+[![onnx](https://github.com/bytedeco/javacpp-presets/workflows/onnx/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnx)
+[![ngraph](https://github.com/bytedeco/javacpp-presets/workflows/ngraph/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Angraph)
+[![onnxruntime](https://github.com/bytedeco/javacpp-presets/workflows/onnxruntime/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnxruntime)
+[![tvm](https://github.com/bytedeco/javacpp-presets/workflows/tvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atvm)
+[![liquidfun](https://github.com/bytedeco/javacpp-presets/workflows/liquidfun/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aliquidfun)
+[![qt](https://github.com/bytedeco/javacpp-presets/workflows/qt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aqt)
+[![skia](https://github.com/bytedeco/javacpp-presets/workflows/skia/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Askia)
+[![cpu_features](https://github.com/bytedeco/javacpp-presets/workflows/cpu_features/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acpu_features)
+[![systems](https://github.com/bytedeco/javacpp-presets/workflows/systems/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Asystems)
+<sup>Commercial support and paid services for custom presets:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
 
 Introduction
 ------------
 The JavaCPP Presets modules contain Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.<moduleName>.presets` packages are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.<moduleName>` packages, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
 
-Please refer to the wiki page for more information about how to [create new presets](https://github.com/bytedeco/javacpp-presets/wiki/Create-New-Presets). Since additional documentation is currently lacking, please also feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project).
+For orientation purposes, the documentation of this repository can be thought of as being split into 2 levels:
+
+ 1. The directory where this parent README.md document is located belongs to the upper level, the `javacpp-presets` module itself, and
+ 2. The subdirectories in it are the actual child modules, with their README.md files, presets, and packages, as the lower level.
+
+This parent README.md file contains general information applicable to all modules to solve issues concerning downloads, common requirements, installation procedures, and build instructions. The respective README.md files in each subdirectory contain extra information, links, and notes concerning API documentation, specific requirements, dependencies for `pom.xml` files, and sample usage code, for the presets and packages of each module. Please be aware that not all of the presets have the same level of maturity, and the style and layout may also differ from one to another since they are based on the APIs of third-party libraries.
+
+Please refer to the wiki page for more information about how to [create new presets](https://github.com/bytedeco/javacpp-presets/wiki/Create-New-Presets). Since additional documentation is currently lacking, please also feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project) or [the discussion forum](https://github.com/bytedeco/javacpp-presets/discussions).
 
 
 Downloads
@@ -74,27 +82,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.4</version>
+    <version>${moduleVersion}-1.5.5</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.4'
+    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.5'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.4")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.5")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.4"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.5"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available to Gradle users is [Gradle JavaCPP](https://github.com/bytedeco/gradle-javacpp), and similarly for Scala users there is [SBT-JavaCPP](https://github.com/bytedeco/sbt-javacpp).
@@ -152,7 +160,7 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.4  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.5  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
@@ -168,39 +176,40 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
- * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
- * Arrow 2.0.0  https://arrow.apache.org/install/
+ * flandmark 1.07  https://github.com/uricamic/flandmark
+ * Arrow 3.0.0  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
- * Hyperscan 5.3.x  https://github.com/intel/hyperscan
- * MKL 2021.x  https://software.intel.com/intel-mkl
+ * Hyperscan 5.4.x  https://github.com/intel/hyperscan
+ * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 1.8.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 2.1.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.13  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
- * CMINPACK 1.3.7  https://github.com/devernay/cminpack
+ * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.9  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.7.9  https://www.python.org/downloads/
- * NumPy 1.19.x  https://github.com/numpy/numpy
+ * CPython 3.9.x  https://www.python.org/downloads/
+ * NumPy 1.20.x  https://github.com/numpy/numpy
  * SciPy 1.6.x  https://github.com/scipy/scipy
  * Gym 0.18.x  https://github.com/openai/gym
- * LLVM 11.0.x  http://llvm.org/releases/download.html
+ * LLVM 11.1.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.80.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.2.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 8.0.x  https://developer.nvidia.com/cudnn
+   * cuDNN 8.1.x  https://developer.nvidia.com/cudnn
    * NCCL 2.8.x  https://developer.nvidia.com/nccl
+ * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
- * MXNet 1.7.0  https://github.com/apache/incubator-mxnet
+ * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.8.0  https://github.com/onnx/onnx
+ * ONNX 1.8.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.6.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.7.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
@@ -257,7 +266,7 @@ How Can I Help?
 Contributions of any kind are highly welcome! At the moment, the `Parser` has limited capabilities, so I plan to improve it gradually to the point where it can successfully parse large C++ header files that are even more convoluted than the ones from OpenCV, Caffe, or TensorFlow, but the build system could also be improved. Consequently, I am looking for help especially with the five following tasks, in no particular order:
 
  * Setting up continuous integration, preferably free on the cloud ([Travis CI](https://travis-ci.org/)?)
- * Improving the `Parser` (by using the [presets for Clang](llvm/src/main/java/org/bytedeco/javacpp/clang.java)?)
+ * Improving the `Parser` (by using the [presets for LLVM and Clang](llvm)?)
  * Providing builds for more platforms, as with `linux-armhf` for [Raspberry Pi](https://www.raspberrypi.org/), etc.
  * Replacing the Bash/Maven build combo by something easier to use ([Gradle](http://gradle.org/)?)
  * Adding new presets as child modules for other C/C++ libraries (Caffe2, OpenNI, OpenMesh, PCL, etc.)

@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of GSL ported to Java from this demo.c source file:
 
- * https://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distribution-Examples.html
+ * https://www.gnu.org/software/gsl/doc/html/randist.html#examples
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Demo.java` source files below, simply execute on the command line:
 ```bash
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.gsl</groupId>
     <artifactId>demo</artifactId>
-    <version>1.5.5-SNAPSHOT</version>
+    <version>1.5.5</version>
     <properties>
         <exec.mainClass>Demo</exec.mainClass>
     </properties>
@@ -46,14 +46,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gsl-platform</artifactId>
-            <version>2.6-1.5.5-SNAPSHOT</version>
+            <version>2.6-1.5.5</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.1-1.5.5-SNAPSHOT</version>
+            <version>2021.1-1.5.5</version>
         </dependency>
 
     </dependencies>

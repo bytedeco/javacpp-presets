@@ -48,9 +48,20 @@ import org.bytedeco.hdf5.presets.*;
             value = {"linux", "macosx"},
             compiler = "cpp11",
             define = {
-                "SHARED_PTR_NAMESPACE std",
-                "UNIQUE_PTR_NAMESPACE std",
+                "SHARED_PTR_NAMESPACE std // overrides boost",
+                "UNIQUE_PTR_NAMESPACE std // overrides boost",
                 "GPU_MODE CPU_ONLY"
+            },
+            exclude = {
+                // prevent linking unnecessarily with Boost
+                "caffe/caffe.hpp",
+                "caffe/common.hpp",
+                "caffe/parallel.hpp",
+                "caffe/solver.hpp",
+                "caffe/util/blocking_queue.hpp",
+                "caffe/util/benchmark.hpp",
+                "caffe/util/io.hpp",
+                "caffe/util/rng.hpp"
             },
             include = {
                 "openpose/utilities/enumClasses.hpp",
