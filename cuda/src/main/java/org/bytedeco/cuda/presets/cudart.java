@@ -38,7 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = javacpp.class, names = {"linux-x86_64", "linux-arm64", "linux-ppc64le", "macosx-x86_64", "windows-x86_64"}, value = {
     @Platform(include = {"<cuda.h>", "<crt/host_defines.h>", "<device_types.h>", "<driver_types.h>", "<surface_types.h>", "<texture_types.h>",
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
-                       /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
+                       /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>",
+                         "<cudaGL.h>", "<cuda_gl_interop.h>"},
               compiler = "cpp11", exclude = "<crt/host_defines.h>",
               includepath = "/usr/local/cuda-11.2/include/", link = {"cudart@.11.0", "cuda@.1#"}, linkpath = "/usr/local/cuda-11.2/lib/"),
     @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-11.2/lib64/"),
@@ -62,6 +63,7 @@ public class cudart implements InfoMapper {
 
                .put(new Info("cuda_runtime_api.h").linePatterns("#define cudaSignalExternalSemaphoresAsync.*", "#define cudaWaitExternalSemaphoresAsync.*").skip())
                .put(new Info("cuda.h").linePatterns("#define cuDeviceTotalMem.*", "#define cuGraphInstantiate.*").skip())
+               .put(new Info("cudaGL.h").linePatterns("#define cuGLCtxCreate.*", "#define cuGLGetDevices.*").skip())
 
                .put(new Info("__CUDA_DEPRECATED").cppText("#define __CUDA_DEPRECATED deprecated").cppTypes())
                .put(new Info("CUDNN_DEPRECATED").cppText("#define CUDNN_DEPRECATED deprecated").cppTypes())
@@ -95,7 +97,7 @@ public class cudart implements InfoMapper {
                              "__internal_trig_reduction_kernel", "__internal_sin_cos_kernel", "cuDeviceGetP2PAttribute",
                              "cuMemRangeGetAttribute", "cuMemRangeGetAttributes", "float2::__cuda_gnu_arm_ice_workaround",
                              "cuDeviceGetLuid", "cuDeviceGetNvSciSyncAttributes", "cudaDeviceGetNvSciSyncAttributes",
-                             "cuMemRetainAllocationHandle").skip())
+                             "cuMemRetainAllocationHandle", "cudaWGLGetDevice", "cuWGLGetDevice").skip())
                .put(new Info("CUcontext").valueTypes("CUctx_st").pointerTypes("@ByPtrPtr CUctx_st"))
                .put(new Info("CUmodule").valueTypes("CUmod_st").pointerTypes("@ByPtrPtr CUmod_st"))
                .put(new Info("CUfunction").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))
@@ -130,6 +132,7 @@ public class cudart implements InfoMapper {
                .put(new Info("const cudaGraphNode_t").valueTypes("CUgraphNode_st").pointerTypes("@Cast(\"const cudaGraphNode_t*\") @ByPtrPtr CUgraphNode_st"))
                .put(new Info("cudaFunction_t").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))
                .put(new Info("cudaMemPool_t", "CUmemoryPool").valueTypes("CUmemPoolHandle_st").pointerTypes("@ByPtrPtr CUmemPoolHandle_st"))
-               .put(new Info("cudaGraphExec_t").valueTypes("CUgraphExec_st").pointerTypes("@ByPtrPtr CUgraphExec_st"));
+               .put(new Info("cudaGraphExec_t").valueTypes("CUgraphExec_st").pointerTypes("@ByPtrPtr CUgraphExec_st"))
+               .put(new Info("GLint", "GLuint", "GLenum").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"));
     }
 }
