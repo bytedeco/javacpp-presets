@@ -248,7 +248,7 @@ public static final int
   CUBLAS_COMPUTE_64F_PEDANTIC      = 71, /* double - pedantic */
   CUBLAS_COMPUTE_32I               = 72, /* signed 32-bit int - default */
   CUBLAS_COMPUTE_32I_PEDANTIC      = 73; /* signed 32-bit int - pedantic */
-// Targeting ..\cublas\cublasContext.java
+// Targeting ../cublas/cublasContext.java
 
 
 
@@ -282,7 +282,7 @@ public static native @Cast("cublasStatus_t") int cublasGetMathMode(cublasContext
 public static native @Cast("cublasStatus_t") int cublasGetMathMode(cublasContext handle, @Cast("cublasMath_t*") IntBuffer mode);
 public static native @Cast("cublasStatus_t") int cublasGetMathMode(cublasContext handle, @Cast("cublasMath_t*") int[] mode);
 public static native @Cast("cublasStatus_t") int cublasSetMathMode(cublasContext handle, @Cast("cublasMath_t") int mode);
-// Targeting ..\cublas\cublasLogCallback.java
+// Targeting ../cublas/cublasLogCallback.java
 
 
 
@@ -7138,7 +7138,7 @@ public static native void cublasZtrmm(@Cast("char") byte side, @Cast("char") byt
 // #include <stdio.h>
 
 // #if defined(__cplusplus)
-// Targeting ..\cublas\cublasLtContext.java
+// Targeting ../cublas/cublasLtContext.java
 
 
 
@@ -7153,28 +7153,28 @@ public static native @Cast("size_t") long cublasLtGetCudartVersion();
 public static native @Cast("cublasStatus_t") int cublasLtGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
 public static native @Cast("cublasStatus_t") int cublasLtGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
 public static native @Cast("cublasStatus_t") int cublasLtGetProperty(@Cast("libraryPropertyType") int type, int[] value);
-// Targeting ..\cublas\cublasLtMatrixLayoutOpaque_t.java
+// Targeting ../cublas/cublasLtMatrixLayoutOpaque_t.java
 
 
 
 /** Opaque descriptor for matrix memory layout
  */
-// Targeting ..\cublas\cublasLtMatmulAlgo_t.java
+// Targeting ../cublas/cublasLtMatmulAlgo_t.java
 
 
-// Targeting ..\cublas\cublasLtMatmulDescOpaque_t.java
+// Targeting ../cublas/cublasLtMatmulDescOpaque_t.java
 
 
 
 /** Opaque descriptor for cublasLtMatmul() operation details
  */
-// Targeting ..\cublas\cublasLtMatrixTransformDescOpaque_t.java
+// Targeting ../cublas/cublasLtMatrixTransformDescOpaque_t.java
 
 
 
 /** Opaque descriptor for cublasLtMatrixTransform() operation details
  */
-// Targeting ..\cublas\cublasLtMatmulPreferenceOpaque_t.java
+// Targeting ../cublas/cublasLtMatmulPreferenceOpaque_t.java
 
 
 
@@ -8005,7 +8005,7 @@ public static native @Cast("cublasStatus_t") int cublasLtMatmulPreferenceGetAttr
     Pointer buf,
     @Cast("size_t") long sizeInBytes,
     @Cast("size_t*") SizeTPointer sizeWritten);
-// Targeting ..\cublas\cublasLtMatmulHeuristicResult_t.java
+// Targeting ../cublas/cublasLtMatmulHeuristicResult_t.java
 
 
 
@@ -8378,7 +8378,7 @@ public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoConfigGetAttr
         Pointer buf,
         @Cast("size_t") long sizeInBytes,
         @Cast("size_t*") SizeTPointer sizeWritten);
-// Targeting ..\cublas\cublasLtLoggerCallback_t.java
+// Targeting ../cublas/cublasLtLoggerCallback_t.java
 
 
 
@@ -8517,7 +8517,7 @@ public static native @Cast("cublasStatus_t") int cublasLtLoggerForceDisable();
 // #include "cublas_v2.h"
 
 // #if defined(__cplusplus)
-// Targeting ..\cublas\cublasXtContext.java
+// Targeting ../cublas/cublasXtContext.java
 
 
 
