@@ -130,6 +130,4 @@ case $PLATFORM in
         ;;
 esac
 
-cp -r $INSTALL_PATH/include/polly/isl $INSTALL_PATH/include/
-
 cd ../..
