@@ -50,6 +50,7 @@
     <module>../caffe/platform</module>
     <module>../openpose/platform</module>
     <module>../cuda/platform</module>
+    <module>../nvcodec/platform</module>
     <module>../opencl/platform</module>
     <module>../mxnet/platform</module>
     <module>../tensorflow/platform</module>
@@ -247,6 +248,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
       <version>11.2-8.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>nvcodec-platform</artifactId>
+      <version>11.0.10-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

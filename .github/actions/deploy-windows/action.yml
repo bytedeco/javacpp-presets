@@ -75,7 +75,15 @@ runs:
           move cuda\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\lib\x64"
         )
 
+        if "%CI_DEPLOY_MODULE%"=="nvcodec" (
+          echo Installing NVIDIA Video Codec SDK
+          python -m gdown.cli https://drive.google.com/uc?id=1cBohhcptNDSF5pxsQ7n4-qcGsgiWUxga
+          unzip Video_Codec_SDK_11.0.10.zip
+          move Video_Codec_SDK_11.0.10 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
+        )
+
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
+          echo Installing TensorRT
           python -m gdown.cli https://drive.google.com/uc?id=12r8CgDD66hIYB3WIX5JQix9zVeYVeHDR
           unzip TensorRT-7.2.3.4.Windows10.x86_64.cuda-11.2.cudnn8.1.zip
           move TensorRT-7.2.3.4 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"

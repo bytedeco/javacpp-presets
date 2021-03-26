@@ -91,7 +91,15 @@ runs:
           rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a)
         fi
 
+        if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
+          echo Installing NVIDIA Video Codec SDK
+          python3 -m gdown.cli https://drive.google.com/uc?id=1cBohhcptNDSF5pxsQ7n4-qcGsgiWUxga
+          unzip Video_Codec_SDK_11.0.10.zip -d /usr/local
+          ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
+        fi
+
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
+          echo Installing TensorRT
           python3 -m gdown.cli https://drive.google.com/uc?id=1iiQkP6R5KzBf_0KzMc9HKTJFO2l9gYC_
           tar -hxvf TensorRT-7.2.3.4.CentOS-7.9.x86_64-gnu.cuda-11.2.cudnn8.1.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
