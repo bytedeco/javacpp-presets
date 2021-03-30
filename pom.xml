@@ -616,6 +616,7 @@
         <module>nvcodec</module>
         <module>opencl</module>
         <module>mxnet</module>
+        <module>pytorch</module>
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
@@ -1344,6 +1345,7 @@
         <module>nvcodec</module>
         <module>opencl</module>
         <module>mxnet</module>
+        <module>pytorch</module>
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
@@ -1421,6 +1423,7 @@
 <!--        <module>cuda</module>-->
         <module>opencl</module>
         <module>mxnet</module>
+        <module>pytorch</module>
         <module>tensorflow</module>
         <module>ale</module>
         <module>onnx</module>
@@ -1560,6 +1563,7 @@
         <module>nvcodec</module>
         <module>opencl</module>
         <module>mxnet</module>
+        <module>pytorch</module>
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>

@@ -17,7 +17,7 @@ runs:
         sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
 
         echo Removing broken stuff from WSL and MSYS2
-        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/mingw64/bin/cmake.exe" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe"
+        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/mingw64/bin/cmake.exe" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
 
         python -m pip install gdown || python -m pip install gdown
 
@@ -219,6 +219,7 @@ runs:
         echo Executing Maven %MAVEN_PHASE% on %MAKEJ% processors
         set EXT=${{ matrix.ext }}
         if "%EXT%" == "" (set EXT2=) else (set EXT2=%EXT:~1%)
+        set "MAVEN_OPTS=-Xss2m"
         set "MAVEN_OPTIONS=clean %MAVEN_PHASE% -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% %MAVEN_OPTIONS%"
 
         setlocal enabledelayedexpansion
