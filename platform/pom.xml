@@ -53,6 +53,7 @@
     <module>../nvcodec/platform</module>
     <module>../opencl/platform</module>
     <module>../mxnet/platform</module>
+    <module>../pytorch/platform</module>
     <module>../tensorflow/platform</module>
     <module>../tensorrt/platform</module>
     <module>../ale/platform</module>
@@ -263,6 +264,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
       <version>1.8.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>pytorch-platform</artifactId>
+      <version>1.8.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
