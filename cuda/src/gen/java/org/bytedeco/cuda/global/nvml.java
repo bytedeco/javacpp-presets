@@ -71,7 +71,7 @@ Supported products:
 - Full Support
     - All Tesla products, starting with the Fermi architecture
     - All Quadro products, starting with the Fermi architecture
-    - All GRID products, starting with the Kepler architecture
+    - All vGPU Software products, starting with the Kepler architecture
     - Selected GeForce Titan products
 - Limited Support
     - All Geforce products, starting with the Fermi architecture
@@ -426,16 +426,26 @@ public static final int nvmlFlagForce =       0x01;
  *   */
 /** enum nvmlBrandType_enum */
 public static final int
-    NVML_BRAND_UNKNOWN = 0, 
-    NVML_BRAND_QUADRO  = 1,
-    NVML_BRAND_TESLA   = 2,
-    NVML_BRAND_NVS     = 3,
-    NVML_BRAND_GRID    = 4,
-    NVML_BRAND_GEFORCE = 5,
-    NVML_BRAND_TITAN   = 6,
+    NVML_BRAND_UNKNOWN          = 0, 
+    NVML_BRAND_QUADRO           = 1,
+    NVML_BRAND_TESLA            = 2,
+    NVML_BRAND_NVS              = 3,
+    NVML_BRAND_GRID             = 4,   // Deprecated from API reporting. Keeping definition for backward compatibility.
+    NVML_BRAND_GEFORCE          = 5,
+    NVML_BRAND_TITAN            = 6,
+    NVML_BRAND_NVIDIA_VAPPS     = 7,   // NVIDIA Virtual Applications
+    NVML_BRAND_NVIDIA_VPC       = 8,   // NVIDIA Virtual PC
+    NVML_BRAND_NVIDIA_VCS       = 9,   // NVIDIA Virtual Compute Server
+    NVML_BRAND_NVIDIA_VWS       = 10,  // NVIDIA RTX Virtual Workstation
+    NVML_BRAND_NVIDIA_VGAMING   = 11,  // NVIDIA vGaming
+    NVML_BRAND_QUADRO_RTX       = 12,
+    NVML_BRAND_NVIDIA_RTX       = 13,
+    NVML_BRAND_NVIDIA           = 14,
+    NVML_BRAND_GEFORCE_RTX      = 15,
+    NVML_BRAND_TITAN_RTX        = 16,
 
     // Keep this last
-    NVML_BRAND_COUNT = 7;
+    NVML_BRAND_COUNT = 17;
 
 /**
  * Temperature thresholds.
@@ -799,11 +809,11 @@ public static final int
 /** \} */
 
 /***************************************************************************************************/
-/** \addtogroup gridVirtual
+/** \addtogroup virtualGPU
  *  \{
  */
 /***************************************************************************************************/
-/** \defgroup nvmlGridEnums GRID Virtualization Enums
+/** \defgroup nvmlVirtualGpuEnums vGPU Enums
  *  \{
  */
 /***************************************************************************************************/
@@ -855,7 +865,7 @@ public static final int
     NVML_VGPU_INSTANCE_GUEST_INFO_STATE_INITIALIZED   = 1;
 
 /**
- * GRID license feature code
+ * vGPU software licensable features
  */
 /** enum nvmlGridLicenseFeatureCode_t */
 public static final int
@@ -868,7 +878,7 @@ public static final int
 
 /***************************************************************************************************/
 
-/** \defgroup nvmlVgpuConstants GRID Virtualization Constants
+/** \defgroup nvmlVgpuConstants vGPU Constants
  *  \{
  */
 /***************************************************************************************************/
@@ -903,7 +913,7 @@ public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_YES =     0x
 /** \} */
 
 /***************************************************************************************************/
-/** \defgroup nvmlVgpuStructs GRID Virtualization Structs
+/** \defgroup nvmlVgpuStructs vGPU Structs
  *  \{
  */
 /***************************************************************************************************/
@@ -5925,15 +5935,15 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFieldValues(nvmlDevi
 /** \} */
 
 /***************************************************************************************************/
-/** \defgroup gridVirtual GRID Virtualization Enums, Constants and Structs
+/** \defgroup vGPU Enums, Constants and Structs
  *  \{
  */
 /** \} */
 /***************************************************************************************************/
 
 /***************************************************************************************************/
-/** \defgroup nvmlGridQueries GRID Virtualization APIs
- * This chapter describes operations that are associated with NVIDIA GRID products.
+/** \defgroup nvmlVirtualGpuQueries vGPU APIs
+ * This chapter describes operations that are associated with NVIDIA vGPU Software products.
  *  \{
  */
 /***************************************************************************************************/
@@ -5996,13 +6006,13 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHostVgpuMode(nvmlDev
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetVirtualizationMode(nvmlDevice_st device, @Cast("nvmlGpuVirtualizationMode_t") int virtualMode);
 
 /**
- * Retrieve the GRID licensable features.
+ * Retrieve the vGPU Software licensable features.
  *
- * Identifies whether the system supports GRID Software Licensing. If it does, return the list of licensable feature(s)
+ * Identifies whether the system supports vGPU Software Licensing. If it does, return the list of licensable feature(s)
  * and their current license status.
  *
  * @param device                    Identifier of the target device
- * @param pGridLicensableFeatures   Pointer to structure in which GRID licensable features are returned
+ * @param pGridLicensableFeatures   Pointer to structure in which vGPU software licensable features are returned
  *
  * @return
  *         - \ref NVML_SUCCESS                 if licensable features are successfully retrieved
@@ -6060,10 +6070,10 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetProcessUtilization(n
 /** \} */
 
 /***************************************************************************************************/
-/** \defgroup nvmlVgpu GRID vGPU Management
+/** \defgroup nvmlVgpu vGPU Management
  * \{
  *
- * This chapter describes APIs supporting NVIDIA GRID vGPU.
+ * This chapter describes APIs supporting NVIDIA vGPU.
  */
 /***************************************************************************************************/
 
@@ -6779,7 +6789,7 @@ public static final int
  * is available. The current state of these dependent fields is reflected in the info structure's \ref nvmlVgpuGuestInfoState_t field.
  *
  * The VMM may choose to read and save the vGPU's VM info as persistent metadata associated with the VM, and provide
- * it to GRID Virtual GPU Manager when creating a vGPU for subsequent instances of the VM.
+ * it to Virtual GPU Manager when creating a vGPU for subsequent instances of the VM.
  *
  * The caller passes in a buffer via \a vgpuMetadata, with the size of the buffer in \a bufferSize. If the vGPU Metadata structure
  * is too large to fit in the supplied buffer, the function returns NVML_ERROR_INSUFFICIENT_SIZE with the size needed
@@ -6932,7 +6942,7 @@ public static native @Cast("nvmlReturn_t") int nvmlSetVgpuVersion(nvmlVgpuVersio
 /** \} */
 
 /***************************************************************************************************/
-/** \defgroup nvmlUtil GRID Virtualization Utilization and Accounting 
+/** \defgroup nvmlUtil vGPU Utilization and Accounting 
  * This chapter describes operations that are associated with vGPU Utilization and Accounting.
  *  \{
  */
@@ -7225,7 +7235,8 @@ public static final int NVML_GPU_INSTANCE_PROFILE_3_SLICE = 0x2;
 public static final int NVML_GPU_INSTANCE_PROFILE_4_SLICE = 0x3;
 public static final int NVML_GPU_INSTANCE_PROFILE_7_SLICE = 0x4;
 public static final int NVML_GPU_INSTANCE_PROFILE_8_SLICE = 0x5;
-public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =   0x6;
+public static final int NVML_GPU_INSTANCE_PROFILE_6_SLICE = 0x6;
+public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =   0x7;
 // Targeting ../nvml/nvmlGpuInstancePlacement_t.java
 
 
@@ -7251,7 +7262,8 @@ public static final int NVML_COMPUTE_INSTANCE_PROFILE_3_SLICE = 0x2;
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_4_SLICE = 0x3;
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_7_SLICE = 0x4;
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_8_SLICE = 0x5;
-public static final int NVML_COMPUTE_INSTANCE_PROFILE_COUNT =   0x6;
+public static final int NVML_COMPUTE_INSTANCE_PROFILE_6_SLICE = 0x6;
+public static final int NVML_COMPUTE_INSTANCE_PROFILE_COUNT =   0x7;
 
 /** All the engines except multiprocessors would be shared */
 public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_SHARED = 0x0;
@@ -7439,6 +7451,36 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceCreateGpuInstance(nvmlD
 public static native @Cast("nvmlReturn_t") int nvmlDeviceCreateGpuInstance(nvmlDevice_st device, @Cast("unsigned int") int profileId,
                                                  @Cast("nvmlGpuInstance_st**") PointerPointer gpuInstance);
 
+/**
+ * Create GPU instance with the specified placement.
+ *
+ * For Ampere &tm; or newer fully supported devices.
+ * Supported on Linux only.
+ * Requires privileged user.
+ *
+ * If the parent device is unbound, reset or the GPU instance is destroyed explicitly, the GPU instance handle would
+ * become invalid. The GPU instance must be recreated to acquire a valid handle.
+ *
+ * @param device                               The identifier of the target device
+ * @param profileId                            The GPU instance profile ID. See \ref nvmlDeviceGetGpuInstanceProfileInfo
+ * @param placement                            The requested placement. See \ref nvmlDeviceGetGpuInstancePossiblePlacements
+ * @param gpuInstance                          Returns the GPU instance handle
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                       Upon success
+ *         - \ref NVML_ERROR_UNINITIALIZED           If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT        If \a device, \a profile, \a profileId, \a placement or \a gpuInstance
+ *                                                   are invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED           If \a device doesn't have MIG mode enabled or in vGPU guest
+ *         - \ref NVML_ERROR_NO_PERMISSION           If user doesn't have permission to perform the operation
+ *         - \ref NVML_ERROR_INSUFFICIENT_RESOURCES  If the requested GPU instance could not be created
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceCreateGpuInstanceWithPlacement(nvmlDevice_st device, @Cast("unsigned int") int profileId,
+                                                              @Const nvmlGpuInstancePlacement_t placement,
+                                                              @ByPtrPtr nvmlGpuInstance_st gpuInstance);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceCreateGpuInstanceWithPlacement(nvmlDevice_st device, @Cast("unsigned int") int profileId,
+                                                              @Const nvmlGpuInstancePlacement_t placement,
+                                                              @Cast("nvmlGpuInstance_st**") PointerPointer gpuInstance);
 /**
  * Destroy GPU instance.
  *

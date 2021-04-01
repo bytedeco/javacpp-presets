@@ -16,7 +16,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 /** \} */
 
 /***************************************************************************************************/
-/** \defgroup nvml GRID Virtualization Migration
+/** \defgroup nvml vGPU Migration
  * This chapter describes operations that are associated with vGPU Migration.
  *  \{
  */

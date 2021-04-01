@@ -32651,7 +32651,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 // Parsed from <cuda_fp16.h>
 
 /*
-* Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+* Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
 *
 * NOTICE TO LICENSEE:
 *
@@ -32703,49 +32703,49 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 * \defgroup CUDA_MATH_INTRINSIC_HALF Half Precision Intrinsics
 * This section describes half precision intrinsic functions that are
 * only supported in device code.
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF_ARITHMETIC Half Arithmetic Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF2_ARITHMETIC Half2 Arithmetic Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF_COMPARISON Half Comparison Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF2_COMPARISON Half2 Comparison Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 /**
-* \defgroup CUDA_MATH__HALF_MISC Half Precision Conversion And Data Movement
+* \defgroup CUDA_MATH__HALF_MISC Half Precision Conversion and Data Movement
 * \ingroup CUDA_MATH_INTRINSIC_HALF
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF_FUNCTIONS Half Math Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF2_FUNCTIONS Half2 Math Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
-* To use these functions include the header file \p cuda_fp16.h in your program.
+* To use these functions, include the header file \p cuda_fp16.h in your program.
 */
 
 // #ifndef __CUDA_FP16_H__
@@ -32799,7 +32799,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 * \details Converts double number \p a to half precision in round-to-nearest-even mode.
 * @param a [in] - double. Is only being read.
 * @return half
-* \retval \p a converted to half.
+* \retval a converted to half.
 * \internal
 * @throws -guarantee no-throw guarantee
 * \behavior reentrant, thread safe
@@ -32814,7 +32814,7 @@ public static native @ByVal __half __double2half(double a);
 * \details Converts float number \p a to half precision in round-to-nearest-even mode. 
 * @param a [in] - float. Is only being read. 
 * @return half
-* \retval \p a converted to half. 
+* \retval a converted to half. 
 * \internal
 * @throws -guarantee no-throw guarantee
 * \behavior reentrant, thread safe
@@ -32829,7 +32829,7 @@ public static native @ByVal __half __float2half(float a);
 * \details Converts float number \p a to half precision in round-to-nearest-even mode.
 * @param a [in] - float. Is only being read. 
 * @return half
-* \retval \p a converted to half. 
+* \retval a converted to half. 
 * \internal
 * @throws -guarantee no-throw guarantee
 * \behavior reentrant, thread safe
@@ -32844,7 +32844,7 @@ public static native @ByVal __half __float2half_rn(float a);
 * \details Converts float number \p a to half precision in round-towards-zero mode.
 * @param a [in] - float. Is only being read. 
 * @return half
-* \retval \p a converted to half. 
+* \retval a converted to half. 
 * \internal
 * @throws -guarantee no-throw guarantee
 * \behavior reentrant, thread safe
@@ -32860,7 +32860,7 @@ public static native @ByVal __half __float2half_rz(float a);
 * @param a [in] - float. Is only being read. 
 * 
 * @return half
-* \retval \p a converted to half. 
+* \retval a converted to half. 
 * \internal
 * @throws -guarantee no-throw guarantee
 * \behavior reentrant, thread safe
@@ -32876,7 +32876,7 @@ public static native @ByVal __half __float2half_rd(float a);
 * @param a [in] - float. Is only being read. 
 * 
 * @return half
-* \retval \p a converted to half. 
+* \retval a converted to half. 
 * \internal
 * @throws -guarantee no-throw guarantee
 * \behavior reentrant, thread safe
@@ -32891,7 +32891,7 @@ public static native @ByVal __half __float2half_ru(float a);
 * @param a [in] - float. Is only being read. 
 * 
 * @return float
-* \retval \p a converted to float. 
+* \retval a converted to float. 
 * \internal
 * @throws -guarantee no-throw guarantee
 * \behavior reentrant, thread safe
@@ -32941,7 +32941,7 @@ public static native @ByVal __half2 __floats2half2_rn(float a, float b);
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts low 16 bits of \p half2 to float and returns the result
 * 
-* \details Converts low 16 bits of \p half2 input \p a to 32 bit floating point number
+* \details Converts low 16 bits of \p half2 input \p a to 32-bit floating-point number
 * and returns the result.
 * @param a [in] - half2. Is only being read. 
 * 
@@ -32957,7 +32957,7 @@ public static native float __low2float(@Const @ByVal __half2 a);
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts high 16 bits of \p half2 to float and returns the result
 * 
-* \details Converts high 16 bits of \p half2 input \p a to 32 bit floating point number
+* \details Converts high 16 bits of \p half2 input \p a to 32-bit floating-point number
 * and returns the result.
 * @param a [in] - half2. Is only being read. 
 * 

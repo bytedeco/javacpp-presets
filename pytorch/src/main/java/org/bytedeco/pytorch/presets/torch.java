@@ -437,6 +437,7 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info().enumerate())
                .put(new Info().javaText("import org.bytedeco.pytorch.Allocator;"))
                .put(new Info().javaText("import org.bytedeco.pytorch.Function;"))
+               .put(new Info().javaText("import org.bytedeco.pytorch.Module;"))
 
                .put(new Info("basic/containers").cppTypes("c10::optional", "c10::Dict", "torch::optional", "torch::OrderedDict"))
                .put(new Info("std::nullptr_t").cast().pointerTypes("PointerPointer"))

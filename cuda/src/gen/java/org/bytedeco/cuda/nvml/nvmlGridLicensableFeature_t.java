@@ -14,7 +14,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 
 
 /**
- * Structure containing GRID licensable feature information
+ * Structure containing vGPU software licensable feature information
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlGridLicensableFeature_t extends Pointer {

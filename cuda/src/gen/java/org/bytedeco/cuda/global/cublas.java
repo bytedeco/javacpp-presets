@@ -103,7 +103,7 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 public static final int CUBLAS_VER_MAJOR = 11;
 public static final int CUBLAS_VER_MINOR = 4;
 public static final int CUBLAS_VER_PATCH = 1;
-public static final int CUBLAS_VER_BUILD = 1026;
+public static final int CUBLAS_VER_BUILD = 1043;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
