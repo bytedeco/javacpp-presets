@@ -82,6 +82,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import org.bytedeco.javacpp.*;
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Module;
 import static org.bytedeco.pytorch.global.torch.*;
 
 public class SimpleMNIST {

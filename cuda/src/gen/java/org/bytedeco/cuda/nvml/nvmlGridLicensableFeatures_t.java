@@ -14,7 +14,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 
 
 /**
- * Structure to store GRID licensable features
+ * Structure to store vGPU software licensable features
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlGridLicensableFeatures_t extends Pointer {
@@ -34,11 +34,11 @@ public class nvmlGridLicensableFeatures_t extends Pointer {
         return new nvmlGridLicensableFeatures_t((Pointer)this).position(position + i);
     }
 
-    /** Non-zero if GRID Software Licensing is supported on the system, otherwise zero */
+    /** Non-zero if vGPU Software Licensing is supported on the system, otherwise zero */
     public native int isGridLicenseSupported(); public native nvmlGridLicensableFeatures_t isGridLicenseSupported(int setter);
     /** Entries returned in \a gridLicensableFeatures array */
     public native @Cast("unsigned int") int licensableFeaturesCount(); public native nvmlGridLicensableFeatures_t licensableFeaturesCount(int setter);
-    /** Array of GRID licensable features. */
+    /** Array of vGPU software licensable features. */
     public native @ByRef nvmlGridLicensableFeature_t gridLicensableFeatures(int i); public native nvmlGridLicensableFeatures_t gridLicensableFeatures(int i, nvmlGridLicensableFeature_t setter);
     @MemberGetter public native nvmlGridLicensableFeature_t gridLicensableFeatures();
 }

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.20.1
+NUMPY_VERSION=1.20.2
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -76,7 +76,7 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.9"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.9" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.9/" crossenv cython
+    "$CPYTHON_HOST_PATH/bin/python3.9" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.9/" crossenv==1.0 cython==0.29.22
     "$CPYTHON_HOST_PATH/bin/python3.9" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate
     cross-expose cython

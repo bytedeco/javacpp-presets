@@ -135,6 +135,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
             "cblas_ismax", "cblas_idmax", "cblas_icmax", "cblas_izmax",
             "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
+            "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
             "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
             "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu", "cblas_cgeadd",

@@ -25,7 +25,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl</artifactId>
-      <version>2.1.1-${project.parent.version}</version>
+      <version>2.1.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -52,7 +52,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>2.1.1-${project.parent.version}</version>
+            <version>2.1.2-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -65,8 +65,8 @@
             <includePath>${basedir}/../opencl/target/classes/org/bytedeco/opencl/include/</includePath>
             <includePath>${basedir}/../opencl/src/main/resources/org/bytedeco/opencl/include/</includePath>
             <includePath>${basedir}/../opencl/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/../dnnl/target/classes/org/bytedeco/openblas/include/</includePath>
-            <includePath>${basedir}/../dnnl/src/main/resources/org/bytedeco/openblas/include/</includePath>
+            <includePath>${basedir}/../dnnl/target/classes/org/bytedeco/dnnl/include/</includePath>
+            <includePath>${basedir}/../dnnl/src/main/resources/org/bytedeco/dnnl/include/</includePath>
             <includePath>${basedir}/../dnnl/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/onnxruntime/core/session/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/onnxruntime/</includePath>
