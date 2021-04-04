@@ -9642,8 +9642,7 @@ public static native LLVMErrorRef LLVMOrcExecutionSessionCreateJITDylib(LLVMOrcE
  * Returns the JITDylib with the given name, or NULL if no such JITDylib
  * exists.
  */
-public static native LLVMOrcJITDylibRef LLVMOrcExecutionSessionGetJITDylibByName(@Cast("const char*") BytePointer Name);
-public static native LLVMOrcJITDylibRef LLVMOrcExecutionSessionGetJITDylibByName(String Name);
+
 
 /**
  * Return a reference to a newly created resource tracker associated with JD.
@@ -9786,7 +9785,7 @@ public static native void LLVMOrcDisposeJITTargetMachineBuilder(
 /**
  * Dispose of an ObjectLayer.
  */
-public static native void LLVMOrcDisposeObjectLayer(LLVMOrcObjectLayerRef ObjLayer);
+
 
 // #endif /* LLVM_C_ORC_H */
 
