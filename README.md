@@ -41,6 +41,7 @@ JavaCPP Presets
 [![nvcodec](https://github.com/bytedeco/javacpp-presets/workflows/nvcodec/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Anvcodec)
 [![opencl](https://github.com/bytedeco/javacpp-presets/workflows/opencl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencl)
 [![mxnet](https://github.com/bytedeco/javacpp-presets/workflows/mxnet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amxnet)
+[![pytorch](https://github.com/bytedeco/javacpp-presets/workflows/pytorch/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Apytorch)
 [![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)
 [![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)
 [![ale](https://github.com/bytedeco/javacpp-presets/workflows/ale/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aale)
@@ -52,7 +53,7 @@ JavaCPP Presets
 [![qt](https://github.com/bytedeco/javacpp-presets/workflows/qt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aqt)
 [![skia](https://github.com/bytedeco/javacpp-presets/workflows/skia/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Askia)
 [![cpu_features](https://github.com/bytedeco/javacpp-presets/workflows/cpu_features/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acpu_features)
-[![systems](https://github.com/bytedeco/javacpp-presets/workflows/systems/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Asystems)
+[![systems](https://github.com/bytedeco/javacpp-presets/workflows/systems/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Asystems)  
 <sup>Commercial support and paid services for custom presets:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
 
 Introduction
@@ -183,7 +184,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 2.1.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.13  http://www.openblas.net/
+ * OpenBLAS 0.3.14  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.9  http://www.fftw.org/download.html
@@ -204,6 +205,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
+ * PyTorch 1.8.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment

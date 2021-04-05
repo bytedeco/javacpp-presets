@@ -13,13 +13,13 @@ runs:
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
           export ARCH=arm64
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-2-local-11.2.1_460.32.03-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-11-2-local-11.2.2_460.32.03-1.aarch64.rpm
           export CUDNN=cudnn-11.2-linux-aarch64sbsa-v8.1.1.33.tgz
           export NCCL=nccl_2.8.4-1+cuda11.2_aarch64.txz
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-2-local-11.2.1_460.32.03-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-11-2-local-11.2.2_460.32.03-1.ppc64le.rpm
           export CUDNN=cudnn-11.2-linux-ppc64le-v8.1.1.33.tgz
           export NCCL=nccl_2.8.4-1+cuda11.2_ppc64le.txz
         fi
@@ -76,7 +76,7 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/$CUDNN
           curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/$NCCL
 
@@ -177,6 +177,7 @@ runs:
           echo Executing Maven $MAVEN_PHASE on $MAKEJ processors
           export EXT=${{ matrix.ext }}
           export EXT2=${EXT:1}
+          export MAVEN_OPTS="-Xss2m"
           export MAVEN_OPTIONS="clean $MAVEN_PHASE -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS"
           for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -pl .,$CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
           for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -f $CI_DEPLOY_MODULE/platform/$EXT2/pom.xml && break || STATUS=$? && sleep 60; done; (exit $STATUS)
