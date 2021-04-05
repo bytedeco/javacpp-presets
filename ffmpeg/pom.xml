@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ffmpeg</artifactId>
-  <version>4.3.2-${project.parent.version}</version>
+  <version>4.4.0-${project.parent.version}</version>
   <name>JavaCPP Presets for FFmpeg</name>
 
   <dependencies>
@@ -48,6 +48,9 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+        </configuration>
       </plugin>
     </plugins>
   </build>

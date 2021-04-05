@@ -46,6 +46,6 @@ public class avformat implements InfoMapper {
         infoMap.put(new Info("AVDeviceInfoList", "AVDeviceCapabilitiesQuery", "AVBPrint", "URLContext", "FFFrac").cast().pointerTypes("Pointer"))
                .put(new Info("AVPROBE_SCORE_RETRY", "AVPROBE_SCORE_STREAM_RETRY").translate(false))
                .put(new Info("LIBAVFORMAT_VERSION_MAJOR <= 54", "FF_API_ALLOC_OUTPUT_CONTEXT", "FF_API_FORMAT_PARAMETERS",
-                             "FF_API_READ_PACKET", "FF_API_CLOSE_INPUT_FILE", "FF_API_NEW_STREAM", "FF_API_SET_PTS_INFO").define(false));
+                             "FF_API_READ_PACKET", "FF_API_CLOSE_INPUT_FILE", "FF_API_NEW_STREAM", "FF_API_SET_PTS_INFO", "LIBAVFORMAT_VERSION_MAJOR < 59").define(false));
     }
 }
