@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.4.5"),
         @Platform(value = "ios", preload = "libopencv_calib3d"),
-        @Platform(value = "windows", link = "opencv_calib3d451")
+        @Platform(value = "windows", link = "opencv_calib3d452")
     },
     target = "org.bytedeco.opencv.opencv_calib3d",
     global = "org.bytedeco.opencv.global.opencv_calib3d"
@@ -150,6 +150,7 @@ public class opencv_calib3d implements InfoMapper {
                .put(new Info("cv::fisheye::CALIB_FIX_INTRINSIC").javaNames("FISHEYE_CALIB_FIX_INTRINSIC").translate())
                .put(new Info("cv::fisheye::CALIB_FIX_PRINCIPAL_POINT").javaNames("FISHEYE_CALIB_FIX_PRINCIPAL_POINT").translate())
                .put(new Info("cv::fisheye::CALIB_ZERO_DISPARITY").javaNames("FISHEYE_CALIB_ZERO_DISPARITY").translate())
+               .put(new Info("cv::fisheye::CALIB_FIX_FOCAL_LENGTH").javaNames("FISHEYE_CALIB_FIX_FOCAL_LENGTH").translate())
                .put(new Info("Affine3d").pointerTypes("Mat"));
     }
 }

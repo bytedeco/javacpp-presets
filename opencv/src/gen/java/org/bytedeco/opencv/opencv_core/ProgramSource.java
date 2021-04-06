@@ -31,7 +31,7 @@ public class ProgramSource extends Pointer {
  // deprecated
 
     public ProgramSource() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public ProgramSource(@Str BytePointer module, @Str BytePointer name, @Str BytePointer codeStr, @Str BytePointer codeHash) { super((Pointer)null); allocate(module, name, codeStr, codeHash); }
     private native void allocate(@Str BytePointer module, @Str BytePointer name, @Str BytePointer codeStr, @Str BytePointer codeHash);
     public ProgramSource(@Str String module, @Str String name, @Str String codeStr, @Str String codeHash) { super((Pointer)null); allocate(module, name, codeStr, codeHash); }

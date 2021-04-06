@@ -84,6 +84,9 @@ sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-
 sedinplace 's/-Xcompiler "$(CFLAGS)/"-Xcompiler=$(CFLAGS)/g' Makefile
 sedinplace '/CHECK(mshadow::DataType<DType>::kFlag == type_flag_)/{N;N;N;d;}' include/mxnet/tensor_blob.h
 sedinplace 's/std::pow/powf/g' src/operator/contrib/multi_lamb.cu
+sedinplace 's/round(/roundf(/g' src/operator/*.cu
+sedinplace 's/floor(/floorf(/g' src/operator/*.cu
+sedinplace 's/ceil(/ceilf(/g' src/operator/*.cu
 
 sedinplace '/#include <opencv2\/opencv.hpp>/a\
 #include <opencv2/imgproc/types_c.h>\

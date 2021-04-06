@@ -27,7 +27,7 @@ public class Device extends Pointer {
     }
 
     public Device() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public Device(Pointer d) { super((Pointer)null); allocate(d); }
     private native void allocate(Pointer d);
     public Device(@Const @ByRef Device d) { super((Pointer)null); allocate(d); }
