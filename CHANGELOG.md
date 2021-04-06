@@ -4,7 +4,7 @@
  * Map `std::vector<cv::Range>` to `RangeVector` in `opencv_core.Mat` for convenience ([issue bytedeco/javacv#1607](https://github.com/bytedeco/javacv/issues/1607))
  * Include `genericaliasobject.h`, `context.h`, `tracemalloc.h`, and `datetime.h` for CPython ([issue #1017](https://github.com/bytedeco/javacpp-presets/issues/1017))
  * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))
- * Upgrade presets for OpenBLAS 0.3.14, DNNL 2.1.2, NumPy 1.20.2, SciPy 1.6.2, CUDA 11.2.2
+ * Upgrade presets for OpenCV 4.5.2, MKL 2021.2, OpenBLAS 0.3.14, DNNL 2.2, NumPy 1.20.2, SciPy 1.6.2, CUDA 11.2.2
 
 ### March 8, 2021 version 1.5.5
  * Bundle LLD executable in presets for LLVM as required by TVM on Windows

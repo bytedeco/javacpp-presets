@@ -126,7 +126,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20201117;
+public static final int OPENCV_DNN_API_VERSION = 20210301;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)
@@ -348,6 +348,9 @@ public static final int OPENCV_DNN_API_VERSION = 20201117;
 // Targeting ../opencv_dnn/PowerLayer.java
 
 
+// Targeting ../opencv_dnn/ExpLayer.java
+
+
 // Targeting ../opencv_dnn/CropLayer.java
 
 
@@ -508,6 +511,18 @@ public static final int OPENCV_DNN_API_VERSION = 20201117;
 
     @Namespace("cv::dnn") public static native @ByVal @Cast("std::vector<std::pair<cv::dnn::Backend,cv::dnn::Target> >*") IntIntPairVector getAvailableBackends();
     @Namespace("cv::dnn") public static native @Cast("cv::dnn::Target*") @StdVector IntPointer getAvailableTargets(@Cast("cv::dnn::Backend") int be);
+
+    /**
+     * \brief Enables detailed logging of the DNN model loading with CV DNN API.
+     * @param isDiagnosticsMode [in] Indicates whether diagnostic mode should be set.
+     *
+     * Diagnostic mode provides detailed logging of the model loading stage to explore
+     * potential problems (ex.: not implemented layer type).
+     *
+     * \note In diagnostic mode series of assertions will be skipped, it can lead to the
+     * expected application crash.
+     */
+    @Namespace("cv::dnn") public static native void enableModelDiagnostics(@Cast("bool") boolean isDiagnosticsMode);
 // Targeting ../opencv_dnn/LayerParams.java
 
 
@@ -1238,11 +1253,14 @@ public static final int OPENCV_DNN_API_VERSION = 20201117;
 @Namespace("cv::dnn") public static native void print(@Const @StdVector @ByRef IntPointer shape, @Str String name/*=""*/);
 @Namespace("cv::dnn") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @StdVector @ByRef IntPointer shape);
 
-@Namespace("cv::dnn") public static native int clamp(int ax, int dims);
+/** \brief Converts axis from {@code [-dims; dims)} (similar to Python's slice notation) to {@code [0; dims)} range. */
+@Namespace("cv::dnn") public static native int normalize_axis(int axis, int dims);
 
-@Namespace("cv::dnn") public static native int clamp(int ax, @Const @StdVector @ByRef IntPointer shape);
+@Namespace("cv::dnn") public static native int normalize_axis(int axis, @Const @StdVector @ByRef IntPointer shape);
 
-@Namespace("cv::dnn") public static native @ByVal Range clamp(@Const @ByRef Range r, int axisSize);
+@Namespace("cv::dnn") public static native @ByVal Range normalize_axis_range(@Const @ByRef Range r, int axisSize);
+
+@Namespace("cv::dnn") public static native @Cast("bool") boolean isAllOnes(@Const @StdVector @ByRef IntPointer inputShape, int startPos, int endPos);
 
 
 

@@ -22,9 +22,9 @@ public class UMat extends Pointer {
 
     /** default constructor */
     public UMat(@Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(usageFlags); }
-    private native void allocate(@Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
+    @NoException private native void allocate(@Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
     public UMat() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     /** constructs 2D matrix of the specified size and type */
     // (_type is CV_8UC1, CV_64FC3, CV_32SC(12) etc.)
     public UMat(int rows, int cols, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(rows, cols, type, usageFlags); }

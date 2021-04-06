@@ -21,7 +21,7 @@ public class Context extends Pointer {
     public Context(Pointer p) { super(p); }
 
     public Context() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     /** @deprecated */
     public Context(int dtype) { super((Pointer)null); allocate(dtype); }
     private native void allocate(int dtype);

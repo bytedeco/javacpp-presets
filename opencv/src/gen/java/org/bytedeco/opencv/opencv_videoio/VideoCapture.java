@@ -76,6 +76,25 @@ public class VideoCapture extends Pointer {
     private native void allocate(@Str String filename);
 
     /** \overload
+    \brief Opens a video file or a capturing device or an IP video stream for video capturing with API Preference and parameters
+    <p>
+    The {@code params} parameter allows to specify extra parameters encoded as pairs {@code (paramId_1, paramValue_1, paramId_2, paramValue_2, ...)}.
+    See cv::VideoCaptureProperties
+    */
+    public VideoCapture(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params) { super((Pointer)null); allocate(filename, apiPreference, params); }
+    private native void allocate(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public VideoCapture(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params) { super((Pointer)null); allocate(filename, apiPreference, params); }
+    private native void allocate(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public VideoCapture(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params) { super((Pointer)null); allocate(filename, apiPreference, params); }
+    private native void allocate(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+    public VideoCapture(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params) { super((Pointer)null); allocate(filename, apiPreference, params); }
+    private native void allocate(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public VideoCapture(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params) { super((Pointer)null); allocate(filename, apiPreference, params); }
+    private native void allocate(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public VideoCapture(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params) { super((Pointer)null); allocate(filename, apiPreference, params); }
+    private native void allocate(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+
+    /** \overload
     \brief  Opens a camera for video capturing
     <p>
     @param index id of the video capturing device to open. To open default camera using default backend just pass 0.
@@ -89,6 +108,19 @@ public class VideoCapture extends Pointer {
     private native void allocate(int index, int apiPreference/*=cv::CAP_ANY*/);
     public VideoCapture(int index) { super((Pointer)null); allocate(index); }
     private native void allocate(int index);
+
+    /** \overload
+    \brief Opens a camera for video capturing with API Preference and parameters
+    <p>
+    The {@code params} parameter allows to specify extra parameters encoded as pairs {@code (paramId_1, paramValue_1, paramId_2, paramValue_2, ...)}.
+    See cv::VideoCaptureProperties
+    */
+    public VideoCapture(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params) { super((Pointer)null); allocate(index, apiPreference, params); }
+    private native void allocate(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public VideoCapture(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params) { super((Pointer)null); allocate(index, apiPreference, params); }
+    private native void allocate(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public VideoCapture(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params) { super((Pointer)null); allocate(index, apiPreference, params); }
+    private native void allocate(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
 
     /** \brief Default destructor
     <p>
@@ -113,6 +145,24 @@ public class VideoCapture extends Pointer {
     <p>
     \overload
     <p>
+    The {@code params} parameter allows to specify extra parameters encoded as pairs {@code (paramId_1, paramValue_1, paramId_2, paramValue_2, ...)}.
+    See cv::VideoCaptureProperties
+    <p>
+    @return {@code true} if the file has been successfully opened
+    <p>
+    The method first calls VideoCapture::release to close the already opened file or camera.
+     */
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
+
+    /** \brief  Opens a camera for video capturing
+    <p>
+    \overload
+    <p>
     Parameters are same as the constructor VideoCapture(int index, int apiPreference = CAP_ANY)
     @return {@code true} if the camera has been successfully opened.
     <p>
@@ -120,6 +170,21 @@ public class VideoCapture extends Pointer {
     */
     public native @Cast("bool") boolean open(int index, int apiPreference/*=cv::CAP_ANY*/);
     public native @Cast("bool") boolean open(int index);
+
+    /** \brief Returns true if video capturing has been initialized already.
+    <p>
+    \overload
+    <p>
+    The {@code params} parameter allows to specify extra parameters encoded as pairs {@code (paramId_1, paramValue_1, paramId_2, paramValue_2, ...)}.
+    See cv::VideoCaptureProperties
+    <p>
+    @return {@code true} if the camera has been successfully opened.
+    <p>
+    The method first calls VideoCapture::release to close the already opened file or camera.
+    */
+    public native @Cast("bool") boolean open(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntPointer params);
+    public native @Cast("bool") boolean open(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) IntBuffer params);
+    public native @Cast("bool") boolean open(int index, int apiPreference, @StdVector @Cast({"int*", "std::vector<int>&"}) int[] params);
 
     /** \brief Returns true if video capturing has been initialized already.
     <p>

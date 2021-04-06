@@ -23,17 +23,17 @@ public class MatSize extends Pointer {
     public MatSize(Pointer p) { super(p); }
 
     public MatSize(IntPointer _p) { super((Pointer)null); allocate(_p); }
-    private native void allocate(IntPointer _p);
+    @NoException private native void allocate(IntPointer _p);
     public MatSize(IntBuffer _p) { super((Pointer)null); allocate(_p); }
-    private native void allocate(IntBuffer _p);
+    @NoException private native void allocate(IntBuffer _p);
     public MatSize(int[] _p) { super((Pointer)null); allocate(_p); }
-    private native void allocate(int[] _p);
-    public native int dims();
+    @NoException private native void allocate(int[] _p);
+    public native @NoException int dims();
     public native @ByVal @Name("operator ()") Size apply();
     public native @ByRef @Name("operator []") IntPointer get(int i);
-    public native @Const @Name("operator const int*") IntPointer asIntPointer();  // TODO OpenCV 4.0: drop this
-    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef MatSize sz);
-    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef MatSize sz);
+    public native @Const @Name("operator const int*") @NoException IntPointer asIntPointer();  // TODO OpenCV 4.0: drop this
+    public native @Cast("bool") @Name("operator ==") @NoException boolean equals(@Const @ByRef MatSize sz);
+    public native @Cast("bool") @Name("operator !=") @NoException boolean notEquals(@Const @ByRef MatSize sz);
 
     public native IntPointer p(); public native MatSize p(IntPointer setter);
 }

@@ -27,7 +27,7 @@ public class PlatformInfo extends Pointer {
     }
 
     public PlatformInfo() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     /**
      * @param id pointer cl_platform_id (cl_platform_id*)
      */

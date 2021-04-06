@@ -29,7 +29,7 @@ public class Program extends Pointer {
     }
 
     public Program() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public Program(@Const @ByRef ProgramSource src,
                 @Str BytePointer buildflags, @Str BytePointer errmsg) { super((Pointer)null); allocate(src, buildflags, errmsg); }
     private native void allocate(@Const @ByRef ProgramSource src,
@@ -40,7 +40,6 @@ public class Program extends Pointer {
                 @Str String buildflags, @Str String errmsg);
     public Program(@Const @ByRef Program prog) { super((Pointer)null); allocate(prog); }
     private native void allocate(@Const @ByRef Program prog);
-
     public native @ByRef @Name("operator =") Program put(@Const @ByRef Program prog);
 
     public native @Cast("bool") boolean create(@Const @ByRef ProgramSource src,

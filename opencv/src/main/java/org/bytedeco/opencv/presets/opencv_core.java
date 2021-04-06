@@ -68,7 +68,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core451", "opencv_imgproc451"}, preload = {"opencv_cudev451"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core452", "opencv_imgproc452"}, preload = {"opencv_cudev452"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -344,6 +344,8 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                        .skip()./*cast().*/pointerTypes("Mat", "Mat", "Mat", "UMat", "UMat", "UMat", "GpuMat", "GpuMat", "GpuMat"))
                .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays")
                        .skip()./*cast().*/pointerTypes("MatVector", "UMatVector", "GpuMatVector"))
+               .put(new Info("cv::cuda::GpuMatND::SizeArray", "cv::cuda::GpuMatND::IndexArray").annotations("@StdVector").valueTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("cv::cuda::GpuMatND::StepArray").annotations("@StdVector").valueTypes("SizeTPointer"))
 
                .put(new Info("cv::traits::Depth", "cv::traits::Type").skip())
                .put(new Info("cv::Complex<float>").pointerTypes("Complexf").base("FloatPointer"))

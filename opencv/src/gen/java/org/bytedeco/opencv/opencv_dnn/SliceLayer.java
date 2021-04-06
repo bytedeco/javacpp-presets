@@ -54,6 +54,7 @@ public class SliceLayer extends Layer {
          * Inner vector has slice ranges for the first number of input dimensions.
          */
         public native @ByRef RangeVectorVector sliceRanges(); public native SliceLayer sliceRanges(RangeVectorVector setter);
+        public native @ByRef IntVectorVector sliceSteps(); public native SliceLayer sliceSteps(IntVectorVector setter);
         public native int axis(); public native SliceLayer axis(int setter);
         public native int num_split(); public native SliceLayer num_split(int setter);
 

@@ -109,8 +109,10 @@ esac
 # work around some compiler bugs
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
 sedinplace 's/typedef c10::variant/public: typedef c10::variant/g' ./torch/csrc/api/include/torch/nn/options/upsampling.h
-sedinplace 's/std::floor/floorf/g' aten/src/ATen/native/cuda/AdaptiveMaxPooling2d.cu
-sedinplace 's/std::ceil/ceilf/g' aten/src/ATen/native/cuda/AdaptiveMaxPooling2d.cu
+sedinplace 's/std::copysign/copysignf/g' aten/src/ATen/native/cuda/*.cu
+sedinplace 's/std::trunc/truncf/g' aten/src/ATen/native/cuda/*.cu
+sedinplace 's/std::floor/floorf/g' aten/src/ATen/native/cuda/*.cu
+sedinplace 's/std::ceil/ceilf/g' aten/src/ATen/native/cuda/*.cu
 sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
 
 "$PYTHON_BIN_PATH" setup.py build

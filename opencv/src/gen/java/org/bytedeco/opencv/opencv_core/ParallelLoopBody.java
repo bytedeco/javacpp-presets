@@ -16,6 +16,8 @@ import static org.bytedeco.opencv.global.opencv_core.*;
 /////////////////////////////// Parallel Primitives //////////////////////////////////
 
 /** \brief Base class for parallel data processors
+<p>
+\ingroup core_parallel
 */
 @Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class ParallelLoopBody extends Pointer {

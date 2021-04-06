@@ -29,7 +29,7 @@ public class Image2D extends Pointer {
     }
 
     public Image2D() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
 
     /**
     @param src UMat object from which to get image properties and data

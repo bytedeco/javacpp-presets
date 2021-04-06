@@ -20,10 +20,10 @@ public class MatStep extends Pointer {
     public MatStep(Pointer p) { super(p); }
 
     public MatStep() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public MatStep(@Cast("size_t") long s) { super((Pointer)null); allocate(s); }
-    private native void allocate(@Cast("size_t") long s);
-    public native @Cast("size_t*") @ByRef @Name("operator []") SizeTPointer get(int i);
+    @NoException private native void allocate(@Cast("size_t") long s);
+    public native @Cast("size_t*") @ByRef @Name("operator []") @NoException SizeTPointer get(int i);
     public native @Cast("size_t") @Name("operator size_t") long asLong();
     public native @ByRef @Name("operator =") MatStep put(@Cast("size_t") long s);
 

@@ -2432,6 +2432,7 @@ location of points on the plane, building special graphs (such as NNG,RNG), and 
     \defgroup imgproc_motion Motion Analysis and Object Tracking
     \defgroup imgproc_feature Feature Detection
     \defgroup imgproc_object Object Detection
+    \defgroup imgproc_segmentation Image Segmentation
     \defgroup imgproc_c C API
     \defgroup imgproc_hal Hardware Acceleration Layer
     \{
@@ -2689,12 +2690,20 @@ public static final int
 /** connected components algorithm */
 /** enum cv::ConnectedComponentsAlgorithmsTypes */
 public static final int
-    /** SAUF \cite Wu2009 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity */
-    CCL_WU      = 0,
-    /** BBDT algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity */
-    CCL_DEFAULT = -1,
-    /** BBDT algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity */
-    CCL_GRANA   = 1;
+    /** BBDT \cite Grana2010 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. The parallel implementation described in \cite Bolelli2017 is available for both BBDT and SAUF. */
+    CCL_DEFAULT   = -1,
+    /** SAUF \cite Wu2009 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. The parallel implementation described in \cite Bolelli2017 is available for SAUF. */
+    CCL_WU        = 0,
+    /** BBDT \cite Grana2010 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. The parallel implementation described in \cite Bolelli2017 is available for both BBDT and SAUF. */
+    CCL_GRANA     = 1,
+    /** Spaghetti \cite Bolelli2019 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. */
+    CCL_BOLELLI   = 2,
+    /** Same as CCL_WU. It is preferable to use the flag with the name of the algorithm (CCL_SAUF) rather than the one with the name of the first author (CCL_WU). */
+    CCL_SAUF      = 3,
+    /** Same as CCL_GRANA. It is preferable to use the flag with the name of the algorithm (CCL_BBDT) rather than the one with the name of the first author (CCL_GRANA). */
+    CCL_BBDT      = 4,
+    /** Same as CCL_BOLELLI. It is preferable to use the flag with the name of the algorithm (CCL_SPAGHETTI) rather than the one with the name of the first author (CCL_BOLELLI). */
+    CCL_SPAGHETTI = 5;
 
 /** mode of the contour retrieval algorithm */
 /** enum cv::RetrievalModes */
@@ -2894,7 +2903,7 @@ public static final int
     COLOR_YCrCb2BGR    = 38,
     COLOR_YCrCb2RGB    = 39,
 
-    /** convert RGB/BGR to HSV (hue saturation value), \ref color_convert_rgb_hsv "color conversions" */
+    /** convert RGB/BGR to HSV (hue saturation value) with H range 0..180 if 8 bit image, \ref color_convert_rgb_hsv "color conversions" */
     COLOR_BGR2HSV      = 40,
     COLOR_RGB2HSV      = 41,
 
@@ -2905,11 +2914,11 @@ public static final int
     /** convert RGB/BGR to CIE Luv, \ref color_convert_rgb_luv "color conversions" */
     COLOR_BGR2Luv      = 50,
     COLOR_RGB2Luv      = 51,
-    /** convert RGB/BGR to HLS (hue lightness saturation), \ref color_convert_rgb_hls "color conversions" */
+    /** convert RGB/BGR to HLS (hue lightness saturation) with H range 0..180 if 8 bit image, \ref color_convert_rgb_hls "color conversions" */
     COLOR_BGR2HLS      = 52,
     COLOR_RGB2HLS      = 53,
 
-    /** backward conversions to RGB/BGR */
+    /** backward conversions HSV to RGB/BGR with H range 0..180 if 8 bit image */
     COLOR_HSV2BGR      = 54,
     COLOR_HSV2RGB      = 55,
 
@@ -2917,16 +2926,21 @@ public static final int
     COLOR_Lab2RGB      = 57,
     COLOR_Luv2BGR      = 58,
     COLOR_Luv2RGB      = 59,
+    /** backward conversions HLS to RGB/BGR with H range 0..180 if 8 bit image */
     COLOR_HLS2BGR      = 60,
     COLOR_HLS2RGB      = 61,
 
+    /** convert RGB/BGR to HSV (hue saturation value) with H range 0..255 if 8 bit image, \ref color_convert_rgb_hsv "color conversions" */
     COLOR_BGR2HSV_FULL = 66,
     COLOR_RGB2HSV_FULL = 67,
+    /** convert RGB/BGR to HLS (hue lightness saturation) with H range 0..255 if 8 bit image, \ref color_convert_rgb_hls "color conversions" */
     COLOR_BGR2HLS_FULL = 68,
     COLOR_RGB2HLS_FULL = 69,
 
+    /** backward conversions HSV to RGB/BGR with H range 0..255 if 8 bit image */
     COLOR_HSV2BGR_FULL = 70,
     COLOR_HSV2RGB_FULL = 71,
+    /** backward conversions HLS to RGB/BGR with H range 0..255 if 8 bit image */
     COLOR_HLS2BGR_FULL = 72,
     COLOR_HLS2RGB_FULL = 73,
 
@@ -4151,6 +4165,60 @@ or #cornerMinEigenVal.
                                      int maxCorners, double qualityLevel, double minDistance,
                                      @ByVal GpuMat mask, int blockSize,
                                      int gradientSize );
+
+/** \brief Same as above, but returns also quality measure of the detected corners.
+<p>
+@param image Input 8-bit or floating-point 32-bit, single-channel image.
+@param corners Output vector of detected corners.
+@param maxCorners Maximum number of corners to return. If there are more corners than are found,
+the strongest of them is returned. {@code maxCorners <= 0} implies that no limit on the maximum is set
+and all detected corners are returned.
+@param qualityLevel Parameter characterizing the minimal accepted quality of image corners. The
+parameter value is multiplied by the best corner quality measure, which is the minimal eigenvalue
+(see #cornerMinEigenVal ) or the Harris function response (see #cornerHarris ). The corners with the
+quality measure less than the product are rejected. For example, if the best corner has the
+quality measure = 1500, and the qualityLevel=0.01 , then all the corners with the quality measure
+less than 15 are rejected.
+@param minDistance Minimum possible Euclidean distance between the returned corners.
+@param mask Region of interest. If the image is not empty (it needs to have the type
+CV_8UC1 and the same size as image ), it specifies the region in which the corners are detected.
+@param cornersQuality Output vector of quality measure of the detected corners.
+@param blockSize Size of an average block for computing a derivative covariation matrix over each
+pixel neighborhood. See cornerEigenValsAndVecs .
+@param gradientSize Aperture parameter for the Sobel operator used for derivatives computation.
+See cornerEigenValsAndVecs .
+@param useHarrisDetector Parameter indicating whether to use a Harris detector (see #cornerHarris)
+or #cornerMinEigenVal.
+@param k Free parameter of the Harris detector.
+ */
+@Namespace("cv") public static native @Name("goodFeaturesToTrack") void goodFeaturesToTrackWithQuality(
+        @ByVal Mat image, @ByVal Mat corners,
+        int maxCorners, double qualityLevel, double minDistance,
+        @ByVal Mat mask, @ByVal Mat cornersQuality, int blockSize/*=3*/,
+        int gradientSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/);
+@Namespace("cv") public static native @Name("goodFeaturesToTrack") void goodFeaturesToTrackWithQuality(
+        @ByVal Mat image, @ByVal Mat corners,
+        int maxCorners, double qualityLevel, double minDistance,
+        @ByVal Mat mask, @ByVal Mat cornersQuality);
+@Namespace("cv") public static native @Name("goodFeaturesToTrack") void goodFeaturesToTrackWithQuality(
+        @ByVal UMat image, @ByVal UMat corners,
+        int maxCorners, double qualityLevel, double minDistance,
+        @ByVal UMat mask, @ByVal UMat cornersQuality, int blockSize/*=3*/,
+        int gradientSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/);
+@Namespace("cv") public static native @Name("goodFeaturesToTrack") void goodFeaturesToTrackWithQuality(
+        @ByVal UMat image, @ByVal UMat corners,
+        int maxCorners, double qualityLevel, double minDistance,
+        @ByVal UMat mask, @ByVal UMat cornersQuality);
+@Namespace("cv") public static native @Name("goodFeaturesToTrack") void goodFeaturesToTrackWithQuality(
+        @ByVal GpuMat image, @ByVal GpuMat corners,
+        int maxCorners, double qualityLevel, double minDistance,
+        @ByVal GpuMat mask, @ByVal GpuMat cornersQuality, int blockSize/*=3*/,
+        int gradientSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/);
+@Namespace("cv") public static native @Name("goodFeaturesToTrack") void goodFeaturesToTrackWithQuality(
+        @ByVal GpuMat image, @ByVal GpuMat corners,
+        int maxCorners, double qualityLevel, double minDistance,
+        @ByVal GpuMat mask, @ByVal GpuMat cornersQuality);
+
 /** \example samples/cpp/tutorial_code/ImgTrans/houghlines.cpp
 An example using the Hough line detector
 ![Sample input image](Hough_Lines_Tutorial_Original_Image.jpg) ![Output image](Hough_Lines_Tutorial_Result.jpg)
@@ -6108,6 +6176,9 @@ a flow from {@code i} -th point of signature1 to {@code j} -th point of signatur
                       float[] lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat flow );
 
 /** \} imgproc_hist
+ <p>
+ *  \addtogroup imgproc_segmentation
+ *  \{
 <p>
 /** \example samples/cpp/watershed.cpp
 An example using the watershed algorithm
@@ -6136,14 +6207,14 @@ function.
 size as image .
 <p>
 @see findContours
-<p>
-\ingroup imgproc_misc
  */
 @Namespace("cv") public static native void watershed( @ByVal Mat image, @ByVal Mat markers );
 @Namespace("cv") public static native void watershed( @ByVal UMat image, @ByVal UMat markers );
 @Namespace("cv") public static native void watershed( @ByVal GpuMat image, @ByVal GpuMat markers );
 
-/** \addtogroup imgproc_filter
+/** \} imgproc_segmentation
+ <p>
+ *  \addtogroup imgproc_filter
  *  \{
 <p>
 /** \brief Performs initial step of meanshift segmentation of an image.
@@ -6200,7 +6271,7 @@ whole original image (i.e. when maxLevel==0).
 
 /** \}
  <p>
- *  \addtogroup imgproc_misc
+ *  \addtogroup imgproc_segmentation
  *  \{
 <p>
 /** \example samples/cpp/grabcut.cpp
@@ -6245,6 +6316,11 @@ mode==GC_EVAL .
                            @ByVal GpuMat bgdModel, @ByVal GpuMat fgdModel,
                            int iterCount );
 
+/** \} imgproc_segmentation
+ <p>
+ *  \addtogroup imgproc_misc
+ *  \{
+<p>
 /** \example samples/cpp/distrans.cpp
 An example on using the distance transform
 */
@@ -8363,6 +8439,10 @@ point.
  *  \} imgproc */
 
  // cv
+
+
+// #include "./imgproc/segmentation.hpp"
+
 
 // #endif
 

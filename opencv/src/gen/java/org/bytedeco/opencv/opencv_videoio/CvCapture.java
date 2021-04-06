@@ -25,10 +25,11 @@ import static org.bytedeco.opencv.global.opencv_videoio.*;
   <p>
   ### See also:
   - \ref videoio_overview
-  - Tutorials: \ref tutorial_table_of_content_videoio
+  - Tutorials: \ref tutorial_table_of_content_app
   \{
     \defgroup videoio_flags_base Flags for video I/O
     \defgroup videoio_flags_others Additional flags for video I/O API backends
+    \defgroup videoio_hwaccel Hardware-accelerated video decoding and encoding
     \defgroup videoio_c C API for video I/O
     \defgroup videoio_ios iOS glue for video I/O
     \defgroup videoio_winrt WinRT glue for video I/O

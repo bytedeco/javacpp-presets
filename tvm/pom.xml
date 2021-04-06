@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl</artifactId>
-      <version>2.1.2-${project.parent.version}</version>
+      <version>2.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -65,7 +65,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>2.1.2-${project.parent.version}</version>
+            <version>2.2-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>

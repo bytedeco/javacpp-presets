@@ -49,12 +49,12 @@ public class SparseMatchInterpolator extends Algorithm {
     @param from_image first of the two matched images, 8-bit single-channel or three-channel.
     <p>
     @param from_points points of the from_image for which there are correspondences in the
-    to_image (Point2f vector, size shouldn't exceed 32767)
+    to_image (Point2f vector or Mat of depth CV_32F)
     <p>
     @param to_image second of the two matched images, 8-bit single-channel or three-channel.
     <p>
     @param to_points points in the to_image corresponding to from_points
-    (Point2f vector, size shouldn't exceed 32767)
+    (Point2f vector or Mat of depth CV_32F)
     <p>
     @param dense_flow output dense matching (two-channel CV_32F image)
      */

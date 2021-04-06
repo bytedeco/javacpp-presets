@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.5.1
+OPENCV_VERSION=4.5.2
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -97,6 +97,7 @@ fi
 # fixes for CUDA
 sedinplace '/typedef ::/d' modules/core/include/opencv2/core/cvdef.h
 sedinplace 's/__constant__//g' modules/core/include/opencv2/core/cuda/detail/color_detail.hpp
+sedinplace 's/ocv_add_app(model-diagnostics)/#ocv_add_app(model-diagnostics)/g' apps/CMakeLists.txt
 
 # avoid issues when checking version of cross-compiled Python
 sedinplace 's/PythonInterp "${min_version}"/PythonInterp/g' cmake/OpenCVDetectPython.cmake
@@ -113,7 +114,7 @@ sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
 BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_objc=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DOPENCV_SKIP_PYTHON_LOADER=ON -DPYTHON3_EXECUTABLE=$PYTHON3_EXECUTABLE -DPYTHON3_INCLUDE_DIR=$PYTHON3_INCLUDE_DIR -DPYTHON3_LIBRARY=$PYTHON3_LIBRARY -DPYTHON3_PACKAGES_PATH=$PYTHON3_PACKAGES_PATH -DPYTHON3_NUMPY_INCLUDE_DIRS=$NUMPY_PATH/python/numpy/core/include/ -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_img_hash=ON"
 
 # support for OpenMP is NOT thread-safe so make sure to never enable it and use pthreads instead
-WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENJPEG=OFF -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON -DWITH_INF_ENGINE=ON -DENABLE_CXX11=ON"
+WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENJPEG=OFF -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON -DWITH_VA=OFF -DWITH_INF_ENGINE=ON -DENABLE_CXX11=ON"
 
 # support headless
 if [[ "${HEADLESS:-no}" == "yes" ]]; then

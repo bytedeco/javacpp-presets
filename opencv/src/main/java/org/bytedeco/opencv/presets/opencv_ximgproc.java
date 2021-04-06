@@ -43,7 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "opencv2/ximgproc/brightedges.hpp", "opencv2/ximgproc/run_length_morphology.hpp", "opencv2/ximgproc/edgepreserving_filter.hpp",
             "opencv2/ximgproc/color_match.hpp"}, link = "opencv_ximgproc@.4.5"),
         @Platform(value = "ios", preload = "libopencv_ximgproc"),
-        @Platform(value = "windows", link = "opencv_ximgproc451")},
+        @Platform(value = "windows", link = "opencv_ximgproc452")},
     target = "org.bytedeco.opencv.opencv_ximgproc",
     global = "org.bytedeco.opencv.global.opencv_ximgproc"
 )

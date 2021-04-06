@@ -347,6 +347,8 @@ public static final int CV_HAL_GEMM_3_T = 4;
 // #ifndef OPENCV_CORE_CVDEF_H
 // #define OPENCV_CORE_CVDEF_H
 
+// #include "opencv2/core/version.hpp"
+
 /** \addtogroup core_utils
  *  \{ */
 
@@ -643,7 +645,9 @@ public static final int CV_FP16_TYPE = CV_FP16_TYPE();
 
 
 
+// #ifndef OPENCV_ABI_COMPATIBILITY
 public static final int OPENCV_ABI_COMPATIBILITY = 400;
+// #endif
 
 // #ifdef __OPENCV_BUILD
 // #endif
@@ -1626,6 +1630,9 @@ public static final int CV_CXX_STD_ARRAY = 1;
 //   #if defined __PPC64__ && defined __GNUC__ && defined _ARCH_PWR8
 //       && !defined(OPENCV_SKIP_INCLUDE_ALTIVEC_H)
 //     #include <altivec.h>
+//     #undef vector
+//     #undef bool
+//     #undef pixel
 //   #endif
 
 //   #if defined(CV_INLINE_ROUND_FLT)
@@ -1949,7 +1956,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    5;
-public static final int CV_VERSION_REVISION = 1;
+public static final int CV_VERSION_REVISION = 2;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -2411,6 +2418,12 @@ It is possible to alternate error processing by using redirectError().
  @param val A function argument.
  */
 @Namespace("cv") public static native float cubeRoot(float val);
+
+/** \overload
+<p>
+cubeRoot with argument of {@code double} type calls {@code std::cbrt(double)}
+*/
+@Namespace("cv") public static native double cubeRoot(double val);
 
 /** \brief Calculates the angle of a 2D vector in degrees.
  <p>
@@ -2979,6 +2992,8 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 
 
 /** \brief Parallel data processor
+<p>
+\ingroup core_parallel
 */
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body, double nstripes/*=-1.*/);
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body);
@@ -2986,8 +3001,10 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 
 
 
+/** \ingroup core_parallel */
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor, double nstripes/*=-1.*/);
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor);
+
 
 /////////////////////////////// forEach method of cv::Mat ////////////////////////////
 
@@ -3259,7 +3276,9 @@ public static final int
 // #ifndef OPENCV_UTILS_TLS_HPP
 // #define OPENCV_UTILS_TLS_HPP
 
-// #include <opencv2/core/utility.hpp>
+// #ifndef OPENCV_CORE_UTILITY_H
+// #error "tls.hpp must be included after opencv2/core/utility.hpp or opencv2/core.hpp"
+// #endif
 // Targeting ../opencv_core/TlsStorage.java
 
  
@@ -7362,7 +7381,6 @@ public static final String cvFuncName = "";
 // #endif
 
 // #include "opencv2/core/cvdef.h"
-// #include "opencv2/core/version.hpp"
 // #include "opencv2/core/base.hpp"
 // #include "opencv2/core/cvstd.hpp"
 // #include "opencv2/core/traits.hpp"
@@ -7408,6 +7426,10 @@ public static final String cvFuncName = "";
             \defgroup core_hal_intrin_impl Private implementation helpers
         \}
         \defgroup core_lowlevel_api Low-level API for external libraries / plugins
+    \}
+    \defgroup core_parallel Parallel Processing
+    \{
+        \defgroup core_parallel_backend Parallel backends API
     \}
 \}
  */
@@ -10354,6 +10376,12 @@ public static final int
   \}
  */
 // Targeting ../opencv_core/GpuMat.java
+
+
+// Targeting ../opencv_core/GpuData.java
+
+
+// Targeting ../opencv_core/GpuMatND.java
 
 
 

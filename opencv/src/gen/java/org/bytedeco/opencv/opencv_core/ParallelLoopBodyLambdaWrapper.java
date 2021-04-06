@@ -13,6 +13,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 
 
+/** \ingroup core_parallel */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public class ParallelLoopBodyLambdaWrapper extends ParallelLoopBody {
     static { Loader.load(); }
