@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=12.0.0-rc3
-TEMP_DIST_URL=https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.0-rc3/llvm-project-12.0.0rc3.src.tar.xz
+LLVM_VERSION=12.0.0-rc5
+TEMP_DIST_URL=https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.0-rc5/llvm-project-12.0.0rc5.src.tar.xz
 # download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz
 # Temporary download target
 download $TEMP_DIST_URL llvm-project-$LLVM_VERSION.src.tar.xz
@@ -19,7 +19,7 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives... (ignore any symlink errors)"
 tar --totals -xf ../llvm-project-$LLVM_VERSION.src.tar.xz || true
 # Temporary archive renaming
-mv llvm-project-12.0.0rc3.src llvm-project-$LLVM_VERSION.src
+mv llvm-project-12.0.0rc5.src llvm-project-$LLVM_VERSION.src
 cd llvm-project-$LLVM_VERSION.src
 patch -Np1 < ../../../llvm.patch
 sedinplace '/find_package(Git/d' llvm/cmake/modules/AddLLVM.cmake llvm/cmake/modules/VersionFromVCS.cmake

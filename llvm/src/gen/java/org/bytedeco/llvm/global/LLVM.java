@@ -2696,22 +2696,14 @@ public static native LLVMValueRef LLVMConstGEP(LLVMValueRef ConstantVal,
                           @ByPtrPtr LLVMValueRef ConstantIndices, @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstGEP(LLVMValueRef ConstantVal,
                           @Cast("LLVMValueRef*") PointerPointer ConstantIndices, @Cast("unsigned") int NumIndices);
-public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
-                           @ByPtrPtr LLVMValueRef ConstantIndices, @Cast("unsigned") int NumIndices);
-public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
-                           @Cast("LLVMValueRef*") PointerPointer ConstantIndices, @Cast("unsigned") int NumIndices);
+
 public static native LLVMValueRef LLVMConstInBoundsGEP(LLVMValueRef ConstantVal,
                                   @ByPtrPtr LLVMValueRef ConstantIndices,
                                   @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstInBoundsGEP(LLVMValueRef ConstantVal,
                                   @Cast("LLVMValueRef*") PointerPointer ConstantIndices,
                                   @Cast("unsigned") int NumIndices);
-public static native LLVMValueRef LLVMConstInBoundsGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
-                                   @ByPtrPtr LLVMValueRef ConstantIndices,
-                                   @Cast("unsigned") int NumIndices);
-public static native LLVMValueRef LLVMConstInBoundsGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
-                                   @Cast("LLVMValueRef*") PointerPointer ConstantIndices,
-                                   @Cast("unsigned") int NumIndices);
+
 public static native LLVMValueRef LLVMConstTrunc(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
 public static native LLVMValueRef LLVMConstSExt(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
 public static native LLVMValueRef LLVMConstZExt(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
@@ -9591,8 +9583,7 @@ public static native LLVMErrorRef LLVMOrcResourceTrackerRemove(LLVMOrcResourceTr
  * ownership has not been passed to a JITDylib (e.g. because some error
  * prevented the client from calling LLVMOrcJITDylibAddGenerator).
  */
-public static native void LLVMOrcDisposeDefinitionGenerator(
-    LLVMOrcDefinitionGeneratorRef DG);
+public static native void LLVMOrcDisposeDefinitionGenerator(LLVMOrcDefinitionGeneratorRef DG);
 
 /**
  * Dispose of a MaterializationUnit.
@@ -9642,7 +9633,10 @@ public static native LLVMErrorRef LLVMOrcExecutionSessionCreateJITDylib(LLVMOrcE
  * Returns the JITDylib with the given name, or NULL if no such JITDylib
  * exists.
  */
-
+public static native LLVMOrcJITDylibRef LLVMOrcExecutionSessionGetJITDylibByName(LLVMOrcExecutionSessionRef ES,
+                                         @Cast("const char*") BytePointer Name);
+public static native LLVMOrcJITDylibRef LLVMOrcExecutionSessionGetJITDylibByName(LLVMOrcExecutionSessionRef ES,
+                                         String Name);
 
 /**
  * Return a reference to a newly created resource tracker associated with JD.
@@ -9785,7 +9779,7 @@ public static native void LLVMOrcDisposeJITTargetMachineBuilder(
 /**
  * Dispose of an ObjectLayer.
  */
-
+public static native void LLVMOrcDisposeObjectLayer(LLVMOrcObjectLayerRef ObjLayer);
 
 // #endif /* LLVM_C_ORC_H */
 
