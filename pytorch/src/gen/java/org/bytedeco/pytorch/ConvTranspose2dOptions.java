@@ -17,13 +17,13 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 @Name("torch::nn::ConvTransposeOptions<2>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class Conv2dTransposeOptions extends Pointer {
+public class ConvTranspose2dOptions extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Conv2dTransposeOptions(Pointer p) { super(p); }
+    public ConvTranspose2dOptions(Pointer p) { super(p); }
 
 
-  public Conv2dTransposeOptions(
+  public ConvTranspose2dOptions(
         @Cast("int64_t") long in_channels,
         @Cast("int64_t") long out_channels,
         @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(in_channels, out_channels, kernel_size); }
