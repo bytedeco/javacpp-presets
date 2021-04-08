@@ -515,6 +515,17 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
+        @StdString BytePointer name,
+        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
+        @StdString String name,
+        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
+  
+  ///
+  ///
+  ///
+  ///
   public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl register_module(
         @StdString BytePointer name,
         @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl module);
@@ -1900,6 +1911,15 @@ public class Module extends Pointer {
    *      submodule_ = register_module("linear", torch::nn::Linear(3, 4));
    *    }
    *  \endrst */
+  
+  ///
+  ///
+  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
+        @StdString BytePointer name,
+        @ByVal ModuleHolder module_holder);
+  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
+        @StdString String name,
+        @ByVal ModuleHolder module_holder);
   
   ///
   ///

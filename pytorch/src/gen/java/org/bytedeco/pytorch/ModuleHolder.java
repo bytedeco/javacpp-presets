@@ -15,19 +15,23 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("torch::nn::ModuleHolder<torch::nn::ModuleDictImpl>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class ModuleDictImplModuleHolder extends Pointer {
+
+/** A {@code ModuleHolder} is essentially a wrapper around {@code std::shared_ptr<M>} where
+ *  {@code M} is an {@code nn::Module} subclass, with convenient constructors defined for
+ *  the kind of constructions we want to allow for our modules. */
+@Name("torch::nn::ModuleHolder<torch::nn::Module>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class ModuleHolder extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ModuleDictImplModuleHolder(Pointer p) { super(p); }
+    public ModuleHolder(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ModuleDictImplModuleHolder(long size) { super((Pointer)null); allocateArray(size); }
+    public ModuleHolder(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public ModuleDictImplModuleHolder position(long position) {
-        return (ModuleDictImplModuleHolder)super.position(position);
+    @Override public ModuleHolder position(long position) {
+        return (ModuleHolder)super.position(position);
     }
-    @Override public ModuleDictImplModuleHolder getPointer(long i) {
-        return new ModuleDictImplModuleHolder((Pointer)this).position(position + i);
+    @Override public ModuleHolder getPointer(long i) {
+        return new ModuleHolder((Pointer)this).position(position + i);
     }
 
   
@@ -39,13 +43,13 @@ public class ModuleDictImplModuleHolder extends Pointer {
    *  NOTE: This uses the behavior of template
    *  classes in C++ that constructors (or any methods) are only compiled when
    *  actually used. */
-  public ModuleDictImplModuleHolder() { super((Pointer)null); allocate(); }
+  public ModuleHolder() { super((Pointer)null); allocate(); }
   private native void allocate();
 
   /** Constructs the {@code ModuleHolder} with an empty contained value. Access to
    *  the underlying module is not permitted and will throw an exception, until
    *  a value is assigned. */
-  /* implicit */ public ModuleDictImplModuleHolder(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0) { super((Pointer)null); allocate(arg0); }
+  /* implicit */ public ModuleHolder(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0) { super((Pointer)null); allocate(arg0); }
 private native void allocate(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0);
 
   /** Constructs the {@code ModuleHolder} with a contained module, forwarding all
@@ -53,28 +57,28 @@ private native void allocate(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0
 
   /** Constructs the {@code ModuleHolder} from a pointer to the contained type.
    *  Example: {@code Linear(std::make_shared<LinearImpl>(...))}. */
-  /* implicit */ public ModuleDictImplModuleHolder(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl module) { super((Pointer)null); allocate(module); }
-private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl module);
+  /* implicit */ public ModuleHolder(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module) { super((Pointer)null); allocate(module); }
+private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
 
   /** Returns true if the {@code ModuleHolder} contains a module, or false if it is
    *  {@code nullptr}. */
   public native @Cast("bool") @Name("operator bool") @NoException boolean asBoolean();
 
   /** Forwards to the contained module. */
-  public native @Name("operator ->") ModuleDictImpl access();
+  public native @Name("operator ->") Module access();
 
   /** Forwards to the contained module. */
 
   /** Returns a reference to the contained module. */
-  public native @ByRef @Name("operator *") ModuleDictImpl multiply();
+  public native @ByRef @Name("operator *") Module multiply();
 
   /** Returns a const reference to the contained module. */
 
   /** Returns a shared pointer to the underlying module. */
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl ptr();
+  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module ptr();
 
   /** Returns a pointer to the underlying module. */
-  public native ModuleDictImpl get();
+  public native Module get();
 
   /** Returns a const pointer to the underlying module. */
 

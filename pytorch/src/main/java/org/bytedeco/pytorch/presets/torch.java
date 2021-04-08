@@ -750,6 +750,8 @@ public class torch implements LoadEnabled, InfoMapper {
 
                .put(new Info("std::shared_ptr<torch::nn::Module>").annotations("@SharedPtr")
                        .valueTypes("@Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module").pointerTypes("Module"))
+               .put(new Info("torch::nn::ModuleHolder<torch::nn::Module>").pointerTypes("ModuleHolder"))
+               .put(new Info("torch::nn::Module::register_module<torch::nn::Module>").javaNames("register_module"))
                .put(new Info("std::shared_ptr<torch::nn::AnyModule>").annotations("@SharedPtr")
                        .valueTypes("@Cast({\"\", \"std::shared_ptr<torch::nn::AnyModule>\"}) AnyModule").pointerTypes("AnyModule"));
 
