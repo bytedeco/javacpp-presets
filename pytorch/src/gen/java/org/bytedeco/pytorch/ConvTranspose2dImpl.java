@@ -43,8 +43,8 @@ public class ConvTranspose2dImpl extends ConvTranspose2dImplBase {
         @Cast("int64_t") long input_channels,
         @Cast("int64_t") long output_channels,
         @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
-  public ConvTranspose2dImpl(@ByVal @Cast("torch::nn::ConvTranspose2dOptions*") Conv2dTransposeOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal @Cast("torch::nn::ConvTranspose2dOptions*") Conv2dTransposeOptions options_);
+  public ConvTranspose2dImpl(@ByVal ConvTranspose2dOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal ConvTranspose2dOptions options_);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input,
                    @Const @ByRef(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
