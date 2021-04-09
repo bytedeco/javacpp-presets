@@ -171,6 +171,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMErrorTypeId").annotations("@Const").valueTypes("LLVMErrorTypeId"))
                .put(new Info("defined(_MSC_VER) && !defined(inline)").define(false))
                .put(new Info("GPU_CODEGEN").define(false))
+               // These things were never actually implemented, see http://llvm.org/PR41362
                .put(new Info("LLVMConstGEP2", "LLVMConstInBoundsGEP2").skip());
     }
 }
