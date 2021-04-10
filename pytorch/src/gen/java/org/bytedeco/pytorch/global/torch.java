@@ -6,6 +6,7 @@ import org.bytedeco.pytorch.*;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.Module;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -17219,6 +17220,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Dump all the template metaprogramming in this file.
 // #include <torch/csrc/api/include/torch/nn/pimpl-inl.h>
  // namespace detail
+// Targeting ../ModuleHolder.java
+
+
 // Targeting ../ModuleDictImplModuleHolder.java
 
 
@@ -18268,13 +18272,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *  }</pre> */
 
 
-// Targeting ../Conv1dTransposeOptions.java
+// Targeting ../ConvTranspose1dOptions.java
 
 
-// Targeting ../Conv2dTransposeOptions.java
+// Targeting ../ConvTranspose2dOptions.java
 
 
-// Targeting ../Conv3dTransposeOptions.java
+// Targeting ../ConvTranspose3dOptions.java
 
 
 
@@ -18304,13 +18308,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *  }</pre> */
 
 // ============================================================================
-// Targeting ../Conv1dTransposeFuncOptions.java
+// Targeting ../ConvTranspose1dFuncOptions.java
 
 
-// Targeting ../Conv2dTransposeFuncOptions.java
+// Targeting ../ConvTranspose2dFuncOptions.java
 
 
-// Targeting ../Conv3dTransposeFuncOptions.java
+// Targeting ../ConvTranspose3dFuncOptions.java
 
 
 
@@ -20315,7 +20319,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 /** F::conv_transpose1d(x, weight, F::ConvTranspose1dFuncOptions().stride(1));
 /** }</pre> */
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv_transpose1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight,
-                               @Cast("const torch::nn::functional::ConvTranspose1dFuncOptions*") @ByRef(nullValue = "torch::nn::functional::ConvTranspose1dFuncOptions{}") Conv1dTransposeFuncOptions options);
+                               @Const @ByRef(nullValue = "torch::nn::functional::ConvTranspose1dFuncOptions{}") ConvTranspose1dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight,
@@ -20341,7 +20345,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 /** F::conv_transpose2d(x, weight, F::ConvTranspose2dFuncOptions().stride(1));
 /** }</pre> */
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv_transpose2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight,
-                               @Cast("const torch::nn::functional::ConvTranspose2dFuncOptions*") @ByRef(nullValue = "torch::nn::functional::ConvTranspose2dFuncOptions{}") Conv2dTransposeFuncOptions options);
+                               @Const @ByRef(nullValue = "torch::nn::functional::ConvTranspose2dFuncOptions{}") ConvTranspose2dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight,
@@ -20367,7 +20371,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 /** F::conv_transpose3d(x, weight, F::ConvTranspose3dFuncOptions().stride(1));
 /** }</pre> */
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv_transpose3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight,
-                               @Cast("const torch::nn::functional::ConvTranspose3dFuncOptions*") @ByRef(nullValue = "torch::nn::functional::ConvTranspose3dFuncOptions{}") Conv3dTransposeFuncOptions options);
+                               @Const @ByRef(nullValue = "torch::nn::functional::ConvTranspose3dFuncOptions{}") ConvTranspose3dFuncOptions options);
 
  // namespace functional
  // namespace nn

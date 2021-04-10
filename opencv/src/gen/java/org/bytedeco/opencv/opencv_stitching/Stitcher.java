@@ -194,6 +194,28 @@ public class Stitcher extends Pointer {
     public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images, @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks);
     public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images);
 
+    /** \brief These function restors camera rotation and camera intrinsics of each camera
+     *  that can be got with \ref Stitcher::cameras call
+    <p>
+    @param images Input images.
+    @param cameras Estimated rotation of cameras for each of the input images.
+    @param component Indices (0-based) of images constituting the final panorama (optional).
+    @return Status code.
+     */
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal MatVector images,
+                            @StdVector CameraParams cameras,
+                            @StdVector IntPointer component);
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal UMatVector images,
+                            @StdVector CameraParams cameras,
+                            @StdVector IntBuffer component);
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal GpuMatVector images,
+                            @StdVector CameraParams cameras,
+                            @StdVector int[] component);
+    /** \overload */
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal MatVector images, @StdVector CameraParams cameras);
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal UMatVector images, @StdVector CameraParams cameras);
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal GpuMatVector images, @StdVector CameraParams cameras);
+
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal UMat pano);

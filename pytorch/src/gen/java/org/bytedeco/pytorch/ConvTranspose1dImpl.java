@@ -4,6 +4,7 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.Module;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -42,8 +43,8 @@ public class ConvTranspose1dImpl extends ConvTranspose1dImplBase {
         @Cast("int64_t") long input_channels,
         @Cast("int64_t") long output_channels,
         @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size);
-  public ConvTranspose1dImpl(@ByVal @Cast("torch::nn::ConvTranspose1dOptions*") Conv1dTransposeOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal @Cast("torch::nn::ConvTranspose1dOptions*") Conv1dTransposeOptions options_);
+  public ConvTranspose1dImpl(@ByVal ConvTranspose1dOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal ConvTranspose1dOptions options_);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input,
                    @Const @ByRef(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

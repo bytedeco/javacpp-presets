@@ -66,9 +66,9 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_461.09_win10.exe
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_461.33_win10.exe
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/cudnn-11.2-windows-x64-v8.1.1.33.zip
-          cuda_11.2.1_461.09_win10.exe -s
+          cuda_11.2.2_461.33_win10.exe -s
           unzip cudnn-11.2-windows-x64-v8.1.1.33.zip
           move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin"
           move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include"
@@ -91,8 +91,8 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17404/w_onemkl_p_2021.1.1.52_offline.exe
-          w_onemkl_p_2021.1.1.52_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17754/w_onemkl_p_2021.2.0.296_offline.exe
+          w_onemkl_p_2021.2.0.296_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (

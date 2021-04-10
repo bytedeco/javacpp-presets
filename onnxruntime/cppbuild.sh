@@ -52,7 +52,7 @@ patch -p1 < ../../../onnxruntime.patch
 sedinplace "s/default='Visual Studio 15 2017'/default='Ninja'/g" tools/ci_build/build.py
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v1../DNNL_TAG v2.1.1/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v1../DNNL_TAG v2.2/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
@@ -60,6 +60,10 @@ sedinplace 's/cudnnSetRNNDescriptor(/cudnnSetRNNDescriptor_v6(/g' onnxruntime/co
 sedinplace 's/HOST_NAME_MAX/sysconf(_SC_HOST_NAME_MAX)/g' onnxruntime/core/providers/cuda/cuda_call.cc
 sedinplace 's/#define NO_EXCEPTION noexcept/#define NO_EXCEPTION/g' include/onnxruntime/core/session/onnxruntime_c_api.h
 sedinplace 's/Provider_/_Provider_/g' onnxruntime/core/providers/shared/exported_symbols.lst
+sedinplace 's/ceil(/ceilf(/g' onnxruntime/core/providers/cuda/object_detection/roialign_impl.cu
+sedinplace 's/ceil(/ceilf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
+sedinplace 's/floor(/floorf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
+sedinplace 's/round(/roundf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
 
 # use PTX instead of compiling for all CUDA archs to reduce library size
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-arch=sm_35/g' cmake/CMakeLists.txt

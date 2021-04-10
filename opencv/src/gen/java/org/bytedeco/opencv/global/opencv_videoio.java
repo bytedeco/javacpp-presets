@@ -82,7 +82,7 @@ public class opencv_videoio extends org.bytedeco.opencv.presets.opencv_videoio {
  *  \{
 <p>
 <p>
-/** \brief %VideoCapture API backends identifier.
+/** \brief cv::VideoCapture API backends identifier.
 <p>
 Select preferred API for a capture object.
 To be used in the VideoCapture::VideoCapture() constructor or VideoCapture::open()
@@ -163,7 +163,7 @@ public static final int
        /** uEye Camera API */
        CAP_UEYE         = 2500;
 
-/** \brief %VideoCapture generic properties identifier.
+/** \brief cv::VideoCapture generic properties identifier.
  <p>
  Reading / writing properties involves many layers. Some unexpected result might happens along this chain.
  Effective behaviour depends from device hardware, driver and API Backend.
@@ -253,11 +253,15 @@ public static final int
        CAP_PROP_ORIENTATION_META = 48,
        /** if true - rotates output frames of CvCapture considering video file's metadata  (applicable for FFmpeg back-end only) (https://github.com/opencv/opencv/issues/15499) */
        CAP_PROP_ORIENTATION_AUTO = 49,
+       /** (**open-only**) Hardware acceleration type (see #VideoAccelerationType). Setting supported only via {@code params} parameter in cv::VideoCapture constructor / .open() method. Default value is backend-specific. */
+       CAP_PROP_HW_ACCELERATION = 50,
+       /** (**open-only**) Hardware device index (select GPU if multiple available) */
+       CAP_PROP_HW_DEVICE      = 51,
 // #ifndef CV_DOXYGEN
-       CV__CAP_PROP_LATEST = 50;
+       CV__CAP_PROP_LATEST = 52;
 // #endif
 
-/** \brief %VideoWriter generic properties identifier.
+/** \brief cv::VideoWriter generic properties identifier.
  @see VideoWriter::get(), VideoWriter::set()
 */
 /** enum cv::VideoWriterProperties */
@@ -272,12 +276,49 @@ public static final int
  *  will work with grayscale frames. */
   VIDEOWRITER_PROP_IS_COLOR = 4,
   /** Defaults to CV_8U. */
-  VIDEOWRITER_PROP_DEPTH = 5;
+  VIDEOWRITER_PROP_DEPTH = 5,
+  /** (**open-only**) Hardware acceleration type (see #VideoAccelerationType). Setting supported only via {@code params} parameter in VideoWriter constructor / .open() method. Default value is backend-specific. */
+  VIDEOWRITER_PROP_HW_ACCELERATION = 6,
+  /** (**open-only**) Hardware device index (select GPU if multiple available) */
+  VIDEOWRITER_PROP_HW_DEVICE       = 7,
+// #ifndef CV_DOXYGEN
+  CV__VIDEOWRITER_PROP_LATEST = 8;
+// #endif
 
 /** \} videoio_flags_base
  <p>
  *  \addtogroup videoio_flags_others
  *  \{
+<p>
+/** \name Hardware acceleration support
+    \{
+*/
+
+/** \brief Video Acceleration type
+ *
+ * Used as value in #CAP_PROP_HW_ACCELERATION and #VIDEOWRITER_PROP_HW_ACCELERATION
+ *
+ * \note In case of FFmpeg backend, it translated to enum AVHWDeviceType (https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/hwcontext.h)
+ */
+/** enum cv::VideoAccelerationType */
+public static final int
+    /** Do not require any specific H/W acceleration, prefer software processing.
+ *  Reading of this value means that special H/W accelerated handling is not added or not detected by OpenCV. */
+    VIDEO_ACCELERATION_NONE     = 0,
+
+    /** Prefer to use H/W acceleration. If no one supported, then fallback to software processing.
+ *  \note H/W acceleration may require special configuration of used environment.
+ *  \note Results in encoding scenario may differ between software and hardware accelerated encoders. */
+    VIDEO_ACCELERATION_ANY      = 1,
+
+    /** DirectX 11 */
+    VIDEO_ACCELERATION_D3D11    = 2,
+    /** VAAPI */
+    VIDEO_ACCELERATION_VAAPI    = 3,
+    /** libmfx (Intel MediaSDK/oneVPL) */
+    VIDEO_ACCELERATION_MFX      = 4;
+
+/** \} Hardware acceleration support
 <p>
 /** \name IEEE 1394 drivers
     \{
@@ -758,8 +799,9 @@ public static final int /** Change image resolution by binning or skipping. */
 
 /** \} XIMEA
 <p>
-/** \name XIMEA Camera API
-*  \{
+<p>
+/** \name ARAVIS Camera API
+    \{
 */
 
 /** Properties of cameras available through ARAVIS backend */
@@ -770,7 +812,6 @@ public static final int /** Automatically trigger frame capture if camera is con
 /** \} ARAVIS
 <p>
 /** \name AVFoundation framework for iOS
-    OS X Lion will have the same API
     \{
 */
 
@@ -782,6 +823,9 @@ public static final int CAP_PROP_IOS_DEVICE_FOCUS        = 9001,
        CAP_PROP_IOS_DEVICE_WHITEBALANCE = 9004,
        CAP_PROP_IOS_DEVICE_TORCH        = 9005;
 
+/** \} AVFoundation framework for iOS
+<p>
+<p>
 /** \name Smartek Giganetix GigEVisionSDK
     \{
 */
@@ -894,8 +938,9 @@ public static final int CAP_PROP_IMAGES_BASE = 18000,
 // Targeting ../opencv_videoio/CvVideoWriterDefaultDeleter.java
 
 
-
-/** \} videoio */
+/** \endcond IGNORED
+ <p>
+ *  \} videoio */
 
  // cv
 

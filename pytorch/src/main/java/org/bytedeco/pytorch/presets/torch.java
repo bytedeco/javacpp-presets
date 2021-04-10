@@ -437,6 +437,7 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info().enumerate())
                .put(new Info().javaText("import org.bytedeco.pytorch.Allocator;"))
                .put(new Info().javaText("import org.bytedeco.pytorch.Function;"))
+               .put(new Info().javaText("import org.bytedeco.pytorch.Module;"))
 
                .put(new Info("basic/containers").cppTypes("c10::optional", "c10::Dict", "torch::optional", "torch::OrderedDict"))
                .put(new Info("std::nullptr_t").cast().pointerTypes("PointerPointer"))
@@ -706,12 +707,12 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::nn::functional::ConvFuncOptions<1>").pointerTypes("Conv1dFuncOptions"))
                .put(new Info("torch::nn::functional::ConvFuncOptions<2>").pointerTypes("Conv2dFuncOptions"))
                .put(new Info("torch::nn::functional::ConvFuncOptions<3>").pointerTypes("Conv3dFuncOptions"))
-               .put(new Info("torch::nn::ConvTransposeOptions<1>").pointerTypes("Conv1dTransposeOptions"))
-               .put(new Info("torch::nn::ConvTransposeOptions<2>").pointerTypes("Conv2dTransposeOptions"))
-               .put(new Info("torch::nn::ConvTransposeOptions<3>").pointerTypes("Conv3dTransposeOptions"))
-               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<1>").pointerTypes("Conv1dTransposeFuncOptions"))
-               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<2>").pointerTypes("Conv2dTransposeFuncOptions"))
-               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<3>").pointerTypes("Conv3dTransposeFuncOptions"))
+               .put(new Info("torch::nn::ConvTransposeOptions<1>").pointerTypes("ConvTranspose1dOptions"))
+               .put(new Info("torch::nn::ConvTransposeOptions<2>").pointerTypes("ConvTranspose2dOptions"))
+               .put(new Info("torch::nn::ConvTransposeOptions<3>").pointerTypes("ConvTranspose3dOptions"))
+               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<1>").pointerTypes("ConvTranspose1dFuncOptions"))
+               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<2>").pointerTypes("ConvTranspose2dFuncOptions"))
+               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<3>").pointerTypes("ConvTranspose3dFuncOptions"))
 
                .put(new Info("torch::nn::ReflectionPadOptions<1>").pointerTypes("ReflectionPad1dOptions"))
                .put(new Info("torch::nn::ReflectionPadOptions<2>").pointerTypes("ReflectionPad2dOptions"))
@@ -749,6 +750,8 @@ public class torch implements LoadEnabled, InfoMapper {
 
                .put(new Info("std::shared_ptr<torch::nn::Module>").annotations("@SharedPtr")
                        .valueTypes("@Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module").pointerTypes("Module"))
+               .put(new Info("torch::nn::ModuleHolder<torch::nn::Module>").pointerTypes("ModuleHolder"))
+               .put(new Info("torch::nn::Module::register_module<torch::nn::Module>").javaNames("register_module"))
                .put(new Info("std::shared_ptr<torch::nn::AnyModule>").annotations("@SharedPtr")
                        .valueTypes("@Cast({\"\", \"std::shared_ptr<torch::nn::AnyModule>\"}) AnyModule").pointerTypes("AnyModule"));
 

@@ -36,7 +36,7 @@ public class KernelArg extends Pointer {
     public KernelArg(int _flags, UMat _m) { super((Pointer)null); allocate(_flags, _m); }
     private native void allocate(int _flags, UMat _m);
     public KernelArg() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
 
     public static native @ByVal KernelArg Local(@Cast("size_t") long localMemSize);
     public static native @ByVal KernelArg PtrWriteOnly(@Const @ByRef UMat m);

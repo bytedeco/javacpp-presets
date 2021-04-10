@@ -49,15 +49,6 @@ public class Stream extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Stream(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Stream(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Stream position(long position) {
-        return (Stream)super.position(position);
-    }
-    @Override public Stream getPointer(long i) {
-        return new Stream((Pointer)this).position(position + i);
-    }
 
     public static class StreamCallback extends FunctionPointer {
         static { Loader.load(); }
@@ -75,6 +66,19 @@ public class Stream extends Pointer {
     /** creates a new asynchronous stream with custom allocator */
     public Stream(@Ptr GpuMat.Allocator allocator) { super((Pointer)null); allocate(allocator); }
     private native void allocate(@Ptr GpuMat.Allocator allocator);
+
+    /** \brief creates a new Stream using the cudaFlags argument to determine the behaviors of the stream
+    <p>
+    \note The cudaFlags parameter is passed to the underlying api cudaStreamCreateWithFlags() and
+    supports the same parameter values.
+    <pre>{@code
+        // creates an OpenCV cuda::Stream that manages an asynchronous, non-blocking,
+        // non-default CUDA stream
+        cv::cuda::Stream cvStream(cudaStreamNonBlocking);
+    }</pre>
+     */
+    public Stream(@Cast("const size_t") long cudaFlags) { super((Pointer)null); allocate(cudaFlags); }
+    private native void allocate(@Cast("const size_t") long cudaFlags);
 
     /** \brief Returns true if the current stream queue is finished. Otherwise, it returns false.
     */

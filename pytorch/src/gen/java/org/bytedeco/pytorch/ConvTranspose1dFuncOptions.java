@@ -4,6 +4,7 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.Module;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -17,21 +18,21 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Options for a {@code D}-dimensional convolution functional. */
 @Name("torch::nn::functional::ConvTransposeFuncOptions<1>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class Conv1dTransposeFuncOptions extends Pointer {
+public class ConvTranspose1dFuncOptions extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Conv1dTransposeFuncOptions() { super((Pointer)null); allocate(); }
+    public ConvTranspose1dFuncOptions() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Conv1dTransposeFuncOptions(long size) { super((Pointer)null); allocateArray(size); }
+    public ConvTranspose1dFuncOptions(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Conv1dTransposeFuncOptions(Pointer p) { super(p); }
+    public ConvTranspose1dFuncOptions(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public Conv1dTransposeFuncOptions position(long position) {
-        return (Conv1dTransposeFuncOptions)super.position(position);
+    @Override public ConvTranspose1dFuncOptions position(long position) {
+        return (ConvTranspose1dFuncOptions)super.position(position);
     }
-    @Override public Conv1dTransposeFuncOptions getPointer(long i) {
-        return new Conv1dTransposeFuncOptions((Pointer)this).position(position + i);
+    @Override public ConvTranspose1dFuncOptions getPointer(long i) {
+        return new ConvTranspose1dFuncOptions((Pointer)this).position(position + i);
     }
 
   public native @ByRef @NoException Tensor bias();

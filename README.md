@@ -165,7 +165,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.1  https://opencv.org/releases.html
+ * OpenCV 4.5.2  https://opencv.org/releases.html
  * FFmpeg 4.3.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 1.27.x https://www.flir.com/products/spinnaker-sdk
@@ -183,8 +183,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.1.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.13  http://www.openblas.net/
+ * DNNL 2.2.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.14  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.9  http://www.fftw.org/download.html

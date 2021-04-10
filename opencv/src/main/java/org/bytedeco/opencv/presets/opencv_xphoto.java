@@ -44,7 +44,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_xphoto@.4.5"
         ),
         @Platform(value = "ios", preload = "libopencv_xphoto"),
-        @Platform(value = "windows", link = "opencv_xphoto451")
+        @Platform(value = "windows", link = "opencv_xphoto452")
     },
     target = "org.bytedeco.opencv.opencv_xphoto",
     global = "org.bytedeco.opencv.global.opencv_xphoto"

@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
             link = "opencv_dnn@.4.5"),
         @Platform(value = "ios", preload = "libopencv_dnn"),
-        @Platform(value = "windows", link = "opencv_dnn451")},
+        @Platform(value = "windows", link = "opencv_dnn452")},
     target = "org.bytedeco.opencv.opencv_dnn",
     global = "org.bytedeco.opencv.global.opencv_dnn"
 )
@@ -62,7 +62,7 @@ public class opencv_dnn implements InfoMapper {
                              "cv::dnn::FlattenLayer", "cv::dnn::ConcatLayer", "cv::dnn::SplitLayer", "cv::dnn::SliceLayer",
                              "cv::dnn::PermuteLayer", "cv::dnn::PaddingLayer", "cv::dnn::ActivationLayer", "cv::dnn::ReLULayer",
                              "cv::dnn::ChannelsPReLULayer", "cv::dnn::ELULayer", "cv::dnn::TanHLayer", "cv::dnn::SigmoidLayer",
-                             "cv::dnn::BNLLLayer", "cv::dnn::AbsLayer", "cv::dnn::PowerLayer", "cv::dnn::CropLayer", "cv::dnn::EltwiseLayer",
+                             "cv::dnn::BNLLLayer", "cv::dnn::AbsLayer", "cv::dnn::PowerLayer", "cv::dnn::CropLayer", "cv::dnn::ExpLayer", "cv::dnn::EltwiseLayer",
                              "cv::dnn::BatchNormLayer", "cv::dnn::MaxUnpoolLayer", "cv::dnn::ScaleLayer", "cv::dnn::ShiftLayer",
                              "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer", "cv::dnn::ProposalLayer",
                              "cv::dnn::ReLU6Layer", "cv::dnn::ReorgLayer", "cv::dnn::RegionLayer", "cv::dnn::ResizeNearestNeighborLayer",

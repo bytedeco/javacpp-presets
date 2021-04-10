@@ -4,6 +4,7 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.Module;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -16,13 +17,13 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 @Name("torch::nn::ConvTransposeOptions<3>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class Conv3dTransposeOptions extends Pointer {
+public class ConvTranspose3dOptions extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Conv3dTransposeOptions(Pointer p) { super(p); }
+    public ConvTranspose3dOptions(Pointer p) { super(p); }
 
 
-  public Conv3dTransposeOptions(
+  public ConvTranspose3dOptions(
         @Cast("int64_t") long in_channels,
         @Cast("int64_t") long out_channels,
         @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size) { super((Pointer)null); allocate(in_channels, out_channels, kernel_size); }
