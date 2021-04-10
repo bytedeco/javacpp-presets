@@ -11,13 +11,12 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 
-if   [ ! -d "ModSecurity" ];
-then
-  git clone https://github.com/SpiderLabs/ModSecurity
-  cd ModSecurity
-  git checkout origin/v3/master
-  git submodule init
-  git submodule update
+if [[ ! -d "ModSecurity" ]]; then
+    git clone https://github.com/SpiderLabs/ModSecurity
+    cd ModSecurity
+    git checkout origin/v3/master
+    git submodule init
+    git submodule update
 else
     cd ModSecurity
 fi

@@ -13,7 +13,7 @@
   <groupId>org.bytedeco</groupId>
   <artifactId>modsecurity-platform</artifactId>
   <version>master-${project.parent.version}</version>
-  <name>JavaCPP Presets Platform for modsecurity</name>
+  <name>JavaCPP Presets Platform for ModSecurity</name>
 
   <properties>
     <javacpp.moduleId>modsecurity</javacpp.moduleId>

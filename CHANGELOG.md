@@ -1,6 +1,6 @@
 
  * Include `cudaGL.h` and `cuda_gl_interop.h` header files in presets for CUDA ([pull #1027](https://github.com/bytedeco/javacpp-presets/pull/1027))
- * Add presets for NVIDIA Video Codec SDK 11.0.10 ([pull #1020](https://github.com/bytedeco/javacpp-presets/pull/1020)), PyTorch 1.8.1 ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623))
+ * Add presets for NVIDIA Video Codec SDK 11.0.10 ([pull #1020](https://github.com/bytedeco/javacpp-presets/pull/1020)), PyTorch 1.8.1 ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623)), ModSecurity ([pull #1012](https://github.com/bytedeco/javacpp-presets/pull/1012))
  * Map `std::vector<cv::Range>` to `RangeVector` in `opencv_core.Mat` for convenience ([issue bytedeco/javacv#1607](https://github.com/bytedeco/javacv/issues/1607))
  * Include `genericaliasobject.h`, `context.h`, `tracemalloc.h`, and `datetime.h` for CPython ([issue #1017](https://github.com/bytedeco/javacpp-presets/issues/1017))
  * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))

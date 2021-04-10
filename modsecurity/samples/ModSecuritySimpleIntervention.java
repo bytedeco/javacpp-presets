@@ -13,20 +13,16 @@
  *
  */
 
+import java.util.Optional;
+import org.bytedeco.javacpp.*;
 import org.bytedeco.modsecurity.*;
 
 public class ModSecuritySimpleIntervention {
-
-
     private static final String BASIC_RULE =
             "SecRuleEngine On\n" +
             "SecRule REQUEST_URI \"@streq /attack\" \"id:1,phase:1,msg: \' Attack detected\' t:lowercase,deny\"";
 
-
-
-
     public static void main(String[]args){
-
         ModSecurity modSecurity = new ModSecurity();
 
         RulesSet rulesSet = new RulesSet();
@@ -43,12 +39,11 @@ public class ModSecuritySimpleIntervention {
         ModSecurityIntervention modSecurityIntervention = new ModSecurityIntervention();
         boolean isIntervention = transaction.intervention(modSecurityIntervention);
 
-        if(isIntervention){
+        if (isIntervention){
             System.out.println("There is intervention !!!");
             logRuleMessages(transaction.m_rulesMessages());
         }
     }
-
 
     private static void logRuleMessages(RuleMessageList messageList){
         if (messageList != null && !messageList.isNull() && !messageList.empty()) {
@@ -65,7 +60,4 @@ public class ModSecuritySimpleIntervention {
     private static void logRuleMessage(RuleMessage ruleMessage){
         System.out.println("RuleMessage id = "+ ruleMessage.m_ruleId()+ " message  = " + Optional.ofNullable(ruleMessage.m_message()).map(BytePointer::getString).orElse("NO_MESSAGE"));
     }
-
-
-
 }

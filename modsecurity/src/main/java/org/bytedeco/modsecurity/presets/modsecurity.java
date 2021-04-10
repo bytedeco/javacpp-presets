@@ -53,8 +53,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 includepath = {"lib","include"},
                 link = "modsecurity"),
         target = "org.bytedeco.modsecurity",
-        global = "org.bytedeco.modsecurity.global")
-public class libmodsecurity implements InfoMapper {
+        global = "org.bytedeco.modsecurity.global.modsecurity")
+public class modsecurity implements InfoMapper {
     static {
         Loader.checkVersion("org.bytedeco", "modsecurity");
     }

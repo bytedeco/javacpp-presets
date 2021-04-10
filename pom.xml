@@ -628,8 +628,8 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
-        <module>systems</module>
         <module>modsecurity</module>
+        <module>systems</module>
       </modules>
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
@@ -1357,8 +1357,8 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
-        <module>systems</module>
         <module>modsecurity</module>
+        <module>systems</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1434,8 +1434,8 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
-        <module>systems</module>
         <module>modsecurity</module>
+        <module>systems</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
