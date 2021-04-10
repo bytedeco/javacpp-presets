@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
-* ModSecurity 3.0.4  https://github.com/SpiderLabs/ModSecurity
+* ModSecurity `master`  https://github.com/SpiderLabs/ModSecurity
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
