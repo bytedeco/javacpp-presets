@@ -13,30 +13,27 @@ import org.bytedeco.ffmpeg.swresample.*;
 import static org.bytedeco.ffmpeg.global.swresample.*;
 
 import static org.bytedeco.ffmpeg.global.avcodec.*;
- //DEPRECATED
 
+
+// #if FF_API_INIT_PACKET
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avcodec.class)
-public class AVPacketSideData extends Pointer {
+public class AVPacketList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVPacketSideData() { super((Pointer)null); allocate(); }
+    public AVPacketList() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public AVPacketSideData(long size) { super((Pointer)null); allocateArray(size); }
+    public AVPacketList(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVPacketSideData(Pointer p) { super(p); }
+    public AVPacketList(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public AVPacketSideData position(long position) {
-        return (AVPacketSideData)super.position(position);
+    @Override public AVPacketList position(long position) {
+        return (AVPacketList)super.position(position);
     }
-    @Override public AVPacketSideData getPointer(long i) {
-        return new AVPacketSideData((Pointer)this).position(position + i);
+    @Override public AVPacketList getPointer(long i) {
+        return new AVPacketList((Pointer)this).position(position + i);
     }
 
-    public native @Cast("uint8_t*") BytePointer data(); public native AVPacketSideData data(BytePointer setter);
-// #if FF_API_BUFFER_SIZE_T
-    public native int size(); public native AVPacketSideData size(int setter);
-// #else
-// #endif
-    public native @Cast("AVPacketSideDataType") int type(); public native AVPacketSideData type(int setter);
+    public native @ByRef AVPacket pkt(); public native AVPacketList pkt(AVPacket setter);
+    public native AVPacketList next(); public native AVPacketList next(AVPacketList setter);
 }

@@ -10,7 +10,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.ffmpeg.global.avutil.*;
 
-// #else
 // #endif
 
 /**
@@ -29,12 +28,13 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * @return newly created buffer pool on success, NULL on error.
  */
 // #if FF_API_BUFFER_SIZE_T
+// #else
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
-public class Alloc_Pointer_int extends FunctionPointer {
+public class Alloc_Pointer_long extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    Alloc_Pointer_int(Pointer p) { super(p); }
-    protected Alloc_Pointer_int() { allocate(); }
+    public    Alloc_Pointer_long(Pointer p) { super(p); }
+    protected Alloc_Pointer_long() { allocate(); }
     private native void allocate();
-    public native AVBufferRef call(Pointer opaque, int size);
+    public native AVBufferRef call(Pointer opaque, @Cast("size_t") long size);
 }
