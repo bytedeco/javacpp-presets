@@ -31,6 +31,8 @@ import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Const;
+import org.bytedeco.javacpp.annotation.MemberGetter;
+import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.StdString;
@@ -1098,4 +1100,9 @@ public class torch implements LoadEnabled, InfoMapper {
         private native void allocate();
         public native @ByVal @Cast("at::Tensor*") Pointer call(@ByRef @Cast("const at::Tensor*") Pointer t1, @ByRef @Cast("const at::Tensor*") Pointer t2);
     }
+
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::istream*") Pointer cin();
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::ostream*") Pointer cout();
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::ostream*") Pointer cerr();
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::ostream*") Pointer clog();
 }
