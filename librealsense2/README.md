@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * librealsense2 2.40.0  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.44.0  https://github.com/IntelRealSense/librealsense
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.librealsense2</groupId>
     <artifactId>rsdistance</artifactId>
-    <version>1.5.5</version>
+    <version>1.5.6</version>
     <properties>
         <exec.mainClass>RsDistance</exec.mainClass>
     </properties>
@@ -48,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>librealsense2-platform</artifactId>
-            <version>2.40.0-1.5.5</version>
+            <version>2.44.0-1.5.6</version>
         </dependency>
     </dependencies>
     <build>
