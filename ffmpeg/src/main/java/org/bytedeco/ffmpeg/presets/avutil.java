@@ -23,8 +23,11 @@
 package org.bytedeco.ffmpeg.presets;
 
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.MemberGetter;
 import org.bytedeco.javacpp.annotation.Name;
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.presets.javacpp;
@@ -170,4 +173,7 @@ public class avutil implements InfoMapper {
     public static native @MemberGetter @Name("AVERROR(ERANGE)") int AVERROR_ERANGE();
     public static native @MemberGetter @Name("AVERROR(ESPIPE)") int AVERROR_ESPIPE();
     public static native @MemberGetter @Name("AVERROR(EXDEV)") int AVERROR_EXDEV();
+
+    public static native @MemberGetter @Cast("void (*)(void*, int, const char*, va_list)") Pointer av_log_default_callback();
+    @NoException public static native void av_log_set_callback(@Cast("void (*)(void*, int, const char*, va_list)") Pointer callback);
 }
