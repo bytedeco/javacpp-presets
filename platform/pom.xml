@@ -65,6 +65,7 @@
     <module>../qt/platform</module>
     <module>../skia/platform</module>
     <module>../cpu_features/platform</module>
+    <module>../modsecurity/platform</module>
     <module>../systems/platform</module>
   </modules>
 
@@ -324,6 +325,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>cpu_features-platform</artifactId>
       <version>0.6.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>modsecurity-platform</artifactId>
+      <version>master-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
