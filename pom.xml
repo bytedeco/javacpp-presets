@@ -628,6 +628,7 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
+        <module>modsecurity</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1356,6 +1357,7 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
+        <module>modsecurity</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1432,6 +1434,7 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
+        <module>modsecurity</module>
         <module>systems</module>
       </modules>
       <properties>
