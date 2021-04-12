@@ -501,6 +501,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("const std::vector<at::Dimname>", "std::vector<at::Dimname>").valueTypes("@StdMove DimnameVector").pointerTypes("DimnameVector").define())
                .put(new Info("std::vector<c10::TensorImpl*>").pointerTypes("TensorImplVector").define())
                .put(new Info("std::vector<at::Tensor>").valueTypes("@StdMove TensorVector").pointerTypes("TensorVector").define())
+               .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
                .put(new Info("std::vector<torch::autograd::Variable>").pointerTypes("TensorVector"))
                .put(new Info("std::vector<std::shared_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreVector").define())
                .put(new Info("std::deque<at::Tensor>").pointerTypes("TensorDeque").define())
@@ -647,6 +648,9 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::ArrayRef<at::TensorArg>", "at::ArrayRef<at::TensorArg>").pointerTypes("TensorArgArrayRef"))
                .put(new Info("c10::ArrayRef<at::TensorArg>::iterator", "c10::ArrayRef<at::TensorArg>::const_iterator").cast().pointerTypes("TensorArg"))
                .put(new Info("c10::ArrayRef<at::indexing::TensorIndex>").pointerTypes("TensorIndexArrayRef"))
+               .put(new Info("c10::ArrayRef<at::indexing::TensorIndex>(std::vector<at::indexing::TensorIndex,A>&)").javaText(
+                       "public TensorIndexArrayRef(@ByRef TensorIndexVector Vec) { super((Pointer)null); allocate(Vec); }\n"
+                     + "private native void allocate(@ByRef TensorIndexVector Vec);"))
                .put(new Info("c10::ArrayRef<at::indexing::TensorIndex>::iterator", "c10::ArrayRef<at::indexing::TensorIndex>::const_iterator").cast().pointerTypes("TensorIndex"))
                .put(new Info("c10::ArrayRef<at::TensorArg>::equals", "c10::ArrayRef<at::Tensor>::equals", "c10::ArrayRef<at::indexing::TensorIndex>::equals").skip())
 

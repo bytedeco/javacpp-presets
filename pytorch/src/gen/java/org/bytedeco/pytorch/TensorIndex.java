@@ -46,6 +46,9 @@ public class TensorIndex extends Pointer {
     static { Loader.load(); }
 
   // Case 1: `at::indexing::None`
+  public TensorIndex() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
   public TensorIndex(@ByVal @Cast("c10::nullopt_t*") Pointer arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@ByVal @Cast("c10::nullopt_t*") Pointer arg0);
 
