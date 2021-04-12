@@ -141,6 +141,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../TensorVector.java
 
 
+// Targeting ../TensorIndexVector.java
+
+
 // Targeting ../FunctionPreVector.java
 
 
@@ -14583,6 +14586,7 @@ body of your function, only data pointers.
 
 
 @Namespace("at::indexing") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef TensorIndex tensor_index);
+@Namespace("at::indexing") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef TensorIndexVector tensor_indices);
 @Namespace("at::indexing::impl") public static native @ByVal Tensor applySlice(
     @Const @ByRef Tensor self,
     @Cast("int64_t") long dim,
@@ -22212,6 +22216,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <type_traits>
 // Targeting ../Module.java
 
+
+@Namespace("torch::nn") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef Module module);
 
 
 /** Serialize a {@code Module} pointer into an {@code OutputArchive}. */

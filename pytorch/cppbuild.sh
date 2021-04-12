@@ -116,7 +116,19 @@ sedinplace 's/std::ceil/ceilf/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/round(/roundf(/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/floor(/floorf(/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/ceil(/ceilf(/g' aten/src/ATen/native/cuda/*.cu
+
+# allow setting the build directory
 sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
+
+# allow resizing std::vector<at::indexing::TensorIndex>
+sedinplace '/TensorIndex(c10::nullopt_t)/i\
+  TensorIndex() : TensorIndex(c10::nullopt) {}\
+' aten/src/ATen/TensorIndexing.h
+
+# add missing declarations
+sedinplace '/^};/a\
+TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
+' torch/csrc/api/include/torch/nn/module.h
 
 "$PYTHON_BIN_PATH" setup.py build
 
