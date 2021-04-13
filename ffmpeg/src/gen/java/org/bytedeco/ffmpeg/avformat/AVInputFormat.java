@@ -258,5 +258,32 @@ public class AVInputFormat extends Pointer {
     public native Get_device_list_AVFormatContext_Pointer get_device_list(); public native AVInputFormat get_device_list(Get_device_list_AVFormatContext_Pointer setter);
 
 // #if LIBAVFORMAT_VERSION_MAJOR < 59
+    /**
+     * Initialize device capabilities submodule.
+     * @see avdevice_capabilities_create() for more details.
+     */
+    public static class Create_device_capabilities_AVFormatContext_Pointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Create_device_capabilities_AVFormatContext_Pointer(Pointer p) { super(p); }
+        protected Create_device_capabilities_AVFormatContext_Pointer() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, @Cast("AVDeviceCapabilitiesQuery*") Pointer caps);
+    }
+    public native Create_device_capabilities_AVFormatContext_Pointer create_device_capabilities(); public native AVInputFormat create_device_capabilities(Create_device_capabilities_AVFormatContext_Pointer setter);
+
+    /**
+     * Free device capabilities submodule.
+     * @see avdevice_capabilities_free() for more details.
+     */
+    public static class Free_device_capabilities_AVFormatContext_Pointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Free_device_capabilities_AVFormatContext_Pointer(Pointer p) { super(p); }
+        protected Free_device_capabilities_AVFormatContext_Pointer() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, @Cast("AVDeviceCapabilitiesQuery*") Pointer caps);
+    }
+    public native Free_device_capabilities_AVFormatContext_Pointer free_device_capabilities(); public native AVInputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_Pointer setter);
 // #endif
 }

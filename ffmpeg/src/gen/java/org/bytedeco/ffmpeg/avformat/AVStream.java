@@ -221,6 +221,8 @@ public static final int AVSTREAM_EVENT_FLAG_NEW_PACKETS = (1 << 1);
      */
 
 // #if LIBAVFORMAT_VERSION_MAJOR < 59
+    // kept for ABI compatibility only, do not access in any way
+    public native Pointer unused(); public native AVStream unused(Pointer setter);
 // #endif
 
     /** number of bits in pts (used for wrapping control) */
@@ -254,6 +256,11 @@ public static final int AVSTREAM_EVENT_FLAG_NEW_PACKETS = (1 << 1);
     public native AVCodecParserContext parser(); public native AVStream parser(AVCodecParserContext setter);
 
 // #if LIBAVFORMAT_VERSION_MAJOR < 59
+    // kept for ABI compatibility only, do not access in any way
+    public native Pointer unused7(); public native AVStream unused7(Pointer setter);
+    public native @ByRef AVProbeData unused6(); public native AVStream unused6(AVProbeData setter);
+    public native @Cast("int64_t") long unused5(int i); public native AVStream unused5(int i, long setter);
+    @MemberGetter public native @Cast("int64_t*") LongPointer unused5();
 // #endif
     /** Only used if the format does not
                                         support seeking natively. */
@@ -269,6 +276,10 @@ public static final int AVSTREAM_EVENT_FLAG_NEW_PACKETS = (1 << 1);
     public native int stream_identifier(); public native AVStream stream_identifier(int setter);
 
 // #if LIBAVFORMAT_VERSION_MAJOR < 59
+    // kept for ABI compatibility only, do not access in any way
+    public native int unused8(); public native AVStream unused8(int setter);
+    public native int unused9(); public native AVStream unused9(int setter);
+    public native int unused10(); public native AVStream unused10(int setter);
 // #endif
 
     /**
