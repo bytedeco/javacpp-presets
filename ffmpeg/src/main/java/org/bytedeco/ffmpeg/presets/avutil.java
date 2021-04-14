@@ -90,6 +90,7 @@ public class avutil implements InfoMapper {
                .put(new Info("FF_API_VAAPI").define())
                .put(new Info("AV_PIX_FMT_ABI_GIT_MASTER", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI", "!FF_API_XVMC",
                              "FF_API_GET_BITS_PER_SAMPLE_FMT", "FF_API_FIND_OPT").define(false))
+               .put(new Info("FF_API_BUFFER_SIZE_T", "FF_API_CRYPTO_SIZE_T").define(true))
                .put(new Info("ff_check_pixfmt_descriptors").skip())
                .put(new Info("AV_CH_FRONT_LEFT",
                              "AV_CH_FRONT_RIGHT",
