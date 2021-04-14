@@ -53,6 +53,7 @@ JavaCPP Presets
 [![qt](https://github.com/bytedeco/javacpp-presets/workflows/qt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aqt)
 [![skia](https://github.com/bytedeco/javacpp-presets/workflows/skia/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Askia)
 [![cpu_features](https://github.com/bytedeco/javacpp-presets/workflows/cpu_features/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acpu_features)
+[![modsecurity](https://github.com/bytedeco/javacpp-presets/workflows/modsecurity/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amodsecurity)
 [![systems](https://github.com/bytedeco/javacpp-presets/workflows/systems/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Asystems)  
 <sup>Commercial support and paid services for custom presets:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
 
@@ -166,7 +167,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 4.5.2  https://opencv.org/releases.html
- * FFmpeg 4.3.x  http://ffmpeg.org/download.html
+ * FFmpeg 4.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 1.27.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
@@ -217,6 +218,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia
  * cpu_features 0.6.0  https://github.com/google/cpu_features
+ * ModSecurity  https://github.com/SpiderLabs/ModSecurity
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/
