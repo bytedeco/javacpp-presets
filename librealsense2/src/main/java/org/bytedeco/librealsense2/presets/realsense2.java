@@ -56,7 +56,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "librealsense2/rs_advanced_mode.h",
                 "librealsense2/rsutil.h"
             },
-            link = "realsense2@.2.40"
+            link = "realsense2@.2.44"
         ),
         @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/")
     },
