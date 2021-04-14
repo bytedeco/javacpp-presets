@@ -49,6 +49,7 @@ public class avcodec implements InfoMapper {
         infoMap.put(new Info("!FF_API_LOWRES", "!FF_API_DEBUG_MV").define(false))
                .put(new Info("CODEC_FLAG_CLOSED_GOP").translate().cppTypes("long"))
                .put(new Info("AVCodecHWConfigInternal").cast().pointerTypes("Pointer"))
+               .put(new Info("AVCodec::hw_configs").skip())
                .putFirst(new Info("AVPanScan").pointerTypes("AVPanScan"))
                .putFirst(new Info("AVCodecContext").pointerTypes("AVCodecContext"));
     }
