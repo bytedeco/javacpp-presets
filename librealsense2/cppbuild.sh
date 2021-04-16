@@ -12,8 +12,8 @@ LIBUSB_VERSION=1.0.22
 download https://github.com/IntelRealSense/librealsense/archive/v$LIBREALSENSE2_VERSION.tar.gz librealsense-$LIBREALSENSE2_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 
-mkdir -p $PLATFORM
-cd $PLATFORM
+mkdir -p "$PLATFORM$EXTENSION"
+cd "$PLATFORM$EXTENSION"
 mkdir -p include lib bin
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
@@ -24,6 +24,12 @@ cd librealsense-$LIBREALSENSE2_VERSION
 patch -Np1 < ../../../librealsense2.patch || true
 sedinplace 's/float_t/float/g' `find src/tm2/ -type f`
 
+GPU_FLAGS="-DBUILD_WITH_CUDA=OFF"
+if [[ "$EXTENSION" == *gpu ]]; then
+    GPU_FLAGS="-DBUILD_WITH_CUDA=ON"
+    GPU_FLAGS="$GPU_FLAGS -DBUILD_WITH_STATIC_CRT=OFF"
+fi
+
 case $PLATFORM in
     linux-armhf)
         cd ../libusb-$LIBUSB_VERSION
@@ -31,7 +37,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE2_VERSION
-        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF $GPU_FLAGS .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -41,7 +47,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE2_VERSION
-        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF $GPU_FLAGS .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -51,7 +57,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE2_VERSION
-        CC="gcc -m32" CXX="g++ -m32" "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        CC="gcc -m32" CXX="g++ -m32" "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF $GPU_FLAGS .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -61,12 +67,12 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE2_VERSION
-        CC="gcc -m64" CXX="g++ -m64" "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        CC="gcc -m64" CXX="g++ -m64" "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB_INC=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_LIB=$INSTALL_PATH/lib/libusb-1.0.a -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF $GPU_FLAGS .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-x86_64)
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF $GPU_FLAGS .
         make -j $MAKEJ
         make install/strip
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib
@@ -76,7 +82,7 @@ case $PLATFORM in
         cd build
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF $GPU_FLAGS ..
         ninja -j $MAKEJ
         cd ..
         cp -a include/* ../include/
@@ -87,7 +93,7 @@ case $PLATFORM in
         cd build
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF $GPU_FLAGS ..
         ninja -j $MAKEJ
         cd ..
         cp -a include/* ../include/

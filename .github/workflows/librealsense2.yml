@@ -19,33 +19,54 @@ jobs:
   linux-armhf:
     runs-on: ubuntu-16.04
     container: ubuntu:xenial
+    strategy:
+      matrix:
+      ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-arm64:
     runs-on: ubuntu-16.04
     container: ubuntu:xenial
+    strategy:
+      matrix:
+      ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86:
     runs-on: ubuntu-16.04
     container: centos:6
+    strategy:
+      matrix:
+      ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
   linux-x86_64:
     runs-on: ubuntu-16.04
     container: centos:6
+    strategy:
+      matrix:
+      ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
   macosx-x86_64:
     runs-on: macos-10.15
+    strategy:
+      matrix:
+      ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-x86:
     runs-on: windows-2019
+    strategy:
+      matrix:
+      ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   windows-x86_64:
     runs-on: windows-2019
+    strategy:
+      matrix:
+      ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   redeploy:
