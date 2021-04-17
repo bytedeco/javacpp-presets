@@ -31,12 +31,12 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <!-- <dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-arm64}</classifier>
-    </dependency> -->
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -63,9 +63,10 @@
                 <manifestEntries>
                   <Class-Path>
                     ${javacpp.moduleId}.jar
-                    <!-- ${javacpp.moduleId}-linux-arm64-gpu.jar -->
+                    ${javacpp.moduleId}-linux-arm64-gpu.jar
                     ${javacpp.moduleId}-linux-x86_64-gpu.jar
-                    ${javacpp.moduleId}-windows-x86_64-gpu.jar</Class-Path>
+                    ${javacpp.moduleId}-windows-x86_64-gpu.jar
+                  </Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -110,7 +111,7 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform.gpu {
-                      <!-- requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.gpu; -->
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.gpu;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.gpu;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64.gpu;
                     }
