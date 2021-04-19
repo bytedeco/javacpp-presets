@@ -19,7 +19,7 @@ fi
 # DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
 # ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
-LIBXML_CONFIG="--enable-static --disable-shared --without-python --without-lzma --with-pic"
+LIBXML_CONFIG="--enable-static --disable-shared --without-iconv --without-python --without-lzma --with-pic"
 
 NASM_VERSION=2.14
 ZLIB=zlib-1.2.11
@@ -1292,7 +1292,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$XML2
-        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --without-iconv
+        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1391,7 +1391,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$XML2
-        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --without-iconv --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
+        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1500,7 +1500,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$XML2
-        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --without-iconv --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         echo ""
