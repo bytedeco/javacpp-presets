@@ -1,4 +1,5 @@
 
+ * Build FFmpeg with libxml2, enabling support for DASH demuxing ([pull #1033](https://github.com/bytedeco/javacpp-presets/pull/1033))
  * Add `@MemberGetter` for `av_log_default_callback()` in presets for FFmpeg ([issue #812](https://github.com/bytedeco/javacpp-presets/issues/812))
  * Include `cudaGL.h` and `cuda_gl_interop.h` header files in presets for CUDA ([pull #1027](https://github.com/bytedeco/javacpp-presets/pull/1027))
  * Add presets for NVIDIA Video Codec SDK 11.0.10 ([pull #1020](https://github.com/bytedeco/javacpp-presets/pull/1020)), PyTorch 1.8.1 ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623)), ModSecurity ([pull #1012](https://github.com/bytedeco/javacpp-presets/pull/1012))
