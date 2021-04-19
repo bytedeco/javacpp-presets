@@ -11,6 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 
+/**
+ * Specifies a memory location.
+ *
+ * To specify a gpu, set type = ::cudaMemLocationTypeDevice and set id = the gpu's device ordinal.
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class cudaMemLocation extends Pointer {
     static { Loader.load(); }
@@ -29,6 +34,8 @@ public class cudaMemLocation extends Pointer {
         return new cudaMemLocation((Pointer)this).position(position + i);
     }
 
+    /** Specifies the location type, which modifies the meaning of id. */
     public native @Cast("cudaMemLocationType") int type(); public native cudaMemLocation type(int setter);
+    /** identifier for a given this location's ::CUmemLocationType. */
     public native int id(); public native cudaMemLocation id(int setter);
 }
