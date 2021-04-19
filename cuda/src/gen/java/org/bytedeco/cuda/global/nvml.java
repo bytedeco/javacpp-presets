@@ -441,8 +441,8 @@ public static final int
     NVML_BRAND_QUADRO_RTX       = 12,
     NVML_BRAND_NVIDIA_RTX       = 13,
     NVML_BRAND_NVIDIA           = 14,
-    NVML_BRAND_GEFORCE_RTX      = 15,
-    NVML_BRAND_TITAN_RTX        = 16,
+    NVML_BRAND_GEFORCE_RTX      = 15,  // Unused
+    NVML_BRAND_TITAN_RTX        = 16,  // Unused
 
     // Keep this last
     NVML_BRAND_COUNT = 17;
@@ -2267,13 +2267,11 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleBySerial(Strin
  *
  * For all products.
  *
- * @param uuid                                 The UUID of the target GPU
- * @param device                               Reference in which to return the device handle
+ * @param uuid                                 The UUID of the target GPU or MIG instance
+ * @param device                               Reference in which to return the device handle or MIG device handle
  * 
  * Starting from NVML 5, this API causes NVML to initialize the target GPU
  * NVML may initialize additional GPUs as it searches for the target GPU
- *
- * This API does not currently support acquiring MIG device handles using MIG device UUIDs.
  *
  * @return 
  *         - \ref NVML_SUCCESS                  if \a device has been set
@@ -4177,7 +4175,6 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderCapacity(nvml
  *         - \ref NVML_ERROR_INVALID_ARGUMENT   if \a sessionCount, or \a device or \a averageFps,
  *                                              or \a averageLatency is NULL
  *         - \ref NVML_ERROR_GPU_IS_LOST        if the target GPU has fallen off the bus or is otherwise inaccessible
- *         - \ref NVML_ERROR_NOT_SUPPORTED      if this query is not supported by \a device
  *         - \ref NVML_ERROR_UNKNOWN            on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderStats(nvmlDevice_st device, @Cast("unsigned int*") IntPointer sessionCount,
@@ -5189,6 +5186,60 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceSetGpuLockedClocks(nvml
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceResetGpuLockedClocks(nvmlDevice_st device);
+
+/**
+ * Set memory clocks that device will lock to.
+ *
+ * Sets the device's memory clocks to the value in the range of minMemClockMHz to maxMemClockMHz.
+ * Setting this will supersede application clock values and take effect regardless of whether a cuda app is running.
+ * See /ref nvmlDeviceSetApplicationsClocks
+ *
+ * Can be used as a setting to request constant performance.
+ *
+ * Requires root/admin permissions.
+ *
+ * After system reboot or driver reload applications clocks go back to their default value.
+ * See \ref nvmlDeviceResetMemoryLockedClocks.
+ *
+ * For Ampere &tm; or newer fully supported devices.
+ *
+ * @param device                               The identifier of the target device
+ * @param minMemClockMHz                       Requested minimum memory clock in MHz
+ * @param maxMemClockMHz                       Requested maximum memory clock in MHz
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if new settings were successfully set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a minGpuClockMHz and \a maxGpuClockMHz
+ *                                                 is not a valid clock combination
+ *         - \ref NVML_ERROR_NO_PERMISSION     if the user doesn't have permission to perform this operation
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device doesn't support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetMemoryLockedClocks(nvmlDevice_st device, @Cast("unsigned int") int minMemClockMHz, @Cast("unsigned int") int maxMemClockMHz);
+
+/**
+ * Resets the memory clock to the default value
+ *
+ * This is the memory clock that will be used after system reboot or driver reload.
+ * Default values are idle clocks, but the current values can be changed using \ref nvmlDeviceSetApplicationsClocks.
+ *
+ * @see nvmlDeviceSetMemoryLockedClocks
+ *
+ * For Ampere &tm; or newer fully supported devices.
+ *
+ * @param device                               The identifier of the target device
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if new settings were successfully set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceResetMemoryLockedClocks(nvmlDevice_st device);
 
 /**
  * Set clocks that applications will lock to.
@@ -7165,32 +7216,32 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetAccountingStat
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceClearAccountingPids(@Cast("nvmlVgpuInstance_t") int vgpuInstance);
-// Targeting ../nvml/nvmlBlacklistDeviceInfo_t.java
+// Targeting ../nvml/nvmlExcludedDeviceInfo_t.java
 
 
 
  /**
- * Retrieves the number of blacklisted GPU devices in the system.
+ * Retrieves the number of excluded GPU devices in the system.
  * 
  * For all products.
  *
- * @param deviceCount                          Reference in which to return the number of blacklisted devices
+ * @param deviceCount                          Reference in which to return the number of excluded devices
  * 
  * @return 
  *         - \ref NVML_SUCCESS                 if \a deviceCount has been set
  *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a deviceCount is NULL
  */
-public static native @Cast("nvmlReturn_t") int nvmlGetBlacklistDeviceCount(@Cast("unsigned int*") IntPointer deviceCount);
-public static native @Cast("nvmlReturn_t") int nvmlGetBlacklistDeviceCount(@Cast("unsigned int*") IntBuffer deviceCount);
-public static native @Cast("nvmlReturn_t") int nvmlGetBlacklistDeviceCount(@Cast("unsigned int*") int[] deviceCount);
+public static native @Cast("nvmlReturn_t") int nvmlGetExcludedDeviceCount(@Cast("unsigned int*") IntPointer deviceCount);
+public static native @Cast("nvmlReturn_t") int nvmlGetExcludedDeviceCount(@Cast("unsigned int*") IntBuffer deviceCount);
+public static native @Cast("nvmlReturn_t") int nvmlGetExcludedDeviceCount(@Cast("unsigned int*") int[] deviceCount);
 
 /**
- * Acquire the device information for a blacklisted device, based on its index.
+ * Acquire the device information for an excluded GPU device, based on its index.
  * 
  * For all products.
  *
  * Valid indices are derived from the \a deviceCount returned by 
- *   \ref nvmlGetBlacklistDeviceCount(). For example, if \a deviceCount is 2 the valid indices  
+ *   \ref nvmlGetExcludedDeviceCount(). For example, if \a deviceCount is 2 the valid indices  
  *   are 0 and 1, corresponding to GPU 0 and GPU 1.
  *
  * @param index                                The index of the target GPU, >= 0 and < \a deviceCount
@@ -7200,9 +7251,9 @@ public static native @Cast("nvmlReturn_t") int nvmlGetBlacklistDeviceCount(@Cast
  *         - \ref NVML_SUCCESS                  if \a device has been set
  *         - \ref NVML_ERROR_INVALID_ARGUMENT   if \a index is invalid or \a info is NULL
  *
- * @see nvmlGetBlacklistDeviceCount
+ * @see nvmlGetExcludedDeviceCount
  */
-public static native @Cast("nvmlReturn_t") int nvmlGetBlacklistDeviceInfoByIndex(@Cast("unsigned int") int index, nvmlBlacklistDeviceInfo_t info);
+public static native @Cast("nvmlReturn_t") int nvmlGetExcludedDeviceInfoByIndex(@Cast("unsigned int") int index, nvmlExcludedDeviceInfo_t info);
 
 /** \} */
 
@@ -7927,6 +7978,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProce
 // #undef nvmlDeviceGetHandleByIndex
 // #undef nvmlDeviceGetHandleByPciBusId
 // #undef nvmlInit
+// #undef nvmlBlacklistDeviceInfo_t
+// #undef nvmlGetBlacklistDeviceCount
+// #undef nvmlGetBlacklistDeviceInfoByIndex
 // #endif
 
 // #ifdef __cplusplus

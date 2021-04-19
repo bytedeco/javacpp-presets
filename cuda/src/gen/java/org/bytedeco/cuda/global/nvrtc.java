@@ -20,7 +20,7 @@ public class nvrtc extends org.bytedeco.cuda.presets.nvrtc {
 //
 // NVIDIA_COPYRIGHT_BEGIN
 //
-// Copyright (c) 2014-2020, NVIDIA CORPORATION.  All rights reserved.
+// Copyright (c) 2014-2021, NVIDIA CORPORATION.  All rights reserved.
 //
 // NVIDIA CORPORATION and its licensors retain all intellectual property
 // and proprietary rights in and to this software, related documentation
@@ -112,10 +112,39 @@ public static native @Cast("nvrtcResult") int nvrtcVersion(IntBuffer major, IntB
 public static native @Cast("nvrtcResult") int nvrtcVersion(int[] major, int[] minor);
 
 
-
+/**
+ * \ingroup query
+ * \brief   nvrtcGetNumSupportedArchs sets the output parameter \p numArchs 
+ *          with the number of architectures supported by NVRTC. This can 
+ *          then be used to pass an array to ::nvrtcGetSupportedArchs to
+ *          get the supported architectures.
+ *
+ * @param numArchs [out] number of supported architectures.
+ * @return
+ *   - \link #nvrtcResult NVRTC_SUCCESS \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_INVALID_INPUT \endlink
+ *
+ * see    ::nvrtcGetSupportedArchs
+ */
 public static native @Cast("nvrtcResult") int nvrtcGetNumSupportedArchs(IntPointer numArchs);
 public static native @Cast("nvrtcResult") int nvrtcGetNumSupportedArchs(IntBuffer numArchs);
 public static native @Cast("nvrtcResult") int nvrtcGetNumSupportedArchs(int[] numArchs);
+
+
+/**
+ * \ingroup query
+ * \brief   nvrtcGetSupportedArchs populates the array passed via the output parameter 
+ *          \p supportedArchs with the architectures supported by NVRTC. The array is
+ *          sorted in the ascending order. The size of the array to be passed can be
+ *          determined using ::nvrtcGetNumSupportedArchs.
+ *
+ * @param supportedArchs [out] sorted array of supported architectures.
+ * @return
+ *   - \link #nvrtcResult NVRTC_SUCCESS \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_INVALID_INPUT \endlink
+ *
+ * see    ::nvrtcGetNumSupportedArchs
+ */
 public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(IntPointer supportedArchs);
 public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(IntBuffer supportedArchs);
 public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(int[] supportedArchs);

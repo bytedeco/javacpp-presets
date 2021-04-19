@@ -13,15 +13,15 @@ runs:
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
           export ARCH=arm64
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-2-local-11.2.2_460.32.03-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-11-3-local-11.3.0_465.19.01-1.aarch64.rpm
           export CUDNN=cudnn-11.2-linux-aarch64sbsa-v8.1.1.33.tgz
-          export NCCL=nccl_2.8.4-1+cuda11.2_aarch64.txz
+          export NCCL=nccl_2.9.6-1+cuda11.3_aarch64.txz
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-2-local-11.2.2_460.32.03-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-11-3-local-11.3.0_465.19.01-1.ppc64le.rpm
           export CUDNN=cudnn-11.2-linux-ppc64le-v8.1.1.33.tgz
-          export NCCL=nccl_2.8.4-1+cuda11.2_ppc64le.txz
+          export NCCL=nccl_2.9.6-1+cuda11.3_ppc64le.txz
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -76,12 +76,12 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/$CUDNN
-          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/$NCCL
+          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.9/$NCCL
 
           rpm -i --force --ignorearch --nodeps $CUDA
-          pushd /var/cuda-repo-rhel8-11-2-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          pushd /var/cuda-repo-rhel8-11-3-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
           tar -hxvf $CUDNN -C /usr/local/
@@ -95,6 +95,7 @@ runs:
           for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f ${f:0:${#f}-1}1; done
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.2
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so

@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cuda.global.cudart.*;
-
+ 
 /** CUDA external memory */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class CUextMemory_st extends Pointer {

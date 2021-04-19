@@ -92,8 +92,8 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
 
 public static final int CUSOLVER_VER_MAJOR = 11;
 public static final int CUSOLVER_VER_MINOR = 1;
-public static final int CUSOLVER_VER_PATCH = 0;
-public static final int CUSOLVER_VER_BUILD = 152;
+public static final int CUSOLVER_VER_PATCH = 1;
+public static final int CUSOLVER_VER_BUILD = 58;
 public static final int CUSOLVER_VERSION = (CUSOLVER_VER_MAJOR * 1000 + 
                         CUSOLVER_VER_MINOR *  100 + 
                         CUSOLVER_VER_PATCH);

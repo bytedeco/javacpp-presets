@@ -11,6 +11,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 
+/**
+ * Opaque data for exporting a pool allocation
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class cudaMemPoolPtrExportData extends Pointer {
     static { Loader.load(); }

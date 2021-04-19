@@ -120,7 +120,7 @@ public class cudart extends org.bytedeco.cuda.presets.cudart {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 11020;
+public static final int CUDA_VERSION = 11030;
 
 // #ifdef __cplusplus
 // #endif
@@ -132,7 +132,9 @@ public static final int CUDA_VERSION = 11020;
 // #if defined(_WIN64) || defined(__LP64__)
 // #else
 // #endif
+/** CUDA device pointer */
 
+/** CUDA device */
 /** CUDA device */
 // Targeting ../cudart/CUctx_st.java
 
@@ -165,6 +167,8 @@ public static final int CUDA_VERSION = 11020;
 
 
 /** An opaque value that represents a CUDA texture object */
+/** An opaque value that represents a CUDA texture object */
+/** An opaque value that represents a CUDA surface object */
 /** An opaque value that represents a CUDA surface object */
 // Targeting ../cudart/CUextMemory_st.java
 
@@ -184,6 +188,9 @@ public static final int CUDA_VERSION = 11020;
 // Targeting ../cudart/CUmemPoolHandle_st.java
 
 
+// Targeting ../cudart/CUuserObject_st.java
+
+
 
 // #ifndef CU_UUID_HAS_BEEN_DEFINED
 // #define CU_UUID_HAS_BEEN_DEFINED
@@ -196,10 +203,10 @@ public static final int CUDA_VERSION = 11020;
  * CUDA IPC handle size
  */
 public static final int CU_IPC_HANDLE_SIZE = 64;
-// Targeting ../cudart/CUipcEventHandle.java
+// Targeting ../cudart/CUipcEventHandle_v1.java
 
 
-// Targeting ../cudart/CUipcMemHandle.java
+// Targeting ../cudart/CUipcMemHandle_v1.java
 
 
 
@@ -379,7 +386,7 @@ public static final int
     /** This has the same effect as ::CU_STREAM_WAIT_VALUE_FLUSH, but as a
                                                   standalone operation. */
     CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES = 3;
-// Targeting ../cudart/CUstreamBatchMemOpParams.java
+// Targeting ../cudart/CUstreamBatchMemOpParams_v1.java
 
 
 
@@ -392,6 +399,16 @@ public static final int
     CU_OCCUPANCY_DEFAULT                  = 0x0,
     /** Assume global caching is enabled and cannot be automatically turned off */
     CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE = 0x1;
+
+/**
+ * Flags for ::cuStreamUpdateCaptureDependencies
+ */
+/** enum CUstreamUpdateCaptureDependencies_flags_enum */
+public static final int
+    /** Add new nodes to the dependency set */
+    CU_STREAM_ADD_CAPTURE_DEPENDENCIES = 0x0,
+    /** Replace the dependency set with the new nodes */
+    CU_STREAM_SET_CAPTURE_DEPENDENCIES = 0x1;
 
 /**
  * Array formats
@@ -646,11 +663,11 @@ public static final int
     CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR = 94,
     /** Device supports launching cooperative kernels via ::cuLaunchCooperativeKernel */
     CU_DEVICE_ATTRIBUTE_COOPERATIVE_LAUNCH = 95,
-    /** Device can participate in cooperative kernels launched via ::cuLaunchCooperativeKernelMultiDevice */
+    /** Deprecated, ::cuLaunchCooperativeKernelMultiDevice is deprecated. */
     CU_DEVICE_ATTRIBUTE_COOPERATIVE_MULTI_DEVICE_LAUNCH = 96,
     /** Maximum optin shared memory per block */
     CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN = 97,
-    /** Both the ::CU_STREAM_WAIT_VALUE_FLUSH flag and the ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES MemOp are supported on the device. See \ref CUDA_MEMOP for additional details. */
+    /** The ::CU_STREAM_WAIT_VALUE_FLUSH flag and the ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES MemOp are supported on the device. See \ref CUDA_MEMOP for additional details. */
     CU_DEVICE_ATTRIBUTE_CAN_FLUSH_REMOTE_WRITES = 98,
     /** Device supports host memory registration via ::cudaHostRegister. */
     CU_DEVICE_ATTRIBUTE_HOST_REGISTER_SUPPORTED = 99,
@@ -672,9 +689,9 @@ public static final int
     CU_DEVICE_ATTRIBUTE_MAX_BLOCKS_PER_MULTIPROCESSOR = 106,
     /** Device supports compression of memory */
     CU_DEVICE_ATTRIBUTE_GENERIC_COMPRESSION_SUPPORTED = 107,
-    /** Device's maximum L2 persisting lines capacity setting in bytes */
+    /** Maximum L2 persisting lines capacity setting in bytes. */
     CU_DEVICE_ATTRIBUTE_MAX_PERSISTING_L2_CACHE_SIZE = 108,
-    /** The maximum value of CUaccessPolicyWindow::num_bytes. */
+    /** Maximum value of CUaccessPolicyWindow::num_bytes. */
     CU_DEVICE_ATTRIBUTE_MAX_ACCESS_POLICY_WINDOW_SIZE = 109,
     /** Device supports specifying the GPUDirect RDMA flag with ::cuMemCreate */
     CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_WITH_CUDA_VMM_SUPPORTED = 110,
@@ -688,8 +705,16 @@ public static final int
     CU_DEVICE_ATTRIBUTE_TIMELINE_SEMAPHORE_INTEROP_SUPPORTED = 114,
     /** Device supports using the ::cuMemAllocAsync and ::cuMemPool family of APIs */
     CU_DEVICE_ATTRIBUTE_MEMORY_POOLS_SUPPORTED = 115,
-    CU_DEVICE_ATTRIBUTE_MAX = 116;
-// Targeting ../cudart/CUdevprop.java
+    /** Device supports GPUDirect RDMA APIs, like nvidia_p2p_get_pages (see https://docs.nvidia.com/cuda/gpudirect-rdma for more information) */
+    CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_SUPPORTED = 116,
+    /** The returned attribute shall be interpreted as a bitmask, where the individual bits are described by the ::CUflushGPUDirectRDMAWritesOptions enum */
+    CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_FLUSH_WRITES_OPTIONS = 117,
+    /** GPUDirect RDMA writes to the device do not need to be flushed for consumers within the scope indicated by the returned attribute. See ::CUGPUDirectRDMAWritesOrdering for the numerical values returned here. */
+    CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_WRITES_ORDERING = 118,
+    /** Handle types supported with mempool based IPC */
+    CU_DEVICE_ATTRIBUTE_MEMPOOL_SUPPORTED_HANDLE_TYPES = 119,
+    CU_DEVICE_ATTRIBUTE_MAX = 120;
+// Targeting ../cudart/CUdevprop_v1.java
 
 
 
@@ -729,7 +754,9 @@ public static final int
     /** 1 if the memory this pointer is referencing can be used with the GPUDirect RDMA API **/
     CU_POINTER_ATTRIBUTE_IS_GPU_DIRECT_RDMA_CAPABLE = 15,
     /** Returns the access flags the device associated with the current context has on the corresponding memory referenced by the pointer given */
-    CU_POINTER_ATTRIBUTE_ACCESS_FLAGS = 16;
+    CU_POINTER_ATTRIBUTE_ACCESS_FLAGS = 16,
+    /** Returns the mempool handle for the allocation if it was allocated from a mempool. Otherwise returns NULL. **/
+    CU_POINTER_ATTRIBUTE_MEMPOOL_HANDLE = 17;
 
 /**
  * Function properties
@@ -1270,16 +1297,16 @@ public static final int
     CU_ACCESS_PROPERTY_STREAMING        = 1,
     /** Persisting access is more likely to persist in cache.*/
     CU_ACCESS_PROPERTY_PERSISTING       = 2;
-// Targeting ../cudart/CUaccessPolicyWindow.java
+// Targeting ../cudart/CUaccessPolicyWindow_v1.java
 
 
-// Targeting ../cudart/CUDA_KERNEL_NODE_PARAMS.java
+// Targeting ../cudart/CUDA_KERNEL_NODE_PARAMS_v1.java
 
 
-// Targeting ../cudart/CUDA_MEMSET_NODE_PARAMS.java
+// Targeting ../cudart/CUDA_MEMSET_NODE_PARAMS_v1.java
 
 
-// Targeting ../cudart/CUDA_HOST_NODE_PARAMS.java
+// Targeting ../cudart/CUDA_HOST_NODE_PARAMS_v1.java
 
 
 
@@ -1325,7 +1352,7 @@ public static final int
     CU_KERNEL_NODE_ATTRIBUTE_ACCESS_POLICY_WINDOW       = 1,
     /** Allows a kernel node to be cooperative (see ::cuLaunchCooperativeKernel). */
     CU_KERNEL_NODE_ATTRIBUTE_COOPERATIVE                = 2;
-// Targeting ../cudart/CUkernelNodeAttrValue.java
+// Targeting ../cudart/CUkernelNodeAttrValue_v1.java
 
 
 
@@ -1361,9 +1388,21 @@ public static final int
     CU_STREAM_ATTRIBUTE_ACCESS_POLICY_WINDOW    = 1,
     /** ::CUsynchronizationPolicy for work queued up in this stream */
     CU_STREAM_ATTRIBUTE_SYNCHRONIZATION_POLICY  = 3;
-// Targeting ../cudart/CUstreamAttrValue.java
+// Targeting ../cudart/CUstreamAttrValue_v1.java
 
 
+
+/**
+ * Flags to specify search options. For more details see ::cuGetProcAddress
+ */
+/** enum CUdriverProcAddress_flags_enum */
+public static final int
+    /** Default search mode for driver symbols. */
+    CU_GET_PROC_ADDRESS_DEFAULT = 0,
+    /** Search for legacy versions of driver symbols. */
+    CU_GET_PROC_ADDRESS_LEGACY_STREAM = 1 << 0,
+    /** Search for per-thread versions of driver symbols. */
+    CU_GET_PROC_ADDRESS_PER_THREAD_DEFAULT_STREAM = 1 << 1;
 
 /**
  * Error codes
@@ -1625,7 +1664,8 @@ public static final int
 
     /**
      * This indicates that a named symbol was not found. Examples of symbols
-     * are global/constant variable names, texture names, and surface names.
+     * are global/constant variable names, driver function names, texture names,
+     * and surface names.
      */
     CUDA_ERROR_NOT_FOUND                      = 500,
 
@@ -1980,19 +2020,19 @@ public static final int CU_MEMHOSTREGISTER_IOMEMORY =     0x04;
 * set will cause ::cuMemHostRegister to error with CUDA_ERROR_NOT_SUPPORTED.
 */
 public static final int CU_MEMHOSTREGISTER_READ_ONLY =    0x08;
-// Targeting ../cudart/CUDA_MEMCPY2D.java
+// Targeting ../cudart/CUDA_MEMCPY2D_v2.java
 
 
-// Targeting ../cudart/CUDA_MEMCPY3D.java
+// Targeting ../cudart/CUDA_MEMCPY3D_v2.java
 
 
-// Targeting ../cudart/CUDA_MEMCPY3D_PEER.java
+// Targeting ../cudart/CUDA_MEMCPY3D_PEER_v1.java
 
 
-// Targeting ../cudart/CUDA_ARRAY_DESCRIPTOR.java
+// Targeting ../cudart/CUDA_ARRAY_DESCRIPTOR_v2.java
 
 
-// Targeting ../cudart/CUDA_ARRAY3D_DESCRIPTOR.java
+// Targeting ../cudart/CUDA_ARRAY3D_DESCRIPTOR_v2.java
 
 
 
@@ -2000,13 +2040,13 @@ public static final int CU_MEMHOSTREGISTER_READ_ONLY =    0x08;
  * Indicates that the layered sparse CUDA array or CUDA mipmapped array has a single mip tail region for all layers
  */
 public static final int CU_ARRAY_SPARSE_PROPERTIES_SINGLE_MIPTAIL = 0x1;
-// Targeting ../cudart/CUDA_ARRAY_SPARSE_PROPERTIES.java
+// Targeting ../cudart/CUDA_ARRAY_SPARSE_PROPERTIES_v1.java
 
 
-// Targeting ../cudart/CUDA_RESOURCE_DESC.java
+// Targeting ../cudart/CUDA_RESOURCE_DESC_v1.java
 
 
-// Targeting ../cudart/CUDA_TEXTURE_DESC.java
+// Targeting ../cudart/CUDA_TEXTURE_DESC_v1.java
 
 
 
@@ -2085,10 +2125,10 @@ public static final int
     CU_RES_VIEW_FORMAT_SIGNED_BC6H   = 0x21,
     /** Block compressed 7 */
     CU_RES_VIEW_FORMAT_UNSIGNED_BC7  = 0x22;
-// Targeting ../cudart/CUDA_RESOURCE_VIEW_DESC.java
+// Targeting ../cudart/CUDA_RESOURCE_VIEW_DESC_v1.java
 
 
-// Targeting ../cudart/CUDA_POINTER_ATTRIBUTE_P2P_TOKENS.java
+// Targeting ../cudart/CUDA_POINTER_ATTRIBUTE_P2P_TOKENS_v1.java
 
 
 
@@ -2104,7 +2144,7 @@ public static final int
     CU_POINTER_ATTRIBUTE_ACCESS_FLAG_READ      = 0x1,
     /** Read-write access, the device has full read-write access to the memory */
     CU_POINTER_ATTRIBUTE_ACCESS_FLAG_READWRITE = 0x3;
-// Targeting ../cudart/CUDA_LAUNCH_PARAMS.java
+// Targeting ../cudart/CUDA_LAUNCH_PARAMS_v1.java
 
 
 
@@ -2182,13 +2222,13 @@ public static final int CUDA_NVSCISYNC_ATTR_SIGNAL = 0x1;
  * to be filled by ::cuDeviceGetNvSciSyncAttributes.
  */
 public static final int CUDA_NVSCISYNC_ATTR_WAIT = 0x2;
-// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_HANDLE_DESC.java
+// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_HANDLE_DESC_v1.java
 
 
-// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_BUFFER_DESC.java
+// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_BUFFER_DESC_v1.java
 
 
-// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC.java
+// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC_v1.java
 
 
 
@@ -2237,19 +2277,19 @@ public static final int
      * Handle is an opaque shared NT handle referencing a timeline semaphore
      */
     CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32 = 10;
-// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC.java
+// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1.java
 
 
-// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS.java
+// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_v1.java
 
 
-// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS.java
+// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS_v1.java
 
 
-// Targeting ../cudart/CUDA_EXT_SEM_SIGNAL_NODE_PARAMS.java
+// Targeting ../cudart/CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1.java
 
 
-// Targeting ../cudart/CUDA_EXT_SEM_WAIT_NODE_PARAMS.java
+// Targeting ../cudart/CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1.java
 
 
 
@@ -2266,7 +2306,7 @@ public static final int
     CU_MEM_HANDLE_TYPE_WIN32                 = 0x2,
     /** Allows a Win32 KMT handle to be used for exporting. (D3DKMT_HANDLE) */
     CU_MEM_HANDLE_TYPE_WIN32_KMT             = 0x4,
-    CU_MEM_HANDLE_TYPE_MAX                   = 0xFFFFFFFF;
+    CU_MEM_HANDLE_TYPE_MAX                   = 0x7FFFFFFF;
 
 /**
  * Specifies the memory protection flags for mapping.
@@ -2279,7 +2319,7 @@ public static final int
     CU_MEM_ACCESS_FLAGS_PROT_READ        = 0x1,
     /** Make the address range read-write accessible */
     CU_MEM_ACCESS_FLAGS_PROT_READWRITE   = 0x3,
-    CU_MEM_ACCESS_FLAGS_PROT_MAX         = 0xFFFFFFFF;
+    CU_MEM_ACCESS_FLAGS_PROT_MAX         = 0x7FFFFFFF;
 
 /**
  * Specifies the type of location
@@ -2289,7 +2329,7 @@ public static final int
     CU_MEM_LOCATION_TYPE_INVALID = 0x0,
     /** Location is a device location, thus id is a device ordinal */
     CU_MEM_LOCATION_TYPE_DEVICE  = 0x1,
-    CU_MEM_LOCATION_TYPE_MAX     = 0xFFFFFFFF;
+    CU_MEM_LOCATION_TYPE_MAX     = 0x7FFFFFFF;
 
 /**
 * Defines the allocation types available
@@ -2302,7 +2342,7 @@ public static final int
       * location while the application is actively using it
       */
     CU_MEM_ALLOCATION_TYPE_PINNED  = 0x1,
-    CU_MEM_ALLOCATION_TYPE_MAX     = 0xFFFFFFFF;
+    CU_MEM_ALLOCATION_TYPE_MAX     = 0x7FFFFFFF;
 
 /**
 * Flag for requesting different optimal and required granularities for an allocation.
@@ -2336,10 +2376,10 @@ public static final int
 /** enum CUmemHandleType_enum */
 public static final int
     CU_MEM_HANDLE_TYPE_GENERIC = 0;
-// Targeting ../cudart/CUarrayMapInfo.java
+// Targeting ../cudart/CUarrayMapInfo_v1.java
 
 
-// Targeting ../cudart/CUmemLocation.java
+// Targeting ../cudart/CUmemLocation_v1.java
 
 
 
@@ -2357,10 +2397,10 @@ public static final int
  * This flag if set indicates that the memory will be used as a tile pool.
  */
 public static final int CU_MEM_CREATE_USAGE_TILE_POOL =    0x1;
-// Targeting ../cudart/CUmemAllocationProp.java
+// Targeting ../cudart/CUmemAllocationProp_v1.java
 
 
-// Targeting ../cudart/CUmemAccessDesc.java
+// Targeting ../cudart/CUmemAccessDesc_v1.java
 
 
 
@@ -2388,11 +2428,15 @@ public static final int
     CU_MEMPOOL_ATTR_REUSE_FOLLOW_EVENT_DEPENDENCIES = 1,
     CU_MEMPOOL_ATTR_REUSE_ALLOW_OPPORTUNISTIC = 2,
     CU_MEMPOOL_ATTR_REUSE_ALLOW_INTERNAL_DEPENDENCIES = 3,
-    CU_MEMPOOL_ATTR_RELEASE_THRESHOLD = 4;
-// Targeting ../cudart/CUmemPoolProps.java
+    CU_MEMPOOL_ATTR_RELEASE_THRESHOLD = 4,
+    CU_MEMPOOL_ATTR_RESERVED_MEM_CURRENT = 5,
+    CU_MEMPOOL_ATTR_RESERVED_MEM_HIGH = 6,
+    CU_MEMPOOL_ATTR_USED_MEM_CURRENT = 7,
+    CU_MEMPOOL_ATTR_USED_MEM_HIGH = 8;
+// Targeting ../cudart/CUmemPoolProps_v1.java
 
 
-// Targeting ../cudart/CUmemPoolPtrExportData.java
+// Targeting ../cudart/CUmemPoolPtrExportData_v1.java
 
 
 
@@ -2538,6 +2582,79 @@ public static final int CU_DEVICE_CPU = CU_DEVICE_CPU();
  */
 public static native @MemberGetter int CU_DEVICE_INVALID();
 public static final int CU_DEVICE_INVALID = CU_DEVICE_INVALID();
+
+/**
+ * Bitmasks for ::CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_FLUSH_WRITES_OPTIONS
+ */
+/** enum CUflushGPUDirectRDMAWritesOptions_enum */
+public static final int
+    /** ::cuFlushGPUDirectRDMAWrites() and its CUDA Runtime API counterpart are supported on the device. */
+    CU_FLUSH_GPU_DIRECT_RDMA_WRITES_OPTION_HOST   = 1<<0,
+    /** The ::CU_STREAM_WAIT_VALUE_FLUSH flag and the ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES MemOp are supported on the device. */
+    CU_FLUSH_GPU_DIRECT_RDMA_WRITES_OPTION_MEMOPS = 1<<1;
+
+/**
+ * Platform native ordering for GPUDirect RDMA writes
+ */
+/** enum CUGPUDirectRDMAWritesOrdering_enum */
+public static final int
+    /** The device does not natively support ordering of remote writes. ::cuFlushGPUDirectRDMAWrites() can be leveraged if supported. */
+    CU_GPU_DIRECT_RDMA_WRITES_ORDERING_NONE        = 0,
+    /** Natively, the device can consistently consume remote writes, although other CUDA devices may not. */
+    CU_GPU_DIRECT_RDMA_WRITES_ORDERING_OWNER       = 100,
+    /** Any CUDA device in the system can consistently consume remote writes to this device. */
+    CU_GPU_DIRECT_RDMA_WRITES_ORDERING_ALL_DEVICES = 200;
+
+/**
+ * The scopes for ::cuFlushGPUDirectRDMAWrites
+ */
+/** enum CUflushGPUDirectRDMAWritesScope_enum */
+public static final int
+    /** Blocks until remote writes are visible to the CUDA device context owning the data. */
+    CU_FLUSH_GPU_DIRECT_RDMA_WRITES_TO_OWNER       = 100,
+    /** Blocks until remote writes are visible to all CUDA device contexts. */
+    CU_FLUSH_GPU_DIRECT_RDMA_WRITES_TO_ALL_DEVICES = 200;
+ 
+/**
+ * The targets for ::cuFlushGPUDirectRDMAWrites
+ */
+/** enum CUflushGPUDirectRDMAWritesTarget_enum */
+public static final int
+    /** Sets the target for ::cuFlushGPUDirectRDMAWrites() to the currently active CUDA device context. */
+    CU_FLUSH_GPU_DIRECT_RDMA_WRITES_TARGET_CURRENT_CTX = 0;
+
+/**
+ * The additional write options for ::cuGraphDebugDotPrint
+ */
+/** enum CUgraphDebugDot_flags_enum */
+public static final int
+    CU_GRAPH_DEBUG_DOT_FLAGS_VERBOSE                        = 1<<0,  /** Output all debug data as if every debug flag is enabled */
+    CU_GRAPH_DEBUG_DOT_FLAGS_RUNTIME_TYPES                  = 1<<1,  /** Use CUDA Runtime structures for output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_KERNEL_NODE_PARAMS             = 1<<2,  /** Adds CUDA_KERNEL_NODE_PARAMS values to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_MEMCPY_NODE_PARAMS             = 1<<3,  /** Adds CUDA_MEMCPY3D values to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_MEMSET_NODE_PARAMS             = 1<<4,  /** Adds CUDA_MEMSET_NODE_PARAMS values to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_HOST_NODE_PARAMS               = 1<<5,  /** Adds CUDA_HOST_NODE_PARAMS values to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_EVENT_NODE_PARAMS              = 1<<6,  /** Adds CUevent handle from record and wait nodes to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_EXT_SEMAS_SIGNAL_NODE_PARAMS   = 1<<7,  /** Adds CUDA_EXT_SEM_SIGNAL_NODE_PARAMS values to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_EXT_SEMAS_WAIT_NODE_PARAMS     = 1<<8,  /** Adds CUDA_EXT_SEM_WAIT_NODE_PARAMS values to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_KERNEL_NODE_ATTRIBUTES         = 1<<9,  /** Adds CUkernelNodeAttrValue values to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_HANDLES                        = 1<<10;  /** Adds node handles and every kernel function handle to output */
+
+/**
+ * Flags for user objects for graphs
+ */
+/** enum CUuserObject_flags_enum */
+public static final int
+    /** Indicates the destructor execution is not synchronized by any CUDA handle. */
+    CU_USER_OBJECT_NO_DESTRUCTOR_SYNC = 1;
+
+/**
+ * Flags for retaining user object references for graphs
+ */
+/** enum CUuserObjectRetain_flags_enum */
+public static final int
+    /** Transfer references from the caller rather than creating new references. */
+    CU_GRAPH_USER_OBJECT_MOVE = 1;
 
 /** \} */ /* END CUDA_TYPES */
 
@@ -2904,7 +3021,7 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  * ::cuDeviceGetName,
  * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
- * ::cudaMemGetInfo
+ * ::cudaMemGetInfo,
  * ::cuDeviceTotalMem
  */
 public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@Cast("size_t*") SizeTPointer maxWidthInElements, @Cast("CUarray_format") int format, @Cast("unsigned") int numChannels, @Cast("CUdevice") int dev);
@@ -3092,7 +3209,8 @@ public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@C
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR_SUPPORTED: Device supports exporting memory to a posix file descriptor with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_HANDLE_SUPPORTED:  Device supports exporting memory to a Win32 NT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_KMT_HANDLE_SUPPORTED: Device supports exporting memory to a Win32 KMT handle with ::cuMemExportToShareableHandle, if requested ::cuMemCreate
- * - ::CU_DEVICE_ATTRIBUTE_MAX_PERSISTING_L2_CACHE_SIZE: maximum L2 cache size in byte for persisting lines.
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_PERSISTING_L2_CACHE_SIZE: Maximum L2 persisting lines capacity setting in bytes.
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_ACCESS_POLICY_WINDOW_SIZE: Maximum value of CUaccessPolicyWindow::num_bytes. 
  * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCKS_PER_MULTIPROCESSOR: Maximum number of thread blocks that can reside on a multiprocessor.
  * - ::CU_DEVICE_ATTRIBUTE_GENERIC_COMPRESSION_SUPPORTED: Device supports compressible memory allocation via ::cuMemCreate
  * - ::CU_DEVICE_ATTRIBUTE_RESERVED_SHARED_MEMORY_PER_BLOCK: Amount of shared memory per block reserved by CUDA driver in bytes.
@@ -3188,7 +3306,7 @@ public static native @Cast("CUresult") int cuDeviceGetAttribute(int[] pi, @Cast(
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * @see ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate, ::cuMemPoolDestroy, ::cuMemAllocFromPoolAsync
+ * @see ::cuDeviceGetDefaultMemPool, ::cuDeviceGetMemPool, ::cuMemPoolCreate, ::cuMemPoolDestroy, ::cuMemAllocFromPoolAsync
  */
 public static native @Cast("CUresult") int cuDeviceSetMemPool(@Cast("CUdevice") int dev, CUmemPoolHandle_st pool);
 
@@ -3204,7 +3322,7 @@ public static native @Cast("CUresult") int cuDeviceSetMemPool(@Cast("CUdevice") 
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * @see ::cuDeviceGetDefaultMemPool
+ * @see ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate, ::cuDeviceSetMemPool
  */
 public static native @Cast("CUresult") int cuDeviceGetMemPool(@ByPtrPtr CUmemPoolHandle_st pool, @Cast("CUdevice") int dev);
 
@@ -3222,7 +3340,7 @@ public static native @Cast("CUresult") int cuDeviceGetMemPool(@ByPtrPtr CUmemPoo
  * ::CUDA_ERROR_NOT_SUPPORTED
  * \notefnerr
  *
- * @see ::cuMemAllocAsync, ::cuMemPoolTrimTo, ::cuMemPoolGetAttribute, ::cuMemPoolSetAttribute, cuMemPoolSetAccess
+ * @see ::cuMemAllocAsync, ::cuMemPoolTrimTo, ::cuMemPoolGetAttribute, ::cuMemPoolSetAttribute, cuMemPoolSetAccess, ::cuDeviceGetMemPool, ::cuMemPoolCreate
  */
 public static native @Cast("CUresult") int cuDeviceGetDefaultMemPool(@ByPtrPtr CUmemPoolHandle_st pool_out, @Cast("CUdevice") int dev);
 
@@ -3302,7 +3420,7 @@ public static native @Cast("CUresult") int cuDeviceGetDefaultMemPool(@ByPtrPtr C
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem
  */
-public static native @Cast("CUresult") @Deprecated int cuDeviceGetProperties(CUdevprop prop, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") @Deprecated int cuDeviceGetProperties(@Cast("CUdevprop*") CUdevprop_v1 prop, @Cast("CUdevice") int dev);
 
 /**
  * \brief Returns the compute capability of the device
@@ -3904,7 +4022,7 @@ public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") int
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetCurrent,
- * ::cuCtxGetDevice
+ * ::cuCtxGetDevice,
  * ::cuCtxGetLimit,
  * ::cuCtxGetSharedMemConfig,
  * ::cuCtxGetStreamPriorityRange,
@@ -5677,7 +5795,7 @@ public static native @Cast("CUresult") int cuDeviceGetPCIBusId(@Cast("char*") by
  * ::cuIpcCloseMemHandle,
  * ::cudaIpcGetEventHandle
  */
-public static native @Cast("CUresult") int cuIpcGetEventHandle(CUipcEventHandle pHandle, CUevent_st event);
+public static native @Cast("CUresult") int cuIpcGetEventHandle(@Cast("CUipcEventHandle*") CUipcEventHandle_v1 pHandle, CUevent_st event);
 
 /**
  * \brief Opens an interprocess event handle for use in the current process
@@ -5717,7 +5835,7 @@ public static native @Cast("CUresult") int cuIpcGetEventHandle(CUipcEventHandle 
  * ::cuIpcCloseMemHandle,
  * ::cudaIpcOpenEventHandle
  */
-public static native @Cast("CUresult") int cuIpcOpenEventHandle(@ByPtrPtr CUevent_st phEvent, @ByVal CUipcEventHandle handle);
+public static native @Cast("CUresult") int cuIpcOpenEventHandle(@ByPtrPtr CUevent_st phEvent, @ByVal @Cast("CUipcEventHandle*") CUipcEventHandle_v1 handle);
 
 /**
  * \brief Gets an interprocess memory handle for an existing device memory
@@ -5758,7 +5876,7 @@ public static native @Cast("CUresult") int cuIpcOpenEventHandle(@ByPtrPtr CUeven
  * ::cuIpcCloseMemHandle,
  * ::cudaIpcGetMemHandle
  */
-public static native @Cast("CUresult") int cuIpcGetMemHandle(CUipcMemHandle pHandle, @Cast("CUdeviceptr") long dptr);
+public static native @Cast("CUresult") int cuIpcGetMemHandle(@Cast("CUipcMemHandle*") CUipcMemHandle_v1 pHandle, @Cast("CUdeviceptr") long dptr);
 
 /**
  * \brief Opens an interprocess memory handle exported from another process
@@ -5816,9 +5934,9 @@ public static native @Cast("CUresult") int cuIpcGetMemHandle(CUipcMemHandle pHan
  * ::cuDeviceCanAccessPeer,
  * ::cudaIpcOpenMemHandle
  */
-public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") LongPointer pdptr, @ByVal CUipcMemHandle handle, @Cast("unsigned int") int Flags);
-public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") LongBuffer pdptr, @ByVal CUipcMemHandle handle, @Cast("unsigned int") int Flags);
-public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") long[] pdptr, @ByVal CUipcMemHandle handle, @Cast("unsigned int") int Flags);
+public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") LongPointer pdptr, @ByVal @Cast("CUipcMemHandle*") CUipcMemHandle_v1 handle, @Cast("unsigned int") int Flags);
+public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") LongBuffer pdptr, @ByVal @Cast("CUipcMemHandle*") CUipcMemHandle_v1 handle, @Cast("unsigned int") int Flags);
+public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") long[] pdptr, @ByVal @Cast("CUipcMemHandle*") CUipcMemHandle_v1 handle, @Cast("unsigned int") int Flags);
 
 /**
  * \brief Attempts to close memory mapped with ::cuIpcOpenMemHandle
@@ -6497,7 +6615,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Ca
  * ::cudaMemcpy2DToArray,
  * ::cudaMemcpy2DFromArray
  */
-public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy);
+public static native @Cast("CUresult") int cuMemcpy2D(@Cast("const CUDA_MEMCPY2D*") CUDA_MEMCPY2D_v2 pCopy);
 
 /**
  * \brief Copies memory for 2D arrays
@@ -6659,7 +6777,7 @@ public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy
  * ::cudaMemcpy2DToArray,
  * ::cudaMemcpy2DFromArray
  */
-public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCPY2D pCopy);
+public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Cast("const CUDA_MEMCPY2D*") CUDA_MEMCPY2D_v2 pCopy);
 
 /**
  * \brief Copies memory for 3D arrays
@@ -6828,7 +6946,7 @@ public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCP
  * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
  * ::cudaMemcpy3D
  */
-public static native @Cast("CUresult") int cuMemcpy3D(@Const CUDA_MEMCPY3D pCopy);
+public static native @Cast("CUresult") int cuMemcpy3D(@Cast("const CUDA_MEMCPY3D*") CUDA_MEMCPY3D_v2 pCopy);
 
 /**
  * \brief Copies memory between contexts
@@ -6852,7 +6970,7 @@ public static native @Cast("CUresult") int cuMemcpy3D(@Const CUDA_MEMCPY3D pCopy
  * ::cuMemcpy3DPeerAsync,
  * ::cudaMemcpy3DPeer
  */
-public static native @Cast("CUresult") int cuMemcpy3DPeer(@Const CUDA_MEMCPY3D_PEER pCopy);
+public static native @Cast("CUresult") int cuMemcpy3DPeer(@Cast("const CUDA_MEMCPY3D_PEER*") CUDA_MEMCPY3D_PEER_v1 pCopy);
 
 /**
  * \brief Copies memory asynchronously
@@ -7306,7 +7424,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoHAsync(Pointer dstHost, CU
  * ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpy2DFromArrayAsync
  */
-public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D pCopy, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemcpy2DAsync(@Cast("const CUDA_MEMCPY2D*") CUDA_MEMCPY2D_v2 pCopy, CUstream_st hStream);
 
 /**
  * \brief Copies memory for 3D arrays
@@ -7480,7 +7598,7 @@ public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D 
  * ::cuMemsetD32, ::cuMemsetD32Async,
  * ::cudaMemcpy3DAsync
  */
-public static native @Cast("CUresult") int cuMemcpy3DAsync(@Const CUDA_MEMCPY3D pCopy, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemcpy3DAsync(@Cast("const CUDA_MEMCPY3D*") CUDA_MEMCPY3D_v2 pCopy, CUstream_st hStream);
 
 /**
  * \brief Copies memory between contexts asynchronously.
@@ -7506,7 +7624,7 @@ public static native @Cast("CUresult") int cuMemcpy3DAsync(@Const CUDA_MEMCPY3D 
  * ::cuMemcpy3DPeerAsync,
  * ::cudaMemcpy3DPeerAsync
  */
-public static native @Cast("CUresult") int cuMemcpy3DPeerAsync(@Const CUDA_MEMCPY3D_PEER pCopy, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemcpy3DPeerAsync(@Cast("const CUDA_MEMCPY3D_PEER*") CUDA_MEMCPY3D_PEER_v1 pCopy, CUstream_st hStream);
 
 /**
  * \brief Initializes device memory
@@ -8075,7 +8193,7 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
  * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
  * ::cudaMallocArray
  */
-public static native @Cast("CUresult") int cuArrayCreate(@ByPtrPtr CUarray_st pHandle, @Const CUDA_ARRAY_DESCRIPTOR pAllocateArray);
+public static native @Cast("CUresult") int cuArrayCreate(@ByPtrPtr CUarray_st pHandle, @Cast("const CUDA_ARRAY_DESCRIPTOR*") CUDA_ARRAY_DESCRIPTOR_v2 pAllocateArray);
 
 /**
  * \brief Get a 1D or 2D CUDA array descriptor
@@ -8109,7 +8227,7 @@ public static native @Cast("CUresult") int cuArrayCreate(@ByPtrPtr CUarray_st pH
  * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
  * ::cudaArrayGetInfo
  */
-public static native @Cast("CUresult") int cuArrayGetDescriptor(CUDA_ARRAY_DESCRIPTOR pArrayDescriptor, CUarray_st hArray);
+public static native @Cast("CUresult") int cuArrayGetDescriptor(@Cast("CUDA_ARRAY_DESCRIPTOR*") CUDA_ARRAY_DESCRIPTOR_v2 pArrayDescriptor, CUarray_st hArray);
 
 /**
  * \brief Returns the layout properties of a sparse CUDA array
@@ -8133,7 +8251,7 @@ public static native @Cast("CUresult") int cuArrayGetDescriptor(CUDA_ARRAY_DESCR
  * @param array [in] - CUDA array to get the sparse properties of
  * @see ::cuMipmappedArrayGetSparseProperties, ::cuMemMapArrayAsync
  */
-public static native @Cast("CUresult") int cuArrayGetSparseProperties(CUDA_ARRAY_SPARSE_PROPERTIES sparseProperties, CUarray_st array);
+public static native @Cast("CUresult") int cuArrayGetSparseProperties(@Cast("CUDA_ARRAY_SPARSE_PROPERTIES*") CUDA_ARRAY_SPARSE_PROPERTIES_v1 sparseProperties, CUarray_st array);
 
 /**
  * \brief Returns the layout properties of a sparse CUDA mipmapped array
@@ -8158,7 +8276,7 @@ public static native @Cast("CUresult") int cuArrayGetSparseProperties(CUDA_ARRAY
  * @param mipmap [in] - CUDA mipmapped array to get the sparse properties of
  * @see ::cuArrayGetSparseProperties, ::cuMemMapArrayAsync
  */
-public static native @Cast("CUresult") int cuMipmappedArrayGetSparseProperties(CUDA_ARRAY_SPARSE_PROPERTIES sparseProperties, CUmipmappedArray_st mipmap);
+public static native @Cast("CUresult") int cuMipmappedArrayGetSparseProperties(@Cast("CUDA_ARRAY_SPARSE_PROPERTIES*") CUDA_ARRAY_SPARSE_PROPERTIES_v1 sparseProperties, CUmipmappedArray_st mipmap);
 
 /**
  * \brief Gets a CUDA array plane from a CUDA array
@@ -8402,7 +8520,7 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
  * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
  * ::cudaMalloc3DArray
  */
-public static native @Cast("CUresult") int cuArray3DCreate(@ByPtrPtr CUarray_st pHandle, @Const CUDA_ARRAY3D_DESCRIPTOR pAllocateArray);
+public static native @Cast("CUresult") int cuArray3DCreate(@ByPtrPtr CUarray_st pHandle, @Cast("const CUDA_ARRAY3D_DESCRIPTOR*") CUDA_ARRAY3D_DESCRIPTOR_v2 pAllocateArray);
 
 /**
  * \brief Get a 3D CUDA array descriptor
@@ -8440,7 +8558,7 @@ public static native @Cast("CUresult") int cuArray3DCreate(@ByPtrPtr CUarray_st 
  * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
  * ::cudaArrayGetInfo
  */
-public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_DESCRIPTOR pArrayDescriptor, CUarray_st hArray);
+public static native @Cast("CUresult") int cuArray3DGetDescriptor(@Cast("CUDA_ARRAY3D_DESCRIPTOR*") CUDA_ARRAY3D_DESCRIPTOR_v2 pArrayDescriptor, CUarray_st hArray);
 
 /**
  * \brief Creates a CUDA mipmapped array
@@ -8582,7 +8700,7 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_D
  * ::cuArrayCreate,
  * ::cudaMallocMipmappedArray
  */
-public static native @Cast("CUresult") int cuMipmappedArrayCreate(@ByPtrPtr CUmipmappedArray_st pHandle, @Const CUDA_ARRAY3D_DESCRIPTOR pMipmappedArrayDesc, @Cast("unsigned int") int numMipmapLevels);
+public static native @Cast("CUresult") int cuMipmappedArrayCreate(@ByPtrPtr CUmipmappedArray_st pHandle, @Cast("const CUDA_ARRAY3D_DESCRIPTOR*") CUDA_ARRAY3D_DESCRIPTOR_v2 pMipmappedArrayDesc, @Cast("unsigned int") int numMipmapLevels);
 
 /**
  * \brief Gets a mipmap level of a CUDA mipmapped array
@@ -8740,9 +8858,9 @@ public static native @Cast("CUresult") int cuMemAddressFree(@Cast("CUdeviceptr")
 *
 * @see ::cuMemRelease, ::cuMemExportToShareableHandle, ::cuMemImportFromShareableHandle
 */
-public static native @Cast("CUresult") int cuMemCreate(@Cast("CUmemGenericAllocationHandle*") LongPointer handle, @Cast("size_t") long size, @Const CUmemAllocationProp prop, @Cast("unsigned long long") long flags);
-public static native @Cast("CUresult") int cuMemCreate(@Cast("CUmemGenericAllocationHandle*") LongBuffer handle, @Cast("size_t") long size, @Const CUmemAllocationProp prop, @Cast("unsigned long long") long flags);
-public static native @Cast("CUresult") int cuMemCreate(@Cast("CUmemGenericAllocationHandle*") long[] handle, @Cast("size_t") long size, @Const CUmemAllocationProp prop, @Cast("unsigned long long") long flags);
+public static native @Cast("CUresult") int cuMemCreate(@Cast("CUmemGenericAllocationHandle*") LongPointer handle, @Cast("size_t") long size, @Cast("const CUmemAllocationProp*") CUmemAllocationProp_v1 prop, @Cast("unsigned long long") long flags);
+public static native @Cast("CUresult") int cuMemCreate(@Cast("CUmemGenericAllocationHandle*") LongBuffer handle, @Cast("size_t") long size, @Cast("const CUmemAllocationProp*") CUmemAllocationProp_v1 prop, @Cast("unsigned long long") long flags);
+public static native @Cast("CUresult") int cuMemCreate(@Cast("CUmemGenericAllocationHandle*") long[] handle, @Cast("size_t") long size, @Cast("const CUmemAllocationProp*") CUmemAllocationProp_v1 prop, @Cast("unsigned long long") long flags);
 
 /**
 * \brief Release a memory handle representing a memory allocation which was previously allocated through cuMemCreate.
@@ -8943,7 +9061,7 @@ public static native @Cast("CUresult") int cuMemMap(@Cast("CUdeviceptr") long pt
  *
  * @see ::cuMipmappedArrayCreate, ::cuArrayCreate, ::cuArray3DCreate, ::cuMemCreate, ::cuArrayGetSparseProperties, ::cuMipmappedArrayGetSparseProperties
  */
-public static native @Cast("CUresult") int cuMemMapArrayAsync(CUarrayMapInfo mapInfoList, @Cast("unsigned int") int count, CUstream_st hStream);
+public static native @Cast("CUresult") int cuMemMapArrayAsync(@Cast("CUarrayMapInfo*") CUarrayMapInfo_v1 mapInfoList, @Cast("unsigned int") int count, CUstream_st hStream);
 
 /**
 * \brief Unmap the backing memory of a given address range.
@@ -8997,7 +9115,7 @@ public static native @Cast("CUresult") int cuMemUnmap(@Cast("CUdeviceptr") long 
 *
 * @see ::cuMemSetAccess, ::cuMemCreate, :cuMemMap
 */
-public static native @Cast("CUresult") int cuMemSetAccess(@Cast("CUdeviceptr") long ptr, @Cast("size_t") long size, @Const CUmemAccessDesc desc, @Cast("size_t") long count);
+public static native @Cast("CUresult") int cuMemSetAccess(@Cast("CUdeviceptr") long ptr, @Cast("size_t") long size, @Cast("const CUmemAccessDesc*") CUmemAccessDesc_v1 desc, @Cast("size_t") long count);
 
 /**
 * \brief Get the access \p flags set for the given \p location and \p ptr
@@ -9016,9 +9134,9 @@ public static native @Cast("CUresult") int cuMemSetAccess(@Cast("CUdeviceptr") l
 *
 * @see ::cuMemSetAccess
 */
-public static native @Cast("CUresult") int cuMemGetAccess(@Cast("unsigned long long*") LongPointer flags, @Const CUmemLocation location, @Cast("CUdeviceptr") long ptr);
-public static native @Cast("CUresult") int cuMemGetAccess(@Cast("unsigned long long*") LongBuffer flags, @Const CUmemLocation location, @Cast("CUdeviceptr") long ptr);
-public static native @Cast("CUresult") int cuMemGetAccess(@Cast("unsigned long long*") long[] flags, @Const CUmemLocation location, @Cast("CUdeviceptr") long ptr);
+public static native @Cast("CUresult") int cuMemGetAccess(@Cast("unsigned long long*") LongPointer flags, @Cast("const CUmemLocation*") CUmemLocation_v1 location, @Cast("CUdeviceptr") long ptr);
+public static native @Cast("CUresult") int cuMemGetAccess(@Cast("unsigned long long*") LongBuffer flags, @Cast("const CUmemLocation*") CUmemLocation_v1 location, @Cast("CUdeviceptr") long ptr);
+public static native @Cast("CUresult") int cuMemGetAccess(@Cast("unsigned long long*") long[] flags, @Cast("const CUmemLocation*") CUmemLocation_v1 location, @Cast("CUdeviceptr") long ptr);
 
 /**
 * \brief Exports an allocation to a requested shareable handle type
@@ -9102,7 +9220,7 @@ public static native @Cast("CUresult") int cuMemImportFromShareableHandle(@Cast(
 *
 * @see ::cuMemCreate, ::cuMemMap
 */
-public static native @Cast("CUresult") int cuMemGetAllocationGranularity(@Cast("size_t*") SizeTPointer granularity, @Const CUmemAllocationProp prop, @Cast("CUmemAllocationGranularity_flags") int option);
+public static native @Cast("CUresult") int cuMemGetAllocationGranularity(@Cast("size_t*") SizeTPointer granularity, @Cast("const CUmemAllocationProp*") CUmemAllocationProp_v1 prop, @Cast("CUmemAllocationGranularity_flags") int option);
 
 /**
 * \brief Retrieve the contents of the property structure defining properties for this handle
@@ -9119,7 +9237,7 @@ public static native @Cast("CUresult") int cuMemGetAllocationGranularity(@Cast("
 *
 * @see ::cuMemCreate, ::cuMemImportFromShareableHandle
 */
-public static native @Cast("CUresult") int cuMemGetAllocationPropertiesFromHandle(CUmemAllocationProp prop, @Cast("CUmemGenericAllocationHandle") long handle);
+public static native @Cast("CUresult") int cuMemGetAllocationPropertiesFromHandle(@Cast("CUmemAllocationProp*") CUmemAllocationProp_v1 prop, @Cast("CUmemGenericAllocationHandle") long handle);
 
 /**
 * \brief Given an address \p addr, returns the allocation handle of the backing memory allocation.
@@ -9223,7 +9341,9 @@ public static native @Cast("CUresult") int cuMemFreeAsync(@Cast("CUdeviceptr") l
  * ::CUDA_ERROR_NOT_SUPPORTED,
  * ::CUDA_ERROR_OUT_OF_MEMORY
  *
- * @see ::cuMemAllocFromPoolAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool, ::cuDeviceSetMemPool, ::cuDeviceGetMemPool, ::cuMemPoolSetAccess, ::cuMemPoolSetAttribute
+ * @see ::cuMemAllocFromPoolAsync, ::cuMemFreeAsync, ::cuDeviceSetMemPool,
+ *     ::cuDeviceGetDefaultMemPool, ::cuDeviceGetMemPool, ::cuMemPoolCreate,
+ *     ::cuMemPoolSetAccess, ::cuMemPoolSetAttribute
  */
 public static native @Cast("CUresult") int cuMemAllocAsync(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t") long bytesize, CUstream_st hStream);
 public static native @Cast("CUresult") int cuMemAllocAsync(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t") long bytesize, CUstream_st hStream);
@@ -9250,7 +9370,8 @@ public static native @Cast("CUresult") int cuMemAllocAsync(@Cast("CUdeviceptr*")
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * @see ::cuMemAllocAsync, ::cuMemFreeAsync
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool,
+ *     ::cuDeviceGetMemPool, ::cuMemPoolCreate
  */
 public static native @Cast("CUresult") int cuMemPoolTrimTo(CUmemPoolHandle_st pool, @Cast("size_t") long minBytesToKeep);
 
@@ -9277,6 +9398,12 @@ public static native @Cast("CUresult") int cuMemPoolTrimTo(CUmemPoolHandle_st po
  *                    Allow ::cuMemAllocAsync to insert new stream dependencies
  *                    in order to establish the stream ordering required to reuse
  *                    a piece of memory released by ::cuMemFreeAsync (default enabled).
+ * - ::CU_MEMPOOL_ATTR_RESERVED_MEM_HIGH: (value type = cuuint64_t)
+ *                    Reset the high watermark that tracks the amount of backing memory that was
+ *                    allocated for the memory pool. It is illegal to set this attribute to a non-zero value.
+ * - ::CU_MEMPOOL_ATTR_USED_MEM_HIGH: (value type = cuuint64_t)
+ *                    Reset the high watermark that tracks the amount of used memory that was
+ *                    allocated for the memory pool.
  *
  * @param pool [in]  - The memory pool to modify
  * @param attr [in]  - The attribute to modify
@@ -9286,7 +9413,8 @@ public static native @Cast("CUresult") int cuMemPoolTrimTo(CUmemPoolHandle_st po
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * @see ::cuMemAllocAsync, ::cuMemFreeAsync
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool,
+ *     ::cuDeviceGetMemPool, ::cuMemPoolCreate
  */
 public static native @Cast("CUresult") int cuMemPoolSetAttribute(CUmemPoolHandle_st pool, @Cast("CUmemPool_attribute") int attr, Pointer value);
 
@@ -9313,6 +9441,15 @@ public static native @Cast("CUresult") int cuMemPoolSetAttribute(CUmemPoolHandle
  *                    Allow ::cuMemAllocAsync to insert new stream dependencies
  *                    in order to establish the stream ordering required to reuse
  *                    a piece of memory released by ::cuMemFreeAsync (default enabled).
+ * - ::CU_MEMPOOL_ATTR_RESERVED_MEM_CURRENT: (value type = cuuint64_t)
+ *                    Amount of backing memory currently allocated for the mempool
+ * - ::CU_MEMPOOL_ATTR_RESERVED_MEM_HIGH: (value type = cuuint64_t)
+ *                    High watermark of backing memory allocated for the mempool since the
+ *                    last time it was reset.
+ * - ::CU_MEMPOOL_ATTR_USED_MEM_CURRENT: (value type = cuuint64_t)
+ *                    Amount of memory from the pool that is currently in use by the application.
+ * - ::CU_MEMPOOL_ATTR_USED_MEM_HIGH: (value type = cuuint64_t)
+ *                    High watermark of the amount of memory from the pool that was in use by the application.
  *
  * @param pool [in]   - The memory pool to get attributes of
  * @param attr [in]   - The attribute to get 
@@ -9323,7 +9460,8 @@ public static native @Cast("CUresult") int cuMemPoolSetAttribute(CUmemPoolHandle
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool,
+ *     ::cuDeviceGetMemPool, ::cuMemPoolCreate
  */
 public static native @Cast("CUresult") int cuMemPoolGetAttribute(CUmemPoolHandle_st pool, @Cast("CUmemPool_attribute") int attr, Pointer value);
 
@@ -9339,9 +9477,10 @@ public static native @Cast("CUresult") int cuMemPoolGetAttribute(CUmemPoolHandle
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * @see ::cuMemAllocAsync, cuMemFreeAsync
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool,
+ *     ::cuDeviceGetMemPool, ::cuMemPoolCreate
  */
-public static native @Cast("CUresult") int cuMemPoolSetAccess(CUmemPoolHandle_st pool, @Const CUmemAccessDesc map, @Cast("size_t") long count);
+public static native @Cast("CUresult") int cuMemPoolSetAccess(CUmemPoolHandle_st pool, @Cast("const CUmemAccessDesc*") CUmemAccessDesc_v1 map, @Cast("size_t") long count);
 
 /**
  * \brief Returns the accessibility of a pool from a device
@@ -9351,10 +9490,13 @@ public static native @Cast("CUresult") int cuMemPoolSetAccess(CUmemPoolHandle_st
  * @param flags [out]   - the accessibility of the pool from the specified location
  * @param memPool [in]  - the pool being queried
  * @param location [in] - the location accessing the pool
+ *
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool,
+ *     ::cuDeviceGetMemPool, ::cuMemPoolCreate
  */
-public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") IntPointer flags, CUmemPoolHandle_st memPool, CUmemLocation location);
-public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") IntBuffer flags, CUmemPoolHandle_st memPool, CUmemLocation location);
-public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") int[] flags, CUmemPoolHandle_st memPool, CUmemLocation location);
+public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") IntPointer flags, CUmemPoolHandle_st memPool, @Cast("CUmemLocation*") CUmemLocation_v1 location);
+public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") IntBuffer flags, CUmemPoolHandle_st memPool, @Cast("CUmemLocation*") CUmemLocation_v1 location);
+public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess_flags*") int[] flags, CUmemPoolHandle_st memPool, @Cast("CUmemLocation*") CUmemLocation_v1 location);
 
 /**
  * \brief Creates a memory pool
@@ -9373,9 +9515,10 @@ public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess
  * ::CUDA_ERROR_OUT_OF_MEMORY,
  * ::CUDA_ERROR_NOT_SUPPORTED
  *
- * @see ::cuDeviceSetMemPool, ::cuMemAllocFromPoolAsync, ::cuMemPoolExportToShareableHandle
+ * @see ::cuDeviceSetMemPool, ::cuDeviceGetMemPool, ::cuDeviceGetDefaultMemPool,
+ *     ::cuMemAllocFromPoolAsync, ::cuMemPoolExportToShareableHandle
  */
-public static native @Cast("CUresult") int cuMemPoolCreate(@ByPtrPtr CUmemPoolHandle_st pool, @Const CUmemPoolProps poolProps);
+public static native @Cast("CUresult") int cuMemPoolCreate(@ByPtrPtr CUmemPoolHandle_st pool, @Cast("const CUmemPoolProps*") CUmemPoolProps_v1 poolProps);
 
 /**
  * \brief Destroys the specified memory pool
@@ -9395,7 +9538,8 @@ public static native @Cast("CUresult") int cuMemPoolCreate(@ByPtrPtr CUmemPoolHa
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * @see ::cuMemFreeAsync, ::cuDeviceSetMemPool, ::cuDeviceGetMemPool, ::cuDeviceGetDefaultMemPool
+ * @see ::cuMemFreeAsync, ::cuDeviceSetMemPool, ::cuDeviceGetMemPool,
+ *     ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate
  */
 public static native @Cast("CUresult") int cuMemPoolDestroy(CUmemPoolHandle_st pool);
 
@@ -9427,7 +9571,9 @@ public static native @Cast("CUresult") int cuMemPoolDestroy(CUmemPoolHandle_st p
  * ::CUDA_ERROR_NOT_SUPPORTED,
  * ::CUDA_ERROR_OUT_OF_MEMORY
  *
- * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate, ::cuMemPoolSetAccess, ::cuMemPoolSetAttribute
+ * @see ::cuMemAllocAsync, ::cuMemFreeAsync, ::cuDeviceGetDefaultMemPool,
+ *     ::cuDeviceGetMemPool, ::cuMemPoolCreate, ::cuMemPoolSetAccess,
+ *     ::cuMemPoolSetAttribute
  */
 public static native @Cast("CUresult") int cuMemAllocFromPoolAsync(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t") long bytesize, CUmemPoolHandle_st pool, CUstream_st hStream);
 public static native @Cast("CUresult") int cuMemAllocFromPoolAsync(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t") long bytesize, CUmemPoolHandle_st pool, CUstream_st hStream);
@@ -9454,6 +9600,11 @@ public static native @Cast("CUresult") int cuMemAllocFromPoolAsync(@Cast("CUdevi
  * ::CUDA_ERROR_INVALID_VALUE,
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_OUT_OF_MEMORY
+ *
+ * @see ::cuMemPoolImportFromShareableHandle, ::cuMemPoolExportPointer,
+ *     ::cuMemPoolImportPointer, ::cuMemAllocAsync, ::cuMemFreeAsync,
+ *     ::cuDeviceGetDefaultMemPool, ::cuDeviceGetMemPool, ::cuMemPoolCreate,
+ *     ::cuMemPoolSetAccess, ::cuMemPoolSetAttribute
  */
 public static native @Cast("CUresult") int cuMemPoolExportToShareableHandle(Pointer handle_out, CUmemPoolHandle_st pool, @Cast("CUmemAllocationHandleType") int handleType, @Cast("unsigned long long") long flags);
 
@@ -9476,6 +9627,8 @@ public static native @Cast("CUresult") int cuMemPoolExportToShareableHandle(Poin
  * ::CUDA_ERROR_INVALID_VALUE,
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_OUT_OF_MEMORY
+ *
+ * @see ::cuMemPoolExportToShareableHandle, ::cuMemPoolExportPointer, ::cuMemPoolImportPointer
  */
 public static native @Cast("CUresult") int cuMemPoolImportFromShareableHandle(
         @ByPtrPtr CUmemPoolHandle_st pool_out,
@@ -9498,8 +9651,10 @@ public static native @Cast("CUresult") int cuMemPoolImportFromShareableHandle(
  * ::CUDA_ERROR_INVALID_VALUE,
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_OUT_OF_MEMORY
+ *
+ * @see ::cuMemPoolExportToShareableHandle, ::cuMemPoolImportFromShareableHandle, ::cuMemPoolImportPointer
  */
-public static native @Cast("CUresult") int cuMemPoolExportPointer(CUmemPoolPtrExportData shareData_out, @Cast("CUdeviceptr") long ptr);
+public static native @Cast("CUresult") int cuMemPoolExportPointer(@Cast("CUmemPoolPtrExportData*") CUmemPoolPtrExportData_v1 shareData_out, @Cast("CUdeviceptr") long ptr);
 
 /**
  * \brief Import a memory pool allocation from another process.
@@ -9525,10 +9680,12 @@ public static native @Cast("CUresult") int cuMemPoolExportPointer(CUmemPoolPtrEx
  * ::CUDA_ERROR_INVALID_VALUE,
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_OUT_OF_MEMORY
+ *
+ * @see ::cuMemPoolExportToShareableHandle, ::cuMemPoolImportFromShareableHandle, ::cuMemPoolExportPointer
  */
-public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") LongPointer ptr_out, CUmemPoolHandle_st pool, CUmemPoolPtrExportData shareData);
-public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") LongBuffer ptr_out, CUmemPoolHandle_st pool, CUmemPoolPtrExportData shareData);
-public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") long[] ptr_out, CUmemPoolHandle_st pool, CUmemPoolPtrExportData shareData);
+public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") LongPointer ptr_out, CUmemPoolHandle_st pool, @Cast("CUmemPoolPtrExportData*") CUmemPoolPtrExportData_v1 shareData);
+public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") LongBuffer ptr_out, CUmemPoolHandle_st pool, @Cast("CUmemPoolPtrExportData*") CUmemPoolPtrExportData_v1 shareData);
+public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdeviceptr*") long[] ptr_out, CUmemPoolHandle_st pool, @Cast("CUmemPoolPtrExportData*") CUmemPoolPtrExportData_v1 shareData);
 
 /** \} */ /* END CUDA_MALLOC_ASYNC */
 
@@ -9766,6 +9923,10 @@ public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdevic
  *
  *      Returns a bitmask of the allowed handle types for an allocation that may
  *      be passed to ::cuMemExportToShareableHandle.
+ * 
+ * - ::CU_POINTER_ATTRIBUTE_MEMPOOL_HANDLE:
+ * 
+ *      Returns in \p *data the handle to the mempool that the allocation was obtained from.
  *
  * \par
  *
@@ -10085,7 +10246,7 @@ public static native @Cast("CUresult") int cuMemAdvise(@Cast("CUdeviceptr") long
  * ::CUDA_ERROR_INVALID_DEVICE
  * \notefnerr
  *
- * @see ::cuMemRangeGetAttribute, ::cuMemAdvise
+ * @see ::cuMemRangeGetAttribute, ::cuMemAdvise,
  * ::cuMemPrefetchAsync,
  * ::cudaMemRangeGetAttributes
  */
@@ -10151,6 +10312,7 @@ public static native @Cast("CUresult") int cuPointerSetAttribute(@Const Pointer 
  * - ::CU_POINTER_ATTRIBUTE_MAPPED
  * - ::CU_POINTER_ATTRIBUTE_IS_LEGACY_CUDA_IPC_CAPABLE
  * - ::CU_POINTER_ATTRIBUTE_ALLOWED_HANDLE_TYPES
+ * - ::CU_POINTER_ATTRIBUTE_MEMPOOL_HANDLE
  *
  * @param numAttributes - Number of attributes to query
  * @param attributes    - An array of attributes to query
@@ -10671,6 +10833,9 @@ public static native @Cast("CUresult") int cuStreamIsCapturing(CUstream_st hStre
 /**
  * \brief Query capture status of a stream
  *
+ * Note there is a later version of this API, ::cuStreamGetCaptureInfo_v2. It will
+ * supplant this version in 12.0, which is retained for minor version compatibility.
+ *
  * Query the capture status of a stream and and get an id for 
  * the capture sequence, which is unique over the lifetime of the process.
  *
@@ -10687,12 +10852,104 @@ public static native @Cast("CUresult") int cuStreamIsCapturing(CUstream_st hStre
  * \notefnerr
  *
  * @see
+ * ::cuStreamGetCaptureInfo_v2,
  * ::cuStreamBeginCapture,
  * ::cuStreamIsCapturing
  */
- public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntPointer captureStatus, @Cast("cuuint64_t*") IntPointer id);
- public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntBuffer captureStatus, @Cast("cuuint64_t*") IntBuffer id);
- public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") int[] captureStatus, @Cast("cuuint64_t*") int[] id);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntPointer captureStatus_out, @Cast("cuuint64_t*") IntPointer id_out);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntBuffer captureStatus_out, @Cast("cuuint64_t*") IntBuffer id_out);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") int[] captureStatus_out, @Cast("cuuint64_t*") int[] id_out);
+
+/**
+ * \brief Query a stream's capture state (11.3+)
+ *
+ * Query stream state related to stream capture.
+ *
+ * If called on ::CU_STREAM_LEGACY (the "null stream") while a stream not created 
+ * with ::CU_STREAM_NON_BLOCKING is capturing, returns ::CUDA_ERROR_STREAM_CAPTURE_IMPLICIT.
+ *
+ * Valid data (other than capture status) is returned only if both of the following are true:
+ * - the call returns CUDA_SUCCESS
+ * - the returned capture status is ::CU_STREAM_CAPTURE_STATUS_ACTIVE
+ *
+ * This version of cuStreamGetCaptureInfo is introduced in CUDA 11.3 and will supplant the
+ * previous version in 12.0. Developers requiring compatibility across minor versions to
+ * CUDA 11.0 (driver version 445) should use ::cuStreamGetCaptureInfo or include a fallback
+ * path.
+ *
+ * @param hStream - The stream to query
+ * @param captureStatus_out - Location to return the capture status of the stream; required
+ * @param id_out - Optional location to return an id for the capture sequence, which is
+ *           unique over the lifetime of the process
+ * @param graph_out - Optional location to return the graph being captured into. All
+ *           operations other than destroy and node removal are permitted on the graph
+ *           while the capture sequence is in progress. This API does not transfer
+ *           ownership of the graph, which is transferred or destroyed at
+ *           ::cuStreamEndCapture. Note that the graph handle may be invalidated before
+ *           end of capture for certain errors. Nodes that are or become
+ *           unreachable from the original stream at ::cuStreamEndCapture due to direct
+ *           actions on the graph do not trigger ::CUDA_ERROR_STREAM_CAPTURE_UNJOINED.
+ * @param dependencies_out - Optional location to store a pointer to an array of nodes.
+ *           The next node to be captured in the stream will depend on this set of nodes,
+ *           absent operations such as event wait which modify this set. The array pointer
+ *           is valid until the next API call which operates on the stream or until end of
+ *           capture. The node handles may be copied out and are valid until they or the
+ *           graph is destroyed. The driver-owned array may also be passed directly to
+ *           APIs that operate on the graph (not the stream) without copying.
+ * @param numDependencies_out - Optional location to store the size of the array
+ *           returned in dependencies_out.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_STREAM_CAPTURE_IMPLICIT
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuStreamGetCaptureInfo,
+ * ::cuStreamBeginCapture,
+ * ::cuStreamIsCapturing,
+ * ::cuStreamUpdateCaptureDependencies
+ */
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo_v2(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntPointer captureStatus_out,
+        @Cast("cuuint64_t*") IntPointer id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo_v2(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntBuffer captureStatus_out,
+        @Cast("cuuint64_t*") IntBuffer id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo_v2(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") int[] captureStatus_out,
+        @Cast("cuuint64_t*") int[] id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
+
+/**
+ * \brief Update the set of dependencies in a capturing stream (11.3+)
+ *
+ * Modifies the dependency set of a capturing stream. The dependency set is the set
+ * of nodes that the next captured node in the stream will depend on.
+ *
+ * Valid flags are ::CU_STREAM_ADD_CAPTURE_DEPENDENCIES and
+ * ::CU_STREAM_SET_CAPTURE_DEPENDENCIES. These control whether the set passed to
+ * the API is added to the existing set or replaces it. A flags value of 0 defaults
+ * to ::CU_STREAM_ADD_CAPTURE_DEPENDENCIES.
+ *
+ * Nodes that are removed from the dependency set via this API do not result in
+ * ::CUDA_ERROR_STREAM_CAPTURE_UNJOINED if they are unreachable from the stream at
+ * ::cuStreamEndCapture.
+ *
+ * Returns ::CUDA_ERROR_ILLEGAL_STATE if the stream is not capturing.
+ *
+ * This API is new in CUDA 11.3. Developers requiring compatibility across minor
+ * versions to CUDA 11.0 should not use this API or provide a fallback.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ * @see
+ * ::cuStreamBeginCapture,
+ * ::cuStreamGetCaptureInfo,
+ * ::cuStreamGetCaptureInfo_v2
+ */
+public static native @Cast("CUresult") int cuStreamUpdateCaptureDependencies(CUstream_st hStream, @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("unsigned int") int flags);
 
 /**
  * \brief Attach memory to a stream asynchronously
@@ -10911,7 +11168,7 @@ public static native @Cast("CUresult") int cuStreamCopyAttributes(CUstream_st ds
  * ::CUaccessPolicyWindow
  */
 public static native @Cast("CUresult") int cuStreamGetAttribute(CUstream_st hStream, @Cast("CUstreamAttrID") int attr,
-                                      CUstreamAttrValue value_out);
+                                      @Cast("CUstreamAttrValue*") CUstreamAttrValue_v1 value_out);
 
 /**
  * \brief Sets stream attribute.
@@ -10934,7 +11191,7 @@ public static native @Cast("CUresult") int cuStreamGetAttribute(CUstream_st hStr
  * ::CUaccessPolicyWindow
  */
 public static native @Cast("CUresult") int cuStreamSetAttribute(CUstream_st hStream, @Cast("CUstreamAttrID") int attr,
-                                      @Const CUstreamAttrValue value);
+                                      @Cast("const CUstreamAttrValue*") CUstreamAttrValue_v1 value);
 
 /** \} */ /* END CUDA_STREAM */
 
@@ -11029,7 +11286,7 @@ public static native @Cast("CUresult") int cuEventCreate(@ByPtrPtr CUevent_st ph
  * ::cuStreamWaitEvent,
  * ::cuEventDestroy,
  * ::cuEventElapsedTime,
- * ::cudaEventRecord
+ * ::cudaEventRecord,
  * ::cuEventRecordWithFlags
  */
 public static native @Cast("CUresult") int cuEventRecord(CUevent_st hEvent, CUstream_st hStream);
@@ -11078,7 +11335,7 @@ public static native @Cast("CUresult") int cuEventRecord(CUevent_st hEvent, CUst
  * ::cuStreamWaitEvent,
  * ::cuEventDestroy,
  * ::cuEventElapsedTime,
- * ::cuEventRecord
+ * ::cuEventRecord,
  * ::cudaEventRecord
  */
 public static native @Cast("CUresult") int cuEventRecordWithFlags(CUevent_st hEvent, CUstream_st hStream, @Cast("unsigned int") int flags);
@@ -11393,7 +11650,7 @@ public static native @Cast("CUresult") int cuEventElapsedTime(float[] pMilliseco
  * ::cuExternalMemoryGetMappedBuffer,
  * ::cuExternalMemoryGetMappedMipmappedArray
  */
-public static native @Cast("CUresult") int cuImportExternalMemory(@ByPtrPtr CUextMemory_st extMem_out, @Const CUDA_EXTERNAL_MEMORY_HANDLE_DESC memHandleDesc);
+public static native @Cast("CUresult") int cuImportExternalMemory(@ByPtrPtr CUextMemory_st extMem_out, @Cast("const CUDA_EXTERNAL_MEMORY_HANDLE_DESC*") CUDA_EXTERNAL_MEMORY_HANDLE_DESC_v1 memHandleDesc);
 
 /**
  * \brief Maps a buffer onto an imported memory object
@@ -11442,13 +11699,13 @@ public static native @Cast("CUresult") int cuImportExternalMemory(@ByPtrPtr CUex
  * ::CUDA_ERROR_INVALID_HANDLE
  * \notefnerr
  *
- * @see ::cuImportExternalMemory
+ * @see ::cuImportExternalMemory,
  * ::cuDestroyExternalMemory,
  * ::cuExternalMemoryGetMappedMipmappedArray
  */
-public static native @Cast("CUresult") int cuExternalMemoryGetMappedBuffer(@Cast("CUdeviceptr*") LongPointer devPtr, CUextMemory_st extMem, @Const CUDA_EXTERNAL_MEMORY_BUFFER_DESC bufferDesc);
-public static native @Cast("CUresult") int cuExternalMemoryGetMappedBuffer(@Cast("CUdeviceptr*") LongBuffer devPtr, CUextMemory_st extMem, @Const CUDA_EXTERNAL_MEMORY_BUFFER_DESC bufferDesc);
-public static native @Cast("CUresult") int cuExternalMemoryGetMappedBuffer(@Cast("CUdeviceptr*") long[] devPtr, CUextMemory_st extMem, @Const CUDA_EXTERNAL_MEMORY_BUFFER_DESC bufferDesc);
+public static native @Cast("CUresult") int cuExternalMemoryGetMappedBuffer(@Cast("CUdeviceptr*") LongPointer devPtr, CUextMemory_st extMem, @Cast("const CUDA_EXTERNAL_MEMORY_BUFFER_DESC*") CUDA_EXTERNAL_MEMORY_BUFFER_DESC_v1 bufferDesc);
+public static native @Cast("CUresult") int cuExternalMemoryGetMappedBuffer(@Cast("CUdeviceptr*") LongBuffer devPtr, CUextMemory_st extMem, @Cast("const CUDA_EXTERNAL_MEMORY_BUFFER_DESC*") CUDA_EXTERNAL_MEMORY_BUFFER_DESC_v1 bufferDesc);
+public static native @Cast("CUresult") int cuExternalMemoryGetMappedBuffer(@Cast("CUdeviceptr*") long[] devPtr, CUextMemory_st extMem, @Cast("const CUDA_EXTERNAL_MEMORY_BUFFER_DESC*") CUDA_EXTERNAL_MEMORY_BUFFER_DESC_v1 bufferDesc);
 
 /**
  * \brief Maps a CUDA mipmapped array onto an external memory object
@@ -11496,11 +11753,11 @@ public static native @Cast("CUresult") int cuExternalMemoryGetMappedBuffer(@Cast
  * ::CUDA_ERROR_INVALID_HANDLE
  * \notefnerr
  *
- * @see ::cuImportExternalMemory
+ * @see ::cuImportExternalMemory,
  * ::cuDestroyExternalMemory,
  * ::cuExternalMemoryGetMappedBuffer
  */
-public static native @Cast("CUresult") int cuExternalMemoryGetMappedMipmappedArray(@ByPtrPtr CUmipmappedArray_st mipmap, CUextMemory_st extMem, @Const CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC mipmapDesc);
+public static native @Cast("CUresult") int cuExternalMemoryGetMappedMipmappedArray(@ByPtrPtr CUmipmappedArray_st mipmap, CUextMemory_st extMem, @Cast("const CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC*") CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC_v1 mipmapDesc);
 
 /**
  * \brief Destroys an external memory object.
@@ -11518,7 +11775,7 @@ public static native @Cast("CUresult") int cuExternalMemoryGetMappedMipmappedArr
  * ::CUDA_ERROR_INVALID_HANDLE
  * \notefnerr
  *
- * @see ::cuImportExternalMemory
+ * @see ::cuImportExternalMemory,
  * ::cuExternalMemoryGetMappedBuffer,
  * ::cuExternalMemoryGetMappedMipmappedArray
  */
@@ -11679,7 +11936,7 @@ public static native @Cast("CUresult") int cuDestroyExternalMemory(CUextMemory_s
  * ::cuSignalExternalSemaphoresAsync,
  * ::cuWaitExternalSemaphoresAsync
  */
-public static native @Cast("CUresult") int cuImportExternalSemaphore(@ByPtrPtr CUextSemaphore_st extSem_out, @Const CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC semHandleDesc);
+public static native @Cast("CUresult") int cuImportExternalSemaphore(@ByPtrPtr CUextSemaphore_st extSem_out, @Cast("const CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC*") CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1 semHandleDesc);
 
 /**
  * \brief Signals a set of external semaphore objects
@@ -11746,7 +12003,7 @@ public static native @Cast("CUresult") int cuImportExternalSemaphore(@ByPtrPtr C
  * ::cuDestroyExternalSemaphore,
  * ::cuWaitExternalSemaphoresAsync
  */
-public static native @Cast("CUresult") int cuSignalExternalSemaphoresAsync(@Cast("const CUexternalSemaphore*") @ByPtrPtr CUextSemaphore_st extSemArray, @Const CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS paramsArray, @Cast("unsigned int") int numExtSems, CUstream_st stream);
+public static native @Cast("CUresult") int cuSignalExternalSemaphoresAsync(@Cast("const CUexternalSemaphore*") @ByPtrPtr CUextSemaphore_st extSemArray, @Cast("const CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS*") CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_v1 paramsArray, @Cast("unsigned int") int numExtSems, CUstream_st stream);
 
 /**
  * \brief Waits on a set of external semaphore objects
@@ -11822,7 +12079,7 @@ public static native @Cast("CUresult") int cuSignalExternalSemaphoresAsync(@Cast
  * ::cuDestroyExternalSemaphore,
  * ::cuSignalExternalSemaphoresAsync
  */
-public static native @Cast("CUresult") int cuWaitExternalSemaphoresAsync(@Cast("const CUexternalSemaphore*") @ByPtrPtr CUextSemaphore_st extSemArray, @Const CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS paramsArray, @Cast("unsigned int") int numExtSems, CUstream_st stream);
+public static native @Cast("CUresult") int cuWaitExternalSemaphoresAsync(@Cast("const CUexternalSemaphore*") @ByPtrPtr CUextSemaphore_st extSemArray, @Cast("const CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS*") CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS_v1 paramsArray, @Cast("unsigned int") int numExtSems, CUstream_st stream);
 
 /**
  * \brief Destroys an external semaphore
@@ -11922,7 +12179,7 @@ public static native @Cast("CUresult") int cuDestroyExternalSemaphore(CUextSemap
  *
  * @see ::cuStreamWaitValue64,
  * ::cuStreamWriteValue32,
- * ::cuStreamWriteValue64
+ * ::cuStreamWriteValue64,
  * ::cuStreamBatchMemOp,
  * ::cuMemHostRegister,
  * ::cuStreamWaitEvent
@@ -12066,7 +12323,7 @@ public static native @Cast("CUresult") int cuStreamWriteValue64(CUstream_st stre
  * ::cuStreamWriteValue64,
  * ::cuMemHostRegister
  */
-public static native @Cast("CUresult") int cuStreamBatchMemOp(CUstream_st stream, @Cast("unsigned int") int count, CUstreamBatchMemOpParams paramArray, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuStreamBatchMemOp(CUstream_st stream, @Cast("unsigned int") int count, @Cast("CUstreamBatchMemOpParams*") CUstreamBatchMemOpParams_v1 paramArray, @Cast("unsigned int") int flags);
 
 /** \} */ /* END CUDA_MEMOP */
 
@@ -12136,7 +12393,7 @@ public static native @Cast("CUresult") int cuStreamBatchMemOp(CUstream_st stream
  * ::cuCtxSetCacheConfig,
  * ::cuFuncSetCacheConfig,
  * ::cuLaunchKernel,
- * ::cudaFuncGetAttributes
+ * ::cudaFuncGetAttributes,
  * ::cudaFuncSetAttribute
  */
 public static native @Cast("CUresult") int cuFuncGetAttribute(IntPointer pi, @Cast("CUfunction_attribute") int attrib, CUfunc_st hfunc);
@@ -12184,7 +12441,7 @@ public static native @Cast("CUresult") int cuFuncGetAttribute(int[] pi, @Cast("C
  * ::cuCtxSetCacheConfig,
  * ::cuFuncSetCacheConfig,
  * ::cuLaunchKernel,
- * ::cudaFuncGetAttributes
+ * ::cudaFuncGetAttributes,
  * ::cudaFuncSetAttribute
  */
 public static native @Cast("CUresult") int cuFuncSetAttribute(CUfunc_st hfunc, @Cast("CUfunction_attribute") int attrib, int value);
@@ -12284,6 +12541,32 @@ public static native @Cast("CUresult") int cuFuncSetCacheConfig(CUfunc_st hfunc,
  * ::cudaFuncSetSharedMemConfig
  */
 public static native @Cast("CUresult") int cuFuncSetSharedMemConfig(CUfunc_st hfunc, @Cast("CUsharedconfig") int config);
+
+/**
+ * \brief Returns a module handle
+ *
+ * Returns in \p *hmod the handle of the module that function \p hfunc
+ * is located in. The lifetime of the module corresponds to the lifetime of
+ * the context it was loaded in or until the module is explicitly unloaded.
+ *
+ * The CUDA runtime manages its own modules loaded into the primary context.
+ * If the handle returned by this API refers to a module loaded by the CUDA runtime,
+ * calling ::cuModuleUnload() on that module will result in undefined behavior.
+ *
+ * @param hmod - Returned module handle
+ * @param hfunc   - Function to retrieve module for
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_FOUND
+ * \notefnerr
+ *
+ */
+public static native @Cast("CUresult") int cuFuncGetModule(@ByPtrPtr CUmod_st hmod, CUfunc_st hfunc);
 
 /**
  * \brief Launches a CUDA function
@@ -12515,6 +12798,8 @@ public static native @Cast("CUresult") int cuLaunchCooperativeKernel(CUfunc_st f
 /**
  * \brief Launches CUDA functions on multiple devices where thread blocks can cooperate and synchronize as they execute
  *
+ * @deprecated This function is deprecated as of CUDA 11.3.
+ *
  * Invokes kernels as specified in the \p launchParamsList array where each element
  * of the array specifies all the parameters required to perform a single kernel launch.
  * These kernels can cooperate and synchronize as they execute. The size of the array is
@@ -12645,7 +12930,7 @@ public static native @Cast("CUresult") int cuLaunchCooperativeKernel(CUfunc_st f
  * ::cuLaunchCooperativeKernel,
  * ::cudaLaunchCooperativeKernelMultiDevice
  */
-public static native @Cast("CUresult") int cuLaunchCooperativeKernelMultiDevice(CUDA_LAUNCH_PARAMS launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") @Deprecated int cuLaunchCooperativeKernelMultiDevice(@Cast("CUDA_LAUNCH_PARAMS*") CUDA_LAUNCH_PARAMS_v1 launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags);
 
 /**
  * \brief Enqueues a host function call in a stream
@@ -13266,7 +13551,7 @@ public static native @Cast("CUresult") int cuGraphCreate(@ByPtrPtr CUgraph_st ph
  * ::cuGraphAddMemcpyNode,
  * ::cuGraphAddMemsetNode
  */
-public static native @Cast("CUresult") int cuGraphAddKernelNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_KERNEL_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphAddKernelNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("const CUDA_KERNEL_NODE_PARAMS*") CUDA_KERNEL_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Returns a kernel node's parameters
@@ -13298,7 +13583,7 @@ public static native @Cast("CUresult") int cuGraphAddKernelNode(@ByPtrPtr CUgrap
  * ::cuGraphAddKernelNode,
  * ::cuGraphKernelNodeSetParams
  */
-public static native @Cast("CUresult") int cuGraphKernelNodeGetParams(CUgraphNode_st hNode, CUDA_KERNEL_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphKernelNodeGetParams(CUgraphNode_st hNode, @Cast("CUDA_KERNEL_NODE_PARAMS*") CUDA_KERNEL_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Sets a kernel node's parameters
@@ -13321,7 +13606,7 @@ public static native @Cast("CUresult") int cuGraphKernelNodeGetParams(CUgraphNod
  * ::cuGraphAddKernelNode,
  * ::cuGraphKernelNodeGetParams
  */
-public static native @Cast("CUresult") int cuGraphKernelNodeSetParams(CUgraphNode_st hNode, @Const CUDA_KERNEL_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphKernelNodeSetParams(CUgraphNode_st hNode, @Cast("const CUDA_KERNEL_NODE_PARAMS*") CUDA_KERNEL_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Creates a memcpy node and adds it to a graph
@@ -13369,7 +13654,7 @@ public static native @Cast("CUresult") int cuGraphKernelNodeSetParams(CUgraphNod
  * ::cuGraphAddHostNode,
  * ::cuGraphAddMemsetNode
  */
-public static native @Cast("CUresult") int cuGraphAddMemcpyNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_MEMCPY3D copyParams, CUctx_st ctx);
+public static native @Cast("CUresult") int cuGraphAddMemcpyNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("const CUDA_MEMCPY3D*") CUDA_MEMCPY3D_v2 copyParams, CUctx_st ctx);
 
 /**
  * \brief Returns a memcpy node's parameters
@@ -13392,7 +13677,7 @@ public static native @Cast("CUresult") int cuGraphAddMemcpyNode(@ByPtrPtr CUgrap
  * ::cuGraphAddMemcpyNode,
  * ::cuGraphMemcpyNodeSetParams
  */
-public static native @Cast("CUresult") int cuGraphMemcpyNodeGetParams(CUgraphNode_st hNode, CUDA_MEMCPY3D nodeParams);
+public static native @Cast("CUresult") int cuGraphMemcpyNodeGetParams(CUgraphNode_st hNode, @Cast("CUDA_MEMCPY3D*") CUDA_MEMCPY3D_v2 nodeParams);
 
 /**
  * \brief Sets a memcpy node's parameters
@@ -13415,7 +13700,7 @@ public static native @Cast("CUresult") int cuGraphMemcpyNodeGetParams(CUgraphNod
  * ::cuGraphAddMemcpyNode,
  * ::cuGraphMemcpyNodeGetParams
  */
-public static native @Cast("CUresult") int cuGraphMemcpyNodeSetParams(CUgraphNode_st hNode, @Const CUDA_MEMCPY3D nodeParams);
+public static native @Cast("CUresult") int cuGraphMemcpyNodeSetParams(CUgraphNode_st hNode, @Cast("const CUDA_MEMCPY3D*") CUDA_MEMCPY3D_v2 nodeParams);
 
 /**
  * \brief Creates a memset node and adds it to a graph
@@ -13457,7 +13742,7 @@ public static native @Cast("CUresult") int cuGraphMemcpyNodeSetParams(CUgraphNod
  * ::cuGraphAddHostNode,
  * ::cuGraphAddMemcpyNode
  */
-public static native @Cast("CUresult") int cuGraphAddMemsetNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_MEMSET_NODE_PARAMS memsetParams, CUctx_st ctx);
+public static native @Cast("CUresult") int cuGraphAddMemsetNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("const CUDA_MEMSET_NODE_PARAMS*") CUDA_MEMSET_NODE_PARAMS_v1 memsetParams, CUctx_st ctx);
 
 /**
  * \brief Returns a memset node's parameters
@@ -13480,7 +13765,7 @@ public static native @Cast("CUresult") int cuGraphAddMemsetNode(@ByPtrPtr CUgrap
  * ::cuGraphAddMemsetNode,
  * ::cuGraphMemsetNodeSetParams
  */
-public static native @Cast("CUresult") int cuGraphMemsetNodeGetParams(CUgraphNode_st hNode, CUDA_MEMSET_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphMemsetNodeGetParams(CUgraphNode_st hNode, @Cast("CUDA_MEMSET_NODE_PARAMS*") CUDA_MEMSET_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Sets a memset node's parameters
@@ -13503,7 +13788,7 @@ public static native @Cast("CUresult") int cuGraphMemsetNodeGetParams(CUgraphNod
  * ::cuGraphAddMemsetNode,
  * ::cuGraphMemsetNodeGetParams
  */
-public static native @Cast("CUresult") int cuGraphMemsetNodeSetParams(CUgraphNode_st hNode, @Const CUDA_MEMSET_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphMemsetNodeSetParams(CUgraphNode_st hNode, @Cast("const CUDA_MEMSET_NODE_PARAMS*") CUDA_MEMSET_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Creates a host execution node and adds it to a graph
@@ -13544,7 +13829,7 @@ public static native @Cast("CUresult") int cuGraphMemsetNodeSetParams(CUgraphNod
  * ::cuGraphAddMemcpyNode,
  * ::cuGraphAddMemsetNode
  */
-public static native @Cast("CUresult") int cuGraphAddHostNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_HOST_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphAddHostNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("const CUDA_HOST_NODE_PARAMS*") CUDA_HOST_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Returns a host node's parameters
@@ -13567,7 +13852,7 @@ public static native @Cast("CUresult") int cuGraphAddHostNode(@ByPtrPtr CUgraphN
  * ::cuGraphAddHostNode,
  * ::cuGraphHostNodeSetParams
  */
-public static native @Cast("CUresult") int cuGraphHostNodeGetParams(CUgraphNode_st hNode, CUDA_HOST_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphHostNodeGetParams(CUgraphNode_st hNode, @Cast("CUDA_HOST_NODE_PARAMS*") CUDA_HOST_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Sets a host node's parameters
@@ -13590,7 +13875,7 @@ public static native @Cast("CUresult") int cuGraphHostNodeGetParams(CUgraphNode_
  * ::cuGraphAddHostNode,
  * ::cuGraphHostNodeGetParams
  */
-public static native @Cast("CUresult") int cuGraphHostNodeSetParams(CUgraphNode_st hNode, @Const CUDA_HOST_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphHostNodeSetParams(CUgraphNode_st hNode, @Cast("const CUDA_HOST_NODE_PARAMS*") CUDA_HOST_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Creates a child graph node and adds it to a graph
@@ -13721,7 +14006,7 @@ public static native @Cast("CUresult") int cuGraphAddEmptyNode(@ByPtrPtr CUgraph
  *
  * @see
  * ::cuGraphAddEventWaitNode,
- * ::cuEventRecord,
+ * ::cuEventRecordWithFlags,
  * ::cuStreamWaitEvent,
  * ::cuGraphCreate,
  * ::cuGraphDestroyNode,
@@ -13753,7 +14038,7 @@ public static native @Cast("CUresult") int cuGraphAddEventRecordNode(@ByPtrPtr C
  * ::cuGraphAddEventRecordNode,
  * ::cuGraphEventRecordNodeSetEvent,
  * ::cuGraphEventWaitNodeGetEvent,
- * ::cuEventRecord,
+ * ::cuEventRecordWithFlags,
  * ::cuStreamWaitEvent
  */
 public static native @Cast("CUresult") int cuGraphEventRecordNodeGetEvent(CUgraphNode_st hNode, @ByPtrPtr CUevent_st event_out);
@@ -13778,7 +14063,7 @@ public static native @Cast("CUresult") int cuGraphEventRecordNodeGetEvent(CUgrap
  * ::cuGraphAddEventRecordNode,
  * ::cuGraphEventRecordNodeGetEvent,
  * ::cuGraphEventWaitNodeSetEvent,
- * ::cuEventRecord,
+ * ::cuEventRecordWithFlags,
  * ::cuStreamWaitEvent
  */
 public static native @Cast("CUresult") int cuGraphEventRecordNodeSetEvent(CUgraphNode_st hNode, CUevent_st event);
@@ -13813,7 +14098,7 @@ public static native @Cast("CUresult") int cuGraphEventRecordNodeSetEvent(CUgrap
  *
  * @see
  * ::cuGraphAddEventRecordNode,
- * ::cuEventRecord,
+ * ::cuEventRecordWithFlags,
  * ::cuStreamWaitEvent,
  * ::cuGraphCreate,
  * ::cuGraphDestroyNode,
@@ -13845,7 +14130,7 @@ public static native @Cast("CUresult") int cuGraphAddEventWaitNode(@ByPtrPtr CUg
  * ::cuGraphAddEventWaitNode,
  * ::cuGraphEventWaitNodeSetEvent,
  * ::cuGraphEventRecordNodeGetEvent,
- * ::cuEventRecord,
+ * ::cuEventRecordWithFlags,
  * ::cuStreamWaitEvent
  */
 public static native @Cast("CUresult") int cuGraphEventWaitNodeGetEvent(CUgraphNode_st hNode, @ByPtrPtr CUevent_st event_out);
@@ -13870,7 +14155,7 @@ public static native @Cast("CUresult") int cuGraphEventWaitNodeGetEvent(CUgraphN
  * ::cuGraphAddEventWaitNode,
  * ::cuGraphEventWaitNodeGetEvent,
  * ::cuGraphEventRecordNodeSetEvent,
- * ::cuEventRecord,
+ * ::cuEventRecordWithFlags,
  * ::cuStreamWaitEvent
  */
 public static native @Cast("CUresult") int cuGraphEventWaitNodeSetEvent(CUgraphNode_st hNode, CUevent_st event);
@@ -13883,6 +14168,10 @@ public static native @Cast("CUresult") int cuGraphEventWaitNodeSetEvent(CUgraphN
  * in \p nodeParams. It is possible for \p numDependencies to be 0, in which case the
  * node will be placed at the root of the graph. \p dependencies may not have any
  * duplicate entries. A handle to the new node will be returned in \p phGraphNode.
+ *
+ * Performs a signal operation on a set of externally allocated semaphore objects
+ * when the node is launched.  The operation(s) will occur after all of the node's
+ * dependencies have completed.
  *
  * @param phGraphNode     - Returns newly created node
  * @param hGraph          - Graph to which to add the node
@@ -13917,7 +14206,7 @@ public static native @Cast("CUresult") int cuGraphEventWaitNodeSetEvent(CUgraphN
  * ::cuGraphAddMemcpyNode,
  * ::cuGraphAddMemsetNode,
  */
-public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresSignalNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresSignalNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS*") CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Returns an external semaphore signal node's parameters
@@ -13948,7 +14237,7 @@ public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresSignalNod
  * ::cuSignalExternalSemaphoresAsync,
  * ::cuWaitExternalSemaphoresAsync
  */
-public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeGetParams(CUgraphNode_st hNode, CUDA_EXT_SEM_SIGNAL_NODE_PARAMS params_out);
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeGetParams(CUgraphNode_st hNode, @Cast("CUDA_EXT_SEM_SIGNAL_NODE_PARAMS*") CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1 params_out);
 
 /**
  * \brief Sets an external semaphore signal node's parameters
@@ -13973,7 +14262,7 @@ public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeGe
  * ::cuSignalExternalSemaphoresAsync,
  * ::cuWaitExternalSemaphoresAsync
  */
-public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeSetParams(CUgraphNode_st hNode, @Const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeSetParams(CUgraphNode_st hNode, @Cast("const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS*") CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Creates an external semaphore wait node and adds it to a graph
@@ -13983,6 +14272,10 @@ public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeSe
  * It is possible for \p numDependencies to be 0, in which case the node will be placed
  * at the root of the graph. \p dependencies may not have any duplicate entries. A handle
  * to the new node will be returned in \p phGraphNode.
+ *
+ * Performs a wait operation on a set of externally allocated semaphore objects
+ * when the node is launched.  The node's dependencies will not be launched until
+ * the wait operation has completed.
  *
  * @param phGraphNode     - Returns newly created node
  * @param hGraph          - Graph to which to add the node
@@ -14017,7 +14310,7 @@ public static native @Cast("CUresult") int cuGraphExternalSemaphoresSignalNodeSe
  * ::cuGraphAddMemcpyNode,
  * ::cuGraphAddMemsetNode,
  */
-public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresWaitNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Const CUDA_EXT_SEM_WAIT_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresWaitNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("const CUDA_EXT_SEM_WAIT_NODE_PARAMS*") CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Returns an external semaphore wait node's parameters
@@ -14048,7 +14341,7 @@ public static native @Cast("CUresult") int cuGraphAddExternalSemaphoresWaitNode(
  * ::cuSignalExternalSemaphoresAsync,
  * ::cuWaitExternalSemaphoresAsync
  */
-public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeGetParams(CUgraphNode_st hNode, CUDA_EXT_SEM_WAIT_NODE_PARAMS params_out);
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeGetParams(CUgraphNode_st hNode, @Cast("CUDA_EXT_SEM_WAIT_NODE_PARAMS*") CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1 params_out);
 
 /**
  * \brief Sets an external semaphore wait node's parameters
@@ -14073,7 +14366,7 @@ public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeGetP
  * ::cuSignalExternalSemaphoresAsync,
  * ::cuWaitExternalSemaphoresAsync
  */
-public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeSetParams(CUgraphNode_st hNode, @Const CUDA_EXT_SEM_WAIT_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeSetParams(CUgraphNode_st hNode, @Cast("const CUDA_EXT_SEM_WAIT_NODE_PARAMS*") CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Clones a graph
@@ -14467,9 +14760,18 @@ public static native @Cast("CUresult") int cuGraphInstantiate(@ByPtrPtr CUgraphE
  * @see
  * ::cuGraphAddKernelNode,
  * ::cuGraphKernelNodeSetParams,
+ * ::cuGraphExecMemcpyNodeSetParams,
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
  * ::cuGraphInstantiate
  */
-public static native @Cast("CUresult") int cuGraphExecKernelNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_KERNEL_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphExecKernelNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Cast("const CUDA_KERNEL_NODE_PARAMS*") CUDA_KERNEL_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Sets the parameters for a memcpy node in the given graphExec.
@@ -14502,12 +14804,20 @@ public static native @Cast("CUresult") int cuGraphExecKernelNodeSetParams(CUgrap
  * \notefnerr
  *
  * @see
- * ::cuGraphInstantiate, 
- * ::cuGraphExecKernelNodeSetParams 
- * ::cuGraphExecMemsetNodeSetParams
- * ::cuGraphExecHostNodeSetParams
+ * ::cuGraphAddMemcpyNode,
+ * ::cuGraphMemcpyNodeSetParams,
+ * ::cuGraphExecKernelNodeSetParams,
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
+ * ::cuGraphInstantiate
  */
-public static native @Cast("CUresult") int cuGraphExecMemcpyNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_MEMCPY3D copyParams, CUctx_st ctx);
+public static native @Cast("CUresult") int cuGraphExecMemcpyNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Cast("const CUDA_MEMCPY3D*") CUDA_MEMCPY3D_v2 copyParams, CUctx_st ctx);
 
 /**
  * \brief Sets the parameters for a memset node in the given graphExec.
@@ -14540,12 +14850,20 @@ public static native @Cast("CUresult") int cuGraphExecMemcpyNodeSetParams(CUgrap
  * \notefnerr
  *
  * @see
- * ::cuGraphInstantiate, 
- * ::cuGraphExecKernelNodeSetParams 
- * ::cuGraphExecMemcpyNodeSetParams 
- * ::cuGraphExecHostNodeSetParams
+ * ::cuGraphAddMemsetNode,
+ * ::cuGraphMemsetNodeSetParams,
+ * ::cuGraphExecKernelNodeSetParams,
+ * ::cuGraphExecMemcpyNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
+ * ::cuGraphInstantiate
  */
-public static native @Cast("CUresult") int cuGraphExecMemsetNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_MEMSET_NODE_PARAMS memsetParams, CUctx_st ctx);
+public static native @Cast("CUresult") int cuGraphExecMemsetNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Cast("const CUDA_MEMSET_NODE_PARAMS*") CUDA_MEMSET_NODE_PARAMS_v1 memsetParams, CUctx_st ctx);
 
 /**
  * \brief Sets the parameters for a host node in the given graphExec.
@@ -14569,12 +14887,20 @@ public static native @Cast("CUresult") int cuGraphExecMemsetNodeSetParams(CUgrap
  * \notefnerr
  *
  * @see
- * ::cuGraphInstantiate,
- * ::cuGraphExecKernelNodeSetParams 
- * ::cuGraphExecMemcpyNodeSetParams 
- * ::cuGraphExecMemsetNodeSetParams 
+ * ::cuGraphAddHostNode,
+ * ::cuGraphHostNodeSetParams,
+ * ::cuGraphExecKernelNodeSetParams,
+ * ::cuGraphExecMemcpyNodeSetParams,
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
+ * ::cuGraphInstantiate
  */
-public static native @Cast("CUresult") int cuGraphExecHostNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_HOST_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphExecHostNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Cast("const CUDA_HOST_NODE_PARAMS*") CUDA_HOST_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Updates node parameters in the child graph node in the given graphExec.
@@ -14604,11 +14930,18 @@ public static native @Cast("CUresult") int cuGraphExecHostNodeSetParams(CUgraphE
  * \notefnerr
  *
  * @see
- * ::cuGraphInstantiate,
- * ::cuGraphExecUpdate,
+ * ::cuGraphAddChildGraphNode,
+ * ::cuGraphChildGraphNodeGetGraph,
  * ::cuGraphExecKernelNodeSetParams,
  * ::cuGraphExecMemcpyNodeSetParams,
- * ::cuGraphExecMemsetNodeSetParams 
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
+ * ::cuGraphInstantiate
  */
 public static native @Cast("CUresult") int cuGraphExecChildGraphNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, CUgraph_st childGraph);
 
@@ -14637,18 +14970,25 @@ public static native @Cast("CUresult") int cuGraphExecChildGraphNodeSetParams(CU
  * ::cuGraphAddEventRecordNode,
  * ::cuGraphEventRecordNodeGetEvent,
  * ::cuGraphEventWaitNodeSetEvent,
- * ::cuEventRecord,
- * ::cuStreamWaitEvent
- * ::cuGraphCreate,
- * ::cuGraphDestroyNode,
+ * ::cuEventRecordWithFlags,
+ * ::cuStreamWaitEvent,
+ * ::cuGraphExecKernelNodeSetParams,
+ * ::cuGraphExecMemcpyNodeSetParams,
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
  * ::cuGraphInstantiate
  */
 public static native @Cast("CUresult") int cuGraphExecEventRecordNodeSetEvent(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, CUevent_st event);
 
 /**
- * \brief Sets the event for an event record node in the given graphExec
+ * \brief Sets the event for an event wait node in the given graphExec
  *
- * Sets the event of an event record node in an executable graph \p hGraphExec.
+ * Sets the event of an event wait node in an executable graph \p hGraphExec.
  * The node is identified by the corresponding node \p hNode in the
  * non-executable graph, from which the executable graph was instantiated.
  *
@@ -14670,10 +15010,17 @@ public static native @Cast("CUresult") int cuGraphExecEventRecordNodeSetEvent(CU
  * ::cuGraphAddEventWaitNode,
  * ::cuGraphEventWaitNodeGetEvent,
  * ::cuGraphEventRecordNodeSetEvent,
- * ::cuEventRecord,
- * ::cuStreamWaitEvent
- * ::cuGraphCreate,
- * ::cuGraphDestroyNode,
+ * ::cuEventRecordWithFlags,
+ * ::cuStreamWaitEvent,
+ * ::cuGraphExecKernelNodeSetParams,
+ * ::cuGraphExecMemcpyNodeSetParams,
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
  * ::cuGraphInstantiate
  */
 public static native @Cast("CUresult") int cuGraphExecEventWaitNodeSetEvent(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, CUevent_st event);
@@ -14708,11 +15055,18 @@ public static native @Cast("CUresult") int cuGraphExecEventWaitNodeSetEvent(CUgr
  * ::cuImportExternalSemaphore,
  * ::cuSignalExternalSemaphoresAsync,
  * ::cuWaitExternalSemaphoresAsync,
- * ::cuGraphCreate,
- * ::cuGraphDestroyNode,
+ * ::cuGraphExecKernelNodeSetParams,
+ * ::cuGraphExecMemcpyNodeSetParams,
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresWaitNodeSetParams,
+ * ::cuGraphExecUpdate,
  * ::cuGraphInstantiate
  */
-public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresSignalNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresSignalNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Cast("const CUDA_EXT_SEM_SIGNAL_NODE_PARAMS*") CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Sets the parameters for an external semaphore wait node in the given graphExec
@@ -14744,11 +15098,18 @@ public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresSignalNo
  * ::cuImportExternalSemaphore,
  * ::cuSignalExternalSemaphoresAsync,
  * ::cuWaitExternalSemaphoresAsync,
- * ::cuGraphCreate,
- * ::cuGraphDestroyNode,
+ * ::cuGraphExecKernelNodeSetParams,
+ * ::cuGraphExecMemcpyNodeSetParams,
+ * ::cuGraphExecMemsetNodeSetParams,
+ * ::cuGraphExecHostNodeSetParams,
+ * ::cuGraphExecChildGraphNodeSetParams,
+ * ::cuGraphExecEventRecordNodeSetEvent,
+ * ::cuGraphExecEventWaitNodeSetEvent,
+ * ::cuGraphExecExternalSemaphoresSignalNodeSetParams,
+ * ::cuGraphExecUpdate,
  * ::cuGraphInstantiate
  */
-public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresWaitNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Const CUDA_EXT_SEM_WAIT_NODE_PARAMS nodeParams);
+public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresWaitNodeSetParams(CUgraphExec_st hGraphExec, CUgraphNode_st hNode, @Cast("const CUDA_EXT_SEM_WAIT_NODE_PARAMS*") CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1 nodeParams);
 
 /**
  * \brief Uploads an executable graph in a stream
@@ -14866,6 +15227,8 @@ public static native @Cast("CUresult") int cuGraphDestroy(CUgraph_st hGraph);
  * - Additional memcpy node restrictions:
  *   - Changing either the source or destination memory type(i.e. CU_MEMORYTYPE_DEVICE,
  *     CU_MEMORYTYPE_ARRAY, etc.) is not supported.
+ * - External semaphore wait nodes and record nodes:
+ *   - Changing the number of semaphores is not supported.
  *
  * Note:  The API may add further restrictions in future releases.  The return code should always be checked.
  *
@@ -14959,7 +15322,7 @@ public static native @Cast("CUresult") int cuGraphKernelNodeCopyAttributes(CUgra
  * ::CUaccessPolicyWindow
  */
 public static native @Cast("CUresult") int cuGraphKernelNodeGetAttribute(CUgraphNode_st hNode, @Cast("CUkernelNodeAttrID") int attr,
-                                      CUkernelNodeAttrValue value_out);
+                                      @Cast("CUkernelNodeAttrValue*") CUkernelNodeAttrValue_v1 value_out);
  
 /**
  * \brief Sets node attribute.
@@ -14981,7 +15344,169 @@ public static native @Cast("CUresult") int cuGraphKernelNodeGetAttribute(CUgraph
  * ::CUaccessPolicyWindow
  */
 public static native @Cast("CUresult") int cuGraphKernelNodeSetAttribute(CUgraphNode_st hNode, @Cast("CUkernelNodeAttrID") int attr,
-                                      @Const CUkernelNodeAttrValue value);
+                                      @Cast("const CUkernelNodeAttrValue*") CUkernelNodeAttrValue_v1 value);
+
+/**
+ * \brief Write a DOT file describing graph structure
+ *
+ * Using the provided \p hGraph, write to \p path a DOT formatted description of the graph.
+ * By default this includes the graph topology, node types, node id, kernel names and memcpy direction.
+ * \p flags can be specified to write more detailed information about each node type such as
+ * parameter values, kernel attributes, node and function handles.
+ *
+ * @param hGraph - The graph to create a DOT file from
+ * @param path   - The path to write the DOT file to
+ * @param flags  - Flags from CUgraphDebugDot_flags for specifying which additional node information to write
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_OPERATING_SYSTEM
+ */
+public static native @Cast("CUresult") int cuGraphDebugDotPrint(CUgraph_st hGraph, @Cast("const char*") BytePointer path, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuGraphDebugDotPrint(CUgraph_st hGraph, String path, @Cast("unsigned int") int flags);
+
+/**
+ * \brief Create a user object
+ *
+ * Create a user object with the specified destructor callback and initial reference count. The
+ * initial references are owned by the caller.
+ *
+ * Destructor callbacks cannot make CUDA API calls and should avoid blocking behavior, as they
+ * are executed by a shared internal thread. Another thread may be signaled to perform such
+ * actions, if it does not block forward progress of tasks scheduled through CUDA.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param object_out      - Location to return the user object handle
+ * @param ptr             - The pointer to pass to the destroy function
+ * @param destroy         - Callback to free the user object when it is no longer in use
+ * @param initialRefcount - The initial refcount to create the object with, typically 1. The
+ *                          initial references are owned by the calling thread.
+ * @param flags           - Currently it is required to pass ::CU_USER_OBJECT_NO_DESTRUCTOR_SYNC,
+ *                          which is the only defined flag. This indicates that the destroy
+ *                          callback cannot be waited on by any CUDA API. Users requiring
+ *                          synchronization of the callback should signal its completion
+ *                          manually.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuUserObjectRetain,
+ * ::cuUserObjectRelease,
+ * ::cuGraphRetainUserObject,
+ * ::cuGraphReleaseUserObject,
+ * ::cuGraphCreate
+ */
+public static native @Cast("CUresult") int cuUserObjectCreate(@ByPtrPtr CUuserObject_st object_out, Pointer ptr, CUhostFn destroy,
+                                    @Cast("unsigned int") int initialRefcount, @Cast("unsigned int") int flags);
+
+/**
+ * \brief Retain a reference to a user object
+ *
+ * Retains new references to a user object. The new references are owned by the caller.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param object - The object to retain
+ * @param count  - The number of references to retain, typically 1. Must be nonzero
+ *                 and not larger than INT_MAX.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuUserObjectCreate,
+ * ::cuUserObjectRelease,
+ * ::cuGraphRetainUserObject,
+ * ::cuGraphReleaseUserObject,
+ * ::cuGraphCreate
+ */
+public static native @Cast("CUresult") int cuUserObjectRetain(CUuserObject_st object, @Cast("unsigned int") int count);
+
+/**
+ * \brief Release a reference to a user object
+ *
+ * Releases user object references owned by the caller. The object's destructor is invoked if
+ * the reference count reaches zero.
+ *
+ * It is undefined behavior to release references not owned by the caller, or to use a user
+ * object handle after all references are released.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param object - The object to release
+ * @param count  - The number of references to release, typically 1. Must be nonzero
+ *                 and not larger than INT_MAX.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuUserObjectCreate,
+ * ::cuUserObjectRetain,
+ * ::cuGraphRetainUserObject,
+ * ::cuGraphReleaseUserObject,
+ * ::cuGraphCreate
+ */
+public static native @Cast("CUresult") int cuUserObjectRelease(CUuserObject_st object, @Cast("unsigned int") int count);
+
+/**
+ * \brief Retain a reference to a user object from a graph
+ *
+ * Creates or moves user object references that will be owned by a CUDA graph.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param graph  - The graph to associate the reference with
+ * @param object - The user object to retain a reference for
+ * @param count  - The number of references to add to the graph, typically 1. Must be
+ *                 nonzero and not larger than INT_MAX.
+ * @param flags  - The optional flag ::CU_GRAPH_USER_OBJECT_MOVE transfers references
+ *                 from the calling thread, rather than create new references. Pass 0
+ *                 to create new references.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuUserObjectCreate,
+ * ::cuUserObjectRetain,
+ * ::cuUserObjectRelease,
+ * ::cuGraphReleaseUserObject,
+ * ::cuGraphCreate
+ */
+public static native @Cast("CUresult") int cuGraphRetainUserObject(CUgraph_st graph, CUuserObject_st object, @Cast("unsigned int") int count, @Cast("unsigned int") int flags);
+
+/**
+ * \brief Release a user object reference from a graph
+ *
+ * Releases user object references owned by a graph.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param graph  - The graph that will release the reference
+ * @param object - The user object to release a reference for
+ * @param count  - The number of references to release, typically 1. Must be nonzero
+ *                 and not larger than INT_MAX.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuUserObjectCreate,
+ * ::cuUserObjectRetain,
+ * ::cuUserObjectRelease,
+ * ::cuGraphRetainUserObject,
+ * ::cuGraphCreate
+ */
+public static native @Cast("CUresult") int cuGraphReleaseUserObject(CUgraph_st graph, CUuserObject_st object, @Cast("unsigned int") int count);
 
 /** \} */ /* END CUDA_GRAPH */
 
@@ -15367,7 +15892,7 @@ public static native @Cast("CUresult") @Deprecated int cuTexRefSetAddress(@Cast(
  * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
  * ::cudaBindTexture2D
  */
-public static native @Cast("CUresult") @Deprecated int cuTexRefSetAddress2D(CUtexref_st hTexRef, @Const CUDA_ARRAY_DESCRIPTOR desc, @Cast("CUdeviceptr") long dptr, @Cast("size_t") long Pitch);
+public static native @Cast("CUresult") @Deprecated int cuTexRefSetAddress2D(CUtexref_st hTexRef, @Cast("const CUDA_ARRAY_DESCRIPTOR*") CUDA_ARRAY_DESCRIPTOR_v2 desc, @Cast("CUdeviceptr") long dptr, @Cast("size_t") long Pitch);
 
 /**
  * \brief Sets the format for a texture reference
@@ -16378,9 +16903,9 @@ public static native @Cast("CUresult") @Deprecated int cuSurfRefGetArray(@ByPtrP
  * ::cuTexObjectDestroy,
  * ::cudaCreateTextureObject
  */
-public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") LongPointer pTexObject, @Const CUDA_RESOURCE_DESC pResDesc, @Const CUDA_TEXTURE_DESC pTexDesc, @Const CUDA_RESOURCE_VIEW_DESC pResViewDesc);
-public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") LongBuffer pTexObject, @Const CUDA_RESOURCE_DESC pResDesc, @Const CUDA_TEXTURE_DESC pTexDesc, @Const CUDA_RESOURCE_VIEW_DESC pResViewDesc);
-public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") long[] pTexObject, @Const CUDA_RESOURCE_DESC pResDesc, @Const CUDA_TEXTURE_DESC pTexDesc, @Const CUDA_RESOURCE_VIEW_DESC pResViewDesc);
+public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") LongPointer pTexObject, @Cast("const CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc, @Cast("const CUDA_TEXTURE_DESC*") CUDA_TEXTURE_DESC_v1 pTexDesc, @Cast("const CUDA_RESOURCE_VIEW_DESC*") CUDA_RESOURCE_VIEW_DESC_v1 pResViewDesc);
+public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") LongBuffer pTexObject, @Cast("const CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc, @Cast("const CUDA_TEXTURE_DESC*") CUDA_TEXTURE_DESC_v1 pTexDesc, @Cast("const CUDA_RESOURCE_VIEW_DESC*") CUDA_RESOURCE_VIEW_DESC_v1 pResViewDesc);
+public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") long[] pTexObject, @Cast("const CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc, @Cast("const CUDA_TEXTURE_DESC*") CUDA_TEXTURE_DESC_v1 pTexDesc, @Cast("const CUDA_RESOURCE_VIEW_DESC*") CUDA_RESOURCE_VIEW_DESC_v1 pResViewDesc);
 
 /**
  * \brief Destroys a texture object
@@ -16421,7 +16946,7 @@ public static native @Cast("CUresult") int cuTexObjectDestroy(@Cast("CUtexObject
  * ::cuTexObjectCreate,
  * ::cudaGetTextureObjectResourceDesc,
  */
-public static native @Cast("CUresult") int cuTexObjectGetResourceDesc(CUDA_RESOURCE_DESC pResDesc, @Cast("CUtexObject") long texObject);
+public static native @Cast("CUresult") int cuTexObjectGetResourceDesc(@Cast("CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc, @Cast("CUtexObject") long texObject);
 
 /**
  * \brief Returns a texture object's texture descriptor
@@ -16442,7 +16967,7 @@ public static native @Cast("CUresult") int cuTexObjectGetResourceDesc(CUDA_RESOU
  * ::cuTexObjectCreate,
  * ::cudaGetTextureObjectTextureDesc
  */
-public static native @Cast("CUresult") int cuTexObjectGetTextureDesc(CUDA_TEXTURE_DESC pTexDesc, @Cast("CUtexObject") long texObject);
+public static native @Cast("CUresult") int cuTexObjectGetTextureDesc(@Cast("CUDA_TEXTURE_DESC*") CUDA_TEXTURE_DESC_v1 pTexDesc, @Cast("CUtexObject") long texObject);
 
 /**
  * \brief Returns a texture object's resource view descriptor
@@ -16464,7 +16989,7 @@ public static native @Cast("CUresult") int cuTexObjectGetTextureDesc(CUDA_TEXTUR
  * ::cuTexObjectCreate,
  * ::cudaGetTextureObjectResourceViewDesc
  */
-public static native @Cast("CUresult") int cuTexObjectGetResourceViewDesc(CUDA_RESOURCE_VIEW_DESC pResViewDesc, @Cast("CUtexObject") long texObject);
+public static native @Cast("CUresult") int cuTexObjectGetResourceViewDesc(@Cast("CUDA_RESOURCE_VIEW_DESC*") CUDA_RESOURCE_VIEW_DESC_v1 pResViewDesc, @Cast("CUtexObject") long texObject);
 
 /** \} */ /* END CUDA_TEXOBJECT */
 
@@ -16507,9 +17032,9 @@ public static native @Cast("CUresult") int cuTexObjectGetResourceViewDesc(CUDA_R
  * ::cuSurfObjectDestroy,
  * ::cudaCreateSurfaceObject
  */
-public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") LongPointer pSurfObject, @Const CUDA_RESOURCE_DESC pResDesc);
-public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") LongBuffer pSurfObject, @Const CUDA_RESOURCE_DESC pResDesc);
-public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") long[] pSurfObject, @Const CUDA_RESOURCE_DESC pResDesc);
+public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") LongPointer pSurfObject, @Cast("const CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc);
+public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") LongBuffer pSurfObject, @Cast("const CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc);
+public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") long[] pSurfObject, @Cast("const CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc);
 
 /**
  * \brief Destroys a surface object
@@ -16550,7 +17075,7 @@ public static native @Cast("CUresult") int cuSurfObjectDestroy(@Cast("CUsurfObje
  * ::cuSurfObjectCreate,
  * ::cudaGetSurfaceObjectResourceDesc
  */
-public static native @Cast("CUresult") int cuSurfObjectGetResourceDesc(CUDA_RESOURCE_DESC pResDesc, @Cast("CUsurfObject") long surfObject);
+public static native @Cast("CUresult") int cuSurfObjectGetResourceDesc(@Cast("CUDA_RESOURCE_DESC*") CUDA_RESOURCE_DESC_v1 pResDesc, @Cast("CUsurfObject") long surfObject);
 
 /** \} */ /* END CUDA_SURFOBJECT */
 
@@ -16987,23 +17512,96 @@ public static native @Cast("CUresult") int cuGraphicsUnmapResources(@Cast("unsig
 
 /** \} */ /* END CUDA_GRAPHICS */
 
+/**
+ * \defgroup CUDA_DRIVER_ENTRY_POINT Driver Entry Point Access 
+ *
+ * ___MANBRIEF___ driver entry point access functions of the low-level CUDA driver API
+ * (___CURRENT_FILE___) ___ENDMANBRIEF___
+ *
+ * This section describes the driver entry point access functions of the low-level CUDA
+ * driver application programming interface.
+ *
+ * \{
+ */
+
+/**
+ * \brief Returns the requested driver API function pointer
+ *
+ * Returns in \p **pfn the address of the CUDA driver function for the requested
+ * CUDA version and flags.
+ *
+ * The CUDA version is specified as (1000 * major + 10 * minor), so CUDA 11.2
+ * should be specified as 11020. For a requested driver symbol, if the specified
+ * CUDA version is greater than or equal to the CUDA version in which the driver symbol
+ * was introduced, this API will return the function pointer to the corresponding
+ * versioned function.
+ *
+ * The pointer returned by the API should be cast to a function pointer matching the
+ * requested driver function's definition in the API header file. The function pointer
+ * typedef can be picked up from the corresponding typedefs header file. For example,
+ * cudaTypedefs.h consists of function pointer typedefs for driver APIs defined in cuda.h.
+ *
+ * The API will return ::CUDA_ERROR_NOT_FOUND if the requested driver function is not
+ * supported on the platform, no ABI compatible driver function exists for the specified
+ * \p cudaVersion or if the driver symbol is invalid.
+ *
+ * The requested flags can be:
+ * - ::CU_GET_PROC_ADDRESS_DEFAULT: This is the default mode. This is equivalent to
+ *   ::CU_GET_PROC_ADDRESS_PER_THREAD_DEFAULT_STREAM if the code is compiled with
+ *   --default-stream per-thread compilation flag or the macro CUDA_API_PER_THREAD_DEFAULT_STREAM
+ *   is defined; ::CU_GET_PROC_ADDRESS_LEGACY_STREAM otherwise.
+ * - ::CU_GET_PROC_ADDRESS_LEGACY_STREAM: This will enable the search for all driver symbols
+ *   that match the requested driver symbol name except the corresponding per-thread versions.
+ * - ::CU_GET_PROC_ADDRESS_PER_THREAD_DEFAULT_STREAM: This will enable the search for all
+ *   driver symbols that match the requested driver symbol name including the per-thread
+ *   versions. If a per-thread version is not found, the API will return the legacy version
+ *   of the driver function.
+ *
+ * @param symbol - The base name of the driver API function to look for. As an example,
+ *                 for the driver API ::cuMemAlloc_v2, \p symbol would be cuMemAlloc and
+ *                 \p cudaVersion would be the ABI compatible CUDA version for the _v2 variant. 
+ * @param pfn - Location to return the function pointer to the requested driver function
+ * @param cudaVersion - The CUDA version to look for the requested driver symbol 
+ * @param flags -  Flags to specify search options.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_NOT_FOUND
+ * \note_version_mixing
+ *
+ * @see
+ * ::cudaGetDriverEntryPoint
+ */
+public static native @Cast("CUresult") int cuGetProcAddress(@Cast("const char*") BytePointer symbol, @Cast("void**") PointerPointer pfn, int cudaVersion, @Cast("cuuint64_t") int flags);
+public static native @Cast("CUresult") int cuGetProcAddress(@Cast("const char*") BytePointer symbol, @Cast("void**") @ByPtrPtr Pointer pfn, int cudaVersion, @Cast("cuuint64_t") int flags);
+public static native @Cast("CUresult") int cuGetProcAddress(String symbol, @Cast("void**") @ByPtrPtr Pointer pfn, int cudaVersion, @Cast("cuuint64_t") int flags);
+
+/** \} */ /* END CUDA_DRIVER_ENTRY_POINT */
+
 public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**") PointerPointer ppExportTable, @Const CUuuid pExportTableId);
 public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**") @ByPtrPtr Pointer ppExportTable, @Const CUuuid pExportTableId);
 
-
 /**
- * \brief Returns a module handle
+ * \brief Blocks until remote writes are visible to the specified scope
  *
- * Returns in \p *hmod the handle of the module that function \p hfunc
- * is located in. The lifetime of the module corresponds to the lifetime of
- * the context it was loaded in or until the module is explicitly unloaded.
+ * Blocks until GPUDirect RDMA writes to the target context via mappings
+ * created through APIs like nvidia_p2p_get_pages (see
+ * https://docs.nvidia.com/cuda/gpudirect-rdma for more information), are
+ * visible to the specified scope.
  *
- * The CUDA runtime manages its own modules loaded into the primary context.
- * If the handle returned by this API refers to a module loaded by the CUDA runtime,
- * calling ::cuModuleUnload() on that module will result in undefined behavior.
+ * If the scope equals or lies within the scope indicated by
+ * ::CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_WRITES_ORDERING, the call
+ * will be a no-op and can be safely omitted for performance. This can be
+ * determined by comparing the numerical values between the two enums, with
+ * smaller scopes having smaller values.
  *
- * @param hmod - Returned module handle
- * @param hfunc   - Function to retrieve module for
+ * Users may query support for this API via
+ * ::CU_DEVICE_ATTRIBUTE_FLUSH_FLUSH_GPU_DIRECT_RDMA_OPTIONS.
+ *
+ * @param target - The target of the operation, see ::CUflushGPUDirectRDMAWritesTarget
+ * @param scope  - The scope of the operation, see ::CUflushGPUDirectRDMAWritesScope
  *
  * @return
  * ::CUDA_SUCCESS,
@@ -17011,17 +17609,17 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_NOT_FOUND
  * \notefnerr
  *
  */
-public static native @Cast("CUresult") int cuFuncGetModule(@ByPtrPtr CUmod_st hmod, CUfunc_st hfunc);
+public static native @Cast("CUresult") int cuFlushGPUDirectRDMAWrites(@Cast("CUflushGPUDirectRDMAWritesTarget") int target, @Cast("CUflushGPUDirectRDMAWritesScope") int scope);
 
 
 /**
  * CUDA API versioning support
  */
 // #if defined(__CUDA_API_VERSION_INTERNAL)
+// #elif defined(__CUDA_API_PER_THREAD_DEFAULT_STREAM)
 // #endif
 
 // #ifdef __cplusplus
@@ -18151,7 +18749,8 @@ public static final int
 
     /**
      * This indicates that a named symbol was not found. Examples of symbols
-     * are global/constant variable names, texture names, and surface names.
+     * are global/constant variable names, driver function names, texture names,
+     * and surface names.
      */
     cudaErrorSymbolNotFound               = 500,
   
@@ -18593,6 +19192,32 @@ public static final int
 // Targeting ../cudart/cudaStreamAttrValue.java
 
 
+
+/**
+ * Flags for ::cudaStreamUpdateCaptureDependencies
+ */
+/** enum cudaStreamUpdateCaptureDependenciesFlags */
+public static final int
+    /** Add new nodes to the dependency set */
+    cudaStreamAddCaptureDependencies = 0x0,
+    /** Replace the dependency set with the new nodes */
+    cudaStreamSetCaptureDependencies = 0x1;
+
+/**
+ * Flags for user objects for graphs
+ */
+/** enum cudaUserObjectFlags */
+public static final int
+    /** Indicates the destructor execution is not synchronized by any CUDA handle. */
+    cudaUserObjectNoDestructorSync = 0x1;
+
+/**
+ * Flags for retaining user object references for graphs
+ */
+/** enum cudaUserObjectRetainFlags */
+public static final int
+    /** Transfer references from the caller rather than creating new references. */
+    cudaGraphUserObjectMove = 0x1;
 // Targeting ../cudart/cudaGraphicsResource.java
 
 
@@ -18882,6 +19507,47 @@ public static final int
     cudaCSV             = 0x01;
 
 /**
+ * CUDA GPUDirect RDMA flush writes APIs supported on the device
+ */
+/** enum cudaFlushGPUDirectRDMAWritesOptions */
+public static final int
+    /** ::cudaDeviceFlushGPUDirectRDMAWrites() and its CUDA Driver API counterpart are supported on the device. */
+    cudaFlushGPUDirectRDMAWritesOptionHost   = 1<<0,
+    /** The ::CU_STREAM_WAIT_VALUE_FLUSH flag and the ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES MemOp are supported on the CUDA device. */
+    cudaFlushGPUDirectRDMAWritesOptionMemOps = 1<<1;
+
+/**
+ * CUDA GPUDirect RDMA flush writes ordering features of the device
+ */
+/** enum cudaGPUDirectRDMAWritesOrdering */
+public static final int
+    /** The device does not natively support ordering of GPUDirect RDMA writes. ::cudaFlushGPUDirectRDMAWrites() can be leveraged if supported. */
+    cudaGPUDirectRDMAWritesOrderingNone       = 0,
+    /** Natively, the device can consistently consume GPUDirect RDMA writes, although other CUDA devices may not. */
+    cudaGPUDirectRDMAWritesOrderingOwner      = 100,
+    /** Any CUDA device in the system can consistently consume GPUDirect RDMA writes to this device. */
+    cudaGPUDirectRDMAWritesOrderingAllDevices = 200;
+
+/**
+ * CUDA GPUDirect RDMA flush writes scopes
+ */
+/** enum cudaFlushGPUDirectRDMAWritesScope */
+public static final int
+    /** Blocks until remote writes are visible to the CUDA device context owning the data. */
+    cudaFlushGPUDirectRDMAWritesToOwner      = 100,
+    /** Blocks until remote writes are visible to all CUDA device contexts. */
+    cudaFlushGPUDirectRDMAWritesToAllDevices = 200;
+
+/**
+ * CUDA GPUDirect RDMA flush writes targets
+ */
+/** enum cudaFlushGPUDirectRDMAWritesTarget */
+public static final int
+    /** Sets the target for ::cudaDeviceFlushGPUDirectRDMAWrites() to the currently active CUDA device context. */
+    cudaFlushGPUDirectRDMAWritesTargetCurrentDevice = 0;
+
+
+/**
  * CUDA device attributes
  */
 /** enum cudaDeviceAttr */
@@ -19085,6 +19751,10 @@ public static final int
     cudaDevAttrDirectManagedMemAccessFromHost = 101,
     /** Maximum number of blocks per multiprocessor */
     cudaDevAttrMaxBlocksPerMultiprocessor     = 106,
+    /** Maximum L2 persisting lines capacity setting in bytes. */
+    cudaDevAttrMaxPersistingL2CacheSize       = 108,
+    /** Maximum value of cudaAccessPolicyWindow::num_bytes. */
+    cudaDevAttrMaxAccessPolicyWindowSize      = 109,
     /** Shared memory reserved by CUDA driver per block in bytes */
     cudaDevAttrReservedSharedMemoryPerBlock   = 111,
     /** Device supports sparse CUDA arrays and sparse CUDA mipmapped arrays */
@@ -19094,23 +19764,21 @@ public static final int
     /** External timeline semaphore interop is supported on the device */
     cudaDevAttrMaxTimelineSemaphoreInteropSupported = 114,
     /** Device supports using the ::cudaMallocAsync and ::cudaMemPool family of APIs */
-    cudaDevAttrMemoryPoolsSupported           = 115;
+    cudaDevAttrMemoryPoolsSupported           = 115,
+    /** Device supports GPUDirect RDMA APIs, like nvidia_p2p_get_pages (see https://docs.nvidia.com/cuda/gpudirect-rdma for more information) */
+    cudaDevAttrGPUDirectRDMASupported         = 116,
+    /** The returned attribute shall be interpreted as a bitmask, where the individual bits are listed in the ::cudaFlushGPUDirectRDMAWritesOptions enum */
+    cudaDevAttrGPUDirectRDMAFlushWritesOptions = 117,
+    /** GPUDirect RDMA writes to the device do not need to be flushed for consumers within the scope indicated by the returned attribute. See ::cudaGPUDirectRDMAWritesOrdering for the numerical values returned here. */
+    cudaDevAttrGPUDirectRDMAWritesOrdering    = 118,
+    /** Handle types supported with mempool based IPC */
+    cudaDevAttrMemoryPoolSupportedHandleTypes = 119;
 
 /**
  * CUDA memory pool attributes
  */
 /** enum cudaMemPoolAttr */
 public static final int
-    /**
-     * (value type = cuuint64_t)
-     * Amount of reserved memory in bytes to hold onto before trying
-     * to release memory back to the OS. When more than the release
-     * threshold bytes of memory are held by the memory pool, the
-     * allocator will try to release memory back to the OS on the
-     * next call to stream, event or context synchronize. (default 0)
-     */
-    cudaMemPoolReuseFollowEventDependencies   = 0x1,
-
     /**
      * (value type = int)
      * Allow cuMemAllocAsync to use memory asynchronously freed
@@ -19119,15 +19787,14 @@ public static final int
      * Cuda events and null stream interactions can create the required
      * stream ordered dependencies. (default enabled)
      */
-    cudaMemPoolReuseAllowOpportunistic        = 0x2,
+    cudaMemPoolReuseFollowEventDependencies   = 0x1,
 
     /**
      * (value type = int)
      * Allow reuse of already completed frees when there is no dependency
      * between the free and allocation. (default enabled)
      */
-    cudaMemPoolReuseAllowInternalDependencies = 0x3,
-
+    cudaMemPoolReuseAllowOpportunistic        = 0x2,
 
     /**
      * (value type = int)
@@ -19135,31 +19802,87 @@ public static final int
      * in order to establish the stream ordering required to reuse
      * a piece of memory released by cuFreeAsync (default enabled).
      */
-    cudaMemPoolAttrReleaseThreshold           = 0x4;
+    cudaMemPoolReuseAllowInternalDependencies = 0x3,
 
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of reserved memory in bytes to hold onto before trying
+     * to release memory back to the OS. When more than the release
+     * threshold bytes of memory are held by the memory pool, the
+     * allocator will try to release memory back to the OS on the
+     * next call to stream, event or context synchronize. (default 0)
+     */
+    cudaMemPoolAttrReleaseThreshold           = 0x4,
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of backing memory currently allocated for the mempool.
+     */
+    cudaMemPoolAttrReservedMemCurrent         = 0x5,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of backing memory allocated for the mempool since the
+     * last time it was reset. High watermark can only be reset to zero.
+     */
+    cudaMemPoolAttrReservedMemHigh            = 0x6,
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of memory from the pool that is currently in use by the application.
+     */
+    cudaMemPoolAttrUsedMemCurrent             = 0x7,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of the amount of memory from the pool that was in use by the application since
+     * the last time it was reset. High watermark can only be reset to zero.
+     */
+    cudaMemPoolAttrUsedMemHigh                = 0x8;
+
+/**
+ * Specifies the type of location 
+ */
 /** enum cudaMemLocationType */
 public static final int
     cudaMemLocationTypeInvalid = 0,
+    /** Location is a device location, thus id is a device ordinal */
     cudaMemLocationTypeDevice = 1;
 // Targeting ../cudart/cudaMemLocation.java
 
 
 
+/**
+ * Specifies the memory protection flags for mapping.
+ */
 /** enum cudaMemAccessFlags */
 public static final int
-    cudaMemAccessFlagsProtNone = 0,
-    cudaMemAccessFlagsProtRead = 1,
+    /** Default, make the address range not accessible */
+    cudaMemAccessFlagsProtNone      = 0,
+    /** Make the address range read accessible */
+    cudaMemAccessFlagsProtRead      = 1,
+    /** Make the address range read-write accessible */
     cudaMemAccessFlagsProtReadWrite = 3;
 // Targeting ../cudart/cudaMemAccessDesc.java
 
 
 
+/**
+ * Defines the allocation types available
+ */
 /** enum cudaMemAllocationType */
 public static final int
     cudaMemAllocationTypeInvalid = 0x0,
+    /** This allocation type is 'pinned', i.e. cannot migrate from its current
+      * location while the application is actively using it
+      */
     cudaMemAllocationTypePinned  = 0x1,
-    cudaMemAllocationTypeMax     = 0xFFFFFFFF;
+    cudaMemAllocationTypeMax     = 0x7FFFFFFF;
 
+/**
+ * Flags for specifying particular handle types
+ */
 /** enum cudaMemAllocationHandleType */
 public static final int
     /** Does not allow any export mechanism. > */
@@ -19483,6 +20206,10 @@ public static final int
  */
 
 /**
+ * CUDA user object for graphs
+ */
+
+/**
  * CUDA function
  */
 
@@ -19562,6 +20289,35 @@ public static final int
     cudaGraphExecUpdateErrorNotSupported      = 0x6,
     /** The update failed because the function of a kernel node changed in an unsupported way */
     cudaGraphExecUpdateErrorUnsupportedFunctionChange = 0x7;
+
+/**
+ * Flags to specify search options to be used with ::cudaGetDriverEntryPoint
+ * For more details see ::cuGetProcAddress
+ */ 
+/** enum cudaGetDriverEntryPointFlags */
+public static final int
+    /** Default search mode for driver symbols. */
+    cudaEnableDefault                = 0x0,
+    /** Search for legacy versions of driver symbols. */
+    cudaEnableLegacyStream           = 0x1,
+    /** Search for per-thread versions of driver symbols. */
+    cudaEnablePerThreadDefaultStream = 0x2;
+
+/**
+ * CUDA Graph debug write options
+ */
+/** enum cudaGraphDebugDotFlags */
+public static final int
+    cudaGraphDebugDotFlagsVerbose                  = 1<<0,  /** Output all debug data as if every debug flag is enabled */
+    cudaGraphDebugDotFlagsKernelNodeParams         = 1<<2,  /** Adds cudaKernelNodeParams to output */
+    cudaGraphDebugDotFlagsMemcpyNodeParams         = 1<<3,  /** Adds cudaMemcpy3DParms to output */
+    cudaGraphDebugDotFlagsMemsetNodeParams         = 1<<4,  /** Adds cudaMemsetParams to output */
+    cudaGraphDebugDotFlagsHostNodeParams           = 1<<5,  /** Adds cudaHostNodeParams to output */
+    cudaGraphDebugDotFlagsEventNodeParams          = 1<<6,  /** Adds cudaEvent_t handle from record and wait nodes to output */
+    cudaGraphDebugDotFlagsExtSemasSignalNodeParams = 1<<7,  /** Adds cudaExternalSemaphoreSignalNodeParams values to output */
+    cudaGraphDebugDotFlagsExtSemasWaitNodeParams   = 1<<8,  /** Adds cudaExternalSemaphoreWaitNodeParams to output */
+    cudaGraphDebugDotFlagsKernelNodeAttributes     = 1<<9,  /** Adds cudaKernelNodeAttrID values to output */
+    cudaGraphDebugDotFlagsHandles                  = 1<<10;  /** Adds node handles and every kernel function handle to output */
 
 /** \} */
 /** \} */ /* END CUDART_TYPES */
@@ -20298,7 +21054,7 @@ public static final int
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  11020;
+public static final int CUDART_VERSION =  11030;
 
 // #if defined(__CUDA_API_VER_MAJOR__) && defined(__CUDA_API_VER_MINOR__)
 public static native @MemberGetter int __CUDART_API_VERSION();
@@ -21058,6 +21814,39 @@ public static native @Cast("cudaError_t") int cudaIpcOpenMemHandle(@Cast("void**
  * ::cuIpcCloseMemHandle
  */
 public static native @Cast("cudaError_t") int cudaIpcCloseMemHandle(Pointer devPtr);
+
+/**
+ * \brief Blocks until remote writes are visible to the specified scope
+ *
+ * Blocks until remote writes to the target context via mappings created
+ * through GPUDirect RDMA APIs, like nvidia_p2p_get_pages (see
+ * https://docs.nvidia.com/cuda/gpudirect-rdma for more information), are
+ * visible to the specified scope.
+ *
+ * If the scope equals or lies within the scope indicated by
+ * ::cudaDevAttrGPUDirectRDMAWritesOrdering, the call will be a no-op and
+ * can be safely omitted for performance. This can be determined by
+ * comparing the numerical values between the two enums, with smaller
+ * scopes having smaller values.
+ *
+ * Users may query support for this API via ::cudaDevAttrGPUDirectRDMAFlushWritesOptions.
+ *
+ * @param target - The target of the operation, see cudaFlushGPUDirectRDMAWritesTarget
+ * @param scope  - The scope of the operation, see cudaFlushGPUDirectRDMAWritesScope
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorNotSupported,
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cuFlushGPUDirectRDMAWrites
+ */
+// #if __CUDART_API_VERSION >= 11030
+public static native @Cast("cudaError_t") int cudaDeviceFlushGPUDirectRDMAWrites(@Cast("cudaFlushGPUDirectRDMAWritesTarget") int target, @Cast("cudaFlushGPUDirectRDMAWritesScope") int scope);
+// #endif
 
 /** \} */ /* END CUDART_DEVICE */
 
@@ -21917,6 +22706,8 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  * - ::cudaDevAttrMaxSharedMemoryPerBlockOptin: Maximum per block shared memory size on the device. This value can
  *   be opted into when using ::cudaFuncSetAttribute
  * - ::cudaDevAttrMaxBlocksPerMultiprocessor: Maximum number of thread blocks that can reside on a multiprocessor.
+ * - ::cudaDevAttrMaxPersistingL2CacheSize: Maximum L2 persisting lines capacity setting in bytes.
+ * - ::cudaDevAttrMaxAccessPolicyWindowSize: Maximum value of cudaAccessPolicyWindow::num_bytes.
  * - ::cudaDevAttrHostRegisterReadOnly: Device supports using the ::cudaHostRegister flag cudaHostRegisterReadOnly
  *   to register memory that must be mapped as read-only to the GPU
  * - ::cudaDevAttrSparseCudaArraySupported: 1 if the device supports sparse CUDA arrays and sparse CUDA mipmapped arrays.
@@ -21955,7 +22746,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(int[] value
  * \note_init_rt
  * \note_callback
  *
- * @see ::cuDeviceGetDefaultMemPool, ::cudaMallocAsync, ::cudaMemPoolTrimTo, ::cudaMemPoolGetAttribute, ::cudaMemPoolSetAttribute, ::cudaMemPoolSetAccess
+ * @see ::cuDeviceGetDefaultMemPool, ::cudaMallocAsync, ::cudaMemPoolTrimTo, ::cudaMemPoolGetAttribute, ::cudaDeviceSetMemPool, ::cudaMemPoolSetAttribute, ::cudaMemPoolSetAccess
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetDefaultMemPool(@ByPtrPtr CUmemPoolHandle_st memPool, int device);
 
@@ -21979,7 +22770,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetDefaultMemPool(@ByPtr
  * \notefnerr
  * \note_callback
  *
- * @see ::cuDeviceSetDefaultMemPool, ::cudaDeviceGetDefaultMemPool, ::cudaMemPoolCreate, ::cudaMemPoolDestroy, ::cudaMallocFromPoolAsync
+ * @see ::cuDeviceSetDefaultMemPool, ::cudaDeviceGetMemPool, ::cudaDeviceGetDefaultMemPool, ::cudaMemPoolCreate, ::cudaMemPoolDestroy, ::cudaMallocFromPoolAsync
  */
 public static native @Cast("cudaError_t") int cudaDeviceSetMemPool(int device, CUmemPoolHandle_st memPool);
 
@@ -21999,7 +22790,7 @@ public static native @Cast("cudaError_t") int cudaDeviceSetMemPool(int device, C
  * \note_init_rt
  * \note_callback
  *
- * @see ::cuDeviceGetMemPool
+ * @see ::cuDeviceGetMemPool, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceSetMemPool
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetMemPool(@ByPtrPtr CUmemPoolHandle_st memPool, int device);
 
@@ -23013,10 +23804,13 @@ public static native @Cast("cudaError_t") int cudaStreamIsCapturing(CUstream_st 
 /**
  * \brief Query capture status of a stream
  *
+ * Note there is a later version of this API, ::cudaStreamGetCaptureInfo_v2. It will
+ * supplant this version in 12.0, which is retained for minor version compatibility.
+ *
  * Query the capture status of a stream and get a unique id representing
  * the capture sequence over the lifetime of the process.
  *
- * If called on ::cudaStreamLegacy (the "null stream") while a stream not created 
+ * If called on ::cudaStreamLegacy (the "null stream") while a stream not created
  * with ::cudaStreamNonBlocking is capturing, returns ::cudaErrorStreamCaptureImplicit.
  *
  * A valid id is returned only if both of the following are true:
@@ -23033,12 +23827,107 @@ public static native @Cast("cudaError_t") int cudaStreamIsCapturing(CUstream_st 
  * \notefnerr
  *
  * @see
+ * ::cudaStreamGetCaptureInfo_v2,
  * ::cudaStreamBeginCapture,
  * ::cudaStreamIsCapturing
  */
 public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") IntPointer pCaptureStatus, @Cast("unsigned long long*") LongPointer pId);
 public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") IntBuffer pCaptureStatus, @Cast("unsigned long long*") LongBuffer pId);
 public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") int[] pCaptureStatus, @Cast("unsigned long long*") long[] pId);
+
+/**
+ * \brief Query a stream's capture state (11.3+)
+ *
+ * Query stream state related to stream capture.
+ *
+ * If called on ::cudaStreamLegacy (the "null stream") while a stream not created 
+ * with ::cudaStreamNonBlocking is capturing, returns ::cudaErrorStreamCaptureImplicit.
+ *
+ * Valid data (other than capture status) is returned only if both of the following are true:
+ * - the call returns cudaSuccess
+ * - the returned capture status is ::cudaStreamCaptureStatusActive
+ *
+ * This version of cudaStreamGetCaptureInfo is introduced in CUDA 11.3 and will supplant the
+ * previous version ::cudaStreamGetCaptureInfo in 12.0. Developers requiring compatibility
+ * across minor versions to CUDA 11.0 (driver version 445) can do one of the following:
+ * - Use the older version of the API, ::cudaStreamGetCaptureInfo
+ * - Pass null for all of \p graph_out, \p dependencies_out, and \p numDependencies_out.
+ *
+ * @param stream - The stream to query
+ * @param captureStatus_out - Location to return the capture status of the stream; required
+ * @param id_out - Optional location to return an id for the capture sequence, which is
+ *           unique over the lifetime of the process
+ * @param graph_out - Optional location to return the graph being captured into. All
+ *           operations other than destroy and node removal are permitted on the graph
+ *           while the capture sequence is in progress. This API does not transfer
+ *           ownership of the graph, which is transferred or destroyed at
+ *           ::cudaStreamEndCapture. Note that the graph handle may be invalidated before
+ *           end of capture for certain errors. Nodes that are or become
+ *           unreachable from the original stream at ::cudaStreamEndCapture due to direct
+ *           actions on the graph do not trigger ::cudaErrorStreamCaptureUnjoined.
+ * @param dependencies_out - Optional location to store a pointer to an array of nodes.
+ *           The next node to be captured in the stream will depend on this set of nodes,
+ *           absent operations such as event wait which modify this set. The array pointer
+ *           is valid until the next API call which operates on the stream or until end of
+ *           capture. The node handles may be copied out and are valid until they or the
+ *           graph is destroyed. The driver-owned array may also be passed directly to
+ *           APIs that operate on the graph (not the stream) without copying.
+ * @param numDependencies_out - Optional location to store the size of the array
+ *           returned in dependencies_out.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorStreamCaptureImplicit
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaStreamGetCaptureInfo,
+ * ::cudaStreamBeginCapture,
+ * ::cudaStreamIsCapturing,
+ * ::cudaStreamUpdateCaptureDependencies
+ */
+public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo_v2(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") IntPointer captureStatus_out, @Cast("unsigned long long*") LongPointer id_out/*=0*/, @ByPtrPtr CUgraph_st graph_out/*=0*/, @Cast("const cudaGraphNode_t**") @ByPtrPtr PointerPointer dependencies_out/*=0*/, @Cast("size_t*") SizeTPointer numDependencies_out/*=0*/);
+public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo_v2(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") IntPointer captureStatus_out);
+public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo_v2(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") IntBuffer captureStatus_out, @Cast("unsigned long long*") LongBuffer id_out/*=0*/, @ByPtrPtr CUgraph_st graph_out/*=0*/, @Cast("const cudaGraphNode_t**") @ByPtrPtr PointerPointer dependencies_out/*=0*/, @Cast("size_t*") SizeTPointer numDependencies_out/*=0*/);
+public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo_v2(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") IntBuffer captureStatus_out);
+public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo_v2(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") int[] captureStatus_out, @Cast("unsigned long long*") long[] id_out/*=0*/, @ByPtrPtr CUgraph_st graph_out/*=0*/, @Cast("const cudaGraphNode_t**") @ByPtrPtr PointerPointer dependencies_out/*=0*/, @Cast("size_t*") SizeTPointer numDependencies_out/*=0*/);
+public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo_v2(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") int[] captureStatus_out);
+
+/**
+ * \brief Update the set of dependencies in a capturing stream (11.3+)
+ *
+ * Modifies the dependency set of a capturing stream. The dependency set is the set
+ * of nodes that the next captured node in the stream will depend on.
+ *
+ * Valid flags are ::cudaStreamAddCaptureDependencies and
+ * ::cudaStreamSetCaptureDependencies. These control whether the set passed to
+ * the API is added to the existing set or replaces it. A flags value of 0 defaults
+ * to ::cudaStreamAddCaptureDependencies.
+ *
+ * Nodes that are removed from the dependency set via this API do not result in
+ * ::cudaErrorStreamCaptureUnjoined if they are unreachable from the stream at
+ * ::cudaStreamEndCapture.
+ *
+ * Returns ::cudaErrorIllegalState if the stream is not capturing.
+ *
+ * This API is new in CUDA 11.3. Developers requiring compatibility across minor
+ * versions of the CUDA driver to 11.0 should not use this API or provide a fallback.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorIllegalState
+ * \notefnerr
+ *
+ * @see
+ * ::cudaStreamBeginCapture,
+ * ::cudaStreamGetCaptureInfo,
+ * ::cudaStreamGetCaptureInfo_v2
+ */
+public static native @Cast("cudaError_t") int cudaStreamUpdateCaptureDependencies(CUstream_st stream, @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("unsigned int") int flags/*=0*/);
+public static native @Cast("cudaError_t") int cudaStreamUpdateCaptureDependencies(CUstream_st stream, @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies);
 /** \} */ /* END CUDART_STREAM */
 
 /**
@@ -24104,6 +24993,8 @@ public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernel(@Const
 /**
  * \brief Launches device functions on multiple devices where thread blocks can cooperate and synchronize as they execute
  *
+ * @deprecated This function is deprecated as of CUDA 11.3.
+ *
  * Invokes kernels as specified in the \p launchParamsList array where each element
  * of the array specifies all the parameters required to perform a single kernel launch.
  * These kernels can cooperate and synchronize as they execute. The size of the array is
@@ -24198,8 +25089,8 @@ public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernel(@Const
  * ::cudaLaunchCooperativeKernel,
  * ::cuLaunchCooperativeKernelMultiDevice
  */
-public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernelMultiDevice(cudaLaunchParams launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags/*=0*/);
-public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernelMultiDevice(cudaLaunchParams launchParamsList, @Cast("unsigned int") int numDevices);
+public static native @Cast("cudaError_t") @Deprecated int cudaLaunchCooperativeKernelMultiDevice(cudaLaunchParams launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags/*=0*/);
+public static native @Cast("cudaError_t") @Deprecated int cudaLaunchCooperativeKernelMultiDevice(cudaLaunchParams launchParamsList, @Cast("unsigned int") int numDevices);
 
 /**
  * \brief Sets the preferred cache configuration for a device function
@@ -26175,10 +27066,10 @@ public static native @Cast("cudaError_t") int cudaMemcpy2D(Pointer dst, @Cast("s
  * \brief Copies data between host and device
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the memory
- * area pointed to by \p src to the CUDA array \p dst starting at the
- * upper left corner (\p wOffset, \p hOffset) where \p kind specifies the
- * direction of the copy, and must be one of ::cudaMemcpyHostToHost,
- * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * area pointed to by \p src to the CUDA array \p dst starting at
+ * \p hOffset rows and \p wOffset bytes from the upper left corner,
+ * where \p kind specifies the direction of the copy, and must be one
+ * of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
  * inferred from the pointer values. However, ::cudaMemcpyDefault is only
@@ -26190,8 +27081,8 @@ public static native @Cast("cudaError_t") int cudaMemcpy2D(Pointer dst, @Cast("s
  * exceeds the maximum allowed.
  *
  * @param dst     - Destination memory address
- * @param wOffset - Destination starting X offset
- * @param hOffset - Destination starting Y offset
+ * @param wOffset - Destination starting X offset (columns in bytes)
+ * @param hOffset - Destination starting Y offset (rows)
  * @param src     - Source memory address
  * @param spitch  - Pitch of source memory
  * @param width   - Width of matrix transfer (columns in bytes)
@@ -26225,8 +27116,8 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArray(cudaArray dst,
  * \brief Copies data between host and device
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the CUDA
- * array \p srcArray starting at the upper left corner
- * (\p wOffset, \p hOffset) to the memory area pointed to by \p dst, where
+ * array \p src starting at \p hOffset rows and \p wOffset bytes from the
+ * upper left corner to the memory area pointed to by \p dst, where
  * \p kind specifies the direction of the copy, and must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
@@ -26242,8 +27133,8 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArray(cudaArray dst,
  * @param dst     - Destination memory address
  * @param dpitch  - Pitch of destination memory
  * @param src     - Source memory address
- * @param wOffset - Source starting X offset
- * @param hOffset - Source starting Y offset
+ * @param wOffset - Source starting X offset (columns in bytes)
+ * @param hOffset - Source starting Y offset (rows)
  * @param width   - Width of matrix transfer (columns in bytes)
  * @param height  - Height of matrix transfer (rows)
  * @param kind    - Type of transfer
@@ -26275,9 +27166,9 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DFromArray(Pointer dst,
  * \brief Copies data between host and device
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the CUDA
- * array \p srcArray starting at the upper left corner
- * (\p wOffsetSrc, \p hOffsetSrc) to the CUDA array \p dst starting at
- * the upper left corner (\p wOffsetDst, \p hOffsetDst), where \p kind
+ * array \p src starting at \p hOffsetSrc rows and \p wOffsetSrc bytes from the
+ * upper left corner to the CUDA array \p dst starting at \p hOffsetDst rows
+ * and \p wOffsetDst bytes from the upper left corner, where \p kind
  * specifies the direction of the copy, and must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
@@ -26288,11 +27179,11 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DFromArray(Pointer dst,
  * \p wOffsetSrc + \p width must not exceed the width of the CUDA array \p src.
  *
  * @param dst        - Destination memory address
- * @param wOffsetDst - Destination starting X offset
- * @param hOffsetDst - Destination starting Y offset
+ * @param wOffsetDst - Destination starting X offset (columns in bytes)
+ * @param hOffsetDst - Destination starting Y offset (rows)
  * @param src        - Source memory address
- * @param wOffsetSrc - Source starting X offset
- * @param hOffsetSrc - Source starting Y offset
+ * @param wOffsetSrc - Source starting X offset (columns in bytes)
+ * @param hOffsetSrc - Source starting Y offset (rows)
  * @param width      - Width of matrix transfer (columns in bytes)
  * @param height     - Height of matrix transfer (rows)
  * @param kind       - Type of transfer
@@ -26569,9 +27460,9 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DAsync(Pointer dst, @Ca
  * \brief Copies data between host and device
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the memory
- * area pointed to by \p src to the CUDA array \p dst starting at the
- * upper left corner (\p wOffset, \p hOffset) where \p kind specifies the
- * direction of the copy, and must be one of ::cudaMemcpyHostToHost,
+ * area pointed to by \p src to the CUDA array \p dst starting at \p hOffset
+ * rows and \p wOffset bytes from the upper left corner, where \p kind specifies
+ * the direction of the copy, and must be one of ::cudaMemcpyHostToHost,
  * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
@@ -26591,8 +27482,8 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DAsync(Pointer dst, @Ca
  * streams.
  *
  * @param dst     - Destination memory address
- * @param wOffset - Destination starting X offset
- * @param hOffset - Destination starting Y offset
+ * @param wOffset - Destination starting X offset (columns in bytes)
+ * @param hOffset - Destination starting Y offset (rows)
  * @param src     - Source memory address
  * @param spitch  - Pitch of source memory
  * @param width   - Width of matrix transfer (columns in bytes)
@@ -26628,9 +27519,9 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArrayAsync(cudaArray
  * \brief Copies data between host and device
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the CUDA
- * array \p srcArray starting at the upper left corner
- * (\p wOffset, \p hOffset) to the memory area pointed to by \p dst, where
- * \p kind specifies the direction of the copy, and must be one of
+ * array \p src starting at \p hOffset rows and \p wOffset bytes from the
+ * upper left corner to the memory area pointed to by \p dst,
+ * where \p kind specifies the direction of the copy, and must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
@@ -26651,8 +27542,8 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArrayAsync(cudaArray
  * @param dst     - Destination memory address
  * @param dpitch  - Pitch of destination memory
  * @param src     - Source memory address
- * @param wOffset - Source starting X offset
- * @param hOffset - Source starting Y offset
+ * @param wOffset - Source starting X offset (columns in bytes)
+ * @param hOffset - Source starting Y offset (rows)
  * @param width   - Width of matrix transfer (columns in bytes)
  * @param height  - Height of matrix transfer (rows)
  * @param kind    - Type of transfer
@@ -27395,8 +28286,8 @@ public static native @Cast("cudaError_t") int cudaMemRangeGetAttributes(@Cast("v
  * @deprecated
  *
  * Copies \p count bytes from the memory area pointed to by \p src to the
- * CUDA array \p dst starting at the upper left corner
- * (\p wOffset, \p hOffset), where \p kind specifies the direction
+ * CUDA array \p dst starting at \p hOffset rows and \p wOffset bytes from
+ * the upper left corner, where \p kind specifies the direction
  * of the copy, and must be one of ::cudaMemcpyHostToHost,
  * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
@@ -27405,8 +28296,8 @@ public static native @Cast("cudaError_t") int cudaMemRangeGetAttributes(@Cast("v
  * allowed on systems that support unified virtual addressing.
  *
  * @param dst     - Destination memory address
- * @param wOffset - Destination starting X offset
- * @param hOffset - Destination starting Y offset
+ * @param wOffset - Destination starting X offset (columns in bytes)
+ * @param hOffset - Destination starting Y offset (rows)
  * @param src     - Source memory address
  * @param count   - Size in bytes to copy
  * @param kind    - Type of transfer
@@ -27437,9 +28328,9 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyToArray(cuda
  *
  * @deprecated
  *
- * Copies \p count bytes from the CUDA array \p src starting at the upper
- * left corner (\p wOffset, hOffset) to the memory area pointed to by \p dst,
- * where \p kind specifies the direction of the copy, and must be one of
+ * Copies \p count bytes from the CUDA array \p src starting at \p hOffset rows
+ * and \p wOffset bytes from the upper left corner to the memory area pointed to
+ * by \p dst, where \p kind specifies the direction of the copy, and must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
@@ -27448,8 +28339,8 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyToArray(cuda
  *
  * @param dst     - Destination memory address
  * @param src     - Source memory address
- * @param wOffset - Source starting X offset
- * @param hOffset - Source starting Y offset
+ * @param wOffset - Source starting X offset (columns in bytes)
+ * @param hOffset - Source starting Y offset (rows)
  * @param count   - Size in bytes to copy
  * @param kind    - Type of transfer
  *
@@ -27479,10 +28370,10 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyFromArray(Po
  *
  * @deprecated
  *
- * Copies \p count bytes from the CUDA array \p src starting at the upper
- * left corner (\p wOffsetSrc, \p hOffsetSrc) to the CUDA array \p dst
- * starting at the upper left corner (\p wOffsetDst, \p hOffsetDst) where
- * \p kind specifies the direction of the copy, and must be one of
+ * Copies \p count bytes from the CUDA array \p src starting at \p hOffsetSrc
+ * rows and \p wOffsetSrc bytes from the upper left corner to the CUDA array
+ * \p dst starting at \p hOffsetDst rows and \p wOffsetDst bytes from the upper
+ * left corner, where \p kind specifies the direction of the copy, and must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
@@ -27490,11 +28381,11 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyFromArray(Po
  * allowed on systems that support unified virtual addressing.
  *
  * @param dst        - Destination memory address
- * @param wOffsetDst - Destination starting X offset
- * @param hOffsetDst - Destination starting Y offset
+ * @param wOffsetDst - Destination starting X offset (columns in bytes)
+ * @param hOffsetDst - Destination starting Y offset (rows)
  * @param src        - Source memory address
- * @param wOffsetSrc - Source starting X offset
- * @param hOffsetSrc - Source starting Y offset
+ * @param wOffsetSrc - Source starting X offset (columns in bytes)
+ * @param hOffsetSrc - Source starting Y offset (rows)
  * @param count      - Size in bytes to copy
  * @param kind       - Type of transfer
  *
@@ -27524,8 +28415,8 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyArrayToArray
  * @deprecated
  *
  * Copies \p count bytes from the memory area pointed to by \p src to the
- * CUDA array \p dst starting at the upper left corner
- * (\p wOffset, \p hOffset), where \p kind specifies the
+ * CUDA array \p dst starting at \p hOffset rows and \p wOffset bytes from
+ * the upper left corner, where \p kind specifies the
  * direction of the copy, and must be one of ::cudaMemcpyHostToHost,
  * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
@@ -27540,8 +28431,8 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyArrayToArray
  * is non-zero, the copy may overlap with operations in other streams.
  *
  * @param dst     - Destination memory address
- * @param wOffset - Destination starting X offset
- * @param hOffset - Destination starting Y offset
+ * @param wOffset - Destination starting X offset (columns in bytes)
+ * @param hOffset - Destination starting Y offset (rows)
  * @param src     - Source memory address
  * @param count   - Size in bytes to copy
  * @param kind    - Type of transfer
@@ -27575,9 +28466,9 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyToArrayAsync
  *
  * @deprecated
  *
- * Copies \p count bytes from the CUDA array \p src starting at the upper
- * left corner (\p wOffset, hOffset) to the memory area pointed to by \p dst,
- * where \p kind specifies the direction of the copy, and must be one of
+ * Copies \p count bytes from the CUDA array \p src starting at \p hOffset rows
+ * and \p wOffset bytes from the upper left corner to the memory area pointed to
+ * by \p dst, where \p kind specifies the direction of the copy, and must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
  * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
@@ -27592,8 +28483,8 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyToArrayAsync
  *
  * @param dst     - Destination memory address
  * @param src     - Source memory address
- * @param wOffset - Source starting X offset
- * @param hOffset - Source starting Y offset
+ * @param wOffset - Source starting X offset (columns in bytes)
+ * @param hOffset - Source starting Y offset (rows)
  * @param count   - Size in bytes to copy
  * @param kind    - Type of transfer
  * @param stream  - Stream identifier
@@ -27681,7 +28572,9 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyFromArrayAsy
  * \note_init_rt
  * \note_callback
  *
- * @see ::cuMemAllocAsync, ::cudaMallocFromPoolAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceSetMemPool, ::cudaDeviceGetMemPool, ::cudaMemPoolSetAccess, ::cudaMemPoolSetAttribute, ::cudaMemPoolGetAttribute
+ * @see ::cuMemAllocAsync,
+ * \ref ::cudaMallocAsync(void** ptr, size_t size, cudaMemPool_t memPool, cudaStream_t stream)  "cudaMallocAsync (C++ API)", 
+ * ::cudaMallocFromPoolAsync, ::cudaFreeAsync, ::cudaDeviceSetMemPool, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceGetMemPool, ::cudaMemPoolSetAccess, ::cudaMemPoolSetAttribute, ::cudaMemPoolGetAttribute
  */
 public static native @Cast("cudaError_t") int cudaMallocAsync(@Cast("void**") PointerPointer devPtr, @Cast("size_t") long size, CUstream_st hStream);
 public static native @Cast("cudaError_t") int cudaMallocAsync(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size, CUstream_st hStream);
@@ -27730,7 +28623,7 @@ public static native @Cast("cudaError_t") int cudaFreeAsync(Pointer devPtr, CUst
  * ::cudaErrorInvalidValue
  * \note_callback
  *
- * @see ::cuMemPoolTrimTo, ::cudaMallocAsync, ::cudaFreeAsync
+ * @see ::cuMemPoolTrimTo, ::cudaMallocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceGetMemPool, ::cudaMemPoolCreate
  */
 public static native @Cast("cudaError_t") int cudaMemPoolTrimTo(CUmemPoolHandle_st memPool, @Cast("size_t") long minBytesToKeep);
 
@@ -27767,7 +28660,8 @@ public static native @Cast("cudaError_t") int cudaMemPoolTrimTo(CUmemPoolHandle_
  * ::cudaErrorInvalidValue
  * \note_callback
  *
- * @see ::cuMemPoolSetAttribute, ::cudaAllocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool
+ * @see ::cuMemPoolSetAttribute, ::cudaMallocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceGetMemPool, ::cudaMemPoolCreate
+ <p>
  */
 public static native @Cast("cudaError_t") int cudaMemPoolSetAttribute(CUmemPoolHandle_st memPool, @Cast("cudaMemPoolAttr") int attr, Pointer value );
 
@@ -27804,7 +28698,8 @@ public static native @Cast("cudaError_t") int cudaMemPoolSetAttribute(CUmemPoolH
  * ::cudaErrorInvalidValue
  * \note_callback
  *
- * @see ::cuMemPoolGetAttribute, ::cudaAllocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool
+ * @see ::cuMemPoolGetAttribute, ::cudaMallocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceGetMemPool, ::cudaMemPoolCreate
+ <p>
  */
 public static native @Cast("cudaError_t") int cudaMemPoolGetAttribute(CUmemPoolHandle_st memPool, @Cast("cudaMemPoolAttr") int attr, Pointer value );
 
@@ -27819,7 +28714,7 @@ public static native @Cast("cudaError_t") int cudaMemPoolGetAttribute(CUmemPoolH
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * @see ::cuMemPoolSetAccess, ::cudaMemPoolGetAcces, ::cudaMallocAsync, cudaMemFreeAsync
+ * @see ::cuMemPoolSetAccess, ::cudaMemPoolGetAccess, ::cudaMallocAsync, cudaFreeAsync
  */
 public static native @Cast("cudaError_t") int cudaMemPoolSetAccess(CUmemPoolHandle_st memPool, @Const cudaMemAccessDesc descList, @Cast("size_t") long count);
 
@@ -27853,7 +28748,8 @@ public static native @Cast("cudaError_t") int cudaMemPoolGetAccess(@Cast("cudaMe
  * ::cudaErrorInvalidValue,
  * ::cudaErrorNotSupported
  *
- * @see ::cuMemPoolCreate, ::cudaDeviceSetMemPool, ::cudaMallocFromPoolAsync, ::cudaMemPoolExportToShareableHandle
+ * @see ::cuMemPoolCreate, ::cudaDeviceSetMemPool, ::cudaMallocFromPoolAsync, ::cudaMemPoolExportToShareableHandle, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceGetMemPool
+ <p>
  */
 public static native @Cast("cudaError_t") int cudaMemPoolCreate(@ByPtrPtr CUmemPoolHandle_st memPool, @Const cudaMemPoolProps poolProps);
 
@@ -27875,7 +28771,7 @@ public static native @Cast("cudaError_t") int cudaMemPoolCreate(@ByPtrPtr CUmemP
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * @see cuMemPoolDestroy, ::cudaFreeAsync, ::cudaDeviceSetMemPool, ::cudaDeviceGetMemPool, ::cudaDeviceGetDefaultMemPool
+ * @see cuMemPoolDestroy, ::cudaFreeAsync, ::cudaDeviceSetMemPool, ::cudaDeviceGetDefaultMemPool, ::cudaDeviceGetMemPool, ::cudaMemPoolCreate
  */
 public static native @Cast("cudaError_t") int cudaMemPoolDestroy(CUmemPoolHandle_st memPool);
 
@@ -27905,7 +28801,9 @@ public static native @Cast("cudaError_t") int cudaMemPoolDestroy(CUmemPoolHandle
  * ::cudaErrorNotSupported,
  * ::cudaErrorOutOfMemory
  *
- * @see ::cuMemAllocFromPoolAsync, ::cudaMallocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaMemPoolCreate, ::cudaMemPoolSetAccess, ::cudaMemPoolSetAttribute
+ * @see ::cuMemAllocFromPoolAsync,
+ * \ref ::cudaMallocAsync(void** ptr, size_t size, cudaMemPool_t memPool, cudaStream_t stream)  "cudaMallocAsync (C++ API)", 
+ * ::cudaMallocAsync, ::cudaFreeAsync, ::cudaDeviceGetDefaultMemPool, ::cudaMemPoolCreate, ::cudaMemPoolSetAccess, ::cudaMemPoolSetAttribute
  */
 public static native @Cast("cudaError_t") int cudaMallocFromPoolAsync(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size, CUmemPoolHandle_st memPool, CUstream_st stream);
 public static native @Cast("cudaError_t") int cudaMallocFromPoolAsync(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size, CUmemPoolHandle_st memPool, CUstream_st stream);
@@ -27921,7 +28819,7 @@ public static native @Cast("cudaError_t") int cudaMallocFromPoolAsync(@Cast("voi
  *
  * \note: To create an IPC capable mempool, create a mempool with a CUmemAllocationHandleType other than cudaMemHandleTypeNone.
  *
- * @param handle_out [out]  - Returned OS handle
+ * @param handle_out [out]  - pointer to the location in which to store the requested handle 
  * @param pool [in]         - pool to export
  * @param handleType [in]   - the type of handle to create
  * @param flags [in]        - must be 0
@@ -27998,7 +28896,7 @@ public static native @Cast("cudaError_t") int cudaMemPoolExportPointer(cudaMemPo
  * \note The ::cudaFreeAsync api may be used in the exporting process before
  *       the ::cudaFreeAsync operation completes in its stream as long as the
  *       ::cudaFreeAsync in the exporting process specifies a stream with
- *       a stream dependency on the importing process's ::cudaMemFreeAsync.
+ *       a stream dependency on the importing process's ::cudaFreeAsync.
  *
  * @param ptr_out [out]  - pointer to imported memory
  * @param pool [in]      - pool from which to import
@@ -31965,7 +32863,240 @@ public static native @Cast("cudaError_t") int cudaGraphExecDestroy(CUgraphExec_s
  */
 public static native @Cast("cudaError_t") int cudaGraphDestroy(CUgraph_st graph);
 
+/**
+ * \brief Write a DOT file describing graph structure
+ *
+ * Using the provided \p graph, write to \p path a DOT formatted description of the graph.
+ * By default this includes the graph topology, node types, node id, kernel names and memcpy direction.
+ * \p flags can be specified to write more detailed information about each node type such as
+ * parameter values, kernel attributes, node and function handles.
+ *
+ * @param graph - The graph to create a DOT file from
+ * @param path  - The path to write the DOT file to
+ * @param flags - Flags from cudaGraphDebugDotFlags for specifying which additional node information to write
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorOperatingSystem
+ */
+public static native @Cast("cudaError_t") int cudaGraphDebugDotPrint(CUgraph_st graph, @Cast("const char*") BytePointer path, @Cast("unsigned int") int flags);
+public static native @Cast("cudaError_t") int cudaGraphDebugDotPrint(CUgraph_st graph, String path, @Cast("unsigned int") int flags);
+
+/**
+ * \brief Create a user object
+ *
+ * Create a user object with the specified destructor callback and initial reference count. The
+ * initial references are owned by the caller.
+ *
+ * Destructor callbacks cannot make CUDA API calls and should avoid blocking behavior, as they
+ * are executed by a shared internal thread. Another thread may be signaled to perform such
+ * actions, if it does not block forward progress of tasks scheduled through CUDA.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param object_out      - Location to return the user object handle
+ * @param ptr             - The pointer to pass to the destroy function
+ * @param destroy         - Callback to free the user object when it is no longer in use
+ * @param initialRefcount - The initial refcount to create the object with, typically 1. The
+ *                          initial references are owned by the calling thread.
+ * @param flags           - Currently it is required to pass ::cudaUserObjectNoDestructorSync,
+ *                          which is the only defined flag. This indicates that the destroy
+ *                          callback cannot be waited on by any CUDA API. Users requiring
+ *                          synchronization of the callback should signal its completion
+ *                          manually.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaUserObjectRetain,
+ * ::cudaUserObjectRelease,
+ * ::cudaGraphRetainUserObject,
+ * ::cudaGraphReleaseUserObject,
+ * ::cudaGraphCreate
+ */
+public static native @Cast("cudaError_t") int cudaUserObjectCreate(@ByPtrPtr CUuserObject_st object_out, Pointer ptr, cudaHostFn_t destroy, @Cast("unsigned int") int initialRefcount, @Cast("unsigned int") int flags);
+
+/**
+ * \brief Retain a reference to a user object
+ *
+ * Retains new references to a user object. The new references are owned by the caller.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param object - The object to retain
+ * @param count  - The number of references to retain, typically 1. Must be nonzero
+ *                 and not larger than INT_MAX.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaUserObjectCreate,
+ * ::cudaUserObjectRelease,
+ * ::cudaGraphRetainUserObject,
+ * ::cudaGraphReleaseUserObject,
+ * ::cudaGraphCreate
+ */
+public static native @Cast("cudaError_t") int cudaUserObjectRetain(CUuserObject_st object, @Cast("unsigned int") int count/*=1*/);
+public static native @Cast("cudaError_t") int cudaUserObjectRetain(CUuserObject_st object);
+
+/**
+ * \brief Release a reference to a user object
+ *
+ * Releases user object references owned by the caller. The object's destructor is invoked if
+ * the reference count reaches zero.
+ *
+ * It is undefined behavior to release references not owned by the caller, or to use a user
+ * object handle after all references are released.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param object - The object to release
+ * @param count  - The number of references to release, typically 1. Must be nonzero
+ *                 and not larger than INT_MAX.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaUserObjectCreate,
+ * ::cudaUserObjectRetain,
+ * ::cudaGraphRetainUserObject,
+ * ::cudaGraphReleaseUserObject,
+ * ::cudaGraphCreate
+ */
+public static native @Cast("cudaError_t") int cudaUserObjectRelease(CUuserObject_st object, @Cast("unsigned int") int count/*=1*/);
+public static native @Cast("cudaError_t") int cudaUserObjectRelease(CUuserObject_st object);
+
+/**
+ * \brief Retain a reference to a user object from a graph
+ *
+ * Creates or moves user object references that will be owned by a CUDA graph.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param graph  - The graph to associate the reference with
+ * @param object - The user object to retain a reference for
+ * @param count  - The number of references to add to the graph, typically 1. Must be
+ *                 nonzero and not larger than INT_MAX.
+ * @param flags  - The optional flag ::cudaGraphUserObjectMove transfers references
+ *                 from the calling thread, rather than create new references. Pass 0
+ *                 to create new references.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaUserObjectCreate
+ * ::cudaUserObjectRetain,
+ * ::cudaUserObjectRelease,
+ * ::cudaGraphReleaseUserObject,
+ * ::cudaGraphCreate
+ */
+public static native @Cast("cudaError_t") int cudaGraphRetainUserObject(CUgraph_st graph, CUuserObject_st object, @Cast("unsigned int") int count/*=1*/, @Cast("unsigned int") int flags/*=0*/);
+public static native @Cast("cudaError_t") int cudaGraphRetainUserObject(CUgraph_st graph, CUuserObject_st object);
+
+/**
+ * \brief Release a user object reference from a graph
+ *
+ * Releases user object references owned by a graph.
+ *
+ * See CUDA User Objects in the CUDA C++ Programming Guide for more information on user objects.
+ *
+ * @param graph  - The graph that will release the reference
+ * @param object - The user object to release a reference for
+ * @param count  - The number of references to release, typically 1. Must be nonzero
+ *                 and not larger than INT_MAX.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaUserObjectCreate
+ * ::cudaUserObjectRetain,
+ * ::cudaUserObjectRelease,
+ * ::cudaGraphRetainUserObject,
+ * ::cudaGraphCreate
+ */
+public static native @Cast("cudaError_t") int cudaGraphReleaseUserObject(CUgraph_st graph, CUuserObject_st object, @Cast("unsigned int") int count/*=1*/);
+public static native @Cast("cudaError_t") int cudaGraphReleaseUserObject(CUgraph_st graph, CUuserObject_st object);
+
 /** \} */ /* END CUDART_GRAPH */
+
+/**
+ * \defgroup CUDART_DRIVER_ENTRY_POINT Driver Entry Point Access
+ *
+ * ___MANBRIEF___ driver entry point access functions of the CUDA runtime API
+ * (___CURRENT_FILE___) ___ENDMANBRIEF___
+ *
+ * This section describes the driver entry point access functions of CUDA
+ * runtime application programming interface.
+ *
+ * \{
+ */
+
+/**
+ * \brief Returns the requested driver API function pointer
+ *
+ * Returns in \p **funcPtr the address of the CUDA driver function for the requested flags.
+ *
+ * For a requested driver symbol, if the CUDA version in which the driver symbol was
+ * introduced is less than or equal to the CUDA runtime version, the API will return
+ * the function pointer to the corresponding versioned driver function.
+ *
+ * The pointer returned by the API should be cast to a function pointer matching the
+ * requested driver function's definition in the API header file. The function pointer
+ * typedef can be picked up from the corresponding typedefs header file. For example,
+ * cudaTypedefs.h consists of function pointer typedefs for driver APIs defined in cuda.h.
+ *
+ * The API will return ::cudaErrorSymbolNotFound if the requested driver function is not
+ * supported on the platform, no ABI compatible driver function exists for the CUDA runtime
+ * version or if the driver symbol is invalid.
+ *
+ * The requested flags can be:
+ * - ::cudaEnableDefault: This is the default mode. This is equivalent to
+ *   ::cudaEnablePerThreadDefaultStream if the code is compiled with
+ *   --default-stream per-thread compilation flag or the macro CUDA_API_PER_THREAD_DEFAULT_STREAM
+ *   is defined; ::cudaEnableLegacyStream otherwise.
+ * - ::cudaEnableLegacyStream: This will enable the search for all driver symbols
+ *   that match the requested driver symbol name except the corresponding per-thread versions.
+ * - ::cudaEnablePerThreadDefaultStream: This will enable the search for all
+ *   driver symbols that match the requested driver symbol name including the per-thread
+ *   versions. If a per-thread version is not found, the API will return the legacy version
+ *   of the driver function.
+ *
+ * @param symbol - The base name of the driver API function to look for. As an example,
+ *                 for the driver API ::cuMemAlloc_v2, \p symbol would be cuMemAlloc.
+ *                 Note that the API will use the CUDA runtime version to return the
+ *                 address to the most recent ABI compatible driver symbol, ::cuMemAlloc
+ *                 or ::cuMemAlloc_v2.
+ * @param funcPtr - Location to return the function pointer to the requested driver function
+ * @param flags -  Flags to specify search options.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorSymbolNotFound
+ * \note_version_mixing
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cuGetProcAddress
+ */
+public static native @Cast("cudaError_t") int cudaGetDriverEntryPoint(@Cast("const char*") BytePointer symbol, @Cast("void**") PointerPointer funcPtr, @Cast("unsigned long long") long flags);
+public static native @Cast("cudaError_t") int cudaGetDriverEntryPoint(@Cast("const char*") BytePointer symbol, @Cast("void**") @ByPtrPtr Pointer funcPtr, @Cast("unsigned long long") long flags);
+public static native @Cast("cudaError_t") int cudaGetDriverEntryPoint(String symbol, @Cast("void**") @ByPtrPtr Pointer funcPtr, @Cast("unsigned long long") long flags);
+
+/** \} */ /* END CUDART_DRIVER_ENTRY_POINT */
 
 /** \cond impl_private */
 public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const void**") PointerPointer ppExportTable, @Const cudaUUID_t pExportTableId);
