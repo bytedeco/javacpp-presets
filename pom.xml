@@ -1145,6 +1145,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1158,6 +1159,8 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>opencl</module>
+        <module>onnxruntime</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>

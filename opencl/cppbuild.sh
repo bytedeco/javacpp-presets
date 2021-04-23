@@ -22,6 +22,22 @@ tar --totals -xf ../OpenCL-ICD-Loader-$OPENCL_VERSION.tar.bz2
 tar --totals -xf ../OpenCL-CLHPP-$OPENCL_VERSION.tar.bz2
 
 case $PLATFORM in
+    linux-arm64)
+        export CC="aarch64-linux-gnu-gcc"
+        export CXX="aarch64-linux-gnu-g++"
+        cd OpenCL-Headers-$OPENCL_VERSION
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH .
+        make -j $MAKEJ
+        make install/strip
+        cd ../OpenCL-ICD-Loader-$OPENCL_VERSION
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOPENCL_ICD_LOADER_HEADERS_DIR=$INSTALL_PATH/include .
+        make -j $MAKEJ
+        make install/strip
+        cd ../OpenCL-CLHPP-$OPENCL_VERSION
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DOPENCL_INCLUDE_DIR=$INSTALL_PATH/include -DOPENCL_LIB_DIR=$INSTALL_PATH/lib -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     linux-x86_64)
         cd OpenCL-Headers-$OPENCL_VERSION
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH .
