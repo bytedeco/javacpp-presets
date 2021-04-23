@@ -30,9 +30,11 @@ runs:
           echo Setting up tools for linux-armhf build
           dpkg --add-architecture i386
           echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main >> /etc/apt/sources.list
+          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu xenial main >> /etc/apt/sources.list
+          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
           apt-get update
           apt-get -y install python python2.7 python-minimal python2.7-minimal libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
-          apt-get -y install pkg-config ccache clang default-jre-headless openjdk-8-jdk-headless ant python python3-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev libbz2-dev zlib1g-dev
+          apt-get -y install pkg-config ccache clang default-jre-headless openjdk-8-jdk-headless ant python python3.6-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev libbz2-dev zlib1g-dev
           curl -LOJ https://github.com/raspberrypi/tools/archive/master.tar.gz
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
           mkdir -p tools userland
@@ -56,19 +58,25 @@ runs:
           echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse >> /etc/apt/sources.list
           echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse >> /etc/apt/sources.list
           echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main >> /etc/apt/sources.list
+          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu xenial main >> /etc/apt/sources.list
           sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
           apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
+          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
           apt-get update
           apt-get -y install python python2.7 python-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-          apt-get -y install pkg-config ccache clang gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch openjdk-8-jdk-headless ant python python3-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
+          apt-get -y install pkg-config ccache clang gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch openjdk-8-jdk-headless ant python python3.6-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/"
         fi
 
         find /usr/lib/jvm/default-java/
+        curl -LO https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
         curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         curl -LO https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
+        tar -xzf cmake-3.16.6-Linux-x86_64.tar.gz -C /opt/
         tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
         unzip gradle-6.7.1-bin.zip -d /opt/
+        ln -sf /usr/bin/python3.6 /usr/bin/python3
+        ln -sf /opt/cmake-3.16.6-Linux-x86_64/bin/* /usr/bin/
         ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
         ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
 
