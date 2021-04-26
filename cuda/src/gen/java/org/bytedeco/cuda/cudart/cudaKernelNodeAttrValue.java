@@ -12,7 +12,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 
 
 /**
- * Graph kernel node attributes union, used with ::cudaKernelNodeSetAttribute/::cudaKernelNodeGetAttribute
+ * Graph kernel node attributes union, used with ::cudaGraphKernelNodeSetAttribute/::cudaGraphKernelNodeGetAttribute
  */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class cudaKernelNodeAttrValue extends Pointer {

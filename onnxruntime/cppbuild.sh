@@ -7,24 +7,14 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export ARCH_FLAGS=
+export DNNL_FLAGS="--use_dnnl"
+export OPENMP_FLAGS="--use_openmp"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
 export CUDA_HOME="/usr/local/cuda"
 export CUDNN_HOME="/usr/local/cuda"
 export MAKEFLAGS="-j $MAKEJ"
 export PYTHON_BIN_PATH=$(which python3)
-export OPENMP_FLAGS="--use_openmp"
-case $PLATFORM in
-    windows-*)
-        if [[ -n "${CUDA_PATH:-}" ]]; then
-            export CUDACXX="$CUDA_PATH/bin/nvcc"
-            export CUDA_HOME="$CUDA_PATH"
-            export CUDNN_HOME="$CUDA_PATH"
-        fi
-        export CC="cl.exe"
-        export CXX="cl.exe"
-        export PYTHON_BIN_PATH=$(which python.exe)
-        ;;
-esac
 
 export GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
@@ -44,8 +34,38 @@ fi
 cd onnxruntime
 git reset --hard
 git checkout v$ONNXRUNTIME
-git submodule update --init --recursive --jobs $MAKEJ
+git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
+
+case $PLATFORM in
+    linux-arm64)
+        export CC="aarch64-linux-gnu-gcc"
+        export CXX="aarch64-linux-gnu-g++"
+        export ARCH_FLAGS="--arm64 --path_to_protoc_exe $INSTALL_PATH/build/protoc"
+        export DNNL_FLAGS=
+        ;;
+    windows-*)
+        if [[ -n "${CUDA_PATH:-}" ]]; then
+            export CUDACXX="$CUDA_PATH/bin/nvcc"
+            export CUDA_HOME="$CUDA_PATH"
+            export CUDNN_HOME="$CUDA_PATH"
+        fi
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        export PYTHON_BIN_PATH=$(which python.exe)
+        ;;
+esac
+
+if [[ -n "$ARCH_FLAGS" ]]; then
+    # build host version of protoc
+    cd ../build
+    CC= CXX= "$CMAKE" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF ../onnxruntime/cmake/external/protobuf/cmake
+    CC= CXX= "$CMAKE" --build . --parallel $MAKEJ
+    cd ../onnxruntime
+fi
+
+# allow cross compilation for linux-arm64
+sedinplace 's/if (args.arm or args.arm64):/if (False):/g' tools/ci_build/build.py
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
@@ -95,7 +115,7 @@ ortApiHandle = initialiseAPIBase(ORT_API_VERSION_1);\
 sedinplace 's/return metadataJava/return (jstring)metadataJava/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib --use_dnnl $OPENMP_FLAGS $GPU_FLAGS
+"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $OPENMP_FLAGS $GPU_FLAGS
 
 # install headers and libraries in standard directories
 cp -r include/* ../include

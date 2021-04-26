@@ -1,11 +1,14 @@
 
+ * Add Windows build for ONNX ([issue #983](https://github.com/bytedeco/javacpp-presets/issues/983))
+ * Add `linux-arm64` builds to presets for DNNL, OpenCL, and ONNX Runtime
+ * Build FFmpeg with libxml2, enabling support for DASH demuxing ([pull #1033](https://github.com/bytedeco/javacpp-presets/pull/1033))
  * Add `@MemberGetter` for `av_log_default_callback()` in presets for FFmpeg ([issue #812](https://github.com/bytedeco/javacpp-presets/issues/812))
  * Include `cudaGL.h` and `cuda_gl_interop.h` header files in presets for CUDA ([pull #1027](https://github.com/bytedeco/javacpp-presets/pull/1027))
  * Add presets for NVIDIA Video Codec SDK 11.0.10 ([pull #1020](https://github.com/bytedeco/javacpp-presets/pull/1020)), PyTorch 1.8.1 ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623)), ModSecurity ([pull #1012](https://github.com/bytedeco/javacpp-presets/pull/1012))
  * Map `std::vector<cv::Range>` to `RangeVector` in `opencv_core.Mat` for convenience ([issue bytedeco/javacv#1607](https://github.com/bytedeco/javacv/issues/1607))
  * Include `genericaliasobject.h`, `context.h`, `tracemalloc.h`, and `datetime.h` for CPython ([issue #1017](https://github.com/bytedeco/javacpp-presets/issues/1017))
  * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))
- * Upgrade presets for OpenCV 4.5.2, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), MKL 2021.2, OpenBLAS 0.3.14, DNNL 2.2.1, CPython 3.9.4, NumPy 1.20.2, SciPy 1.6.2, Gym 0.18.1, CUDA 11.2.2
+ * Upgrade presets for OpenCV 4.5.2, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), MKL 2021.2, OpenBLAS 0.3.14, DNNL 2.2.1, CPython 3.9.4, NumPy 1.20.2, SciPy 1.6.2, Gym 0.18.1, CUDA 11.3.0, NCCL 2.9.6, ONNX 1.9.0
 
 ### March 8, 2021 version 1.5.5
  * Bundle LLD executable in presets for LLVM as required by TVM on Windows

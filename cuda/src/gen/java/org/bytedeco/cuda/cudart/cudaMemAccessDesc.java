@@ -11,6 +11,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 
+/**
+ * Memory access descriptor
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class cudaMemAccessDesc extends Pointer {
     static { Loader.load(); }
@@ -29,6 +32,8 @@ public class cudaMemAccessDesc extends Pointer {
         return new cudaMemAccessDesc((Pointer)this).position(position + i);
     }
 
+    /** Location on which the request is to change it's accessibility */
     public native @ByRef cudaMemLocation location(); public native cudaMemAccessDesc location(cudaMemLocation setter);
+    /** ::CUmemProt accessibility flags to set on the request */
     public native @Cast("cudaMemAccessFlags") int flags(); public native cudaMemAccessDesc flags(int setter);
 }
