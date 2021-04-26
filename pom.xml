@@ -1570,6 +1570,7 @@
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
+        <module>onnx</module>
         <module>onnxruntime</module>
         <module>tvm</module>
         <module>liquidfun</module>
