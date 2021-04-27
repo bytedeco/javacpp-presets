@@ -153,6 +153,7 @@ runs:
         gradle --version
         mvn -version
         gpg --version
+        python3 --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)
