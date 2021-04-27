@@ -167,7 +167,7 @@ case $PLATFORM in
         make install_dev
         cd ../srt-$LIBSRT_VERSION
         patch -Np1 < ../../../srt-android.patch || true
-        CFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" CXXFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$INSTALL_PATH/lib/ $ANDROID_FLAGS" $CMAKE --verbose -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG .
+        CFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" CXXFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$INSTALL_PATH/lib/ $ANDROID_FLAGS" $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../openh264-$OPENH264_VERSION
@@ -295,7 +295,7 @@ EOF
         make install_dev
         cd ../srt-$LIBSRT_VERSION
         patch -Np1 < ../../../srt-android.patch || true
-        CFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" CXXFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$INSTALL_PATH/lib/ $ANDROID_FLAGS" $CMAKE --verbose -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG .
+        CFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" CXXFLAGS="-I$INSTALL_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$INSTALL_PATH/lib/ $ANDROID_FLAGS" $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../openh264-$OPENH264_VERSION
@@ -601,7 +601,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -1590,7 +1590,7 @@ EOF
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
-        CC="gcc -m64" CXX="g++ -m64"  CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DENABLE_STDCXX_SYNC=ON .
+        CC="gcc -m64" CXX="g++ -m64" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DENABLE_STDCXX_SYNC=ON .
         make -j $MAKEJ V=0
         make install
         cd ../openh264-$OPENH264_VERSION
