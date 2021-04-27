@@ -72,6 +72,9 @@ export TVM_LIBRARY_PATH=`pwd`
 sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can_overflow/g' include/tvm/runtime/ndarray.h
 sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 
+# https://github.com/apache/tvm/pull/6717
+sedinplace 's/(lanes, \/\*Scalable=\*\/false)/::getFixed(lanes)/g' src/target/llvm/codegen_llvm.cc
+
 # https://github.com/apache/tvm/pull/6752
 patch -Np1 < ../../../tvm.patch
 
