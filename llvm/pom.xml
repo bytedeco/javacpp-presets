@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>llvm</artifactId>
-  <version>11.1.0-${project.parent.version}</version>
+  <version>12.0.0-${project.parent.version}</version>
   <name>JavaCPP Presets for LLVM</name>
 
   <dependencies>
@@ -32,6 +32,13 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/polly/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
+          </includePaths>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

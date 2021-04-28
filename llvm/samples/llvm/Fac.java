@@ -59,7 +59,7 @@ public class Fac {
         }
 
         LLVMPassManagerRef pass = LLVMCreatePassManager();
-        LLVMAddConstantPropagationPass(pass);
+        // LLVMAddConstantPropagationPass(pass);
         LLVMAddInstructionCombiningPass(pass);
         LLVMAddPromoteMemoryToRegisterPass(pass);
         // LLVMAddDemoteMemoryToRegisterPass(pass); // Demotes every possible value to memory
