@@ -8,7 +8,7 @@
  * Map `std::vector<cv::Range>` to `RangeVector` in `opencv_core.Mat` for convenience ([issue bytedeco/javacv#1607](https://github.com/bytedeco/javacv/issues/1607))
  * Include `genericaliasobject.h`, `context.h`, `tracemalloc.h`, and `datetime.h` for CPython ([issue #1017](https://github.com/bytedeco/javacpp-presets/issues/1017))
  * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))
- * Upgrade presets for OpenCV 4.5.2, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), MKL 2021.2, OpenBLAS 0.3.14, DNNL 2.2.1, CPython 3.9.4, NumPy 1.20.2, SciPy 1.6.2, Gym 0.18.1, CUDA 11.3.0, NCCL 2.9.6, ONNX 1.9.0
+ * Upgrade presets for OpenCV 4.5.2, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), MKL 2021.2, OpenBLAS 0.3.14, DNNL 2.2.1, CPython 3.9.4, NumPy 1.20.2, SciPy 1.6.2, Gym 0.18.1, LLVM 12.0.0 ([pull #1029](https://github.com/bytedeco/javacpp-presets/pull/1029)), CUDA 11.3.0, NCCL 2.9.6, ONNX 1.9.0
 
 ### March 8, 2021 version 1.5.5
  * Bundle LLD executable in presets for LLVM as required by TVM on Windows
