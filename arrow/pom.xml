@@ -14,7 +14,18 @@
   <version>3.0.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Arrow</name>
 
+  <properties>
+    <javacpp.nativeRequires>
+      requires org.bytedeco.llvm.${javacpp.platform.module};
+    </javacpp.nativeRequires>
+  </properties>
+
   <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>llvm</artifactId>
+      <version>12.0.0-${project.parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
@@ -32,6 +43,48 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>llvm-platform</artifactId>
+            <version>12.0.0-${project.parent.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <classPaths>
+            <classPath>${basedir}/../llvm/target/classes/</classPath>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
+          <includePaths>
+            <includePath>${basedir}/../llvm/src/main/resources/org/bytedeco/llvm/include/</includePath>
+            <includePath>${basedir}/../llvm/target/classes/org/bytedeco/llvm/include/</includePath>
+            <includePath>${basedir}/../llvm/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/../llvm/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/../llvm/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
+          </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/llvm/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/llvm/include/</includeResource>
+            <includeResource>/org/bytedeco/llvm/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/llvm/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/llvm/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

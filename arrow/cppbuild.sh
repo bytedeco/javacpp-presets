@@ -12,13 +12,10 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=11.1.0
 OPENSSL_VERSION=1.1.1k
 ZLIB_VERSION=1.2.11
 PROTO_VERSION=3.13.0
 ARROW_VERSION=3.0.0
-download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
-download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang-$LLVM_VERSION.src.tar.xz clang-$LLVM_VERSION.src.tar.xz
 download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
 download https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz openssl-$OPENSSL_VERSION.tar.gz
 download http://zlib.net/zlib-$ZLIB_VERSION.tar.gz zlib-$ZLIB_VERSION.tar.gz
@@ -28,40 +25,28 @@ download https://www.apache.org/dist/arrow/arrow-$ARROW_VERSION/apache-arrow-$AR
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
+
+LLVM_PATH="$INSTALL_PATH/../../../llvm/cppbuild/$PLATFORM/"
+LLVM_PATH="${LLVM_PATH//\\//}"
+
 echo "Decompressing archives... (ignore any symlink errors)"
 tar --totals -xzf ../apache-arrow-$ARROW_VERSION.tar.gz
 tar --totals -xzf ../protobuf-$PROTO_VERSION.tar.gz
 tar --totals -xzf ../zlib-$ZLIB_VERSION.tar.gz
 tar --totals -xzf ../openssl-$OPENSSL_VERSION.tar.gz
-tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
 cd apache-arrow-$ARROW_VERSION
 patch -Np1 < ../../../arrow.patch
-sedinplace 's/ARROW_LLVM_VERSIONS "10"/ARROW_LLVM_VERSIONS "11" "10"/g' cpp/CMakeLists.txt
-cd ../llvm-$LLVM_VERSION.src
-sedinplace '/find_package(Git/d' cmake/modules/AddLLVM.cmake cmake/modules/VersionFromVCS.cmake
-mkdir -p build tools
-cd tools
-tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../clang-$LLVM_VERSION.src.tar.xz
-rm -Rf clang
-mv clang-$LLVM_VERSION.src clang
-cd ../build
+sedinplace 's/set(ARROW_LLVM_VERSIONS/set(ARROW_LLVM_VERSIONS "12"/g' cpp/CMakeLists.txt
+
+mkdir -p build
+cd build
 
 COMPONENTS="-DARROW_COMPUTE=ON -DARROW_CSV=ON -DARROW_DATASET=ON -DARROW_FILESYSTEM=ON -DARROW_FLIGHT=ON -DARROW_GANDIVA=ON -DARROW_HDFS=ON -DARROW_JSON=ON -DARROW_ORC=ON -DARROW_PARQUET=ON -DARROW_PLASMA=ON -DARROW_DEPENDENCY_SOURCE=BUNDLED -DARROW_VERBOSE_THIRDPARTY_BUILD=ON -DARROW_USE_GLOG=ON -DARROW_WITH_BROTLI=ON -DARROW_WITH_BZ2=OFF -DARROW_WITH_LZ4=ON -DARROW_WITH_SNAPPY=ON -DARROW_WITH_ZLIB=ON -DARROW_WITH_ZSTD=OFF"
 
 case $PLATFORM in
     linux-armhf)
-        mkdir -p ../tblgen
-        cd ../tblgen
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_DEFAULT_TARGET_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_TARGET_ARCH=ARM -DLLVM_TARGETS_TO_BUILD=ARM -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ llvm-tblgen clang-tblgen
-        TBLGEN=`pwd`
-        mkdir -p ../build
-        cd ../build
         export CC="arm-linux-gnueabihf-gcc"
         export CXX="arm-linux-gnueabihf-g++ -std=c++11"
-        "$CMAKE" -DCMAKE_EXE_LINKER_FLAGS="-ldl" -DCMAKE_SHARED_LINKER_FLAGS="-ldl" -DLLVM_CCACHE_BUILD=ON -DCMAKE_CROSSCOMPILING=True -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLLVM_TABLEGEN="$TBLGEN/bin/llvm-tblgen" -DCLANG_TABLEGEN="$TBLGEN/bin/clang-tblgen" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_DEFAULT_TARGET_TRIPLE=arm-unknown-linux-gnueabihf -DLLVM_TARGET_ARCH=ARM -DLLVM_TARGETS_TO_BUILD=ARM -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ
-        make install
         cd ../../openssl-$OPENSSL_VERSION
         ./Configure linux-generic32 -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=arm-linux-gnueabihf-
         make -s -j $MAKEJ
@@ -72,18 +57,8 @@ case $PLATFORM in
         make install/strip
         ;;
     linux-arm64)
-        mkdir -p ../tblgen
-        cd ../tblgen
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_TARGET_ARCH=AArch64 -DLLVM_TARGETS_TO_BUILD=AArch64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ llvm-tblgen clang-tblgen
-        TBLGEN=`pwd`
-        mkdir -p ../build
-        cd ../build
         export CC="aarch64-linux-gnu-gcc"
         export CXX="aarch64-linux-gnu-g++ -std=c++11"
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_CROSSCOMPILING=True -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLLVM_TABLEGEN="$TBLGEN/bin/llvm-tblgen" -DCLANG_TABLEGEN="$TBLGEN/bin/clang-tblgen" -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=aarch64-unknown-linux-gnu -DLLVM_TARGET_ARCH=AArch64 -DLLVM_TARGETS_TO_BUILD=AArch64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ
-        make install
         cd ../../openssl-$OPENSSL_VERSION
         ./Configure linux-aarch64 -march=armv8-a+crypto -mcpu=cortex-a57+crypto -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu-
         make -s -j $MAKEJ
@@ -94,18 +69,8 @@ case $PLATFORM in
         make install/strip
         ;;
     linux-ppc64le)
-        mkdir -p ../tblgen
-        cd ../tblgen
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_TARGET_ARCH=PowerPC -DLLVM_TARGETS_TO_BUILD=PowerPC -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ llvm-tblgen clang-tblgen
-        TBLGEN=`pwd`
-        mkdir -p ../build
-        cd ../build
         export CC="powerpc64le-linux-gnu-gcc"
         export CXX="powerpc64le-linux-gnu-g++ -std=c++11"
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_CROSSCOMPILING=True -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLLVM_TABLEGEN="$TBLGEN/bin/llvm-tblgen" -DCLANG_TABLEGEN="$TBLGEN/bin/clang-tblgen" -DCMAKE_BUILD_TYPE=Release -DLLVM_HOST_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_DEFAULT_TARGET_TRIPLE=powerpc64le-unknown-linux-gnu -DLLVM_TARGET_ARCH=PowerPC -DLLVM_TARGETS_TO_BUILD=PowerPC -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ
-        make install
         cd ../../openssl-$OPENSSL_VERSION
         ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=powerpc64le-linux-gnu-
         make -s -j $MAKEJ
@@ -118,9 +83,6 @@ case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"
         export CXX="g++ -std=c++11 -m32"
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ
-        make install
         cd ../../openssl-$OPENSSL_VERSION
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
         make -s -j $MAKEJ
@@ -133,24 +95,18 @@ case $PLATFORM in
     linux-x86_64)
         export CC="gcc -m64"
         export CXX="g++ -std=c++11 -m64"
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ
-        make install
         cd ../../openssl-$OPENSSL_VERSION
         ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp
-        "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DLLVM_ROOT="$INSTALL_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" .
+        "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DLLVM_ROOT="$LLVM_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-*)
         export CC="clang"
         export CXX="clang++"
-        "$CMAKE" -DLLVM_CCACHE_BUILD=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        make -j $MAKEJ
-        make install
         cd ../../openssl-$OPENSSL_VERSION
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
         make -s -j $MAKEJ
@@ -164,9 +120,6 @@ case $PLATFORM in
     windows-x86)
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        ninja -j $MAKEJ
-        ninja install
         cd ../..
         unzip -o ../cpython-bin-deps-openssl-bin.zip
         cd cpython-bin-deps-openssl-bin/
@@ -192,9 +145,6 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$PYTHON_BIN_PATH" ..
-        ninja -j $MAKEJ
-        ninja install
         cd ../..
         unzip -o ../cpython-bin-deps-openssl-bin.zip
         cd cpython-bin-deps-openssl-bin/
