@@ -167,14 +167,14 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 4.5.2  https://opencv.org/releases.html
- * FFmpeg 4.3.x  http://ffmpeg.org/download.html
+ * FFmpeg 4.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 1.27.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
- * librealsense2 2.40.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.44.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
@@ -194,15 +194,15 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.20.x  https://github.com/numpy/numpy
  * SciPy 1.6.x  https://github.com/scipy/scipy
  * Gym 0.18.x  https://github.com/openai/gym
- * LLVM 11.1.x  http://llvm.org/releases/download.html
+ * LLVM 12.x.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.80.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.2.x  https://developer.nvidia.com/cuda-downloads
+ * CUDA 11.3.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.1.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.8.x  https://developer.nvidia.com/nccl
+   * NCCL 2.9.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
@@ -210,7 +210,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.8.x  https://github.com/onnx/onnx
+ * ONNX 1.9.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.7.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/tvm

@@ -20,7 +20,7 @@ runs:
         if [[ "$CENTOS_VERSION" == "6" ]]; then
           sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/6\/sclo/6.10\/sclo/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
         fi
-        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel doxygen GeoIP-devel pcre-devel ssdeep-devel yajl-devel
+        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
         # https://gcc.gnu.org/legacy-ml/gcc-patches/2018-01/msg01962.html
         sed -i 's/_mm512_abs_pd (__m512 __A)/_mm512_abs_pd (__m512d __A)/g' /opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/include/avx512fintrin.h
         source scl_source enable $SCL_ENABLE || true
@@ -62,16 +62,16 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda-repo-rhel7-11-2-local-11.2.2_460.32.03-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda-repo-rhel7-11-3-local-11.3.0_465.19.01-1.x86_64.rpm
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/cudnn-11.2-linux-x64-v8.1.1.33.tgz
-          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.8/nccl_2.8.4-1+cuda11.2_x86_64.txz
+          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.9/nccl_2.9.6-1+cuda11.3_x86_64.txz
 
-          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-2-local-11.2.2_460.32.03-1.x86_64.rpm
-          pushd /var/cuda-repo-rhel7-11-2-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-3-local-11.3.0_465.19.01-1.x86_64.rpm
+          pushd /var/cuda-repo-rhel7-11-3-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
           tar -hxvf cudnn-11.2-linux-x64-v8.1.1.33.tgz -C /usr/local/
-          tar -hxvf nccl_2.8.4-1+cuda11.2_x86_64.txz --strip-components=1 -C /usr/local/cuda/
+          tar -hxvf nccl_2.9.6-1+cuda11.3_x86_64.txz --strip-components=1 -C /usr/local/cuda/
           mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
 
           # Work around issues with CUDA 10.2/11.x
@@ -81,6 +81,7 @@ runs:
           for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f ${f:0:${#f}-1}1; done
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.2
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
@@ -166,6 +167,7 @@ runs:
         gradle --version
         mvn -version
         gpg --version
+        python3 --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)

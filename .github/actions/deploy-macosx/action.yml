@@ -10,7 +10,7 @@ runs:
         export MACOSX_DEPLOYMENT_TARGET=10.13
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr doxygen geoip pcre ssdeep yajl
+        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           brew uninstall gcc@8 gcc@9 gcc@10
@@ -79,6 +79,7 @@ runs:
         gradle --version
         mvn -version
         gpg --version
+        python3 --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)

@@ -244,7 +244,8 @@ public class Qt5Core extends QtInfoMapper {
     macros.put("Q_DECL_NOTHROW", "");
     macros.put("Q_DECL_RELAXED_CONSTEXPR", "");
     macros.put("Q_DECL_UNUSED", "");
-    macros.put("Q_DECLARE_FLAGS", "#define Q_DECLARE_FLAGS(arg0, arg1)");
+    macros.put("Q_DECLARE_FLAGS(arg0, arg1)", "");
+    macros.put("Q_DUMMY_COMPARISON_OPERATOR(arg0)", "");
     macros.put("Q_DECLARE_OPERATORS_FOR_FLAGS(arg0)", "");
     macros.put("Q_DECLARE_PRIVATE(arg0)", "");
     macros.put("Q_DECLARE_SHARED(arg0)", "");
