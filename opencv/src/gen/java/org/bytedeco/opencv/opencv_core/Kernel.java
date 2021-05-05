@@ -30,7 +30,7 @@ public class Kernel extends Pointer {
     }
 
     public Kernel() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public Kernel(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog) { super((Pointer)null); allocate(kname, prog); }
     private native void allocate(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog);
     public Kernel(String kname, @Const @ByRef Program prog) { super((Pointer)null); allocate(kname, prog); }

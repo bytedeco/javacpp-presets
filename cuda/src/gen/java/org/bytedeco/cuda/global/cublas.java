@@ -102,8 +102,8 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 
 public static final int CUBLAS_VER_MAJOR = 11;
 public static final int CUBLAS_VER_MINOR = 4;
-public static final int CUBLAS_VER_PATCH = 1;
-public static final int CUBLAS_VER_BUILD = 1043;
+public static final int CUBLAS_VER_PATCH = 2;
+public static final int CUBLAS_VER_BUILD = 10064;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
@@ -7444,6 +7444,16 @@ public static final int
     CUBLASLT_MATRIX_LAYOUT_BATCH_COUNT = 5,
 
     /** Stride (in elements) to the next matrix for strided batch operation.
+     *
+     * When matrix type is planar-complex (CUBLASLT_MATRIX_LAYOUT_PLANE_OFFSET != 0), batch stride
+     * is interpreted by cublasLtMatmul() in number of real valued sub-elements. E.g. for data of type CUDA_C_16F,
+     * offset of 1024B is encoded as a stride of value 512 (since each element of the real and imaginary matrices
+     * is a 2B (16bit) floating point type).
+     *
+     * NOTE: A bug in cublasLtMatrixTransform() causes it to interpret the batch stride for a planar-complex matrix
+     * as if it was specified in number of complex elements. Therefore an offset of 1024B must be encoded as stride
+     * value 256 when calling cublasLtMatrixTransform() (each complex element is 4B with real and imaginary values 2B each).
+     * This behavior is expected to be corrected in the next major cuBLAS version.
      *
      * int64_t, default: 0
      */

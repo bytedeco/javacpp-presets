@@ -15,10 +15,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-
-/** A {@code ModuleHolder} is essentially a wrapper around {@code std::shared_ptr<M>} where
- *  {@code M} is an {@code nn::Module} subclass, with convenient constructors defined for
- *  the kind of constructions we want to allow for our modules. */
 @Name("torch::nn::ModuleHolder<torch::nn::ModuleDictImpl>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ModuleDictImplModuleHolder extends Pointer {
     static { Loader.load(); }

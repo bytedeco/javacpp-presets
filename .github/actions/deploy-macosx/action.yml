@@ -10,7 +10,7 @@ runs:
         export MACOSX_DEPLOYMENT_TARGET=10.13
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr
+        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           brew uninstall gcc@8 gcc@9 gcc@10
@@ -48,9 +48,9 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17408/m_onemkl_p_2021.1.1.50_offline.dmg
-          hdiutil mount m_onemkl_p_2021.1.1.50_offline.dmg
-          sudo /Volumes/m_onemkl_p_2021.1.1.50_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17578/m_onemkl_p_2021.2.0.269_offline.dmg
+          hdiutil mount m_onemkl_p_2021.2.0.269_offline.dmg
+          sudo /Volumes/m_onemkl_p_2021.2.0.269_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
         fi
 
         GRADLE_TASK=publishToMavenLocal
@@ -79,6 +79,7 @@ runs:
         gradle --version
         mvn -version
         gpg --version
+        python3 --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)

@@ -29,7 +29,7 @@ public class Queue extends Pointer {
     }
 
     public Queue() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public Queue(@Const @ByRef Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d) { super((Pointer)null); allocate(c, d); }
     private native void allocate(@Const @ByRef Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d);
     public Queue(@Const @ByRef Context c) { super((Pointer)null); allocate(c); }

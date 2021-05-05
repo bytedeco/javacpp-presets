@@ -18,6 +18,7 @@ import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_videoio.*;
 
 
+/** \cond IGNORED */
 @Name("cv::DefaultDeleter<CvCapture>") @Properties(inherit = org.bytedeco.opencv.presets.opencv_videoio.class)
 public class CvCaptureDefaultDeleter extends Pointer {
     static { Loader.load(); }
