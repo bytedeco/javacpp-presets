@@ -1157,6 +1157,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>nvcodec</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>
