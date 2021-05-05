@@ -33,7 +33,7 @@ public class CUVIDH264DPBENTRY extends Pointer {
         return (CUVIDH264DPBENTRY)super.position(position);
     }
     @Override public CUVIDH264DPBENTRY getPointer(long i) {
-        return new CUVIDH264DPBENTRY((Pointer)this).position(position + i);
+        return new CUVIDH264DPBENTRY((Pointer)this).offsetAddress(i);
     }
 
     /** picture index of reference frame                                        */

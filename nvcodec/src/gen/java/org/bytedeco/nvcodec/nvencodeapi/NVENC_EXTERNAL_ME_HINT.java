@@ -35,7 +35,7 @@ public class NVENC_EXTERNAL_ME_HINT extends Pointer {
         return (NVENC_EXTERNAL_ME_HINT)super.position(position);
     }
     @Override public NVENC_EXTERNAL_ME_HINT getPointer(long i) {
-        return new NVENC_EXTERNAL_ME_HINT((Pointer)this).position(position + i);
+        return new NVENC_EXTERNAL_ME_HINT((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Specifies the x component of integer pixel MV (relative to current MB) S12.0. */

@@ -33,7 +33,7 @@ public class CUVIDH264PICPARAMS extends Pointer {
         return (CUVIDH264PICPARAMS)super.position(position);
     }
     @Override public CUVIDH264PICPARAMS getPointer(long i) {
-        return new CUVIDH264PICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDH264PICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     // SPS

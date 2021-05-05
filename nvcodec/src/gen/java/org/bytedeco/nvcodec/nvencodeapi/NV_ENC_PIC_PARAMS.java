@@ -34,7 +34,7 @@ public class NV_ENC_PIC_PARAMS extends Pointer {
         return (NV_ENC_PIC_PARAMS)super.position(position);
     }
     @Override public NV_ENC_PIC_PARAMS getPointer(long i) {
-        return new NV_ENC_PIC_PARAMS((Pointer)this).position(position + i);
+        return new NV_ENC_PIC_PARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Struct version. Must be set to ::NV_ENC_PIC_PARAMS_VER. */

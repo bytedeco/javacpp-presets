@@ -34,7 +34,7 @@ public class CUVIDEOFORMATEX extends Pointer {
         return (CUVIDEOFORMATEX)super.position(position);
     }
     @Override public CUVIDEOFORMATEX getPointer(long i) {
-        return new CUVIDEOFORMATEX((Pointer)this).position(position + i);
+        return new CUVIDEOFORMATEX((Pointer)this).offsetAddress(i);
     }
 
     /** OUT: CUVIDEOFORMAT structure */

@@ -35,7 +35,7 @@ public class NV_ENC_MAP_INPUT_RESOURCE extends Pointer {
         return (NV_ENC_MAP_INPUT_RESOURCE)super.position(position);
     }
     @Override public NV_ENC_MAP_INPUT_RESOURCE getPointer(long i) {
-        return new NV_ENC_MAP_INPUT_RESOURCE((Pointer)this).position(position + i);
+        return new NV_ENC_MAP_INPUT_RESOURCE((Pointer)this).offsetAddress(i);
     }
 
     /** [in]:  Struct version. Must be set to ::NV_ENC_MAP_INPUT_RESOURCE_VER. */

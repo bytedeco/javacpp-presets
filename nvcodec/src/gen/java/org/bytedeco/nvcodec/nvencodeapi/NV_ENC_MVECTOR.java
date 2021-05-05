@@ -33,7 +33,7 @@ public class NV_ENC_MVECTOR extends Pointer {
         return (NV_ENC_MVECTOR)super.position(position);
     }
     @Override public NV_ENC_MVECTOR getPointer(long i) {
-        return new NV_ENC_MVECTOR((Pointer)this).position(position + i);
+        return new NV_ENC_MVECTOR((Pointer)this).offsetAddress(i);
     }
 
     /** the x component of MV in quarter-pel units */

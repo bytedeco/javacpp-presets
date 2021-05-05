@@ -34,7 +34,7 @@ public class NV_ENC_CONFIG_HEVC extends Pointer {
         return (NV_ENC_CONFIG_HEVC)super.position(position);
     }
     @Override public NV_ENC_CONFIG_HEVC getPointer(long i) {
-        return new NV_ENC_CONFIG_HEVC((Pointer)this).position(position + i);
+        return new NV_ENC_CONFIG_HEVC((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Specifies the level of the encoded bitstream.*/

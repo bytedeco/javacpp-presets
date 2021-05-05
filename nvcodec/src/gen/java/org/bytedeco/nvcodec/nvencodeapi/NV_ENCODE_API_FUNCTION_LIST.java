@@ -40,7 +40,7 @@ public class NV_ENCODE_API_FUNCTION_LIST extends Pointer {
         return (NV_ENCODE_API_FUNCTION_LIST)super.position(position);
     }
     @Override public NV_ENCODE_API_FUNCTION_LIST getPointer(long i) {
-        return new NV_ENCODE_API_FUNCTION_LIST((Pointer)this).position(position + i);
+        return new NV_ENCODE_API_FUNCTION_LIST((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Client should pass NV_ENCODE_API_FUNCTION_LIST_VER.                               */
