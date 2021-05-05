@@ -30,7 +30,7 @@ public class OclPlatform extends Pointer {
     }
 
     public OclPlatform() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public OclPlatform(@Const @ByRef OclPlatform p) { super((Pointer)null); allocate(p); }
     private native void allocate(@Const @ByRef OclPlatform p);
     public native @ByRef @Name("operator =") OclPlatform put(@Const @ByRef OclPlatform p);

@@ -31,6 +31,8 @@ import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Const;
+import org.bytedeco.javacpp.annotation.MemberGetter;
+import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.StdString;
@@ -369,7 +371,7 @@ public class torch implements LoadEnabled, InfoMapper {
                      : lib.equals("nvinfer") ? "@.7"
                      : lib.equals("cufft") || lib.equals("curand") ? "@.10"
                      : lib.equals("cudart") ? "@.11.0"
-                     : lib.equals("nvrtc") ? "@.11.2"
+                     : lib.equals("nvrtc") ? "@.11.3"
                      : "@.11";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8"
@@ -378,7 +380,7 @@ public class torch implements LoadEnabled, InfoMapper {
                      : lib.equals("nvinfer") ? "64_7"
                      : lib.equals("cufft") || lib.equals("curand") ? "64_10"
                      : lib.equals("cudart") ? "64_110"
-                     : lib.equals("nvrtc") ? "64_112_0"
+                     : lib.equals("nvrtc") ? "64_113_0"
                      : "64_11";
             } else {
                 continue; // no CUDA
@@ -499,6 +501,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("const std::vector<at::Dimname>", "std::vector<at::Dimname>").valueTypes("@StdMove DimnameVector").pointerTypes("DimnameVector").define())
                .put(new Info("std::vector<c10::TensorImpl*>").pointerTypes("TensorImplVector").define())
                .put(new Info("std::vector<at::Tensor>").valueTypes("@StdMove TensorVector").pointerTypes("TensorVector").define())
+               .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
                .put(new Info("std::vector<torch::autograd::Variable>").pointerTypes("TensorVector"))
                .put(new Info("std::vector<std::shared_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreVector").define())
                .put(new Info("std::deque<at::Tensor>").pointerTypes("TensorDeque").define())
@@ -645,6 +648,9 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::ArrayRef<at::TensorArg>", "at::ArrayRef<at::TensorArg>").pointerTypes("TensorArgArrayRef"))
                .put(new Info("c10::ArrayRef<at::TensorArg>::iterator", "c10::ArrayRef<at::TensorArg>::const_iterator").cast().pointerTypes("TensorArg"))
                .put(new Info("c10::ArrayRef<at::indexing::TensorIndex>").pointerTypes("TensorIndexArrayRef"))
+               .put(new Info("c10::ArrayRef<at::indexing::TensorIndex>(std::vector<at::indexing::TensorIndex,A>&)").javaText(
+                       "public TensorIndexArrayRef(@ByRef TensorIndexVector Vec) { super((Pointer)null); allocate(Vec); }\n"
+                     + "private native void allocate(@ByRef TensorIndexVector Vec);"))
                .put(new Info("c10::ArrayRef<at::indexing::TensorIndex>::iterator", "c10::ArrayRef<at::indexing::TensorIndex>::const_iterator").cast().pointerTypes("TensorIndex"))
                .put(new Info("c10::ArrayRef<at::TensorArg>::equals", "c10::ArrayRef<at::Tensor>::equals", "c10::ArrayRef<at::indexing::TensorIndex>::equals").skip())
 
@@ -707,12 +713,12 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::nn::functional::ConvFuncOptions<1>").pointerTypes("Conv1dFuncOptions"))
                .put(new Info("torch::nn::functional::ConvFuncOptions<2>").pointerTypes("Conv2dFuncOptions"))
                .put(new Info("torch::nn::functional::ConvFuncOptions<3>").pointerTypes("Conv3dFuncOptions"))
-               .put(new Info("torch::nn::ConvTransposeOptions<1>").pointerTypes("Conv1dTransposeOptions"))
-               .put(new Info("torch::nn::ConvTransposeOptions<2>").pointerTypes("Conv2dTransposeOptions"))
-               .put(new Info("torch::nn::ConvTransposeOptions<3>").pointerTypes("Conv3dTransposeOptions"))
-               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<1>").pointerTypes("Conv1dTransposeFuncOptions"))
-               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<2>").pointerTypes("Conv2dTransposeFuncOptions"))
-               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<3>").pointerTypes("Conv3dTransposeFuncOptions"))
+               .put(new Info("torch::nn::ConvTransposeOptions<1>").pointerTypes("ConvTranspose1dOptions"))
+               .put(new Info("torch::nn::ConvTransposeOptions<2>").pointerTypes("ConvTranspose2dOptions"))
+               .put(new Info("torch::nn::ConvTransposeOptions<3>").pointerTypes("ConvTranspose3dOptions"))
+               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<1>").pointerTypes("ConvTranspose1dFuncOptions"))
+               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<2>").pointerTypes("ConvTranspose2dFuncOptions"))
+               .put(new Info("torch::nn::functional::ConvTransposeFuncOptions<3>").pointerTypes("ConvTranspose3dFuncOptions"))
 
                .put(new Info("torch::nn::ReflectionPadOptions<1>").pointerTypes("ReflectionPad1dOptions"))
                .put(new Info("torch::nn::ReflectionPadOptions<2>").pointerTypes("ReflectionPad2dOptions"))
@@ -750,6 +756,8 @@ public class torch implements LoadEnabled, InfoMapper {
 
                .put(new Info("std::shared_ptr<torch::nn::Module>").annotations("@SharedPtr")
                        .valueTypes("@Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module").pointerTypes("Module"))
+               .put(new Info("torch::nn::ModuleHolder<torch::nn::Module>").pointerTypes("ModuleHolder"))
+               .put(new Info("torch::nn::Module::register_module<torch::nn::Module>").javaNames("register_module"))
                .put(new Info("std::shared_ptr<torch::nn::AnyModule>").annotations("@SharedPtr")
                        .valueTypes("@Cast({\"\", \"std::shared_ptr<torch::nn::AnyModule>\"}) AnyModule").pointerTypes("AnyModule"));
 
@@ -1096,4 +1104,9 @@ public class torch implements LoadEnabled, InfoMapper {
         private native void allocate();
         public native @ByVal @Cast("at::Tensor*") Pointer call(@ByRef @Cast("const at::Tensor*") Pointer t1, @ByRef @Cast("const at::Tensor*") Pointer t2);
     }
+
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::istream*") Pointer cin();
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::ostream*") Pointer cout();
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::ostream*") Pointer cerr();
+    @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::ostream*") Pointer clog();
 }

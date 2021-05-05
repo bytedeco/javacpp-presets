@@ -199,12 +199,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        9;
-public static final int PY_MICRO_VERSION =        2;
+public static final int PY_MICRO_VERSION =        4;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.9.2";
+public static final String PY_VERSION =              "3.9.4";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -501,6 +501,9 @@ public static final int HAVE_DUP2 = 1;
 
 /* Define to 1 if you have the `dup3' function. */
 public static final int HAVE_DUP3 = 1;
+
+/* Define if you have the '_dyld_shared_cache_contains_path' function. */
+/* #undef HAVE_DYLD_SHARED_CACHE_CONTAINS_PATH */
 
 /* Defined when any dynamic module loading is enabled. */
 public static final int HAVE_DYNAMIC_LOADING = 1;
@@ -998,9 +1001,6 @@ public static final int HAVE_PREADV2 = 1;
 
 /* Define if you have the 'prlimit' functions. */
 public static final int HAVE_PRLIMIT = 1;
-
-/* Define if you have the '_dyld_shared_cache_contains_path' function. */
-/* #undef HAVE_DYLD_SHARED_CACHE_CONTAINS_PATH */
 
 /* Define to 1 if you have the <process.h> header file. */
 /* #undef HAVE_PROCESS_H */

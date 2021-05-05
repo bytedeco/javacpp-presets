@@ -196,7 +196,7 @@ public class cudaDeviceProp extends Pointer {
     public native int canUseHostPointerForRegisteredMem(); public native cudaDeviceProp canUseHostPointerForRegisteredMem(int setter);
     /** Device supports launching cooperative kernels via ::cudaLaunchCooperativeKernel */
     public native int cooperativeLaunch(); public native cudaDeviceProp cooperativeLaunch(int setter);
-    /** Device can participate in cooperative kernels launched via ::cudaLaunchCooperativeKernelMultiDevice */
+    /** Deprecated, cudaLaunchCooperativeKernelMultiDevice is deprecated. */
     public native int cooperativeMultiDeviceLaunch(); public native cudaDeviceProp cooperativeMultiDeviceLaunch(int setter);
     /** Per device maximum shared memory per block usable by special opt in */
     public native @Cast("size_t") long sharedMemPerBlockOptin(); public native cudaDeviceProp sharedMemPerBlockOptin(long setter);

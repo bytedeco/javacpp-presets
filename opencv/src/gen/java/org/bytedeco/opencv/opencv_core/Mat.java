@@ -230,7 +230,7 @@ public class Mat extends AbstractMat {
     allocated with Mat::create . In the former case, the old content is de-referenced.
      */
     public Mat() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
 
     /** \overload
     @param rows Number of rows in a 2D array.

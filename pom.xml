@@ -628,6 +628,7 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
+        <module>modsecurity</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1144,6 +1145,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1158,6 +1160,8 @@
         <module>tesseract</module>
         <module>cuda</module>
         <module>nvcodec</module>
+        <module>opencl</module>
+        <module>onnxruntime</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>
@@ -1357,6 +1361,7 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
+        <module>modsecurity</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1433,6 +1438,7 @@
         <module>qt</module>
         <module>skia</module>
         <module>cpu_features</module>
+        <module>modsecurity</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1565,6 +1571,7 @@
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
+        <module>onnx</module>
         <module>onnxruntime</module>
         <module>tvm</module>
         <module>liquidfun</module>

@@ -80,6 +80,7 @@ public class opencv_ximgproc extends org.bytedeco.opencv.presets.opencv_ximgproc
 // #include "ximgproc/sparse_match_interpolator.hpp"
 // #include "ximgproc/structured_edge_detection.hpp"
 // #include "ximgproc/edgeboxes.hpp"
+// #include "ximgproc/edge_drawing.hpp"
 // #include "ximgproc/seeds.hpp"
 // #include "ximgproc/segmentation.hpp"
 // #include "ximgproc/fast_hough_transform.hpp"
@@ -115,6 +116,8 @@ i.e. algorithms which somehow takes into account pixel affinities in natural ima
     \defgroup ximgproc_segmentation Image segmentation
     <p>
     \defgroup ximgproc_fast_line_detector Fast line detector
+    <p>
+    \defgroup ximgproc_edge_drawing EdgeDrawing
     <p>
     \defgroup ximgproc_fourier Fourier descriptors
     <p>
@@ -2014,7 +2017,7 @@ with a small 3 x 3 kernel and additional conversion into CieLAB color space.
                                          If zero, Canny() is not applied and the input
                                          image is taken as an edge image.
 @param _do_merge            false      - If true, incremental merging of segments
-                                         will be perfomred
+                                         will be performed
 */
 @Namespace("cv::ximgproc") public static native @Ptr FastLineDetector createFastLineDetector(
         int _length_threshold/*=10*/, float _distance_threshold/*=1.414213562f*/,

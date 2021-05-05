@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(include = {/*"<opencv2/objdetect/objdetect_c.h>",*/ "<opencv2/objdetect.hpp>",
             "<opencv2/objdetect/detection_based_tracker.hpp>"}, link = "opencv_objdetect@.4.5"),
         @Platform(value = "ios", preload = "libopencv_objdetect"),
-        @Platform(value = "windows", link = "opencv_objdetect451")},
+        @Platform(value = "windows", link = "opencv_objdetect452")},
     target = "org.bytedeco.opencv.opencv_objdetect",
     global = "org.bytedeco.opencv.global.opencv_objdetect"
 )

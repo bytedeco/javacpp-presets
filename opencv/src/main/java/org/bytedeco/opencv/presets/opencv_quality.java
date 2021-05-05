@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_quality@.4.5"
         ),
         @Platform(value = "ios", preload = "libopencv_quality"),
-        @Platform(value = "windows", link = "opencv_quality451")
+        @Platform(value = "windows", link = "opencv_quality452")
     },
     target = "org.bytedeco.opencv.opencv_quality",
     global = "org.bytedeco.opencv.global.opencv_quality"

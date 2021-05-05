@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>onnx-platform</artifactId>
-  <version>1.8.1-${project.parent.version}</version>
+  <version>1.9.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for ONNX</name>
 
   <properties>
@@ -42,6 +42,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.macosx-x86_64}</classifier>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.windows-x86_64}</classifier>
+    </dependency>
   </dependencies>
 
   <build>
@@ -54,7 +60,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -101,6 +107,7 @@
                     module org.bytedeco.${javacpp.moduleId}.platform {
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
+                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
                   </moduleInfoSource>
                 </module>
