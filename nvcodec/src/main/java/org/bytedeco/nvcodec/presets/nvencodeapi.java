@@ -38,25 +38,12 @@ import org.bytedeco.nvcodec.presets.*;
     inherit = nvcuvid.class,
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-x86_64", "windows-x86_64"},
-            include = "nvEncodeAPI.h"
-        ),
-        @Platform(
-            value = "linux-arm64",
-            includepath = {"/usr/include/aarch64-linux-gnu/", "/usr/local/videocodecsdk/Interface/"},
-            linkpath = {"/usr/lib/aarch64-linux-gnu/", "/usr/local/videocodecsdk/Lib/linux/stubs/aarch64/"},
-            link = "nvidia-encode"
-        ),
-        @Platform(
-            value = "linux-x86_64",
-            includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Interface/"},
-            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Lib/linux/stubs/x86_64/"},
+            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
+            include = "nvEncodeAPI.h",
             link = "nvidia-encode"
         ),
         @Platform(
             value = "windows-x86_64",
-            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Interface/",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/x64/",
             link = "nvencodeapi"
         )
     },

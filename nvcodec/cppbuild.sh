@@ -14,6 +14,12 @@ case $PLATFORM in
             exit 1
         fi
         ;;
+    linux-ppc64le)
+        if [[ ! -d "/usr/local/videocodecsdk/" ]]; then
+            echo "Please install the Video Codec SDK in /usr/local/videocodecsdk/"
+            exit 1
+        fi
+        ;;
     linux-x86_64)
         if [[ ! -d "/usr/local/videocodecsdk/" ]]; then
             echo "Please install the Video Codec SDK in /usr/local/videocodecsdk/"
