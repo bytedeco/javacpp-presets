@@ -116,14 +116,19 @@ runs:
           python -m gdown.cli https://drive.google.com/uc?id=15i6tV-vahgm_uNWT96c_KX7tFdZxmev-
           python -m gdown.cli https://drive.google.com/uc?id=1ikOyG-gVettvjoJGQWkHxOcBWuTrGyfz
           rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x86.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x86.msi ADDLOCAL=ALL"
+          rem cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x86.msi ADDLOCAL=ALL"
+          rem cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x86.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /i Spinnaker-2.4.0.143_Binaries_v140_x86.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /i Spinnaker-2.4.0.143_SourceCode_v140_x86.msi ADDLOCAL=ALL"
           dir .
           dir "C:\Program Files (x86)"
           dir "C:\Program Files (x86)\FLIR Systems"
           dir "C:\Program Files (x86)\FLIR Systems\Spinnaker"
           dir "C:\Program Files (x86)\FLIR Systems\Spinnaker\include"
           dir "C:\Program Files (x86)\FLIR Systems\Spinnaker\include\spinc"
+          dir "C:\Program Files (x86)\Spinnaker"
+          dir "C:\Program Files (x86)\Spinnaker\include"
+          dir "C:\Program Files (x86)\Spinnaker\include\spinc"
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
@@ -131,13 +136,18 @@ runs:
           python -m gdown.cli https://drive.google.com/uc?id=1NiMxxDflip1F5rJuf73xhfoI9vWUeUkQ
           python -m gdown.cli https://drive.google.com/uc?id=1FKatuVsLIQLbDb9R9W2ax_tav8_7--HI
           rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x64.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x64.msi ADDLOCAL=ALL"
+          rem cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x64.msi ADDLOCAL=ALL"
+          rem cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /i Spinnaker-2.4.0.143_Binaries_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /i Spinnaker-2.4.0.143_SourceCode_v140_x64.msi ADDLOCAL=ALL"
           dir "C:\Program Files"
           dir "C:\Program Files\FLIR Systems"
           dir "C:\Program Files\FLIR Systems\Spinnaker"
           dir "C:\Program Files\FLIR Systems\Spinnaker\include"
           dir "C:\Program Files\FLIR Systems\Spinnaker\include\spinc"
+          dir "C:\Program Files\Spinnaker"
+          dir "C:\Program Files\Spinnaker\include"
+          dir "C:\Program Files\Spinnaker\include\spinc"
         )
 
         set GRADLE_TASK=publishToMavenLocal
