@@ -121,6 +121,13 @@ runs:
           ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 
+        if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
+          echo Installing TensorRT
+          python3 -m gdown.cli https://drive.google.com/uc?id=1uwb4nISZT0-FcpTQ4dnWaD47fLQu69IP
+          tar -hxvf TensorRT-7.2.1.6.Ubuntu-18.04.aarch64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
+          ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+        fi
+        
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture amdhf
           python3 -m gdown.cli https://drive.google.com/uc?id=16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI
