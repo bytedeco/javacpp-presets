@@ -35,7 +35,7 @@ public class NV_ENC_LOCK_BITSTREAM extends Pointer {
         return (NV_ENC_LOCK_BITSTREAM)super.position(position);
     }
     @Override public NV_ENC_LOCK_BITSTREAM getPointer(long i) {
-        return new NV_ENC_LOCK_BITSTREAM((Pointer)this).position(position + i);
+        return new NV_ENC_LOCK_BITSTREAM((Pointer)this).offsetAddress(i);
     }
  
     /** [in]: Struct version. Must be set to ::NV_ENC_LOCK_BITSTREAM_VER. */

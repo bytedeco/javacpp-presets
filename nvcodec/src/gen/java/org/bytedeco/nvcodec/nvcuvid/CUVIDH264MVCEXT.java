@@ -33,7 +33,7 @@ public class CUVIDH264MVCEXT extends Pointer {
         return (CUVIDH264MVCEXT)super.position(position);
     }
     @Override public CUVIDH264MVCEXT getPointer(long i) {
-        return new CUVIDH264MVCEXT((Pointer)this).position(position + i);
+        return new CUVIDH264MVCEXT((Pointer)this).offsetAddress(i);
     }
 
     /** Max number of coded views minus 1 in video : Range - 0 to 1023              */

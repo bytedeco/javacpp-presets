@@ -33,7 +33,7 @@ public class CUVIDJPEGPICPARAMS extends Pointer {
         return (CUVIDJPEGPICPARAMS)super.position(position);
     }
     @Override public CUVIDJPEGPICPARAMS getPointer(long i) {
-        return new CUVIDJPEGPICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDJPEGPICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     public native int Reserved(); public native CUVIDJPEGPICPARAMS Reserved(int setter);

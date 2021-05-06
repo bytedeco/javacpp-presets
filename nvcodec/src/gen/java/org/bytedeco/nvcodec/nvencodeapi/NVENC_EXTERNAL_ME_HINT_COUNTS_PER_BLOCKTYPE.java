@@ -35,7 +35,7 @@ public class NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE extends Pointer {
         return (NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE)super.position(position);
     }
     @Override public NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE getPointer(long i) {
-        return new NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE((Pointer)this).position(position + i);
+        return new NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Supported for H264, HEVC. It Specifies the number of candidates per 16x16 block. */

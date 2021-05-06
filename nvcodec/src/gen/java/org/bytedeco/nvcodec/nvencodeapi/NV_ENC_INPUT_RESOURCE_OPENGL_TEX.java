@@ -35,7 +35,7 @@ public class NV_ENC_INPUT_RESOURCE_OPENGL_TEX extends Pointer {
         return (NV_ENC_INPUT_RESOURCE_OPENGL_TEX)super.position(position);
     }
     @Override public NV_ENC_INPUT_RESOURCE_OPENGL_TEX getPointer(long i) {
-        return new NV_ENC_INPUT_RESOURCE_OPENGL_TEX((Pointer)this).position(position + i);
+        return new NV_ENC_INPUT_RESOURCE_OPENGL_TEX((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: The name of the texture to be used. */

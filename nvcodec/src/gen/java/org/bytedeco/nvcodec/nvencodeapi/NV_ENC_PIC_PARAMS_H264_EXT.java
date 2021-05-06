@@ -33,7 +33,7 @@ public class NV_ENC_PIC_PARAMS_H264_EXT extends Pointer {
         return (NV_ENC_PIC_PARAMS_H264_EXT)super.position(position);
     }
     @Override public NV_ENC_PIC_PARAMS_H264_EXT getPointer(long i) {
-        return new NV_ENC_PIC_PARAMS_H264_EXT((Pointer)this).position(position + i);
+        return new NV_ENC_PIC_PARAMS_H264_EXT((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Specifies the MVC picture parameters. */

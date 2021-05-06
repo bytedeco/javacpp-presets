@@ -35,7 +35,7 @@ public class NV_ENC_SEQUENCE_PARAM_PAYLOAD extends Pointer {
         return (NV_ENC_SEQUENCE_PARAM_PAYLOAD)super.position(position);
     }
     @Override public NV_ENC_SEQUENCE_PARAM_PAYLOAD getPointer(long i) {
-        return new NV_ENC_SEQUENCE_PARAM_PAYLOAD((Pointer)this).position(position + i);
+        return new NV_ENC_SEQUENCE_PARAM_PAYLOAD((Pointer)this).offsetAddress(i);
     }
 
     /** [in]:  Struct version. Must be set to ::NV_ENC_INITIALIZE_PARAMS_VER. */

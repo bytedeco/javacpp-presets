@@ -33,7 +33,7 @@ public class CUVIDVP9PICPARAMS extends Pointer {
         return (CUVIDVP9PICPARAMS)super.position(position);
     }
     @Override public CUVIDVP9PICPARAMS getPointer(long i) {
-        return new CUVIDVP9PICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDVP9PICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned int") int width(); public native CUVIDVP9PICPARAMS width(int setter);

@@ -34,7 +34,7 @@ public class CUVIDPARSERDISPINFO extends Pointer {
         return (CUVIDPARSERDISPINFO)super.position(position);
     }
     @Override public CUVIDPARSERDISPINFO getPointer(long i) {
-        return new CUVIDPARSERDISPINFO((Pointer)this).position(position + i);
+        return new CUVIDPARSERDISPINFO((Pointer)this).offsetAddress(i);
     }
 
     /** OUT: Index of the current picture                                                         */

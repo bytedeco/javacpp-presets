@@ -35,7 +35,7 @@ public class NV_ENC_RECONFIGURE_PARAMS extends Pointer {
         return (NV_ENC_RECONFIGURE_PARAMS)super.position(position);
     }
     @Override public NV_ENC_RECONFIGURE_PARAMS getPointer(long i) {
-        return new NV_ENC_RECONFIGURE_PARAMS((Pointer)this).position(position + i);
+        return new NV_ENC_RECONFIGURE_PARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Struct version. Must be set to ::NV_ENC_RECONFIGURE_PARAMS_VER. */

@@ -34,7 +34,7 @@ public class NV_ENC_PRESET_CONFIG extends Pointer {
         return (NV_ENC_PRESET_CONFIG)super.position(position);
     }
     @Override public NV_ENC_PRESET_CONFIG getPointer(long i) {
-        return new NV_ENC_PRESET_CONFIG((Pointer)this).position(position + i);
+        return new NV_ENC_PRESET_CONFIG((Pointer)this).offsetAddress(i);
     }
 
     /** [in]:  Struct version. Must be set to ::NV_ENC_PRESET_CONFIG_VER. */
