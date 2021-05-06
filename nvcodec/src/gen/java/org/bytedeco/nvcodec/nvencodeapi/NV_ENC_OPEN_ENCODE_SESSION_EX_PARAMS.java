@@ -33,7 +33,7 @@ public class NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS extends Pointer {
         return (NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS)super.position(position);
     }
     @Override public NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS getPointer(long i) {
-        return new NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS((Pointer)this).position(position + i);
+        return new NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Struct version. Must be set to ::NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER. */

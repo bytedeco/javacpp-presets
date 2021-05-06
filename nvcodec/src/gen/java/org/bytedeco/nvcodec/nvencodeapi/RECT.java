@@ -35,7 +35,7 @@ public class RECT extends Pointer {
         return (RECT)super.position(position);
     }
     @Override public RECT getPointer(long i) {
-        return new RECT((Pointer)this).position(position + i);
+        return new RECT((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: X coordinate of the upper left corner of rectangular area to be specified.       */

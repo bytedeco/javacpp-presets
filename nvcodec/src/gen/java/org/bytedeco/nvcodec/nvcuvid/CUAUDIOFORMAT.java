@@ -34,7 +34,7 @@ public class CUAUDIOFORMAT extends Pointer {
         return (CUAUDIOFORMAT)super.position(position);
     }
     @Override public CUAUDIOFORMAT getPointer(long i) {
-        return new CUAUDIOFORMAT((Pointer)this).position(position + i);
+        return new CUAUDIOFORMAT((Pointer)this).offsetAddress(i);
     }
 
     /** OUT: Compression format                                              */

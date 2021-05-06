@@ -33,7 +33,7 @@ public class CUVIDVC1PICPARAMS extends Pointer {
         return (CUVIDVC1PICPARAMS)super.position(position);
     }
     @Override public CUVIDVC1PICPARAMS getPointer(long i) {
-        return new CUVIDVC1PICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDVC1PICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** Picture index of forward reference (P/B-frames) */

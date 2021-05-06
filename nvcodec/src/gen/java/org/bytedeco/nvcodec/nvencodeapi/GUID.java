@@ -36,7 +36,7 @@ public class GUID extends Pointer {
         return (GUID)super.position(position);
     }
     @Override public GUID getPointer(long i) {
-        return new GUID((Pointer)this).position(position + i);
+        return new GUID((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Specifies the first 8 hexadecimal digits of the GUID.                                */

@@ -33,7 +33,7 @@ public class CUVIDGETDECODESTATUS extends Pointer {
         return (CUVIDGETDECODESTATUS)super.position(position);
     }
     @Override public CUVIDGETDECODESTATUS getPointer(long i) {
-        return new CUVIDGETDECODESTATUS((Pointer)this).position(position + i);
+        return new CUVIDGETDECODESTATUS((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("cuvidDecodeStatus") int decodeStatus(); public native CUVIDGETDECODESTATUS decodeStatus(int setter);

@@ -34,7 +34,7 @@ public class CUVIDPROCPARAMS extends Pointer {
         return (CUVIDPROCPARAMS)super.position(position);
     }
     @Override public CUVIDPROCPARAMS getPointer(long i) {
-        return new CUVIDPROCPARAMS((Pointer)this).position(position + i);
+        return new CUVIDPROCPARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** IN: Input is progressive (deinterlace_mode will be ignored)                */

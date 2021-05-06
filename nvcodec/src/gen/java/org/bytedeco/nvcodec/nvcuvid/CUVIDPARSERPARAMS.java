@@ -33,7 +33,7 @@ public class CUVIDPARSERPARAMS extends Pointer {
         return (CUVIDPARSERPARAMS)super.position(position);
     }
     @Override public CUVIDPARSERPARAMS getPointer(long i) {
-        return new CUVIDPARSERPARAMS((Pointer)this).position(position + i);
+        return new CUVIDPARSERPARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** IN: cudaVideoCodec_XXX                                                  */

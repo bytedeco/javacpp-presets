@@ -32,7 +32,7 @@ public class CUVIDDECODECREATEINFO extends Pointer {
         return (CUVIDDECODECREATEINFO)super.position(position);
     }
     @Override public CUVIDDECODECREATEINFO getPointer(long i) {
-        return new CUVIDDECODECREATEINFO((Pointer)this).position(position + i);
+        return new CUVIDDECODECREATEINFO((Pointer)this).offsetAddress(i);
     }
 
     /** IN: Coded sequence width in pixels                                             */

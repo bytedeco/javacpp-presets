@@ -32,7 +32,7 @@ public class CUVIDDECODECAPS extends Pointer {
         return (CUVIDDECODECAPS)super.position(position);
     }
     @Override public CUVIDDECODECAPS getPointer(long i) {
-        return new CUVIDDECODECAPS((Pointer)this).position(position + i);
+        return new CUVIDDECODECAPS((Pointer)this).offsetAddress(i);
     }
 
     /** IN: cudaVideoCodec_XXX                                             */

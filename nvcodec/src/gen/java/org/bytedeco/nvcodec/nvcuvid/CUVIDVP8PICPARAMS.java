@@ -34,7 +34,7 @@ public class CUVIDVP8PICPARAMS extends Pointer {
         return (CUVIDVP8PICPARAMS)super.position(position);
     }
     @Override public CUVIDVP8PICPARAMS getPointer(long i) {
-        return new CUVIDVP8PICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDVP8PICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     public native int width(); public native CUVIDVP8PICPARAMS width(int setter);

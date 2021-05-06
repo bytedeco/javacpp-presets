@@ -33,7 +33,7 @@ public class NV_ENC_H264_MV_DATA extends Pointer {
         return (NV_ENC_H264_MV_DATA)super.position(position);
     }
     @Override public NV_ENC_H264_MV_DATA getPointer(long i) {
-        return new NV_ENC_H264_MV_DATA((Pointer)this).position(position + i);
+        return new NV_ENC_H264_MV_DATA((Pointer)this).offsetAddress(i);
     }
 
     /** up to 4 vectors for 8x8 partition */

@@ -33,7 +33,7 @@ public class CUVIDOPERATINGPOINTINFO extends Pointer {
         return (CUVIDOPERATINGPOINTINFO)super.position(position);
     }
     @Override public CUVIDOPERATINGPOINTINFO getPointer(long i) {
-        return new CUVIDOPERATINGPOINTINFO((Pointer)this).position(position + i);
+        return new CUVIDOPERATINGPOINTINFO((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("cudaVideoCodec") int codec(); public native CUVIDOPERATINGPOINTINFO codec(int setter);

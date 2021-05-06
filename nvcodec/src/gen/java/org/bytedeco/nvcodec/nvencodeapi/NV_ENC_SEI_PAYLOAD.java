@@ -34,7 +34,7 @@ public class NV_ENC_SEI_PAYLOAD extends Pointer {
         return (NV_ENC_SEI_PAYLOAD)super.position(position);
     }
     @Override public NV_ENC_SEI_PAYLOAD getPointer(long i) {
-        return new NV_ENC_SEI_PAYLOAD((Pointer)this).position(position + i);
+        return new NV_ENC_SEI_PAYLOAD((Pointer)this).offsetAddress(i);
     }
 
     /** [in] SEI payload size in bytes. SEI payload must be byte aligned, as described in Annex D */

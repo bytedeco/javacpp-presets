@@ -33,7 +33,7 @@ public class NV_ENC_CREATE_MV_BUFFER extends Pointer {
         return (NV_ENC_CREATE_MV_BUFFER)super.position(position);
     }
     @Override public NV_ENC_CREATE_MV_BUFFER getPointer(long i) {
-        return new NV_ENC_CREATE_MV_BUFFER((Pointer)this).position(position + i);
+        return new NV_ENC_CREATE_MV_BUFFER((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Struct version. Must be set to NV_ENC_CREATE_MV_BUFFER_VER */

@@ -33,7 +33,7 @@ public class NV_ENC_RC_PARAMS extends Pointer {
          return (NV_ENC_RC_PARAMS)super.position(position);
      }
      @Override public NV_ENC_RC_PARAMS getPointer(long i) {
-         return new NV_ENC_RC_PARAMS((Pointer)this).position(position + i);
+         return new NV_ENC_RC_PARAMS((Pointer)this).offsetAddress(i);
      }
  
     public native @Cast("uint32_t") int version(); public native NV_ENC_RC_PARAMS version(int setter);

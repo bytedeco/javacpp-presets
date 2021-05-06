@@ -33,7 +33,7 @@ public class CUVIDH264SVCEXT extends Pointer {
         return (CUVIDH264SVCEXT)super.position(position);
     }
     @Override public CUVIDH264SVCEXT getPointer(long i) {
-        return new CUVIDH264SVCEXT((Pointer)this).position(position + i);
+        return new CUVIDH264SVCEXT((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned char") byte profile_idc(); public native CUVIDH264SVCEXT profile_idc(byte setter);

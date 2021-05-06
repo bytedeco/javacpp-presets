@@ -34,7 +34,7 @@ public class CUVIDEOFORMAT extends Pointer {
         return (CUVIDEOFORMAT)super.position(position);
     }
     @Override public CUVIDEOFORMAT getPointer(long i) {
-        return new CUVIDEOFORMAT((Pointer)this).position(position + i);
+        return new CUVIDEOFORMAT((Pointer)this).offsetAddress(i);
     }
 
     /** OUT: Compression format          */

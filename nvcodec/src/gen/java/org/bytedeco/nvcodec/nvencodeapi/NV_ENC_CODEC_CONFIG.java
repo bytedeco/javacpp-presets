@@ -34,7 +34,7 @@ public class NV_ENC_CODEC_CONFIG extends Pointer {
         return (NV_ENC_CODEC_CONFIG)super.position(position);
     }
     @Override public NV_ENC_CODEC_CONFIG getPointer(long i) {
-        return new NV_ENC_CODEC_CONFIG((Pointer)this).position(position + i);
+        return new NV_ENC_CODEC_CONFIG((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Specifies the H.264-specific encoder configuration. */

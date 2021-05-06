@@ -35,7 +35,7 @@ public class CUVIDSOURCEPARAMS extends Pointer {
         return (CUVIDSOURCEPARAMS)super.position(position);
     }
     @Override public CUVIDSOURCEPARAMS getPointer(long i) {
-        return new CUVIDSOURCEPARAMS((Pointer)this).position(position + i);
+        return new CUVIDSOURCEPARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** IN: Time stamp units in Hz (0=default=10000000Hz)      */

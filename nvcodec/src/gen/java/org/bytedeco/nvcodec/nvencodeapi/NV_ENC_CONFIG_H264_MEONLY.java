@@ -35,7 +35,7 @@ public class NV_ENC_CONFIG_H264_MEONLY extends Pointer {
         return (NV_ENC_CONFIG_H264_MEONLY)super.position(position);
     }
     @Override public NV_ENC_CONFIG_H264_MEONLY getPointer(long i) {
-        return new NV_ENC_CONFIG_H264_MEONLY((Pointer)this).position(position + i);
+        return new NV_ENC_CONFIG_H264_MEONLY((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Disable Motion Estimation on 16x16 blocks*/

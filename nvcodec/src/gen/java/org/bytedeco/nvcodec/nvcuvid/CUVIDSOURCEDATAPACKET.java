@@ -35,7 +35,7 @@ public class CUVIDSOURCEDATAPACKET extends Pointer {
         return (CUVIDSOURCEDATAPACKET)super.position(position);
     }
     @Override public CUVIDSOURCEDATAPACKET getPointer(long i) {
-        return new CUVIDSOURCEDATAPACKET((Pointer)this).position(position + i);
+        return new CUVIDSOURCEDATAPACKET((Pointer)this).offsetAddress(i);
     }
 
     /** IN: Combination of CUVID_PKT_XXX flags                              */

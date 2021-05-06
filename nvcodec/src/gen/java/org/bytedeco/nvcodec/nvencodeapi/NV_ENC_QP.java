@@ -33,7 +33,7 @@ public class NV_ENC_QP extends Pointer {
         return (NV_ENC_QP)super.position(position);
     }
     @Override public NV_ENC_QP getPointer(long i) {
-        return new NV_ENC_QP((Pointer)this).position(position + i);
+        return new NV_ENC_QP((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Specifies QP value for P-frame. Even though this field is uint32_t for legacy reasons, the client should treat this as a signed parameter(int32_t) for cases in which negative QP values are to be specified. */

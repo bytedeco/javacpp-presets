@@ -34,7 +34,7 @@ public class NV_ENC_PIC_PARAMS_H264 extends Pointer {
         return (NV_ENC_PIC_PARAMS_H264)super.position(position);
     }
     @Override public NV_ENC_PIC_PARAMS_H264 getPointer(long i) {
-        return new NV_ENC_PIC_PARAMS_H264((Pointer)this).position(position + i);
+        return new NV_ENC_PIC_PARAMS_H264((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Specifies the display POC syntax This is required to be set if client is handling the picture type decision. */

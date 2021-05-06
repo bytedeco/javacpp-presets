@@ -36,7 +36,7 @@ public class NV_ENC_CONFIG_H264_VUI_PARAMETERS extends Pointer {
         return (NV_ENC_CONFIG_H264_VUI_PARAMETERS)super.position(position);
     }
     @Override public NV_ENC_CONFIG_H264_VUI_PARAMETERS getPointer(long i) {
-        return new NV_ENC_CONFIG_H264_VUI_PARAMETERS((Pointer)this).position(position + i);
+        return new NV_ENC_CONFIG_H264_VUI_PARAMETERS((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: if set to 1 , it specifies that the overscanInfo is present */

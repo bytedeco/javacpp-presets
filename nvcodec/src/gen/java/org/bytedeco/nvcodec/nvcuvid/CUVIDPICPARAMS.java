@@ -34,7 +34,7 @@ public class CUVIDPICPARAMS extends Pointer {
         return (CUVIDPICPARAMS)super.position(position);
     }
     @Override public CUVIDPICPARAMS getPointer(long i) {
-        return new CUVIDPICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDPICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** IN: Coded frame size in macroblocks                           */
