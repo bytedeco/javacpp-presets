@@ -118,6 +118,12 @@ runs:
           rem We can get these msi files by starting the installation from the exe file
           cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x86.msi ADDLOCAL=ALL"
           cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x86.msi ADDLOCAL=ALL"
+          dir .
+          dir "C:\Program Files (x86)"
+          dir "C:\Program Files (x86)\FLIR Systems"
+          dir "C:\Program Files (x86)\FLIR Systems\Spinnaker"
+          dir "C:\Program Files (x86)\FLIR Systems\Spinnaker\include"
+          dir "C:\Program Files (x86)\FLIR Systems\Spinnaker\include\spinc"
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
@@ -127,6 +133,11 @@ runs:
           rem We can get these msi files by starting the installation from the exe file
           cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x64.msi ADDLOCAL=ALL"
           cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x64.msi ADDLOCAL=ALL"
+          dir "C:\Program Files"
+          dir "C:\Program Files\FLIR Systems"
+          dir "C:\Program Files\FLIR Systems\Spinnaker"
+          dir "C:\Program Files\FLIR Systems\Spinnaker\include"
+          dir "C:\Program Files\FLIR Systems\Spinnaker\include\spinc"
         )
 
         set GRADLE_TASK=publishToMavenLocal
