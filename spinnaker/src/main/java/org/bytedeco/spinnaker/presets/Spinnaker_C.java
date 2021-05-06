@@ -62,17 +62,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "windows", link = {"SpinnakerC_v140", "Spinnaker_v140", "SpinVideoC_v140", "SpinVideo_v140"},
                 includepath = {"C:/Program Files/FLIR Systems/Spinnaker/include/spinc/",
                                "C:/Program Files (x86)/FLIR Systems/Spinnaker/include/spinc/",
-                               // CI automatic installation skips "LIR Systems" dir?
+                               // CI installation skips "FLIR Systems" dir
+                               "C:/Program Files/Spinnaker/include/spinc/",
                                "C:/Program Files (x86)/Spinnaker/include/spinc"}),
         @Platform(value = "windows-x86",
                 linkpath    = {"C:/Program Files/FLIR Systems/Spinnaker/lib/vs2015/",
                                "C:/Program Files (x86)/FLIR Systems/Spinnaker/lib/vs2015/",
-                               // CI automatic installation skips "LIR Systems" dir?
+                               // CI installation skips "FLIR Systems" dir
                                "C:/Program Files/Spinnaker/lib/vs2015",
                                "C:/Program Files (x86)/Spinnaker/lib/vs2015"},
                 preloadpath = {"C:/Program Files/FLIR Systems/Spinnaker/bin/vs2015/",
                                "C:/Program Files (x86)/FLIR Systems/Spinnaker/bin/vs2015/",
-                               // CI automatic installation skips "LIR Systems" dir?
+                               // CI installation skips "FLIR Systems" dir
                                "C:/Program Files/Spinnaker/bin/vs2015/",
                                "C:/Program Files (x86)/Spinnaker/bin/vs2015/",}),
         @Platform(value = "windows-x86_64",
