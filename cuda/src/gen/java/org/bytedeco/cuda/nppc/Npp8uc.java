@@ -33,7 +33,7 @@ public class Npp8uc extends Pointer {
         return (Npp8uc)super.position(position);
     }
     @Override public Npp8uc getPointer(long i) {
-        return new Npp8uc((Pointer)this).position(position + i);
+        return new Npp8uc((Pointer)this).offsetAddress(i);
     }
 
     /**  Real part */

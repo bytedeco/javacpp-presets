@@ -29,7 +29,7 @@ public class cudaKernelNodeParams extends Pointer {
         return (cudaKernelNodeParams)super.position(position);
     }
     @Override public cudaKernelNodeParams getPointer(long i) {
-        return new cudaKernelNodeParams((Pointer)this).position(position + i);
+        return new cudaKernelNodeParams((Pointer)this).offsetAddress(i);
     }
 
     /** Kernel to launch */

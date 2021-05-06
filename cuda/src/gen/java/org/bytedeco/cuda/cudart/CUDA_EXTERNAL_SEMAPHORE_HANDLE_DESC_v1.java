@@ -29,7 +29,7 @@ public class CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1 extends Pointer {
         return (CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1)super.position(position);
     }
     @Override public CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1 getPointer(long i) {
-        return new CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1((Pointer)this).position(position + i);
+        return new CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1((Pointer)this).offsetAddress(i);
     }
 
     /**

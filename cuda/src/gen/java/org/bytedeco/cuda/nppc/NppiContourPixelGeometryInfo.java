@@ -34,7 +34,7 @@ public class NppiContourPixelGeometryInfo extends Pointer {
         return (NppiContourPixelGeometryInfo)super.position(position);
     }
     @Override public NppiContourPixelGeometryInfo getPointer(long i) {
-        return new NppiContourPixelGeometryInfo((Pointer)this).position(position + i);
+        return new NppiContourPixelGeometryInfo((Pointer)this).offsetAddress(i);
     }
 
     /** image geometry X and Y location of current contour pixel */

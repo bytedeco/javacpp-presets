@@ -29,7 +29,7 @@ public class CUmemPoolPtrExportData_v1 extends Pointer {
         return (CUmemPoolPtrExportData_v1)super.position(position);
     }
     @Override public CUmemPoolPtrExportData_v1 getPointer(long i) {
-        return new CUmemPoolPtrExportData_v1((Pointer)this).position(position + i);
+        return new CUmemPoolPtrExportData_v1((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned char") byte reserved(int i); public native CUmemPoolPtrExportData_v1 reserved(int i, byte setter);

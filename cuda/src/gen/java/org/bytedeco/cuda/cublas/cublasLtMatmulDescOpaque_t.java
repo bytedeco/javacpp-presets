@@ -30,7 +30,7 @@ public class cublasLtMatmulDescOpaque_t extends Pointer {
         return (cublasLtMatmulDescOpaque_t)super.position(position);
     }
     @Override public cublasLtMatmulDescOpaque_t getPointer(long i) {
-        return new cublasLtMatmulDescOpaque_t((Pointer)this).position(position + i);
+        return new cublasLtMatmulDescOpaque_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("uint64_t") long data(int i); public native cublasLtMatmulDescOpaque_t data(int i, long setter);

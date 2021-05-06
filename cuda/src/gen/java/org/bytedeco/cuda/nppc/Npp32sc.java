@@ -32,7 +32,7 @@ public class Npp32sc extends Pointer {
         return (Npp32sc)super.position(position);
     }
     @Override public Npp32sc getPointer(long i) {
-        return new Npp32sc((Pointer)this).position(position + i);
+        return new Npp32sc((Pointer)this).offsetAddress(i);
     }
 
     /**  Real part */

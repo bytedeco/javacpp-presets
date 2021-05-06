@@ -25,7 +25,7 @@ public class CUuuid extends Pointer {
         return (CUuuid)super.position(position);
     }
     @Override public CUuuid getPointer(long i) {
-        return new CUuuid((Pointer)this).position(position + i);
+        return new CUuuid((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("char") byte bytes(int i); public native CUuuid bytes(int i, byte setter);

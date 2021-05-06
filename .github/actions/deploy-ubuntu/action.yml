@@ -114,11 +114,18 @@ runs:
           rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a)
         fi
 
-        if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
           python3 -m gdown.cli https://drive.google.com/uc?id=1cBohhcptNDSF5pxsQ7n4-qcGsgiWUxga
           unzip Video_Codec_SDK_11.0.10.zip -d /usr/local
           ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
+        fi
+
+        if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
+          echo Installing TensorRT
+          python3 -m gdown.cli https://drive.google.com/uc?id=1uwb4nISZT0-FcpTQ4dnWaD47fLQu69IP
+          tar -hxvf TensorRT-7.2.1.6.Ubuntu-18.04.aarch64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
+          ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then

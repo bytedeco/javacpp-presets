@@ -29,7 +29,7 @@ public class CUstreamBatchMemOpParams_v1 extends Pointer {
         return (CUstreamBatchMemOpParams_v1)super.position(position);
     }
     @Override public CUstreamBatchMemOpParams_v1 getPointer(long i) {
-        return new CUstreamBatchMemOpParams_v1((Pointer)this).position(position + i);
+        return new CUstreamBatchMemOpParams_v1((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("CUstreamBatchMemOpType") int operation(); public native CUstreamBatchMemOpParams_v1 operation(int setter);

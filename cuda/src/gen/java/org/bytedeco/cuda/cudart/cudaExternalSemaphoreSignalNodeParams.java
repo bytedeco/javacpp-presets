@@ -29,7 +29,7 @@ public class cudaExternalSemaphoreSignalNodeParams extends Pointer {
         return (cudaExternalSemaphoreSignalNodeParams)super.position(position);
     }
     @Override public cudaExternalSemaphoreSignalNodeParams getPointer(long i) {
-        return new cudaExternalSemaphoreSignalNodeParams((Pointer)this).position(position + i);
+        return new cudaExternalSemaphoreSignalNodeParams((Pointer)this).offsetAddress(i);
     }
 
     /** Array of external semaphore handles. */

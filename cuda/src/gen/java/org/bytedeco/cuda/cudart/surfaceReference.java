@@ -29,7 +29,7 @@ public class surfaceReference extends Pointer {
         return (surfaceReference)super.position(position);
     }
     @Override public surfaceReference getPointer(long i) {
-        return new surfaceReference((Pointer)this).position(position + i);
+        return new surfaceReference((Pointer)this).offsetAddress(i);
     }
 
     /**

@@ -29,7 +29,7 @@ public class cudaMemAccessDesc extends Pointer {
         return (cudaMemAccessDesc)super.position(position);
     }
     @Override public cudaMemAccessDesc getPointer(long i) {
-        return new cudaMemAccessDesc((Pointer)this).position(position + i);
+        return new cudaMemAccessDesc((Pointer)this).offsetAddress(i);
     }
 
     /** Location on which the request is to change it's accessibility */
