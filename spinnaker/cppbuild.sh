@@ -24,13 +24,15 @@ case $PLATFORM in
         ;;
     linux-x86*)
         if [[ ! -d "/usr/include/spinnaker/" ]]; then
-            echo "Please install Spinnaker under the default installation directory"
+            echo "Please install Spinnaker under the default installation directory: /usr/include/spinnaker"
+            echo "ls /usr/include"
+            ls /usr/include
             exit 1
         fi
         ;;
     windows-*)
         if [[ ! -d "/C/Program Files/Spinnaker/" ]] && [[ ! -d "/C/Program Files (x86)/Spinnaker/" ]] &&
-           [[ ! -d "/C/Program Files/Point Grey Research/" ]] && [[ ! -d "/C/Program Files (x86)/Point Grey Research/" ]]; then
+           [[ ! -d "/C/Program Files/FLIR Systems/Spinnaker/" ]] && [[ ! -d "/C/Program Files (x86)/FLIR Systems/Spinnaker/" ]]; then
             echo "Please install Spinnaker under the default installation directory"
             exit 1
         fi
