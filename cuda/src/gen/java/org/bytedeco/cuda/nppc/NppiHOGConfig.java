@@ -33,7 +33,7 @@ public class NppiHOGConfig extends Pointer {
         return (NppiHOGConfig)super.position(position);
     }
     @Override public NppiHOGConfig getPointer(long i) {
-        return new NppiHOGConfig((Pointer)this).offsetAddress(i);
+        return new NppiHOGConfig((Pointer)this).position(position + i);
     }
 
     /**  square cell size (pixels). */

@@ -29,7 +29,7 @@ public class cudaMemPoolPtrExportData extends Pointer {
         return (cudaMemPoolPtrExportData)super.position(position);
     }
     @Override public cudaMemPoolPtrExportData getPointer(long i) {
-        return new cudaMemPoolPtrExportData((Pointer)this).offsetAddress(i);
+        return new cudaMemPoolPtrExportData((Pointer)this).position(position + i);
     }
 
     public native @Cast("unsigned char") byte reserved(int i); public native cudaMemPoolPtrExportData reserved(int i, byte setter);

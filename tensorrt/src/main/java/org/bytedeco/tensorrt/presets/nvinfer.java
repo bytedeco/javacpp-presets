@@ -45,16 +45,10 @@ import org.bytedeco.cuda.presets.nvrtc;
     inherit = {cublas.class, cudnn.class, nvrtc.class},
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-x86_64", "windows-x86_64"},
+            value = {"linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
             link = "nvinfer@.7"
-        ),
-        @Platform(
-            value = "linux-arm64",
-            includepath = {"/usr/include/aarch64-linux-gnu/", "/usr/local/tensorrt/include/"},
-            linkpath = {"/usr/lib/aarch64-linux-gnu/", "/usr/local/tensorrt/lib/"},
-            preload = "myelin@.1"
         ),
         @Platform(
             value = "linux-x86_64",

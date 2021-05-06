@@ -1161,7 +1161,6 @@
         <module>cuda</module>
         <module>nvcodec</module>
         <module>opencl</module>
-        <module>tensorrt</module>
         <module>onnxruntime</module>
         <module>cpu_features</module>
         <module>systems</module>
@@ -1217,6 +1216,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>nvcodec</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>

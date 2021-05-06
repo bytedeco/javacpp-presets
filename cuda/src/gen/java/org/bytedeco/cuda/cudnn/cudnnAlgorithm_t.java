@@ -29,7 +29,7 @@ public class cudnnAlgorithm_t extends Pointer {
         return (cudnnAlgorithm_t)super.position(position);
     }
     @Override public cudnnAlgorithm_t getPointer(long i) {
-        return new cudnnAlgorithm_t((Pointer)this).offsetAddress(i);
+        return new cudnnAlgorithm_t((Pointer)this).position(position + i);
     }
 
         @Name("algo.convFwdAlgo") public native @Cast("cudnnConvolutionFwdAlgo_t") int algo_convFwdAlgo(); public native cudnnAlgorithm_t algo_convFwdAlgo(int setter);

@@ -34,7 +34,7 @@ public class NppiResizeBatchROI_Advanced extends Pointer {
         return (NppiResizeBatchROI_Advanced)super.position(position);
     }
     @Override public NppiResizeBatchROI_Advanced getPointer(long i) {
-        return new NppiResizeBatchROI_Advanced((Pointer)this).offsetAddress(i);
+        return new NppiResizeBatchROI_Advanced((Pointer)this).position(position + i);
     }
 
     public native @ByRef NppiRect oSrcRectROI(); public native NppiResizeBatchROI_Advanced oSrcRectROI(NppiRect setter);    

@@ -29,7 +29,7 @@ public class CUarrayMapInfo_v1 extends Pointer {
         return (CUarrayMapInfo_v1)super.position(position);
     }
     @Override public CUarrayMapInfo_v1 getPointer(long i) {
-        return new CUarrayMapInfo_v1((Pointer)this).offsetAddress(i);
+        return new CUarrayMapInfo_v1((Pointer)this).position(position + i);
     }
     
     /** Resource type */
