@@ -25,10 +25,6 @@ case $PLATFORM in
     linux-x86*)
         if [[ ! -d "/usr/include/spinnaker/" ]] && [[ ! -d "/opt/spinnaker/include/" ]]; then
             echo "Please install Spinnaker under the default installation directory: /usr/include/spinnaker or /opt/spinnaker/include"
-            echo "ls /usr/include"
-            ls /usr/include
-            echo "ls /opt/spinnaker/include"
-            ls /opt/spinnaker/include
             exit 1
         fi
         ;;
