@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "plasma/events.h",
                 "plasma/test_util.h",
             },
-            link = "plasma@.300"
+            link = "plasma@.400"
         ),
     },
     target = "org.bytedeco.plasma",

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/platform.h",
                 "parquet/type_fwd.h",
                 "parquet/types.h",
-                "parquet/deprecated_io.h",
+//                "parquet/deprecated_io.h",
                 "parquet/exception.h",
                 "parquet/level_comparison.h",
                 "parquet/level_conversion.h",
@@ -53,7 +53,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/column_reader.h",
                 "parquet/column_scanner.h",
                 "parquet/column_writer.h",
-                "parquet/encryption.h",
+                "parquet/encryption/encryption.h",
                 "parquet/properties.h",
                 "parquet/metadata.h",
                 "parquet/file_reader.h",
@@ -63,7 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/arrow/reader.h",
                 "parquet/arrow/writer.h",
             },
-            link = "parquet@.300"
+            link = "parquet@.400"
         ),
     },
     target = "org.bytedeco.parquet",
