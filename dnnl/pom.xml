@@ -14,12 +14,6 @@
   <version>2.2.1-${project.parent.version}</version>
   <name>JavaCPP Presets for DNNL</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.opencl.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>

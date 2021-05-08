@@ -14,15 +14,6 @@
   <version>0.7.0-${project.parent.version}</version>
   <name>JavaCPP Presets for TVM</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.dnnl.${javacpp.platform.module};
-      requires org.bytedeco.llvm.${javacpp.platform.module};
-      requires org.bytedeco.mkl.${javacpp.platform.module};
-      requires org.bytedeco.scipy.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -14,12 +14,6 @@
   <version>1.07-${project.parent.version}</version>
   <name>JavaCPP Presets for flandmark</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.opencv.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>

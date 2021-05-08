@@ -14,12 +14,6 @@
   <version>1.6.2-${project.parent.version}</version>
   <name>JavaCPP Presets for SciPy</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.numpy.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
