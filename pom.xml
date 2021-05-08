@@ -395,9 +395,6 @@
                   <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}${javacpp.platform.extension}.jar</file>
                   <moduleInfoSource>
                     open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module} {
-                      requires transitive org.bytedeco.${javacpp.packageName};
-                      requires org.bytedeco.javacpp.${javacpp.platform.module};
-                      ${javacpp.nativeRequires}
                     }
                   </moduleInfoSource>
                 </module>
