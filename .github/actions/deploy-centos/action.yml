@@ -128,11 +128,9 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "spinnaker" ]]; then
           echo Installing Spinnaker amd64
-          python3 -m gdown.cli https://drive.google.com/uc?id=1DiI8mG1fyewEGWxW7keg-dqXk0rLwmAK
-          tar -xzvf spinnaker-1.27.0.48-Ubuntu16.04-amd64-pkg.tar.gz
-          find -name *.deb | while read f; do ar -xv $f; tar --totals -xf data.tar.xz -C /; done;
-          ln -s libSpinnaker_C.so.1.27.0.48 /usr/lib/libSpinnaker_C.so.1
-          ln -s libSpinnaker.so.1.27.0.48 /usr/lib/libSpinnaker.so.1
+          python3 -m gdown.cli https://drive.google.com/uc?id=1zr9k4x-NI3OkVMLCccSBY4VtR-16iAQG
+          tar -xzvf spinnaker-2.4.0.143-Ubuntu18.04-amd64-pkg.tar.gz
+          find -name *.deb | while read f; do ar -xv $f; tar --totals -xvf data.tar.xz -C /; done;
         fi
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
