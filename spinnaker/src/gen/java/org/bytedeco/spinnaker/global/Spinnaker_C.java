@@ -159,67 +159,67 @@ public class Spinnaker_C extends org.bytedeco.spinnaker.presets.Spinnaker_C {
 public static final byte False = False();
 @MemberGetter public static native @Cast("const bool8_t") byte True();
 public static final byte True = True();
-// Targeting ..\Spinnaker_C\spinSystem.java
+// Targeting ../Spinnaker_C/spinSystem.java
 
 
-// Targeting ..\Spinnaker_C\spinInterfaceList.java
+// Targeting ../Spinnaker_C/spinInterfaceList.java
 
 
-// Targeting ..\Spinnaker_C\spinInterface.java
+// Targeting ../Spinnaker_C/spinInterface.java
 
 
-// Targeting ..\Spinnaker_C\spinCameraList.java
+// Targeting ../Spinnaker_C/spinCameraList.java
 
 
-// Targeting ..\Spinnaker_C\spinCamera.java
+// Targeting ../Spinnaker_C/spinCamera.java
 
 
-// Targeting ..\Spinnaker_C\spinImage.java
+// Targeting ../Spinnaker_C/spinImage.java
 
 
-// Targeting ..\Spinnaker_C\spinImageStatistics.java
+// Targeting ../Spinnaker_C/spinImageStatistics.java
 
 
-// Targeting ..\Spinnaker_C\spinDeviceEventHandler.java
+// Targeting ../Spinnaker_C/spinDeviceEventHandler.java
 
 
-// Targeting ..\Spinnaker_C\spinImageEventHandler.java
+// Targeting ../Spinnaker_C/spinImageEventHandler.java
 
 
-// Targeting ..\Spinnaker_C\spinDeviceArrivalEventHandler.java
+// Targeting ../Spinnaker_C/spinDeviceArrivalEventHandler.java
 
 
-// Targeting ..\Spinnaker_C\spinDeviceRemovalEventHandler.java
+// Targeting ../Spinnaker_C/spinDeviceRemovalEventHandler.java
 
 
-// Targeting ..\Spinnaker_C\spinInterfaceEventHandler.java
+// Targeting ../Spinnaker_C/spinInterfaceEventHandler.java
 
 
-// Targeting ..\Spinnaker_C\spinLogEventHandler.java
+// Targeting ../Spinnaker_C/spinLogEventHandler.java
 
 
-// Targeting ..\Spinnaker_C\spinLogEventData.java
+// Targeting ../Spinnaker_C/spinLogEventData.java
 
 
-// Targeting ..\Spinnaker_C\spinDeviceEventData.java
+// Targeting ../Spinnaker_C/spinDeviceEventData.java
 
 
-// Targeting ..\Spinnaker_C\spinVideo.java
+// Targeting ../Spinnaker_C/spinVideo.java
 
 
-// Targeting ..\Spinnaker_C\spinDeviceEventFunction.java
+// Targeting ../Spinnaker_C/spinDeviceEventFunction.java
 
 
-// Targeting ..\Spinnaker_C\spinImageEventFunction.java
+// Targeting ../Spinnaker_C/spinImageEventFunction.java
 
 
-// Targeting ..\Spinnaker_C\spinArrivalEventFunction.java
+// Targeting ../Spinnaker_C/spinArrivalEventFunction.java
 
 
-// Targeting ..\Spinnaker_C\spinRemovalEventFunction.java
+// Targeting ../Spinnaker_C/spinRemovalEventFunction.java
 
 
-// Targeting ..\Spinnaker_C\spinLogEventFunction.java
+// Targeting ../Spinnaker_C/spinLogEventFunction.java
 
 
 
@@ -525,13 +525,13 @@ public enum _spinPayloadTypeInfoIDs {
     public _spinPayloadTypeInfoIDs intern() { for (_spinPayloadTypeInfoIDs e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ..\Spinnaker_C\spinPNGOption.java
+// Targeting ../Spinnaker_C/spinPNGOption.java
 
 
-// Targeting ..\Spinnaker_C\spinPPMOption.java
+// Targeting ../Spinnaker_C/spinPPMOption.java
 
 
-// Targeting ..\Spinnaker_C\spinPGMOption.java
+// Targeting ../Spinnaker_C/spinPGMOption.java
 
 
 
@@ -564,28 +564,28 @@ public enum CompressionMethod {
     public CompressionMethod intern() { for (CompressionMethod e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ..\Spinnaker_C\spinTIFFOption.java
+// Targeting ../Spinnaker_C/spinTIFFOption.java
 
 
-// Targeting ..\Spinnaker_C\spinJPEGOption.java
+// Targeting ../Spinnaker_C/spinJPEGOption.java
 
 
-// Targeting ..\Spinnaker_C\spinJPG2Option.java
+// Targeting ../Spinnaker_C/spinJPG2Option.java
 
 
-// Targeting ..\Spinnaker_C\spinBMPOption.java
+// Targeting ../Spinnaker_C/spinBMPOption.java
 
 
-// Targeting ..\Spinnaker_C\spinMJPGOption.java
+// Targeting ../Spinnaker_C/spinMJPGOption.java
 
 
-// Targeting ..\Spinnaker_C\spinH264Option.java
+// Targeting ../Spinnaker_C/spinH264Option.java
 
 
-// Targeting ..\Spinnaker_C\spinAVIOption.java
+// Targeting ../Spinnaker_C/spinAVIOption.java
 
 
-// Targeting ..\Spinnaker_C\spinLibraryVersion.java
+// Targeting ../Spinnaker_C/spinLibraryVersion.java
 
 
 
@@ -617,7 +617,7 @@ public enum _actionCommandStatus {
     public _actionCommandStatus intern() { for (_actionCommandStatus e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ..\Spinnaker_C\actionCommandResult.java
+// Targeting ../Spinnaker_C/actionCommandResult.java
 
 
 
@@ -5558,7 +5558,7 @@ public enum _spinCxpPoCxpStatusEnums {
 // #define FLIR_SPINNAKER_CHUNKDATADEF_C_H
 
 // #include "SpinnakerPlatformC.h"
-// Targeting ..\Spinnaker_C\spinChunkData.java
+// Targeting ../Spinnaker_C/spinChunkData.java
 
 
 
@@ -5589,16 +5589,16 @@ public enum _spinCxpPoCxpStatusEnums {
 
 // #ifndef FLIR_SPINNAKER_GENAPIDEFS_C_H
 // #define FLIR_SPINNAKER_GENAPIDEFS_C_H
-// Targeting ..\Spinnaker_C\spinNodeMapHandle.java
+// Targeting ../Spinnaker_C/spinNodeMapHandle.java
 
 
-// Targeting ..\Spinnaker_C\spinNodeHandle.java
+// Targeting ../Spinnaker_C/spinNodeHandle.java
 
 
-// Targeting ..\Spinnaker_C\spinNodeCallbackHandle.java
+// Targeting ../Spinnaker_C/spinNodeCallbackHandle.java
 
 
-// Targeting ..\Spinnaker_C\spinNodeCallbackFunction.java
+// Targeting ../Spinnaker_C/spinNodeCallbackFunction.java
 
 
 
@@ -9850,7 +9850,7 @@ public enum _spinInputDirection {
 // #define FLIR_SPINNAKER_QUICKSPINDEFS_C_H
 
 // #include "SpinnakerGenApiDefsC.h"
-// Targeting ..\Spinnaker_C\quickSpin.java
+// Targeting ../Spinnaker_C/quickSpin.java
 
 
 
@@ -10314,7 +10314,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLDEVICE_H
 // #define FLIR_SPINNAKERC_TLDEVICE_H
-// Targeting ..\Spinnaker_C\quickSpinTLDevice.java
+// Targeting ../Spinnaker_C/quickSpinTLDevice.java
 
 
 
@@ -10347,7 +10347,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLINTERFACE_H
 // #define FLIR_SPINNAKERC_TLINTERFACE_H
-// Targeting ..\Spinnaker_C\quickSpinTLInterface.java
+// Targeting ../Spinnaker_C/quickSpinTLInterface.java
 
 
 
@@ -10380,7 +10380,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLSTREAM_H
 // #define FLIR_SPINNAKERC_TLSTREAM_H
-// Targeting ..\Spinnaker_C\quickSpinTLStream.java
+// Targeting ../Spinnaker_C/quickSpinTLStream.java
 
 
 
@@ -10413,7 +10413,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLSYSTEM_H
 // #define FLIR_SPINNAKERC_TLSYSTEM_H
-// Targeting ..\Spinnaker_C\quickSpinTLSystem.java
+// Targeting ../Spinnaker_C/quickSpinTLSystem.java
 
 
 
