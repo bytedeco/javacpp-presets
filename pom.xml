@@ -1161,6 +1161,7 @@
         <module>cuda</module>
         <module>nvcodec</module>
         <module>opencl</module>
+        <module>tensorrt</module>
         <module>onnxruntime</module>
         <module>cpu_features</module>
         <module>systems</module>
