@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/flight/server_auth.h",
                 "arrow/flight/server.h",
             },
-            link = "arrow_flight@.300",
+            link = "arrow_flight@.400",
             preload = {"libcrypto-1_1", "libssl-1_1"}
         ),
     },

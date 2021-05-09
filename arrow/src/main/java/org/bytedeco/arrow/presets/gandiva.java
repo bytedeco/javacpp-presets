@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "gandiva/decimal_scalar.h",
                 "gandiva/tree_expr_builder.h",
             },
-            link = "gandiva@.300"
+            link = "gandiva@.400"
         ),
     },
     target = "org.bytedeco.gandiva",
@@ -65,6 +65,8 @@ public class gandiva implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("GANDIVA_EXPORT").cppTypes().annotations())
+               .put(new Info("std::hash<gandiva::DecimalScalar128>").pointerTypes("DecimalScalar128Hash"))
+               .put(new Info("std::unordered_set<gandiva::DecimalScalar128>").pointerTypes("DecimalScalar128Set").define())
                .put(new Info("std::shared_ptr<gandiva::FunctionSignature>").annotations("@SharedPtr").pointerTypes("FunctionSignature"))
                .put(new Info("std::vector<std::shared_ptr<gandiva::FunctionSignature> >").pointerTypes("FunctionSignatureVector").define())
                .put(new Info("std::unordered_set<int32_t>").pointerTypes("IntSet").define())

@@ -35,7 +35,7 @@ public class NV_ENC_CONFIG_H264 extends Pointer {
         return (NV_ENC_CONFIG_H264)super.position(position);
     }
     @Override public NV_ENC_CONFIG_H264 getPointer(long i) {
-        return new NV_ENC_CONFIG_H264((Pointer)this).position(position + i);
+        return new NV_ENC_CONFIG_H264((Pointer)this).offsetAddress(i);
     }
 
     /** [in]: Set to 1 to enable SVC temporal*/

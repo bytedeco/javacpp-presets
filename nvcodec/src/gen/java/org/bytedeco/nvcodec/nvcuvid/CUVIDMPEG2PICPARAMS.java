@@ -34,7 +34,7 @@ public class CUVIDMPEG2PICPARAMS extends Pointer {
         return (CUVIDMPEG2PICPARAMS)super.position(position);
     }
     @Override public CUVIDMPEG2PICPARAMS getPointer(long i) {
-        return new CUVIDMPEG2PICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDMPEG2PICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     public native int ForwardRefIdx(); public native CUVIDMPEG2PICPARAMS ForwardRefIdx(int setter);          // Picture index of forward reference (P/B-frames)

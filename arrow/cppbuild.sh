@@ -12,11 +12,11 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=11.1.0
+LLVM_VERSION=12.0.0
 OPENSSL_VERSION=1.1.1k
 ZLIB_VERSION=1.2.11
 PROTO_VERSION=3.13.0
-ARROW_VERSION=3.0.0
+ARROW_VERSION=4.0.0
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang-$LLVM_VERSION.src.tar.xz clang-$LLVM_VERSION.src.tar.xz
 download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
@@ -36,6 +36,7 @@ tar --totals -xzf ../openssl-$OPENSSL_VERSION.tar.gz
 tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
 cd apache-arrow-$ARROW_VERSION
 patch -Np1 < ../../../arrow.patch
+sedinplace 's/PlatformToolset=v140/PlatformToolset=v142/g' cpp/cmake_modules/ThirdpartyToolchain.cmake
 sedinplace 's/ARROW_LLVM_VERSIONS "10"/ARROW_LLVM_VERSIONS "11" "10"/g' cpp/CMakeLists.txt
 cd ../llvm-$LLVM_VERSION.src
 sedinplace '/find_package(Git/d' cmake/modules/AddLLVM.cmake cmake/modules/VersionFromVCS.cmake
@@ -221,5 +222,10 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+# work around link issues on Windows
+echo "extern template class arrow::Future<std::shared_ptr<arrow::RecordBatch> >;"  >> ../../include/arrow/dataset/scanner.h
+echo "extern template class arrow::Future<arrow::dataset::TaggedRecordBatch>;"     >> ../../include/arrow/dataset/scanner.h
+echo "extern template class arrow::Future<arrow::dataset::EnumeratedRecordBatch>;" >> ../../include/arrow/dataset/scanner.h
 
 cd ../../..

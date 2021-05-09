@@ -33,7 +33,7 @@ public class CUVIDAV1PICPARAMS extends Pointer {
         return (CUVIDAV1PICPARAMS)super.position(position);
     }
     @Override public CUVIDAV1PICPARAMS getPointer(long i) {
-        return new CUVIDAV1PICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDAV1PICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned int") int width(); public native CUVIDAV1PICPARAMS width(int setter);                               // coded width, if superres enabled then it is upscaled width

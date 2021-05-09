@@ -789,7 +789,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
             memcpy2D.srcDevice(srcFrame.get() + memcpy2D.srcPitch() * this.surfaceHeight);
             memcpy2D.dstHost(decodedFrame.getPointer(memcpy2D.dstPitch() * this.lumaHeight));
-            memcpy2D.dstDevice(decodedFrame.address());
+            memcpy2D.dstDevice(memcpy2D.dstHost().address());
             memcpy2D.Height(this.chromaHeight);
             checkCudaApiCall(cuMemcpy2DAsync(memcpy2D, this.cuvidStream));
 

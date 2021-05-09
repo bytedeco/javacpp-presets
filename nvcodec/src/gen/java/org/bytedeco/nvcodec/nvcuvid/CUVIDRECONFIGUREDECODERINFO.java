@@ -33,7 +33,7 @@ public class CUVIDRECONFIGUREDECODERINFO extends Pointer {
         return (CUVIDRECONFIGUREDECODERINFO)super.position(position);
     }
     @Override public CUVIDRECONFIGUREDECODERINFO getPointer(long i) {
-        return new CUVIDRECONFIGUREDECODERINFO((Pointer)this).position(position + i);
+        return new CUVIDRECONFIGUREDECODERINFO((Pointer)this).offsetAddress(i);
     }
 
     /** IN: Coded sequence width in pixels, MUST be < = ulMaxWidth defined at CUVIDDECODECREATEINFO  */

@@ -34,7 +34,7 @@ public class NV_ENC_ENCODE_OUT_PARAMS extends Pointer {
         return (NV_ENC_ENCODE_OUT_PARAMS)super.position(position);
     }
     @Override public NV_ENC_ENCODE_OUT_PARAMS getPointer(long i) {
-        return new NV_ENC_ENCODE_OUT_PARAMS((Pointer)this).position(position + i);
+        return new NV_ENC_ENCODE_OUT_PARAMS((Pointer)this).offsetAddress(i);
     }
 
     /** [out]: Struct version. */

@@ -34,7 +34,7 @@ public class CUVIDHEVCPICPARAMS extends Pointer {
         return (CUVIDHEVCPICPARAMS)super.position(position);
     }
     @Override public CUVIDHEVCPICPARAMS getPointer(long i) {
-        return new CUVIDHEVCPICPARAMS((Pointer)this).position(position + i);
+        return new CUVIDHEVCPICPARAMS((Pointer)this).offsetAddress(i);
     }
 
     // sps
