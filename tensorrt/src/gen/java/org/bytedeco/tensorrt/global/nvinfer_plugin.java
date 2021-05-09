@@ -26,7 +26,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 // Parsed from NvInferPlugin.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -323,7 +323,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 // Parsed from NvInferPluginUtils.h
 
 /*
- * Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
