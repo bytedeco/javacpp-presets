@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>spinnaker-platform</artifactId>
-  <version>1.27.0.48-${project.parent.version}</version>
+  <version>2.4.0.143-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Spinnaker</name>
 
   <properties>

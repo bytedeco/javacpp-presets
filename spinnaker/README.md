@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Spinnaker 1.27.0.48  https://www.flir.com/products/spinnaker-sdk
+ * Spinnaker 2.4.0.143  https://www.flir.com/products/spinnaker-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.spinnaker</groupId>
     <artifactId>acquisition_c</artifactId>
-    <version>1.5.5</version>
+    <version>1.5.6-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Acquisition_C</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>spinnaker-platform</artifactId>
-            <version>1.27.0.48-1.5.5</version>
+            <version>2.4.0.143-1.5.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

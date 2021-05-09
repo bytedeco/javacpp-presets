@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SPINNAKER_VERSION=1.27.0.48
+SPINNAKER_VERSION=2.4.0.143
 
 case $PLATFORM in
     linux-arm*)
@@ -23,14 +23,14 @@ case $PLATFORM in
         mv $PLATFORM/include/C/* $PLATFORM/include
         ;;
     linux-x86*)
-        if [[ ! -d "/usr/include/spinnaker/" ]]; then
-            echo "Please install Spinnaker under the default installation directory"
+        if [[ ! -d "/usr/include/spinnaker/" ]] && [[ ! -d "/opt/spinnaker/include/" ]]; then
+            echo "Please install Spinnaker under the default installation directory: /usr/include/spinnaker or /opt/spinnaker/include"
             exit 1
         fi
         ;;
     windows-*)
         if [[ ! -d "/C/Program Files/Spinnaker/" ]] && [[ ! -d "/C/Program Files (x86)/Spinnaker/" ]] &&
-           [[ ! -d "/C/Program Files/Point Grey Research/" ]] && [[ ! -d "/C/Program Files (x86)/Point Grey Research/" ]]; then
+           [[ ! -d "/C/Program Files/FLIR Systems/Spinnaker/" ]] && [[ ! -d "/C/Program Files (x86)/FLIR Systems/Spinnaker/" ]]; then
             echo "Please install Spinnaker under the default installation directory"
             exit 1
         fi
