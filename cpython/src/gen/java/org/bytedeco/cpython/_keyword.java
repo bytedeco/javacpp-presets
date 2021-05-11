@@ -26,7 +26,7 @@ public class _keyword extends Pointer {
         return (_keyword)super.position(position);
     }
     @Override public _keyword getPointer(long i) {
-        return new _keyword((Pointer)this).position(position + i);
+        return new _keyword((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("identifier") PyObject arg(); public native _keyword arg(PyObject setter);

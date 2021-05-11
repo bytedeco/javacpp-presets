@@ -32,7 +32,7 @@ public class Subdiv2D extends Pointer {
         return (Subdiv2D)super.position(position);
     }
     @Override public Subdiv2D getPointer(long i) {
-        return new Subdiv2D((Pointer)this).position(position + i);
+        return new Subdiv2D((Pointer)this).offsetAddress(i);
     }
 
     /** Subdiv2D point location cases */

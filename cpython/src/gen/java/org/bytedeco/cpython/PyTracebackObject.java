@@ -27,7 +27,7 @@ public class PyTracebackObject extends Pointer {
         return (PyTracebackObject)super.position(position);
     }
     @Override public PyTracebackObject getPointer(long i) {
-        return new PyTracebackObject((Pointer)this).position(position + i);
+        return new PyTracebackObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyTracebackObject ob_base(PyObject setter);

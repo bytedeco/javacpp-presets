@@ -27,7 +27,7 @@ public class Index extends Pointer {
         return (Index)super.position(position);
     }
     @Override public Index getPointer(long i) {
-        return new Index((Pointer)this).position(position + i);
+        return new Index((Pointer)this).offsetAddress(i);
     }
 
     public Index() { super((Pointer)null); allocate(); }

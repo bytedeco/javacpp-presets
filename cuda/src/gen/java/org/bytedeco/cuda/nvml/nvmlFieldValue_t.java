@@ -31,7 +31,7 @@ public class nvmlFieldValue_t extends Pointer {
         return (nvmlFieldValue_t)super.position(position);
     }
     @Override public nvmlFieldValue_t getPointer(long i) {
-        return new nvmlFieldValue_t((Pointer)this).position(position + i);
+        return new nvmlFieldValue_t((Pointer)this).offsetAddress(i);
     }
 
     /** ID of the NVML field to retrieve. This must be set before any call that uses this struct. See the constants starting with NVML_FI_ above. */

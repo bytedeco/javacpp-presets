@@ -26,7 +26,7 @@ public class PyCMethodObject extends Pointer {
         return (PyCMethodObject)super.position(position);
     }
     @Override public PyCMethodObject getPointer(long i) {
-        return new PyCMethodObject((Pointer)this).position(position + i);
+        return new PyCMethodObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyCFunctionObject func(); public native PyCMethodObject func(PyCFunctionObject setter);

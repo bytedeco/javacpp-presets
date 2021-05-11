@@ -27,7 +27,7 @@ public class IndexParams extends Pointer {
         return (IndexParams)super.position(position);
     }
     @Override public IndexParams getPointer(long i) {
-        return new IndexParams((Pointer)this).position(position + i);
+        return new IndexParams((Pointer)this).offsetAddress(i);
     }
 
     public IndexParams() { super((Pointer)null); allocate(); }

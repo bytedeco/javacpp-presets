@@ -24,7 +24,7 @@ public class Size2d extends DoublePointer {
         return (Size2d)super.position(position);
     }
     @Override public Size2d getPointer(long i) {
-        return new Size2d((Pointer)this).position(position + i);
+        return new Size2d((Pointer)this).offsetAddress(i);
     }
 
 

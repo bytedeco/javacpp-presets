@@ -42,7 +42,7 @@ public class VideoWriter extends Pointer {
         return (VideoWriter)super.position(position);
     }
     @Override public VideoWriter getPointer(long i) {
-        return new VideoWriter((Pointer)this).position(position + i);
+        return new VideoWriter((Pointer)this).offsetAddress(i);
     }
 
     /** \brief Default constructors

@@ -31,7 +31,7 @@ public class CvRect extends AbstractCvRect {
         return (CvRect)super.position(position);
     }
     @Override public CvRect getPointer(long i) {
-        return new CvRect((Pointer)this).position(position + i);
+        return new CvRect((Pointer)this).offsetAddress(i);
     }
 
     public native int x(); public native CvRect x(int setter);

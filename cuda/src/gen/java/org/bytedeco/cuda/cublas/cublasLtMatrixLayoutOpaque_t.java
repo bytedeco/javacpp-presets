@@ -30,7 +30,7 @@ public class cublasLtMatrixLayoutOpaque_t extends Pointer {
         return (cublasLtMatrixLayoutOpaque_t)super.position(position);
     }
     @Override public cublasLtMatrixLayoutOpaque_t getPointer(long i) {
-        return new cublasLtMatrixLayoutOpaque_t((Pointer)this).position(position + i);
+        return new cublasLtMatrixLayoutOpaque_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("uint64_t") long data(int i); public native cublasLtMatrixLayoutOpaque_t data(int i, long setter);

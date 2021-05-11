@@ -28,7 +28,7 @@ public class CvSparseMatIterator extends Pointer {
         return (CvSparseMatIterator)super.position(position);
     }
     @Override public CvSparseMatIterator getPointer(long i) {
-        return new CvSparseMatIterator((Pointer)this).position(position + i);
+        return new CvSparseMatIterator((Pointer)this).offsetAddress(i);
     }
 
     public native CvSparseMat mat(); public native CvSparseMatIterator mat(CvSparseMat setter);

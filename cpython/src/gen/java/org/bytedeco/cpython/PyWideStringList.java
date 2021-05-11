@@ -28,7 +28,7 @@ public class PyWideStringList extends Pointer {
         return (PyWideStringList)super.position(position);
     }
     @Override public PyWideStringList getPointer(long i) {
-        return new PyWideStringList((Pointer)this).position(position + i);
+        return new PyWideStringList((Pointer)this).offsetAddress(i);
     }
 
     /* If length is greater than zero, items must be non-NULL

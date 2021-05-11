@@ -26,7 +26,7 @@ public class _alias extends Pointer {
         return (_alias)super.position(position);
     }
     @Override public _alias getPointer(long i) {
-        return new _alias((Pointer)this).position(position + i);
+        return new _alias((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("identifier") PyObject name(); public native _alias name(PyObject setter);

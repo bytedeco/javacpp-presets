@@ -30,7 +30,7 @@ public class CvTreeNodeIterator extends Pointer {
         return (CvTreeNodeIterator)super.position(position);
     }
     @Override public CvTreeNodeIterator getPointer(long i) {
-        return new CvTreeNodeIterator((Pointer)this).position(position + i);
+        return new CvTreeNodeIterator((Pointer)this).offsetAddress(i);
     }
 
     public native @Const Pointer node(); public native CvTreeNodeIterator node(Pointer setter);

@@ -14,13 +14,13 @@ runs:
           export ARCH=arm64
           export PREFIX=aarch64-linux-gnu
           export CUDA=cuda-repo-rhel8-11-3-local-11.3.0_465.19.01-1.aarch64.rpm
-          export CUDNN=cudnn-11.2-linux-aarch64sbsa-v8.1.1.33.tgz
+          export CUDNN=cudnn-11.3-linux-aarch64sbsa-v8.2.0.53.tgz
           export NCCL=nccl_2.9.6-1+cuda11.3_aarch64.txz
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export PREFIX=powerpc64le-linux-gnu
           export CUDA=cuda-repo-rhel8-11-3-local-11.3.0_465.19.01-1.ppc64le.rpm
-          export CUDNN=cudnn-11.2-linux-ppc64le-v8.1.1.33.tgz
+          export CUDNN=cudnn-11.3-linux-ppc64le-v8.2.0.53.tgz
           export NCCL=nccl_2.9.6-1+cuda11.3_ppc64le.txz
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
@@ -85,7 +85,7 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/$CUDA
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/$CUDNN
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.0/$CUDNN
           curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.9/$NCCL
 
           rpm -i --force --ignorearch --nodeps $CUDA

@@ -27,7 +27,7 @@ public class PyCodeObject extends Pointer {
         return (PyCodeObject)super.position(position);
     }
     @Override public PyCodeObject getPointer(long i) {
-        return new PyCodeObject((Pointer)this).position(position + i);
+        return new PyCodeObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyCodeObject ob_base(PyObject setter);

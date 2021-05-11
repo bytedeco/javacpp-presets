@@ -55,7 +55,7 @@ public class BlocksGainCompensator extends BlocksCompensator {
         return (BlocksGainCompensator)super.position(position);
     }
     @Override public BlocksGainCompensator getPointer(long i) {
-        return new BlocksGainCompensator((Pointer)this).position(position + i);
+        return new BlocksGainCompensator((Pointer)this).offsetAddress(i);
     }
 
     // This Constructor only exists to make source level compatibility detector happy

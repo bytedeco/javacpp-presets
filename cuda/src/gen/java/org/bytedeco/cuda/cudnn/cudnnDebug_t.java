@@ -29,7 +29,7 @@ public class cudnnDebug_t extends Pointer {
         return (cudnnDebug_t)super.position(position);
     }
     @Override public cudnnDebug_t getPointer(long i) {
-        return new cudnnDebug_t((Pointer)this).position(position + i);
+        return new cudnnDebug_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned") int cudnn_version(); public native cudnnDebug_t cudnn_version(int setter);

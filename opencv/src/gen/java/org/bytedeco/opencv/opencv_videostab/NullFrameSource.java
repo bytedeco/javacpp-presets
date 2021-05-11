@@ -55,7 +55,7 @@ public class NullFrameSource extends IFrameSource {
         return (NullFrameSource)super.position(position);
     }
     @Override public NullFrameSource getPointer(long i) {
-        return new NullFrameSource((Pointer)this).position(position + i);
+        return new NullFrameSource((Pointer)this).offsetAddress(i);
     }
 
     public native void reset();

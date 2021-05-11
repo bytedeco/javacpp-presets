@@ -43,7 +43,7 @@ public class MinProblemSolver extends Algorithm {
             return (Function)super.position(position);
         }
         @Override public Function getPointer(long i) {
-            return new Function((Pointer)this).position(position + i);
+            return new Function((Pointer)this).offsetAddress(i);
         }
     
         @Virtual(true) public native @Const({false, false, true}) int getDims();

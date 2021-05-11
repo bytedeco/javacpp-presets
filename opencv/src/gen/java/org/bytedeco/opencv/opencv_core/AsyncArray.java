@@ -39,7 +39,7 @@ public class AsyncArray extends Pointer {
         return (AsyncArray)super.position(position);
     }
     @Override public AsyncArray getPointer(long i) {
-        return new AsyncArray((Pointer)this).position(position + i);
+        return new AsyncArray((Pointer)this).offsetAddress(i);
     }
 
     public AsyncArray() { super((Pointer)null); allocate(); }

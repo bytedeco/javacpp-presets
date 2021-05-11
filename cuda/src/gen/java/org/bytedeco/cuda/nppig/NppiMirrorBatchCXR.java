@@ -56,7 +56,7 @@ public class NppiMirrorBatchCXR extends Pointer {
         return (NppiMirrorBatchCXR)super.position(position);
     }
     @Override public NppiMirrorBatchCXR getPointer(long i) {
-        return new NppiMirrorBatchCXR((Pointer)this).position(position + i);
+        return new NppiMirrorBatchCXR((Pointer)this).offsetAddress(i);
     }
 
     public native @Const Pointer pSrc(); public native NppiMirrorBatchCXR pSrc(Pointer setter);  /* device memory pointer, ignored for in place versions */

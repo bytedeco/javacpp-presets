@@ -33,7 +33,7 @@ public class cublasLtMatmulAlgo_t extends Pointer {
         return (cublasLtMatmulAlgo_t)super.position(position);
     }
     @Override public cublasLtMatmulAlgo_t getPointer(long i) {
-        return new cublasLtMatmulAlgo_t((Pointer)this).position(position + i);
+        return new cublasLtMatmulAlgo_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("uint64_t") long data(int i); public native cublasLtMatmulAlgo_t data(int i, long setter);

@@ -62,7 +62,7 @@ public class BundleAdjusterAffine extends BundleAdjusterBase {
         return (BundleAdjusterAffine)super.position(position);
     }
     @Override public BundleAdjusterAffine getPointer(long i) {
-        return new BundleAdjusterAffine((Pointer)this).position(position + i);
+        return new BundleAdjusterAffine((Pointer)this).offsetAddress(i);
     }
 
     public BundleAdjusterAffine() { super((Pointer)null); allocate(); }

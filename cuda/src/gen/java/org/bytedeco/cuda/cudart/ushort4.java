@@ -25,7 +25,7 @@ public class ushort4 extends Pointer {
         return (ushort4)super.position(position);
     }
     @Override public ushort4 getPointer(long i) {
-        return new ushort4((Pointer)this).position(position + i);
+        return new ushort4((Pointer)this).offsetAddress(i);
     }
  
     public native @Cast("unsigned short") short x(); public native ushort4 x(short setter); public native @Cast("unsigned short") short y(); public native ushort4 y(short setter); public native @Cast("unsigned short") short z(); public native ushort4 z(short setter); public native @Cast("unsigned short") short w(); public native ushort4 w(short setter);

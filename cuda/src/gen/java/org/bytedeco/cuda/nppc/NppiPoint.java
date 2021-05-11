@@ -32,7 +32,7 @@ public class NppiPoint extends Pointer {
         return (NppiPoint)super.position(position);
     }
     @Override public NppiPoint getPointer(long i) {
-        return new NppiPoint((Pointer)this).position(position + i);
+        return new NppiPoint((Pointer)this).offsetAddress(i);
     }
 
     /**  x-coordinate. */

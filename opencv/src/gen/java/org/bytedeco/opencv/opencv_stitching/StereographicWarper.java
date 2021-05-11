@@ -55,7 +55,7 @@ public class StereographicWarper extends WarperCreator {
         return (StereographicWarper)super.position(position);
     }
     @Override public StereographicWarper getPointer(long i) {
-        return new StereographicWarper((Pointer)this).position(position + i);
+        return new StereographicWarper((Pointer)this).offsetAddress(i);
     }
 
     public native @Ptr RotationWarper create(float scale);

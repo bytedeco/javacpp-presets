@@ -28,7 +28,7 @@ public class nvmlComputeInstancePlacement_t extends Pointer {
         return (nvmlComputeInstancePlacement_t)super.position(position);
     }
     @Override public nvmlComputeInstancePlacement_t getPointer(long i) {
-        return new nvmlComputeInstancePlacement_t((Pointer)this).position(position + i);
+        return new nvmlComputeInstancePlacement_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned int") int start(); public native nvmlComputeInstancePlacement_t start(int setter);

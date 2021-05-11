@@ -39,7 +39,7 @@ public class KeyPoint extends Pointer {
         return (KeyPoint)super.position(position);
     }
     @Override public KeyPoint getPointer(long i) {
-        return new KeyPoint((Pointer)this).position(position + i);
+        return new KeyPoint((Pointer)this).offsetAddress(i);
     }
 
     /** the default constructor */

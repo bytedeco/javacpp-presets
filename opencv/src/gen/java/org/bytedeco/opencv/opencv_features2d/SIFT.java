@@ -43,7 +43,7 @@ public class SIFT extends Feature2D {
         return (SIFT)super.position(position);
     }
     @Override public SIFT getPointer(long i) {
-        return new SIFT((Pointer)this).position(position + i);
+        return new SIFT((Pointer)this).offsetAddress(i);
     }
 
     /**

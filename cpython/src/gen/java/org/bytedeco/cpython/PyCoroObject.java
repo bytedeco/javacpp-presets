@@ -27,7 +27,7 @@ public class PyCoroObject extends Pointer {
         return (PyCoroObject)super.position(position);
     }
     @Override public PyCoroObject getPointer(long i) {
-        return new PyCoroObject((Pointer)this).position(position + i);
+        return new PyCoroObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyCoroObject ob_base(PyObject setter);

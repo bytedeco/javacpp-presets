@@ -27,7 +27,7 @@ public class HierarchicalClusteringIndexParams extends IndexParams {
         return (HierarchicalClusteringIndexParams)super.position(position);
     }
     @Override public HierarchicalClusteringIndexParams getPointer(long i) {
-        return new HierarchicalClusteringIndexParams((Pointer)this).position(position + i);
+        return new HierarchicalClusteringIndexParams((Pointer)this).offsetAddress(i);
     }
 
     public HierarchicalClusteringIndexParams(int branching/*=32*/,

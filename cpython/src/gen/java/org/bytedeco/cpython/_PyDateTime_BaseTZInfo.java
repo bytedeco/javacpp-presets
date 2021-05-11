@@ -30,7 +30,7 @@ public class _PyDateTime_BaseTZInfo extends Pointer {
         return (_PyDateTime_BaseTZInfo)super.position(position);
     }
     @Override public _PyDateTime_BaseTZInfo getPointer(long i) {
-        return new _PyDateTime_BaseTZInfo((Pointer)this).position(position + i);
+        return new _PyDateTime_BaseTZInfo((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native _PyDateTime_BaseTZInfo ob_base(PyObject setter);

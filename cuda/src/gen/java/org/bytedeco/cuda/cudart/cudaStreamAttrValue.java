@@ -29,7 +29,7 @@ public class cudaStreamAttrValue extends Pointer {
         return (cudaStreamAttrValue)super.position(position);
     }
     @Override public cudaStreamAttrValue getPointer(long i) {
-        return new cudaStreamAttrValue((Pointer)this).position(position + i);
+        return new cudaStreamAttrValue((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef cudaAccessPolicyWindow accessPolicyWindow(); public native cudaStreamAttrValue accessPolicyWindow(cudaAccessPolicyWindow setter);

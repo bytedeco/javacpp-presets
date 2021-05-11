@@ -26,7 +26,7 @@ public class _PyDateTime_BaseTime extends Pointer {
         return (_PyDateTime_BaseTime)super.position(position);
     }
     @Override public _PyDateTime_BaseTime getPointer(long i) {
-        return new _PyDateTime_BaseTime((Pointer)this).position(position + i);
+        return new _PyDateTime_BaseTime((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native _PyDateTime_BaseTime ob_base(PyObject setter);

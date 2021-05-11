@@ -51,7 +51,7 @@ public class Box extends Pointer {
         return (Box)super.position(position);
     }
     @Override public Box getPointer(long i) {
-        return new Box((Pointer)this).position(position + i);
+        return new Box((Pointer)this).offsetAddress(i);
     }
 
   public native int x(); public native Box x(int setter);

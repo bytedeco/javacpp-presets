@@ -55,7 +55,7 @@ public class CharucoBoard extends Board {
         return (CharucoBoard)super.position(position);
     }
     @Override public CharucoBoard getPointer(long i) {
-        return new CharucoBoard((Pointer)this).position(position + i);
+        return new CharucoBoard((Pointer)this).offsetAddress(i);
     }
 
     // vector of chessboard 3D corners precalculated

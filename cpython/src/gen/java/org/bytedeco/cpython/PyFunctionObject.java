@@ -38,7 +38,7 @@ public class PyFunctionObject extends Pointer {
         return (PyFunctionObject)super.position(position);
     }
     @Override public PyFunctionObject getPointer(long i) {
-        return new PyFunctionObject((Pointer)this).position(position + i);
+        return new PyFunctionObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyFunctionObject ob_base(PyObject setter);

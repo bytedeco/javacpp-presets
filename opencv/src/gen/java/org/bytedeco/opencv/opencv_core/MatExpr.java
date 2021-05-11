@@ -71,7 +71,7 @@ public class MatExpr extends Pointer {
         return (MatExpr)super.position(position);
     }
     @Override public MatExpr getPointer(long i) {
-        return new MatExpr((Pointer)this).position(position + i);
+        return new MatExpr((Pointer)this).offsetAddress(i);
     }
 
     public MatExpr() { super((Pointer)null); allocate(); }

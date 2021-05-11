@@ -26,7 +26,7 @@ public class _arguments extends Pointer {
         return (_arguments)super.position(position);
     }
     @Override public _arguments getPointer(long i) {
-        return new _arguments((Pointer)this).position(position + i);
+        return new _arguments((Pointer)this).offsetAddress(i);
     }
 
     public native asdl_seq posonlyargs(); public native _arguments posonlyargs(asdl_seq setter);

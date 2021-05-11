@@ -29,7 +29,7 @@ public class MatConstIterator extends Pointer {
         return (MatConstIterator)super.position(position);
     }
     @Override public MatConstIterator getPointer(long i) {
-        return new MatConstIterator((Pointer)this).position(position + i);
+        return new MatConstIterator((Pointer)this).offsetAddress(i);
     }
 
 

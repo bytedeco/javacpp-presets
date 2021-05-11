@@ -29,7 +29,7 @@ public class CvPoint extends AbstractCvPoint {
         return (CvPoint)super.position(position);
     }
     @Override public CvPoint getPointer(long i) {
-        return new CvPoint((Pointer)this).position(position + i);
+        return new CvPoint((Pointer)this).offsetAddress(i);
     }
 
     public native int x(); public native CvPoint x(int setter);

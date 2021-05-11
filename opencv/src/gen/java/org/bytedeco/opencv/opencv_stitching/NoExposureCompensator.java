@@ -57,7 +57,7 @@ public class NoExposureCompensator extends ExposureCompensator {
         return (NoExposureCompensator)super.position(position);
     }
     @Override public NoExposureCompensator getPointer(long i) {
-        return new NoExposureCompensator((Pointer)this).position(position + i);
+        return new NoExposureCompensator((Pointer)this).offsetAddress(i);
     }
 
     public native void feed(@Const @ByRef PointVector arg0, @Const @ByRef UMatVector arg1,

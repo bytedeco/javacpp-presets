@@ -90,7 +90,7 @@ public class PCA extends Pointer {
         return (PCA)super.position(position);
     }
     @Override public PCA getPointer(long i) {
-        return new PCA((Pointer)this).position(position + i);
+        return new PCA((Pointer)this).offsetAddress(i);
     }
 
     /** enum cv::PCA::Flags */

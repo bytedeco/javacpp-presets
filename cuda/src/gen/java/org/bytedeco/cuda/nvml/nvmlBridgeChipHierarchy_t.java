@@ -32,7 +32,7 @@ public class nvmlBridgeChipHierarchy_t extends Pointer {
         return (nvmlBridgeChipHierarchy_t)super.position(position);
     }
     @Override public nvmlBridgeChipHierarchy_t getPointer(long i) {
-        return new nvmlBridgeChipHierarchy_t((Pointer)this).position(position + i);
+        return new nvmlBridgeChipHierarchy_t((Pointer)this).offsetAddress(i);
     }
 
     /** Number of Bridge Chips on the Board */

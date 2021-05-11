@@ -28,7 +28,7 @@ public class PyDateTime_CAPI extends Pointer {
         return (PyDateTime_CAPI)super.position(position);
     }
     @Override public PyDateTime_CAPI getPointer(long i) {
-        return new PyDateTime_CAPI((Pointer)this).position(position + i);
+        return new PyDateTime_CAPI((Pointer)this).offsetAddress(i);
     }
 
     /* type objects */

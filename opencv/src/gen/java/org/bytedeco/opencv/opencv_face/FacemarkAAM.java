@@ -52,7 +52,7 @@ public class FacemarkAAM extends FacemarkTrain {
             return (Params)super.position(position);
         }
         @Override public Params getPointer(long i) {
-            return new Params((Pointer)this).position(position + i);
+            return new Params((Pointer)this).offsetAddress(i);
         }
     
         /**
@@ -97,7 +97,7 @@ public class FacemarkAAM extends FacemarkTrain {
             return (Config)super.position(position);
         }
         @Override public Config getPointer(long i) {
-            return new Config((Pointer)this).position(position + i);
+            return new Config((Pointer)this).offsetAddress(i);
         }
     
         public Config( @ByVal(nullValue = "cv::Mat::eye(2,2,CV_32F)") Mat rot,
@@ -139,7 +139,7 @@ public class FacemarkAAM extends FacemarkTrain {
             return (Data)super.position(position);
         }
         @Override public Data getPointer(long i) {
-            return new Data((Pointer)this).position(position + i);
+            return new Data((Pointer)this).offsetAddress(i);
         }
     
         public native @ByRef Point2fVector s0(); public native Data s0(Point2fVector setter);
@@ -162,7 +162,7 @@ public class FacemarkAAM extends FacemarkTrain {
             return (Model)super.position(position);
         }
         @Override public Model getPointer(long i) {
-            return new Model((Pointer)this).position(position + i);
+            return new Model((Pointer)this).offsetAddress(i);
         }
     
         
@@ -188,7 +188,7 @@ public class FacemarkAAM extends FacemarkTrain {
                 return (Texture)super.position(position);
             }
             @Override public Texture getPointer(long i) {
-                return new Texture((Pointer)this).position(position + i);
+                return new Texture((Pointer)this).offsetAddress(i);
             }
         
             /**  unused delete */

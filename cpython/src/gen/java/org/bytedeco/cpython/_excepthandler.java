@@ -25,7 +25,7 @@ public class _excepthandler extends Pointer {
         return (_excepthandler)super.position(position);
     }
     @Override public _excepthandler getPointer(long i) {
-        return new _excepthandler((Pointer)this).position(position + i);
+        return new _excepthandler((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("_excepthandler_kind") int kind(); public native _excepthandler kind(int setter);

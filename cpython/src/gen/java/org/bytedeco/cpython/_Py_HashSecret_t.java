@@ -47,7 +47,7 @@ public class _Py_HashSecret_t extends Pointer {
         return (_Py_HashSecret_t)super.position(position);
     }
     @Override public _Py_HashSecret_t getPointer(long i) {
-        return new _Py_HashSecret_t((Pointer)this).position(position + i);
+        return new _Py_HashSecret_t((Pointer)this).offsetAddress(i);
     }
 
     /* ensure 24 bytes */

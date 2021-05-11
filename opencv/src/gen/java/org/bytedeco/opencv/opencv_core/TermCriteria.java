@@ -34,7 +34,7 @@ public class TermCriteria extends Pointer {
         return (TermCriteria)super.position(position);
     }
     @Override public TermCriteria getPointer(long i) {
-        return new TermCriteria((Pointer)this).position(position + i);
+        return new TermCriteria((Pointer)this).offsetAddress(i);
     }
 
     /**

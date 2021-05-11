@@ -38,7 +38,7 @@ public class CirclesGridFinderParameters extends Pointer {
         return (CirclesGridFinderParameters)super.position(position);
     }
     @Override public CirclesGridFinderParameters getPointer(long i) {
-        return new CirclesGridFinderParameters((Pointer)this).position(position + i);
+        return new CirclesGridFinderParameters((Pointer)this).offsetAddress(i);
     }
 
     public CirclesGridFinderParameters() { super((Pointer)null); allocate(); }

@@ -31,7 +31,7 @@ public class nvmlPciInfo_t extends Pointer {
         return (nvmlPciInfo_t)super.position(position);
     }
     @Override public nvmlPciInfo_t getPointer(long i) {
-        return new nvmlPciInfo_t((Pointer)this).position(position + i);
+        return new nvmlPciInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** The legacy tuple domain:bus:device.function PCI identifier (&amp; NULL terminator) */

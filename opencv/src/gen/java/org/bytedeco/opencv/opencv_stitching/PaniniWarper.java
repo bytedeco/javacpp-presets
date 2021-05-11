@@ -52,7 +52,7 @@ public class PaniniWarper extends WarperCreator {
         return (PaniniWarper)super.position(position);
     }
     @Override public PaniniWarper getPointer(long i) {
-        return new PaniniWarper((Pointer)this).position(position + i);
+        return new PaniniWarper((Pointer)this).offsetAddress(i);
     }
 
     public PaniniWarper(float A/*=1*/, float B/*=1*/) { super((Pointer)null); allocate(A, B); }

@@ -55,7 +55,7 @@ public class MercatorWarper extends WarperCreator {
         return (MercatorWarper)super.position(position);
     }
     @Override public MercatorWarper getPointer(long i) {
-        return new MercatorWarper((Pointer)this).position(position + i);
+        return new MercatorWarper((Pointer)this).offsetAddress(i);
     }
 
     public native @Ptr RotationWarper create(float scale);

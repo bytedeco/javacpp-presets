@@ -34,6 +34,6 @@ public class CvCaptureDefaultDeleter extends Pointer {
         return (CvCaptureDefaultDeleter)super.position(position);
     }
     @Override public CvCaptureDefaultDeleter getPointer(long i) {
-        return new CvCaptureDefaultDeleter((Pointer)this).position(position + i);
+        return new CvCaptureDefaultDeleter((Pointer)this).offsetAddress(i);
     }
  public native @Name("operator ()") void apply(CvCapture obj); }

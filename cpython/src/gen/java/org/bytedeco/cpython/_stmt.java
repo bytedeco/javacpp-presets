@@ -25,7 +25,7 @@ public class _stmt extends Pointer {
         return (_stmt)super.position(position);
     }
     @Override public _stmt getPointer(long i) {
-        return new _stmt((Pointer)this).position(position + i);
+        return new _stmt((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("_stmt_kind") int kind(); public native _stmt kind(int setter);

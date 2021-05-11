@@ -57,7 +57,7 @@ public class VoronoiSeamFinder extends PairwiseSeamFinder {
         return (VoronoiSeamFinder)super.position(position);
     }
     @Override public VoronoiSeamFinder getPointer(long i) {
-        return new VoronoiSeamFinder((Pointer)this).position(position + i);
+        return new VoronoiSeamFinder((Pointer)this).offsetAddress(i);
     }
 
     public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,

@@ -26,7 +26,7 @@ public class wrapperbase extends Pointer {
         return (wrapperbase)super.position(position);
     }
     @Override public wrapperbase getPointer(long i) {
-        return new wrapperbase((Pointer)this).position(position + i);
+        return new wrapperbase((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("const char*") BytePointer name(); public native wrapperbase name(BytePointer setter);

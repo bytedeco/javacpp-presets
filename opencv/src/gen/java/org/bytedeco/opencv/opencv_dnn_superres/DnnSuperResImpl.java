@@ -47,7 +47,7 @@ public class DnnSuperResImpl extends Pointer {
         return (DnnSuperResImpl)super.position(position);
     }
     @Override public DnnSuperResImpl getPointer(long i) {
-        return new DnnSuperResImpl((Pointer)this).position(position + i);
+        return new DnnSuperResImpl((Pointer)this).offsetAddress(i);
     }
 
 

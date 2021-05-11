@@ -47,7 +47,7 @@ public class CvHaarFeatureParams extends CvFeatureParams {
         return (CvHaarFeatureParams)super.position(position);
     }
     @Override public CvHaarFeatureParams getPointer(long i) {
-        return new CvHaarFeatureParams((Pointer)this).position(position + i);
+        return new CvHaarFeatureParams((Pointer)this).offsetAddress(i);
     }
 
 

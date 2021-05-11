@@ -29,7 +29,7 @@ public class CUdevprop_v1 extends Pointer {
         return (CUdevprop_v1)super.position(position);
     }
     @Override public CUdevprop_v1 getPointer(long i) {
-        return new CUdevprop_v1((Pointer)this).position(position + i);
+        return new CUdevprop_v1((Pointer)this).offsetAddress(i);
     }
 
     /** Maximum number of threads per block */

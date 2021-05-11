@@ -28,7 +28,7 @@ public class NppiConnectedRegion extends Pointer {
         return (NppiConnectedRegion)super.position(position);
     }
     @Override public NppiConnectedRegion getPointer(long i) {
-        return new NppiConnectedRegion((Pointer)this).position(position + i);
+        return new NppiConnectedRegion((Pointer)this).offsetAddress(i);
     }
 
 	/**  x, y, width, height == left, top, right, and bottom pixel coordinates */

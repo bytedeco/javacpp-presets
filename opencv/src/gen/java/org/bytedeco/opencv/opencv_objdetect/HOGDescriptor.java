@@ -57,7 +57,7 @@ public class HOGDescriptor extends Pointer {
         return (HOGDescriptor)super.position(position);
     }
     @Override public HOGDescriptor getPointer(long i) {
-        return new HOGDescriptor((Pointer)this).position(position + i);
+        return new HOGDescriptor((Pointer)this).offsetAddress(i);
     }
 
     /** enum cv::HOGDescriptor::HistogramNormType */

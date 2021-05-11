@@ -39,7 +39,7 @@ public class nvmlExcludedDeviceInfo_t extends Pointer {
         return (nvmlExcludedDeviceInfo_t)super.position(position);
     }
     @Override public nvmlExcludedDeviceInfo_t getPointer(long i) {
-        return new nvmlExcludedDeviceInfo_t((Pointer)this).position(position + i);
+        return new nvmlExcludedDeviceInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** The PCI information for the excluded GPU */

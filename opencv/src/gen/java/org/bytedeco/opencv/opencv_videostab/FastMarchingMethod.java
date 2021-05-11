@@ -59,7 +59,7 @@ public class FastMarchingMethod extends Pointer {
         return (FastMarchingMethod)super.position(position);
     }
     @Override public FastMarchingMethod getPointer(long i) {
-        return new FastMarchingMethod((Pointer)this).position(position + i);
+        return new FastMarchingMethod((Pointer)this).offsetAddress(i);
     }
 
     public FastMarchingMethod() { super((Pointer)null); allocate(); }

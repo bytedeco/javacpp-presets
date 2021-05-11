@@ -26,7 +26,7 @@ public class PyGetSetDescrObject extends Pointer {
         return (PyGetSetDescrObject)super.position(position);
     }
     @Override public PyGetSetDescrObject getPointer(long i) {
-        return new PyGetSetDescrObject((Pointer)this).position(position + i);
+        return new PyGetSetDescrObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyDescrObject d_common(); public native PyGetSetDescrObject d_common(PyDescrObject setter);

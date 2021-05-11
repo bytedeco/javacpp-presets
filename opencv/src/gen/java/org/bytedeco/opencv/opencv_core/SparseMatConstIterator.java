@@ -41,7 +41,7 @@ public class SparseMatConstIterator extends Pointer {
         return (SparseMatConstIterator)super.position(position);
     }
     @Override public SparseMatConstIterator getPointer(long i) {
-        return new SparseMatConstIterator((Pointer)this).position(position + i);
+        return new SparseMatConstIterator((Pointer)this).offsetAddress(i);
     }
 
     /** the default constructor */

@@ -38,7 +38,7 @@ public class RotatedRect extends FloatPointer {
         return (RotatedRect)super.position(position);
     }
     @Override public RotatedRect getPointer(long i) {
-        return new RotatedRect((Pointer)this).position(position + i);
+        return new RotatedRect((Pointer)this).offsetAddress(i);
     }
 
     /** default constructor */

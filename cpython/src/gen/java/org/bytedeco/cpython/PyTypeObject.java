@@ -26,7 +26,7 @@ public class PyTypeObject extends Pointer {
         return (PyTypeObject)super.position(position);
     }
     @Override public PyTypeObject getPointer(long i) {
-        return new PyTypeObject((Pointer)this).position(position + i);
+        return new PyTypeObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyTypeObject ob_base(PyVarObject setter);

@@ -84,7 +84,7 @@ public class Stitcher extends Pointer {
         return (Stitcher)super.position(position);
     }
     @Override public Stitcher getPointer(long i) {
-        return new Stitcher((Pointer)this).position(position + i);
+        return new Stitcher((Pointer)this).offsetAddress(i);
     }
 
     /**

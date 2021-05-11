@@ -29,7 +29,7 @@ public class CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1 extends Pointer {
         return (CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1)super.position(position);
     }
     @Override public CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1 getPointer(long i) {
-        return new CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1((Pointer)this).position(position + i);
+        return new CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1((Pointer)this).offsetAddress(i);
     }
 
     /** Array of external semaphore handles. */

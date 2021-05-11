@@ -50,7 +50,7 @@ public class HarrisLaplaceFeatureDetector extends Feature2D {
         return (HarrisLaplaceFeatureDetector)super.position(position);
     }
     @Override public HarrisLaplaceFeatureDetector getPointer(long i) {
-        return new HarrisLaplaceFeatureDetector((Pointer)this).position(position + i);
+        return new HarrisLaplaceFeatureDetector((Pointer)this).offsetAddress(i);
     }
 
     /**

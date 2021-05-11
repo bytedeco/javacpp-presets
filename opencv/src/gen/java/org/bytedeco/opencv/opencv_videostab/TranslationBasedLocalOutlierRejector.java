@@ -52,7 +52,7 @@ public class TranslationBasedLocalOutlierRejector extends IOutlierRejector {
         return (TranslationBasedLocalOutlierRejector)super.position(position);
     }
     @Override public TranslationBasedLocalOutlierRejector getPointer(long i) {
-        return new TranslationBasedLocalOutlierRejector((Pointer)this).position(position + i);
+        return new TranslationBasedLocalOutlierRejector((Pointer)this).offsetAddress(i);
     }
 
     public TranslationBasedLocalOutlierRejector() { super((Pointer)null); allocate(); }

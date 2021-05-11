@@ -55,7 +55,7 @@ public class NullInpainter extends InpainterBase {
         return (NullInpainter)super.position(position);
     }
     @Override public NullInpainter getPointer(long i) {
-        return new NullInpainter((Pointer)this).position(position + i);
+        return new NullInpainter((Pointer)this).offsetAddress(i);
     }
 
     public native void inpaint(int arg0, @ByRef Mat arg1, @ByRef Mat arg2);

@@ -31,7 +31,7 @@ public class CvBox2D extends AbstractCvBox2D {
         return (CvBox2D)super.position(position);
     }
     @Override public CvBox2D getPointer(long i) {
-        return new CvBox2D((Pointer)this).position(position + i);
+        return new CvBox2D((Pointer)this).offsetAddress(i);
     }
 
     /** Center of the box.                          */

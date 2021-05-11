@@ -111,7 +111,7 @@ public class memory extends dnnl_memory_handle {
         return (memory)super.position(position);
     }
     @Override public memory getPointer(long i) {
-        return new memory((Pointer)this).position(position + i);
+        return new memory((Pointer)this).offsetAddress(i);
     }
 
 
@@ -1065,7 +1065,7 @@ public class memory extends dnnl_memory_handle {
             return (desc)super.position(position);
         }
         @Override public desc getPointer(long i) {
-            return new desc((Pointer)this).position(position + i);
+            return new desc((Pointer)this).offsetAddress(i);
         }
     
         /** The underlying C API data structure. */

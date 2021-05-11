@@ -33,7 +33,7 @@ public class Hamming extends Pointer {
         return (Hamming)super.position(position);
     }
     @Override public Hamming getPointer(long i) {
-        return new Hamming((Pointer)this).position(position + i);
+        return new Hamming((Pointer)this).offsetAddress(i);
     }
 
     @MemberGetter public static native @Cast("const cv::NormTypes") int normType();

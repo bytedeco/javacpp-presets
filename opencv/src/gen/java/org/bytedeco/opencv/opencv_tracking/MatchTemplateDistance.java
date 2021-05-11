@@ -53,7 +53,7 @@ public class MatchTemplateDistance extends IDescriptorDistance {
         return (MatchTemplateDistance)super.position(position);
     }
     @Override public MatchTemplateDistance getPointer(long i) {
-        return new MatchTemplateDistance((Pointer)this).position(position + i);
+        return new MatchTemplateDistance((Pointer)this).offsetAddress(i);
     }
 
     /**

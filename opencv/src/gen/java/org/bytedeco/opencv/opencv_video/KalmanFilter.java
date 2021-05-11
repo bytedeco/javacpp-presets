@@ -54,7 +54,7 @@ public class KalmanFilter extends Pointer {
         return (KalmanFilter)super.position(position);
     }
     @Override public KalmanFilter getPointer(long i) {
-        return new KalmanFilter((Pointer)this).position(position + i);
+        return new KalmanFilter((Pointer)this).offsetAddress(i);
     }
 
     public KalmanFilter() { super((Pointer)null); allocate(); }

@@ -52,7 +52,7 @@ public class WeightingDeblurer extends DeblurerBase {
         return (WeightingDeblurer)super.position(position);
     }
     @Override public WeightingDeblurer getPointer(long i) {
-        return new WeightingDeblurer((Pointer)this).position(position + i);
+        return new WeightingDeblurer((Pointer)this).offsetAddress(i);
     }
 
     public WeightingDeblurer() { super((Pointer)null); allocate(); }

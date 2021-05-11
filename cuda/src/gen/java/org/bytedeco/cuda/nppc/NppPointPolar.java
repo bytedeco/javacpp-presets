@@ -31,7 +31,7 @@ public class NppPointPolar extends Pointer {
         return (NppPointPolar)super.position(position);
     }
     @Override public NppPointPolar getPointer(long i) {
-        return new NppPointPolar((Pointer)this).position(position + i);
+        return new NppPointPolar((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("Npp32f") float rho(); public native NppPointPolar rho(float setter);

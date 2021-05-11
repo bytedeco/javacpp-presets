@@ -31,7 +31,7 @@ public class _Py_tss_t extends Pointer {
         return (_Py_tss_t)super.position(position);
     }
     @Override public _Py_tss_t getPointer(long i) {
-        return new _Py_tss_t((Pointer)this).position(position + i);
+        return new _Py_tss_t((Pointer)this).offsetAddress(i);
     }
 
     public native int _is_initialized(); public native _Py_tss_t _is_initialized(int setter);

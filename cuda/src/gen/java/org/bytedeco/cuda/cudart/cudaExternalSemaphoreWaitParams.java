@@ -29,7 +29,7 @@ public class cudaExternalSemaphoreWaitParams extends Pointer {
         return (cudaExternalSemaphoreWaitParams)super.position(position);
     }
     @Override public cudaExternalSemaphoreWaitParams getPointer(long i) {
-        return new cudaExternalSemaphoreWaitParams((Pointer)this).position(position + i);
+        return new cudaExternalSemaphoreWaitParams((Pointer)this).offsetAddress(i);
     }
 
         /**

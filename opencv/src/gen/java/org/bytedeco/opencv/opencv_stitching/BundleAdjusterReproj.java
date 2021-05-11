@@ -59,7 +59,7 @@ public class BundleAdjusterReproj extends BundleAdjusterBase {
         return (BundleAdjusterReproj)super.position(position);
     }
     @Override public BundleAdjusterReproj getPointer(long i) {
-        return new BundleAdjusterReproj((Pointer)this).position(position + i);
+        return new BundleAdjusterReproj((Pointer)this).offsetAddress(i);
     }
 
     public BundleAdjusterReproj() { super((Pointer)null); allocate(); }

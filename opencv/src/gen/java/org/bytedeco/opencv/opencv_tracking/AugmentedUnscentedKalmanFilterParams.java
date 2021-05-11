@@ -50,7 +50,7 @@ public class AugmentedUnscentedKalmanFilterParams extends UnscentedKalmanFilterP
         return (AugmentedUnscentedKalmanFilterParams)super.position(position);
     }
     @Override public AugmentedUnscentedKalmanFilterParams getPointer(long i) {
-        return new AugmentedUnscentedKalmanFilterParams((Pointer)this).position(position + i);
+        return new AugmentedUnscentedKalmanFilterParams((Pointer)this).offsetAddress(i);
     }
 
 

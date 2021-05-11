@@ -39,7 +39,7 @@ public class SVD extends Pointer {
         return (SVD)super.position(position);
     }
     @Override public SVD getPointer(long i) {
-        return new SVD((Pointer)this).position(position + i);
+        return new SVD((Pointer)this).offsetAddress(i);
     }
 
     /** enum cv::SVD::Flags */

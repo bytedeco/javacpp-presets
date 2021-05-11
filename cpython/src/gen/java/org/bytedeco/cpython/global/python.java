@@ -199,12 +199,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        9;
-public static final int PY_MICRO_VERSION =        4;
+public static final int PY_MICRO_VERSION =        5;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.9.4";
+public static final String PY_VERSION =              "3.9.5";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -15137,6 +15137,8 @@ public static final int PYOS_STACK_MARGIN = 2048;
 // #ifndef Py_LIMITED_API
 // #ifndef PYCTYPE_H
 // #define PYCTYPE_H
+// #ifdef __cplusplus
+// #endif
 
 public static final int PY_CTF_LOWER =  0x01;
 public static final int PY_CTF_UPPER =  0x02;
@@ -15168,6 +15170,8 @@ public static final int PY_CTF_XDIGIT = 0x10;
 // #define Py_TOLOWER(c) (_Py_ctype_tolower[Py_CHARMASK(c)])
 // #define Py_TOUPPER(c) (_Py_ctype_toupper[Py_CHARMASK(c)])
 
+// #ifdef __cplusplus
+// #endif
 // #endif /* !PYCTYPE_H */
 // #endif /* !Py_LIMITED_API */
 

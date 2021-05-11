@@ -54,7 +54,7 @@ public class Dictionary extends Pointer {
         return (Dictionary)super.position(position);
     }
     @Override public Dictionary getPointer(long i) {
-        return new Dictionary((Pointer)this).position(position + i);
+        return new Dictionary((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef Mat bytesList(); public native Dictionary bytesList(Mat setter);         // marker code information

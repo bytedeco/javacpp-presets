@@ -34,7 +34,7 @@ public class nvmlRowRemapperHistogramValues_t extends Pointer {
         return (nvmlRowRemapperHistogramValues_t)super.position(position);
     }
     @Override public nvmlRowRemapperHistogramValues_t getPointer(long i) {
-        return new nvmlRowRemapperHistogramValues_t((Pointer)this).position(position + i);
+        return new nvmlRowRemapperHistogramValues_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned int") int max(); public native nvmlRowRemapperHistogramValues_t max(int setter);

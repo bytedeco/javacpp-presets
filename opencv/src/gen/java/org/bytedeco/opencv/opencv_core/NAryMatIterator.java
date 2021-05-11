@@ -89,7 +89,7 @@ public class NAryMatIterator extends Pointer {
         return (NAryMatIterator)super.position(position);
     }
     @Override public NAryMatIterator getPointer(long i) {
-        return new NAryMatIterator((Pointer)this).position(position + i);
+        return new NAryMatIterator((Pointer)this).offsetAddress(i);
     }
 
     /** the default constructor */

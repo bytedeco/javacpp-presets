@@ -31,7 +31,7 @@ public class nvmlFBCStats_t extends Pointer {
         return (nvmlFBCStats_t)super.position(position);
     }
     @Override public nvmlFBCStats_t getPointer(long i) {
-        return new nvmlFBCStats_t((Pointer)this).position(position + i);
+        return new nvmlFBCStats_t((Pointer)this).offsetAddress(i);
     }
 
     /** Total no of sessions */

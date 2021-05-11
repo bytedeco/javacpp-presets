@@ -28,7 +28,7 @@ public class nvmlComputeInstanceInfo_t extends Pointer {
         return (nvmlComputeInstanceInfo_t)super.position(position);
     }
     @Override public nvmlComputeInstanceInfo_t getPointer(long i) {
-        return new nvmlComputeInstanceInfo_t((Pointer)this).position(position + i);
+        return new nvmlComputeInstanceInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Parent device */

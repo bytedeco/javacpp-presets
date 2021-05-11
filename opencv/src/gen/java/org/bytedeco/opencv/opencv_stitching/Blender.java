@@ -62,7 +62,7 @@ public class Blender extends Pointer {
         return (Blender)super.position(position);
     }
     @Override public Blender getPointer(long i) {
-        return new Blender((Pointer)this).position(position + i);
+        return new Blender((Pointer)this).offsetAddress(i);
     }
 
 

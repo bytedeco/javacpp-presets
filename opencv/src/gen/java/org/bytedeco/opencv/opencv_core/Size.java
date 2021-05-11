@@ -40,7 +40,7 @@ public class Size extends IntPointer {
         return (Size)super.position(position);
     }
     @Override public Size getPointer(long i) {
-        return new Size((Pointer)this).position(position + i);
+        return new Size((Pointer)this).offsetAddress(i);
     }
 
 

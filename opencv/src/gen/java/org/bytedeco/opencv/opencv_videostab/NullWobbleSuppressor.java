@@ -55,7 +55,7 @@ public class NullWobbleSuppressor extends WobbleSuppressorBase {
         return (NullWobbleSuppressor)super.position(position);
     }
     @Override public NullWobbleSuppressor getPointer(long i) {
-        return new NullWobbleSuppressor((Pointer)this).position(position + i);
+        return new NullWobbleSuppressor((Pointer)this).offsetAddress(i);
     }
 
     public native void suppress(int idx, @Const @ByRef Mat frame, @ByRef Mat result);

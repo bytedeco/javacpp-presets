@@ -28,7 +28,7 @@ public class nvmlGpuInstancePlacement_t extends Pointer {
         return (nvmlGpuInstancePlacement_t)super.position(position);
     }
     @Override public nvmlGpuInstancePlacement_t getPointer(long i) {
-        return new nvmlGpuInstancePlacement_t((Pointer)this).position(position + i);
+        return new nvmlGpuInstancePlacement_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned int") int start(); public native nvmlGpuInstancePlacement_t start(int setter);

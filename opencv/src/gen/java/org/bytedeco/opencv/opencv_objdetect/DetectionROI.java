@@ -46,7 +46,7 @@ public class DetectionROI extends Pointer {
         return (DetectionROI)super.position(position);
     }
     @Override public DetectionROI getPointer(long i) {
-        return new DetectionROI((Pointer)this).position(position + i);
+        return new DetectionROI((Pointer)this).offsetAddress(i);
     }
 
    /** scale(size) of the bounding box */

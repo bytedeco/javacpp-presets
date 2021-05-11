@@ -27,7 +27,7 @@ public class PyTryBlock extends Pointer {
         return (PyTryBlock)super.position(position);
     }
     @Override public PyTryBlock getPointer(long i) {
-        return new PyTryBlock((Pointer)this).position(position + i);
+        return new PyTryBlock((Pointer)this).offsetAddress(i);
     }
 
     public native int b_type(); public native PyTryBlock b_type(int setter);                 /* what kind of block this is */

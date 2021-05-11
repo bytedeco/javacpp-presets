@@ -31,7 +31,7 @@ public class nvmlUnitFanSpeeds_t extends Pointer {
         return (nvmlUnitFanSpeeds_t)super.position(position);
     }
     @Override public nvmlUnitFanSpeeds_t getPointer(long i) {
-        return new nvmlUnitFanSpeeds_t((Pointer)this).position(position + i);
+        return new nvmlUnitFanSpeeds_t((Pointer)this).offsetAddress(i);
     }
 
     /** Fan speed data for each fan */

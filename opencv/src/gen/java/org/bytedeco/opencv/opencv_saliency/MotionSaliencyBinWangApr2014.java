@@ -52,7 +52,7 @@ public class MotionSaliencyBinWangApr2014 extends MotionSaliency {
         return (MotionSaliencyBinWangApr2014)super.position(position);
     }
     @Override public MotionSaliencyBinWangApr2014 getPointer(long i) {
-        return new MotionSaliencyBinWangApr2014((Pointer)this).position(position + i);
+        return new MotionSaliencyBinWangApr2014((Pointer)this).offsetAddress(i);
     }
 
   public MotionSaliencyBinWangApr2014() { super((Pointer)null); allocate(); }

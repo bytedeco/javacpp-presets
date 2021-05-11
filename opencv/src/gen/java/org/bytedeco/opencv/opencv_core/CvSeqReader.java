@@ -28,7 +28,7 @@ public class CvSeqReader extends Pointer {
         return (CvSeqReader)super.position(position);
     }
     @Override public CvSeqReader getPointer(long i) {
-        return new CvSeqReader((Pointer)this).position(position + i);
+        return new CvSeqReader((Pointer)this).offsetAddress(i);
     }
 
     public native int header_size(); public native CvSeqReader header_size(int setter);

@@ -55,7 +55,7 @@ public class NullDeblurer extends DeblurerBase {
         return (NullDeblurer)super.position(position);
     }
     @Override public NullDeblurer getPointer(long i) {
-        return new NullDeblurer((Pointer)this).position(position + i);
+        return new NullDeblurer((Pointer)this).offsetAddress(i);
     }
 
     public native void deblur(int arg0, @ByRef Mat arg1, @Const @ByRef Range arg2);

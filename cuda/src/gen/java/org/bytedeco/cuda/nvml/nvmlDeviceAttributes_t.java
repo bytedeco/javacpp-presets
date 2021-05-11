@@ -28,7 +28,7 @@ public class nvmlDeviceAttributes_t extends Pointer {
         return (nvmlDeviceAttributes_t)super.position(position);
     }
     @Override public nvmlDeviceAttributes_t getPointer(long i) {
-        return new nvmlDeviceAttributes_t((Pointer)this).position(position + i);
+        return new nvmlDeviceAttributes_t((Pointer)this).offsetAddress(i);
     }
 
     /** Streaming Multiprocessor count */

@@ -37,7 +37,7 @@ public class IplImage extends AbstractIplImage {
         return (IplImage)super.position(position);
     }
     @Override public IplImage getPointer(long i) {
-        return new IplImage((Pointer)this).position(position + i);
+        return new IplImage((Pointer)this).offsetAddress(i);
     }
 
     /** sizeof(IplImage) */

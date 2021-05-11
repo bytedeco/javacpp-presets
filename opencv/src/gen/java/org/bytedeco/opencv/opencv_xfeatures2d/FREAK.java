@@ -62,7 +62,7 @@ public class FREAK extends Feature2D {
         return (FREAK)super.position(position);
     }
     @Override public FREAK getPointer(long i) {
-        return new FREAK((Pointer)this).position(position + i);
+        return new FREAK((Pointer)this).offsetAddress(i);
     }
 
 

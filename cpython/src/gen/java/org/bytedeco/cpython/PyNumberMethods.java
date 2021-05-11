@@ -28,7 +28,7 @@ public class PyNumberMethods extends Pointer {
         return (PyNumberMethods)super.position(position);
     }
     @Override public PyNumberMethods getPointer(long i) {
-        return new PyNumberMethods((Pointer)this).position(position + i);
+        return new PyNumberMethods((Pointer)this).offsetAddress(i);
     }
 
     /* Number implementations must check *both*

@@ -46,7 +46,7 @@ public class CascadeClassifier extends Pointer {
         return (CascadeClassifier)super.position(position);
     }
     @Override public CascadeClassifier getPointer(long i) {
-        return new CascadeClassifier((Pointer)this).position(position + i);
+        return new CascadeClassifier((Pointer)this).offsetAddress(i);
     }
 
     public CascadeClassifier() { super((Pointer)null); allocate(); }

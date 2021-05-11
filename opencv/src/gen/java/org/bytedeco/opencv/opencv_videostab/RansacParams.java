@@ -54,7 +54,7 @@ public class RansacParams extends Pointer {
         return (RansacParams)super.position(position);
     }
     @Override public RansacParams getPointer(long i) {
-        return new RansacParams((Pointer)this).position(position + i);
+        return new RansacParams((Pointer)this).offsetAddress(i);
     }
 
     /** subset size */

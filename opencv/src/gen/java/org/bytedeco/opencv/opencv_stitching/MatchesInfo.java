@@ -59,7 +59,7 @@ public class MatchesInfo extends Pointer {
         return (MatchesInfo)super.position(position);
     }
     @Override public MatchesInfo getPointer(long i) {
-        return new MatchesInfo((Pointer)this).position(position + i);
+        return new MatchesInfo((Pointer)this).offsetAddress(i);
     }
 
     public MatchesInfo() { super((Pointer)null); allocate(); }

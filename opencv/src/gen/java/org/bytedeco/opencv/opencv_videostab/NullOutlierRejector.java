@@ -55,7 +55,7 @@ public class NullOutlierRejector extends IOutlierRejector {
         return (NullOutlierRejector)super.position(position);
     }
     @Override public NullOutlierRejector getPointer(long i) {
-        return new NullOutlierRejector((Pointer)this).position(position + i);
+        return new NullOutlierRejector((Pointer)this).offsetAddress(i);
     }
 
     public native void process(

@@ -26,7 +26,7 @@ public class ulong4 extends Pointer {
         return (ulong4)super.position(position);
     }
     @Override public ulong4 getPointer(long i) {
-        return new ulong4((Pointer)this).position(position + i);
+        return new ulong4((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned long int") long x(); public native ulong4 x(long setter);

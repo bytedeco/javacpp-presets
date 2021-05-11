@@ -39,7 +39,7 @@ public class WeChatQRCode extends Pointer {
         return (WeChatQRCode)super.position(position);
     }
     @Override public WeChatQRCode getPointer(long i) {
-        return new WeChatQRCode((Pointer)this).position(position + i);
+        return new WeChatQRCode((Pointer)this).offsetAddress(i);
     }
 
     /**

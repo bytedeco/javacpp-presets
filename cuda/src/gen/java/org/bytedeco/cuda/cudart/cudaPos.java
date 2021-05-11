@@ -31,7 +31,7 @@ public class cudaPos extends Pointer {
         return (cudaPos)super.position(position);
     }
     @Override public cudaPos getPointer(long i) {
-        return new cudaPos((Pointer)this).position(position + i);
+        return new cudaPos((Pointer)this).offsetAddress(i);
     }
 
     /** x */

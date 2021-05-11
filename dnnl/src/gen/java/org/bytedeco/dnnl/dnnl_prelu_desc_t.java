@@ -32,7 +32,7 @@ public class dnnl_prelu_desc_t extends Pointer {
         return (dnnl_prelu_desc_t)super.position(position);
     }
     @Override public dnnl_prelu_desc_t getPointer(long i) {
-        return new dnnl_prelu_desc_t((Pointer)this).position(position + i);
+        return new dnnl_prelu_desc_t((Pointer)this).offsetAddress(i);
     }
 
     /** The kind of primitive. Used for self-identifying the primitive

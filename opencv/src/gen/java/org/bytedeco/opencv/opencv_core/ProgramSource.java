@@ -26,7 +26,7 @@ public class ProgramSource extends Pointer {
         return (ProgramSource)super.position(position);
     }
     @Override public ProgramSource getPointer(long i) {
-        return new ProgramSource((Pointer)this).position(position + i);
+        return new ProgramSource((Pointer)this).offsetAddress(i);
     }
  // deprecated
 

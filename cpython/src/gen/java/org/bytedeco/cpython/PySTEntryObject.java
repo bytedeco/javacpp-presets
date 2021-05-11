@@ -26,7 +26,7 @@ public class PySTEntryObject extends Pointer {
         return (PySTEntryObject)super.position(position);
     }
     @Override public PySTEntryObject getPointer(long i) {
-        return new PySTEntryObject((Pointer)this).position(position + i);
+        return new PySTEntryObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PySTEntryObject ob_base(PyObject setter);

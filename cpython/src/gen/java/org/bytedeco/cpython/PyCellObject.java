@@ -27,7 +27,7 @@ public class PyCellObject extends Pointer {
         return (PyCellObject)super.position(position);
     }
     @Override public PyCellObject getPointer(long i) {
-        return new PyCellObject((Pointer)this).position(position + i);
+        return new PyCellObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyCellObject ob_base(PyObject setter);

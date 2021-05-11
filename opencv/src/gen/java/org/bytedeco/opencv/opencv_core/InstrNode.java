@@ -29,7 +29,7 @@ public class InstrNode extends Pointer {
         return (InstrNode)super.position(position);
     }
     @Override public InstrNode getPointer(long i) {
-        return new InstrNode((Pointer)this).position(position + i);
+        return new InstrNode((Pointer)this).offsetAddress(i);
     }
 
     public InstrNode() { super((Pointer)null); allocate(); }

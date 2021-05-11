@@ -27,7 +27,7 @@ fi
 cd pytorch
 git reset --hard
 git checkout v$PYTORCH_VERSION
-git submodule update --init --recursive --jobs $MAKEJ
+git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"

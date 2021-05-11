@@ -83,7 +83,7 @@ public class NppiWarpPerspectiveBatchCXR extends Pointer {
         return (NppiWarpPerspectiveBatchCXR)super.position(position);
     }
     @Override public NppiWarpPerspectiveBatchCXR getPointer(long i) {
-        return new NppiWarpPerspectiveBatchCXR((Pointer)this).position(position + i);
+        return new NppiWarpPerspectiveBatchCXR((Pointer)this).offsetAddress(i);
     }
 
     public native @Const Pointer pSrc(); public native NppiWarpPerspectiveBatchCXR pSrc(Pointer setter);  /* device memory pointer */

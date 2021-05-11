@@ -27,7 +27,7 @@ public class _PyErr_StackItem extends Pointer {
         return (_PyErr_StackItem)super.position(position);
     }
     @Override public _PyErr_StackItem getPointer(long i) {
-        return new _PyErr_StackItem((Pointer)this).position(position + i);
+        return new _PyErr_StackItem((Pointer)this).offsetAddress(i);
     }
 
     /* This struct represents an entry on the exception stack, which is a

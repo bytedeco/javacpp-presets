@@ -52,7 +52,7 @@ public class ConsistentMosaicInpainter extends InpainterBase {
         return (ConsistentMosaicInpainter)super.position(position);
     }
     @Override public ConsistentMosaicInpainter getPointer(long i) {
-        return new ConsistentMosaicInpainter((Pointer)this).position(position + i);
+        return new ConsistentMosaicInpainter((Pointer)this).offsetAddress(i);
     }
 
     public ConsistentMosaicInpainter() { super((Pointer)null); allocate(); }

@@ -23,7 +23,7 @@ public class PlatformInfo extends Pointer {
         return (PlatformInfo)super.position(position);
     }
     @Override public PlatformInfo getPointer(long i) {
-        return new PlatformInfo((Pointer)this).position(position + i);
+        return new PlatformInfo((Pointer)this).offsetAddress(i);
     }
 
     public PlatformInfo() { super((Pointer)null); allocate(); }

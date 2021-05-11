@@ -58,7 +58,7 @@ public class CylindricalWarper extends WarperCreator {
         return (CylindricalWarper)super.position(position);
     }
     @Override public CylindricalWarper getPointer(long i) {
-        return new CylindricalWarper((Pointer)this).position(position + i);
+        return new CylindricalWarper((Pointer)this).offsetAddress(i);
     }
 
     public native @Ptr RotationWarper create(float scale);

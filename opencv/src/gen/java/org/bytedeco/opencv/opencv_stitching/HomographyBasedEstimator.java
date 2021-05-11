@@ -54,7 +54,7 @@ public class HomographyBasedEstimator extends Estimator {
         return (HomographyBasedEstimator)super.position(position);
     }
     @Override public HomographyBasedEstimator getPointer(long i) {
-        return new HomographyBasedEstimator((Pointer)this).position(position + i);
+        return new HomographyBasedEstimator((Pointer)this).offsetAddress(i);
     }
 
     public HomographyBasedEstimator(@Cast("bool") boolean is_focals_estimated/*=false*/) { super((Pointer)null); allocate(is_focals_estimated); }

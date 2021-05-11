@@ -49,7 +49,7 @@ public class BackgroundSubtractorLSBPDesc extends Pointer {
         return (BackgroundSubtractorLSBPDesc)super.position(position);
     }
     @Override public BackgroundSubtractorLSBPDesc getPointer(long i) {
-        return new BackgroundSubtractorLSBPDesc((Pointer)this).position(position + i);
+        return new BackgroundSubtractorLSBPDesc((Pointer)this).offsetAddress(i);
     }
 
     public static native void calcLocalSVDValues(@ByVal Mat localSVDValues, @Const @ByRef Mat frame);

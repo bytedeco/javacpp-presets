@@ -28,7 +28,7 @@ public class CvGraph extends AbstractCvGraph {
         return (CvGraph)super.position(position);
     }
     @Override public CvGraph getPointer(long i) {
-        return new CvGraph((Pointer)this).position(position + i);
+        return new CvGraph((Pointer)this).offsetAddress(i);
     }
 
     /** Miscellaneous flags.     */

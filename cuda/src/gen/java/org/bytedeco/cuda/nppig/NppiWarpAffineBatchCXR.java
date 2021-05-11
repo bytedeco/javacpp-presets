@@ -84,7 +84,7 @@ public class NppiWarpAffineBatchCXR extends Pointer {
         return (NppiWarpAffineBatchCXR)super.position(position);
     }
     @Override public NppiWarpAffineBatchCXR getPointer(long i) {
-        return new NppiWarpAffineBatchCXR((Pointer)this).position(position + i);
+        return new NppiWarpAffineBatchCXR((Pointer)this).offsetAddress(i);
     }
 
     public native @Const Pointer pSrc(); public native NppiWarpAffineBatchCXR pSrc(Pointer setter);  /* device memory pointer */

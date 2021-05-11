@@ -55,7 +55,7 @@ public class MoreAccurateMotionWobbleSuppressor extends MoreAccurateMotionWobble
         return (MoreAccurateMotionWobbleSuppressor)super.position(position);
     }
     @Override public MoreAccurateMotionWobbleSuppressor getPointer(long i) {
-        return new MoreAccurateMotionWobbleSuppressor((Pointer)this).position(position + i);
+        return new MoreAccurateMotionWobbleSuppressor((Pointer)this).offsetAddress(i);
     }
 
     public native void suppress(int idx, @Const @ByRef Mat frame, @ByRef Mat result);

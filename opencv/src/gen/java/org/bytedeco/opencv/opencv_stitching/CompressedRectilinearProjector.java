@@ -56,7 +56,7 @@ public class CompressedRectilinearProjector extends ProjectorBase {
         return (CompressedRectilinearProjector)super.position(position);
     }
     @Override public CompressedRectilinearProjector getPointer(long i) {
-        return new CompressedRectilinearProjector((Pointer)this).position(position + i);
+        return new CompressedRectilinearProjector((Pointer)this).offsetAddress(i);
     }
 
     public native float a(); public native CompressedRectilinearProjector a(float setter);

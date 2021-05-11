@@ -55,7 +55,7 @@ public class PlanePortraitProjector extends ProjectorBase {
         return (PlanePortraitProjector)super.position(position);
     }
     @Override public PlanePortraitProjector getPointer(long i) {
-        return new PlanePortraitProjector((Pointer)this).position(position + i);
+        return new PlanePortraitProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

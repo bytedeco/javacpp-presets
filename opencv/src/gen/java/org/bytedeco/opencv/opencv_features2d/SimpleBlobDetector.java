@@ -70,7 +70,7 @@ public class SimpleBlobDetector extends Feature2D {
         return (SimpleBlobDetector)super.position(position);
     }
     @Override public SimpleBlobDetector getPointer(long i) {
-        return new SimpleBlobDetector((Pointer)this).position(position + i);
+        return new SimpleBlobDetector((Pointer)this).offsetAddress(i);
     }
 
   @NoOffset public static class Params extends Pointer {
@@ -84,7 +84,7 @@ public class SimpleBlobDetector extends Feature2D {
           return (Params)super.position(position);
       }
       @Override public Params getPointer(long i) {
-          return new Params((Pointer)this).position(position + i);
+          return new Params((Pointer)this).offsetAddress(i);
       }
   
       public Params() { super((Pointer)null); allocate(); }

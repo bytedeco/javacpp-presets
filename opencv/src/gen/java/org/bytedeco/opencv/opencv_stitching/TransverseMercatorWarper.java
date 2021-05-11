@@ -55,7 +55,7 @@ public class TransverseMercatorWarper extends WarperCreator {
         return (TransverseMercatorWarper)super.position(position);
     }
     @Override public TransverseMercatorWarper getPointer(long i) {
-        return new TransverseMercatorWarper((Pointer)this).position(position + i);
+        return new TransverseMercatorWarper((Pointer)this).offsetAddress(i);
     }
 
     public native @Ptr RotationWarper create(float scale);

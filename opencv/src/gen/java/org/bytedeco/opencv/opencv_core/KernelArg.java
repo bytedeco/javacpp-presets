@@ -26,7 +26,7 @@ public class KernelArg extends Pointer {
         return (KernelArg)super.position(position);
     }
     @Override public KernelArg getPointer(long i) {
-        return new KernelArg((Pointer)this).position(position + i);
+        return new KernelArg((Pointer)this).offsetAddress(i);
     }
 
     /** enum cv::ocl::KernelArg:: */

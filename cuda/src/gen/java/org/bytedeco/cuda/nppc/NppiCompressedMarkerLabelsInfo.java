@@ -34,7 +34,7 @@ public class NppiCompressedMarkerLabelsInfo extends Pointer {
         return (NppiCompressedMarkerLabelsInfo)super.position(position);
     }
     @Override public NppiCompressedMarkerLabelsInfo getPointer(long i) {
-        return new NppiCompressedMarkerLabelsInfo((Pointer)this).position(position + i);
+        return new NppiCompressedMarkerLabelsInfo((Pointer)this).offsetAddress(i);
     }
 
     /** total number of pixels in this connected pixel region */

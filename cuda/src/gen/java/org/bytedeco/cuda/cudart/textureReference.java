@@ -29,7 +29,7 @@ public class textureReference extends Pointer {
         return (textureReference)super.position(position);
     }
     @Override public textureReference getPointer(long i) {
-        return new textureReference((Pointer)this).position(position + i);
+        return new textureReference((Pointer)this).offsetAddress(i);
     }
 
     /**

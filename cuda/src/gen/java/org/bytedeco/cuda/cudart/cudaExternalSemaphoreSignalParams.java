@@ -32,7 +32,7 @@ public class cudaExternalSemaphoreSignalParams extends Pointer {
         return (cudaExternalSemaphoreSignalParams)super.position(position);
     }
     @Override public cudaExternalSemaphoreSignalParams getPointer(long i) {
-        return new cudaExternalSemaphoreSignalParams((Pointer)this).position(position + i);
+        return new cudaExternalSemaphoreSignalParams((Pointer)this).offsetAddress(i);
     }
 
         /**

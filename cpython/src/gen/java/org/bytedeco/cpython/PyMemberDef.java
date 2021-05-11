@@ -32,7 +32,7 @@ public class PyMemberDef extends Pointer {
         return (PyMemberDef)super.position(position);
     }
     @Override public PyMemberDef getPointer(long i) {
-        return new PyMemberDef((Pointer)this).position(position + i);
+        return new PyMemberDef((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("const char*") BytePointer name(); public native PyMemberDef name(BytePointer setter);

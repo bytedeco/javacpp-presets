@@ -41,7 +41,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
         return (primitive_attr)super.position(position);
     }
     @Override public primitive_attr getPointer(long i) {
-        return new primitive_attr((Pointer)this).position(position + i);
+        return new primitive_attr((Pointer)this).offsetAddress(i);
     }
 
 

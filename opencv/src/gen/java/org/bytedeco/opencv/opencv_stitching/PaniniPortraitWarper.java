@@ -52,7 +52,7 @@ public class PaniniPortraitWarper extends WarperCreator {
         return (PaniniPortraitWarper)super.position(position);
     }
     @Override public PaniniPortraitWarper getPointer(long i) {
-        return new PaniniPortraitWarper((Pointer)this).position(position + i);
+        return new PaniniPortraitWarper((Pointer)this).offsetAddress(i);
     }
 
     public PaniniPortraitWarper(float A/*=1*/, float B/*=1*/) { super((Pointer)null); allocate(A, B); }

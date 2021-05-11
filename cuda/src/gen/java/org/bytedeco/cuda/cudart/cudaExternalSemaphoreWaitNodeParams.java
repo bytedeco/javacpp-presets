@@ -29,7 +29,7 @@ public class cudaExternalSemaphoreWaitNodeParams extends Pointer {
         return (cudaExternalSemaphoreWaitNodeParams)super.position(position);
     }
     @Override public cudaExternalSemaphoreWaitNodeParams getPointer(long i) {
-        return new cudaExternalSemaphoreWaitNodeParams((Pointer)this).position(position + i);
+        return new cudaExternalSemaphoreWaitNodeParams((Pointer)this).offsetAddress(i);
     }
 
     /** Array of external semaphore handles. */

@@ -63,7 +63,7 @@ public class Point extends IntPointer {
         return (Point)super.position(position);
     }
     @Override public Point getPointer(long i) {
-        return new Point((Pointer)this).position(position + i);
+        return new Point((Pointer)this).offsetAddress(i);
     }
 
 

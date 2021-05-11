@@ -30,7 +30,7 @@ public class CvSparseNode extends Pointer {
         return (CvSparseNode)super.position(position);
     }
     @Override public CvSparseNode getPointer(long i) {
-        return new CvSparseNode((Pointer)this).position(position + i);
+        return new CvSparseNode((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned") int hashval(); public native CvSparseNode hashval(int setter);

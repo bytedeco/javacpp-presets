@@ -29,7 +29,7 @@ public class cudaDeviceProp extends Pointer {
         return (cudaDeviceProp)super.position(position);
     }
     @Override public cudaDeviceProp getPointer(long i) {
-        return new cudaDeviceProp((Pointer)this).position(position + i);
+        return new cudaDeviceProp((Pointer)this).offsetAddress(i);
     }
 
     /** ASCII string identifying device */

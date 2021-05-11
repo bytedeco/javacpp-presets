@@ -26,7 +26,7 @@ public class CvSize2D32f extends AbstractCvSize2D32f {
         return (CvSize2D32f)super.position(position);
     }
     @Override public CvSize2D32f getPointer(long i) {
-        return new CvSize2D32f((Pointer)this).position(position + i);
+        return new CvSize2D32f((Pointer)this).offsetAddress(i);
     }
 
     public native float width(); public native CvSize2D32f width(float setter);

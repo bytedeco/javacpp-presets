@@ -32,7 +32,7 @@ public class FlowWarpLayer extends Layer {
             return (FlowWarpLayer)super.position(position);
         }
         @Override public FlowWarpLayer getPointer(long i) {
-            return new FlowWarpLayer((Pointer)this).position(position + i);
+            return new FlowWarpLayer((Pointer)this).offsetAddress(i);
         }
     
         public static native @Ptr FlowWarpLayer create(@Const @ByRef LayerParams params);

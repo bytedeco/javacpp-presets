@@ -31,7 +31,7 @@ public class CvMoments extends AbstractCvMoments {
         return (CvMoments)super.position(position);
     }
     @Override public CvMoments getPointer(long i) {
-        return new CvMoments((Pointer)this).position(position + i);
+        return new CvMoments((Pointer)this).offsetAddress(i);
     }
 
     /** spatial moments */

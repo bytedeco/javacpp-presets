@@ -29,7 +29,7 @@ public class cudaResourceViewDesc extends Pointer {
         return (cudaResourceViewDesc)super.position(position);
     }
     @Override public cudaResourceViewDesc getPointer(long i) {
-        return new cudaResourceViewDesc((Pointer)this).position(position + i);
+        return new cudaResourceViewDesc((Pointer)this).offsetAddress(i);
     }
 
     /** Resource view format */

@@ -25,7 +25,7 @@ public class _expr extends Pointer {
         return (_expr)super.position(position);
     }
     @Override public _expr getPointer(long i) {
-        return new _expr((Pointer)this).position(position + i);
+        return new _expr((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("_expr_kind") int kind(); public native _expr kind(int setter);

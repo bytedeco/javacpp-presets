@@ -53,7 +53,7 @@ public class StandardCollector extends PredictCollector {
             return (PredictResult)super.position(position);
         }
         @Override public PredictResult getPointer(long i) {
-            return new PredictResult((Pointer)this).position(position + i);
+            return new PredictResult((Pointer)this).offsetAddress(i);
         }
     
         public native int label(); public native PredictResult label(int setter);

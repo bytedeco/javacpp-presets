@@ -27,7 +27,7 @@ public class node extends Pointer {
         return (node)super.position(position);
     }
     @Override public node getPointer(long i) {
-        return new node((Pointer)this).position(position + i);
+        return new node((Pointer)this).offsetAddress(i);
     }
 
     public native short n_type(); public native node n_type(short setter);

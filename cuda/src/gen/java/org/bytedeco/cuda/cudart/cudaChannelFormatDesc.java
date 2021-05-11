@@ -29,7 +29,7 @@ public class cudaChannelFormatDesc extends Pointer {
         return (cudaChannelFormatDesc)super.position(position);
     }
     @Override public cudaChannelFormatDesc getPointer(long i) {
-        return new cudaChannelFormatDesc((Pointer)this).position(position + i);
+        return new cudaChannelFormatDesc((Pointer)this).offsetAddress(i);
     }
 
     /** x */

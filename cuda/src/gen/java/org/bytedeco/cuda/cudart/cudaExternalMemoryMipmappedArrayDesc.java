@@ -29,7 +29,7 @@ public class cudaExternalMemoryMipmappedArrayDesc extends Pointer {
         return (cudaExternalMemoryMipmappedArrayDesc)super.position(position);
     }
     @Override public cudaExternalMemoryMipmappedArrayDesc getPointer(long i) {
-        return new cudaExternalMemoryMipmappedArrayDesc((Pointer)this).position(position + i);
+        return new cudaExternalMemoryMipmappedArrayDesc((Pointer)this).offsetAddress(i);
     }
 
     /**

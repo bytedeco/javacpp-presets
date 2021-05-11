@@ -29,7 +29,7 @@ public class CUipcEventHandle_v1 extends Pointer {
         return (CUipcEventHandle_v1)super.position(position);
     }
     @Override public CUipcEventHandle_v1 getPointer(long i) {
-        return new CUipcEventHandle_v1((Pointer)this).position(position + i);
+        return new CUipcEventHandle_v1((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("char") byte reserved(int i); public native CUipcEventHandle_v1 reserved(int i, byte setter);

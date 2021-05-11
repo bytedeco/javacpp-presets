@@ -24,7 +24,7 @@ public class Point3d extends DoublePointer {
         return (Point3d)super.position(position);
     }
     @Override public Point3d getPointer(long i) {
-        return new Point3d((Pointer)this).position(position + i);
+        return new Point3d((Pointer)this).offsetAddress(i);
     }
 
 

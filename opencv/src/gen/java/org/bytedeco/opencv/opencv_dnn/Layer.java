@@ -34,7 +34,7 @@ public class Layer extends Algorithm {
             return (Layer)super.position(position);
         }
         @Override public Layer getPointer(long i) {
-            return new Layer((Pointer)this).position(position + i);
+            return new Layer((Pointer)this).offsetAddress(i);
         }
     
 

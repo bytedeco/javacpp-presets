@@ -25,7 +25,7 @@ public class _mod extends Pointer {
         return (_mod)super.position(position);
     }
     @Override public _mod getPointer(long i) {
-        return new _mod((Pointer)this).position(position + i);
+        return new _mod((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("_mod_kind") int kind(); public native _mod kind(int setter);

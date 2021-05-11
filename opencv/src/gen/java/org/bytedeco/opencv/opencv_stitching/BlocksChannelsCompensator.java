@@ -55,7 +55,7 @@ public class BlocksChannelsCompensator extends BlocksCompensator {
         return (BlocksChannelsCompensator)super.position(position);
     }
     @Override public BlocksChannelsCompensator getPointer(long i) {
-        return new BlocksChannelsCompensator((Pointer)this).position(position + i);
+        return new BlocksChannelsCompensator((Pointer)this).offsetAddress(i);
     }
 
     public BlocksChannelsCompensator(int bl_width/*=32*/, int bl_height/*=32*/, int nr_feeds/*=1*/) { super((Pointer)null); allocate(bl_width, bl_height, nr_feeds); }

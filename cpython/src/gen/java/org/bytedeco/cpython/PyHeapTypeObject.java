@@ -27,7 +27,7 @@ public class PyHeapTypeObject extends Pointer {
         return (PyHeapTypeObject)super.position(position);
     }
     @Override public PyHeapTypeObject getPointer(long i) {
-        return new PyHeapTypeObject((Pointer)this).position(position + i);
+        return new PyHeapTypeObject((Pointer)this).offsetAddress(i);
     }
 
     /* Note: there's a dependency on the order of these members

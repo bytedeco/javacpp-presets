@@ -28,7 +28,7 @@ public class nvmlGpuInstanceInfo_t extends Pointer {
         return (nvmlGpuInstanceInfo_t)super.position(position);
     }
     @Override public nvmlGpuInstanceInfo_t getPointer(long i) {
-        return new nvmlGpuInstanceInfo_t((Pointer)this).position(position + i);
+        return new nvmlGpuInstanceInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Parent device */

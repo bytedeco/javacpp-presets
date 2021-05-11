@@ -51,7 +51,7 @@ public class ContourFitting extends Algorithm {
             return (ContourFitting)super.position(position);
         }
         @Override public ContourFitting getPointer(long i) {
-            return new ContourFitting((Pointer)this).position(position + i);
+            return new ContourFitting((Pointer)this).offsetAddress(i);
         }
     
         /** \brief Fit two closed curves using fourier descriptors. More details in \cite PersoonFu1977 and \cite BergerRaghunathan1998

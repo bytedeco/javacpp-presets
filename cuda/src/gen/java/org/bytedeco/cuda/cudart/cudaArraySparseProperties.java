@@ -29,7 +29,7 @@ public class cudaArraySparseProperties extends Pointer {
         return (cudaArraySparseProperties)super.position(position);
     }
     @Override public cudaArraySparseProperties getPointer(long i) {
-        return new cudaArraySparseProperties((Pointer)this).position(position + i);
+        return new cudaArraySparseProperties((Pointer)this).offsetAddress(i);
     }
 
         /** Tile width in elements */

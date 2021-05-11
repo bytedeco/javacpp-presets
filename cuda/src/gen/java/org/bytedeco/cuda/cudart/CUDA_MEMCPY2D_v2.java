@@ -29,7 +29,7 @@ public class CUDA_MEMCPY2D_v2 extends Pointer {
         return (CUDA_MEMCPY2D_v2)super.position(position);
     }
     @Override public CUDA_MEMCPY2D_v2 getPointer(long i) {
-        return new CUDA_MEMCPY2D_v2((Pointer)this).position(position + i);
+        return new CUDA_MEMCPY2D_v2((Pointer)this).offsetAddress(i);
     }
 
     /** Source X in bytes */

@@ -31,7 +31,7 @@ public class nvmlHwbcEntry_t extends Pointer {
         return (nvmlHwbcEntry_t)super.position(position);
     }
     @Override public nvmlHwbcEntry_t getPointer(long i) {
-        return new nvmlHwbcEntry_t((Pointer)this).position(position + i);
+        return new nvmlHwbcEntry_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned int") int hwbcId(); public native nvmlHwbcEntry_t hwbcId(int setter);

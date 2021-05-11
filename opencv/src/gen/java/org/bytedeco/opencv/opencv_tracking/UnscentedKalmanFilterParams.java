@@ -51,7 +51,7 @@ public class UnscentedKalmanFilterParams extends Pointer {
         return (UnscentedKalmanFilterParams)super.position(position);
     }
     @Override public UnscentedKalmanFilterParams getPointer(long i) {
-        return new UnscentedKalmanFilterParams((Pointer)this).position(position + i);
+        return new UnscentedKalmanFilterParams((Pointer)this).offsetAddress(i);
     }
 
 

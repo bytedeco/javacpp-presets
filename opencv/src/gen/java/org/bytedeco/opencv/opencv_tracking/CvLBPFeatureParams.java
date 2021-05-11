@@ -47,7 +47,7 @@ public class CvLBPFeatureParams extends CvFeatureParams {
         return (CvLBPFeatureParams)super.position(position);
     }
     @Override public CvLBPFeatureParams getPointer(long i) {
-        return new CvLBPFeatureParams((Pointer)this).position(position + i);
+        return new CvLBPFeatureParams((Pointer)this).offsetAddress(i);
     }
 
   public CvLBPFeatureParams() { super((Pointer)null); allocate(); }

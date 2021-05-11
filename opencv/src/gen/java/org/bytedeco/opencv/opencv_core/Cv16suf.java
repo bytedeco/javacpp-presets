@@ -29,7 +29,7 @@ public class Cv16suf extends Pointer {
         return (Cv16suf)super.position(position);
     }
     @Override public Cv16suf getPointer(long i) {
-        return new Cv16suf((Pointer)this).position(position + i);
+        return new Cv16suf((Pointer)this).offsetAddress(i);
     }
 
     public native short i(); public native Cv16suf i(short setter);

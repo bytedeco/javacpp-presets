@@ -36,7 +36,7 @@ public class TickMeter extends Pointer {
         return (TickMeter)super.position(position);
     }
     @Override public TickMeter getPointer(long i) {
-        return new TickMeter((Pointer)this).position(position + i);
+        return new TickMeter((Pointer)this).offsetAddress(i);
     }
 
     /** the default constructor */

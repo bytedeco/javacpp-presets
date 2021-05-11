@@ -29,7 +29,7 @@ public class cudaMemPoolProps extends Pointer {
         return (cudaMemPoolProps)super.position(position);
     }
     @Override public cudaMemPoolProps getPointer(long i) {
-        return new cudaMemPoolProps((Pointer)this).position(position + i);
+        return new cudaMemPoolProps((Pointer)this).offsetAddress(i);
     }
 
     /** Allocation type. Currently must be specified as cudaMemAllocationTypePinned */

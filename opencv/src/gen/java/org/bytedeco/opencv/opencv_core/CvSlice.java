@@ -25,7 +25,7 @@ public class CvSlice extends Pointer {
         return (CvSlice)super.position(position);
     }
     @Override public CvSlice getPointer(long i) {
-        return new CvSlice((Pointer)this).position(position + i);
+        return new CvSlice((Pointer)this).offsetAddress(i);
     }
 
     public native int start_index(); public native CvSlice start_index(int setter);

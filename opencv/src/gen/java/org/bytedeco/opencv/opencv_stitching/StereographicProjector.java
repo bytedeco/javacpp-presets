@@ -56,7 +56,7 @@ public class StereographicProjector extends ProjectorBase {
         return (StereographicProjector)super.position(position);
     }
     @Override public StereographicProjector getPointer(long i) {
-        return new StereographicProjector((Pointer)this).position(position + i);
+        return new StereographicProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

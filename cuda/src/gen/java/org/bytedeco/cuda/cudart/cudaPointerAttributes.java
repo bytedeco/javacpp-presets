@@ -29,7 +29,7 @@ public class cudaPointerAttributes extends Pointer {
         return (cudaPointerAttributes)super.position(position);
     }
     @Override public cudaPointerAttributes getPointer(long i) {
-        return new cudaPointerAttributes((Pointer)this).position(position + i);
+        return new cudaPointerAttributes((Pointer)this).offsetAddress(i);
     }
 
     /**

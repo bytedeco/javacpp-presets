@@ -34,7 +34,7 @@ public class NppStreamContext extends Pointer {
         return (NppStreamContext)super.position(position);
     }
     @Override public NppStreamContext getPointer(long i) {
-        return new NppStreamContext((Pointer)this).position(position + i);
+        return new NppStreamContext((Pointer)this).offsetAddress(i);
     }
 
     public native CUstream_st hStream(); public native NppStreamContext hStream(CUstream_st setter);

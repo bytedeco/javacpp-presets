@@ -32,7 +32,7 @@ public class DataAugmentationLayer extends Layer {
             return (DataAugmentationLayer)super.position(position);
         }
         @Override public DataAugmentationLayer getPointer(long i) {
-            return new DataAugmentationLayer((Pointer)this).position(position + i);
+            return new DataAugmentationLayer((Pointer)this).offsetAddress(i);
         }
     
         public static native @Ptr DataAugmentationLayer create(@Const @ByRef LayerParams params);

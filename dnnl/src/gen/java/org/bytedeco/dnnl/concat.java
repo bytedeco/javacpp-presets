@@ -27,7 +27,7 @@ public class concat extends primitive {
         return (concat)super.position(position);
     }
     @Override public concat getPointer(long i) {
-        return new concat((Pointer)this).position(position + i);
+        return new concat((Pointer)this).offsetAddress(i);
     }
 
     /** Primitive descriptor for a concat primitive. */
@@ -55,7 +55,7 @@ public class concat extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc((Pointer)this).position(position + i);
+            return new primitive_desc((Pointer)this).offsetAddress(i);
         }
     
 

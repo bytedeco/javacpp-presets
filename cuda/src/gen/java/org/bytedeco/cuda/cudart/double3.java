@@ -26,7 +26,7 @@ public class double3 extends Pointer {
         return (double3)super.position(position);
     }
     @Override public double3 getPointer(long i) {
-        return new double3((Pointer)this).position(position + i);
+        return new double3((Pointer)this).offsetAddress(i);
     }
 
     public native double x(); public native double3 x(double setter);

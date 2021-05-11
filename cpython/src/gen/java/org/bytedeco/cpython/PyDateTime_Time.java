@@ -26,7 +26,7 @@ public class PyDateTime_Time extends Pointer {
         return (PyDateTime_Time)super.position(position);
     }
     @Override public PyDateTime_Time getPointer(long i) {
-        return new PyDateTime_Time((Pointer)this).position(position + i);
+        return new PyDateTime_Time((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyDateTime_Time ob_base(PyObject setter);

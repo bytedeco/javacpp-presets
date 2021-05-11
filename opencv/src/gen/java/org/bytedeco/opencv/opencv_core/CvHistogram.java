@@ -28,7 +28,7 @@ public class CvHistogram extends org.bytedeco.opencv.opencv_imgproc.AbstractCvHi
         return (CvHistogram)super.position(position);
     }
     @Override public CvHistogram getPointer(long i) {
-        return new CvHistogram((Pointer)this).position(position + i);
+        return new CvHistogram((Pointer)this).offsetAddress(i);
     }
 
     public native int type(); public native CvHistogram type(int setter);

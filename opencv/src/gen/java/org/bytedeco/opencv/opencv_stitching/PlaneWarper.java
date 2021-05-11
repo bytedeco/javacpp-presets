@@ -59,7 +59,7 @@ public class PlaneWarper extends WarperCreator {
         return (PlaneWarper)super.position(position);
     }
     @Override public PlaneWarper getPointer(long i) {
-        return new PlaneWarper((Pointer)this).position(position + i);
+        return new PlaneWarper((Pointer)this).offsetAddress(i);
     }
 
     public native @Ptr RotationWarper create(float scale);

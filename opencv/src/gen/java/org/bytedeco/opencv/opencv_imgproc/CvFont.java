@@ -32,7 +32,7 @@ public class CvFont extends AbstractCvFont {
         return (CvFont)super.position(position);
     }
     @Override public CvFont getPointer(long i) {
-        return new CvFont((Pointer)this).position(position + i);
+        return new CvFont((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("const char*") BytePointer nameFont(); public native CvFont nameFont(BytePointer setter);   //Qt:nameFont

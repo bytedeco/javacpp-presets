@@ -39,7 +39,7 @@ public class Net extends Pointer {
             return (Net)super.position(position);
         }
         @Override public Net getPointer(long i) {
-            return new Net((Pointer)this).position(position + i);
+            return new Net((Pointer)this).offsetAddress(i);
         }
     
 

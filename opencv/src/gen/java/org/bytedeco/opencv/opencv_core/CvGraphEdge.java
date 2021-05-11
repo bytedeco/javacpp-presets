@@ -29,7 +29,7 @@ public class CvGraphEdge extends Pointer {
         return (CvGraphEdge)super.position(position);
     }
     @Override public CvGraphEdge getPointer(long i) {
-        return new CvGraphEdge((Pointer)this).position(position + i);
+        return new CvGraphEdge((Pointer)this).offsetAddress(i);
     }
 
     public native int flags(); public native CvGraphEdge flags(int setter);

@@ -28,7 +28,7 @@ public class IplConvKernel extends org.bytedeco.opencv.opencv_imgproc.AbstractIp
         return (IplConvKernel)super.position(position);
     }
     @Override public IplConvKernel getPointer(long i) {
-        return new IplConvKernel((Pointer)this).position(position + i);
+        return new IplConvKernel((Pointer)this).offsetAddress(i);
     }
 
     public native int nCols(); public native IplConvKernel nCols(int setter);

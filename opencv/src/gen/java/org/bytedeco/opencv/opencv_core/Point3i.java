@@ -42,7 +42,7 @@ public class Point3i extends IntPointer {
         return (Point3i)super.position(position);
     }
     @Override public Point3i getPointer(long i) {
-        return new Point3i((Pointer)this).position(position + i);
+        return new Point3i((Pointer)this).offsetAddress(i);
     }
 
 

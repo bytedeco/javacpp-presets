@@ -32,7 +32,7 @@ public class CvHuMoments extends Pointer {
         return (CvHuMoments)super.position(position);
     }
     @Override public CvHuMoments getPointer(long i) {
-        return new CvHuMoments((Pointer)this).position(position + i);
+        return new CvHuMoments((Pointer)this).offsetAddress(i);
     }
 
     /** Hu invariants */

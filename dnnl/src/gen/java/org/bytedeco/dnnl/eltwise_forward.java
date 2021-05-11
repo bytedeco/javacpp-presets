@@ -49,7 +49,7 @@ public class eltwise_forward extends primitive {
         return (eltwise_forward)super.position(position);
     }
     @Override public eltwise_forward getPointer(long i) {
-        return new eltwise_forward((Pointer)this).position(position + i);
+        return new eltwise_forward((Pointer)this).offsetAddress(i);
     }
 
     /** Descriptor for an elementwise forward propagation primitive. */
@@ -100,7 +100,7 @@ public class eltwise_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc((Pointer)this).position(position + i);
+            return new primitive_desc((Pointer)this).offsetAddress(i);
         }
     
         /** Default constructor. Produces an empty object. */

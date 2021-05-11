@@ -37,7 +37,7 @@ public class FileNode extends Pointer {
         return (FileNode)super.position(position);
     }
     @Override public FileNode getPointer(long i) {
-        return new FileNode((Pointer)this).position(position + i);
+        return new FileNode((Pointer)this).offsetAddress(i);
     }
 
     /** type of the file storage node */

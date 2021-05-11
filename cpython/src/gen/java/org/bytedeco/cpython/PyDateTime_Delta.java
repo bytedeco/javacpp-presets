@@ -27,7 +27,7 @@ public class PyDateTime_Delta extends Pointer {
         return (PyDateTime_Delta)super.position(position);
     }
     @Override public PyDateTime_Delta getPointer(long i) {
-        return new PyDateTime_Delta((Pointer)this).position(position + i);
+        return new PyDateTime_Delta((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyDateTime_Delta ob_base(PyObject setter);

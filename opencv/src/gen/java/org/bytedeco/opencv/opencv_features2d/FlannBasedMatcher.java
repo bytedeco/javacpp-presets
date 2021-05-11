@@ -45,7 +45,7 @@ public class FlannBasedMatcher extends DescriptorMatcher {
         return (FlannBasedMatcher)super.position(position);
     }
     @Override public FlannBasedMatcher getPointer(long i) {
-        return new FlannBasedMatcher((Pointer)this).position(position + i);
+        return new FlannBasedMatcher((Pointer)this).offsetAddress(i);
     }
 
     public FlannBasedMatcher( @Ptr IndexParams indexParams/*=makePtr<flann::KDTreeIndexParams>()*/,

@@ -27,7 +27,7 @@ public class PyCompilerFlags extends Pointer {
         return (PyCompilerFlags)super.position(position);
     }
     @Override public PyCompilerFlags getPointer(long i) {
-        return new PyCompilerFlags((Pointer)this).position(position + i);
+        return new PyCompilerFlags((Pointer)this).offsetAddress(i);
     }
 
     public native int cf_flags(); public native PyCompilerFlags cf_flags(int setter);  /* bitmask of CO_xxx flags relevant to future */

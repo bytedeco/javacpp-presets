@@ -29,7 +29,7 @@ public class CvNArrayIterator extends Pointer {
         return (CvNArrayIterator)super.position(position);
     }
     @Override public CvNArrayIterator getPointer(long i) {
-        return new CvNArrayIterator((Pointer)this).position(position + i);
+        return new CvNArrayIterator((Pointer)this).offsetAddress(i);
     }
 
     /** number of arrays */

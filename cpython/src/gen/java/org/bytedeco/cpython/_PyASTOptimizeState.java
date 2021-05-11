@@ -26,7 +26,7 @@ public class _PyASTOptimizeState extends Pointer {
         return (_PyASTOptimizeState)super.position(position);
     }
     @Override public _PyASTOptimizeState getPointer(long i) {
-        return new _PyASTOptimizeState((Pointer)this).position(position + i);
+        return new _PyASTOptimizeState((Pointer)this).offsetAddress(i);
     }
 
     public native int optimize(); public native _PyASTOptimizeState optimize(int setter);

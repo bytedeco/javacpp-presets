@@ -28,7 +28,7 @@ public class Cv64suf extends Pointer {
         return (Cv64suf)super.position(position);
     }
     @Override public Cv64suf getPointer(long i) {
-        return new Cv64suf((Pointer)this).position(position + i);
+        return new Cv64suf((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("int64") long i(); public native Cv64suf i(long setter);

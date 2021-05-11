@@ -31,7 +31,7 @@ public class nvmlProcessInfo_t extends Pointer {
         return (nvmlProcessInfo_t)super.position(position);
     }
     @Override public nvmlProcessInfo_t getPointer(long i) {
-        return new nvmlProcessInfo_t((Pointer)this).position(position + i);
+        return new nvmlProcessInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Process ID */

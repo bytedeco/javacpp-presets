@@ -32,7 +32,7 @@ public class PyASCIIObject extends Pointer {
         return (PyASCIIObject)super.position(position);
     }
     @Override public PyASCIIObject getPointer(long i) {
-        return new PyASCIIObject((Pointer)this).position(position + i);
+        return new PyASCIIObject((Pointer)this).offsetAddress(i);
     }
 
     /* There are 4 forms of Unicode strings:

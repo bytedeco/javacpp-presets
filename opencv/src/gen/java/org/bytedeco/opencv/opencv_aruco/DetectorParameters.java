@@ -102,7 +102,7 @@ public class DetectorParameters extends Pointer {
         return (DetectorParameters)super.position(position);
     }
     @Override public DetectorParameters getPointer(long i) {
-        return new DetectorParameters((Pointer)this).position(position + i);
+        return new DetectorParameters((Pointer)this).offsetAddress(i);
     }
 
 

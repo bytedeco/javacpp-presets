@@ -27,7 +27,7 @@ public class LinearIndexParams extends IndexParams {
         return (LinearIndexParams)super.position(position);
     }
     @Override public LinearIndexParams getPointer(long i) {
-        return new LinearIndexParams((Pointer)this).position(position + i);
+        return new LinearIndexParams((Pointer)this).offsetAddress(i);
     }
 
     public LinearIndexParams() { super((Pointer)null); allocate(); }

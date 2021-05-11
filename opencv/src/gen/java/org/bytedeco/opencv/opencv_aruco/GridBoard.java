@@ -50,7 +50,7 @@ public class GridBoard extends Board {
         return (GridBoard)super.position(position);
     }
     @Override public GridBoard getPointer(long i) {
-        return new GridBoard((Pointer)this).position(position + i);
+        return new GridBoard((Pointer)this).offsetAddress(i);
     }
 
     /**

@@ -31,7 +31,7 @@ public class nvmlVgpuPgpuMetadata_t extends Pointer {
         return (nvmlVgpuPgpuMetadata_t)super.position(position);
     }
     @Override public nvmlVgpuPgpuMetadata_t getPointer(long i) {
-        return new nvmlVgpuPgpuMetadata_t((Pointer)this).position(position + i);
+        return new nvmlVgpuPgpuMetadata_t((Pointer)this).offsetAddress(i);
     }
 
     /** Current version of the structure */

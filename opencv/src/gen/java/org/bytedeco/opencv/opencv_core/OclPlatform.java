@@ -26,7 +26,7 @@ public class OclPlatform extends Pointer {
         return (OclPlatform)super.position(position);
     }
     @Override public OclPlatform getPointer(long i) {
-        return new OclPlatform((Pointer)this).position(position + i);
+        return new OclPlatform((Pointer)this).offsetAddress(i);
     }
 
     public OclPlatform() { super((Pointer)null); allocate(); }

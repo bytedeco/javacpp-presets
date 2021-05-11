@@ -27,7 +27,7 @@ public class AutotunedIndexParams extends IndexParams {
         return (AutotunedIndexParams)super.position(position);
     }
     @Override public AutotunedIndexParams getPointer(long i) {
-        return new AutotunedIndexParams((Pointer)this).position(position + i);
+        return new AutotunedIndexParams((Pointer)this).offsetAddress(i);
     }
 
     public AutotunedIndexParams(float target_precision/*=0.8f*/, float build_weight/*=0.01f*/,

@@ -59,7 +59,7 @@ public class ImageFeatures extends Pointer {
         return (ImageFeatures)super.position(position);
     }
     @Override public ImageFeatures getPointer(long i) {
-        return new ImageFeatures((Pointer)this).position(position + i);
+        return new ImageFeatures((Pointer)this).offsetAddress(i);
     }
 
     public native int img_idx(); public native ImageFeatures img_idx(int setter);

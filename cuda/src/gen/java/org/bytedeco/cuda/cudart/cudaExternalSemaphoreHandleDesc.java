@@ -29,7 +29,7 @@ public class cudaExternalSemaphoreHandleDesc extends Pointer {
         return (cudaExternalSemaphoreHandleDesc)super.position(position);
     }
     @Override public cudaExternalSemaphoreHandleDesc getPointer(long i) {
-        return new cudaExternalSemaphoreHandleDesc((Pointer)this).position(position + i);
+        return new cudaExternalSemaphoreHandleDesc((Pointer)this).offsetAddress(i);
     }
 
     /**

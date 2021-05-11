@@ -28,7 +28,7 @@ public class CvContour extends CvSeq {
         return (CvContour)super.position(position);
     }
     @Override public CvContour getPointer(long i) {
-        return new CvContour((Pointer)this).position(position + i);
+        return new CvContour((Pointer)this).offsetAddress(i);
     }
 
     /** Miscellaneous flags.     */

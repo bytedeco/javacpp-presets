@@ -26,7 +26,7 @@ public class setentry extends Pointer {
         return (setentry)super.position(position);
     }
     @Override public setentry getPointer(long i) {
-        return new setentry((Pointer)this).position(position + i);
+        return new setentry((Pointer)this).offsetAddress(i);
     }
 
     public native PyObject key(); public native setentry key(PyObject setter);

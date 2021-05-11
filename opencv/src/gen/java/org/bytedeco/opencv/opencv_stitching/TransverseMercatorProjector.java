@@ -56,7 +56,7 @@ public class TransverseMercatorProjector extends ProjectorBase {
         return (TransverseMercatorProjector)super.position(position);
     }
     @Override public TransverseMercatorProjector getPointer(long i) {
-        return new TransverseMercatorProjector((Pointer)this).position(position + i);
+        return new TransverseMercatorProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

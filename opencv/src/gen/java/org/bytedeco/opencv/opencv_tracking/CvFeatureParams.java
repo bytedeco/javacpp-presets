@@ -47,7 +47,7 @@ public class CvFeatureParams extends CvParams {
         return (CvFeatureParams)super.position(position);
     }
     @Override public CvFeatureParams getPointer(long i) {
-        return new CvFeatureParams((Pointer)this).position(position + i);
+        return new CvFeatureParams((Pointer)this).offsetAddress(i);
     }
 
   /** enum cv::detail::tracking::contrib_feature::CvFeatureParams::FeatureType */
