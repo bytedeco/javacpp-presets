@@ -17,10 +17,6 @@
   <properties>
     <tensorflow.version>1.15.5</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.mkldnn.${javacpp.platform.module};
-      requires org.bytedeco.numpy.${javacpp.platform.module};
-    </javacpp.nativeRequires>
   </properties>
 
   <dependencies>

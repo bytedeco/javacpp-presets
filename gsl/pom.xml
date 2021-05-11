@@ -14,12 +14,6 @@
   <version>2.6-${project.parent.version}</version>
   <name>JavaCPP Presets for GSL</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.openblas.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>

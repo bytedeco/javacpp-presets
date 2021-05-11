@@ -14,12 +14,6 @@
   <version>7.2-${project.parent.version}</version>
   <name>JavaCPP Presets for TensorRT</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.cuda.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>

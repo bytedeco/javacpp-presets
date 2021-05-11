@@ -16,9 +16,6 @@
 
   <properties>
     <onnxruntime.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/onnxruntime</onnxruntime.path>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.dnnl.${javacpp.platform.module};
-    </javacpp.nativeRequires>
   </properties>
 
   <dependencies>

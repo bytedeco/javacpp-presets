@@ -14,14 +14,6 @@
   <version>1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Caffe</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.opencv.${javacpp.platform.module};
-      requires org.bytedeco.hdf5.${javacpp.platform.module};
-      requires org.bytedeco.openblas.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
