@@ -147,7 +147,7 @@ public class DTrees extends StatModel {
             return (Node)super.position(position);
         }
         @Override public Node getPointer(long i) {
-            return new Node((Pointer)this).position(position + i);
+            return new Node((Pointer)this).offsetAddress(i);
         }
     
         public Node() { super((Pointer)null); allocate(); }
@@ -184,7 +184,7 @@ public class DTrees extends StatModel {
             return (Split)super.position(position);
         }
         @Override public Split getPointer(long i) {
-            return new Split((Pointer)this).position(position + i);
+            return new Split((Pointer)this).offsetAddress(i);
         }
     
         public Split() { super((Pointer)null); allocate(); }

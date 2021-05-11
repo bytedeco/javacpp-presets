@@ -31,7 +31,7 @@ public class CvLineIterator extends Pointer {
         return (CvLineIterator)super.position(position);
     }
     @Override public CvLineIterator getPointer(long i) {
-        return new CvLineIterator((Pointer)this).position(position + i);
+        return new CvLineIterator((Pointer)this).offsetAddress(i);
     }
 
     /** Pointer to the current point: */

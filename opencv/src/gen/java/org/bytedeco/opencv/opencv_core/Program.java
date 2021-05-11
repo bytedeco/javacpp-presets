@@ -25,7 +25,7 @@ public class Program extends Pointer {
         return (Program)super.position(position);
     }
     @Override public Program getPointer(long i) {
-        return new Program((Pointer)this).position(position + i);
+        return new Program((Pointer)this).offsetAddress(i);
     }
 
     public Program() { super((Pointer)null); allocate(); }

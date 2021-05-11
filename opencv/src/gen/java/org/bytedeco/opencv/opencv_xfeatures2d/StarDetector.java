@@ -50,7 +50,7 @@ public class StarDetector extends Feature2D {
         return (StarDetector)super.position(position);
     }
     @Override public StarDetector getPointer(long i) {
-        return new StarDetector((Pointer)this).position(position + i);
+        return new StarDetector((Pointer)this).offsetAddress(i);
     }
 
     /** the full constructor */

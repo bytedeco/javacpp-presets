@@ -55,7 +55,7 @@ public class LogToStdout extends ILog {
         return (LogToStdout)super.position(position);
     }
     @Override public LogToStdout getPointer(long i) {
-        return new LogToStdout((Pointer)this).position(position + i);
+        return new LogToStdout((Pointer)this).offsetAddress(i);
     }
 
     public native void print(@Cast("const char*") BytePointer format);

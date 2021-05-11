@@ -36,7 +36,7 @@ public class Model extends Pointer {
              return (Model)super.position(position);
          }
          @Override public Model getPointer(long i) {
-             return new Model((Pointer)this).position(position + i);
+             return new Model((Pointer)this).offsetAddress(i);
          }
      
          public Model() { super((Pointer)null); allocate(); }

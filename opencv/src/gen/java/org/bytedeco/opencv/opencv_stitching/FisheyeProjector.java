@@ -56,7 +56,7 @@ public class FisheyeProjector extends ProjectorBase {
         return (FisheyeProjector)super.position(position);
     }
     @Override public FisheyeProjector getPointer(long i) {
-        return new FisheyeProjector((Pointer)this).position(position + i);
+        return new FisheyeProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

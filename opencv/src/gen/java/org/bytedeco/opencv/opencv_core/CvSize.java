@@ -28,7 +28,7 @@ public class CvSize extends AbstractCvSize {
         return (CvSize)super.position(position);
     }
     @Override public CvSize getPointer(long i) {
-        return new CvSize((Pointer)this).position(position + i);
+        return new CvSize((Pointer)this).offsetAddress(i);
     }
 
     public native int width(); public native CvSize width(int setter);

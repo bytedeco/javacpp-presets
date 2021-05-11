@@ -26,7 +26,7 @@ public class prelu_backward extends primitive {
         return (prelu_backward)super.position(position);
     }
     @Override public prelu_backward getPointer(long i) {
-        return new prelu_backward((Pointer)this).position(position + i);
+        return new prelu_backward((Pointer)this).offsetAddress(i);
     }
 
     /** Descriptor for a PReLU backward propagation primitive. */
@@ -67,7 +67,7 @@ public class prelu_backward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc((Pointer)this).position(position + i);
+            return new primitive_desc((Pointer)this).offsetAddress(i);
         }
     
         /** Default constructor. Produces an empty object. */

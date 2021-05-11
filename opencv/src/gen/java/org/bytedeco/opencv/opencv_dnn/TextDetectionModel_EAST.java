@@ -35,7 +35,7 @@ public class TextDetectionModel_EAST extends TextDetectionModel {
         return (TextDetectionModel_EAST)super.position(position);
     }
     @Override public TextDetectionModel_EAST getPointer(long i) {
-        return new TextDetectionModel_EAST((Pointer)this).position(position + i);
+        return new TextDetectionModel_EAST((Pointer)this).offsetAddress(i);
     }
 
     public TextDetectionModel_EAST() { super((Pointer)null); allocate(); }

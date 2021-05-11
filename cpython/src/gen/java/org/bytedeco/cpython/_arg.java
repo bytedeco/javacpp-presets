@@ -26,7 +26,7 @@ public class _arg extends Pointer {
         return (_arg)super.position(position);
     }
     @Override public _arg getPointer(long i) {
-        return new _arg((Pointer)this).position(position + i);
+        return new _arg((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("identifier") PyObject arg(); public native _arg arg(PyObject setter);

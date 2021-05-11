@@ -31,7 +31,7 @@ public class nvmlSample_t extends Pointer {
         return (nvmlSample_t)super.position(position);
     }
     @Override public nvmlSample_t getPointer(long i) {
-        return new nvmlSample_t((Pointer)this).position(position + i);
+        return new nvmlSample_t((Pointer)this).offsetAddress(i);
     }
 
     /** CPU Timestamp in microseconds */

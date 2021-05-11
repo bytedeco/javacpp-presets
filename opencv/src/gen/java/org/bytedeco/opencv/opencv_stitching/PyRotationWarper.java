@@ -51,7 +51,7 @@ public class PyRotationWarper extends Pointer {
             return (PyRotationWarper)super.position(position);
         }
         @Override public PyRotationWarper getPointer(long i) {
-            return new PyRotationWarper((Pointer)this).position(position + i);
+            return new PyRotationWarper((Pointer)this).offsetAddress(i);
         }
     
         public PyRotationWarper(@Str BytePointer type, float scale) { super((Pointer)null); allocate(type, scale); }

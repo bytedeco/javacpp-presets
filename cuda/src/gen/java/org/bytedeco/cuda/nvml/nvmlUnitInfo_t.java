@@ -31,7 +31,7 @@ public class nvmlUnitInfo_t extends Pointer {
         return (nvmlUnitInfo_t)super.position(position);
     }
     @Override public nvmlUnitInfo_t getPointer(long i) {
-        return new nvmlUnitInfo_t((Pointer)this).position(position + i);
+        return new nvmlUnitInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Product name */

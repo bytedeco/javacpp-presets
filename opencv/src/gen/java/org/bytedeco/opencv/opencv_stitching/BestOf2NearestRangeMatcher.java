@@ -52,7 +52,7 @@ public class BestOf2NearestRangeMatcher extends BestOf2NearestMatcher {
         return (BestOf2NearestRangeMatcher)super.position(position);
     }
     @Override public BestOf2NearestRangeMatcher getPointer(long i) {
-        return new BestOf2NearestRangeMatcher((Pointer)this).position(position + i);
+        return new BestOf2NearestRangeMatcher((Pointer)this).offsetAddress(i);
     }
 
     public BestOf2NearestRangeMatcher(int range_width/*=5*/, @Cast("bool") boolean try_use_gpu/*=false*/, float match_conf/*=0.3f*/,

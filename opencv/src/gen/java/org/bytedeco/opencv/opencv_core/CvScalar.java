@@ -30,7 +30,7 @@ public class CvScalar extends AbstractCvScalar {
         return (CvScalar)super.position(position);
     }
     @Override public CvScalar getPointer(long i) {
-        return new CvScalar((Pointer)this).position(position + i);
+        return new CvScalar((Pointer)this).offsetAddress(i);
     }
 
     public native double val(int i); public native CvScalar val(int i, double setter);

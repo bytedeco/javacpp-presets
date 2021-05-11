@@ -26,7 +26,7 @@ public class _inittab extends Pointer {
         return (_inittab)super.position(position);
     }
     @Override public _inittab getPointer(long i) {
-        return new _inittab((Pointer)this).position(position + i);
+        return new _inittab((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("const char*") BytePointer name(); public native _inittab name(BytePointer setter);           /* ASCII encoded string */

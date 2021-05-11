@@ -27,7 +27,7 @@ public class PyListObject extends Pointer {
         return (PyListObject)super.position(position);
     }
     @Override public PyListObject getPointer(long i) {
-        return new PyListObject((Pointer)this).position(position + i);
+        return new PyListObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyListObject ob_base(PyVarObject setter);

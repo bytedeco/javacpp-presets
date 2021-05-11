@@ -44,7 +44,7 @@ public class StaticSaliencyFineGrained extends StaticSaliency {
         return (StaticSaliencyFineGrained)super.position(position);
     }
     @Override public StaticSaliencyFineGrained getPointer(long i) {
-        return new StaticSaliencyFineGrained((Pointer)this).position(position + i);
+        return new StaticSaliencyFineGrained((Pointer)this).offsetAddress(i);
     }
 
 

@@ -27,6 +27,7 @@ public class IntMemoryMap extends Pointer {
     @Index public native @ByRef memory get(int i);
     public native IntMemoryMap put(int i, memory value);
 
+    public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {

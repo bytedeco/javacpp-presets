@@ -28,7 +28,7 @@ public class NppiContourPixelDirectionInfo extends Pointer {
         return (NppiContourPixelDirectionInfo)super.position(position);
     }
     @Override public NppiContourPixelDirectionInfo getPointer(long i) {
-        return new NppiContourPixelDirectionInfo((Pointer)this).position(position + i);
+        return new NppiContourPixelDirectionInfo((Pointer)this).offsetAddress(i);
     }
 
     /** provides current contour pixel input and output direction info */

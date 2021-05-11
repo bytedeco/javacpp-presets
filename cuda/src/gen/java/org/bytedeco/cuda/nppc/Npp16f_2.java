@@ -28,7 +28,7 @@ public class Npp16f_2 extends Pointer {
         return (Npp16f_2)super.position(position);
     }
     @Override public Npp16f_2 getPointer(long i) {
-        return new Npp16f_2((Pointer)this).position(position + i);
+        return new Npp16f_2((Pointer)this).offsetAddress(i);
     }
 
    public native short fp16_0(); public native Npp16f_2 fp16_0(short setter);

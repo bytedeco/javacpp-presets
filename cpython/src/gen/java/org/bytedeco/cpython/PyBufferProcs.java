@@ -26,7 +26,7 @@ public class PyBufferProcs extends Pointer {
         return (PyBufferProcs)super.position(position);
     }
     @Override public PyBufferProcs getPointer(long i) {
-        return new PyBufferProcs((Pointer)this).position(position + i);
+        return new PyBufferProcs((Pointer)this).offsetAddress(i);
     }
 
      public native getbufferproc bf_getbuffer(); public native PyBufferProcs bf_getbuffer(getbufferproc setter);

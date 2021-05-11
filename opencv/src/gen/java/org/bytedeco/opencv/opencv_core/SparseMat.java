@@ -107,7 +107,7 @@ public class SparseMat extends Pointer {
         return (SparseMat)super.position(position);
     }
     @Override public SparseMat getPointer(long i) {
-        return new SparseMat((Pointer)this).position(position + i);
+        return new SparseMat((Pointer)this).offsetAddress(i);
     }
 
 
@@ -154,7 +154,7 @@ public class SparseMat extends Pointer {
             return (Node)super.position(position);
         }
         @Override public Node getPointer(long i) {
-            return new Node((Pointer)this).position(position + i);
+            return new Node((Pointer)this).offsetAddress(i);
         }
     
         /** hash value */

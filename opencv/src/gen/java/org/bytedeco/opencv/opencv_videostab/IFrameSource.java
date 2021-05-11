@@ -58,7 +58,7 @@ public class IFrameSource extends Pointer {
         return (IFrameSource)super.position(position);
     }
     @Override public IFrameSource getPointer(long i) {
-        return new IFrameSource((Pointer)this).position(position + i);
+        return new IFrameSource((Pointer)this).offsetAddress(i);
     }
 
     @Virtual(true) public native void reset();

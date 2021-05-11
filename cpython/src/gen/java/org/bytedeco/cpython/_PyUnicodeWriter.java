@@ -29,7 +29,7 @@ public class _PyUnicodeWriter extends Pointer {
         return (_PyUnicodeWriter)super.position(position);
     }
     @Override public _PyUnicodeWriter getPointer(long i) {
-        return new _PyUnicodeWriter((Pointer)this).position(position + i);
+        return new _PyUnicodeWriter((Pointer)this).offsetAddress(i);
     }
 
     public native PyObject buffer(); public native _PyUnicodeWriter buffer(PyObject setter);

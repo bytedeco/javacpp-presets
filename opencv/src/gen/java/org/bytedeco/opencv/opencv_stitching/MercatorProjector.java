@@ -56,7 +56,7 @@ public class MercatorProjector extends ProjectorBase {
         return (MercatorProjector)super.position(position);
     }
     @Override public MercatorProjector getPointer(long i) {
-        return new MercatorProjector((Pointer)this).position(position + i);
+        return new MercatorProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

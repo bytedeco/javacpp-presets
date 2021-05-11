@@ -39,7 +39,7 @@ public class CvLevMarq extends Pointer {
         return (CvLevMarq)super.position(position);
     }
     @Override public CvLevMarq getPointer(long i) {
-        return new CvLevMarq((Pointer)this).position(position + i);
+        return new CvLevMarq((Pointer)this).offsetAddress(i);
     }
 
     public CvLevMarq() { super((Pointer)null); allocate(); }

@@ -49,6 +49,7 @@ public class SizeTTrackMap extends Pointer {
     @Index public native @ByRef Track get(@Cast("size_t") long i);
     public native SizeTTrackMap put(@Cast("size_t") long i, Track value);
 
+    public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {

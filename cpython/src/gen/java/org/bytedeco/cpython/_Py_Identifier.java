@@ -50,7 +50,7 @@ public class _Py_Identifier extends Pointer {
         return (_Py_Identifier)super.position(position);
     }
     @Override public _Py_Identifier getPointer(long i) {
-        return new _Py_Identifier((Pointer)this).position(position + i);
+        return new _Py_Identifier((Pointer)this).offsetAddress(i);
     }
 
     public native _Py_Identifier next(); public native _Py_Identifier next(_Py_Identifier setter);

@@ -28,7 +28,7 @@ public class FileStorage extends Pointer {
         return (FileStorage)super.position(position);
     }
     @Override public FileStorage getPointer(long i) {
-        return new FileStorage((Pointer)this).position(position + i);
+        return new FileStorage((Pointer)this).offsetAddress(i);
     }
 
     /** file storage mode */

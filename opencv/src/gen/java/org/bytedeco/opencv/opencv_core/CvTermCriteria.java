@@ -30,7 +30,7 @@ public class CvTermCriteria extends Pointer {
         return (CvTermCriteria)super.position(position);
     }
     @Override public CvTermCriteria getPointer(long i) {
-        return new CvTermCriteria((Pointer)this).position(position + i);
+        return new CvTermCriteria((Pointer)this).offsetAddress(i);
     }
 
     /** may be combination of

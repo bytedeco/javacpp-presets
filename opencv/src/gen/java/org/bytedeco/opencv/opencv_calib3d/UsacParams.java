@@ -38,7 +38,7 @@ public class UsacParams extends Pointer {
         return (UsacParams)super.position(position);
     }
     @Override public UsacParams getPointer(long i) {
-        return new UsacParams((Pointer)this).position(position + i);
+        return new UsacParams((Pointer)this).offsetAddress(i);
     }
  // in alphabetical order
     public UsacParams() { super((Pointer)null); allocate(); }

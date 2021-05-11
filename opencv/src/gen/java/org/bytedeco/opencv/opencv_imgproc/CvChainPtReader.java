@@ -31,7 +31,7 @@ public class CvChainPtReader extends CvSeqReader {
         return (CvChainPtReader)super.position(position);
     }
     @Override public CvChainPtReader getPointer(long i) {
-        return new CvChainPtReader((Pointer)this).position(position + i);
+        return new CvChainPtReader((Pointer)this).offsetAddress(i);
     }
 
     public native int header_size(); public native CvChainPtReader header_size(int setter);

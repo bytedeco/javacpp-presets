@@ -26,7 +26,7 @@ public class _frame extends Pointer {
         return (_frame)super.position(position);
     }
     @Override public _frame getPointer(long i) {
-        return new _frame((Pointer)this).position(position + i);
+        return new _frame((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyVarObject ob_base(); public native _frame ob_base(PyVarObject setter);

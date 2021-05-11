@@ -29,7 +29,7 @@ public class cudaKernelNodeAttrValue extends Pointer {
         return (cudaKernelNodeAttrValue)super.position(position);
     }
     @Override public cudaKernelNodeAttrValue getPointer(long i) {
-        return new cudaKernelNodeAttrValue((Pointer)this).position(position + i);
+        return new cudaKernelNodeAttrValue((Pointer)this).offsetAddress(i);
     }
 
     /** Attribute ::CUaccessPolicyWindow. */

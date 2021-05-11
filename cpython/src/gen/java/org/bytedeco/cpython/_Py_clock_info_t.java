@@ -28,7 +28,7 @@ public class _Py_clock_info_t extends Pointer {
         return (_Py_clock_info_t)super.position(position);
     }
     @Override public _Py_clock_info_t getPointer(long i) {
-        return new _Py_clock_info_t((Pointer)this).position(position + i);
+        return new _Py_clock_info_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("const char*") BytePointer implementation(); public native _Py_clock_info_t implementation(BytePointer setter);

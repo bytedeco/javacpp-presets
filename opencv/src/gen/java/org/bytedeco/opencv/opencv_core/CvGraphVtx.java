@@ -28,7 +28,7 @@ public class CvGraphVtx extends Pointer {
         return (CvGraphVtx)super.position(position);
     }
     @Override public CvGraphVtx getPointer(long i) {
-        return new CvGraphVtx((Pointer)this).position(position + i);
+        return new CvGraphVtx((Pointer)this).offsetAddress(i);
     }
 
     public native int flags(); public native CvGraphVtx flags(int setter);

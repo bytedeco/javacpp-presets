@@ -45,6 +45,6 @@ public class Accumulator extends Pointer {
         return (Accumulator)super.position(position);
     }
     @Override public Accumulator getPointer(long i) {
-        return new Accumulator((Pointer)this).position(position + i);
+        return new Accumulator((Pointer)this).offsetAddress(i);
     }
  }

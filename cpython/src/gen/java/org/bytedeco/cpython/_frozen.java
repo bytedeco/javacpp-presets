@@ -26,7 +26,7 @@ public class _frozen extends Pointer {
         return (_frozen)super.position(position);
     }
     @Override public _frozen getPointer(long i) {
-        return new _frozen((Pointer)this).position(position + i);
+        return new _frozen((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("const char*") BytePointer name(); public native _frozen name(BytePointer setter);                 /* ASCII encoded string */

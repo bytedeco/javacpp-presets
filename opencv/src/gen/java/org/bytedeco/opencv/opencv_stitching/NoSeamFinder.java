@@ -57,7 +57,7 @@ public class NoSeamFinder extends SeamFinder {
         return (NoSeamFinder)super.position(position);
     }
     @Override public NoSeamFinder getPointer(long i) {
-        return new NoSeamFinder((Pointer)this).position(position + i);
+        return new NoSeamFinder((Pointer)this).offsetAddress(i);
     }
 
     public native void find(@Const @ByRef UMatVector arg0, @Const @ByRef PointVector arg1, @ByRef UMatVector arg2);

@@ -27,7 +27,7 @@ public class Py_buffer extends Pointer {
         return (Py_buffer)super.position(position);
     }
     @Override public Py_buffer getPointer(long i) {
-        return new Py_buffer((Pointer)this).position(position + i);
+        return new Py_buffer((Pointer)this).offsetAddress(i);
     }
 
     public native Pointer buf(); public native Py_buffer buf(Pointer setter);

@@ -31,7 +31,7 @@ public class nvmlProcessUtilizationSample_t extends Pointer {
         return (nvmlProcessUtilizationSample_t)super.position(position);
     }
     @Override public nvmlProcessUtilizationSample_t getPointer(long i) {
-        return new nvmlProcessUtilizationSample_t((Pointer)this).position(position + i);
+        return new nvmlProcessUtilizationSample_t((Pointer)this).offsetAddress(i);
     }
 
     /** PID of process */

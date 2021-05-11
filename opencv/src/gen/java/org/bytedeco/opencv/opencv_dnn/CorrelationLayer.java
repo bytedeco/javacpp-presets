@@ -32,7 +32,7 @@ public class CorrelationLayer extends Layer {
             return (CorrelationLayer)super.position(position);
         }
         @Override public CorrelationLayer getPointer(long i) {
-            return new CorrelationLayer((Pointer)this).position(position + i);
+            return new CorrelationLayer((Pointer)this).offsetAddress(i);
         }
     
         public static native @Ptr CorrelationLayer create(@Const @ByRef LayerParams params);

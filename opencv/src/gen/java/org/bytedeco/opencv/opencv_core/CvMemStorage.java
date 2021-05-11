@@ -28,7 +28,7 @@ public class CvMemStorage extends AbstractCvMemStorage {
         return (CvMemStorage)super.position(position);
     }
     @Override public CvMemStorage getPointer(long i) {
-        return new CvMemStorage((Pointer)this).position(position + i);
+        return new CvMemStorage((Pointer)this).offsetAddress(i);
     }
 
     public native int signature(); public native CvMemStorage signature(int setter);

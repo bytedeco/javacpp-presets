@@ -56,7 +56,7 @@ public class TimelapserCrop extends Timelapser {
         return (TimelapserCrop)super.position(position);
     }
     @Override public TimelapserCrop getPointer(long i) {
-        return new TimelapserCrop((Pointer)this).position(position + i);
+        return new TimelapserCrop((Pointer)this).offsetAddress(i);
     }
 
     public native void initialize(@Const @ByRef PointVector corners, @Const @ByRef SizeVector sizes);

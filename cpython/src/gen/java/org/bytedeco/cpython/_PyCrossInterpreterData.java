@@ -29,7 +29,7 @@ public class _PyCrossInterpreterData extends Pointer {
         return (_PyCrossInterpreterData)super.position(position);
     }
     @Override public _PyCrossInterpreterData getPointer(long i) {
-        return new _PyCrossInterpreterData((Pointer)this).position(position + i);
+        return new _PyCrossInterpreterData((Pointer)this).offsetAddress(i);
     }
 
     // data is the cross-interpreter-safe derivation of a Python object

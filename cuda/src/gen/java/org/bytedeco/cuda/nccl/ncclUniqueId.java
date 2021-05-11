@@ -27,7 +27,7 @@ public class ncclUniqueId extends Pointer {
         return (ncclUniqueId)super.position(position);
     }
     @Override public ncclUniqueId getPointer(long i) {
-        return new ncclUniqueId((Pointer)this).position(position + i);
+        return new ncclUniqueId((Pointer)this).offsetAddress(i);
     }
  public native @Cast("char") byte internal(int i); public native ncclUniqueId internal(int i, byte setter);
 @MemberGetter public native @Cast("char*") BytePointer internal(); }

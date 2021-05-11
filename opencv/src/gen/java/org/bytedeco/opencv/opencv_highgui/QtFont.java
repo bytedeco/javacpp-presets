@@ -42,7 +42,7 @@ public class QtFont extends Pointer {
         return (QtFont)super.position(position);
     }
     @Override public QtFont getPointer(long i) {
-        return new QtFont((Pointer)this).position(position + i);
+        return new QtFont((Pointer)this).offsetAddress(i);
     }
 
     /** Name of the font */

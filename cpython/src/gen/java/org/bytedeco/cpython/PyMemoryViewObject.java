@@ -26,7 +26,7 @@ public class PyMemoryViewObject extends Pointer {
         return (PyMemoryViewObject)super.position(position);
     }
     @Override public PyMemoryViewObject getPointer(long i) {
-        return new PyMemoryViewObject((Pointer)this).position(position + i);
+        return new PyMemoryViewObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyMemoryViewObject ob_base(PyVarObject setter);

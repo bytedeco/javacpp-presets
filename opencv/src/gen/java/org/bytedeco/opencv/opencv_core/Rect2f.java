@@ -24,7 +24,7 @@ public class Rect2f extends FloatPointer {
         return (Rect2f)super.position(position);
     }
     @Override public Rect2f getPointer(long i) {
-        return new Rect2f((Pointer)this).position(position + i);
+        return new Rect2f((Pointer)this).offsetAddress(i);
     }
 
 

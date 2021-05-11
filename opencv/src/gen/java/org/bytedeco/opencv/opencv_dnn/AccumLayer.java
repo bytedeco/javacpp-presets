@@ -32,7 +32,7 @@ public class AccumLayer extends Layer {
             return (AccumLayer)super.position(position);
         }
         @Override public AccumLayer getPointer(long i) {
-            return new AccumLayer((Pointer)this).position(position + i);
+            return new AccumLayer((Pointer)this).offsetAddress(i);
         }
     
         public static native @Ptr AccumLayer create(@Const @ByRef LayerParams params);

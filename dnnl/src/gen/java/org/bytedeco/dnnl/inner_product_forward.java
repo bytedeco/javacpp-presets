@@ -36,7 +36,7 @@ public class inner_product_forward extends primitive {
         return (inner_product_forward)super.position(position);
     }
     @Override public inner_product_forward getPointer(long i) {
-        return new inner_product_forward((Pointer)this).position(position + i);
+        return new inner_product_forward((Pointer)this).offsetAddress(i);
     }
 
     /** Descriptor for an inner product forward propagation primitive. */
@@ -119,7 +119,7 @@ public class inner_product_forward extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc((Pointer)this).position(position + i);
+            return new primitive_desc((Pointer)this).offsetAddress(i);
         }
     
         /** Default constructor. Produces an empty object. */

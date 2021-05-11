@@ -47,7 +47,7 @@ public class CvHOGFeatureParams extends CvFeatureParams {
         return (CvHOGFeatureParams)super.position(position);
     }
     @Override public CvHOGFeatureParams getPointer(long i) {
-        return new CvHOGFeatureParams((Pointer)this).position(position + i);
+        return new CvHOGFeatureParams((Pointer)this).offsetAddress(i);
     }
 
   public CvHOGFeatureParams() { super((Pointer)null); allocate(); }

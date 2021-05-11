@@ -49,6 +49,7 @@ public class SizeTPointVectorMap extends Pointer {
     @Index public native @ByRef PointVector get(@Cast("size_t") long i);
     public native SizeTPointVectorMap put(@Cast("size_t") long i, PointVector value);
 
+    public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {

@@ -52,7 +52,7 @@ public class ERStat extends Pointer {
         return (ERStat)super.position(position);
     }
     @Override public ERStat getPointer(long i) {
-        return new ERStat((Pointer)this).position(position + i);
+        return new ERStat((Pointer)this).offsetAddress(i);
     }
 
     /** Constructor */

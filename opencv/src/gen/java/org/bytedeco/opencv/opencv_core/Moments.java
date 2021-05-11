@@ -65,7 +65,7 @@ public class Moments extends Pointer {
         return (Moments)super.position(position);
     }
     @Override public Moments getPointer(long i) {
-        return new Moments((Pointer)this).position(position + i);
+        return new Moments((Pointer)this).offsetAddress(i);
     }
 
     /** the default constructor */

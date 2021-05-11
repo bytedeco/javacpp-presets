@@ -31,7 +31,7 @@ public class nvmlBAR1Memory_t extends Pointer {
         return (nvmlBAR1Memory_t)super.position(position);
     }
     @Override public nvmlBAR1Memory_t getPointer(long i) {
-        return new nvmlBAR1Memory_t((Pointer)this).position(position + i);
+        return new nvmlBAR1Memory_t((Pointer)this).offsetAddress(i);
     }
 
     /** Total BAR1 Memory (in bytes) */

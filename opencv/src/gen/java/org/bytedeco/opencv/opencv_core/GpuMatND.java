@@ -25,7 +25,7 @@ public class GpuMatND extends Pointer {
         return (GpuMatND)super.position(position);
     }
     @Override public GpuMatND getPointer(long i) {
-        return new GpuMatND((Pointer)this).position(position + i);
+        return new GpuMatND((Pointer)this).offsetAddress(i);
     }
 
 

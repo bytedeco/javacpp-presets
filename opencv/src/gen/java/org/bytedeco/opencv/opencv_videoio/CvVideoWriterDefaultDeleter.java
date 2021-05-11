@@ -32,6 +32,6 @@ public class CvVideoWriterDefaultDeleter extends Pointer {
         return (CvVideoWriterDefaultDeleter)super.position(position);
     }
     @Override public CvVideoWriterDefaultDeleter getPointer(long i) {
-        return new CvVideoWriterDefaultDeleter((Pointer)this).position(position + i);
+        return new CvVideoWriterDefaultDeleter((Pointer)this).offsetAddress(i);
     }
  public native @Name("operator ()") void apply(CvVideoWriter obj); }

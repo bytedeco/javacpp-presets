@@ -25,7 +25,7 @@ public class Image2D extends Pointer {
         return (Image2D)super.position(position);
     }
     @Override public Image2D getPointer(long i) {
-        return new Image2D((Pointer)this).position(position + i);
+        return new Image2D((Pointer)this).offsetAddress(i);
     }
 
     public Image2D() { super((Pointer)null); allocate(); }

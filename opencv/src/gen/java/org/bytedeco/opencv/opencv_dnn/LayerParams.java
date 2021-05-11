@@ -37,7 +37,7 @@ public class LayerParams extends Dict {
             return (LayerParams)super.position(position);
         }
         @Override public LayerParams getPointer(long i) {
-            return new LayerParams((Pointer)this).position(position + i);
+            return new LayerParams((Pointer)this).offsetAddress(i);
         }
     
         //TODO: Add ability to name blob params

@@ -57,7 +57,7 @@ public class BestOf2NearestMatcher extends FeaturesMatcher {
         return (BestOf2NearestMatcher)super.position(position);
     }
     @Override public BestOf2NearestMatcher getPointer(long i) {
-        return new BestOf2NearestMatcher((Pointer)this).position(position + i);
+        return new BestOf2NearestMatcher((Pointer)this).offsetAddress(i);
     }
 
     /** \brief Constructs a "best of 2 nearest" matcher.

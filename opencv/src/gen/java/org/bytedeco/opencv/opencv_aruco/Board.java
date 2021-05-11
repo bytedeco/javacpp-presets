@@ -55,7 +55,7 @@ public class Board extends Pointer {
         return (Board)super.position(position);
     }
     @Override public Board getPointer(long i) {
-        return new Board((Pointer)this).position(position + i);
+        return new Board((Pointer)this).offsetAddress(i);
     }
 
     /**

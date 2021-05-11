@@ -29,7 +29,7 @@ public class PyStatus extends Pointer {
         return (PyStatus)super.position(position);
     }
     @Override public PyStatus getPointer(long i) {
-        return new PyStatus((Pointer)this).position(position + i);
+        return new PyStatus((Pointer)this).offsetAddress(i);
     }
 
     /** enum PyStatus::_type */

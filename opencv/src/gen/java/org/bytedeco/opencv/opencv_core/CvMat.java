@@ -40,7 +40,7 @@ public class CvMat extends AbstractCvMat {
         return (CvMat)super.position(position);
     }
     @Override public CvMat getPointer(long i) {
-        return new CvMat((Pointer)this).position(position + i);
+        return new CvMat((Pointer)this).offsetAddress(i);
     }
 
     public native int type(); public native CvMat type(int setter);

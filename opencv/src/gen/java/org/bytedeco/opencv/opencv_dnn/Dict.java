@@ -33,7 +33,7 @@ public class Dict extends Pointer {
         return (Dict)super.position(position);
     }
     @Override public Dict getPointer(long i) {
-        return new Dict((Pointer)this).position(position + i);
+        return new Dict((Pointer)this).offsetAddress(i);
     }
 
 

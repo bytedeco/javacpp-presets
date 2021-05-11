@@ -24,7 +24,7 @@ public class Rect2d extends DoublePointer {
         return (Rect2d)super.position(position);
     }
     @Override public Rect2d getPointer(long i) {
-        return new Rect2d((Pointer)this).position(position + i);
+        return new Rect2d((Pointer)this).offsetAddress(i);
     }
 
 

@@ -31,7 +31,7 @@ public class nvmlEncoderSessionInfo_t extends Pointer {
         return (nvmlEncoderSessionInfo_t)super.position(position);
     }
     @Override public nvmlEncoderSessionInfo_t getPointer(long i) {
-        return new nvmlEncoderSessionInfo_t((Pointer)this).position(position + i);
+        return new nvmlEncoderSessionInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Unique session ID */

@@ -23,7 +23,7 @@ public class Device extends Pointer {
         return (Device)super.position(position);
     }
     @Override public Device getPointer(long i) {
-        return new Device((Pointer)this).position(position + i);
+        return new Device((Pointer)this).offsetAddress(i);
     }
 
     public Device() { super((Pointer)null); allocate(); }

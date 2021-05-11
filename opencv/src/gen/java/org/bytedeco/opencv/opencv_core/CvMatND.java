@@ -32,7 +32,7 @@ public class CvMatND extends AbstractCvMatND {
         return (CvMatND)super.position(position);
     }
     @Override public CvMatND getPointer(long i) {
-        return new CvMatND((Pointer)this).position(position + i);
+        return new CvMatND((Pointer)this).offsetAddress(i);
     }
 
     public native int type(); public native CvMatND type(int setter);

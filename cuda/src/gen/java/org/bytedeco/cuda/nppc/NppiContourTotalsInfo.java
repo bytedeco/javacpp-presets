@@ -28,7 +28,7 @@ public class NppiContourTotalsInfo extends Pointer {
         return (NppiContourTotalsInfo)super.position(position);
     }
     @Override public NppiContourTotalsInfo getPointer(long i) {
-        return new NppiContourTotalsInfo((Pointer)this).position(position + i);
+        return new NppiContourTotalsInfo((Pointer)this).offsetAddress(i);
     }
 
     /** total number of contour pixels in image */

@@ -27,6 +27,7 @@ public class IntDoubleMap extends Pointer {
     @Index public native double get(int i);
     public native IntDoubleMap put(int i, double value);
 
+    public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {

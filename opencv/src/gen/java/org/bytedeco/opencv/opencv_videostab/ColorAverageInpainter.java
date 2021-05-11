@@ -55,7 +55,7 @@ public class ColorAverageInpainter extends InpainterBase {
         return (ColorAverageInpainter)super.position(position);
     }
     @Override public ColorAverageInpainter getPointer(long i) {
-        return new ColorAverageInpainter((Pointer)this).position(position + i);
+        return new ColorAverageInpainter((Pointer)this).offsetAddress(i);
     }
 
     public native void inpaint(int idx, @ByRef Mat frame, @ByRef Mat mask);

@@ -26,7 +26,7 @@ public class OpenCLExecutionContext extends Pointer {
         return (OpenCLExecutionContext)super.position(position);
     }
     @Override public OpenCLExecutionContext getPointer(long i) {
-        return new OpenCLExecutionContext((Pointer)this).position(position + i);
+        return new OpenCLExecutionContext((Pointer)this).offsetAddress(i);
     }
 
     public OpenCLExecutionContext() { super((Pointer)null); allocate(); }

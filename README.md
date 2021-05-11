@@ -185,7 +185,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 2.2.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.14  http://www.openblas.net/
+ * OpenBLAS 0.3.15  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.9  http://www.fftw.org/download.html
@@ -201,7 +201,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.3.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 8.1.x  https://developer.nvidia.com/cudnn
+   * cuDNN 8.2.x  https://developer.nvidia.com/cudnn
    * NCCL 2.9.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader

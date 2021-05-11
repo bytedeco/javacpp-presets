@@ -59,7 +59,7 @@ public class PlaneProjector extends ProjectorBase {
         return (PlaneProjector)super.position(position);
     }
     @Override public PlaneProjector getPointer(long i) {
-        return new PlaneProjector((Pointer)this).position(position + i);
+        return new PlaneProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

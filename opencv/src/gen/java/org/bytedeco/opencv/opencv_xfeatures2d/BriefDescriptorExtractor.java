@@ -57,7 +57,7 @@ public class BriefDescriptorExtractor extends Feature2D {
         return (BriefDescriptorExtractor)super.position(position);
     }
     @Override public BriefDescriptorExtractor getPointer(long i) {
-        return new BriefDescriptorExtractor((Pointer)this).position(position + i);
+        return new BriefDescriptorExtractor((Pointer)this).offsetAddress(i);
     }
 
     public static native @Ptr BriefDescriptorExtractor create( int bytes/*=32*/, @Cast("bool") boolean use_orientation/*=false*/ );

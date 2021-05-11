@@ -63,7 +63,7 @@ public class GpuMat extends Pointer {
         return (GpuMat)super.position(position);
     }
     @Override public GpuMat getPointer(long i) {
-        return new GpuMat((Pointer)this).position(position + i);
+        return new GpuMat((Pointer)this).offsetAddress(i);
     }
 
     public static class Allocator extends Pointer {

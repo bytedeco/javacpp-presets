@@ -26,7 +26,7 @@ public class PyStructSequence_Desc extends Pointer {
         return (PyStructSequence_Desc)super.position(position);
     }
     @Override public PyStructSequence_Desc getPointer(long i) {
-        return new PyStructSequence_Desc((Pointer)this).position(position + i);
+        return new PyStructSequence_Desc((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("const char*") BytePointer name(); public native PyStructSequence_Desc name(BytePointer setter);

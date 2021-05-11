@@ -50,7 +50,7 @@ public class CvHOGEvaluator extends CvFeatureEvaluator {
         return (CvHOGEvaluator)super.position(position);
     }
     @Override public CvHOGEvaluator getPointer(long i) {
-        return new CvHOGEvaluator((Pointer)this).position(position + i);
+        return new CvHOGEvaluator((Pointer)this).offsetAddress(i);
     }
 
   public native void init( @Const CvFeatureParams _featureParams, int _maxSampleCount, @ByVal Size _winSize );

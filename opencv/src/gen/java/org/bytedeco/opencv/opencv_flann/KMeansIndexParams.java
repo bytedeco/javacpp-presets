@@ -27,7 +27,7 @@ public class KMeansIndexParams extends IndexParams {
         return (KMeansIndexParams)super.position(position);
     }
     @Override public KMeansIndexParams getPointer(long i) {
-        return new KMeansIndexParams((Pointer)this).position(position + i);
+        return new KMeansIndexParams((Pointer)this).offsetAddress(i);
     }
 
     public KMeansIndexParams(int branching/*=32*/, int iterations/*=11*/,

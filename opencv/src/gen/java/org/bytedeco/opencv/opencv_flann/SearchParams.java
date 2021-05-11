@@ -27,7 +27,7 @@ public class SearchParams extends IndexParams {
         return (SearchParams)super.position(position);
     }
     @Override public SearchParams getPointer(long i) {
-        return new SearchParams((Pointer)this).position(position + i);
+        return new SearchParams((Pointer)this).offsetAddress(i);
     }
 
     public SearchParams( int checks, float eps, @Cast("bool") boolean sorted, @Cast("bool") boolean explore_all_trees ) { super((Pointer)null); allocate(checks, eps, sorted, explore_all_trees); }

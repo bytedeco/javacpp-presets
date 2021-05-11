@@ -47,7 +47,7 @@ public class WeakClassifierHaarFeature extends Pointer {
         return (WeakClassifierHaarFeature)super.position(position);
     }
     @Override public WeakClassifierHaarFeature getPointer(long i) {
-        return new WeakClassifierHaarFeature((Pointer)this).position(position + i);
+        return new WeakClassifierHaarFeature((Pointer)this).offsetAddress(i);
     }
 
 

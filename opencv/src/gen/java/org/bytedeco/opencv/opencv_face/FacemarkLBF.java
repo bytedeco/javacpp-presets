@@ -52,7 +52,7 @@ public class FacemarkLBF extends FacemarkTrain {
             return (Params)super.position(position);
         }
         @Override public Params getPointer(long i) {
-            return new Params((Pointer)this).position(position + i);
+            return new Params((Pointer)this).offsetAddress(i);
         }
     
         /**
@@ -124,7 +124,7 @@ public class FacemarkLBF extends FacemarkTrain {
             return (BBox)super.position(position);
         }
         @Override public BBox getPointer(long i) {
-            return new BBox((Pointer)this).position(position + i);
+            return new BBox((Pointer)this).offsetAddress(i);
         }
     
         public BBox() { super((Pointer)null); allocate(); }

@@ -28,7 +28,7 @@ public class CvSeq extends AbstractCvSeq {
         return (CvSeq)super.position(position);
     }
     @Override public CvSeq getPointer(long i) {
-        return new CvSeq((Pointer)this).position(position + i);
+        return new CvSeq((Pointer)this).offsetAddress(i);
     }
 
     /** Miscellaneous flags.     */

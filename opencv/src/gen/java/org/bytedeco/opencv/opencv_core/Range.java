@@ -51,7 +51,7 @@ public class Range extends Pointer {
         return (Range)super.position(position);
     }
     @Override public Range getPointer(long i) {
-        return new Range((Pointer)this).position(position + i);
+        return new Range((Pointer)this).offsetAddress(i);
     }
 
     public Range() { super((Pointer)null); allocate(); }

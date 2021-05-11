@@ -69,7 +69,7 @@ public class BEBLID extends Feature2D {
         return (BEBLID)super.position(position);
     }
     @Override public BEBLID getPointer(long i) {
-        return new BEBLID((Pointer)this).position(position + i);
+        return new BEBLID((Pointer)this).offsetAddress(i);
     }
 
     /**

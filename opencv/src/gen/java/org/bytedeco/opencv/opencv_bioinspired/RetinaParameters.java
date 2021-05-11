@@ -97,7 +97,7 @@ public class RetinaParameters extends Pointer {
             return (RetinaParameters)super.position(position);
         }
         @Override public RetinaParameters getPointer(long i) {
-            return new RetinaParameters((Pointer)this).position(position + i);
+            return new RetinaParameters((Pointer)this).offsetAddress(i);
         }
     
         /** Outer Plexiform Layer (OPL) and Inner Plexiform Layer Parvocellular (IplParvo) parameters */
@@ -112,7 +112,7 @@ public class RetinaParameters extends Pointer {
                 return (OPLandIplParvoParameters)super.position(position);
             }
             @Override public OPLandIplParvoParameters getPointer(long i) {
-                return new OPLandIplParvoParameters((Pointer)this).position(position + i);
+                return new OPLandIplParvoParameters((Pointer)this).offsetAddress(i);
             }
         
                public OPLandIplParvoParameters() { super((Pointer)null); allocate(); }
@@ -139,7 +139,7 @@ public class RetinaParameters extends Pointer {
                 return (IplMagnoParameters)super.position(position);
             }
             @Override public IplMagnoParameters getPointer(long i) {
-                return new IplMagnoParameters((Pointer)this).position(position + i);
+                return new IplMagnoParameters((Pointer)this).offsetAddress(i);
             }
         
             public IplMagnoParameters() { super((Pointer)null); allocate(); }

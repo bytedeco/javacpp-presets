@@ -29,7 +29,7 @@ public class dim3 extends Pointer {
         return (dim3)super.position(position);
     }
     @Override public dim3 getPointer(long i) {
-        return new dim3((Pointer)this).position(position + i);
+        return new dim3((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("unsigned int") int x(); public native dim3 x(int setter);

@@ -25,7 +25,7 @@ public class Queue extends Pointer {
         return (Queue)super.position(position);
     }
     @Override public Queue getPointer(long i) {
-        return new Queue((Pointer)this).position(position + i);
+        return new Queue((Pointer)this).offsetAddress(i);
     }
 
     public Queue() { super((Pointer)null); allocate(); }

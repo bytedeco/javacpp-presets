@@ -31,7 +31,7 @@ public class nvmlVgpuInstanceUtilizationSample_t extends Pointer {
         return (nvmlVgpuInstanceUtilizationSample_t)super.position(position);
     }
     @Override public nvmlVgpuInstanceUtilizationSample_t getPointer(long i) {
-        return new nvmlVgpuInstanceUtilizationSample_t((Pointer)this).position(position + i);
+        return new nvmlVgpuInstanceUtilizationSample_t((Pointer)this).offsetAddress(i);
     }
 
     /** vGPU Instance */

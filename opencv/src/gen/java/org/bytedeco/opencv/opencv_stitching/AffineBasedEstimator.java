@@ -59,7 +59,7 @@ public class AffineBasedEstimator extends Estimator {
         return (AffineBasedEstimator)super.position(position);
     }
     @Override public AffineBasedEstimator getPointer(long i) {
-        return new AffineBasedEstimator((Pointer)this).position(position + i);
+        return new AffineBasedEstimator((Pointer)this).offsetAddress(i);
     }
 
     public AffineBasedEstimator() { super((Pointer)null); allocate(); }

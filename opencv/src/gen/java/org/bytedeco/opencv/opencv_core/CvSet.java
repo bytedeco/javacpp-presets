@@ -28,7 +28,7 @@ public class CvSet extends AbstractCvSet {
         return (CvSet)super.position(position);
     }
     @Override public CvSet getPointer(long i) {
-        return new CvSet((Pointer)this).position(position + i);
+        return new CvSet((Pointer)this).offsetAddress(i);
     }
 
     /** Miscellaneous flags.     */

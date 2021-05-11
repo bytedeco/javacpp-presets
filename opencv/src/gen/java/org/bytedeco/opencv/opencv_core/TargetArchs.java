@@ -34,7 +34,7 @@ public class TargetArchs extends Pointer {
         return (TargetArchs)super.position(position);
     }
     @Override public TargetArchs getPointer(long i) {
-        return new TargetArchs((Pointer)this).position(position + i);
+        return new TargetArchs((Pointer)this).offsetAddress(i);
     }
 
     /** \brief The following method checks whether the module was built with the support of the given feature:

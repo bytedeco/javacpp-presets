@@ -47,7 +47,7 @@ public class ObjectnessBING extends Objectness {
         return (ObjectnessBING)super.position(position);
     }
     @Override public ObjectnessBING getPointer(long i) {
-        return new ObjectnessBING((Pointer)this).position(position + i);
+        return new ObjectnessBING((Pointer)this).offsetAddress(i);
     }
 
 

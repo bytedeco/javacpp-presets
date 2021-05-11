@@ -35,7 +35,7 @@ public class ConstLayer extends Layer {
             return (ConstLayer)super.position(position);
         }
         @Override public ConstLayer getPointer(long i) {
-            return new ConstLayer((Pointer)this).position(position + i);
+            return new ConstLayer((Pointer)this).offsetAddress(i);
         }
     
         public static native @Ptr Layer create(@Const @ByRef LayerParams params);

@@ -56,7 +56,7 @@ public class OCRBeamSearchDecoder extends BaseOCR {
         return (OCRBeamSearchDecoder)super.position(position);
     }
     @Override public OCRBeamSearchDecoder getPointer(long i) {
-        return new OCRBeamSearchDecoder((Pointer)this).position(position + i);
+        return new OCRBeamSearchDecoder((Pointer)this).offsetAddress(i);
     }
 
 
@@ -83,7 +83,7 @@ public class OCRBeamSearchDecoder extends BaseOCR {
             return (ClassifierCallback)super.position(position);
         }
         @Override public ClassifierCallback getPointer(long i) {
-            return new ClassifierCallback((Pointer)this).position(position + i);
+            return new ClassifierCallback((Pointer)this).offsetAddress(i);
         }
     
         /** \brief The character classifier must return a (ranked list of) class(es) id('s)

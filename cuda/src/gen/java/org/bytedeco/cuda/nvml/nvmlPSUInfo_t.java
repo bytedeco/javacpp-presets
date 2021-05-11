@@ -43,7 +43,7 @@ public class nvmlPSUInfo_t extends Pointer {
         return (nvmlPSUInfo_t)super.position(position);
     }
     @Override public nvmlPSUInfo_t getPointer(long i) {
-        return new nvmlPSUInfo_t((Pointer)this).position(position + i);
+        return new nvmlPSUInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** The power supply state */

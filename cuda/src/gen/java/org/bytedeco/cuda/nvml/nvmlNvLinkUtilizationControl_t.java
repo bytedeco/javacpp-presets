@@ -31,7 +31,7 @@ public class nvmlNvLinkUtilizationControl_t extends Pointer {
         return (nvmlNvLinkUtilizationControl_t)super.position(position);
     }
     @Override public nvmlNvLinkUtilizationControl_t getPointer(long i) {
-        return new nvmlNvLinkUtilizationControl_t((Pointer)this).position(position + i);
+        return new nvmlNvLinkUtilizationControl_t((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("nvmlNvLinkUtilizationCountUnits_t") int units(); public native nvmlNvLinkUtilizationControl_t units(int setter);

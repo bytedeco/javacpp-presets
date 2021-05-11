@@ -31,7 +31,7 @@ public class FileNodeIterator extends Pointer {
         return (FileNodeIterator)super.position(position);
     }
     @Override public FileNodeIterator getPointer(long i) {
-        return new FileNodeIterator((Pointer)this).position(position + i);
+        return new FileNodeIterator((Pointer)this).offsetAddress(i);
     }
 
     /** \brief The constructors.

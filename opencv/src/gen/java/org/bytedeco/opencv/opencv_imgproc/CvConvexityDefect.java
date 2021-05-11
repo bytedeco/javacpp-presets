@@ -32,7 +32,7 @@ public class CvConvexityDefect extends Pointer {
         return (CvConvexityDefect)super.position(position);
     }
     @Override public CvConvexityDefect getPointer(long i) {
-        return new CvConvexityDefect((Pointer)this).position(position + i);
+        return new CvConvexityDefect((Pointer)this).offsetAddress(i);
     }
 
     /** point of the contour where the defect begins */

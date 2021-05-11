@@ -25,7 +25,7 @@ public class NodeDataTls extends Pointer {
         return (NodeDataTls)super.position(position);
     }
     @Override public NodeDataTls getPointer(long i) {
-        return new NodeDataTls((Pointer)this).position(position + i);
+        return new NodeDataTls((Pointer)this).offsetAddress(i);
     }
 
     public NodeDataTls() { super((Pointer)null); allocate(); }

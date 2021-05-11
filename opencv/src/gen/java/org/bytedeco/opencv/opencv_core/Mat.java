@@ -220,7 +220,7 @@ public class Mat extends AbstractMat {
         return (Mat)super.position(position);
     }
     @Override public Mat getPointer(long i) {
-        return new Mat((Pointer)this).position(position + i);
+        return new Mat((Pointer)this).offsetAddress(i);
     }
 
     /**

@@ -28,7 +28,7 @@ public class CvSetElem extends Pointer {
         return (CvSetElem)super.position(position);
     }
     @Override public CvSetElem getPointer(long i) {
-        return new CvSetElem((Pointer)this).position(position + i);
+        return new CvSetElem((Pointer)this).offsetAddress(i);
     }
 
     public native int flags(); public native CvSetElem flags(int setter);

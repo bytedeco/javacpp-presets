@@ -28,7 +28,7 @@ public class PyAsyncGenObject extends Pointer {
         return (PyAsyncGenObject)super.position(position);
     }
     @Override public PyAsyncGenObject getPointer(long i) {
-        return new PyAsyncGenObject((Pointer)this).position(position + i);
+        return new PyAsyncGenObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyAsyncGenObject ob_base(PyObject setter);

@@ -32,7 +32,7 @@ public class nvmlLedState_t extends Pointer {
         return (nvmlLedState_t)super.position(position);
     }
     @Override public nvmlLedState_t getPointer(long i) {
-        return new nvmlLedState_t((Pointer)this).position(position + i);
+        return new nvmlLedState_t((Pointer)this).offsetAddress(i);
     }
 
     /** If amber, a text description of the cause */

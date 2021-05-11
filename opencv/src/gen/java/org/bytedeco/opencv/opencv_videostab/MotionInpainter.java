@@ -52,7 +52,7 @@ public class MotionInpainter extends InpainterBase {
         return (MotionInpainter)super.position(position);
     }
     @Override public MotionInpainter getPointer(long i) {
-        return new MotionInpainter((Pointer)this).position(position + i);
+        return new MotionInpainter((Pointer)this).offsetAddress(i);
     }
 
     public MotionInpainter() { super((Pointer)null); allocate(); }

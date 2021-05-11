@@ -31,7 +31,7 @@ public class PyObject extends Pointer {
         return (PyObject)super.position(position);
     }
     @Override public PyObject getPointer(long i) {
-        return new PyObject((Pointer)this).position(position + i);
+        return new PyObject((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("Py_ssize_t") long ob_refcnt(); public native PyObject ob_refcnt(long setter);

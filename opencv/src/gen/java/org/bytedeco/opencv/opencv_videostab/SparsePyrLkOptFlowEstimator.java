@@ -55,7 +55,7 @@ public class SparsePyrLkOptFlowEstimator extends PyrLkOptFlowEstimatorBase {
         return (SparsePyrLkOptFlowEstimator)super.position(position);
     }
     @Override public SparsePyrLkOptFlowEstimator getPointer(long i) {
-        return new SparsePyrLkOptFlowEstimator((Pointer)this).position(position + i);
+        return new SparsePyrLkOptFlowEstimator((Pointer)this).offsetAddress(i);
     }
     public ISparseOptFlowEstimator asISparseOptFlowEstimator() { return asISparseOptFlowEstimator(this); }
     @Namespace public static native @Name("static_cast<cv::videostab::ISparseOptFlowEstimator*>") ISparseOptFlowEstimator asISparseOptFlowEstimator(SparsePyrLkOptFlowEstimator pointer);

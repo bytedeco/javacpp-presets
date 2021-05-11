@@ -32,7 +32,7 @@ public class ParamGrid extends Pointer {
         return (ParamGrid)super.position(position);
     }
     @Override public ParamGrid getPointer(long i) {
-        return new ParamGrid((Pointer)this).position(position + i);
+        return new ParamGrid((Pointer)this).offsetAddress(i);
     }
 
     /** \brief Default constructor */

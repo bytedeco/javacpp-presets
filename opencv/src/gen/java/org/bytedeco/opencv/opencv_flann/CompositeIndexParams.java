@@ -27,7 +27,7 @@ public class CompositeIndexParams extends IndexParams {
         return (CompositeIndexParams)super.position(position);
     }
     @Override public CompositeIndexParams getPointer(long i) {
-        return new CompositeIndexParams((Pointer)this).position(position + i);
+        return new CompositeIndexParams((Pointer)this).offsetAddress(i);
     }
 
     public CompositeIndexParams(int trees/*=4*/, int branching/*=32*/, int iterations/*=11*/,

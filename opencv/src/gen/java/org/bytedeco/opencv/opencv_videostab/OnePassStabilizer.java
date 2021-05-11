@@ -52,7 +52,7 @@ public class OnePassStabilizer extends StabilizerBase {
         return (OnePassStabilizer)super.position(position);
     }
     @Override public OnePassStabilizer getPointer(long i) {
-        return new OnePassStabilizer((Pointer)this).position(position + i);
+        return new OnePassStabilizer((Pointer)this).offsetAddress(i);
     }
     public IFrameSource asIFrameSource() { return asIFrameSource(this); }
     @Namespace public static native @Name("static_cast<cv::videostab::IFrameSource*>") IFrameSource asIFrameSource(OnePassStabilizer pointer);

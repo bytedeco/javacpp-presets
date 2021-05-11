@@ -34,7 +34,7 @@ public class DMatch extends Pointer {
         return (DMatch)super.position(position);
     }
     @Override public DMatch getPointer(long i) {
-        return new DMatch((Pointer)this).position(position + i);
+        return new DMatch((Pointer)this).offsetAddress(i);
     }
 
     public DMatch() { super((Pointer)null); allocate(); }

@@ -28,7 +28,7 @@ public class Cv32suf extends Pointer {
         return (Cv32suf)super.position(position);
     }
     @Override public Cv32suf getPointer(long i) {
-        return new Cv32suf((Pointer)this).position(position + i);
+        return new Cv32suf((Pointer)this).offsetAddress(i);
     }
 
     public native int i(); public native Cv32suf i(int setter);

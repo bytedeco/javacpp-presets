@@ -28,7 +28,7 @@ public class CvSeqWriter extends Pointer {
         return (CvSeqWriter)super.position(position);
     }
     @Override public CvSeqWriter getPointer(long i) {
-        return new CvSeqWriter((Pointer)this).position(position + i);
+        return new CvSeqWriter((Pointer)this).offsetAddress(i);
     }
 
     public native int header_size(); public native CvSeqWriter header_size(int setter);

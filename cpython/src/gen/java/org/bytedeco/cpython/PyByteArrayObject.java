@@ -28,7 +28,7 @@ public class PyByteArrayObject extends Pointer {
         return (PyByteArrayObject)super.position(position);
     }
     @Override public PyByteArrayObject getPointer(long i) {
-        return new PyByteArrayObject((Pointer)this).position(position + i);
+        return new PyByteArrayObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyByteArrayObject ob_base(PyVarObject setter);

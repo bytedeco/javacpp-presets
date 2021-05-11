@@ -52,7 +52,7 @@ public class GaussianMotionFilter extends MotionFilterBase {
         return (GaussianMotionFilter)super.position(position);
     }
     @Override public GaussianMotionFilter getPointer(long i) {
-        return new GaussianMotionFilter((Pointer)this).position(position + i);
+        return new GaussianMotionFilter((Pointer)this).offsetAddress(i);
     }
 
     public GaussianMotionFilter(int radius/*=15*/, float stdev/*=-1.f*/) { super((Pointer)null); allocate(radius, stdev); }

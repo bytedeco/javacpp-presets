@@ -30,7 +30,7 @@ public class NodeDataTlsData extends Pointer {
         return (NodeDataTlsData)super.position(position);
     }
     @Override public NodeDataTlsData getPointer(long i) {
-        return new NodeDataTlsData((Pointer)this).position(position + i);
+        return new NodeDataTlsData((Pointer)this).offsetAddress(i);
     }
 
     public NodeDataTlsData() { super((Pointer)null); allocate(); }

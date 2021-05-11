@@ -72,7 +72,7 @@ public class TrackerCSRT extends Tracker {
             return (Params)super.position(position);
         }
         @Override public Params getPointer(long i) {
-            return new Params((Pointer)this).position(position + i);
+            return new Params((Pointer)this).offsetAddress(i);
         }
     
         public Params() { super((Pointer)null); allocate(); }

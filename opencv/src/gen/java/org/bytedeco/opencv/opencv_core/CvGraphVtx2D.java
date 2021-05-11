@@ -28,7 +28,7 @@ public class CvGraphVtx2D extends CvGraphVtx {
         return (CvGraphVtx2D)super.position(position);
     }
     @Override public CvGraphVtx2D getPointer(long i) {
-        return new CvGraphVtx2D((Pointer)this).position(position + i);
+        return new CvGraphVtx2D((Pointer)this).offsetAddress(i);
     }
 
     public native int flags(); public native CvGraphVtx2D flags(int setter);

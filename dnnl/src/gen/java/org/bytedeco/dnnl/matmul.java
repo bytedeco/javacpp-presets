@@ -38,7 +38,7 @@ public class matmul extends primitive {
         return (matmul)super.position(position);
     }
     @Override public matmul getPointer(long i) {
-        return new matmul((Pointer)this).position(position + i);
+        return new matmul((Pointer)this).offsetAddress(i);
     }
 
     /** Descriptor for a matmul primitive. */
@@ -87,7 +87,7 @@ public class matmul extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc((Pointer)this).position(position + i);
+            return new primitive_desc((Pointer)this).offsetAddress(i);
         }
     
         /** Default constructor. Produces an empty object. */

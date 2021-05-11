@@ -29,7 +29,7 @@ public class PyPreConfig extends Pointer {
         return (PyPreConfig)super.position(position);
     }
     @Override public PyPreConfig getPointer(long i) {
-        return new PyPreConfig((Pointer)this).position(position + i);
+        return new PyPreConfig((Pointer)this).offsetAddress(i);
     }
 
     public native int _config_init(); public native PyPreConfig _config_init(int setter);     /* _PyConfigInitEnum value */

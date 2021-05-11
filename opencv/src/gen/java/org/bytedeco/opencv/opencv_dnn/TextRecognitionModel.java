@@ -37,7 +37,7 @@ public class TextRecognitionModel extends Model {
         return (TextRecognitionModel)super.position(position);
     }
     @Override public TextRecognitionModel getPointer(long i) {
-        return new TextRecognitionModel((Pointer)this).position(position + i);
+        return new TextRecognitionModel((Pointer)this).offsetAddress(i);
     }
 
     public TextRecognitionModel() { super((Pointer)null); allocate(); }

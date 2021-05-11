@@ -48,7 +48,7 @@ public class DetectionBasedTracker extends Pointer {
                 return (Parameters)super.position(position);
             }
             @Override public Parameters getPointer(long i) {
-                return new Parameters((Pointer)this).position(position + i);
+                return new Parameters((Pointer)this).offsetAddress(i);
             }
         
             public native int maxTrackLifetime(); public native Parameters maxTrackLifetime(int setter);

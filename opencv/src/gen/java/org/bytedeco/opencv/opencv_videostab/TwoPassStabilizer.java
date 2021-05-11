@@ -52,7 +52,7 @@ public class TwoPassStabilizer extends StabilizerBase {
         return (TwoPassStabilizer)super.position(position);
     }
     @Override public TwoPassStabilizer getPointer(long i) {
-        return new TwoPassStabilizer((Pointer)this).position(position + i);
+        return new TwoPassStabilizer((Pointer)this).offsetAddress(i);
     }
     public IFrameSource asIFrameSource() { return asIFrameSource(this); }
     @Namespace public static native @Name("static_cast<cv::videostab::IFrameSource*>") IFrameSource asIFrameSource(TwoPassStabilizer pointer);

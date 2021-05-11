@@ -57,7 +57,7 @@ public class ProjectorBase extends Pointer {
         return (ProjectorBase)super.position(position);
     }
     @Override public ProjectorBase getPointer(long i) {
-        return new ProjectorBase((Pointer)this).position(position + i);
+        return new ProjectorBase((Pointer)this).offsetAddress(i);
     }
 
     public native void setCameraParams(@ByVal(nullValue = "cv::InputArray(cv::Mat::eye(3, 3, CV_32F))") Mat K,

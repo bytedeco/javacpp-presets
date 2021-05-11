@@ -49,7 +49,7 @@ public class TrackedObject extends Pointer {
         return (TrackedObject)super.position(position);
     }
     @Override public TrackedObject getPointer(long i) {
-        return new TrackedObject((Pointer)this).position(position + i);
+        return new TrackedObject((Pointer)this).offsetAddress(i);
     }
 
     /** Detected object ROI (zero area if N/A). */

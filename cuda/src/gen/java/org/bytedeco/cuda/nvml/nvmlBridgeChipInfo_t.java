@@ -31,7 +31,7 @@ public class nvmlBridgeChipInfo_t extends Pointer {
         return (nvmlBridgeChipInfo_t)super.position(position);
     }
     @Override public nvmlBridgeChipInfo_t getPointer(long i) {
-        return new nvmlBridgeChipInfo_t((Pointer)this).position(position + i);
+        return new nvmlBridgeChipInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Type of Bridge Chip  */

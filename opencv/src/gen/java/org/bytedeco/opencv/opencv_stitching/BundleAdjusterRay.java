@@ -58,7 +58,7 @@ public class BundleAdjusterRay extends BundleAdjusterBase {
         return (BundleAdjusterRay)super.position(position);
     }
     @Override public BundleAdjusterRay getPointer(long i) {
-        return new BundleAdjusterRay((Pointer)this).position(position + i);
+        return new BundleAdjusterRay((Pointer)this).offsetAddress(i);
     }
 
     public BundleAdjusterRay() { super((Pointer)null); allocate(); }

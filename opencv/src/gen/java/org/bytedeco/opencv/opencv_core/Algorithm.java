@@ -37,7 +37,7 @@ public class Algorithm extends Pointer {
         return (Algorithm)super.position(position);
     }
     @Override public Algorithm getPointer(long i) {
-        return new Algorithm((Pointer)this).position(position + i);
+        return new Algorithm((Pointer)this).offsetAddress(i);
     }
 
     public Algorithm() { super((Pointer)null); allocate(); }

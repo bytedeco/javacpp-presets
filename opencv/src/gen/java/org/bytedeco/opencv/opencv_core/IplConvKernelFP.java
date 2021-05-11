@@ -28,7 +28,7 @@ public class IplConvKernelFP extends Pointer {
         return (IplConvKernelFP)super.position(position);
     }
     @Override public IplConvKernelFP getPointer(long i) {
-        return new IplConvKernelFP((Pointer)this).position(position + i);
+        return new IplConvKernelFP((Pointer)this).offsetAddress(i);
     }
 
     public native int nCols(); public native IplConvKernelFP nCols(int setter);

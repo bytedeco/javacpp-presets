@@ -28,7 +28,7 @@ public class CvGraphScanner extends AbstractCvGraphScanner {
         return (CvGraphScanner)super.position(position);
     }
     @Override public CvGraphScanner getPointer(long i) {
-        return new CvGraphScanner((Pointer)this).position(position + i);
+        return new CvGraphScanner((Pointer)this).offsetAddress(i);
     }
 
     public native CvGraphVtx vtx(); public native CvGraphScanner vtx(CvGraphVtx setter);       /* current graph vertex (or current edge origin) */

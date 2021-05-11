@@ -56,7 +56,7 @@ public class SphericalWarper extends WarperCreator {
         return (SphericalWarper)super.position(position);
     }
     @Override public SphericalWarper getPointer(long i) {
-        return new SphericalWarper((Pointer)this).position(position + i);
+        return new SphericalWarper((Pointer)this).offsetAddress(i);
     }
 
     public native @Ptr RotationWarper create(float scale);

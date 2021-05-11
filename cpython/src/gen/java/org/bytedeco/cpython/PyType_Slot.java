@@ -26,7 +26,7 @@ public class PyType_Slot extends Pointer {
         return (PyType_Slot)super.position(position);
     }
     @Override public PyType_Slot getPointer(long i) {
-        return new PyType_Slot((Pointer)this).position(position + i);
+        return new PyType_Slot((Pointer)this).offsetAddress(i);
     }
 
     public native int slot(); public native PyType_Slot slot(int setter);    /* slot id, see below */

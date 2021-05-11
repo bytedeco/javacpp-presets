@@ -55,7 +55,7 @@ public class InpaintingPipeline extends InpainterBase {
         return (InpaintingPipeline)super.position(position);
     }
     @Override public InpaintingPipeline getPointer(long i) {
-        return new InpaintingPipeline((Pointer)this).position(position + i);
+        return new InpaintingPipeline((Pointer)this).offsetAddress(i);
     }
 
     public native void pushBack(@Ptr InpainterBase inpainter);

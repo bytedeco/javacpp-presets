@@ -60,7 +60,7 @@ public class Timelapser extends Pointer {
         return (Timelapser)super.position(position);
     }
     @Override public Timelapser getPointer(long i) {
-        return new Timelapser((Pointer)this).position(position + i);
+        return new Timelapser((Pointer)this).offsetAddress(i);
     }
 
 

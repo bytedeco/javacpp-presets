@@ -26,7 +26,7 @@ public class PyDateTime_TZInfo extends Pointer {
         return (PyDateTime_TZInfo)super.position(position);
     }
     @Override public PyDateTime_TZInfo getPointer(long i) {
-        return new PyDateTime_TZInfo((Pointer)this).position(position + i);
+        return new PyDateTime_TZInfo((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyDateTime_TZInfo ob_base(PyObject setter);               /* a pure abstract base class */

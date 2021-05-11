@@ -28,7 +28,7 @@ public class CvSparseMat extends AbstractCvSparseMat {
         return (CvSparseMat)super.position(position);
     }
     @Override public CvSparseMat getPointer(long i) {
-        return new CvSparseMat((Pointer)this).position(position + i);
+        return new CvSparseMat((Pointer)this).offsetAddress(i);
     }
 
     public native int type(); public native CvSparseMat type(int setter);

@@ -52,7 +52,7 @@ public class PyrLkOptFlowEstimatorBase extends Pointer {
         return (PyrLkOptFlowEstimatorBase)super.position(position);
     }
     @Override public PyrLkOptFlowEstimatorBase getPointer(long i) {
-        return new PyrLkOptFlowEstimatorBase((Pointer)this).position(position + i);
+        return new PyrLkOptFlowEstimatorBase((Pointer)this).offsetAddress(i);
     }
 
     public PyrLkOptFlowEstimatorBase() { super((Pointer)null); allocate(); }

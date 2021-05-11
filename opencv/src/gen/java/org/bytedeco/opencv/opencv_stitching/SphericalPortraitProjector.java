@@ -56,7 +56,7 @@ public class SphericalPortraitProjector extends ProjectorBase {
         return (SphericalPortraitProjector)super.position(position);
     }
     @Override public SphericalPortraitProjector getPointer(long i) {
-        return new SphericalPortraitProjector((Pointer)this).position(position + i);
+        return new SphericalPortraitProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

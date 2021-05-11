@@ -31,7 +31,7 @@ public class CvSeqBlock extends Pointer {
         return (CvSeqBlock)super.position(position);
     }
     @Override public CvSeqBlock getPointer(long i) {
-        return new CvSeqBlock((Pointer)this).position(position + i);
+        return new CvSeqBlock((Pointer)this).offsetAddress(i);
     }
 
     /** Previous sequence block.                   */

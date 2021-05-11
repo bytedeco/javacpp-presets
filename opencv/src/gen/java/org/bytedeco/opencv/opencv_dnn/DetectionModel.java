@@ -36,7 +36,7 @@ public class DetectionModel extends Model {
              return (DetectionModel)super.position(position);
          }
          @Override public DetectionModel getPointer(long i) {
-             return new DetectionModel((Pointer)this).position(position + i);
+             return new DetectionModel((Pointer)this).offsetAddress(i);
          }
      
          /**

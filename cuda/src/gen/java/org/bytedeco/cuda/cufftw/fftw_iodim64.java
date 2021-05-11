@@ -29,7 +29,7 @@ public class fftw_iodim64 extends Pointer {
         return (fftw_iodim64)super.position(position);
     }
     @Override public fftw_iodim64 getPointer(long i) {
-        return new fftw_iodim64((Pointer)this).position(position + i);
+        return new fftw_iodim64((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("ptrdiff_t") long n(); public native fftw_iodim64 n(long setter);

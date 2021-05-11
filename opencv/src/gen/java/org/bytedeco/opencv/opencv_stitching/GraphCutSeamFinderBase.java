@@ -57,7 +57,7 @@ public class GraphCutSeamFinderBase extends Pointer {
         return (GraphCutSeamFinderBase)super.position(position);
     }
     @Override public GraphCutSeamFinderBase getPointer(long i) {
-        return new GraphCutSeamFinderBase((Pointer)this).position(position + i);
+        return new GraphCutSeamFinderBase((Pointer)this).offsetAddress(i);
     }
 
     /** enum cv::detail::GraphCutSeamFinderBase::CostType */

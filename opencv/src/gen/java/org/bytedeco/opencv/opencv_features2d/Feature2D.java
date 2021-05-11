@@ -46,7 +46,7 @@ public class Feature2D extends Algorithm {
         return (Feature2D)super.position(position);
     }
     @Override public Feature2D getPointer(long i) {
-        return new Feature2D((Pointer)this).position(position + i);
+        return new Feature2D((Pointer)this).offsetAddress(i);
     }
 
 

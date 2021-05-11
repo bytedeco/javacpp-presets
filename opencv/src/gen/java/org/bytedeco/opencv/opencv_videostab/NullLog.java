@@ -55,7 +55,7 @@ public class NullLog extends ILog {
         return (NullLog)super.position(position);
     }
     @Override public NullLog getPointer(long i) {
-        return new NullLog((Pointer)this).position(position + i);
+        return new NullLog((Pointer)this).offsetAddress(i);
     }
 
     public native void print(@Cast("const char*") BytePointer arg0);

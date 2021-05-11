@@ -55,7 +55,7 @@ public class MotionStabilizationPipeline extends IMotionStabilizer {
         return (MotionStabilizationPipeline)super.position(position);
     }
     @Override public MotionStabilizationPipeline getPointer(long i) {
-        return new MotionStabilizationPipeline((Pointer)this).position(position + i);
+        return new MotionStabilizationPipeline((Pointer)this).offsetAddress(i);
     }
 
     public native void pushBack(@Ptr IMotionStabilizer stabilizer);

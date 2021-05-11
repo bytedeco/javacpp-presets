@@ -25,7 +25,7 @@ public class _type_ignore extends Pointer {
         return (_type_ignore)super.position(position);
     }
     @Override public _type_ignore getPointer(long i) {
-        return new _type_ignore((Pointer)this).position(position + i);
+        return new _type_ignore((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("_type_ignore_kind") int kind(); public native _type_ignore kind(int setter);

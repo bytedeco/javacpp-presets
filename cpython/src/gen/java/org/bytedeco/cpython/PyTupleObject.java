@@ -27,7 +27,7 @@ public class PyTupleObject extends Pointer {
         return (PyTupleObject)super.position(position);
     }
     @Override public PyTupleObject getPointer(long i) {
-        return new PyTupleObject((Pointer)this).position(position + i);
+        return new PyTupleObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyTupleObject ob_base(PyVarObject setter);

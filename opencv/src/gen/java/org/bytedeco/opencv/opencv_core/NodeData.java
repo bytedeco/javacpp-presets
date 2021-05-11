@@ -25,7 +25,7 @@ public class NodeData extends Pointer {
         return (NodeData)super.position(position);
     }
     @Override public NodeData getPointer(long i) {
-        return new NodeData((Pointer)this).position(position + i);
+        return new NodeData((Pointer)this).offsetAddress(i);
     }
 
     public NodeData(@Cast("const char*") BytePointer funName/*=0*/, @Cast("const char*") BytePointer fileName/*=NULL*/, int lineNum/*=0*/, Pointer retAddress/*=NULL*/, @Cast("bool") boolean alwaysExpand/*=false*/, @Cast("cv::instr::TYPE") int instrType/*=cv::instr::TYPE_GENERAL*/, @Cast("cv::instr::IMPL") int implType/*=cv::instr::IMPL_PLAIN*/) { super((Pointer)null); allocate(funName, fileName, lineNum, retAddress, alwaysExpand, instrType, implType); }

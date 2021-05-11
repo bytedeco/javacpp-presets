@@ -28,7 +28,7 @@ public class IplROI extends Pointer {
         return (IplROI)super.position(position);
     }
     @Override public IplROI getPointer(long i) {
-        return new IplROI((Pointer)this).position(position + i);
+        return new IplROI((Pointer)this).offsetAddress(i);
     }
 
     /** 0 - no COI (all channels are selected), 1 - 0th channel is selected ...*/

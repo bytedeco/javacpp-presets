@@ -48,7 +48,7 @@ public class primitive extends dnnl_primitive_handle {
         return (primitive)super.position(position);
     }
     @Override public primitive getPointer(long i) {
-        return new primitive((Pointer)this).position(position + i);
+        return new primitive((Pointer)this).offsetAddress(i);
     }
 
     /** Kinds of primitives supported by the library. */

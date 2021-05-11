@@ -26,7 +26,7 @@ public class PyGenObject extends Pointer {
         return (PyGenObject)super.position(position);
     }
     @Override public PyGenObject getPointer(long i) {
-        return new PyGenObject((Pointer)this).position(position + i);
+        return new PyGenObject((Pointer)this).offsetAddress(i);
     }
 
     /* The gi_ prefix is intended to remind of generator-iterator. */

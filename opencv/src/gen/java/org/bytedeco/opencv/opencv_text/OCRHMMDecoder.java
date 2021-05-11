@@ -53,7 +53,7 @@ public class OCRHMMDecoder extends BaseOCR {
         return (OCRHMMDecoder)super.position(position);
     }
     @Override public OCRHMMDecoder getPointer(long i) {
-        return new OCRHMMDecoder((Pointer)this).position(position + i);
+        return new OCRHMMDecoder((Pointer)this).offsetAddress(i);
     }
 
 
@@ -80,7 +80,7 @@ public class OCRHMMDecoder extends BaseOCR {
             return (ClassifierCallback)super.position(position);
         }
         @Override public ClassifierCallback getPointer(long i) {
-            return new ClassifierCallback((Pointer)this).position(position + i);
+            return new ClassifierCallback((Pointer)this).offsetAddress(i);
         }
     
         /** \brief The character classifier must return a (ranked list of) class(es) id('s)

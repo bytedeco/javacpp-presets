@@ -34,7 +34,7 @@ public class CvMemBlock extends Pointer {
         return (CvMemBlock)super.position(position);
     }
     @Override public CvMemBlock getPointer(long i) {
-        return new CvMemBlock((Pointer)this).position(position + i);
+        return new CvMemBlock((Pointer)this).offsetAddress(i);
     }
 
     public native CvMemBlock prev(); public native CvMemBlock prev(CvMemBlock setter);

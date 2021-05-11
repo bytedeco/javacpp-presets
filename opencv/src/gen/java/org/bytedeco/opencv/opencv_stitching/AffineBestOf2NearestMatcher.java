@@ -61,7 +61,7 @@ public class AffineBestOf2NearestMatcher extends BestOf2NearestMatcher {
         return (AffineBestOf2NearestMatcher)super.position(position);
     }
     @Override public AffineBestOf2NearestMatcher getPointer(long i) {
-        return new AffineBestOf2NearestMatcher((Pointer)this).position(position + i);
+        return new AffineBestOf2NearestMatcher((Pointer)this).offsetAddress(i);
     }
 
     /** \brief Constructs a "best of 2 nearest" matcher that expects affine transformation

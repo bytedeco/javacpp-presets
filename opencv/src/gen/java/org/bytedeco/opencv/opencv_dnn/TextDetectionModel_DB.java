@@ -41,7 +41,7 @@ public class TextDetectionModel_DB extends TextDetectionModel {
         return (TextDetectionModel_DB)super.position(position);
     }
     @Override public TextDetectionModel_DB getPointer(long i) {
-        return new TextDetectionModel_DB((Pointer)this).position(position + i);
+        return new TextDetectionModel_DB((Pointer)this).offsetAddress(i);
     }
 
     public TextDetectionModel_DB() { super((Pointer)null); allocate(); }

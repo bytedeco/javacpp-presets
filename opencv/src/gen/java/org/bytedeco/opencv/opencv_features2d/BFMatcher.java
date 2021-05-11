@@ -42,7 +42,7 @@ public class BFMatcher extends DescriptorMatcher {
         return (BFMatcher)super.position(position);
     }
     @Override public BFMatcher getPointer(long i) {
-        return new BFMatcher((Pointer)this).position(position + i);
+        return new BFMatcher((Pointer)this).offsetAddress(i);
     }
 
     /** \brief Brute-force matcher constructor (obsolete). Please use BFMatcher.create()

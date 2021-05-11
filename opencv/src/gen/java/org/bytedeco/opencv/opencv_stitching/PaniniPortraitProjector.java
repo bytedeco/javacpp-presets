@@ -56,7 +56,7 @@ public class PaniniPortraitProjector extends ProjectorBase {
         return (PaniniPortraitProjector)super.position(position);
     }
     @Override public PaniniPortraitProjector getPointer(long i) {
-        return new PaniniPortraitProjector((Pointer)this).position(position + i);
+        return new PaniniPortraitProjector((Pointer)this).offsetAddress(i);
     }
 
     public native float a(); public native PaniniPortraitProjector a(float setter);

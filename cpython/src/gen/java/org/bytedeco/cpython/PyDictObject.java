@@ -29,7 +29,7 @@ public class PyDictObject extends Pointer {
         return (PyDictObject)super.position(position);
     }
     @Override public PyDictObject getPointer(long i) {
-        return new PyDictObject((Pointer)this).position(position + i);
+        return new PyDictObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyDictObject ob_base(PyObject setter);

@@ -31,7 +31,7 @@ public class nvmlMemory_t extends Pointer {
         return (nvmlMemory_t)super.position(position);
     }
     @Override public nvmlMemory_t getPointer(long i) {
-        return new nvmlMemory_t((Pointer)this).position(position + i);
+        return new nvmlMemory_t((Pointer)this).offsetAddress(i);
     }
 
     /** Total installed FB memory (in bytes) */

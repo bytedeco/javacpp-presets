@@ -42,7 +42,7 @@ public class _longobject extends Pointer {
         return (_longobject)super.position(position);
     }
     @Override public _longobject getPointer(long i) {
-        return new _longobject((Pointer)this).position(position + i);
+        return new _longobject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyVarObject ob_base(); public native _longobject ob_base(PyVarObject setter);

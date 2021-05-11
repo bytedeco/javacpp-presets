@@ -50,7 +50,7 @@ public class Track extends Pointer {
         return (Track)super.position(position);
     }
     @Override public Track getPointer(long i) {
-        return new Track((Pointer)this).position(position + i);
+        return new Track((Pointer)this).offsetAddress(i);
     }
 
     

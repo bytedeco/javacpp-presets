@@ -70,7 +70,7 @@ public class Rect extends IntPointer {
         return (Rect)super.position(position);
     }
     @Override public Rect getPointer(long i) {
-        return new Rect((Pointer)this).position(position + i);
+        return new Rect((Pointer)this).offsetAddress(i);
     }
 
 

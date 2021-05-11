@@ -26,7 +26,7 @@ public class PyAsyncMethods extends Pointer {
         return (PyAsyncMethods)super.position(position);
     }
     @Override public PyAsyncMethods getPointer(long i) {
-        return new PyAsyncMethods((Pointer)this).position(position + i);
+        return new PyAsyncMethods((Pointer)this).offsetAddress(i);
     }
 
     public native unaryfunc am_await(); public native PyAsyncMethods am_await(unaryfunc setter);

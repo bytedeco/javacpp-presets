@@ -59,7 +59,7 @@ public class CameraParams extends Pointer {
         return (CameraParams)super.position(position);
     }
     @Override public CameraParams getPointer(long i) {
-        return new CameraParams((Pointer)this).position(position + i);
+        return new CameraParams((Pointer)this).offsetAddress(i);
     }
 
     public CameraParams() { super((Pointer)null); allocate(); }

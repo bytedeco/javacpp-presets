@@ -32,7 +32,7 @@ public class nvmlUtilization_t extends Pointer {
         return (nvmlUtilization_t)super.position(position);
     }
     @Override public nvmlUtilization_t getPointer(long i) {
-        return new nvmlUtilization_t((Pointer)this).position(position + i);
+        return new nvmlUtilization_t((Pointer)this).offsetAddress(i);
     }
 
     /** Percent of time over the past sample period during which one or more kernels was executing on the GPU */

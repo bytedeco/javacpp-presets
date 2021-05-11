@@ -50,7 +50,7 @@ public class TrackerParams extends Pointer {
         return (TrackerParams)super.position(position);
     }
     @Override public TrackerParams getPointer(long i) {
-        return new TrackerParams((Pointer)this).position(position + i);
+        return new TrackerParams((Pointer)this).offsetAddress(i);
     }
 
     /** Min track duration in milliseconds. */

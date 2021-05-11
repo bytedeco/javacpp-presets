@@ -38,7 +38,7 @@ public class SegmentationParameters extends Pointer {
         return (SegmentationParameters)super.position(position);
     }
     @Override public SegmentationParameters getPointer(long i) {
-        return new SegmentationParameters((Pointer)this).position(position + i);
+        return new SegmentationParameters((Pointer)this).offsetAddress(i);
     }
  // CV_EXPORTS_W_MAP to export to python native dictionnaries
 	// default structure instance construction with default values

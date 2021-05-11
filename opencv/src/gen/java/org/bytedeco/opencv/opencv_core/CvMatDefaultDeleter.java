@@ -32,6 +32,6 @@ public class CvMatDefaultDeleter extends Pointer {
         return (CvMatDefaultDeleter)super.position(position);
     }
     @Override public CvMatDefaultDeleter getPointer(long i) {
-        return new CvMatDefaultDeleter((Pointer)this).position(position + i);
+        return new CvMatDefaultDeleter((Pointer)this).offsetAddress(i);
     }
  public native @Name("operator ()") void apply(CvMat obj); }

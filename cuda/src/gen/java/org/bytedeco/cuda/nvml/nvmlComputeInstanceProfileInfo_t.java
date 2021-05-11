@@ -28,7 +28,7 @@ public class nvmlComputeInstanceProfileInfo_t extends Pointer {
         return (nvmlComputeInstanceProfileInfo_t)super.position(position);
     }
     @Override public nvmlComputeInstanceProfileInfo_t getPointer(long i) {
-        return new nvmlComputeInstanceProfileInfo_t((Pointer)this).position(position + i);
+        return new nvmlComputeInstanceProfileInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Unique profile ID within the GPU instance */

@@ -29,7 +29,7 @@ public class CUmemPoolProps_v1 extends Pointer {
         return (CUmemPoolProps_v1)super.position(position);
     }
     @Override public CUmemPoolProps_v1 getPointer(long i) {
-        return new CUmemPoolProps_v1((Pointer)this).position(position + i);
+        return new CUmemPoolProps_v1((Pointer)this).offsetAddress(i);
     }
 
     /** Allocation type. Currently must be specified as CU_MEM_ALLOCATION_TYPE_PINNED */

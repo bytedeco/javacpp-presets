@@ -52,7 +52,7 @@ public class CompressedRectilinearPortraitWarper extends WarperCreator {
         return (CompressedRectilinearPortraitWarper)super.position(position);
     }
     @Override public CompressedRectilinearPortraitWarper getPointer(long i) {
-        return new CompressedRectilinearPortraitWarper((Pointer)this).position(position + i);
+        return new CompressedRectilinearPortraitWarper((Pointer)this).offsetAddress(i);
     }
 
     public CompressedRectilinearPortraitWarper(float A/*=1*/, float B/*=1*/) { super((Pointer)null); allocate(A, B); }

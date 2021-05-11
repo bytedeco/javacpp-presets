@@ -26,7 +26,7 @@ public class PyWrapperDescrObject extends Pointer {
         return (PyWrapperDescrObject)super.position(position);
     }
     @Override public PyWrapperDescrObject getPointer(long i) {
-        return new PyWrapperDescrObject((Pointer)this).position(position + i);
+        return new PyWrapperDescrObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyDescrObject d_common(); public native PyWrapperDescrObject d_common(PyDescrObject setter);

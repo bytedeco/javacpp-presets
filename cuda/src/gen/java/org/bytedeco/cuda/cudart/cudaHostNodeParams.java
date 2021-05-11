@@ -29,7 +29,7 @@ public class cudaHostNodeParams extends Pointer {
         return (cudaHostNodeParams)super.position(position);
     }
     @Override public cudaHostNodeParams getPointer(long i) {
-        return new cudaHostNodeParams((Pointer)this).position(position + i);
+        return new cudaHostNodeParams((Pointer)this).offsetAddress(i);
     }
 
     /** The function to call when the node executes */

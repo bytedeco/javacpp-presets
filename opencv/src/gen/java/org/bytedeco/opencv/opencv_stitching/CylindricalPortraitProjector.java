@@ -55,7 +55,7 @@ public class CylindricalPortraitProjector extends ProjectorBase {
         return (CylindricalPortraitProjector)super.position(position);
     }
     @Override public CylindricalPortraitProjector getPointer(long i) {
-        return new CylindricalPortraitProjector((Pointer)this).position(position + i);
+        return new CylindricalPortraitProjector((Pointer)this).offsetAddress(i);
     }
 
     public native void mapForward(float x, float y, @ByRef FloatPointer u, @ByRef FloatPointer v);

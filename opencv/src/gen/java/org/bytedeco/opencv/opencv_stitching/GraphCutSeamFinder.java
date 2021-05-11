@@ -54,7 +54,7 @@ public class GraphCutSeamFinder extends GraphCutSeamFinderBase {
         return (GraphCutSeamFinder)super.position(position);
     }
     @Override public GraphCutSeamFinder getPointer(long i) {
-        return new GraphCutSeamFinder((Pointer)this).position(position + i);
+        return new GraphCutSeamFinder((Pointer)this).offsetAddress(i);
     }
     public SeamFinder asSeamFinder() { return asSeamFinder(this); }
     @Namespace public static native @Name("static_cast<cv::detail::SeamFinder*>") SeamFinder asSeamFinder(GraphCutSeamFinder pointer);

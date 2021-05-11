@@ -29,7 +29,7 @@ public class PyUnicodeObject extends Pointer {
         return (PyUnicodeObject)super.position(position);
     }
     @Override public PyUnicodeObject getPointer(long i) {
-        return new PyUnicodeObject((Pointer)this).position(position + i);
+        return new PyUnicodeObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyCompactUnicodeObject _base(); public native PyUnicodeObject _base(PyCompactUnicodeObject setter);

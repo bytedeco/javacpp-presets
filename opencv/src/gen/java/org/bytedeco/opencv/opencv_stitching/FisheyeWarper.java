@@ -55,7 +55,7 @@ public class FisheyeWarper extends WarperCreator {
         return (FisheyeWarper)super.position(position);
     }
     @Override public FisheyeWarper getPointer(long i) {
-        return new FisheyeWarper((Pointer)this).position(position + i);
+        return new FisheyeWarper((Pointer)this).offsetAddress(i);
     }
 
     public native @Ptr RotationWarper create(float scale);

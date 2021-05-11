@@ -60,7 +60,7 @@ public class MSDDetector extends Feature2D {
         return (MSDDetector)super.position(position);
     }
     @Override public MSDDetector getPointer(long i) {
-        return new MSDDetector((Pointer)this).position(position + i);
+        return new MSDDetector((Pointer)this).offsetAddress(i);
     }
 
 

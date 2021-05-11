@@ -50,7 +50,7 @@ public class CvLBPEvaluator extends CvFeatureEvaluator {
         return (CvLBPEvaluator)super.position(position);
     }
     @Override public CvLBPEvaluator getPointer(long i) {
-        return new CvLBPEvaluator((Pointer)this).position(position + i);
+        return new CvLBPEvaluator((Pointer)this).offsetAddress(i);
     }
 
   public native void init( @Const CvFeatureParams _featureParams, int _maxSampleCount, @ByVal Size _winSize );

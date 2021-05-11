@@ -31,7 +31,7 @@ public class nvmlVgpuPgpuCompatibility_t extends Pointer {
         return (nvmlVgpuPgpuCompatibility_t)super.position(position);
     }
     @Override public nvmlVgpuPgpuCompatibility_t getPointer(long i) {
-        return new nvmlVgpuPgpuCompatibility_t((Pointer)this).position(position + i);
+        return new nvmlVgpuPgpuCompatibility_t((Pointer)this).offsetAddress(i);
     }
 
     /** Compatibility of vGPU VM. See \ref nvmlVgpuVmCompatibility_t */

@@ -29,7 +29,7 @@ public class CvMemStoragePos extends Pointer {
         return (CvMemStoragePos)super.position(position);
     }
     @Override public CvMemStoragePos getPointer(long i) {
-        return new CvMemStoragePos((Pointer)this).position(position + i);
+        return new CvMemStoragePos((Pointer)this).offsetAddress(i);
     }
 
     public native CvMemBlock top(); public native CvMemStoragePos top(CvMemBlock setter);

@@ -29,7 +29,7 @@ public class CUmemLocation_v1 extends Pointer {
         return (CUmemLocation_v1)super.position(position);
     }
     @Override public CUmemLocation_v1 getPointer(long i) {
-        return new CUmemLocation_v1((Pointer)this).position(position + i);
+        return new CUmemLocation_v1((Pointer)this).offsetAddress(i);
     }
 
     /** Specifies the location type, which modifies the meaning of id. */

@@ -50,7 +50,7 @@ public class CvHaarEvaluator extends CvFeatureEvaluator {
         return (CvHaarEvaluator)super.position(position);
     }
     @Override public CvHaarEvaluator getPointer(long i) {
-        return new CvHaarEvaluator((Pointer)this).position(position + i);
+        return new CvHaarEvaluator((Pointer)this).offsetAddress(i);
     }
 
 

@@ -26,7 +26,7 @@ public class CvPoint3D64f extends AbstractCvPoint3D64f {
         return (CvPoint3D64f)super.position(position);
     }
     @Override public CvPoint3D64f getPointer(long i) {
-        return new CvPoint3D64f((Pointer)this).position(position + i);
+        return new CvPoint3D64f((Pointer)this).offsetAddress(i);
     }
 
     public native double x(); public native CvPoint3D64f x(double setter);

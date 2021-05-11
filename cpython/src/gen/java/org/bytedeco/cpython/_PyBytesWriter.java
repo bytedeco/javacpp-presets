@@ -30,7 +30,7 @@ public class _PyBytesWriter extends Pointer {
         return (_PyBytesWriter)super.position(position);
     }
     @Override public _PyBytesWriter getPointer(long i) {
-        return new _PyBytesWriter((Pointer)this).position(position + i);
+        return new _PyBytesWriter((Pointer)this).offsetAddress(i);
     }
 
     /* bytes, bytearray or NULL (when the small buffer is used) */

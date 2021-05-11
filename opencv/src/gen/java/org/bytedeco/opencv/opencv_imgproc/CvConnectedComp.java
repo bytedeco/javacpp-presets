@@ -36,7 +36,7 @@ public class CvConnectedComp extends Pointer {
         return (CvConnectedComp)super.position(position);
     }
     @Override public CvConnectedComp getPointer(long i) {
-        return new CvConnectedComp((Pointer)this).position(position + i);
+        return new CvConnectedComp((Pointer)this).offsetAddress(i);
     }
 
     /**area of the connected component  */

@@ -47,7 +47,7 @@ public class EstimatedGaussDistribution extends Pointer {
         return (EstimatedGaussDistribution)super.position(position);
     }
     @Override public EstimatedGaussDistribution getPointer(long i) {
-        return new EstimatedGaussDistribution((Pointer)this).position(position + i);
+        return new EstimatedGaussDistribution((Pointer)this).offsetAddress(i);
     }
 
 

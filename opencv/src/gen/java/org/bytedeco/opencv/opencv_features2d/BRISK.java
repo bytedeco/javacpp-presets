@@ -42,7 +42,7 @@ public class BRISK extends Feature2D {
         return (BRISK)super.position(position);
     }
     @Override public BRISK getPointer(long i) {
-        return new BRISK((Pointer)this).position(position + i);
+        return new BRISK((Pointer)this).offsetAddress(i);
     }
 
     /** \brief The BRISK constructor

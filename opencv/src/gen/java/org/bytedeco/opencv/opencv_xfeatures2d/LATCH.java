@@ -70,7 +70,7 @@ public class LATCH extends Feature2D {
         return (LATCH)super.position(position);
     }
     @Override public LATCH getPointer(long i) {
-        return new LATCH((Pointer)this).position(position + i);
+        return new LATCH((Pointer)this).offsetAddress(i);
     }
 
     public static native @Ptr LATCH create(int bytes/*=32*/, @Cast("bool") boolean rotationInvariance/*=true*/, int half_ssd_size/*=3*/, double sigma/*=2.0*/);

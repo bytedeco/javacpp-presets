@@ -49,7 +49,7 @@ public class KeyPointsFilter extends Pointer {
         return (KeyPointsFilter)super.position(position);
     }
     @Override public KeyPointsFilter getPointer(long i) {
-        return new KeyPointsFilter((Pointer)this).position(position + i);
+        return new KeyPointsFilter((Pointer)this).offsetAddress(i);
     }
 
     public KeyPointsFilter() { super((Pointer)null); allocate(); }

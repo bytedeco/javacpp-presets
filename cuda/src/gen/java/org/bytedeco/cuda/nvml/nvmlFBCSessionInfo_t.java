@@ -31,7 +31,7 @@ public class nvmlFBCSessionInfo_t extends Pointer {
         return (nvmlFBCSessionInfo_t)super.position(position);
     }
     @Override public nvmlFBCSessionInfo_t getPointer(long i) {
-        return new nvmlFBCSessionInfo_t((Pointer)this).position(position + i);
+        return new nvmlFBCSessionInfo_t((Pointer)this).offsetAddress(i);
     }
 
     /** Unique session ID */

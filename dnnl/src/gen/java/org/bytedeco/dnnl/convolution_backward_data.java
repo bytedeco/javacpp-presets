@@ -26,7 +26,7 @@ public class convolution_backward_data extends primitive {
         return (convolution_backward_data)super.position(position);
     }
     @Override public convolution_backward_data getPointer(long i) {
-        return new convolution_backward_data((Pointer)this).position(position + i);
+        return new convolution_backward_data((Pointer)this).offsetAddress(i);
     }
 
 
@@ -221,7 +221,7 @@ public class convolution_backward_data extends primitive {
             return (primitive_desc)super.position(position);
         }
         @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc((Pointer)this).position(position + i);
+            return new primitive_desc((Pointer)this).offsetAddress(i);
         }
     
         /** Default constructor. Produces an empty object. */

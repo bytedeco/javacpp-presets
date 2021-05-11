@@ -54,7 +54,7 @@ public class LUCID extends Feature2D {
         return (LUCID)super.position(position);
     }
     @Override public LUCID getPointer(long i) {
-        return new LUCID((Pointer)this).position(position + i);
+        return new LUCID((Pointer)this).offsetAddress(i);
     }
 
     /**

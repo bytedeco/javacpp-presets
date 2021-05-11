@@ -32,7 +32,7 @@ public class CvChain extends CvSeq {
         return (CvChain)super.position(position);
     }
     @Override public CvChain getPointer(long i) {
-        return new CvChain((Pointer)this).position(position + i);
+        return new CvChain((Pointer)this).offsetAddress(i);
     }
 
     /** Miscellaneous flags.     */

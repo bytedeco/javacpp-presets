@@ -54,7 +54,7 @@ public class MultiBandBlender extends Blender {
         return (MultiBandBlender)super.position(position);
     }
     @Override public MultiBandBlender getPointer(long i) {
-        return new MultiBandBlender((Pointer)this).position(position + i);
+        return new MultiBandBlender((Pointer)this).offsetAddress(i);
     }
 
     public MultiBandBlender(int try_gpu/*=false*/, int num_bands/*=5*/, int weight_type/*=CV_32F*/) { super((Pointer)null); allocate(try_gpu, num_bands, weight_type); }

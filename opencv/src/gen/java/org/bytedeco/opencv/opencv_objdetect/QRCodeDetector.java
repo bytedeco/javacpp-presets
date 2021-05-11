@@ -40,7 +40,7 @@ public class QRCodeDetector extends Pointer {
         return (QRCodeDetector)super.position(position);
     }
     @Override public QRCodeDetector getPointer(long i) {
-        return new QRCodeDetector((Pointer)this).position(position + i);
+        return new QRCodeDetector((Pointer)this).offsetAddress(i);
     }
 
     public QRCodeDetector() { super((Pointer)null); allocate(); }

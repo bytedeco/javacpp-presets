@@ -26,7 +26,7 @@ public class PyStopIterationObject extends Pointer {
         return (PyStopIterationObject)super.position(position);
     }
     @Override public PyStopIterationObject getPointer(long i) {
-        return new PyStopIterationObject((Pointer)this).position(position + i);
+        return new PyStopIterationObject((Pointer)this).offsetAddress(i);
     }
 
     public native @ByRef PyObject ob_base(); public native PyStopIterationObject ob_base(PyObject setter); public native PyObject dict(); public native PyStopIterationObject dict(PyObject setter);

@@ -31,7 +31,7 @@ public class nvmlViolationTime_t extends Pointer {
         return (nvmlViolationTime_t)super.position(position);
     }
     @Override public nvmlViolationTime_t getPointer(long i) {
-        return new nvmlViolationTime_t((Pointer)this).position(position + i);
+        return new nvmlViolationTime_t((Pointer)this).offsetAddress(i);
     }
 
     /** referenceTime represents CPU timestamp in microseconds */

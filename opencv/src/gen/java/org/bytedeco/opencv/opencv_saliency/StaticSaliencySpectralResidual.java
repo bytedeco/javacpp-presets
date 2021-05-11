@@ -50,7 +50,7 @@ public class StaticSaliencySpectralResidual extends StaticSaliency {
         return (StaticSaliencySpectralResidual)super.position(position);
     }
     @Override public StaticSaliencySpectralResidual getPointer(long i) {
-        return new StaticSaliencySpectralResidual((Pointer)this).position(position + i);
+        return new StaticSaliencySpectralResidual((Pointer)this).offsetAddress(i);
     }
 
 

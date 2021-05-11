@@ -26,7 +26,7 @@ public class CvPoint3D32f extends AbstractCvPoint3D32f {
         return (CvPoint3D32f)super.position(position);
     }
     @Override public CvPoint3D32f getPointer(long i) {
-        return new CvPoint3D32f((Pointer)this).position(position + i);
+        return new CvPoint3D32f((Pointer)this).offsetAddress(i);
     }
 
     public native float x(); public native CvPoint3D32f x(float setter);

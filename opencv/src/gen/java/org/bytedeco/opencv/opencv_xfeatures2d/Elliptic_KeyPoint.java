@@ -47,7 +47,7 @@ public class Elliptic_KeyPoint extends KeyPoint {
         return (Elliptic_KeyPoint)super.position(position);
     }
     @Override public Elliptic_KeyPoint getPointer(long i) {
-        return new Elliptic_KeyPoint((Pointer)this).position(position + i);
+        return new Elliptic_KeyPoint((Pointer)this).offsetAddress(i);
     }
 
     /** the lengths of the major and minor ellipse axes */

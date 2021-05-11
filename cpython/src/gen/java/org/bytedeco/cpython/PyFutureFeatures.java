@@ -29,7 +29,7 @@ public class PyFutureFeatures extends Pointer {
         return (PyFutureFeatures)super.position(position);
     }
     @Override public PyFutureFeatures getPointer(long i) {
-        return new PyFutureFeatures((Pointer)this).position(position + i);
+        return new PyFutureFeatures((Pointer)this).offsetAddress(i);
     }
 
     public native int ff_features(); public native PyFutureFeatures ff_features(int setter);      /* flags set by future statements */

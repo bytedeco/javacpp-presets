@@ -35,7 +35,7 @@ public class NppiRect extends Pointer {
         return (NppiRect)super.position(position);
     }
     @Override public NppiRect getPointer(long i) {
-        return new NppiRect((Pointer)this).position(position + i);
+        return new NppiRect((Pointer)this).offsetAddress(i);
     }
 
     /**  x-coordinate of upper left corner (lowest memory address). */

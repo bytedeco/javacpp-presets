@@ -52,7 +52,7 @@ public class ColorInpainter extends InpainterBase {
         return (ColorInpainter)super.position(position);
     }
     @Override public ColorInpainter getPointer(long i) {
-        return new ColorInpainter((Pointer)this).position(position + i);
+        return new ColorInpainter((Pointer)this).offsetAddress(i);
     }
 
     public ColorInpainter(int method/*=cv::INPAINT_TELEA*/, double radius/*=2.*/) { super((Pointer)null); allocate(method, radius); }

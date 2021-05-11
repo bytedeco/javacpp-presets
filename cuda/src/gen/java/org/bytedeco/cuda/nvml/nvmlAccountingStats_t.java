@@ -46,7 +46,7 @@ public class nvmlAccountingStats_t extends Pointer {
         return (nvmlAccountingStats_t)super.position(position);
     }
     @Override public nvmlAccountingStats_t getPointer(long i) {
-        return new nvmlAccountingStats_t((Pointer)this).position(position + i);
+        return new nvmlAccountingStats_t((Pointer)this).offsetAddress(i);
     }
 
     /** Percent of time over the process's lifetime during which one or more kernels was executing on the GPU. */

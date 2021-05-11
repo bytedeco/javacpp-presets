@@ -29,7 +29,7 @@ public class cudaTextureDesc extends Pointer {
         return (cudaTextureDesc)super.position(position);
     }
     @Override public cudaTextureDesc getPointer(long i) {
-        return new cudaTextureDesc((Pointer)this).position(position + i);
+        return new cudaTextureDesc((Pointer)this).offsetAddress(i);
     }
 
     /**

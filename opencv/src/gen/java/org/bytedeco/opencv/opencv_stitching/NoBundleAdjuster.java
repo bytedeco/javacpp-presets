@@ -55,7 +55,7 @@ public class NoBundleAdjuster extends BundleAdjusterBase {
         return (NoBundleAdjuster)super.position(position);
     }
     @Override public NoBundleAdjuster getPointer(long i) {
-        return new NoBundleAdjuster((Pointer)this).position(position + i);
+        return new NoBundleAdjuster((Pointer)this).offsetAddress(i);
     }
 
     public NoBundleAdjuster() { super((Pointer)null); allocate(); }
