@@ -14,12 +14,6 @@
   <version>0.26.0-${project.parent.version}</version>
   <name>JavaCPP Presets for nGraph</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.mkldnn.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>

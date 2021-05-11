@@ -14,12 +14,6 @@
   <version>4.1.1-${project.parent.version}</version>
   <name>JavaCPP Presets for Tesseract</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.leptonica.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
