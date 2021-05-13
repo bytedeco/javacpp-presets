@@ -75,6 +75,10 @@ runs:
           move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.3\bin"
           move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.3\include"
           move cuda\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.3\lib\x64"
+
+          echo Applying hotfix to Visual Studio 2019 for CUDA
+          curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
+          bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp cmath {} \;"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
