@@ -66,6 +66,9 @@ tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
+# https://github.com/apache/incubator-mxnet/pull/20207
+patch -Np1 < ../../../mxnet.patch
+
 # upgrade MKL-DNN
 #sedinplace 's/0.18.1/0.19/g' 3rdparty/mkldnn/CMakeLists.txt
 #sedinplace 's/0.18/0.19/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
