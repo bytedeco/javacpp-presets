@@ -78,7 +78,7 @@ runs:
 
           echo Applying hotfix to Visual Studio 2019 for CUDA
           curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
-          bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp cmath {} \;"
+          bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
@@ -220,8 +220,10 @@ runs:
         echo ^</settings^> >> %USERPROFILE%\.m2\settings.xml
 
         set /a "SECONDS=%RANDOM% %% 300"
-        echo Sleeping %SECONDS% seconds to help avoid race conditions with Maven
-        timeout %SECONDS% > nul
+        if "%CI_DEPLOY_NEED_CUDA%"=="" (
+            echo Sleeping %SECONDS% seconds to help avoid race conditions with Maven
+            timeout %SECONDS% > nul
+        )
 
         echo Executing Maven %MAVEN_PHASE% on %MAKEJ% processors
         set EXT=${{ matrix.ext }}

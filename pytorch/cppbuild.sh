@@ -7,11 +7,15 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export BUILD_TEST=0
 export MAX_JOBS=$MAKEJ
 export USE_CUDA=0
+export USE_NUMPY=0
 export USE_OPENMP=1
 if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA=1
+    export USE_FAST_NVCC=0
+    export CUDA_SEPARABLE_COMPILATION=OFF
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
@@ -106,6 +110,9 @@ case $PLATFORM in
         ;;
 esac
 
+sedinplace 's/build_python=True/build_python=False/g' setup.py
+sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
+
 # work around some compiler bugs
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
 sedinplace 's/typedef c10::variant/public: typedef c10::variant/g' ./torch/csrc/api/include/torch/nn/options/upsampling.h
@@ -117,8 +124,9 @@ sedinplace 's/round(/roundf(/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/floor(/floorf(/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/ceil(/ceilf(/g' aten/src/ATen/native/cuda/*.cu
 
-# allow setting the build directory
+# allow setting the build directory and passing CUDA options
 sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
+sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUILD_', 'USE_', 'CMAKE_', 'CUDA_'))/g" tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>
 sedinplace '/TensorIndex(c10::nullopt_t)/i\
