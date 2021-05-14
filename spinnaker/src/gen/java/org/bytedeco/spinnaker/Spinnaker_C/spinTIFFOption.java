@@ -34,7 +34,7 @@ public class spinTIFFOption extends Pointer {
     }
 
     /** Compression method to use for encoding TIFF images. */
-    public native @Cast("spinCompressionMethod") int compression(); public native spinTIFFOption compression(int setter);
+    public native spinCompressionMethod compression(); public native spinTIFFOption compression(spinCompressionMethod setter);
     /** Reserved for future use. */
     public native @Cast("unsigned int") int reserved(int i); public native spinTIFFOption reserved(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();

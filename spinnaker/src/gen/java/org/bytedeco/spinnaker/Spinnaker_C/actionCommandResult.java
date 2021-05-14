@@ -36,5 +36,5 @@ public class actionCommandResult extends Pointer {
     public native @Cast("unsigned int") int DeviceAddress(); public native actionCommandResult DeviceAddress(int setter);
 
     /* Action Command status return from device */
-    public native @Cast("actionCommandStatus") int Status(); public native actionCommandResult Status(int setter);
+    public native actionCommandStatus Status(); public native actionCommandResult Status(actionCommandStatus setter);
 }

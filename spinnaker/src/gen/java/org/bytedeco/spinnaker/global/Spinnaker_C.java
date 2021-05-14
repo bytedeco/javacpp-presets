@@ -241,7 +241,7 @@ public static final byte True = True();
  * for GenICam related errors.  The error codes in the range of -3000 to -3999
  * are reserved for image processing related errors.
  */
-public enum _spinError {
+public enum spinError {
     /**
      * An error code of 0 means that the function has run without error.
      */
@@ -309,9 +309,9 @@ public enum _spinError {
     SPINNAKER_ERR_CUSTOM_ID(-10000);
 
     public final int value;
-    private _spinError(int v) { this.value = v; }
-    private _spinError(_spinError e) { this.value = e.value; }
-    public _spinError intern() { for (_spinError e : values()) if (e.value == value) return e; return this; }
+    private spinError(int v) { this.value = v; }
+    private spinError(spinError e) { this.value = e.value; }
+    public spinError intern() { for (spinError e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
@@ -321,7 +321,7 @@ public enum _spinError {
  * https://www.flir.com/support-center/iis/machine-vision/knowledge-base/different-color-processing-algorithms-in-flycapture2
  * for complete details for each algorithm.
  */
-public enum _spinColorProcessingAlgorithm {
+public enum spinColorProcessingAlgorithm {
     /** Default method. */
     DEFAULT(0),
     /** No color processing. */
@@ -352,16 +352,16 @@ public enum _spinColorProcessingAlgorithm {
     WEIGHTED_DIRECTIONAL_FILTER(10);
 
     public final int value;
-    private _spinColorProcessingAlgorithm(int v) { this.value = v; }
-    private _spinColorProcessingAlgorithm(_spinColorProcessingAlgorithm e) { this.value = e.value; }
-    public _spinColorProcessingAlgorithm intern() { for (_spinColorProcessingAlgorithm e : values()) if (e.value == value) return e; return this; }
+    private spinColorProcessingAlgorithm(int v) { this.value = v; }
+    private spinColorProcessingAlgorithm(spinColorProcessingAlgorithm e) { this.value = e.value; }
+    public spinColorProcessingAlgorithm intern() { for (spinColorProcessingAlgorithm e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /**
  * Channels that allow statistics to be calculated.
  */
-public enum _spinStatisticsChannel {
+public enum spinStatisticsChannel {
     GREY(0),
     RED(1),
     GREEN(2),
@@ -372,14 +372,14 @@ public enum _spinStatisticsChannel {
     NUM_STATISTICS_CHANNELS(7);
 
     public final int value;
-    private _spinStatisticsChannel(int v) { this.value = v; }
-    private _spinStatisticsChannel(_spinStatisticsChannel e) { this.value = e.value; }
-    public _spinStatisticsChannel intern() { for (_spinStatisticsChannel e : values()) if (e.value == value) return e; return this; }
+    private spinStatisticsChannel(int v) { this.value = v; }
+    private spinStatisticsChannel(spinStatisticsChannel e) { this.value = e.value; }
+    public spinStatisticsChannel intern() { for (spinStatisticsChannel e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** File formats to be used for saving images to disk. */
-public enum _spinImageFileFormat {
+public enum spinImageFileFormat {
     /** Determine file format from file extension. */
     FROM_FILE_EXT(-1),
     /** Portable gray map. */
@@ -401,9 +401,9 @@ public enum _spinImageFileFormat {
     IMAGE_FILE_FORMAT_FORCE_32BITS(0x7FFFFFFF);
 
     public final int value;
-    private _spinImageFileFormat(int v) { this.value = v; }
-    private _spinImageFileFormat(_spinImageFileFormat e) { this.value = e.value; }
-    public _spinImageFileFormat intern() { for (_spinImageFileFormat e : values()) if (e.value == value) return e; return this; }
+    private spinImageFileFormat(int v) { this.value = v; }
+    private spinImageFileFormat(spinImageFileFormat e) { this.value = e.value; }
+    public spinImageFileFormat intern() { for (spinImageFileFormat e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
@@ -417,7 +417,7 @@ public enum _spinImageFileFormat {
  *
  * @see spinImageGetTLPixelFormatNamespace()
  */
-public enum _spinPixelFormatNamespaceID {
+public enum spinPixelFormatNamespaceID {
     SPINNAKER_PIXELFORMAT_NAMESPACE_UNKNOWN(0),    /* GenTL v1.2 */
     SPINNAKER_PIXELFORMAT_NAMESPACE_GEV(1),        /* GenTL v1.2 */
     SPINNAKER_PIXELFORMAT_NAMESPACE_IIDC(2),       /* GenTL v1.2 */
@@ -427,14 +427,14 @@ public enum _spinPixelFormatNamespaceID {
     SPINNAKER_PIXELFORMAT_NAMESPACE_CUSTOM_ID(1000);
 
     public final int value;
-    private _spinPixelFormatNamespaceID(int v) { this.value = v; }
-    private _spinPixelFormatNamespaceID(_spinPixelFormatNamespaceID e) { this.value = e.value; }
-    public _spinPixelFormatNamespaceID intern() { for (_spinPixelFormatNamespaceID e : values()) if (e.value == value) return e; return this; }
+    private spinPixelFormatNamespaceID(int v) { this.value = v; }
+    private spinPixelFormatNamespaceID(spinPixelFormatNamespaceID e) { this.value = e.value; }
+    public spinPixelFormatNamespaceID intern() { for (spinPixelFormatNamespaceID e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** Status of images returned from spinImageGetStatus() call. */
-public enum _spinImageStatus {
+public enum spinImageStatus {
     /** Image has an unknown error. */
     IMAGE_UNKNOWN_ERROR(-1),
     /** Image is returned from GetNextImage() call without any errors. */
@@ -469,14 +469,14 @@ public enum _spinImageStatus {
     IMAGE_NO_SYSTEM_RESOURCES(12);
 
     public final int value;
-    private _spinImageStatus(int v) { this.value = v; }
-    private _spinImageStatus(_spinImageStatus e) { this.value = e.value; }
-    public _spinImageStatus intern() { for (_spinImageStatus e : values()) if (e.value == value) return e; return this; }
+    private spinImageStatus(int v) { this.value = v; }
+    private spinImageStatus(spinImageStatus e) { this.value = e.value; }
+    public spinImageStatus intern() { for (spinImageStatus e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** log levels */
-public enum _spinLogLevel {
+public enum spinnakerLogLevel {
     LOG_LEVEL_OFF(-1),     // Logging is off.
     LOG_LEVEL_FATAL(0),    // Not used by Spinnaker.
     LOG_LEVEL_ALERT(100),  // Not used by Spinnaker.
@@ -491,14 +491,14 @@ public enum _spinLogLevel {
     LOG_LEVEL_NOTSET(800); // Logs everything.
 
     public final int value;
-    private _spinLogLevel(int v) { this.value = v; }
-    private _spinLogLevel(_spinLogLevel e) { this.value = e.value; }
-    public _spinLogLevel intern() { for (_spinLogLevel e : values()) if (e.value == value) return e; return this; }
+    private spinnakerLogLevel(int v) { this.value = v; }
+    private spinnakerLogLevel(spinnakerLogLevel e) { this.value = e.value; }
+    public spinnakerLogLevel intern() { for (spinnakerLogLevel e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /* Enumeration of TLType dependent payload types. Introduced in GenTL v1.2 */
-public enum _spinPayloadTypeInfoIDs {
+public enum spinPayloadTypeInfoIDs {
     PAYLOAD_TYPE_UNKNOWN(0),         /* GenTL v1.2 */
     PAYLOAD_TYPE_IMAGE(1),           /* GenTL v1.2 */
     PAYLOAD_TYPE_RAW_DATA(2),        /* GenTL v1.2 */
@@ -520,23 +520,23 @@ public enum _spinPayloadTypeInfoIDs {
     PAYLOAD_TYPE_CHUNK_DATA_LOSSY_COMPRESSED(1006);
 
     public final int value;
-    private _spinPayloadTypeInfoIDs(int v) { this.value = v; }
-    private _spinPayloadTypeInfoIDs(_spinPayloadTypeInfoIDs e) { this.value = e.value; }
-    public _spinPayloadTypeInfoIDs intern() { for (_spinPayloadTypeInfoIDs e : values()) if (e.value == value) return e; return this; }
+    private spinPayloadTypeInfoIDs(int v) { this.value = v; }
+    private spinPayloadTypeInfoIDs(spinPayloadTypeInfoIDs e) { this.value = e.value; }
+    public spinPayloadTypeInfoIDs intern() { for (spinPayloadTypeInfoIDs e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../Spinnaker_C/spinPNGOption.java
+// Targeting ..\Spinnaker_C\spinPNGOption.java
 
 
-// Targeting ../Spinnaker_C/spinPPMOption.java
+// Targeting ..\Spinnaker_C\spinPPMOption.java
 
 
-// Targeting ../Spinnaker_C/spinPGMOption.java
+// Targeting ..\Spinnaker_C\spinPGMOption.java
 
 
 
 /** Compression method used in saving TIFF images in the spinTIFFOption struct. */
-public enum CompressionMethod {
+public enum spinCompressionMethod {
     NONE(1),      // Save without any compression.
     PACKBITS(2),      // Save using PACKBITS compression.
     DEFLATE(3),       // Save using DEFLATE compression (ZLIB compression).
@@ -559,9 +559,9 @@ public enum CompressionMethod {
     JPG(8);
 
     public final int value;
-    private CompressionMethod(int v) { this.value = v; }
-    private CompressionMethod(CompressionMethod e) { this.value = e.value; }
-    public CompressionMethod intern() { for (CompressionMethod e : values()) if (e.value == value) return e; return this; }
+    private spinCompressionMethod(int v) { this.value = v; }
+    private spinCompressionMethod(spinCompressionMethod e) { this.value = e.value; }
+    public spinCompressionMethod intern() { for (spinCompressionMethod e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 // Targeting ../Spinnaker_C/spinTIFFOption.java
@@ -592,7 +592,7 @@ public enum CompressionMethod {
 /**
  * Possible Status Codes Returned from Action Command.
  */
-public enum _actionCommandStatus {
+public enum actionCommandStatus {
     /** The device acknowledged the command. */
     ACTION_COMMAND_STATUS_OK(0),
 
@@ -612,9 +612,9 @@ public enum _actionCommandStatus {
     ACTION_COMMAND_STATUS_ERROR(0x8FFF);
 
     public final int value;
-    private _actionCommandStatus(int v) { this.value = v; }
-    private _actionCommandStatus(_actionCommandStatus e) { this.value = e.value; }
-    public _actionCommandStatus intern() { for (_actionCommandStatus e : values()) if (e.value == value) return e; return this; }
+    private actionCommandStatus(int v) { this.value = v; }
+    private actionCommandStatus(actionCommandStatus e) { this.value = e.value; }
+    public actionCommandStatus intern() { for (actionCommandStatus e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 // Targeting ../Spinnaker_C/actionCommandResult.java
@@ -668,7 +668,7 @@ public enum _actionCommandStatus {
 *\brief The enum definitions for camera nodes.
 */
 
-public enum _spinLUTSelectorEnums {
+public enum spinLUTSelectorEnums {
     /** 
         This LUT is for re-mapping pixels of all formats 
         (mono, Bayer, red, green and blue).
@@ -677,13 +677,13 @@ public enum _spinLUTSelectorEnums {
     NUM_LUTSELECTOR(1);
 
     public final int value;
-    private _spinLUTSelectorEnums(int v) { this.value = v; }
-    private _spinLUTSelectorEnums(_spinLUTSelectorEnums e) { this.value = e.value; }
-    public _spinLUTSelectorEnums intern() { for (_spinLUTSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLUTSelectorEnums(int v) { this.value = v; }
+    private spinLUTSelectorEnums(spinLUTSelectorEnums e) { this.value = e.value; }
+    public spinLUTSelectorEnums intern() { for (spinLUTSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinExposureModeEnums {
+public enum spinExposureModeEnums {
     /** 
         Timed exposure. The exposure time is set using the 
         ExposureTime or ExposureAuto features and the exposure starts with the
@@ -698,13 +698,13 @@ public enum _spinExposureModeEnums {
     NUM_EXPOSUREMODE(2);
 
     public final int value;
-    private _spinExposureModeEnums(int v) { this.value = v; }
-    private _spinExposureModeEnums(_spinExposureModeEnums e) { this.value = e.value; }
-    public _spinExposureModeEnums intern() { for (_spinExposureModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinExposureModeEnums(int v) { this.value = v; }
+    private spinExposureModeEnums(spinExposureModeEnums e) { this.value = e.value; }
+    public spinExposureModeEnums intern() { for (spinExposureModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAcquisitionModeEnums {
+public enum spinAcquisitionModeEnums {
     /** */
     AcquisitionMode_Continuous(0),
     /** */
@@ -714,13 +714,13 @@ public enum _spinAcquisitionModeEnums {
     NUM_ACQUISITIONMODE(3);
 
     public final int value;
-    private _spinAcquisitionModeEnums(int v) { this.value = v; }
-    private _spinAcquisitionModeEnums(_spinAcquisitionModeEnums e) { this.value = e.value; }
-    public _spinAcquisitionModeEnums intern() { for (_spinAcquisitionModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAcquisitionModeEnums(int v) { this.value = v; }
+    private spinAcquisitionModeEnums(spinAcquisitionModeEnums e) { this.value = e.value; }
+    public spinAcquisitionModeEnums intern() { for (spinAcquisitionModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTriggerSourceEnums {
+public enum spinTriggerSourceEnums {
     /** */
     TriggerSource_Software(0),
     /** */
@@ -756,13 +756,13 @@ public enum _spinTriggerSourceEnums {
     NUM_TRIGGERSOURCE(16);
 
     public final int value;
-    private _spinTriggerSourceEnums(int v) { this.value = v; }
-    private _spinTriggerSourceEnums(_spinTriggerSourceEnums e) { this.value = e.value; }
-    public _spinTriggerSourceEnums intern() { for (_spinTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTriggerSourceEnums(int v) { this.value = v; }
+    private spinTriggerSourceEnums(spinTriggerSourceEnums e) { this.value = e.value; }
+    public spinTriggerSourceEnums intern() { for (spinTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTriggerActivationEnums {
+public enum spinTriggerActivationEnums {
     /** */
     TriggerActivation_LevelLow(0),
     /** */
@@ -776,13 +776,13 @@ public enum _spinTriggerActivationEnums {
     NUM_TRIGGERACTIVATION(5);
 
     public final int value;
-    private _spinTriggerActivationEnums(int v) { this.value = v; }
-    private _spinTriggerActivationEnums(_spinTriggerActivationEnums e) { this.value = e.value; }
-    public _spinTriggerActivationEnums intern() { for (_spinTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTriggerActivationEnums(int v) { this.value = v; }
+    private spinTriggerActivationEnums(spinTriggerActivationEnums e) { this.value = e.value; }
+    public spinTriggerActivationEnums intern() { for (spinTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSensorShutterModeEnums {
+public enum spinSensorShutterModeEnums {
     /** 
         The shutter opens and closes at the same time for all pixels.
         All the pixels are exposed for the same length of time at the same time.
@@ -801,13 +801,13 @@ public enum _spinSensorShutterModeEnums {
     NUM_SENSORSHUTTERMODE(3);
 
     public final int value;
-    private _spinSensorShutterModeEnums(int v) { this.value = v; }
-    private _spinSensorShutterModeEnums(_spinSensorShutterModeEnums e) { this.value = e.value; }
-    public _spinSensorShutterModeEnums intern() { for (_spinSensorShutterModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSensorShutterModeEnums(int v) { this.value = v; }
+    private spinSensorShutterModeEnums(spinSensorShutterModeEnums e) { this.value = e.value; }
+    public spinSensorShutterModeEnums intern() { for (spinSensorShutterModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTriggerModeEnums {
+public enum spinTriggerModeEnums {
     /** */
     TriggerMode_Off(0),
     /** */
@@ -815,13 +815,13 @@ public enum _spinTriggerModeEnums {
     NUM_TRIGGERMODE(2);
 
     public final int value;
-    private _spinTriggerModeEnums(int v) { this.value = v; }
-    private _spinTriggerModeEnums(_spinTriggerModeEnums e) { this.value = e.value; }
-    public _spinTriggerModeEnums intern() { for (_spinTriggerModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTriggerModeEnums(int v) { this.value = v; }
+    private spinTriggerModeEnums(spinTriggerModeEnums e) { this.value = e.value; }
+    public spinTriggerModeEnums intern() { for (spinTriggerModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTriggerOverlapEnums {
+public enum spinTriggerOverlapEnums {
     /** */
     TriggerOverlap_Off(0),
     /** */
@@ -831,13 +831,13 @@ public enum _spinTriggerOverlapEnums {
     NUM_TRIGGEROVERLAP(3);
 
     public final int value;
-    private _spinTriggerOverlapEnums(int v) { this.value = v; }
-    private _spinTriggerOverlapEnums(_spinTriggerOverlapEnums e) { this.value = e.value; }
-    public _spinTriggerOverlapEnums intern() { for (_spinTriggerOverlapEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTriggerOverlapEnums(int v) { this.value = v; }
+    private spinTriggerOverlapEnums(spinTriggerOverlapEnums e) { this.value = e.value; }
+    public spinTriggerOverlapEnums intern() { for (spinTriggerOverlapEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTriggerSelectorEnums {
+public enum spinTriggerSelectorEnums {
     /** */
     TriggerSelector_AcquisitionStart(0),
     /** */
@@ -847,13 +847,13 @@ public enum _spinTriggerSelectorEnums {
     NUM_TRIGGERSELECTOR(3);
 
     public final int value;
-    private _spinTriggerSelectorEnums(int v) { this.value = v; }
-    private _spinTriggerSelectorEnums(_spinTriggerSelectorEnums e) { this.value = e.value; }
-    public _spinTriggerSelectorEnums intern() { for (_spinTriggerSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTriggerSelectorEnums(int v) { this.value = v; }
+    private spinTriggerSelectorEnums(spinTriggerSelectorEnums e) { this.value = e.value; }
+    public spinTriggerSelectorEnums intern() { for (spinTriggerSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinExposureAutoEnums {
+public enum spinExposureAutoEnums {
     /** 
         Exposure time is manually controlled using ExposureTime
       */
@@ -871,13 +871,13 @@ public enum _spinExposureAutoEnums {
     NUM_EXPOSUREAUTO(3);
 
     public final int value;
-    private _spinExposureAutoEnums(int v) { this.value = v; }
-    private _spinExposureAutoEnums(_spinExposureAutoEnums e) { this.value = e.value; }
-    public _spinExposureAutoEnums intern() { for (_spinExposureAutoEnums e : values()) if (e.value == value) return e; return this; }
+    private spinExposureAutoEnums(int v) { this.value = v; }
+    private spinExposureAutoEnums(spinExposureAutoEnums e) { this.value = e.value; }
+    public spinExposureAutoEnums intern() { for (spinExposureAutoEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEventSelectorEnums {
+public enum spinEventSelectorEnums {
     /** */
     EventSelector_Error(0),
     /** */
@@ -887,13 +887,13 @@ public enum _spinEventSelectorEnums {
     NUM_EVENTSELECTOR(3);
 
     public final int value;
-    private _spinEventSelectorEnums(int v) { this.value = v; }
-    private _spinEventSelectorEnums(_spinEventSelectorEnums e) { this.value = e.value; }
-    public _spinEventSelectorEnums intern() { for (_spinEventSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEventSelectorEnums(int v) { this.value = v; }
+    private spinEventSelectorEnums(spinEventSelectorEnums e) { this.value = e.value; }
+    public spinEventSelectorEnums intern() { for (spinEventSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEventNotificationEnums {
+public enum spinEventNotificationEnums {
     /** */
     EventNotification_On(0),
     /** */
@@ -901,13 +901,13 @@ public enum _spinEventNotificationEnums {
     NUM_EVENTNOTIFICATION(2);
 
     public final int value;
-    private _spinEventNotificationEnums(int v) { this.value = v; }
-    private _spinEventNotificationEnums(_spinEventNotificationEnums e) { this.value = e.value; }
-    public _spinEventNotificationEnums intern() { for (_spinEventNotificationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEventNotificationEnums(int v) { this.value = v; }
+    private spinEventNotificationEnums(spinEventNotificationEnums e) { this.value = e.value; }
+    public spinEventNotificationEnums intern() { for (spinEventNotificationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLogicBlockSelectorEnums {
+public enum spinLogicBlockSelectorEnums {
     /** */
     LogicBlockSelector_LogicBlock0(0),
     /** */
@@ -915,13 +915,13 @@ public enum _spinLogicBlockSelectorEnums {
     NUM_LOGICBLOCKSELECTOR(2);
 
     public final int value;
-    private _spinLogicBlockSelectorEnums(int v) { this.value = v; }
-    private _spinLogicBlockSelectorEnums(_spinLogicBlockSelectorEnums e) { this.value = e.value; }
-    public _spinLogicBlockSelectorEnums intern() { for (_spinLogicBlockSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLogicBlockSelectorEnums(int v) { this.value = v; }
+    private spinLogicBlockSelectorEnums(spinLogicBlockSelectorEnums e) { this.value = e.value; }
+    public spinLogicBlockSelectorEnums intern() { for (spinLogicBlockSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLogicBlockLUTInputActivationEnums {
+public enum spinLogicBlockLUTInputActivationEnums {
     /** */
     LogicBlockLUTInputActivation_LevelLow(0),
     /** */
@@ -935,13 +935,13 @@ public enum _spinLogicBlockLUTInputActivationEnums {
     NUM_LOGICBLOCKLUTINPUTACTIVATION(5);
 
     public final int value;
-    private _spinLogicBlockLUTInputActivationEnums(int v) { this.value = v; }
-    private _spinLogicBlockLUTInputActivationEnums(_spinLogicBlockLUTInputActivationEnums e) { this.value = e.value; }
-    public _spinLogicBlockLUTInputActivationEnums intern() { for (_spinLogicBlockLUTInputActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLogicBlockLUTInputActivationEnums(int v) { this.value = v; }
+    private spinLogicBlockLUTInputActivationEnums(spinLogicBlockLUTInputActivationEnums e) { this.value = e.value; }
+    public spinLogicBlockLUTInputActivationEnums intern() { for (spinLogicBlockLUTInputActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLogicBlockLUTInputSelectorEnums {
+public enum spinLogicBlockLUTInputSelectorEnums {
     /** */
     LogicBlockLUTInputSelector_Input0(0),
     /** */
@@ -953,13 +953,13 @@ public enum _spinLogicBlockLUTInputSelectorEnums {
     NUM_LOGICBLOCKLUTINPUTSELECTOR(4);
 
     public final int value;
-    private _spinLogicBlockLUTInputSelectorEnums(int v) { this.value = v; }
-    private _spinLogicBlockLUTInputSelectorEnums(_spinLogicBlockLUTInputSelectorEnums e) { this.value = e.value; }
-    public _spinLogicBlockLUTInputSelectorEnums intern() { for (_spinLogicBlockLUTInputSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLogicBlockLUTInputSelectorEnums(int v) { this.value = v; }
+    private spinLogicBlockLUTInputSelectorEnums(spinLogicBlockLUTInputSelectorEnums e) { this.value = e.value; }
+    public spinLogicBlockLUTInputSelectorEnums intern() { for (spinLogicBlockLUTInputSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLogicBlockLUTInputSourceEnums {
+public enum spinLogicBlockLUTInputSourceEnums {
     /** Zero*/
     LogicBlockLUTInputSource_Zero(0),
     /** Line0*/
@@ -1001,13 +1001,13 @@ public enum _spinLogicBlockLUTInputSourceEnums {
     NUM_LOGICBLOCKLUTINPUTSOURCE(19);
 
     public final int value;
-    private _spinLogicBlockLUTInputSourceEnums(int v) { this.value = v; }
-    private _spinLogicBlockLUTInputSourceEnums(_spinLogicBlockLUTInputSourceEnums e) { this.value = e.value; }
-    public _spinLogicBlockLUTInputSourceEnums intern() { for (_spinLogicBlockLUTInputSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLogicBlockLUTInputSourceEnums(int v) { this.value = v; }
+    private spinLogicBlockLUTInputSourceEnums(spinLogicBlockLUTInputSourceEnums e) { this.value = e.value; }
+    public spinLogicBlockLUTInputSourceEnums intern() { for (spinLogicBlockLUTInputSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLogicBlockLUTSelectorEnums {
+public enum spinLogicBlockLUTSelectorEnums {
     /** */
     LogicBlockLUTSelector_Value(0),
     /** */
@@ -1015,13 +1015,13 @@ public enum _spinLogicBlockLUTSelectorEnums {
     NUM_LOGICBLOCKLUTSELECTOR(2);
 
     public final int value;
-    private _spinLogicBlockLUTSelectorEnums(int v) { this.value = v; }
-    private _spinLogicBlockLUTSelectorEnums(_spinLogicBlockLUTSelectorEnums e) { this.value = e.value; }
-    public _spinLogicBlockLUTSelectorEnums intern() { for (_spinLogicBlockLUTSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLogicBlockLUTSelectorEnums(int v) { this.value = v; }
+    private spinLogicBlockLUTSelectorEnums(spinLogicBlockLUTSelectorEnums e) { this.value = e.value; }
+    public spinLogicBlockLUTSelectorEnums intern() { for (spinLogicBlockLUTSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinColorTransformationSelectorEnums {
+public enum spinColorTransformationSelectorEnums {
     /** */
     ColorTransformationSelector_RGBtoRGB(0),
     /** */
@@ -1029,13 +1029,13 @@ public enum _spinColorTransformationSelectorEnums {
     NUM_COLORTRANSFORMATIONSELECTOR(2);
 
     public final int value;
-    private _spinColorTransformationSelectorEnums(int v) { this.value = v; }
-    private _spinColorTransformationSelectorEnums(_spinColorTransformationSelectorEnums e) { this.value = e.value; }
-    public _spinColorTransformationSelectorEnums intern() { for (_spinColorTransformationSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinColorTransformationSelectorEnums(int v) { this.value = v; }
+    private spinColorTransformationSelectorEnums(spinColorTransformationSelectorEnums e) { this.value = e.value; }
+    public spinColorTransformationSelectorEnums intern() { for (spinColorTransformationSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinRgbTransformLightSourceEnums {
+public enum spinRgbTransformLightSourceEnums {
     /** 
         Uses a matrix calibrated for a wide range of light sources.
       */
@@ -1072,13 +1072,13 @@ public enum _spinRgbTransformLightSourceEnums {
     NUM_RGBTRANSFORMLIGHTSOURCE(8);
 
     public final int value;
-    private _spinRgbTransformLightSourceEnums(int v) { this.value = v; }
-    private _spinRgbTransformLightSourceEnums(_spinRgbTransformLightSourceEnums e) { this.value = e.value; }
-    public _spinRgbTransformLightSourceEnums intern() { for (_spinRgbTransformLightSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinRgbTransformLightSourceEnums(int v) { this.value = v; }
+    private spinRgbTransformLightSourceEnums(spinRgbTransformLightSourceEnums e) { this.value = e.value; }
+    public spinRgbTransformLightSourceEnums intern() { for (spinRgbTransformLightSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinColorTransformationValueSelectorEnums {
+public enum spinColorTransformationValueSelectorEnums {
     /** */
     ColorTransformationValueSelector_Gain00(0),
     /** */
@@ -1106,13 +1106,13 @@ public enum _spinColorTransformationValueSelectorEnums {
     NUM_COLORTRANSFORMATIONVALUESELECTOR(12);
 
     public final int value;
-    private _spinColorTransformationValueSelectorEnums(int v) { this.value = v; }
-    private _spinColorTransformationValueSelectorEnums(_spinColorTransformationValueSelectorEnums e) { this.value = e.value; }
-    public _spinColorTransformationValueSelectorEnums intern() { for (_spinColorTransformationValueSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinColorTransformationValueSelectorEnums(int v) { this.value = v; }
+    private spinColorTransformationValueSelectorEnums(spinColorTransformationValueSelectorEnums e) { this.value = e.value; }
+    public spinColorTransformationValueSelectorEnums intern() { for (spinColorTransformationValueSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceRegistersEndiannessEnums {
+public enum spinDeviceRegistersEndiannessEnums {
     /** */
     DeviceRegistersEndianness_Little(0),
     /** */
@@ -1120,25 +1120,25 @@ public enum _spinDeviceRegistersEndiannessEnums {
     NUM_DEVICEREGISTERSENDIANNESS(2);
 
     public final int value;
-    private _spinDeviceRegistersEndiannessEnums(int v) { this.value = v; }
-    private _spinDeviceRegistersEndiannessEnums(_spinDeviceRegistersEndiannessEnums e) { this.value = e.value; }
-    public _spinDeviceRegistersEndiannessEnums intern() { for (_spinDeviceRegistersEndiannessEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceRegistersEndiannessEnums(int v) { this.value = v; }
+    private spinDeviceRegistersEndiannessEnums(spinDeviceRegistersEndiannessEnums e) { this.value = e.value; }
+    public spinDeviceRegistersEndiannessEnums intern() { for (spinDeviceRegistersEndiannessEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceScanTypeEnums {
+public enum spinDeviceScanTypeEnums {
     /** */
     DeviceScanType_Areascan(0),
     NUM_DEVICESCANTYPE(1);
 
     public final int value;
-    private _spinDeviceScanTypeEnums(int v) { this.value = v; }
-    private _spinDeviceScanTypeEnums(_spinDeviceScanTypeEnums e) { this.value = e.value; }
-    public _spinDeviceScanTypeEnums intern() { for (_spinDeviceScanTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceScanTypeEnums(int v) { this.value = v; }
+    private spinDeviceScanTypeEnums(spinDeviceScanTypeEnums e) { this.value = e.value; }
+    public spinDeviceScanTypeEnums intern() { for (spinDeviceScanTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceCharacterSetEnums {
+public enum spinDeviceCharacterSetEnums {
     /** */
     DeviceCharacterSet_UTF8(0),
     /** */
@@ -1146,13 +1146,13 @@ public enum _spinDeviceCharacterSetEnums {
     NUM_DEVICECHARACTERSET(2);
 
     public final int value;
-    private _spinDeviceCharacterSetEnums(int v) { this.value = v; }
-    private _spinDeviceCharacterSetEnums(_spinDeviceCharacterSetEnums e) { this.value = e.value; }
-    public _spinDeviceCharacterSetEnums intern() { for (_spinDeviceCharacterSetEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceCharacterSetEnums(int v) { this.value = v; }
+    private spinDeviceCharacterSetEnums(spinDeviceCharacterSetEnums e) { this.value = e.value; }
+    public spinDeviceCharacterSetEnums intern() { for (spinDeviceCharacterSetEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceTLTypeEnums {
+public enum spinDeviceTLTypeEnums {
     /** */
     DeviceTLType_GigEVision(0),
     /** */
@@ -1168,37 +1168,37 @@ public enum _spinDeviceTLTypeEnums {
     NUM_DEVICETLTYPE(6);
 
     public final int value;
-    private _spinDeviceTLTypeEnums(int v) { this.value = v; }
-    private _spinDeviceTLTypeEnums(_spinDeviceTLTypeEnums e) { this.value = e.value; }
-    public _spinDeviceTLTypeEnums intern() { for (_spinDeviceTLTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceTLTypeEnums(int v) { this.value = v; }
+    private spinDeviceTLTypeEnums(spinDeviceTLTypeEnums e) { this.value = e.value; }
+    public spinDeviceTLTypeEnums intern() { for (spinDeviceTLTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDevicePowerSupplySelectorEnums {
+public enum spinDevicePowerSupplySelectorEnums {
     /** */
     DevicePowerSupplySelector_External(0),
     NUM_DEVICEPOWERSUPPLYSELECTOR(1);
 
     public final int value;
-    private _spinDevicePowerSupplySelectorEnums(int v) { this.value = v; }
-    private _spinDevicePowerSupplySelectorEnums(_spinDevicePowerSupplySelectorEnums e) { this.value = e.value; }
-    public _spinDevicePowerSupplySelectorEnums intern() { for (_spinDevicePowerSupplySelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDevicePowerSupplySelectorEnums(int v) { this.value = v; }
+    private spinDevicePowerSupplySelectorEnums(spinDevicePowerSupplySelectorEnums e) { this.value = e.value; }
+    public spinDevicePowerSupplySelectorEnums intern() { for (spinDevicePowerSupplySelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceTemperatureSelectorEnums {
+public enum spinDeviceTemperatureSelectorEnums {
     /** */
     DeviceTemperatureSelector_Sensor(0),
     NUM_DEVICETEMPERATURESELECTOR(1);
 
     public final int value;
-    private _spinDeviceTemperatureSelectorEnums(int v) { this.value = v; }
-    private _spinDeviceTemperatureSelectorEnums(_spinDeviceTemperatureSelectorEnums e) { this.value = e.value; }
-    public _spinDeviceTemperatureSelectorEnums intern() { for (_spinDeviceTemperatureSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceTemperatureSelectorEnums(int v) { this.value = v; }
+    private spinDeviceTemperatureSelectorEnums(spinDeviceTemperatureSelectorEnums e) { this.value = e.value; }
+    public spinDeviceTemperatureSelectorEnums intern() { for (spinDeviceTemperatureSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceIndicatorModeEnums {
+public enum spinDeviceIndicatorModeEnums {
     /** */
     DeviceIndicatorMode_Inactive(0),
     /** */
@@ -1208,13 +1208,13 @@ public enum _spinDeviceIndicatorModeEnums {
     NUM_DEVICEINDICATORMODE(3);
 
     public final int value;
-    private _spinDeviceIndicatorModeEnums(int v) { this.value = v; }
-    private _spinDeviceIndicatorModeEnums(_spinDeviceIndicatorModeEnums e) { this.value = e.value; }
-    public _spinDeviceIndicatorModeEnums intern() { for (_spinDeviceIndicatorModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceIndicatorModeEnums(int v) { this.value = v; }
+    private spinDeviceIndicatorModeEnums(spinDeviceIndicatorModeEnums e) { this.value = e.value; }
+    public spinDeviceIndicatorModeEnums intern() { for (spinDeviceIndicatorModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAutoExposureControlPriorityEnums {
+public enum spinAutoExposureControlPriorityEnums {
     /** */
     AutoExposureControlPriority_Gain(0),
     /** */
@@ -1222,13 +1222,13 @@ public enum _spinAutoExposureControlPriorityEnums {
     NUM_AUTOEXPOSURECONTROLPRIORITY(2);
 
     public final int value;
-    private _spinAutoExposureControlPriorityEnums(int v) { this.value = v; }
-    private _spinAutoExposureControlPriorityEnums(_spinAutoExposureControlPriorityEnums e) { this.value = e.value; }
-    public _spinAutoExposureControlPriorityEnums intern() { for (_spinAutoExposureControlPriorityEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAutoExposureControlPriorityEnums(int v) { this.value = v; }
+    private spinAutoExposureControlPriorityEnums(spinAutoExposureControlPriorityEnums e) { this.value = e.value; }
+    public spinAutoExposureControlPriorityEnums intern() { for (spinAutoExposureControlPriorityEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAutoExposureMeteringModeEnums {
+public enum spinAutoExposureMeteringModeEnums {
     /** */
     AutoExposureMeteringMode_Average(0),
     /** */
@@ -1242,13 +1242,13 @@ public enum _spinAutoExposureMeteringModeEnums {
     NUM_AUTOEXPOSUREMETERINGMODE(5);
 
     public final int value;
-    private _spinAutoExposureMeteringModeEnums(int v) { this.value = v; }
-    private _spinAutoExposureMeteringModeEnums(_spinAutoExposureMeteringModeEnums e) { this.value = e.value; }
-    public _spinAutoExposureMeteringModeEnums intern() { for (_spinAutoExposureMeteringModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAutoExposureMeteringModeEnums(int v) { this.value = v; }
+    private spinAutoExposureMeteringModeEnums(spinAutoExposureMeteringModeEnums e) { this.value = e.value; }
+    public spinAutoExposureMeteringModeEnums intern() { for (spinAutoExposureMeteringModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBalanceWhiteAutoProfileEnums {
+public enum spinBalanceWhiteAutoProfileEnums {
     /** Indoor auto white balance Profile. Can be used to compensate for artificial lighting.*/
     BalanceWhiteAutoProfile_Indoor(0),
     /** Outdoor auto white balance profile. Designed for scenes with
@@ -1258,13 +1258,13 @@ public enum _spinBalanceWhiteAutoProfileEnums {
     NUM_BALANCEWHITEAUTOPROFILE(2);
 
     public final int value;
-    private _spinBalanceWhiteAutoProfileEnums(int v) { this.value = v; }
-    private _spinBalanceWhiteAutoProfileEnums(_spinBalanceWhiteAutoProfileEnums e) { this.value = e.value; }
-    public _spinBalanceWhiteAutoProfileEnums intern() { for (_spinBalanceWhiteAutoProfileEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBalanceWhiteAutoProfileEnums(int v) { this.value = v; }
+    private spinBalanceWhiteAutoProfileEnums(spinBalanceWhiteAutoProfileEnums e) { this.value = e.value; }
+    public spinBalanceWhiteAutoProfileEnums intern() { for (spinBalanceWhiteAutoProfileEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAutoAlgorithmSelectorEnums {
+public enum spinAutoAlgorithmSelectorEnums {
     /** Selects the Auto White Balance algorithm.*/
     AutoAlgorithmSelector_Awb(0),
     /** Selects the Auto Exposure algorithm.*/
@@ -1272,13 +1272,13 @@ public enum _spinAutoAlgorithmSelectorEnums {
     NUM_AUTOALGORITHMSELECTOR(2);
 
     public final int value;
-    private _spinAutoAlgorithmSelectorEnums(int v) { this.value = v; }
-    private _spinAutoAlgorithmSelectorEnums(_spinAutoAlgorithmSelectorEnums e) { this.value = e.value; }
-    public _spinAutoAlgorithmSelectorEnums intern() { for (_spinAutoAlgorithmSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAutoAlgorithmSelectorEnums(int v) { this.value = v; }
+    private spinAutoAlgorithmSelectorEnums(spinAutoAlgorithmSelectorEnums e) { this.value = e.value; }
+    public spinAutoAlgorithmSelectorEnums intern() { for (spinAutoAlgorithmSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAutoExposureTargetGreyValueAutoEnums {
+public enum spinAutoExposureTargetGreyValueAutoEnums {
     /** Target grey value is manually controlled*/
     AutoExposureTargetGreyValueAuto_Off(0),
     /** Target grey value is constantly adapted by the device to maximize the dynamic range.*/
@@ -1286,13 +1286,13 @@ public enum _spinAutoExposureTargetGreyValueAutoEnums {
     NUM_AUTOEXPOSURETARGETGREYVALUEAUTO(2);
 
     public final int value;
-    private _spinAutoExposureTargetGreyValueAutoEnums(int v) { this.value = v; }
-    private _spinAutoExposureTargetGreyValueAutoEnums(_spinAutoExposureTargetGreyValueAutoEnums e) { this.value = e.value; }
-    public _spinAutoExposureTargetGreyValueAutoEnums intern() { for (_spinAutoExposureTargetGreyValueAutoEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAutoExposureTargetGreyValueAutoEnums(int v) { this.value = v; }
+    private spinAutoExposureTargetGreyValueAutoEnums(spinAutoExposureTargetGreyValueAutoEnums e) { this.value = e.value; }
+    public spinAutoExposureTargetGreyValueAutoEnums intern() { for (spinAutoExposureTargetGreyValueAutoEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAutoExposureLightingModeEnums {
+public enum spinAutoExposureLightingModeEnums {
     /** */
     AutoExposureLightingMode_AutoDetect(0),
     /** */
@@ -1304,13 +1304,13 @@ public enum _spinAutoExposureLightingModeEnums {
     NUM_AUTOEXPOSURELIGHTINGMODE(4);
 
     public final int value;
-    private _spinAutoExposureLightingModeEnums(int v) { this.value = v; }
-    private _spinAutoExposureLightingModeEnums(_spinAutoExposureLightingModeEnums e) { this.value = e.value; }
-    public _spinAutoExposureLightingModeEnums intern() { for (_spinAutoExposureLightingModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAutoExposureLightingModeEnums(int v) { this.value = v; }
+    private spinAutoExposureLightingModeEnums(spinAutoExposureLightingModeEnums e) { this.value = e.value; }
+    public spinAutoExposureLightingModeEnums intern() { for (spinAutoExposureLightingModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevIEEE1588StatusEnums {
+public enum spinGevIEEE1588StatusEnums {
     /** Initializing*/
     GevIEEE1588Status_Initializing(0),
     /** Faulty*/
@@ -1332,13 +1332,13 @@ public enum _spinGevIEEE1588StatusEnums {
     NUM_GEVIEEE1588STATUS(9);
 
     public final int value;
-    private _spinGevIEEE1588StatusEnums(int v) { this.value = v; }
-    private _spinGevIEEE1588StatusEnums(_spinGevIEEE1588StatusEnums e) { this.value = e.value; }
-    public _spinGevIEEE1588StatusEnums intern() { for (_spinGevIEEE1588StatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevIEEE1588StatusEnums(int v) { this.value = v; }
+    private spinGevIEEE1588StatusEnums(spinGevIEEE1588StatusEnums e) { this.value = e.value; }
+    public spinGevIEEE1588StatusEnums intern() { for (spinGevIEEE1588StatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevIEEE1588ModeEnums {
+public enum spinGevIEEE1588ModeEnums {
     /** Automatic*/
     GevIEEE1588Mode_Auto(0),
     /** Slave Only*/
@@ -1346,25 +1346,25 @@ public enum _spinGevIEEE1588ModeEnums {
     NUM_GEVIEEE1588MODE(2);
 
     public final int value;
-    private _spinGevIEEE1588ModeEnums(int v) { this.value = v; }
-    private _spinGevIEEE1588ModeEnums(_spinGevIEEE1588ModeEnums e) { this.value = e.value; }
-    public _spinGevIEEE1588ModeEnums intern() { for (_spinGevIEEE1588ModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevIEEE1588ModeEnums(int v) { this.value = v; }
+    private spinGevIEEE1588ModeEnums(spinGevIEEE1588ModeEnums e) { this.value = e.value; }
+    public spinGevIEEE1588ModeEnums intern() { for (spinGevIEEE1588ModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevIEEE1588ClockAccuracyEnums {
+public enum spinGevIEEE1588ClockAccuracyEnums {
     /** Unknown Accuracy*/
     GevIEEE1588ClockAccuracy_Unknown(0),
     NUM_GEVIEEE1588CLOCKACCURACY(1);
 
     public final int value;
-    private _spinGevIEEE1588ClockAccuracyEnums(int v) { this.value = v; }
-    private _spinGevIEEE1588ClockAccuracyEnums(_spinGevIEEE1588ClockAccuracyEnums e) { this.value = e.value; }
-    public _spinGevIEEE1588ClockAccuracyEnums intern() { for (_spinGevIEEE1588ClockAccuracyEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevIEEE1588ClockAccuracyEnums(int v) { this.value = v; }
+    private spinGevIEEE1588ClockAccuracyEnums(spinGevIEEE1588ClockAccuracyEnums e) { this.value = e.value; }
+    public spinGevIEEE1588ClockAccuracyEnums intern() { for (spinGevIEEE1588ClockAccuracyEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevCCPEnums {
+public enum spinGevCCPEnums {
     /** */
     GevCCP_OpenAccess(0),
     /** */
@@ -1374,13 +1374,13 @@ public enum _spinGevCCPEnums {
     NUM_GEVCCP(3);
 
     public final int value;
-    private _spinGevCCPEnums(int v) { this.value = v; }
-    private _spinGevCCPEnums(_spinGevCCPEnums e) { this.value = e.value; }
-    public _spinGevCCPEnums intern() { for (_spinGevCCPEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevCCPEnums(int v) { this.value = v; }
+    private spinGevCCPEnums(spinGevCCPEnums e) { this.value = e.value; }
+    public spinGevCCPEnums intern() { for (spinGevCCPEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevSupportedOptionSelectorEnums {
+public enum spinGevSupportedOptionSelectorEnums {
     /** */
     GevSupportedOptionSelector_UserDefinedName(0),
     /** */
@@ -1428,13 +1428,13 @@ public enum _spinGevSupportedOptionSelectorEnums {
     NUM_GEVSUPPORTEDOPTIONSELECTOR(22);
 
     public final int value;
-    private _spinGevSupportedOptionSelectorEnums(int v) { this.value = v; }
-    private _spinGevSupportedOptionSelectorEnums(_spinGevSupportedOptionSelectorEnums e) { this.value = e.value; }
-    public _spinGevSupportedOptionSelectorEnums intern() { for (_spinGevSupportedOptionSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevSupportedOptionSelectorEnums(int v) { this.value = v; }
+    private spinGevSupportedOptionSelectorEnums(spinGevSupportedOptionSelectorEnums e) { this.value = e.value; }
+    public spinGevSupportedOptionSelectorEnums intern() { for (spinGevSupportedOptionSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBlackLevelSelectorEnums {
+public enum spinBlackLevelSelectorEnums {
     /** */
     BlackLevelSelector_All(0),
     /** */
@@ -1444,13 +1444,13 @@ public enum _spinBlackLevelSelectorEnums {
     NUM_BLACKLEVELSELECTOR(3);
 
     public final int value;
-    private _spinBlackLevelSelectorEnums(int v) { this.value = v; }
-    private _spinBlackLevelSelectorEnums(_spinBlackLevelSelectorEnums e) { this.value = e.value; }
-    public _spinBlackLevelSelectorEnums intern() { for (_spinBlackLevelSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBlackLevelSelectorEnums(int v) { this.value = v; }
+    private spinBlackLevelSelectorEnums(spinBlackLevelSelectorEnums e) { this.value = e.value; }
+    public spinBlackLevelSelectorEnums intern() { for (spinBlackLevelSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBalanceWhiteAutoEnums {
+public enum spinBalanceWhiteAutoEnums {
     /** Sets operation mode to Off, which is manual control.*/
     BalanceWhiteAuto_Off(0),
     /** Sets operation mode to once. Once runs for a number of iterations and then sets White Balance Auto to Off.*/
@@ -1460,13 +1460,13 @@ public enum _spinBalanceWhiteAutoEnums {
     NUM_BALANCEWHITEAUTO(3);
 
     public final int value;
-    private _spinBalanceWhiteAutoEnums(int v) { this.value = v; }
-    private _spinBalanceWhiteAutoEnums(_spinBalanceWhiteAutoEnums e) { this.value = e.value; }
-    public _spinBalanceWhiteAutoEnums intern() { for (_spinBalanceWhiteAutoEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBalanceWhiteAutoEnums(int v) { this.value = v; }
+    private spinBalanceWhiteAutoEnums(spinBalanceWhiteAutoEnums e) { this.value = e.value; }
+    public spinBalanceWhiteAutoEnums intern() { for (spinBalanceWhiteAutoEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGainAutoEnums {
+public enum spinGainAutoEnums {
     /** Gain is manually controlled*/
     GainAuto_Off(0),
     /** 
@@ -1480,13 +1480,13 @@ public enum _spinGainAutoEnums {
     NUM_GAINAUTO(3);
 
     public final int value;
-    private _spinGainAutoEnums(int v) { this.value = v; }
-    private _spinGainAutoEnums(_spinGainAutoEnums e) { this.value = e.value; }
-    public _spinGainAutoEnums intern() { for (_spinGainAutoEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGainAutoEnums(int v) { this.value = v; }
+    private spinGainAutoEnums(spinGainAutoEnums e) { this.value = e.value; }
+    public spinGainAutoEnums intern() { for (spinGainAutoEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBalanceRatioSelectorEnums {
+public enum spinBalanceRatioSelectorEnums {
     /** 
         Selects the red balance ratio control for adjustment.  The red balance 
         ratio is relative to the green channel.
@@ -1500,25 +1500,25 @@ public enum _spinBalanceRatioSelectorEnums {
     NUM_BALANCERATIOSELECTOR(2);
 
     public final int value;
-    private _spinBalanceRatioSelectorEnums(int v) { this.value = v; }
-    private _spinBalanceRatioSelectorEnums(_spinBalanceRatioSelectorEnums e) { this.value = e.value; }
-    public _spinBalanceRatioSelectorEnums intern() { for (_spinBalanceRatioSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBalanceRatioSelectorEnums(int v) { this.value = v; }
+    private spinBalanceRatioSelectorEnums(spinBalanceRatioSelectorEnums e) { this.value = e.value; }
+    public spinBalanceRatioSelectorEnums intern() { for (spinBalanceRatioSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGainSelectorEnums {
+public enum spinGainSelectorEnums {
     /** */
     GainSelector_All(0),
     NUM_GAINSELECTOR(1);
 
     public final int value;
-    private _spinGainSelectorEnums(int v) { this.value = v; }
-    private _spinGainSelectorEnums(_spinGainSelectorEnums e) { this.value = e.value; }
-    public _spinGainSelectorEnums intern() { for (_spinGainSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGainSelectorEnums(int v) { this.value = v; }
+    private spinGainSelectorEnums(spinGainSelectorEnums e) { this.value = e.value; }
+    public spinGainSelectorEnums intern() { for (spinGainSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDefectCorrectionModeEnums {
+public enum spinDefectCorrectionModeEnums {
     /** Pixels are replaced with the average of their neighbours.  This is the normal mode of operation.*/
     DefectCorrectionMode_Average(0),
     /** Pixels are replaced with the maximum pixel value (i.e., 255 for 8-bit images).  Can be used for debugging the table.*/
@@ -1528,13 +1528,13 @@ public enum _spinDefectCorrectionModeEnums {
     NUM_DEFECTCORRECTIONMODE(3);
 
     public final int value;
-    private _spinDefectCorrectionModeEnums(int v) { this.value = v; }
-    private _spinDefectCorrectionModeEnums(_spinDefectCorrectionModeEnums e) { this.value = e.value; }
-    public _spinDefectCorrectionModeEnums intern() { for (_spinDefectCorrectionModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDefectCorrectionModeEnums(int v) { this.value = v; }
+    private spinDefectCorrectionModeEnums(spinDefectCorrectionModeEnums e) { this.value = e.value; }
+    public spinDefectCorrectionModeEnums intern() { for (spinDefectCorrectionModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinUserSetSelectorEnums {
+public enum spinUserSetSelectorEnums {
     /** Factory default set.*/
     UserSetSelector_Default(0),
     /** User configurable set 0.*/
@@ -1544,13 +1544,13 @@ public enum _spinUserSetSelectorEnums {
     NUM_USERSETSELECTOR(3);
 
     public final int value;
-    private _spinUserSetSelectorEnums(int v) { this.value = v; }
-    private _spinUserSetSelectorEnums(_spinUserSetSelectorEnums e) { this.value = e.value; }
-    public _spinUserSetSelectorEnums intern() { for (_spinUserSetSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinUserSetSelectorEnums(int v) { this.value = v; }
+    private spinUserSetSelectorEnums(spinUserSetSelectorEnums e) { this.value = e.value; }
+    public spinUserSetSelectorEnums intern() { for (spinUserSetSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinUserSetDefaultEnums {
+public enum spinUserSetDefaultEnums {
     /** Factory default set.*/
     UserSetDefault_Default(0),
     /** User configurable set 0.*/
@@ -1560,13 +1560,13 @@ public enum _spinUserSetDefaultEnums {
     NUM_USERSETDEFAULT(3);
 
     public final int value;
-    private _spinUserSetDefaultEnums(int v) { this.value = v; }
-    private _spinUserSetDefaultEnums(_spinUserSetDefaultEnums e) { this.value = e.value; }
-    public _spinUserSetDefaultEnums intern() { for (_spinUserSetDefaultEnums e : values()) if (e.value == value) return e; return this; }
+    private spinUserSetDefaultEnums(int v) { this.value = v; }
+    private spinUserSetDefaultEnums(spinUserSetDefaultEnums e) { this.value = e.value; }
+    public spinUserSetDefaultEnums intern() { for (spinUserSetDefaultEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSerialPortBaudRateEnums {
+public enum spinSerialPortBaudRateEnums {
     /** */
     SerialPortBaudRate_Baud300(0),
     /** */
@@ -1598,13 +1598,13 @@ public enum _spinSerialPortBaudRateEnums {
     NUM_SERIALPORTBAUDRATE(14);
 
     public final int value;
-    private _spinSerialPortBaudRateEnums(int v) { this.value = v; }
-    private _spinSerialPortBaudRateEnums(_spinSerialPortBaudRateEnums e) { this.value = e.value; }
-    public _spinSerialPortBaudRateEnums intern() { for (_spinSerialPortBaudRateEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSerialPortBaudRateEnums(int v) { this.value = v; }
+    private spinSerialPortBaudRateEnums(spinSerialPortBaudRateEnums e) { this.value = e.value; }
+    public spinSerialPortBaudRateEnums intern() { for (spinSerialPortBaudRateEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSerialPortParityEnums {
+public enum spinSerialPortParityEnums {
     /** */
     SerialPortParity_None(0),
     /** */
@@ -1618,25 +1618,25 @@ public enum _spinSerialPortParityEnums {
     NUM_SERIALPORTPARITY(5);
 
     public final int value;
-    private _spinSerialPortParityEnums(int v) { this.value = v; }
-    private _spinSerialPortParityEnums(_spinSerialPortParityEnums e) { this.value = e.value; }
-    public _spinSerialPortParityEnums intern() { for (_spinSerialPortParityEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSerialPortParityEnums(int v) { this.value = v; }
+    private spinSerialPortParityEnums(spinSerialPortParityEnums e) { this.value = e.value; }
+    public spinSerialPortParityEnums intern() { for (spinSerialPortParityEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSerialPortSelectorEnums {
+public enum spinSerialPortSelectorEnums {
     /** */
     SerialPortSelector_SerialPort0(0),
     NUM_SERIALPORTSELECTOR(1);
 
     public final int value;
-    private _spinSerialPortSelectorEnums(int v) { this.value = v; }
-    private _spinSerialPortSelectorEnums(_spinSerialPortSelectorEnums e) { this.value = e.value; }
-    public _spinSerialPortSelectorEnums intern() { for (_spinSerialPortSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSerialPortSelectorEnums(int v) { this.value = v; }
+    private spinSerialPortSelectorEnums(spinSerialPortSelectorEnums e) { this.value = e.value; }
+    public spinSerialPortSelectorEnums intern() { for (spinSerialPortSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSerialPortStopBitsEnums {
+public enum spinSerialPortStopBitsEnums {
     /** */
     SerialPortStopBits_Bits1(0),
     /** */
@@ -1646,13 +1646,13 @@ public enum _spinSerialPortStopBitsEnums {
     NUM_SERIALPORTSTOPBITS(3);
 
     public final int value;
-    private _spinSerialPortStopBitsEnums(int v) { this.value = v; }
-    private _spinSerialPortStopBitsEnums(_spinSerialPortStopBitsEnums e) { this.value = e.value; }
-    public _spinSerialPortStopBitsEnums intern() { for (_spinSerialPortStopBitsEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSerialPortStopBitsEnums(int v) { this.value = v; }
+    private spinSerialPortStopBitsEnums(spinSerialPortStopBitsEnums e) { this.value = e.value; }
+    public spinSerialPortStopBitsEnums intern() { for (spinSerialPortStopBitsEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSerialPortSourceEnums {
+public enum spinSerialPortSourceEnums {
     /** */
     SerialPortSource_Line0(0),
     /** */
@@ -1666,13 +1666,13 @@ public enum _spinSerialPortSourceEnums {
     NUM_SERIALPORTSOURCE(5);
 
     public final int value;
-    private _spinSerialPortSourceEnums(int v) { this.value = v; }
-    private _spinSerialPortSourceEnums(_spinSerialPortSourceEnums e) { this.value = e.value; }
-    public _spinSerialPortSourceEnums intern() { for (_spinSerialPortSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSerialPortSourceEnums(int v) { this.value = v; }
+    private spinSerialPortSourceEnums(spinSerialPortSourceEnums e) { this.value = e.value; }
+    public spinSerialPortSourceEnums intern() { for (spinSerialPortSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSequencerModeEnums {
+public enum spinSequencerModeEnums {
     /** */
     SequencerMode_Off(0),
     /** */
@@ -1680,13 +1680,13 @@ public enum _spinSequencerModeEnums {
     NUM_SEQUENCERMODE(2);
 
     public final int value;
-    private _spinSequencerModeEnums(int v) { this.value = v; }
-    private _spinSequencerModeEnums(_spinSequencerModeEnums e) { this.value = e.value; }
-    public _spinSequencerModeEnums intern() { for (_spinSequencerModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSequencerModeEnums(int v) { this.value = v; }
+    private spinSequencerModeEnums(spinSequencerModeEnums e) { this.value = e.value; }
+    public spinSequencerModeEnums intern() { for (spinSequencerModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSequencerConfigurationValidEnums {
+public enum spinSequencerConfigurationValidEnums {
     /** */
     SequencerConfigurationValid_No(0),
     /** */
@@ -1694,13 +1694,13 @@ public enum _spinSequencerConfigurationValidEnums {
     NUM_SEQUENCERCONFIGURATIONVALID(2);
 
     public final int value;
-    private _spinSequencerConfigurationValidEnums(int v) { this.value = v; }
-    private _spinSequencerConfigurationValidEnums(_spinSequencerConfigurationValidEnums e) { this.value = e.value; }
-    public _spinSequencerConfigurationValidEnums intern() { for (_spinSequencerConfigurationValidEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSequencerConfigurationValidEnums(int v) { this.value = v; }
+    private spinSequencerConfigurationValidEnums(spinSequencerConfigurationValidEnums e) { this.value = e.value; }
+    public spinSequencerConfigurationValidEnums intern() { for (spinSequencerConfigurationValidEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSequencerSetValidEnums {
+public enum spinSequencerSetValidEnums {
     /** */
     SequencerSetValid_No(0),
     /** */
@@ -1708,13 +1708,13 @@ public enum _spinSequencerSetValidEnums {
     NUM_SEQUENCERSETVALID(2);
 
     public final int value;
-    private _spinSequencerSetValidEnums(int v) { this.value = v; }
-    private _spinSequencerSetValidEnums(_spinSequencerSetValidEnums e) { this.value = e.value; }
-    public _spinSequencerSetValidEnums intern() { for (_spinSequencerSetValidEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSequencerSetValidEnums(int v) { this.value = v; }
+    private spinSequencerSetValidEnums(spinSequencerSetValidEnums e) { this.value = e.value; }
+    public spinSequencerSetValidEnums intern() { for (spinSequencerSetValidEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSequencerTriggerActivationEnums {
+public enum spinSequencerTriggerActivationEnums {
     /** */
     SequencerTriggerActivation_RisingEdge(0),
     /** */
@@ -1728,13 +1728,13 @@ public enum _spinSequencerTriggerActivationEnums {
     NUM_SEQUENCERTRIGGERACTIVATION(5);
 
     public final int value;
-    private _spinSequencerTriggerActivationEnums(int v) { this.value = v; }
-    private _spinSequencerTriggerActivationEnums(_spinSequencerTriggerActivationEnums e) { this.value = e.value; }
-    public _spinSequencerTriggerActivationEnums intern() { for (_spinSequencerTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSequencerTriggerActivationEnums(int v) { this.value = v; }
+    private spinSequencerTriggerActivationEnums(spinSequencerTriggerActivationEnums e) { this.value = e.value; }
+    public spinSequencerTriggerActivationEnums intern() { for (spinSequencerTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSequencerConfigurationModeEnums {
+public enum spinSequencerConfigurationModeEnums {
     /** */
     SequencerConfigurationMode_Off(0),
     /** */
@@ -1742,13 +1742,13 @@ public enum _spinSequencerConfigurationModeEnums {
     NUM_SEQUENCERCONFIGURATIONMODE(2);
 
     public final int value;
-    private _spinSequencerConfigurationModeEnums(int v) { this.value = v; }
-    private _spinSequencerConfigurationModeEnums(_spinSequencerConfigurationModeEnums e) { this.value = e.value; }
-    public _spinSequencerConfigurationModeEnums intern() { for (_spinSequencerConfigurationModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSequencerConfigurationModeEnums(int v) { this.value = v; }
+    private spinSequencerConfigurationModeEnums(spinSequencerConfigurationModeEnums e) { this.value = e.value; }
+    public spinSequencerConfigurationModeEnums intern() { for (spinSequencerConfigurationModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSequencerTriggerSourceEnums {
+public enum spinSequencerTriggerSourceEnums {
     /** */
     SequencerTriggerSource_Off(0),
     /** */
@@ -1756,25 +1756,25 @@ public enum _spinSequencerTriggerSourceEnums {
     NUM_SEQUENCERTRIGGERSOURCE(2);
 
     public final int value;
-    private _spinSequencerTriggerSourceEnums(int v) { this.value = v; }
-    private _spinSequencerTriggerSourceEnums(_spinSequencerTriggerSourceEnums e) { this.value = e.value; }
-    public _spinSequencerTriggerSourceEnums intern() { for (_spinSequencerTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSequencerTriggerSourceEnums(int v) { this.value = v; }
+    private spinSequencerTriggerSourceEnums(spinSequencerTriggerSourceEnums e) { this.value = e.value; }
+    public spinSequencerTriggerSourceEnums intern() { for (spinSequencerTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferQueueModeEnums {
+public enum spinTransferQueueModeEnums {
     /** Blocks first In are transferred Out first.*/
     TransferQueueMode_FirstInFirstOut(0),
     NUM_TRANSFERQUEUEMODE(1);
 
     public final int value;
-    private _spinTransferQueueModeEnums(int v) { this.value = v; }
-    private _spinTransferQueueModeEnums(_spinTransferQueueModeEnums e) { this.value = e.value; }
-    public _spinTransferQueueModeEnums intern() { for (_spinTransferQueueModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferQueueModeEnums(int v) { this.value = v; }
+    private spinTransferQueueModeEnums(spinTransferQueueModeEnums e) { this.value = e.value; }
+    public spinTransferQueueModeEnums intern() { for (spinTransferQueueModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferOperationModeEnums {
+public enum spinTransferOperationModeEnums {
     /** Continuous*/
     TransferOperationMode_Continuous(0),
     /** Multi Block*/
@@ -1782,13 +1782,13 @@ public enum _spinTransferOperationModeEnums {
     NUM_TRANSFEROPERATIONMODE(2);
 
     public final int value;
-    private _spinTransferOperationModeEnums(int v) { this.value = v; }
-    private _spinTransferOperationModeEnums(_spinTransferOperationModeEnums e) { this.value = e.value; }
-    public _spinTransferOperationModeEnums intern() { for (_spinTransferOperationModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferOperationModeEnums(int v) { this.value = v; }
+    private spinTransferOperationModeEnums(spinTransferOperationModeEnums e) { this.value = e.value; }
+    public spinTransferOperationModeEnums intern() { for (spinTransferOperationModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferControlModeEnums {
+public enum spinTransferControlModeEnums {
     /** Basic*/
     TransferControlMode_Basic(0),
     /** Automatic*/
@@ -1798,13 +1798,13 @@ public enum _spinTransferControlModeEnums {
     NUM_TRANSFERCONTROLMODE(3);
 
     public final int value;
-    private _spinTransferControlModeEnums(int v) { this.value = v; }
-    private _spinTransferControlModeEnums(_spinTransferControlModeEnums e) { this.value = e.value; }
-    public _spinTransferControlModeEnums intern() { for (_spinTransferControlModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferControlModeEnums(int v) { this.value = v; }
+    private spinTransferControlModeEnums(spinTransferControlModeEnums e) { this.value = e.value; }
+    public spinTransferControlModeEnums intern() { for (spinTransferControlModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkGainSelectorEnums {
+public enum spinChunkGainSelectorEnums {
     /** */
     ChunkGainSelector_All(0),
     /** */
@@ -1816,13 +1816,13 @@ public enum _spinChunkGainSelectorEnums {
     NUM_CHUNKGAINSELECTOR(4);
 
     public final int value;
-    private _spinChunkGainSelectorEnums(int v) { this.value = v; }
-    private _spinChunkGainSelectorEnums(_spinChunkGainSelectorEnums e) { this.value = e.value; }
-    public _spinChunkGainSelectorEnums intern() { for (_spinChunkGainSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkGainSelectorEnums(int v) { this.value = v; }
+    private spinChunkGainSelectorEnums(spinChunkGainSelectorEnums e) { this.value = e.value; }
+    public spinChunkGainSelectorEnums intern() { for (spinChunkGainSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkSelectorEnums {
+public enum spinChunkSelectorEnums {
     /** */
     ChunkSelector_Image(0),
     /** */
@@ -1856,25 +1856,25 @@ public enum _spinChunkSelectorEnums {
     NUM_CHUNKSELECTOR(15);
 
     public final int value;
-    private _spinChunkSelectorEnums(int v) { this.value = v; }
-    private _spinChunkSelectorEnums(_spinChunkSelectorEnums e) { this.value = e.value; }
-    public _spinChunkSelectorEnums intern() { for (_spinChunkSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkSelectorEnums(int v) { this.value = v; }
+    private spinChunkSelectorEnums(spinChunkSelectorEnums e) { this.value = e.value; }
+    public spinChunkSelectorEnums intern() { for (spinChunkSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkBlackLevelSelectorEnums {
+public enum spinChunkBlackLevelSelectorEnums {
     /** */
     ChunkBlackLevelSelector_All(0),
     NUM_CHUNKBLACKLEVELSELECTOR(1);
 
     public final int value;
-    private _spinChunkBlackLevelSelectorEnums(int v) { this.value = v; }
-    private _spinChunkBlackLevelSelectorEnums(_spinChunkBlackLevelSelectorEnums e) { this.value = e.value; }
-    public _spinChunkBlackLevelSelectorEnums intern() { for (_spinChunkBlackLevelSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkBlackLevelSelectorEnums(int v) { this.value = v; }
+    private spinChunkBlackLevelSelectorEnums(spinChunkBlackLevelSelectorEnums e) { this.value = e.value; }
+    public spinChunkBlackLevelSelectorEnums intern() { for (spinChunkBlackLevelSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkPixelFormatEnums {
+public enum spinChunkPixelFormatEnums {
     /** */
     ChunkPixelFormat_Mono8(0),
     /** */
@@ -1898,13 +1898,13 @@ public enum _spinChunkPixelFormatEnums {
     NUM_CHUNKPIXELFORMAT(10);
 
     public final int value;
-    private _spinChunkPixelFormatEnums(int v) { this.value = v; }
-    private _spinChunkPixelFormatEnums(_spinChunkPixelFormatEnums e) { this.value = e.value; }
-    public _spinChunkPixelFormatEnums intern() { for (_spinChunkPixelFormatEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkPixelFormatEnums(int v) { this.value = v; }
+    private spinChunkPixelFormatEnums(spinChunkPixelFormatEnums e) { this.value = e.value; }
+    public spinChunkPixelFormatEnums intern() { for (spinChunkPixelFormatEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinFileOperationStatusEnums {
+public enum spinFileOperationStatusEnums {
     /** File Operation was sucessful.*/
     FileOperationStatus_Success(0),
     /** File Operation failed.*/
@@ -1914,13 +1914,13 @@ public enum _spinFileOperationStatusEnums {
     NUM_FILEOPERATIONSTATUS(3);
 
     public final int value;
-    private _spinFileOperationStatusEnums(int v) { this.value = v; }
-    private _spinFileOperationStatusEnums(_spinFileOperationStatusEnums e) { this.value = e.value; }
-    public _spinFileOperationStatusEnums intern() { for (_spinFileOperationStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinFileOperationStatusEnums(int v) { this.value = v; }
+    private spinFileOperationStatusEnums(spinFileOperationStatusEnums e) { this.value = e.value; }
+    public spinFileOperationStatusEnums intern() { for (spinFileOperationStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinFileOpenModeEnums {
+public enum spinFileOpenModeEnums {
     /** */
     FileOpenMode_Read(0),
     /** */
@@ -1930,13 +1930,13 @@ public enum _spinFileOpenModeEnums {
     NUM_FILEOPENMODE(3);
 
     public final int value;
-    private _spinFileOpenModeEnums(int v) { this.value = v; }
-    private _spinFileOpenModeEnums(_spinFileOpenModeEnums e) { this.value = e.value; }
-    public _spinFileOpenModeEnums intern() { for (_spinFileOpenModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinFileOpenModeEnums(int v) { this.value = v; }
+    private spinFileOpenModeEnums(spinFileOpenModeEnums e) { this.value = e.value; }
+    public spinFileOpenModeEnums intern() { for (spinFileOpenModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinFileOperationSelectorEnums {
+public enum spinFileOperationSelectorEnums {
     /** */
     FileOperationSelector_Open(0),
     /** */
@@ -1950,13 +1950,13 @@ public enum _spinFileOperationSelectorEnums {
     NUM_FILEOPERATIONSELECTOR(5);
 
     public final int value;
-    private _spinFileOperationSelectorEnums(int v) { this.value = v; }
-    private _spinFileOperationSelectorEnums(_spinFileOperationSelectorEnums e) { this.value = e.value; }
-    public _spinFileOperationSelectorEnums intern() { for (_spinFileOperationSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinFileOperationSelectorEnums(int v) { this.value = v; }
+    private spinFileOperationSelectorEnums(spinFileOperationSelectorEnums e) { this.value = e.value; }
+    public spinFileOperationSelectorEnums intern() { for (spinFileOperationSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinFileSelectorEnums {
+public enum spinFileSelectorEnums {
     /** */
     FileSelector_UserSetDefault(0),
     /** */
@@ -1970,13 +1970,13 @@ public enum _spinFileSelectorEnums {
     NUM_FILESELECTOR(5);
 
     public final int value;
-    private _spinFileSelectorEnums(int v) { this.value = v; }
-    private _spinFileSelectorEnums(_spinFileSelectorEnums e) { this.value = e.value; }
-    public _spinFileSelectorEnums intern() { for (_spinFileSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinFileSelectorEnums(int v) { this.value = v; }
+    private spinFileSelectorEnums(spinFileSelectorEnums e) { this.value = e.value; }
+    public spinFileSelectorEnums intern() { for (spinFileSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBinningSelectorEnums {
+public enum spinBinningSelectorEnums {
     /** 
         The total amount of binning to be performed on the captured sensor data.
       */
@@ -1993,13 +1993,13 @@ public enum _spinBinningSelectorEnums {
     NUM_BINNINGSELECTOR(3);
 
     public final int value;
-    private _spinBinningSelectorEnums(int v) { this.value = v; }
-    private _spinBinningSelectorEnums(_spinBinningSelectorEnums e) { this.value = e.value; }
-    public _spinBinningSelectorEnums intern() { for (_spinBinningSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBinningSelectorEnums(int v) { this.value = v; }
+    private spinBinningSelectorEnums(spinBinningSelectorEnums e) { this.value = e.value; }
+    public spinBinningSelectorEnums intern() { for (spinBinningSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTestPatternGeneratorSelectorEnums {
+public enum spinTestPatternGeneratorSelectorEnums {
     /** TestPattern feature controls the sensor{@code s test pattern generator.*/
     TestPatternGeneratorSelector_Sensor(0),
     /** TestPattern feature controls the test pattern inserted at the start of the image pipeline.*/
@@ -2007,13 +2007,13 @@ public enum _spinTestPatternGeneratorSelectorEnums {
     NUM_TESTPATTERNGENERATORSELECTOR(2);
 
     public final int value;
-    private _spinTestPatternGeneratorSelectorEnums(int v) { this.value = v; }
-    private _spinTestPatternGeneratorSelectorEnums(_spinTestPatternGeneratorSelectorEnums e) { this.value = e.value; }
-    public _spinTestPatternGeneratorSelectorEnums intern() { for (_spinTestPatternGeneratorSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTestPatternGeneratorSelectorEnums(int v) { this.value = v; }
+    private spinTestPatternGeneratorSelectorEnums(spinTestPatternGeneratorSelectorEnums e) { this.value = e.value; }
+    public spinTestPatternGeneratorSelectorEnums intern() { for (spinTestPatternGeneratorSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCompressionSaturationPriorityEnums {
+public enum spinCompressionSaturationPriorityEnums {
     /** Frames which will cause the MaxDatarateThreshold to be exceeded will not be transmitted. Requires FrameRateEnable to be True*/
     CompressionSaturationPriority_DropFrame(0),
     /** AcquisitionFrameRate is dynamically adjusted to the highest possible value without exceeding the MaxDatarateThreshold.*/
@@ -2021,13 +2021,13 @@ public enum _spinCompressionSaturationPriorityEnums {
     NUM_COMPRESSIONSATURATIONPRIORITY(2);
 
     public final int value;
-    private _spinCompressionSaturationPriorityEnums(int v) { this.value = v; }
-    private _spinCompressionSaturationPriorityEnums(_spinCompressionSaturationPriorityEnums e) { this.value = e.value; }
-    public _spinCompressionSaturationPriorityEnums intern() { for (_spinCompressionSaturationPriorityEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCompressionSaturationPriorityEnums(int v) { this.value = v; }
+    private spinCompressionSaturationPriorityEnums(spinCompressionSaturationPriorityEnums e) { this.value = e.value; }
+    public spinCompressionSaturationPriorityEnums intern() { for (spinCompressionSaturationPriorityEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTestPatternEnums {
+public enum spinTestPatternEnums {
     /** Test pattern is disabled.*/
     TestPattern_Off(0),
     /** Pixel value increments by 1 for each pixel.*/
@@ -2037,13 +2037,13 @@ public enum _spinTestPatternEnums {
     NUM_TESTPATTERN(3);
 
     public final int value;
-    private _spinTestPatternEnums(int v) { this.value = v; }
-    private _spinTestPatternEnums(_spinTestPatternEnums e) { this.value = e.value; }
-    public _spinTestPatternEnums intern() { for (_spinTestPatternEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTestPatternEnums(int v) { this.value = v; }
+    private spinTestPatternEnums(spinTestPatternEnums e) { this.value = e.value; }
+    public spinTestPatternEnums intern() { for (spinTestPatternEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinPixelColorFilterEnums {
+public enum spinPixelColorFilterEnums {
     /** No color filter.*/
     PixelColorFilter_None(0),
     /** Bayer Red Green filter.*/
@@ -2057,13 +2057,13 @@ public enum _spinPixelColorFilterEnums {
     NUM_PIXELCOLORFILTER(5);
 
     public final int value;
-    private _spinPixelColorFilterEnums(int v) { this.value = v; }
-    private _spinPixelColorFilterEnums(_spinPixelColorFilterEnums e) { this.value = e.value; }
-    public _spinPixelColorFilterEnums intern() { for (_spinPixelColorFilterEnums e : values()) if (e.value == value) return e; return this; }
+    private spinPixelColorFilterEnums(int v) { this.value = v; }
+    private spinPixelColorFilterEnums(spinPixelColorFilterEnums e) { this.value = e.value; }
+    public spinPixelColorFilterEnums intern() { for (spinPixelColorFilterEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAdcBitDepthEnums {
+public enum spinAdcBitDepthEnums {
     /** */
     AdcBitDepth_Bit8(0),
     /** */
@@ -2075,25 +2075,25 @@ public enum _spinAdcBitDepthEnums {
     NUM_ADCBITDEPTH(4);
 
     public final int value;
-    private _spinAdcBitDepthEnums(int v) { this.value = v; }
-    private _spinAdcBitDepthEnums(_spinAdcBitDepthEnums e) { this.value = e.value; }
-    public _spinAdcBitDepthEnums intern() { for (_spinAdcBitDepthEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAdcBitDepthEnums(int v) { this.value = v; }
+    private spinAdcBitDepthEnums(spinAdcBitDepthEnums e) { this.value = e.value; }
+    public spinAdcBitDepthEnums intern() { for (spinAdcBitDepthEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDecimationHorizontalModeEnums {
+public enum spinDecimationHorizontalModeEnums {
     /** The value of every Nth pixel is kept, others are discarded.*/
     DecimationHorizontalMode_Discard(0),
     NUM_DECIMATIONHORIZONTALMODE(1);
 
     public final int value;
-    private _spinDecimationHorizontalModeEnums(int v) { this.value = v; }
-    private _spinDecimationHorizontalModeEnums(_spinDecimationHorizontalModeEnums e) { this.value = e.value; }
-    public _spinDecimationHorizontalModeEnums intern() { for (_spinDecimationHorizontalModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDecimationHorizontalModeEnums(int v) { this.value = v; }
+    private spinDecimationHorizontalModeEnums(spinDecimationHorizontalModeEnums e) { this.value = e.value; }
+    public spinDecimationHorizontalModeEnums intern() { for (spinDecimationHorizontalModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBinningVerticalModeEnums {
+public enum spinBinningVerticalModeEnums {
     /** 
         The response from the combined vertical cells is added, resulting
         in increased sensitivity (a brighter image).
@@ -2107,13 +2107,13 @@ public enum _spinBinningVerticalModeEnums {
     NUM_BINNINGVERTICALMODE(2);
 
     public final int value;
-    private _spinBinningVerticalModeEnums(int v) { this.value = v; }
-    private _spinBinningVerticalModeEnums(_spinBinningVerticalModeEnums e) { this.value = e.value; }
-    public _spinBinningVerticalModeEnums intern() { for (_spinBinningVerticalModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBinningVerticalModeEnums(int v) { this.value = v; }
+    private spinBinningVerticalModeEnums(spinBinningVerticalModeEnums e) { this.value = e.value; }
+    public spinBinningVerticalModeEnums intern() { for (spinBinningVerticalModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinPixelSizeEnums {
+public enum spinPixelSizeEnums {
     /** 1 bit per pixel.*/
     PixelSize_Bpp1(0),
     /** 2 bits per pixel.*/
@@ -2149,13 +2149,13 @@ public enum _spinPixelSizeEnums {
     NUM_PIXELSIZE(16);
 
     public final int value;
-    private _spinPixelSizeEnums(int v) { this.value = v; }
-    private _spinPixelSizeEnums(_spinPixelSizeEnums e) { this.value = e.value; }
-    public _spinPixelSizeEnums intern() { for (_spinPixelSizeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinPixelSizeEnums(int v) { this.value = v; }
+    private spinPixelSizeEnums(spinPixelSizeEnums e) { this.value = e.value; }
+    public spinPixelSizeEnums intern() { for (spinPixelSizeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDecimationSelectorEnums {
+public enum spinDecimationSelectorEnums {
     /** The total amount of decimation to be performed on the captured image data.*/
     DecimationSelector_All(0),
     /** The portion of decimation to be performed on the sensor directly. Currently this is the only decimation layer available and hence is identical to the "All" layer.  All decimation modification should therefore be done via the "All" layer only.
@@ -2164,13 +2164,13 @@ public enum _spinDecimationSelectorEnums {
     NUM_DECIMATIONSELECTOR(2);
 
     public final int value;
-    private _spinDecimationSelectorEnums(int v) { this.value = v; }
-    private _spinDecimationSelectorEnums(_spinDecimationSelectorEnums e) { this.value = e.value; }
-    public _spinDecimationSelectorEnums intern() { for (_spinDecimationSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDecimationSelectorEnums(int v) { this.value = v; }
+    private spinDecimationSelectorEnums(spinDecimationSelectorEnums e) { this.value = e.value; }
+    public spinDecimationSelectorEnums intern() { for (spinDecimationSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinImageCompressionModeEnums {
+public enum spinImageCompressionModeEnums {
     /** */
     ImageCompressionMode_Off(0),
     /** */
@@ -2178,13 +2178,13 @@ public enum _spinImageCompressionModeEnums {
     NUM_IMAGECOMPRESSIONMODE(2);
 
     public final int value;
-    private _spinImageCompressionModeEnums(int v) { this.value = v; }
-    private _spinImageCompressionModeEnums(_spinImageCompressionModeEnums e) { this.value = e.value; }
-    public _spinImageCompressionModeEnums intern() { for (_spinImageCompressionModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinImageCompressionModeEnums(int v) { this.value = v; }
+    private spinImageCompressionModeEnums(spinImageCompressionModeEnums e) { this.value = e.value; }
+    public spinImageCompressionModeEnums intern() { for (spinImageCompressionModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBinningHorizontalModeEnums {
+public enum spinBinningHorizontalModeEnums {
     /** 
         The response from the combined horizontal cells is added, 
         resulting in increased sensitivity (a brighter image).
@@ -2198,13 +2198,13 @@ public enum _spinBinningHorizontalModeEnums {
     NUM_BINNINGHORIZONTALMODE(2);
 
     public final int value;
-    private _spinBinningHorizontalModeEnums(int v) { this.value = v; }
-    private _spinBinningHorizontalModeEnums(_spinBinningHorizontalModeEnums e) { this.value = e.value; }
-    public _spinBinningHorizontalModeEnums intern() { for (_spinBinningHorizontalModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBinningHorizontalModeEnums(int v) { this.value = v; }
+    private spinBinningHorizontalModeEnums(spinBinningHorizontalModeEnums e) { this.value = e.value; }
+    public spinBinningHorizontalModeEnums intern() { for (spinBinningHorizontalModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinPixelFormatEnums {
+public enum spinPixelFormatEnums {
     /** */
     PixelFormat_Mono8(0),
     /** */
@@ -2711,25 +2711,25 @@ public enum _spinPixelFormatEnums {
     NUM_PIXELFORMAT(252);
 
     public final int value;
-    private _spinPixelFormatEnums(int v) { this.value = v; }
-    private _spinPixelFormatEnums(_spinPixelFormatEnums e) { this.value = e.value; }
-    public _spinPixelFormatEnums intern() { for (_spinPixelFormatEnums e : values()) if (e.value == value) return e; return this; }
+    private spinPixelFormatEnums(int v) { this.value = v; }
+    private spinPixelFormatEnums(spinPixelFormatEnums e) { this.value = e.value; }
+    public spinPixelFormatEnums intern() { for (spinPixelFormatEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDecimationVerticalModeEnums {
+public enum spinDecimationVerticalModeEnums {
     /** The value of every Nth pixel is kept, others are discarded.*/
     DecimationVerticalMode_Discard(0),
     NUM_DECIMATIONVERTICALMODE(1);
 
     public final int value;
-    private _spinDecimationVerticalModeEnums(int v) { this.value = v; }
-    private _spinDecimationVerticalModeEnums(_spinDecimationVerticalModeEnums e) { this.value = e.value; }
-    public _spinDecimationVerticalModeEnums intern() { for (_spinDecimationVerticalModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDecimationVerticalModeEnums(int v) { this.value = v; }
+    private spinDecimationVerticalModeEnums(spinDecimationVerticalModeEnums e) { this.value = e.value; }
+    public spinDecimationVerticalModeEnums intern() { for (spinDecimationVerticalModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLineModeEnums {
+public enum spinLineModeEnums {
     /** */
     LineMode_Input(0),
     /** */
@@ -2737,13 +2737,13 @@ public enum _spinLineModeEnums {
     NUM_LINEMODE(2);
 
     public final int value;
-    private _spinLineModeEnums(int v) { this.value = v; }
-    private _spinLineModeEnums(_spinLineModeEnums e) { this.value = e.value; }
-    public _spinLineModeEnums intern() { for (_spinLineModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLineModeEnums(int v) { this.value = v; }
+    private spinLineModeEnums(spinLineModeEnums e) { this.value = e.value; }
+    public spinLineModeEnums intern() { for (spinLineModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLineSourceEnums {
+public enum spinLineSourceEnums {
     /** */
     LineSource_Off(0),
     /** */
@@ -2785,13 +2785,13 @@ public enum _spinLineSourceEnums {
     NUM_LINESOURCE(19);
 
     public final int value;
-    private _spinLineSourceEnums(int v) { this.value = v; }
-    private _spinLineSourceEnums(_spinLineSourceEnums e) { this.value = e.value; }
-    public _spinLineSourceEnums intern() { for (_spinLineSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLineSourceEnums(int v) { this.value = v; }
+    private spinLineSourceEnums(spinLineSourceEnums e) { this.value = e.value; }
+    public spinLineSourceEnums intern() { for (spinLineSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLineInputFilterSelectorEnums {
+public enum spinLineInputFilterSelectorEnums {
     /** */
     LineInputFilterSelector_Deglitch(0),
     /** */
@@ -2799,13 +2799,13 @@ public enum _spinLineInputFilterSelectorEnums {
     NUM_LINEINPUTFILTERSELECTOR(2);
 
     public final int value;
-    private _spinLineInputFilterSelectorEnums(int v) { this.value = v; }
-    private _spinLineInputFilterSelectorEnums(_spinLineInputFilterSelectorEnums e) { this.value = e.value; }
-    public _spinLineInputFilterSelectorEnums intern() { for (_spinLineInputFilterSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLineInputFilterSelectorEnums(int v) { this.value = v; }
+    private spinLineInputFilterSelectorEnums(spinLineInputFilterSelectorEnums e) { this.value = e.value; }
+    public spinLineInputFilterSelectorEnums intern() { for (spinLineInputFilterSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinUserOutputSelectorEnums {
+public enum spinUserOutputSelectorEnums {
     /** */
     UserOutputSelector_UserOutput0(0),
     /** */
@@ -2817,13 +2817,13 @@ public enum _spinUserOutputSelectorEnums {
     NUM_USEROUTPUTSELECTOR(4);
 
     public final int value;
-    private _spinUserOutputSelectorEnums(int v) { this.value = v; }
-    private _spinUserOutputSelectorEnums(_spinUserOutputSelectorEnums e) { this.value = e.value; }
-    public _spinUserOutputSelectorEnums intern() { for (_spinUserOutputSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinUserOutputSelectorEnums(int v) { this.value = v; }
+    private spinUserOutputSelectorEnums(spinUserOutputSelectorEnums e) { this.value = e.value; }
+    public spinUserOutputSelectorEnums intern() { for (spinUserOutputSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLineFormatEnums {
+public enum spinLineFormatEnums {
     /** */
     LineFormat_NoConnect(0),
     /** */
@@ -2841,13 +2841,13 @@ public enum _spinLineFormatEnums {
     NUM_LINEFORMAT(7);
 
     public final int value;
-    private _spinLineFormatEnums(int v) { this.value = v; }
-    private _spinLineFormatEnums(_spinLineFormatEnums e) { this.value = e.value; }
-    public _spinLineFormatEnums intern() { for (_spinLineFormatEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLineFormatEnums(int v) { this.value = v; }
+    private spinLineFormatEnums(spinLineFormatEnums e) { this.value = e.value; }
+    public spinLineFormatEnums intern() { for (spinLineFormatEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinLineSelectorEnums {
+public enum spinLineSelectorEnums {
     /** */
     LineSelector_Line0(0),
     /** */
@@ -2859,13 +2859,13 @@ public enum _spinLineSelectorEnums {
     NUM_LINESELECTOR(4);
 
     public final int value;
-    private _spinLineSelectorEnums(int v) { this.value = v; }
-    private _spinLineSelectorEnums(_spinLineSelectorEnums e) { this.value = e.value; }
-    public _spinLineSelectorEnums intern() { for (_spinLineSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinLineSelectorEnums(int v) { this.value = v; }
+    private spinLineSelectorEnums(spinLineSelectorEnums e) { this.value = e.value; }
+    public spinLineSelectorEnums intern() { for (spinLineSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinExposureActiveModeEnums {
+public enum spinExposureActiveModeEnums {
     /** */
     ExposureActiveMode_Line1(0),
     /** */
@@ -2875,13 +2875,13 @@ public enum _spinExposureActiveModeEnums {
     NUM_EXPOSUREACTIVEMODE(3);
 
     public final int value;
-    private _spinExposureActiveModeEnums(int v) { this.value = v; }
-    private _spinExposureActiveModeEnums(_spinExposureActiveModeEnums e) { this.value = e.value; }
-    public _spinExposureActiveModeEnums intern() { for (_spinExposureActiveModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinExposureActiveModeEnums(int v) { this.value = v; }
+    private spinExposureActiveModeEnums(spinExposureActiveModeEnums e) { this.value = e.value; }
+    public spinExposureActiveModeEnums intern() { for (spinExposureActiveModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterTriggerActivationEnums {
+public enum spinCounterTriggerActivationEnums {
     /** */
     CounterTriggerActivation_LevelLow(0),
     /** */
@@ -2895,13 +2895,13 @@ public enum _spinCounterTriggerActivationEnums {
     NUM_COUNTERTRIGGERACTIVATION(5);
 
     public final int value;
-    private _spinCounterTriggerActivationEnums(int v) { this.value = v; }
-    private _spinCounterTriggerActivationEnums(_spinCounterTriggerActivationEnums e) { this.value = e.value; }
-    public _spinCounterTriggerActivationEnums intern() { for (_spinCounterTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterTriggerActivationEnums(int v) { this.value = v; }
+    private spinCounterTriggerActivationEnums(spinCounterTriggerActivationEnums e) { this.value = e.value; }
+    public spinCounterTriggerActivationEnums intern() { for (spinCounterTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterSelectorEnums {
+public enum spinCounterSelectorEnums {
     /** */
     CounterSelector_Counter0(0),
     /** */
@@ -2909,13 +2909,13 @@ public enum _spinCounterSelectorEnums {
     NUM_COUNTERSELECTOR(2);
 
     public final int value;
-    private _spinCounterSelectorEnums(int v) { this.value = v; }
-    private _spinCounterSelectorEnums(_spinCounterSelectorEnums e) { this.value = e.value; }
-    public _spinCounterSelectorEnums intern() { for (_spinCounterSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterSelectorEnums(int v) { this.value = v; }
+    private spinCounterSelectorEnums(spinCounterSelectorEnums e) { this.value = e.value; }
+    public spinCounterSelectorEnums intern() { for (spinCounterSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterStatusEnums {
+public enum spinCounterStatusEnums {
     /** The counter is idle.*/
     CounterStatus_CounterIdle(0),
     /** The counter is waiting for a start trigger.*/
@@ -2929,13 +2929,13 @@ public enum _spinCounterStatusEnums {
     NUM_COUNTERSTATUS(5);
 
     public final int value;
-    private _spinCounterStatusEnums(int v) { this.value = v; }
-    private _spinCounterStatusEnums(_spinCounterStatusEnums e) { this.value = e.value; }
-    public _spinCounterStatusEnums intern() { for (_spinCounterStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterStatusEnums(int v) { this.value = v; }
+    private spinCounterStatusEnums(spinCounterStatusEnums e) { this.value = e.value; }
+    public spinCounterStatusEnums intern() { for (spinCounterStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterTriggerSourceEnums {
+public enum spinCounterTriggerSourceEnums {
     /** Off*/
     CounterTriggerSource_Off(0),
     /** Line0*/
@@ -2975,13 +2975,13 @@ public enum _spinCounterTriggerSourceEnums {
     NUM_COUNTERTRIGGERSOURCE(18);
 
     public final int value;
-    private _spinCounterTriggerSourceEnums(int v) { this.value = v; }
-    private _spinCounterTriggerSourceEnums(_spinCounterTriggerSourceEnums e) { this.value = e.value; }
-    public _spinCounterTriggerSourceEnums intern() { for (_spinCounterTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterTriggerSourceEnums(int v) { this.value = v; }
+    private spinCounterTriggerSourceEnums(spinCounterTriggerSourceEnums e) { this.value = e.value; }
+    public spinCounterTriggerSourceEnums intern() { for (spinCounterTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterResetSourceEnums {
+public enum spinCounterResetSourceEnums {
     /** Off*/
     CounterResetSource_Off(0),
     /** Line0*/
@@ -3021,13 +3021,13 @@ public enum _spinCounterResetSourceEnums {
     NUM_COUNTERRESETSOURCE(18);
 
     public final int value;
-    private _spinCounterResetSourceEnums(int v) { this.value = v; }
-    private _spinCounterResetSourceEnums(_spinCounterResetSourceEnums e) { this.value = e.value; }
-    public _spinCounterResetSourceEnums intern() { for (_spinCounterResetSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterResetSourceEnums(int v) { this.value = v; }
+    private spinCounterResetSourceEnums(spinCounterResetSourceEnums e) { this.value = e.value; }
+    public spinCounterResetSourceEnums intern() { for (spinCounterResetSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterEventSourceEnums {
+public enum spinCounterEventSourceEnums {
     /** Off*/
     CounterEventSource_Off(0),
     /** MHzTick*/
@@ -3069,13 +3069,13 @@ public enum _spinCounterEventSourceEnums {
     NUM_COUNTEREVENTSOURCE(19);
 
     public final int value;
-    private _spinCounterEventSourceEnums(int v) { this.value = v; }
-    private _spinCounterEventSourceEnums(_spinCounterEventSourceEnums e) { this.value = e.value; }
-    public _spinCounterEventSourceEnums intern() { for (_spinCounterEventSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterEventSourceEnums(int v) { this.value = v; }
+    private spinCounterEventSourceEnums(spinCounterEventSourceEnums e) { this.value = e.value; }
+    public spinCounterEventSourceEnums intern() { for (spinCounterEventSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterEventActivationEnums {
+public enum spinCounterEventActivationEnums {
     /** */
     CounterEventActivation_LevelLow(0),
     /** */
@@ -3089,13 +3089,13 @@ public enum _spinCounterEventActivationEnums {
     NUM_COUNTEREVENTACTIVATION(5);
 
     public final int value;
-    private _spinCounterEventActivationEnums(int v) { this.value = v; }
-    private _spinCounterEventActivationEnums(_spinCounterEventActivationEnums e) { this.value = e.value; }
-    public _spinCounterEventActivationEnums intern() { for (_spinCounterEventActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterEventActivationEnums(int v) { this.value = v; }
+    private spinCounterEventActivationEnums(spinCounterEventActivationEnums e) { this.value = e.value; }
+    public spinCounterEventActivationEnums intern() { for (spinCounterEventActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCounterResetActivationEnums {
+public enum spinCounterResetActivationEnums {
     /** */
     CounterResetActivation_LevelLow(0),
     /** */
@@ -3109,13 +3109,13 @@ public enum _spinCounterResetActivationEnums {
     NUM_COUNTERRESETACTIVATION(5);
 
     public final int value;
-    private _spinCounterResetActivationEnums(int v) { this.value = v; }
-    private _spinCounterResetActivationEnums(_spinCounterResetActivationEnums e) { this.value = e.value; }
-    public _spinCounterResetActivationEnums intern() { for (_spinCounterResetActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCounterResetActivationEnums(int v) { this.value = v; }
+    private spinCounterResetActivationEnums(spinCounterResetActivationEnums e) { this.value = e.value; }
+    public spinCounterResetActivationEnums intern() { for (spinCounterResetActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceTypeEnums {
+public enum spinDeviceTypeEnums {
     /** Data stream transmitter device.*/
     DeviceType_Transmitter(0),
     /** Data stream receiver device.*/
@@ -3127,13 +3127,13 @@ public enum _spinDeviceTypeEnums {
     NUM_DEVICETYPE(4);
 
     public final int value;
-    private _spinDeviceTypeEnums(int v) { this.value = v; }
-    private _spinDeviceTypeEnums(_spinDeviceTypeEnums e) { this.value = e.value; }
-    public _spinDeviceTypeEnums intern() { for (_spinDeviceTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceTypeEnums(int v) { this.value = v; }
+    private spinDeviceTypeEnums(spinDeviceTypeEnums e) { this.value = e.value; }
+    public spinDeviceTypeEnums intern() { for (spinDeviceTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceConnectionStatusEnums {
+public enum spinDeviceConnectionStatusEnums {
     /** Connection is in use.*/
     DeviceConnectionStatus_Active(0),
     /** Connection is not in use.*/
@@ -3141,13 +3141,13 @@ public enum _spinDeviceConnectionStatusEnums {
     NUM_DEVICECONNECTIONSTATUS(2);
 
     public final int value;
-    private _spinDeviceConnectionStatusEnums(int v) { this.value = v; }
-    private _spinDeviceConnectionStatusEnums(_spinDeviceConnectionStatusEnums e) { this.value = e.value; }
-    public _spinDeviceConnectionStatusEnums intern() { for (_spinDeviceConnectionStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceConnectionStatusEnums(int v) { this.value = v; }
+    private spinDeviceConnectionStatusEnums(spinDeviceConnectionStatusEnums e) { this.value = e.value; }
+    public spinDeviceConnectionStatusEnums intern() { for (spinDeviceConnectionStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceLinkThroughputLimitModeEnums {
+public enum spinDeviceLinkThroughputLimitModeEnums {
     /** Enables the DeviceLinkThroughputLimit feature.*/
     DeviceLinkThroughputLimitMode_On(0),
     /** Disables the DeviceLinkThroughputLimit feature.*/
@@ -3155,13 +3155,13 @@ public enum _spinDeviceLinkThroughputLimitModeEnums {
     NUM_DEVICELINKTHROUGHPUTLIMITMODE(2);
 
     public final int value;
-    private _spinDeviceLinkThroughputLimitModeEnums(int v) { this.value = v; }
-    private _spinDeviceLinkThroughputLimitModeEnums(_spinDeviceLinkThroughputLimitModeEnums e) { this.value = e.value; }
-    public _spinDeviceLinkThroughputLimitModeEnums intern() { for (_spinDeviceLinkThroughputLimitModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceLinkThroughputLimitModeEnums(int v) { this.value = v; }
+    private spinDeviceLinkThroughputLimitModeEnums(spinDeviceLinkThroughputLimitModeEnums e) { this.value = e.value; }
+    public spinDeviceLinkThroughputLimitModeEnums intern() { for (spinDeviceLinkThroughputLimitModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceLinkHeartbeatModeEnums {
+public enum spinDeviceLinkHeartbeatModeEnums {
     /** Enables the Link heartbeat.*/
     DeviceLinkHeartbeatMode_On(0),
     /** Disables the Link heartbeat.*/
@@ -3169,13 +3169,13 @@ public enum _spinDeviceLinkHeartbeatModeEnums {
     NUM_DEVICELINKHEARTBEATMODE(2);
 
     public final int value;
-    private _spinDeviceLinkHeartbeatModeEnums(int v) { this.value = v; }
-    private _spinDeviceLinkHeartbeatModeEnums(_spinDeviceLinkHeartbeatModeEnums e) { this.value = e.value; }
-    public _spinDeviceLinkHeartbeatModeEnums intern() { for (_spinDeviceLinkHeartbeatModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceLinkHeartbeatModeEnums(int v) { this.value = v; }
+    private spinDeviceLinkHeartbeatModeEnums(spinDeviceLinkHeartbeatModeEnums e) { this.value = e.value; }
+    public spinDeviceLinkHeartbeatModeEnums intern() { for (spinDeviceLinkHeartbeatModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceStreamChannelTypeEnums {
+public enum spinDeviceStreamChannelTypeEnums {
     /** Data stream transmitter channel.*/
     DeviceStreamChannelType_Transmitter(0),
     /** Data stream receiver channel.*/
@@ -3183,13 +3183,13 @@ public enum _spinDeviceStreamChannelTypeEnums {
     NUM_DEVICESTREAMCHANNELTYPE(2);
 
     public final int value;
-    private _spinDeviceStreamChannelTypeEnums(int v) { this.value = v; }
-    private _spinDeviceStreamChannelTypeEnums(_spinDeviceStreamChannelTypeEnums e) { this.value = e.value; }
-    public _spinDeviceStreamChannelTypeEnums intern() { for (_spinDeviceStreamChannelTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceStreamChannelTypeEnums(int v) { this.value = v; }
+    private spinDeviceStreamChannelTypeEnums(spinDeviceStreamChannelTypeEnums e) { this.value = e.value; }
+    public spinDeviceStreamChannelTypeEnums intern() { for (spinDeviceStreamChannelTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceStreamChannelEndiannessEnums {
+public enum spinDeviceStreamChannelEndiannessEnums {
     /** Stream channel data is big Endian.*/
     DeviceStreamChannelEndianness_Big(0),
     /** Stream channel data is little Endian.*/
@@ -3197,13 +3197,13 @@ public enum _spinDeviceStreamChannelEndiannessEnums {
     NUM_DEVICESTREAMCHANNELENDIANNESS(2);
 
     public final int value;
-    private _spinDeviceStreamChannelEndiannessEnums(int v) { this.value = v; }
-    private _spinDeviceStreamChannelEndiannessEnums(_spinDeviceStreamChannelEndiannessEnums e) { this.value = e.value; }
-    public _spinDeviceStreamChannelEndiannessEnums intern() { for (_spinDeviceStreamChannelEndiannessEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceStreamChannelEndiannessEnums(int v) { this.value = v; }
+    private spinDeviceStreamChannelEndiannessEnums(spinDeviceStreamChannelEndiannessEnums e) { this.value = e.value; }
+    public spinDeviceStreamChannelEndiannessEnums intern() { for (spinDeviceStreamChannelEndiannessEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceClockSelectorEnums {
+public enum spinDeviceClockSelectorEnums {
     /** Clock frequency of the image sensor of the camera.*/
     DeviceClockSelector_Sensor(0),
     /** Clock frequency of the camera A/D conversion stage.*/
@@ -3213,25 +3213,25 @@ public enum _spinDeviceClockSelectorEnums {
     NUM_DEVICECLOCKSELECTOR(3);
 
     public final int value;
-    private _spinDeviceClockSelectorEnums(int v) { this.value = v; }
-    private _spinDeviceClockSelectorEnums(_spinDeviceClockSelectorEnums e) { this.value = e.value; }
-    public _spinDeviceClockSelectorEnums intern() { for (_spinDeviceClockSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceClockSelectorEnums(int v) { this.value = v; }
+    private spinDeviceClockSelectorEnums(spinDeviceClockSelectorEnums e) { this.value = e.value; }
+    public spinDeviceClockSelectorEnums intern() { for (spinDeviceClockSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceSerialPortSelectorEnums {
+public enum spinDeviceSerialPortSelectorEnums {
     /** Serial port associated to the Camera link connection.*/
     DeviceSerialPortSelector_CameraLink(0),
     NUM_DEVICESERIALPORTSELECTOR(1);
 
     public final int value;
-    private _spinDeviceSerialPortSelectorEnums(int v) { this.value = v; }
-    private _spinDeviceSerialPortSelectorEnums(_spinDeviceSerialPortSelectorEnums e) { this.value = e.value; }
-    public _spinDeviceSerialPortSelectorEnums intern() { for (_spinDeviceSerialPortSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceSerialPortSelectorEnums(int v) { this.value = v; }
+    private spinDeviceSerialPortSelectorEnums(spinDeviceSerialPortSelectorEnums e) { this.value = e.value; }
+    public spinDeviceSerialPortSelectorEnums intern() { for (spinDeviceSerialPortSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceSerialPortBaudRateEnums {
+public enum spinDeviceSerialPortBaudRateEnums {
     /** Serial port speed of 9600 baud.*/
     DeviceSerialPortBaudRate_Baud9600(0),
     /** Serial port speed of 19200 baud.*/
@@ -3251,13 +3251,13 @@ public enum _spinDeviceSerialPortBaudRateEnums {
     NUM_DEVICESERIALPORTBAUDRATE(8);
 
     public final int value;
-    private _spinDeviceSerialPortBaudRateEnums(int v) { this.value = v; }
-    private _spinDeviceSerialPortBaudRateEnums(_spinDeviceSerialPortBaudRateEnums e) { this.value = e.value; }
-    public _spinDeviceSerialPortBaudRateEnums intern() { for (_spinDeviceSerialPortBaudRateEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceSerialPortBaudRateEnums(int v) { this.value = v; }
+    private spinDeviceSerialPortBaudRateEnums(spinDeviceSerialPortBaudRateEnums e) { this.value = e.value; }
+    public spinDeviceSerialPortBaudRateEnums intern() { for (spinDeviceSerialPortBaudRateEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSensorTapsEnums {
+public enum spinSensorTapsEnums {
     /** 1 tap.*/
     SensorTaps_One(0),
     /** 2 taps.*/
@@ -3273,13 +3273,13 @@ public enum _spinSensorTapsEnums {
     NUM_SENSORTAPS(6);
 
     public final int value;
-    private _spinSensorTapsEnums(int v) { this.value = v; }
-    private _spinSensorTapsEnums(_spinSensorTapsEnums e) { this.value = e.value; }
-    public _spinSensorTapsEnums intern() { for (_spinSensorTapsEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSensorTapsEnums(int v) { this.value = v; }
+    private spinSensorTapsEnums(spinSensorTapsEnums e) { this.value = e.value; }
+    public spinSensorTapsEnums intern() { for (spinSensorTapsEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSensorDigitizationTapsEnums {
+public enum spinSensorDigitizationTapsEnums {
     /** 1 tap.*/
     SensorDigitizationTaps_One(0),
     /** 2 taps.*/
@@ -3295,13 +3295,13 @@ public enum _spinSensorDigitizationTapsEnums {
     NUM_SENSORDIGITIZATIONTAPS(6);
 
     public final int value;
-    private _spinSensorDigitizationTapsEnums(int v) { this.value = v; }
-    private _spinSensorDigitizationTapsEnums(_spinSensorDigitizationTapsEnums e) { this.value = e.value; }
-    public _spinSensorDigitizationTapsEnums intern() { for (_spinSensorDigitizationTapsEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSensorDigitizationTapsEnums(int v) { this.value = v; }
+    private spinSensorDigitizationTapsEnums(spinSensorDigitizationTapsEnums e) { this.value = e.value; }
+    public spinSensorDigitizationTapsEnums intern() { for (spinSensorDigitizationTapsEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinRegionSelectorEnums {
+public enum spinRegionSelectorEnums {
     /** Selected feature will control the region 0.*/
     RegionSelector_Region0(0),
     /** Selected feature will control the region 1.*/
@@ -3313,13 +3313,13 @@ public enum _spinRegionSelectorEnums {
     NUM_REGIONSELECTOR(4);
 
     public final int value;
-    private _spinRegionSelectorEnums(int v) { this.value = v; }
-    private _spinRegionSelectorEnums(_spinRegionSelectorEnums e) { this.value = e.value; }
-    public _spinRegionSelectorEnums intern() { for (_spinRegionSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinRegionSelectorEnums(int v) { this.value = v; }
+    private spinRegionSelectorEnums(spinRegionSelectorEnums e) { this.value = e.value; }
+    public spinRegionSelectorEnums intern() { for (spinRegionSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinRegionModeEnums {
+public enum spinRegionModeEnums {
     /** Disable the usage of the Region.*/
     RegionMode_Off(0),
     /** Enable the usage of the Region.*/
@@ -3327,13 +3327,13 @@ public enum _spinRegionModeEnums {
     NUM_REGIONMODE(2);
 
     public final int value;
-    private _spinRegionModeEnums(int v) { this.value = v; }
-    private _spinRegionModeEnums(_spinRegionModeEnums e) { this.value = e.value; }
-    public _spinRegionModeEnums intern() { for (_spinRegionModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinRegionModeEnums(int v) { this.value = v; }
+    private spinRegionModeEnums(spinRegionModeEnums e) { this.value = e.value; }
+    public spinRegionModeEnums intern() { for (spinRegionModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinRegionDestinationEnums {
+public enum spinRegionDestinationEnums {
     /** The destination of the region is the data stream 0.*/
     RegionDestination_Stream0(0),
     /** The destination of the region is the data stream 1.*/
@@ -3343,13 +3343,13 @@ public enum _spinRegionDestinationEnums {
     NUM_REGIONDESTINATION(3);
 
     public final int value;
-    private _spinRegionDestinationEnums(int v) { this.value = v; }
-    private _spinRegionDestinationEnums(_spinRegionDestinationEnums e) { this.value = e.value; }
-    public _spinRegionDestinationEnums intern() { for (_spinRegionDestinationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinRegionDestinationEnums(int v) { this.value = v; }
+    private spinRegionDestinationEnums(spinRegionDestinationEnums e) { this.value = e.value; }
+    public spinRegionDestinationEnums intern() { for (spinRegionDestinationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinImageComponentSelectorEnums {
+public enum spinImageComponentSelectorEnums {
     /** The acquisition of intensity of the reflected light is controlled.*/
     ImageComponentSelector_Intensity(0),
     /** The acquisition of color of the reflected light is controlled*/
@@ -3369,13 +3369,13 @@ public enum _spinImageComponentSelectorEnums {
     NUM_IMAGECOMPONENTSELECTOR(8);
 
     public final int value;
-    private _spinImageComponentSelectorEnums(int v) { this.value = v; }
-    private _spinImageComponentSelectorEnums(_spinImageComponentSelectorEnums e) { this.value = e.value; }
-    public _spinImageComponentSelectorEnums intern() { for (_spinImageComponentSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinImageComponentSelectorEnums(int v) { this.value = v; }
+    private spinImageComponentSelectorEnums(spinImageComponentSelectorEnums e) { this.value = e.value; }
+    public spinImageComponentSelectorEnums intern() { for (spinImageComponentSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinPixelFormatInfoSelectorEnums {
+public enum spinPixelFormatInfoSelectorEnums {
     /** Monochrome 1-bit packed*/
     PixelFormatInfoSelector_Mono1p(0),
     /** Monochrome 2-bit packed*/
@@ -3841,13 +3841,13 @@ public enum _spinPixelFormatInfoSelectorEnums {
     NUM_PIXELFORMATINFOSELECTOR(231);
 
     public final int value;
-    private _spinPixelFormatInfoSelectorEnums(int v) { this.value = v; }
-    private _spinPixelFormatInfoSelectorEnums(_spinPixelFormatInfoSelectorEnums e) { this.value = e.value; }
-    public _spinPixelFormatInfoSelectorEnums intern() { for (_spinPixelFormatInfoSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinPixelFormatInfoSelectorEnums(int v) { this.value = v; }
+    private spinPixelFormatInfoSelectorEnums(spinPixelFormatInfoSelectorEnums e) { this.value = e.value; }
+    public spinPixelFormatInfoSelectorEnums intern() { for (spinPixelFormatInfoSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeinterlacingEnums {
+public enum spinDeinterlacingEnums {
     /** The device doesn't perform de-interlacing.*/
     Deinterlacing_Off(0),
     /** The device performs de-interlacing by outputting each line of each field twice.*/
@@ -3857,13 +3857,13 @@ public enum _spinDeinterlacingEnums {
     NUM_DEINTERLACING(3);
 
     public final int value;
-    private _spinDeinterlacingEnums(int v) { this.value = v; }
-    private _spinDeinterlacingEnums(_spinDeinterlacingEnums e) { this.value = e.value; }
-    public _spinDeinterlacingEnums intern() { for (_spinDeinterlacingEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeinterlacingEnums(int v) { this.value = v; }
+    private spinDeinterlacingEnums(spinDeinterlacingEnums e) { this.value = e.value; }
+    public spinDeinterlacingEnums intern() { for (spinDeinterlacingEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinImageCompressionRateOptionEnums {
+public enum spinImageCompressionRateOptionEnums {
     /** Output stream follows a constant bit rate. Allows easy bandwidth management on the link.*/
     ImageCompressionRateOption_FixBitrate(0),
     /** Output stream has a constant image quality. Can be used when image processing algorithms are sensitive to image degradation caused by excessive data compression.*/
@@ -3871,13 +3871,13 @@ public enum _spinImageCompressionRateOptionEnums {
     NUM_IMAGECOMPRESSIONRATEOPTION(2);
 
     public final int value;
-    private _spinImageCompressionRateOptionEnums(int v) { this.value = v; }
-    private _spinImageCompressionRateOptionEnums(_spinImageCompressionRateOptionEnums e) { this.value = e.value; }
-    public _spinImageCompressionRateOptionEnums intern() { for (_spinImageCompressionRateOptionEnums e : values()) if (e.value == value) return e; return this; }
+    private spinImageCompressionRateOptionEnums(int v) { this.value = v; }
+    private spinImageCompressionRateOptionEnums(spinImageCompressionRateOptionEnums e) { this.value = e.value; }
+    public spinImageCompressionRateOptionEnums intern() { for (spinImageCompressionRateOptionEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinImageCompressionJPEGFormatOptionEnums {
+public enum spinImageCompressionJPEGFormatOptionEnums {
     /** Selects lossless JPEG compression based on a predictive coding model.*/
     ImageCompressionJPEGFormatOption_Lossless(0),
     /** Indicates this is a baseline sequential (single-scan) DCT-based JPEG.*/
@@ -3889,13 +3889,13 @@ public enum _spinImageCompressionJPEGFormatOptionEnums {
     NUM_IMAGECOMPRESSIONJPEGFORMATOPTION(4);
 
     public final int value;
-    private _spinImageCompressionJPEGFormatOptionEnums(int v) { this.value = v; }
-    private _spinImageCompressionJPEGFormatOptionEnums(_spinImageCompressionJPEGFormatOptionEnums e) { this.value = e.value; }
-    public _spinImageCompressionJPEGFormatOptionEnums intern() { for (_spinImageCompressionJPEGFormatOptionEnums e : values()) if (e.value == value) return e; return this; }
+    private spinImageCompressionJPEGFormatOptionEnums(int v) { this.value = v; }
+    private spinImageCompressionJPEGFormatOptionEnums(spinImageCompressionJPEGFormatOptionEnums e) { this.value = e.value; }
+    public spinImageCompressionJPEGFormatOptionEnums intern() { for (spinImageCompressionJPEGFormatOptionEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinAcquisitionStatusSelectorEnums {
+public enum spinAcquisitionStatusSelectorEnums {
     /** Device is currently waiting for a trigger for the capture of one or many frames.*/
     AcquisitionStatusSelector_AcquisitionTriggerWait(0),
     /** Device is currently doing an acquisition of one or many frames.*/
@@ -3911,13 +3911,13 @@ public enum _spinAcquisitionStatusSelectorEnums {
     NUM_ACQUISITIONSTATUSSELECTOR(6);
 
     public final int value;
-    private _spinAcquisitionStatusSelectorEnums(int v) { this.value = v; }
-    private _spinAcquisitionStatusSelectorEnums(_spinAcquisitionStatusSelectorEnums e) { this.value = e.value; }
-    public _spinAcquisitionStatusSelectorEnums intern() { for (_spinAcquisitionStatusSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinAcquisitionStatusSelectorEnums(int v) { this.value = v; }
+    private spinAcquisitionStatusSelectorEnums(spinAcquisitionStatusSelectorEnums e) { this.value = e.value; }
+    public spinAcquisitionStatusSelectorEnums intern() { for (spinAcquisitionStatusSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinExposureTimeModeEnums {
+public enum spinExposureTimeModeEnums {
     /** The exposure time is common to all the color components. The common ExposureTime value to use can be set selecting it with ExposureTimeSelector[Common].*/
     ExposureTimeMode_Common(0),
     /** The exposure time is individual for each color component. Each individual ExposureTime values to use can be set by selecting them with ExposureTimeSelector.*/
@@ -3925,13 +3925,13 @@ public enum _spinExposureTimeModeEnums {
     NUM_EXPOSURETIMEMODE(2);
 
     public final int value;
-    private _spinExposureTimeModeEnums(int v) { this.value = v; }
-    private _spinExposureTimeModeEnums(_spinExposureTimeModeEnums e) { this.value = e.value; }
-    public _spinExposureTimeModeEnums intern() { for (_spinExposureTimeModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinExposureTimeModeEnums(int v) { this.value = v; }
+    private spinExposureTimeModeEnums(spinExposureTimeModeEnums e) { this.value = e.value; }
+    public spinExposureTimeModeEnums intern() { for (spinExposureTimeModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinExposureTimeSelectorEnums {
+public enum spinExposureTimeSelectorEnums {
     /** Selects the common ExposureTime.*/
     ExposureTimeSelector_Common(0),
     /** Selects the red common ExposureTime.*/
@@ -3957,13 +3957,13 @@ public enum _spinExposureTimeSelectorEnums {
     NUM_EXPOSURETIMESELECTOR(11);
 
     public final int value;
-    private _spinExposureTimeSelectorEnums(int v) { this.value = v; }
-    private _spinExposureTimeSelectorEnums(_spinExposureTimeSelectorEnums e) { this.value = e.value; }
-    public _spinExposureTimeSelectorEnums intern() { for (_spinExposureTimeSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinExposureTimeSelectorEnums(int v) { this.value = v; }
+    private spinExposureTimeSelectorEnums(spinExposureTimeSelectorEnums e) { this.value = e.value; }
+    public spinExposureTimeSelectorEnums intern() { for (spinExposureTimeSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGainAutoBalanceEnums {
+public enum spinGainAutoBalanceEnums {
     /** Gain tap balancing is user controlled using Gain .*/
     GainAutoBalance_Off(0),
     /** Gain tap balancing is automatically adjusted once by the device. Once it has converged, it automatically returns to the Off state.*/
@@ -3973,13 +3973,13 @@ public enum _spinGainAutoBalanceEnums {
     NUM_GAINAUTOBALANCE(3);
 
     public final int value;
-    private _spinGainAutoBalanceEnums(int v) { this.value = v; }
-    private _spinGainAutoBalanceEnums(_spinGainAutoBalanceEnums e) { this.value = e.value; }
-    public _spinGainAutoBalanceEnums intern() { for (_spinGainAutoBalanceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGainAutoBalanceEnums(int v) { this.value = v; }
+    private spinGainAutoBalanceEnums(spinGainAutoBalanceEnums e) { this.value = e.value; }
+    public spinGainAutoBalanceEnums intern() { for (spinGainAutoBalanceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBlackLevelAutoEnums {
+public enum spinBlackLevelAutoEnums {
     /** Analog black level is user controlled using BlackLevel.*/
     BlackLevelAuto_Off(0),
     /** Analog black level is automatically adjusted once by the device. Once it has converged, it automatically returns to the Off state.*/
@@ -3989,13 +3989,13 @@ public enum _spinBlackLevelAutoEnums {
     NUM_BLACKLEVELAUTO(3);
 
     public final int value;
-    private _spinBlackLevelAutoEnums(int v) { this.value = v; }
-    private _spinBlackLevelAutoEnums(_spinBlackLevelAutoEnums e) { this.value = e.value; }
-    public _spinBlackLevelAutoEnums intern() { for (_spinBlackLevelAutoEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBlackLevelAutoEnums(int v) { this.value = v; }
+    private spinBlackLevelAutoEnums(spinBlackLevelAutoEnums e) { this.value = e.value; }
+    public spinBlackLevelAutoEnums intern() { for (spinBlackLevelAutoEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinBlackLevelAutoBalanceEnums {
+public enum spinBlackLevelAutoBalanceEnums {
     /** Black level tap balancing is user controlled using BlackLevel.*/
     BlackLevelAutoBalance_Off(0),
     /** Black level tap balancing is automatically adjusted once by the device. Once it has converged, it automatically returns to the Off state.*/
@@ -4005,13 +4005,13 @@ public enum _spinBlackLevelAutoBalanceEnums {
     NUM_BLACKLEVELAUTOBALANCE(3);
 
     public final int value;
-    private _spinBlackLevelAutoBalanceEnums(int v) { this.value = v; }
-    private _spinBlackLevelAutoBalanceEnums(_spinBlackLevelAutoBalanceEnums e) { this.value = e.value; }
-    public _spinBlackLevelAutoBalanceEnums intern() { for (_spinBlackLevelAutoBalanceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinBlackLevelAutoBalanceEnums(int v) { this.value = v; }
+    private spinBlackLevelAutoBalanceEnums(spinBlackLevelAutoBalanceEnums e) { this.value = e.value; }
+    public spinBlackLevelAutoBalanceEnums intern() { for (spinBlackLevelAutoBalanceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinWhiteClipSelectorEnums {
+public enum spinWhiteClipSelectorEnums {
     /** White Clip will be applied to all channels or taps.*/
     WhiteClipSelector_All(0),
     /** White Clip will be applied to the red channel.*/
@@ -4033,13 +4033,13 @@ public enum _spinWhiteClipSelectorEnums {
     NUM_WHITECLIPSELECTOR(9);
 
     public final int value;
-    private _spinWhiteClipSelectorEnums(int v) { this.value = v; }
-    private _spinWhiteClipSelectorEnums(_spinWhiteClipSelectorEnums e) { this.value = e.value; }
-    public _spinWhiteClipSelectorEnums intern() { for (_spinWhiteClipSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinWhiteClipSelectorEnums(int v) { this.value = v; }
+    private spinWhiteClipSelectorEnums(spinWhiteClipSelectorEnums e) { this.value = e.value; }
+    public spinWhiteClipSelectorEnums intern() { for (spinWhiteClipSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTimerSelectorEnums {
+public enum spinTimerSelectorEnums {
     /** Selects the Timer 0.*/
     TimerSelector_Timer0(0),
     /** Selects the Timer 1.*/
@@ -4049,13 +4049,13 @@ public enum _spinTimerSelectorEnums {
     NUM_TIMERSELECTOR(3);
 
     public final int value;
-    private _spinTimerSelectorEnums(int v) { this.value = v; }
-    private _spinTimerSelectorEnums(_spinTimerSelectorEnums e) { this.value = e.value; }
-    public _spinTimerSelectorEnums intern() { for (_spinTimerSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTimerSelectorEnums(int v) { this.value = v; }
+    private spinTimerSelectorEnums(spinTimerSelectorEnums e) { this.value = e.value; }
+    public spinTimerSelectorEnums intern() { for (spinTimerSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTimerStatusEnums {
+public enum spinTimerStatusEnums {
     /** The Timer is idle.*/
     TimerStatus_TimerIdle(0),
     /** The Timer is waiting for a start trigger.*/
@@ -4067,13 +4067,13 @@ public enum _spinTimerStatusEnums {
     NUM_TIMERSTATUS(4);
 
     public final int value;
-    private _spinTimerStatusEnums(int v) { this.value = v; }
-    private _spinTimerStatusEnums(_spinTimerStatusEnums e) { this.value = e.value; }
-    public _spinTimerStatusEnums intern() { for (_spinTimerStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTimerStatusEnums(int v) { this.value = v; }
+    private spinTimerStatusEnums(spinTimerStatusEnums e) { this.value = e.value; }
+    public spinTimerStatusEnums intern() { for (spinTimerStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTimerTriggerSourceEnums {
+public enum spinTimerTriggerSourceEnums {
     /** Disables the Timer trigger.*/
     TimerTriggerSource_Off(0),
     /** Starts with the reception of the Acquisition Trigger.*/
@@ -4165,13 +4165,13 @@ public enum _spinTimerTriggerSourceEnums {
     NUM_TIMERTRIGGERSOURCE(44);
 
     public final int value;
-    private _spinTimerTriggerSourceEnums(int v) { this.value = v; }
-    private _spinTimerTriggerSourceEnums(_spinTimerTriggerSourceEnums e) { this.value = e.value; }
-    public _spinTimerTriggerSourceEnums intern() { for (_spinTimerTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTimerTriggerSourceEnums(int v) { this.value = v; }
+    private spinTimerTriggerSourceEnums(spinTimerTriggerSourceEnums e) { this.value = e.value; }
+    public spinTimerTriggerSourceEnums intern() { for (spinTimerTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTimerTriggerActivationEnums {
+public enum spinTimerTriggerActivationEnums {
     /** Starts counting on the Rising Edge of the selected trigger signal.*/
     TimerTriggerActivation_RisingEdge(0),
     /** Starts counting on the Falling Edge of the selected trigger signal.*/
@@ -4185,13 +4185,13 @@ public enum _spinTimerTriggerActivationEnums {
     NUM_TIMERTRIGGERACTIVATION(5);
 
     public final int value;
-    private _spinTimerTriggerActivationEnums(int v) { this.value = v; }
-    private _spinTimerTriggerActivationEnums(_spinTimerTriggerActivationEnums e) { this.value = e.value; }
-    public _spinTimerTriggerActivationEnums intern() { for (_spinTimerTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTimerTriggerActivationEnums(int v) { this.value = v; }
+    private spinTimerTriggerActivationEnums(spinTimerTriggerActivationEnums e) { this.value = e.value; }
+    public spinTimerTriggerActivationEnums intern() { for (spinTimerTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderSelectorEnums {
+public enum spinEncoderSelectorEnums {
     /** Selects Encoder 0.*/
     EncoderSelector_Encoder0(0),
     /** Selects Encoder 1.*/
@@ -4201,13 +4201,13 @@ public enum _spinEncoderSelectorEnums {
     NUM_ENCODERSELECTOR(3);
 
     public final int value;
-    private _spinEncoderSelectorEnums(int v) { this.value = v; }
-    private _spinEncoderSelectorEnums(_spinEncoderSelectorEnums e) { this.value = e.value; }
-    public _spinEncoderSelectorEnums intern() { for (_spinEncoderSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderSelectorEnums(int v) { this.value = v; }
+    private spinEncoderSelectorEnums(spinEncoderSelectorEnums e) { this.value = e.value; }
+    public spinEncoderSelectorEnums intern() { for (spinEncoderSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderSourceAEnums {
+public enum spinEncoderSourceAEnums {
     /** Counter is stopped.*/
     EncoderSourceA_Off(0),
     /** Encoder Forward input is taken from the chosen I/O Line.*/
@@ -4219,13 +4219,13 @@ public enum _spinEncoderSourceAEnums {
     NUM_ENCODERSOURCEA(4);
 
     public final int value;
-    private _spinEncoderSourceAEnums(int v) { this.value = v; }
-    private _spinEncoderSourceAEnums(_spinEncoderSourceAEnums e) { this.value = e.value; }
-    public _spinEncoderSourceAEnums intern() { for (_spinEncoderSourceAEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderSourceAEnums(int v) { this.value = v; }
+    private spinEncoderSourceAEnums(spinEncoderSourceAEnums e) { this.value = e.value; }
+    public spinEncoderSourceAEnums intern() { for (spinEncoderSourceAEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderSourceBEnums {
+public enum spinEncoderSourceBEnums {
     /** Counter is stopped.*/
     EncoderSourceB_Off(0),
     /** Encoder Reverse input is taken from the chosen I/O Line..*/
@@ -4237,13 +4237,13 @@ public enum _spinEncoderSourceBEnums {
     NUM_ENCODERSOURCEB(4);
 
     public final int value;
-    private _spinEncoderSourceBEnums(int v) { this.value = v; }
-    private _spinEncoderSourceBEnums(_spinEncoderSourceBEnums e) { this.value = e.value; }
-    public _spinEncoderSourceBEnums intern() { for (_spinEncoderSourceBEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderSourceBEnums(int v) { this.value = v; }
+    private spinEncoderSourceBEnums(spinEncoderSourceBEnums e) { this.value = e.value; }
+    public spinEncoderSourceBEnums intern() { for (spinEncoderSourceBEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderModeEnums {
+public enum spinEncoderModeEnums {
     /** The counter increments or decrements 1 for every full quadrature cycle with jitter filtering.*/
     EncoderMode_FourPhase(0),
     /** The counter increments or decrements every quadrature phase for high resolution counting, but without jitter filtering.*/
@@ -4251,13 +4251,13 @@ public enum _spinEncoderModeEnums {
     NUM_ENCODERMODE(2);
 
     public final int value;
-    private _spinEncoderModeEnums(int v) { this.value = v; }
-    private _spinEncoderModeEnums(_spinEncoderModeEnums e) { this.value = e.value; }
-    public _spinEncoderModeEnums intern() { for (_spinEncoderModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderModeEnums(int v) { this.value = v; }
+    private spinEncoderModeEnums(spinEncoderModeEnums e) { this.value = e.value; }
+    public spinEncoderModeEnums intern() { for (spinEncoderModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderOutputModeEnums {
+public enum spinEncoderOutputModeEnums {
     /** No output pulse are generated.*/
     EncoderOutputMode_Off(0),
     /** Output pulses are generated at all new positions in the positive direction. If the encoder reverses no output pulse are generated until it has again passed the position where the reversal started.*/
@@ -4273,13 +4273,13 @@ public enum _spinEncoderOutputModeEnums {
     NUM_ENCODEROUTPUTMODE(6);
 
     public final int value;
-    private _spinEncoderOutputModeEnums(int v) { this.value = v; }
-    private _spinEncoderOutputModeEnums(_spinEncoderOutputModeEnums e) { this.value = e.value; }
-    public _spinEncoderOutputModeEnums intern() { for (_spinEncoderOutputModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderOutputModeEnums(int v) { this.value = v; }
+    private spinEncoderOutputModeEnums(spinEncoderOutputModeEnums e) { this.value = e.value; }
+    public spinEncoderOutputModeEnums intern() { for (spinEncoderOutputModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderStatusEnums {
+public enum spinEncoderStatusEnums {
     /** The encoder counter last incremented.*/
     EncoderStatus_EncoderUp(0),
     /** The encoder counter last decremented.*/
@@ -4291,13 +4291,13 @@ public enum _spinEncoderStatusEnums {
     NUM_ENCODERSTATUS(4);
 
     public final int value;
-    private _spinEncoderStatusEnums(int v) { this.value = v; }
-    private _spinEncoderStatusEnums(_spinEncoderStatusEnums e) { this.value = e.value; }
-    public _spinEncoderStatusEnums intern() { for (_spinEncoderStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderStatusEnums(int v) { this.value = v; }
+    private spinEncoderStatusEnums(spinEncoderStatusEnums e) { this.value = e.value; }
+    public spinEncoderStatusEnums intern() { for (spinEncoderStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderResetSourceEnums {
+public enum spinEncoderResetSourceEnums {
     /** Disable the Encoder Reset trigger.*/
     EncoderResetSource_Off(0),
     /** Resets with the reception of the Acquisition Trigger.*/
@@ -4373,13 +4373,13 @@ public enum _spinEncoderResetSourceEnums {
     NUM_ENCODERRESETSOURCE(36);
 
     public final int value;
-    private _spinEncoderResetSourceEnums(int v) { this.value = v; }
-    private _spinEncoderResetSourceEnums(_spinEncoderResetSourceEnums e) { this.value = e.value; }
-    public _spinEncoderResetSourceEnums intern() { for (_spinEncoderResetSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderResetSourceEnums(int v) { this.value = v; }
+    private spinEncoderResetSourceEnums(spinEncoderResetSourceEnums e) { this.value = e.value; }
+    public spinEncoderResetSourceEnums intern() { for (spinEncoderResetSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinEncoderResetActivationEnums {
+public enum spinEncoderResetActivationEnums {
     /** Resets the Encoder on the Rising Edge of the signal.*/
     EncoderResetActivation_RisingEdge(0),
     /** Resets the Encoder on the Falling Edge of the signal.*/
@@ -4393,13 +4393,13 @@ public enum _spinEncoderResetActivationEnums {
     NUM_ENCODERRESETACTIVATION(5);
 
     public final int value;
-    private _spinEncoderResetActivationEnums(int v) { this.value = v; }
-    private _spinEncoderResetActivationEnums(_spinEncoderResetActivationEnums e) { this.value = e.value; }
-    public _spinEncoderResetActivationEnums intern() { for (_spinEncoderResetActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinEncoderResetActivationEnums(int v) { this.value = v; }
+    private spinEncoderResetActivationEnums(spinEncoderResetActivationEnums e) { this.value = e.value; }
+    public spinEncoderResetActivationEnums intern() { for (spinEncoderResetActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSoftwareSignalSelectorEnums {
+public enum spinSoftwareSignalSelectorEnums {
     /** Selects the software generated signal to control.*/
     SoftwareSignalSelector_SoftwareSignal0(0),
     /** Selects the software generated signal to control.*/
@@ -4409,13 +4409,13 @@ public enum _spinSoftwareSignalSelectorEnums {
     NUM_SOFTWARESIGNALSELECTOR(3);
 
     public final int value;
-    private _spinSoftwareSignalSelectorEnums(int v) { this.value = v; }
-    private _spinSoftwareSignalSelectorEnums(_spinSoftwareSignalSelectorEnums e) { this.value = e.value; }
-    public _spinSoftwareSignalSelectorEnums intern() { for (_spinSoftwareSignalSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSoftwareSignalSelectorEnums(int v) { this.value = v; }
+    private spinSoftwareSignalSelectorEnums(spinSoftwareSignalSelectorEnums e) { this.value = e.value; }
+    public spinSoftwareSignalSelectorEnums intern() { for (spinSoftwareSignalSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinActionUnconditionalModeEnums {
+public enum spinActionUnconditionalModeEnums {
     /** Unconditional mode is disabled.*/
     ActionUnconditionalMode_Off(0),
     /** Unconditional mode is enabled.*/
@@ -4423,13 +4423,13 @@ public enum _spinActionUnconditionalModeEnums {
     NUM_ACTIONUNCONDITIONALMODE(2);
 
     public final int value;
-    private _spinActionUnconditionalModeEnums(int v) { this.value = v; }
-    private _spinActionUnconditionalModeEnums(_spinActionUnconditionalModeEnums e) { this.value = e.value; }
-    public _spinActionUnconditionalModeEnums intern() { for (_spinActionUnconditionalModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinActionUnconditionalModeEnums(int v) { this.value = v; }
+    private spinActionUnconditionalModeEnums(spinActionUnconditionalModeEnums e) { this.value = e.value; }
+    public spinActionUnconditionalModeEnums intern() { for (spinActionUnconditionalModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinSourceSelectorEnums {
+public enum spinSourceSelectorEnums {
     /** Selects the data source 0.*/
     SourceSelector_Source0(0),
     /** Selects the data source 1.*/
@@ -4441,13 +4441,13 @@ public enum _spinSourceSelectorEnums {
     NUM_SOURCESELECTOR(4);
 
     public final int value;
-    private _spinSourceSelectorEnums(int v) { this.value = v; }
-    private _spinSourceSelectorEnums(_spinSourceSelectorEnums e) { this.value = e.value; }
-    public _spinSourceSelectorEnums intern() { for (_spinSourceSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinSourceSelectorEnums(int v) { this.value = v; }
+    private spinSourceSelectorEnums(spinSourceSelectorEnums e) { this.value = e.value; }
+    public spinSourceSelectorEnums intern() { for (spinSourceSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferSelectorEnums {
+public enum spinTransferSelectorEnums {
     /** The transfer features control the data stream 0.*/
     TransferSelector_Stream0(0),
     /** The transfer features control the data stream 1.*/
@@ -4459,13 +4459,13 @@ public enum _spinTransferSelectorEnums {
     NUM_TRANSFERSELECTOR(4);
 
     public final int value;
-    private _spinTransferSelectorEnums(int v) { this.value = v; }
-    private _spinTransferSelectorEnums(_spinTransferSelectorEnums e) { this.value = e.value; }
-    public _spinTransferSelectorEnums intern() { for (_spinTransferSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferSelectorEnums(int v) { this.value = v; }
+    private spinTransferSelectorEnums(spinTransferSelectorEnums e) { this.value = e.value; }
+    public spinTransferSelectorEnums intern() { for (spinTransferSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferTriggerSelectorEnums {
+public enum spinTransferTriggerSelectorEnums {
     /** Selects a trigger to start the transfers.*/
     TransferTriggerSelector_TransferStart(0),
     /** Selects a trigger to stop the transfers.*/
@@ -4485,13 +4485,13 @@ public enum _spinTransferTriggerSelectorEnums {
     NUM_TRANSFERTRIGGERSELECTOR(8);
 
     public final int value;
-    private _spinTransferTriggerSelectorEnums(int v) { this.value = v; }
-    private _spinTransferTriggerSelectorEnums(_spinTransferTriggerSelectorEnums e) { this.value = e.value; }
-    public _spinTransferTriggerSelectorEnums intern() { for (_spinTransferTriggerSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferTriggerSelectorEnums(int v) { this.value = v; }
+    private spinTransferTriggerSelectorEnums(spinTransferTriggerSelectorEnums e) { this.value = e.value; }
+    public spinTransferTriggerSelectorEnums intern() { for (spinTransferTriggerSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferTriggerModeEnums {
+public enum spinTransferTriggerModeEnums {
     /** Disables the selected trigger.*/
     TransferTriggerMode_Off(0),
     /** Enable the selected trigger.*/
@@ -4499,13 +4499,13 @@ public enum _spinTransferTriggerModeEnums {
     NUM_TRANSFERTRIGGERMODE(2);
 
     public final int value;
-    private _spinTransferTriggerModeEnums(int v) { this.value = v; }
-    private _spinTransferTriggerModeEnums(_spinTransferTriggerModeEnums e) { this.value = e.value; }
-    public _spinTransferTriggerModeEnums intern() { for (_spinTransferTriggerModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferTriggerModeEnums(int v) { this.value = v; }
+    private spinTransferTriggerModeEnums(spinTransferTriggerModeEnums e) { this.value = e.value; }
+    public spinTransferTriggerModeEnums intern() { for (spinTransferTriggerModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferTriggerSourceEnums {
+public enum spinTransferTriggerSourceEnums {
     /** Specifies which physical line (or pin) and associated I/O control block to use as external source for the transfer control trigger signal.*/
     TransferTriggerSource_Line0(0),
     /** Specifies which physical line (or pin) and associated I/O control block to use as external source for the transfer control trigger signal.*/
@@ -4551,13 +4551,13 @@ public enum _spinTransferTriggerSourceEnums {
     NUM_TRANSFERTRIGGERSOURCE(21);
 
     public final int value;
-    private _spinTransferTriggerSourceEnums(int v) { this.value = v; }
-    private _spinTransferTriggerSourceEnums(_spinTransferTriggerSourceEnums e) { this.value = e.value; }
-    public _spinTransferTriggerSourceEnums intern() { for (_spinTransferTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferTriggerSourceEnums(int v) { this.value = v; }
+    private spinTransferTriggerSourceEnums(spinTransferTriggerSourceEnums e) { this.value = e.value; }
+    public spinTransferTriggerSourceEnums intern() { for (spinTransferTriggerSourceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferTriggerActivationEnums {
+public enum spinTransferTriggerActivationEnums {
     /** Specifies that the trigger is considered valid on the rising edge of the source signal.*/
     TransferTriggerActivation_RisingEdge(0),
     /** Specifies that the trigger is considered valid on the falling edge of the source signal.*/
@@ -4571,13 +4571,13 @@ public enum _spinTransferTriggerActivationEnums {
     NUM_TRANSFERTRIGGERACTIVATION(5);
 
     public final int value;
-    private _spinTransferTriggerActivationEnums(int v) { this.value = v; }
-    private _spinTransferTriggerActivationEnums(_spinTransferTriggerActivationEnums e) { this.value = e.value; }
-    public _spinTransferTriggerActivationEnums intern() { for (_spinTransferTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferTriggerActivationEnums(int v) { this.value = v; }
+    private spinTransferTriggerActivationEnums(spinTransferTriggerActivationEnums e) { this.value = e.value; }
+    public spinTransferTriggerActivationEnums intern() { for (spinTransferTriggerActivationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferStatusSelectorEnums {
+public enum spinTransferStatusSelectorEnums {
     /** Data blocks are transmitted when enough data is available.*/
     TransferStatusSelector_Streaming(0),
     /** Data blocks transmission is suspended immediately.*/
@@ -4591,13 +4591,13 @@ public enum _spinTransferStatusSelectorEnums {
     NUM_TRANSFERSTATUSSELECTOR(5);
 
     public final int value;
-    private _spinTransferStatusSelectorEnums(int v) { this.value = v; }
-    private _spinTransferStatusSelectorEnums(_spinTransferStatusSelectorEnums e) { this.value = e.value; }
-    public _spinTransferStatusSelectorEnums intern() { for (_spinTransferStatusSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferStatusSelectorEnums(int v) { this.value = v; }
+    private spinTransferStatusSelectorEnums(spinTransferStatusSelectorEnums e) { this.value = e.value; }
+    public spinTransferStatusSelectorEnums intern() { for (spinTransferStatusSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTransferComponentSelectorEnums {
+public enum spinTransferComponentSelectorEnums {
     /** The TransferStreamChannel feature controls the index of the stream channel for the streaming of the red plane of the planar pixel formats.*/
     TransferComponentSelector_Red(0),
     /** The TransferStreamChannel feature controls the index of the stream channel for the streaming of the green plane of the planar pixel formats.*/
@@ -4609,13 +4609,13 @@ public enum _spinTransferComponentSelectorEnums {
     NUM_TRANSFERCOMPONENTSELECTOR(4);
 
     public final int value;
-    private _spinTransferComponentSelectorEnums(int v) { this.value = v; }
-    private _spinTransferComponentSelectorEnums(_spinTransferComponentSelectorEnums e) { this.value = e.value; }
-    public _spinTransferComponentSelectorEnums intern() { for (_spinTransferComponentSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTransferComponentSelectorEnums(int v) { this.value = v; }
+    private spinTransferComponentSelectorEnums(spinTransferComponentSelectorEnums e) { this.value = e.value; }
+    public spinTransferComponentSelectorEnums intern() { for (spinTransferComponentSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinScan3dDistanceUnitEnums {
+public enum spinScan3dDistanceUnitEnums {
     /** Distance values are in millimeter units (default).*/
     Scan3dDistanceUnit_Millimeter(0),
     /** Distance values are in inch units.*/
@@ -4623,13 +4623,13 @@ public enum _spinScan3dDistanceUnitEnums {
     NUM_SCAN3DDISTANCEUNIT(2);
 
     public final int value;
-    private _spinScan3dDistanceUnitEnums(int v) { this.value = v; }
-    private _spinScan3dDistanceUnitEnums(_spinScan3dDistanceUnitEnums e) { this.value = e.value; }
-    public _spinScan3dDistanceUnitEnums intern() { for (_spinScan3dDistanceUnitEnums e : values()) if (e.value == value) return e; return this; }
+    private spinScan3dDistanceUnitEnums(int v) { this.value = v; }
+    private spinScan3dDistanceUnitEnums(spinScan3dDistanceUnitEnums e) { this.value = e.value; }
+    public spinScan3dDistanceUnitEnums intern() { for (spinScan3dDistanceUnitEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinScan3dCoordinateSystemEnums {
+public enum spinScan3dCoordinateSystemEnums {
     /** Default value. 3-axis orthogonal, right-hand X-Y-Z.*/
     Scan3dCoordinateSystem_Cartesian(0),
     /** A Theta-Phi-Rho coordinate system.*/
@@ -4639,13 +4639,13 @@ public enum _spinScan3dCoordinateSystemEnums {
     NUM_SCAN3DCOORDINATESYSTEM(3);
 
     public final int value;
-    private _spinScan3dCoordinateSystemEnums(int v) { this.value = v; }
-    private _spinScan3dCoordinateSystemEnums(_spinScan3dCoordinateSystemEnums e) { this.value = e.value; }
-    public _spinScan3dCoordinateSystemEnums intern() { for (_spinScan3dCoordinateSystemEnums e : values()) if (e.value == value) return e; return this; }
+    private spinScan3dCoordinateSystemEnums(int v) { this.value = v; }
+    private spinScan3dCoordinateSystemEnums(spinScan3dCoordinateSystemEnums e) { this.value = e.value; }
+    public spinScan3dCoordinateSystemEnums intern() { for (spinScan3dCoordinateSystemEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinScan3dOutputModeEnums {
+public enum spinScan3dOutputModeEnums {
     /** Uncalibrated 2.5D Depth map. The distance data does not represent a physical unit and may be non-linear. The data is a 2.5D range map only.*/
     Scan3dOutputMode_UncalibratedC(0),
     /** 3 Coordinates in grid organization. The full 3 coordinate data with the grid array organization from the sensor kept.*/
@@ -4671,13 +4671,13 @@ public enum _spinScan3dOutputModeEnums {
     NUM_SCAN3DOUTPUTMODE(11);
 
     public final int value;
-    private _spinScan3dOutputModeEnums(int v) { this.value = v; }
-    private _spinScan3dOutputModeEnums(_spinScan3dOutputModeEnums e) { this.value = e.value; }
-    public _spinScan3dOutputModeEnums intern() { for (_spinScan3dOutputModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinScan3dOutputModeEnums(int v) { this.value = v; }
+    private spinScan3dOutputModeEnums(spinScan3dOutputModeEnums e) { this.value = e.value; }
+    public spinScan3dOutputModeEnums intern() { for (spinScan3dOutputModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinScan3dCoordinateSystemReferenceEnums {
+public enum spinScan3dCoordinateSystemReferenceEnums {
     /** Default value. Original fixed reference. The coordinate system fixed relative the camera reference point marker is used.*/
     Scan3dCoordinateSystemReference_Anchor(0),
     /** Transformed reference system. The transformed coordinate system is used according to the definition in the rotation and translation matrices.*/
@@ -4685,13 +4685,13 @@ public enum _spinScan3dCoordinateSystemReferenceEnums {
     NUM_SCAN3DCOORDINATESYSTEMREFERENCE(2);
 
     public final int value;
-    private _spinScan3dCoordinateSystemReferenceEnums(int v) { this.value = v; }
-    private _spinScan3dCoordinateSystemReferenceEnums(_spinScan3dCoordinateSystemReferenceEnums e) { this.value = e.value; }
-    public _spinScan3dCoordinateSystemReferenceEnums intern() { for (_spinScan3dCoordinateSystemReferenceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinScan3dCoordinateSystemReferenceEnums(int v) { this.value = v; }
+    private spinScan3dCoordinateSystemReferenceEnums(spinScan3dCoordinateSystemReferenceEnums e) { this.value = e.value; }
+    public spinScan3dCoordinateSystemReferenceEnums intern() { for (spinScan3dCoordinateSystemReferenceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinScan3dCoordinateSelectorEnums {
+public enum spinScan3dCoordinateSelectorEnums {
     /** The first (X or Theta) coordinate*/
     Scan3dCoordinateSelector_CoordinateA(0),
     /** The second (Y or Phi) coordinate*/
@@ -4701,13 +4701,13 @@ public enum _spinScan3dCoordinateSelectorEnums {
     NUM_SCAN3DCOORDINATESELECTOR(3);
 
     public final int value;
-    private _spinScan3dCoordinateSelectorEnums(int v) { this.value = v; }
-    private _spinScan3dCoordinateSelectorEnums(_spinScan3dCoordinateSelectorEnums e) { this.value = e.value; }
-    public _spinScan3dCoordinateSelectorEnums intern() { for (_spinScan3dCoordinateSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinScan3dCoordinateSelectorEnums(int v) { this.value = v; }
+    private spinScan3dCoordinateSelectorEnums(spinScan3dCoordinateSelectorEnums e) { this.value = e.value; }
+    public spinScan3dCoordinateSelectorEnums intern() { for (spinScan3dCoordinateSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinScan3dCoordinateTransformSelectorEnums {
+public enum spinScan3dCoordinateTransformSelectorEnums {
     /** Rotation around X axis.*/
     Scan3dCoordinateTransformSelector_RotationX(0),
     /** Rotation around Y axis.*/
@@ -4723,13 +4723,13 @@ public enum _spinScan3dCoordinateTransformSelectorEnums {
     NUM_SCAN3DCOORDINATETRANSFORMSELECTOR(6);
 
     public final int value;
-    private _spinScan3dCoordinateTransformSelectorEnums(int v) { this.value = v; }
-    private _spinScan3dCoordinateTransformSelectorEnums(_spinScan3dCoordinateTransformSelectorEnums e) { this.value = e.value; }
-    public _spinScan3dCoordinateTransformSelectorEnums intern() { for (_spinScan3dCoordinateTransformSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinScan3dCoordinateTransformSelectorEnums(int v) { this.value = v; }
+    private spinScan3dCoordinateTransformSelectorEnums(spinScan3dCoordinateTransformSelectorEnums e) { this.value = e.value; }
+    public spinScan3dCoordinateTransformSelectorEnums intern() { for (spinScan3dCoordinateTransformSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinScan3dCoordinateReferenceSelectorEnums {
+public enum spinScan3dCoordinateReferenceSelectorEnums {
     /** Rotation around X axis.*/
     Scan3dCoordinateReferenceSelector_RotationX(0),
     /** Rotation around Y axis.*/
@@ -4745,13 +4745,13 @@ public enum _spinScan3dCoordinateReferenceSelectorEnums {
     NUM_SCAN3DCOORDINATEREFERENCESELECTOR(6);
 
     public final int value;
-    private _spinScan3dCoordinateReferenceSelectorEnums(int v) { this.value = v; }
-    private _spinScan3dCoordinateReferenceSelectorEnums(_spinScan3dCoordinateReferenceSelectorEnums e) { this.value = e.value; }
-    public _spinScan3dCoordinateReferenceSelectorEnums intern() { for (_spinScan3dCoordinateReferenceSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinScan3dCoordinateReferenceSelectorEnums(int v) { this.value = v; }
+    private spinScan3dCoordinateReferenceSelectorEnums(spinScan3dCoordinateReferenceSelectorEnums e) { this.value = e.value; }
+    public spinScan3dCoordinateReferenceSelectorEnums intern() { for (spinScan3dCoordinateReferenceSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkImageComponentEnums {
+public enum spinChunkImageComponentEnums {
     /** The image data is the intensity component.*/
     ChunkImageComponent_Intensity(0),
     /** The image data is color component.*/
@@ -4771,13 +4771,13 @@ public enum _spinChunkImageComponentEnums {
     NUM_CHUNKIMAGECOMPONENT(8);
 
     public final int value;
-    private _spinChunkImageComponentEnums(int v) { this.value = v; }
-    private _spinChunkImageComponentEnums(_spinChunkImageComponentEnums e) { this.value = e.value; }
-    public _spinChunkImageComponentEnums intern() { for (_spinChunkImageComponentEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkImageComponentEnums(int v) { this.value = v; }
+    private spinChunkImageComponentEnums(spinChunkImageComponentEnums e) { this.value = e.value; }
+    public spinChunkImageComponentEnums intern() { for (spinChunkImageComponentEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkCounterSelectorEnums {
+public enum spinChunkCounterSelectorEnums {
     /** Selects the counter 0.*/
     ChunkCounterSelector_Counter0(0),
     /** Selects the counter 1.*/
@@ -4787,13 +4787,13 @@ public enum _spinChunkCounterSelectorEnums {
     NUM_CHUNKCOUNTERSELECTOR(3);
 
     public final int value;
-    private _spinChunkCounterSelectorEnums(int v) { this.value = v; }
-    private _spinChunkCounterSelectorEnums(_spinChunkCounterSelectorEnums e) { this.value = e.value; }
-    public _spinChunkCounterSelectorEnums intern() { for (_spinChunkCounterSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkCounterSelectorEnums(int v) { this.value = v; }
+    private spinChunkCounterSelectorEnums(spinChunkCounterSelectorEnums e) { this.value = e.value; }
+    public spinChunkCounterSelectorEnums intern() { for (spinChunkCounterSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkTimerSelectorEnums {
+public enum spinChunkTimerSelectorEnums {
     /** Selects the first Timer.*/
     ChunkTimerSelector_Timer0(0),
     /** Selects the first Timer.*/
@@ -4803,13 +4803,13 @@ public enum _spinChunkTimerSelectorEnums {
     NUM_CHUNKTIMERSELECTOR(3);
 
     public final int value;
-    private _spinChunkTimerSelectorEnums(int v) { this.value = v; }
-    private _spinChunkTimerSelectorEnums(_spinChunkTimerSelectorEnums e) { this.value = e.value; }
-    public _spinChunkTimerSelectorEnums intern() { for (_spinChunkTimerSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkTimerSelectorEnums(int v) { this.value = v; }
+    private spinChunkTimerSelectorEnums(spinChunkTimerSelectorEnums e) { this.value = e.value; }
+    public spinChunkTimerSelectorEnums intern() { for (spinChunkTimerSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkEncoderSelectorEnums {
+public enum spinChunkEncoderSelectorEnums {
     /** Selects the first Encoder.*/
     ChunkEncoderSelector_Encoder0(0),
     /** Selects the first Encoder.*/
@@ -4819,13 +4819,13 @@ public enum _spinChunkEncoderSelectorEnums {
     NUM_CHUNKENCODERSELECTOR(3);
 
     public final int value;
-    private _spinChunkEncoderSelectorEnums(int v) { this.value = v; }
-    private _spinChunkEncoderSelectorEnums(_spinChunkEncoderSelectorEnums e) { this.value = e.value; }
-    public _spinChunkEncoderSelectorEnums intern() { for (_spinChunkEncoderSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkEncoderSelectorEnums(int v) { this.value = v; }
+    private spinChunkEncoderSelectorEnums(spinChunkEncoderSelectorEnums e) { this.value = e.value; }
+    public spinChunkEncoderSelectorEnums intern() { for (spinChunkEncoderSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkEncoderStatusEnums {
+public enum spinChunkEncoderStatusEnums {
     /** The encoder counter last incremented.*/
     ChunkEncoderStatus_EncoderUp(0),
     /** The encoder counter last decremented.*/
@@ -4837,13 +4837,13 @@ public enum _spinChunkEncoderStatusEnums {
     NUM_CHUNKENCODERSTATUS(4);
 
     public final int value;
-    private _spinChunkEncoderStatusEnums(int v) { this.value = v; }
-    private _spinChunkEncoderStatusEnums(_spinChunkEncoderStatusEnums e) { this.value = e.value; }
-    public _spinChunkEncoderStatusEnums intern() { for (_spinChunkEncoderStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkEncoderStatusEnums(int v) { this.value = v; }
+    private spinChunkEncoderStatusEnums(spinChunkEncoderStatusEnums e) { this.value = e.value; }
+    public spinChunkEncoderStatusEnums intern() { for (spinChunkEncoderStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkExposureTimeSelectorEnums {
+public enum spinChunkExposureTimeSelectorEnums {
     /** Selects the common ExposureTime.*/
     ChunkExposureTimeSelector_Common(0),
     /** Selects the red common ExposureTime.*/
@@ -4869,13 +4869,13 @@ public enum _spinChunkExposureTimeSelectorEnums {
     NUM_CHUNKEXPOSURETIMESELECTOR(11);
 
     public final int value;
-    private _spinChunkExposureTimeSelectorEnums(int v) { this.value = v; }
-    private _spinChunkExposureTimeSelectorEnums(_spinChunkExposureTimeSelectorEnums e) { this.value = e.value; }
-    public _spinChunkExposureTimeSelectorEnums intern() { for (_spinChunkExposureTimeSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkExposureTimeSelectorEnums(int v) { this.value = v; }
+    private spinChunkExposureTimeSelectorEnums(spinChunkExposureTimeSelectorEnums e) { this.value = e.value; }
+    public spinChunkExposureTimeSelectorEnums intern() { for (spinChunkExposureTimeSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkSourceIDEnums {
+public enum spinChunkSourceIDEnums {
     /** Image comes from the Source 0.*/
     ChunkSourceID_Source0(0),
     /** Image comes from the Source 1.*/
@@ -4885,13 +4885,13 @@ public enum _spinChunkSourceIDEnums {
     NUM_CHUNKSOURCEID(3);
 
     public final int value;
-    private _spinChunkSourceIDEnums(int v) { this.value = v; }
-    private _spinChunkSourceIDEnums(_spinChunkSourceIDEnums e) { this.value = e.value; }
-    public _spinChunkSourceIDEnums intern() { for (_spinChunkSourceIDEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkSourceIDEnums(int v) { this.value = v; }
+    private spinChunkSourceIDEnums(spinChunkSourceIDEnums e) { this.value = e.value; }
+    public spinChunkSourceIDEnums intern() { for (spinChunkSourceIDEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkRegionIDEnums {
+public enum spinChunkRegionIDEnums {
     /** Image comes from the Region 0.*/
     ChunkRegionID_Region0(0),
     /** Image comes from the Region 1.*/
@@ -4901,13 +4901,13 @@ public enum _spinChunkRegionIDEnums {
     NUM_CHUNKREGIONID(3);
 
     public final int value;
-    private _spinChunkRegionIDEnums(int v) { this.value = v; }
-    private _spinChunkRegionIDEnums(_spinChunkRegionIDEnums e) { this.value = e.value; }
-    public _spinChunkRegionIDEnums intern() { for (_spinChunkRegionIDEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkRegionIDEnums(int v) { this.value = v; }
+    private spinChunkRegionIDEnums(spinChunkRegionIDEnums e) { this.value = e.value; }
+    public spinChunkRegionIDEnums intern() { for (spinChunkRegionIDEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkTransferStreamIDEnums {
+public enum spinChunkTransferStreamIDEnums {
     /** Data comes from Stream0.*/
     ChunkTransferStreamID_Stream0(0),
     /** Data comes from Stream1.*/
@@ -4919,13 +4919,13 @@ public enum _spinChunkTransferStreamIDEnums {
     NUM_CHUNKTRANSFERSTREAMID(4);
 
     public final int value;
-    private _spinChunkTransferStreamIDEnums(int v) { this.value = v; }
-    private _spinChunkTransferStreamIDEnums(_spinChunkTransferStreamIDEnums e) { this.value = e.value; }
-    public _spinChunkTransferStreamIDEnums intern() { for (_spinChunkTransferStreamIDEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkTransferStreamIDEnums(int v) { this.value = v; }
+    private spinChunkTransferStreamIDEnums(spinChunkTransferStreamIDEnums e) { this.value = e.value; }
+    public spinChunkTransferStreamIDEnums intern() { for (spinChunkTransferStreamIDEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkScan3dDistanceUnitEnums {
+public enum spinChunkScan3dDistanceUnitEnums {
     /** Default value. Distance values are in millimeter units.*/
     ChunkScan3dDistanceUnit_Millimeter(0),
     /** Distance values are in inch units.*/
@@ -4933,13 +4933,13 @@ public enum _spinChunkScan3dDistanceUnitEnums {
     NUM_CHUNKSCAN3DDISTANCEUNIT(2);
 
     public final int value;
-    private _spinChunkScan3dDistanceUnitEnums(int v) { this.value = v; }
-    private _spinChunkScan3dDistanceUnitEnums(_spinChunkScan3dDistanceUnitEnums e) { this.value = e.value; }
-    public _spinChunkScan3dDistanceUnitEnums intern() { for (_spinChunkScan3dDistanceUnitEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkScan3dDistanceUnitEnums(int v) { this.value = v; }
+    private spinChunkScan3dDistanceUnitEnums(spinChunkScan3dDistanceUnitEnums e) { this.value = e.value; }
+    public spinChunkScan3dDistanceUnitEnums intern() { for (spinChunkScan3dDistanceUnitEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkScan3dOutputModeEnums {
+public enum spinChunkScan3dOutputModeEnums {
     /** Uncalibrated 2.5D Depth map. The distance data does not represent a physical unit and may be non-linear. The data is a 2.5D range map only.*/
     ChunkScan3dOutputMode_UncalibratedC(0),
     /** 3 Coordinates in grid organization. The full 3 coordinate data with the grid array organization from the sensor kept.*/
@@ -4965,13 +4965,13 @@ public enum _spinChunkScan3dOutputModeEnums {
     NUM_CHUNKSCAN3DOUTPUTMODE(11);
 
     public final int value;
-    private _spinChunkScan3dOutputModeEnums(int v) { this.value = v; }
-    private _spinChunkScan3dOutputModeEnums(_spinChunkScan3dOutputModeEnums e) { this.value = e.value; }
-    public _spinChunkScan3dOutputModeEnums intern() { for (_spinChunkScan3dOutputModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkScan3dOutputModeEnums(int v) { this.value = v; }
+    private spinChunkScan3dOutputModeEnums(spinChunkScan3dOutputModeEnums e) { this.value = e.value; }
+    public spinChunkScan3dOutputModeEnums intern() { for (spinChunkScan3dOutputModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkScan3dCoordinateSystemEnums {
+public enum spinChunkScan3dCoordinateSystemEnums {
     /** Default value. 3-axis orthogonal, right-hand X-Y-Z.*/
     ChunkScan3dCoordinateSystem_Cartesian(0),
     /** A Theta-Phi-Rho coordinate system.*/
@@ -4981,13 +4981,13 @@ public enum _spinChunkScan3dCoordinateSystemEnums {
     NUM_CHUNKSCAN3DCOORDINATESYSTEM(3);
 
     public final int value;
-    private _spinChunkScan3dCoordinateSystemEnums(int v) { this.value = v; }
-    private _spinChunkScan3dCoordinateSystemEnums(_spinChunkScan3dCoordinateSystemEnums e) { this.value = e.value; }
-    public _spinChunkScan3dCoordinateSystemEnums intern() { for (_spinChunkScan3dCoordinateSystemEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkScan3dCoordinateSystemEnums(int v) { this.value = v; }
+    private spinChunkScan3dCoordinateSystemEnums(spinChunkScan3dCoordinateSystemEnums e) { this.value = e.value; }
+    public spinChunkScan3dCoordinateSystemEnums intern() { for (spinChunkScan3dCoordinateSystemEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkScan3dCoordinateSystemReferenceEnums {
+public enum spinChunkScan3dCoordinateSystemReferenceEnums {
     /** Default value. Original fixed reference. The coordinate system fixed relative the camera reference point marker is used.*/
     ChunkScan3dCoordinateSystemReference_Anchor(0),
     /** Transformed reference system. The transformed coordinate system is used according to the definition in the rotation and translation matrices.*/
@@ -4995,13 +4995,13 @@ public enum _spinChunkScan3dCoordinateSystemReferenceEnums {
     NUM_CHUNKSCAN3DCOORDINATESYSTEMREFERENCE(2);
 
     public final int value;
-    private _spinChunkScan3dCoordinateSystemReferenceEnums(int v) { this.value = v; }
-    private _spinChunkScan3dCoordinateSystemReferenceEnums(_spinChunkScan3dCoordinateSystemReferenceEnums e) { this.value = e.value; }
-    public _spinChunkScan3dCoordinateSystemReferenceEnums intern() { for (_spinChunkScan3dCoordinateSystemReferenceEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkScan3dCoordinateSystemReferenceEnums(int v) { this.value = v; }
+    private spinChunkScan3dCoordinateSystemReferenceEnums(spinChunkScan3dCoordinateSystemReferenceEnums e) { this.value = e.value; }
+    public spinChunkScan3dCoordinateSystemReferenceEnums intern() { for (spinChunkScan3dCoordinateSystemReferenceEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkScan3dCoordinateSelectorEnums {
+public enum spinChunkScan3dCoordinateSelectorEnums {
     /** The first (X or Theta) coordinate*/
     ChunkScan3dCoordinateSelector_CoordinateA(0),
     /** The second (Y or Phi) coordinate*/
@@ -5011,13 +5011,13 @@ public enum _spinChunkScan3dCoordinateSelectorEnums {
     NUM_CHUNKSCAN3DCOORDINATESELECTOR(3);
 
     public final int value;
-    private _spinChunkScan3dCoordinateSelectorEnums(int v) { this.value = v; }
-    private _spinChunkScan3dCoordinateSelectorEnums(_spinChunkScan3dCoordinateSelectorEnums e) { this.value = e.value; }
-    public _spinChunkScan3dCoordinateSelectorEnums intern() { for (_spinChunkScan3dCoordinateSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkScan3dCoordinateSelectorEnums(int v) { this.value = v; }
+    private spinChunkScan3dCoordinateSelectorEnums(spinChunkScan3dCoordinateSelectorEnums e) { this.value = e.value; }
+    public spinChunkScan3dCoordinateSelectorEnums intern() { for (spinChunkScan3dCoordinateSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkScan3dCoordinateTransformSelectorEnums {
+public enum spinChunkScan3dCoordinateTransformSelectorEnums {
     /** Rotation around X axis.*/
     ChunkScan3dCoordinateTransformSelector_RotationX(0),
     /** Rotation around Y axis.*/
@@ -5033,13 +5033,13 @@ public enum _spinChunkScan3dCoordinateTransformSelectorEnums {
     NUM_CHUNKSCAN3DCOORDINATETRANSFORMSELECTOR(6);
 
     public final int value;
-    private _spinChunkScan3dCoordinateTransformSelectorEnums(int v) { this.value = v; }
-    private _spinChunkScan3dCoordinateTransformSelectorEnums(_spinChunkScan3dCoordinateTransformSelectorEnums e) { this.value = e.value; }
-    public _spinChunkScan3dCoordinateTransformSelectorEnums intern() { for (_spinChunkScan3dCoordinateTransformSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkScan3dCoordinateTransformSelectorEnums(int v) { this.value = v; }
+    private spinChunkScan3dCoordinateTransformSelectorEnums(spinChunkScan3dCoordinateTransformSelectorEnums e) { this.value = e.value; }
+    public spinChunkScan3dCoordinateTransformSelectorEnums intern() { for (spinChunkScan3dCoordinateTransformSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinChunkScan3dCoordinateReferenceSelectorEnums {
+public enum spinChunkScan3dCoordinateReferenceSelectorEnums {
     /** Rotation around X axis.*/
     ChunkScan3dCoordinateReferenceSelector_RotationX(0),
     /** Rotation around Y axis.*/
@@ -5055,13 +5055,13 @@ public enum _spinChunkScan3dCoordinateReferenceSelectorEnums {
     NUM_CHUNKSCAN3DCOORDINATEREFERENCESELECTOR(6);
 
     public final int value;
-    private _spinChunkScan3dCoordinateReferenceSelectorEnums(int v) { this.value = v; }
-    private _spinChunkScan3dCoordinateReferenceSelectorEnums(_spinChunkScan3dCoordinateReferenceSelectorEnums e) { this.value = e.value; }
-    public _spinChunkScan3dCoordinateReferenceSelectorEnums intern() { for (_spinChunkScan3dCoordinateReferenceSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinChunkScan3dCoordinateReferenceSelectorEnums(int v) { this.value = v; }
+    private spinChunkScan3dCoordinateReferenceSelectorEnums(spinChunkScan3dCoordinateReferenceSelectorEnums e) { this.value = e.value; }
+    public spinChunkScan3dCoordinateReferenceSelectorEnums intern() { for (spinChunkScan3dCoordinateReferenceSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinDeviceTapGeometryEnums {
+public enum spinDeviceTapGeometryEnums {
     /** Geometry_1X_1Y*/
     DeviceTapGeometry_Geometry_1X_1Y(0),
     /** Geometry_1X2_1Y*/
@@ -5155,13 +5155,13 @@ public enum _spinDeviceTapGeometryEnums {
     NUM_DEVICETAPGEOMETRY(45);
 
     public final int value;
-    private _spinDeviceTapGeometryEnums(int v) { this.value = v; }
-    private _spinDeviceTapGeometryEnums(_spinDeviceTapGeometryEnums e) { this.value = e.value; }
-    public _spinDeviceTapGeometryEnums intern() { for (_spinDeviceTapGeometryEnums e : values()) if (e.value == value) return e; return this; }
+    private spinDeviceTapGeometryEnums(int v) { this.value = v; }
+    private spinDeviceTapGeometryEnums(spinDeviceTapGeometryEnums e) { this.value = e.value; }
+    public spinDeviceTapGeometryEnums intern() { for (spinDeviceTapGeometryEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevPhysicalLinkConfigurationEnums {
+public enum spinGevPhysicalLinkConfigurationEnums {
     /** Single Link*/
     GevPhysicalLinkConfiguration_SingleLink(0),
     /** Multi Link*/
@@ -5173,13 +5173,13 @@ public enum _spinGevPhysicalLinkConfigurationEnums {
     NUM_GEVPHYSICALLINKCONFIGURATION(4);
 
     public final int value;
-    private _spinGevPhysicalLinkConfigurationEnums(int v) { this.value = v; }
-    private _spinGevPhysicalLinkConfigurationEnums(_spinGevPhysicalLinkConfigurationEnums e) { this.value = e.value; }
-    public _spinGevPhysicalLinkConfigurationEnums intern() { for (_spinGevPhysicalLinkConfigurationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevPhysicalLinkConfigurationEnums(int v) { this.value = v; }
+    private spinGevPhysicalLinkConfigurationEnums(spinGevPhysicalLinkConfigurationEnums e) { this.value = e.value; }
+    public spinGevPhysicalLinkConfigurationEnums intern() { for (spinGevPhysicalLinkConfigurationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevCurrentPhysicalLinkConfigurationEnums {
+public enum spinGevCurrentPhysicalLinkConfigurationEnums {
     /** Single Link*/
     GevCurrentPhysicalLinkConfiguration_SingleLink(0),
     /** Multi Link*/
@@ -5191,13 +5191,13 @@ public enum _spinGevCurrentPhysicalLinkConfigurationEnums {
     NUM_GEVCURRENTPHYSICALLINKCONFIGURATION(4);
 
     public final int value;
-    private _spinGevCurrentPhysicalLinkConfigurationEnums(int v) { this.value = v; }
-    private _spinGevCurrentPhysicalLinkConfigurationEnums(_spinGevCurrentPhysicalLinkConfigurationEnums e) { this.value = e.value; }
-    public _spinGevCurrentPhysicalLinkConfigurationEnums intern() { for (_spinGevCurrentPhysicalLinkConfigurationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevCurrentPhysicalLinkConfigurationEnums(int v) { this.value = v; }
+    private spinGevCurrentPhysicalLinkConfigurationEnums(spinGevCurrentPhysicalLinkConfigurationEnums e) { this.value = e.value; }
+    public spinGevCurrentPhysicalLinkConfigurationEnums intern() { for (spinGevCurrentPhysicalLinkConfigurationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevIPConfigurationStatusEnums {
+public enum spinGevIPConfigurationStatusEnums {
     /** None*/
     GevIPConfigurationStatus_None(0),
     /** Persistent IP*/
@@ -5211,13 +5211,13 @@ public enum _spinGevIPConfigurationStatusEnums {
     NUM_GEVIPCONFIGURATIONSTATUS(5);
 
     public final int value;
-    private _spinGevIPConfigurationStatusEnums(int v) { this.value = v; }
-    private _spinGevIPConfigurationStatusEnums(_spinGevIPConfigurationStatusEnums e) { this.value = e.value; }
-    public _spinGevIPConfigurationStatusEnums intern() { for (_spinGevIPConfigurationStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevIPConfigurationStatusEnums(int v) { this.value = v; }
+    private spinGevIPConfigurationStatusEnums(spinGevIPConfigurationStatusEnums e) { this.value = e.value; }
+    public spinGevIPConfigurationStatusEnums intern() { for (spinGevIPConfigurationStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevGVCPExtendedStatusCodesSelectorEnums {
+public enum spinGevGVCPExtendedStatusCodesSelectorEnums {
     /** Version 1 1*/
     GevGVCPExtendedStatusCodesSelector_Version1_1(0),
     /** Version 2 0*/
@@ -5225,13 +5225,13 @@ public enum _spinGevGVCPExtendedStatusCodesSelectorEnums {
     NUM_GEVGVCPEXTENDEDSTATUSCODESSELECTOR(2);
 
     public final int value;
-    private _spinGevGVCPExtendedStatusCodesSelectorEnums(int v) { this.value = v; }
-    private _spinGevGVCPExtendedStatusCodesSelectorEnums(_spinGevGVCPExtendedStatusCodesSelectorEnums e) { this.value = e.value; }
-    public _spinGevGVCPExtendedStatusCodesSelectorEnums intern() { for (_spinGevGVCPExtendedStatusCodesSelectorEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevGVCPExtendedStatusCodesSelectorEnums(int v) { this.value = v; }
+    private spinGevGVCPExtendedStatusCodesSelectorEnums(spinGevGVCPExtendedStatusCodesSelectorEnums e) { this.value = e.value; }
+    public spinGevGVCPExtendedStatusCodesSelectorEnums intern() { for (spinGevGVCPExtendedStatusCodesSelectorEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinGevGVSPExtendedIDModeEnums {
+public enum spinGevGVSPExtendedIDModeEnums {
     /** Off*/
     GevGVSPExtendedIDMode_Off(0),
     /** On*/
@@ -5239,13 +5239,13 @@ public enum _spinGevGVSPExtendedIDModeEnums {
     NUM_GEVGVSPEXTENDEDIDMODE(2);
 
     public final int value;
-    private _spinGevGVSPExtendedIDModeEnums(int v) { this.value = v; }
-    private _spinGevGVSPExtendedIDModeEnums(_spinGevGVSPExtendedIDModeEnums e) { this.value = e.value; }
-    public _spinGevGVSPExtendedIDModeEnums intern() { for (_spinGevGVSPExtendedIDModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinGevGVSPExtendedIDModeEnums(int v) { this.value = v; }
+    private spinGevGVSPExtendedIDModeEnums(spinGevGVSPExtendedIDModeEnums e) { this.value = e.value; }
+    public spinGevGVSPExtendedIDModeEnums intern() { for (spinGevGVSPExtendedIDModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinClConfigurationEnums {
+public enum spinClConfigurationEnums {
     /** Standard base configuration described by the Camera Link standard.*/
     ClConfiguration_Base(0),
     /** Standard medium configuration described by the Camera Link standard.*/
@@ -5259,13 +5259,13 @@ public enum _spinClConfigurationEnums {
     NUM_CLCONFIGURATION(5);
 
     public final int value;
-    private _spinClConfigurationEnums(int v) { this.value = v; }
-    private _spinClConfigurationEnums(_spinClConfigurationEnums e) { this.value = e.value; }
-    public _spinClConfigurationEnums intern() { for (_spinClConfigurationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinClConfigurationEnums(int v) { this.value = v; }
+    private spinClConfigurationEnums(spinClConfigurationEnums e) { this.value = e.value; }
+    public spinClConfigurationEnums intern() { for (spinClConfigurationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinClTimeSlotsCountEnums {
+public enum spinClTimeSlotsCountEnums {
     /** One*/
     ClTimeSlotsCount_One(0),
     /** Two*/
@@ -5275,13 +5275,13 @@ public enum _spinClTimeSlotsCountEnums {
     NUM_CLTIMESLOTSCOUNT(3);
 
     public final int value;
-    private _spinClTimeSlotsCountEnums(int v) { this.value = v; }
-    private _spinClTimeSlotsCountEnums(_spinClTimeSlotsCountEnums e) { this.value = e.value; }
-    public _spinClTimeSlotsCountEnums intern() { for (_spinClTimeSlotsCountEnums e : values()) if (e.value == value) return e; return this; }
+    private spinClTimeSlotsCountEnums(int v) { this.value = v; }
+    private spinClTimeSlotsCountEnums(spinClTimeSlotsCountEnums e) { this.value = e.value; }
+    public spinClTimeSlotsCountEnums intern() { for (spinClTimeSlotsCountEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCxpLinkConfigurationStatusEnums {
+public enum spinCxpLinkConfigurationStatusEnums {
     /** The Link configuration of the Device is unknown. Either the configuration operation has failed or there is nothing connected.*/
     CxpLinkConfigurationStatus_None(0),
     /** The Device is in the process of configuring the Link. The Link cannot be used yet.*/
@@ -5349,13 +5349,13 @@ public enum _spinCxpLinkConfigurationStatusEnums {
     NUM_CXPLINKCONFIGURATIONSTATUS(32);
 
     public final int value;
-    private _spinCxpLinkConfigurationStatusEnums(int v) { this.value = v; }
-    private _spinCxpLinkConfigurationStatusEnums(_spinCxpLinkConfigurationStatusEnums e) { this.value = e.value; }
-    public _spinCxpLinkConfigurationStatusEnums intern() { for (_spinCxpLinkConfigurationStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCxpLinkConfigurationStatusEnums(int v) { this.value = v; }
+    private spinCxpLinkConfigurationStatusEnums(spinCxpLinkConfigurationStatusEnums e) { this.value = e.value; }
+    public spinCxpLinkConfigurationStatusEnums intern() { for (spinCxpLinkConfigurationStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCxpLinkConfigurationPreferredEnums {
+public enum spinCxpLinkConfigurationPreferredEnums {
     /** 1 Connection operating at CXP-1 speed (1.25 Gbps).*/
     CxpLinkConfigurationPreferred_CXP1_X1(0),
     /** 1 Connection operating at CXP-2 speed (2.50 Gbps).*/
@@ -5419,13 +5419,13 @@ public enum _spinCxpLinkConfigurationPreferredEnums {
     NUM_CXPLINKCONFIGURATIONPREFERRED(30);
 
     public final int value;
-    private _spinCxpLinkConfigurationPreferredEnums(int v) { this.value = v; }
-    private _spinCxpLinkConfigurationPreferredEnums(_spinCxpLinkConfigurationPreferredEnums e) { this.value = e.value; }
-    public _spinCxpLinkConfigurationPreferredEnums intern() { for (_spinCxpLinkConfigurationPreferredEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCxpLinkConfigurationPreferredEnums(int v) { this.value = v; }
+    private spinCxpLinkConfigurationPreferredEnums(spinCxpLinkConfigurationPreferredEnums e) { this.value = e.value; }
+    public spinCxpLinkConfigurationPreferredEnums intern() { for (spinCxpLinkConfigurationPreferredEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCxpLinkConfigurationEnums {
+public enum spinCxpLinkConfigurationEnums {
     /** Sets Automatic discovery for the Link Configuration.*/
     CxpLinkConfiguration_Auto(0),
     /** Force the Link to 1 Connection operating at CXP-1 speed (1.25 Gbps).*/
@@ -5491,13 +5491,13 @@ public enum _spinCxpLinkConfigurationEnums {
     NUM_CXPLINKCONFIGURATION(31);
 
     public final int value;
-    private _spinCxpLinkConfigurationEnums(int v) { this.value = v; }
-    private _spinCxpLinkConfigurationEnums(_spinCxpLinkConfigurationEnums e) { this.value = e.value; }
-    public _spinCxpLinkConfigurationEnums intern() { for (_spinCxpLinkConfigurationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCxpLinkConfigurationEnums(int v) { this.value = v; }
+    private spinCxpLinkConfigurationEnums(spinCxpLinkConfigurationEnums e) { this.value = e.value; }
+    public spinCxpLinkConfigurationEnums intern() { for (spinCxpLinkConfigurationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCxpConnectionTestModeEnums {
+public enum spinCxpConnectionTestModeEnums {
     /** Off*/
     CxpConnectionTestMode_Off(0),
     /** Mode 1*/
@@ -5505,13 +5505,13 @@ public enum _spinCxpConnectionTestModeEnums {
     NUM_CXPCONNECTIONTESTMODE(2);
 
     public final int value;
-    private _spinCxpConnectionTestModeEnums(int v) { this.value = v; }
-    private _spinCxpConnectionTestModeEnums(_spinCxpConnectionTestModeEnums e) { this.value = e.value; }
-    public _spinCxpConnectionTestModeEnums intern() { for (_spinCxpConnectionTestModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCxpConnectionTestModeEnums(int v) { this.value = v; }
+    private spinCxpConnectionTestModeEnums(spinCxpConnectionTestModeEnums e) { this.value = e.value; }
+    public spinCxpConnectionTestModeEnums intern() { for (spinCxpConnectionTestModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinCxpPoCxpStatusEnums {
+public enum spinCxpPoCxpStatusEnums {
     /** Normal automatic PoCXP operation.*/
     CxpPoCxpStatus_Auto(0),
     /** PoCXP is forced off.*/
@@ -5521,9 +5521,9 @@ public enum _spinCxpPoCxpStatusEnums {
     NUM_CXPPOCXPSTATUS(3);
 
     public final int value;
-    private _spinCxpPoCxpStatusEnums(int v) { this.value = v; }
-    private _spinCxpPoCxpStatusEnums(_spinCxpPoCxpStatusEnums e) { this.value = e.value; }
-    public _spinCxpPoCxpStatusEnums intern() { for (_spinCxpPoCxpStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinCxpPoCxpStatusEnums(int v) { this.value = v; }
+    private spinCxpPoCxpStatusEnums(spinCxpPoCxpStatusEnums e) { this.value = e.value; }
+    public spinCxpPoCxpStatusEnums intern() { for (spinCxpPoCxpStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
@@ -5558,7 +5558,7 @@ public enum _spinCxpPoCxpStatusEnums {
 // #define FLIR_SPINNAKER_CHUNKDATADEF_C_H
 
 // #include "SpinnakerPlatformC.h"
-// Targeting ../Spinnaker_C/spinChunkData.java
+// Targeting ..\Spinnaker_C\spinChunkData.java
 
 
 
@@ -5589,16 +5589,16 @@ public enum _spinCxpPoCxpStatusEnums {
 
 // #ifndef FLIR_SPINNAKER_GENAPIDEFS_C_H
 // #define FLIR_SPINNAKER_GENAPIDEFS_C_H
-// Targeting ../Spinnaker_C/spinNodeMapHandle.java
+// Targeting ..\Spinnaker_C\spinNodeMapHandle.java
 
 
-// Targeting ../Spinnaker_C/spinNodeHandle.java
+// Targeting ..\Spinnaker_C\spinNodeHandle.java
 
 
-// Targeting ../Spinnaker_C/spinNodeCallbackHandle.java
+// Targeting ..\Spinnaker_C\spinNodeCallbackHandle.java
 
 
-// Targeting ../Spinnaker_C/spinNodeCallbackFunction.java
+// Targeting ..\Spinnaker_C\spinNodeCallbackFunction.java
 
 
 
@@ -5611,7 +5611,7 @@ public enum _spinCxpPoCxpStatusEnums {
  */
 /*@{*/
 
-public enum _spinNodeType {
+public enum spinNodeType {
     ValueNode(0),
     BaseNode(1),
     IntegerNode(2),
@@ -5627,27 +5627,27 @@ public enum _spinNodeType {
     UnknownNode(-1);
 
     public final int value;
-    private _spinNodeType(int v) { this.value = v; }
-    private _spinNodeType(_spinNodeType e) { this.value = e.value; }
-    public _spinNodeType intern() { for (_spinNodeType e : values()) if (e.value == value) return e; return this; }
+    private spinNodeType(int v) { this.value = v; }
+    private spinNodeType(spinNodeType e) { this.value = e.value; }
+    public spinNodeType intern() { for (spinNodeType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 // signed or unsigned integers
-public enum _spinSign {
+public enum spinSign {
     Signed(0),
     Unsigned(1),
     _UndefinedSign(2);
 
     public final int value;
-    private _spinSign(int v) { this.value = v; }
-    private _spinSign(_spinSign e) { this.value = e.value; }
-    public _spinSign intern() { for (_spinSign e : values()) if (e.value == value) return e; return this; }
+    private spinSign(int v) { this.value = v; }
+    private spinSign(spinSign e) { this.value = e.value; }
+    public spinSign intern() { for (spinSign e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 // access mode of a node
-public enum _spinAccessMode {
+public enum spinAccessMode {
     NI(0),
     NA(1),
     WO(2),
@@ -5657,14 +5657,14 @@ public enum _spinAccessMode {
     _CycleDetectAccesMode(6);
 
     public final int value;
-    private _spinAccessMode(int v) { this.value = v; }
-    private _spinAccessMode(_spinAccessMode e) { this.value = e.value; }
-    public _spinAccessMode intern() { for (_spinAccessMode e : values()) if (e.value == value) return e; return this; }
+    private spinAccessMode(int v) { this.value = v; }
+    private spinAccessMode(spinAccessMode e) { this.value = e.value; }
+    public spinAccessMode intern() { for (spinAccessMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 // recommended visibility of a node
-public enum _spinVisibility {
+public enum spinVisibility {
     Beginner(0),
     Expert(1),
     Guru(2),
@@ -5672,28 +5672,28 @@ public enum _spinVisibility {
     _UndefinedVisibility(99);
 
     public final int value;
-    private _spinVisibility(int v) { this.value = v; }
-    private _spinVisibility(_spinVisibility e) { this.value = e.value; }
-    public _spinVisibility intern() { for (_spinVisibility e : values()) if (e.value == value) return e; return this; }
+    private spinVisibility(int v) { this.value = v; }
+    private spinVisibility(spinVisibility e) { this.value = e.value; }
+    public spinVisibility intern() { for (spinVisibility e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 // caching mode of a register
-public enum _spinCachingMode {
+public enum spinCachingMode {
     NoCache(0),              // Do not use cache
     WriteThrough(1),         // Write to cache and register
     WriteAround(2),          // Write to register, write to cache on read
     _UndefinedCachingMode(3);// Not yet initialized
 
     public final int value;
-    private _spinCachingMode(int v) { this.value = v; }
-    private _spinCachingMode(_spinCachingMode e) { this.value = e.value; }
-    public _spinCachingMode intern() { for (_spinCachingMode e : values()) if (e.value == value) return e; return this; }
+    private spinCachingMode(int v) { this.value = v; }
+    private spinCachingMode(spinCachingMode e) { this.value = e.value; }
+    public spinCachingMode intern() { for (spinCachingMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** recommended representation of a node value */
-public enum _spinRepresentation {
+public enum spinRepresentation {
     /** Slider with linear behavior */
     Linear(0),
     /** Slider with logarithmic behaviour */
@@ -5711,14 +5711,14 @@ public enum _spinRepresentation {
     _UndefinedRepresentation(7);
 
     public final int value;
-    private _spinRepresentation(int v) { this.value = v; }
-    private _spinRepresentation(_spinRepresentation e) { this.value = e.value; }
-    public _spinRepresentation intern() { for (_spinRepresentation e : values()) if (e.value == value) return e; return this; }
+    private spinRepresentation(int v) { this.value = v; }
+    private spinRepresentation(spinRepresentation e) { this.value = e.value; }
+    public spinRepresentation intern() { for (spinRepresentation e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** Endianess of a value in a register */
-public enum _spinEndianess {
+public enum spinEndianess {
     /** Register is big endian */
     BigEndian(0),
     /** Register is little endian */
@@ -5727,14 +5727,14 @@ public enum _spinEndianess {
     _UndefinedEndian(2);
 
     public final int value;
-    private _spinEndianess(int v) { this.value = v; }
-    private _spinEndianess(_spinEndianess e) { this.value = e.value; }
-    public _spinEndianess intern() { for (_spinEndianess e : values()) if (e.value == value) return e; return this; }
+    private spinEndianess(int v) { this.value = v; }
+    private spinEndianess(spinEndianess e) { this.value = e.value; }
+    public spinEndianess intern() { for (spinEndianess e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** Defines if a node name is standard or custom */
-public enum _spinNameSpace {
+public enum spinNameSpace {
     /** name resides in custom namespace */
     Custom(0),
     /** name resides in one of the standard namespaces */
@@ -5743,14 +5743,14 @@ public enum _spinNameSpace {
     _UndefinedNameSpace(2);
 
     public final int value;
-    private _spinNameSpace(int v) { this.value = v; }
-    private _spinNameSpace(_spinNameSpace e) { this.value = e.value; }
-    public _spinNameSpace intern() { for (_spinNameSpace e : values()) if (e.value == value) return e; return this; }
+    private spinNameSpace(int v) { this.value = v; }
+    private spinNameSpace(spinNameSpace e) { this.value = e.value; }
+    public spinNameSpace intern() { for (spinNameSpace e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** Defines from which standard namespace a node name comes from */
-public enum _spinStandardNameSpace {
+public enum spinStandardNameSpace {
     /** name resides in custom namespace */
     None(0),
     /** name resides in GigE Vision namespace */
@@ -5765,14 +5765,14 @@ public enum _spinStandardNameSpace {
     _UndefinedStandardNameSpace(5);
 
     public final int value;
-    private _spinStandardNameSpace(int v) { this.value = v; }
-    private _spinStandardNameSpace(_spinStandardNameSpace e) { this.value = e.value; }
-    public _spinStandardNameSpace intern() { for (_spinStandardNameSpace e : values()) if (e.value == value) return e; return this; }
+    private spinStandardNameSpace(int v) { this.value = v; }
+    private spinStandardNameSpace(spinStandardNameSpace e) { this.value = e.value; }
+    public spinStandardNameSpace intern() { for (spinStandardNameSpace e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** Defines the chices of a Yes/No alternaitve */
-public enum _spinYesNo {
+public enum spinYesNo {
     /** yes */
     Yes(1),
     /** no */
@@ -5781,14 +5781,14 @@ public enum _spinYesNo {
     _UndefinedYesNo(2);
 
     public final int value;
-    private _spinYesNo(int v) { this.value = v; }
-    private _spinYesNo(_spinYesNo e) { this.value = e.value; }
-    public _spinYesNo intern() { for (_spinYesNo e : values()) if (e.value == value) return e; return this; }
+    private spinYesNo(int v) { this.value = v; }
+    private spinYesNo(spinYesNo e) { this.value = e.value; }
+    public spinYesNo intern() { for (spinYesNo e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** typedef for fomula type */
-public enum _spinSlope {
+public enum spinSlope {
     Increasing(0),      /**> strictly monotonous increasing */
     Decreasing(1),      /**> strictly monotonous decreasing */
     Varying(2),         /**> slope changes, e.g. at run-time */
@@ -5797,15 +5797,15 @@ public enum _spinSlope {
     _UndefinedESlope(4);
 
     public final int value;
-    private _spinSlope(int v) { this.value = v; }
-    private _spinSlope(_spinSlope e) { this.value = e.value; }
-    public _spinSlope intern() { for (_spinSlope e : values()) if (e.value == value) return e; return this; }
+    private spinSlope(int v) { this.value = v; }
+    private spinSlope(spinSlope e) { this.value = e.value; }
+    public spinSlope intern() { for (spinSlope e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** typedef describing the different validity checks which can be performed on an XML file
 /** The enum values for a bitfield of lenght uint32_t */
-public enum _spinXMLValidation {
+public enum spinXMLValidation {
     xvLoad(0x00000001L),                 /**> Creates a dummy node map */
     xvCycles(0x00000002L),               /**> checks for write and dependency cycles (implies xvLoad) */
     xvSFNC(0x00000004L),                 /**> checks for conformance with the standard feature naming convention (SFNC) */
@@ -5815,14 +5815,14 @@ public enum _spinXMLValidation {
     _UndefinedEXMLValidation(0x8000000L);
 
     public final long value;
-    private _spinXMLValidation(long v) { this.value = v; }
-    private _spinXMLValidation(_spinXMLValidation e) { this.value = e.value; }
-    public _spinXMLValidation intern() { for (_spinXMLValidation e : values()) if (e.value == value) return e; return this; }
+    private spinXMLValidation(long v) { this.value = v; }
+    private spinXMLValidation(spinXMLValidation e) { this.value = e.value; }
+    public spinXMLValidation intern() { for (spinXMLValidation e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** typedef for float notation */
-public enum _spinDisplayNotation {
+public enum spinDisplayNotation {
     fnAutomatic(0),               /**> the notation if either scientific or fixed depending on what is shorter */
     fnFixed(1),                   /**> the notation is fixed, e.g. 123.4 */
     fnScientific(2),              /**> the notation is scientific, e.g. 1.234e2 */
@@ -5830,14 +5830,14 @@ public enum _spinDisplayNotation {
     _UndefinedEDisplayNotation(3);
 
     public final int value;
-    private _spinDisplayNotation(int v) { this.value = v; }
-    private _spinDisplayNotation(_spinDisplayNotation e) { this.value = e.value; }
-    public _spinDisplayNotation intern() { for (_spinDisplayNotation e : values()) if (e.value == value) return e; return this; }
+    private spinDisplayNotation(int v) { this.value = v; }
+    private spinDisplayNotation(spinDisplayNotation e) { this.value = e.value; }
+    public spinDisplayNotation intern() { for (spinDisplayNotation e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** typedef for interface type */
-public enum _spinInterfaceType {
+public enum spinInterfaceType {
     intfIValue(0),       /**> IValue interface */
     intfIBase(1),        /**> IBase interface */
     intfIInteger(2),     /**> IInteger interface */
@@ -5852,14 +5852,14 @@ public enum _spinInterfaceType {
     intfIPort(11);        /**> IPort interface */
 
     public final int value;
-    private _spinInterfaceType(int v) { this.value = v; }
-    private _spinInterfaceType(_spinInterfaceType e) { this.value = e.value; }
-    public _spinInterfaceType intern() { for (_spinInterfaceType e : values()) if (e.value == value) return e; return this; }
+    private spinInterfaceType(int v) { this.value = v; }
+    private spinInterfaceType(spinInterfaceType e) { this.value = e.value; }
+    public spinInterfaceType intern() { for (spinInterfaceType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** typedef for link type */
-public enum _spinLinkType {
+public enum spinLinkType {
     ctAllDependingNodes(0), /**> All nodes which will be invalidated if this node becomes invalid */
     ctAllTerminalNodes(1),  /**> All terminal nodes which may be written to by this node */
     ctInvalidators(2),      /**> List of references to nodes which may invalidate this node */
@@ -5868,35 +5868,35 @@ public enum _spinLinkType {
     ctDependingChildren(5); /**> All child nodes which will cause this node to be invalidated */
 
     public final int value;
-    private _spinLinkType(int v) { this.value = v; }
-    private _spinLinkType(_spinLinkType e) { this.value = e.value; }
-    public _spinLinkType intern() { for (_spinLinkType e : values()) if (e.value == value) return e; return this; }
+    private spinLinkType(int v) { this.value = v; }
+    private spinLinkType(spinLinkType e) { this.value = e.value; }
+    public spinLinkType intern() { for (spinLinkType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** typedef for increment mode */
-public enum _spinIncMode {
+public enum spinIncMode {
     noIncrement(0),    // !> The feature has no increment
     fixedIncrement(1), // !> The feature has a fix increment
     listIncrement(2); // !> The feature has a list of valid value
 
     public final int value;
-    private _spinIncMode(int v) { this.value = v; }
-    private _spinIncMode(_spinIncMode e) { this.value = e.value; }
-    public _spinIncMode intern() { for (_spinIncMode e : values()) if (e.value == value) return e; return this; }
+    private spinIncMode(int v) { this.value = v; }
+    private spinIncMode(spinIncMode e) { this.value = e.value; }
+    public spinIncMode intern() { for (spinIncMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
 /** typedef for link type */
-public enum _spinInputDirection {
+public enum spinInputDirection {
     idFrom(0), /**> Indicates a swiss knife that it is used as worker for a converter computing FROM */
     idTo(1),   /**> Indicates a swiss knife that it is used as worker for a converter computing TO */
     idNone(2); /**> SwissKnife is not used within a converter */
 
     public final int value;
-    private _spinInputDirection(int v) { this.value = v; }
-    private _spinInputDirection(_spinInputDirection e) { this.value = e.value; }
-    public _spinInputDirection intern() { for (_spinInputDirection e : values()) if (e.value == value) return e; return this; }
+    private spinInputDirection(int v) { this.value = v; }
+    private spinInputDirection(spinInputDirection e) { this.value = e.value; }
+    public spinInputDirection intern() { for (spinInputDirection e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
@@ -5959,8 +5959,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeMapGetNode(spinNodeMapHandle hNodeMap, @Cast("const char*") BytePointer pName, @ByPtrPtr spinNodeHandle phNode);
-    public static native @Cast("_spinError") int spinNodeMapGetNode(spinNodeMapHandle hNodeMap, String pName, @ByPtrPtr spinNodeHandle phNode);
+    public static native spinError spinNodeMapGetNode(spinNodeMapHandle hNodeMap, @Cast("const char*") BytePointer pName, @ByPtrPtr spinNodeHandle phNode);
+    public static native spinError spinNodeMapGetNode(spinNodeMapHandle hNodeMap, String pName, @ByPtrPtr spinNodeHandle phNode);
 
     /**
      * Gets the number of nodes in the map
@@ -5971,7 +5971,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeMapGetNumNodes(spinNodeMapHandle hNodeMap, @Cast("size_t*") SizeTPointer pValue);
+    public static native spinError spinNodeMapGetNumNodes(spinNodeMapHandle hNodeMap, @Cast("size_t*") SizeTPointer pValue);
 
     /**
      * Retrieves a node from the nodemap by index
@@ -5983,7 +5983,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeMapGetNodeByIndex(spinNodeMapHandle hNodeMap, @Cast("size_t") long index, @ByPtrPtr spinNodeHandle phNode);
+    public static native spinError spinNodeMapGetNodeByIndex(spinNodeMapHandle hNodeMap, @Cast("size_t") long index, @ByPtrPtr spinNodeHandle phNode);
 
     /**
      * Releases the entry node handle.
@@ -5998,7 +5998,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeMapReleaseNode(spinNodeMapHandle hNodeMap, spinNodeHandle hNode);
+    public static native spinError spinNodeMapReleaseNode(spinNodeMapHandle hNodeMap, spinNodeHandle hNode);
     
     /**
      * Fires nodes which have a polling time
@@ -6009,7 +6009,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeMapPoll(spinNodeMapHandle hNodeMap, @Cast("int64_t") long timestamp);
+    public static native spinError spinNodeMapPoll(spinNodeMapHandle hNodeMap, @Cast("int64_t") long timestamp);
     /*@}*/
 
     /**
@@ -6030,9 +6030,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native @Cast("_spinError") int spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
-    public static native _spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
+    public static native spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
+    public static native spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
      * Checks whether a node is readable
@@ -6043,9 +6043,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native @Cast("_spinError") int spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
-    public static native _spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
+    public static native spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
+    public static native spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
      * Checks whether a node is writable
@@ -6056,9 +6056,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native @Cast("_spinError") int spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
-    public static native _spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
+    public static native spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
+    public static native spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
      * Checks whether a node is available
@@ -6069,9 +6069,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native @Cast("_spinError") int spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
-    public static native _spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
+    public static native spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
+    public static native spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
      * Checks whether two nodes are equal
@@ -6084,9 +6084,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") BytePointer pbResult);
-    public static native @Cast("_spinError") int spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") ByteBuffer pbResult);
-    public static native _spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") byte[] pbResult);
+    public static native spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") BytePointer pbResult);
+    public static native spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") byte[] pbResult);
 
     /**
      * Retrieves the access mode of a node (as an enum, spinAccessMode)
@@ -6098,9 +6098,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") IntPointer pAccessMode);
-    public static native @Cast("_spinError") int spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") IntBuffer pAccessMode);
-    public static native _spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") int[] pAccessMode);
+    public static native spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") IntPointer pAccessMode);
+    public static native spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") IntBuffer pAccessMode);
+    public static native spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") int[] pAccessMode);
 
     /**
      * Retrieves the name of a node (no whitespace)
@@ -6113,9 +6113,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinNodeGetName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieve the namespace of a node (as an enum, spinNameSpace)
@@ -6127,9 +6127,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") IntPointer pNamespace);
-    public static native @Cast("_spinError") int spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") IntBuffer pNamespace);
-    public static native _spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") int[] pNamespace);
+    public static native spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") IntPointer pNamespace);
+    public static native spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") IntBuffer pNamespace);
+    public static native spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") int[] pNamespace);
 
     /**
      * Retrieves the recommended visibility of a node (as an enum, spinVisibility)
@@ -6141,9 +6141,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") IntPointer pVisibility);
-    public static native @Cast("_spinError") int spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") IntBuffer pVisibility);
-    public static native _spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") int[] pVisibility);
+    public static native spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") IntPointer pVisibility);
+    public static native spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") IntBuffer pVisibility);
+    public static native spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") int[] pVisibility);
 
     /**
      * Invalidates a node in case its values may have changed, rendering it no longer valid
@@ -6153,7 +6153,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeInvalidateNode(spinNodeHandle hNode);
+    public static native spinError spinNodeInvalidateNode(spinNodeHandle hNode);
 
     /**
      * Retrieves the caching mode of a node (as an enum, spinCachingMode)
@@ -6165,9 +6165,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") IntPointer pCachingMode);
-    public static native @Cast("_spinError") int spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") IntBuffer pCachingMode);
-    public static native _spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") int[] pCachingMode);
+    public static native spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") IntPointer pCachingMode);
+    public static native spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") IntBuffer pCachingMode);
+    public static native spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") int[] pCachingMode);
 
     /**
      * Retrieves a short description of a node
@@ -6180,9 +6180,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves a longer description of a node
@@ -6195,9 +6195,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the display name of a node (whitespace possible)
@@ -6210,9 +6210,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the type of a node (as an enum, spinNodeType)
@@ -6224,9 +6224,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") IntPointer pType);
-    public static native @Cast("_spinError") int spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") IntBuffer pType);
-    public static native _spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") int[] pType);
+    public static native spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") IntPointer pType);
+    public static native spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") IntBuffer pType);
+    public static native spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") int[] pType);
 
     /**
      * Retrieve the polling time of a node
@@ -6237,9 +6237,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pPollingTime);
-    public static native @Cast("_spinError") int spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pPollingTime);
-    public static native _spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") long[] pPollingTime);
+    public static native spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pPollingTime);
+    public static native spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pPollingTime);
+    public static native spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") long[] pPollingTime);
 
     /**
      * Registers a callback to a node
@@ -6252,7 +6252,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeRegisterCallback(
+    public static native spinError spinNodeRegisterCallback(
             spinNodeHandle hNode,
             spinNodeCallbackFunction pCbFunction,
             @ByPtrPtr spinNodeCallbackHandle phCb);
@@ -6266,7 +6266,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeDeregisterCallback(spinNodeHandle hNode, spinNodeCallbackHandle hCb);
+    public static native spinError spinNodeDeregisterCallback(spinNodeHandle hNode, spinNodeCallbackHandle hCb);
 
     /**
      * Retrieves the imposed access mode of a node
@@ -6277,7 +6277,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetImposedAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode") int imposedAccessMode);
+    public static native spinError spinNodeGetImposedAccessMode(spinNodeHandle hNode, spinAccessMode imposedAccessMode);
+    public static native spinError spinNodeGetImposedAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode") int imposedAccessMode);
 
     /**
      * Retrieves the imposed visibility of a node
@@ -6288,7 +6289,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeGetImposedVisibility(spinNodeHandle hNode, @Cast("spinVisibility") int imposedVisibility);
+    public static native spinError spinNodeGetImposedVisibility(spinNodeHandle hNode, spinVisibility imposedVisibility);
+    public static native spinError spinNodeGetImposedVisibility(spinNodeHandle hNode, @Cast("spinVisibility") int imposedVisibility);
     /*@}*/
 
     /**
@@ -6312,9 +6314,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinNodeToString(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the value of any node type as a c-string; manually set whether to verify the node
@@ -6328,9 +6330,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Sets the value of any node type from a c-string; it is important to ensure that the value of the c-string is
@@ -6342,8 +6344,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeFromString(spinNodeHandle hNode, @Cast("const char*") BytePointer pBuf);
-    public static native @Cast("_spinError") int spinNodeFromString(spinNodeHandle hNode, String pBuf);
+    public static native spinError spinNodeFromString(spinNodeHandle hNode, @Cast("const char*") BytePointer pBuf);
+    public static native spinError spinNodeFromString(spinNodeHandle hNode, String pBuf);
 
     /**
      * Sets the value of any node type from a c-string; manually set whether to verify the node; ensure the value of the
@@ -6356,8 +6358,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinNodeFromStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const char*") BytePointer pBuf);
-    public static native @Cast("_spinError") int spinNodeFromStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
+    public static native spinError spinNodeFromStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const char*") BytePointer pBuf);
+    public static native spinError spinNodeFromStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
     /*@}*/
 
     /**
@@ -6378,8 +6380,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinStringSetValue(spinNodeHandle hNode, @Cast("const char*") BytePointer pBuf);
-    public static native @Cast("_spinError") int spinStringSetValue(spinNodeHandle hNode, String pBuf);
+    public static native spinError spinStringSetValue(spinNodeHandle hNode, @Cast("const char*") BytePointer pBuf);
+    public static native spinError spinStringSetValue(spinNodeHandle hNode, String pBuf);
 
     /**
      * Sets the value of a string node; manually set whether to verify the node
@@ -6391,8 +6393,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinStringSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const char*") BytePointer pBuf);
-    public static native @Cast("_spinError") int spinStringSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
+    public static native spinError spinStringSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const char*") BytePointer pBuf);
+    public static native spinError spinStringSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
 
     /**
      * Retrieves the value of a string node as a c-string
@@ -6405,9 +6407,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinStringGetValue(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the value of a string node as a cstring; manually set whether to verify the node
@@ -6421,9 +6423,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the maximum length of the c-string to be returned
@@ -6434,9 +6436,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
     /*@}*/
 
     /**
@@ -6457,7 +6459,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerSetValue(spinNodeHandle hNode, @Cast("int64_t") long value);
+    public static native spinError spinIntegerSetValue(spinNodeHandle hNode, @Cast("int64_t") long value);
 
     /**
      * Sets the value of an integer node; manually set whether to verify the node
@@ -6469,7 +6471,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t") long value);
+    public static native spinError spinIntegerSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t") long value);
 
     /**
      * Retrieves the value of an integer node
@@ -6480,9 +6482,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
      * Retrieves the value of an integer node; manually set whether to verify the node
@@ -6494,9 +6496,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") long[] pValue);
 
     /**
      * Retrieves the minimum value of an integer node; all potential values must be greater than or equal to the minimum
@@ -6507,9 +6509,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
      * Retrieves the maximum value of an integer node; all potential values must be lesser than or equal to the maximum
@@ -6520,9 +6522,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
      * Retrieves the increment of an integer node; all possible values must be divisible by the increment
@@ -6533,9 +6535,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
      * Retrieves the numerical representation of the value of a node; i.e. linear, logarithmic, hexidecimal, MAC
@@ -6547,9 +6549,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntPointer pValue);
-    public static native @Cast("_spinError") int spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
-    public static native _spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") int[] pValue);
+    public static native spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntPointer pValue);
+    public static native spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
+    public static native spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") int[] pValue);
     /*@}*/
 
     /**
@@ -6570,7 +6572,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatSetValue(spinNodeHandle hNode, double value);
+    public static native spinError spinFloatSetValue(spinNodeHandle hNode, double value);
 
     /**
      * Sets the value of a float node; manually set whether to verify the node
@@ -6582,7 +6584,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, double value);
+    public static native spinError spinFloatSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, double value);
 
     /**
      * Retrieves the value of a float node
@@ -6593,9 +6595,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatGetValue(spinNodeHandle hNode, DoublePointer pValue);
-    public static native @Cast("_spinError") int spinFloatGetValue(spinNodeHandle hNode, DoubleBuffer pValue);
-    public static native _spinError spinFloatGetValue(spinNodeHandle hNode, double[] pValue);
+    public static native spinError spinFloatGetValue(spinNodeHandle hNode, DoublePointer pValue);
+    public static native spinError spinFloatGetValue(spinNodeHandle hNode, DoubleBuffer pValue);
+    public static native spinError spinFloatGetValue(spinNodeHandle hNode, double[] pValue);
 
     /**
      * Retrieves the value of a float node; manually set whether to verify the node
@@ -6606,9 +6608,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, DoublePointer pValue);
-    public static native @Cast("_spinError") int spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, DoubleBuffer pValue);
-    public static native _spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, double[] pValue);
+    public static native spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, DoublePointer pValue);
+    public static native spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, DoubleBuffer pValue);
+    public static native spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, double[] pValue);
 
     /**
      * Retrieves the minimum value of a float node; all potential values must be greater than or equal to the minimum
@@ -6619,9 +6621,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatGetMin(spinNodeHandle hNode, DoublePointer pValue);
-    public static native @Cast("_spinError") int spinFloatGetMin(spinNodeHandle hNode, DoubleBuffer pValue);
-    public static native _spinError spinFloatGetMin(spinNodeHandle hNode, double[] pValue);
+    public static native spinError spinFloatGetMin(spinNodeHandle hNode, DoublePointer pValue);
+    public static native spinError spinFloatGetMin(spinNodeHandle hNode, DoubleBuffer pValue);
+    public static native spinError spinFloatGetMin(spinNodeHandle hNode, double[] pValue);
 
     /**
      * Retrieves the maximum value of a float node; all potential values must be lesser than or equal to the maximum
@@ -6632,9 +6634,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatGetMax(spinNodeHandle hNode, DoublePointer pValue);
-    public static native @Cast("_spinError") int spinFloatGetMax(spinNodeHandle hNode, DoubleBuffer pValue);
-    public static native _spinError spinFloatGetMax(spinNodeHandle hNode, double[] pValue);
+    public static native spinError spinFloatGetMax(spinNodeHandle hNode, DoublePointer pValue);
+    public static native spinError spinFloatGetMax(spinNodeHandle hNode, DoubleBuffer pValue);
+    public static native spinError spinFloatGetMax(spinNodeHandle hNode, double[] pValue);
 
     /**
      * Retrieves the numerical representation of the value of a node; i.e. linear, logarithmic, hexidecimal, MAC
@@ -6646,9 +6648,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntPointer pValue);
-    public static native @Cast("_spinError") int spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
-    public static native _spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") int[] pValue);
+    public static native spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntPointer pValue);
+    public static native spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
+    public static native spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") int[] pValue);
 
     /**
      * Retrieves the units of the float node value
@@ -6661,9 +6663,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     /*@}*/
 
     /**
@@ -6684,7 +6686,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationGetNumEntries(spinNodeHandle hEnumNode, @Cast("size_t*") SizeTPointer pValue);
+    public static native spinError spinEnumerationGetNumEntries(spinNodeHandle hEnumNode, @Cast("size_t*") SizeTPointer pValue);
 
     /**
      * Retrieves an entry node from an enum node using an index
@@ -6696,7 +6698,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationGetEntryByIndex(spinNodeHandle hEnumNode, @Cast("size_t") long index, @ByPtrPtr spinNodeHandle phEntry);
+    public static native spinError spinEnumerationGetEntryByIndex(spinNodeHandle hEnumNode, @Cast("size_t") long index, @ByPtrPtr spinNodeHandle phEntry);
 
     /**
      * Retrieves an entry node from an enum node using the entry's symbolic
@@ -6708,8 +6710,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationGetEntryByName(spinNodeHandle hEnumNode, @Cast("const char*") BytePointer pName, @ByPtrPtr spinNodeHandle phEntry);
-    public static native @Cast("_spinError") int spinEnumerationGetEntryByName(spinNodeHandle hEnumNode, String pName, @ByPtrPtr spinNodeHandle phEntry);
+    public static native spinError spinEnumerationGetEntryByName(spinNodeHandle hEnumNode, @Cast("const char*") BytePointer pName, @ByPtrPtr spinNodeHandle phEntry);
+    public static native spinError spinEnumerationGetEntryByName(spinNodeHandle hEnumNode, String pName, @ByPtrPtr spinNodeHandle phEntry);
 
     /**
      * Retrieves the currently selected entry node from an enum node
@@ -6720,7 +6722,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationGetCurrentEntry(spinNodeHandle hEnumNode, @ByPtrPtr spinNodeHandle phEntry);
+    public static native spinError spinEnumerationGetCurrentEntry(spinNodeHandle hEnumNode, @ByPtrPtr spinNodeHandle phEntry);
 
     /**
      * Releases the entry node from the enum node handle.
@@ -6735,7 +6737,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationReleaseNode(spinNodeHandle hEnumNode, spinNodeHandle hEntry);
+    public static native spinError spinEnumerationReleaseNode(spinNodeHandle hEnumNode, spinNodeHandle hEntry);
     
     /**
      * Sets a new entry using its integer value retrieved from a call to spinEnumerationEntryGetIntValue(); note that
@@ -6750,7 +6752,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationSetIntValue(spinNodeHandle hEnumNode, @Cast("int64_t") long value);
+    public static native spinError spinEnumerationSetIntValue(spinNodeHandle hEnumNode, @Cast("int64_t") long value);
 
     /**
      * Sets a new entry using its enum; note that enumeration entry int and enum values are different - int values
@@ -6764,7 +6766,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationSetEnumValue(spinNodeHandle hEnumNode, @Cast("size_t") long value);
+    public static native spinError spinEnumerationSetEnumValue(spinNodeHandle hEnumNode, @Cast("size_t") long value);
     /*@}*/
 
     /**
@@ -6786,9 +6788,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
      * Retrieves the enum value (as an integer) of an entry node; note that enumeraiton entry int and enum values are
@@ -6801,7 +6803,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationEntryGetEnumValue(spinNodeHandle hNode, @Cast("size_t*") SizeTPointer pValue);
+    public static native spinError spinEnumerationEntryGetEnumValue(spinNodeHandle hNode, @Cast("size_t*") SizeTPointer pValue);
 
     /**
      * Retrieves the symbolic of an entry node as a c-string
@@ -6814,9 +6816,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     /*@}*/
 
     /**
@@ -6838,7 +6840,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinBooleanSetValue(spinNodeHandle hNode, @Cast("bool8_t") byte value);
+    public static native spinError spinBooleanSetValue(spinNodeHandle hNode, @Cast("bool8_t") byte value);
 
     /**
      * Retrieves the value of a boolean node; boolean values are represented by 'True' (which equals '0') and 'False'
@@ -6850,9 +6852,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbValue);
-    public static native @Cast("_spinError") int spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
-    public static native _spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbValue);
+    public static native spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbValue);
+    public static native spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
+    public static native spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbValue);
     /*@}*/
 
     /**
@@ -6872,7 +6874,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCommandExecute(spinNodeHandle hNode);
+    public static native spinError spinCommandExecute(spinNodeHandle hNode);
 
     /**
      * Retrieves whether or not the action of a command node has completed
@@ -6883,9 +6885,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbValue);
-    public static native @Cast("_spinError") int spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
-    public static native _spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbValue);
+    public static native spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbValue);
+    public static native spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
+    public static native spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbValue);
     /*@}*/
 
     /**
@@ -6906,7 +6908,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCategoryGetNumFeatures(spinNodeHandle hCategoryNode, @Cast("size_t*") SizeTPointer pValue);
+    public static native spinError spinCategoryGetNumFeatures(spinNodeHandle hCategoryNode, @Cast("size_t*") SizeTPointer pValue);
 
     /**
      * Retrieves a node from a category node using an index
@@ -6918,7 +6920,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCategoryGetFeatureByIndex(spinNodeHandle hCategoryNode, @Cast("size_t") long index, @ByPtrPtr spinNodeHandle phFeature);
+    public static native spinError spinCategoryGetFeatureByIndex(spinNodeHandle hCategoryNode, @Cast("size_t") long index, @ByPtrPtr spinNodeHandle phFeature);
     /*@}*/
 
     /**
@@ -6934,7 +6936,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCategoryReleaseNode(spinNodeHandle hCategoryNode, spinNodeHandle hFeature);
+    public static native spinError spinCategoryReleaseNode(spinNodeHandle hCategoryNode, spinNodeHandle hFeature);
 
     /**
      * \defgroup CIRegister IRegister Access
@@ -6955,9 +6957,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") BytePointer pBuf, @Cast("int64_t") long length);
-    public static native @Cast("_spinError") int spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
-    public static native _spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") byte[] pBuf, @Cast("int64_t") long length);
+    public static native spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") BytePointer pBuf, @Cast("int64_t") long length);
+    public static native spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
+    public static native spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") byte[] pBuf, @Cast("int64_t") long length);
 
     /**
      * Retrieves the value of a register node; manually set whether to verify the node and whether to ignore the cache
@@ -6972,19 +6974,19 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinRegisterGetEx(
+    public static native spinError spinRegisterGetEx(
             spinNodeHandle hNode,
             @Cast("bool8_t") byte bVerify,
             @Cast("bool8_t") byte bIgnoreCache,
             @Cast("uint8_t*") BytePointer pBuf,
             @Cast("int64_t") long length);
-    public static native @Cast("_spinError") int spinRegisterGetEx(
+    public static native spinError spinRegisterGetEx(
             spinNodeHandle hNode,
             @Cast("bool8_t") byte bVerify,
             @Cast("bool8_t") byte bIgnoreCache,
             @Cast("uint8_t*") ByteBuffer pBuf,
             @Cast("int64_t") long length);
-    public static native _spinError spinRegisterGetEx(
+    public static native spinError spinRegisterGetEx(
             spinNodeHandle hNode,
             @Cast("bool8_t") byte bVerify,
             @Cast("bool8_t") byte bIgnoreCache,
@@ -7000,9 +7002,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pAddress);
-    public static native @Cast("_spinError") int spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pAddress);
-    public static native _spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") long[] pAddress);
+    public static native spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pAddress);
+    public static native spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pAddress);
+    public static native spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") long[] pAddress);
 
     /**
      * Retrieves the length (in bytes) of the value of a register node
@@ -7013,9 +7015,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pLength);
-    public static native @Cast("_spinError") int spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pLength);
-    public static native _spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") long[] pLength);
+    public static native spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pLength);
+    public static native spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pLength);
+    public static native spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") long[] pLength);
 
     /**
      * Sets the value of a register node
@@ -7027,9 +7029,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") BytePointer pBuf, @Cast("int64_t") long length);
-    public static native @Cast("_spinError") int spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
-    public static native _spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") byte[] pBuf, @Cast("int64_t") long length);
+    public static native spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") BytePointer pBuf, @Cast("int64_t") long length);
+    public static native spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
+    public static native spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") byte[] pBuf, @Cast("int64_t") long length);
 
     /**
      * Sets the value of a register node; manually set whether to verify the node
@@ -7053,7 +7055,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinRegisterSetReference(spinNodeHandle hNode, spinNodeHandle hRef);
+    public static native spinError spinRegisterSetReference(spinNodeHandle hNode, spinNodeHandle hRef);
 
     /*@}*/
 
@@ -7133,9 +7135,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLast(@Cast("spinError*") IntPointer pError);
-    public static native @Cast("_spinError") int spinErrorGetLast(@Cast("spinError*") IntBuffer pError);
-    public static native _spinError spinErrorGetLast(@Cast("spinError*") int[] pError);
+    public static native spinError spinErrorGetLast(@Cast("spinError*") IntPointer pError);
+    public static native spinError spinErrorGetLast(@Cast("spinError*") IntBuffer pError);
+    public static native spinError spinErrorGetLast(@Cast("spinError*") int[] pError);
 
     /**
      * Retrieves the error message of the last error
@@ -7147,9 +7149,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLastMessage(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinErrorGetLastMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinErrorGetLastMessage(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastMessage(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastMessage(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the build date of the last error
@@ -7161,9 +7163,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLastBuildDate(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinErrorGetLastBuildDate(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinErrorGetLastBuildDate(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastBuildDate(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastBuildDate(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastBuildDate(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the build time of the last error
@@ -7175,9 +7177,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLastBuildTime(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinErrorGetLastBuildTime(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinErrorGetLastBuildTime(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastBuildTime(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastBuildTime(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastBuildTime(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the filename of the last error
@@ -7189,9 +7191,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLastFileName(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinErrorGetLastFileName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinErrorGetLastFileName(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFileName(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFileName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFileName(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the full error message of the last error
@@ -7203,9 +7205,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLastFullMessage(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinErrorGetLastFullMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinErrorGetLastFullMessage(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFullMessage(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFullMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFullMessage(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the function name of the last error
@@ -7217,9 +7219,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLastFunctionName(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinErrorGetLastFunctionName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinErrorGetLastFunctionName(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFunctionName(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFunctionName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinErrorGetLastFunctionName(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the line number of the last error
@@ -7231,9 +7233,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinErrorGetLastLineNumber(@Cast("int64_t*") LongPointer pLineNum);
-    public static native @Cast("_spinError") int spinErrorGetLastLineNumber(@Cast("int64_t*") LongBuffer pLineNum);
-    public static native _spinError spinErrorGetLastLineNumber(@Cast("int64_t*") long[] pLineNum);
+    public static native spinError spinErrorGetLastLineNumber(@Cast("int64_t*") LongPointer pLineNum);
+    public static native spinError spinErrorGetLastLineNumber(@Cast("int64_t*") LongBuffer pLineNum);
+    public static native spinError spinErrorGetLastLineNumber(@Cast("int64_t*") long[] pLineNum);
     /*@}*/
 
     /**
@@ -7257,7 +7259,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemGetInstance(@ByPtrPtr spinSystem phSystem);
+    public static native spinError spinSystemGetInstance(@ByPtrPtr spinSystem phSystem);
 
     /**
      * Releases the system; make sure handle is cleaned up properly by setting it to NULL
@@ -7271,7 +7273,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemReleaseInstance(spinSystem hSystem);
+    public static native spinError spinSystemReleaseInstance(spinSystem hSystem);
 
     /**
      * Retrieves a list of detected (and enumerable) interfaces on the system;
@@ -7286,7 +7288,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemGetInterfaces(spinSystem hSystem, spinInterfaceList hInterfaceList);
+    public static native spinError spinSystemGetInterfaces(spinSystem hSystem, spinInterfaceList hInterfaceList);
 
     /**
      * Retrieves a list of detected (and enumerable) cameras on the system;
@@ -7301,7 +7303,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemGetCameras(spinSystem hSystem, spinCameraList hCameraList);
+    public static native spinError spinSystemGetCameras(spinSystem hSystem, spinCameraList hCameraList);
 
     /**
      * Retrieves a list of detected (and enumerable) cameras on the system;
@@ -7319,7 +7321,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemGetCamerasEx(
+    public static native spinError spinSystemGetCamerasEx(
             spinSystem hSystem,
             @Cast("bool8_t") byte bUpdateInterfaces,
             @Cast("bool8_t") byte bUpdateCameras,
@@ -7334,7 +7336,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemSetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel") int logLevel);
+    public static native spinError spinSystemSetLoggingLevel(spinSystem hSystem, spinnakerLogLevel logLevel);
+    public static native spinError spinSystemSetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel") int logLevel);
 
     /**
      * Retrieves the logging level for all logging events on the system
@@ -7345,9 +7348,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") IntPointer pLogLevel);
-    public static native @Cast("_spinError") int spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") IntBuffer pLogLevel);
-    public static native _spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") int[] pLogLevel);
+    public static native spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") IntPointer pLogLevel);
+    public static native spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") IntBuffer pLogLevel);
+    public static native spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") int[] pLogLevel);
 
     /**
      * Registers a logging event handler to the system (event handlers registered in this way must be unregistered)
@@ -7358,7 +7361,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemRegisterLogEventHandler(spinSystem hSystem, spinLogEventHandler hLogEventHandler);
+    public static native spinError spinSystemRegisterLogEventHandler(spinSystem hSystem, spinLogEventHandler hLogEventHandler);
 
     /**
      * Unregisters a selected logging event handler from the system
@@ -7369,7 +7372,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemUnregisterLogEventHandler(spinSystem hSystem, spinLogEventHandler hLogEventHandler);
+    public static native spinError spinSystemUnregisterLogEventHandler(spinSystem hSystem, spinLogEventHandler hLogEventHandler);
 
     /**
      * Unregisters all logging event handlers from the system
@@ -7379,7 +7382,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemUnregisterAllLogEventHandlers(spinSystem hSystem);
+    public static native spinError spinSystemUnregisterAllLogEventHandlers(spinSystem hSystem);
 
     /**
      * Checks whether a system is currently in use
@@ -7390,9 +7393,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") BytePointer pbIsInUse);
-    public static native @Cast("_spinError") int spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbIsInUse);
-    public static native _spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") byte[] pbIsInUse);
+    public static native spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") BytePointer pbIsInUse);
+    public static native spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbIsInUse);
+    public static native spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") byte[] pbIsInUse);
 
     /**
      * Registers a device arrival event handler to every interface on the system (event handlers registered this way
@@ -7404,7 +7407,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemRegisterDeviceArrivalEventHandler(
+    public static native spinError spinSystemRegisterDeviceArrivalEventHandler(
             spinSystem hSystem,
             spinDeviceArrivalEventHandler hDeviceArrivalEventHandler);
 
@@ -7418,7 +7421,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemRegisterDeviceRemovalEventHandler(
+    public static native spinError spinSystemRegisterDeviceRemovalEventHandler(
             spinSystem hSystem,
             spinDeviceRemovalEventHandler hDeviceRemovalEventHandler);
 
@@ -7432,7 +7435,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemUnregisterDeviceArrivalEventHandler(
+    public static native spinError spinSystemUnregisterDeviceArrivalEventHandler(
             spinSystem hSystem,
             spinDeviceArrivalEventHandler hDeviceArrivalEventHandler);
 
@@ -7446,7 +7449,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemUnregisterDeviceRemovalEventHandler(
+    public static native spinError spinSystemUnregisterDeviceRemovalEventHandler(
             spinSystem hSystem,
             spinDeviceRemovalEventHandler hDeviceRemovalEventHandler);
 
@@ -7464,7 +7467,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemRegisterInterfaceEventHandler(
+    public static native spinError spinSystemRegisterInterfaceEventHandler(
             spinSystem hSystem,
             spinInterfaceEventHandler hInterfaceEventHandler);
 
@@ -7479,7 +7482,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemUnregisterInterfaceEventHandler(
+    public static native spinError spinSystemUnregisterInterfaceEventHandler(
             spinSystem hSystem,
             spinInterfaceEventHandler hInterfaceEventHandler);
 
@@ -7492,9 +7495,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") BytePointer pbChanged);
-    public static native @Cast("_spinError") int spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbChanged);
-    public static native _spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") byte[] pbChanged);
+    public static native spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") BytePointer pbChanged);
+    public static native spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbChanged);
+    public static native spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") byte[] pbChanged);
 
     /**
      * Updates the list of cameras on the system, informing whether there has been any changes; manually set whether to
@@ -7507,9 +7510,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") BytePointer pbChanged);
-    public static native @Cast("_spinError") int spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") ByteBuffer pbChanged);
-    public static native _spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") byte[] pbChanged);
+    public static native spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") BytePointer pbChanged);
+    public static native spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") ByteBuffer pbChanged);
+    public static native spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") byte[] pbChanged);
 
     /**
      * Broadcast an Action Command to all devices on system
@@ -7537,7 +7540,7 @@ public enum _spinInputDirection {
      *
      * @return A struct containing the current version of Spinnaker(major, minor, type, build).
      */
-    public static native _spinError spinSystemGetLibraryVersion(spinSystem hSystem, spinLibraryVersion hLibraryVersion);
+    public static native spinError spinSystemGetLibraryVersion(spinSystem hSystem, spinLibraryVersion hLibraryVersion);
 
     /**
      * Retrieves the transport layer nodemap from the system.
@@ -7548,7 +7551,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinSystemGetTLNodeMap(spinSystem hSystem, @ByPtrPtr spinNodeMapHandle phNodeMap);
+    public static native spinError spinSystemGetTLNodeMap(spinSystem hSystem, @ByPtrPtr spinNodeMapHandle phNodeMap);
     /*@}*/
 
     /**
@@ -7568,7 +7571,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceListCreateEmpty(@ByPtrPtr spinInterfaceList phInterfaceList);
+    public static native spinError spinInterfaceListCreateEmpty(@ByPtrPtr spinInterfaceList phInterfaceList);
 
     /**
      * Destroys an interface list
@@ -7578,7 +7581,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceListDestroy(spinInterfaceList hInterfaceList);
+    public static native spinError spinInterfaceListDestroy(spinInterfaceList hInterfaceList);
 
     /**
      * Retrieves the number of interfaces in an interface list
@@ -7590,7 +7593,7 @@ public enum _spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      * @see spinError
      */
-    public static native _spinError spinInterfaceListGetSize(spinInterfaceList hInterfaceList, @Cast("size_t*") SizeTPointer pSize);
+    public static native spinError spinInterfaceListGetSize(spinInterfaceList hInterfaceList, @Cast("size_t*") SizeTPointer pSize);
 
     /**
      * Retrieves an interface from an interface list using an index (interfaces retrieved this way must be released)
@@ -7602,7 +7605,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceListGet(spinInterfaceList hInterfaceList, @Cast("size_t") long index, @ByPtrPtr spinInterface phInterface);
+    public static native spinError spinInterfaceListGet(spinInterfaceList hInterfaceList, @Cast("size_t") long index, @ByPtrPtr spinInterface phInterface);
 
     /**
      * Clears an interface list
@@ -7612,7 +7615,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceListClear(spinInterfaceList hInterfaceList);
+    public static native spinError spinInterfaceListClear(spinInterfaceList hInterfaceList);
     /*@}*/
 
     /**
@@ -7632,7 +7635,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListCreateEmpty(@ByPtrPtr spinCameraList phCameraList);
+    public static native spinError spinCameraListCreateEmpty(@ByPtrPtr spinCameraList phCameraList);
 
     /**
      * Destroys a camera list
@@ -7642,7 +7645,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListDestroy(spinCameraList hCameraList);
+    public static native spinError spinCameraListDestroy(spinCameraList hCameraList);
 
     /**
      * Retrieves the number of cameras on a camera list
@@ -7653,7 +7656,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListGetSize(spinCameraList hCameraList, @Cast("size_t*") SizeTPointer pSize);
+    public static native spinError spinCameraListGetSize(spinCameraList hCameraList, @Cast("size_t*") SizeTPointer pSize);
 
     /**
      * Retrieves a camera from a camera list using an index. This function will return
@@ -7666,7 +7669,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListGet(spinCameraList hCameraList, @Cast("size_t") long index, @ByPtrPtr spinCamera phCamera);
+    public static native spinError spinCameraListGet(spinCameraList hCameraList, @Cast("size_t") long index, @ByPtrPtr spinCamera phCamera);
 
     /**
      * Clears a camera list
@@ -7676,7 +7679,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListClear(spinCameraList hCameraList);
+    public static native spinError spinCameraListClear(spinCameraList hCameraList);
 
     /**
      * Removes a camera from a camera list using its index
@@ -7687,7 +7690,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListRemove(spinCameraList hCameraList, @Cast("size_t") long index);
+    public static native spinError spinCameraListRemove(spinCameraList hCameraList, @Cast("size_t") long index);
 
     /**
      * Appends all the cameras from one camera list to another
@@ -7698,7 +7701,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListAppend(spinCameraList hCameraListBase, spinCameraList hCameraListToAppend);
+    public static native spinError spinCameraListAppend(spinCameraList hCameraListBase, spinCameraList hCameraListToAppend);
 
     /**
      * Retrieves a camera from a camera list using its serial number. This
@@ -7712,8 +7715,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListGetBySerial(spinCameraList hCameraList, @Cast("const char*") BytePointer pSerial, @ByPtrPtr spinCamera phCamera);
-    public static native @Cast("_spinError") int spinCameraListGetBySerial(spinCameraList hCameraList, String pSerial, @ByPtrPtr spinCamera phCamera);
+    public static native spinError spinCameraListGetBySerial(spinCameraList hCameraList, @Cast("const char*") BytePointer pSerial, @ByPtrPtr spinCamera phCamera);
+    public static native spinError spinCameraListGetBySerial(spinCameraList hCameraList, String pSerial, @ByPtrPtr spinCamera phCamera);
 
     /**
      * Removes a camera from a camera list using its serial number
@@ -7724,8 +7727,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraListRemoveBySerial(spinCameraList hCameraList, @Cast("const char*") BytePointer pSerial);
-    public static native @Cast("_spinError") int spinCameraListRemoveBySerial(spinCameraList hCameraList, String pSerial);
+    public static native spinError spinCameraListRemoveBySerial(spinCameraList hCameraList, @Cast("const char*") BytePointer pSerial);
+    public static native spinError spinCameraListRemoveBySerial(spinCameraList hCameraList, String pSerial);
     /*@}*/
 
     /**
@@ -7746,9 +7749,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") BytePointer pbChanged);
-    public static native @Cast("_spinError") int spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbChanged);
-    public static native _spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") byte[] pbChanged);
+    public static native spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") BytePointer pbChanged);
+    public static native spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbChanged);
+    public static native spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") byte[] pbChanged);
 
     /**
      * Retrieves a camera list from an interface;
@@ -7763,7 +7766,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceGetCameras(spinInterface hInterface, spinCameraList hCameraList);
+    public static native spinError spinInterfaceGetCameras(spinInterface hInterface, spinCameraList hCameraList);
 
     /**
      * Retrieves a camera list from an interface;
@@ -7780,7 +7783,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceGetCamerasEx(
+    public static native spinError spinInterfaceGetCamerasEx(
             spinInterface hInterface,
             @Cast("bool8_t") byte bUpdateCameras,
             spinCameraList hCameraList);
@@ -7794,7 +7797,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceGetTLNodeMap(spinInterface hInterface, @ByPtrPtr spinNodeMapHandle phNodeMap);
+    public static native spinError spinInterfaceGetTLNodeMap(spinInterface hInterface, @ByPtrPtr spinNodeMapHandle phNodeMap);
 
     /**
      * Registers a device arrival event handler on an interface (event handlers registered in this way must be
@@ -7806,7 +7809,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceRegisterDeviceArrivalEventHandler(
+    public static native spinError spinInterfaceRegisterDeviceArrivalEventHandler(
             spinInterface hInterface,
             spinDeviceArrivalEventHandler hDeviceArrivalEventHandler);
 
@@ -7820,7 +7823,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceRegisterDeviceRemovalEventHandler(
+    public static native spinError spinInterfaceRegisterDeviceRemovalEventHandler(
             spinInterface hInterface,
             spinDeviceRemovalEventHandler hDeviceRemovalEventHandler);
 
@@ -7833,7 +7836,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceUnregisterDeviceArrivalEventHandler(
+    public static native spinError spinInterfaceUnregisterDeviceArrivalEventHandler(
             spinInterface hInterface,
             spinDeviceArrivalEventHandler hDeviceArrivalEventHandler);
 
@@ -7846,7 +7849,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceUnregisterDeviceRemovalEventHandler(
+    public static native spinError spinInterfaceUnregisterDeviceRemovalEventHandler(
             spinInterface hInterface,
             spinDeviceRemovalEventHandler hDeviceRemovalEventHandler);
 
@@ -7859,7 +7862,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceRegisterInterfaceEventHandler(
+    public static native spinError spinInterfaceRegisterInterfaceEventHandler(
             spinInterface hInterface,
             spinInterfaceEventHandler hInterfaceEventHandler);
 
@@ -7872,7 +7875,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceUnregisterInterfaceEventHandler(
+    public static native spinError spinInterfaceUnregisterInterfaceEventHandler(
             spinInterface hInterface,
             spinInterfaceEventHandler hInterfaceEventHandler);
 
@@ -7884,7 +7887,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceRelease(spinInterface hInterface);
+    public static native spinError spinInterfaceRelease(spinInterface hInterface);
 
     /**
      * Checks whether an interface is in use
@@ -7895,9 +7898,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") BytePointer pbIsInUse);
-    public static native @Cast("_spinError") int spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbIsInUse);
-    public static native _spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") byte[] pbIsInUse);
+    public static native spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") BytePointer pbIsInUse);
+    public static native spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbIsInUse);
+    public static native spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") byte[] pbIsInUse);
 
     /**
      * Broadcast an Action Command to all devices on interface
@@ -7938,7 +7941,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraInit(spinCamera hCamera);
+    public static native spinError spinCameraInit(spinCamera hCamera);
 
     /**
      * Deinitializes a camera, greatly reducing functionality
@@ -7948,7 +7951,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraDeInit(spinCamera hCamera);
+    public static native spinError spinCameraDeInit(spinCamera hCamera);
 
     /**
      * Retrieves the GenICam nodemap from a camera
@@ -7959,7 +7962,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetNodeMap(spinCamera hCamera, @ByPtrPtr spinNodeMapHandle phNodeMap);
+    public static native spinError spinCameraGetNodeMap(spinCamera hCamera, @ByPtrPtr spinNodeMapHandle phNodeMap);
 
     /**
      * Retrieves the transport layer device nodemap from a camera
@@ -7970,7 +7973,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetTLDeviceNodeMap(spinCamera hCamera, @ByPtrPtr spinNodeMapHandle phNodeMap);
+    public static native spinError spinCameraGetTLDeviceNodeMap(spinCamera hCamera, @ByPtrPtr spinNodeMapHandle phNodeMap);
 
     /**
      * Retrieves the transport layer stream nodemap from a camera
@@ -7981,7 +7984,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetTLStreamNodeMap(spinCamera hCamera, @ByPtrPtr spinNodeMapHandle phNodeMap);
+    public static native spinError spinCameraGetTLStreamNodeMap(spinCamera hCamera, @ByPtrPtr spinNodeMapHandle phNodeMap);
 
     /**
      * Retrieves the access mode of a camera (as an enum, spinAccessMode)
@@ -7993,9 +7996,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") IntPointer pAccessMode);
-    public static native @Cast("_spinError") int spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") IntBuffer pAccessMode);
-    public static native _spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") int[] pAccessMode);
+    public static native spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") IntPointer pAccessMode);
+    public static native spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") IntBuffer pAccessMode);
+    public static native spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") int[] pAccessMode);
 
     /*
      * Reads a remote port on a physical Camera. This function can be used to read
@@ -8013,7 +8016,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraReadPort(spinCamera hCamera, @Cast("uint64_t") int iAddress, Pointer pBuffer, @Cast("size_t") long iSize);
+    public static native spinError spinCameraReadPort(spinCamera hCamera, @Cast("uint64_t") int iAddress, Pointer pBuffer, @Cast("size_t") long iSize);
 
     /*
      * Writes a remote port on a physical Camera. This function can be used to write
@@ -8031,7 +8034,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraWritePort(spinCamera hCamera, @Cast("uint64_t") int iAddress, Pointer pBuffer, @Cast("size_t") long iSize);
+    public static native spinError spinCameraWritePort(spinCamera hCamera, @Cast("uint64_t") int iAddress, Pointer pBuffer, @Cast("size_t") long iSize);
 
     /**
      * Has a camera start acquiring images
@@ -8041,7 +8044,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraBeginAcquisition(spinCamera hCamera);
+    public static native spinError spinCameraBeginAcquisition(spinCamera hCamera);
 
     /**
      * Has a camera stop acquiring images
@@ -8051,7 +8054,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraEndAcquisition(spinCamera hCamera);
+    public static native spinError spinCameraEndAcquisition(spinCamera hCamera);
 
     /**
      * Retrieves an image from a camera
@@ -8062,7 +8065,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetNextImage(spinCamera hCamera, @ByPtrPtr spinImage phImage);
+    public static native spinError spinCameraGetNextImage(spinCamera hCamera, @ByPtrPtr spinImage phImage);
 
     /**
      * Retrieves an image from a camera; manually set the timeout in milliseconds
@@ -8074,7 +8077,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetNextImageEx(spinCamera hCamera, @Cast("uint64_t") int grabTimeout, @ByPtrPtr spinImage phImage);
+    public static native spinError spinCameraGetNextImageEx(spinCamera hCamera, @Cast("uint64_t") int grabTimeout, @ByPtrPtr spinImage phImage);
 
     /**
      * Retrieves a unique identifier for a camera
@@ -8087,9 +8090,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Checks whether a camera is currently acquiring images
@@ -8100,9 +8103,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbIsStreaming);
-    public static native @Cast("_spinError") int spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbIsStreaming);
-    public static native _spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") byte[] pbIsStreaming);
+    public static native spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbIsStreaming);
+    public static native spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbIsStreaming);
+    public static native spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") byte[] pbIsStreaming);
 
     /**
      * Retrieves the GUI XML from a camera
@@ -8115,9 +8118,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Registers a universal device event handler (every device event type) to a camera
@@ -8128,7 +8131,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraRegisterDeviceEventHandler(spinCamera hCamera, spinDeviceEventHandler hDeviceEventHandler);
+    public static native spinError spinCameraRegisterDeviceEventHandler(spinCamera hCamera, spinDeviceEventHandler hDeviceEventHandler);
 
     /**
      * Registers a specific device event handler (only one device event type) to a camera
@@ -8140,11 +8143,11 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraRegisterDeviceEventHandlerEx(
+    public static native spinError spinCameraRegisterDeviceEventHandlerEx(
             spinCamera hCamera,
             spinDeviceEventHandler hDeviceEventHandler,
             @Cast("const char*") BytePointer pName);
-    public static native @Cast("_spinError") int spinCameraRegisterDeviceEventHandlerEx(
+    public static native spinError spinCameraRegisterDeviceEventHandlerEx(
             spinCamera hCamera,
             spinDeviceEventHandler hDeviceEventHandler,
             String pName);
@@ -8158,7 +8161,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraUnregisterDeviceEventHandler(
+    public static native spinError spinCameraUnregisterDeviceEventHandler(
             spinCamera hCamera,
             spinDeviceEventHandler hDeviceEventHandler);
 
@@ -8171,7 +8174,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraRegisterImageEventHandler(spinCamera hCamera, spinImageEventHandler hImageEventHandler);
+    public static native spinError spinCameraRegisterImageEventHandler(spinCamera hCamera, spinImageEventHandler hImageEventHandler);
 
     /**
      * Unregisters an image event handler from a camera
@@ -8182,7 +8185,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraUnregisterImageEventHandler(spinCamera hCamera, spinImageEventHandler hImageEventHandler);
+    public static native spinError spinCameraUnregisterImageEventHandler(spinCamera hCamera, spinImageEventHandler hImageEventHandler);
 
     /**
      * Releases a camera
@@ -8192,7 +8195,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraRelease(spinCamera hCamera);
+    public static native spinError spinCameraRelease(spinCamera hCamera);
 
     /**
      * Checks whether a camera is still valid for use
@@ -8203,9 +8206,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbValid);
-    public static native @Cast("_spinError") int spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbValid);
-    public static native _spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") byte[] pbValid);
+    public static native spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbValid);
+    public static native spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbValid);
+    public static native spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") byte[] pbValid);
 
     /**
      * Checks whether a camera is currently initialized
@@ -8216,9 +8219,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbInit);
-    public static native @Cast("_spinError") int spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbInit);
-    public static native _spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") byte[] pbInit);
+    public static native spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbInit);
+    public static native spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbInit);
+    public static native spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") byte[] pbInit);
     /*@}*/
 
     /**
@@ -8230,9 +8233,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") IntPointer pMaxPacketSize);
-    public static native @Cast("_spinError") int spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") IntBuffer pMaxPacketSize);
-    public static native _spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") int[] pMaxPacketSize);
+    public static native spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") IntPointer pMaxPacketSize);
+    public static native spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") IntBuffer pMaxPacketSize);
+    public static native spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") int[] pMaxPacketSize);
     /*@}*/
 
     /**
@@ -8263,7 +8266,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageCreateEmpty(@ByPtrPtr spinImage phImage);
+    public static native spinError spinImageCreateEmpty(@ByPtrPtr spinImage phImage);
 
     /**
      * Creates an image from another;
@@ -8276,7 +8279,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageCreate(spinImage hSrcImage, @ByPtrPtr spinImage phDestImage);
+    public static native spinError spinImageCreate(spinImage hSrcImage, @ByPtrPtr spinImage phDestImage);
 
     /**
      * Creates an image with some set properties;
@@ -8294,7 +8297,15 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageCreateEx(
+    public static native spinError spinImageCreateEx(
+            @ByPtrPtr spinImage phImage,
+            @Cast("size_t") long width,
+            @Cast("size_t") long height,
+            @Cast("size_t") long offsetX,
+            @Cast("size_t") long offsetY,
+            spinPixelFormatEnums pixelFormat,
+            Pointer pData);
+    public static native spinError spinImageCreateEx(
             @ByPtrPtr spinImage phImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8323,7 +8334,17 @@ public enum _spinInputDirection {
     *
     * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
     */
-    public static native _spinError spinImageCreateEx2(
+    public static native spinError spinImageCreateEx2(
+            @ByPtrPtr spinImage phImage,
+            @Cast("size_t") long width,
+            @Cast("size_t") long height,
+            @Cast("size_t") long offsetX,
+            @Cast("size_t") long offsetY,
+            spinPixelFormatEnums pixelFormat,
+            Pointer pData,
+            spinPayloadTypeInfoIDs dataPayloadType,
+            @Cast("size_t") long dataSize);
+    public static native spinError spinImageCreateEx2(
             @ByPtrPtr spinImage phImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8342,7 +8363,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageDestroy(spinImage hImage);
+    public static native spinError spinImageDestroy(spinImage hImage);
 
     /**
      * Sets the default color processing algorithm of all images (if not otherwise set)
@@ -8352,7 +8373,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm") int algorithm);
+    public static native spinError spinImageSetDefaultColorProcessing(spinColorProcessingAlgorithm algorithm);
+    public static native spinError spinImageSetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm") int algorithm);
 
     /**
      * Retrieves the default color processing algorithm
@@ -8362,9 +8384,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") IntPointer pAlgorithm);
-    public static native @Cast("_spinError") int spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
-    public static native _spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") int[] pAlgorithm);
+    public static native spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") IntPointer pAlgorithm);
+    public static native spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
+    public static native spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") int[] pAlgorithm);
 
     /**
      * Retrieves the color processing algorithm of a specific image
@@ -8375,9 +8397,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") IntPointer pAlgorithm);
-    public static native @Cast("_spinError") int spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
-    public static native _spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") int[] pAlgorithm);
+    public static native spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") IntPointer pAlgorithm);
+    public static native spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
+    public static native spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") int[] pAlgorithm);
 
     /**
      * Sets the default number of threads used for image decompression during
@@ -8391,7 +8413,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSetNumDecompressionThreads(@Cast("unsigned int") int numThreads);
+    public static native spinError spinImageSetNumDecompressionThreads(@Cast("unsigned int") int numThreads);
 
     /**
      * Gets the number of threads used for image decompression during Convert().
@@ -8402,9 +8424,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") IntPointer pNumThreads);
-    public static native @Cast("_spinError") int spinImageGetNumDecompressionThreads(@Cast("unsigned int*") IntBuffer pNumThreads);
-    public static native _spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") int[] pNumThreads);
+    public static native spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") IntPointer pNumThreads);
+    public static native spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") IntBuffer pNumThreads);
+    public static native spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") int[] pNumThreads);
 
     /**
      * Converts the pixel format of one image into a new image
@@ -8416,7 +8438,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageConvert(spinImage hSrcImage, @Cast("spinPixelFormatEnums") int pixelFormat, spinImage hDestImage);
+    public static native spinError spinImageConvert(spinImage hSrcImage, spinPixelFormatEnums pixelFormat, spinImage hDestImage);
+    public static native spinError spinImageConvert(spinImage hSrcImage, @Cast("spinPixelFormatEnums") int pixelFormat, spinImage hDestImage);
 
     /**
      * Converts the pixel format and color processing algorithm of one image into a new image
@@ -8429,7 +8452,12 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageConvertEx(
+    public static native spinError spinImageConvertEx(
+            spinImage hSrcImage,
+            spinPixelFormatEnums pixelFormat,
+            spinColorProcessingAlgorithm algorithm,
+            spinImage hDestImage);
+    public static native spinError spinImageConvertEx(
             spinImage hSrcImage,
             @Cast("spinPixelFormatEnums") int pixelFormat,
             @Cast("spinColorProcessingAlgorithm") int algorithm,
@@ -8448,7 +8476,14 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageReset(
+    public static native spinError spinImageReset(
+            spinImage hImage,
+            @Cast("size_t") long width,
+            @Cast("size_t") long height,
+            @Cast("size_t") long offsetX,
+            @Cast("size_t") long offsetY,
+            spinPixelFormatEnums pixelFormat);
+    public static native spinError spinImageReset(
             spinImage hImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8470,7 +8505,15 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageResetEx(
+    public static native spinError spinImageResetEx(
+            spinImage hImage,
+            @Cast("size_t") long width,
+            @Cast("size_t") long height,
+            @Cast("size_t") long offsetX,
+            @Cast("size_t") long offsetY,
+            spinPixelFormatEnums pixelFormat,
+            Pointer pData);
+    public static native spinError spinImageResetEx(
             spinImage hImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8488,9 +8531,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") IntPointer pId);
-    public static native @Cast("_spinError") int spinImageGetID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
-    public static native _spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") int[] pId);
+    public static native spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") IntPointer pId);
+    public static native spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
+    public static native spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") int[] pId);
 
     /**
      * Retrieves the image data of an image
@@ -8501,8 +8544,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetData(spinImage hImage, @Cast("void**") PointerPointer ppData);
-    public static native _spinError spinImageGetData(spinImage hImage, @Cast("void**") @ByPtrPtr Pointer ppData);
+    public static native spinError spinImageGetData(spinImage hImage, @Cast("void**") PointerPointer ppData);
+    public static native spinError spinImageGetData(spinImage hImage, @Cast("void**") @ByPtrPtr Pointer ppData);
 
     /**
      * Retrieves the private data of an image
@@ -8513,8 +8556,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetPrivateData(spinImage hImage, @Cast("void**") PointerPointer ppData);
-    public static native _spinError spinImageGetPrivateData(spinImage hImage, @Cast("void**") @ByPtrPtr Pointer ppData);
+    public static native spinError spinImageGetPrivateData(spinImage hImage, @Cast("void**") PointerPointer ppData);
+    public static native spinError spinImageGetPrivateData(spinImage hImage, @Cast("void**") @ByPtrPtr Pointer ppData);
 
     /**
      * Retrieves the buffer size of an image
@@ -8525,7 +8568,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetBufferSize(spinImage hImage, @Cast("size_t*") SizeTPointer pSize);
+    public static native spinError spinImageGetBufferSize(spinImage hImage, @Cast("size_t*") SizeTPointer pSize);
 
     /**
      * Creates a deep copy of an image (the destination image must be created as an empty image prior to the deep copy)
@@ -8536,7 +8579,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageDeepCopy(spinImage hSrcImage, spinImage hDestImage);
+    public static native spinError spinImageDeepCopy(spinImage hSrcImage, spinImage hDestImage);
 
     /**
      * Retrieves the width of an image
@@ -8547,7 +8590,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetWidth(spinImage hImage, @Cast("size_t*") SizeTPointer pWidth);
+    public static native spinError spinImageGetWidth(spinImage hImage, @Cast("size_t*") SizeTPointer pWidth);
 
     /**
      * Retrieves the height of an image
@@ -8558,7 +8601,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetHeight(spinImage hImage, @Cast("size_t*") SizeTPointer pHeight);
+    public static native spinError spinImageGetHeight(spinImage hImage, @Cast("size_t*") SizeTPointer pHeight);
 
     /**
      * Retrieves the offset of an image along its X axis
@@ -8569,7 +8612,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetOffsetX(spinImage hImage, @Cast("size_t*") SizeTPointer pOffsetX);
+    public static native spinError spinImageGetOffsetX(spinImage hImage, @Cast("size_t*") SizeTPointer pOffsetX);
 
     /**
      * Retrieves the offset of an image along its Y axis
@@ -8580,7 +8623,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetOffsetY(spinImage hImage, @Cast("size_t*") SizeTPointer pOffsetY);
+    public static native spinError spinImageGetOffsetY(spinImage hImage, @Cast("size_t*") SizeTPointer pOffsetY);
 
     /**
      * Retrieves the padding of an image along its X axis
@@ -8591,7 +8634,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetPaddingX(spinImage hImage, @Cast("size_t*") SizeTPointer pPaddingX);
+    public static native spinError spinImageGetPaddingX(spinImage hImage, @Cast("size_t*") SizeTPointer pPaddingX);
 
     /**
      * Retrieves the padding of an image along its Y axis
@@ -8602,7 +8645,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetPaddingY(spinImage hImage, @Cast("size_t*") SizeTPointer pPaddingY);
+    public static native spinError spinImageGetPaddingY(spinImage hImage, @Cast("size_t*") SizeTPointer pPaddingY);
 
     /**
      * Retrieves the frame ID of an image
@@ -8613,9 +8656,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") IntPointer pFrameID);
-    public static native @Cast("_spinError") int spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") IntBuffer pFrameID);
-    public static native _spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") int[] pFrameID);
+    public static native spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") IntPointer pFrameID);
+    public static native spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") IntBuffer pFrameID);
+    public static native spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") int[] pFrameID);
 
     /**
      * Retrieves the timestamp of an image
@@ -8626,9 +8669,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") IntPointer pTimeStamp);
-    public static native @Cast("_spinError") int spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") IntBuffer pTimeStamp);
-    public static native _spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") int[] pTimeStamp);
+    public static native spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") IntPointer pTimeStamp);
+    public static native spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") IntBuffer pTimeStamp);
+    public static native spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") int[] pTimeStamp);
 
     /**
      * Retrieves the payload type of an image (as an enum, spinPayloadTypeInfoIds)
@@ -8640,7 +8683,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetPayloadType(spinImage hImage, @Cast("size_t*") SizeTPointer pPayloadType);
+    public static native spinError spinImageGetPayloadType(spinImage hImage, @Cast("size_t*") SizeTPointer pPayloadType);
 
     /**
      * Retrieves the transport layer payload type of an image (as an enum, spinPayloadTypeInfoIds)
@@ -8652,9 +8695,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") IntPointer pPayloadType);
-    public static native @Cast("_spinError") int spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") IntBuffer pPayloadType);
-    public static native _spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") int[] pPayloadType);
+    public static native spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") IntPointer pPayloadType);
+    public static native spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") IntBuffer pPayloadType);
+    public static native spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") int[] pPayloadType);
 
     /**
      * Retrieves the pixel format of an image (as an enum, spinPixelFormatEnums)
@@ -8666,9 +8709,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") IntPointer pPixelFormat);
-    public static native @Cast("_spinError") int spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") IntBuffer pPixelFormat);
-    public static native _spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") int[] pPixelFormat);
+    public static native spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") IntPointer pPixelFormat);
+    public static native spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") IntBuffer pPixelFormat);
+    public static native spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") int[] pPixelFormat);
 
     /**
      * Retrieves the transport layer pixel format of an image (as an unsigned integer)
@@ -8679,9 +8722,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") IntPointer pPixelFormat);
-    public static native @Cast("_spinError") int spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") IntBuffer pPixelFormat);
-    public static native _spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") int[] pPixelFormat);
+    public static native spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") IntPointer pPixelFormat);
+    public static native spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") IntBuffer pPixelFormat);
+    public static native spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") int[] pPixelFormat);
 
     /**
      * Retrieves the transport layer pixel format namespace of an image (as an enum, spinPixelFormatNamespaceID)
@@ -8693,13 +8736,13 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetTLPixelFormatNamespace(
+    public static native spinError spinImageGetTLPixelFormatNamespace(
             spinImage hImage,
             @Cast("spinPixelFormatNamespaceID*") IntPointer pPixelFormatNamespace);
-    public static native @Cast("_spinError") int spinImageGetTLPixelFormatNamespace(
+    public static native spinError spinImageGetTLPixelFormatNamespace(
             spinImage hImage,
             @Cast("spinPixelFormatNamespaceID*") IntBuffer pPixelFormatNamespace);
-    public static native _spinError spinImageGetTLPixelFormatNamespace(
+    public static native spinError spinImageGetTLPixelFormatNamespace(
             spinImage hImage,
             @Cast("spinPixelFormatNamespaceID*") int[] pPixelFormatNamespace);
 
@@ -8714,9 +8757,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Checks whether an image is incomplete
@@ -8727,9 +8770,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") BytePointer pbIsIncomplete);
-    public static native @Cast("_spinError") int spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbIsIncomplete);
-    public static native _spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") byte[] pbIsIncomplete);
+    public static native spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") BytePointer pbIsIncomplete);
+    public static native spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbIsIncomplete);
+    public static native spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") byte[] pbIsIncomplete);
 
     /**
      * Retrieves the valid payload size of an image
@@ -8740,7 +8783,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetValidPayloadSize(spinImage hImage, @Cast("size_t*") SizeTPointer pSize);
+    public static native spinError spinImageGetValidPayloadSize(spinImage hImage, @Cast("size_t*") SizeTPointer pSize);
 
     /**
      * Saves an image using a specified file format (using an enum, spinImageFileFormat)
@@ -8753,8 +8796,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSave(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Cast("spinImageFileFormat") int format);
-    public static native @Cast("_spinError") int spinImageSave(spinImage hImage, String pFilename, @Cast("spinImageFileFormat") int format);
+    public static native spinError spinImageSave(spinImage hImage, @Cast("const char*") BytePointer pFilename, spinImageFileFormat format);
+    public static native spinError spinImageSave(spinImage hImage, String pFilename, @Cast("spinImageFileFormat") int format);
 
     /**
      * Saves an image using a specified file format (using the extension of the filename)
@@ -8765,8 +8808,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSaveFromExt(spinImage hImage, @Cast("const char*") BytePointer pFilename);
-    public static native @Cast("_spinError") int spinImageSaveFromExt(spinImage hImage, String pFilename);
+    public static native spinError spinImageSaveFromExt(spinImage hImage, @Cast("const char*") BytePointer pFilename);
+    public static native spinError spinImageSaveFromExt(spinImage hImage, String pFilename);
 
     /**
      * Saves an image as a PNG image
@@ -8779,8 +8822,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSavePng(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPNGOption pOption);
-    public static native @Cast("_spinError") int spinImageSavePng(spinImage hImage, String pFilename, @Const spinPNGOption pOption);
+    public static native spinError spinImageSavePng(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPNGOption pOption);
+    public static native spinError spinImageSavePng(spinImage hImage, String pFilename, @Const spinPNGOption pOption);
 
     /**
      * Saves an image as a PPM image
@@ -8792,8 +8835,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSavePpm(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPPMOption pOption);
-    public static native @Cast("_spinError") int spinImageSavePpm(spinImage hImage, String pFilename, @Const spinPPMOption pOption);
+    public static native spinError spinImageSavePpm(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPPMOption pOption);
+    public static native spinError spinImageSavePpm(spinImage hImage, String pFilename, @Const spinPPMOption pOption);
 
     /**
      * Saves an image as an PGM image
@@ -8805,8 +8848,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSavePgm(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPGMOption pOption);
-    public static native @Cast("_spinError") int spinImageSavePgm(spinImage hImage, String pFilename, @Const spinPGMOption pOption);
+    public static native spinError spinImageSavePgm(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPGMOption pOption);
+    public static native spinError spinImageSavePgm(spinImage hImage, String pFilename, @Const spinPGMOption pOption);
 
     /**
      * Saves an image as a TIFF image
@@ -8818,8 +8861,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSaveTiff(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinTIFFOption pOption);
-    public static native @Cast("_spinError") int spinImageSaveTiff(spinImage hImage, String pFilename, @Const spinTIFFOption pOption);
+    public static native spinError spinImageSaveTiff(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinTIFFOption pOption);
+    public static native spinError spinImageSaveTiff(spinImage hImage, String pFilename, @Const spinTIFFOption pOption);
 
     /**
      * Saves an image as a JPEG image
@@ -8831,8 +8874,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSaveJpeg(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinJPEGOption pOption);
-    public static native @Cast("_spinError") int spinImageSaveJpeg(spinImage hImage, String pFilename, @Const spinJPEGOption pOption);
+    public static native spinError spinImageSaveJpeg(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinJPEGOption pOption);
+    public static native spinError spinImageSaveJpeg(spinImage hImage, String pFilename, @Const spinJPEGOption pOption);
 
     /**
      * Saves an image as a JPEG 2000 image
@@ -8844,8 +8887,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSaveJpg2(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinJPG2Option pOption);
-    public static native @Cast("_spinError") int spinImageSaveJpg2(spinImage hImage, String pFilename, @Const spinJPG2Option pOption);
+    public static native spinError spinImageSaveJpg2(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinJPG2Option pOption);
+    public static native spinError spinImageSaveJpg2(spinImage hImage, String pFilename, @Const spinJPG2Option pOption);
 
     /**
      * Saves an image as a BMP image
@@ -8857,8 +8900,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageSaveBmp(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinBMPOption pOption);
-    public static native @Cast("_spinError") int spinImageSaveBmp(spinImage hImage, String pFilename, @Const spinBMPOption pOption);
+    public static native spinError spinImageSaveBmp(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinBMPOption pOption);
+    public static native spinError spinImageSaveBmp(spinImage hImage, String pFilename, @Const spinBMPOption pOption);
 
     /**
      * Retrieves the chunk layout ID of an image
@@ -8869,9 +8912,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") IntPointer pId);
-    public static native @Cast("_spinError") int spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
-    public static native _spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") int[] pId);
+    public static native spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") IntPointer pId);
+    public static native spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
+    public static native spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") int[] pId);
 
     /**
      * Calculates the image statistics of an image
@@ -8882,7 +8925,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageCalculateStatistics(spinImage hImage, spinImageStatistics hStatistics);
+    public static native spinError spinImageCalculateStatistics(spinImage hImage, spinImageStatistics hStatistics);
 
     /**
      * Retrieves the image status of an image
@@ -8893,9 +8936,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") IntPointer pStatus);
-    public static native @Cast("_spinError") int spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") IntBuffer pStatus);
-    public static native _spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") int[] pStatus);
+    public static native spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") IntPointer pStatus);
+    public static native spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") IntBuffer pStatus);
+    public static native spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") int[] pStatus);
 
     /**
      * Retrieves the description of image status
@@ -8908,9 +8951,12 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetStatusDescription(spinImageStatus status, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetStatusDescription(spinImageStatus status, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetStatusDescription(spinImageStatus status, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Releases an image
@@ -8920,7 +8966,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageRelease(spinImage hImage);
+    public static native spinError spinImageRelease(spinImage hImage);
 
     /**
      * Checks whether an image has CRC
@@ -8931,9 +8977,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") BytePointer pbHasCRC);
-    public static native @Cast("_spinError") int spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbHasCRC);
-    public static native _spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") byte[] pbHasCRC);
+    public static native spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") BytePointer pbHasCRC);
+    public static native spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbHasCRC);
+    public static native spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") byte[] pbHasCRC);
 
     /**
      * Checks whether the CRC of an image is correct
@@ -8944,9 +8990,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") BytePointer pbCheckCRC);
-    public static native @Cast("_spinError") int spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbCheckCRC);
-    public static native _spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") byte[] pbCheckCRC);
+    public static native spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") BytePointer pbCheckCRC);
+    public static native spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbCheckCRC);
+    public static native spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") byte[] pbCheckCRC);
 
     /**
      * Retrieves the number of bits per pixel of an image
@@ -8957,7 +9003,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetBitsPerPixel(spinImage hImage, @Cast("size_t*") SizeTPointer pBitsPerPixel);
+    public static native spinError spinImageGetBitsPerPixel(spinImage hImage, @Cast("size_t*") SizeTPointer pBitsPerPixel);
 
     /**
      * Retrieves the size of an image
@@ -8968,7 +9014,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetSize(spinImage hImage, @Cast("size_t*") SizeTPointer pImageSize);
+    public static native spinError spinImageGetSize(spinImage hImage, @Cast("size_t*") SizeTPointer pImageSize);
 
     /**
      * Retrieves the stride of an image
@@ -8979,7 +9025,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageGetStride(spinImage hImage, @Cast("size_t*") SizeTPointer pStride);
+    public static native spinError spinImageGetStride(spinImage hImage, @Cast("size_t*") SizeTPointer pStride);
     /*@}*/
 
     /**
@@ -9001,7 +9047,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceEventHandlerCreate(
+    public static native spinError spinDeviceEventHandlerCreate(
             @ByPtrPtr spinDeviceEventHandler phDeviceEventHandler,
             spinDeviceEventFunction pFunction,
             Pointer pUserData);
@@ -9014,7 +9060,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceEventHandlerDestroy(spinDeviceEventHandler hDeviceEventHandler);
+    public static native spinError spinDeviceEventHandlerDestroy(spinDeviceEventHandler hDeviceEventHandler);
 
     /**
      * Creates an image event handler
@@ -9027,7 +9073,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageEventHandlerCreate(
+    public static native spinError spinImageEventHandlerCreate(
             @ByPtrPtr spinImageEventHandler phImageEventHandler,
             spinImageEventFunction pFunction,
             Pointer pUserData);
@@ -9040,7 +9086,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageEventHandlerDestroy(spinImageEventHandler hImageEventHandler);
+    public static native spinError spinImageEventHandlerDestroy(spinImageEventHandler hImageEventHandler);
 
     /**
      * Creates a device arrival event handler
@@ -9054,7 +9100,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceArrivalEventHandlerCreate(
+    public static native spinError spinDeviceArrivalEventHandlerCreate(
             @ByPtrPtr spinDeviceArrivalEventHandler phDeviceArrivalEventHandler,
             spinArrivalEventFunction pFunction,
             Pointer pUserData);
@@ -9067,7 +9113,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceArrivalEventHandlerDestroy(spinDeviceArrivalEventHandler hDeviceArrivalEventHandler);
+    public static native spinError spinDeviceArrivalEventHandlerDestroy(spinDeviceArrivalEventHandler hDeviceArrivalEventHandler);
 
     /**
     * Creates a device removal event handler
@@ -9082,7 +9128,7 @@ public enum _spinInputDirection {
     *
     * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
     */
-    public static native _spinError spinDeviceRemovalEventHandlerCreate(
+    public static native spinError spinDeviceRemovalEventHandlerCreate(
             @ByPtrPtr spinDeviceRemovalEventHandler phDeviceRemovalEventHandler,
             spinRemovalEventFunction pFunction,
             Pointer pUserData);
@@ -9095,7 +9141,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceRemovalEventHandlerDestroy(spinDeviceRemovalEventHandler hDeviceRemovalEventHandler);
+    public static native spinError spinDeviceRemovalEventHandlerDestroy(spinDeviceRemovalEventHandler hDeviceRemovalEventHandler);
 
     /**
      * Creates an interface event handler (both device arrival and device removal)
@@ -9111,7 +9157,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceEventHandlerCreate(
+    public static native spinError spinInterfaceEventHandlerCreate(
             @ByPtrPtr spinInterfaceEventHandler phInterfaceEventHandler,
             spinArrivalEventFunction pArrivalFunction,
             spinRemovalEventFunction pRemovalFunction,
@@ -9125,7 +9171,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinInterfaceEventHandlerDestroy(spinInterfaceEventHandler hInterfaceEventHandler);
+    public static native spinError spinInterfaceEventHandlerDestroy(spinInterfaceEventHandler hInterfaceEventHandler);
 
     /**
      * Creates a log event handler
@@ -9138,7 +9184,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogEventHandlerCreate(
+    public static native spinError spinLogEventHandlerCreate(
             @ByPtrPtr spinLogEventHandler phLogEventHandler,
             spinLogEventFunction pFunction,
             Pointer pUserData);
@@ -9151,7 +9197,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogEventHandlerDestroy(spinLogEventHandler hLogEventHandler);
+    public static native spinError spinLogEventHandlerDestroy(spinLogEventHandler hLogEventHandler);
     /*@}*/
 
     /**
@@ -9171,7 +9217,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsCreate(@ByPtrPtr spinImageStatistics phStatistics);
+    public static native spinError spinImageStatisticsCreate(@ByPtrPtr spinImageStatistics phStatistics);
 
     /**
      * Destroys an image statistics context
@@ -9181,7 +9227,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsDestroy(spinImageStatistics hStatistics);
+    public static native spinError spinImageStatisticsDestroy(spinImageStatistics hStatistics);
 
     /**
      * Enables all channels of an image statistics context
@@ -9191,7 +9237,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsEnableAll(spinImageStatistics hStatistics);
+    public static native spinError spinImageStatisticsEnableAll(spinImageStatistics hStatistics);
 
     /**
      * Disables all channels of an image statistics context
@@ -9201,7 +9247,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsDisableAll(spinImageStatistics hStatistics);
+    public static native spinError spinImageStatisticsDisableAll(spinImageStatistics hStatistics);
 
     /**
      * Disables all channels of an image statistics context except grey-scale
@@ -9211,7 +9257,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsEnableGreyOnly(spinImageStatistics hStatistics);
+    public static native spinError spinImageStatisticsEnableGreyOnly(spinImageStatistics hStatistics);
 
     /**
      * Disables all channels of an image statistics context except red, blue, and green
@@ -9221,7 +9267,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsEnableRgbOnly(spinImageStatistics hStatistics);
+    public static native spinError spinImageStatisticsEnableRgbOnly(spinImageStatistics hStatistics);
 
     /**
      * Disables all channels of an image statistics context except hue, saturation, and lightness
@@ -9231,7 +9277,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsEnableHslOnly(spinImageStatistics hStatistics);
+    public static native spinError spinImageStatisticsEnableHslOnly(spinImageStatistics hStatistics);
 
     /**
      * Checks whether an image statistics context is enabled
@@ -9243,15 +9289,27 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsGetChannelStatus(
+    public static native spinError spinImageStatisticsGetChannelStatus(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @Cast("bool8_t*") BytePointer pbEnabled);
-    public static native @Cast("_spinError") int spinImageStatisticsGetChannelStatus(
+    public static native spinError spinImageStatisticsGetChannelStatus(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("bool8_t*") ByteBuffer pbEnabled);
-    public static native _spinError spinImageStatisticsGetChannelStatus(
+    public static native spinError spinImageStatisticsGetChannelStatus(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("bool8_t*") byte[] pbEnabled);
+    public static native spinError spinImageStatisticsGetChannelStatus(
+            spinImageStatistics hStatistics,
+            @Cast("spinStatisticsChannel") int channel,
+            @Cast("bool8_t*") BytePointer pbEnabled);
+    public static native spinError spinImageStatisticsGetChannelStatus(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("bool8_t*") ByteBuffer pbEnabled);
+    public static native spinError spinImageStatisticsGetChannelStatus(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("bool8_t*") byte[] pbEnabled);
@@ -9266,7 +9324,11 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsSetChannelStatus(
+    public static native spinError spinImageStatisticsSetChannelStatus(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("bool8_t") byte bEnable);
+    public static native spinError spinImageStatisticsSetChannelStatus(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("bool8_t") byte bEnable);
@@ -9282,17 +9344,32 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsGetRange(
+    public static native spinError spinImageStatisticsGetRange(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pMin,
             @Cast("unsigned int*") IntPointer pMax);
-    public static native @Cast("_spinError") int spinImageStatisticsGetRange(
+    public static native spinError spinImageStatisticsGetRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pMin,
             @Cast("unsigned int*") IntBuffer pMax);
-    public static native _spinError spinImageStatisticsGetRange(
+    public static native spinError spinImageStatisticsGetRange(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") int[] pMin,
+            @Cast("unsigned int*") int[] pMax);
+    public static native spinError spinImageStatisticsGetRange(
+            spinImageStatistics hStatistics,
+            @Cast("spinStatisticsChannel") int channel,
+            @Cast("unsigned int*") IntPointer pMin,
+            @Cast("unsigned int*") IntPointer pMax);
+    public static native spinError spinImageStatisticsGetRange(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") IntBuffer pMin,
+            @Cast("unsigned int*") IntBuffer pMax);
+    public static native spinError spinImageStatisticsGetRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pMin,
@@ -9309,17 +9386,32 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsGetPixelValueRange(
+    public static native spinError spinImageStatisticsGetPixelValueRange(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pMin,
             @Cast("unsigned int*") IntPointer pMax);
-    public static native @Cast("_spinError") int spinImageStatisticsGetPixelValueRange(
+    public static native spinError spinImageStatisticsGetPixelValueRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pMin,
             @Cast("unsigned int*") IntBuffer pMax);
-    public static native _spinError spinImageStatisticsGetPixelValueRange(
+    public static native spinError spinImageStatisticsGetPixelValueRange(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") int[] pMin,
+            @Cast("unsigned int*") int[] pMax);
+    public static native spinError spinImageStatisticsGetPixelValueRange(
+            spinImageStatistics hStatistics,
+            @Cast("spinStatisticsChannel") int channel,
+            @Cast("unsigned int*") IntPointer pMin,
+            @Cast("unsigned int*") IntPointer pMax);
+    public static native spinError spinImageStatisticsGetPixelValueRange(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") IntBuffer pMin,
+            @Cast("unsigned int*") IntBuffer pMax);
+    public static native spinError spinImageStatisticsGetPixelValueRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pMin,
@@ -9335,15 +9427,27 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsGetNumPixelValues(
+    public static native spinError spinImageStatisticsGetNumPixelValues(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pNumValues);
-    public static native @Cast("_spinError") int spinImageStatisticsGetNumPixelValues(
+    public static native spinError spinImageStatisticsGetNumPixelValues(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pNumValues);
-    public static native _spinError spinImageStatisticsGetNumPixelValues(
+    public static native spinError spinImageStatisticsGetNumPixelValues(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") int[] pNumValues);
+    public static native spinError spinImageStatisticsGetNumPixelValues(
+            spinImageStatistics hStatistics,
+            @Cast("spinStatisticsChannel") int channel,
+            @Cast("unsigned int*") IntPointer pNumValues);
+    public static native spinError spinImageStatisticsGetNumPixelValues(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") IntBuffer pNumValues);
+    public static native spinError spinImageStatisticsGetNumPixelValues(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pNumValues);
@@ -9358,15 +9462,27 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsGetMean(
+    public static native spinError spinImageStatisticsGetMean(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             FloatPointer pMean);
-    public static native @Cast("_spinError") int spinImageStatisticsGetMean(
+    public static native spinError spinImageStatisticsGetMean(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             FloatBuffer pMean);
-    public static native _spinError spinImageStatisticsGetMean(
+    public static native spinError spinImageStatisticsGetMean(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            float[] pMean);
+    public static native spinError spinImageStatisticsGetMean(
+            spinImageStatistics hStatistics,
+            @Cast("spinStatisticsChannel") int channel,
+            FloatPointer pMean);
+    public static native spinError spinImageStatisticsGetMean(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            FloatBuffer pMean);
+    public static native spinError spinImageStatisticsGetMean(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             float[] pMean);
@@ -9381,19 +9497,31 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsGetHistogram(
+    public static native spinError spinImageStatisticsGetHistogram(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @Cast("int**") PointerPointer ppHistogram);
-    public static native _spinError spinImageStatisticsGetHistogram(
+    public static native spinError spinImageStatisticsGetHistogram(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @ByPtrPtr IntPointer ppHistogram);
-    public static native @Cast("_spinError") int spinImageStatisticsGetHistogram(
+    public static native spinError spinImageStatisticsGetHistogram(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @ByPtrPtr IntBuffer ppHistogram);
-    public static native _spinError spinImageStatisticsGetHistogram(
+    public static native spinError spinImageStatisticsGetHistogram(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @ByPtrPtr int[] ppHistogram);
+    public static native spinError spinImageStatisticsGetHistogram(
+            spinImageStatistics hStatistics,
+            @Cast("spinStatisticsChannel") int channel,
+            @ByPtrPtr IntPointer ppHistogram);
+    public static native spinError spinImageStatisticsGetHistogram(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @ByPtrPtr IntBuffer ppHistogram);
+    public static native spinError spinImageStatisticsGetHistogram(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @ByPtrPtr int[] ppHistogram);
@@ -9414,9 +9542,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageStatisticsGetAll(
+    public static native spinError spinImageStatisticsGetAll(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pRangeMin,
             @Cast("unsigned int*") IntPointer pRangeMax,
             @Cast("unsigned int*") IntPointer pPixelValueMin,
@@ -9424,9 +9552,9 @@ public enum _spinInputDirection {
             @Cast("unsigned int*") IntPointer pNumPixelValues,
             FloatPointer pPixelValueMean,
             @Cast("int**") PointerPointer ppHistogram);
-    public static native _spinError spinImageStatisticsGetAll(
+    public static native spinError spinImageStatisticsGetAll(
             spinImageStatistics hStatistics,
-            @Cast("spinStatisticsChannel") int channel,
+            spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pRangeMin,
             @Cast("unsigned int*") IntPointer pRangeMax,
             @Cast("unsigned int*") IntPointer pPixelValueMin,
@@ -9434,7 +9562,7 @@ public enum _spinInputDirection {
             @Cast("unsigned int*") IntPointer pNumPixelValues,
             FloatPointer pPixelValueMean,
             @ByPtrPtr IntPointer ppHistogram);
-    public static native @Cast("_spinError") int spinImageStatisticsGetAll(
+    public static native spinError spinImageStatisticsGetAll(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pRangeMin,
@@ -9444,7 +9572,37 @@ public enum _spinInputDirection {
             @Cast("unsigned int*") IntBuffer pNumPixelValues,
             FloatBuffer pPixelValueMean,
             @ByPtrPtr IntBuffer ppHistogram);
-    public static native _spinError spinImageStatisticsGetAll(
+    public static native spinError spinImageStatisticsGetAll(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") int[] pRangeMin,
+            @Cast("unsigned int*") int[] pRangeMax,
+            @Cast("unsigned int*") int[] pPixelValueMin,
+            @Cast("unsigned int*") int[] pPixelValueMax,
+            @Cast("unsigned int*") int[] pNumPixelValues,
+            float[] pPixelValueMean,
+            @ByPtrPtr int[] ppHistogram);
+    public static native spinError spinImageStatisticsGetAll(
+            spinImageStatistics hStatistics,
+            @Cast("spinStatisticsChannel") int channel,
+            @Cast("unsigned int*") IntPointer pRangeMin,
+            @Cast("unsigned int*") IntPointer pRangeMax,
+            @Cast("unsigned int*") IntPointer pPixelValueMin,
+            @Cast("unsigned int*") IntPointer pPixelValueMax,
+            @Cast("unsigned int*") IntPointer pNumPixelValues,
+            FloatPointer pPixelValueMean,
+            @ByPtrPtr IntPointer ppHistogram);
+    public static native spinError spinImageStatisticsGetAll(
+            spinImageStatistics hStatistics,
+            spinStatisticsChannel channel,
+            @Cast("unsigned int*") IntBuffer pRangeMin,
+            @Cast("unsigned int*") IntBuffer pRangeMax,
+            @Cast("unsigned int*") IntBuffer pPixelValueMin,
+            @Cast("unsigned int*") IntBuffer pPixelValueMax,
+            @Cast("unsigned int*") IntBuffer pNumPixelValues,
+            FloatBuffer pPixelValueMean,
+            @ByPtrPtr IntBuffer ppHistogram);
+    public static native spinError spinImageStatisticsGetAll(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pRangeMin,
@@ -9475,9 +9633,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the priority of a log event
@@ -9488,9 +9646,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") long[] pValue);
 
     /**
      * Retrieves the priority name of a log event
@@ -9503,9 +9661,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the timestamp of a log event
@@ -9518,9 +9676,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the NDC of a log event
@@ -9533,9 +9691,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the thread name of a log event
@@ -9548,9 +9706,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Retrieves the log message of a log event
@@ -9563,9 +9721,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /*@}*/
 
@@ -9586,9 +9744,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") IntPointer pEventId);
-    public static native @Cast("_spinError") int spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") IntBuffer pEventId);
-    public static native _spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") int[] pEventId);
+    public static native spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") IntPointer pEventId);
+    public static native spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") IntBuffer pEventId);
+    public static native spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") int[] pEventId);
 
     /**
      * Retrieves the payload data of a device event
@@ -9600,15 +9758,15 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceEventGetPayloadData(
+    public static native spinError spinDeviceEventGetPayloadData(
             spinDeviceEventData hDeviceEventData,
             @Cast("const uint8_t*") BytePointer pBuf,
             @Cast("size_t*") SizeTPointer pBufSize);
-    public static native @Cast("_spinError") int spinDeviceEventGetPayloadData(
+    public static native spinError spinDeviceEventGetPayloadData(
             spinDeviceEventData hDeviceEventData,
             @Cast("const uint8_t*") ByteBuffer pBuf,
             @Cast("size_t*") SizeTPointer pBufSize);
-    public static native _spinError spinDeviceEventGetPayloadData(
+    public static native spinError spinDeviceEventGetPayloadData(
             spinDeviceEventData hDeviceEventData,
             @Cast("const uint8_t*") byte[] pBuf,
             @Cast("size_t*") SizeTPointer pBufSize);
@@ -9622,7 +9780,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceEventGetPayloadDataSize(spinDeviceEventData hDeviceEventData, @Cast("size_t*") SizeTPointer pBufSize);
+    public static native spinError spinDeviceEventGetPayloadDataSize(spinDeviceEventData hDeviceEventData, @Cast("size_t*") SizeTPointer pBufSize);
 
     /**
      * Retrieves the event name of a device event
@@ -9635,9 +9793,9 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native @Cast("_spinError") int spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native _spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /*@}*/
 
@@ -9660,12 +9818,12 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") LongPointer pValue);
-    public static native @Cast("_spinError") int spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongBuffer pValue);
-    public static native _spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") long[] pValue);
-    public static native @Cast("_spinError") int spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongPointer pValue);
-    public static native _spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") LongBuffer pValue);
-    public static native @Cast("_spinError") int spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") long[] pValue);
+    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongPointer pValue);
+    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") LongBuffer pValue);
+    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") long[] pValue);
 
     /*
      * Retrieves a float value of a piece of chunk data
@@ -9677,12 +9835,12 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, DoublePointer pValue);
-    public static native @Cast("_spinError") int spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoubleBuffer pValue);
-    public static native _spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, double[] pValue);
-    public static native @Cast("_spinError") int spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoublePointer pValue);
-    public static native _spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, DoubleBuffer pValue);
-    public static native @Cast("_spinError") int spinImageChunkDataGetFloatValue(spinImage hImage, String pName, double[] pValue);
+    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, DoublePointer pValue);
+    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoubleBuffer pValue);
+    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, double[] pValue);
+    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoublePointer pValue);
+    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, DoubleBuffer pValue);
+    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, String pName, double[] pValue);
 
     /*@}*/
 
@@ -9753,8 +9911,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinVideoOpenUncompressed(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinAVIOption option);
-    public static native @Cast("_spinError") int spinVideoOpenUncompressed(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinAVIOption option);
+    public static native spinError spinVideoOpenUncompressed(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinAVIOption option);
+    public static native spinError spinVideoOpenUncompressed(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinAVIOption option);
 
     /*
      * Opens an empty video file to create an MJPG file
@@ -9766,8 +9924,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinVideoOpenMJPG(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinMJPGOption option);
-    public static native @Cast("_spinError") int spinVideoOpenMJPG(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinMJPGOption option);
+    public static native spinError spinVideoOpenMJPG(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinMJPGOption option);
+    public static native spinError spinVideoOpenMJPG(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinMJPGOption option);
 
     /*
      * Opens an empty video file to create an H264 MP4 file
@@ -9779,8 +9937,8 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinVideoOpenH264(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinH264Option option);
-    public static native @Cast("_spinError") int spinVideoOpenH264(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinH264Option option);
+    public static native spinError spinVideoOpenH264(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinH264Option option);
+    public static native spinError spinVideoOpenH264(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinH264Option option);
 
     /*
      * Appends an image to the end of an open video file
@@ -9791,7 +9949,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinVideoAppend(spinVideo hSpinVideo, spinImage hImage);
+    public static native spinError spinVideoAppend(spinVideo hSpinVideo, spinImage hImage);
 
     /**
      * Set the maximum file size (in megabytes) of a AVI/MP4 file. A new AVI/MP4 file
@@ -9803,7 +9961,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinVideoSetMaximumFileSize(spinVideo hSpinVideo, @Cast("unsigned int") int size);
+    public static native spinError spinVideoSetMaximumFileSize(spinVideo hSpinVideo, @Cast("unsigned int") int size);
 
     /*
      * Closes a video file to complete its creation
@@ -9813,7 +9971,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError spinVideoClose(spinVideo hSpinVideo);
+    public static native spinError spinVideoClose(spinVideo hSpinVideo);
     /*@}*/
 
     /*@}*/
@@ -9850,7 +10008,7 @@ public enum _spinInputDirection {
 // #define FLIR_SPINNAKER_QUICKSPINDEFS_C_H
 
 // #include "SpinnakerGenApiDefsC.h"
-// Targeting ../Spinnaker_C/quickSpin.java
+// Targeting ..\Spinnaker_C\quickSpin.java
 
 
 
@@ -9914,7 +10072,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError quickSpinInit(spinCamera hCamera, quickSpin pQuickSpin);
+    public static native spinError quickSpinInit(spinCamera hCamera, quickSpin pQuickSpin);
 
     /*
      * Pre-features all nodes housed on the GenICam, transport layer device, and transport layer stream nodemaps (device
@@ -9930,7 +10088,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError quickSpinInitEx(
+    public static native spinError quickSpinInitEx(
             spinCamera hCamera,
             quickSpin pQuickSpin,
             quickSpinTLDevice pQuickSpinTLDevice,
@@ -9945,7 +10103,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError quickSpinTLDeviceInit(spinCamera hCamera, quickSpinTLDevice pQuickSpinTLDevice);
+    public static native spinError quickSpinTLDeviceInit(spinCamera hCamera, quickSpinTLDevice pQuickSpinTLDevice);
 
     /*
      * Pre-fetches all nodes housed on the transport layer stream nodemap (device initialization not necessary)
@@ -9956,7 +10114,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError quickSpinTLStreamInit(spinCamera hCamera, quickSpinTLStream pQuickSpinTLStream);
+    public static native spinError quickSpinTLStreamInit(spinCamera hCamera, quickSpinTLStream pQuickSpinTLStream);
 
     /*
      * Pre-fetches all nodes housed on the transport layer interface nodemap (device initialization not necessary)
@@ -9967,7 +10125,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError quickSpinTLInterfaceInit(spinInterface hInterface, quickSpinTLInterface pQuickSpinTLInterface);
+    public static native spinError quickSpinTLInterfaceInit(spinInterface hInterface, quickSpinTLInterface pQuickSpinTLInterface);
 
     /*
      * Pre-fetches all nodes housed on the transport layer system nodemap
@@ -9978,7 +10136,7 @@ public enum _spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native _spinError quickSpinTLSystemInit(spinSystem hSystem, quickSpinTLSystem pQuickSpinTLSystem);
+    public static native spinError quickSpinTLSystemInit(spinSystem hSystem, quickSpinTLSystem pQuickSpinTLSystem);
 
     /*@}*/
 
@@ -10027,7 +10185,7 @@ public enum _spinInputDirection {
 *\brief The enumeration definitions for transport layer nodes.
 */
 
-public enum _spinTLStreamTypeEnums {
+public enum spinTLStreamTypeEnums {
 	/** GigE Vision*/
 	StreamType_GigEVision(0),
 	/** Camera Link*/
@@ -10043,13 +10201,13 @@ public enum _spinTLStreamTypeEnums {
 	NUMSTREAMTYPE(6);
 
     public final int value;
-    private _spinTLStreamTypeEnums(int v) { this.value = v; }
-    private _spinTLStreamTypeEnums(_spinTLStreamTypeEnums e) { this.value = e.value; }
-    public _spinTLStreamTypeEnums intern() { for (_spinTLStreamTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLStreamTypeEnums(int v) { this.value = v; }
+    private spinTLStreamTypeEnums(spinTLStreamTypeEnums e) { this.value = e.value; }
+    public spinTLStreamTypeEnums intern() { for (spinTLStreamTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLStreamBufferCountModeEnums {
+public enum spinTLStreamBufferCountModeEnums {
 	/** The number of buffers used for the stream are set by the user.*/
 	StreamBufferCountMode_Manual(0),
 	/** DEPRECATED. The number of buffers used for the stream is automatically calculated based on the device frame rate.*/
@@ -10057,13 +10215,13 @@ public enum _spinTLStreamBufferCountModeEnums {
 	NUMSTREAMBUFFERCOUNTMODE(2);
 
     public final int value;
-    private _spinTLStreamBufferCountModeEnums(int v) { this.value = v; }
-    private _spinTLStreamBufferCountModeEnums(_spinTLStreamBufferCountModeEnums e) { this.value = e.value; }
-    public _spinTLStreamBufferCountModeEnums intern() { for (_spinTLStreamBufferCountModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLStreamBufferCountModeEnums(int v) { this.value = v; }
+    private spinTLStreamBufferCountModeEnums(spinTLStreamBufferCountModeEnums e) { this.value = e.value; }
+    public spinTLStreamBufferCountModeEnums intern() { for (spinTLStreamBufferCountModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLStreamBufferHandlingModeEnums {
+public enum spinTLStreamBufferHandlingModeEnums {
 	/** The application always gets the buffer from the head of the output buffer queue (thus, the oldest available one). If the output buffer queue is empty, the application waits for a newly acquired buffer until the timeout expires.*/
 	StreamBufferHandlingMode_OldestFirst(0),
 	/** The application always gets the buffer from the head of the output buffer queue (thus, the oldest available one). If the output buffer queue is empty, the application waits for a newly acquired buffer until the timeout expires. If a new buffer arrives it will overwrite the existing buffer from the head of the queue (behaves like a circular buffer).*/
@@ -10075,13 +10233,13 @@ public enum _spinTLStreamBufferHandlingModeEnums {
 	NUMSTREAMBUFFERHANDLINGMODE(4);
 
     public final int value;
-    private _spinTLStreamBufferHandlingModeEnums(int v) { this.value = v; }
-    private _spinTLStreamBufferHandlingModeEnums(_spinTLStreamBufferHandlingModeEnums e) { this.value = e.value; }
-    public _spinTLStreamBufferHandlingModeEnums intern() { for (_spinTLStreamBufferHandlingModeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLStreamBufferHandlingModeEnums(int v) { this.value = v; }
+    private spinTLStreamBufferHandlingModeEnums(spinTLStreamBufferHandlingModeEnums e) { this.value = e.value; }
+    public spinTLStreamBufferHandlingModeEnums intern() { for (spinTLStreamBufferHandlingModeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLDeviceTypeEnums {
+public enum spinTLDeviceTypeEnums {
 	/** GigE Vision*/
 	DeviceType_GigEVision(0),
 	/** Camera Link*/
@@ -10097,13 +10255,13 @@ public enum _spinTLDeviceTypeEnums {
 	NUMDEVICETYPE(6);
 
     public final int value;
-    private _spinTLDeviceTypeEnums(int v) { this.value = v; }
-    private _spinTLDeviceTypeEnums(_spinTLDeviceTypeEnums e) { this.value = e.value; }
-    public _spinTLDeviceTypeEnums intern() { for (_spinTLDeviceTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLDeviceTypeEnums(int v) { this.value = v; }
+    private spinTLDeviceTypeEnums(spinTLDeviceTypeEnums e) { this.value = e.value; }
+    public spinTLDeviceTypeEnums intern() { for (spinTLDeviceTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLDeviceAccessStatusEnums {
+public enum spinTLDeviceAccessStatusEnums {
 	/** Not known to producer.*/
 	DeviceAccessStatus_Unknown(0),
 	/** Full access*/
@@ -10121,13 +10279,13 @@ public enum _spinTLDeviceAccessStatusEnums {
 	NUMDEVICEACCESSSTATUS(7);
 
     public final int value;
-    private _spinTLDeviceAccessStatusEnums(int v) { this.value = v; }
-    private _spinTLDeviceAccessStatusEnums(_spinTLDeviceAccessStatusEnums e) { this.value = e.value; }
-    public _spinTLDeviceAccessStatusEnums intern() { for (_spinTLDeviceAccessStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLDeviceAccessStatusEnums(int v) { this.value = v; }
+    private spinTLDeviceAccessStatusEnums(spinTLDeviceAccessStatusEnums e) { this.value = e.value; }
+    public spinTLDeviceAccessStatusEnums intern() { for (spinTLDeviceAccessStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLGevCCPEnums {
+public enum spinTLGevCCPEnums {
 	/** Open access privilege.*/
 	GevCCP_EnumEntry_GevCCP_OpenAccess(0),
 	/** Exclusive access privilege.*/
@@ -10137,13 +10295,13 @@ public enum _spinTLGevCCPEnums {
 	NUMGEVCCP(3);
 
     public final int value;
-    private _spinTLGevCCPEnums(int v) { this.value = v; }
-    private _spinTLGevCCPEnums(_spinTLGevCCPEnums e) { this.value = e.value; }
-    public _spinTLGevCCPEnums intern() { for (_spinTLGevCCPEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLGevCCPEnums(int v) { this.value = v; }
+    private spinTLGevCCPEnums(spinTLGevCCPEnums e) { this.value = e.value; }
+    public spinTLGevCCPEnums intern() { for (spinTLGevCCPEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLGUIXMLLocationEnums {
+public enum spinTLGUIXMLLocationEnums {
 	/** Load XML from device*/
 	GUIXMLLocation_Device(0),
 	/** Load XML from host*/
@@ -10151,13 +10309,13 @@ public enum _spinTLGUIXMLLocationEnums {
 	NUMGUIXMLLOCATION(2);
 
     public final int value;
-    private _spinTLGUIXMLLocationEnums(int v) { this.value = v; }
-    private _spinTLGUIXMLLocationEnums(_spinTLGUIXMLLocationEnums e) { this.value = e.value; }
-    public _spinTLGUIXMLLocationEnums intern() { for (_spinTLGUIXMLLocationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLGUIXMLLocationEnums(int v) { this.value = v; }
+    private spinTLGUIXMLLocationEnums(spinTLGUIXMLLocationEnums e) { this.value = e.value; }
+    public spinTLGUIXMLLocationEnums intern() { for (spinTLGUIXMLLocationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLGenICamXMLLocationEnums {
+public enum spinTLGenICamXMLLocationEnums {
 	/** Load GenICam XML from device*/
 	GenICamXMLLocation_Device(0),
 	/** Load GenICam XML from host*/
@@ -10165,13 +10323,13 @@ public enum _spinTLGenICamXMLLocationEnums {
 	NUMGENICAMXMLLOCATION(2);
 
     public final int value;
-    private _spinTLGenICamXMLLocationEnums(int v) { this.value = v; }
-    private _spinTLGenICamXMLLocationEnums(_spinTLGenICamXMLLocationEnums e) { this.value = e.value; }
-    public _spinTLGenICamXMLLocationEnums intern() { for (_spinTLGenICamXMLLocationEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLGenICamXMLLocationEnums(int v) { this.value = v; }
+    private spinTLGenICamXMLLocationEnums(spinTLGenICamXMLLocationEnums e) { this.value = e.value; }
+    public spinTLGenICamXMLLocationEnums intern() { for (spinTLGenICamXMLLocationEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLDeviceEndianessMechanismEnums {
+public enum spinTLDeviceEndianessMechanismEnums {
 	/** Handling the device endianness according to GenICam Schema 1.0*/
 	DeviceEndianessMechanism_Legacy(0),
 	/** Handling the device endianness according to GenICam Schema 1.1 and later*/
@@ -10179,13 +10337,13 @@ public enum _spinTLDeviceEndianessMechanismEnums {
 	NUMDEVICEENDIANESSMECHANISM(2);
 
     public final int value;
-    private _spinTLDeviceEndianessMechanismEnums(int v) { this.value = v; }
-    private _spinTLDeviceEndianessMechanismEnums(_spinTLDeviceEndianessMechanismEnums e) { this.value = e.value; }
-    public _spinTLDeviceEndianessMechanismEnums intern() { for (_spinTLDeviceEndianessMechanismEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLDeviceEndianessMechanismEnums(int v) { this.value = v; }
+    private spinTLDeviceEndianessMechanismEnums(spinTLDeviceEndianessMechanismEnums e) { this.value = e.value; }
+    public spinTLDeviceEndianessMechanismEnums intern() { for (spinTLDeviceEndianessMechanismEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLDeviceCurrentSpeedEnums {
+public enum spinTLDeviceCurrentSpeedEnums {
 	/** Unknown-Speed.*/
 	DeviceCurrentSpeed_UnknownSpeed(0),
 	/** Low-Speed.*/
@@ -10199,13 +10357,13 @@ public enum _spinTLDeviceCurrentSpeedEnums {
 	NUMDEVICECURRENTSPEED(5);
 
     public final int value;
-    private _spinTLDeviceCurrentSpeedEnums(int v) { this.value = v; }
-    private _spinTLDeviceCurrentSpeedEnums(_spinTLDeviceCurrentSpeedEnums e) { this.value = e.value; }
-    public _spinTLDeviceCurrentSpeedEnums intern() { for (_spinTLDeviceCurrentSpeedEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLDeviceCurrentSpeedEnums(int v) { this.value = v; }
+    private spinTLDeviceCurrentSpeedEnums(spinTLDeviceCurrentSpeedEnums e) { this.value = e.value; }
+    public spinTLDeviceCurrentSpeedEnums intern() { for (spinTLDeviceCurrentSpeedEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLInterfaceTypeEnums {
+public enum spinTLInterfaceTypeEnums {
 	/** GigE Vision*/
 	InterfaceType_GigEVision(0),
 	/** Camera Link*/
@@ -10221,13 +10379,13 @@ public enum _spinTLInterfaceTypeEnums {
 	NUMINTERFACETYPE(6);
 
     public final int value;
-    private _spinTLInterfaceTypeEnums(int v) { this.value = v; }
-    private _spinTLInterfaceTypeEnums(_spinTLInterfaceTypeEnums e) { this.value = e.value; }
-    public _spinTLInterfaceTypeEnums intern() { for (_spinTLInterfaceTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLInterfaceTypeEnums(int v) { this.value = v; }
+    private spinTLInterfaceTypeEnums(spinTLInterfaceTypeEnums e) { this.value = e.value; }
+    public spinTLInterfaceTypeEnums intern() { for (spinTLInterfaceTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLPOEStatusEnums {
+public enum spinTLPOEStatusEnums {
 	/** Not Supported*/
 	POEStatus_NotSupported(0),
 	/** Power is Off*/
@@ -10237,13 +10395,13 @@ public enum _spinTLPOEStatusEnums {
 	NUMPOESTATUS(3);
 
     public final int value;
-    private _spinTLPOEStatusEnums(int v) { this.value = v; }
-    private _spinTLPOEStatusEnums(_spinTLPOEStatusEnums e) { this.value = e.value; }
-    public _spinTLPOEStatusEnums intern() { for (_spinTLPOEStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLPOEStatusEnums(int v) { this.value = v; }
+    private spinTLPOEStatusEnums(spinTLPOEStatusEnums e) { this.value = e.value; }
+    public spinTLPOEStatusEnums intern() { for (spinTLPOEStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLFilterDriverStatusEnums {
+public enum spinTLFilterDriverStatusEnums {
 	/** Not Supported*/
 	FilterDriverStatus_NotSupported(0),
 	/** FLIR Light Weight Filter Driver is disabled*/
@@ -10253,13 +10411,13 @@ public enum _spinTLFilterDriverStatusEnums {
 	NUMFILTERDRIVERSTATUS(3);
 
     public final int value;
-    private _spinTLFilterDriverStatusEnums(int v) { this.value = v; }
-    private _spinTLFilterDriverStatusEnums(_spinTLFilterDriverStatusEnums e) { this.value = e.value; }
-    public _spinTLFilterDriverStatusEnums intern() { for (_spinTLFilterDriverStatusEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLFilterDriverStatusEnums(int v) { this.value = v; }
+    private spinTLFilterDriverStatusEnums(spinTLFilterDriverStatusEnums e) { this.value = e.value; }
+    public spinTLFilterDriverStatusEnums intern() { for (spinTLFilterDriverStatusEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
-public enum _spinTLTLTypeEnums {
+public enum spinTLTLTypeEnums {
 	/** GigE Vision*/
 	TLType_GigEVision(0),
 	/** Camera Link*/
@@ -10277,9 +10435,9 @@ public enum _spinTLTLTypeEnums {
 	NUMTLTYPE(7);
 
     public final int value;
-    private _spinTLTLTypeEnums(int v) { this.value = v; }
-    private _spinTLTLTypeEnums(_spinTLTLTypeEnums e) { this.value = e.value; }
-    public _spinTLTLTypeEnums intern() { for (_spinTLTLTypeEnums e : values()) if (e.value == value) return e; return this; }
+    private spinTLTLTypeEnums(int v) { this.value = v; }
+    private spinTLTLTypeEnums(spinTLTLTypeEnums e) { this.value = e.value; }
+    public spinTLTLTypeEnums intern() { for (spinTLTLTypeEnums e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
@@ -10314,7 +10472,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLDEVICE_H
 // #define FLIR_SPINNAKERC_TLDEVICE_H
-// Targeting ../Spinnaker_C/quickSpinTLDevice.java
+// Targeting ..\Spinnaker_C\quickSpinTLDevice.java
 
 
 
@@ -10347,7 +10505,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLINTERFACE_H
 // #define FLIR_SPINNAKERC_TLINTERFACE_H
-// Targeting ../Spinnaker_C/quickSpinTLInterface.java
+// Targeting ..\Spinnaker_C\quickSpinTLInterface.java
 
 
 
@@ -10380,7 +10538,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLSTREAM_H
 // #define FLIR_SPINNAKERC_TLSTREAM_H
-// Targeting ../Spinnaker_C/quickSpinTLStream.java
+// Targeting ..\Spinnaker_C\quickSpinTLStream.java
 
 
 
@@ -10413,7 +10571,7 @@ public enum _spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLSYSTEM_H
 // #define FLIR_SPINNAKERC_TLSYSTEM_H
-// Targeting ../Spinnaker_C/quickSpinTLSystem.java
+// Targeting ..\Spinnaker_C\quickSpinTLSystem.java
 
 
 
