@@ -5960,7 +5960,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeMapGetNode(spinNodeMapHandle hNodeMap, @Cast("const char*") BytePointer pName, @ByPtrPtr spinNodeHandle phNode);
-    public static native spinError spinNodeMapGetNode(spinNodeMapHandle hNodeMap, String pName, @ByPtrPtr spinNodeHandle phNode);
+    public static native @Cast("spinError") int spinNodeMapGetNode(spinNodeMapHandle hNodeMap, String pName, @ByPtrPtr spinNodeHandle phNode);
 
     /**
      * Gets the number of nodes in the map
@@ -6031,7 +6031,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native @Cast("spinError") int spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
     public static native spinError spinNodeIsImplemented(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
@@ -6044,7 +6044,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native @Cast("spinError") int spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
     public static native spinError spinNodeIsReadable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
@@ -6057,7 +6057,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native @Cast("spinError") int spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
     public static native spinError spinNodeIsWritable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
@@ -6070,7 +6070,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbResult);
-    public static native spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native @Cast("spinError") int spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbResult);
     public static native spinError spinNodeIsAvailable(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbResult);
 
     /**
@@ -6085,7 +6085,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") BytePointer pbResult);
-    public static native spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") ByteBuffer pbResult);
+    public static native @Cast("spinError") int spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") ByteBuffer pbResult);
     public static native spinError spinNodeIsEqual(spinNodeHandle hNodeFirst, spinNodeHandle hNodeSecond, @Cast("bool8_t*") byte[] pbResult);
 
     /**
@@ -6099,7 +6099,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") IntPointer pAccessMode);
-    public static native spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") IntBuffer pAccessMode);
+    public static native @Cast("spinError") int spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") IntBuffer pAccessMode);
     public static native spinError spinNodeGetAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode*") int[] pAccessMode);
 
     /**
@@ -6114,7 +6114,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinNodeGetName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinNodeGetName(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6128,7 +6128,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") IntPointer pNamespace);
-    public static native spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") IntBuffer pNamespace);
+    public static native @Cast("spinError") int spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") IntBuffer pNamespace);
     public static native spinError spinNodeGetNameSpace(spinNodeHandle hNode, @Cast("spinNameSpace*") int[] pNamespace);
 
     /**
@@ -6142,7 +6142,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") IntPointer pVisibility);
-    public static native spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") IntBuffer pVisibility);
+    public static native @Cast("spinError") int spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") IntBuffer pVisibility);
     public static native spinError spinNodeGetVisibility(spinNodeHandle hNode, @Cast("spinVisibility*") int[] pVisibility);
 
     /**
@@ -6166,7 +6166,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") IntPointer pCachingMode);
-    public static native spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") IntBuffer pCachingMode);
+    public static native @Cast("spinError") int spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") IntBuffer pCachingMode);
     public static native spinError spinNodeGetCachingMode(spinNodeHandle hNode, @Cast("spinCachingMode*") int[] pCachingMode);
 
     /**
@@ -6181,7 +6181,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinNodeGetToolTip(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6196,7 +6196,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinNodeGetDescription(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6211,7 +6211,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinNodeGetDisplayName(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6225,7 +6225,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") IntPointer pType);
-    public static native spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") IntBuffer pType);
+    public static native @Cast("spinError") int spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") IntBuffer pType);
     public static native spinError spinNodeGetType(spinNodeHandle hNode, @Cast("spinNodeType*") int[] pType);
 
     /**
@@ -6238,7 +6238,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pPollingTime);
-    public static native spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pPollingTime);
+    public static native @Cast("spinError") int spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pPollingTime);
     public static native spinError spinNodeGetPollingTime(spinNodeHandle hNode, @Cast("int64_t*") long[] pPollingTime);
 
     /**
@@ -6278,7 +6278,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetImposedAccessMode(spinNodeHandle hNode, spinAccessMode imposedAccessMode);
-    public static native spinError spinNodeGetImposedAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode") int imposedAccessMode);
+    public static native @Cast("spinError") int spinNodeGetImposedAccessMode(spinNodeHandle hNode, @Cast("spinAccessMode") int imposedAccessMode);
 
     /**
      * Retrieves the imposed visibility of a node
@@ -6290,7 +6290,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeGetImposedVisibility(spinNodeHandle hNode, spinVisibility imposedVisibility);
-    public static native spinError spinNodeGetImposedVisibility(spinNodeHandle hNode, @Cast("spinVisibility") int imposedVisibility);
+    public static native @Cast("spinError") int spinNodeGetImposedVisibility(spinNodeHandle hNode, @Cast("spinVisibility") int imposedVisibility);
     /*@}*/
 
     /**
@@ -6315,7 +6315,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinNodeToString(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinNodeToString(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6331,7 +6331,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinNodeToStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6345,7 +6345,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeFromString(spinNodeHandle hNode, @Cast("const char*") BytePointer pBuf);
-    public static native spinError spinNodeFromString(spinNodeHandle hNode, String pBuf);
+    public static native @Cast("spinError") int spinNodeFromString(spinNodeHandle hNode, String pBuf);
 
     /**
      * Sets the value of any node type from a c-string; manually set whether to verify the node; ensure the value of the
@@ -6359,7 +6359,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinNodeFromStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const char*") BytePointer pBuf);
-    public static native spinError spinNodeFromStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
+    public static native @Cast("spinError") int spinNodeFromStringEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
     /*@}*/
 
     /**
@@ -6381,7 +6381,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinStringSetValue(spinNodeHandle hNode, @Cast("const char*") BytePointer pBuf);
-    public static native spinError spinStringSetValue(spinNodeHandle hNode, String pBuf);
+    public static native @Cast("spinError") int spinStringSetValue(spinNodeHandle hNode, String pBuf);
 
     /**
      * Sets the value of a string node; manually set whether to verify the node
@@ -6394,7 +6394,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinStringSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const char*") BytePointer pBuf);
-    public static native spinError spinStringSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
+    public static native @Cast("spinError") int spinStringSetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, String pBuf);
 
     /**
      * Retrieves the value of a string node as a c-string
@@ -6408,7 +6408,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinStringGetValue(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinStringGetValue(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6424,7 +6424,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinStringGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -6437,7 +6437,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinStringGetMaxLength(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
     /*@}*/
 
@@ -6483,7 +6483,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinIntegerGetValue(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
@@ -6497,7 +6497,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinIntegerGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("int64_t*") long[] pValue);
 
     /**
@@ -6510,7 +6510,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinIntegerGetMin(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
@@ -6523,7 +6523,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinIntegerGetMax(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
@@ -6536,7 +6536,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinIntegerGetInc(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
@@ -6550,7 +6550,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntPointer pValue);
-    public static native spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
+    public static native @Cast("spinError") int spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
     public static native spinError spinIntegerGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") int[] pValue);
     /*@}*/
 
@@ -6596,7 +6596,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinFloatGetValue(spinNodeHandle hNode, DoublePointer pValue);
-    public static native spinError spinFloatGetValue(spinNodeHandle hNode, DoubleBuffer pValue);
+    public static native @Cast("spinError") int spinFloatGetValue(spinNodeHandle hNode, DoubleBuffer pValue);
     public static native spinError spinFloatGetValue(spinNodeHandle hNode, double[] pValue);
 
     /**
@@ -6609,7 +6609,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, DoublePointer pValue);
-    public static native spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, DoubleBuffer pValue);
+    public static native @Cast("spinError") int spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, DoubleBuffer pValue);
     public static native spinError spinFloatGetValueEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, double[] pValue);
 
     /**
@@ -6622,7 +6622,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinFloatGetMin(spinNodeHandle hNode, DoublePointer pValue);
-    public static native spinError spinFloatGetMin(spinNodeHandle hNode, DoubleBuffer pValue);
+    public static native @Cast("spinError") int spinFloatGetMin(spinNodeHandle hNode, DoubleBuffer pValue);
     public static native spinError spinFloatGetMin(spinNodeHandle hNode, double[] pValue);
 
     /**
@@ -6635,7 +6635,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinFloatGetMax(spinNodeHandle hNode, DoublePointer pValue);
-    public static native spinError spinFloatGetMax(spinNodeHandle hNode, DoubleBuffer pValue);
+    public static native @Cast("spinError") int spinFloatGetMax(spinNodeHandle hNode, DoubleBuffer pValue);
     public static native spinError spinFloatGetMax(spinNodeHandle hNode, double[] pValue);
 
     /**
@@ -6649,7 +6649,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntPointer pValue);
-    public static native spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
+    public static native @Cast("spinError") int spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") IntBuffer pValue);
     public static native spinError spinFloatGetRepresentation(spinNodeHandle hNode, @Cast("spinRepresentation*") int[] pValue);
 
     /**
@@ -6664,7 +6664,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinFloatGetUnit(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     /*@}*/
 
@@ -6711,7 +6711,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinEnumerationGetEntryByName(spinNodeHandle hEnumNode, @Cast("const char*") BytePointer pName, @ByPtrPtr spinNodeHandle phEntry);
-    public static native spinError spinEnumerationGetEntryByName(spinNodeHandle hEnumNode, String pName, @ByPtrPtr spinNodeHandle phEntry);
+    public static native @Cast("spinError") int spinEnumerationGetEntryByName(spinNodeHandle hEnumNode, String pName, @ByPtrPtr spinNodeHandle phEntry);
 
     /**
      * Retrieves the currently selected entry node from an enum node
@@ -6789,7 +6789,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinEnumerationEntryGetIntValue(spinNodeHandle hNode, @Cast("int64_t*") long[] pValue);
 
     /**
@@ -6817,7 +6817,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinEnumerationEntryGetSymbolic(spinNodeHandle hNode, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     /*@}*/
 
@@ -6853,7 +6853,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbValue);
-    public static native spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
+    public static native @Cast("spinError") int spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
     public static native spinError spinBooleanGetValue(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbValue);
     /*@}*/
 
@@ -6886,7 +6886,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") BytePointer pbValue);
-    public static native spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
+    public static native @Cast("spinError") int spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") ByteBuffer pbValue);
     public static native spinError spinCommandIsDone(spinNodeHandle hNode, @Cast("bool8_t*") byte[] pbValue);
     /*@}*/
 
@@ -6958,7 +6958,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") BytePointer pBuf, @Cast("int64_t") long length);
-    public static native spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
+    public static native @Cast("spinError") int spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
     public static native spinError spinRegisterGet(spinNodeHandle hNode, @Cast("uint8_t*") byte[] pBuf, @Cast("int64_t") long length);
 
     /**
@@ -6980,7 +6980,7 @@ public enum spinInputDirection {
             @Cast("bool8_t") byte bIgnoreCache,
             @Cast("uint8_t*") BytePointer pBuf,
             @Cast("int64_t") long length);
-    public static native spinError spinRegisterGetEx(
+    public static native @Cast("spinError") int spinRegisterGetEx(
             spinNodeHandle hNode,
             @Cast("bool8_t") byte bVerify,
             @Cast("bool8_t") byte bIgnoreCache,
@@ -7003,7 +7003,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pAddress);
-    public static native spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pAddress);
+    public static native @Cast("spinError") int spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pAddress);
     public static native spinError spinRegisterGetAddress(spinNodeHandle hNode, @Cast("int64_t*") long[] pAddress);
 
     /**
@@ -7016,7 +7016,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") LongPointer pLength);
-    public static native spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pLength);
+    public static native @Cast("spinError") int spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") LongBuffer pLength);
     public static native spinError spinRegisterGetLength(spinNodeHandle hNode, @Cast("int64_t*") long[] pLength);
 
     /**
@@ -7030,7 +7030,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") BytePointer pBuf, @Cast("int64_t") long length);
-    public static native spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
+    public static native @Cast("spinError") int spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
     public static native spinError spinRegisterSet(spinNodeHandle hNode, @Cast("const uint8_t*") byte[] pBuf, @Cast("int64_t") long length);
 
     /**
@@ -7136,7 +7136,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLast(@Cast("spinError*") IntPointer pError);
-    public static native spinError spinErrorGetLast(@Cast("spinError*") IntBuffer pError);
+    public static native @Cast("spinError") int spinErrorGetLast(@Cast("spinError*") IntBuffer pError);
     public static native spinError spinErrorGetLast(@Cast("spinError*") int[] pError);
 
     /**
@@ -7150,7 +7150,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLastMessage(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinErrorGetLastMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinErrorGetLastMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinErrorGetLastMessage(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -7164,7 +7164,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLastBuildDate(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinErrorGetLastBuildDate(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinErrorGetLastBuildDate(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinErrorGetLastBuildDate(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -7178,7 +7178,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLastBuildTime(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinErrorGetLastBuildTime(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinErrorGetLastBuildTime(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinErrorGetLastBuildTime(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -7192,7 +7192,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLastFileName(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinErrorGetLastFileName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinErrorGetLastFileName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinErrorGetLastFileName(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -7206,7 +7206,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLastFullMessage(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinErrorGetLastFullMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinErrorGetLastFullMessage(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinErrorGetLastFullMessage(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -7220,7 +7220,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLastFunctionName(@Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinErrorGetLastFunctionName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinErrorGetLastFunctionName(@Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinErrorGetLastFunctionName(@Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -7234,7 +7234,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinErrorGetLastLineNumber(@Cast("int64_t*") LongPointer pLineNum);
-    public static native spinError spinErrorGetLastLineNumber(@Cast("int64_t*") LongBuffer pLineNum);
+    public static native @Cast("spinError") int spinErrorGetLastLineNumber(@Cast("int64_t*") LongBuffer pLineNum);
     public static native spinError spinErrorGetLastLineNumber(@Cast("int64_t*") long[] pLineNum);
     /*@}*/
 
@@ -7337,7 +7337,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinSystemSetLoggingLevel(spinSystem hSystem, spinnakerLogLevel logLevel);
-    public static native spinError spinSystemSetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel") int logLevel);
+    public static native @Cast("spinError") int spinSystemSetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel") int logLevel);
 
     /**
      * Retrieves the logging level for all logging events on the system
@@ -7349,7 +7349,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") IntPointer pLogLevel);
-    public static native spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") IntBuffer pLogLevel);
+    public static native @Cast("spinError") int spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") IntBuffer pLogLevel);
     public static native spinError spinSystemGetLoggingLevel(spinSystem hSystem, @Cast("spinnakerLogLevel*") int[] pLogLevel);
 
     /**
@@ -7394,7 +7394,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") BytePointer pbIsInUse);
-    public static native spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbIsInUse);
+    public static native @Cast("spinError") int spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbIsInUse);
     public static native spinError spinSystemIsInUse(spinSystem hSystem, @Cast("bool8_t*") byte[] pbIsInUse);
 
     /**
@@ -7496,7 +7496,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") BytePointer pbChanged);
-    public static native spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbChanged);
+    public static native @Cast("spinError") int spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") ByteBuffer pbChanged);
     public static native spinError spinSystemUpdateCameras(spinSystem hSystem, @Cast("bool8_t*") byte[] pbChanged);
 
     /**
@@ -7511,7 +7511,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") BytePointer pbChanged);
-    public static native spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") ByteBuffer pbChanged);
+    public static native @Cast("spinError") int spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") ByteBuffer pbChanged);
     public static native spinError spinSystemUpdateCamerasEx(spinSystem hSystem, @Cast("bool8_t") byte bUpdateInterfaces, @Cast("bool8_t*") byte[] pbChanged);
 
     /**
@@ -7716,7 +7716,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraListGetBySerial(spinCameraList hCameraList, @Cast("const char*") BytePointer pSerial, @ByPtrPtr spinCamera phCamera);
-    public static native spinError spinCameraListGetBySerial(spinCameraList hCameraList, String pSerial, @ByPtrPtr spinCamera phCamera);
+    public static native @Cast("spinError") int spinCameraListGetBySerial(spinCameraList hCameraList, String pSerial, @ByPtrPtr spinCamera phCamera);
 
     /**
      * Removes a camera from a camera list using its serial number
@@ -7728,7 +7728,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraListRemoveBySerial(spinCameraList hCameraList, @Cast("const char*") BytePointer pSerial);
-    public static native spinError spinCameraListRemoveBySerial(spinCameraList hCameraList, String pSerial);
+    public static native @Cast("spinError") int spinCameraListRemoveBySerial(spinCameraList hCameraList, String pSerial);
     /*@}*/
 
     /**
@@ -7750,7 +7750,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") BytePointer pbChanged);
-    public static native spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbChanged);
+    public static native @Cast("spinError") int spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbChanged);
     public static native spinError spinInterfaceUpdateCameras(spinInterface hInterface, @Cast("bool8_t*") byte[] pbChanged);
 
     /**
@@ -7899,7 +7899,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") BytePointer pbIsInUse);
-    public static native spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbIsInUse);
+    public static native @Cast("spinError") int spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") ByteBuffer pbIsInUse);
     public static native spinError spinInterfaceIsInUse(spinInterface hInterface, @Cast("bool8_t*") byte[] pbIsInUse);
 
     /**
@@ -7997,7 +7997,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") IntPointer pAccessMode);
-    public static native spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") IntBuffer pAccessMode);
+    public static native @Cast("spinError") int spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") IntBuffer pAccessMode);
     public static native spinError spinCameraGetAccessMode(spinCamera hCamera, @Cast("spinAccessMode*") int[] pAccessMode);
 
     /*
@@ -8091,7 +8091,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinCameraGetUniqueID(spinCamera hCamera, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -8104,7 +8104,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbIsStreaming);
-    public static native spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbIsStreaming);
+    public static native @Cast("spinError") int spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbIsStreaming);
     public static native spinError spinCameraIsStreaming(spinCamera hCamera, @Cast("bool8_t*") byte[] pbIsStreaming);
 
     /**
@@ -8119,7 +8119,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinCameraGetGuiXml(spinCamera hCamera, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -8147,7 +8147,7 @@ public enum spinInputDirection {
             spinCamera hCamera,
             spinDeviceEventHandler hDeviceEventHandler,
             @Cast("const char*") BytePointer pName);
-    public static native spinError spinCameraRegisterDeviceEventHandlerEx(
+    public static native @Cast("spinError") int spinCameraRegisterDeviceEventHandlerEx(
             spinCamera hCamera,
             spinDeviceEventHandler hDeviceEventHandler,
             String pName);
@@ -8207,7 +8207,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbValid);
-    public static native spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbValid);
+    public static native @Cast("spinError") int spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbValid);
     public static native spinError spinCameraIsValid(spinCamera hCamera, @Cast("bool8_t*") byte[] pbValid);
 
     /**
@@ -8220,7 +8220,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") BytePointer pbInit);
-    public static native spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbInit);
+    public static native @Cast("spinError") int spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") ByteBuffer pbInit);
     public static native spinError spinCameraIsInitialized(spinCamera hCamera, @Cast("bool8_t*") byte[] pbInit);
     /*@}*/
 
@@ -8234,7 +8234,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") IntPointer pMaxPacketSize);
-    public static native spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") IntBuffer pMaxPacketSize);
+    public static native @Cast("spinError") int spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") IntBuffer pMaxPacketSize);
     public static native spinError spinCameraDiscoverMaxPacketSize(spinCamera hCamera, @Cast("unsigned int*") int[] pMaxPacketSize);
     /*@}*/
 
@@ -8305,7 +8305,7 @@ public enum spinInputDirection {
             @Cast("size_t") long offsetY,
             spinPixelFormatEnums pixelFormat,
             Pointer pData);
-    public static native spinError spinImageCreateEx(
+    public static native @Cast("spinError") int spinImageCreateEx(
             @ByPtrPtr spinImage phImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8344,7 +8344,7 @@ public enum spinInputDirection {
             Pointer pData,
             spinPayloadTypeInfoIDs dataPayloadType,
             @Cast("size_t") long dataSize);
-    public static native spinError spinImageCreateEx2(
+    public static native @Cast("spinError") int spinImageCreateEx2(
             @ByPtrPtr spinImage phImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8374,7 +8374,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSetDefaultColorProcessing(spinColorProcessingAlgorithm algorithm);
-    public static native spinError spinImageSetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm") int algorithm);
+    public static native @Cast("spinError") int spinImageSetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm") int algorithm);
 
     /**
      * Retrieves the default color processing algorithm
@@ -8385,7 +8385,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") IntPointer pAlgorithm);
-    public static native spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
+    public static native @Cast("spinError") int spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
     public static native spinError spinImageGetDefaultColorProcessing(@Cast("spinColorProcessingAlgorithm*") int[] pAlgorithm);
 
     /**
@@ -8398,7 +8398,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") IntPointer pAlgorithm);
-    public static native spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
+    public static native @Cast("spinError") int spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") IntBuffer pAlgorithm);
     public static native spinError spinImageGetColorProcessing(spinImage hImage, @Cast("spinColorProcessingAlgorithm*") int[] pAlgorithm);
 
     /**
@@ -8425,7 +8425,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") IntPointer pNumThreads);
-    public static native spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") IntBuffer pNumThreads);
+    public static native @Cast("spinError") int spinImageGetNumDecompressionThreads(@Cast("unsigned int*") IntBuffer pNumThreads);
     public static native spinError spinImageGetNumDecompressionThreads(@Cast("unsigned int*") int[] pNumThreads);
 
     /**
@@ -8439,7 +8439,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageConvert(spinImage hSrcImage, spinPixelFormatEnums pixelFormat, spinImage hDestImage);
-    public static native spinError spinImageConvert(spinImage hSrcImage, @Cast("spinPixelFormatEnums") int pixelFormat, spinImage hDestImage);
+    public static native @Cast("spinError") int spinImageConvert(spinImage hSrcImage, @Cast("spinPixelFormatEnums") int pixelFormat, spinImage hDestImage);
 
     /**
      * Converts the pixel format and color processing algorithm of one image into a new image
@@ -8457,7 +8457,7 @@ public enum spinInputDirection {
             spinPixelFormatEnums pixelFormat,
             spinColorProcessingAlgorithm algorithm,
             spinImage hDestImage);
-    public static native spinError spinImageConvertEx(
+    public static native @Cast("spinError") int spinImageConvertEx(
             spinImage hSrcImage,
             @Cast("spinPixelFormatEnums") int pixelFormat,
             @Cast("spinColorProcessingAlgorithm") int algorithm,
@@ -8483,7 +8483,7 @@ public enum spinInputDirection {
             @Cast("size_t") long offsetX,
             @Cast("size_t") long offsetY,
             spinPixelFormatEnums pixelFormat);
-    public static native spinError spinImageReset(
+    public static native @Cast("spinError") int spinImageReset(
             spinImage hImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8513,7 +8513,7 @@ public enum spinInputDirection {
             @Cast("size_t") long offsetY,
             spinPixelFormatEnums pixelFormat,
             Pointer pData);
-    public static native spinError spinImageResetEx(
+    public static native @Cast("spinError") int spinImageResetEx(
             spinImage hImage,
             @Cast("size_t") long width,
             @Cast("size_t") long height,
@@ -8532,7 +8532,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") IntPointer pId);
-    public static native spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
+    public static native @Cast("spinError") int spinImageGetID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
     public static native spinError spinImageGetID(spinImage hImage, @Cast("uint64_t*") int[] pId);
 
     /**
@@ -8657,7 +8657,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") IntPointer pFrameID);
-    public static native spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") IntBuffer pFrameID);
+    public static native @Cast("spinError") int spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") IntBuffer pFrameID);
     public static native spinError spinImageGetFrameID(spinImage hImage, @Cast("uint64_t*") int[] pFrameID);
 
     /**
@@ -8670,7 +8670,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") IntPointer pTimeStamp);
-    public static native spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") IntBuffer pTimeStamp);
+    public static native @Cast("spinError") int spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") IntBuffer pTimeStamp);
     public static native spinError spinImageGetTimeStamp(spinImage hImage, @Cast("uint64_t*") int[] pTimeStamp);
 
     /**
@@ -8696,7 +8696,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") IntPointer pPayloadType);
-    public static native spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") IntBuffer pPayloadType);
+    public static native @Cast("spinError") int spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") IntBuffer pPayloadType);
     public static native spinError spinImageGetTLPayloadType(spinImage hImage, @Cast("spinPayloadTypeInfoIDs*") int[] pPayloadType);
 
     /**
@@ -8710,7 +8710,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") IntPointer pPixelFormat);
-    public static native spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") IntBuffer pPixelFormat);
+    public static native @Cast("spinError") int spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") IntBuffer pPixelFormat);
     public static native spinError spinImageGetPixelFormat(spinImage hImage, @Cast("spinPixelFormatEnums*") int[] pPixelFormat);
 
     /**
@@ -8723,7 +8723,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") IntPointer pPixelFormat);
-    public static native spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") IntBuffer pPixelFormat);
+    public static native @Cast("spinError") int spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") IntBuffer pPixelFormat);
     public static native spinError spinImageGetTLPixelFormat(spinImage hImage, @Cast("uint64_t*") int[] pPixelFormat);
 
     /**
@@ -8739,7 +8739,7 @@ public enum spinInputDirection {
     public static native spinError spinImageGetTLPixelFormatNamespace(
             spinImage hImage,
             @Cast("spinPixelFormatNamespaceID*") IntPointer pPixelFormatNamespace);
-    public static native spinError spinImageGetTLPixelFormatNamespace(
+    public static native @Cast("spinError") int spinImageGetTLPixelFormatNamespace(
             spinImage hImage,
             @Cast("spinPixelFormatNamespaceID*") IntBuffer pPixelFormatNamespace);
     public static native spinError spinImageGetTLPixelFormatNamespace(
@@ -8758,7 +8758,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinImageGetPixelFormatName(spinImage hImage, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -8771,7 +8771,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") BytePointer pbIsIncomplete);
-    public static native spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbIsIncomplete);
+    public static native @Cast("spinError") int spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbIsIncomplete);
     public static native spinError spinImageIsIncomplete(spinImage hImage, @Cast("bool8_t*") byte[] pbIsIncomplete);
 
     /**
@@ -8797,7 +8797,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSave(spinImage hImage, @Cast("const char*") BytePointer pFilename, spinImageFileFormat format);
-    public static native spinError spinImageSave(spinImage hImage, String pFilename, @Cast("spinImageFileFormat") int format);
+    public static native @Cast("spinError") int spinImageSave(spinImage hImage, String pFilename, @Cast("spinImageFileFormat") int format);
 
     /**
      * Saves an image using a specified file format (using the extension of the filename)
@@ -8809,7 +8809,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSaveFromExt(spinImage hImage, @Cast("const char*") BytePointer pFilename);
-    public static native spinError spinImageSaveFromExt(spinImage hImage, String pFilename);
+    public static native @Cast("spinError") int spinImageSaveFromExt(spinImage hImage, String pFilename);
 
     /**
      * Saves an image as a PNG image
@@ -8823,7 +8823,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSavePng(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPNGOption pOption);
-    public static native spinError spinImageSavePng(spinImage hImage, String pFilename, @Const spinPNGOption pOption);
+    public static native @Cast("spinError") int spinImageSavePng(spinImage hImage, String pFilename, @Const spinPNGOption pOption);
 
     /**
      * Saves an image as a PPM image
@@ -8836,7 +8836,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSavePpm(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPPMOption pOption);
-    public static native spinError spinImageSavePpm(spinImage hImage, String pFilename, @Const spinPPMOption pOption);
+    public static native @Cast("spinError") int spinImageSavePpm(spinImage hImage, String pFilename, @Const spinPPMOption pOption);
 
     /**
      * Saves an image as an PGM image
@@ -8849,7 +8849,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSavePgm(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinPGMOption pOption);
-    public static native spinError spinImageSavePgm(spinImage hImage, String pFilename, @Const spinPGMOption pOption);
+    public static native @Cast("spinError") int spinImageSavePgm(spinImage hImage, String pFilename, @Const spinPGMOption pOption);
 
     /**
      * Saves an image as a TIFF image
@@ -8862,7 +8862,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSaveTiff(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinTIFFOption pOption);
-    public static native spinError spinImageSaveTiff(spinImage hImage, String pFilename, @Const spinTIFFOption pOption);
+    public static native @Cast("spinError") int spinImageSaveTiff(spinImage hImage, String pFilename, @Const spinTIFFOption pOption);
 
     /**
      * Saves an image as a JPEG image
@@ -8875,7 +8875,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSaveJpeg(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinJPEGOption pOption);
-    public static native spinError spinImageSaveJpeg(spinImage hImage, String pFilename, @Const spinJPEGOption pOption);
+    public static native @Cast("spinError") int spinImageSaveJpeg(spinImage hImage, String pFilename, @Const spinJPEGOption pOption);
 
     /**
      * Saves an image as a JPEG 2000 image
@@ -8888,7 +8888,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSaveJpg2(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinJPG2Option pOption);
-    public static native spinError spinImageSaveJpg2(spinImage hImage, String pFilename, @Const spinJPG2Option pOption);
+    public static native @Cast("spinError") int spinImageSaveJpg2(spinImage hImage, String pFilename, @Const spinJPG2Option pOption);
 
     /**
      * Saves an image as a BMP image
@@ -8901,7 +8901,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageSaveBmp(spinImage hImage, @Cast("const char*") BytePointer pFilename, @Const spinBMPOption pOption);
-    public static native spinError spinImageSaveBmp(spinImage hImage, String pFilename, @Const spinBMPOption pOption);
+    public static native @Cast("spinError") int spinImageSaveBmp(spinImage hImage, String pFilename, @Const spinBMPOption pOption);
 
     /**
      * Retrieves the chunk layout ID of an image
@@ -8913,7 +8913,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") IntPointer pId);
-    public static native spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
+    public static native @Cast("spinError") int spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") IntBuffer pId);
     public static native spinError spinImageGetChunkLayoutID(spinImage hImage, @Cast("uint64_t*") int[] pId);
 
     /**
@@ -8937,7 +8937,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") IntPointer pStatus);
-    public static native spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") IntBuffer pStatus);
+    public static native @Cast("spinError") int spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") IntBuffer pStatus);
     public static native spinError spinImageGetStatus(spinImage hImage, @Cast("spinImageStatus*") int[] pStatus);
 
     /**
@@ -8952,11 +8952,11 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageGetStatusDescription(spinImageStatus status, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinImageGetStatusDescription(spinImageStatus status, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinImageGetStatusDescription(spinImageStatus status, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinImageGetStatusDescription(@Cast("spinImageStatus") int status, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
      * Releases an image
@@ -8978,7 +8978,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") BytePointer pbHasCRC);
-    public static native spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbHasCRC);
+    public static native @Cast("spinError") int spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbHasCRC);
     public static native spinError spinImageHasCRC(spinImage hImage, @Cast("bool8_t*") byte[] pbHasCRC);
 
     /**
@@ -8991,7 +8991,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") BytePointer pbCheckCRC);
-    public static native spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbCheckCRC);
+    public static native @Cast("spinError") int spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") ByteBuffer pbCheckCRC);
     public static native spinError spinImageCheckCRC(spinImage hImage, @Cast("bool8_t*") byte[] pbCheckCRC);
 
     /**
@@ -9293,7 +9293,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @Cast("bool8_t*") BytePointer pbEnabled);
-    public static native spinError spinImageStatisticsGetChannelStatus(
+    public static native @Cast("spinError") int spinImageStatisticsGetChannelStatus(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("bool8_t*") ByteBuffer pbEnabled);
@@ -9301,7 +9301,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @Cast("bool8_t*") byte[] pbEnabled);
-    public static native spinError spinImageStatisticsGetChannelStatus(
+    public static native @Cast("spinError") int spinImageStatisticsGetChannelStatus(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("bool8_t*") BytePointer pbEnabled);
@@ -9309,7 +9309,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @Cast("bool8_t*") ByteBuffer pbEnabled);
-    public static native spinError spinImageStatisticsGetChannelStatus(
+    public static native @Cast("spinError") int spinImageStatisticsGetChannelStatus(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("bool8_t*") byte[] pbEnabled);
@@ -9328,7 +9328,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @Cast("bool8_t") byte bEnable);
-    public static native spinError spinImageStatisticsSetChannelStatus(
+    public static native @Cast("spinError") int spinImageStatisticsSetChannelStatus(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("bool8_t") byte bEnable);
@@ -9349,7 +9349,7 @@ public enum spinInputDirection {
             spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pMin,
             @Cast("unsigned int*") IntPointer pMax);
-    public static native spinError spinImageStatisticsGetRange(
+    public static native @Cast("spinError") int spinImageStatisticsGetRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pMin,
@@ -9359,7 +9359,7 @@ public enum spinInputDirection {
             spinStatisticsChannel channel,
             @Cast("unsigned int*") int[] pMin,
             @Cast("unsigned int*") int[] pMax);
-    public static native spinError spinImageStatisticsGetRange(
+    public static native @Cast("spinError") int spinImageStatisticsGetRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntPointer pMin,
@@ -9369,7 +9369,7 @@ public enum spinInputDirection {
             spinStatisticsChannel channel,
             @Cast("unsigned int*") IntBuffer pMin,
             @Cast("unsigned int*") IntBuffer pMax);
-    public static native spinError spinImageStatisticsGetRange(
+    public static native @Cast("spinError") int spinImageStatisticsGetRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pMin,
@@ -9391,7 +9391,7 @@ public enum spinInputDirection {
             spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pMin,
             @Cast("unsigned int*") IntPointer pMax);
-    public static native spinError spinImageStatisticsGetPixelValueRange(
+    public static native @Cast("spinError") int spinImageStatisticsGetPixelValueRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pMin,
@@ -9401,7 +9401,7 @@ public enum spinInputDirection {
             spinStatisticsChannel channel,
             @Cast("unsigned int*") int[] pMin,
             @Cast("unsigned int*") int[] pMax);
-    public static native spinError spinImageStatisticsGetPixelValueRange(
+    public static native @Cast("spinError") int spinImageStatisticsGetPixelValueRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntPointer pMin,
@@ -9411,7 +9411,7 @@ public enum spinInputDirection {
             spinStatisticsChannel channel,
             @Cast("unsigned int*") IntBuffer pMin,
             @Cast("unsigned int*") IntBuffer pMax);
-    public static native spinError spinImageStatisticsGetPixelValueRange(
+    public static native @Cast("spinError") int spinImageStatisticsGetPixelValueRange(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pMin,
@@ -9431,7 +9431,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @Cast("unsigned int*") IntPointer pNumValues);
-    public static native spinError spinImageStatisticsGetNumPixelValues(
+    public static native @Cast("spinError") int spinImageStatisticsGetNumPixelValues(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pNumValues);
@@ -9439,7 +9439,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @Cast("unsigned int*") int[] pNumValues);
-    public static native spinError spinImageStatisticsGetNumPixelValues(
+    public static native @Cast("spinError") int spinImageStatisticsGetNumPixelValues(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntPointer pNumValues);
@@ -9447,7 +9447,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @Cast("unsigned int*") IntBuffer pNumValues);
-    public static native spinError spinImageStatisticsGetNumPixelValues(
+    public static native @Cast("spinError") int spinImageStatisticsGetNumPixelValues(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pNumValues);
@@ -9466,7 +9466,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             FloatPointer pMean);
-    public static native spinError spinImageStatisticsGetMean(
+    public static native @Cast("spinError") int spinImageStatisticsGetMean(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             FloatBuffer pMean);
@@ -9474,7 +9474,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             float[] pMean);
-    public static native spinError spinImageStatisticsGetMean(
+    public static native @Cast("spinError") int spinImageStatisticsGetMean(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             FloatPointer pMean);
@@ -9482,7 +9482,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             FloatBuffer pMean);
-    public static native spinError spinImageStatisticsGetMean(
+    public static native @Cast("spinError") int spinImageStatisticsGetMean(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             float[] pMean);
@@ -9505,7 +9505,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @ByPtrPtr IntPointer ppHistogram);
-    public static native spinError spinImageStatisticsGetHistogram(
+    public static native @Cast("spinError") int spinImageStatisticsGetHistogram(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @ByPtrPtr IntBuffer ppHistogram);
@@ -9513,7 +9513,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @ByPtrPtr int[] ppHistogram);
-    public static native spinError spinImageStatisticsGetHistogram(
+    public static native @Cast("spinError") int spinImageStatisticsGetHistogram(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @ByPtrPtr IntPointer ppHistogram);
@@ -9521,7 +9521,7 @@ public enum spinInputDirection {
             spinImageStatistics hStatistics,
             spinStatisticsChannel channel,
             @ByPtrPtr IntBuffer ppHistogram);
-    public static native spinError spinImageStatisticsGetHistogram(
+    public static native @Cast("spinError") int spinImageStatisticsGetHistogram(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @ByPtrPtr int[] ppHistogram);
@@ -9562,7 +9562,7 @@ public enum spinInputDirection {
             @Cast("unsigned int*") IntPointer pNumPixelValues,
             FloatPointer pPixelValueMean,
             @ByPtrPtr IntPointer ppHistogram);
-    public static native spinError spinImageStatisticsGetAll(
+    public static native @Cast("spinError") int spinImageStatisticsGetAll(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntBuffer pRangeMin,
@@ -9582,7 +9582,7 @@ public enum spinInputDirection {
             @Cast("unsigned int*") int[] pNumPixelValues,
             float[] pPixelValueMean,
             @ByPtrPtr int[] ppHistogram);
-    public static native spinError spinImageStatisticsGetAll(
+    public static native @Cast("spinError") int spinImageStatisticsGetAll(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") IntPointer pRangeMin,
@@ -9602,7 +9602,7 @@ public enum spinInputDirection {
             @Cast("unsigned int*") IntBuffer pNumPixelValues,
             FloatBuffer pPixelValueMean,
             @ByPtrPtr IntBuffer ppHistogram);
-    public static native spinError spinImageStatisticsGetAll(
+    public static native @Cast("spinError") int spinImageStatisticsGetAll(
             spinImageStatistics hStatistics,
             @Cast("spinStatisticsChannel") int channel,
             @Cast("unsigned int*") int[] pRangeMin,
@@ -9634,7 +9634,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinLogDataGetCategoryName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -9647,7 +9647,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinLogDataGetPriority(spinLogEventData hLogEventData, @Cast("int64_t*") long[] pValue);
 
     /**
@@ -9662,7 +9662,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinLogDataGetPriorityName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -9677,7 +9677,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinLogDataGetTimestamp(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -9692,7 +9692,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinLogDataGetNDC(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -9707,7 +9707,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinLogDataGetThreadName(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /**
@@ -9722,7 +9722,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinLogDataGetLogMessage(spinLogEventData hLogEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /*@}*/
@@ -9745,7 +9745,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") IntPointer pEventId);
-    public static native spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") IntBuffer pEventId);
+    public static native @Cast("spinError") int spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") IntBuffer pEventId);
     public static native spinError spinDeviceEventGetId(spinDeviceEventData hDeviceEventData, @Cast("uint64_t*") int[] pEventId);
 
     /**
@@ -9762,7 +9762,7 @@ public enum spinInputDirection {
             spinDeviceEventData hDeviceEventData,
             @Cast("const uint8_t*") BytePointer pBuf,
             @Cast("size_t*") SizeTPointer pBufSize);
-    public static native spinError spinDeviceEventGetPayloadData(
+    public static native @Cast("spinError") int spinDeviceEventGetPayloadData(
             spinDeviceEventData hDeviceEventData,
             @Cast("const uint8_t*") ByteBuffer pBuf,
             @Cast("size_t*") SizeTPointer pBufSize);
@@ -9794,7 +9794,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") BytePointer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
-    public static native spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
+    public static native @Cast("spinError") int spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") ByteBuffer pBuf, @Cast("size_t*") SizeTPointer pBufLen);
     public static native spinError spinDeviceEventGetName(spinDeviceEventData hDeviceEventData, @Cast("char*") byte[] pBuf, @Cast("size_t*") SizeTPointer pBufLen);
 
     /*@}*/
@@ -9819,11 +9819,11 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") LongPointer pValue);
-    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongBuffer pValue);
+    public static native @Cast("spinError") int spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongBuffer pValue);
     public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") long[] pValue);
-    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongPointer pValue);
+    public static native @Cast("spinError") int spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") LongPointer pValue);
     public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, @Cast("const char*") BytePointer pName, @Cast("int64_t*") LongBuffer pValue);
-    public static native spinError spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") long[] pValue);
+    public static native @Cast("spinError") int spinImageChunkDataGetIntValue(spinImage hImage, String pName, @Cast("int64_t*") long[] pValue);
 
     /*
      * Retrieves a float value of a piece of chunk data
@@ -9836,11 +9836,11 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, DoublePointer pValue);
-    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoubleBuffer pValue);
+    public static native @Cast("spinError") int spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoubleBuffer pValue);
     public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, double[] pValue);
-    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoublePointer pValue);
+    public static native @Cast("spinError") int spinImageChunkDataGetFloatValue(spinImage hImage, String pName, DoublePointer pValue);
     public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, @Cast("const char*") BytePointer pName, DoubleBuffer pValue);
-    public static native spinError spinImageChunkDataGetFloatValue(spinImage hImage, String pName, double[] pValue);
+    public static native @Cast("spinError") int spinImageChunkDataGetFloatValue(spinImage hImage, String pName, double[] pValue);
 
     /*@}*/
 
@@ -9912,7 +9912,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinVideoOpenUncompressed(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinAVIOption option);
-    public static native spinError spinVideoOpenUncompressed(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinAVIOption option);
+    public static native @Cast("spinError") int spinVideoOpenUncompressed(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinAVIOption option);
 
     /*
      * Opens an empty video file to create an MJPG file
@@ -9925,7 +9925,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinVideoOpenMJPG(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinMJPGOption option);
-    public static native spinError spinVideoOpenMJPG(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinMJPGOption option);
+    public static native @Cast("spinError") int spinVideoOpenMJPG(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinMJPGOption option);
 
     /*
      * Opens an empty video file to create an H264 MP4 file
@@ -9938,7 +9938,7 @@ public enum spinInputDirection {
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
     public static native spinError spinVideoOpenH264(@ByPtrPtr spinVideo phSpinVideo, @Cast("const char*") BytePointer pName, @ByVal spinH264Option option);
-    public static native spinError spinVideoOpenH264(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinH264Option option);
+    public static native @Cast("spinError") int spinVideoOpenH264(@ByPtrPtr spinVideo phSpinVideo, String pName, @ByVal spinH264Option option);
 
     /*
      * Appends an image to the end of an open video file
