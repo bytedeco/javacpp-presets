@@ -37,7 +37,7 @@ public class ThreadLocalDebugInfo extends Pointer {
         return (ThreadLocalDebugInfo)super.position(position);
     }
     @Override public ThreadLocalDebugInfo getPointer(long i) {
-        return new ThreadLocalDebugInfo((Pointer)this).position(position + i);
+        return new ThreadLocalDebugInfo((Pointer)this).offsetAddress(i);
     }
 
   public static native DebugInfoBase get(DebugInfoKind kind);

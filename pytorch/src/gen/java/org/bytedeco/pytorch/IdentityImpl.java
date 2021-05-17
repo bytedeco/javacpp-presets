@@ -36,7 +36,7 @@ public class IdentityImpl extends IdentityImplCloneable {
         return (IdentityImpl)super.position(position);
     }
     @Override public IdentityImpl getPointer(long i) {
-        return new IdentityImpl((Pointer)this).position(position + i);
+        return new IdentityImpl((Pointer)this).offsetAddress(i);
     }
 
   public native void reset();

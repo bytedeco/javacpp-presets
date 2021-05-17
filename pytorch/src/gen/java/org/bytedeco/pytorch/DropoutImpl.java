@@ -50,7 +50,7 @@ public class DropoutImpl extends DropoutImplBase {
         return (DropoutImpl)super.position(position);
     }
     @Override public DropoutImpl getPointer(long i) {
-        return new DropoutImpl((Pointer)this).position(position + i);
+        return new DropoutImpl((Pointer)this).offsetAddress(i);
     }
 
 

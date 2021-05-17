@@ -44,7 +44,7 @@ public class MultiMarginLossImpl extends MultiMarginLossImplCloneable {
         return (MultiMarginLossImpl)super.position(position);
     }
     @Override public MultiMarginLossImpl getPointer(long i) {
-        return new MultiMarginLossImpl((Pointer)this).position(position + i);
+        return new MultiMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public MultiMarginLossImpl(

@@ -28,7 +28,7 @@ public class ForwardGrad extends Pointer {
         return (ForwardGrad)super.position(position);
     }
     @Override public ForwardGrad getPointer(long i) {
-        return new ForwardGrad((Pointer)this).position(position + i);
+        return new ForwardGrad((Pointer)this).offsetAddress(i);
     }
 
 

@@ -31,7 +31,7 @@ public class NoNamesGuard extends Pointer {
         return (NoNamesGuard)super.position(position);
     }
     @Override public NoNamesGuard getPointer(long i) {
-        return new NoNamesGuard((Pointer)this).position(position + i);
+        return new NoNamesGuard((Pointer)this).offsetAddress(i);
     }
 
   public NoNamesGuard() { super((Pointer)null); allocate(); }

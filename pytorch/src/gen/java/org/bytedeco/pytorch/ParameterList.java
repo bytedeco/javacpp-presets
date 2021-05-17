@@ -33,7 +33,7 @@ public class ParameterList extends ParameterListImplModuleHolder {
         return (ParameterList)super.position(position);
     }
     @Override public ParameterList getPointer(long i) {
-        return new ParameterList((Pointer)this).position(position + i);
+        return new ParameterList((Pointer)this).offsetAddress(i);
     }
 
   }

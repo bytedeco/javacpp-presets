@@ -96,7 +96,7 @@ public class SequentialImpl extends SequentialImplCloneable {
         return (SequentialImpl)super.position(position);
     }
     @Override public SequentialImpl getPointer(long i) {
-        return new SequentialImpl((Pointer)this).position(position + i);
+        return new SequentialImpl((Pointer)this).offsetAddress(i);
     }
 
 

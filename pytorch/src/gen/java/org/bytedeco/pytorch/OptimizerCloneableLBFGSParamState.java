@@ -31,7 +31,7 @@ public class OptimizerCloneableLBFGSParamState extends OptimizerParamState {
         return (OptimizerCloneableLBFGSParamState)super.position(position);
     }
     @Override public OptimizerCloneableLBFGSParamState getPointer(long i) {
-        return new OptimizerCloneableLBFGSParamState((Pointer)this).position(position + i);
+        return new OptimizerCloneableLBFGSParamState((Pointer)this).offsetAddress(i);
     }
 
 }

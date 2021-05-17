@@ -42,7 +42,7 @@ public class NLLLossImpl extends NLLLossImplCloneable {
         return (NLLLossImpl)super.position(position);
     }
     @Override public NLLLossImpl getPointer(long i) {
-        return new NLLLossImpl((Pointer)this).position(position + i);
+        return new NLLLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public NLLLossImpl(

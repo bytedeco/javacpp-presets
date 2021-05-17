@@ -41,7 +41,7 @@ public class HardshrinkImpl extends HardshrinkImplCloneable {
         return (HardshrinkImpl)super.position(position);
     }
     @Override public HardshrinkImpl getPointer(long i) {
-        return new HardshrinkImpl((Pointer)this).position(position + i);
+        return new HardshrinkImpl((Pointer)this).offsetAddress(i);
     }
 
   public HardshrinkImpl(@Const @ByRef(nullValue = "torch::nn::HardshrinkOptions{}") HardshrinkOptions options_) { super((Pointer)null); allocate(options_); }

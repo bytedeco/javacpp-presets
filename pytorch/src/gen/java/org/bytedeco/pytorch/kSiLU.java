@@ -27,7 +27,7 @@ public class kSiLU extends Pointer {
         return (kSiLU)super.position(position);
     }
     @Override public kSiLU getPointer(long i) {
-        return new kSiLU((Pointer)this).position(position + i);
+        return new kSiLU((Pointer)this).offsetAddress(i);
     }
  public kSiLU() { super((Pointer)null); allocate(); }
 private native void allocate(); }

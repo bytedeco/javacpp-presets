@@ -35,7 +35,7 @@ public class Blob extends Pointer {
         return (Blob)super.position(position);
     }
     @Override public Blob getPointer(long i) {
-        return new Blob((Pointer)this).position(position + i);
+        return new Blob((Pointer)this).offsetAddress(i);
     }
 
   /**

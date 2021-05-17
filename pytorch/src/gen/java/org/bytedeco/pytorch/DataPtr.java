@@ -35,7 +35,7 @@ public class DataPtr extends Pointer {
         return (DataPtr)super.position(position);
     }
     @Override public DataPtr getPointer(long i) {
-        return new DataPtr((Pointer)this).position(position + i);
+        return new DataPtr((Pointer)this).offsetAddress(i);
     }
 
   // Choice of CPU here is arbitrary; if there's an "undefined" device

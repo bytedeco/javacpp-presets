@@ -41,7 +41,7 @@ public class CTCLossImpl extends CTCLossImplCloneable {
         return (CTCLossImpl)super.position(position);
     }
     @Override public CTCLossImpl getPointer(long i) {
-        return new CTCLossImpl((Pointer)this).position(position + i);
+        return new CTCLossImpl((Pointer)this).offsetAddress(i);
     }
 
 

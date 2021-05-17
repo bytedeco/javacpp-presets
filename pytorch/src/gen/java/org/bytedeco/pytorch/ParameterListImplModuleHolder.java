@@ -27,7 +27,7 @@ public class ParameterListImplModuleHolder extends Pointer {
         return (ParameterListImplModuleHolder)super.position(position);
     }
     @Override public ParameterListImplModuleHolder getPointer(long i) {
-        return new ParameterListImplModuleHolder((Pointer)this).position(position + i);
+        return new ParameterListImplModuleHolder((Pointer)this).offsetAddress(i);
     }
 
   

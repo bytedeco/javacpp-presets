@@ -39,7 +39,7 @@ public class FlattenOptions extends Pointer {
         return (FlattenOptions)super.position(position);
     }
     @Override public FlattenOptions getPointer(long i) {
-        return new FlattenOptions((Pointer)this).position(position + i);
+        return new FlattenOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer start_dim();

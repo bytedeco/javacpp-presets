@@ -27,7 +27,7 @@ public class ShortArrayRef extends Pointer {
         return (ShortArrayRef)super.position(position);
     }
     @Override public ShortArrayRef getPointer(long i) {
-        return new ShortArrayRef((Pointer)this).position(position + i);
+        return new ShortArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

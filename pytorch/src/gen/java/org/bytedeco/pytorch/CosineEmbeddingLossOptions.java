@@ -39,7 +39,7 @@ public class CosineEmbeddingLossOptions extends Pointer {
         return (CosineEmbeddingLossOptions)super.position(position);
     }
     @Override public CosineEmbeddingLossOptions getPointer(long i) {
-        return new CosineEmbeddingLossOptions((Pointer)this).position(position + i);
+        return new CosineEmbeddingLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer margin();

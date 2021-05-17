@@ -42,7 +42,7 @@ public class CrossEntropyLossImpl extends CrossEntropyLossImplCloneable {
         return (CrossEntropyLossImpl)super.position(position);
     }
     @Override public CrossEntropyLossImpl getPointer(long i) {
-        return new CrossEntropyLossImpl((Pointer)this).position(position + i);
+        return new CrossEntropyLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public CrossEntropyLossImpl(

@@ -70,7 +70,7 @@ public class Module extends Pointer {
         return (Module)super.position(position);
     }
     @Override public Module getPointer(long i) {
-        return new Module((Pointer)this).position(position + i);
+        return new Module((Pointer)this).offsetAddress(i);
     }
 
 

@@ -45,7 +45,7 @@ public class CosineEmbeddingLossImpl extends CosineEmbeddingLossImplCloneable {
         return (CosineEmbeddingLossImpl)super.position(position);
     }
     @Override public CosineEmbeddingLossImpl getPointer(long i) {
-        return new CosineEmbeddingLossImpl((Pointer)this).position(position + i);
+        return new CosineEmbeddingLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public CosineEmbeddingLossImpl(

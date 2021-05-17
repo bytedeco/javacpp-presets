@@ -39,7 +39,7 @@ public class PReLUOptions extends Pointer {
         return (PReLUOptions)super.position(position);
     }
     @Override public PReLUOptions getPointer(long i) {
-        return new PReLUOptions((Pointer)this).position(position + i);
+        return new PReLUOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer num_parameters();

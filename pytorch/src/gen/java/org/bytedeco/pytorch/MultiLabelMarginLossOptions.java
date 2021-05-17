@@ -36,7 +36,7 @@ public class MultiLabelMarginLossOptions extends Pointer {
         return (MultiLabelMarginLossOptions)super.position(position);
     }
     @Override public MultiLabelMarginLossOptions getPointer(long i) {
-        return new MultiLabelMarginLossOptions((Pointer)this).position(position + i);
+        return new MultiLabelMarginLossOptions((Pointer)this).offsetAddress(i);
     }
 
 

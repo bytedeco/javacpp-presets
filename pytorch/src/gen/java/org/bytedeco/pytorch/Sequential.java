@@ -38,7 +38,7 @@ public class Sequential extends SequentialImplModuleHolder {
         return (Sequential)super.position(position);
     }
     @Override public Sequential getPointer(long i) {
-        return new Sequential((Pointer)this).position(position + i);
+        return new Sequential((Pointer)this).offsetAddress(i);
     }
 
 

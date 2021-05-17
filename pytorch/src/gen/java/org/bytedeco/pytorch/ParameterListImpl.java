@@ -27,7 +27,7 @@ public class ParameterListImpl extends ParameterListImplCloneable {
         return (ParameterListImpl)super.position(position);
     }
     @Override public ParameterListImpl getPointer(long i) {
-        return new ParameterListImpl((Pointer)this).position(position + i);
+        return new ParameterListImpl((Pointer)this).offsetAddress(i);
     }
 
 

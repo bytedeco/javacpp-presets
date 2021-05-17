@@ -39,7 +39,7 @@ public class DDPLoggingData extends Pointer {
         return (DDPLoggingData)super.position(position);
     }
     @Override public DDPLoggingData getPointer(long i) {
-        return new DDPLoggingData((Pointer)this).position(position + i);
+        return new DDPLoggingData((Pointer)this).offsetAddress(i);
     }
 
   // Data that can be got during DistributedDataParallel construction time

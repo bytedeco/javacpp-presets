@@ -38,7 +38,7 @@ public class InterpolateFuncOptions extends Pointer {
         return (InterpolateFuncOptions)super.position(position);
     }
     @Override public InterpolateFuncOptions getPointer(long i) {
-        return new InterpolateFuncOptions((Pointer)this).position(position + i);
+        return new InterpolateFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException LongVectorOptional size();

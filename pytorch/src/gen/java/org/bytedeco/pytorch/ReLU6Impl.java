@@ -41,7 +41,7 @@ public class ReLU6Impl extends ReLU6ImplCloneable {
         return (ReLU6Impl)super.position(position);
     }
     @Override public ReLU6Impl getPointer(long i) {
-        return new ReLU6Impl((Pointer)this).position(position + i);
+        return new ReLU6Impl((Pointer)this).offsetAddress(i);
     }
 
   public ReLU6Impl(@Const @ByRef(nullValue = "torch::nn::ReLU6Options{}") ReLU6Options options_) { super((Pointer)null); allocate(options_); }

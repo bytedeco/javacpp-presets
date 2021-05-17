@@ -36,7 +36,7 @@ public class SigmoidImpl extends SigmoidImplCloneable {
         return (SigmoidImpl)super.position(position);
     }
     @Override public SigmoidImpl getPointer(long i) {
-        return new SigmoidImpl((Pointer)this).position(position + i);
+        return new SigmoidImpl((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

@@ -31,7 +31,7 @@ public class OptimizerCloneableAdamWOptions extends OptimizerOptions {
         return (OptimizerCloneableAdamWOptions)super.position(position);
     }
     @Override public OptimizerCloneableAdamWOptions getPointer(long i) {
-        return new OptimizerCloneableAdamWOptions((Pointer)this).position(position + i);
+        return new OptimizerCloneableAdamWOptions((Pointer)this).offsetAddress(i);
     }
 
 }

@@ -27,7 +27,7 @@ public class kBorder extends Pointer {
         return (kBorder)super.position(position);
     }
     @Override public kBorder getPointer(long i) {
-        return new kBorder((Pointer)this).position(position + i);
+        return new kBorder((Pointer)this).offsetAddress(i);
     }
  public kBorder() { super((Pointer)null); allocate(); }
 private native void allocate(); }

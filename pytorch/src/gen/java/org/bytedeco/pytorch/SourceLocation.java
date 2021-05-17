@@ -32,7 +32,7 @@ public class SourceLocation extends Pointer {
         return (SourceLocation)super.position(position);
     }
     @Override public SourceLocation getPointer(long i) {
-        return new SourceLocation((Pointer)this).position(position + i);
+        return new SourceLocation((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("const char*") BytePointer function(); public native SourceLocation function(BytePointer setter);

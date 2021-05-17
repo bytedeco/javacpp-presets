@@ -27,7 +27,7 @@ public class kRNN_TANH extends Pointer {
         return (kRNN_TANH)super.position(position);
     }
     @Override public kRNN_TANH getPointer(long i) {
-        return new kRNN_TANH((Pointer)this).position(position + i);
+        return new kRNN_TANH((Pointer)this).offsetAddress(i);
     }
  public kRNN_TANH() { super((Pointer)null); allocate(); }
 private native void allocate(); }

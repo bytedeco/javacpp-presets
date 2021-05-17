@@ -27,7 +27,7 @@ public class kMax extends Pointer {
         return (kMax)super.position(position);
     }
     @Override public kMax getPointer(long i) {
-        return new kMax((Pointer)this).position(position + i);
+        return new kMax((Pointer)this).offsetAddress(i);
     }
  public kMax() { super((Pointer)null); allocate(); }
 private native void allocate(); }

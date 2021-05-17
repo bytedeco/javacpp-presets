@@ -20,7 +20,7 @@ public class TensorVectorOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorVectorOptional(Pointer p) { super(p); }
-    public TensorVectorOptional(@StdMove TensorVector value) { put(value); }
+    public TensorVectorOptional(@StdMove TensorVector value) { this(); put(value); }
     public TensorVectorOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef TensorVectorOptional put(@ByRef TensorVectorOptional x);

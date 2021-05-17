@@ -20,7 +20,7 @@ public class DoubleOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleOptional(Pointer p) { super(p); }
-    public DoubleOptional(double value) { put(value); }
+    public DoubleOptional(double value) { this(); put(value); }
     public DoubleOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef DoubleOptional put(@ByRef DoubleOptional x);

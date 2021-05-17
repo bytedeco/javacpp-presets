@@ -31,7 +31,7 @@ public class OptimizerCloneableRMSpropOptions extends OptimizerOptions {
         return (OptimizerCloneableRMSpropOptions)super.position(position);
     }
     @Override public OptimizerCloneableRMSpropOptions getPointer(long i) {
-        return new OptimizerCloneableRMSpropOptions((Pointer)this).position(position + i);
+        return new OptimizerCloneableRMSpropOptions((Pointer)this).offsetAddress(i);
     }
 
 }

@@ -27,7 +27,7 @@ public class OutputArchive extends Pointer {
         return (OutputArchive)super.position(position);
     }
     @Override public OutputArchive getPointer(long i) {
-        return new OutputArchive((Pointer)this).position(position + i);
+        return new OutputArchive((Pointer)this).offsetAddress(i);
     }
 
   public OutputArchive() { super((Pointer)null); allocate(); }

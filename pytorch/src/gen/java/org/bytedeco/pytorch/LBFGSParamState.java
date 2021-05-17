@@ -31,7 +31,7 @@ public class LBFGSParamState extends OptimizerCloneableLBFGSParamState {
         return (LBFGSParamState)super.position(position);
     }
     @Override public LBFGSParamState getPointer(long i) {
-        return new LBFGSParamState((Pointer)this).position(position + i);
+        return new LBFGSParamState((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer func_evals();

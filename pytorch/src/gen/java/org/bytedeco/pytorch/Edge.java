@@ -29,7 +29,7 @@ public class Edge extends Pointer {
         return (Edge)super.position(position);
     }
     @Override public Edge getPointer(long i) {
-        return new Edge((Pointer)this).position(position + i);
+        return new Edge((Pointer)this).offsetAddress(i);
     }
 
   public Edge() { super((Pointer)null); allocate(); }

@@ -50,7 +50,7 @@ public class AlphaDropoutImpl extends AlphaDropoutImplBase {
         return (AlphaDropoutImpl)super.position(position);
     }
     @Override public AlphaDropoutImpl getPointer(long i) {
-        return new AlphaDropoutImpl((Pointer)this).position(position + i);
+        return new AlphaDropoutImpl((Pointer)this).offsetAddress(i);
     }
 
 

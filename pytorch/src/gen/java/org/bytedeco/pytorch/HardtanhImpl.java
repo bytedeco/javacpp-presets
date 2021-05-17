@@ -41,7 +41,7 @@ public class HardtanhImpl extends HardtanhImplCloneable {
         return (HardtanhImpl)super.position(position);
     }
     @Override public HardtanhImpl getPointer(long i) {
-        return new HardtanhImpl((Pointer)this).position(position + i);
+        return new HardtanhImpl((Pointer)this).offsetAddress(i);
     }
 
   public HardtanhImpl(@Const @ByRef(nullValue = "torch::nn::HardtanhOptions{}") HardtanhOptions options_) { super((Pointer)null); allocate(options_); }

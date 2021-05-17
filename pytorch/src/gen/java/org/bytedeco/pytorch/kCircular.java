@@ -27,7 +27,7 @@ public class kCircular extends Pointer {
         return (kCircular)super.position(position);
     }
     @Override public kCircular getPointer(long i) {
-        return new kCircular((Pointer)this).position(position + i);
+        return new kCircular((Pointer)this).offsetAddress(i);
     }
  public kCircular() { super((Pointer)null); allocate(); }
 private native void allocate(); }

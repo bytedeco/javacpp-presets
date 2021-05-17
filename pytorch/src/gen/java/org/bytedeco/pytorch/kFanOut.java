@@ -27,7 +27,7 @@ public class kFanOut extends Pointer {
         return (kFanOut)super.position(position);
     }
     @Override public kFanOut getPointer(long i) {
-        return new kFanOut((Pointer)this).position(position + i);
+        return new kFanOut((Pointer)this).offsetAddress(i);
     }
  public kFanOut() { super((Pointer)null); allocate(); }
 private native void allocate(); }

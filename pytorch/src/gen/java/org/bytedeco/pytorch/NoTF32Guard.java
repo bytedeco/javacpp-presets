@@ -36,7 +36,7 @@ public class NoTF32Guard extends Pointer {
         return (NoTF32Guard)super.position(position);
     }
     @Override public NoTF32Guard getPointer(long i) {
-        return new NoTF32Guard((Pointer)this).position(position + i);
+        return new NoTF32Guard((Pointer)this).offsetAddress(i);
     }
 
   public NoTF32Guard() { super((Pointer)null); allocate(); }

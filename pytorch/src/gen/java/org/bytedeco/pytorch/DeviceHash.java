@@ -30,7 +30,7 @@ public class DeviceHash extends Pointer {
         return (DeviceHash)super.position(position);
     }
     @Override public DeviceHash getPointer(long i) {
-        return new DeviceHash((Pointer)this).position(position + i);
+        return new DeviceHash((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("std::size_t") @Name("operator ()") @NoException long apply(@ByVal Device d);

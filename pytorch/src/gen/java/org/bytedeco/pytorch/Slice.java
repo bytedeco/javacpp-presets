@@ -28,7 +28,7 @@ public class Slice extends Pointer {
         return (Slice)super.position(position);
     }
     @Override public Slice getPointer(long i) {
-        return new Slice((Pointer)this).position(position + i);
+        return new Slice((Pointer)this).offsetAddress(i);
     }
 
   // This mirrors `__PySlice_Unpack` in torch/csrc/utils/python_compat.h

@@ -31,7 +31,7 @@ public class AdamParamState extends OptimizerCloneableAdamParamState {
         return (AdamParamState)super.position(position);
     }
     @Override public AdamParamState getPointer(long i) {
-        return new AdamParamState((Pointer)this).position(position + i);
+        return new AdamParamState((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer step();

@@ -27,7 +27,7 @@ public class IValueArrayRef extends Pointer {
         return (IValueArrayRef)super.position(position);
     }
     @Override public IValueArrayRef getPointer(long i) {
-        return new IValueArrayRef((Pointer)this).position(position + i);
+        return new IValueArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

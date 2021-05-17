@@ -42,7 +42,7 @@ public class HingeEmbeddingLossImpl extends HingeEmbeddingLossImplCloneable {
         return (HingeEmbeddingLossImpl)super.position(position);
     }
     @Override public HingeEmbeddingLossImpl getPointer(long i) {
-        return new HingeEmbeddingLossImpl((Pointer)this).position(position + i);
+        return new HingeEmbeddingLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public HingeEmbeddingLossImpl(

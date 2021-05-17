@@ -39,7 +39,7 @@ public class TripletMarginLossOptions extends Pointer {
         return (TripletMarginLossOptions)super.position(position);
     }
     @Override public TripletMarginLossOptions getPointer(long i) {
-        return new TripletMarginLossOptions((Pointer)this).position(position + i);
+        return new TripletMarginLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer margin();

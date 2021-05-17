@@ -20,7 +20,7 @@ public class SizeTOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SizeTOptional(Pointer p) { super(p); }
-    public SizeTOptional(long value) { put(value); }
+    public SizeTOptional(long value) { this(); put(value); }
     public SizeTOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef SizeTOptional put(@ByRef SizeTOptional x);

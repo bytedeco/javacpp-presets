@@ -31,7 +31,7 @@ public class NoTracerDispatchMode extends Pointer {
         return (NoTracerDispatchMode)super.position(position);
     }
     @Override public NoTracerDispatchMode getPointer(long i) {
-        return new NoTracerDispatchMode((Pointer)this).position(position + i);
+        return new NoTracerDispatchMode((Pointer)this).offsetAddress(i);
     }
 
 }

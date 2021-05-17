@@ -31,7 +31,7 @@ public class OptimizerCloneableLBFGSOptions extends OptimizerOptions {
         return (OptimizerCloneableLBFGSOptions)super.position(position);
     }
     @Override public OptimizerCloneableLBFGSOptions getPointer(long i) {
-        return new OptimizerCloneableLBFGSOptions((Pointer)this).position(position + i);
+        return new OptimizerCloneableLBFGSOptions((Pointer)this).offsetAddress(i);
     }
 
 }

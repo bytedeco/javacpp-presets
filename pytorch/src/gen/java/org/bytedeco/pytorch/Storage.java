@@ -28,7 +28,7 @@ public class Storage extends Pointer {
         return (Storage)super.position(position);
     }
     @Override public Storage getPointer(long i) {
-        return new Storage((Pointer)this).position(position + i);
+        return new Storage((Pointer)this).offsetAddress(i);
     }
 
   @Opaque public static class use_byte_size_t extends Pointer {

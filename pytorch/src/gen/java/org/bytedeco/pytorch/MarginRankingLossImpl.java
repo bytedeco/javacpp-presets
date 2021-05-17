@@ -43,7 +43,7 @@ public class MarginRankingLossImpl extends MarginRankingLossImplCloneable {
         return (MarginRankingLossImpl)super.position(position);
     }
     @Override public MarginRankingLossImpl getPointer(long i) {
-        return new MarginRankingLossImpl((Pointer)this).position(position + i);
+        return new MarginRankingLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public MarginRankingLossImpl(@Const @ByRef(nullValue = "torch::nn::MarginRankingLossOptions{}") MarginRankingLossOptions options_) { super((Pointer)null); allocate(options_); }

@@ -31,7 +31,7 @@ public class OptimizerOptions extends Pointer {
         return (OptimizerOptions)super.position(position);
     }
     @Override public OptimizerOptions getPointer(long i) {
-        return new OptimizerOptions((Pointer)this).position(position + i);
+        return new OptimizerOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @UniquePtr OptimizerOptions clone();

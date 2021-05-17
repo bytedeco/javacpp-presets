@@ -39,7 +39,7 @@ public class MarginRankingLossOptions extends Pointer {
         return (MarginRankingLossOptions)super.position(position);
     }
     @Override public MarginRankingLossOptions getPointer(long i) {
-        return new MarginRankingLossOptions((Pointer)this).position(position + i);
+        return new MarginRankingLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer margin();

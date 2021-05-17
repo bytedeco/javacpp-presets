@@ -38,7 +38,7 @@ public class C10FlagParser extends Pointer {
         return (C10FlagParser)super.position(position);
     }
     @Override public C10FlagParser getPointer(long i) {
-        return new C10FlagParser((Pointer)this).position(position + i);
+        return new C10FlagParser((Pointer)this).offsetAddress(i);
     }
 
   public C10FlagParser() { super((Pointer)null); allocate(); }

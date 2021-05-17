@@ -38,7 +38,7 @@ public class GumbelSoftmaxFuncOptions extends Pointer {
         return (GumbelSoftmaxFuncOptions)super.position(position);
     }
     @Override public GumbelSoftmaxFuncOptions getPointer(long i) {
-        return new GumbelSoftmaxFuncOptions((Pointer)this).position(position + i);
+        return new GumbelSoftmaxFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer tau();

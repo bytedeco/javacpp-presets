@@ -27,7 +27,7 @@ public class kLeakyReLU extends Pointer {
         return (kLeakyReLU)super.position(position);
     }
     @Override public kLeakyReLU getPointer(long i) {
-        return new kLeakyReLU((Pointer)this).position(position + i);
+        return new kLeakyReLU((Pointer)this).offsetAddress(i);
     }
  public kLeakyReLU() { super((Pointer)null); allocate(); }
 private native void allocate(); }

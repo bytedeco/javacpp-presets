@@ -31,7 +31,7 @@ public class quint8 extends Pointer {
         return (quint8)super.position(position);
     }
     @Override public quint8 getPointer(long i) {
-        return new quint8((Pointer)this).position(position + i);
+        return new quint8((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("uint8_t") byte val_(); public native quint8 val_(byte setter);

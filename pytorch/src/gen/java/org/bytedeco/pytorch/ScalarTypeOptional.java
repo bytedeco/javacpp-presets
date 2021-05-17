@@ -20,7 +20,7 @@ public class ScalarTypeOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScalarTypeOptional(Pointer p) { super(p); }
-    public ScalarTypeOptional(ScalarType value) { put(value); }
+    public ScalarTypeOptional(ScalarType value) { this(); put(value); }
     public ScalarTypeOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef ScalarTypeOptional put(@ByRef ScalarTypeOptional x);

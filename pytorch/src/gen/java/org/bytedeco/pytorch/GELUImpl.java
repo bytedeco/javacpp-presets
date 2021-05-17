@@ -36,7 +36,7 @@ public class GELUImpl extends GELUImplCloneable {
         return (GELUImpl)super.position(position);
     }
     @Override public GELUImpl getPointer(long i) {
-        return new GELUImpl((Pointer)this).position(position + i);
+        return new GELUImpl((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

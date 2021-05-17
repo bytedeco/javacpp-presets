@@ -38,7 +38,7 @@ public class InstanceNormFuncOptions extends Pointer {
         return (InstanceNormFuncOptions)super.position(position);
     }
     @Override public InstanceNormFuncOptions getPointer(long i) {
-        return new InstanceNormFuncOptions((Pointer)this).position(position + i);
+        return new InstanceNormFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor running_mean();

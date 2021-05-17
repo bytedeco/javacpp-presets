@@ -38,7 +38,7 @@ public class RReLUFuncOptions extends Pointer {
         return (RReLUFuncOptions)super.position(position);
     }
     @Override public RReLUFuncOptions getPointer(long i) {
-        return new RReLUFuncOptions((Pointer)this).position(position + i);
+        return new RReLUFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer lower();

@@ -37,7 +37,7 @@ public class ELUOptions extends Pointer {
         return (ELUOptions)super.position(position);
     }
     @Override public ELUOptions getPointer(long i) {
-        return new ELUOptions((Pointer)this).position(position + i);
+        return new ELUOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer alpha();

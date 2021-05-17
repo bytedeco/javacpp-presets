@@ -36,7 +36,7 @@ public class LogSigmoidImpl extends LogSigmoidImplCloneable {
         return (LogSigmoidImpl)super.position(position);
     }
     @Override public LogSigmoidImpl getPointer(long i) {
-        return new LogSigmoidImpl((Pointer)this).position(position + i);
+        return new LogSigmoidImpl((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

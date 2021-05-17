@@ -177,6 +177,7 @@ import org.bytedeco.openblas.presets.openblas;
 
                 "torch/autograd.h",
                 "torch/csrc/WindowsTorchApiMacro.h",
+                "torch/csrc/api/include/torch/cuda.h",
                 "torch/csrc/autograd/edge.h",
                 "torch/csrc/autograd/function_hook.h",
                 "torch/csrc/autograd/cpp_hook.h",
@@ -589,16 +590,16 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::fetch_and_cast<c10::quint4x2>").javaNames("fetch_and_cast_quint4x2"))
                .put(new Info("c10::cast_and_store<c10::quint4x2>").javaNames("cast_and_store_quint4x2"))
                .put(new Info("c10::aten::clone").javaNames("_clone"))
-               .put(new Info("at::Tensor::data_ptr<jbyte>").javaNames("data_ptr_byte"))
-               .put(new Info("at::Tensor::data_ptr<jshort>").javaNames("data_ptr_short"))
-               .put(new Info("at::Tensor::data_ptr<jint>").javaNames("data_ptr_int"))
-               .put(new Info("at::Tensor::data_ptr<jlong>").javaNames("data_ptr_long"))
+               .put(new Info("at::Tensor::data_ptr<int8_t>").javaNames("data_ptr_byte"))
+               .put(new Info("at::Tensor::data_ptr<int16_t>").javaNames("data_ptr_short"))
+               .put(new Info("at::Tensor::data_ptr<int>").javaNames("data_ptr_int"))
+               .put(new Info("at::Tensor::data_ptr<int64_t>").javaNames("data_ptr_long"))
                .put(new Info("at::Tensor::data_ptr<float>").javaNames("data_ptr_float"))
                .put(new Info("at::Tensor::data_ptr<double>").javaNames("data_ptr_double"))
-               .put(new Info("at::Tensor::item<jbyte>").javaNames("item_byte"))
-               .put(new Info("at::Tensor::item<jshort>").javaNames("item_short"))
-               .put(new Info("at::Tensor::item<jint>").javaNames("item_int"))
-               .put(new Info("at::Tensor::item<jlong>").javaNames("item_long"))
+               .put(new Info("at::Tensor::item<int8_t>").javaNames("item_byte"))
+               .put(new Info("at::Tensor::item<int16_t>").javaNames("item_short"))
+               .put(new Info("at::Tensor::item<int>").javaNames("item_int"))
+               .put(new Info("at::Tensor::item<int64_t>").javaNames("item_long"))
                .put(new Info("at::Tensor::item<float>").javaNames("item_float"))
                .put(new Info("at::Tensor::item<double>").javaNames("item_double"))
 
@@ -666,6 +667,11 @@ public class torch implements LoadEnabled, InfoMapper {
 //               .put(new Info("std::shared_ptr<c10::Type>", "c10::TypePtr").annotations("@SharedPtr").valueTypes("Type").pointerTypes("Type"))
                .put(new Info("at::namedinference::TensorName").valueTypes("@Cast({\"\", \"at::namedinference::TensorName&&\"}) @StdMove TensorName").pointerTypes("TensorName"))
                .put(new Info("std::shared_ptr<torch::autograd::FunctionPreHook>").annotations("@SharedPtr").valueTypes("FunctionPreHook").pointerTypes("FunctionPreHook"))
+               .put(new Info("torch::cuda::device_count").javaNames("cuda_device_count"))
+               .put(new Info("torch::cuda::is_available").javaNames("cuda_is_available"))
+               .put(new Info("torch::cuda::manual_seed").javaNames("cuda_manual_seed"))
+               .put(new Info("torch::cuda::manual_seed_all").javaNames("cuda_manual_seed_all"))
+               .put(new Info("torch::cuda::synchronize").javaNames("cuda_synchronize"))
 
                .put(new Info("std::vector<torch::data::Example<> >",
                              "std::vector<torch::data::datasets::Dataset<torch::data::datasets::MNIST,torch::data::Example<> >::ExampleType>").pointerTypes("ExampleVector").define())

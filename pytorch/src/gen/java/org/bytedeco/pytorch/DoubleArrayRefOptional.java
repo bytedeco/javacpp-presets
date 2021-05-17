@@ -20,7 +20,7 @@ public class DoubleArrayRefOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleArrayRefOptional(Pointer p) { super(p); }
-    public DoubleArrayRefOptional(DoubleArrayRef value) { put(value); }
+    public DoubleArrayRefOptional(DoubleArrayRef value) { this(); put(value); }
     public DoubleArrayRefOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef DoubleArrayRefOptional put(@ByRef DoubleArrayRefOptional x);

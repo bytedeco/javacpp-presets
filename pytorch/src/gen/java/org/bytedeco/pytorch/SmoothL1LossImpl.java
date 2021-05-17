@@ -45,7 +45,7 @@ public class SmoothL1LossImpl extends SmoothL1LossImplCloneable {
         return (SmoothL1LossImpl)super.position(position);
     }
     @Override public SmoothL1LossImpl getPointer(long i) {
-        return new SmoothL1LossImpl((Pointer)this).position(position + i);
+        return new SmoothL1LossImpl((Pointer)this).offsetAddress(i);
     }
 
   public SmoothL1LossImpl(@Const @ByRef(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options_) { super((Pointer)null); allocate(options_); }

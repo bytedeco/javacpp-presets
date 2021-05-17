@@ -30,7 +30,7 @@ public class Conv3dFuncOptions extends Pointer {
         return (Conv3dFuncOptions)super.position(position);
     }
     @Override public Conv3dFuncOptions getPointer(long i) {
-        return new Conv3dFuncOptions((Pointer)this).position(position + i);
+        return new Conv3dFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor bias();

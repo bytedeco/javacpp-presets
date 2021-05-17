@@ -27,7 +27,7 @@ public class kReflect extends Pointer {
         return (kReflect)super.position(position);
     }
     @Override public kReflect getPointer(long i) {
-        return new kReflect((Pointer)this).position(position + i);
+        return new kReflect((Pointer)this).offsetAddress(i);
     }
  public kReflect() { super((Pointer)null); allocate(); }
 private native void allocate(); }

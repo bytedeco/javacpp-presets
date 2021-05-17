@@ -31,7 +31,7 @@ public class RMSpropParamState extends OptimizerCloneableRMSpropParamState {
         return (RMSpropParamState)super.position(position);
     }
     @Override public RMSpropParamState getPointer(long i) {
-        return new RMSpropParamState((Pointer)this).position(position + i);
+        return new RMSpropParamState((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer step();

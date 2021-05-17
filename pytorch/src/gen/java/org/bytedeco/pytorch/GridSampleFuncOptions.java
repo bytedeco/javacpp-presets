@@ -38,7 +38,7 @@ public class GridSampleFuncOptions extends Pointer {
         return (GridSampleFuncOptions)super.position(position);
     }
     @Override public GridSampleFuncOptions getPointer(long i) {
-        return new GridSampleFuncOptions((Pointer)this).position(position + i);
+        return new GridSampleFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("torch::nn::functional::GridSampleFuncOptions::mode_t*") @ByRef @NoException Pointer mode();

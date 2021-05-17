@@ -28,7 +28,7 @@ public class TensorGeometry extends Pointer {
         return (TensorGeometry)super.position(position);
     }
     @Override public TensorGeometry getPointer(long i) {
-        return new TensorGeometry((Pointer)this).position(position + i);
+        return new TensorGeometry((Pointer)this).offsetAddress(i);
     }
 
   public TensorGeometry() { super((Pointer)null); allocate(); }

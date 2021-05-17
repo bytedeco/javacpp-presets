@@ -113,7 +113,7 @@ public class AnyModule extends Pointer {
         return (AnyModule)super.position(position);
     }
     @Override public AnyModule getPointer(long i) {
-        return new AnyModule((Pointer)this).position(position + i);
+        return new AnyModule((Pointer)this).offsetAddress(i);
     }
 
   /** A default-constructed {@code AnyModule} is in an empty state. */

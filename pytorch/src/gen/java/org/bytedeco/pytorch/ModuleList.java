@@ -38,7 +38,7 @@ public class ModuleList extends ModuleListImplModuleHolder {
         return (ModuleList)super.position(position);
     }
     @Override public ModuleList getPointer(long i) {
-        return new ModuleList((Pointer)this).position(position + i);
+        return new ModuleList((Pointer)this).offsetAddress(i);
     }
 
   }

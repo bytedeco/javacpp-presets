@@ -38,7 +38,7 @@ public class DropoutFuncOptions extends Pointer {
         return (DropoutFuncOptions)super.position(position);
     }
     @Override public DropoutFuncOptions getPointer(long i) {
-        return new DropoutFuncOptions((Pointer)this).position(position + i);
+        return new DropoutFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer p();

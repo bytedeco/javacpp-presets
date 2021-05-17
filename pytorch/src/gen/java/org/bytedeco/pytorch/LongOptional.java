@@ -20,7 +20,7 @@ public class LongOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LongOptional(Pointer p) { super(p); }
-    public LongOptional(long value) { put(value); }
+    public LongOptional(long value) { this(); put(value); }
     public LongOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef LongOptional put(@ByRef LongOptional x);

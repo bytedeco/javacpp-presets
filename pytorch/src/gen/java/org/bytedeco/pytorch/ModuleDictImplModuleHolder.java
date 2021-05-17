@@ -27,7 +27,7 @@ public class ModuleDictImplModuleHolder extends Pointer {
         return (ModuleDictImplModuleHolder)super.position(position);
     }
     @Override public ModuleDictImplModuleHolder getPointer(long i) {
-        return new ModuleDictImplModuleHolder((Pointer)this).position(position + i);
+        return new ModuleDictImplModuleHolder((Pointer)this).offsetAddress(i);
     }
 
   

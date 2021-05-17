@@ -39,7 +39,7 @@ public class HingeEmbeddingLossOptions extends Pointer {
         return (HingeEmbeddingLossOptions)super.position(position);
     }
     @Override public HingeEmbeddingLossOptions getPointer(long i) {
-        return new HingeEmbeddingLossOptions((Pointer)this).position(position + i);
+        return new HingeEmbeddingLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer margin();

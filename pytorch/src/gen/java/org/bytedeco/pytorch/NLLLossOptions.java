@@ -39,7 +39,7 @@ public class NLLLossOptions extends Pointer {
         return (NLLLossOptions)super.position(position);
     }
     @Override public NLLLossOptions getPointer(long i) {
-        return new NLLLossOptions((Pointer)this).position(position + i);
+        return new NLLLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor weight();

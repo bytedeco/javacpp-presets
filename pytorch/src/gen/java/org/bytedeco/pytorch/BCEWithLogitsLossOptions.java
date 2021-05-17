@@ -39,7 +39,7 @@ public class BCEWithLogitsLossOptions extends Pointer {
         return (BCEWithLogitsLossOptions)super.position(position);
     }
     @Override public BCEWithLogitsLossOptions getPointer(long i) {
-        return new BCEWithLogitsLossOptions((Pointer)this).position(position + i);
+        return new BCEWithLogitsLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor weight();

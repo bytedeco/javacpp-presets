@@ -39,7 +39,7 @@ public class MultiMarginLossOptions extends Pointer {
         return (MultiMarginLossOptions)super.position(position);
     }
     @Override public MultiMarginLossOptions getPointer(long i) {
-        return new MultiMarginLossOptions((Pointer)this).position(position + i);
+        return new MultiMarginLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer p();

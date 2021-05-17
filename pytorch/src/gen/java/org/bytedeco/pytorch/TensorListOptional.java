@@ -20,7 +20,7 @@ public class TensorListOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorListOptional(Pointer p) { super(p); }
-    public TensorListOptional(TensorArrayRef value) { put(value); }
+    public TensorListOptional(TensorArrayRef value) { this(); put(value); }
     public TensorListOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef TensorListOptional put(@ByRef TensorListOptional x);

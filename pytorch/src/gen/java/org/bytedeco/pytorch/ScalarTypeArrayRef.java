@@ -27,7 +27,7 @@ public class ScalarTypeArrayRef extends Pointer {
         return (ScalarTypeArrayRef)super.position(position);
     }
     @Override public ScalarTypeArrayRef getPointer(long i) {
-        return new ScalarTypeArrayRef((Pointer)this).position(position + i);
+        return new ScalarTypeArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

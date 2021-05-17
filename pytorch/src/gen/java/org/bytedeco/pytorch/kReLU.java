@@ -27,7 +27,7 @@ public class kReLU extends Pointer {
         return (kReLU)super.position(position);
     }
     @Override public kReLU getPointer(long i) {
-        return new kReLU((Pointer)this).position(position + i);
+        return new kReLU((Pointer)this).offsetAddress(i);
     }
  public kReLU() { super((Pointer)null); allocate(); }
 private native void allocate(); }

@@ -27,7 +27,7 @@ public class kNone extends Pointer {
         return (kNone)super.position(position);
     }
     @Override public kNone getPointer(long i) {
-        return new kNone((Pointer)this).position(position + i);
+        return new kNone((Pointer)this).offsetAddress(i);
     }
  public kNone() { super((Pointer)null); allocate(); }
 private native void allocate(); }

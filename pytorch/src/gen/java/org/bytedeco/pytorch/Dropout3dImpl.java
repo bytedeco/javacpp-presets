@@ -50,7 +50,7 @@ public class Dropout3dImpl extends Dropout3dImplBase {
         return (Dropout3dImpl)super.position(position);
     }
     @Override public Dropout3dImpl getPointer(long i) {
-        return new Dropout3dImpl((Pointer)this).position(position + i);
+        return new Dropout3dImpl((Pointer)this).offsetAddress(i);
     }
 
 

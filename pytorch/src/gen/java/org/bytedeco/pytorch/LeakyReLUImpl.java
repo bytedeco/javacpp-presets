@@ -41,7 +41,7 @@ public class LeakyReLUImpl extends LeakyReLUImplCloneable {
         return (LeakyReLUImpl)super.position(position);
     }
     @Override public LeakyReLUImpl getPointer(long i) {
-        return new LeakyReLUImpl((Pointer)this).position(position + i);
+        return new LeakyReLUImpl((Pointer)this).offsetAddress(i);
     }
 
   public LeakyReLUImpl(@Const @ByRef(nullValue = "torch::nn::LeakyReLUOptions{}") LeakyReLUOptions options_) { super((Pointer)null); allocate(options_); }

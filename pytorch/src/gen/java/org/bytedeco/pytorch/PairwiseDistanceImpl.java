@@ -42,7 +42,7 @@ public class PairwiseDistanceImpl extends PairwiseDistanceImplCloneable {
         return (PairwiseDistanceImpl)super.position(position);
     }
     @Override public PairwiseDistanceImpl getPointer(long i) {
-        return new PairwiseDistanceImpl((Pointer)this).position(position + i);
+        return new PairwiseDistanceImpl((Pointer)this).offsetAddress(i);
     }
 
   public PairwiseDistanceImpl(@Const @ByRef(nullValue = "torch::nn::PairwiseDistanceOptions{}") PairwiseDistanceOptions options_) { super((Pointer)null); allocate(options_); }

@@ -39,7 +39,7 @@ public class CrossEntropyLossOptions extends Pointer {
         return (CrossEntropyLossOptions)super.position(position);
     }
     @Override public CrossEntropyLossOptions getPointer(long i) {
-        return new CrossEntropyLossOptions((Pointer)this).position(position + i);
+        return new CrossEntropyLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor weight();

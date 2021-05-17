@@ -27,7 +27,7 @@ public class kNearest extends Pointer {
         return (kNearest)super.position(position);
     }
     @Override public kNearest getPointer(long i) {
-        return new kNearest((Pointer)this).position(position + i);
+        return new kNearest((Pointer)this).offsetAddress(i);
     }
  public kNearest() { super((Pointer)null); allocate(); }
 private native void allocate(); }

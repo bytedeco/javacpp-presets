@@ -27,7 +27,7 @@ public class SequentialImplModuleHolder extends Pointer {
         return (SequentialImplModuleHolder)super.position(position);
     }
     @Override public SequentialImplModuleHolder getPointer(long i) {
-        return new SequentialImplModuleHolder((Pointer)this).position(position + i);
+        return new SequentialImplModuleHolder((Pointer)this).offsetAddress(i);
     }
 
   

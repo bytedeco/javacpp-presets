@@ -31,7 +31,7 @@ public class WarningHandler extends Pointer {
         return (WarningHandler)super.position(position);
     }
     @Override public WarningHandler getPointer(long i) {
-        return new WarningHandler((Pointer)this).position(position + i);
+        return new WarningHandler((Pointer)this).offsetAddress(i);
     }
 
   /** The default warning handler. Prints the message to stderr. */

@@ -27,7 +27,7 @@ public class FloatComplexrrayRef extends Pointer {
         return (FloatComplexrrayRef)super.position(position);
     }
     @Override public FloatComplexrrayRef getPointer(long i) {
-        return new FloatComplexrrayRef((Pointer)this).position(position + i);
+        return new FloatComplexrrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

@@ -41,7 +41,7 @@ public class SELUImpl extends SELUImplCloneable {
         return (SELUImpl)super.position(position);
     }
     @Override public SELUImpl getPointer(long i) {
-        return new SELUImpl((Pointer)this).position(position + i);
+        return new SELUImpl((Pointer)this).offsetAddress(i);
     }
 
   public SELUImpl(@Const @ByRef(nullValue = "torch::nn::SELUOptions{}") SELUOptions options_) { super((Pointer)null); allocate(options_); }

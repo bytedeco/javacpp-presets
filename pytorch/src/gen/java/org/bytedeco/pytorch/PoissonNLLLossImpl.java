@@ -41,7 +41,7 @@ public class PoissonNLLLossImpl extends PoissonNLLLossImplCloneable {
         return (PoissonNLLLossImpl)super.position(position);
     }
     @Override public PoissonNLLLossImpl getPointer(long i) {
-        return new PoissonNLLLossImpl((Pointer)this).position(position + i);
+        return new PoissonNLLLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public PoissonNLLLossImpl(@Const @ByRef(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_) { super((Pointer)null); allocate(options_); }

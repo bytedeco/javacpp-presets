@@ -38,7 +38,7 @@ public class ModuleDict extends ModuleDictImplModuleHolder {
         return (ModuleDict)super.position(position);
     }
     @Override public ModuleDict getPointer(long i) {
-        return new ModuleDict((Pointer)this).position(position + i);
+        return new ModuleDict((Pointer)this).offsetAddress(i);
     }
 
   }

@@ -61,7 +61,7 @@ public class Generator extends Pointer {
         return (Generator)super.position(position);
     }
     @Override public Generator getPointer(long i) {
-        return new Generator((Pointer)this).position(position + i);
+        return new Generator((Pointer)this).offsetAddress(i);
     }
 
   public Generator() { super((Pointer)null); allocate(); }

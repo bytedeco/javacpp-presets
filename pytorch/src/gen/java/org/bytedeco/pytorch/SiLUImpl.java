@@ -36,7 +36,7 @@ public class SiLUImpl extends SiLUImplCloneable {
         return (SiLUImpl)super.position(position);
     }
     @Override public SiLUImpl getPointer(long i) {
-        return new SiLUImpl((Pointer)this).position(position + i);
+        return new SiLUImpl((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

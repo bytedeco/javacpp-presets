@@ -37,7 +37,7 @@ public class CosineSimilarityOptions extends Pointer {
         return (CosineSimilarityOptions)super.position(position);
     }
     @Override public CosineSimilarityOptions getPointer(long i) {
-        return new CosineSimilarityOptions((Pointer)this).position(position + i);
+        return new CosineSimilarityOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer dim();

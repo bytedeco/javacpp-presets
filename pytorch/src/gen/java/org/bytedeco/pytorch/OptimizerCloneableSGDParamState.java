@@ -31,7 +31,7 @@ public class OptimizerCloneableSGDParamState extends OptimizerParamState {
         return (OptimizerCloneableSGDParamState)super.position(position);
     }
     @Override public OptimizerCloneableSGDParamState getPointer(long i) {
-        return new OptimizerCloneableSGDParamState((Pointer)this).position(position + i);
+        return new OptimizerCloneableSGDParamState((Pointer)this).offsetAddress(i);
     }
 
 }

@@ -36,7 +36,7 @@ public class SoftsignImpl extends SoftsignImplCloneable {
         return (SoftsignImpl)super.position(position);
     }
     @Override public SoftsignImpl getPointer(long i) {
-        return new SoftsignImpl((Pointer)this).position(position + i);
+        return new SoftsignImpl((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

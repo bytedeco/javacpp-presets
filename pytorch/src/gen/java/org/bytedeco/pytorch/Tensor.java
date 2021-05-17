@@ -45,7 +45,7 @@ public class Tensor extends Pointer {
         return (Tensor)super.position(position);
     }
     @Override public Tensor getPointer(long i) {
-        return new Tensor((Pointer)this).position(position + i);
+        return new Tensor((Pointer)this).offsetAddress(i);
     }
 
   public Tensor() { super((Pointer)null); allocate(); }
@@ -230,25 +230,25 @@ public class Tensor extends Pointer {
 
   public native Pointer data_ptr();
 
-  public native @Name("data_ptr<jbyte>") BytePointer data_ptr_byte();
+  public native @Name("data_ptr<int8_t>") BytePointer data_ptr_byte();
 
-  public native @Name("data_ptr<jshort>") ShortPointer data_ptr_short();
+  public native @Name("data_ptr<int16_t>") ShortPointer data_ptr_short();
 
-  public native @Name("data_ptr<jint>") IntPointer data_ptr_int();
+  public native @Name("data_ptr<int>") IntPointer data_ptr_int();
 
-  public native @Name("data_ptr<jlong>") LongPointer data_ptr_long();
+  public native @Cast("int64_t*") @Name("data_ptr<int64_t>") LongPointer data_ptr_long();
 
   public native @Name("data_ptr<float>") FloatPointer data_ptr_float();
 
   public native @Name("data_ptr<double>") DoublePointer data_ptr_double();
 
-  public native @Name("item<jbyte>") byte item_byte();
+  public native @Name("item<int8_t>") byte item_byte();
 
-  public native @Name("item<jshort>") short item_short();
+  public native @Name("item<int16_t>") short item_short();
 
-  public native @Name("item<jint>") int item_int();
+  public native @Name("item<int>") int item_int();
 
-  public native @Name("item<jlong>") long item_long();
+  public native @Cast("int64_t") @Name("item<int64_t>") long item_long();
 
   public native @Name("item<float>") float item_float();
 

@@ -27,7 +27,7 @@ public class HalfArrayRef extends Pointer {
         return (HalfArrayRef)super.position(position);
     }
     @Override public HalfArrayRef getPointer(long i) {
-        return new HalfArrayRef((Pointer)this).position(position + i);
+        return new HalfArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

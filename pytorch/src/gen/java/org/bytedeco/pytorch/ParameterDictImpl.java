@@ -28,7 +28,7 @@ public class ParameterDictImpl extends ParameterDictImplCloneable {
         return (ParameterDictImpl)super.position(position);
     }
     @Override public ParameterDictImpl getPointer(long i) {
-        return new ParameterDictImpl((Pointer)this).position(position + i);
+        return new ParameterDictImpl((Pointer)this).offsetAddress(i);
     }
 
 

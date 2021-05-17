@@ -20,7 +20,7 @@ public class GeneratorOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneratorOptional(Pointer p) { super(p); }
-    public GeneratorOptional(Generator value) { put(value); }
+    public GeneratorOptional(Generator value) { this(); put(value); }
     public GeneratorOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef GeneratorOptional put(@ByRef GeneratorOptional x);

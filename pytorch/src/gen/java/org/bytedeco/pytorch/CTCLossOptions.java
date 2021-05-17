@@ -39,7 +39,7 @@ public class CTCLossOptions extends Pointer {
         return (CTCLossOptions)super.position(position);
     }
     @Override public CTCLossOptions getPointer(long i) {
-        return new CTCLossOptions((Pointer)this).position(position + i);
+        return new CTCLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer blank();

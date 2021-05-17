@@ -38,7 +38,7 @@ public class AlphaDropoutFuncOptions extends Pointer {
         return (AlphaDropoutFuncOptions)super.position(position);
     }
     @Override public AlphaDropoutFuncOptions getPointer(long i) {
-        return new AlphaDropoutFuncOptions((Pointer)this).position(position + i);
+        return new AlphaDropoutFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer p();

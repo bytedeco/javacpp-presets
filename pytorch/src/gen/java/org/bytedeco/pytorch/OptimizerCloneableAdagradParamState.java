@@ -31,7 +31,7 @@ public class OptimizerCloneableAdagradParamState extends OptimizerParamState {
         return (OptimizerCloneableAdagradParamState)super.position(position);
     }
     @Override public OptimizerCloneableAdagradParamState getPointer(long i) {
-        return new OptimizerCloneableAdagradParamState((Pointer)this).position(position + i);
+        return new OptimizerCloneableAdagradParamState((Pointer)this).offsetAddress(i);
     }
 
 }

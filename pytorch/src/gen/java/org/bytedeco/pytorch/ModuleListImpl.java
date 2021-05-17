@@ -72,7 +72,7 @@ public class ModuleListImpl extends ModuleListImplCloneable {
         return (ModuleListImpl)super.position(position);
     }
     @Override public ModuleListImpl getPointer(long i) {
-        return new ModuleListImpl((Pointer)this).position(position + i);
+        return new ModuleListImpl((Pointer)this).offsetAddress(i);
     }
 
 

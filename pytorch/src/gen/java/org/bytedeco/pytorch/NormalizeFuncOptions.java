@@ -38,7 +38,7 @@ public class NormalizeFuncOptions extends Pointer {
         return (NormalizeFuncOptions)super.position(position);
     }
     @Override public NormalizeFuncOptions getPointer(long i) {
-        return new NormalizeFuncOptions((Pointer)this).position(position + i);
+        return new NormalizeFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer p();

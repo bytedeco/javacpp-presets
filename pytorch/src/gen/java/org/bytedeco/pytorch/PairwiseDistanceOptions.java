@@ -39,7 +39,7 @@ public class PairwiseDistanceOptions extends Pointer {
         return (PairwiseDistanceOptions)super.position(position);
     }
     @Override public PairwiseDistanceOptions getPointer(long i) {
-        return new PairwiseDistanceOptions((Pointer)this).position(position + i);
+        return new PairwiseDistanceOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer p();

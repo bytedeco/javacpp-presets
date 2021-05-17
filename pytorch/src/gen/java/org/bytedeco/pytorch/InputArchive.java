@@ -31,7 +31,7 @@ public class InputArchive extends Pointer {
         return (InputArchive)super.position(position);
     }
     @Override public InputArchive getPointer(long i) {
-        return new InputArchive((Pointer)this).position(position + i);
+        return new InputArchive((Pointer)this).offsetAddress(i);
     }
 
   /** Default-constructs the {@code InputArchive}. */

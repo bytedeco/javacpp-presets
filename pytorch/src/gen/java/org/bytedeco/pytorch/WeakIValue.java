@@ -28,7 +28,7 @@ public class WeakIValue extends Pointer {
         return (WeakIValue)super.position(position);
     }
     @Override public WeakIValue getPointer(long i) {
-        return new WeakIValue((Pointer)this).position(position + i);
+        return new WeakIValue((Pointer)this).offsetAddress(i);
     }
 
   public WeakIValue() { super((Pointer)null); allocate(); }

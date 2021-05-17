@@ -39,7 +39,7 @@ public class SoftplusOptions extends Pointer {
         return (SoftplusOptions)super.position(position);
     }
     @Override public SoftplusOptions getPointer(long i) {
-        return new SoftplusOptions((Pointer)this).position(position + i);
+        return new SoftplusOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer beta();

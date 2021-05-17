@@ -43,7 +43,7 @@ public class SoftMarginLossImpl extends SoftMarginLossImplCloneable {
         return (SoftMarginLossImpl)super.position(position);
     }
     @Override public SoftMarginLossImpl getPointer(long i) {
-        return new SoftMarginLossImpl((Pointer)this).position(position + i);
+        return new SoftMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public SoftMarginLossImpl(@Const @ByRef(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_) { super((Pointer)null); allocate(options_); }

@@ -31,7 +31,7 @@ public class OptimizerCloneableAdamParamState extends OptimizerParamState {
         return (OptimizerCloneableAdamParamState)super.position(position);
     }
     @Override public OptimizerCloneableAdamParamState getPointer(long i) {
-        return new OptimizerCloneableAdamParamState((Pointer)this).position(position + i);
+        return new OptimizerCloneableAdamParamState((Pointer)this).offsetAddress(i);
     }
 
 }

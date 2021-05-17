@@ -27,7 +27,7 @@ public class kRNN_RELU extends Pointer {
         return (kRNN_RELU)super.position(position);
     }
     @Override public kRNN_RELU getPointer(long i) {
-        return new kRNN_RELU((Pointer)this).position(position + i);
+        return new kRNN_RELU((Pointer)this).offsetAddress(i);
     }
  public kRNN_RELU() { super((Pointer)null); allocate(); }
 private native void allocate(); }

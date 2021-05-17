@@ -27,7 +27,7 @@ public class kMean extends Pointer {
         return (kMean)super.position(position);
     }
     @Override public kMean getPointer(long i) {
-        return new kMean((Pointer)this).position(position + i);
+        return new kMean((Pointer)this).offsetAddress(i);
     }
  public kMean() { super((Pointer)null); allocate(); }
 private native void allocate(); }

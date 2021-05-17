@@ -27,7 +27,7 @@ public class kConvTranspose2D extends Pointer {
         return (kConvTranspose2D)super.position(position);
     }
     @Override public kConvTranspose2D getPointer(long i) {
-        return new kConvTranspose2D((Pointer)this).position(position + i);
+        return new kConvTranspose2D((Pointer)this).offsetAddress(i);
     }
  public kConvTranspose2D() { super((Pointer)null); allocate(); }
 private native void allocate(); }

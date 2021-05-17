@@ -46,7 +46,7 @@ public class TripletMarginLossImpl extends TripletMarginLossImplCloneable {
         return (TripletMarginLossImpl)super.position(position);
     }
     @Override public TripletMarginLossImpl getPointer(long i) {
-        return new TripletMarginLossImpl((Pointer)this).position(position + i);
+        return new TripletMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public TripletMarginLossImpl(

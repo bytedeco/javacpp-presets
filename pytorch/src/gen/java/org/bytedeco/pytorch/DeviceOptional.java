@@ -20,7 +20,7 @@ public class DeviceOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeviceOptional(Pointer p) { super(p); }
-    public DeviceOptional(Device value) { put(value); }
+    public DeviceOptional(Device value) { this(); put(value); }
     public DeviceOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef DeviceOptional put(@ByRef DeviceOptional x);

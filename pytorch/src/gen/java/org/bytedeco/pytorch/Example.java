@@ -31,7 +31,7 @@ public class Example extends Pointer {
         return (Example)super.position(position);
     }
     @Override public Example getPointer(long i) {
-        return new Example((Pointer)this).position(position + i);
+        return new Example((Pointer)this).offsetAddress(i);
     }
 
 

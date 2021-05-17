@@ -31,7 +31,7 @@ public class OptimizerCloneableSGDOptions extends OptimizerOptions {
         return (OptimizerCloneableSGDOptions)super.position(position);
     }
     @Override public OptimizerCloneableSGDOptions getPointer(long i) {
-        return new OptimizerCloneableSGDOptions((Pointer)this).position(position + i);
+        return new OptimizerCloneableSGDOptions((Pointer)this).offsetAddress(i);
     }
 
 }
