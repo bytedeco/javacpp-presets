@@ -41,7 +41,7 @@ public class SoftplusImpl extends SoftplusImplCloneable {
         return (SoftplusImpl)super.position(position);
     }
     @Override public SoftplusImpl getPointer(long i) {
-        return new SoftplusImpl((Pointer)this).position(position + i);
+        return new SoftplusImpl((Pointer)this).offsetAddress(i);
     }
 
   public SoftplusImpl(@Const @ByRef(nullValue = "torch::nn::SoftplusOptions{}") SoftplusOptions options_) { super((Pointer)null); allocate(options_); }

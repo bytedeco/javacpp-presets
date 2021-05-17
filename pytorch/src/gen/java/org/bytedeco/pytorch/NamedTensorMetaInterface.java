@@ -31,7 +31,7 @@ public class NamedTensorMetaInterface extends Pointer {
         return (NamedTensorMetaInterface)super.position(position);
     }
     @Override public NamedTensorMetaInterface getPointer(long i) {
-        return new NamedTensorMetaInterface((Pointer)this).position(position + i);
+        return new NamedTensorMetaInterface((Pointer)this).offsetAddress(i);
     }
 
   public native @UniquePtr NamedTensorMetaInterface clone();

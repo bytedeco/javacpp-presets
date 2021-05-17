@@ -39,7 +39,7 @@ public class TripletMarginWithDistanceLossOptions extends Pointer {
         return (TripletMarginWithDistanceLossOptions)super.position(position);
     }
     @Override public TripletMarginWithDistanceLossOptions getPointer(long i) {
-        return new TripletMarginWithDistanceLossOptions((Pointer)this).position(position + i);
+        return new TripletMarginWithDistanceLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("c10::optional<torch::nn::TripletMarginWithDistanceLossOptions::distance_function_t>*") @ByRef @NoException Pointer distance_function();

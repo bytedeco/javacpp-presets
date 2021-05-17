@@ -41,7 +41,7 @@ public class PReLUImpl extends PReLUImplCloneable {
         return (PReLUImpl)super.position(position);
     }
     @Override public PReLUImpl getPointer(long i) {
-        return new PReLUImpl((Pointer)this).position(position + i);
+        return new PReLUImpl((Pointer)this).offsetAddress(i);
     }
 
   public PReLUImpl(@Const @ByRef(nullValue = "torch::nn::PReLUOptions{}") PReLUOptions options_) { super((Pointer)null); allocate(options_); }

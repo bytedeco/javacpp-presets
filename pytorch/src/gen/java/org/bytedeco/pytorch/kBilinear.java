@@ -27,7 +27,7 @@ public class kBilinear extends Pointer {
         return (kBilinear)super.position(position);
     }
     @Override public kBilinear getPointer(long i) {
-        return new kBilinear((Pointer)this).position(position + i);
+        return new kBilinear((Pointer)this).offsetAddress(i);
     }
  public kBilinear() { super((Pointer)null); allocate(); }
 private native void allocate(); }

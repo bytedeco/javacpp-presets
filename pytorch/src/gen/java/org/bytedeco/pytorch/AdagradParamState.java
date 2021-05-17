@@ -31,7 +31,7 @@ public class AdagradParamState extends OptimizerCloneableAdagradParamState {
         return (AdagradParamState)super.position(position);
     }
     @Override public AdagradParamState getPointer(long i) {
-        return new AdagradParamState((Pointer)this).position(position + i);
+        return new AdagradParamState((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor sum();

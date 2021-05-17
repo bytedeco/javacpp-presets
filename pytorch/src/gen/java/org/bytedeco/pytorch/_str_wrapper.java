@@ -32,7 +32,7 @@ public class _str_wrapper extends Pointer {
         return (_str_wrapper)super.position(position);
     }
     @Override public _str_wrapper getPointer(long i) {
-        return new _str_wrapper((Pointer)this).position(position + i);
+        return new _str_wrapper((Pointer)this).offsetAddress(i);
     }
 
   // return by reference to avoid the binary size of a string copy

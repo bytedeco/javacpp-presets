@@ -38,7 +38,7 @@ public class EmbeddingFuncOptions extends Pointer {
         return (EmbeddingFuncOptions)super.position(position);
     }
     @Override public EmbeddingFuncOptions getPointer(long i) {
-        return new EmbeddingFuncOptions((Pointer)this).position(position + i);
+        return new EmbeddingFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException LongOptional padding_idx();

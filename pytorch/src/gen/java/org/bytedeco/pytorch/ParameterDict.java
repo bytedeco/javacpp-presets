@@ -34,7 +34,7 @@ public class ParameterDict extends ParameterDictImplModuleHolder {
         return (ParameterDict)super.position(position);
     }
     @Override public ParameterDict getPointer(long i) {
-        return new ParameterDict((Pointer)this).position(position + i);
+        return new ParameterDict((Pointer)this).offsetAddress(i);
     }
 
   }

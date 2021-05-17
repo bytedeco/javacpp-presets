@@ -20,7 +20,7 @@ public class LongExpandingArrayOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LongExpandingArrayOptional(Pointer p) { super(p); }
-    public LongExpandingArrayOptional(LongPointer value) { put(value); }
+    public LongExpandingArrayOptional(LongPointer value) { this(); put(value); }
     public LongExpandingArrayOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef LongExpandingArrayOptional put(@ByRef LongExpandingArrayOptional x);

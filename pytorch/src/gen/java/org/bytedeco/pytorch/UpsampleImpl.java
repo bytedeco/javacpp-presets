@@ -42,7 +42,7 @@ public class UpsampleImpl extends UpsampleImplCloneable {
         return (UpsampleImpl)super.position(position);
     }
     @Override public UpsampleImpl getPointer(long i) {
-        return new UpsampleImpl((Pointer)this).position(position + i);
+        return new UpsampleImpl((Pointer)this).offsetAddress(i);
     }
 
   public UpsampleImpl(@Const @ByRef(nullValue = "torch::nn::UpsampleOptions{}") UpsampleOptions options_) { super((Pointer)null); allocate(options_); }

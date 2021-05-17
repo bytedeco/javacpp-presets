@@ -36,7 +36,7 @@ public class MSELossOptions extends Pointer {
         return (MSELossOptions)super.position(position);
     }
     @Override public MSELossOptions getPointer(long i) {
-        return new MSELossOptions((Pointer)this).position(position + i);
+        return new MSELossOptions((Pointer)this).offsetAddress(i);
     }
 
 

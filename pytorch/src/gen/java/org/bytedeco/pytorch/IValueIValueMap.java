@@ -30,6 +30,7 @@ public class IValueIValueMap extends Pointer {
     @Index public native @ByRef IValue get(@ByRef IValue i);
     public native IValueIValueMap put(@ByRef IValue i, IValue value);
 
+    public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {

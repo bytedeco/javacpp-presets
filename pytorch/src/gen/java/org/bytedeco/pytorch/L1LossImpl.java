@@ -42,7 +42,7 @@ public class L1LossImpl extends L1LossImplCloneable {
         return (L1LossImpl)super.position(position);
     }
     @Override public L1LossImpl getPointer(long i) {
-        return new L1LossImpl((Pointer)this).position(position + i);
+        return new L1LossImpl((Pointer)this).offsetAddress(i);
     }
 
   public L1LossImpl(@Const @ByRef(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_) { super((Pointer)null); allocate(options_); }

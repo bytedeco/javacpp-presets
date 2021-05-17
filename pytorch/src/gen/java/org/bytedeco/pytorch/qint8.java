@@ -33,7 +33,7 @@ public class qint8 extends Pointer {
         return (qint8)super.position(position);
     }
     @Override public qint8 getPointer(long i) {
-        return new qint8((Pointer)this).position(position + i);
+        return new qint8((Pointer)this).offsetAddress(i);
     }
 
   public native byte val_(); public native qint8 val_(byte setter);

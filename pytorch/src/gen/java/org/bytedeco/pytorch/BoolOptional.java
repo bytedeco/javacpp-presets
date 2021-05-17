@@ -20,7 +20,7 @@ public class BoolOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BoolOptional(Pointer p) { super(p); }
-    public BoolOptional(boolean value) { put(value); }
+    public BoolOptional(boolean value) { this(); put(value); }
     public BoolOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef BoolOptional put(@ByRef BoolOptional x);

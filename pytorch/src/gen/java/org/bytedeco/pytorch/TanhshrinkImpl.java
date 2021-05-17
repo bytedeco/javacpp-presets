@@ -36,7 +36,7 @@ public class TanhshrinkImpl extends TanhshrinkImplCloneable {
         return (TanhshrinkImpl)super.position(position);
     }
     @Override public TanhshrinkImpl getPointer(long i) {
-        return new TanhshrinkImpl((Pointer)this).position(position + i);
+        return new TanhshrinkImpl((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

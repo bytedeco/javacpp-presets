@@ -37,7 +37,7 @@ public class AutogradMeta extends AutogradMetaInterface {
         return (AutogradMeta)super.position(position);
     }
     @Override public AutogradMeta getPointer(long i) {
-        return new AutogradMeta((Pointer)this).position(position + i);
+        return new AutogradMeta((Pointer)this).offsetAddress(i);
     }
 
   public native @StdString BytePointer name_(); public native AutogradMeta name_(BytePointer setter);

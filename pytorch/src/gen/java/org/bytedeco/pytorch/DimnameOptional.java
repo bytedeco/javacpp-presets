@@ -20,7 +20,7 @@ public class DimnameOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DimnameOptional(Pointer p) { super(p); }
-    public DimnameOptional(Dimname value) { put(value); }
+    public DimnameOptional(Dimname value) { this(); put(value); }
     public DimnameOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef DimnameOptional put(@ByRef DimnameOptional x);

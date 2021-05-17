@@ -38,7 +38,7 @@ public class EmbeddingBagFuncOptions extends Pointer {
         return (EmbeddingBagFuncOptions)super.position(position);
     }
     @Override public EmbeddingBagFuncOptions getPointer(long i) {
-        return new EmbeddingBagFuncOptions((Pointer)this).position(position + i);
+        return new EmbeddingBagFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor offsets();

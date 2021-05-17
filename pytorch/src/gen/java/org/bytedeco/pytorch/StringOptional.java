@@ -20,8 +20,8 @@ public class StringOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringOptional(Pointer p) { super(p); }
-    public StringOptional(BytePointer value) { put(value); }
-    public StringOptional(String value) { put(value); }
+    public StringOptional(BytePointer value) { this(); put(value); }
+    public StringOptional(String value) { this(); put(value); }
     public StringOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef StringOptional put(@ByRef StringOptional x);

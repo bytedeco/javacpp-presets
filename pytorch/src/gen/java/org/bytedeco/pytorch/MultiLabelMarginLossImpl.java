@@ -43,7 +43,7 @@ public class MultiLabelMarginLossImpl extends MultiLabelMarginLossImplCloneable 
         return (MultiLabelMarginLossImpl)super.position(position);
     }
     @Override public MultiLabelMarginLossImpl getPointer(long i) {
-        return new MultiLabelMarginLossImpl((Pointer)this).position(position + i);
+        return new MultiLabelMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public MultiLabelMarginLossImpl(

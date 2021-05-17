@@ -27,7 +27,7 @@ public class TensorIndexArrayRef extends Pointer {
         return (TensorIndexArrayRef)super.position(position);
     }
     @Override public TensorIndexArrayRef getPointer(long i) {
-        return new TensorIndexArrayRef((Pointer)this).position(position + i);
+        return new TensorIndexArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

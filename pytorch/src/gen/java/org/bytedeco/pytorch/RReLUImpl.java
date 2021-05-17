@@ -41,7 +41,7 @@ public class RReLUImpl extends RReLUImplCloneable {
         return (RReLUImpl)super.position(position);
     }
     @Override public RReLUImpl getPointer(long i) {
-        return new RReLUImpl((Pointer)this).position(position + i);
+        return new RReLUImpl((Pointer)this).offsetAddress(i);
     }
 
   public RReLUImpl(@Const @ByRef(nullValue = "torch::nn::RReLUOptions{}") RReLUOptions options_) { super((Pointer)null); allocate(options_); }

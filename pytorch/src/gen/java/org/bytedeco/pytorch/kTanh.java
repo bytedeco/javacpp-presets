@@ -27,7 +27,7 @@ public class kTanh extends Pointer {
         return (kTanh)super.position(position);
     }
     @Override public kTanh getPointer(long i) {
-        return new kTanh((Pointer)this).position(position + i);
+        return new kTanh((Pointer)this).offsetAddress(i);
     }
  public kTanh() { super((Pointer)null); allocate(); }
 private native void allocate(); }

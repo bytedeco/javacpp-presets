@@ -20,7 +20,7 @@ public class LayoutOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LayoutOptional(Pointer p) { super(p); }
-    public LayoutOptional(Layout value) { put(value); }
+    public LayoutOptional(Layout value) { this(); put(value); }
     public LayoutOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef LayoutOptional put(@ByRef LayoutOptional x);

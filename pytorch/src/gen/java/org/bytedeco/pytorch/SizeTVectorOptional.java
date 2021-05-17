@@ -20,7 +20,7 @@ public class SizeTVectorOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SizeTVectorOptional(Pointer p) { super(p); }
-    public SizeTVectorOptional(SizeTVector value) { put(value); }
+    public SizeTVectorOptional(SizeTVector value) { this(); put(value); }
     public SizeTVectorOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef SizeTVectorOptional put(@ByRef SizeTVectorOptional x);

@@ -41,7 +41,7 @@ public class SoftshrinkImpl extends SoftshrinkImplCloneable {
         return (SoftshrinkImpl)super.position(position);
     }
     @Override public SoftshrinkImpl getPointer(long i) {
-        return new SoftshrinkImpl((Pointer)this).position(position + i);
+        return new SoftshrinkImpl((Pointer)this).offsetAddress(i);
     }
 
   public SoftshrinkImpl(@Const @ByRef(nullValue = "torch::nn::SoftshrinkOptions{}") SoftshrinkOptions options_) { super((Pointer)null); allocate(options_); }

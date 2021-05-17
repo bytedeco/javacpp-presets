@@ -27,7 +27,7 @@ public class kLSTM extends Pointer {
         return (kLSTM)super.position(position);
     }
     @Override public kLSTM getPointer(long i) {
-        return new kLSTM((Pointer)this).position(position + i);
+        return new kLSTM((Pointer)this).offsetAddress(i);
     }
  public kLSTM() { super((Pointer)null); allocate(); }
 private native void allocate(); }

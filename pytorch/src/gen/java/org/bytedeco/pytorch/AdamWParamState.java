@@ -31,7 +31,7 @@ public class AdamWParamState extends OptimizerCloneableAdamWParamState {
         return (AdamWParamState)super.position(position);
     }
     @Override public AdamWParamState getPointer(long i) {
-        return new AdamWParamState((Pointer)this).position(position + i);
+        return new AdamWParamState((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer step();

@@ -20,8 +20,8 @@ public class LongArrayRefOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LongArrayRefOptional(Pointer p) { super(p); }
-    public LongArrayRefOptional(@Cast("c10::ArrayRef<int64_t>*") LongArrayRef value) { put(value); }
-    public LongArrayRefOptional(@Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... value) { put(value); }
+    public LongArrayRefOptional(@Cast("c10::ArrayRef<int64_t>*") LongArrayRef value) { this(); put(value); }
+    public LongArrayRefOptional(@Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... value) { this(); put(value); }
     public LongArrayRefOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef LongArrayRefOptional put(@ByRef LongArrayRefOptional x);

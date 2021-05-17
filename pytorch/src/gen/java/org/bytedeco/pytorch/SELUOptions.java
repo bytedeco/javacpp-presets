@@ -36,7 +36,7 @@ public class SELUOptions extends Pointer {
         return (SELUOptions)super.position(position);
     }
     @Override public SELUOptions getPointer(long i) {
-        return new SELUOptions((Pointer)this).position(position + i);
+        return new SELUOptions((Pointer)this).offsetAddress(i);
     }
 
   /* implicit */ public SELUOptions(@Cast("bool") boolean inplace/*=false*/) { super((Pointer)null); allocate(inplace); }

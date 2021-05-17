@@ -39,7 +39,7 @@ public class BCELossOptions extends Pointer {
         return (BCELossOptions)super.position(position);
     }
     @Override public BCELossOptions getPointer(long i) {
-        return new BCELossOptions((Pointer)this).position(position + i);
+        return new BCELossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor weight();

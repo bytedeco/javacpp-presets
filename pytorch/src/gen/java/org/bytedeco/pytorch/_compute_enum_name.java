@@ -31,7 +31,7 @@ public class _compute_enum_name extends Pointer {
         return (_compute_enum_name)super.position(position);
     }
     @Override public _compute_enum_name getPointer(long i) {
-        return new _compute_enum_name((Pointer)this).position(position + i);
+        return new _compute_enum_name((Pointer)this).offsetAddress(i);
     }
 
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kLinear v);

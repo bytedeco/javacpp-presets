@@ -31,7 +31,7 @@ public class OptimizerCloneableRMSpropParamState extends OptimizerParamState {
         return (OptimizerCloneableRMSpropParamState)super.position(position);
     }
     @Override public OptimizerCloneableRMSpropParamState getPointer(long i) {
-        return new OptimizerCloneableRMSpropParamState((Pointer)this).position(position + i);
+        return new OptimizerCloneableRMSpropParamState((Pointer)this).offsetAddress(i);
     }
 
 }

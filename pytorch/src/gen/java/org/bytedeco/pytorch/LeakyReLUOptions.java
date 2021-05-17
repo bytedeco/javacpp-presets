@@ -39,7 +39,7 @@ public class LeakyReLUOptions extends Pointer {
         return (LeakyReLUOptions)super.position(position);
     }
     @Override public LeakyReLUOptions getPointer(long i) {
-        return new LeakyReLUOptions((Pointer)this).position(position + i);
+        return new LeakyReLUOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer negative_slope();

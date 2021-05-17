@@ -31,7 +31,7 @@ public class GradMode extends Pointer {
         return (GradMode)super.position(position);
     }
     @Override public GradMode getPointer(long i) {
-        return new GradMode((Pointer)this).position(position + i);
+        return new GradMode((Pointer)this).offsetAddress(i);
     }
 
   public static native @Cast("bool") boolean is_enabled();

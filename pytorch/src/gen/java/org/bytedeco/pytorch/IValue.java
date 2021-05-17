@@ -417,7 +417,7 @@ public class IValue extends Pointer {
           return (HashAliasedIValue)super.position(position);
       }
       @Override public HashAliasedIValue getPointer(long i) {
-          return new HashAliasedIValue((Pointer)this).position(position + i);
+          return new HashAliasedIValue((Pointer)this).offsetAddress(i);
       }
   
     public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef IValue val);
@@ -437,7 +437,7 @@ public class IValue extends Pointer {
           return (CompAliasedIValues)super.position(position);
       }
       @Override public CompAliasedIValues getPointer(long i) {
-          return new CompAliasedIValues((Pointer)this).position(position + i);
+          return new CompAliasedIValues((Pointer)this).offsetAddress(i);
       }
   
     public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef IValue lhs, @Const @ByRef IValue rhs);

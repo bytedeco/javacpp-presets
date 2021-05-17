@@ -39,7 +39,7 @@ public class CELUOptions extends Pointer {
         return (CELUOptions)super.position(position);
     }
     @Override public CELUOptions getPointer(long i) {
-        return new CELUOptions((Pointer)this).position(position + i);
+        return new CELUOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer alpha();

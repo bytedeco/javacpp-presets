@@ -36,7 +36,7 @@ public class SmoothL1LossOptions extends Pointer {
         return (SmoothL1LossOptions)super.position(position);
     }
     @Override public SmoothL1LossOptions getPointer(long i) {
-        return new SmoothL1LossOptions((Pointer)this).position(position + i);
+        return new SmoothL1LossOptions((Pointer)this).offsetAddress(i);
     }
 
 

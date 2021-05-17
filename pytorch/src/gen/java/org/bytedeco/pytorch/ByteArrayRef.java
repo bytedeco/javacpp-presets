@@ -39,7 +39,7 @@ public class ByteArrayRef extends Pointer {
         return (ByteArrayRef)super.position(position);
     }
     @Override public ByteArrayRef getPointer(long i) {
-        return new ByteArrayRef((Pointer)this).position(position + i);
+        return new ByteArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

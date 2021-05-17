@@ -33,7 +33,7 @@ public class ExampleStack extends ExampleCollation {
         return (ExampleStack)super.position(position);
     }
     @Override public ExampleStack getPointer(long i) {
-        return new ExampleStack((Pointer)this).position(position + i);
+        return new ExampleStack((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Example apply_batch(@ByVal ExampleVector examples);

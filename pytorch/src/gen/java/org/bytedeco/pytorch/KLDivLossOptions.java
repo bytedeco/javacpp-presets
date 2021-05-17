@@ -36,7 +36,7 @@ public class KLDivLossOptions extends Pointer {
         return (KLDivLossOptions)super.position(position);
     }
     @Override public KLDivLossOptions getPointer(long i) {
-        return new KLDivLossOptions((Pointer)this).position(position + i);
+        return new KLDivLossOptions((Pointer)this).offsetAddress(i);
     }
 
 

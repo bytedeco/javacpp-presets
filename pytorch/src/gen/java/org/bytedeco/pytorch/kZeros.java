@@ -27,7 +27,7 @@ public class kZeros extends Pointer {
         return (kZeros)super.position(position);
     }
     @Override public kZeros getPointer(long i) {
-        return new kZeros((Pointer)this).position(position + i);
+        return new kZeros((Pointer)this).offsetAddress(i);
     }
  public kZeros() { super((Pointer)null); allocate(); }
 private native void allocate(); }

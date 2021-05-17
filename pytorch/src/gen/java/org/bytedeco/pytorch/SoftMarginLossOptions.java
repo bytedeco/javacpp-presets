@@ -36,7 +36,7 @@ public class SoftMarginLossOptions extends Pointer {
         return (SoftMarginLossOptions)super.position(position);
     }
     @Override public SoftMarginLossOptions getPointer(long i) {
-        return new SoftMarginLossOptions((Pointer)this).position(position + i);
+        return new SoftMarginLossOptions((Pointer)this).offsetAddress(i);
     }
 
 

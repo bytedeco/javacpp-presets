@@ -14930,6 +14930,38 @@ body of your function, only data pointers.
 // #endif
 
 
+// Parsed from torch/csrc/api/include/torch/cuda.h
+
+// #pragma once
+
+// #include <torch/csrc/WindowsTorchApiMacro.h>
+
+// #include <cstdint>
+// #include <cstddef>
+
+/** Returns the number of CUDA devices available. */
+@Namespace("torch::cuda") public static native @Cast("size_t") @Name("device_count") long cuda_device_count();
+
+/** Returns true if at least one CUDA device is available. */
+@Namespace("torch::cuda") public static native @Cast("bool") @Name("is_available") boolean cuda_is_available();
+
+/** Returns true if CUDA is available, and CuDNN is available. */
+@Namespace("torch::cuda") public static native @Cast("bool") boolean cudnn_is_available();
+
+/** Sets the seed for the current GPU. */
+@Namespace("torch::cuda") public static native @Name("manual_seed") void cuda_manual_seed(@Cast("uint64_t") long seed);
+
+/** Sets the seed for all available GPUs. */
+@Namespace("torch::cuda") public static native @Name("manual_seed_all") void cuda_manual_seed_all(@Cast("uint64_t") long seed);
+
+/** Waits for all kernels in all streams on a CUDA device to complete. */
+@Namespace("torch::cuda") public static native @Name("synchronize") void cuda_synchronize(@Cast("int64_t") long device_index/*=-1*/);
+@Namespace("torch::cuda") public static native @Name("synchronize") void cuda_synchronize();
+
+ // namespace cuda
+ // namespace torch
+
+
 // Parsed from torch/csrc/autograd/edge.h
 
 // #pragma once
@@ -22359,18 +22391,18 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *                2            |       torch::nn::AnyValue(3.0)
  *    ----------------------------------------------------------------
  *    Thus we pass the following arguments to the `FORWARD_HAS_DEFAULT_ARGS` macro:
- *    */
-/**   FORWARD_HAS_DEFAULT_ARGS({1, torch::nn::AnyValue(2)}, {2, torch::nn::AnyValue(3.0)})
-/**  private:
-/**   int value;
-/** };
-/** TORCH_MODULE(M);
-/** }</pre>
-/** Now, running the following would work:
-/** <pre>{@code
-/** torch::nn::Sequential seq(M(1));
-/** seq->forward(1);  // This correctly populates the default arguments for `MImpl::forward`
-/** }</pre> */
+ *    * /
+ *    FORWARD_HAS_DEFAULT_ARGS({1, torch::nn::AnyValue(2)}, {2, torch::nn::AnyValue(3.0)})
+ *   private:
+ *    int value;
+ *  };
+ *  TORCH_MODULE(M);
+ *  }</pre>
+ *  Now, running the following would work:
+ *  <pre>{@code
+ *  torch::nn::Sequential seq(M(1));
+ *  seq->forward(1);  // This correctly populates the default arguments for `MImpl::forward`
+ *  }</pre> */
 // #define FORWARD_HAS_DEFAULT_ARGS(...)
 //   template <typename ModuleType, typename... ArgumentTypes>
 //   friend struct torch::nn::AnyModuleHolder;

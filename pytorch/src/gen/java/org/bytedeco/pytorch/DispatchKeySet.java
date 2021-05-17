@@ -52,7 +52,7 @@ public class DispatchKeySet extends Pointer {
         return (DispatchKeySet)super.position(position);
     }
     @Override public DispatchKeySet getPointer(long i) {
-        return new DispatchKeySet((Pointer)this).position(position + i);
+        return new DispatchKeySet((Pointer)this).offsetAddress(i);
     }
 
   public enum Full { FULL(0);

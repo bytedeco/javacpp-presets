@@ -39,7 +39,7 @@ public class HardtanhOptions extends Pointer {
         return (HardtanhOptions)super.position(position);
     }
     @Override public HardtanhOptions getPointer(long i) {
-        return new HardtanhOptions((Pointer)this).position(position + i);
+        return new HardtanhOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException DoublePointer min_val();

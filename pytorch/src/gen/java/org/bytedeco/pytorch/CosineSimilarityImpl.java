@@ -40,7 +40,7 @@ public class CosineSimilarityImpl extends CosineSimilarityImplCloneable {
         return (CosineSimilarityImpl)super.position(position);
     }
     @Override public CosineSimilarityImpl getPointer(long i) {
-        return new CosineSimilarityImpl((Pointer)this).position(position + i);
+        return new CosineSimilarityImpl((Pointer)this).offsetAddress(i);
     }
 
   public CosineSimilarityImpl(@Const @ByRef(nullValue = "torch::nn::CosineSimilarityOptions{}") CosineSimilarityOptions options_) { super((Pointer)null); allocate(options_); }

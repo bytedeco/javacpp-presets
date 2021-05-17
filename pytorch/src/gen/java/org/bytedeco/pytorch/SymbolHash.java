@@ -32,7 +32,7 @@ public class SymbolHash extends Pointer {
         return (SymbolHash)super.position(position);
     }
     @Override public SymbolHash getPointer(long i) {
-        return new SymbolHash((Pointer)this).position(position + i);
+        return new SymbolHash((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("std::size_t") @Name("operator ()") long apply(@ByVal Symbol s);

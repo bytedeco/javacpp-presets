@@ -34,7 +34,7 @@ public class EmbeddingBagFromPretrainedOptions extends Pointer {
         return (EmbeddingBagFromPretrainedOptions)super.position(position);
     }
     @Override public EmbeddingBagFromPretrainedOptions getPointer(long i) {
-        return new EmbeddingBagFromPretrainedOptions((Pointer)this).position(position + i);
+        return new EmbeddingBagFromPretrainedOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("bool*") @ByRef @NoException BoolPointer freeze();

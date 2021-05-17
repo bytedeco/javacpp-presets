@@ -39,7 +39,7 @@ public class MultiLabelSoftMarginLossOptions extends Pointer {
         return (MultiLabelSoftMarginLossOptions)super.position(position);
     }
     @Override public MultiLabelSoftMarginLossOptions getPointer(long i) {
-        return new MultiLabelSoftMarginLossOptions((Pointer)this).position(position + i);
+        return new MultiLabelSoftMarginLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor weight();

@@ -27,7 +27,7 @@ public class kArea extends Pointer {
         return (kArea)super.position(position);
     }
     @Override public kArea getPointer(long i) {
-        return new kArea((Pointer)this).position(position + i);
+        return new kArea((Pointer)this).offsetAddress(i);
     }
  public kArea() { super((Pointer)null); allocate(); }
 private native void allocate(); }

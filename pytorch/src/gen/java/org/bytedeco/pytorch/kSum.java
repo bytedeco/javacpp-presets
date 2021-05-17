@@ -27,7 +27,7 @@ public class kSum extends Pointer {
         return (kSum)super.position(position);
     }
     @Override public kSum getPointer(long i) {
-        return new kSum((Pointer)this).position(position + i);
+        return new kSum((Pointer)this).offsetAddress(i);
     }
  public kSum() { super((Pointer)null); allocate(); }
 private native void allocate(); }

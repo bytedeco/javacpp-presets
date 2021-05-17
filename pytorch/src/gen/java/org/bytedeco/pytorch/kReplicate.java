@@ -27,7 +27,7 @@ public class kReplicate extends Pointer {
         return (kReplicate)super.position(position);
     }
     @Override public kReplicate getPointer(long i) {
-        return new kReplicate((Pointer)this).position(position + i);
+        return new kReplicate((Pointer)this).offsetAddress(i);
     }
  public kReplicate() { super((Pointer)null); allocate(); }
 private native void allocate(); }

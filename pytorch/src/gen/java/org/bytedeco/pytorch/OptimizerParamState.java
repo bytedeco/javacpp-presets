@@ -32,7 +32,7 @@ public class OptimizerParamState extends Pointer {
         return (OptimizerParamState)super.position(position);
     }
     @Override public OptimizerParamState getPointer(long i) {
-        return new OptimizerParamState((Pointer)this).position(position + i);
+        return new OptimizerParamState((Pointer)this).offsetAddress(i);
     }
 
   public native @UniquePtr OptimizerParamState clone();

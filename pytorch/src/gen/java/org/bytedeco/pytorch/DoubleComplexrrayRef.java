@@ -27,7 +27,7 @@ public class DoubleComplexrrayRef extends Pointer {
         return (DoubleComplexrrayRef)super.position(position);
     }
     @Override public DoubleComplexrrayRef getPointer(long i) {
-        return new DoubleComplexrrayRef((Pointer)this).position(position + i);
+        return new DoubleComplexrrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

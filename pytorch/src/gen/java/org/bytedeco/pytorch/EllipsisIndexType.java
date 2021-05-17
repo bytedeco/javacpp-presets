@@ -28,7 +28,7 @@ public class EllipsisIndexType extends Pointer {
         return (EllipsisIndexType)super.position(position);
     }
     @Override public EllipsisIndexType getPointer(long i) {
-        return new EllipsisIndexType((Pointer)this).position(position + i);
+        return new EllipsisIndexType((Pointer)this).offsetAddress(i);
     }
  public EllipsisIndexType() { super((Pointer)null); allocate(); }
 private native void allocate(); }

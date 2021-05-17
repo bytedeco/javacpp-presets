@@ -28,7 +28,7 @@ public class DebugInfoBase extends Pointer {
         return (DebugInfoBase)super.position(position);
     }
     @Override public DebugInfoBase getPointer(long i) {
-        return new DebugInfoBase((Pointer)this).position(position + i);
+        return new DebugInfoBase((Pointer)this).offsetAddress(i);
     }
 
   public DebugInfoBase() { super((Pointer)null); allocate(); }

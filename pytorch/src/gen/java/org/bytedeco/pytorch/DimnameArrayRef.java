@@ -27,7 +27,7 @@ public class DimnameArrayRef extends Pointer {
         return (DimnameArrayRef)super.position(position);
     }
     @Override public DimnameArrayRef getPointer(long i) {
-        return new DimnameArrayRef((Pointer)this).position(position + i);
+        return new DimnameArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

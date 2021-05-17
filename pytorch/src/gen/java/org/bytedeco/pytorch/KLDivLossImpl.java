@@ -41,7 +41,7 @@ public class KLDivLossImpl extends KLDivLossImplCloneable {
         return (KLDivLossImpl)super.position(position);
     }
     @Override public KLDivLossImpl getPointer(long i) {
-        return new KLDivLossImpl((Pointer)this).position(position + i);
+        return new KLDivLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public KLDivLossImpl(@Const @ByRef(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_) { super((Pointer)null); allocate(options_); }

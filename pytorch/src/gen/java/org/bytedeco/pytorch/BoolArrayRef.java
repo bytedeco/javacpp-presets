@@ -27,7 +27,7 @@ public class BoolArrayRef extends Pointer {
         return (BoolArrayRef)super.position(position);
     }
     @Override public BoolArrayRef getPointer(long i) {
-        return new BoolArrayRef((Pointer)this).position(position + i);
+        return new BoolArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

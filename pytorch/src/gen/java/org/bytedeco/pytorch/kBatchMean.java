@@ -27,7 +27,7 @@ public class kBatchMean extends Pointer {
         return (kBatchMean)super.position(position);
     }
     @Override public kBatchMean getPointer(long i) {
-        return new kBatchMean((Pointer)this).position(position + i);
+        return new kBatchMean((Pointer)this).offsetAddress(i);
     }
  public kBatchMean() { super((Pointer)null); allocate(); }
 private native void allocate(); }

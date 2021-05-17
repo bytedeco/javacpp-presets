@@ -27,7 +27,7 @@ public class kTrilinear extends Pointer {
         return (kTrilinear)super.position(position);
     }
     @Override public kTrilinear getPointer(long i) {
-        return new kTrilinear((Pointer)this).position(position + i);
+        return new kTrilinear((Pointer)this).offsetAddress(i);
     }
  public kTrilinear() { super((Pointer)null); allocate(); }
 private native void allocate(); }

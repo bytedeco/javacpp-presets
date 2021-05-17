@@ -31,7 +31,7 @@ public class ModuleHolder extends Pointer {
         return (ModuleHolder)super.position(position);
     }
     @Override public ModuleHolder getPointer(long i) {
-        return new ModuleHolder((Pointer)this).position(position + i);
+        return new ModuleHolder((Pointer)this).offsetAddress(i);
     }
 
   

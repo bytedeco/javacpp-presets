@@ -36,7 +36,7 @@ public class ReLU6Options extends Pointer {
         return (ReLU6Options)super.position(position);
     }
     @Override public ReLU6Options getPointer(long i) {
-        return new ReLU6Options((Pointer)this).position(position + i);
+        return new ReLU6Options((Pointer)this).offsetAddress(i);
     }
 
   /* implicit */ public ReLU6Options(@Cast("bool") boolean inplace/*=false*/) { super((Pointer)null); allocate(inplace); }

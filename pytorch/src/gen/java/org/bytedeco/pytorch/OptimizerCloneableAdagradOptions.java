@@ -31,7 +31,7 @@ public class OptimizerCloneableAdagradOptions extends OptimizerOptions {
         return (OptimizerCloneableAdagradOptions)super.position(position);
     }
     @Override public OptimizerCloneableAdagradOptions getPointer(long i) {
-        return new OptimizerCloneableAdagradOptions((Pointer)this).position(position + i);
+        return new OptimizerCloneableAdagradOptions((Pointer)this).offsetAddress(i);
     }
 
 }

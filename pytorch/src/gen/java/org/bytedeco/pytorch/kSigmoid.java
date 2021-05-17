@@ -27,7 +27,7 @@ public class kSigmoid extends Pointer {
         return (kSigmoid)super.position(position);
     }
     @Override public kSigmoid getPointer(long i) {
-        return new kSigmoid((Pointer)this).position(position + i);
+        return new kSigmoid((Pointer)this).offsetAddress(i);
     }
  public kSigmoid() { super((Pointer)null); allocate(); }
 private native void allocate(); }

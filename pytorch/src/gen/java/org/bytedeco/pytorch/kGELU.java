@@ -27,7 +27,7 @@ public class kGELU extends Pointer {
         return (kGELU)super.position(position);
     }
     @Override public kGELU getPointer(long i) {
-        return new kGELU((Pointer)this).position(position + i);
+        return new kGELU((Pointer)this).offsetAddress(i);
     }
  public kGELU() { super((Pointer)null); allocate(); }
 private native void allocate(); }

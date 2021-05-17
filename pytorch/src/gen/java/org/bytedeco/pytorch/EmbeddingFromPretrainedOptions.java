@@ -34,7 +34,7 @@ public class EmbeddingFromPretrainedOptions extends Pointer {
         return (EmbeddingFromPretrainedOptions)super.position(position);
     }
     @Override public EmbeddingFromPretrainedOptions getPointer(long i) {
-        return new EmbeddingFromPretrainedOptions((Pointer)this).position(position + i);
+        return new EmbeddingFromPretrainedOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("bool*") @ByRef @NoException BoolPointer freeze();

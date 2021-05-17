@@ -28,7 +28,7 @@ public class Context extends Pointer {
         return (Context)super.position(position);
     }
     @Override public Context getPointer(long i) {
-        return new Context((Pointer)this).position(position + i);
+        return new Context((Pointer)this).offsetAddress(i);
     }
 
   public Context() { super((Pointer)null); allocate(); }

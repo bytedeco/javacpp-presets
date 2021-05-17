@@ -46,7 +46,7 @@ public class TripletMarginWithDistanceLossImpl extends TripletMarginWithDistance
         return (TripletMarginWithDistanceLossImpl)super.position(position);
     }
     @Override public TripletMarginWithDistanceLossImpl getPointer(long i) {
-        return new TripletMarginWithDistanceLossImpl((Pointer)this).position(position + i);
+        return new TripletMarginWithDistanceLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public TripletMarginWithDistanceLossImpl(

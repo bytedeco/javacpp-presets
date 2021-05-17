@@ -27,7 +27,7 @@ public class kConstant extends Pointer {
         return (kConstant)super.position(position);
     }
     @Override public kConstant getPointer(long i) {
-        return new kConstant((Pointer)this).position(position + i);
+        return new kConstant((Pointer)this).offsetAddress(i);
     }
  public kConstant() { super((Pointer)null); allocate(); }
 private native void allocate(); }

@@ -29,7 +29,7 @@ public class QualifiedName extends Pointer {
         return (QualifiedName)super.position(position);
     }
     @Override public QualifiedName getPointer(long i) {
-        return new QualifiedName((Pointer)this).position(position + i);
+        return new QualifiedName((Pointer)this).offsetAddress(i);
     }
 
   public QualifiedName() { super((Pointer)null); allocate(); }

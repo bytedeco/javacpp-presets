@@ -27,7 +27,7 @@ public class BFloat16ArrayRef extends Pointer {
         return (BFloat16ArrayRef)super.position(position);
     }
     @Override public BFloat16ArrayRef getPointer(long i) {
-        return new BFloat16ArrayRef((Pointer)this).position(position + i);
+        return new BFloat16ArrayRef((Pointer)this).offsetAddress(i);
     }
 
   /** \name Constructors

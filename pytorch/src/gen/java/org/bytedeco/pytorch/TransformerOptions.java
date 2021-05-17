@@ -36,7 +36,7 @@ public class TransformerOptions extends Pointer {
         return (TransformerOptions)super.position(position);
     }
     @Override public TransformerOptions getPointer(long i) {
-        return new TransformerOptions((Pointer)this).position(position + i);
+        return new TransformerOptions((Pointer)this).offsetAddress(i);
     }
 
 

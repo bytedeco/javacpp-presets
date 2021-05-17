@@ -41,7 +41,7 @@ public class ELUImpl extends ELUImplCloneable {
         return (ELUImpl)super.position(position);
     }
     @Override public ELUImpl getPointer(long i) {
-        return new ELUImpl((Pointer)this).position(position + i);
+        return new ELUImpl((Pointer)this).offsetAddress(i);
     }
 
   public ELUImpl(@Const @ByRef(nullValue = "torch::nn::ELUOptions{}") ELUOptions options_) { super((Pointer)null); allocate(options_); }

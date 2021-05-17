@@ -30,7 +30,7 @@ public class NoGradGuard extends AutoGradMode {
         return (NoGradGuard)super.position(position);
     }
     @Override public NoGradGuard getPointer(long i) {
-        return new NoGradGuard((Pointer)this).position(position + i);
+        return new NoGradGuard((Pointer)this).offsetAddress(i);
     }
 
   public NoGradGuard() { super((Pointer)null); allocate(); }

@@ -31,7 +31,7 @@ public class SGDParamState extends OptimizerCloneableSGDParamState {
         return (SGDParamState)super.position(position);
     }
     @Override public SGDParamState getPointer(long i) {
-        return new SGDParamState((Pointer)this).position(position + i);
+        return new SGDParamState((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor momentum_buffer();

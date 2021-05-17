@@ -41,7 +41,7 @@ public class FlattenImpl extends FlattenImplCloneable {
         return (FlattenImpl)super.position(position);
     }
     @Override public FlattenImpl getPointer(long i) {
-        return new FlattenImpl((Pointer)this).position(position + i);
+        return new FlattenImpl((Pointer)this).offsetAddress(i);
     }
 
   public FlattenImpl(@Const @ByRef(nullValue = "torch::nn::FlattenOptions{}") FlattenOptions options_) { super((Pointer)null); allocate(options_); }

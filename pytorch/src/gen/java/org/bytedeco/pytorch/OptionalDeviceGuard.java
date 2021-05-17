@@ -71,7 +71,7 @@ public class OptionalDeviceGuard extends Pointer {
         return (OptionalDeviceGuard)super.position(position);
     }
     @Override public OptionalDeviceGuard getPointer(long i) {
-        return new OptionalDeviceGuard((Pointer)this).position(position + i);
+        return new OptionalDeviceGuard((Pointer)this).offsetAddress(i);
     }
 
   /** Create an uninitialized guard.  Set the guard later using reset_device. */

@@ -36,7 +36,7 @@ public class Softmax2dImpl extends Softmax2dImplCloneable {
         return (Softmax2dImpl)super.position(position);
     }
     @Override public Softmax2dImpl getPointer(long i) {
-        return new Softmax2dImpl((Pointer)this).position(position + i);
+        return new Softmax2dImpl((Pointer)this).offsetAddress(i);
     }
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

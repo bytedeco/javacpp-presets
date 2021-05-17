@@ -27,7 +27,7 @@ public class kGRU extends Pointer {
         return (kGRU)super.position(position);
     }
     @Override public kGRU getPointer(long i) {
-        return new kGRU((Pointer)this).position(position + i);
+        return new kGRU((Pointer)this).offsetAddress(i);
     }
  public kGRU() { super((Pointer)null); allocate(); }
 private native void allocate(); }

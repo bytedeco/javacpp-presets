@@ -20,7 +20,7 @@ public class MemoryFormatOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MemoryFormatOptional(Pointer p) { super(p); }
-    public MemoryFormatOptional(MemoryFormat value) { put(value); }
+    public MemoryFormatOptional(MemoryFormat value) { this(); put(value); }
     public MemoryFormatOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef MemoryFormatOptional put(@ByRef MemoryFormatOptional x);

@@ -33,7 +33,7 @@ public class NamesMode extends Pointer {
         return (NamesMode)super.position(position);
     }
     @Override public NamesMode getPointer(long i) {
-        return new NamesMode((Pointer)this).position(position + i);
+        return new NamesMode((Pointer)this).offsetAddress(i);
     }
 
   public static native @Cast("bool") boolean is_enabled();

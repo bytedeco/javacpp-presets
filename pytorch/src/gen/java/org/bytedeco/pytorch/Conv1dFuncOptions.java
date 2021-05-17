@@ -32,7 +32,7 @@ public class Conv1dFuncOptions extends Pointer {
         return (Conv1dFuncOptions)super.position(position);
     }
     @Override public Conv1dFuncOptions getPointer(long i) {
-        return new Conv1dFuncOptions((Pointer)this).position(position + i);
+        return new Conv1dFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor bias();

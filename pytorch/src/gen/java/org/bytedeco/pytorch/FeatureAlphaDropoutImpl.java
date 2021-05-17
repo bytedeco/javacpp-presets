@@ -46,7 +46,7 @@ public class FeatureAlphaDropoutImpl extends FeatureAlphaDropoutImplBase {
         return (FeatureAlphaDropoutImpl)super.position(position);
     }
     @Override public FeatureAlphaDropoutImpl getPointer(long i) {
-        return new FeatureAlphaDropoutImpl((Pointer)this).position(position + i);
+        return new FeatureAlphaDropoutImpl((Pointer)this).offsetAddress(i);
     }
 
 

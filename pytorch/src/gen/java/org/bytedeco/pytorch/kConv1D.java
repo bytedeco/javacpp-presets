@@ -27,7 +27,7 @@ public class kConv1D extends Pointer {
         return (kConv1D)super.position(position);
     }
     @Override public kConv1D getPointer(long i) {
-        return new kConv1D((Pointer)this).position(position + i);
+        return new kConv1D((Pointer)this).offsetAddress(i);
     }
  public kConv1D() { super((Pointer)null); allocate(); }
 private native void allocate(); }

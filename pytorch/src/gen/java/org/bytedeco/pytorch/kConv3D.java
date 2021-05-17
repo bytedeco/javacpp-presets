@@ -27,7 +27,7 @@ public class kConv3D extends Pointer {
         return (kConv3D)super.position(position);
     }
     @Override public kConv3D getPointer(long i) {
-        return new kConv3D((Pointer)this).position(position + i);
+        return new kConv3D((Pointer)this).offsetAddress(i);
     }
  public kConv3D() { super((Pointer)null); allocate(); }
 private native void allocate(); }

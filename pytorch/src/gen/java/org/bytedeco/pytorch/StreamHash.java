@@ -30,7 +30,7 @@ public class StreamHash extends Pointer {
           return (StreamHash)super.position(position);
       }
       @Override public StreamHash getPointer(long i) {
-          return new StreamHash((Pointer)this).position(position + i);
+          return new StreamHash((Pointer)this).offsetAddress(i);
       }
   
     public native @Cast("std::size_t") @Name("operator ()") @NoException long apply(@ByVal Stream s);

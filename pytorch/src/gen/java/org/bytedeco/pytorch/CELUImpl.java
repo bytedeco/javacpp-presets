@@ -41,7 +41,7 @@ public class CELUImpl extends CELUImplCloneable {
         return (CELUImpl)super.position(position);
     }
     @Override public CELUImpl getPointer(long i) {
-        return new CELUImpl((Pointer)this).position(position + i);
+        return new CELUImpl((Pointer)this).offsetAddress(i);
     }
 
   public CELUImpl(@Const @ByRef(nullValue = "torch::nn::CELUOptions{}") CELUOptions options_) { super((Pointer)null); allocate(options_); }

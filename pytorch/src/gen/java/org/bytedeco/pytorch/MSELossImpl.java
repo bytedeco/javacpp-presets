@@ -42,7 +42,7 @@ public class MSELossImpl extends MSELossImplCloneable {
         return (MSELossImpl)super.position(position);
     }
     @Override public MSELossImpl getPointer(long i) {
-        return new MSELossImpl((Pointer)this).position(position + i);
+        return new MSELossImpl((Pointer)this).offsetAddress(i);
     }
 
   public MSELossImpl(@Const @ByRef(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_) { super((Pointer)null); allocate(options_); }

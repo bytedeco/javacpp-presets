@@ -41,7 +41,7 @@ public class GLUImpl extends GLUImplCloneable {
         return (GLUImpl)super.position(position);
     }
     @Override public GLUImpl getPointer(long i) {
-        return new GLUImpl((Pointer)this).position(position + i);
+        return new GLUImpl((Pointer)this).offsetAddress(i);
     }
 
   public GLUImpl(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_) { super((Pointer)null); allocate(options_); }

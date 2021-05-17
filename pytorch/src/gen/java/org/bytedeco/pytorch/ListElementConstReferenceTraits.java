@@ -31,7 +31,7 @@ public class ListElementConstReferenceTraits extends Pointer {
         return (ListElementConstReferenceTraits)super.position(position);
     }
     @Override public ListElementConstReferenceTraits getPointer(long i) {
-        return new ListElementConstReferenceTraits((Pointer)this).position(position + i);
+        return new ListElementConstReferenceTraits((Pointer)this).offsetAddress(i);
     }
 
 }

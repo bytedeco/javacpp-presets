@@ -38,7 +38,7 @@ public class BatchNormFuncOptions extends Pointer {
         return (BatchNormFuncOptions)super.position(position);
     }
     @Override public BatchNormFuncOptions getPointer(long i) {
-        return new BatchNormFuncOptions((Pointer)this).position(position + i);
+        return new BatchNormFuncOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException Tensor weight();

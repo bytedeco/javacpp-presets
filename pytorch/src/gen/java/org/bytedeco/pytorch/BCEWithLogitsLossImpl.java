@@ -44,7 +44,7 @@ public class BCEWithLogitsLossImpl extends BCEWithLogitsLossImplCloneable {
         return (BCEWithLogitsLossImpl)super.position(position);
     }
     @Override public BCEWithLogitsLossImpl getPointer(long i) {
-        return new BCEWithLogitsLossImpl((Pointer)this).position(position + i);
+        return new BCEWithLogitsLossImpl((Pointer)this).offsetAddress(i);
     }
 
   public BCEWithLogitsLossImpl(@Const @ByRef(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_) { super((Pointer)null); allocate(options_); }

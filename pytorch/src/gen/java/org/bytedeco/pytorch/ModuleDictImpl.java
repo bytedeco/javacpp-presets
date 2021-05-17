@@ -84,7 +84,7 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
         return (ModuleDictImpl)super.position(position);
     }
     @Override public ModuleDictImpl getPointer(long i) {
-        return new ModuleDictImpl((Pointer)this).position(position + i);
+        return new ModuleDictImpl((Pointer)this).offsetAddress(i);
     }
 
 

@@ -39,7 +39,7 @@ public class PoissonNLLLossOptions extends Pointer {
         return (PoissonNLLLossOptions)super.position(position);
     }
     @Override public PoissonNLLLossOptions getPointer(long i) {
-        return new PoissonNLLLossOptions((Pointer)this).position(position + i);
+        return new PoissonNLLLossOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("bool*") @ByRef @NoException BoolPointer log_input();

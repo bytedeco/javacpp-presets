@@ -31,7 +31,7 @@ public class ComplexHolder extends Pointer {
         return (ComplexHolder)super.position(position);
     }
     @Override public ComplexHolder getPointer(long i) {
-        return new ComplexHolder((Pointer)this).position(position + i);
+        return new ComplexHolder((Pointer)this).offsetAddress(i);
     }
 
     public ComplexHolder() { super((Pointer)null); allocate(); }

@@ -42,7 +42,7 @@ public class BCELossImpl extends BCELossImplCloneable {
         return (BCELossImpl)super.position(position);
     }
     @Override public BCELossImpl getPointer(long i) {
-        return new BCELossImpl((Pointer)this).position(position + i);
+        return new BCELossImpl((Pointer)this).offsetAddress(i);
     }
 
   public BCELossImpl(@Const @ByRef(nullValue = "torch::nn::BCELossOptions{}") BCELossOptions options_) { super((Pointer)null); allocate(options_); }

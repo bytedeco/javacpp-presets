@@ -27,7 +27,7 @@ public class kBicubic extends Pointer {
         return (kBicubic)super.position(position);
     }
     @Override public kBicubic getPointer(long i) {
-        return new kBicubic((Pointer)this).position(position + i);
+        return new kBicubic((Pointer)this).offsetAddress(i);
     }
  public kBicubic() { super((Pointer)null); allocate(); }
 private native void allocate(); }

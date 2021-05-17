@@ -107,7 +107,7 @@ public class TensorOptions extends Pointer {
         return (TensorOptions)super.position(position);
     }
     @Override public TensorOptions getPointer(long i) {
-        return new TensorOptions((Pointer)this).position(position + i);
+        return new TensorOptions((Pointer)this).offsetAddress(i);
     }
 
   public TensorOptions() { super((Pointer)null); allocate(); }

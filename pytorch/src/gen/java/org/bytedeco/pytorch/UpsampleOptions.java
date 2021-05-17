@@ -37,7 +37,7 @@ public class UpsampleOptions extends Pointer {
         return (UpsampleOptions)super.position(position);
     }
     @Override public UpsampleOptions getPointer(long i) {
-        return new UpsampleOptions((Pointer)this).position(position + i);
+        return new UpsampleOptions((Pointer)this).offsetAddress(i);
     }
 
   public native @ByRef @NoException LongVectorOptional size();

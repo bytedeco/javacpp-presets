@@ -34,7 +34,7 @@ public class L1LossOptions extends Pointer {
         return (L1LossOptions)super.position(position);
     }
     @Override public L1LossOptions getPointer(long i) {
-        return new L1LossOptions((Pointer)this).position(position + i);
+        return new L1LossOptions((Pointer)this).offsetAddress(i);
     }
 
 
