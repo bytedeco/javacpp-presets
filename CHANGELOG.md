@@ -1,4 +1,5 @@
 
+ * Correct `enum` classes in presets for Spinnaker ([pull #1048](https://github.com/bytedeco/javacpp-presets/pull/1048))
  * Add Windows build for ONNX ([issue #983](https://github.com/bytedeco/javacpp-presets/issues/983))
  * Add `linux-arm64` builds to presets for DNNL, OpenCL, TensorRT ([pull #1044](https://github.com/bytedeco/javacpp-presets/pull/1044)), and ONNX Runtime
  * Build FFmpeg with libxml2, enabling support for DASH demuxing ([pull #1033](https://github.com/bytedeco/javacpp-presets/pull/1033)), and libsrt for SRT protocol support ([pull #1036](https://github.com/bytedeco/javacpp-presets/pull/1036))

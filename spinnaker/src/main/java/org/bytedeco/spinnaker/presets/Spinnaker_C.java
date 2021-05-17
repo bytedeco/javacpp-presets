@@ -90,17 +90,11 @@ public class Spinnaker_C implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
-                .put(new Info("SPINC_CALLTYPE").cppTypes().annotations().cppText(""))
-                .put(new Info("SPINC_NO_DECLSPEC_STATEMENTS", "EXTERN_C").define())
-                .put(new Info("SPINNAKERC_API").cppTypes("_spinError").cppText("enum _spinError").define())
-//                // Skip deprecation macro, as it is causing parsing error in javacpp
-//                .put(new Info("SPINNAKERC_API_DEPRECATED").skip())
-                // Skip to avoid linker errors, somehow JavaCPP did not generate wrappers for those functions,
-                // To avoid errors like: jniSpinnaker_C.obj : error LNK2001: unresolved external symbol spinCameraForceIP
-                .put(new Info("spinCameraForceIP").skip())
-                .put(new Info("spinRegisterSetEx").skip())
-                .put(new Info("spinSystemSendActionCommand").skip())
-                .put(new Info("spinInterfaceSendActionCommand").skip())
+               .put(new Info("SPINC_CALLTYPE", "SPINNAKERC_API", "SPINC_IMPORT_EXPORT").annotations().cppTypes())
+               .put(new Info("SPINC_NO_DECLSPEC_STATEMENTS", "EXTERN_C").define())
+               // Skip to avoid linker errors, somehow Spinnaker SDK does not export those functions,
+               // To avoid errors like: jniSpinnaker_C.obj : error LNK2001: unresolved external symbol spinCameraForceIP
+               .put(new Info("spinCameraForceIP", "spinRegisterSetEx", "spinSystemSendActionCommand", "spinInterfaceSendActionCommand").skip())
         ;
     }
 }
