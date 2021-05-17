@@ -525,13 +525,13 @@ public enum spinPayloadTypeInfoIDs {
     public spinPayloadTypeInfoIDs intern() { for (spinPayloadTypeInfoIDs e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ..\Spinnaker_C\spinPNGOption.java
+// Targeting ../Spinnaker_C/spinPNGOption.java
 
 
-// Targeting ..\Spinnaker_C\spinPPMOption.java
+// Targeting ../Spinnaker_C/spinPPMOption.java
 
 
-// Targeting ..\Spinnaker_C\spinPGMOption.java
+// Targeting ../Spinnaker_C/spinPGMOption.java
 
 
 
@@ -5558,7 +5558,7 @@ public enum spinCxpPoCxpStatusEnums {
 // #define FLIR_SPINNAKER_CHUNKDATADEF_C_H
 
 // #include "SpinnakerPlatformC.h"
-// Targeting ..\Spinnaker_C\spinChunkData.java
+// Targeting ../Spinnaker_C/spinChunkData.java
 
 
 
@@ -5589,16 +5589,16 @@ public enum spinCxpPoCxpStatusEnums {
 
 // #ifndef FLIR_SPINNAKER_GENAPIDEFS_C_H
 // #define FLIR_SPINNAKER_GENAPIDEFS_C_H
-// Targeting ..\Spinnaker_C\spinNodeMapHandle.java
+// Targeting ../Spinnaker_C/spinNodeMapHandle.java
 
 
-// Targeting ..\Spinnaker_C\spinNodeHandle.java
+// Targeting ../Spinnaker_C/spinNodeHandle.java
 
 
-// Targeting ..\Spinnaker_C\spinNodeCallbackHandle.java
+// Targeting ../Spinnaker_C/spinNodeCallbackHandle.java
 
 
-// Targeting ..\Spinnaker_C\spinNodeCallbackFunction.java
+// Targeting ../Spinnaker_C/spinNodeCallbackFunction.java
 
 
 
@@ -10008,7 +10008,7 @@ public enum spinInputDirection {
 // #define FLIR_SPINNAKER_QUICKSPINDEFS_C_H
 
 // #include "SpinnakerGenApiDefsC.h"
-// Targeting ..\Spinnaker_C\quickSpin.java
+// Targeting ../Spinnaker_C/quickSpin.java
 
 
 
@@ -10472,7 +10472,7 @@ public enum spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLDEVICE_H
 // #define FLIR_SPINNAKERC_TLDEVICE_H
-// Targeting ..\Spinnaker_C\quickSpinTLDevice.java
+// Targeting ../Spinnaker_C/quickSpinTLDevice.java
 
 
 
@@ -10505,7 +10505,7 @@ public enum spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLINTERFACE_H
 // #define FLIR_SPINNAKERC_TLINTERFACE_H
-// Targeting ..\Spinnaker_C\quickSpinTLInterface.java
+// Targeting ../Spinnaker_C/quickSpinTLInterface.java
 
 
 
@@ -10538,7 +10538,7 @@ public enum spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLSTREAM_H
 // #define FLIR_SPINNAKERC_TLSTREAM_H
-// Targeting ..\Spinnaker_C\quickSpinTLStream.java
+// Targeting ../Spinnaker_C/quickSpinTLStream.java
 
 
 
@@ -10571,7 +10571,7 @@ public enum spinTLTLTypeEnums {
 
 // #ifndef FLIR_SPINNAKERC_TLSYSTEM_H
 // #define FLIR_SPINNAKERC_TLSYSTEM_H
-// Targeting ..\Spinnaker_C\quickSpinTLSystem.java
+// Targeting ../Spinnaker_C/quickSpinTLSystem.java
 
 
 

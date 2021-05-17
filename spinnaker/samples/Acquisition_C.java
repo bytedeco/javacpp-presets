@@ -1,4 +1,4 @@
-package samples;//=============================================================================
+//=============================================================================
 // Copyright © 2018 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
 // This software is the confidential and proprietary information of FLIR

@@ -57,7 +57,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 ### The `Acquisition_C.java` source file
 ```java
-package samples;//=============================================================================
+//=============================================================================
 // Copyright © 2018 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
 // This software is the confidential and proprietary information of FLIR
