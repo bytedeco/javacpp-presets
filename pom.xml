@@ -617,6 +617,7 @@
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
+        <module>depthai</module>
         <module>onnx</module>
         <module>ngraph</module>
         <module>onnxruntime</module>
@@ -1098,6 +1099,7 @@
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>depthai</module>
         <module>cpu_features</module>
         <module>systems</module>
       </modules>
@@ -1159,6 +1161,7 @@
         <module>nvcodec</module>
         <module>opencl</module>
         <module>tensorrt</module>
+        <module>depthai</module>
         <module>onnxruntime</module>
         <module>cpu_features</module>
         <module>systems</module>
@@ -1277,6 +1280,7 @@
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>ale</module>
+        <module>depthai</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>cpu_features</module>
@@ -1352,6 +1356,7 @@
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
+        <module>depthai</module>
         <module>onnx</module>
         <module>ngraph</module>
         <module>onnxruntime</module>
