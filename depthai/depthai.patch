@@ -1,0 +1,264 @@
+diff -ruN depthai-core-v2.3.0/src/device/DeviceBootloader.cpp depthai-core-v2.3.0-patch/src/device/DeviceBootloader.cpp
+--- depthai-core-v2.3.0/src/device/DeviceBootloader.cpp	2021-05-05 01:41:56.984372000 +0900
++++ depthai-core-v2.3.0-patch/src/device/DeviceBootloader.cpp	2021-05-18 16:41:31.072137791 +0900
+@@ -38,7 +38,7 @@
+     if(!found) {
+         std::tie(found, dev) = XLinkConnection::getFirstDevice(X_LINK_BOOTLOADER);
+     }
+-    return {found, dev};
++    return std::tuple<bool, DeviceInfo>{found, dev};
+ }
+ 
+ // Returns all devices which aren't already booted
+@@ -286,7 +286,7 @@
+     updateFlash.storage = dai::bootloader::request::UpdateFlash::SBR;
+     updateFlash.totalSize = static_cast<uint32_t>(package.size());
+     updateFlash.numPackets = ((static_cast<uint32_t>(package.size()) - 1) / bootloader::XLINK_STREAM_MAX_SIZE) + 1;
+-    if(!sendBootloaderRequest(streamId, updateFlash)) return {false, "Couldn't send bootloader flash request"};
++    if(!sendBootloaderRequest(streamId, updateFlash)) return std::tuple<bool, std::string>{false, "Couldn't send bootloader flash request"};
+ 
+     // After that send numPackets of data
+     stream->writeSplit(package.data(), package.size(), bootloader::XLINK_STREAM_MAX_SIZE);
+@@ -296,7 +296,7 @@
+     dai::bootloader::response::FlashComplete result;
+     do {
+         std::vector<uint8_t> data;
+-        if(!receiveBootloaderResponseData(streamId, data)) return {false, "Couldn't receive bootloader response"};
++        if(!receiveBootloaderResponseData(streamId, data)) return std::tuple<bool, std::string>{false, "Couldn't receive bootloader response"};
+ 
+         dai::bootloader::response::FlashStatusUpdate update;
+         if(parseBootloaderResponse(data, update)) {
+@@ -308,13 +308,13 @@
+             break;
+         } else {
+             // Unknown response, shouldn't happen
+-            return {false, "Unknown response from bootloader while flashing"};
++            return std::tuple<bool, std::string>{false, "Unknown response from bootloader while flashing"};
+         }
+ 
+     } while(true);
+ 
+     // Return if flashing was successful
+-    return {result.success, result.errorMsg};
++    return std::tuple<bool, std::string>{result.success, result.errorMsg};
+ }
+ 
+ std::tuple<bool, std::string> DeviceBootloader::flashBootloader(std::function<void(float)> progressCb, std::string path) {
+@@ -335,7 +335,7 @@
+     updateFlash.storage = dai::bootloader::request::UpdateFlash::BOOTLOADER;
+     updateFlash.totalSize = static_cast<uint32_t>(package.size());
+     updateFlash.numPackets = ((static_cast<uint32_t>(package.size()) - 1) / bootloader::XLINK_STREAM_MAX_SIZE) + 1;
+-    if(!sendBootloaderRequest(streamId, updateFlash)) return {false, "Couldn't send bootloader flash request"};
++    if(!sendBootloaderRequest(streamId, updateFlash)) return std::tuple<bool, std::string>{false, "Couldn't send bootloader flash request"};
+ 
+     // After that send numPackets of data
+     stream->writeSplit(package.data(), package.size(), bootloader::XLINK_STREAM_MAX_SIZE);
+@@ -345,7 +345,7 @@
+     dai::bootloader::response::FlashComplete result;
+     do {
+         std::vector<uint8_t> data;
+-        if(!receiveBootloaderResponseData(streamId, data)) return {false, "Couldn't receive bootloader response"};
++        if(!receiveBootloaderResponseData(streamId, data)) return std::tuple<bool, std::string>{false, "Couldn't receive bootloader response"};
+ 
+         dai::bootloader::response::FlashStatusUpdate update;
+         if(parseBootloaderResponse(data, update)) {
+@@ -358,13 +358,13 @@
+             break;
+         } else {
+             // Unknown response, shouldn't happen
+-            return {false, "Unknown response from bootloader while flashing"};
++            return std::tuple<bool, std::string>{false, "Unknown response from bootloader while flashing"};
+         }
+ 
+     } while(true);
+ 
+     // Return if flashing was successful
+-    return {result.success, result.errorMsg};
++    return std::tuple<bool, std::string>{result.success, result.errorMsg};
+ }
+ 
+ bool DeviceBootloader::isEmbeddedVersion() {
+diff -ruN depthai-core-v2.3.0/src/device/Device.cpp depthai-core-v2.3.0-patch/src/device/Device.cpp
+--- depthai-core-v2.3.0/src/device/Device.cpp	2021-05-05 01:41:56.984372000 +0900
++++ depthai-core-v2.3.0-patch/src/device/Device.cpp	2021-05-18 16:40:34.782964492 +0900
+@@ -114,7 +114,7 @@
+     // If none were found, try BOOTED
+     if(!found) std::tie(found, deviceInfo) = XLinkConnection::getFirstDevice(X_LINK_BOOTED);
+ 
+-    return {found, deviceInfo};
++    return std::tuple<bool, DeviceInfo>{found, deviceInfo};
+ }
+ 
+ // Default overload ('DEFAULT_SEARCH_TIME' timeout)
+@@ -132,7 +132,7 @@
+     if(!found) {
+         std::tie(found, dev) = XLinkConnection::getFirstDevice(X_LINK_BOOTLOADER);
+     }
+-    return {found, dev};
++    return std::tuple<bool, DeviceInfo>{found, dev};
+ }
+ 
+ // Returns all devices which aren't already booted
+@@ -153,9 +153,9 @@
+     DeviceInfo dev;
+     for(const auto& state : states) {
+         std::tie(found, dev) = XLinkConnection::getDeviceByMxId(mxId, state);
+-        if(found) return {true, dev};
++        if(found) return std::tuple<bool, DeviceInfo>{true, dev};
+     }
+-    return {false, DeviceInfo()};
++    return std::tuple<bool, DeviceInfo>{false, DeviceInfo()};
+ }
+ 
+ std::vector<std::uint8_t> Device::getEmbeddedDeviceBinary(bool usb2Mode, OpenVINO::Version version) {
+diff -ruN depthai-core-v2.3.0/src/pipeline/node/ColorCamera.cpp depthai-core-v2.3.0-patch/src/pipeline/node/ColorCamera.cpp
+--- depthai-core-v2.3.0/src/pipeline/node/ColorCamera.cpp	2021-05-05 01:41:56.988371800 +0900
++++ depthai-core-v2.3.0-patch/src/pipeline/node/ColorCamera.cpp	2021-05-18 16:42:50.571382571 +0900
+@@ -190,7 +190,7 @@
+ 
+ // Returns preview size
+ std::tuple<int, int> ColorCamera::getPreviewSize() const {
+-    return {properties.previewWidth, properties.previewHeight};
++    return std::tuple<int, int>{properties.previewWidth, properties.previewHeight};
+ }
+ 
+ int ColorCamera::getPreviewWidth() const {
+@@ -227,10 +227,10 @@
+             maxVideoHeight = getScaledSize(maxVideoHeight, numH, denH);
+         }
+ 
+-        return {maxVideoWidth, maxVideoHeight};
++        return std::tuple<int, int>{maxVideoWidth, maxVideoHeight};
+     }
+ 
+-    return {properties.videoWidth, properties.videoHeight};
++    return std::tuple<int, int>{properties.videoWidth, properties.videoHeight};
+ }
+ 
+ int ColorCamera::getVideoWidth() const {
+@@ -269,11 +269,11 @@
+             maxStillHeight = getScaledSize(maxStillHeight, numH, denH);
+         }
+ 
+-        return {maxStillWidth, maxStillHeight};
++        return std::tuple<int, int>{maxStillWidth, maxStillHeight};
+     }
+ 
+     // Else return size set
+-    return {properties.stillWidth, properties.stillHeight};
++    return std::tuple<int, int>{properties.stillWidth, properties.stillHeight};
+ }
+ 
+ int ColorCamera::getStillWidth() const {
+@@ -288,19 +288,19 @@
+ std::tuple<int, int> ColorCamera::getResolutionSize() const {
+     switch(properties.resolution) {
+         case ColorCameraProperties::SensorResolution::THE_1080_P:
+-            return {1920, 1080};
++            return std::tuple<int, int>{1920, 1080};
+             break;
+ 
+         case ColorCameraProperties::SensorResolution::THE_4_K:
+-            return {3840, 2160};
++            return std::tuple<int, int>{3840, 2160};
+             break;
+ 
+         case ColorCameraProperties::SensorResolution::THE_12_MP:
+-            return {4056, 3040};
++            return std::tuple<int, int>{4056, 3040};
+             break;
+     }
+ 
+-    return {1920, 1080};
++    return std::tuple<int, int>{1920, 1080};
+ }
+ 
+ int ColorCamera::getResolutionWidth() const {
+@@ -336,7 +336,7 @@
+ }
+ 
+ std::tuple<int, int> ColorCamera::getIspSize() const {
+-    return {getIspWidth(), getIspHeight()};
++    return std::tuple<int, int>{getIspWidth(), getIspHeight()};
+ }
+ 
+ void ColorCamera::sensorCenterCrop() {
+@@ -360,9 +360,9 @@
+     if(properties.sensorCropX == ColorCameraProperties::AUTO || properties.sensorCropY == ColorCameraProperties::AUTO) {
+         float x = std::floor(((getResolutionWidth() - getVideoWidth()) / 2.0f) / getResolutionWidth());
+         float y = std::floor(((getResolutionHeight() - getVideoHeight()) / 2.0f) / getResolutionHeight());
+-        return {x, y};
++        return std::tuple<float, float>{x, y};
+     }
+-    return {properties.sensorCropX, properties.sensorCropY};
++    return std::tuple<float, float>{properties.sensorCropX, properties.sensorCropY};
+ }
+ 
+ float ColorCamera::getSensorCropX() const {
+diff -ruN depthai-core-v2.3.0/src/pipeline/node/MonoCamera.cpp depthai-core-v2.3.0-patch/src/pipeline/node/MonoCamera.cpp
+--- depthai-core-v2.3.0/src/pipeline/node/MonoCamera.cpp	2021-05-05 01:41:56.988371800 +0900
++++ depthai-core-v2.3.0-patch/src/pipeline/node/MonoCamera.cpp	2021-05-18 16:46:15.307012901 +0900
+@@ -105,18 +105,18 @@
+ std::tuple<int, int> MonoCamera::getResolutionSize() const {
+     switch(properties.resolution) {
+         case MonoCameraProperties::SensorResolution::THE_400_P:
+-            return {640, 400};
++            return std::tuple<int, int>{640, 400};
+             break;
+ 
+         case MonoCameraProperties::SensorResolution::THE_720_P:
+-            return {1280, 720};
++            return std::tuple<int, int>{1280, 720};
+             break;
+ 
+         case MonoCameraProperties::SensorResolution::THE_800_P:
+-            return {1280, 800};
++            return std::tuple<int, int>{1280, 800};
+             break;
+     }
+-    return {1280, 720};
++    return std::tuple<int, int>{1280, 720};
+ }
+ 
+ int MonoCamera::getResolutionWidth() const {
+diff -ruN depthai-core-v2.3.0/src/pipeline/node/VideoEncoder.cpp depthai-core-v2.3.0-patch/src/pipeline/node/VideoEncoder.cpp
+--- depthai-core-v2.3.0/src/pipeline/node/VideoEncoder.cpp	2021-05-05 01:41:56.988371800 +0900
++++ depthai-core-v2.3.0-patch/src/pipeline/node/VideoEncoder.cpp	2021-05-18 16:42:01.842232534 +0900
+@@ -134,7 +134,7 @@
+ }
+ 
+ std::tuple<int, int> VideoEncoder::getSize() const {
+-    return {properties.width, properties.height};
++    return std::tuple<int, int>{properties.width, properties.height};
+ }
+ 
+ int VideoEncoder::getWidth() const {
+diff -ruN depthai-core-v2.3.0/src/xlink/XLinkConnection.cpp depthai-core-v2.3.0-patch/src/xlink/XLinkConnection.cpp
+--- depthai-core-v2.3.0/src/xlink/XLinkConnection.cpp	2021-05-05 01:41:56.988371800 +0900
++++ depthai-core-v2.3.0-patch/src/xlink/XLinkConnection.cpp	2021-05-18 16:48:05.897353388 +0900
+@@ -106,9 +106,9 @@
+ std::tuple<bool, DeviceInfo> XLinkConnection::getFirstDevice(XLinkDeviceState_t state) {
+     auto devices = getAllConnectedDevices();
+     for(const auto& d : devices) {
+-        if(d.state == state || state == X_LINK_ANY_STATE) return {true, d};
++        if(d.state == state || state == X_LINK_ANY_STATE) return std::tuple<bool, DeviceInfo>{true, d};
+     }
+-    return {false, DeviceInfo()};
++    return std::tuple<bool, DeviceInfo>{false, DeviceInfo()};
+ }
+ 
+ std::tuple<bool, DeviceInfo> XLinkConnection::getDeviceByMxId(std::string mxId, XLinkDeviceState_t state) {
+@@ -116,11 +116,11 @@
+     for(const auto& d : devices) {
+         if(d.state == state || state == X_LINK_ANY_STATE) {
+             if(d.getMxId() == mxId) {
+-                return {true, d};
++                return std::tuple<bool, DeviceInfo>{true, d};
+             }
+         }
+     }
+-    return {false, DeviceInfo()};
++    return std::tuple<bool, DeviceInfo>{false, DeviceInfo()};
+ }
+ 
+ XLinkConnection::XLinkConnection(const DeviceInfo& deviceDesc, std::vector<std::uint8_t> mvcmdBinary, XLinkDeviceState_t expectedState) {

@@ -57,6 +57,7 @@
     <module>../tensorflow/platform</module>
     <module>../tensorrt/platform</module>
     <module>../ale/platform</module>
+    <module>../depthai/platform</module>
     <module>../onnx/platform</module>
     <module>../ngraph/platform</module>
     <module>../onnxruntime/platform</module>
@@ -285,6 +286,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>ale-platform</artifactId>
       <version>0.6.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>depthai-platform</artifactId>
+      <version>2.3.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
