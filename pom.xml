@@ -604,6 +604,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -763,6 +764,7 @@
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
@@ -810,6 +812,7 @@
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
@@ -857,6 +860,7 @@
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
@@ -904,6 +908,7 @@
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
@@ -1097,6 +1102,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>depthai</module>
@@ -1155,6 +1161,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
@@ -1214,6 +1221,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
@@ -1274,6 +1282,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1343,6 +1352,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1423,6 +1433,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1499,6 +1510,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
@@ -1564,6 +1576,7 @@
         <module>scipy</module>
         <module>gym</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
