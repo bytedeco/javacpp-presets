@@ -1,4 +1,5 @@
 
+ * Enable GTK support in presets for OpenCV when building on ARM as well
  * Correct `enum` classes in presets for Spinnaker ([pull #1048](https://github.com/bytedeco/javacpp-presets/pull/1048))
  * Add Windows build for ONNX ([issue #983](https://github.com/bytedeco/javacpp-presets/issues/983))
  * Add `linux-arm64` builds to presets for DNNL, OpenCL, TensorRT ([pull #1044](https://github.com/bytedeco/javacpp-presets/pull/1044)), and ONNX Runtime
