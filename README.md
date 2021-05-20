@@ -32,6 +32,7 @@ JavaCPP Presets
 [![scipy](https://github.com/bytedeco/javacpp-presets/workflows/scipy/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ascipy)
 [![gym](https://github.com/bytedeco/javacpp-presets/workflows/gym/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Agym)
 [![llvm](https://github.com/bytedeco/javacpp-presets/workflows/llvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Allvm)
+[![libffi](https://github.com/bytedeco/javacpp-presets/workflows/libffi/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibffi)
 [![libpostal](https://github.com/bytedeco/javacpp-presets/workflows/libpostal/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibpostal)
 [![leptonica](https://github.com/bytedeco/javacpp-presets/workflows/leptonica/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aleptonica)
 [![tesseract](https://github.com/bytedeco/javacpp-presets/workflows/tesseract/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atesseract)
@@ -196,6 +197,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * SciPy 1.6.x  https://github.com/scipy/scipy
  * Gym 0.18.x  https://github.com/openai/gym
  * LLVM 12.x.x  http://llvm.org/releases/download.html
+ * libffi 3.3  https://github.com/libffi/libffi
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.80.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract

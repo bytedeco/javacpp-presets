@@ -44,6 +44,7 @@
     <module>../scipy/platform</module>
     <module>../gym/platform</module>
     <module>../llvm/platform</module>
+    <module>../libffi/platform</module>
     <module>../libpostal/platform</module>
     <module>../leptonica/platform</module>
     <module>../tesseract/platform</module>
@@ -221,6 +222,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
       <version>12.0.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>libffi-platform</artifactId>
+      <version>3.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
