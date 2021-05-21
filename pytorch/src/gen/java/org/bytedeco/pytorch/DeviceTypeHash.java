@@ -14,25 +14,24 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
- // namespace c10
-@Name("std::hash<c10::DeviceType>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class DeviceTypeHash extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public DeviceTypeHash() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DeviceTypeHash(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DeviceTypeHash(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public DeviceTypeHash position(long position) {
-        return (DeviceTypeHash)super.position(position);
-    }
-    @Override public DeviceTypeHash getPointer(long i) {
-        return new DeviceTypeHash((Pointer)this).offsetAddress(i);
-    }
 
-  public native @Cast("std::size_t") @Name("operator ()") long apply(DeviceType k);
-  public native @Cast("std::size_t") @Name("operator ()") long apply(@Cast("c10::DeviceType") byte k);
-}
+  @Name("std::hash<caffe2::TypeIdentifier>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class DeviceTypeHash extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public DeviceTypeHash() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public DeviceTypeHash(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public DeviceTypeHash(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public DeviceTypeHash position(long position) {
+          return (DeviceTypeHash)super.position(position);
+      }
+      @Override public DeviceTypeHash getPointer(long i) {
+          return new DeviceTypeHash((Pointer)this).offsetAddress(i);
+      }
+  
+    public native @Cast("std::size_t") @Name("operator ()") long apply(@ByVal TypeIdentifier x);
+  }

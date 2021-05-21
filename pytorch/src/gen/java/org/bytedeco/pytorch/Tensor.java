@@ -176,7 +176,7 @@ public class Tensor extends Pointer {
   public native @NoException Layout layout();
 
   /** Returns a {@code Tensor}'s dtype ({@code TypeMeta}). Defined in TensorMethods.cpp */
-  public native @ByVal @Cast("caffe2::TypeMeta*") @NoException Pointer dtype();
+  public native @ByVal @NoException TypeMeta dtype();
 
   /** Returns a {@code Tensor}'s device. */
   public native @ByVal Device device();
@@ -1389,10 +1389,10 @@ public class Tensor extends Pointer {
   // Before that change, we make this method to maintain BC for C++ usage like
   // `x.to(y.dtype)`.
   // TODO: remove following two after at::kDouble and its friends are TypeMeta's.
-  public native @ByVal Tensor to(@ByVal @Cast("caffe2::TypeMeta*") Pointer type_meta, @Cast("bool") boolean non_blocking/*=false*/, @Cast("bool") boolean copy/*=false*/);
-  public native @ByVal Tensor to(@ByVal @Cast("caffe2::TypeMeta*") Pointer type_meta);
-  public native @ByVal Tensor to(@ByVal Device device, @ByVal @Cast("caffe2::TypeMeta*") Pointer type_meta, @Cast("bool") boolean non_blocking/*=false*/, @Cast("bool") boolean copy/*=false*/);
-  public native @ByVal Tensor to(@ByVal Device device, @ByVal @Cast("caffe2::TypeMeta*") Pointer type_meta);
+  public native @ByVal Tensor to(@ByVal TypeMeta type_meta, @Cast("bool") boolean non_blocking/*=false*/, @Cast("bool") boolean copy/*=false*/);
+  public native @ByVal Tensor to(@ByVal TypeMeta type_meta);
+  public native @ByVal Tensor to(@ByVal Device device, @ByVal TypeMeta type_meta, @Cast("bool") boolean non_blocking/*=false*/, @Cast("bool") boolean copy/*=false*/);
+  public native @ByVal Tensor to(@ByVal Device device, @ByVal TypeMeta type_meta);
 
   /** NOTE: This is similar to the legacy {@code .data()} function on {@code Variable}, and is intended
    *  to be used from functions that need to access the {@code Variable}'s equivalent {@code Tensor}

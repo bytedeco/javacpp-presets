@@ -102,40 +102,40 @@ public class TensorImpl extends Pointer {
   public TensorImpl(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @ByVal DispatchKeySet arg1,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type) { super((Pointer)null); allocate(storage, arg1, data_type); }
+        @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(storage, arg1, data_type); }
   private native void allocate(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @ByVal DispatchKeySet arg1,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type);
+        @Const @ByVal TypeMeta data_type);
 
   /**
    * Construct a 1-dim 0 size tensor that doesn't have a storage.
    */
-  public TensorImpl(@ByVal DispatchKeySet arg0, @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(arg0, data_type, device_opt); }
-  private native void allocate(@ByVal DispatchKeySet arg0, @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type, @ByVal DeviceOptional device_opt);
+  public TensorImpl(@ByVal DispatchKeySet arg0, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(arg0, data_type, device_opt); }
+  private native void allocate(@ByVal DispatchKeySet arg0, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt);
 
   // Legacy constructors so I don't have to go update call sites.
   // TODO: When Variable is added, delete these constructors
   public TensorImpl(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         DispatchKey dispatch_key,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type) { super((Pointer)null); allocate(storage, dispatch_key, data_type); }
+        @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(storage, dispatch_key, data_type); }
   private native void allocate(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         DispatchKey dispatch_key,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type);
+        @Const @ByVal TypeMeta data_type);
   public TensorImpl(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @Cast("c10::DispatchKey") byte dispatch_key,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type) { super((Pointer)null); allocate(storage, dispatch_key, data_type); }
+        @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(storage, dispatch_key, data_type); }
   private native void allocate(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @Cast("c10::DispatchKey") byte dispatch_key,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type);
-  public TensorImpl(DispatchKey dispatch_key, @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
-  private native void allocate(DispatchKey dispatch_key, @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type, @ByVal DeviceOptional device_opt);
-  public TensorImpl(@Cast("c10::DispatchKey") byte dispatch_key, @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
-  private native void allocate(@Cast("c10::DispatchKey") byte dispatch_key, @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type, @ByVal DeviceOptional device_opt);
+        @Const @ByVal TypeMeta data_type);
+  public TensorImpl(DispatchKey dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
+  private native void allocate(DispatchKey dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt);
+  public TensorImpl(@Cast("c10::DispatchKey") byte dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
+  private native void allocate(@Cast("c10::DispatchKey") byte dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt);
   
   
   
@@ -389,7 +389,7 @@ public class TensorImpl extends Pointer {
    * Returns the TypeMeta of a tensor, which describes what data type
    * it is (e.g., int, float, ...)
    */
-  public native @ByVal @Cast("const caffe2::TypeMeta*") Pointer dtype();
+  public native @Const @ByVal TypeMeta dtype();
 
   /**
    * Return the size of a single element of this tensor in bytes.
@@ -644,7 +644,7 @@ public class TensorImpl extends Pointer {
 
   public native void ShareExternalPointer(
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type,
+        @Const @ByVal TypeMeta data_type,
         @Cast("size_t") long size_bytes);
 
   /**
@@ -658,7 +658,7 @@ public class TensorImpl extends Pointer {
    * If the existing data does not match the desired type, it will be deleted
    * and a new storage will be created.
    */
-  public native Pointer raw_mutable_data(@ByVal @Cast("const caffe2::TypeMeta*") Pointer meta);
+  public native Pointer raw_mutable_data(@Const @ByVal TypeMeta meta);
 
   /**
    * Returns a typed pointer of the underlying storage.
@@ -684,7 +684,7 @@ public class TensorImpl extends Pointer {
 
   public native void set_storage_and_dtype(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
-        @ByVal @Cast("const caffe2::TypeMeta*") Pointer data_type);
+        @Const @ByVal TypeMeta data_type);
 
   /**
    * Set the strides of the tensor to match memory_format
