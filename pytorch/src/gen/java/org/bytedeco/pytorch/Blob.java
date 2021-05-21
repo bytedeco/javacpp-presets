@@ -55,7 +55,7 @@ public class Blob extends Pointer {
   /**
    * Returns the meta info of the blob.
    */
-  public native @ByVal @Cast("const caffe2::TypeMeta*") @NoException Pointer meta();
+  public native @Const @ByVal @NoException TypeMeta meta();
 
   /**
    * Returns a printable typename of the blob.
@@ -98,7 +98,7 @@ public class Blob extends Pointer {
    * call is made or the blob is destructed.
    */
 
-  public native Pointer ShareExternal(Pointer allocated, @ByVal @Cast("const caffe2::TypeMeta*") Pointer meta);
+  public native Pointer ShareExternal(Pointer allocated, @Const @ByVal TypeMeta meta);
 
   /**
    * Resets the Blob to an empty one.

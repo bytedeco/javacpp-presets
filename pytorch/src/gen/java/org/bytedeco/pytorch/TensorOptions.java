@@ -100,6 +100,8 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorOptions extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorOptions(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public TensorOptions(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
@@ -121,6 +123,11 @@ private native void allocate(@Cast("c10::Layout") byte layout);
 
   /** Constructs a {@code TensorOptions} object with the given device.
    *  See NOTE [ TensorOptions Constructors ] on why this is templatized. */
+  
+  ///
+  ///
+  public TensorOptions(@ByVal Device device) { super((Pointer)null); allocate(device); }
+  private native void allocate(@ByVal Device device);
 
   /** Constructs a {@code TensorOptions} object from arguments allowed in {@code Device}
    *  constructors.
@@ -132,8 +139,8 @@ private native void allocate(@Cast("c10::Layout") byte layout);
    *      constructors too. */
 
   /** Constructs a {@code TensorOptions} object with the given dtype. */
-  /* implicit */ public TensorOptions(@ByVal @Cast("caffe2::TypeMeta*") Pointer dtype) { super((Pointer)null); allocate(dtype); }
-private native void allocate(@ByVal @Cast("caffe2::TypeMeta*") Pointer dtype);
+  /* implicit */ public TensorOptions(@ByVal TypeMeta dtype) { super((Pointer)null); allocate(dtype); }
+private native void allocate(@ByVal TypeMeta dtype);
 
   /** legacy constructor to support ScalarType */
   /* implicit */ public TensorOptions(ScalarType dtype) { super((Pointer)null); allocate(dtype); }
@@ -159,7 +166,7 @@ private native void allocate(MemoryFormat memory_format);
   public native @ByVal @NoException TensorOptions device_index(short device_index);
 
   /** Return a copy of {@code TensorOptions} with {@code dtype} set to the given one. */
-  public native @ByVal @NoException TensorOptions dtype(@ByVal @Cast("c10::optional<caffe2::TypeMeta>*") Pointer dtype);
+  public native @ByVal @NoException TensorOptions dtype(@ByVal TypeMetaOptional dtype);
 
   // legacy function to support ScalarType
   public native @ByVal @NoException TensorOptions dtype(@ByVal ScalarTypeOptional dtype);
@@ -192,14 +199,14 @@ private native void allocate(MemoryFormat memory_format);
   public native @NoException int device_index();
 
   /** Returns the dtype of the {@code TensorOptions}. */
-  public native @ByVal @Cast("caffe2::TypeMeta*") @NoException Pointer dtype();
+  public native @ByVal @NoException TypeMeta dtype();
 
   /** Returns whether the dtype is specified. */
   public native @Cast("bool") @NoException boolean has_dtype();
 
   /** Returns the dtype of the {@code TensorOptions}, or {@code c10::nullopt} if
    *  device is not specified. */
-  public native @ByVal @Cast("c10::optional<caffe2::TypeMeta>*") @NoException Pointer dtype_opt();
+  public native @ByVal @NoException TypeMetaOptional dtype_opt();
 
   /** Returns the layout of the {@code TensorOptions}. */
   public native @NoException Layout layout();

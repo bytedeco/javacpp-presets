@@ -52,15 +52,15 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             compiler = "cpp14",
-            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std" },
+            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
             include = {
                 "c10/macros/cmake_macros.h",
                 "c10/macros/Export.h",
                 "c10/macros/Macros.h",
+                "c10/util/IdWrapper.h",
 //                "c10/util/C++17.h",
 //                "c10/util/Array.h",
 //                "c10/util/ConstexprCrc.h",
-//                "c10/util/IdWrapper.h",
 //                "c10/util/TypeIndex.h",
 //                "c10/util/TypeTraits.h",
 //                "c10/util/TypeList.h",
@@ -72,7 +72,7 @@ import org.bytedeco.openblas.presets.openblas;
 //                "c10/util/python_stub.h",
 //                "c10/util/reverse_iterator.h",
 //                "c10/util/string_view.h",
-//                "c10/util/typeid.h",
+                "c10/util/typeid.h",
                 "c10/util/AlignOf.h",
                 "c10/util/Deprecated.h",
                 "c10/util/StringUtil.h",
@@ -476,6 +476,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::optional<at::Generator>").pointerTypes("GeneratorOptional").define())
                .put(new Info("c10::optional<at::Tensor>").pointerTypes("TensorOptional").define())
                .put(new Info("c10::optional<at::TensorList>").pointerTypes("TensorListOptional").define())
+               .put(new Info("c10::optional<caffe2::TypeMeta>").pointerTypes("TypeMetaOptional").define())
                .put(new Info("c10::optional<torch::ExpandingArray<1> >",
                              "c10::optional<torch::ExpandingArray<2> >",
                              "c10::optional<torch::ExpandingArray<3> >").cast().pointerTypes("LongExpandingArrayOptional").define())
@@ -530,7 +531,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("std::vector<std::shared_ptr<torch::nn::AnyModule> >::iterator").pointerTypes("SharedAnyModuleVector.Iterator"))
                .put(new Info("std::vector<std::pair<std::string,std::shared_ptr<torch::nn::Module> > >").pointerTypes("StringSharedModulePairVector").define())
 
-               .put(new Info("C10_EXPORT", "C10_HIDDEN", "C10_IMPORT", "C10_API", "C10_API_ENUM",
+               .put(new Info("C10_EXPORT", "C10_HIDDEN", "C10_IMPORT", "C10_API", "C10_API_ENUM", "EXPORT_IF_NOT_GCC",
                              "TORCH_API", "TORCH_CUDA_CU_API", "TORCH_CUDA_CPP_API", "TORCH_HIP_API", "TORCH_PYTHON_API",
                              "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__", "__ubsan_ignore_signed_int_overflow__",
                              "C10_UID", "C10_NODISCARD", "C10_UNUSED", "C10_RESTRICT", "C10_NOINLINE", "C10_ALWAYS_INLINE",
@@ -590,6 +591,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::fetch_and_cast<c10::quint4x2>").javaNames("fetch_and_cast_quint4x2"))
                .put(new Info("c10::cast_and_store<c10::quint4x2>").javaNames("cast_and_store_quint4x2"))
                .put(new Info("c10::aten::clone").javaNames("_clone"))
+               .put(new Info("c10::TensorOptions<c10::Device>").javaNames("TensorOptions"))
                .put(new Info("at::Tensor::data_ptr<int8_t>").javaNames("data_ptr_byte"))
                .put(new Info("at::Tensor::data_ptr<int16_t>").javaNames("data_ptr_short"))
                .put(new Info("at::Tensor::data_ptr<int>").javaNames("data_ptr_int"))
@@ -665,6 +667,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::DataPtr", "at::DataPtr").valueTypes("@Cast({\"\", \"c10::DataPtr&&\"}) @StdMove DataPtr").pointerTypes("DataPtr"))
                .put(new Info("c10::Storage", "at::Storage").valueTypes("@Cast({\"\", \"c10::Storage&&\"}) @StdMove Storage").pointerTypes("Storage"))
 //               .put(new Info("std::shared_ptr<c10::Type>", "c10::TypePtr").annotations("@SharedPtr").valueTypes("Type").pointerTypes("Type"))
+               .put(new Info("c10::IdWrapper<TypeIdentifier,c10::util::type_index>", "at::IdWrapper<TypeIdentifier,c10::util::type_index>").pointerTypes("TypeIdentifierIdWrapper"))
                .put(new Info("at::namedinference::TensorName").valueTypes("@Cast({\"\", \"at::namedinference::TensorName&&\"}) @StdMove TensorName").pointerTypes("TensorName"))
                .put(new Info("std::shared_ptr<torch::autograd::FunctionPreHook>").annotations("@SharedPtr").valueTypes("FunctionPreHook").pointerTypes("FunctionPreHook"))
                .put(new Info("torch::cuda::device_count").javaNames("cuda_device_count"))
@@ -922,7 +925,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::SGDParamState>",
                              "torch::optim::OptimizerCloneableParamState<SGDParamState>").pointerTypes("OptimizerCloneableSGDParamState"))
 
-               .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::string_view", "caffe2::TypeMeta", "c10::GeneratorImpl", "c10::impl::DeviceGuardImplInterface",
+               .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::string_view", "c10::GeneratorImpl", "c10::impl::DeviceGuardImplInterface",
                              "PyObject", "std::function<PyObject*(void*)>", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
 //                             "std::enable_shared_from_this<c10::Type>", "c10::SingleElementType<c10::TypeKind::ListType,c10::ListType>",
                              "at::cuda::NVRTC", "THCState", "THHState", "std::enable_shared_from_this<torch::autograd::ForwardGrad>", "torch::autograd::ViewInfo",
@@ -963,7 +966,7 @@ public class torch implements LoadEnabled, InfoMapper {
                              "torch::nn::TransformerDecoderLayerOptions::activation_t", "torch::nn::TransformerDecoderLayerOptions::activation_t",
                              "torch::nn::TransformerOptions::activation_t", "torch::nn::TransformerOptions::activation_t",
 
-                             "c10::optional<c10::string_view>", "c10::optional<caffe2::TypeMeta>", "c10::optional<std::chrono::milliseconds>",
+                             "c10::optional<c10::string_view>", "c10::optional<std::chrono::milliseconds>",
                              "c10::optional<torch::autograd::ViewInfo>", "c10::optional<std::reference_wrapper<const std::string> >",
                              "c10::optional<torch::nn::TripletMarginWithDistanceLossOptions::distance_function_t>",
                              "c10::optional<torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::distance_function_t>",

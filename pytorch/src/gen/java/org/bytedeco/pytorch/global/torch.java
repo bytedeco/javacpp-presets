@@ -81,6 +81,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../TensorListOptional.java
 
 
+// Targeting ../TypeMetaOptional.java
+
+
 // Targeting ../LongExpandingArrayOptional.java
 
 
@@ -637,6 +640,198 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // #endif
 
 // #endif // C10_MACROS_MACROS_H_
+
+
+// Parsed from c10/util/IdWrapper.h
+
+// #pragma once
+
+// #include <c10/macros/Macros.h>
+// #include <functional>
+// #include <utility>
+// Targeting ../TypeIdentifierIdWrapper.java
+
+
+
+ // namespace c10
+
+// #define C10_DEFINE_HASH_FOR_IDWRAPPER(ClassName)
+//   namespace std {
+//   template <>
+//   struct hash<ClassName> {
+//     size_t operator()(ClassName x) const {
+//       return hash_value(x);
+//     }
+//   };
+//   }
+
+
+// Parsed from c10/util/typeid.h
+
+// #pragma once
+
+// #include <atomic>
+// #include <cassert>
+// #include <complex>
+// #include <cstdlib>
+// #include <iostream>
+// #include <memory>
+// #include <mutex>
+// #include <type_traits>
+// #include <unordered_map>
+// #include <unordered_set>
+// #include <vector>
+// #ifdef __GXX_RTTI
+// #include <typeinfo>
+// #endif
+
+// #include <exception>
+
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Backtrace.h>
+// #include <c10/util/C++17.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/IdWrapper.h>
+// #include <c10/util/Type.h>
+// #include <c10/util/TypeTraits.h>
+// #include <c10/util/TypeIndex.h>
+// #include <c10/util/flat_hash_map.h>
+
+// #include <c10/core/ScalarType.h>
+
+/*
+ * TypeIdentifier is a small type containing an id.
+ * Types must be registered using CAFFE_KNOWN_TYPE() for them to have a type id.
+ * If a type is registered, you can also create an object containing meta data
+ * like constructor, destructor, stringified name, ... about the type by calling
+ * TypeMeta::Make<T>. This returns a TypeMeta() object, which is basically just
+ * a pointer to the type information, so it's cheap to pass around.
+ */
+
+// TODO: This file is still in the caffe2 namespace, despite living
+// in the ATen directory.  This is because the macro
+// CAFFE_KNOWN_TYPE defines a template specialization, which relies
+// on the namespace of TypeMeta matching the namespace where the macro is
+// called.  This requires us to fix all of the call-sites, which I want to do
+// later.  So the namespace is not fixed at the moment.
+
+// Make at::Half a fundamental type.
+ // namespace guts
+ // namespace c10
+// Targeting ../TypeIdentifier.java
+
+
+
+// Allow usage in std::map / std::set
+// TODO Disallow this and rather use std::unordered_map/set everywhere
+@Namespace("caffe2") public static native @Cast("const bool") @Name("operator <") boolean lessThan(@ByVal TypeIdentifier lhs, @ByVal TypeIdentifier rhs);
+
+@Namespace("caffe2") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer stream,
+    @ByVal TypeIdentifier typeId);
+
+ // namespace caffe2
+
+// Targeting ../DeviceTypeHash.java
+
+
+  
+// Targeting ../TypeMetaData.java
+
+
+
+// Mechanism for throwing errors which can't be prevented at compile time
+// due to type erasure. E.g. somebody calling TypeMeta::copy() for
+// non-copyable type. Right now just throws exception but is implemented
+// in .cpp to manage dependencies
+@Namespace("caffe2::detail") public static native void _ThrowRuntimeTypeLogicError(@StdString BytePointer msg);
+@Namespace("caffe2::detail") public static native void _ThrowRuntimeTypeLogicError(@StdString String msg);
+
+/**
+ * Placement new function for the type.
+ */
+
+/**
+ * Typed copy function for classes.
+ */
+
+/**
+ * A placeholder function for types that do not allow assignment.
+ */
+// Targeting ../_Uninitialized.java
+
+
+
+ // namespace detail
+
+//
+// note: this is outside TypeMeta bc gcc seems to have trouble
+// with scalarTypeItemSizes as a constexpr static member used by
+// a public inline instance method
+//
+
+// item sizes for TypeMeta::itemsize() fast path
+@Namespace("caffe2") @MemberGetter public static native @Cast("const uint8_t") byte scalarTypeItemSizes(int i);
+@Namespace("caffe2") @MemberGetter public static native @Cast("const uint8_t*") BytePointer scalarTypeItemSizes();
+// Targeting ../TypeMeta.java
+
+
+
+// specializations of TypeMeta::_typeMetaData for ScalarType types
+
+// #define DEFINE_SCALAR_METADATA_INSTANCE(T, name)
+//   template <>
+//   constexpr uint16_t TypeMeta::_typeMetaData<T>() noexcept {
+//     return static_cast<uint16_t>(ScalarType::name);
+//   }
+
+
+
+
+@Namespace("caffe2") public static native @Cast("bool") @Name("operator ==") @NoException boolean equals(
+    @Const @ByVal TypeMeta lhs,
+    @Const @ByVal TypeMeta rhs);
+@Namespace("caffe2") public static native @Cast("bool") @Name("operator !=") @NoException boolean notEquals(
+    @Const @ByVal TypeMeta lhs,
+    @Const @ByVal TypeMeta rhs);
+
+@Namespace("caffe2") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer stream,
+    @ByVal TypeMeta typeMeta);
+
+/**
+ * Register unique id for a type so it can be used in TypeMeta context, e.g. be
+ * used as a type for Blob or for Tensor elements.
+ *
+ * CAFFE_KNOWN_TYPE does explicit instantiation of TypeIdentifier::Get<T>
+ * template function and thus needs to be put in a single translation unit (.cpp
+ * file) for a given type T. Other translation units that use type T as a type
+ * of the caffe2::Blob or element type of caffe2::Tensor need to depend on the
+ * translation unit that contains CAFFE_KNOWN_TYPE declaration via regular
+ * linkage dependencies.
+ *
+ * NOTE: the macro needs to be invoked in ::caffe2 namespace
+ */
+// Implementation note: in MSVC, we will need to prepend the C10_API
+// keyword in order to get things compiled properly. in Linux, gcc seems to
+// create attribute ignored error for explicit template instantiations, see
+//   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0537r0.html
+//   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=51930
+// and as a result, we define these two macros slightly differently.
+// #if defined(_MSC_VER) || defined(__clang__)
+// #define EXPORT_IF_NOT_GCC C10_EXPORT
+// #else
+// #define EXPORT_IF_NOT_GCC
+// #endif
+
+// #define CAFFE_KNOWN_TYPE(T)
+//   template <>
+//   EXPORT_IF_NOT_GCC uint16_t TypeMeta::_typeMetaData<T>() noexcept {
+//     static const uint16_t index = addTypeMetaData<T>();
+//     return index;
+//   }
+
+ // namespace caffe2
 
 
 // Parsed from c10/util/AlignOf.h
@@ -2717,10 +2912,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 
-
-// Targeting ../DeviceTypeHash.java
-
-
+ // namespace c10
  // namespace std
 
 
@@ -3823,17 +4015,17 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 /**
  * convert ScalarType enum values to TypeMeta handles
  */
-@Namespace("c10") public static native @ByVal @Cast("caffe2::TypeMeta*") Pointer scalarTypeToTypeMeta(ScalarType scalar_type);
+@Namespace("c10") public static native @ByVal TypeMeta scalarTypeToTypeMeta(ScalarType scalar_type);
 
 /**
  * convert TypeMeta handles to ScalarType enum values
  */
-@Namespace("c10") public static native ScalarType typeMetaToScalarType(@ByVal @Cast("caffe2::TypeMeta*") Pointer dtype);
+@Namespace("c10") public static native ScalarType typeMetaToScalarType(@ByVal TypeMeta dtype);
 
 /**
  * typeMetaToScalarType(), lifted to optional
  */
-@Namespace("c10") public static native @ByVal ScalarTypeOptional optTypeMetaToScalarType(@ByVal @Cast("c10::optional<caffe2::TypeMeta>*") Pointer type_meta);
+@Namespace("c10") public static native @ByVal ScalarTypeOptional optTypeMetaToScalarType(@ByVal TypeMetaOptional type_meta);
 
 /**
  * convenience: equality across TypeMeta/ScalarType conversion
@@ -3972,10 +4164,10 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <c10/macros/Macros.h>
 // #include <c10/core/ScalarType.h>
  // namespace caffe2
-@Namespace("c10") public static native void set_default_dtype(@ByVal @Cast("caffe2::TypeMeta*") Pointer dtype);
-@Namespace("c10") public static native @ByVal @Cast("const caffe2::TypeMeta*") Pointer get_default_dtype();
+@Namespace("c10") public static native void set_default_dtype(@ByVal TypeMeta dtype);
+@Namespace("c10") public static native @Const @ByVal TypeMeta get_default_dtype();
 @Namespace("c10") public static native ScalarType get_default_dtype_as_scalartype();
-@Namespace("c10") public static native @ByVal @Cast("const caffe2::TypeMeta*") Pointer get_default_complex_dtype();
+@Namespace("c10") public static native @Const @ByVal TypeMeta get_default_complex_dtype();
  // namespace c10
 
 
@@ -4030,7 +4222,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 @Namespace("c10") public static native ScalarType dtype_or_default(@ByVal ScalarTypeOptional dtype);
 
-@Namespace("c10") public static native @ByVal @Cast("caffe2::TypeMeta*") Pointer dtype_or_default(@ByVal @Cast("c10::optional<caffe2::TypeMeta>*") Pointer dtype);
+@Namespace("c10") public static native @ByVal TypeMeta dtype_or_default(@ByVal TypeMetaOptional dtype);
 
 @Namespace("c10") public static native Layout layout_or_default(@ByVal LayoutOptional layout);
 
@@ -4065,7 +4257,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 /** Convenience function that returns a {@code TensorOptions} object with the {@code dtype}
  *  set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions dtype(@ByVal @Cast("caffe2::TypeMeta*") Pointer dtype);
+@Namespace("c10") public static native @ByVal TensorOptions dtype(@ByVal TypeMeta dtype);
 
 // legacy function to support ScalarType
 @Namespace("c10") public static native @ByVal TensorOptions dtype(ScalarType dtype);
