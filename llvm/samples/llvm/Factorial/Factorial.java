@@ -45,7 +45,7 @@ import static org.bytedeco.llvm.global.LLVM.*;
  *
  * This sample contains code for the following stages:
  *
- * 1. Initializing require LLVM components
+ * 1. Initializing required LLVM components
  * 2. Generating LLVM IR for a factorial function
  * 3. Verifies that our generated code is well formed
  * 4. Creating a pass pipeline with the legacy pass manager
@@ -78,7 +78,6 @@ public class Factorial {
         LLVMValueRef n = LLVMGetParam(factorial, /* parameterIndex */0);
         LLVMValueRef zero = LLVMConstInt(i32Type, 0, /* signExtend */ 0);
         LLVMValueRef one = LLVMConstInt(i32Type, 1, /* signExtend */ 0);
-
         LLVMBasicBlockRef entry = LLVMAppendBasicBlockInContext(context, factorial, "entry");
         LLVMBasicBlockRef ifFalse = LLVMAppendBasicBlockInContext(context, factorial, "if_false");
         LLVMBasicBlockRef exit = LLVMAppendBasicBlockInContext(context, factorial, "exit");
