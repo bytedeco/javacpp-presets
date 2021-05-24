@@ -1,0 +1,30 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.bytedeco.llvm</groupId>
+        <artifactId>samples</artifactId>
+        <version>1.5.6-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Factorial</artifactId>
+    <version>1.5.6-SNAPSHOT</version>
+
+    <properties>
+        <exec.mainClass>Factorial</exec.mainClass>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>llvm-platform</artifactId>
+            <version>12.0.0-1.5.6-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
