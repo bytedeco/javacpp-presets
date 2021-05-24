@@ -55,6 +55,7 @@ public class EmitBitcode {
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
+        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMInitializeNativeAsmPrinter();
         LLVMInitializeNativeAsmParser();
         LLVMInitializeNativeDisassembler();

@@ -60,6 +60,7 @@ public class Factorial {
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
+        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMLinkInMCJIT();
         LLVMInitializeNativeAsmPrinter();
         LLVMInitializeNativeAsmParser();
