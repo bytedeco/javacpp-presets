@@ -121,6 +121,7 @@ public class DataOutputQueue extends Pointer {
      * @return Message of type T or nullptr if no message available
      */
     public native @SharedPtr @ByVal ADatatype tryGet();
+    public native @Name("tryGet<dai::ADatatype>") void tryGetVoid();
     public native @Name("tryGet<dai::ImgFrame>") @SharedPtr ImgFrame tryGetImgFrame();
     public native @Name("tryGet<dai::NNData>") @SharedPtr NNData tryGetNNData();
     public native @Name("tryGet<dai::Tracklets>") @SharedPtr Tracklets tryGetTracklets();
@@ -140,6 +141,7 @@ public class DataOutputQueue extends Pointer {
      * @return Message of type T or nullptr if no message available
      */
     public native @SharedPtr @ByVal ADatatype get();
+    public native @Name("get<dai::ADatatype>") void getVoid();
     public native @Name("get<dai::ImgFrame>") @SharedPtr ImgFrame getImgFrame();
     public native @Name("get<dai::NNData>") @SharedPtr NNData getNNData();
     public native @Name("get<dai::Tracklets>") @SharedPtr Tracklets getTracklets();
@@ -159,6 +161,7 @@ public class DataOutputQueue extends Pointer {
      * @return Message of type T or nullptr if no message available
      */
     public native @SharedPtr @ByVal ADatatype front();
+    public native @Name("front<dai::ADatatype>") void frontVoid();
     public native @Name("front<dai::ImgFrame>") @SharedPtr ImgFrame frontImgFrame();
     public native @Name("front<dai::NNData>") @SharedPtr NNData frontNNData();
     public native @Name("front<dai::Tracklets>") @SharedPtr Tracklets frontTracklets();
