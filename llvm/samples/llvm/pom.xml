@@ -6,7 +6,6 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <exec.mainClass>OrcJit</exec.mainClass>
     </properties>
     <repositories>
         <repository>
@@ -26,7 +25,51 @@
             <version>3.3-1.5.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>emit-bitcode</id>
+            <properties>
+                <exec.mainClass>EmitBitcode$EmitBitcodeAndRelocatableObject</exec.mainClass>
+            </properties>
+        </profile>
+        <profile>
+            <id>evaluate-bitcode</id>
+            <properties>
+                <exec.mainClass>EmitBitcode$EvaluateBitcode</exec.mainClass>
+            </properties>
+        </profile>
+        <profile>
+            <id>factorial</id>
+            <properties>
+                <exec.mainClass>Factorial</exec.mainClass>
+            </properties>
+        </profile>
+        <profile>
+            <id>orcjit</id>
+            <properties>
+                <exec.mainClass>OrcJit</exec.mainClass>
+            </properties>
+        </profile>
+    </profiles>
     <build>
         <sourceDirectory>.</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>java</executable>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
