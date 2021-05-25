@@ -26,11 +26,14 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example of LLVM ported to Java from this C source file:
+Here is a simple example showing how to calculate the factorial of a number 
+with LLVM.
 
- * https://github.com/wickedchicken/llvm-c-example/blob/master/fac.c
+We can use [Maven 3](http://maven.apache.org/) to download and install 
+automatically all the class files as well as the native binaries. To run 
+this sample code, after creating the `pom.xml` and `Factorial.java` source 
+files below, simply execute on the command line:
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Fac.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -40,10 +43,10 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
-    <artifactId>fac</artifactId>
+    <artifactId>Factorial</artifactId>
     <version>1.5.6-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>Fac</exec.mainClass>
+        <exec.mainClass>Factorial</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
@@ -59,86 +62,102 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```
 
 ### The `Fac.java` source file
-```java
-// General stuff
-import org.bytedeco.javacpp.*;
 
-// Headers required by LLVM
+```java
+import org.bytedeco.javacpp.*;
 import org.bytedeco.llvm.LLVM.*;
+
 import static org.bytedeco.llvm.global.LLVM.*;
 
-public class Fac {
-    public static void main (String[] args) {
-        BytePointer error = new BytePointer((Pointer)null); // Used to retrieve messages from functions
+public class Factorial {
+    // a 'char *' used to retrieve error messages from LLVM
+    private static final BytePointer error = new BytePointer();
+
+    public static void main(String[] args) {
+        // Stage 1: Initialize LLVM components
+        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMLinkInMCJIT();
         LLVMInitializeNativeAsmPrinter();
         LLVMInitializeNativeAsmParser();
-        LLVMInitializeNativeDisassembler();
         LLVMInitializeNativeTarget();
-        LLVMModuleRef mod = LLVMModuleCreateWithName("fac_module");
-        LLVMTypeRef[] fac_args = { LLVMInt32Type() };
-        LLVMValueRef fac = LLVMAddFunction(mod, "fac", LLVMFunctionType(LLVMInt32Type(), fac_args[0], 1, 0));
-        LLVMSetFunctionCallConv(fac, LLVMCCallConv);
-        LLVMValueRef n = LLVMGetParam(fac, 0);
 
-        LLVMBasicBlockRef entry = LLVMAppendBasicBlock(fac, "entry");
-        LLVMBasicBlockRef iftrue = LLVMAppendBasicBlock(fac, "iftrue");
-        LLVMBasicBlockRef iffalse = LLVMAppendBasicBlock(fac, "iffalse");
-        LLVMBasicBlockRef end = LLVMAppendBasicBlock(fac, "end");
-        LLVMBuilderRef builder = LLVMCreateBuilder();
+        // Stage 2: Build the factorial function.
+        LLVMContextRef context = LLVMContextCreate();
+        LLVMModuleRef module = LLVMModuleCreateWithNameInContext("factorial", context);
+        LLVMBuilderRef builder = LLVMCreateBuilderInContext(context);
+        LLVMTypeRef i32Type = LLVMInt32TypeInContext(context);
+        LLVMTypeRef factorialType = LLVMFunctionType(i32Type, i32Type, /* argumentCount */ 1, /* isVariadic */ 0);
+
+        LLVMValueRef factorial = LLVMAddFunction(module, "factorial", factorialType);
+        LLVMSetFunctionCallConv(factorial, LLVMCCallConv);
+
+        LLVMValueRef n = LLVMGetParam(factorial, /* parameterIndex */0);
+        LLVMValueRef zero = LLVMConstInt(i32Type, 0, /* signExtend */ 0);
+        LLVMValueRef one = LLVMConstInt(i32Type, 1, /* signExtend */ 0);
+        LLVMBasicBlockRef entry = LLVMAppendBasicBlockInContext(context, factorial, "entry");
+        LLVMBasicBlockRef ifFalse = LLVMAppendBasicBlockInContext(context, factorial, "if_false");
+        LLVMBasicBlockRef exit = LLVMAppendBasicBlockInContext(context, factorial, "exit");
 
         LLVMPositionBuilderAtEnd(builder, entry);
-        LLVMValueRef If = LLVMBuildICmp(builder, LLVMIntEQ, n, LLVMConstInt(LLVMInt32Type(), 0, 0), "n == 0");
-        LLVMBuildCondBr(builder, If, iftrue, iffalse);
+        LLVMValueRef condition = LLVMBuildICmp(builder, LLVMIntEQ, n, zero, "condition = n == 0");
+        LLVMBuildCondBr(builder, condition, exit, ifFalse);
 
-        LLVMPositionBuilderAtEnd(builder, iftrue);
-        LLVMValueRef res_iftrue = LLVMConstInt(LLVMInt32Type(), 1, 0);
-        LLVMBuildBr(builder, end);
+        LLVMPositionBuilderAtEnd(builder, ifFalse);
+        LLVMValueRef nMinusOne = LLVMBuildSub(builder, n, one, "nMinusOne = n - 1");
+        PointerPointer<Pointer> arguments = new PointerPointer<>(1)
+            .put(0, nMinusOne);
+        LLVMValueRef factorialResult = LLVMBuildCall(builder, factorial, arguments, 1, "factorialResult = factorial(nMinusOne)");
+        LLVMValueRef resultIfFalse = LLVMBuildMul(builder, n, factorialResult, "resultIfFalse = n * factorialResult");
+        LLVMBuildBr(builder, exit);
 
-        LLVMPositionBuilderAtEnd(builder, iffalse);
-        LLVMValueRef n_minus = LLVMBuildSub(builder, n, LLVMConstInt(LLVMInt32Type(), 1, 0), "n - 1");
-        LLVMValueRef[] call_fac_args = { n_minus };
-        LLVMValueRef call_fac = LLVMBuildCall(builder, fac, new PointerPointer(call_fac_args), 1, "fac(n - 1)");
-        LLVMValueRef res_iffalse = LLVMBuildMul(builder, n, call_fac, "n * fac(n - 1)");
-        LLVMBuildBr(builder, end);
+        LLVMPositionBuilderAtEnd(builder, exit);
+        LLVMValueRef phi = LLVMBuildPhi(builder, i32Type, "result");
+        PointerPointer<Pointer> phiValues = new PointerPointer<>(2)
+            .put(0, one)
+            .put(1, resultIfFalse);
+        PointerPointer<Pointer> phiBlocks = new PointerPointer<>(2)
+            .put(0, entry)
+            .put(1, ifFalse);
+        LLVMAddIncoming(phi, phiValues, phiBlocks, /* pairCount */ 2);
+        LLVMBuildRet(builder, phi);
 
-        LLVMPositionBuilderAtEnd(builder, end);
-        LLVMValueRef res = LLVMBuildPhi(builder, LLVMInt32Type(), "result");
-        LLVMValueRef[] phi_vals = { res_iftrue, res_iffalse };
-        LLVMBasicBlockRef[] phi_blocks = { iftrue, iffalse };
-        LLVMAddIncoming(res, new PointerPointer(phi_vals), new PointerPointer(phi_blocks), 2);
-        LLVMBuildRet(builder, res);
-
-        LLVMVerifyModule(mod, LLVMAbortProcessAction, error);
-        LLVMDisposeMessage(error); // Handler == LLVMAbortProcessAction -> No need to check errors
-
-
-        LLVMExecutionEngineRef engine = new LLVMExecutionEngineRef();
-        if(LLVMCreateJITCompilerForModule(engine, mod, 2, error) != 0) {
-            System.err.println(error.getString());
+        // Stage 3: Verify the module using LLVMVerifier
+        if (LLVMVerifyModule(module, LLVMPrintMessageAction, error) != 0) {
             LLVMDisposeMessage(error);
-            System.exit(-1);
+            return;
         }
 
-        LLVMPassManagerRef pass = LLVMCreatePassManager();
-        LLVMAddConstantPropagationPass(pass);
-        LLVMAddInstructionCombiningPass(pass);
-        LLVMAddPromoteMemoryToRegisterPass(pass);
-        // LLVMAddDemoteMemoryToRegisterPass(pass); // Demotes every possible value to memory
-        LLVMAddGVNPass(pass);
-        LLVMAddCFGSimplificationPass(pass);
-        LLVMRunPassManager(pass, mod);
-        LLVMDumpModule(mod);
+        // Stage 4: Create a pass pipeline using the legacy pass manager
+        LLVMPassManagerRef pm = LLVMCreatePassManager();
+        LLVMAddAggressiveInstCombinerPass(pm);
+        LLVMAddNewGVNPass(pm);
+        LLVMAddCFGSimplificationPass(pm);
+        LLVMRunPassManager(pm, module);
+        LLVMDumpModule(module);
 
-        LLVMGenericValueRef exec_args = LLVMCreateGenericValueOfInt(LLVMInt32Type(), 10, 0);
-        LLVMGenericValueRef exec_res = LLVMRunFunction(engine, fac, 1, exec_args);
-        System.err.println();
-        System.err.println("; Running fac(10) with JIT...");
-        System.err.println("; Result: " + LLVMGenericValueToInt(exec_res, 0));
+        // Stage 5: Execute the code using MCJIT
+        LLVMExecutionEngineRef engine = new LLVMExecutionEngineRef();
+        LLVMMCJITCompilerOptions options = new LLVMMCJITCompilerOptions();
+        if (LLVMCreateMCJITCompilerForModule(engine, module, options, 3, error) != 0) {
+            System.err.println("Failed to create JIT compiler: " + error.getString());
+            LLVMDisposeMessage(error);
+            return;
+        }
 
-        LLVMDisposePassManager(pass);
-        LLVMDisposeBuilder(builder);
+        LLVMGenericValueRef argument = LLVMCreateGenericValueOfInt(i32Type, 10, /* signExtend */ 0);
+        LLVMGenericValueRef result = LLVMRunFunction(engine, factorial, /* argumentCount */ 1, argument);
+        System.out.println();
+        System.out.println("; Running factorial(10) with MCJIT...");
+        System.out.println("; Result: " + LLVMGenericValueToInt(result, /* signExtend */ 0));
+
+        // Stage 6: Dispose of the allocated resources
         LLVMDisposeExecutionEngine(engine);
+        LLVMDisposePassManager(pm);
+        LLVMDisposeBuilder(builder);
+        LLVMContextDispose(context);
     }
 }
 ```
+
+More samples showing off LLVM usage from Java can be found in the samples 
+directory.
