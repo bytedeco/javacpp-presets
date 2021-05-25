@@ -46,8 +46,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             resource = {"include", "lib"}
         ),
         @Platform(
-	    value = "windows",
-	    link = "libffi-7"
+            value = "windows",
+            link = "libffi-7"
         ),
     },
     target = "org.bytedeco.libffi",
@@ -81,18 +81,22 @@ public class ffi implements InfoMapper {
     }
 
     public static native @MemberGetter int FFI_FIRST_ABI();
-//    public static native @MemberGetter int FFI_UNIX64();
-//    public static native @MemberGetter int FFI_WIN64();
-//    public static native @MemberGetter int FFI_EFI64();
-//    public static native @MemberGetter int FFI_GNUW64();
-//    public static native @MemberGetter int FFI_SYSV();
-//    public static native @MemberGetter int FFI_THISCALL();
-//    public static native @MemberGetter int FFI_FASTCALL();
-//    public static native @MemberGetter int FFI_STDCALL();
-//    public static native @MemberGetter int FFI_PASCAL();
-//    public static native @MemberGetter int FFI_REGISTER();
-//    public static native @MemberGetter int FFI_MS_CDECL();
-//    public static native @MemberGetter int FFI_VFP();
+    public static native @MemberGetter @Platform(not = "windows", pattern = ".*-x86_64") int FFI_UNIX64();
+    public static native @MemberGetter @Platform(not = "windows", pattern = ".*-x86_64") int FFI_EFI64();
+    public static native @MemberGetter @Platform(pattern = ".*-x86_64") int FFI_WIN64();
+    public static native @MemberGetter @Platform(pattern = ".*-x86_64") int FFI_GNUW64();
+    public static native @MemberGetter @Platform(pattern = ".*-x86") int FFI_THISCALL();
+    public static native @MemberGetter @Platform(pattern = ".*-x86") int FFI_FASTCALL();
+    public static native @MemberGetter @Platform(pattern = ".*-x86") int FFI_STDCALL();
+    public static native @MemberGetter @Platform(pattern = ".*-x86") int FFI_PASCAL();
+    public static native @MemberGetter @Platform(pattern = ".*-x86") int FFI_REGISTER();
+    public static native @MemberGetter @Platform(pattern = ".*-x86") int FFI_MS_CDECL();
+    public static native @MemberGetter @Platform(pattern = {".*-x86", ".*-arm.*"}) int FFI_SYSV();
+    public static native @MemberGetter @Platform(pattern = "(?!.*-arm64).*-arm.*") int FFI_VFP();
+    public static native @MemberGetter @Platform(pattern = ".*-ppc64.*") int FFI_LINUX();
+    public static native @MemberGetter @Platform(pattern = ".*-ppc64.*") int FFI_LINUX_STRUCT_ALIGN();
+    public static native @MemberGetter @Platform(pattern = ".*-ppc64.*") int FFI_LINUX_LONG_DOUBLE_128();
+    public static native @MemberGetter @Platform(pattern = ".*-ppc64.*") int FFI_LINUX_LONG_DOUBLE_IEEE128();
     public static native @MemberGetter int FFI_LAST_ABI();
     public static native @MemberGetter int FFI_DEFAULT_ABI();
 }
