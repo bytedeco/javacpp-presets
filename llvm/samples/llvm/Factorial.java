@@ -38,20 +38,20 @@ import static org.bytedeco.llvm.global.LLVM.*;
 
 /**
  * Sample code for generating LLVM IR for a factorial function
- *
+ * <p>
  * The factorial function has the following LLVM IR signature:
- *
+ * <p>
  * declare i32 @factorial(i32 %n)
- *
+ * <p>
  * This sample contains code for the following stages:
- *
+ * <p>
  * 1. Initializing required LLVM components
  * 2. Generating LLVM IR for a factorial function
  * 3. Verifies that our generated code is well formed
  * 4. Creating a pass pipeline with the legacy pass manager
  * 5. Executing the code with the LLVM MCJIT Compiler
  * 6. Dispose of the allocated resources
- *
+ * <p>
  * TODO(supergrecko): Replace with new Pass Manager for LLVM 13
  */
 public class Factorial {

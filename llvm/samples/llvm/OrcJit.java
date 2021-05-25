@@ -25,7 +25,6 @@ import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.libffi.ffi_cif;
-import org.bytedeco.libffi.ffi_type;
 import org.bytedeco.llvm.LLVM.LLVMBasicBlockRef;
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
@@ -44,9 +43,9 @@ import static org.bytedeco.libffi.global.ffi.*;
 
 /**
  * Sample code for using the OrcJIT v2 API to JIT compile and call arbitrary functions
- *
+ * <p>
  * This sample contains code for the following steps:
- *
+ * <p>
  * 1. Initializing required LLVM components
  * 2. Generating LLVM IR for a sum function
  * 3. Load the module into OrcJIT and get the address of "sum"
@@ -126,7 +125,9 @@ public class OrcJit {
             System.err.println("Failed to prepare the libffi cif");
             return;
         }
-        Pointer function = new Pointer() {{ address = res.get(); }};
+        Pointer function = new Pointer() {{
+            address = res.get();
+        }};
         ffi_call(cif, function, returns, values);
         System.out.println("Evaluating sum(42, 30) through OrcJIT results in: " + returns.get());
 
