@@ -42,9 +42,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = javacpp.class,
     value = {
         @Platform(
-            value = {"linux-arm", "linux-x86"},
+            value = {"linux-arm", "linux-x86", "macosx-x86"},
             compiler = "cpp11",
-            define = {"SHARED_PTR_NAMESPACE std"},
+            define = "SHARED_PTR_NAMESPACE std",
             include = {
                 "XLink/XLinkPublicDefines.h",
                 "depthai/depthai.hpp",
@@ -137,6 +137,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             },
             link = "depthai-core"
         ),
+        @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/")
     },
     target = "org.bytedeco.depthai",
     global = "org.bytedeco.depthai.global.depthai"
@@ -205,9 +206,13 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"create<dai::node::MonoCamera>\") @SharedPtr MonoCamera createMonoCamera();\n"
                      + "public native @Name(\"create<dai::node::NeuralNetwork>\") @SharedPtr NeuralNetwork createNeuralNetwork();\n"
 //                     + "public native @Name(\"create<dai::node::DetectionNetwork>\") @SharedPtr DetectionNetwork createDetectionNetwork();\n"
+                     + "public native @Name(\"create<dai::node::MobileNetDetectionNetwork>\") @SharedPtr DetectionNetwork createMobileNetDetectionNetwork();\n"
+                     + "public native @Name(\"create<dai::node::YoloDetectionNetwork>\") @SharedPtr DetectionNetwork createYoloDetectionNetwork();\n"
                      + "public native @Name(\"create<dai::node::ObjectTracker>\") @SharedPtr ObjectTracker createObjectTracker();\n"
                      + "public native @Name(\"create<dai::node::SPIOut>\") @SharedPtr SPIOut createSPIOut();\n"
 //                     + "public native @Name(\"create<dai::node::SpatialDetectionNetwork>\") @SharedPtr SpatialDetectionNetwork createSpatialDetectionNetwork();\n"
+                     + "public native @Name(\"create<dai::node::MobileNetSpatialDetectionNetwork>\") @SharedPtr SpatialDetectionNetwork createMobileNetSpatialDetectionNetwork();\n"
+                     + "public native @Name(\"create<dai::node::YoloSpatialDetectionNetwork>\") @SharedPtr SpatialDetectionNetwork createYoloSpatialDetectionNetwork();\n"
                      + "public native @Name(\"create<dai::node::SpatialLocationCalculator>\") @SharedPtr SpatialLocationCalculator createSpatialLocationCalculator();\n"
                      + "public native @Name(\"create<dai::node::StereoDepth>\") @SharedPtr StereoDepth createStereoDepth();\n"
                      + "public native @Name(\"create<dai::node::SystemLogger>\") @SharedPtr SystemLogger createSystemLogger();\n"
@@ -224,6 +229,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"has<dai::SystemInformation>\") @Cast(\"bool\") boolean hasSystemInformation();\n"))
                .put(new Info("dai::DataOutputQueue::tryGet").javaText(
                        "public native @SharedPtr @ByVal ADatatype tryGet();\n"
+                     + "public native @Name(\"tryGet<dai::ADatatype>\") void tryGetVoid();\n"
                      + "public native @Name(\"tryGet<dai::ImgFrame>\") @SharedPtr ImgFrame tryGetImgFrame();\n"
                      + "public native @Name(\"tryGet<dai::NNData>\") @SharedPtr NNData tryGetNNData();\n"
                      + "public native @Name(\"tryGet<dai::Tracklets>\") @SharedPtr Tracklets tryGetTracklets();\n"
@@ -232,6 +238,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"tryGet<dai::SystemInformation>\") @SharedPtr SystemInformation tryGetSystemInformation();\n"))
                .put(new Info("dai::DataOutputQueue::get").javaText(
                        "public native @SharedPtr @ByVal ADatatype get();\n"
+                     + "public native @Name(\"get<dai::ADatatype>\") void getVoid();\n"
                      + "public native @Name(\"get<dai::ImgFrame>\") @SharedPtr ImgFrame getImgFrame();\n"
                      + "public native @Name(\"get<dai::NNData>\") @SharedPtr NNData getNNData();\n"
                      + "public native @Name(\"get<dai::Tracklets>\") @SharedPtr Tracklets getTracklets();\n"
@@ -240,6 +247,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"get<dai::SystemInformation>\") @SharedPtr SystemInformation getSystemInformation();\n"))
                .put(new Info("dai::DataOutputQueue::front").javaText(
                        "public native @SharedPtr @ByVal ADatatype front();\n"
+                     + "public native @Name(\"front<dai::ADatatype>\") void frontVoid();\n"
                      + "public native @Name(\"front<dai::ImgFrame>\") @SharedPtr ImgFrame frontImgFrame();\n"
                      + "public native @Name(\"front<dai::NNData>\") @SharedPtr NNData frontNNData();\n"
                      + "public native @Name(\"front<dai::Tracklets>\") @SharedPtr Tracklets frontTracklets();\n"
