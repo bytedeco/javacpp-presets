@@ -45,5 +45,5 @@ public class MaxPool1dImpl extends MaxPool1dImplBase {
 
   /** Returns the outputs and the indices of the max values.
    *  Useful for {@code torch::nn::MaxUnpool1d} later. */
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward_with_indices(@Const @ByRef Tensor input);
+  public native @ByVal TensorTensorTuple forward_with_indices(@Const @ByRef Tensor input);
 }

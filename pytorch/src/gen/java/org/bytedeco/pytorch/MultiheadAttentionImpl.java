@@ -40,10 +40,10 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
   public MultiheadAttentionImpl(@Const @ByRef MultiheadAttentionOptions options_) { super((Pointer)null); allocate(options_); }
   @NoDeallocator private native void allocate(@Const @ByRef MultiheadAttentionOptions options_);
 
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor query, @Const @ByRef Tensor key,
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor query, @Const @ByRef Tensor key,
                    @Const @ByRef Tensor value, @Const @ByRef(nullValue = "at::Tensor{}") Tensor key_padding_mask,
                    @Cast("bool") boolean need_weights/*=true*/, @Const @ByRef(nullValue = "at::Tensor{}") Tensor attn_mask);
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor query, @Const @ByRef Tensor key,
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor query, @Const @ByRef Tensor key,
                    @Const @ByRef Tensor value);
   public native void reset();
 

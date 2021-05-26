@@ -40,10 +40,10 @@ public class RNNImpl extends RNNImplBase {
   public RNNImpl(@Const @ByRef RNNOptions options_) { super((Pointer)null); allocate(options_); }
   @NoDeallocator private native void allocate(@Const @ByRef RNNOptions options_);
 
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor input);
-  public native @ByVal @Cast("std::tuple<torch::nn::utils::rnn::PackedSequence,at::Tensor>*") Pointer forward_with_packed_input(@Const @ByRef PackedSequence packed_input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
-  public native @ByVal @Cast("std::tuple<torch::nn::utils::rnn::PackedSequence,at::Tensor>*") Pointer forward_with_packed_input(@Const @ByRef PackedSequence packed_input);
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input);
+  public native @ByVal PackedSequenceTensorTuple forward_with_packed_input(@Const @ByRef PackedSequence packed_input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
+  public native @ByVal PackedSequenceTensorTuple forward_with_packed_input(@Const @ByRef PackedSequence packed_input);
 
   public native @ByRef RNNOptions options(); public native RNNImpl options(RNNOptions setter);
 }

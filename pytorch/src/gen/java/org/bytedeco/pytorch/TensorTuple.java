@@ -15,18 +15,18 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@NoOffset @Name("torch::optional<std::tuple<at::Tensor,at::Tensor> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TensorTensorOptional extends Pointer {
+@NoOffset @Name("std::tuple<at::Tensor>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class TensorTuple extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TensorTensorOptional(Pointer p) { super(p); }
-    public TensorTensorOptional(TensorTensorTuple value) { this(); put(value); }
-    public TensorTensorOptional()       { allocate();  }
+    public TensorTuple(Pointer p) { super(p); }
+    public TensorTuple(@ByRef Tensor value0) { allocate(value0); }
+    private native void allocate(@ByRef Tensor value0);
+    public TensorTuple()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef TensorTensorOptional put(@ByRef TensorTensorOptional x);
+    public native @Name("operator =") @ByRef TensorTuple put(@ByRef TensorTuple x);
 
-
-    @Name("value") public native @ByRef TensorTensorTuple get();
-    @ValueSetter public native TensorTensorOptional put(@ByRef TensorTensorTuple value);
+    public @ByRef Tensor get0() { return get0(this); }
+    @Namespace @Name("std::get<0>") public static native @ByRef Tensor get0(@ByRef TensorTuple container);
 }
 

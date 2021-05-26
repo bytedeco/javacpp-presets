@@ -40,13 +40,13 @@ public class LSTMImpl extends LSTMImplBase {
   public LSTMImpl(@Const @ByRef LSTMOptions options_) { super((Pointer)null); allocate(options_); }
   @NoDeallocator private native void allocate(@Const @ByRef LSTMOptions options_);
 
-  public native @ByVal @Cast("std::tuple<at::Tensor,std::tuple<at::Tensor,at::Tensor> >*") Pointer forward(
+  public native @ByVal TensorTensorTensorTupleTuple forward(
       @Const @ByRef Tensor input, @ByVal(nullValue = "torch::optional<std::tuple<at::Tensor,at::Tensor> >{}") TensorTensorOptional hx_opt);
-  public native @ByVal @Cast("std::tuple<at::Tensor,std::tuple<at::Tensor,at::Tensor> >*") Pointer forward(
+  public native @ByVal TensorTensorTensorTupleTuple forward(
       @Const @ByRef Tensor input);
-  public native @ByVal @Cast("std::tuple<torch::nn::utils::rnn::PackedSequence,std::tuple<at::Tensor,at::Tensor> >*") Pointer forward_with_packed_input(
+  public native @ByVal PackedSequenceTensorTensorTupleTuple forward_with_packed_input(
       @Const @ByRef PackedSequence packed_input, @ByVal(nullValue = "torch::optional<std::tuple<at::Tensor,at::Tensor> >{}") TensorTensorOptional hx_opt);
-  public native @ByVal @Cast("std::tuple<torch::nn::utils::rnn::PackedSequence,std::tuple<at::Tensor,at::Tensor> >*") Pointer forward_with_packed_input(
+  public native @ByVal PackedSequenceTensorTensorTupleTuple forward_with_packed_input(
       @Const @ByRef PackedSequence packed_input);
 
   public native @ByRef LSTMOptions options(); public native LSTMImpl options(LSTMOptions setter);
