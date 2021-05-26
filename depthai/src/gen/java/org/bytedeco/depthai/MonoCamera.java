@@ -37,9 +37,16 @@ public class MonoCamera extends Node {
     /**
      * Outputs ImgFrame message that carries RAW8 encoded (grayscale) frame data.
      *
-     * Suitable for use StereoDepth node
+     * Suitable for use StereoDepth node. Processed by ISP
      */
     @MemberGetter public native @ByRef Output out();
+
+    /**
+     * Outputs ImgFrame message that carries RAW10-packed (MIPI CSI-2 format) frame data.
+     *
+     * Captured directly from the camera sensor
+     */
+    @MemberGetter public native @ByRef Output raw();
 
     /**
      * Specify which board socket to use

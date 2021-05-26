@@ -475,6 +475,25 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
   // namespace dai
 
 
+// Parsed from depthai-shared/common/UsbSpeed.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+
+@Namespace("dai") public enum UsbSpeed { UNKNOWN(0), LOW(1), FULL(2), HIGH(3), SUPER(4), SUPER_PLUS(5);
+
+    public final int value;
+    private UsbSpeed(int v) { this.value = v; }
+    private UsbSpeed(UsbSpeed e) { this.value = e.value; }
+    public UsbSpeed intern() { for (UsbSpeed e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+  // namespace dai
+
+
 // Parsed from depthai-shared/datatype/DatatypeEnum.hpp
 
 // #pragma once
@@ -1131,6 +1150,28 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
   // namespace dai
 
 
+// Parsed from depthai/common/UsbSpeed.hpp
+
+// #pragma once
+
+// #include "depthai-shared/common/UsbSpeed.hpp"
+
+@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, UsbSpeed speed);
+@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Cast("dai::UsbSpeed") int speed);
+
+  // namespace dai
+
+
+// Parsed from depthai/common/CameraBoardSocket.hpp
+
+// #pragma once
+
+// #include "depthai-shared/common/CameraBoardSocket.hpp"
+
+@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, CameraBoardSocket socket);
+
+  // namespace dai
+
 // Parsed from depthai/pipeline/datatype/ADatatype.hpp
 
 // #pragma once
@@ -1317,7 +1358,6 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 
 @Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, Tracklet.TrackingStatus status);
-@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Cast("dai::Tracklet::TrackingStatus") int status);
 
   // namespace dai
 
@@ -1444,10 +1484,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #include <depthai/pipeline/datatype/CameraControl.hpp>
 
+// #include "depthai/common/CameraBoardSocket.hpp"
 // #include "depthai/pipeline/Node.hpp"
 
 // shared
-// #include <depthai-shared/common/CameraBoardSocket.hpp>
 // #include <depthai-shared/properties/MonoCameraProperties.hpp>
 // Targeting ../MonoCamera.java
 
@@ -1789,13 +1829,14 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // project
 // #include "CallbackHandler.hpp"
 // #include "DataQueue.hpp"
+// #include "depthai/common/CameraBoardSocket.hpp"
+// #include "depthai/common/UsbSpeed.hpp"
 // #include "depthai/pipeline/Pipeline.hpp"
 // #include "depthai/utility/Pimpl.hpp"
 // #include "depthai/xlink/XLinkConnection.hpp"
 // #include "depthai/xlink/XLinkStream.hpp"
 
 // shared
-// #include "depthai-shared/common/CameraBoardSocket.hpp"
 // #include "depthai-shared/common/ChipTemperature.hpp"
 // #include "depthai-shared/common/CpuUsage.hpp"
 // #include "depthai-shared/common/MemoryInfo.hpp"

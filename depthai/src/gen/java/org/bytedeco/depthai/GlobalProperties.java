@@ -44,4 +44,12 @@ public class GlobalProperties extends Pointer {
     public native double leonMssFrequencyHz(); public native GlobalProperties leonMssFrequencyHz(double setter);
     public native @ByRef StringOptional pipelineName(); public native GlobalProperties pipelineName(StringOptional setter);
     public native @ByRef StringOptional pipelineVersion(); public native GlobalProperties pipelineVersion(StringOptional setter);
+    /**
+     * Camera tuning blob size in bytes
+     */
+    public native @ByRef @Cast("tl::optional<std::uint32_t>*") IntOptional cameraTuningBlobSize(); public native GlobalProperties cameraTuningBlobSize(IntOptional setter);
+    /**
+     * Uri which points to camera tuning blob
+     */
+    public native @StdString BytePointer cameraTuningBlobUri(); public native GlobalProperties cameraTuningBlobUri(BytePointer setter);
 }

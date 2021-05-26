@@ -155,8 +155,9 @@ public class StereoDepth extends Node {
      * The mirroring is required to have a normal non-mirrored disparity/depth output.
      *
      * A side effect of this option is disparity alignment to the perspective of left or right input:
-     * - LR-check disabled: {@code false}: mapped to left and mirrored, {@code true}: mapped to right;
-     * - LR-check enabled: {@code false}: mapped to right, {@code true}: mapped to left, never mirrored.
+     * {@code false}: mapped to left and mirrored, {@code true}: mapped to right.
+     * With LR-check enabled, this option is ignored, none of the outputs are mirrored,
+     * and disparity is mapped to right.
      *
      * @param enable True for normal disparity/depth, otherwise mirrored
      */
@@ -174,4 +175,10 @@ public class StereoDepth extends Node {
      * DEPRECATED. The output is auto-enabled if used
      */
     public native @Deprecated void setOutputDepth(@Cast("bool") boolean enable);
+
+    /**
+     * Useful for normalization of the disparity map.
+     * @return Maximum disparity value that the node can return
+     */
+    public native float getMaxDisparity();
 }
