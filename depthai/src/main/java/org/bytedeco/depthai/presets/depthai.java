@@ -44,7 +44,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             value = {"linux-arm", "linux-x86", "macosx-x86"},
             compiler = "cpp11",
-            define = "SHARED_PTR_NAMESPACE std",
+            define = {"SHARED_PTR_NAMESPACE std", "XLINK_USE_MX_ID_NAME ON"},
             include = {
                 "XLink/XLinkPublicDefines.h",
                 "depthai/depthai.hpp",
@@ -64,6 +64,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai-shared/common/Rect.hpp",
                 "depthai-shared/common/RotatedRect.hpp",
                 "depthai-shared/common/Timestamp.hpp",
+                "depthai-shared/common/UsbSpeed.hpp",
                 "depthai-shared/datatype/DatatypeEnum.hpp",
                 "depthai-shared/datatype/RawBuffer.hpp",
                 "depthai-shared/datatype/RawCameraControl.hpp",
@@ -100,6 +101,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai-shared/pipeline/NodeObjInfo.hpp",
                 "depthai-shared/pipeline/PipelineSchema.hpp",
                 "depthai/openvino/OpenVINO.hpp",
+                "depthai/common/UsbSpeed.hpp",
+                "depthai/common/CameraBoardSocket.hpp",
                 "depthai/pipeline/datatype/ADatatype.hpp",
                 "depthai/pipeline/datatype/Buffer.hpp",
                 "depthai/pipeline/datatype/CameraControl.hpp",

@@ -130,4 +130,8 @@ public class Pipeline extends Pointer {
 
     /** Get required OpenVINO version to run this pipeline */
     public native @Cast("dai::OpenVINO::Version") int getOpenVINOVersion();
+
+    /** Set a camera IQ (Image Quality) tuning blob, used for all cameras */
+    public native void setCameraTuningBlobPath(@StdString BytePointer path);
+    public native void setCameraTuningBlobPath(@StdString String path);
 }

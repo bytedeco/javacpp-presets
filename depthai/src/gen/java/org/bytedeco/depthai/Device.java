@@ -477,6 +477,13 @@ public class Device extends Pointer {
     public native @ByVal CpuUsage getLeonMssCpuUsage();
 
     /**
+     * Retrieves USB connection speed
+     *
+     * @return USB connection speed of connected device if applicable. Unknown otherwise.
+     */
+    public native UsbSpeed getUsbSpeed();
+
+    /**
      * Explicitly closes connection to device.
      * \note This function does not need to be explicitly called
      * as destructor closes the device automatically
