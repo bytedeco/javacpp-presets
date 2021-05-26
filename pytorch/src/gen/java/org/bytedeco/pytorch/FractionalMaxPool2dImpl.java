@@ -49,7 +49,7 @@ public class FractionalMaxPool2dImpl extends FractionalMaxPool2dImplCloneable {
 
   /** Returns the outputs and the indices of the max values.
    *  Useful for {@code torch::nn::MaxUnpool2d} later. */
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward_with_indices(@Const @ByRef Tensor input);
+  public native @ByVal TensorTensorTuple forward_with_indices(@Const @ByRef Tensor input);
 
   /** The options with which this {@code Module} was constructed. */
   public native @ByRef FractionalMaxPool2dOptions options(); public native FractionalMaxPool2dImpl options(FractionalMaxPool2dOptions setter);

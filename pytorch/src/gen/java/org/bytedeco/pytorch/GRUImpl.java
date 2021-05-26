@@ -40,10 +40,10 @@ public class GRUImpl extends GRUImplBase {
   public GRUImpl(@Const @ByRef GRUOptions options_) { super((Pointer)null); allocate(options_); }
   @NoDeallocator private native void allocate(@Const @ByRef GRUOptions options_);
 
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor input);
-  public native @ByVal @Cast("std::tuple<torch::nn::utils::rnn::PackedSequence,at::Tensor>*") Pointer forward_with_packed_input(@Const @ByRef PackedSequence packed_input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
-  public native @ByVal @Cast("std::tuple<torch::nn::utils::rnn::PackedSequence,at::Tensor>*") Pointer forward_with_packed_input(@Const @ByRef PackedSequence packed_input);
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input);
+  public native @ByVal PackedSequenceTensorTuple forward_with_packed_input(@Const @ByRef PackedSequence packed_input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
+  public native @ByVal PackedSequenceTensorTuple forward_with_packed_input(@Const @ByRef PackedSequence packed_input);
 
   public native @ByRef GRUOptions options(); public native GRUImpl options(GRUOptions setter);
 }

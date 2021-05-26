@@ -507,10 +507,17 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("std::vector<torch::autograd::Variable>").pointerTypes("TensorVector"))
                .put(new Info("std::vector<std::shared_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreVector").define())
                .put(new Info("std::deque<at::Tensor>").pointerTypes("TensorDeque").define())
-               .put(new Info("std::tuple<at::Tensor>", "std::tuple<at::Tensor,at::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor>",
-                             "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor>",
-                             "std::tuple<at::Tensor,at::Tensor,double,int64_t>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,int64_t>",
-                             "std::tuple<at::Tensor,at::Tensor,at::Tensor,std::vector<at::Tensor> >").cast().pointerTypes("Tensor"))
+               .put(new Info("std::tuple<at::Tensor>").pointerTypes("TensorTuple").define())
+               .put(new Info("std::tuple<at::Tensor,at::Tensor>").pointerTypes("TensorTensorTuple").define())
+               .put(new Info("std::tuple<at::Tensor,at::Tensor,at::Tensor>").pointerTypes("TensorTensorTensorTuple").define())
+               .put(new Info("std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor>").pointerTypes("TensorTensorTensorTensorTuple").define())
+               .put(new Info("std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor>").pointerTypes("TensorTensorTensorTensorTensorTuple").define())
+               .put(new Info("std::tuple<at::Tensor,at::Tensor,at::Tensor,std::vector<at::Tensor> >").pointerTypes("TensorTensorTensorTensorVectorTuple").define())
+               .put(new Info("std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,int64_t>").pointerTypes("TensorTensorTensorTensorLongTuple").define())
+               .put(new Info("std::tuple<at::Tensor,at::Tensor,double,int64_t>").pointerTypes("TensorTensorDoubleLongTuple").define())
+               .put(new Info("std::tuple<at::Tensor,std::tuple<at::Tensor,at::Tensor> >").pointerTypes("TensorTensorTensorTupleTuple").define())
+               .put(new Info("std::tuple<torch::nn::utils::rnn::PackedSequence,at::Tensor>").purify().pointerTypes("PackedSequenceTensorTuple").define())
+               .put(new Info("std::tuple<torch::nn::utils::rnn::PackedSequence,std::tuple<at::Tensor,at::Tensor> >").purify().pointerTypes("PackedSequenceTensorTensorTupleTuple").define())
                .put(new Info("std::tuple<at::Tensor&,at::Tensor&>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>").cast().pointerTypes("PointerPointer<Tensor>"))
                .put(new Info("torch::OrderedDict<std::string,at::Tensor>", "torch::OrderedDict<std::string,torch::Tensor>").pointerTypes("StringTensorDict").define())
                .put(new Info("torch::OrderedDict<std::string,at::Tensor>::Iterator").pointerTypes("StringTensorDict.Iterator"))
@@ -971,9 +978,6 @@ public class torch implements LoadEnabled, InfoMapper {
                              "c10::optional<torch::nn::TripletMarginWithDistanceLossOptions::distance_function_t>",
                              "c10::optional<torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::distance_function_t>",
                              "std::tuple<at::Tensor,c10::optional<std::vector<int64_t> >,c10::optional<std::vector<double> >,c10::optional<bool> >",
-                             "std::tuple<at::Tensor,std::tuple<at::Tensor,at::Tensor> >",
-                             "std::tuple<torch::nn::utils::rnn::PackedSequence,at::Tensor>",
-                             "std::tuple<torch::nn::utils::rnn::PackedSequence,std::tuple<at::Tensor,at::Tensor> >",
 
                              "std::enable_shared_from_this<torch::nn::Module>", "std::enable_shared_from_this<Module>"
                              ).cast().pointerTypes("Pointer"))

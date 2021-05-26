@@ -40,7 +40,7 @@ public class LSTMCellImpl extends LSTMCellImplBase {
   public LSTMCellImpl(@Const @ByRef LSTMCellOptions options_) { super((Pointer)null); allocate(options_); }
   @NoDeallocator private native void allocate(@Const @ByRef LSTMCellOptions options_);
 
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::optional<std::tuple<at::Tensor,at::Tensor> >{}") TensorTensorOptional hx_opt);
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward(@Const @ByRef Tensor input);
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::optional<std::tuple<at::Tensor,at::Tensor> >{}") TensorTensorOptional hx_opt);
+  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input);
   public native @ByRef LSTMCellOptions options(); public native LSTMCellImpl options(LSTMCellOptions setter);
 }

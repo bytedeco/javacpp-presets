@@ -48,5 +48,5 @@ public class AdaptiveMaxPool1dImpl extends AdaptiveMaxPool1dImplBase {
 
   /** Returns the indices along with the outputs.
    *  Useful to pass to nn.MaxUnpool1d. */
-  public native @ByVal @Cast("std::tuple<at::Tensor,at::Tensor>*") Tensor forward_with_indices(@Const @ByRef Tensor input);
+  public native @ByVal TensorTensorTuple forward_with_indices(@Const @ByRef Tensor input);
 }
