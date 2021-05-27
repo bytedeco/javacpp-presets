@@ -1445,6 +1445,7 @@
         <module>pytorch</module>
         <module>tensorflow</module>
         <module>ale</module>
+        <module>depthai</module>
         <module>onnx</module>
         <module>ngraph</module>
         <module>onnxruntime</module>

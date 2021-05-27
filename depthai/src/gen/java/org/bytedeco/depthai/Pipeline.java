@@ -66,12 +66,12 @@ public class Pipeline extends Pointer {
     public native @Name("create<dai::node::ImageManip>") @SharedPtr ImageManip createImageManip();
     public native @Name("create<dai::node::MonoCamera>") @SharedPtr MonoCamera createMonoCamera();
     public native @Name("create<dai::node::NeuralNetwork>") @SharedPtr NeuralNetwork createNeuralNetwork();
-    public native @Name("create<dai::node::MobileNetDetectionNetwork>") @SharedPtr DetectionNetwork createMobileNetDetectionNetwork();
-    public native @Name("create<dai::node::YoloDetectionNetwork>") @SharedPtr DetectionNetwork createYoloDetectionNetwork();
+    public native @Name("create<dai::node::MobileNetDetectionNetwork>") @SharedPtr MobileNetDetectionNetwork createMobileNetDetectionNetwork();
+    public native @Name("create<dai::node::YoloDetectionNetwork>") @SharedPtr YoloDetectionNetwork createYoloDetectionNetwork();
     public native @Name("create<dai::node::ObjectTracker>") @SharedPtr ObjectTracker createObjectTracker();
     public native @Name("create<dai::node::SPIOut>") @SharedPtr SPIOut createSPIOut();
-    public native @Name("create<dai::node::MobileNetSpatialDetectionNetwork>") @SharedPtr SpatialDetectionNetwork createMobileNetSpatialDetectionNetwork();
-    public native @Name("create<dai::node::YoloSpatialDetectionNetwork>") @SharedPtr SpatialDetectionNetwork createYoloSpatialDetectionNetwork();
+    public native @Name("create<dai::node::MobileNetSpatialDetectionNetwork>") @SharedPtr MobileNetSpatialDetectionNetwork createMobileNetSpatialDetectionNetwork();
+    public native @Name("create<dai::node::YoloSpatialDetectionNetwork>") @SharedPtr YoloSpatialDetectionNetwork createYoloSpatialDetectionNetwork();
     public native @Name("create<dai::node::SpatialLocationCalculator>") @SharedPtr SpatialLocationCalculator createSpatialLocationCalculator();
     public native @Name("create<dai::node::StereoDepth>") @SharedPtr StereoDepth createStereoDepth();
     public native @Name("create<dai::node::SystemLogger>") @SharedPtr SystemLogger createSystemLogger();

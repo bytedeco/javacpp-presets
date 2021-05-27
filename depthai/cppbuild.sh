@@ -90,7 +90,7 @@ case $PLATFORM in
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_MACOSX_RPATH=ON -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=OFF .
         make -j $MAKEJ
         make install/strip
-        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/depthai-core.dylib
+        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libdepthai-core.dylib
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
