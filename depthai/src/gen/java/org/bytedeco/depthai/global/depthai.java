@@ -1244,6 +1244,23 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
   // namespace dai
 
 
+// Parsed from depthai/pipeline/datatype/ImgDetections.hpp
+
+// #pragma once
+
+// #include <chrono>
+// #include <unordered_map>
+// #include <vector>
+
+// #include "depthai-shared/datatype/RawImgDetections.hpp"
+// #include "depthai/pipeline/datatype/Buffer.hpp"
+// Targeting ../ImgDetections.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai/pipeline/datatype/ImageManipConfig.hpp
 
 // #pragma once
