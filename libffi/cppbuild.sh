@@ -84,6 +84,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
+        sedinplace 's/\\\$rpath/@rpath/g' configure
         CC="clang" ./configure --prefix="$INSTALL_PATH" --disable-multi-os-directory
         make -j $MAKEJ
         make install-strip
