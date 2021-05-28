@@ -104,6 +104,7 @@ public class DataOutputQueue extends Pointer {
      */
     public native @Cast("bool") boolean has();
     public native @Name("has<dai::ImgFrame>") @Cast("bool") boolean hasImgFrame();
+    public native @Name("has<dai::ImgDetections>") @Cast("bool") boolean hasImgDetections();
     public native @Name("has<dai::NNData>") @Cast("bool") boolean hasNNData();
     public native @Name("has<dai::Tracklets>") @Cast("bool") boolean hasTracklets();
     public native @Name("has<dai::SpatialImgDetections>") @Cast("bool") boolean hasSpatialImgDetections();
@@ -123,6 +124,7 @@ public class DataOutputQueue extends Pointer {
     public native @SharedPtr @ByVal ADatatype tryGet();
     public native @Name("tryGet<dai::ADatatype>") void tryGetVoid();
     public native @Name("tryGet<dai::ImgFrame>") @SharedPtr ImgFrame tryGetImgFrame();
+    public native @Name("tryGet<dai::ImgDetections>") @SharedPtr ImgDetections tryGetImgDetections();
     public native @Name("tryGet<dai::NNData>") @SharedPtr NNData tryGetNNData();
     public native @Name("tryGet<dai::Tracklets>") @SharedPtr Tracklets tryGetTracklets();
     public native @Name("tryGet<dai::SpatialImgDetections>") @SharedPtr SpatialImgDetections tryGetSpatialImgDetections();
@@ -143,6 +145,7 @@ public class DataOutputQueue extends Pointer {
     public native @SharedPtr @ByVal ADatatype get();
     public native @Name("get<dai::ADatatype>") void getVoid();
     public native @Name("get<dai::ImgFrame>") @SharedPtr ImgFrame getImgFrame();
+    public native @Name("get<dai::ImgDetections>") @SharedPtr ImgDetections getImgDetections();
     public native @Name("get<dai::NNData>") @SharedPtr NNData getNNData();
     public native @Name("get<dai::Tracklets>") @SharedPtr Tracklets getTracklets();
     public native @Name("get<dai::SpatialImgDetections>") @SharedPtr SpatialImgDetections getSpatialImgDetections();
@@ -163,6 +166,7 @@ public class DataOutputQueue extends Pointer {
     public native @SharedPtr @ByVal ADatatype front();
     public native @Name("front<dai::ADatatype>") void frontVoid();
     public native @Name("front<dai::ImgFrame>") @SharedPtr ImgFrame frontImgFrame();
+    public native @Name("front<dai::ImgDetections>") @SharedPtr ImgDetections frontImgDetections();
     public native @Name("front<dai::NNData>") @SharedPtr NNData frontNNData();
     public native @Name("front<dai::Tracklets>") @SharedPtr Tracklets frontTracklets();
     public native @Name("front<dai::SpatialImgDetections>") @SharedPtr SpatialImgDetections frontSpatialImgDetections();

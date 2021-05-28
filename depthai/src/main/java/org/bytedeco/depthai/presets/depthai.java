@@ -107,6 +107,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai/pipeline/datatype/Buffer.hpp",
                 "depthai/pipeline/datatype/CameraControl.hpp",
                 "depthai/pipeline/datatype/ImgFrame.hpp",
+                "depthai/pipeline/datatype/ImgDetections.hpp",
                 "depthai/pipeline/datatype/ImageManipConfig.hpp",
                 "depthai/pipeline/datatype/NNData.hpp",
                 "depthai/pipeline/datatype/SpatialImgDetections.hpp",
@@ -225,6 +226,7 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::DataOutputQueue::has").javaText(
                        "public native @Cast(\"bool\") boolean has();\n"
                      + "public native @Name(\"has<dai::ImgFrame>\") @Cast(\"bool\") boolean hasImgFrame();\n"
+                     + "public native @Name(\"has<dai::ImgDetections>\") @Cast(\"bool\") boolean hasImgDetections();\n"
                      + "public native @Name(\"has<dai::NNData>\") @Cast(\"bool\") boolean hasNNData();\n"
                      + "public native @Name(\"has<dai::Tracklets>\") @Cast(\"bool\") boolean hasTracklets();\n"
                      + "public native @Name(\"has<dai::SpatialImgDetections>\") @Cast(\"bool\") boolean hasSpatialImgDetections();\n"
@@ -234,6 +236,7 @@ public class depthai implements InfoMapper {
                        "public native @SharedPtr @ByVal ADatatype tryGet();\n"
                      + "public native @Name(\"tryGet<dai::ADatatype>\") void tryGetVoid();\n"
                      + "public native @Name(\"tryGet<dai::ImgFrame>\") @SharedPtr ImgFrame tryGetImgFrame();\n"
+                     + "public native @Name(\"tryGet<dai::ImgDetections>\") @SharedPtr ImgDetections tryGetImgDetections();\n"
                      + "public native @Name(\"tryGet<dai::NNData>\") @SharedPtr NNData tryGetNNData();\n"
                      + "public native @Name(\"tryGet<dai::Tracklets>\") @SharedPtr Tracklets tryGetTracklets();\n"
                      + "public native @Name(\"tryGet<dai::SpatialImgDetections>\") @SharedPtr SpatialImgDetections tryGetSpatialImgDetections();\n"
@@ -243,6 +246,7 @@ public class depthai implements InfoMapper {
                        "public native @SharedPtr @ByVal ADatatype get();\n"
                      + "public native @Name(\"get<dai::ADatatype>\") void getVoid();\n"
                      + "public native @Name(\"get<dai::ImgFrame>\") @SharedPtr ImgFrame getImgFrame();\n"
+                     + "public native @Name(\"get<dai::ImgDetections>\") @SharedPtr ImgDetections getImgDetections();\n"
                      + "public native @Name(\"get<dai::NNData>\") @SharedPtr NNData getNNData();\n"
                      + "public native @Name(\"get<dai::Tracklets>\") @SharedPtr Tracklets getTracklets();\n"
                      + "public native @Name(\"get<dai::SpatialImgDetections>\") @SharedPtr SpatialImgDetections getSpatialImgDetections();\n"
@@ -252,6 +256,7 @@ public class depthai implements InfoMapper {
                        "public native @SharedPtr @ByVal ADatatype front();\n"
                      + "public native @Name(\"front<dai::ADatatype>\") void frontVoid();\n"
                      + "public native @Name(\"front<dai::ImgFrame>\") @SharedPtr ImgFrame frontImgFrame();\n"
+                     + "public native @Name(\"front<dai::ImgDetections>\") @SharedPtr ImgDetections frontImgDetections();\n"
                      + "public native @Name(\"front<dai::NNData>\") @SharedPtr NNData frontNNData();\n"
                      + "public native @Name(\"front<dai::Tracklets>\") @SharedPtr Tracklets frontTracklets();\n"
                      + "public native @Name(\"front<dai::SpatialImgDetections>\") @SharedPtr SpatialImgDetections frontSpatialImgDetections();\n"
