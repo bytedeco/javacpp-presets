@@ -616,6 +616,7 @@
         <module>mxnet</module>
         <module>pytorch</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>ale</module>
         <module>depthai</module>
@@ -1167,6 +1168,7 @@
         <module>cuda</module>
         <module>nvcodec</module>
         <module>opencl</module>
+        <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>depthai</module>
         <module>onnxruntime</module>
@@ -1364,6 +1366,7 @@
         <module>mxnet</module>
         <module>pytorch</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>ale</module>
         <module>depthai</module>
@@ -1444,6 +1447,7 @@
         <module>mxnet</module>
         <module>pytorch</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>ale</module>
         <module>depthai</module>
         <module>onnx</module>
@@ -1587,6 +1591,7 @@
         <module>mxnet</module>
         <module>pytorch</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>ale</module>
         <module>onnx</module>
