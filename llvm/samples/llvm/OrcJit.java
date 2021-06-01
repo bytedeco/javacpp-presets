@@ -86,7 +86,6 @@ public class OrcJit {
 
         LLVMDumpModule(module);
         LLVMOrcThreadSafeModuleRef threadModule = LLVMOrcCreateNewThreadSafeModule(module, threadContext);
-        LLVMOrcDisposeThreadSafeContext(threadContext);
 
         // Stage 3: Execute using OrcJIT
         LLVMOrcLLJITRef jit = new LLVMOrcLLJITRef();
@@ -133,6 +132,6 @@ public class OrcJit {
 
         // Stage 5: Dispose of the allocated resources
         LLVMOrcDisposeLLJIT(jit);
-        LLVMOrcDisposeThreadSafeModule(threadModule);
+        LLVMShutdown();
     }
 }
