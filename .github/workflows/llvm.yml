@@ -62,3 +62,17 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions
+  samples:
+    needs: redeploy
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, macos-10.15, windows-2019]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          mvn -B -U -e clean compile exec:java -Pfactorial
+          mvn exec:java -Pemit-bitcode
+          mvn exec:java -Pevaluate-bitcode
+          mvn exec:java -Porcjit
+        working-directory: llvm/samples/llvm

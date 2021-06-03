@@ -1,72 +1,59 @@
-JavaCPP Presets for LLVM
-========================
+/*
+ * Copyright (C) 2021 Mats Larsen
+ *
+ * Licensed either under the Apache License, Version 2.0, or (at your option)
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (subject to the "Classpath" exception),
+ * either version 2, or any later version (collectively, the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.gnu.org/licenses/
+ *     http://www.gnu.org/software/classpath/license.html
+ *
+ * or as provided in the LICENSE.txt file that accompanied this code.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/llvm/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/llvm) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/llvm.svg)](http://bytedeco.org/builds/)  
-<sup>Build status for all platforms:</sup> [![llvm](https://github.com/bytedeco/javacpp-presets/workflows/llvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Allvm)  <sup>Commercial support:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
-
-
-Introduction
-------------
-This directory contains the JavaCPP Presets module for:
-
- * LLVM 12.0.0  http://llvm.org/
-
-Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
-
-
-Documentation
--------------
-Java API documentation is available here:
-
- * http://bytedeco.org/javacpp-presets/llvm/apidocs/
-
-&lowast; Bindings are currently available only for the C APIs of LLVM and Clang.  
-&lowast; In the case of Clang, we might need to disable crash recovery with the `LIBCLANG_DISABLE_CRASH_RECOVERY=1` environment variable to prevent clashes with the JVM's own signal handlers.
-
-
-Sample Usage
-------------
-Here is a simple example showing how to calculate the factorial of a number with LLVM, initially based on this C source file:
-
- * https://github.com/wickedchicken/llvm-c-example/blob/master/fac.c
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Factorial.java` source files below, simply execute on the command line:
-
-```bash
- $ mvn compile exec:java
-```
-
-### The `pom.xml` build file
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.llvm</groupId>
-    <artifactId>Factorial</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
-    <properties>
-        <exec.mainClass>Factorial</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>llvm-platform</artifactId>
-            <version>12.0.0-1.5.6-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-    </build>
-</project>
-```
-
-### The `Factorial.java` source file
-
-```java
-import org.bytedeco.javacpp.*;
-import org.bytedeco.llvm.LLVM.*;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.llvm.LLVM.LLVMBasicBlockRef;
+import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
+import org.bytedeco.llvm.LLVM.LLVMContextRef;
+import org.bytedeco.llvm.LLVM.LLVMExecutionEngineRef;
+import org.bytedeco.llvm.LLVM.LLVMGenericValueRef;
+import org.bytedeco.llvm.LLVM.LLVMMCJITCompilerOptions;
+import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import org.bytedeco.llvm.LLVM.LLVMPassManagerRef;
+import org.bytedeco.llvm.LLVM.LLVMTypeRef;
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 
+/**
+ * Sample code for generating LLVM IR for a factorial function
+ * <p>
+ * The factorial function has the following LLVM IR signature:
+ * <p>
+ * declare i32 @factorial(i32 %n)
+ * <p>
+ * This sample contains code for the following stages:
+ * <p>
+ * 1. Initializing required LLVM components
+ * 2. Generating LLVM IR for a factorial function
+ * 3. Verifies that our generated code is well formed
+ * 4. Creating a pass pipeline with the legacy pass manager
+ * 5. Executing the code with the LLVM MCJIT Compiler
+ * 6. Dispose of the allocated resources
+ * <p>
+ * TODO(supergrecko): Replace with new Pass Manager for LLVM 13
+ */
 public class Factorial {
     // a 'char *' used to retrieve error messages from LLVM
     private static final BytePointer error = new BytePointer();
@@ -155,6 +142,3 @@ public class Factorial {
         LLVMContextDispose(context);
     }
 }
-```
-
-More samples showing off LLVM usage from Java can be found in the [`samples/`](samples/) subdirectory.
