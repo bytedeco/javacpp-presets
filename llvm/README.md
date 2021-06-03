@@ -26,13 +26,11 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example showing how to calculate the factorial of a number 
-with LLVM.
+Here is a simple example showing how to calculate the factorial of a number with LLVM, initially based on this C source file:
 
-We can use [Maven 3](http://maven.apache.org/) to download and install 
-automatically all the class files as well as the native binaries. To run 
-this sample code, after creating the `pom.xml` and `Factorial.java` source 
-files below, simply execute on the command line:
+ * https://github.com/wickedchicken/llvm-c-example/blob/master/fac.c
+
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Factorial.java` source files below, simply execute on the command line:
 
 ```bash
  $ mvn compile exec:java
@@ -61,7 +59,7 @@ files below, simply execute on the command line:
 </project>
 ```
 
-### The `Fac.java` source file
+### The `Factorial.java` source file
 
 ```java
 import org.bytedeco.javacpp.*;
@@ -159,5 +157,4 @@ public class Factorial {
 }
 ```
 
-More samples showing off LLVM usage from Java can be found in the samples 
-directory.
+More samples showing off LLVM usage from Java can be found in the [`samples/`](samples/) subdirectory.

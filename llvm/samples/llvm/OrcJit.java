@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2021 Samuel Audet
+ * Copyright (C) 2021 Mats Larsen
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ public class OrcJit {
             return;
         }
 
-        LongPointer res = new LongPointer(1);
+        final LongPointer res = new LongPointer(1);
         if ((err = LLVMOrcLLJITLookup(jit, res, "sum")) != null) {
             System.err.println("Failed to look up 'sum' symbol: " + LLVMGetErrorMessage(err));
             LLVMConsumeError(err);

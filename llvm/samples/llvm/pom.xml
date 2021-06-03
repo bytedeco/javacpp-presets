@@ -4,15 +4,10 @@
     <artifactId>samples</artifactId>
     <version>1.5.6-SNAPSHOT</version>
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <exec.mainClass>Factorial</exec.mainClass>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
-    <repositories>
-        <repository>
-            <id>sonatype-nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
@@ -25,17 +20,28 @@
             <version>3.3-1.5.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
     <profiles>
         <profile>
             <id>emit-bitcode</id>
             <properties>
-                <exec.mainClass>EmitBitcode$EmitBitcodeAndRelocatableObject</exec.mainClass>
+                <exec.mainClass>EmitBitcode</exec.mainClass>
+                <exec.args>-emit</exec.args>
             </properties>
         </profile>
         <profile>
             <id>evaluate-bitcode</id>
             <properties>
-                <exec.mainClass>EmitBitcode$EvaluateBitcode</exec.mainClass>
+                <exec.mainClass>EmitBitcode</exec.mainClass>
+                <exec.args>-evaluate</exec.args>
             </properties>
         </profile>
         <profile>
@@ -51,25 +57,4 @@
             </properties>
         </profile>
     </profiles>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>java</executable>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
