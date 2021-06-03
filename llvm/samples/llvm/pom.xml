@@ -1,10 +1,10 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
-    <artifactId>fac</artifactId>
+    <artifactId>samples</artifactId>
     <version>1.5.6-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>Fac</exec.mainClass>
+        <exec.mainClass>Factorial</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
@@ -14,8 +14,47 @@
             <artifactId>llvm-platform</artifactId>
             <version>12.0.0-1.5.6-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>libffi-platform</artifactId>
+            <version>3.3-1.5.6-SNAPSHOT</version>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
     <build>
         <sourceDirectory>.</sourceDirectory>
     </build>
+    <profiles>
+        <profile>
+            <id>emit-bitcode</id>
+            <properties>
+                <exec.mainClass>EmitBitcode</exec.mainClass>
+                <exec.args>-emit</exec.args>
+            </properties>
+        </profile>
+        <profile>
+            <id>evaluate-bitcode</id>
+            <properties>
+                <exec.mainClass>EmitBitcode</exec.mainClass>
+                <exec.args>-evaluate</exec.args>
+            </properties>
+        </profile>
+        <profile>
+            <id>factorial</id>
+            <properties>
+                <exec.mainClass>Factorial</exec.mainClass>
+            </properties>
+        </profile>
+        <profile>
+            <id>orcjit</id>
+            <properties>
+                <exec.mainClass>OrcJit</exec.mainClass>
+            </properties>
+        </profile>
+    </profiles>
 </project>
