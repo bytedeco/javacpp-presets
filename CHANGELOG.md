@@ -1,5 +1,5 @@
 
- * Update samples for LLVM 12 with new `samples/llvm/OrcJit.java` using libffi ([pull #1050](https://github.com/bytedeco/javacpp-presets/pull/1050))
+ * Update samples for LLVM 12 including new `samples/llvm/OrcJit.java` using libffi ([pull #1050](https://github.com/bytedeco/javacpp-presets/pull/1050))
  * Enable GTK support in presets for OpenCV when building on ARM as well
  * Correct `enum` classes in presets for Spinnaker ([pull #1048](https://github.com/bytedeco/javacpp-presets/pull/1048))
  * Add Windows build for ONNX ([issue #983](https://github.com/bytedeco/javacpp-presets/issues/983))
