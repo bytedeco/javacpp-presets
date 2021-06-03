@@ -11066,19 +11066,20 @@ public static native void LLVMAddSLPVectorizePass(LLVMPassManagerRef PM);
 // #include "llvm/Pass.h"
 // #include "llvm-c/Transforms/PassManagerBuilder.h"
 // #include "llvm-c/Types.h"
+// #include "llvm-c/Error.h"
 
 /**
  * This function does the standard LLVM optimization.
  * This function is based on main() of llvm/tools/opt/opt.cpp.
  * Use LLVMGetHostCPUName() for the cpu argument.
  */
-public static native void optimizeModule(
+public static native LLVMErrorRef optimizeModule(
     LLVMModuleRef moduleRef,
     @Cast("const char*") BytePointer cpu,
     @Cast("unsigned") int optLevel,
     @Cast("unsigned") int sizeLevel
 );
-public static native void optimizeModule(
+public static native LLVMErrorRef optimizeModule(
     LLVMModuleRef moduleRef,
     String cpu,
     @Cast("unsigned") int optLevel,
@@ -11089,13 +11090,13 @@ public static native void optimizeModule(
  * This function is similar to LLVMCreateJITCompilerForModule() but does CPU specific optimization.
  * Use LLVMGetHostCPUName() for the cpu argument.
  */
-public static native void createOptimizedJITCompilerForModule(
+public static native LLVMErrorRef createOptimizedJITCompilerForModule(
     @ByPtrPtr LLVMExecutionEngineRef outJIT,
     LLVMModuleRef moduleRef,
     @Cast("const char*") BytePointer cpu,
     @Cast("unsigned") int optLevel
 );
-public static native void createOptimizedJITCompilerForModule(
+public static native LLVMErrorRef createOptimizedJITCompilerForModule(
     @Cast("LLVMExecutionEngineRef*") PointerPointer outJIT,
     LLVMModuleRef moduleRef,
     String cpu,

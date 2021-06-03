@@ -276,8 +276,17 @@ public class MatMulBenchmark {
         return module;
     }
 
+    static void handleError(LLVMErrorRef e) {
+        if (e != null && !e.isNull()) {
+            BytePointer p = LLVMGetErrorMessage(e);
+            String s = p.getString();
+            LLVMDisposeErrorMessage(p);
+            throw new RuntimeException(s);
+        }
+    }
+
     static void optimize(LLVMModuleRef module) {
-        optimizeModule(module, cpu, 3, 0);
+        handleError(optimizeModule(module, cpu, 3, 0));
     }
 
     static void verify(LLVMModuleRef module, boolean dumpModule) {
@@ -295,7 +304,7 @@ public class MatMulBenchmark {
     }
 
     static void jitCompile(LLVMExecutionEngineRef engine, LLVMModuleRef module) {
-        createOptimizedJITCompilerForModule(engine, module, cpu, 3);
+        handleError(createOptimizedJITCompilerForModule(engine, module, cpu, 3));
     }
 
     static LLVMValueRef toConstInt(int v) {

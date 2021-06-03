@@ -41,6 +41,7 @@ import org.bytedeco.javacpp.tools.*;
     compiler = "cpp14", link = {"LLVM-12", "LTO@.12", "Remarks@.12"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
+@NoException
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
 
