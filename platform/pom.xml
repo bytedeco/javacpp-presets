@@ -69,6 +69,7 @@
     <module>../cpu_features/platform</module>
     <module>../modsecurity/platform</module>
     <module>../systems/platform</module>
+    <module>../leapmotion/platform</module>
   </modules>
 
   <dependencies>
