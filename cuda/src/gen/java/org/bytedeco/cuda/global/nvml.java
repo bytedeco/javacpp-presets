@@ -194,7 +194,7 @@ public static final String NVML_DEVICE_PCI_BUS_ID_FMT =                  "%08X:%
 /**
  * Enum to represent type of bridge chip
  */
-/** enum nvmlBridgeChipType_enum */
+/** enum nvmlBridgeChipType_t */
 public static final int
     NVML_BRIDGE_CHIP_PLX = 0,
     NVML_BRIDGE_CHIP_BRO4 = 1;
@@ -207,7 +207,7 @@ public static final int NVML_NVLINK_MAX_LINKS = 12;
 /**
  * Enum to represent the NvLink utilization counter packet units
  */
-/** enum nvmlNvLinkUtilizationCountUnits_enum */
+/** enum nvmlNvLinkUtilizationCountUnits_t */
 public static final int
     NVML_NVLINK_COUNTER_UNIT_CYCLES = 0,     // count by cycles
     NVML_NVLINK_COUNTER_UNIT_PACKETS = 1,     // count by packets
@@ -223,7 +223,7 @@ public static final int
  *  ** all packet filter descriptions are target GPU centric
  *  ** these can be "OR'd" together 
  */
-/** enum nvmlNvLinkUtilizationCountPktTypes_enum */
+/** enum nvmlNvLinkUtilizationCountPktTypes_t */
 public static final int
     NVML_NVLINK_COUNTER_PKTFILTER_NOP        = 0x1,     // no operation packets
     NVML_NVLINK_COUNTER_PKTFILTER_READ       = 0x2,     // read packets
@@ -241,7 +241,7 @@ public static final int
 /**
  * Enum to represent NvLink queryable capabilities
  */
-/** enum nvmlNvLinkCapability_enum */
+/** enum nvmlNvLinkCapability_t */
 public static final int
     NVML_NVLINK_CAP_P2P_SUPPORTED = 0,     // P2P over NVLink is supported
     NVML_NVLINK_CAP_SYSMEM_ACCESS = 1,     // Access to system memory is supported
@@ -255,7 +255,7 @@ public static final int
 /**
  * Enum to represent NvLink queryable error counters
  */
-/** enum nvmlNvLinkErrorCounter_enum */
+/** enum nvmlNvLinkErrorCounter_t */
 public static final int
     NVML_NVLINK_ERROR_DL_REPLAY   = 0,     // Data link transmit replay error counter
     NVML_NVLINK_ERROR_DL_RECOVERY = 1,     // Data link transmit recovery error counter
@@ -269,7 +269,7 @@ public static final int
  * Represents level relationships within a system between two GPUs
  * The enums are spaced to allow for future relationships
  */
-/** enum nvmlGpuLevel_enum */
+/** enum nvmlGpuTopologyLevel_t */
 public static final int
     NVML_TOPOLOGY_INTERNAL           = 0, // e.g. Tesla K80
     NVML_TOPOLOGY_SINGLE             = 10, // all devices that only need traverse a single PCIe switch
@@ -284,7 +284,7 @@ public static final int
 public static final int NVML_TOPOLOGY_CPU = NVML_TOPOLOGY_NODE;
 
 /* P2P Capability Index Status*/
-/** enum nvmlGpuP2PStatus_enum */
+/** enum nvmlGpuP2PStatus_t */
 public static final int
     NVML_P2P_STATUS_OK     = 0,
     NVML_P2P_STATUS_CHIPSET_NOT_SUPPORED = 1,
@@ -295,7 +295,7 @@ public static final int
     NVML_P2P_STATUS_UNKNOWN = 6;
 
 /* P2P Capability Index*/
-/** enum nvmlGpuP2PCapsIndex_enum */
+/** enum nvmlGpuP2PCapsIndex_t */
 public static final int
     NVML_P2P_CAPS_INDEX_READ = 0,
     NVML_P2P_CAPS_INDEX_WRITE = 1,
@@ -318,7 +318,7 @@ public static final int NVML_MAX_PHYSICAL_BRIDGE =                         (128)
 /**
  *  Represents Type of Sampling Event
  */
-/** enum nvmlSamplingType_enum */
+/** enum nvmlSamplingType_t */
 public static final int
     /** To represent total power drawn by GPU */
     NVML_TOTAL_POWER_SAMPLES        = 0,
@@ -341,7 +341,7 @@ public static final int
 /**
  * Represents the queryable PCIe utilization counters
  */
-/** enum nvmlPcieUtilCounter_enum */
+/** enum nvmlPcieUtilCounter_t */
 public static final int
     NVML_PCIE_UTIL_TX_BYTES             = 0, // 1KB granularity
     NVML_PCIE_UTIL_RX_BYTES             = 1, // 1KB granularity
@@ -352,7 +352,7 @@ public static final int
 /**
  * Represents the type for sample value returned
  */
-/** enum nvmlValueType_enum */
+/** enum nvmlValueType_t */
 public static final int
     NVML_VALUE_TYPE_DOUBLE = 0,
     NVML_VALUE_TYPE_UNSIGNED_INT = 1,
@@ -372,7 +372,7 @@ public static final int
 /**
  * Represents type of perf policy for which violation times can be queried 
  */
-/** enum nvmlPerfPolicyType_enum */
+/** enum nvmlPerfPolicyType_t */
 public static final int
     /** How long did power violations cause the GPU to be below application clocks */
     NVML_PERF_POLICY_POWER = 0,
@@ -409,7 +409,7 @@ public static final int
 /** 
  * Generic enable/disable enum. 
  */
-/** enum nvmlEnableState_enum */
+/** enum nvmlEnableState_t */
 public static final int
     /** Feature disabled  */
     NVML_FEATURE_DISABLED    = 0,
@@ -424,7 +424,7 @@ public static final int nvmlFlagForce =       0x01;
 /**
  *  * The Brand of the GPU
  *   */
-/** enum nvmlBrandType_enum */
+/** enum nvmlBrandType_t */
 public static final int
     NVML_BRAND_UNKNOWN          = 0, 
     NVML_BRAND_QUADRO           = 1,
@@ -450,7 +450,7 @@ public static final int
 /**
  * Temperature thresholds.
  */
-/** enum nvmlTemperatureThresholds_enum */
+/** enum nvmlTemperatureThresholds_t */
 public static final int
     NVML_TEMPERATURE_THRESHOLD_SHUTDOWN      = 0, // Temperature at which the GPU will
                                                   // shut down for HW protection
@@ -472,7 +472,7 @@ public static final int
 /** 
  * Temperature sensors. 
  */
-/** enum nvmlTemperatureSensors_enum */
+/** enum nvmlTemperatureSensors_t */
 public static final int
     /** Temperature sensor for the GPU die */
     NVML_TEMPERATURE_GPU      = 0,
@@ -487,7 +487,7 @@ public static final int
  * Earlier CUDA versions supported a single exclusive mode, 
  * which is equivalent to NVML_COMPUTEMODE_EXCLUSIVE_THREAD in CUDA 4.0 and beyond.
  */
-/** enum nvmlComputeMode_enum */
+/** enum nvmlComputeMode_t */
 public static final int
     /** Default compute mode -- multiple contexts per device */
     NVML_COMPUTEMODE_DEFAULT           = 0,
@@ -527,7 +527,7 @@ public static final int NVML_DOUBLE_BIT_ECC = NVML_DOUBLE_BIT_ECC();
 /**
  * Memory error types
  */
-/** enum nvmlMemoryErrorType_enum */
+/** enum nvmlMemoryErrorType_t */
 public static final int
     /**
      * A memory error that was corrected
@@ -557,7 +557,7 @@ public static final int
  *       client active (e.g. X11), then Linux also sees per-boot behavior. If not, volatile counts are reset each time a compute app
  *       is run.
  */
-/** enum nvmlEccCounterType_enum */
+/** enum nvmlEccCounterType_t */
 public static final int
     /** Volatile counts are reset each time the driver loads. */
     NVML_VOLATILE_ECC      = 0,
@@ -573,7 +573,7 @@ public static final int
  * 
  * All speeds are in Mhz.
  */
-/** enum nvmlClockType_enum */
+/** enum nvmlClockType_t */
 public static final int
     /** Graphics clock domain */
     NVML_CLOCK_GRAPHICS  = 0,
@@ -592,7 +592,7 @@ public static final int
  * Clock Ids.  These are used in combination with nvmlClockType_t
  * to specify a single clock value.
  */
-/** enum nvmlClockId_enum */
+/** enum nvmlClockId_t */
 public static final int
     /** Current actual clock value */
     NVML_CLOCK_ID_CURRENT            = 0,
@@ -612,7 +612,7 @@ public static final int
  *
  * Windows only.
  */
-/** enum nvmlDriverModel_enum */
+/** enum nvmlDriverModel_t */
 public static final int
     /** WDDM driver model -- GPU treated as a display device */
     NVML_DRIVER_WDDM      = 0,
@@ -622,7 +622,7 @@ public static final int
 /**
  * Allowed PStates.
  */
-/** enum nvmlPStates_enum */
+/** enum nvmlPstates_t */
 public static final int
     /** Performance state 0 -- Maximum Performance */
     NVML_PSTATE_0               = 0,
@@ -666,7 +666,7 @@ public static final int
  *
  * Each GOM is designed to meet specific user needs.
  */
-/** enum nvmlGom_enum */
+/** enum nvmlGpuOperationMode_t */
 public static final int
     /** Everything is enabled and running at full speed */
     NVML_GOM_ALL_ON                    = 0,
@@ -682,7 +682,7 @@ public static final int
 /** 
  * Available infoROM objects.
  */
-/** enum nvmlInforomObject_enum */
+/** enum nvmlInforomObject_t */
 public static final int
     /** An object defined by OEM */
     NVML_INFOROM_OEM            = 0,
@@ -698,7 +698,7 @@ public static final int
 /** 
  * Return values for NVML API calls. 
  */
-/** enum nvmlReturn_enum */
+/** enum nvmlReturn_t */
 public static final int
     // cppcheck-suppress *
     /** The operation was successful */
@@ -755,7 +755,7 @@ public static final int
 /**
  * See \ref nvmlDeviceGetMemoryErrorCounter
  */
-/** enum nvmlMemoryLocation_enum */
+/** enum nvmlMemoryLocation_t */
 public static final int
     /** GPU L1 Cache */
     NVML_MEMORY_LOCATION_L1_CACHE        = 0,
@@ -782,7 +782,7 @@ public static final int
 /**
  * Causes for page retirement
  */
-/** enum nvmlPageRetirementCause_enum */
+/** enum nvmlPageRetirementCause_t */
 public static final int
     /** Page was retired due to multiple single bit ECC error */
     NVML_PAGE_RETIREMENT_CAUSE_MULTIPLE_SINGLE_BIT_ECC_ERRORS = 0,
@@ -795,7 +795,7 @@ public static final int
 /**
  * API types that allow changes to default permission restrictions
  */
-/** enum nvmlRestrictedAPI_enum */
+/** enum nvmlRestrictedAPI_t */
 public static final int
     /** APIs that change application clocks, see nvmlDeviceSetApplicationsClocks 
  *  and see nvmlDeviceResetApplicationsClocks */
@@ -821,7 +821,7 @@ public static final int
 /**
  * GPU virtualization mode types.
  */
-/** enum nvmlGpuVirtualizationMode */
+/** enum nvmlGpuVirtualizationMode_t */
 public static final int
     /** Represents Bare Metal GPU */
     NVML_GPU_VIRTUALIZATION_MODE_NONE = 0,
@@ -837,7 +837,7 @@ public static final int
 /**
  * Host vGPU modes
  */
-/** enum nvmlHostVgpuMode_enum */
+/** enum nvmlHostVgpuMode_t */
 public static final int
     /** Non SR-IOV mode */
     NVML_HOST_VGPU_MODE_NON_SRIOV    = 0,
@@ -847,7 +847,7 @@ public static final int
 /**
  * Types of VM identifiers
  */
-/** enum nvmlVgpuVmIdType */
+/** enum nvmlVgpuVmIdType_t */
 public static final int
     /** VM ID represents DOMAIN ID */
     NVML_VGPU_VM_ID_DOMAIN_ID = 0,
@@ -857,7 +857,7 @@ public static final int
 /**
  * vGPU GUEST info state.
  */
-/** enum nvmlVgpuGuestInfoState_enum */
+/** enum nvmlVgpuGuestInfoState_t */
 public static final int
     /** Guest-dependent fields uninitialized */
     NVML_VGPU_INSTANCE_GUEST_INFO_STATE_UNINITIALIZED = 0,
@@ -1347,7 +1347,7 @@ public static final int NVML_FI_MAX = 148;
 /** 
  * Fan state enum. 
  */
-/** enum nvmlFanState_enum */
+/** enum nvmlFanState_t */
 public static final int
     /** Fan is working properly */
     NVML_FAN_NORMAL       = 0,
@@ -1357,7 +1357,7 @@ public static final int
 /** 
  * Led color enum. 
  */
-/** enum nvmlLedColor_enum */
+/** enum nvmlLedColor_t */
 public static final int
     /** GREEN, indicates good health */
     NVML_LED_COLOR_GREEN       = 0,
@@ -1576,7 +1576,7 @@ public static final long nvmlClocksThrottleReasonAll = (nvmlClocksThrottleReason
 /**
  * Represents type of encoder for capacity can be queried
  */
-/** enum nvmlEncoderQueryType_enum */
+/** enum nvmlEncoderType_t */
 public static final int
     /** H264 encoder */
     NVML_ENCODER_QUERY_H264 = 0,
@@ -1597,7 +1597,7 @@ public static final int
 /**
  * Represents frame buffer capture session type
  */
-/** enum nvmlFBCSessionType_enum */
+/** enum nvmlFBCSessionType_t */
 public static final int
     /** Unknwon */
     NVML_FBC_SESSION_TYPE_UNKNOWN = 0,
@@ -1638,7 +1638,7 @@ public static final int NVML_NVFBC_SESSION_FLAG_CAPTURE_WITH_WAIT_TIMEOUT =     
 /**
  *  Is the GPU device to be removed from the kernel by nvmlDeviceRemoveGpu()
  */
-/** enum nvmlDetachGpuState_enum */
+/** enum nvmlDetachGpuState_t */
 public static final int
     NVML_DETACH_GPU_KEEP         = 0,
     NVML_DETACH_GPU_REMOVE = 1;
@@ -1646,7 +1646,7 @@ public static final int
 /**
  *  Parent bridge PCIe link state requested by nvmlDeviceRemoveGpu()
  */
-/** enum nvmlPcieLinkState_enum */
+/** enum nvmlPcieLinkState_t */
 public static final int
     NVML_PCIE_LINK_KEEP         = 0,
     NVML_PCIE_LINK_SHUT_DOWN = 1;
@@ -5114,7 +5114,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceClearEccErrorCounts(nvm
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetDriverModel(nvmlDevice_st device, @Cast("nvmlDriverModel_t") int driverModel, @Cast("unsigned int") int flags);
 
-/** enum nvmlClockLimitId_enum */
+/** enum nvmlClockLimitId_t */
 public static final int
     NVML_CLOCK_LIMIT_ID_RANGE_START = 0xffffff00,
     NVML_CLOCK_LIMIT_ID_TDP = 0xffffff00 + 1,
@@ -6798,7 +6798,7 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(
 /**
  * vGPU VM compatibility codes
  */
-/** enum nvmlVgpuVmCompatibility_enum */
+/** enum nvmlVgpuVmCompatibility_t */
 public static final int
     /** vGPU is not runnable */
     NVML_VGPU_VM_COMPATIBILITY_NONE         = 0x0,
@@ -6814,7 +6814,7 @@ public static final int
 /**
  *  vGPU-pGPU compatibility limit codes
  */
-/** enum nvmlVgpuPgpuCompatibilityLimitCode_enum */
+/** enum nvmlVgpuPgpuCompatibilityLimitCode_t */
 public static final int
     /** Compatibility is not limited. */
     NVML_VGPU_COMPATIBILITY_LIMIT_NONE          = 0x0,

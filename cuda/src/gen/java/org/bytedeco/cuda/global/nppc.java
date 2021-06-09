@@ -76,7 +76,7 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
 public static final int NPP_VER_MAJOR = 11;
 public static final int NPP_VER_MINOR = 3;
 public static final int NPP_VER_PATCH = 3;
-public static final int NPP_VER_BUILD = 44;
+public static final int NPP_VER_BUILD = 95;
 
 public static final int NPP_VERSION = (NPP_VER_MAJOR * 1000 +     
                      NPP_VER_MINOR *  100 +     

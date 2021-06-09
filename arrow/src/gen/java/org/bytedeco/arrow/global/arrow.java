@@ -170,20 +170,20 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 
 public static final int ARROW_VERSION_MAJOR = 4;
 public static final int ARROW_VERSION_MINOR = 0;
-public static final int ARROW_VERSION_PATCH = 0;
+public static final int ARROW_VERSION_PATCH = 1;
 public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VERSION_MINOR) * 1000 + ARROW_VERSION_PATCH;
 
-public static final String ARROW_VERSION_STRING = "4.0.0";
+public static final String ARROW_VERSION_STRING = "4.0.1";
 
 public static final String ARROW_SO_VERSION = "400";
-public static final String ARROW_FULL_SO_VERSION = "400.0.0";
+public static final String ARROW_FULL_SO_VERSION = "400.1.0";
 
 public static final String ARROW_CXX_COMPILER_ID = "GNU";
-public static final String ARROW_CXX_COMPILER_VERSION = "10.2.1";
+public static final String ARROW_CXX_COMPILER_VERSION = "10.3.1";
 public static final String ARROW_CXX_COMPILER_FLAGS = "-std=c++11 -m64 -fdiagnostics-color=always -O3 -DNDEBUG";
 
-public static final String ARROW_GIT_ID = "1700cffe1b9fc8429a75b4accde6bda4237a1989";
-public static final String ARROW_GIT_DESCRIPTION = "1.5.5-29-g1700cffe1b-dirty";
+public static final String ARROW_GIT_ID = "88236a4fd22333bc0eb61158fc36ec939681d1e7";
+public static final String ARROW_GIT_DESCRIPTION = "1.5.5-53-g88236a4fd2-dirty";
 
 public static final String ARROW_PACKAGE_KIND = "";
 

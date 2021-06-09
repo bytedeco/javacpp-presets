@@ -162,6 +162,8 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"))
                .put(new Info("gsl_sf_legendre_Plm_array", "gsl_sf_legendre_Plm_deriv_array", "gsl_sf_legendre_sphPlm_array", "gsl_sf_legendre_sphPlm_deriv_array",
                              "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf",
+                             "gsl_matrix_char_norm1", "gsl_matrix_uchar_norm1", "gsl_matrix_ushort_norm1", "gsl_matrix_uint_norm1", "gsl_matrix_ulong_norm1",
+                             "gsl_spmatrix_char_norm1", "gsl_spmatrix_uchar_norm1", "gsl_spmatrix_ushort_norm1", "gsl_spmatrix_ulong_norm1", "gsl_spmatrix_uint_norm1",
                              "gsl_sf_coupling_6j_INCORRECT", "gsl_sf_coupling_6j_INCORRECT_e", "gsl_spmatrix_cumsum").skip());
     }
 

@@ -79,9 +79,9 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 //##############################################################################
 
 public static final int CUSPARSE_VER_MAJOR = 11;
-public static final int CUSPARSE_VER_MINOR = 5;
+public static final int CUSPARSE_VER_MINOR = 6;
 public static final int CUSPARSE_VER_PATCH = 0;
-public static final int CUSPARSE_VER_BUILD = 58;
+public static final int CUSPARSE_VER_BUILD = 109;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -2898,21 +2898,21 @@ public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgemmi(cu
                @Cast("cuDoubleComplex*") double2 C,
                int ldc);
 
-public static native @Cast("cusparseStatus_t") int cusparseCreateCsrsm2Info(@ByPtrPtr csrsm2Info info);
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCreateCsrsm2Info(@ByPtrPtr csrsm2Info info);
 
-public static native @Cast("cusparseStatus_t") int cusparseDestroyCsrsm2Info(csrsm2Info info);
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDestroyCsrsm2Info(csrsm2Info info);
 
-public static native @Cast("cusparseStatus_t") int cusparseXcsrsm2_zeroPivot(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseXcsrsm2_zeroPivot(cusparseContext handle,
                           csrsm2Info info,
                           IntPointer _position);
-public static native @Cast("cusparseStatus_t") int cusparseXcsrsm2_zeroPivot(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseXcsrsm2_zeroPivot(cusparseContext handle,
                           csrsm2Info info,
                           IntBuffer _position);
-public static native @Cast("cusparseStatus_t") int cusparseXcsrsm2_zeroPivot(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseXcsrsm2_zeroPivot(cusparseContext handle,
                           csrsm2Info info,
                           int[] _position);
 
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -2929,7 +2929,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -2946,7 +2946,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -2964,7 +2964,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_bufferSizeExt
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
 
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -2981,7 +2981,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -2998,7 +2998,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -3016,7 +3016,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_bufferSizeExt
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
 
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -3033,7 +3033,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -3050,7 +3050,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -3068,7 +3068,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_bufferSizeExt
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
 
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -3085,7 +3085,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -3102,7 +3102,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_bufferSizeExt
                               csrsm2Info info,
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_bufferSizeExt(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_bufferSizeExt(cusparseContext handle,
                               int algo,
                               @Cast("cusparseOperation_t") int transA,
                               @Cast("cusparseOperation_t") int transB,
@@ -3120,7 +3120,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_bufferSizeExt
                               @Cast("cusparseSolvePolicy_t") int policy,
                               @Cast("size_t*") SizeTPointer pBufferSize);
 
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3137,7 +3137,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3154,7 +3154,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3172,7 +3172,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_analysis(cusp
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
 
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3189,7 +3189,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3206,7 +3206,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3224,7 +3224,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_analysis(cusp
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
 
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3241,7 +3241,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3258,7 +3258,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3276,7 +3276,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_analysis(cusp
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
 
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3293,7 +3293,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3310,7 +3310,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_analysis(cusp
                          csrsm2Info info,
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_analysis(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_analysis(cusparseContext handle,
                          int algo,
                          @Cast("cusparseOperation_t") int transA,
                          @Cast("cusparseOperation_t") int transB,
@@ -3328,7 +3328,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_analysis(cusp
                          @Cast("cusparseSolvePolicy_t") int policy,
                          Pointer pBuffer);
 
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3345,7 +3345,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3362,7 +3362,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseScsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3380,7 +3380,7 @@ public static native @Cast("cusparseStatus_t") int cusparseScsrsm2_solve(cuspars
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
 
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3397,7 +3397,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3414,7 +3414,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3432,7 +3432,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDcsrsm2_solve(cuspars
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
 
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3449,7 +3449,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3466,7 +3466,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3484,7 +3484,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCcsrsm2_solve(cuspars
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
 
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3501,7 +3501,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -3518,7 +3518,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_solve(cuspars
                       csrsm2Info info,
                       @Cast("cusparseSolvePolicy_t") int policy,
                       Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseZcsrsm2_solve(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZcsrsm2_solve(cusparseContext handle,
                       int algo,
                       @Cast("cusparseOperation_t") int transA,
                       @Cast("cusparseOperation_t") int transB,
@@ -13084,6 +13084,56 @@ public static native @Cast("cusparseStatus_t") int cusparseSpSV_solve(cusparseCo
                    cusparseSpSVDescr spsvDescr);
 
 // #############################################################################
+// # SPARSE TRIANGULAR MATRIX SOLVE
+// #############################################################################
+
+/** enum cusparseSpSMAlg_t */
+public static final int
+    CUSPARSE_SPSM_ALG_DEFAULT = 0;
+// Targeting ../cusparse/cusparseSpSMDescr.java
+
+
+
+public static native @Cast("cusparseStatus_t") int cusparseSpSM_createDescr(@ByPtrPtr cusparseSpSMDescr descr);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpSM_destroyDescr(cusparseSpSMDescr descr);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpSM_bufferSize(cusparseContext handle,
+                        @Cast("cusparseOperation_t") int opA,
+                        @Cast("cusparseOperation_t") int opB,
+                        @Const Pointer alpha,
+                        cusparseSpMatDescr matA,
+                        cusparseDnMatDescr matB,
+                        cusparseDnMatDescr matC,
+                        @Cast("cudaDataType") int computeType,
+                        @Cast("cusparseSpSMAlg_t") int alg,
+                        cusparseSpSMDescr spsmDescr,
+                        @Cast("size_t*") SizeTPointer bufferSize);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpSM_analysis(cusparseContext handle,
+                        @Cast("cusparseOperation_t") int opA,
+                        @Cast("cusparseOperation_t") int opB,
+                        @Const Pointer alpha,
+                        cusparseSpMatDescr matA,
+                        cusparseDnMatDescr matB,
+                        cusparseDnMatDescr matC,
+                        @Cast("cudaDataType") int computeType,
+                        @Cast("cusparseSpSMAlg_t") int alg,
+                        cusparseSpSMDescr spsmDescr,
+                        Pointer externalBuffer);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpSM_solve(cusparseContext handle,
+                    @Cast("cusparseOperation_t") int opA,
+                    @Cast("cusparseOperation_t") int opB,
+                    @Const Pointer alpha,
+                    cusparseSpMatDescr matA,
+                    cusparseDnMatDescr matB,
+                    cusparseDnMatDescr matC,
+                    @Cast("cudaDataType") int computeType,
+                    @Cast("cusparseSpSMAlg_t") int alg,
+                    cusparseSpSMDescr spsmDescr);
+
+// #############################################################################
 // # SPARSE MATRIX-MATRIX MULTIPLICATION
 // #############################################################################
 
@@ -13127,7 +13177,9 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMM_preprocess(cuspa
 
 /** enum cusparseSpGEMMAlg_t */
 public static final int
-    CUSPARSE_SPGEMM_DEFAULT = 0;
+    CUSPARSE_SPGEMM_DEFAULT                 = 0,
+    CUSPARSE_SPGEMM_CSR_ALG_DETERMINITIC    = 1,
+    CUSPARSE_SPGEMM_CSR_ALG_NONDETERMINITIC = 2;
 // Targeting ../cusparse/cusparseSpGEMMDescr.java
 
 
@@ -13175,6 +13227,59 @@ public static native @Cast("cusparseStatus_t") int cusparseSpGEMM_copy(cusparseC
                     @Cast("cudaDataType") int computeType,
                     @Cast("cusparseSpGEMMAlg_t") int alg,
                     cusparseSpGEMMDescr spgemmDescr);
+
+// #############################################################################
+// # SPARSE MATRIX - SPARSE MATRIX MULTIPLICATION (SpGEMM) STRUCTURE REUSE
+// #############################################################################
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEMMreuse_workEstimation(cusparseContext handle,
+                                   @Cast("cusparseOperation_t") int opA,
+                                   @Cast("cusparseOperation_t") int opB,
+                                   cusparseSpMatDescr matA,
+                                   cusparseSpMatDescr matB,
+                                   cusparseSpMatDescr matC,
+                                   @Cast("cusparseSpGEMMAlg_t") int alg,
+                                   cusparseSpGEMMDescr spgemmDescr,
+                                   @Cast("size_t*") SizeTPointer bufferSize1,
+                                   Pointer externalBuffer1);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEMMreuse_nnz(cusparseContext handle,
+                        @Cast("cusparseOperation_t") int opA,
+                        @Cast("cusparseOperation_t") int opB,
+                        cusparseSpMatDescr matA,
+                        cusparseSpMatDescr matB,
+                        cusparseSpMatDescr matC,
+                        @Cast("cusparseSpGEMMAlg_t") int alg,
+                        cusparseSpGEMMDescr spgemmDescr,
+                        @Cast("size_t*") SizeTPointer bufferSize2,
+                        Pointer externalBuffer2,
+                        @Cast("size_t*") SizeTPointer bufferSize3,
+                        Pointer externalBuffer3,
+                        @Cast("size_t*") SizeTPointer bufferSize4,
+                        Pointer externalBuffer4);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEMMreuse_copy(cusparseContext handle,
+                         @Cast("cusparseOperation_t") int opA,
+                         @Cast("cusparseOperation_t") int opB,
+                         cusparseSpMatDescr matA,
+                         cusparseSpMatDescr matB,
+                         cusparseSpMatDescr matC,
+                         @Cast("cusparseSpGEMMAlg_t") int alg,
+                         cusparseSpGEMMDescr spgemmDescr,
+                         @Cast("size_t*") SizeTPointer bufferSize5,
+                         Pointer externalBuffer5);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEMMreuse_compute(cusparseContext handle,
+                            @Cast("cusparseOperation_t") int opA,
+                            @Cast("cusparseOperation_t") int opB,
+                            @Const Pointer alpha,
+                            cusparseSpMatDescr matA,
+                            cusparseSpMatDescr matB,
+                            @Const Pointer beta,
+                            cusparseSpMatDescr matC,
+                            @Cast("cudaDataType") int computeType,
+                            @Cast("cusparseSpGEMMAlg_t") int alg,
+                            cusparseSpGEMMDescr spgemmDescr);
 
 // #############################################################################
 // # SAMPLED DENSE-DENSE MATRIX MULTIPLICATION

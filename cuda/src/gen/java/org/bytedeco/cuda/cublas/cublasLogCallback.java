@@ -11,7 +11,6 @@ import org.bytedeco.cuda.cudart.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 import static org.bytedeco.cuda.global.cublas.*;
-         
 
 
 /* Cublas logging */

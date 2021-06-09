@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2020 Samuel Audet
+ * Copyright (C) 2015-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseSpMatDescr_t").valueTypes("cusparseSpMatDescr").pointerTypes("@ByPtrPtr cusparseSpMatDescr"))
                .put(new Info("cusparseDnMatDescr_t").valueTypes("cusparseDnMatDescr").pointerTypes("@ByPtrPtr cusparseDnMatDescr"))
                .put(new Info("cusparseSpSVDescr_t").valueTypes("cusparseSpSVDescr").pointerTypes("@ByPtrPtr cusparseSpSVDescr"))
+               .put(new Info("cusparseSpSMDescr_t").valueTypes("cusparseSpSMDescr").pointerTypes("@ByPtrPtr cusparseSpSMDescr"))
                .put(new Info("cusparseSpGEMMDescr_t").valueTypes("cusparseSpGEMMDescr").pointerTypes("@ByPtrPtr cusparseSpGEMMDescr"))
                .put(new Info("cusparseBlockedEllGet", "cusparseCreateSpVec", "cusparseDestroySpVec", "cusparseSpVecGet", "cusparseSpVecGetIndexBase",
                              "cusparseSpVecGetValues", "cusparseSpVecSetValues", "cusparseCreateDnVec", "cusparseDestroyDnVec",
