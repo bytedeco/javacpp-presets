@@ -68,10 +68,10 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda_11.3.0_465.89_win10.exe
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.0/cudnn-11.3-windows-x64-v8.2.0.53.zip
-          cuda_11.3.0_465.89_win10.exe -s
-          unzip cudnn-11.3-windows-x64-v8.2.0.53.zip
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.89_win10.exe
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.1/cudnn-11.3-windows-x64-v8.2.1.32.zip
+          cuda_11.3.1_465.89_win10.exe -s
+          unzip cudnn-11.3-windows-x64-v8.2.1.32.zip
           move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.3\bin"
           move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.3\include"
           move cuda\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.3\lib\x64"

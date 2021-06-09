@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GYM_VERSION=0.18.0
+GYM_VERSION=0.18.3
 download https://github.com/openai/gym/archive/$GYM_VERSION.tar.gz gym-$GYM_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -77,15 +77,15 @@ PYTHONNOUSERSITE=1 "$PYTHON_BIN_PATH" setup.py install --prefix ..
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(cloudpickle future `#six` pyglet gym)
+export MODULES=(cloudpickle `#future six` pyglet gym)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE-*/$MODULE* ../python/
     cp -r $PYTHON_INSTALL_PATH/$MODULE-*/EGG-INFO/* ../python/$MODULE.egg-info/
 done
-cp -r $PYTHON_INSTALL_PATH/future-*/libfuturize ../python/
-cp -r $PYTHON_INSTALL_PATH/future-*/libpasteurize ../python/
-cp -r $PYTHON_INSTALL_PATH/future-*/past ../python/
+#cp -r $PYTHON_INSTALL_PATH/future-*/libfuturize ../python/
+#cp -r $PYTHON_INSTALL_PATH/future-*/libpasteurize ../python/
+#cp -r $PYTHON_INSTALL_PATH/future-*/past ../python/
 # Work around issues with pyglet
 sedinplace '/XEHeadOfExtensionList.argtypes/d' ../python/pyglet/libs/x11/xlib.py
 rm -Rf $(find ../ -iname __pycache__)

@@ -12,7 +12,7 @@
  * Map `std::vector<cv::Range>` to `RangeVector` in `opencv_core.Mat` for convenience ([issue bytedeco/javacv#1607](https://github.com/bytedeco/javacv/issues/1607))
  * Include `genericaliasobject.h`, `context.h`, `tracemalloc.h`, and `datetime.h` for CPython ([issue #1017](https://github.com/bytedeco/javacpp-presets/issues/1017))
  * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))
- * Upgrade presets for OpenCV 4.5.2, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), Spinnaker 2.4.0.143 ([pull #1040](https://github.com/bytedeco/javacpp-presets/pull/1040)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), Arrow 4.0.0, MKL 2021.2, OpenBLAS 0.3.15, DNNL 2.2.2, CPython 3.9.5, NumPy 1.20.3, SciPy 1.6.3, Gym 0.18.1, LLVM 12.0.0 ([pull #1029](https://github.com/bytedeco/javacpp-presets/pull/1029)), CUDA 11.3.0, cuDNN 8.2.0, NCCL 2.9.6, ONNX 1.9.0
+ * Upgrade presets for OpenCV 4.5.2, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), Spinnaker 2.4.0.143 ([pull #1040](https://github.com/bytedeco/javacpp-presets/pull/1040)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), Arrow 4.0.1, MKL 2021.2, OpenBLAS 0.3.15, GSL 2.7, DNNL 2.2.3, CPython 3.9.5, NumPy 1.20.3, SciPy 1.6.3, Gym 0.18.3, LLVM 12.0.0 ([pull #1029](https://github.com/bytedeco/javacpp-presets/pull/1029)), Leptonica 1.81.0, CUDA 11.3.1, cuDNN 8.2.1, NCCL 2.9.8, ONNX 1.9.0, and their dependencies
 
 ### March 8, 2021 version 1.5.5
  * Bundle LLD executable in presets for LLVM as required by TVM on Windows

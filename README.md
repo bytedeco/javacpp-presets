@@ -182,7 +182,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  https://github.com/uricamic/flandmark
- * Arrow 4.0.0  https://arrow.apache.org/install/
+ * Arrow 4.0.x  https://arrow.apache.org/install/
  * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/mkl
@@ -192,7 +192,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.9  http://www.fftw.org/download.html
- * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
+ * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.9.x  https://www.python.org/downloads/
  * NumPy 1.20.x  https://github.com/numpy/numpy
  * SciPy 1.6.x  https://github.com/scipy/scipy
@@ -200,7 +200,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LLVM 12.x.x  http://llvm.org/releases/download.html
  * libffi 3.3  https://github.com/libffi/libffi
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.80.0  http://www.leptonica.org/download.html
+ * Leptonica 1.81.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose

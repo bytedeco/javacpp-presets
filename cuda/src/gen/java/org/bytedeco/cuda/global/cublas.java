@@ -101,9 +101,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 11;
-public static final int CUBLAS_VER_MINOR = 4;
-public static final int CUBLAS_VER_PATCH = 2;
-public static final int CUBLAS_VER_BUILD = 10064;
+public static final int CUBLAS_VER_MINOR = 5;
+public static final int CUBLAS_VER_PATCH = 1;
+public static final int CUBLAS_VER_BUILD = 109;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
@@ -122,7 +122,6 @@ public static final int
     CUBLAS_STATUS_NOT_SUPPORTED   = 15,
     CUBLAS_STATUS_LICENSE_ERROR   = 16;
 
-
 /** enum cublasFillMode_t */
 public static final int
     CUBLAS_FILL_MODE_LOWER = 0, 
@@ -139,7 +138,6 @@ public static final int
     CUBLAS_SIDE_LEFT = 0, 
     CUBLAS_SIDE_RIGHT = 1; 
 
-
 /** enum cublasOperation_t */
 public static final int
     CUBLAS_OP_N = 0,  
@@ -147,7 +145,6 @@ public static final int
     CUBLAS_OP_C = 2,
     CUBLAS_OP_HERMITAN = 2, /* synonym if CUBLAS_OP_C */
     CUBLAS_OP_CONJG = 3;     /* conjugate, placeholder - not supported in the current release */
-
 
 /** enum cublasPointerMode_t */
 public static final int 
@@ -281,7 +278,12 @@ public static native @Cast("cublasStatus_t") int cublasSetAtomicsMode(cublasCont
 public static native @Cast("cublasStatus_t") int cublasGetMathMode(cublasContext handle, @Cast("cublasMath_t*") IntPointer mode);
 public static native @Cast("cublasStatus_t") int cublasGetMathMode(cublasContext handle, @Cast("cublasMath_t*") IntBuffer mode);
 public static native @Cast("cublasStatus_t") int cublasGetMathMode(cublasContext handle, @Cast("cublasMath_t*") int[] mode);
-public static native @Cast("cublasStatus_t") int cublasSetMathMode(cublasContext handle, @Cast("cublasMath_t") int mode);
+public static native @Cast("cublasStatus_t") int cublasSetMathMode(cublasContext handle, @Cast("cublasMath_t") int mode);         
+
+public static native @Cast("cublasStatus_t") int cublasGetSmCountTarget(cublasContext handle, IntPointer smCountTarget);
+public static native @Cast("cublasStatus_t") int cublasGetSmCountTarget(cublasContext handle, IntBuffer smCountTarget);
+public static native @Cast("cublasStatus_t") int cublasGetSmCountTarget(cublasContext handle, int[] smCountTarget);
+public static native @Cast("cublasStatus_t") int cublasSetSmCountTarget(cublasContext handle, int smCountTarget);
 // Targeting ../cublas/cublasLogCallback.java
 
 
@@ -7074,7 +7076,7 @@ public static native void cublasZtrmm(@Cast("char") byte side, @Cast("char") byt
 // Parsed from <cublasLt.h>
 
 /*
- * Copyright 1993-2019 NVIDIA Corporation. All rights reserved.
+ * Copyright 1993-2021 NVIDIA Corporation. All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -7213,7 +7215,13 @@ public static final int
     CUBLASLT_MATMUL_TILE_128x256   = 23,
     CUBLASLT_MATMUL_TILE_256x128   = 24,
     CUBLASLT_MATMUL_TILE_512x64    = 25,
-    CUBLASLT_MATMUL_TILE_END = 26;
+    CUBLASLT_MATMUL_TILE_64x96     = 26,
+    CUBLASLT_MATMUL_TILE_96x64     = 27,
+    CUBLASLT_MATMUL_TILE_96x128    = 28,
+    CUBLASLT_MATMUL_TILE_128x160   = 29,
+    CUBLASLT_MATMUL_TILE_160x128   = 30,
+    CUBLASLT_MATMUL_TILE_192x128   = 31,
+    CUBLASLT_MATMUL_TILE_END = 32;
 
 /** Size and number of stages in which elements are read into shared memory
  *
@@ -7250,7 +7258,9 @@ public static final int
     CUBLASLT_MATMUL_STAGES_8x4       = 26,
     CUBLASLT_MATMUL_STAGES_16x10     = 27,
     CUBLASLT_MATMUL_STAGES_8x5       = 28,
-    CUBLASLT_MATMUL_STAGES_END = 29;
+    CUBLASLT_MATMUL_STAGES_16x80     = 29,
+    CUBLASLT_MATMUL_STAGES_64x80     = 30,
+    CUBLASLT_MATMUL_STAGES_END = 31;
 
 /** Pointer mode to use for alpha/beta */
 /** enum cublasLtPointerMode_t */
@@ -7267,6 +7277,8 @@ public static final int
 /** Mask to define and query pointer mode capability */
 /** enum cublasLtPointerModeMask_t */
 public static final int
+    /** no initial filtering is performed when querying pointer mode capabilities, will use gemm pointer mode defined in operation description **/
+    CUBLASLT_POINTER_MODE_MASK_NO_FILTERING = 0,
     /** see CUBLASLT_POINTER_MODE_HOST */
     CUBLASLT_POINTER_MODE_MASK_HOST = 1,
     /** see CUBLASLT_POINTER_MODE_DEVICE */
@@ -7605,14 +7617,86 @@ public static final int
      */
     CUBLASLT_MATMUL_DESC_EPILOGUE = 7,
 
-    /** Bias vector pointer in the device memory, see CUBLASLT_EPILOGUE_BIAS. Bias vector elements are the same type as
+    /** Bias or bias gradient vector pointer in the device memory.
+     *
+     * Bias case. See CUBLASLT_EPILOGUE_BIAS.
+     * Bias vector elements are the same type as
      * the output elements (Ctype) with the exception of IMMA kernels with computeType=CUDA_R_32I and Ctype=CUDA_R_8I
      * where the bias vector elements are the same type as alpha, beta (CUBLASLT_MATMUL_DESC_SCALE_TYPE=CUDA_R_32F).
      * Bias vector length must match matrix D rows count.
      *
-     * const void *, default: NULL
+     * Bias gradient case. See CUBLASLT_EPILOGUE_DRELU_BGRAD and CUBLASLT_EPILOGUE_DGELU_BGRAD.
+     * Bias gradient vector elements are the same type as the output elements
+     * (Ctype) with the exception of IMMA kernels (see above).
+     *
+     * Routines that don't dereference this pointer, like cublasLtMatmulAlgoGetHeuristic()
+     * depend on its value to determine expected pointer alignment.
+     *
+     * Bias case: const void *, default: NULL
+     * Bias gradient case: void *, default: NULL
      */
-    CUBLASLT_MATMUL_DESC_BIAS_POINTER = 8;
+    CUBLASLT_MATMUL_DESC_BIAS_POINTER = 8,
+
+    /** Batch stride for bias or bias gradient vector.
+     *
+     * Used together with CUBLASLT_MATMUL_DESC_BIAS_POINTER when matrix D's CUBLASLT_MATRIX_LAYOUT_BATCH_COUNT > 1.
+     *
+     * int64_t, default: 0
+     */
+    CUBLASLT_MATMUL_DESC_BIAS_BATCH_STRIDE = 10,
+
+    /** Pointer for epilogue auxiliary buffer.
+     *
+     * - Output vector for ReLu bit-mask in forward pass when CUBLASLT_EPILOGUE_RELU_AUX
+     *   or CUBLASLT_EPILOGUE_RELU_AUX_BIAS epilogue is used.
+     * - Input vector for ReLu bit-mask in backward pass when
+     *   CUBLASLT_EPILOGUE_DRELU_BGRAD epilogue is used.
+     *
+     * - Output of GELU input matrix in forward pass when
+     *   CUBLASLT_EPILOGUE_GELU_AUX_BIAS epilogue is used.
+     * - Input of GELU input matrix for backward pass when
+     *   CUBLASLT_EPILOGUE_DGELU_BGRAD epilogue is used.
+     *
+     * GELU input matrix elements type is the same as the type of elements of
+     * the output matrix.
+     *
+     * Routines that don't dereference this pointer, like cublasLtMatmulAlgoGetHeuristic()
+     * depend on its value to determine expected pointer alignment.
+     *
+     * Requires setting CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_LD attribute.
+     *
+     * Forward pass: void *, default: NULL
+     * Backward pass: const void *, default: NULL
+     */
+    CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER = 11,
+
+    /** Leading dimension for epilogue auxiliary buffer.
+     *
+     * - ReLu bit-mask matrix leading dimension in elements (i.e. bits)
+     *   when CUBLASLT_EPILOGUE_RELU_AUX, CUBLASLT_EPILOGUE_RELU_AUX_BIAS or CUBLASLT_EPILOGUE_DRELU_BGRAD epilogue is used.
+     *   Must be divisible by 128 and be no less than the number of rows in the output matrix.
+     *
+     * - GELU input matrix leading dimension in elements
+     *   when CUBLASLT_EPILOGUE_GELU_AUX_BIAS or CUBLASLT_EPILOGUE_DGELU_BGRAD epilogue used.
+     *   Must be divisible by 8 and be no less than the number of rows in the output matrix.
+     *
+     * int64_t, default: 0
+     */
+    CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_LD = 12,
+
+    /** Batch stride for epilogue auxiliary buffer.
+     *
+     * - ReLu bit-mask matrix batch stride in elements (i.e. bits)
+     *   when CUBLASLT_EPILOGUE_RELU_AUX, CUBLASLT_EPILOGUE_RELU_AUX_BIAS or CUBLASLT_EPILOGUE_DRELU_BGRAD epilogue is used.
+     *   Must be divisible by 128.
+     *
+     * - GELU input matrix batch stride in elements
+     *   when CUBLASLT_EPILOGUE_GELU_AUX_BIAS or CUBLASLT_EPILOGUE_DGELU_BGRAD epilogue used.
+     *   Must be divisible by 8.
+     *
+     * int64_t, default: 0
+     */
+    CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_BATCH_STRIDE = 13;
 
 /** Internal. Do not use directly.
  */
@@ -7816,9 +7900,16 @@ public static final int
      */
     CUBLASLT_EPILOGUE_DEFAULT = 1,
 
-    /** ReLu, apply ReLu point-wise transform to the results (x:=max(x, 0))
+    /** ReLu, apply ReLu point-wise transform to the results (x:=max(x, 0)).
      */
     CUBLASLT_EPILOGUE_RELU = 2,
+
+    /** ReLu, apply ReLu point-wise transform to the results (x:=max(x, 0)).
+     *
+     * This epilogue mode produces an extra output, a ReLu bit-mask matrix,
+     * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+     */
+    CUBLASLT_EPILOGUE_RELU_AUX = (CUBLASLT_EPILOGUE_RELU | 128),
 
     /** Bias, apply (broadcasted) Bias from bias vector. Bias vector length must match matrix D rows, it must be packed
      * (stride between vector elements is 1). Bias vector is broadcasted to all columns and added before applying final
@@ -7828,7 +7919,54 @@ public static final int
 
     /** ReLu and Bias, apply Bias and then ReLu transform
      */
-    CUBLASLT_EPILOGUE_RELU_BIAS = (CUBLASLT_EPILOGUE_RELU | CUBLASLT_EPILOGUE_BIAS);
+    CUBLASLT_EPILOGUE_RELU_BIAS = (CUBLASLT_EPILOGUE_RELU | CUBLASLT_EPILOGUE_BIAS),
+
+    /** ReLu and Bias, apply Bias and then ReLu transform
+     *
+     * This epilogue mode produces an extra output, a ReLu bit-mask matrix,
+     * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+     */
+    CUBLASLT_EPILOGUE_RELU_AUX_BIAS = (CUBLASLT_EPILOGUE_RELU_AUX | CUBLASLT_EPILOGUE_BIAS),
+
+    /* ReLu and Bias gradients. Apply independently ReLu and Bias gradient to
+     * matmul output. Store ReLu gradient in the output matrix, and Bias gradient
+     * in the auxiliary output (see CUBLASLT_MATMUL_DESC_BIAS_POINTER).
+     *
+     * This epilogue mode requires an extra input,
+     * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+     */
+    CUBLASLT_EPILOGUE_DRELU_BGRAD = 8 | 16 | 128,
+
+    /** GELU, apply GELU point-wise transform to the results (x:=GELU(x)).
+     */
+    CUBLASLT_EPILOGUE_GELU = 32,
+
+    /** GELU, apply GELU point-wise transform to the results (x:=GELU(x)).
+     *
+     * This epilogue mode outputs GELU input as a separate matrix (useful for training).
+     * See CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+     */
+    CUBLASLT_EPILOGUE_GELU_AUX = (CUBLASLT_EPILOGUE_GELU | 128),
+
+    /** GELU and Bias, apply Bias and then GELU transform
+     */
+    CUBLASLT_EPILOGUE_GELU_BIAS = (CUBLASLT_EPILOGUE_GELU | CUBLASLT_EPILOGUE_BIAS),
+
+    /** GELU and Bias, apply Bias and then GELU transform
+     *
+     * This epilogue mode outputs GELU input as a separate matrix (useful for training).
+     * See CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+     */
+    CUBLASLT_EPILOGUE_GELU_AUX_BIAS = (CUBLASLT_EPILOGUE_GELU_AUX | CUBLASLT_EPILOGUE_BIAS),
+
+    /* GELU and Bias gradients. Apply independently GELU and Bias gradient to
+     * matmul output. Store GELU gradient in the output matrix, and Bias gradient
+     * in the auxiliary output (see CUBLASLT_MATMUL_DESC_BIAS_POINTER).
+     *
+     * This epilogue mode requires an extra input,
+     * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+     */
+    CUBLASLT_EPILOGUE_DGELU_BGRAD = 16 | 64 | 128;
 
 /** Matmul heuristic search mode
  */
@@ -7948,11 +8086,18 @@ public static final int
      */
     CUBLASLT_MATMUL_PREF_EPILOGUE_MASK = 11,
 
-     /** Numerical implementation details mask, see cublasLtNumericalImplFlags_t. Filters heuristic result to only include algorithms that use the allowed implementations.
+    /** Numerical implementation details mask, see cublasLtNumericalImplFlags_t. Filters heuristic result to only include algorithms that use the allowed implementations.
      *
      * uint64_t, default: uint64_t(-1) (allow everything)
      */
-     CUBLASLT_MATMUL_PREF_IMPL_MASK = 12;
+    CUBLASLT_MATMUL_PREF_IMPL_MASK = 12,
+
+    /** Number of SMs to target for parallel execution. Optimizes heuristics for execution in smaller number of SM when
+     * user expects a concurrent stream to be using some of the device resources.
+     *
+     * int32_t, default: 0 - use the number reported by the device.
+     */
+    CUBLASLT_MATMUL_PREF_SM_COUNT_TARGET = 13;
 
 /** Internal. Do not use directly.
  */
@@ -8021,16 +8166,26 @@ public static native @Cast("cublasStatus_t") int cublasLtMatmulPreferenceGetAttr
 
 /** Query cublasLt heuristic for algorithm appropriate for given use case.
  *
- * @param requestedAlgoCount [in]     size of heuristicResultsArray (in elements) and requested maximum number of
- *                                    algorithms to return
- * @param heuristicResultsArray [out]  output algorithms and associated runtime characteristics, ordered in increasing
- *                                    estimated compute time
- * @param returnAlgoCount [out]        number of heuristicResultsArray elements written
+ * @param lightHandle [in]            Pointer to the allocated cuBLASLt handle for the cuBLASLt
+ *                                        context. See cublasLtHandle_t.
+ * @param operationDesc [in]          Handle to the matrix multiplication descriptor.
+ * @param Adesc [in]                  Handle to the layout descriptors for matrix A.
+ * @param Bdesc [in]                  Handle to the layout descriptors for matrix B.
+ * @param Cdesc [in]                  Handle to the layout descriptors for matrix C.
+ * @param Ddesc [in]                  Handle to the layout descriptors for matrix D.
+ * @param preference [in]             Pointer to the structure holding the heuristic search
+ *                                        preferences descriptor. See cublasLtMatrixLayout_t.
+ * @param requestedAlgoCount [in]     Size of heuristicResultsArray (in elements) and requested
+ *                                        maximum number of algorithms to return.
+ * @param heuristicResultsArray [in, out]  Output algorithms and associated runtime characteristics,
+ *                                        ordered in increasing estimated compute time.
+ * @param returnAlgoCount [out]        The number of heuristicResultsArray elements written.
  *
- * \retval     CUBLAS_STATUS_INVALID_VALUE  if requestedAlgoCount is less or equal to zero
- * \retval     CUBLAS_STATUS_NOT_SUPPORTED  if no heuristic function available for current configuration
- * \retval     CUBLAS_STATUS_SUCCESS        if query was successful, inspect heuristicResultsArray[0 to (returnAlgoCount -
- *                                          1)].state for detail status of results
+ * \retval  CUBLAS_STATUS_INVALID_VALUE   if requestedAlgoCount is less or equal to zero
+ * \retval  CUBLAS_STATUS_NOT_SUPPORTED   if no heuristic function available for current configuration
+ * \retval  CUBLAS_STATUS_SUCCESS         if query was successful, inspect
+ *                                        heuristicResultsArray[0 to (returnAlgoCount - 1)].state
+ *                                        for detail status of results
  */
 public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoGetHeuristic(
     cublasLtContext lightHandle,
