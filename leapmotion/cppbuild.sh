@@ -47,12 +47,25 @@ case $PLATFORM in
     #     make -j $MAKEJ
     #     make install
     #     ;;
-    # windows-x86)
-    #     nmake -f win32/Makefile.msc zlib.lib
-    #     mkdir -p ../include ../lib
-    #     cp zconf.h zlib.h ../include/
-    #     cp zlib.lib ../lib/
-    #     ;;
+    windows-x86)
+        LEAPMOTION_VERSION=4.1.0
+        EXTENSION=.zip
+        FOLDER=LeapDeveloperKit_$LEAPMOTION_VERSION+52211_win
+        FILE=$FOLDER$EXTENSION
+        cd ../../
+        if [ -f $FILE ];then
+            echo "$FILE exists, unzipping..."
+        else
+            echo "$FILE not found. Please download it and place it into this directory."
+            exit 1
+        fi
+        unzip $FILE
+        cd cppbuild/$PLATFORM/
+        mkdir -p lib
+        cp ../../$FOLDER/LeapSDK/lib/x86/LeapC.lib lib/
+        cp -r ../../$FOLDER/LeapSDK/include include
+        rm -rf ../../$FOLDER
+        ;;
     windows-x86_64)
         LEAPMOTION_VERSION=4.1.0
         EXTENSION=.zip
