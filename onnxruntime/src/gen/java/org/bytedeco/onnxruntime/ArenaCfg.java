@@ -30,7 +30,6 @@ public class ArenaCfg extends BaseArenaCfg {
   * @param arena_extend_strategy -  use -1 to allow ORT to choose the default, 0 = kNextPowerOfTwo, 1 = kSameAsRequested
   * @param initial_chunk_size_bytes - use -1 to allow ORT to choose the default
   * @param max_dead_bytes_per_chunk - use -1 to allow ORT to choose the default
-  * @return an instance of ArenaCfg
   * See docs/C_API.md for details on what the following parameters mean and how to choose these values
   */
   public ArenaCfg(@Cast("size_t") long max_mem, int arena_extend_strategy, int initial_chunk_size_bytes, int max_dead_bytes_per_chunk) { super((Pointer)null); allocate(max_mem, arena_extend_strategy, initial_chunk_size_bytes, max_dead_bytes_per_chunk); }

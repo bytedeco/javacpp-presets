@@ -26,7 +26,7 @@ public class BaseAllocator extends Pointer {
         return (BaseAllocator)super.position(position);
     }
     @Override public BaseAllocator getPointer(long i) {
-        return new BaseAllocator((Pointer)this).position(position + i);
+        return new BaseAllocator((Pointer)this).offsetAddress(i);
     }
 
 

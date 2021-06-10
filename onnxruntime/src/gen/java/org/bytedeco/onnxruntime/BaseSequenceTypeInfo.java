@@ -26,7 +26,7 @@ public class BaseSequenceTypeInfo extends Pointer {
         return (BaseSequenceTypeInfo)super.position(position);
     }
     @Override public BaseSequenceTypeInfo getPointer(long i) {
-        return new BaseSequenceTypeInfo((Pointer)this).position(position + i);
+        return new BaseSequenceTypeInfo((Pointer)this).offsetAddress(i);
     }
 
 

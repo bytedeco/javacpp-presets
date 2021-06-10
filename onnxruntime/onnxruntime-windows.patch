@@ -1,0 +1,46 @@
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index e473f4b4fa..de6431dc8b 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -1385,8 +1385,11 @@ if (onnxruntime_USE_CUDA)
+   endif()
+   enable_language(CUDA)
+   message( STATUS "CMAKE_CUDA_COMPILER_VERSION: ${CMAKE_CUDA_COMPILER_VERSION}")
+-
+-  set(CMAKE_CUDA_STANDARD 14)
++  if (WIN32)
++    set(CMAKE_CUDA_STANDARD 17)
++  else()
++    set(CMAKE_CUDA_STANDARD 14)
++  endif()
+   file(TO_CMAKE_PATH ${onnxruntime_CUDNN_HOME} onnxruntime_CUDNN_HOME)
+   set(ONNXRUNTIME_CUDA_LIBRARIES ${CUDA_LIBRARIES})
+ 
+diff --git a/onnxruntime/core/providers/cpu/tensor/upsample.h b/onnxruntime/core/providers/cpu/tensor/upsample.h
+index c2aea9374b..0b48cd6fed 100644
+--- a/onnxruntime/core/providers/cpu/tensor/upsample.h
++++ b/onnxruntime/core/providers/cpu/tensor/upsample.h
+@@ -18,8 +18,8 @@ constexpr const char* UpsampleModeCubic = "cubic";
+ // is a 4x4 matrix
+ const size_t CubicModeGridLength = 4;
+ 
+-using GetNearestPixelFunc = std::function<int64_t(float, bool)>;
+-using GetOriginalCoordinateFunc = std::function<float(float, float, float, float, float, float)>;
++using GetNearestPixelFunc = int64_t(*)(float, bool);
++using GetOriginalCoordinateFunc = float (*)(float, float, float, float, float, float);
+ 
+ enum UpsampleMode {
+   NN = 0,      // nearest neighbour
+diff --git a/onnxruntime/core/providers/cuda/cuda_execution_provider.h b/onnxruntime/core/providers/cuda/cuda_execution_provider.h
+index c1c35284ee..e8848e06f2 100644
+--- a/onnxruntime/core/providers/cuda/cuda_execution_provider.h
++++ b/onnxruntime/core/providers/cuda/cuda_execution_provider.h
+@@ -178,7 +178,7 @@ class CUDAExecutionProvider : public IExecutionProvider {
+           p.reset();
+       });
+     }
+-    std::shared_ptr<PerThreadContextMap> p{std::make_shared<PerThreadContextMap>()};
++    std::shared_ptr<PerThreadContextMap> p = std::make_shared<PerThreadContextMap>();
+   };
+ 
+   static const std::shared_ptr<PerThreadContextMap>& PerThreadContextCache() {

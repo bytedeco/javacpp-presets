@@ -34,7 +34,7 @@ public class OrtCustomOp extends Pointer {
         return (OrtCustomOp)super.position(position);
     }
     @Override public OrtCustomOp getPointer(long i) {
-        return new OrtCustomOp((Pointer)this).position(position + i);
+        return new OrtCustomOp((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("uint32_t") int version(); public native OrtCustomOp version(int setter);  // Initialize to ORT_API_VERSION
@@ -130,4 +130,24 @@ public class OrtCustomOp extends Pointer {
       public native void call(Pointer op_kernel);
   }
   public native KernelDestroy_Pointer KernelDestroy(); public native OrtCustomOp KernelDestroy(KernelDestroy_Pointer setter);
+
+  // Returns the characteristics of the input & output tensors
+  public static class GetInputCharacteristic_OrtCustomOp_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetInputCharacteristic_OrtCustomOp_long(Pointer p) { super(p); }
+      protected GetInputCharacteristic_OrtCustomOp_long() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtCustomOpInputOutputCharacteristic") int call(@Const OrtCustomOp op, @Cast("size_t") long index);
+  }
+  public native GetInputCharacteristic_OrtCustomOp_long GetInputCharacteristic(); public native OrtCustomOp GetInputCharacteristic(GetInputCharacteristic_OrtCustomOp_long setter);
+  public static class GetOutputCharacteristic_OrtCustomOp_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetOutputCharacteristic_OrtCustomOp_long(Pointer p) { super(p); }
+      protected GetOutputCharacteristic_OrtCustomOp_long() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtCustomOpInputOutputCharacteristic") int call(@Const OrtCustomOp op, @Cast("size_t") long index);
+  }
+  public native GetOutputCharacteristic_OrtCustomOp_long GetOutputCharacteristic(); public native OrtCustomOp GetOutputCharacteristic(GetOutputCharacteristic_OrtCustomOp_long setter);
 }

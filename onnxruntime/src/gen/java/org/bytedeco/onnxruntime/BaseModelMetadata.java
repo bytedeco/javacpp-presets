@@ -26,7 +26,7 @@ public class BaseModelMetadata extends Pointer {
         return (BaseModelMetadata)super.position(position);
     }
     @Override public BaseModelMetadata getPointer(long i) {
-        return new BaseModelMetadata((Pointer)this).position(position + i);
+        return new BaseModelMetadata((Pointer)this).offsetAddress(i);
     }
 
 

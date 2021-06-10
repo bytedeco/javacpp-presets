@@ -34,7 +34,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // #include <string.h>
 
 // This value is used in structures passed to ORT so that a newer version of ORT will still work with them
-public static final int ORT_API_VERSION = 7;
+public static final int ORT_API_VERSION = 8;
 
 // #ifdef __cplusplus
 // #endif
@@ -79,7 +79,12 @@ public static final int ORT_API_VERSION = 7;
 // #define ORT_MUST_USE_RESULT
 // #define ORTCHAR_T wchar_t
 // #else
+// To make symbols visible on macOS/iOS
+// #ifdef __APPLE__
+// #define ORT_EXPORT __attribute__((visibility("default")))
+// #else
 // #define ORT_EXPORT
+// #endif
 // #define ORT_API_CALL
 // #define ORT_MUST_USE_RESULT __attribute__((warn_unused_result))
 // #define ORTCHAR_T char
@@ -223,6 +228,9 @@ public static final int
 // Targeting ../OrtArenaCfg.java
 
 
+// Targeting ../OrtPrepackedWeightsContainer.java
+
+
 
 // #ifdef _WIN32
 // #else
@@ -250,9 +258,9 @@ public static final int
 
 
 
-// Set Graph optimization level.
-// Refer https://github.com/microsoft/onnxruntime/blob/master/docs/ONNX_Runtime_Graph_Optimizations.md
-// for in-depth undersrtanding of Graph Optimizations in ORT
+// Graph optimization level.
+// Refer to https://www.onnxruntime.ai/docs/resources/graph-optimizations.html
+// for an in-depth understanding of Graph Optimizations in ORT
 /** enum GraphOptimizationLevel */
 public static final int
   ORT_DISABLE_ALL = 0,
@@ -307,6 +315,9 @@ public static final int
 // Targeting ../OrtCUDAProviderOptions.java
 
 
+// Targeting ../OrtROCMProviderOptions.java
+
+
 // Targeting ../OrtTensorRTProviderOptions.java
 
 
@@ -329,13 +340,19 @@ public static native @Const OrtApiBase OrtGetApiBase();
  *   3 Call OrtAddCustomOpDomain to add the custom domain of ops to the session options
 */
 // #define OrtCustomOpApi OrtApi
+
+// Specifies some characteristics of inputs/outputs of custom ops:
+// Specify if the inputs/outputs are one of:
+// 1) Non-optional (input/output must be present in the node)
+// 2) Optional (input/output may be absent in the node)
+/** enum OrtCustomOpInputOutputCharacteristic */
+public static final int
+  // TODO: Support 'Variadic' inputs/outputs
+  INPUT_OUTPUT_REQUIRED = 0,
+  INPUT_OUTPUT_OPTIONAL = 1;
 // Targeting ../OrtCustomOp.java
 
 
-
-/*
- * END EXPERIMENTAL
-*/
 
 // #ifdef __cplusplus
 // #endif

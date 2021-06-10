@@ -26,7 +26,7 @@ public class BaseCustomOpDomain extends Pointer {
         return (BaseCustomOpDomain)super.position(position);
     }
     @Override public BaseCustomOpDomain getPointer(long i) {
-        return new BaseCustomOpDomain((Pointer)this).position(position + i);
+        return new BaseCustomOpDomain((Pointer)this).offsetAddress(i);
     }
 
 

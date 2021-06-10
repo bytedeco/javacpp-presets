@@ -27,7 +27,7 @@ public class Value extends BaseValue {
         return (Value)super.position(position);
     }
     @Override public Value getPointer(long i) {
-        return new Value((Pointer)this).position(position + i);
+        return new Value((Pointer)this).offsetAddress(i);
     }
 
   public static native @Name("CreateTensor<float>") @StdMove Value CreateTensorFloat(@Const OrtMemoryInfo info, FloatPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);

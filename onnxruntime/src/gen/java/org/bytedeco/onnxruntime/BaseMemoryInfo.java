@@ -26,7 +26,7 @@ public class BaseMemoryInfo extends Pointer {
         return (BaseMemoryInfo)super.position(position);
     }
     @Override public BaseMemoryInfo getPointer(long i) {
-        return new BaseMemoryInfo((Pointer)this).position(position + i);
+        return new BaseMemoryInfo((Pointer)this).offsetAddress(i);
     }
 
 

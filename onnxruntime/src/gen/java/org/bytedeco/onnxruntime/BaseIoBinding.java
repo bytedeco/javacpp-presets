@@ -26,7 +26,7 @@ public class BaseIoBinding extends Pointer {
         return (BaseIoBinding)super.position(position);
     }
     @Override public BaseIoBinding getPointer(long i) {
-        return new BaseIoBinding((Pointer)this).position(position + i);
+        return new BaseIoBinding((Pointer)this).offsetAddress(i);
     }
 
 

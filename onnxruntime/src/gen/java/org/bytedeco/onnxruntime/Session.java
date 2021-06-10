@@ -23,6 +23,8 @@ public class Session extends BaseSession {
 
   public Session(@ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_path, options); }
   private native void allocate(@ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options);
+  public Session(@ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container) { super((Pointer)null); allocate(env, model_path, options, prepacked_weights_container); }
+  private native void allocate(@ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container);
   public Session(@ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_data, model_data_length, options); }
   private native void allocate(@ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options);
 

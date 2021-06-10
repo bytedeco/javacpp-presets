@@ -27,7 +27,7 @@ public class RunOptions extends BaseRunOptions {
         return (RunOptions)super.position(position);
     }
     @Override public RunOptions getPointer(long i) {
-        return new RunOptions((Pointer)this).position(position + i);
+        return new RunOptions((Pointer)this).offsetAddress(i);
     }
 
   public RunOptions() { super((Pointer)null); allocate(); }
@@ -42,6 +42,9 @@ public class RunOptions extends BaseRunOptions {
   public native @ByRef RunOptions SetRunTag(@Cast("const char*") BytePointer run_tag);
   public native @ByRef RunOptions SetRunTag(String run_tag);
   public native @Cast("const char*") BytePointer GetRunTag();
+
+  public native @ByRef RunOptions AddConfigEntry(@Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
+  public native @ByRef RunOptions AddConfigEntry(String config_key, String config_value);
 
   // terminate ALL currently executing Session::Run calls that were made using this RunOptions instance
   public native @ByRef RunOptions SetTerminate();

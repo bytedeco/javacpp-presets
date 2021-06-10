@@ -26,7 +26,7 @@ public class BaseTensorTypeAndShapeInfo extends Pointer {
         return (BaseTensorTypeAndShapeInfo)super.position(position);
     }
     @Override public BaseTensorTypeAndShapeInfo getPointer(long i) {
-        return new BaseTensorTypeAndShapeInfo((Pointer)this).position(position + i);
+        return new BaseTensorTypeAndShapeInfo((Pointer)this).offsetAddress(i);
     }
 
 

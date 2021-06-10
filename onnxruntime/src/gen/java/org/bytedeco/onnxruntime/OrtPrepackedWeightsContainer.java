@@ -13,11 +13,11 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
-  //Don't call ReleaseSession from Dllmain (because session owns a thread pool)
+
 @Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class OrtValue extends Pointer {
+public class OrtPrepackedWeightsContainer extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public OrtValue() { super((Pointer)null); }
+    public OrtPrepackedWeightsContainer() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OrtValue(Pointer p) { super(p); }
+    public OrtPrepackedWeightsContainer(Pointer p) { super(p); }
 }

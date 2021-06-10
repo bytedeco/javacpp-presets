@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2019-2021 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ import org.bytedeco.dnnl.presets.*;
                 "onnxruntime/core/providers/cuda/cuda_provider_factory.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
             },
-            link = "onnxruntime@.1.7.0",
+            link = "onnxruntime@.1.8.0",
             preload = {"onnxruntime_providers_shared", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
         @Platform(
@@ -99,6 +99,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("ORTCHAR_T").cppText("").cppTypes().cast().pointerTypes("Pointer"))
                .put(new Info("ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
                .put(new Info("ORT_API_MANUAL_INIT").define(false))
+               .put(new Info("USE_CUDA", "USE_DNNL").define(true))
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api").skip())
                .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())

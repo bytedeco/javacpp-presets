@@ -27,7 +27,7 @@ public class SessionOptions extends BaseSessionOptions {
         return (SessionOptions)super.position(position);
     }
     @Override public SessionOptions getPointer(long i) {
-        return new SessionOptions((Pointer)this).position(position + i);
+        return new SessionOptions((Pointer)this).offsetAddress(i);
     }
 
   public SessionOptions() { super((Pointer)null); allocate(); }
@@ -68,6 +68,7 @@ public class SessionOptions extends BaseSessionOptions {
   public native @ByRef SessionOptions AddInitializer(String name, @Const OrtValue ort_val);
 
   public native @ByRef SessionOptions AppendExecutionProvider_CUDA(@Const @ByRef OrtCUDAProviderOptions provider_options);
+  public native @ByRef SessionOptions AppendExecutionProvider_ROCM(@Const @ByRef OrtROCMProviderOptions provider_options);
   public native @ByRef SessionOptions AppendExecutionProvider_OpenVINO(@Const @ByRef OrtOpenVINOProviderOptions provider_options);
   public native @ByRef SessionOptions AppendExecutionProvider_TensorRT(@Const @ByRef OrtTensorRTProviderOptions provider_options);
 }

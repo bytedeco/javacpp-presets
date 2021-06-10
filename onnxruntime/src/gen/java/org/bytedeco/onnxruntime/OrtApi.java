@@ -30,7 +30,7 @@ public class OrtApi extends Pointer {
         return (OrtApi)super.position(position);
     }
     @Override public OrtApi getPointer(long i) {
-        return new OrtApi((Pointer)this).position(position + i);
+        return new OrtApi((Pointer)this).offsetAddress(i);
     }
 
   /**
@@ -71,7 +71,7 @@ public class OrtApi extends Pointer {
   public native GetErrorMessage_OrtStatus GetErrorMessage(); public native OrtApi GetErrorMessage(GetErrorMessage_OrtStatus setter);
 
   /**
-     * @param out Should be freed by {@code OrtReleaseEnv} after use
+     * @param out Should be freed by {@code ReleaseEnv} after use
      */
   public static class CreateEnv_int_BytePointer_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -84,7 +84,7 @@ public class OrtApi extends Pointer {
   public native CreateEnv_int_BytePointer_PointerPointer CreateEnv(); public native OrtApi CreateEnv(CreateEnv_int_BytePointer_PointerPointer setter);
 
   /**
-   * @param out Should be freed by {@code OrtReleaseEnv} after use
+   * @param out Should be freed by {@code ReleaseEnv} after use
    */
   public static class CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -159,7 +159,7 @@ public class OrtApi extends Pointer {
   public native Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer Run(); public native OrtApi Run(Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer setter);
 
   /**
-    * @return A pointer of the newly created object. The pointer should be freed by OrtReleaseSessionOptions after use
+    * @return A pointer of the newly created object. The pointer should be freed by ReleaseSessionOptions after use
     */
   public static class CreateSessionOptions_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -344,7 +344,7 @@ public class OrtApi extends Pointer {
   public native SetInterOpNumThreads_OrtSessionOptions_int SetInterOpNumThreads(); public native OrtApi SetInterOpNumThreads(SetInterOpNumThreads_OrtSessionOptions_int setter);
 
   /*
-  Create a custom op domain. After all sessions using it are released, call OrtReleaseCustomOpDomain
+  Create a custom op domain. After all sessions using it are released, call ReleaseCustomOpDomain
   */
   public static class CreateCustomOpDomain_BytePointer_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -442,7 +442,7 @@ public class OrtApi extends Pointer {
   public native SessionGetOverridableInitializerCount_OrtSession_SizeTPointer SessionGetOverridableInitializerCount(); public native OrtApi SessionGetOverridableInitializerCount(SessionGetOverridableInitializerCount_OrtSession_SizeTPointer setter);
 
   /**
-   * @param out  should be freed by OrtReleaseTypeInfo after use
+   * @param out  should be freed by ReleaseTypeInfo after use
    */
   public static class SessionGetInputTypeInfo_OrtSession_long_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -455,7 +455,7 @@ public class OrtApi extends Pointer {
   public native SessionGetInputTypeInfo_OrtSession_long_PointerPointer SessionGetInputTypeInfo(); public native OrtApi SessionGetInputTypeInfo(SessionGetInputTypeInfo_OrtSession_long_PointerPointer setter);
 
   /**
-   * @param out  should be freed by OrtReleaseTypeInfo after use
+   * @param out  should be freed by ReleaseTypeInfo after use
    */
   public static class SessionGetOutputTypeInfo_OrtSession_long_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -469,7 +469,7 @@ public class OrtApi extends Pointer {
   public native SessionGetOutputTypeInfo_OrtSession_long_PointerPointer SessionGetOutputTypeInfo(); public native OrtApi SessionGetOutputTypeInfo(SessionGetOutputTypeInfo_OrtSession_long_PointerPointer setter);
 
   /**
- * @param out  should be freed by OrtReleaseTypeInfo after use
+ * @param out  should be freed by ReleaseTypeInfo after use
  */
   public static class SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -517,7 +517,7 @@ public class OrtApi extends Pointer {
   public native SessionGetOverridableInitializerName_OrtSession_long_OrtAllocator_PointerPointer SessionGetOverridableInitializerName(); public native OrtApi SessionGetOverridableInitializerName(SessionGetOverridableInitializerName_OrtSession_long_OrtAllocator_PointerPointer setter);
 
   /**
-   * @return A pointer to the newly created object. The pointer should be freed by OrtReleaseRunOptions after use
+   * @return A pointer to the newly created object. The pointer should be freed by ReleaseRunOptions after use
    */
   public static class CreateRunOptions_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -608,8 +608,8 @@ public class OrtApi extends Pointer {
   public native RunOptionsUnsetTerminate_OrtRunOptions RunOptionsUnsetTerminate(); public native OrtApi RunOptionsUnsetTerminate(RunOptionsUnsetTerminate_OrtRunOptions setter);
 
   /**
-   * Create a tensor from an allocator. OrtReleaseValue will also release the buffer inside the output value
-   * @param out Should be freed by calling OrtReleaseValue
+   * Create a tensor from an allocator. ReleaseValue will also release the buffer inside the output value
+   * @param out Should be freed by calling ReleaseValue
    * @param type must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
    */
   public static class CreateTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer extends FunctionPointer {
@@ -625,8 +625,8 @@ public class OrtApi extends Pointer {
 
   /**
    * Create a tensor with user's buffer. You can fill the buffer either before calling this function or after.
-   * p_data is owned by caller. OrtReleaseValue won't release p_data.
-   * @param out Should be freed by calling OrtReleaseValue
+   * p_data is owned by caller. ReleaseValue won't release p_data.
+   * @param out Should be freed by calling ReleaseValue
    */
   public static class CreateTensorWithDataAsOrtValue_OrtMemoryInfo_Pointer_long_LongPointer_long_int_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -738,7 +738,7 @@ public class OrtApi extends Pointer {
   public native GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer GetOnnxTypeFromTypeInfo(); public native OrtApi GetOnnxTypeFromTypeInfo(GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer setter);
 
   /**
-     * The 'out' value should be released by calling OrtReleaseTensorTypeAndShapeInfo
+     * The 'out' value should be released by calling ReleaseTensorTypeAndShapeInfo
      */
   public static class CreateTensorTypeAndShapeInfo_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -835,7 +835,7 @@ public class OrtApi extends Pointer {
   public native GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer GetTensorShapeElementCount(); public native OrtApi GetTensorShapeElementCount(GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer setter);
 
   /**
- * @param out Should be freed by OrtReleaseTensorTypeAndShapeInfo after use
+ * @param out Should be freed by ReleaseTensorTypeAndShapeInfo after use
  */
   public static class GetTensorTypeAndShape_OrtValue_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -850,7 +850,7 @@ public class OrtApi extends Pointer {
   /**
  * Get the type information of an OrtValue
  * @param value
- * @param out The returned value should be freed by OrtReleaseTypeInfo after use
+ * @param out The returned value should be freed by ReleaseTypeInfo after use
  */
   public static class GetTypeInfo_OrtValue_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -1130,6 +1130,12 @@ public class OrtApi extends Pointer {
   }
   public native GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long GetOpaqueValue(); public native OrtApi GetOpaqueValue(GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long setter);
 
+  /**
+     * Fetch a float stored as an attribute in the graph node
+     * \info - OrtKernelInfo instance
+     * \name - name of the attribute to be parsed
+     * \out - pointer to memory where the attribute is to be stored
+     */
   public static class KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1140,6 +1146,13 @@ public class OrtApi extends Pointer {
                     FloatPointer out);
   }
   public native KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer KernelInfoGetAttribute_float(); public native OrtApi KernelInfoGetAttribute_float(KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer setter);
+
+  /**
+     * Fetch a 64-bit int stored as an attribute in the graph node
+     * \info - OrtKernelInfo instance
+     * \name - name of the attribute to be parsed
+     * \out - pointer to memory where the attribute is to be stored
+     */
   public static class KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1150,6 +1163,23 @@ public class OrtApi extends Pointer {
                     @Cast("int64_t*") LongPointer out);
   }
   public native KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer KernelInfoGetAttribute_int64(); public native OrtApi KernelInfoGetAttribute_int64(KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer setter);
+  /**
+     * Fetch a string stored as an attribute in the graph node
+     * \info - OrtKernelInfo instance
+     * \name - name of the attribute to be parsed
+     * \out - pointer to memory where the attribute's contents are to be stored
+     * \size - actual size of string attribute
+     * (If {@code out} is nullptr, the value of {@code size} is set to the true size of the string
+        attribute, and a success status is returned.
+        <p>
+        If the {@code size} parameter is greater than or equal to the actual string attribute's size,
+        the value of {@code size} is set to the true size of the string attribute, the provided memory
+        is filled with the attribute's contents, and a success status is returned.
+        <p>
+        If the {@code size} parameter is lesser than the actual string attribute's size and {@code out}
+        is not nullptr, the value of {@code size} is set to the true size of the string attribute
+        and a failure status is returned.)
+     */
   public static class KernelInfoGetAttribute_string_OrtKernelInfo_BytePointer_BytePointer_SizeTPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1235,7 +1265,7 @@ public class OrtApi extends Pointer {
       private native void allocate();
       public native void call(OrtSession input);
   }
-  public native ReleaseSession_OrtSession ReleaseSession(); public native OrtApi ReleaseSession(ReleaseSession_OrtSession setter);  //Don't call OrtReleaseSession from Dllmain (because session owns a thread pool)
+  public native ReleaseSession_OrtSession ReleaseSession(); public native OrtApi ReleaseSession(ReleaseSession_OrtSession setter);  //Don't call ReleaseSession from Dllmain (because session owns a thread pool)
   public static class ReleaseValue_OrtValue extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -2038,7 +2068,7 @@ public class OrtApi extends Pointer {
    * Use this in conjunction with DisablePerSessionThreads API or else the session will use
    * its own thread pools.
    *
-   * @param out should be freed by {@code OrtReleaseEnv} after use
+   * @param out should be freed by {@code ReleaseEnv} after use
    */
   public static class CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -2065,6 +2095,21 @@ public class OrtApi extends Pointer {
                     OrtSessionOptions options, @Const OrtCUDAProviderOptions cuda_options);
   }
   public native SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions SessionOptionsAppendExecutionProvider_CUDA(); public native OrtApi SessionOptionsAppendExecutionProvider_CUDA(SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions setter);
+
+  /**
+   * Append ROCM execution provider to the session options
+   * If ROCM is not available (due to a non rocm enabled build), this function will return failure.
+   */
+  public static class SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions(Pointer p) { super(p); }
+      protected SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call(
+                    OrtSessionOptions options, @Const OrtROCMProviderOptions rocm_options);
+  }
+  public native SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions SessionOptionsAppendExecutionProvider_ROCM(); public native OrtApi SessionOptionsAppendExecutionProvider_ROCM(SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions setter);
 
   /**
    * Append OpenVINO execution provider to the session options
@@ -2098,7 +2143,8 @@ public class OrtApi extends Pointer {
   public native SetGlobalDenormalAsZero_OrtThreadingOptions SetGlobalDenormalAsZero(); public native OrtApi SetGlobalDenormalAsZero(SetGlobalDenormalAsZero_OrtThreadingOptions setter);
 
   /**
-  * Use this API to create the configuration of an arena that can eventually be used to define 
+  * (Deprecated) Use {@code CreateArenaCfgV2} instead
+  * Use this API to create the configuration of an arena that can eventually be used to define
   * an arena based allocator's behavior
   * @param max_mem - use 0 to allow ORT to choose the default
   * @param arena_extend_strategy -  use -1 to allow ORT to choose the default, 0 = kNextPowerOfTwo, 1 = kSameAsRequested
@@ -2134,8 +2180,8 @@ public class OrtApi extends Pointer {
   * (doc_string field of the GraphProto message within the ModelProto message).
   * If it doesn't exist, an empty string will be returned.
   * @param model_metadata - an instance of OrtModelMetadata
-  * @param allocator - allocator used to allocate the string that will be returned back 
-  * @param value - is set to a null terminated string allocated using 'allocator'. 
+  * @param allocator - allocator used to allocate the string that will be returned back
+  * @param value - is set to a null terminated string allocated using 'allocator'.
     The caller is responsible for freeing it.
   */
   public static class ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
@@ -2189,4 +2235,198 @@ public class OrtApi extends Pointer {
       public native @Cast("OrtStatusPtr") OrtStatus call( IntPointer device_id);
   }
   public native GetCurrentGpuDeviceId_IntPointer GetCurrentGpuDeviceId(); public native OrtApi GetCurrentGpuDeviceId(GetCurrentGpuDeviceId_IntPointer setter);
+
+  /**
+     * Fetch an array of int64_t values stored as an attribute in the graph node
+     * \info - OrtKernelInfo instance
+     * \name - name of the attribute to be parsed
+     * \out - pointer to memory where the attribute's contents are to be stored
+     * \size - actual size of attribute array
+     * (If {@code out} is nullptr, the value of {@code size} is set to the true size of the attribute
+        array's size, and a success status is returned.
+        <p>
+        If the {@code size} parameter is greater than or equal to the actual attribute array's size,
+        the value of {@code size} is set to the true size of the attribute array's size,
+        the provided memory is filled with the attribute's contents,
+        and a success status is returned.
+        <p>
+        If the {@code size} parameter is lesser than the actual attribute array's size and {@code out}
+        is not nullptr, the value of {@code size} is set to the true size of the attribute array's size
+        and a failure status is returned.)
+     */
+  public static class KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer(Pointer p) { super(p); }
+      protected KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    FloatPointer out, @Cast("size_t*") SizeTPointer size);
+  }
+  public native KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer KernelInfoGetAttributeArray_float(); public native OrtApi KernelInfoGetAttributeArray_float(KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer setter);
+
+  /**
+     * Fetch an array of int64_t values stored as an attribute in the graph node
+     * \info - OrtKernelInfo instance
+     * \name - name of the attribute to be parsed
+     * \out - pointer to memory where the attribute's contents are to be stored
+     * \size - actual size of attribute array
+     * (If {@code out} is nullptr, the value of {@code size} is set to the true size of the attribute
+        array's size, and a success status is returned.
+        <p>
+        If the {@code size} parameter is greater than or equal to the actual attribute array's size,
+        the value of {@code size} is set to the true size of the attribute array's size,
+        the provided memory is filled with the attribute's contents,
+        and a success status is returned.
+        <p>
+        If the {@code size} parameter is lesser than the actual attribute array's size and {@code out}
+        is not nullptr, the value of {@code size} is set to the true size of the attribute array's size
+        and a failure status is returned.)
+     */
+  public static class KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer(Pointer p) { super(p); }
+      protected KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    @Cast("int64_t*") LongPointer out, @Cast("size_t*") SizeTPointer size);
+  }
+  public native KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer KernelInfoGetAttributeArray_int64(); public native OrtApi KernelInfoGetAttributeArray_int64(KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer setter);
+
+  /**
+  * Use this API to create the configuration of an arena that can eventually be used to define
+  * an arena based allocator's behavior
+  * @param arena_config_keys - keys to configure the arena
+  * @param arena_config_values - values to configure the arena
+  * @param num_keys - number of keys passed in
+  * Supported keys are (See docs/C_API.md for details on what the following parameters mean and how to choose these values.):
+  * "max_mem": Maximum memory that can be allocated by the arena based allocator.
+     Use 0 for ORT to pick the best value. Default is 0.
+  * "arena_extend_strategy": 0 = kNextPowerOfTwo, 1 = kSameAsRequested.
+     Use -1 to allow ORT to choose the default.
+  * "initial_chunk_size_bytes": (Possible) Size of the first allocation in the arena.
+     Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
+     Ultimately, the first allocation size is determined by the allocation memory request.
+  * "max_dead_bytes_per_chunk": Threshold of unused memory in an allocated chunk of arena memory after
+     crossing which the current chunk is chunked into 2.
+  * "initial_growth_chunk_size_bytes": (Possible) Size of the second allocation in the arena.
+     Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
+     Ultimately, the allocation size is determined by the allocation memory request.
+     Further allocation sizes are governed by the arena extend strategy.
+  */
+  public static class CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer(Pointer p) { super(p); }
+      protected CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*const*") PointerPointer arena_config_keys,
+                    @Cast("const size_t*") SizeTPointer arena_config_values, @Cast("size_t") long num_keys,
+                    @Cast("OrtArenaCfg**") PointerPointer out);
+  }
+  public native CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer CreateArenaCfgV2(); public native OrtApi CreateArenaCfgV2(CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer setter);
+
+  /**
+     * Set a single run configuration entry as a pair of strings
+     * If a configuration with same key exists, this will overwrite the configuration with the given config_value
+     * @param config_key    A null terminated string representation of the config key
+     * @param config_value  A null terminated string representation of the config value
+     * The config_key and the format of config_value are defined in onnxruntime_run_options_config_keys.h
+     */
+  public static class AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer(Pointer p) { super(p); }
+      protected AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtRunOptions options,
+                    @Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
+  }
+  public native AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer AddRunConfigEntry(); public native OrtApi AddRunConfigEntry(AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer setter);
+
+  /*
+     * Creates an OrtPrepackedWeightsContainer instance.
+     * This container will hold pre-packed buffers of shared initializers for sharing between sessions
+     * (i.e.) if there are shared initializers that can be shared between sessions, the pre-packed buffers
+     * of these (if any) may possibly be shared to provide memory footprint savings. Pass this container
+     * to sessions that you would like to share pre-packed buffers of shared initializers at session
+     * creation time.
+     *  \out - created OrtPrepackedWeightsContainer instance
+    */
+  public static class CreatePrepackedWeightsContainer_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreatePrepackedWeightsContainer_PointerPointer(Pointer p) { super(p); }
+      protected CreatePrepackedWeightsContainer_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtPrepackedWeightsContainer**") PointerPointer out);
+  }
+  public native CreatePrepackedWeightsContainer_PointerPointer CreatePrepackedWeightsContainer(); public native OrtApi CreatePrepackedWeightsContainer(CreatePrepackedWeightsContainer_PointerPointer setter);
+
+  /*
+     * Release OrtPrepackedWeightsContainer instance
+     *  Note: The OrtPrepackedWeightsContainer instance must not be released until the sessions using it are released
+    */
+  public static class ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer(Pointer p) { super(p); }
+      protected ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer() { allocate(); }
+      private native void allocate();
+      public native void call(OrtPrepackedWeightsContainer input);
+  }
+  public native ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer ReleasePrepackedWeightsContainer(); public native OrtApi ReleasePrepackedWeightsContainer(ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer setter);
+
+  /**
+     * Same functionality offered by CreateSession() API except that a container that contains
+     pre-packed weights' buffers is written into/read from by the created session.
+     This is useful when used in conjunction with the AddInitializer() API which injects
+     shared initializer info into sessions. Wherever possible, the pre-packed versions of these
+     shared initializers are cached in this container so that multiple sessions can just re-use
+     these instead of duplicating these in memory.
+     * \env - OrtEnv instance instance
+     * \model_path - model path
+     * \options - OrtSessionOptions instance
+     * \prepacked_weights_container - OrtPrepackedWeightsContainer instance
+     * \out - created session instance
+     */
+  public static class CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer(Pointer p) { super(p); }
+      protected CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
+                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @Cast("OrtSession**") PointerPointer out);
+  }
+  public native CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer CreateSessionWithPrepackedWeightsContainer(); public native OrtApi CreateSessionWithPrepackedWeightsContainer(CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer setter);
+
+  /**
+     * Same functionality offered by CreateSessionFromArray() API except that a container that contains
+     pre-packed weights' buffers is written into/read from by the created session.
+     This is useful when used in conjunction with the AddInitializer() API which injects
+     shared initializer info into sessions. Wherever possible, the pre-packed versions of these
+     shared initializers are cached in this container so that multiple sessions can just re-use
+     these instead of duplicating these in memory.
+     * \env - OrtEnv instance instance
+     * \model_data - model byte array
+     * \model_data_length - the size of the model byte array
+     * \options - OrtSessionOptions instance
+     * \prepacked_weights_container - OrtPrepackedWeightsContainer instance
+     * \out - created session instance
+     */
+  public static class CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer(Pointer p) { super(p); }
+      protected CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env,
+                    @Const Pointer model_data, @Cast("size_t") long model_data_length,
+                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @Cast("OrtSession**") PointerPointer out);
+  }
+  public native CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer CreateSessionFromArrayWithPrepackedWeightsContainer(); public native OrtApi CreateSessionFromArrayWithPrepackedWeightsContainer(CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer setter);
 }

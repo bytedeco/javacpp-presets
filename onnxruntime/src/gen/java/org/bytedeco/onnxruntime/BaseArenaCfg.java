@@ -28,7 +28,7 @@ public class BaseArenaCfg extends Pointer {
         return (BaseArenaCfg)super.position(position);
     }
     @Override public BaseArenaCfg getPointer(long i) {
-        return new BaseArenaCfg((Pointer)this).position(position + i);
+        return new BaseArenaCfg((Pointer)this).offsetAddress(i);
     }
 
 
