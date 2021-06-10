@@ -26,7 +26,7 @@ public class BaseEnv extends Pointer {
         return (BaseEnv)super.position(position);
     }
     @Override public BaseEnv getPointer(long i) {
-        return new BaseEnv((Pointer)this).position(position + i);
+        return new BaseEnv((Pointer)this).offsetAddress(i);
     }
 
 

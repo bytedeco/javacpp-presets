@@ -30,7 +30,7 @@ public class OrtApiBase extends Pointer {
         return (OrtApiBase)super.position(position);
     }
     @Override public OrtApiBase getPointer(long i) {
-        return new OrtApiBase((Pointer)this).position(position + i);
+        return new OrtApiBase((Pointer)this).offsetAddress(i);
     }
 
   public static class GetApi_int extends FunctionPointer {

@@ -26,7 +26,7 @@ public class BaseRunOptions extends Pointer {
         return (BaseRunOptions)super.position(position);
     }
     @Override public BaseRunOptions getPointer(long i) {
-        return new BaseRunOptions((Pointer)this).position(position + i);
+        return new BaseRunOptions((Pointer)this).offsetAddress(i);
     }
 
 

@@ -27,7 +27,7 @@ public class Env extends BaseEnv {
         return (Env)super.position(position);
     }
     @Override public Env getPointer(long i) {
-        return new Env((Pointer)this).position(position + i);
+        return new Env((Pointer)this).offsetAddress(i);
     }
 
   public Env(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(logging_level, logid); }

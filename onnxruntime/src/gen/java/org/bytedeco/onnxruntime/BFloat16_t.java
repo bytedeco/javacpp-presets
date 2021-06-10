@@ -36,7 +36,7 @@ public class BFloat16_t extends Pointer {
         return (BFloat16_t)super.position(position);
     }
     @Override public BFloat16_t getPointer(long i) {
-        return new BFloat16_t((Pointer)this).position(position + i);
+        return new BFloat16_t((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("uint16_t") short value(); public native BFloat16_t value(short setter);

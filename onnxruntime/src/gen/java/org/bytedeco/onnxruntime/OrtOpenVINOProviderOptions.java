@@ -30,7 +30,7 @@ public class OrtOpenVINOProviderOptions extends Pointer {
         return (OrtOpenVINOProviderOptions)super.position(position);
     }
     @Override public OrtOpenVINOProviderOptions getPointer(long i) {
-        return new OrtOpenVINOProviderOptions((Pointer)this).position(position + i);
+        return new OrtOpenVINOProviderOptions((Pointer)this).offsetAddress(i);
     }
 
 // #ifdef __cplusplus
@@ -40,5 +40,7 @@ public class OrtOpenVINOProviderOptions extends Pointer {
   public native @Cast("const char*") BytePointer device_type(); public native OrtOpenVINOProviderOptions device_type(BytePointer setter);                // CPU_FP32, GPU_FP32, GPU_FP16, MYRIAD_FP16, VAD-M_FP16 or VAD-F_FP32
   public native @Cast("unsigned char") byte enable_vpu_fast_compile(); public native OrtOpenVINOProviderOptions enable_vpu_fast_compile(byte setter);  // 0 = false, nonzero = true
   public native @Cast("const char*") BytePointer device_id(); public native OrtOpenVINOProviderOptions device_id(BytePointer setter);
-  public native @Cast("size_t") long num_of_threads(); public native OrtOpenVINOProviderOptions num_of_threads(long setter);  // 0 uses default number of threads
+  public native @Cast("size_t") long num_of_threads(); public native OrtOpenVINOProviderOptions num_of_threads(long setter);               // 0 uses default number of threads
+  public native @Cast("unsigned char") byte use_compiled_network(); public native OrtOpenVINOProviderOptions use_compiled_network(byte setter);  // 0 = false, nonzero = true
+  public native @Cast("const char*") BytePointer blob_dump_path(); public native OrtOpenVINOProviderOptions blob_dump_path(BytePointer setter);          // path is set to empty by default
 }

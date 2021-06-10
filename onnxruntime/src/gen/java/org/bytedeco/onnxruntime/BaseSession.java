@@ -26,7 +26,7 @@ public class BaseSession extends Pointer {
         return (BaseSession)super.position(position);
     }
     @Override public BaseSession getPointer(long i) {
-        return new BaseSession((Pointer)this).position(position + i);
+        return new BaseSession((Pointer)this).offsetAddress(i);
     }
 
 

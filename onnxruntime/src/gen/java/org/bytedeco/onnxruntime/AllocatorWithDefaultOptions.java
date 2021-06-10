@@ -27,7 +27,7 @@ public class AllocatorWithDefaultOptions extends Pointer {
         return (AllocatorWithDefaultOptions)super.position(position);
     }
     @Override public AllocatorWithDefaultOptions getPointer(long i) {
-        return new AllocatorWithDefaultOptions((Pointer)this).position(position + i);
+        return new AllocatorWithDefaultOptions((Pointer)this).offsetAddress(i);
     }
 
   public AllocatorWithDefaultOptions() { super((Pointer)null); allocate(); }

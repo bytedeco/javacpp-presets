@@ -26,7 +26,7 @@ public class BaseMapTypeInfo extends Pointer {
         return (BaseMapTypeInfo)super.position(position);
     }
     @Override public BaseMapTypeInfo getPointer(long i) {
-        return new BaseMapTypeInfo((Pointer)this).position(position + i);
+        return new BaseMapTypeInfo((Pointer)this).offsetAddress(i);
     }
 
 

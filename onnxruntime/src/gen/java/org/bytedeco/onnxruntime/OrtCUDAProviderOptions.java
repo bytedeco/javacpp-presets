@@ -33,14 +33,20 @@ public class OrtCUDAProviderOptions extends Pointer {
         return (OrtCUDAProviderOptions)super.position(position);
     }
     @Override public OrtCUDAProviderOptions getPointer(long i) {
-        return new OrtCUDAProviderOptions((Pointer)this).position(position + i);
+        return new OrtCUDAProviderOptions((Pointer)this).offsetAddress(i);
     }
 
   public native int device_id(); public native OrtCUDAProviderOptions device_id(int setter);                                  // cuda device with id=0 as default device.
   public native @Cast("OrtCudnnConvAlgoSearch") int cudnn_conv_algo_search(); public native OrtCUDAProviderOptions cudnn_conv_algo_search(int setter);  // cudnn conv algo search option
-  public native @Cast("size_t") long cuda_mem_limit(); public native OrtCUDAProviderOptions cuda_mem_limit(long setter);                          // default cuda memory limitation to maximum finite value of size_t.
-  public native int arena_extend_strategy(); public native OrtCUDAProviderOptions arena_extend_strategy(int setter);                      // default area extend strategy to KNextPowerOfTwo.
+
+  public native @Cast("size_t") long gpu_mem_limit(); public native OrtCUDAProviderOptions gpu_mem_limit(long setter);  // default cuda memory limitation to maximum finite value of size_t.
+                         // (will be overridden by "max_mem" value used while creating `arena_cfg` if `arena_cfg` is provided)
+
+  public native int arena_extend_strategy(); public native OrtCUDAProviderOptions arena_extend_strategy(int setter);  // default area extend strategy to KNextPowerOfTwo.
+                              // (will be overridden by "arena_extend_strategy" value used while creating `arena_cfg` if `arena_cfg` is provided)
+
   public native int do_copy_in_default_stream(); public native OrtCUDAProviderOptions do_copy_in_default_stream(int setter);
   public native int has_user_compute_stream(); public native OrtCUDAProviderOptions has_user_compute_stream(int setter);
   public native Pointer user_compute_stream(); public native OrtCUDAProviderOptions user_compute_stream(Pointer setter);
+  public native OrtArenaCfg default_memory_arena_cfg(); public native OrtCUDAProviderOptions default_memory_arena_cfg(OrtArenaCfg setter);
 }

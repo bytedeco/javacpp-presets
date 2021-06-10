@@ -26,7 +26,7 @@ public class BaseValue extends Pointer {
         return (BaseValue)super.position(position);
     }
     @Override public BaseValue getPointer(long i) {
-        return new BaseValue((Pointer)this).position(position + i);
+        return new BaseValue((Pointer)this).offsetAddress(i);
     }
 
 

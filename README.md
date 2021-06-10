@@ -218,7 +218,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DepthAI 2.4.0  https://github.com/luxonis/depthai-core
  * ONNX 1.9.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.7.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.8.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

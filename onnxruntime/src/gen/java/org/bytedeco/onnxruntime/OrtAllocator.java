@@ -32,7 +32,7 @@ public class OrtAllocator extends Pointer {
         return (OrtAllocator)super.position(position);
     }
     @Override public OrtAllocator getPointer(long i) {
-        return new OrtAllocator((Pointer)this).position(position + i);
+        return new OrtAllocator((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("uint32_t") int version(); public native OrtAllocator version(int setter);  // Initialize to ORT_API_VERSION
