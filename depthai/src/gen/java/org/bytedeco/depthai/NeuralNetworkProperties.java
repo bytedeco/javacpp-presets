@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Specify NeuralNetwork options such as blob path, ...
+ * Specify properties for NeuralNetwork such as blob path, ...
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class NeuralNetworkProperties extends Pointer {

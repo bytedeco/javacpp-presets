@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Spatial location information structure
+ * SpatialLocations structure
  *
  * Contains configuration data, average depth for the calculated ROI on depth map.
  * Together with spatial coordinates: x,y,z relative to the center of depth map.
@@ -36,12 +36,28 @@ public class SpatialLocations extends Pointer {
         return new SpatialLocations((Pointer)this).offsetAddress(i);
     }
 
-    // Configuration for selected ROI
+    /**
+     *  Configuration for selected ROI
+     */
     public native @ByRef SpatialLocationCalculatorConfigData config(); public native SpatialLocations config(SpatialLocationCalculatorConfigData setter);
-    // Average of depth values inside the ROI between the specified thresholds in config
+    /**
+     *  Average of depth values inside the ROI between the specified thresholds in config
+     */
     public native float depthAverage(); public native SpatialLocations depthAverage(float setter);
-    // Number of depth values used to calculate depthAverage based on config
+    /**
+     *  Minimum of depth values inside the ROI between the specified thresholds in config
+     */
+    public native @Cast("std::uint16_t") short depthMin(); public native SpatialLocations depthMin(short setter);
+    /**
+     *  Maximum of depth values inside the ROI between the specified thresholds in config
+     */
+    public native @Cast("std::uint16_t") short depthMax(); public native SpatialLocations depthMax(short setter);
+    /**
+     *  Number of depth values used to calculate depthAverage based on config
+     */
     public native @Cast("std::uint32_t") int depthAveragePixelCount(); public native SpatialLocations depthAveragePixelCount(int setter);
-    // Spatial coordinates: x,y,z; x,y are the relative positions of the center of ROI to the center of depth map
+    /**
+     *  Spatial coordinates: x,y,z; x,y are the relative positions of the center of ROI to the center of depth map
+     */
     public native @ByRef Point3f spatialCoordinates(); public native SpatialLocations spatialCoordinates(Point3f setter);
 }

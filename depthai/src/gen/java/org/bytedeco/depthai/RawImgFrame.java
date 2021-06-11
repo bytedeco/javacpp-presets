@@ -11,6 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.depthai.global.depthai.*;
 
 
+/** RawImgFrame structure */
 @Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class RawImgFrame extends RawBuffer {
     static { Loader.load(); }

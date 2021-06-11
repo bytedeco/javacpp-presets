@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * \brief DetectionNetwork. Base for different network specializations
+ * \brief DetectionNetwork, base for different network specializations
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class DetectionNetwork extends NeuralNetwork {

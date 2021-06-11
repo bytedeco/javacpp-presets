@@ -11,6 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.depthai.global.depthai.*;
 
 
+/** NodeIo informations such as name, type, ... */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class NodeIoInfo extends Pointer {
     static { Loader.load(); }

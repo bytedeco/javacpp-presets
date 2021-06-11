@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Specify StereoDepth options
+ * Specify properties for StereoDepth
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class StereoDepthProperties extends Pointer {
@@ -60,6 +60,9 @@ public class StereoDepthProperties extends Pointer {
      * Calibration data byte array
      */
     public native @Cast("std::uint8_t*") @StdVector BytePointer calibration(); public native StereoDepthProperties calibration(BytePointer setter);
+
+    public native @ByRef EepromData calibrationData(); public native StereoDepthProperties calibrationData(EepromData setter);
+
     /**
      * Set kernel size for disparity/depth median filtering, or disable
      */
@@ -77,6 +80,8 @@ public class StereoDepthProperties extends Pointer {
      * Confidence threshold for disparity calculation, 0..255
      */
     public native @Cast("std::int32_t") int confidenceThreshold(); public native StereoDepthProperties confidenceThreshold(int setter);
+
+    public native @Cast("bool") boolean enableRectification(); public native StereoDepthProperties enableRectification(boolean setter);
     /**
      * Computes and combines disparities in both L-R and R-L directions, and combine them.
      * For better occlusion handling

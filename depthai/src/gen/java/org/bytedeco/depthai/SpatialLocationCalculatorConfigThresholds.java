@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Spatial location configuration thresholds structure
+ * SpatialLocation configuration thresholds structure
  *
  * Contains configuration data for lower and upper threshold in millimeters for ROI.
  * Values outside of threshold range will be ignored when calculating spatial coordinates from depth map.

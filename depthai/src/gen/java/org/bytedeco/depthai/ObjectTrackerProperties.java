@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Properties for ObjectTracker
+ * Specify properties for ObjectTracker
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class ObjectTrackerProperties extends Pointer {

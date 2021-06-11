@@ -128,6 +128,20 @@ public class Pipeline extends Pointer {
     /** Set a specific OpenVINO version to use with this pipeline */
     public native void setOpenVINOVersion(@Cast("dai::OpenVINO::Version") int version);
 
+    /**
+     * Sets the calibration in pipeline which overrides the calibration data in eeprom
+     *
+     * @param calibrationDataHandler CalibrationHandler object which is loaded with calibration information.
+     */
+    public native void setCalibrationData(@ByVal CalibrationHandler calibrationDataHandler);
+
+    /**
+     * gets the calibration data which is set through pipeline
+     *
+     * @return the calibrationHandler with calib data in the pipeline
+     */
+    public native @ByVal CalibrationHandler getCalibrationData();
+
     /** Get required OpenVINO version to run this pipeline */
     public native @Cast("dai::OpenVINO::Version") int getOpenVINOVersion();
 

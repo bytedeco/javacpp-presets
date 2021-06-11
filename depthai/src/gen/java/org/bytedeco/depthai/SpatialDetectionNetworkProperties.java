@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Properties for SpatialDetectionNetwork
+ * Specify properties for SpatialDetectionNetwork
  */
 @Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class SpatialDetectionNetworkProperties extends DetectionNetworkProperties {

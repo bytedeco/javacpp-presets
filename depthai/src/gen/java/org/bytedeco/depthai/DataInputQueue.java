@@ -90,13 +90,14 @@ public class DataInputQueue extends Pointer {
      * Can either block if 'blocking' behavior is true or overwrite oldest
      * @param msg Message to add to the queue
      */
-    public native void send(@Const @SharedPtr @ByRef ADatatype msg);
+    public native @Name("send") void sendSharedPtr(@Const @SharedPtr @ByRef ADatatype msg);
 
     /**
      * Adds a message to the queue, which will be picked up and sent to the device.
      * Can either block if 'blocking' behavior is true or overwrite oldest
      * @param msg Message to add to the queue
      */
+    public native void send(@Const @ByRef ADatatype msg);
 
     /**
      * Adds message to the queue, which will be picked up and sent to the device.
@@ -114,7 +115,7 @@ public class DataInputQueue extends Pointer {
      * @param msg Message to add to the queue
      * @param timeout Maximum duration to block in milliseconds
      */
-    public native @Cast("bool") boolean send(@Const @SharedPtr @ByRef ADatatype msg, @ByVal @Cast("std::chrono::milliseconds*") Pointer timeout);
+    public native @Cast("bool") @Name("send") boolean sendSharedPtr(@Const @SharedPtr @ByRef ADatatype msg, @ByVal @Cast("std::chrono::milliseconds*") Pointer timeout);
 
     /**
      * Adds message to the queue, which will be picked up and sent to the device.
@@ -123,4 +124,5 @@ public class DataInputQueue extends Pointer {
      * @param msg Message to add to the queue
      * @param timeout Maximum duration to block in milliseconds
      */
+    public native @Cast("bool") boolean send(@Const @ByRef ADatatype msg, @ByVal @Cast("std::chrono::milliseconds*") Pointer timeout);
 }

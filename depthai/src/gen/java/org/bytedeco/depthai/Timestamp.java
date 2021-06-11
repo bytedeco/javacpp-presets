@@ -11,6 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.depthai.global.depthai.*;
 
 
+/** Timestamp structure */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class Timestamp extends Pointer {
     static { Loader.load(); }
@@ -31,4 +32,5 @@ public class Timestamp extends Pointer {
 
     public native @Cast("int64_t") long sec(); public native Timestamp sec(long setter);
     public native @Cast("int64_t") long nsec(); public native Timestamp nsec(long setter);
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer get();
 }

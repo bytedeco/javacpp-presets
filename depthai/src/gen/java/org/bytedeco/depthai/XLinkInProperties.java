@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Properties for XLinkIn which define stream name
+ * Specify properties for XLinkIn such as stream name, ...
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class XLinkInProperties extends Pointer {

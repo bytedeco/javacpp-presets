@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Specify ColorCamera options such as camera ID, ...
+ *  Specify properties for ColorCamera such as camera ID, ...
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class ColorCameraProperties extends Pointer {

@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * SystemLoggerProperties
+ * SystemLoggerProperties structure
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class SystemLoggerProperties extends Pointer {

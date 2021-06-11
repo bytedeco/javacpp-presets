@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * YoloSpatialDetectionNetwork. (tiny)Yolov3/v4 based network with spatial location data.
+ * YoloSpatialDetectionNetwork node. (tiny)Yolov3/v4 based network with spatial location data.
  */
 @Namespace("dai::node") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class YoloSpatialDetectionNetwork extends SpatialDetectionNetwork {

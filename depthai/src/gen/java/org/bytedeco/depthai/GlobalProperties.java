@@ -45,6 +45,12 @@ public class GlobalProperties extends Pointer {
     public native @ByRef StringOptional pipelineName(); public native GlobalProperties pipelineName(StringOptional setter);
     public native @ByRef StringOptional pipelineVersion(); public native GlobalProperties pipelineVersion(StringOptional setter);
     /**
+     * Calibration data sent through pipeline
+     */
+
+    public native @ByRef EepromDataOptional calibData(); public native GlobalProperties calibData(EepromDataOptional setter);
+
+    /**
      * Camera tuning blob size in bytes
      */
     public native @ByRef @Cast("tl::optional<std::uint32_t>*") IntOptional cameraTuningBlobSize(); public native GlobalProperties cameraTuningBlobSize(IntOptional setter);

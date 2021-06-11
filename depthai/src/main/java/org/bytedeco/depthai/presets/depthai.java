@@ -63,8 +63,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai-shared/common/Size2f.hpp",
                 "depthai-shared/common/Rect.hpp",
                 "depthai-shared/common/RotatedRect.hpp",
+                "depthai-shared/common/Extrinsics.hpp",
+                "depthai-shared/common/CameraModel.hpp",
+                "depthai-shared/common/CameraInfo.hpp",
+                "depthai-shared/common/StereoRectification.hpp",
+                "depthai-shared/common/EepromData.hpp",
                 "depthai-shared/common/Timestamp.hpp",
                 "depthai-shared/common/UsbSpeed.hpp",
+                "depthai-shared/datatype/RawIMUData.hpp",
                 "depthai-shared/datatype/DatatypeEnum.hpp",
                 "depthai-shared/datatype/RawBuffer.hpp",
                 "depthai-shared/datatype/RawCameraControl.hpp",
@@ -80,6 +86,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai-shared/log/LogLevel.hpp",
                 "depthai-shared/log/LogMessage.hpp",
                 "depthai-shared/xlink/XLinkConstants.hpp",
+                "depthai-shared/properties/IMUProperties.hpp",
                 "depthai-shared/properties/GlobalProperties.hpp",
                 "depthai-shared/properties/ColorCameraProperties.hpp",
                 "depthai-shared/properties/ImageManipProperties.hpp",
@@ -105,6 +112,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai/common/CameraBoardSocket.hpp",
                 "depthai/pipeline/datatype/ADatatype.hpp",
                 "depthai/pipeline/datatype/Buffer.hpp",
+                "depthai/pipeline/datatype/IMUData.hpp",
                 "depthai/pipeline/datatype/CameraControl.hpp",
                 "depthai/pipeline/datatype/ImgFrame.hpp",
                 "depthai/pipeline/datatype/ImgDetections.hpp",
@@ -118,6 +126,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai/pipeline/AssetManager.hpp",
                 "depthai/pipeline/Node.hpp",
                 "depthai/pipeline/Pipeline.hpp",
+                "depthai/pipeline/node/IMU.hpp",
                 "depthai/pipeline/node/ColorCamera.hpp",
                 "depthai/pipeline/node/ImageManip.hpp",
                 "depthai/pipeline/node/MonoCamera.hpp",
@@ -135,6 +144,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai/xlink/XLinkConnection.hpp",
                 "depthai/xlink/XLinkStream.hpp",
                 "depthai/device/DataQueue.hpp",
+                "depthai/device/CalibrationHandler.hpp",
                 "depthai/device/CallbackHandler.hpp",
                 "depthai/device/Device.hpp",
                 "depthai/device/DeviceBootloader.hpp",
@@ -155,6 +165,7 @@ public class depthai implements InfoMapper {
                .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE").cppTypes().annotations())
 
                .put(new Info("std::uint8_t").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
+               .put(new Info("std::uint16_t").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("std::int32_t", "std::uint32_t", "dai::OpenVINO::Version").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::int64_t", "dai::Node::Id").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
@@ -175,12 +186,14 @@ public class depthai implements InfoMapper {
                .put(new Info("std::shared_ptr<dai::Node>").annotations("@SharedPtr").pointerTypes("Node"))
                .put(new Info("std::vector<int>").annotations("@StdVector").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+               .put(new Info("std::vector<std::vector<float> >").pointerTypes("FloatVectorVector").define())
                .put(new Info("std::vector<std::shared_ptr<dai::Asset> >").pointerTypes("AssetVector").define())
                .put(new Info("std::vector<std::shared_ptr<dai::ADatatype> >").pointerTypes("ADatatypeVector").define())
                .put(new Info("std::vector<std::shared_ptr<dai::Node> >").pointerTypes("NodeVector").define())
                .put(new Info("const std::vector<std::pair<std::string,dai::AssetView> >",
                                    "std::vector<std::pair<std::string,dai::AssetView> >").pointerTypes("StringAssetViewPairVector").define())
                .put(new Info("std::unordered_set<dai::Node::Connection>").pointerTypes("ConnectionSet").define())
+               .put(new Info("std::unordered_map<dai::CameraBoardSocket,dai::CameraInfo>").pointerTypes("CameraBoardSocketCameraInfoMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::unordered_set<dai::Node::Connection> >").pointerTypes("NodeIdConnectionSetMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::shared_ptr<dai::Node> >").pointerTypes("NodeIdNodeMap").define())
                .put(new Info("std::unordered_map<int64_t,dai::NodeObjInfo>").pointerTypes("LongNodeObjInfoMap").define())
@@ -190,10 +203,12 @@ public class depthai implements InfoMapper {
                .put(new Info("tl::optional<int>", "tl::optional<std::int32_t>", "tl::optional<std::uint32_t>").cast().pointerTypes("IntOptional").define())
                .put(new Info("tl::optional<dai::OpenVINO::Version>").pointerTypes("VersionOptional").define())
                .put(new Info("tl::optional<std::string>").pointerTypes("StringOptional").define())
+               .put(new Info("tl::optional<dai::EepromData>").pointerTypes("EepromDataOptional").define())
+               .put(new Info("std::tuple<std::vector<std::vector<float> >,int,int>").pointerTypes("FloatVectorVectorIntIntTuple").define())
 
                .put(new Info("dai::Node").immutable().purify())
                .put(new Info("dai::Node::Connection").pointerTypes("Node.Connection"))
-               .put(new Info("dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
+               .put(new Info("dai::node::IMU", "dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
                              "dai::node::NeuralNetwork", "dai::node::DetectionNetwork", "dai::node::ObjectTracker", "dai::node::SPIOut",
                              "dai::node::SpatialDetectionNetwork", "dai::node::SpatialLocationCalculator", "dai::node::StereoDepth",
                              "dai::node::SystemLogger", "dai::node::VideoEncoder", "dai::node::XLinkIn", "dai::node::XLinkOut").immutable())
@@ -203,6 +218,10 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::node::StereoDepth::Properties::MedianFilter").pointerTypes("StereoDepthProperties.MedianFilter"))
                .put(new Info("dai::node::VideoEncoder::Properties::Profile").pointerTypes("VideoEncoderProperties.Profile"))
                .put(new Info("dai::node::VideoEncoder::Properties::RateControlMode").pointerTypes("VideoEncoderProperties.RateControlMode"))
+
+               .put(new Info("dai::IMUReport::accuracy").javaNames("reportAccuracy"))
+               .put(new Info("dai::DataInputQueue::send(const std::shared_ptr<dai::ADatatype>&)",
+                             "dai::DataInputQueue::send(const std::shared_ptr<dai::ADatatype>&, std::chrono::milliseconds)").javaNames("sendSharedPtr"))
 
                .put(new Info("dai::Pipeline::create").javaText(
                        "public native @Name(\"create<dai::node::ColorCamera>\") @SharedPtr ColorCamera createColorCamera();\n"

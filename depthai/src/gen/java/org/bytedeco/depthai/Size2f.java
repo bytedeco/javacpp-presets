@@ -11,6 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.depthai.global.depthai.*;
 
 
+/**
+ * Size2f structure
+ *
+ * width, height values define the size of the shape/frame
+ */
 @Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class Size2f extends Pointer {
     static { Loader.load(); }
