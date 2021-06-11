@@ -25,6 +25,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../StringOptional.java
 
 
+// Targeting ../EepromDataOptional.java
+
+
 // Targeting ../StringIntVectorMap.java
 
 
@@ -34,6 +37,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../StringVector.java
 
 
+// Targeting ../FloatVectorVector.java
+
+
 // Targeting ../AssetVector.java
 
 
@@ -41,6 +47,12 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 
 
 // Targeting ../NodeVector.java
+
+
+// Targeting ../FloatVectorVectorIntIntTuple.java
+
+
+// Targeting ../CameraBoardSocketCameraInfoMap.java
 
 
 // Targeting ../NodeIdConnectionSetMap.java
@@ -187,6 +199,7 @@ public static final int
 // #include "utility/Initialization.hpp"
 
 // Include some common device classes
+// #include "device/CalibrationHandler.hpp"
 // #include "device/Device.hpp"
 // #include "device/DeviceBootloader.hpp"
 
@@ -196,6 +209,7 @@ public static final int
 // Include common nodes
 // #include "pipeline/node/ColorCamera.hpp"
 // #include "pipeline/node/DetectionNetwork.hpp"
+// #include "pipeline/node/IMU.hpp"
 // #include "pipeline/node/ImageManip.hpp"
 // #include "pipeline/node/MonoCamera.hpp"
 // #include "pipeline/node/NeuralNetwork.hpp"
@@ -212,6 +226,7 @@ public static final int
 // Include common datatypes
 // #include "pipeline/datatype/Buffer.hpp"
 // #include "pipeline/datatype/CameraControl.hpp"
+// #include "pipeline/datatype/IMUData.hpp"
 // #include "pipeline/datatype/ImageManipConfig.hpp"
 // #include "pipeline/datatype/ImgDetections.hpp"
 // #include "pipeline/datatype/ImgFrame.hpp"
@@ -301,7 +316,12 @@ public static final int
     @Override public String toString() { return intern().name(); }
 }
 
-  // namespace dai
+
+// Targeting ../ConnectionHash.java
+
+
+  // namespace std
+
 
 // Parsed from depthai-shared/common/CameraImageOrientation.hpp
 
@@ -459,6 +479,87 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
   // namespace dai
 
 
+// Parsed from depthai-shared/common/Extrinsics.hpp
+
+// #pragma once
+
+// #include <vector>
+
+// #include "depthai-shared/common/CameraBoardSocket.hpp"
+// #include "depthai-shared/common/Point3f.hpp"
+// Targeting ../Extrinsics.java
+
+
+
+  // namespace dai
+
+// Parsed from depthai-shared/common/CameraModel.hpp
+
+// #pragma once
+
+// #include <nlohmann/json.hpp>
+/**
+ * Which CameraModel to initialize the calibration with.
+ */
+@Namespace("dai") public enum CameraModel { Perspective((byte)(0)), Fisheye((byte)(1)), Equirectangular((byte)(2)), RadialDivision((byte)(3));
+
+    public final byte value;
+    private CameraModel(byte v) { this.value = v; }
+    private CameraModel(CameraModel e) { this.value = e.value; }
+    public CameraModel intern() { for (CameraModel e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+  // namespace dai
+
+// Parsed from depthai-shared/common/CameraInfo.hpp
+
+// #pragma once
+
+// #include "depthai-shared/common/CameraModel.hpp"
+// #include "depthai-shared/common/Extrinsics.hpp"
+// Targeting ../CameraInfo.java
+
+
+
+  // namespace dai
+
+// Parsed from depthai-shared/common/StereoRectification.hpp
+
+// #pragma once
+
+// #include <vector>
+
+// #include "depthai-shared/common/CameraBoardSocket.hpp"
+// Targeting ../StereoRectification.java
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/common/EepromData.hpp
+
+// #pragma once
+// #include <string>
+// #include <unordered_map>
+// #include <vector>
+
+// #include "depthai-shared/common/CameraBoardSocket.hpp"
+// #include "depthai-shared/common/CameraInfo.hpp"
+// #include "depthai-shared/common/Extrinsics.hpp"
+// #include "depthai-shared/common/Point3f.hpp"
+// #include "depthai-shared/common/StereoRectification.hpp"
+
+// libraries
+// #include "nlohmann/json.hpp"
+// Targeting ../EepromData.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai-shared/common/Timestamp.hpp
 
 // #pragma once
@@ -467,6 +568,8 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include <cstdint>
 
 // libraries
+// #include <chrono>
+
 // #include "nlohmann/json.hpp"
 // Targeting ../Timestamp.java
 
@@ -482,6 +585,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // std
 // #include <cstdint>
 
+/**
+ * Get USB Speed
+ */
+
 @Namespace("dai") public enum UsbSpeed { UNKNOWN(0), LOW(1), FULL(2), HIGH(3), SUPER(4), SUPER_PLUS(5);
 
     public final int value;
@@ -490,6 +597,38 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
     public UsbSpeed intern() { for (UsbSpeed e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/datatype/RawIMUData.hpp
+
+// #pragma once
+
+// #include "RawBuffer.hpp"
+// #include "depthai-shared/common/Point3f.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
+// Targeting ../IMUReport.java
+
+
+// Targeting ../IMUReportAccelerometer.java
+
+
+// Targeting ../IMUReportGyroscope.java
+
+
+// Targeting ../IMUReportMagneticField.java
+
+
+// Targeting ../IMUReportRotationVectorWAcc.java
+
+
+// Targeting ../IMUPacket.java
+
+
+// Targeting ../RawIMUData.java
+
+
 
   // namespace dai
 
@@ -511,7 +650,8 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
     SystemInformation(7),
     SpatialLocationCalculatorConfig(8),
     SpatialLocationCalculatorData(9),
-    Tracklets(10);
+    Tracklets(10),
+    IMUData(11);
 
     public final int value;
     private DatatypeEnum(int v) { this.value = v; }
@@ -782,12 +922,166 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
   // namespace dai
 
 
+// Parsed from depthai-shared/properties/IMUProperties.hpp
+
+// #pragma once
+
+// #include <depthai-shared/datatype/RawIMUData.hpp>
+// #include <nlohmann/json.hpp>
+
+/**
+ * Available IMU sensors.
+ * More details about each sensor can be found in the datasheet:
+ * \link https://www.ceva-dsp.com/wp-content/uploads/2019/10/BNO080_085-Datasheet.pdf \endlink
+ */
+@Namespace("dai") public enum IMUSensor {
+    /**
+     * Section 2.1.1
+     *
+     * Acceleration of the device without any postprocessing, straight from the sensor.
+     * Units are [m/s^2]
+     */
+    ACCELEROMETER_RAW(0x14),
+    /**
+     * Section 2.1.1
+     *
+     * Acceleration of the device including gravity.
+     * Units are [m/s^2]
+     */
+    ACCELEROMETER(0x01),
+    /**
+     * Section 2.1.1
+     *
+     * Acceleration of the device with gravity removed.
+     * Units are [m/s^2]
+     */
+    LINEAR_ACCELERATION(0x04),
+    /**
+     * Section 2.1.1
+     *
+     * Gravity.
+     * Units are [m/s^2]
+     */
+    GRAVITY(0x06),
+    /**
+     * Section 2.1.2
+     *
+     * The angular velocity of the device without any postprocessing, straight from the sensor.
+     * Units are [rad/s]
+     */
+    GYROSCOPE_RAW(0x15),
+    /**
+     * Section 2.1.2
+     *
+     * The angular velocity of the device.
+     * Units are [rad/s]
+     */
+    GYROSCOPE_CALIBRATED(0x02),
+    /**
+     * Section 2.1.2
+     *
+     * Angular velocity without bias compensation.
+     * Units are [rad/s]
+     */
+    GYROSCOPE_UNCALIBRATED(0x07),
+    /**
+     * Section 2.1.3
+     *
+     * Magnetic field measurement without any postprocessing, straight from the sensor.
+     * Units are [uTesla]
+     */
+    MAGNETOMETER_RAW(0x16),
+    /**
+     * Section 2.1.3
+     *
+     * The fully calibrated magnetic field measurement.
+     * Units are [uTesla]
+     */
+    MAGNETOMETER_CALIBRATED(0x03),
+    /**
+     * Section 2.1.3
+     *
+     * The magnetic field measurement without hard-iron offset applied.
+     * Units are [uTesla]
+     */
+    MAGNETOMETER_UNCALIBRATED(0x0f),
+    /**
+     * Section 2.2
+     *
+     * The rotation vector provides an orientation output that is expressed as a quaternion referenced to magnetic north
+     * and gravity. It is produced by fusing the outputs of the accelerometer, gyroscope and magnetometer. The rotation
+     * vector is the most accurate orientation estimate available. The magnetometer provides correction in yaw to
+     * reduce drift and the gyroscope enables the most responsive performance.
+     */
+    ROTATION_VECTOR(0x05),
+    /**
+     * Section 2.2
+     *
+     * The game rotation vector is an orientation output that is expressed as a quaternion with no specific reference for
+     * heading, while roll and pitch are referenced against gravity. It is produced by fusing the outputs of the
+     * accelerometer and the gyroscope (i.e. no magnetometer). The game rotation vector does not use the
+     * magnetometer to correct the gyroscopes drift in yaw. This is a deliberate omission (as specified by Google) to
+     * allow gaming applications to use a smoother representation of the orientation without the jumps that an
+     * instantaneous correction provided by a magnetic field update could provide. Long term the output will likely drift in
+     * yaw due to the characteristics of gyroscopes, but this is seen as preferable for this output versus a corrected output.
+     */
+    GAME_ROTATION_VECTOR(0x08),
+    /**
+     * Section 2.2
+     *
+     * The geomagnetic rotation vector is an orientation output that is expressed as a quaternion referenced to magnetic
+     * north and gravity. It is produced by fusing the outputs of the accelerometer and magnetometer. The gyroscope is
+     * specifically excluded in order to produce a rotation vector output using less power than is required to produce the
+     * rotation vector of section 2.2.4. The consequences of removing the gyroscope are:
+     * Less responsive output since the highly dynamic outputs of the gyroscope are not used
+     * More errors in the presence of varying magnetic fields.
+     */
+    GEOMAGNETIC_ROTATION_VECTOR(0x09),
+    /**
+     * Section 2.2
+     *
+     * Estimates of the magnetic field and the roll/pitch of the device can create a potential correction in the rotation
+     * vector produced. For applications (typically augmented or virtual reality applications) where a sudden jump can be
+     * disturbing, the output is adjusted to prevent these jumps in a manner that takes account of the velocity of the
+     * sensor system.
+     */
+    ARVR_STABILIZED_ROTATION_VECTOR(0x28),
+    /**
+     * Section 2.2
+     *
+     * While the magnetometer is removed from the calculation of the game rotation vector, the accelerometer itself can
+     * create a potential correction in the rotation vector produced (i.e. the estimate of gravity changes). For applications
+     * (typically augmented or virtual reality applications) where a sudden jump can be disturbing, the output is adjusted
+     * to prevent these jumps in a manner that takes account of the velocity of the sensor system. This process is called
+     * AR/VR stabilization.
+     */
+    ARVR_STABILIZED_GAME_ROTATION_VECTOR(0x29);
+    // GYRO_INTEGRATED_ROTATION_VECTOR = 0x2A,
+
+    public final int value;
+    private IMUSensor(int v) { this.value = v; }
+    private IMUSensor(IMUSensor e) { this.value = e.value; }
+    public IMUSensor intern() { for (IMUSensor e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../IMUSensorConfig.java
+
+
+// Targeting ../IMUProperties.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai-shared/properties/GlobalProperties.hpp
 
 // #pragma once
 
 // #include <depthai-shared/common/optional.hpp>
 // #include <nlohmann/json.hpp>
+
+// #include "depthai-shared/common/EepromData.hpp"
 // Targeting ../GlobalProperties.java
 
 
@@ -890,9 +1184,9 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai-shared/common/optional.hpp"
 
 @Namespace("dai") public enum TrackerType {
-    // Ability to track the objects without accessing image data.
+    /** Ability to track the objects without accessing image data. */
     ZERO_TERM_IMAGELESS(5),
-    // Tracking using image data too.
+    /** Tracking using image data too. */
     ZERO_TERM_COLOR_HISTOGRAM(6);
 
     public final int value;
@@ -903,9 +1197,9 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 }
 
 @Namespace("dai") public enum TrackerIdAssigmentPolicy {
-    // Always take a new, unique ID
+    /** Always take a new, unique ID */
     UNIQUE_ID(0),
-    // Take the smallest available ID
+    /** Take the smallest available ID */
     SMALLEST_ID(1);
 
     public final int value;
@@ -983,6 +1277,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
+// #include <depthai-shared/common/EepromData.hpp>
 // #include <depthai-shared/common/optional.hpp>
 // #include <nlohmann/json.hpp>
 
@@ -1197,6 +1492,23 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 // #include "depthai/pipeline/datatype/ADatatype.hpp"
 // Targeting ../Buffer.java
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai/pipeline/datatype/IMUData.hpp
+
+// #pragma once
+
+// #include <chrono>
+// #include <unordered_map>
+// #include <vector>
+
+// #include "depthai-shared/datatype/RawIMUData.hpp"
+// #include "depthai/pipeline/datatype/Buffer.hpp"
+// Targeting ../IMUData.java
 
 
 
@@ -1425,10 +1737,9 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 
 
+  // namespace dai
 
-// Targeting ../ConnectionHash.java
-
-
+// Specialization of std::hash for Node::Connection
 
   // namespace std
 
@@ -1445,6 +1756,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // project
 // #include "AssetManager.hpp"
 // #include "Node.hpp"
+// #include "depthai/device/CalibrationHandler.hpp"
 // #include "depthai/openvino/OpenVINO.hpp"
 
 // shared
@@ -1457,6 +1769,22 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 
 
+  // namespace dai
+
+
+// Parsed from depthai/pipeline/node/IMU.hpp
+
+// #pragma once
+
+// #include "depthai/pipeline/Node.hpp"
+
+// shared
+// #include <depthai-shared/properties/IMUProperties.hpp>
+// Targeting ../IMU.java
+
+
+
+  // namespace node
   // namespace dai
 
 
@@ -1810,6 +2138,22 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
   // namespace dai
 
 
+// Parsed from depthai/device/CalibrationHandler.hpp
+
+// #pragma once
+// #include <string>
+// #include <tuple>
+
+// #include "depthai-shared/common/CameraBoardSocket.hpp"
+// #include "depthai-shared/common/EepromData.hpp"
+// #include "depthai-shared/common/Point2f.hpp"
+// #include "depthai-shared/common/Size2f.hpp"
+// Targeting ../CalibrationHandler.java
+
+
+
+  // namespace dai
+
 // Parsed from depthai/device/CallbackHandler.hpp
 
 // #pragma once
@@ -1848,6 +2192,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "DataQueue.hpp"
 // #include "depthai/common/CameraBoardSocket.hpp"
 // #include "depthai/common/UsbSpeed.hpp"
+// #include "depthai/device/CalibrationHandler.hpp"
 // #include "depthai/pipeline/Pipeline.hpp"
 // #include "depthai/utility/Pimpl.hpp"
 // #include "depthai/xlink/XLinkConnection.hpp"

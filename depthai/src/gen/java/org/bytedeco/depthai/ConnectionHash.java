@@ -11,8 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.depthai.global.depthai.*;
   // namespace dai
 
-// Specialization of std::hash for Node::Connection
-@Name("std::hash<dai::Node::Connection>") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+@Name("std::hash<dai::CameraBoardSocket>") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class ConnectionHash extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -30,5 +29,6 @@ public class ConnectionHash extends Pointer {
         return new ConnectionHash((Pointer)this).offsetAddress(i);
     }
 
-    public native @Cast("std::size_t") @Name("operator ()") long apply(@Const @ByRef Node.Connection obj);
+    public native @Cast("std::size_t") @Name("operator ()") long apply(CameraBoardSocket s);
+    public native @Cast("std::size_t") @Name("operator ()") long apply(@Cast("dai::CameraBoardSocket") int s);
 }

@@ -76,16 +76,16 @@ public class StereoDepth extends Node {
      * Specify local filesystem path to the calibration file
      * @param path Path to calibration file. If empty use EEPROM
      */
-    public native void loadCalibrationFile(@StdString BytePointer path);
-    public native void loadCalibrationFile(@StdString String path);
+    public native @Deprecated void loadCalibrationFile(@StdString BytePointer path);
+    public native @Deprecated void loadCalibrationFile(@StdString String path);
 
     /**
      * Specify calibration data as a vector of bytes
      * @param path Calibration data. If empty use EEPROM
      */
-    public native void loadCalibrationData(@Cast("std::uint8_t*") @StdVector BytePointer data);
-    public native void loadCalibrationData(@Cast("std::uint8_t*") @StdVector ByteBuffer data);
-    public native void loadCalibrationData(@Cast("std::uint8_t*") @StdVector byte[] data);
+    public native @Deprecated void loadCalibrationData(@Cast("std::uint8_t*") @StdVector BytePointer data);
+    public native @Deprecated void loadCalibrationData(@Cast("std::uint8_t*") @StdVector ByteBuffer data);
+    public native @Deprecated void loadCalibrationData(@Cast("std::uint8_t*") @StdVector byte[] data);
 
     /**
      * Specify that a passthrough/dummy calibration should be used,

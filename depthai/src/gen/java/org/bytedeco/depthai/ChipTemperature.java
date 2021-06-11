@@ -34,14 +34,24 @@ public class ChipTemperature extends Pointer {
         return new ChipTemperature((Pointer)this).offsetAddress(i);
     }
 
-    /** CPU Subsystem */
+    /**
+     *  CPU Subsystem
+     */
     public native float css(); public native ChipTemperature css(float setter);
-    /** Media Subsystem */
+    /**
+     *  Media Subsystem
+     */
     public native float mss(); public native ChipTemperature mss(float setter);
-    /** Shave Array */
+    /**
+     *  Shave Array
+     */
     public native float upa(); public native ChipTemperature upa(float setter);
-    /** DRAM Subsystem */
+    /**
+     *  DRAM Subsystem
+     */
     public native float dss(); public native ChipTemperature dss(float setter);
-    /** Average of measurements */
+    /**
+     *  Average of measurements
+     */
     public native float average(); public native ChipTemperature average(float setter);
 }

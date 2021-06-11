@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Properties for SPIOut node
+ * Specify properties for SPIOut node
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class SPIOutProperties extends Pointer {

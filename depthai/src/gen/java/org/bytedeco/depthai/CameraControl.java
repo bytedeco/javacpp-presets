@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * CameraControl message
+ * CameraControl message.
  * Specifies various camera control commands like:
  *
  *  - Still capture

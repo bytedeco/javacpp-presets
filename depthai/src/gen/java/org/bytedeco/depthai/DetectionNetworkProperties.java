@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Properties for DetectionNetwork
+ *  Specify properties for DetectionNetwork
  */
 @Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class DetectionNetworkProperties extends NeuralNetworkProperties {

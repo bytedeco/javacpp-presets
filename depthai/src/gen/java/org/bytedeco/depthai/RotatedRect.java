@@ -11,6 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.depthai.global.depthai.*;
 
 
+/** RotatedRect structure */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class RotatedRect extends Pointer {
     static { Loader.load(); }

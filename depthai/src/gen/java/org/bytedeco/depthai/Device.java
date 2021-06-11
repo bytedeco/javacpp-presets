@@ -242,6 +242,13 @@ public class Device extends Pointer {
     public native LogLevel getLogLevel();
 
     /**
+     * Get the Device Info object o the device which is currently running
+     *
+     * @return DeviceInfo of the current device in execution
+     */
+    public native @ByVal DeviceInfo getDeviceInfo();
+
+    /**
      * Sets logging level which decides printing level to standard output.
      * If lower than setLogLevel, no messages will be printed
      *
@@ -475,6 +482,22 @@ public class Device extends Pointer {
      * @return Average CPU usage and sampling duration
      */
     public native @ByVal CpuUsage getLeonMssCpuUsage();
+
+    /**
+     * Stores the Calibration and Device information to the Device EEPROM
+     *
+     * @param calibrationObj CalibrationHandler object which is loaded with calibration information.
+     *
+     * @return true on successful flash, false on failure
+     */
+    public native @Cast("bool") boolean flashCalibration(@ByVal CalibrationHandler calibrationDataHandler);
+
+    /**
+     * Fetches the EEPROM data from the device and loads it into CalibrationHandler object
+     *
+     * @return The CalibrationHandler object containing the calibration currently flashed on device EEPROM
+     */
+    public native @ByVal CalibrationHandler readCalibration();
 
     /**
      * Retrieves USB connection speed

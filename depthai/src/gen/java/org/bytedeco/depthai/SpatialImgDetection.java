@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Spatial image detection structure
+ * SpatialImgDetection structure
  *
  * Contains image detection results together with spatial location data.
  */

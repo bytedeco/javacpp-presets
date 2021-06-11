@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * MobileNetSpatialDetectionNetwork. Mobilenet-SSD based network with spatial location data.
+ * MobileNetSpatialDetectionNetwork node. Mobilenet-SSD based network with spatial location data.
  */
 @Namespace("dai::node") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class MobileNetSpatialDetectionNetwork extends SpatialDetectionNetwork {

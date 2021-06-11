@@ -34,8 +34,12 @@ public class CpuUsage extends Pointer {
         return new CpuUsage((Pointer)this).offsetAddress(i);
     }
 
-    /** Average CPU usage, expressed with a normalized value (0-1) */
+    /**
+     *  Average CPU usage, expressed with a normalized value (0-1)
+     */
     public native float average(); public native CpuUsage average(float setter);
-    /** Time span in which the average was calculated in milliseconds */
+    /**
+     *  Time span in which the average was calculated in milliseconds
+     */
     public native int msTime(); public native CpuUsage msTime(int setter);
 }

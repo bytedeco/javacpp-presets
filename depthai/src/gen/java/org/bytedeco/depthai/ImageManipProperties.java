@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Specify ImageManip options
+ * Specify properties for ImageManip
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class ImageManipProperties extends Pointer {

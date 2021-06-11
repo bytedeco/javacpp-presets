@@ -215,7 +215,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow Lite 2.5.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.4.0  https://github.com/luxonis/depthai-core
+ * DepthAI 2.5.0  https://github.com/luxonis/depthai-core
  * ONNX 1.9.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.8.x  https://github.com/microsoft/onnxruntime

@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Specify SpatialLocationCalculator options
+ * Specify properties for SpatialLocationCalculator
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class SpatialLocationCalculatorProperties extends Pointer {

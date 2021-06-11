@@ -12,7 +12,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * Specify VideoEncoder options such as profile, bitrate, ...
+ * Specify properties for VideoEncoder such as profile, bitrate, ...
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class VideoEncoderProperties extends Pointer {
