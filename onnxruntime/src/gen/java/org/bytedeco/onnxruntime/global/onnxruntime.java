@@ -564,6 +564,25 @@ public static final int
 // #include "onnxruntime_cxx_inline.h"
 
 
+// Parsed from onnxruntime/core/providers/cpu/cpu_provider_factory.h
+
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// #include "onnxruntime_c_api.h"
+
+// #ifdef __cplusplus
+// #endif
+
+/**
+ * @param use_arena zero: false. non-zero: true.
+ */
+public static native @Cast("OrtStatusPtr") OrtStatus OrtSessionOptionsAppendExecutionProvider_CPU( OrtSessionOptions options, int use_arena);
+
+// #ifdef __cplusplus
+// #endif
+
+
 // Parsed from onnxruntime/core/providers/cuda/cuda_provider_factory.h
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
