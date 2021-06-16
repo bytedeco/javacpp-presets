@@ -47,15 +47,30 @@ import org.bytedeco.dnnl.presets.*;
             include = {
                 "onnxruntime/core/session/onnxruntime_c_api.h",
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
+                "onnxruntime/core/providers/cpu/cpu_provider_factory.h",
                 "onnxruntime/core/providers/cuda/cuda_provider_factory.h",
-                "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h"
+                "onnxruntime/core/providers/dnnl/dnnl_provider_factory.h",
+//                "onnxruntime/core/providers/nnapi/nnapi_provider_factory.h",
+//                "onnxruntime/core/providers/nuphar/nuphar_provider_factory.h",
+//                "onnxruntime/core/providers/openvino/openvino_provider_factory.h",
+//                "onnxruntime/core/providers/tensorrt/tensorrt_provider_factory.h",
+//                "onnxruntime/core/providers/migraphx/migraphx_provider_factory.h",
+//                "onnxruntime/core/providers/acl/acl_provider_factory.h",
+//                "onnxruntime/core/providers/armnn/armnn_provider_factory.h",
+//                "onnxruntime/core/providers/coreml/coreml_provider_factory.h",
+//                "onnxruntime/core/providers/rocm/rocm_provider_factory.h",
+//                "onnxruntime/core/providers/dml/dml_provider_factory.h",
             },
-            link = "onnxruntime@.1.8.0",
-            preload = {"onnxruntime_providers_shared", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.8.0"}
         ),
         @Platform(
-            value = {"linux", "macosx", "windows"},
-            extension = "-gpu"
+            value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.8.0", "onnxruntime_providers_dnnl"}
+        ),
+        @Platform(
+            value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            extension = "-gpu",
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.8.0", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
     },
     target = "org.bytedeco.onnxruntime",

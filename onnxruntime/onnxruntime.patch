@@ -65,6 +65,15 @@ index c295aa0b4..1b55c1d0c 100644
      auto error = Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_);
      if (!error.IsOK()) {
        LOGS_DEFAULT(ERROR) << error.ErrorMessage();
+@@ -917,7 +936,7 @@ struct ProviderSharedLibrary {
+     }
+   }
+ 
+-  ProviderSharedLibrary() = default;
++  ProviderSharedLibrary() { Ensure(); };
+   ~ProviderSharedLibrary() {
+     // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
+   }
 @@ -948,6 +967,18 @@ struct ProviderLibrary {
        return nullptr;
  
