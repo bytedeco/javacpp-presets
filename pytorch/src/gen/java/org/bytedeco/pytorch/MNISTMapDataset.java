@@ -32,6 +32,7 @@ public class MNISTMapDataset extends MNISTMapBatchDataset {
   public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal SizeTArrayRef indices);
 
   /** Returns the size of the source dataset. */
+  // NOLINTNEXTLINE(bugprone-exception-escape)
   public native @ByVal @NoException SizeTOptional size();
 
   /** Calls {@code reset()} on the underlying dataset.

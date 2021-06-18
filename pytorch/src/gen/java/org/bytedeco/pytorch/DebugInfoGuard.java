@@ -28,19 +28,13 @@ public class DebugInfoGuard extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DebugInfoGuard(Pointer p) { super(p); }
 
-  public DebugInfoGuard(
-        DebugInfoKind kind, @SharedPtr DebugInfoBase info) { super((Pointer)null); allocate(kind, info); }
-  private native void allocate(
-        DebugInfoKind kind, @SharedPtr DebugInfoBase info);
-  public DebugInfoGuard(
-        @Cast("c10::DebugInfoKind") byte kind, @SharedPtr DebugInfoBase info) { super((Pointer)null); allocate(kind, info); }
-  private native void allocate(
-        @Cast("c10::DebugInfoKind") byte kind, @SharedPtr DebugInfoBase info);
+  public DebugInfoGuard(DebugInfoKind kind, @SharedPtr DebugInfoBase info) { super((Pointer)null); allocate(kind, info); }
+  private native void allocate(DebugInfoKind kind, @SharedPtr DebugInfoBase info);
+  public DebugInfoGuard(@Cast("c10::DebugInfoKind") byte kind, @SharedPtr DebugInfoBase info) { super((Pointer)null); allocate(kind, info); }
+  private native void allocate(@Cast("c10::DebugInfoKind") byte kind, @SharedPtr DebugInfoBase info);
 
-  public DebugInfoGuard(
-        @SharedPtr ThreadLocalDebugInfo info) { super((Pointer)null); allocate(info); }
-  private native void allocate(
-        @SharedPtr ThreadLocalDebugInfo info);
+  public DebugInfoGuard(@SharedPtr ThreadLocalDebugInfo info) { super((Pointer)null); allocate(info); }
+  private native void allocate(@SharedPtr ThreadLocalDebugInfo info);
 
   
   

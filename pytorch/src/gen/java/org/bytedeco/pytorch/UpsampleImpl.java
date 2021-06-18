@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Upsample model(UpsampleOptions().scale_factor({3}).mode(torch::kLinear).align_corners(false));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class UpsampleImpl extends UpsampleImplCloneable {
     static { Loader.load(); }

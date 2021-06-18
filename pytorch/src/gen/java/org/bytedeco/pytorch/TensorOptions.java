@@ -40,7 +40,8 @@ import static org.bytedeco.pytorch.global.torch.*;
  *      at::dtype(at::kInt)
  * 
  *  Additionally, anywhere a TensorOptions is expected, you can directly
- *  pass at::kCUDA / at::kInt, and it will implicitly convert to a TensorOptions.
+ *  pass at::kCUDA / at::kInt, and it will implicitly convert to a
+ *  TensorOptions.
  * 
  *  Here are some recommended ways to create a 2x2 tensor of zeros
  *  with certain properties.  These all *implicitly* make use of
@@ -83,7 +84,8 @@ import static org.bytedeco.pytorch.global.torch.*;
  *     }
  * 
  *     template <typename... Args,
- *              typename = std::enable_if_t<std::is_constructible<Device, Args&&...>::value>>
+ *              typename = std::enable_if_t<std::is_constructible<Device,
+ *              Args&&...>::value>>
  *     /* implicit * /  TensorOptions(Args&&... args)
  *      : TensorOptions(Device(std::forward<Args>(args)...)) {}
  * 
@@ -95,7 +97,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  * 
  *  To get around this, we templatize the {@code Device} constructor. Since overload
  *  resolution is done before template resolution, our problem is solved. */
-
 
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorOptions extends Pointer {
@@ -126,8 +127,8 @@ private native void allocate(@Cast("c10::Layout") byte layout);
   
   ///
   ///
-  public TensorOptions(@ByVal Device device) { super((Pointer)null); allocate(device); }
-  private native void allocate(@ByVal Device device);
+  public TensorOptions(@ByRef(true) Device device) { super((Pointer)null); allocate(device); }
+  private native void allocate(@ByRef(true) Device device);
 
   /** Constructs a {@code TensorOptions} object from arguments allowed in {@code Device}
    *  constructors.
@@ -237,6 +238,8 @@ private native void allocate(MemoryFormat memory_format);
   /** Returns if the layout is sparse */
   public native @Cast("bool") boolean is_sparse();
 
+  public native @Cast("bool") boolean is_sparse_csr();
+
   // For compatibility with legacy tensor.type() comparisons
   public native @Cast("bool") boolean type_equal(@Const @ByRef TensorOptions other);
 
@@ -274,10 +277,12 @@ private native void allocate(MemoryFormat memory_format);
   public native @ByVal @NoException TensorOptions merge_in(@ByVal TensorOptions options);
 
   // TODO remove after TensorOptions rationalization
-  public native @ByVal @NoException TensorOptions merge_memory_format(@ByVal MemoryFormatOptional optional_memory_format);
+  public native @ByVal @NoException TensorOptions merge_memory_format(
+        @ByVal MemoryFormatOptional optional_memory_format);
 
-  // Resolves the tensor type set specified by the current construction axes.
-  public native @ByVal @NoException DispatchKeySet key_set();
-
+  // INVARIANT: computeDispatchKey returns only the subset of dispatch keys for
+  // which dispatchKeyToBackend is injective, if it is defined at all  (for
+  // the most part, this just means that this function never returns an
+  // Autograd key)
   public native DispatchKey computeDispatchKey();
 }

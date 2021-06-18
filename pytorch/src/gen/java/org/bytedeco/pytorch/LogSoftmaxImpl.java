@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  LogSoftmax model(LogSoftmaxOptions(1));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LogSoftmaxImpl extends LogSoftmaxImplCloneable {
     static { Loader.load(); }

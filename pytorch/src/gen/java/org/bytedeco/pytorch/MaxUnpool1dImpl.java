@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  MaxUnpool1d model(MaxUnpool1dOptions(3).stride(2).padding(1));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MaxUnpool1dImpl extends MaxUnpool1dImplBase {
     static { Loader.load(); }

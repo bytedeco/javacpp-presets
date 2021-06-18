@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  CTCLoss model(CTCLossOptions().blank(42).zero_infinity(false).reduction(torch::kSum));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class CTCLossImpl extends CTCLossImplCloneable {
     static { Loader.load(); }

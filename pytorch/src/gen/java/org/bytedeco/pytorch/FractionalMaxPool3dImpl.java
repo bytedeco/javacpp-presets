@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  FractionalMaxPool3d model(FractionalMaxPool3dOptions(5).output_size(1));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class FractionalMaxPool3dImpl extends FractionalMaxPool3dImplCloneable {
     static { Loader.load(); }

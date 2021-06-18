@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  BCELoss model(BCELossOptions().reduction(torch::kNone).weight(weight));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class BCELossImpl extends BCELossImplCloneable {
     static { Loader.load(); }

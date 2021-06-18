@@ -113,6 +113,8 @@ public class DispatchKeySet extends Pointer {
   public native @ByVal @Name("operator &") DispatchKeySet and(@ByVal DispatchKeySet other);
   // Compute the set difference self - other
   public native @ByVal @Name("operator -") DispatchKeySet subtract(@ByVal DispatchKeySet other);
+  // Compute self ^ other
+  public native @ByVal @Name("operator ^") DispatchKeySet xor(@ByVal DispatchKeySet other);
   // Perform set equality
   
   // Add a DispatchKey to the DispatchKey set.  Does NOT mutate,
@@ -136,8 +138,8 @@ public class DispatchKeySet extends Pointer {
   public native DispatchKey highestPriorityBackendTypeId();
   // STL iterator for DispatchKeySet. Iterates through all DispatchKeys in the
   // set. The iterator is only invalidated by the destruction of the underlying
-  // DispatchKeySet as the iterator stores a pointer to the raw representation of
-  // the DispatchKeySet.
+  // DispatchKeySet as the iterator stores a pointer to the raw representation
+  // of the DispatchKeySet.
   @NoOffset public static class iterator extends Pointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -172,5 +174,4 @@ public class DispatchKeySet extends Pointer {
   // We do not need to iterate beyond NumDispatchKeys so we will treat this as
   // the end iterator. NumDispatchKeys will always be strictly less than 64.
   public native @ByVal iterator end();
-
 }

@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Conv3d model(Conv3dOptions(3, 2, 3).stride(1).bias(false));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Conv3dImpl extends Conv3dImplBase {
     static { Loader.load(); }

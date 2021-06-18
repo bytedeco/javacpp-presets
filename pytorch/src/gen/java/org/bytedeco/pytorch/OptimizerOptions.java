@@ -37,4 +37,6 @@ public class OptimizerOptions extends Pointer {
   public native @UniquePtr OptimizerOptions clone();
   
   
+  public native double get_lr();
+  public native void set_lr(double lr);
 }

@@ -25,6 +25,8 @@ public class FeatureAlphaDropoutImplCloneable extends Module {
   /** {@code reset()} must perform initialization of all members with reference
    *  semantics, most importantly parameters, buffers and submodules. */
   public native void reset();
+  @Override public Module asModule() { return asModule(this); }
+  @Namespace public static native @Name("static_cast<torch::nn::Module*>") Module asModule(FeatureAlphaDropoutImplCloneable module);
 
   /** Performs a recursive "deep copy" of the {@code Module}, such that all parameters
    *  and submodules in the cloned module are different from those in the

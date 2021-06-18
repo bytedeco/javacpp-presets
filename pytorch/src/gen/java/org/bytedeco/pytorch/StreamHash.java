@@ -15,23 +15,23 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace c10
-  @Name("std::hash<c10::Stream>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("std::hash<c10::Stream>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class StreamHash extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public StreamHash() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public StreamHash(long size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public StreamHash(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(long size);
-      @Override public StreamHash position(long position) {
-          return (StreamHash)super.position(position);
-      }
-      @Override public StreamHash getPointer(long i) {
-          return new StreamHash((Pointer)this).offsetAddress(i);
-      }
-  
-    public native @Cast("std::size_t") @Name("operator ()") @NoException long apply(@ByVal Stream s);
-  }
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public StreamHash() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StreamHash(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StreamHash(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public StreamHash position(long position) {
+        return (StreamHash)super.position(position);
+    }
+    @Override public StreamHash getPointer(long i) {
+        return new StreamHash((Pointer)this).offsetAddress(i);
+    }
+
+  public native @Cast("std::size_t") @Name("operator ()") @NoException long apply(@ByVal Stream s);
+}

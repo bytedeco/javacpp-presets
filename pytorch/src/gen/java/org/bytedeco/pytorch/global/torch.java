@@ -66,6 +66,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../ScalarTypeOptional.java
 
 
+// Targeting ../DimVectorOptional.java
+
+
 // Targeting ../DimnameOptional.java
 
 
@@ -109,6 +112,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../TensorDeque.java
+
+
+// Targeting ../StringStringMap.java
+
+
+// Targeting ../StringLongMap.java
 
 
 // Targeting ../DimnameVector.java
@@ -198,6 +207,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../TensorTensorTensorTupleTuple.java
 
 
+// Targeting ../TensorMaybeOwnedTensorMaybeOwnedTuple.java
+
+
+// Targeting ../TensorMaybeOwnedTensorMaybeOwnedTensorMaybeOwnedTuple.java
+
+
 // Targeting ../PackedSequenceTensorTuple.java
 
 
@@ -226,11 +241,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 /* #undef C10_USE_GFLAGS */
 // #define C10_USE_NUMA
 /* #undef C10_USE_MSVC_STATIC_RUNTIME */
-
-// Used by libtorch mobile build to enable features that are not enabled by
-// caffe2 mobile build. Should only use it when necessary as we are committed
-// to converging libtorch and caffe2 mobile builds and removing it eventually.
-/* #undef FEATURE_TORCH_MOBILE */
 
 // #endif // C10_MACROS_CMAKE_MACROS_H_
 
@@ -329,10 +339,22 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #define TORCH_API C10_IMPORT
 // #endif
 
-// NB: For now, HIP is overloaded to use the same macro, but ideally
-// HIPify should translate TORCH_CUDA_API to TORCH_HIP_API
-// JX: I removed the || defined(TORCH_HIP_BUILD_MAIN_LIB) check for TORCH_CUDA_*_API
-// since TORCH_HIP_API seems properly initialized below
+// You may be wondering: Whose brilliant idea was it to split torch_cuda into
+// two pieces with confusing names?
+// Once upon a time, there _was_ only TORCH_CUDA_API. All was happy until we
+// tried to compile PyTorch for CUDA 11.1, which ran into relocation marker
+// issues when linking big binaries.
+// (https://github.com/pytorch/pytorch/issues/39968) We had two choices:
+//    (1) Stop supporting so many GPU architectures
+//    (2) Do something else
+// We chose #2 and decided to split the behemoth that was torch_cuda into two
+// smaller libraries, one with most of the core kernel functions (torch_cuda_cu)
+// and the other that had..well..everything else (torch_cuda_cpp). The idea was
+// this: instead of linking our static libraries (like the hefty
+// libcudnn_static.a) with another huge library, torch_cuda, and run into pesky
+// relocation marker issues, we could link our static libraries to a smaller
+// part of torch_cuda (torch_cuda_cpp) and avoid the issues.
+
 // libtorch_cuda_cu.so
 // #ifdef TORCH_CUDA_CU_BUILD_MAIN_LIB
 // #define TORCH_CUDA_CU_API C10_EXPORT
@@ -347,7 +369,8 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #define TORCH_CUDA_CPP_API C10_IMPORT
 // #endif
 
-// libtorch_cuda.so (where torch_cuda_cu and torch_cuda_cpp are a part of the same api)
+// libtorch_cuda.so (where torch_cuda_cu and torch_cuda_cpp are a part of the
+// same api)
 // #ifdef TORCH_CUDA_BUILD_MAIN_LIB
 // #define TORCH_CUDA_CPP_API C10_EXPORT
 // #define TORCH_CUDA_CU_API C10_EXPORT
@@ -400,15 +423,16 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #include <c10/macros/Export.h>
 
 // #if defined(__clang__)
-//   #define __ubsan_ignore_float_divide_by_zero__ __attribute__((no_sanitize("float-divide-by-zero")))
-//   #define __ubsan_ignore_undefined__ __attribute__((no_sanitize("undefined")))
-//   #define __ubsan_ignore_signed_int_overflow__ __attribute__((no_sanitize("signed-integer-overflow")))
+// #define __ubsan_ignore_float_divide_by_zero__
+//   __attribute__((no_sanitize("float-divide-by-zero")))
+// #define __ubsan_ignore_undefined__ __attribute__((no_sanitize("undefined")))
+// #define __ubsan_ignore_signed_int_overflow__
+//   __attribute__((no_sanitize("signed-integer-overflow")))
 // #else
-//   #define __ubsan_ignore_float_divide_by_zero__
-//   #define __ubsan_ignore_undefined__
-//   #define __ubsan_ignore_signed_int_overflow__
+// #define __ubsan_ignore_float_divide_by_zero__
+// #define __ubsan_ignore_undefined__
+// #define __ubsan_ignore_signed_int_overflow__
 // #endif
-
 
 // Detect address sanitizer as some stuff doesn't work with it
 // #undef C10_ASAN_ENABLED
@@ -430,7 +454,6 @@ public static final int C10_ASAN_ENABLED = 1;
 
 // #if !defined(C10_ASAN_ENABLED)
 // #endif
-
 
 // Disable the copy and assignment operator for a class. Note that this will
 // disable the usage of the class in std containers.
@@ -456,6 +479,11 @@ public static final int C10_ASAN_ENABLED = 1;
 // #define C10_ANONYMOUS_VARIABLE(str) C10_CONCATENATE(str, __LINE__)
 // #endif
 
+// #ifdef __has_cpp_attribute
+// #define C10_HAS_CPP_ATTRIBUTE(x) __has_cpp_attribute(x)
+// #else
+// #define C10_HAS_CPP_ATTRIBUTE(x) (0)
+// #endif
 
 /** C10_NODISCARD - Warn if a type or return value is discarded. */
 
@@ -480,24 +508,25 @@ public static final int C10_ASAN_ENABLED = 1;
 //  - gcc 8.3: https://godbolt.org/z/4tLMQS (always advertises support)
 // #define C10_NODISCARD
 // #if defined(__has_cpp_attribute)
-// # if __has_cpp_attribute(nodiscard)
-// #  undef C10_NODISCARD
-// #  define C10_NODISCARD [[nodiscard]]
-// # endif
+// #if __has_cpp_attribute(nodiscard)
+// #undef C10_NODISCARD
+// #define C10_NODISCARD [[nodiscard]]
+// #endif
 // Workaround for llvm.org/PR23435, since clang 3.6 and below emit a spurious
 // error when __has_cpp_attribute is given a scoped attribute in C mode.
 // #elif __cplusplus && defined(__has_cpp_attribute)
-// # if __has_cpp_attribute(clang::warn_unused_result)
-// TODO: It's possible this is still triggering https://github.com/pytorch/pytorch/issues/13118
-// on Windows; if it is, better fix it.
-// #  undef C10_NODISCARD
-// #  define C10_NODISCARD [[clang::warn_unused_result]]
-// # endif
+// #if __has_cpp_attribute(clang::warn_unused_result)
+// TODO: It's possible this is still triggering
+// https://github.com/pytorch/pytorch/issues/13118 on Windows; if it is, better
+// fix it.
+// #undef C10_NODISCARD
+// #define C10_NODISCARD [[clang::warn_unused_result]]
+// #endif
 // #endif
 
 // suppress an unused variable.
 // #if defined(_MSC_VER) && !defined(__clang__)
-// #define C10_UNUSED __pragma(warning(suppress: 4100 4101))
+// #define C10_UNUSED __pragma(warning(suppress : 4100 4101))
 // #else
 // #define C10_UNUSED __attribute__((__unused__))
 // #endif //_MSC_VER
@@ -507,13 +536,19 @@ public static final int C10_ASAN_ENABLED = 1;
 // Simply define the namespace, in case a dependent library want to refer to
 // the c10 namespace but not any nontrivial files.
  // namespace c10
- 
- 
+
+ // namespace c10
+
+ // namespace c10
 
 // Since C10 is the core library for caffe2 (and aten), we will simply reroute
 // all abstractions defined in c10 to be available in caffe2 as well.
 // This is only for backwards compatibility. Please use the symbols from the
-// c10 namespace where possible.   
+// c10 namespace where possible.
+
+
+
+ // namespace at
 
 // WARNING!!! THIS IS A GIANT HACK!!!
 // This line means you cannot simultaneously include c10/hip
@@ -522,7 +557,9 @@ public static final int C10_ASAN_ENABLED = 1;
 // files in ATen/cuda, so it assumes that c10::hip is available
 // from at::cuda.  This namespace makes that happen.  When
 // HIPIFY is no longer out-of-place, we can switch the cuda
-// here to hip and everyone is happy. 
+// here to hip and everyone is happy.
+
+ // namespace at
 
 // C10_LIKELY/C10_UNLIKELY
 //
@@ -537,32 +574,46 @@ public static final int C10_ASAN_ENABLED = 1;
 // without it.
 //
 // #if defined(__GNUC__) || defined(__ICL) || defined(__clang__)
-// #define C10_LIKELY(expr)    (__builtin_expect(static_cast<bool>(expr), 1))
-// #define C10_UNLIKELY(expr)  (__builtin_expect(static_cast<bool>(expr), 0))
+// #define C10_LIKELY(expr) (__builtin_expect(static_cast<bool>(expr), 1))
+// #define C10_UNLIKELY(expr) (__builtin_expect(static_cast<bool>(expr), 0))
 // #else
-// #define C10_LIKELY(expr)    (expr)
-// #define C10_UNLIKELY(expr)  (expr)
+// #define C10_LIKELY(expr) (expr)
+// #define C10_UNLIKELY(expr) (expr)
 // #endif
 
 /** C10_NOINLINE - Functions whose declaration is annotated with this will not
  *  be inlined. */
 // #ifdef __GNUC__
-// #define C10_NOINLINE __attribute__((__noinline__))
+// #define C10_NOINLINE __attribute__((noinline))
 // #elif _MSC_VER
 // #define C10_NOINLINE __declspec(noinline)
 // #else
 // #define C10_NOINLINE
 // #endif
 
-// #if __has_attribute(always_inline) || defined(__GNUC__)
+// #if defined(_MSC_VER)
+// #elif __has_attribute(always_inline) || defined(__GNUC__)
 // #define C10_ALWAYS_INLINE __attribute__((__always_inline__)) inline
-// #elif defined(_MSC_VER)
 // #else
 // #define C10_ALWAYS_INLINE inline
 // #endif
 
+// C10_FALLTHROUGH - Annotate fallthrough to the next case in a switch.
+// #if C10_HAS_CPP_ATTRIBUTE(fallthrough)
+// #define C10_FALLTHROUGH [[fallthrough]]
+// #else
+// #define C10_FALLTHROUGH
+// #endif
+
 // #include <sstream>
 // #include <string>
+
+// #ifdef __HIPCC__
+// Unlike CUDA, HIP requires a HIP header to be included for __host__ to work.
+// We do this #include here so that C10_HOST_DEVICE and friends will Just Work.
+// See https://github.com/ROCm-Developer-Tools/HIP/issues/441
+// #include <hip/hip_runtime.h>
+// #endif
 
 // #if defined(__CUDACC__) || defined(__HIPCC__)
 // #else
@@ -597,8 +648,8 @@ public static final int C10_WARP_SIZE = 64;
 // #endif // NDEBUG
 // #define CUDA_KERNEL_ASSERT(cond)
 //   if (C10_UNLIKELY(!(cond))) {
-//     __assert_fail(#cond, __FILE__, static_cast<unsigned int>(__LINE__),
-//                   __func__);
+//     __assert_fail(
+//         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
 //   }
 // #endif // __APPLE__
 
@@ -699,6 +750,60 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 //   }
 
 
+// Parsed from c10/util/MaybeOwned.h
+
+// #pragma once
+
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/in_place.h>
+
+// #include <type_traits>
+
+/** Traits class describing how to borrow from T.  As a synopsis, here
+ *  is how we might implement borrowing from an arbitrary type T using
+ *  a raw pointer to const:
+ * 
+ *  template <typename T>
+ *  struct MaybeOwnedTraits {
+ *    using owned_type = T;
+ *    using borrow_type = const T*;
+ * 
+ *    static borrow_type createBorrow(const owned_type& from) {
+ *      return &from;
+ *    }
+ * 
+ *    static void assignBorrow(borrow_type& lhs, borrow_type rhs) {
+ *      lhs = rhs;
+ *    }
+ * 
+ *    static void destroyBorrow(borrow_type& toDestroy) {}
+ * 
+ *    static const owned_type& referenceFromBorrow(const borrow_type& borrow) {
+ *      return *borrow;
+ *    }
+ * 
+ *    static const owned_type* pointerFromBorrow(const borrow_type& borrow) {
+ *      return borrow;
+ *    }
+ * 
+ *    static bool debugBorrowIsValid(const borrow_type& borrow) {
+ *      return borrow != nullptr;
+ *    }
+ *  };
+ * 
+ *  (This implementation is not in use because MaybeOwned is an unsafe
+ *  abstraction and we don't want to encourage it widely, just for
+ *  skipping reference counting in critical paths.)
+ * 
+ *  For examples that are in use, see intrusive_ptr.h and TensorBody.h. */
+// Targeting ../TensorMaybeOwned.java
+
+
+
+ // namespace c10
+
+
 // Parsed from c10/util/typeid.h
 
 // #pragma once
@@ -726,8 +831,8 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // #include <c10/util/Exception.h>
 // #include <c10/util/IdWrapper.h>
 // #include <c10/util/Type.h>
-// #include <c10/util/TypeTraits.h>
 // #include <c10/util/TypeIndex.h>
+// #include <c10/util/TypeTraits.h>
 // #include <c10/util/flat_hash_map.h>
 
 // #include <c10/core/ScalarType.h>
@@ -821,12 +926,8 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 
 
-@Namespace("caffe2") public static native @Cast("bool") @Name("operator ==") @NoException boolean equals(
-    @Const @ByVal TypeMeta lhs,
-    @Const @ByVal TypeMeta rhs);
-@Namespace("caffe2") public static native @Cast("bool") @Name("operator !=") @NoException boolean notEquals(
-    @Const @ByVal TypeMeta lhs,
-    @Const @ByVal TypeMeta rhs);
+@Namespace("caffe2") public static native @Cast("bool") @Name("operator ==") @NoException boolean equals(@Const @ByVal TypeMeta lhs, @Const @ByVal TypeMeta rhs);
+@Namespace("caffe2") public static native @Cast("bool") @Name("operator !=") @NoException boolean notEquals(@Const @ByVal TypeMeta lhs, @Const @ByVal TypeMeta rhs);
 
 @Namespace("caffe2") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
     @Cast("std::ostream*") @ByRef Pointer stream,
@@ -957,28 +1058,23 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 //      ...
 //    };
 
-// NB: In PyTorch, this block is not actually used at the moment
-// because we are C++11.  However, aspirationally, we would like
-// to use this version, because as of C++14 it is the correct and
-// portable way to declare something deprecated.
 // NB: __cplusplus doesn't work for MSVC, so for now MSVC always uses
-// the "__declspec(deprecated)" implementation and not the C++14 "[[deprecated]]"
-// attribute. We tried enabling "[[deprecated]]" for C++14 on MSVC, but
-// ran into issues with some older MSVC versions.
+// the "__declspec(deprecated)" implementation and not the C++14
+// "[[deprecated]]" attribute. We tried enabling "[[deprecated]]" for C++14 on
+// MSVC, but ran into issues with some older MSVC versions.
 // #if (defined(__cplusplus) && __cplusplus >= 201402L)
-// # define C10_DEPRECATED [[deprecated]]
-// # define C10_DEPRECATED_MESSAGE(message) [[deprecated(message)]]
+// #define C10_DEPRECATED [[deprecated]]
+// #define C10_DEPRECATED_MESSAGE(message) [[deprecated(message)]]
 // #elif defined(__GNUC__)
-// # define C10_DEPRECATED __attribute__((deprecated))
+// #define C10_DEPRECATED __attribute__((deprecated))
 // TODO Is there some way to implement this?
-// # define C10_DEPRECATED_MESSAGE(message) __attribute__((deprecated))
+// #define C10_DEPRECATED_MESSAGE(message) __attribute__((deprecated))
 
 // #elif defined(_MSC_VER)
 // #else
-// # warning "You need to implement C10_DEPRECATED for this compiler"
-// # define C10_DEPRECATED
+// #warning "You need to implement C10_DEPRECATED for this compiler"
+// #define C10_DEPRECATED
 // #endif
-
 
 // Sample usage:
 //
@@ -992,7 +1088,8 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // many compilers.
 // #if defined(__has_cpp_attribute)
 // #if __has_cpp_attribute(deprecated) && !defined(__CUDACC__)
-// # define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy) using TypeName [[deprecated]] = TypeThingy;
+// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
+//   using TypeName [[deprecated]] = TypeThingy;
 // #endif
 // #endif
 
@@ -1005,16 +1102,18 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // attribute when not cuda, and when using a GCC compiler that doesn't support
 // the c++14 syntax we checked for above (available in __GNUC__ >= 5)
 // #if !defined(__CUDACC__)
-// # define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy) using TypeName __attribute__((deprecated)) = TypeThingy;
+// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
+//   using TypeName __attribute__((deprecated)) = TypeThingy;
 // #else
 // using cuda + gcc < 5, neither deprecated syntax is available so turning off.
-// # define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy) using TypeName = TypeThingy;
+// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
+//   using TypeName = TypeThingy;
 // #endif
 // #endif
 
-// #if ! defined(C10_DEFINE_DEPRECATED_USING)
-// # warning "You need to implement C10_DEFINE_DEPRECATED_USING for this compiler"
-// # define C10_DEFINE_DEPRECATED_USING
+// #if !defined(C10_DEFINE_DEPRECATED_USING)
+// #warning "You need to implement C10_DEFINE_DEPRECATED_USING for this compiler"
+// #define C10_DEFINE_DEPRECATED_USING
 // #endif
 
 
@@ -1038,16 +1137,20 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 @Namespace("c10::detail") public static native @StdString BytePointer ExcludeFileExtension(@StdString BytePointer full_path);
 @Namespace("c10::detail") public static native @StdString String ExcludeFileExtension(@StdString String full_path);
+// Targeting ../CompileTimeEmptyString.java
+
 
 
 @Namespace("c10::detail") public static native @Cast("std::ostream*") @ByRef Pointer _str(@Cast("std::ostream*") @ByRef Pointer ss);
+
+@Namespace("c10::detail") public static native @Cast("std::ostream*") @ByRef @Name("_str") Pointer _strCompileTimeEmptyString(@Cast("std::ostream*") @ByRef Pointer ss, @Const @ByRef CompileTimeEmptyString t);
 // Targeting ../_str_wrapper.java
 
 
 
-// For c10::str() with an empty argument list (which is common in our assert macros),
-// we don't want to pay the binary size for constructing and destructing a stringstream
-// or even constructing a string. Let's just return a reference to an empty string.
+// For c10::str() with an empty argument list (which is common in our assert
+// macros), we don't want to pay the binary size for constructing and
+// destructing a stringstream or even constructing a string.
 
  // namespace detail
 
@@ -1098,8 +1201,8 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 // #pragma once
 
-// #include <c10/util/AlignOf.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/AlignOf.h>
 
 // #include <algorithm>
 // #include <cassert>
@@ -1133,12 +1236,9 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 /** SmallVectorTemplateBase<isPodLike = true> - This is where we put method
  *  implementations that are designed to work with POD-like T's. */
+// Targeting ../DimVectorImpl.java
 
-/** This class consists of common code factored out of the SmallVector class to
- *  reduce code duplication based on the SmallVector 'N' template parameter.
- *  Warning: C10_IS_TRIVIALLY_COPYABLE may not always detect non-POD
- *  type correctly. For example, std::unique_ptr may be treated as POD and cause
- *  memory leaks. */
+
 
 
 
@@ -1150,15 +1250,9 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
  *  SmallVectorTemplateCommon. There are 'N-1' elements here. The remaining '1'
  *  element is in the base class. This is specialized for the N=1 and N=0 cases
  *  to avoid allocating unnecessary storage. */
+// Targeting ../DimVector.java
 
-/** This is a 'vector' (really, a variable-sized array), optimized
- *  for the case when the array is small.  It contains some number of elements
- *  in-place, which allows it to avoid heap allocation when the actual number of
- *  elements is below that threshold.  This allows normal "small" cases to be
- *  fast without losing generality for large inputs.
- * 
- *  Note that this does not attempt to be exception safe.
- *  */
+
 
 
 
@@ -1177,8 +1271,8 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // #define C10_UTIL_EXCEPTION_H_
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/StringUtil.h>
 // #include <c10/util/Deprecated.h>
+// #include <c10/util/StringUtil.h>
 
 // #include <cstddef>
 // #include <exception>
@@ -1211,11 +1305,17 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 /** Issue a warning with a given message. Dispatched to the current
  *  warning handler. */
-@Namespace("c10::Warning") public static native void warn(@ByVal SourceLocation source_location,
+@Namespace("c10::Warning") public static native void warn(
+    @Const @ByRef SourceLocation source_location,
     @StdString BytePointer msg,
     @Cast("bool") boolean verbatim);
-@Namespace("c10::Warning") public static native void warn(@ByVal SourceLocation source_location,
+@Namespace("c10::Warning") public static native void warn(
+    @Const @ByRef SourceLocation source_location,
     @StdString String msg,
+    @Cast("bool") boolean verbatim);
+@Namespace("c10::Warning") public static native void warn(
+    @ByVal SourceLocation source_location,
+    @ByVal CompileTimeEmptyString msg,
     @Cast("bool") boolean verbatim);
 /** Sets the global warning handler. This is not thread-safe, so it should
  *  generally be called once during initialization or while holding the GIL
@@ -1226,6 +1326,12 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 /** Gets the global warning handler. */
 @Namespace("c10::Warning") public static native @NoException WarningHandler get_warning_handler();
 
+/** The TORCH_WARN_ONCE macro is difficult to test for. Use
+ *  setWarnAlways(true) to turn it into TORCH_WARN, which can be
+ *  tested for more easily. */
+@Namespace("c10::Warning") public static native @NoException void set_warnAlways(@Cast("bool") boolean arg0);
+@Namespace("c10::Warning") public static native @Cast("bool") @NoException boolean get_warnAlways();
+
 
 // Targeting ../IndexError.java
 
@@ -1234,6 +1340,9 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 
 // Targeting ../TypeError.java
+
+
+// Targeting ../NotImplementedError.java
 
 
 // Targeting ../EnforceFiniteError.java
@@ -1247,26 +1356,20 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // exception type before its what() content
 @Namespace("c10") public static native @StdString BytePointer GetExceptionString(@Cast("const std::exception*") @ByRef Pointer e);
 
-// Return x if it is non-empty; otherwise return y.
-@Namespace("c10::detail") public static native @StdString BytePointer if_empty_then(@StdString BytePointer x, @StdString BytePointer y);
-@Namespace("c10::detail") public static native @StdString String if_empty_then(@StdString String x, @StdString String y);
-
-
-
-
  // namespace c10
 
 // Private helper macro for implementing TORCH_INTERNAL_ASSERT and TORCH_CHECK
 //
-// Note: In the debug build With MSVC, __LINE__ might be of long type (a.k.a int32_t),
-// which is different from the definition of `SourceLocation` that requires
-// unsigned int (a.k.a uint32_t) and may cause a compile error with the message:
-// error C2397: conversion from 'long' to 'uint32_t' requires a narrowing conversion
-// Here the static cast is used to pass the build.
-// if this is used inside a lambda the __func__ macro expands to operator(),
-// which isn't very useful, but hard to fix in a macro so suppressing the warning.
+// Note: In the debug build With MSVC, __LINE__ might be of long type (a.k.a
+// int32_t), which is different from the definition of `SourceLocation` that
+// requires unsigned int (a.k.a uint32_t) and may cause a compile error with the
+// message: error C2397: conversion from 'long' to 'uint32_t' requires a
+// narrowing conversion Here the static cast is used to pass the build. if this
+// is used inside a lambda the __func__ macro expands to operator(), which isn't
+// very useful, but hard to fix in a macro so suppressing the warning.
 // #define C10_THROW_ERROR(err_type, msg)
-//   throw ::c10::err_type({__func__, __FILE__, static_cast<uint32_t>(__LINE__)}, msg)
+//   throw ::c10::err_type(
+//       {__func__, __FILE__, static_cast<uint32_t>(__LINE__)}, msg)
 
 // Private helper macro for workaround MSVC misexpansion of nested macro
 // invocations involving __VA_ARGS__.  See
@@ -1276,13 +1379,14 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // On nvcc, C10_UNLIKELY thwarts missing return statement analysis.  In cases
 // where the unlikely expression may be a constant, use this macro to ensure
 // return statement analysis keeps working (at the cost of not getting the
-// likely/unlikely annotation on nvcc). https://github.com/pytorch/pytorch/issues/21418
+// likely/unlikely annotation on nvcc).
+// https://github.com/pytorch/pytorch/issues/21418
 //
 // Currently, this is only used in the error reporting macros below.  If you
 // want to use it more generally, move me to Macros.h
 //
-// TODO: Brian Vaughan observed that we might be able to get this to work on nvcc
-// by writing some sort of C++ overload that distinguishes constexpr inputs
+// TODO: Brian Vaughan observed that we might be able to get this to work on
+// nvcc by writing some sort of C++ overload that distinguishes constexpr inputs
 // from non-constexpr.  Since there isn't any evidence that losing C10_UNLIKELY
 // in nvcc is causing us perf problems, this is not yet implemented, but this
 // might be an interesting piece of C++ code for an intrepid bootcamper to
@@ -1292,7 +1396,6 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // #else
 // #define C10_UNLIKELY_OR_CONST(e) C10_UNLIKELY(e)
 // #endif
-
 
 // ----------------------------------------------------------------------------
 // Error reporting macros
@@ -1330,22 +1433,28 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // #ifdef STRIP_ERROR_MESSAGES
 // #define TORCH_INTERNAL_ASSERT(cond, ...)
 //   if (C10_UNLIKELY_OR_CONST(!(cond))) {
-//     C10_THROW_ERROR(Error,
-//         #cond " INTERNAL ASSERT FAILED at"
-//         C10_STRINGIZE(__FILE__)
-//     );
+//     ::c10::detail::torchCheckFail(
+//         __func__,
+//         __FILE__,
+//         static_cast<uint32_t>(__LINE__),
+//         #cond "INTERNAL ASSERT FAILED at" C10_STRINGIZE(__FILE__));
 //   }
 // #else
+// It would be nice if we could build a combined string literal out of
+// the TORCH_INTERNAL_ASSERT prefix and a user-provided string literal
+// as the first argument, but there doesn't seem to be any good way to
+// do that while still supporting having a first argument that isn't a
+// string literal.
 // #define TORCH_INTERNAL_ASSERT(cond, ...)
 //   if (C10_UNLIKELY_OR_CONST(!(cond))) {
-//     C10_THROW_ERROR(Error, ::c10::str(
-//         #cond " INTERNAL ASSERT FAILED at "
-//         C10_STRINGIZE(__FILE__)
-//         ":"
-//         C10_STRINGIZE(__LINE__)
-//         ", please report a bug to PyTorch. ",
-//         ::c10::str(__VA_ARGS__)
-//     ));
+//     ::c10::detail::torchInternalAssertFail(
+//         __func__,
+//         __FILE__,
+//         static_cast<uint32_t>(__LINE__),
+//         #cond
+//         "INTERNAL ASSERT FAILED at " C10_STRINGIZE(__FILE__) ":" C10_STRINGIZE(
+//             __LINE__) ", please report a bug to PyTorch. ",
+//         c10::str(__VA_ARGS__));
 //   }
 // #endif
 
@@ -1374,49 +1483,107 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 // #ifdef STRIP_ERROR_MESSAGES
 // #define TORCH_CHECK_MSG(cond, type, ...)
-//   (#cond #type " CHECK FAILED at "
-//    C10_STRINGIZE(__FILE__))
+//   (#cond #type " CHECK FAILED at " C10_STRINGIZE(__FILE__))
 // #define TORCH_CHECK_WITH_MSG(error_t, cond, type, ...)
 //   if (C10_UNLIKELY_OR_CONST(!(cond))) {
-//     C10_THROW_ERROR(Error,
-//         TORCH_CHECK_MSG(cond, type, __VA_ARGS__)
-//     );
+//     C10_THROW_ERROR(Error, TORCH_CHECK_MSG(cond, type, __VA_ARGS__));
 //   }
 // #else
+@Namespace("c10::detail") public static native @Cast("const char*") BytePointer torchCheckMsgImpl(@Cast("const char*") BytePointer msg);
+@Namespace("c10::detail") public static native String torchCheckMsgImpl(String msg);
+// If there is just 1 user-provided C-string argument, use it.
+@Namespace("c10::detail") public static native @Cast("const char*") BytePointer torchCheckMsgImpl(
+    @Cast("const char*") BytePointer msg,
+    @Cast("const char*") BytePointer args);
+@Namespace("c10::detail") public static native String torchCheckMsgImpl(
+    String msg,
+    String args);
+ // namespace detail
+ // namespace c10
+
 // #define TORCH_CHECK_MSG(cond, type, ...)
-//   ::c10::detail::if_empty_then(
-//       ::c10::str(__VA_ARGS__),
-//       "Expected " #cond " to be true, but got false.  "
+//   (::c10::detail::torchCheckMsgImpl(
+//       "Expected " #cond
+//       " to be true, but got false.  "
 //       "(Could this error message be improved?  If so, "
-//       "please report an enhancement request to PyTorch.)"
-//   )
+//       "please report an enhancement request to PyTorch.)",
+//       ##__VA_ARGS__))
 // #define TORCH_CHECK_WITH_MSG(error_t, cond, type, ...)
 //   if (C10_UNLIKELY_OR_CONST(!(cond))) {
-//     C10_THROW_ERROR(error_t,
-//         TORCH_CHECK_MSG(cond, type, __VA_ARGS__)
-//     );
+//     C10_THROW_ERROR(error_t, TORCH_CHECK_MSG(cond, type, __VA_ARGS__));
 //   }
 // #endif
 
-@Namespace("c10::detail") public static native void torchCheckFail(@Cast("const char*") BytePointer func, @Cast("const char*") BytePointer file, @Cast("uint32_t") int line, @StdString BytePointer msg);
-@Namespace("c10::detail") public static native void torchCheckFail(String func, String file, @Cast("uint32_t") int line, @StdString String msg);
+@Namespace("c10::detail") public static native void torchCheckFail(
+    @Cast("const char*") BytePointer func,
+    @Cast("const char*") BytePointer file,
+    @Cast("uint32_t") int line,
+    @StdString BytePointer msg);
+@Namespace("c10::detail") public static native void torchCheckFail(
+    String func,
+    String file,
+    @Cast("uint32_t") int line,
+    @StdString String msg);
+
+// The c10::str() call that creates userMsg can have 1 of 3 return
+// types depending on the number and types of arguments passed to
+// TORCH_INTERNAL_ASSERT.  0 arguments will get a
+// CompileTimeEmptyString, 1 const char * will be passed straight
+// through, and anything else will get converted to std::string.
+@Namespace("c10::detail") public static native void torchInternalAssertFail(
+    @Cast("const char*") BytePointer func,
+    @Cast("const char*") BytePointer file,
+    @Cast("uint32_t") int line,
+    @Cast("const char*") BytePointer condMsg,
+    @Cast("const char*") BytePointer userMsg);
+@Namespace("c10::detail") public static native void torchInternalAssertFail(
+    String func,
+    String file,
+    @Cast("uint32_t") int line,
+    String condMsg,
+    String userMsg);
+@Namespace("c10::detail") public static native void torchInternalAssertFail(
+    @Cast("const char*") BytePointer func,
+    @Cast("const char*") BytePointer file,
+    @Cast("uint32_t") int line,
+    @Cast("const char*") BytePointer condMsg,
+    @ByVal CompileTimeEmptyString userMsg);
+@Namespace("c10::detail") public static native void torchInternalAssertFail(
+    String func,
+    String file,
+    @Cast("uint32_t") int line,
+    String condMsg,
+    @ByVal CompileTimeEmptyString userMsg);
 
  // namespace detail
- // namespace 10
+ // namespace c10
 
+// #ifdef STRIP_ERROR_MESSAGES
 // #define TORCH_CHECK(cond, ...)
 //   if (C10_UNLIKELY_OR_CONST(!(cond))) {
 //     ::c10::detail::torchCheckFail(
-//         __func__, __FILE__, static_cast<uint32_t>(__LINE__),
+//         __func__,
+//         __FILE__,
+//         static_cast<uint32_t>(__LINE__),
 //         TORCH_CHECK_MSG(cond, "", __VA_ARGS__));
 //   }
+// #else
+// #define TORCH_CHECK(cond, ...)
+//   if (C10_UNLIKELY_OR_CONST(!(cond))) {
+//     ::c10::detail::torchCheckFail(
+//         __func__,
+//         __FILE__,
+//         static_cast<uint32_t>(__LINE__),
+//         TORCH_CHECK_MSG(cond, "", ##__VA_ARGS__));
+//   }
+// #endif
 
-// An utility macro that does what `TORCH_CHECK` does if compiled in the host code,
-// otherwise does nothing. Supposed to be used in the code shared between host and
-// device code as an alternative for `TORCH_CHECK`.
+// An utility macro that does what `TORCH_CHECK` does if compiled in the host
+// code, otherwise does nothing. Supposed to be used in the code shared between
+// host and device code as an alternative for `TORCH_CHECK`.
 // #if defined(__CUDACC__) || defined(__HIPCC__)
 // #else
-// #define TORCH_CHECK_IF_NOT_ON_CUDA(cond, ...) TORCH_CHECK(cond, __VA_ARGS__)
+// #define TORCH_CHECK_IF_NOT_ON_CUDA(cond, ...) TORCH_CHECK(cond, ##__VA_ARGS__)
 // #endif
 
 // Debug only version of TORCH_INTERNAL_ASSERT. This macro only checks in debug
@@ -1448,33 +1615,58 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 // #define TORCH_CHECK_TYPE(cond, ...)
 //   TORCH_CHECK_WITH_MSG(TypeError, cond, "TYPE", __VA_ARGS__)
 
+// Like TORCH_CHECK, but raises NotImplementedErrors instead of Errors.
+// #define TORCH_CHECK_NOT_IMPLEMENTED(cond, ...)
+//   TORCH_CHECK_WITH_MSG(NotImplementedError, cond, "TYPE", __VA_ARGS__)
+
 // Report a warning to the user.  Accepts an arbitrary number of extra
 // arguments which are concatenated into the warning message using operator<<
 //
 // #ifdef STRIP_ERROR_MESSAGES
 // #define TORCH_WARN(...)
-//   ::c10::Warning::warn({__func__, __FILE__, static_cast<uint32_t>(__LINE__)}, {}, false)
+//   ::c10::Warning::warn(
+//       {__func__, __FILE__, static_cast<uint32_t>(__LINE__)},
+//       ::c10::detail::CompileTimeEmptyString{},
+//       false)
 // #else
 // #define TORCH_WARN(...)
-//   ::c10::Warning::warn({__func__, __FILE__, static_cast<uint32_t>(__LINE__)}, ::c10::str(__VA_ARGS__), false)
+//   ::c10::Warning::warn(
+//       {__func__, __FILE__, static_cast<uint32_t>(__LINE__)},
+//       ::c10::str(__VA_ARGS__),
+//       false)
 // #endif
 
 // Report a warning to the user only once.  Accepts an arbitrary number of extra
 // arguments which are concatenated into the warning message using operator<<
 //
 // #ifdef STRIP_ERROR_MESSAGES
-// #define TORCH_WARN_ONCE(...)
-//   C10_UNUSED static const auto C10_ANONYMOUS_VARIABLE(torch_warn_once_) = [&] {
-//     ::c10::Warning::warn({__func__, __FILE__, static_cast<uint32_t>(__LINE__)}, {}, false);
-//     return true;
-//   }()
+// #define _TORCH_WARN_ONCE(...)
+//   C10_UNUSED static const auto C10_ANONYMOUS_VARIABLE(torch_warn_once_) =
+//       [&] {
+//         ::c10::Warning::warn(
+//             {__func__, __FILE__, static_cast<uint32_t>(__LINE__)},
+//             ::c10::detail::CompileTimeEmptyString{},
+//             false);
+//         return true;
+//       }()
 // #else
-// #define TORCH_WARN_ONCE(...)
-//   C10_UNUSED static const auto C10_ANONYMOUS_VARIABLE(torch_warn_once_) = [&] {
-//     ::c10::Warning::warn({__func__, __FILE__, static_cast<uint32_t>(__LINE__)}, ::c10::str(__VA_ARGS__), false);
-//     return true;
-//   }()
+// #define _TORCH_WARN_ONCE(...)
+//   C10_UNUSED static const auto C10_ANONYMOUS_VARIABLE(torch_warn_once_) =
+//       [&] {
+//         ::c10::Warning::warn(
+//             {__func__, __FILE__, static_cast<uint32_t>(__LINE__)},
+//             ::c10::str(__VA_ARGS__),
+//             false);
+//         return true;
+//       }()
 // #endif
+
+// #define TORCH_WARN_ONCE(...)
+//   if (::c10::Warning::get_warnAlways()) {
+//     TORCH_WARN(__VA_ARGS__);
+//   } else {
+//     _TORCH_WARN_ONCE(__VA_ARGS__);
+//   }
 
 // ----------------------------------------------------------------------------
 // Deprecated macros
@@ -1482,40 +1674,47 @@ public static final int IS_NOT_GCC5_CONSTEXPR = 0;
 
 /*
 // Deprecation disabled until we fix sites in our codebase
-C10_DEPRECATED_MESSAGE("AT_ERROR(msg) is deprecated, use TORCH_CHECK(false, msg) instead.")
+C10_DEPRECATED_MESSAGE("AT_ERROR(msg) is deprecated, use TORCH_CHECK(false, msg)
+instead.")
 */
 @Namespace("c10::detail") public static native void deprecated_AT_ERROR();
 
 /*
 // Deprecation disabled until we fix sites in our codebase
-C10_DEPRECATED_MESSAGE("AT_ASSERT is deprecated, if you mean to indicate an internal invariant failure, use " \
-                       "TORCH_INTERNAL_ASSERT instead; if you mean to do user error checking, use " \
-                       "TORCH_CHECK.  See https://github.com/pytorch/pytorch/issues/20287 for more details.")
+C10_DEPRECATED_MESSAGE("AT_ASSERT is deprecated, if you mean to indicate an
+internal invariant failure, use " \
+                       "TORCH_INTERNAL_ASSERT instead; if you mean to do user
+error checking, use " \ "TORCH_CHECK.  See
+https://github.com/pytorch/pytorch/issues/20287 for more details.")
 */
 @Namespace("c10::detail") public static native void deprecated_AT_ASSERT();
 
 /*
 // Deprecation disabled until we fix sites in our codebase
-C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an internal invariant failure, use " \
-                       "TORCH_INTERNAL_ASSERT instead; if you mean to do user error checking, use " \
-                       "TORCH_CHECK.  See https://github.com/pytorch/pytorch/issues/20287 for more details.")
+C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an
+internal invariant failure, use " \
+                       "TORCH_INTERNAL_ASSERT instead; if you mean to do user
+error checking, use " \ "TORCH_CHECK.  See
+https://github.com/pytorch/pytorch/issues/20287 for more details.")
 */
 @Namespace("c10::detail") public static native void deprecated_AT_ASSERTM();
 
- // namespace c10::detail
+ // namespace detail
+ // namespace c10
 
 // Deprecated alias; this alias was deprecated because people kept mistakenly
 // using it for user error checking.  Use TORCH_INTERNAL_ASSERT or TORCH_CHECK
-// instead. See https://github.com/pytorch/pytorch/issues/20287 for more details.
+// instead. See https://github.com/pytorch/pytorch/issues/20287 for more
+// details.
 // #define AT_ASSERT(...)
 //   do {
 //     ::c10::detail::deprecated_AT_ASSERT();
 //     C10_EXPAND_MSVC_WORKAROUND(TORCH_INTERNAL_ASSERT(__VA_ARGS__));
 //   } while (false)
 
-// Deprecated alias, like AT_ASSERT.  The new TORCH_INTERNAL_ASSERT macro supports
-// both 0-ary and variadic calls, so having a separate message-accepting macro
-// is not necessary.
+// Deprecated alias, like AT_ASSERT.  The new TORCH_INTERNAL_ASSERT macro
+// supports both 0-ary and variadic calls, so having a separate
+// message-accepting macro is not necessary.
 //
 // NB: we MUST include cond explicitly here, as MSVC will miscompile the macro
 // expansion, shunting all of __VA_ARGS__ to cond.  An alternate workaround
@@ -1559,10 +1758,10 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 
 // #pragma once
 
-// #include <c10/util/SmallVector.h>
 // #include <c10/util/C++17.h>
-// #include <c10/util/Exception.h>
 // #include <c10/util/Deprecated.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/SmallVector.h>
 
 // #include <array>
 // #include <iterator>
@@ -1610,6 +1809,9 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 
 
 // Targeting ../DimnameArrayRef.java
+
+
+// Targeting ../ScalarArrayRef.java
 
 
 // Targeting ../TensorArrayRef.java
@@ -1664,9 +1866,10 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // Reference: https://en.cppreference.com/w/cpp/numeric/complex
 //
 // [NOTE: Complex Operator Unification]
-// Operators currently use a mix of std::complex, thrust::complex, and c10::complex internally.
-// The end state is that all operators will use c10::complex internally.  Until then, there may
-// be some hacks to support all variants.
+// Operators currently use a mix of std::complex, thrust::complex, and
+// c10::complex internally. The end state is that all operators will use
+// c10::complex internally.  Until then, there may be some hacks to support all
+// variants.
 //
 //
 // [Note on Constructors]
@@ -1683,7 +1886,8 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // - converting constructors
 //
 // Converting constructors:
-// - std::complex defines converting constructor between float/double/long double,
+// - std::complex defines converting constructor between float/double/long
+// double,
 //   while we define converting constructor between float/double.
 // - For these converting constructors, upcasting is implicit, downcasting is
 //   explicit.
@@ -1703,41 +1907,50 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // There are three types of assign operator:
 // - Assign a real value from the same scalar type
 //   - In std, this is templated as complex& operator=(const T& x)
-//     with specialization `complex& operator=(T x)` for float/double/long double
-//     Since we only support float and double, on will use `complex& operator=(T x)`
+//     with specialization `complex& operator=(T x)` for float/double/long
+//     double Since we only support float and double, on will use `complex&
+//     operator=(T x)`
 // - Copy assignment operator and converting assignment operator
-//   - There is no specialization of converting assignment operators, which type is
+//   - There is no specialization of converting assignment operators, which type
+//   is
 //     convertible is solely dependent on whether the scalar type is convertible
 //
-// In addition to the standard assignment, we also provide assignment operators with std and thrust
+// In addition to the standard assignment, we also provide assignment operators
+// with std and thrust
 //
 //
 // [Casting operators]
 //
-// std::complex does not have casting operators. We define casting operators casting to std::complex and thrust::complex
+// std::complex does not have casting operators. We define casting operators
+// casting to std::complex and thrust::complex
 //
 //
 // [Operator ""]
 //
-// std::complex has custom literals `i`, `if` and `il` defined in namespace `std::literals::complex_literals`.
-// We define our own custom literals in the namespace `c10::complex_literals`. Our custom literals does not
-// follow the same behavior as in std::complex, instead, we define _if, _id to construct float/double
-// complex literals.
+// std::complex has custom literals `i`, `if` and `il` defined in namespace
+// `std::literals::complex_literals`. We define our own custom literals in the
+// namespace `c10::complex_literals`. Our custom literals does not follow the
+// same behavior as in std::complex, instead, we define _if, _id to construct
+// float/double complex literals.
 //
 //
 // [real() and imag()]
 //
-// In C++20, there are two overload of these functions, one it to return the real/imag, another is to set real/imag,
-// they are both constexpr. We follow this design.
+// In C++20, there are two overload of these functions, one it to return the
+// real/imag, another is to set real/imag, they are both constexpr. We follow
+// this design.
 //
 //
 // [Operator +=,-=,*=,/=]
 //
-// Since C++20, these operators become constexpr. In our implementation, they are also constexpr.
+// Since C++20, these operators become constexpr. In our implementation, they
+// are also constexpr.
 //
-// There are two types of such operators: operating with a real number, or operating with another complex number.
-// For the operating with a real number, the generic template form has argument type `const T &`, while the overload
-// for float/double/long double has `T`. We will follow the same type as float/double/long double in std.
+// There are two types of such operators: operating with a real number, or
+// operating with another complex number. For the operating with a real number,
+// the generic template form has argument type `const T &`, while the overload
+// for float/double/long double has `T`. We will follow the same type as
+// float/double/long double in std.
 //
 // [Unary operator +-]
 //
@@ -1765,7 +1978,8 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 //
 //
 //
-// TODO(@zasdfgbnm): c10::complex<c10::Half> is not currently supported, because:
+// TODO(@zasdfgbnm): c10::complex<c10::Half> is not currently supported,
+// because:
 //  - lots of members and functions of c10::Half are not constexpr
 //  - thrust::complex only support float and double
 
@@ -1779,15 +1993,16 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 
  // namespace complex_literals
 
-
-// Define operators between integral scalars and c10::complex. std::complex does not support this when T is a
-// floating-point number. This is useful because it saves a lot of "static_cast" when operate a complex and an integer.
-// This makes the code both less verbose and potentially more efficient.
+// Define operators between integral scalars and c10::complex. std::complex does
+// not support this when T is a floating-point number. This is useful because it
+// saves a lot of "static_cast" when operate a complex and an integer. This
+// makes the code both less verbose and potentially more efficient.
 // #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-//   typename std::enable_if_t<std::is_floating_point<fT>::value && std::is_integral<iT>::value, int> = 0
+//   typename std::enable_if_t<
+//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
+//       int> = 0
 
 // #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-
 
 
 
@@ -1877,8 +2092,8 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // #endif
 
 // #include <complex>
-// #include <cstring>
 // #include <cstdint>
+// #include <cstring>
 // #include <iosfwd>
 // #include <limits>
 // #include <sstream>
@@ -1901,35 +2116,40 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // #define C10_DEVICE_HOST_FUNCTION
 // #endif
 
-  @Namespace("c10::detail") public static native float fp32_from_bits(@Cast("uint32_t") int w);
+@Namespace("c10::detail") public static native float fp32_from_bits(@Cast("uint32_t") int w);
 
-  @Namespace("c10::detail") public static native @Cast("uint32_t") int fp32_to_bits(float f);
+@Namespace("c10::detail") public static native @Cast("uint32_t") int fp32_to_bits(float f);
 
-  /*
-   * Convert a 16-bit floating-point number in IEEE half-precision format, in bit representation, to
-   * a 32-bit floating-point number in IEEE single-precision format, in bit representation.
-   *
-   * @note The implementation doesn't use any floating-point operations.
-   */
-  @Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format, in bit representation.
+ *
+ * @note The implementation doesn't use any floating-point operations.
+ */
+@Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
 
-  /*
-   * Convert a 16-bit floating-point number in IEEE half-precision format, in bit representation, to
-   * a 32-bit floating-point number in IEEE single-precision format.
-   *
-   * @note The implementation relies on IEEE-like (no assumption about rounding mode and no operations on denormals)
-   * floating-point operations and bitcasts between integer and floating-point variables.
-   */
-  @Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
 
-  /*
-   * Convert a 32-bit floating-point number in IEEE single-precision format to a 16-bit floating-point number in
-   * IEEE half-precision format, in bit representation.
-   *
-   * @note The implementation relies on IEEE-like (no assumption about rounding mode and no operations on denormals)
-   * floating-point operations and bitcasts between integer and floating-point variables.
-   */
-  @Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
 
 
 // Targeting ../Half.java
@@ -1944,10 +2164,10 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // C4804: unsafe use of type 'bool' in operation
 // It can be addressed by disabling the following warning.
 // #ifdef _MSC_VER
-// #pragma warning( push )
-// #pragma warning( disable : 4146 )
-// #pragma warning( disable : 4804 )
-// #pragma warning( disable : 4018 )
+// #pragma warning(push)
+// #pragma warning(disable : 4146)
+// #pragma warning(disable : 4804)
+// #pragma warning(disable : 4018)
 // #endif
 
 // The overflow checks may involve float to int conversion which may
@@ -1971,7 +2191,7 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // #endif
 
 // #ifdef _MSC_VER
-// #pragma warning( pop )
+// #pragma warning(pop)
 // #endif
 
 
@@ -2033,18 +2253,17 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 
 // #if defined(CUDA_VERSION) && CUDA_VERSION >= 11000
 // #endif
-  @Namespace("c10::detail") public static native float f32_from_bits(@Cast("uint16_t") short src);
+@Namespace("c10::detail") public static native float f32_from_bits(@Cast("uint16_t") short src);
 
-  @Namespace("c10::detail") public static native @Cast("uint16_t") short bits_from_f32(float src);
+@Namespace("c10::detail") public static native @Cast("uint16_t") short bits_from_f32(float src);
 
-  @Namespace("c10::detail") public static native @Cast("uint16_t") short round_to_nearest_even(float src);
+@Namespace("c10::detail") public static native @Cast("uint16_t") short round_to_nearest_even(float src);
 
 // Targeting ../BFloat16.java
 
 
 
  // namespace c10
-
 
 // #include <c10/util/BFloat16-inl.h>
 
@@ -2078,9 +2297,10 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
   MOBILE_RUNTIME_INFO((byte)(1)),
   PROFILER_STATE((byte)(2)),
   INFERENCE_CONTEXT((byte)(3)), // for inference usage
+  PARAM_COMMS_INFO((byte)(4)),
 
-  TEST_INFO((byte)(4)), // used only in tests
-  TEST_INFO_2((byte)(5));// used only in tests
+  TEST_INFO((byte)(5)), // used only in tests
+  TEST_INFO_2((byte)(6));// used only in tests
 
     public final byte value;
     private DebugInfoKind(byte v) { this.value = v; }
@@ -2127,9 +2347,9 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 
 // #pragma once
 // #include <c10/core/ScalarType.h>
-// #include <c10/util/Half.h>
-// #include <c10/util/BFloat16.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/BFloat16.h>
+// #include <c10/util/Half.h>
 
 // #include <type_traits>
 
@@ -2199,35 +2419,64 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // #define ERROR_UNSUPPORTED_CAST TORCH_CHECK(false, "Unexpected scalar type");
 // #endif
 
-// Fetch a value with dynamic type src_type from ptr, and cast it to static type dest_t.
-// #define FETCH_AND_CAST_CASE(type, scalartype) case ScalarType::scalartype: return static_cast_with_inter_type<dest_t, type>::apply(*(const type *)ptr);
-@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::qint8>") qint8 fetch_and_cast_qint8(ScalarType src_type, @Const Pointer ptr);
-@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::quint8>") quint8 fetch_and_cast_quint8(ScalarType src_type, @Const Pointer ptr);
-@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::qint32>") qint32 fetch_and_cast_qint32(ScalarType src_type, @Const Pointer ptr);
-@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::quint4x2>") quint4x2 fetch_and_cast_quint4x2(ScalarType src_type, @Const Pointer ptr);
+// Fetch a value with dynamic type src_type from ptr, and cast it to static type
+// dest_t.
+// #define FETCH_AND_CAST_CASE(type, scalartype)
+//   case ScalarType::scalartype:
+//     return static_cast_with_inter_type<dest_t, type>::apply(*(const type*)ptr);
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::qint8>") qint8 fetch_and_cast_qint8(
+    ScalarType src_type,
+    @Const Pointer ptr);
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::quint8>") quint8 fetch_and_cast_quint8(
+    ScalarType src_type,
+    @Const Pointer ptr);
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::qint32>") qint32 fetch_and_cast_qint32(
+    ScalarType src_type,
+    @Const Pointer ptr);
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::quint4x2>") quint4x2 fetch_and_cast_quint4x2(
+    ScalarType src_type,
+    @Const Pointer ptr);
 
-// Cast a value with static type src_t into dynamic dest_type, and store it to ptr.
-// #define CAST_AND_STORE_CASE(type, scalartype) case ScalarType::scalartype: *(type *)ptr = static_cast_with_inter_type<type, src_t>::apply(value); return;
-@Namespace("c10") public static native @Name("cast_and_store<c10::qint8>") void cast_and_store_qint8(ScalarType dest_type, Pointer ptr, @ByVal qint8 value);
-@Namespace("c10") public static native @Name("cast_and_store<c10::quint8>") void cast_and_store_quint8(ScalarType dest_type, Pointer ptr, @ByVal quint8 value);
-@Namespace("c10") public static native @Name("cast_and_store<c10::qint32>") void cast_and_store_qint32(ScalarType dest_type, Pointer ptr, @ByVal qint32 value);
-@Namespace("c10") public static native @Name("cast_and_store<c10::quint4x2>") void cast_and_store_quint4x2(ScalarType dest_type, Pointer ptr, @ByVal quint4x2 value);
+// Cast a value with static type src_t into dynamic dest_type, and store it to
+// ptr.
+// #define CAST_AND_STORE_CASE(type, scalartype)
+//   case ScalarType::scalartype:
+//     *(type*)ptr = static_cast_with_inter_type<type, src_t>::apply(value);
+//     return;
+@Namespace("c10") public static native @Name("cast_and_store<c10::qint8>") void cast_and_store_qint8(
+    ScalarType dest_type,
+    Pointer ptr,
+    @ByVal qint8 value);
+@Namespace("c10") public static native @Name("cast_and_store<c10::quint8>") void cast_and_store_quint8(
+    ScalarType dest_type,
+    Pointer ptr,
+    @ByVal quint8 value);
+@Namespace("c10") public static native @Name("cast_and_store<c10::qint32>") void cast_and_store_qint32(
+    ScalarType dest_type,
+    Pointer ptr,
+    @ByVal qint32 value);
+@Namespace("c10") public static native @Name("cast_and_store<c10::quint4x2>") void cast_and_store_quint4x2(
+    ScalarType dest_type,
+    Pointer ptr,
+    @ByVal quint4x2 value);
 
 // #define DEFINE_UNCASTABLE(T, scalartype_)
-// template<>
-// C10_HOST_DEVICE inline T fetch_and_cast<T>(const ScalarType src_type, const void *ptr) {
-//   CUDA_KERNEL_ASSERT(ScalarType::scalartype_ == src_type);
-//   return *(const T *)ptr;
-// }
-// template<>
-// C10_HOST_DEVICE inline void cast_and_store<T>(const ScalarType dest_type, void *ptr, T value) {
-//   CUDA_KERNEL_ASSERT(ScalarType::scalartype_ == dest_type);
-//   *(T *)ptr = value;
-// }
+//   template <>
+//   C10_HOST_DEVICE inline T fetch_and_cast<T>(
+//       const ScalarType src_type, const void* ptr) {
+//     CUDA_KERNEL_ASSERT(ScalarType::scalartype_ == src_type);
+//     return *(const T*)ptr;
+//   }
+//   template <>
+//   C10_HOST_DEVICE inline void cast_and_store<T>(
+//       const ScalarType dest_type, void* ptr, T value) {
+//     CUDA_KERNEL_ASSERT(ScalarType::scalartype_ == dest_type);
+//     *(T*)ptr = value;
+//   }
 
 
 
-  // namespace c10
+ // namespace c10
 
 // Trigger tests for D25440771. TODO: Remove this line any time you want.
 
@@ -2324,8 +2573,9 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 //   C10_EXPORT ::c10::Registry<SrcType, PtrType<ObjectType>, ##__VA_ARGS__>*
 //   RegistryName() {
 //     static ::c10::Registry<SrcType, PtrType<ObjectType>, ##__VA_ARGS__>*
-//         registry = new ::c10::
-//             Registry<SrcType, PtrType<ObjectType>, ##__VA_ARGS__>(false);
+//         registry =
+//             new ::c10::Registry<SrcType, PtrType<ObjectType>, ##__VA_ARGS__>(
+//                 false);
 //     return registry;
 //   }
 
@@ -2518,7 +2768,7 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 // flags defined in C10. This is done via a global reference, so the flag
 // itself is not duplicated - under the hood it is the same global gflags flag.
 // #define C10_GFLAGS_DEF_WRAPPER(type, real_type, name, default_value, help_str)
-//   DEFINE_##type(name, default_value, help_str);                                
+//   DEFINE_##type(name, default_value, help_str);
 
 // #define C10_DEFINE_int(name, default_value, help_str)
 //   C10_GFLAGS_DEF_WRAPPER(int32, gflags::int32, name, default_value, help_str)
@@ -2534,8 +2784,7 @@ C10_DEPRECATED_MESSAGE("AT_ASSERTM is deprecated, if you mean to indicate an int
 //   C10_GFLAGS_DEF_WRAPPER(string, ::fLS::clstring, name, default_value, help_str)
 
 // DECLARE_typed_var should be used in header files and in the global namespace.
-// #define C10_GFLAGS_DECLARE_WRAPPER(type, real_type, name)
-//   DECLARE_##type(name);                                   
+// #define C10_GFLAGS_DECLARE_WRAPPER(type, real_type, name) DECLARE_##type(name);
 
 // #define C10_DECLARE_int(name)
 //   C10_GFLAGS_DECLARE_WRAPPER(int32, gflags::int32, name)
@@ -2698,6 +2947,29 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
     String condition,
     @StdString String msg);
 
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString msg);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString msg);
+
 @Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
     @Cast("const char*") BytePointer file,
     int line,
@@ -2720,6 +2992,29 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
     int line,
     String condition,
     @StdString String msg);
+
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString msg);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString msg);
 
 @Namespace("c10") public static native @Cast("const bool") boolean IsUsingGoogleLogging();
 
@@ -2744,12 +3039,12 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   } while (false)
 
 // #define CAFFE_ENFORCE_FINITE(condition, ...)
-//     do {
-//       if (C10_UNLIKELY(!(condition))) {
-//         ::c10::ThrowEnforceFiniteNotMet(
+//   do {
+//     if (C10_UNLIKELY(!(condition))) {
+//       ::c10::ThrowEnforceFiniteNotMet(
 //           __FILE__, __LINE__, #condition, ::c10::str(__VA_ARGS__));
-//       }
-//     } while (false)
+//     }
+//   } while (false)
 
 // #define CAFFE_ENFORCE_WITH_CALLER(condition, ...)
 //   do {
@@ -2761,83 +3056,81 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #define CAFFE_THROW(...)
 //   ::c10::ThrowEnforceNotMet(__FILE__, __LINE__, "", ::c10::str(__VA_ARGS__))
-// Targeting ../EnforceOK.java
 
+/**
+ * Rich logging messages
+ *
+ * CAFFE_ENFORCE_THAT can be used with one of the "checker functions" that
+ * capture input argument values and add it to the exception message. E.g.
+ * {@code CAFFE_ENFORCE_THAT(Equals(foo(x), bar(y)), "Optional additional message")}
+ * would evaluate both foo and bar only once and if the results are not equal -
+ * include them in the exception message.
+ *
+ * Some of the basic checker functions like Equals or Greater are already
+ * defined below. Other header might define customized checkers by adding
+ * functions to caffe2::enforce_detail namespace. For example:
+ *
+ *   namespace caffe2 { namespace enforce_detail {
+ *   inline EnforceFailMessage IsVector(const vector<int64_t>& shape) {
+ *     if (shape.size() == 1) { return EnforceOK(); }
+ *     return c10::str("Shape ", shape, " is not a vector");
+ *   }
+ *   }}
+ *
+ * With further usages like {@code CAFFE_ENFORCE_THAT(IsVector(Input(0).dims()))}
+ *
+ * Convenient wrappers for binary operations like CAFFE_ENFORCE_EQ are provided
+ * too. Please use them instead of CHECK_EQ and friends for failures in
+ * user-provided input.
+ */
+// #define CAFFE_ENFORCE_THAT_IMPL(op, lhs, rhs, expr, ...)
+//   ::c10::enforce_detail::enforceThatImpl(
+//       op, lhs, rhs, __FILE__, __LINE__, expr, nullptr, ##__VA_ARGS__)
 
+// #define CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(op, lhs, rhs, expr, ...)
+//   ::c10::enforce_detail::enforceThatImpl(
+//       op, (lhs), (rhs), __FILE__, __LINE__, expr, this, ##__VA_ARGS__)
 
-// #define BINARY_COMP_HELPER(name, op)
-//   template <typename T1, typename T2>
-//   inline EnforceFailMessage name(const T1& x, const T2& y) {
-//     if (x op y) {
-//       return EnforceOK();
-//     }
-//     return c10::str(x, " vs ", y);
-//   }
-// #undef BINARY_COMP_HELPER
-
-// #define CAFFE_ENFORCE_THAT_IMPL(condition, expr, ...)
-//   do {
-//     using namespace ::c10::enforce_detail;
-//     const EnforceFailMessage& CAFFE_ENFORCE_THAT_IMPL_r_ = (condition);
-//     if (C10_UNLIKELY(CAFFE_ENFORCE_THAT_IMPL_r_.bad())) {
-//       ::c10::ThrowEnforceNotMet(
-//           __FILE__,
-//           __LINE__,
-//           expr,
-//           CAFFE_ENFORCE_THAT_IMPL_r_.get_message_and_free(
-//               ::c10::str(__VA_ARGS__)));
-//     }
-//   } while (false)
-
-// #define CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(condition, expr, ...)
-//   do {
-//     using namespace ::c10::enforce_detail;
-//     const EnforceFailMessage& CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER_r_ =
-//         (condition);
-//     if (C10_UNLIKELY(CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER_r_.bad())) {
-//       ::c10::ThrowEnforceNotMet(
-//           __FILE__,
-//           __LINE__,
-//           expr,
-//           CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER_r_.get_message_and_free(
-//               ::c10::str(__VA_ARGS__)),
-//           this);
-//     }
-//   } while (false)
  // namespace enforce_detail
 
-// #define CAFFE_ENFORCE_THAT(condition, ...)
-//   CAFFE_ENFORCE_THAT_IMPL((condition), #condition, __VA_ARGS__)
+// #define CAFFE_ENFORCE_THAT(cmp, op, lhs, rhs, ...)
+//   CAFFE_ENFORCE_THAT_IMPL(cmp, lhs, rhs, #lhs " " #op " " #rhs, ##__VA_ARGS__)
 
+// #define CAFFE_ENFORCE_BINARY_OP(cmp, op, x, y, ...)
+//   CAFFE_ENFORCE_THAT_IMPL(cmp, x, y, #x " " #op " " #y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_EQ(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(Equals((x), (y)), #x " == " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP(std::equal_to<void>(), ==, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_NE(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(NotEquals((x), (y)), #x " != " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP(std::not_equal_to<void>(), !=, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_LE(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(LessEquals((x), (y)), #x " <= " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP(std::less_equal<void>(), <=, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_LT(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(Less((x), (y)), #x " < " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP(std::less<void>(), <, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_GE(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(GreaterEquals((x), (y)), #x " >= " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP(std::greater_equal<void>(), >=, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_GT(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(Greater((x), (y)), #x " > " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP(std::greater<void>(), >, x, y, ##__VA_ARGS__)
+
+// #define CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(cmp, op, x, y, ...)
+//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
+//       cmp, x, y, #x " " #op " " #y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_EQ_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
-//       Equals((x), (y)), #x " == " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::equal_to<void>(), ==, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_NE_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
-//       NotEquals((x), (y)), #x " != " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::not_equal_to<void>(), !=, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_LE_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
-//       LessEquals((x), (y)), #x " <= " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::less_equal<void>(), <=, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_LT_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(Less((x), (y)), #x " < " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(std::less<void>(), <, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_GE_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
-//       GreaterEquals((x), (y)), #x " >= " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::greater_equal<void>(), >=, x, y, ##__VA_ARGS__)
 // #define CAFFE_ENFORCE_GT_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
-//       Greater((x), (y)), #x " > " #y, __VA_ARGS__)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::greater<void>(), >, x, y, ##__VA_ARGS__)
 
 /**
  * Very lightweight logging for the first time API usage. It's beneficial for
@@ -2863,12 +3156,13 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 
-@Namespace("c10") public static native void SetPyTorchDDPUsageLogger(@ByVal DataLogger logger);
+@Namespace("c10") public static native void SetPyTorchDDPUsageLogger(
+    @ByVal DataLogger logger);
 @Namespace("c10") public static native void LogPyTorchDDPUsage(@Const @ByRef DDPLoggingData ddpData);
 // Return value is needed to do the static variable initialization trick
 @Namespace("c10::detail") public static native @Cast("bool") boolean LogAPIUsageFakeReturn(@StdString BytePointer context);
 @Namespace("c10::detail") public static native @Cast("bool") boolean LogAPIUsageFakeReturn(@StdString String context);
-
+ // namespace detail
 
  // namespace c10
 
@@ -2886,8 +3180,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #include <c10/macros/Macros.h>
 
-// #include <ostream>
 // #include <functional>
+// #include <ostream>
 
 @Namespace("c10") public enum DeviceType {
   CPU((byte)(0)),
@@ -2903,11 +3197,14 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   Vulkan((byte)(10)), // Vulkan
   Metal((byte)(11)), // Metal
   XPU((byte)(12)), // XPU
+  MLC((byte)(13)), // ML Compute / Apple
+  Meta((byte)(14)), // Meta (tensors with no data)
+  HPU((byte)(15)), // HPU / HABANA
   // NB: If you add more devices:
   //  - Change the implementations of DeviceTypeName and isValidDeviceType
   //    in DeviceType.cpp
   //  - Change the number below
-  COMPILE_TIME_MAX_DEVICE_TYPES((byte)(13));
+  COMPILE_TIME_MAX_DEVICE_TYPES((byte)(16));
 
     public final byte value;
     private DeviceType(byte v) { this.value = v; }
@@ -2922,23 +3219,20 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 @Namespace("c10") @MemberGetter public static native DeviceType kFPGA();
 @Namespace("c10") @MemberGetter public static native DeviceType kMSNPU();
 @Namespace("c10") @MemberGetter public static native DeviceType kXLA();
+@Namespace("c10") @MemberGetter public static native DeviceType kMLC();
+@Namespace("c10") @MemberGetter public static native DeviceType kMeta();
 @Namespace("c10") @MemberGetter public static native DeviceType kVulkan();
 @Namespace("c10") @MemberGetter public static native DeviceType kMetal();
 @Namespace("c10") @MemberGetter public static native DeviceType kXPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kHPU();
 
 // define explicit int constant
 @Namespace("c10") @MemberGetter public static native int COMPILE_TIME_MAX_DEVICE_TYPES();
 
-@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(
-    DeviceType d,
-    @Cast("bool") boolean lower_case/*=false*/);
-@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(
-    DeviceType d);
-@Namespace("c10") public static native @StdString String DeviceTypeName(
-    @Cast("c10::DeviceType") byte d,
-    @Cast("bool") boolean lower_case/*=false*/);
-@Namespace("c10") public static native @StdString String DeviceTypeName(
-    @Cast("c10::DeviceType") byte d);
+@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d, @Cast("bool") boolean lower_case/*=false*/);
+@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d);
+@Namespace("c10") public static native @StdString String DeviceTypeName(@Cast("c10::DeviceType") byte d, @Cast("bool") boolean lower_case/*=false*/);
+@Namespace("c10") public static native @StdString String DeviceTypeName(@Cast("c10::DeviceType") byte d);
 
 @Namespace("c10") public static native @Cast("bool") boolean isValidDeviceType(DeviceType d);
 @Namespace("c10") public static native @Cast("bool") boolean isValidDeviceType(@Cast("c10::DeviceType") byte d);
@@ -2997,7 +3291,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // Design note: in principle, we could avoid these wrappers using:
 //
 // using DeviceGuard = impl::InlineDeviceGuard<impl::VirtualGuardImpl>;
-// using OptionalDeviceGuard = impl::InlineOptionalDeviceGuard<impl::VirtualGuardImpl>;
+// using OptionalDeviceGuard =
+// impl::InlineOptionalDeviceGuard<impl::VirtualGuardImpl>;
 //
 // But the error messages are worse, and our users can't just look at the
 // header file to find out what's going on.  Furthermore, for specializations
@@ -3012,12 +3307,12 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #pragma once
 
-// #include <vector>
-// #include <iostream>
-// #include <string>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
+// #include <iostream>
+// #include <string>
+// #include <vector>
 
 // Semantically, a dispatch key identifies a possible "level" in our
 // dispatch, for which a handler may be registered.  Traditional
@@ -3068,34 +3363,28 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   HIP((byte)(Undefined.value + 3)), // NB: I think this is not actually used, due to Note [Masquerading as
   // CUDA]
   FPGA((byte)(Undefined.value + 4)), // Xilinx support lives out of tree at
-        // https://gitlab.com/pytorch-complex/vitis_kernels
+  // https://gitlab.com/pytorch-complex/vitis_kernels
   MSNPU((byte)(Undefined.value + 5)), // unused externally, but tested at
   // test/cpp_extensions/msnpu_extension.cpp
   XLA((byte)(Undefined.value + 6)), // lives out of tree at https://github.com/pytorch/xla
-  Vulkan((byte)(Undefined.value + 7)),
-  Metal((byte)(Undefined.value + 8)),
-  XPU((byte)(Undefined.value + 9)), // For out of tree Intel's heterogeneous computing plug-in
+  MLC((byte)(Undefined.value + 7)), // lives out of tree at https://github.com/pytorch/MLCompute
+  Vulkan((byte)(Undefined.value + 8)),
+  Metal((byte)(Undefined.value + 9)),
+  XPU((byte)(Undefined.value + 10)), // For out of tree Intel's heterogeneous computing plug-in
+  HPU((byte)(Undefined.value + 11)), // For out of tree & closed source integration of HPU / Habana
 
-  // These are Caffe2 device types which we grandfathered into
-  // DispatchKey.
-  // TODO: Caffe2-only DispatchKeys actually should be removed from this enum
-  // and just simply be undispatchable.
-  MKLDNN((byte)(Undefined.value + 10)), // (MKLDNN is treated as another "device" in Caffe2)
-  OpenGL((byte)(Undefined.value + 11)),
-  OpenCL((byte)(Undefined.value + 12)),
-  IDEEP((byte)(Undefined.value + 13)),
+  // A meta tensor is a tensor without any data associated with it.  (They
+  // have also colloquially been referred to as tensors on the "null" device).
+  // A meta tensor can be used to dry run operators without actually doing any
+  // computation, e.g., add on two meta tensors would give you another meta
+  // tensor with the output shape and dtype, but wouldn't actually add anything.
+  Meta((byte)(Undefined.value + 12)),
 
   // Here are backends which specify more specialized operators
   // based on the dtype of the tensor.
-  QuantizedCPU((byte)(Undefined.value + 14)), // registered at build/aten/src/ATen/RegisterQuantizedCPU.cpp
-  QuantizedCUDA((byte)(Undefined.value + 15)), // registered at build/aten/src/ATen/RegisterQuantizedCUDA.cpp
-  QuantizedXPU((byte)(Undefined.value + 16)), // For out of tree Intel's heterogeneous computing plug-in
-  ComplexCPU((byte)(Undefined.value + 17)), // lives out of tree at
-  // https://gitlab.com/pytorch-complex/pytorch-cpu-strided-complex
-  ComplexCUDA((byte)(Undefined.value + 18)), // and
-  // https://gitlab.com/pytorch-complex/pytorch-cuda-strided-complex
-  // tested at test/cpp_extensions/complex_registration_extension.cpp
-  // TODO: Remove Complex dispatch keys when Complex is moved in tree
+  QuantizedCPU((byte)(Undefined.value + 13)), // registered at build/aten/src/ATen/RegisterQuantizedCPU.cpp
+  QuantizedCUDA((byte)(Undefined.value + 14)), // registered at build/aten/src/ATen/RegisterQuantizedCUDA.cpp
+  QuantizedXPU((byte)(Undefined.value + 15)), // For out of tree Intel's heterogeneous computing plug-in
 
   // This backend is to support custom RNGs; it lets you go
   // to a different kernel if you pass in a generator that is not a
@@ -3106,90 +3395,43 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   //  2) use it as a dispatch key while registering custom kernels
   //     (templatized kernels specialized for user-defined PRNG class)
   // intended for out of tree use; tested by aten/src/ATen/test/rng_test.cpp
-  CustomRNGKeyId((byte)(Undefined.value + 19)),
+  CustomRNGKeyId((byte)(Undefined.value + 16)),
 
   // Here are backends which specify more specialized operators
   // based on the layout of the tensor.  Note that the sparse backends
   // are one case where ordering matters: sparse multi-dispatches with
   // the corresponding dense tensors, and must be handled before them.
-  MkldnnCPU((byte)(Undefined.value + 20)), // registered at build/aten/src/ATen/RegisterMkldnnCPU.cpp
+  MkldnnCPU((byte)(Undefined.value + 17)), // registered at build/aten/src/ATen/RegisterMkldnnCPU.cpp
   // NB: not to be confused with MKLDNN, which is Caffe2 only
-  SparseCPU((byte)(Undefined.value + 21)), // registered at build/aten/src/ATen/RegisterSparseCPU.cpp
-  SparseCUDA((byte)(Undefined.value + 22)), // registered at build/aten/src/ATen/RegisterSparseCUDA.cpp
-  SparseHIP((byte)(Undefined.value + 23)), // TODO: I think this is not actually used, due to Note
+  SparseCPU((byte)(Undefined.value + 18)), // registered at build/aten/src/ATen/RegisterSparseCPU.cpp
+  SparseCUDA((byte)(Undefined.value + 19)), // registered at build/aten/src/ATen/RegisterSparseCUDA.cpp
+  SparseHIP((byte)(Undefined.value + 20)), // TODO: I think this is not actually used, due to Note
   // [Masquerading as CUDA]
-  SparseXPU((byte)(Undefined.value + 24)), // For out of tree Intel's heterogeneous computing plug-in
+  SparseXPU((byte)(Undefined.value + 21)), // For out of tree Intel's heterogeneous computing plug-in
 
-  NestedTensor((byte)(Undefined.value + 25)), // lives out of tree at https://github.com/pytorch/nestedtensor
+  SparseCsrCPU((byte)(Undefined.value + 22)),
+  SparseCsrCUDA((byte)(Undefined.value + 23)),
+
+  NestedTensor((byte)(Undefined.value + 24)), // lives out of tree at https://github.com/pytorch/nestedtensor
   // Here are reserved backends for user-defined backends, see Note [Private use
   // DispatchKey]
   // To see some example about how to use this, check out MSNPU
-  PrivateUse1((byte)(Undefined.value + 26)),
-  PrivateUse2((byte)(Undefined.value + 27)),
-  PrivateUse3((byte)(Undefined.value + 28)),
+  PrivateUse1((byte)(Undefined.value + 25)),
+  PrivateUse2((byte)(Undefined.value + 26)),
+  PrivateUse3((byte)(Undefined.value + 27)),
 
   // Define an alias key to represent end of backend dispatch keys.
   // If you add new backend keys after PrivateUse3, please also update it here.
   EndOfBackendKeys((byte)(PrivateUse3.value)),
-
-  // The meta function characterizes how an operation affects the metadata of a
-  // tensor (shape, dtype) without doing any of the actual computation.  A
-  // meta tensor can be used to dry run operators without actually doing
-  // any computation, e.g., add on two meta tensors would give you another
-  // meta tensor with the output shape and dtype, but wouldn't actually
-  // add anything.  A meta implementation typically would look something like:
-  //
-  //  Tensor meta::add(const Tensor& self, const Tensor& other) {
-  //    TORCH_CHECK(self.size().equals(other.size()));
-  //    return at::empty_like(self, self.size());
-  //  }
-  //
-  // The meta function would get invoked if you ran an operator passing
-  // in meta tensors.  The call stack in such a case would look something like
-  // this:
-  //
-  //  at::add(x: Meta, y: Meta) {
-  //    return [dispatch] meta::add(x: Meta, y: Meta) {
-  //      output_shape = ...
-  //      [dispatch] meta::empty(output_shape) {
-  //        return ... meta tensor with output_shape but no data allocated ...
-  //      }
-  //    }
-  //  }
-  //
-  // Meta functions have an important secondary function, which is they can
-  // be used as tensor "allocators".  A typical backend implementation should
-  // be implemented in this way:
-  //
-  //  Tensor cpu::add(const Tensor& self, const Tensor& other) {
-  //    Tensor result = meta::add(self, other);
-  //    // ... do the actual computation into result ...
-  //    return result;
-  //  }
-  //
-  // In this case, the internal at::empty_like invocation would dispatch to the
-  // CPU factory function, not the meta factory function.  The call stack in
-  // this case looks like:
-  //
-  //  at::add(x: CPU, y: CPU) {
-  //    return [dispatch] cpu::add(x: CPU, y: CPU) {
-  //      output = [direct] meta::add(x: CPU, y: CPU) {
-  //        output_shape = ...
-  //        [dispatch] cpu::empty(output_shape)
-  //      }
-  //      ... compute on output ...
-  //      return output;
-  //    }
-  //  }
-  //
-  Meta((byte)(PrivateUse3.value + 1)),
 
   // In some situations, it is not immediately obvious what the correct
   // backend for function is, because the function in question doesn't
   // have any "tensor" arguments.  In this case, a BackendSelect function
   // can be registered to implement the custom determination of the
   // correct backend.
-  BackendSelect((byte)(PrivateUse3.value + 2)),
+  BackendSelect((byte)(PrivateUse3.value + 1)),
+
+  FuncTorchPython((byte)(PrivateUse3.value + 2)), // See Note [Out-of-tree vmap+grad prototype]
 
   // The named dispatch key is set for any tensors with named dimensions.
   // Although we have a dispatch key for named tensors, for historical reasons,
@@ -3204,6 +3446,48 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   // has named dimension propagation that doesn't match that of its
   // constituent parts.
   Named((byte)(PrivateUse3.value + 3)),
+
+  // See Note [Out-of-tree vmap+grad prototype]. The purpose of this key
+  // is to insert code after the "autograd subsystem" runs, so this key should
+  // be directly after ADInplaceOrView and all of the autograd keys.
+  FuncTorchDynamicLayerBackMode((byte)(PrivateUse3.value + 4)),
+
+  // Note [ADInplaceOrView key]
+  // ADInplaceOrView key is used by inplace or view ops to register a kernel
+  // that does additional setup for future autograd computation.
+  //
+  // 1. For inplace ops this kernel does version bump
+  // 2. For view ops this kernel does `as_view` setup where we properly setup
+  //    DifferentiableViewMeta on the view tensors.
+  //
+  // For other ops it's fallthrough kernel since there's no extra
+  // work to do.
+  //
+  // Note [Dream: skip VariableType kernel when requires_grad=false]
+  //
+  // In an ideal world where we can skip VariableType kernel for inputs
+  // with requires_grad=false, instead of a fallthrough kernel, we'll
+  // register a kernel shown below to all functional ops as well:
+  // torch::Tensor my_functional_op(...) {
+  //   {
+  //     // Note for every op in VariableType, you need to go through
+  //     // `AutoDispatchBelowADInplaceOrView` guard exactly once to add the
+  //     // key to TLS excluded set. If you don't go through it at all,
+  //     // inplace/view ops called through `at::` inside your backend
+  //     // kernel will dispatch to ADInplaceOrView kernels and do a lot
+  //     // of extra work.
+  //     at::AutoDispatchBelowADInplaceOrView guard;
+  //     at::redispatch::my_functional_op(...);
+  //   }
+  // }
+  // But this work is currently blocked since it adds an extra dispatch
+  // for all ops and it's non-trivial overhead at model level(a few percents).
+  // Thus our current approach takes advantage of the fact every kernel go
+  // through VariableType kernel first and pulls the
+  // `at::AutoDispatchBelowADInplaceOrView` guard of functional ops
+  // up to the `VariableType` kernel. Thus we only add the extra dispatch
+  // to view/inplace ops to minimize its perf impact to real models.
+  ADInplaceOrView((byte)(PrivateUse3.value + 5)),
 
   // Note [Alias Dispatch Key : Autograd]
   // All backends are oblivious to autograd; autograd is handled as a
@@ -3230,44 +3514,53 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   // reserved user-defined backends. All other in-tree backends share the
   // AutogradOther key. We can add specific autograd key for those backends
   // upon request.
-  AutogradOther((byte)(PrivateUse3.value + 4)),
-  AutogradCPU((byte)(PrivateUse3.value + 5)),
-  AutogradCUDA((byte)(PrivateUse3.value + 6)),
-  AutogradXLA((byte)(PrivateUse3.value + 7)),
-  AutogradNestedTensor((byte)(PrivateUse3.value + 8)), // lives out of tree at
-                        // https://github.com/pytorch/nestedtensor
-  AutogradXPU((byte)(PrivateUse3.value + 9)),
+  AutogradOther((byte)(PrivateUse3.value + 6)),
+  AutogradCPU((byte)(PrivateUse3.value + 7)),
+  AutogradCUDA((byte)(PrivateUse3.value + 8)),
+  AutogradXLA((byte)(PrivateUse3.value + 9)),
+  AutogradXPU((byte)(PrivateUse3.value + 10)),
+  AutogradMLC((byte)(PrivateUse3.value + 11)),
+  AutogradHPU((byte)(PrivateUse3.value + 12)),
+  AutogradNestedTensor((byte)(PrivateUse3.value + 13)), // lives out of tree at
+  // https://github.com/pytorch/nestedtensor
   // Here are some reserved pre-autograd keys for user-defined backends, see
   // Note [Private use DispatchKey]
-  AutogradPrivateUse1((byte)(PrivateUse3.value + 10)),
-  AutogradPrivateUse2((byte)(PrivateUse3.value + 11)),
-  AutogradPrivateUse3((byte)(PrivateUse3.value + 12)),
+  AutogradPrivateUse1((byte)(PrivateUse3.value + 14)),
+  AutogradPrivateUse2((byte)(PrivateUse3.value + 15)),
+  AutogradPrivateUse3((byte)(PrivateUse3.value + 16)),
 
-  Tracer((byte)(PrivateUse3.value + 13)),
+  Tracer((byte)(PrivateUse3.value + 17)),
 
   // Autocasting precedes VariableTypeId, to ensure casts are autograd-exposed
   // and inputs are saved for backward in the post-autocast type.
-  Autocast((byte)(PrivateUse3.value + 14)),
+  // AutocastCPU,
+  AutocastCUDA((byte)(PrivateUse3.value + 18)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ WRAPPERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
   // There are a number of alternative modes which may want to handle before
   // autograd; for example, error checking, tracing, profiling or vmap.  They
   // go here.
 
+  FuncTorchBatched((byte)(PrivateUse3.value + 19)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchVmapMode((byte)(PrivateUse3.value + 20)), // See Note [Out-of-tree vmap+grad prototype]
+
   // This is the dispatch key for BatchedTensorImpl, which is used to implement
   // batching rules for vmap.
-  Batched((byte)(PrivateUse3.value + 15)),
+  Batched((byte)(PrivateUse3.value + 21)),
 
   // When we are inside a vmap, all tensors dispatch on this key.
   // See Note: [DispatchKey::VmapMode usage] for more details.
-  VmapMode((byte)(PrivateUse3.value + 16)),
+  VmapMode((byte)(PrivateUse3.value + 22)),
+
+  FuncTorchGradWrapper((byte)(PrivateUse3.value + 23)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchDynamicLayerFrontMode((byte)(PrivateUse3.value + 24)), // See Note [Out-of-tree vmap+grad prototype]
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a single
   // process test.  Use it by creating a TensorImpl with this DispatchKey, and
   // then registering operators to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp for a usage example.
-  TESTING_ONLY_GenericWrapper((byte)(PrivateUse3.value + 17)),
+  TESTING_ONLY_GenericWrapper((byte)(PrivateUse3.value + 25)),
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a ingle
@@ -3276,10 +3569,10 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   // to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp
   // for a usage example
-  TESTING_ONLY_GenericMode((byte)(PrivateUse3.value + 18)),
+  TESTING_ONLY_GenericMode((byte)(PrivateUse3.value + 26)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FIN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-  NumDispatchKeys((byte)(PrivateUse3.value + 19)), // Sentinel, end of runtime keys.
+  NumDispatchKeys((byte)(PrivateUse3.value + 27)), // Sentinel, end of runtime keys.
 
   // ~~~~~~~~~~~~~~~~~~~~~~ Alias Dispatch Keys ~~~~~~~~~~~~~~~~~~~~~~~~~~ //
   // Alias dispatch keys are synthetic dispatch keys which map to multiple
@@ -3293,23 +3586,26 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   // Alias keys won't be directly called during runtime.
 
   // See Note [Alias Dispatch Key : Autograd]
-  Autograd((byte)(PrivateUse3.value + 20)),
-  Math((byte)(PrivateUse3.value + 21)), // registered at build/aten/src/ATen/RegisterMath.cpp
-  DefaultBackend((byte)(PrivateUse3.value + 22)), // registered at
-                  // build/aten/src/ATen/RegisterDefaultBackend.cpp
+  Autograd((byte)(PrivateUse3.value + 28)),
+  CompositeImplicitAutograd((byte)(PrivateUse3.value + 29)), // registered at
+  // build/aten/src/ATen/RegisterCompositeImplicitAutograd.cpp
+  CompositeExplicitAutograd((byte)(PrivateUse3.value + 30)), // registered at
+  // build/aten/src/ATen/RegisterCompositeExplicitAutograd.cpp
 
   // Define an alias key to represent end of alias dispatch keys.
   // If you add new alias keys after Autograd, please also update it here.
-  EndOfAliasKeys((byte)(DefaultBackend.value)), //
+  EndOfAliasKeys((byte)(CompositeExplicitAutograd.value)), //
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~ BC ALIASES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
   // The aliases exist for backwards compatibility reasons, they shouldn't
   // be used
   CPUTensorId((byte)(CPU.value)),
   CUDATensorId((byte)(CUDA.value)),
+  DefaultBackend((byte)(CompositeExplicitAutograd.value)),
   PrivateUse1_PreAutograd((byte)(AutogradPrivateUse1.value)),
   PrivateUse2_PreAutograd((byte)(AutogradPrivateUse2.value)),
-  PrivateUse3_PreAutograd((byte)(AutogradPrivateUse3.value));
+  PrivateUse3_PreAutograd((byte)(AutogradPrivateUse3.value)),
+  Autocast((byte)(AutocastCUDA.value));
 
     public final byte value;
     private DispatchKey(byte v) { this.value = v; }
@@ -3336,11 +3632,11 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // We provide two classes of private user tensor id: regular DispatchKeys
 // and Autograd DispatchKeys.  DispatchKeys serve the role of ordinary "backend"
 // DispatchKeys; if you were adding support for a new type of accelerator, you
-// would use a backend DispatchKey, and ideally automatically reuse AutogradOther
-// definitions already defined in PyTorch.  AutogradPrivateUse DispatchKeys serve
-// as "wrapper" DispatchKeys: they are only necessary for tensors that compose
-// multiple internal tensors, and for cases when the built-in autograd formulas
-// for operators are not appropriate.
+// would use a backend DispatchKey, and ideally automatically reuse
+// AutogradOther definitions already defined in PyTorch.  AutogradPrivateUse
+// DispatchKeys serve as "wrapper" DispatchKeys: they are only necessary for
+// tensors that compose multiple internal tensors, and for cases when the
+// built-in autograd formulas for operators are not appropriate.
 
 @Namespace("c10") public static native @Cast("const char*") BytePointer toString(DispatchKey arg0);
 @Namespace("c10") public static native String toString(@Cast("c10::DispatchKey") byte arg0);
@@ -3360,13 +3656,13 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 @Namespace("c10") public static native @Cast("bool") boolean isAliasDispatchKey(DispatchKey k);
 @Namespace("c10") public static native @Cast("bool") boolean isAliasDispatchKey(@Cast("c10::DispatchKey") byte k);
  // namespace c10
-  // Expose the constant, but not the TYPE (DispatchKey is an implementation
-  // detail!)
-
+// Expose the constant, but not the TYPE (DispatchKey is an implementation
+// detail!)
+ // namespace torch
 
 // NB: You really shouldn't use this instance; this enum is guaranteed
 // to be pretty small so a regular array should be acceptable.
-
+ // namespace std
 
 
 // Parsed from c10/core/DispatchKeySet.h
@@ -3374,8 +3670,9 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #pragma once
 
 // #include <c10/core/DispatchKey.h>
-// #include <c10/util/llvmMathExtras.h>
 // #include <c10/util/Exception.h>
+// #include <c10/util/Metaprogramming.h>
+// #include <c10/util/llvmMathExtras.h>
 // #include <ostream>
 // Targeting ../DispatchKeySet.java
 
@@ -3386,12 +3683,29 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // autograd_dispatch_keyset should include all runtime autograd keys.
 // Alias key DispatchKey::Autograd maps to autograd_dispatch_keyset.
-// NB: keys in this set also get associated with Math
+// NB: keys in this set also get associated with CompositeImplicitAutograd
 @Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet autograd_dispatch_keyset();
 
+@Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet autocast_dispatch_keyset();
+
+// See Note [TLS Initialization]
+@Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet default_included_set();
+
+@Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet default_excluded_set();
+
+@Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet autograd_dispatch_keyset_with_ADInplaceOrView();
+
 // backend dispatch keys that map to DispatchKey::AutogradOther
-// NB: keys in this set also get associated with Math
+// NB: keys in this set also get associated with CompositeImplicitAutograd
 @Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet autogradother_backends();
+
+// The set of dispatch keys that come after autograd
+// n.b. this relies on the fact that AutogradOther is currently the lowest
+// Autograd key
+@Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet after_autograd_keyset();
+
+// The set of dispatch keys that come after ADInplaceOrView
+@Namespace("c10") @MemberGetter public static native @Const @ByRef DispatchKeySet after_ADInplaceOrView_keyset();
 
 // true if t is a backend dispatch key
 @Namespace("c10") public static native @Cast("bool") boolean isBackendDispatchKey(DispatchKey t);
@@ -3401,10 +3715,18 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 @Namespace("c10") public static native @ByVal DispatchKeySet getRuntimeDispatchKeySet(DispatchKey t);
 @Namespace("c10") public static native @ByVal DispatchKeySet getRuntimeDispatchKeySet(@Cast("c10::DispatchKey") byte t);
 
-// Returns a DispatchKeySet of all backend keys mapped to Autograd dispatch key t,
-// DispatchKeySet is empty if t is not alias of DispatchKey::Autograd.
+// Returns a DispatchKeySet of all backend keys mapped to Autograd dispatch key
+// t, DispatchKeySet is empty if t is not alias of DispatchKey::Autograd.
 @Namespace("c10") public static native @ByVal DispatchKeySet getBackendKeySetFromAutograd(DispatchKey t);
 @Namespace("c10") public static native @ByVal DispatchKeySet getBackendKeySetFromAutograd(@Cast("c10::DispatchKey") byte t);
+
+// Returns a DispatchKeySet of autograd related keys mapped to backend.
+@Namespace("c10") public static native @ByVal DispatchKeySet getAutogradRelatedKeySetFromBackend(DispatchKey t);
+@Namespace("c10") public static native @ByVal DispatchKeySet getAutogradRelatedKeySetFromBackend(@Cast("c10::DispatchKey") byte t);
+
+// Returns a DispatchKeySet of autocast related keys mapped to backend.
+@Namespace("c10") public static native @ByVal DispatchKeySet getAutocastRelatedKeySetFromBackend(DispatchKey t);
+@Namespace("c10") public static native @ByVal DispatchKeySet getAutocastRelatedKeySetFromBackend(@Cast("c10::DispatchKey") byte t);
 
 // This API exists because we have a use case for checking
 // getRuntimeDispatchKeySet(alias).has(DispatchKey::Undefined)
@@ -3420,6 +3742,13 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // those cases.
 @Namespace("c10") public static native DispatchKey legacyExtractDispatchKey(@ByVal DispatchKeySet s);
 
+// Given a function type, constructs a function_traits type that drops the first
+// parameter type if the first parameter is of type DispatchKeySet. NB:
+// DispatchKeySet is currently explicitly hidden from JIT (mainly to avoid
+// pushing unnecessary arguments on the stack - see Note [ Plumbing Keys Through
+// the Dispatcher] for details). If at any point in the future we need to expose
+// this type to JIT, revisit the usage of this type alias.
+ // namespace c10
 
 
 // Parsed from c10/core/Backend.h
@@ -3458,18 +3787,22 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   XPU(4),
   SparseCPU(5),
   SparseCUDA(6),
-  SparseHIP(7),
-  SparseXPU(8),
-  MSNPU(9),
-  XLA(10),
-  Vulkan(11),
-  Metal(12),
-  QuantizedCPU(13),
-  QuantizedCUDA(14),
-  QuantizedXPU(15),
-  Undefined(16),
-  MkldnnCPU(17),
-  NumOptions(18);
+  SparseCsrCPU(7),
+  SparseCsrCUDA(8),
+  SparseHIP(9),
+  SparseXPU(10),
+  MSNPU(11),
+  XLA(12),
+  Vulkan(13),
+  Metal(14),
+  QuantizedCPU(15),
+  QuantizedCUDA(16),
+  QuantizedXPU(17),
+  Undefined(18),
+  MkldnnCPU(19),
+  MLC(20),
+  HPU(21),
+  NumOptions(22);
 
     public final int value;
     private Backend(int v) { this.value = v; }
@@ -3477,12 +3810,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
     public Backend intern() { for (Backend e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
-@Namespace("c10") public static native Backend toSparse(Backend b);
-@Namespace("c10") public static native @Cast("c10::Backend") int toSparse(@Cast("c10::Backend") int b);
-
-@Namespace("c10") public static native Backend toDense(Backend b);
-@Namespace("c10") public static native @Cast("c10::Backend") int toDense(@Cast("c10::Backend") int b);
 
 @Namespace("c10") public static native Backend dispatchKeyToBackend(DispatchKey t);
 @Namespace("c10") public static native @Cast("c10::Backend") int dispatchKeyToBackend(@Cast("c10::DispatchKey") byte t);
@@ -3493,24 +3820,15 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 @Namespace("c10") public static native DeviceType backendToDeviceType(Backend b);
 @Namespace("c10") public static native @Cast("c10::DeviceType") byte backendToDeviceType(@Cast("c10::Backend") int b);
 
-@Namespace("c10") public static native Backend backendToCPU(Backend b);
-@Namespace("c10") public static native @Cast("c10::Backend") int backendToCPU(@Cast("c10::Backend") int b);
-
-@Namespace("c10") public static native Backend backendToXPU(Backend b);
-@Namespace("c10") public static native @Cast("c10::Backend") int backendToXPU(@Cast("c10::Backend") int b);
-
-@Namespace("c10") public static native Backend backendToCUDA(Backend b);
-@Namespace("c10") public static native @Cast("c10::Backend") int backendToCUDA(@Cast("c10::Backend") int b);
-
-@Namespace("c10") public static native Backend backendToHIP(Backend b);
-@Namespace("c10") public static native @Cast("c10::Backend") int backendToHIP(@Cast("c10::Backend") int b);
-
 // TODO: This probably shouldn't actually be static inline
 @Namespace("c10") public static native @Cast("const char*") BytePointer toString(Backend b);
 @Namespace("c10") public static native String toString(@Cast("c10::Backend") int b);
 
 @Namespace("c10") public static native @Cast("bool") boolean isSparse(Backend b);
 @Namespace("c10") public static native @Cast("bool") boolean isSparse(@Cast("c10::Backend") int b);
+
+@Namespace("c10") public static native @Cast("bool") boolean isSparseCsr(Backend b);
+@Namespace("c10") public static native @Cast("bool") boolean isSparseCsr(@Cast("c10::Backend") int b);
 
  // namespace c10
 
@@ -3552,6 +3870,24 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
  // namespace c10
 
 
+// Parsed from c10/core/GradMode.h
+
+// #pragma once
+
+// #include <c10/macros/Macros.h>
+// Targeting ../GradMode.java
+
+
+// Targeting ../AutoGradMode.java
+
+
+// Targeting ../NoGradGuard.java
+
+
+
+ // namespace c10
+
+
 // Parsed from c10/core/Layout.h
 
 // #pragma once
@@ -3560,7 +3896,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <c10/util/Exception.h>
 
 // #include <iostream>
-@Namespace("c10") public enum Layout { Strided((byte)(0)), Sparse((byte)(1)), Mkldnn((byte)(2)), NumOptions((byte)(3));
+@Namespace("c10") public enum Layout { Strided((byte)(0)), Sparse((byte)(1)), SparseCsr((byte)(2)), Mkldnn((byte)(3)), NumOptions((byte)(4));
 
     public final byte value;
     private Layout(byte v) { this.value = v; }
@@ -3582,8 +3918,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #pragma once
 
 // #include <c10/core/Backend.h>
-// #include <c10/util/Exception.h>
 // #include <c10/util/ArrayRef.h>
+// #include <c10/util/Exception.h>
 
 // #include <iostream>
 
@@ -3598,11 +3934,17 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //    should be in channels_last format
 //
 //  Contiguous:
-//    Regardless of input tensors format, the output should be contiguous Tensor.
+//    Regardless of input tensors format, the output should be contiguous
+//    Tensor.
 //
 //  ChannelsLast:
-//    Regardless of input tensors format, the output should be in channels_last format.
-@Namespace("c10") public enum MemoryFormat { Contiguous((byte)(0)), Preserve((byte)(1)), ChannelsLast((byte)(2)), ChannelsLast3d((byte)(3));
+//    Regardless of input tensors format, the output should be in channels_last
+//    format.
+@Namespace("c10") public enum MemoryFormat {
+  Contiguous((byte)(0)),
+  Preserve((byte)(1)),
+  ChannelsLast((byte)(2)),
+  ChannelsLast3d((byte)(3));
 
     public final byte value;
     private MemoryFormat(byte v) { this.value = v; }
@@ -3620,7 +3962,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 
-// Note: Hardcoded the channel last stride indices here to get better performance
+// Note: Hardcoded the channel last stride indices here to get better
+// performance
 @Namespace("c10") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector get_channels_last_strides_2d(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
 @Namespace("c10") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector get_channels_last_strides_2d(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
 
@@ -3634,13 +3977,23 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // will be a constant array and we can access it using constant index number,
 // the compiler will fully unroll the loop on strides indices to gain a better
 // performance.
-// 2. No error check in helper function, caller ensures the correctness of the input
-// 3. All helper functions have similar comments, only 1st helper function is commented here.
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d_s4(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d_s4(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
+// 2. No error check in helper function, caller ensures the correctness of the
+// input
+// 3. All helper functions have similar comments, only 1st helper function is
+// commented here.
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d_s4(
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d_s4(
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
 
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d_s5(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d_s5(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d_s5(
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d_s5(
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
 
 // Note [Ambiguous is_channels_last_strides_xd]
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3688,14 +4041,23 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // issues in our tests.
 //
 // We use Channels Last 2d as an example above.
-// This is a general problem for all the is_channels_last_strides_xd implementation.
-// Please check the helper functions (is_channels_last_strides_*d_s*) for more details.
+// This is a general problem for all the is_channels_last_strides_xd
+// implementation. Please check the helper functions
+// (is_channels_last_strides_*d_s*) for more details.
 
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d(
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_2d(
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
 
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
-@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d(
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides);
+@Namespace("c10") public static native @Cast("bool") boolean is_channels_last_strides_3d(
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... strides);
 
  // namespace c10
 
@@ -3796,14 +4158,14 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #pragma once
 
 // #include <c10/util/ArrayRef.h>
-// #include <c10/util/complex.h>
+// #include <c10/util/BFloat16.h>
 // #include <c10/util/Half.h>
+// #include <c10/util/Optional.h>
+// #include <c10/util/complex.h>
 // #include <c10/util/qint32.h>
 // #include <c10/util/qint8.h>
-// #include <c10/util/quint8.h>
-// #include <c10/util/BFloat16.h>
 // #include <c10/util/quint4x2.h>
-// #include <c10/util/Optional.h>
+// #include <c10/util/quint8.h>
 
 // #include <complex>
 // #include <cstdint>
@@ -3837,7 +4199,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(at::BFloat16, BFloat16) /* 15 */
 //   _(c10::quint4x2, QUInt4x2) /* 16 */
 
-
 // If you want to support ComplexHalf for real, add ComplexHalf
 // into this macro (and change the name).  But beware: convert()
 // doesn't work for all the conversions you need...
@@ -3854,7 +4215,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(c10::complex<double>, ComplexDouble)
 //   _(bool, Bool)
 //   _(at::BFloat16, BFloat16)
-
 
 @Namespace("c10") public enum ScalarType {
   Byte((byte)(0)), /* 0 */
@@ -3889,30 +4249,30 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // These are used to map ScalarTypes to C++ types.
 
 // #define SPECIALIZE_ScalarTypeToCPPType(cpp_type, scalar_type)
-// template<>
-// struct ScalarTypeToCPPType<c10::ScalarType::scalar_type> {
-//   using type = cpp_type;
+//   template <>
+//   struct ScalarTypeToCPPType<c10::ScalarType::scalar_type> {
+//     using type = cpp_type;
 // 
-//   /* This is a workaround for the CUDA bug which prevents */
-//   /* ::detail::ScalarTypeToCType<T>::type being used directly due to */
-//   /* ambiguous reference which can't to be resolved. For some reason it */
-//   /* cant pick between at::detail and at::cuda::detail. */
-//   /* For repro example, please see: */
-//   /* https://gist.github.com/izdeby/952ae7cf256ddb740a73776d39a7e7ba */
-//   /* TODO: remove once the bug is fixed. */
-//   static type t;
-// }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */
+//     /* This is a workaround for the CUDA bug which prevents */
+//     /* ::detail::ScalarTypeToCType<T>::type being used directly due to */
+//     /* ambiguous reference which can't to be resolved. For some reason it */
+//     /* cant pick between at::detail and at::cuda::detail. */
+//     /* For repro example, please see: */
+//     /* https://gist.github.com/izdeby/952ae7cf256ddb740a73776d39a7e7ba */
+//     /* TODO: remove once the bug is fixed. */
+//     static type t;
+//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */
 
 // #undef SPECIALIZE_ScalarTypeToCPPType
 
  // namespace impl
 
 // #define SPECIALIZE_CppTypeToScalarType(cpp_type, scalar_type)
-//   template<>
-//   struct CppTypeToScalarType<cpp_type>:
-//     std::integral_constant<c10::ScalarType,
-//                            c10::ScalarType::scalar_type>
-//   {}; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */
+//   template <>
+//   struct CppTypeToScalarType<cpp_type>
+//       : std::
+//             integral_constant<c10::ScalarType, c10::ScalarType::scalar_type> {
+//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */
 
 // #undef SPECIALIZE_CppTypeToScalarType
 
@@ -3940,7 +4300,9 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(int64_t, Long)
 //   _(float, Float)
 //   _(double, Double)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE>::t), SCALARTYPE)
+//   _(decltype(
+//         ::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE>::t),
+//     SCALARTYPE)
 
 // #define AT_FORALL_SCALAR_TYPES_AND2(SCALARTYPE1, SCALARTYPE2, _)
 //   _(uint8_t, Byte)
@@ -3950,8 +4312,12 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(int64_t, Long)
 //   _(float, Float)
 //   _(double, Double)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE1>::t), SCALARTYPE1)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE2>::t), SCALARTYPE2)
+//   _(decltype(
+//         ::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE1>::t),
+//     SCALARTYPE1)
+//   _(decltype(
+//         ::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE2>::t),
+//     SCALARTYPE2)
 
 // #define AT_FORALL_SCALAR_TYPES_AND3(SCALARTYPE1, SCALARTYPE2, SCALARTYPE3, _)
 //   _(uint8_t, Byte)
@@ -3961,9 +4327,15 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(int64_t, Long)
 //   _(float, Float)
 //   _(double, Double)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE1>::t), SCALARTYPE1)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE2>::t), SCALARTYPE2)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE3>::t), SCALARTYPE3)
+//   _(decltype(
+//         ::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE1>::t),
+//     SCALARTYPE1)
+//   _(decltype(
+//         ::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE2>::t),
+//     SCALARTYPE2)
+//   _(decltype(
+//         ::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::SCALARTYPE3>::t),
+//     SCALARTYPE3)
 
 // #define AT_FORALL_QINT_TYPES(_)
 //   _(c10::qint8, QInt8)
@@ -4058,7 +4430,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 /**
  * typeMetaToScalarType(), lifted to optional
  */
-@Namespace("c10") public static native @ByVal ScalarTypeOptional optTypeMetaToScalarType(@ByVal TypeMetaOptional type_meta);
+@Namespace("c10") public static native @ByVal ScalarTypeOptional optTypeMetaToScalarType(
+    @ByVal TypeMetaOptional type_meta);
 
 /**
  * convenience: equality across TypeMeta/ScalarType conversion
@@ -4082,8 +4455,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <stdint.h>
 // #include <stdexcept>
 // #include <string>
-// #include <utility>
 // #include <type_traits>
+// #include <utility>
 
 // #include <c10/core/ScalarType.h>
 // #include <c10/macros/Macros.h>
@@ -4185,7 +4558,10 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 @Namespace("c10") public static native @Cast("bool") boolean memoryProfilingEnabled();
-@Namespace("c10") public static native void reportMemoryUsageToProfiler(Pointer ptr, @Cast("int64_t") long alloc_size, @ByVal Device device);
+@Namespace("c10") public static native void reportMemoryUsageToProfiler(
+    Pointer ptr,
+    @Cast("int64_t") long alloc_size,
+    @ByVal Device device);
 
  // namespace c10
 
@@ -4194,8 +4570,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #pragma once
 
-// #include <c10/macros/Macros.h>
 // #include <c10/core/ScalarType.h>
+// #include <c10/macros/Macros.h>
  // namespace caffe2
 @Namespace("c10") public static native void set_default_dtype(@ByVal TypeMeta dtype);
 @Namespace("c10") public static native @Const @ByVal TypeMeta get_default_dtype();
@@ -4234,28 +4610,32 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #pragma once
 
-// #include <c10/core/DefaultDtype.h>
 // #include <c10/core/Backend.h>
+// #include <c10/core/DefaultDtype.h>
+// #include <c10/core/Device.h>
+// #include <c10/core/DispatchKeySet.h>
 // #include <c10/core/Layout.h>
+// #include <c10/core/MemoryFormat.h>
 // #include <c10/core/ScalarType.h>
 // #include <c10/core/ScalarTypeToTypeMeta.h>
-// #include <c10/core/Device.h>
-// #include <c10/core/MemoryFormat.h>
-// #include <c10/core/DispatchKeySet.h>
 
-// #include <c10/util/Optional.h>
-// #include <c10/util/C++17.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/C++17.h>
+// #include <c10/util/Optional.h>
 
 // #include <cstddef>
 // #include <iosfwd>
 // #include <utility>
 
-@Namespace("c10") public static native DispatchKey computeDispatchKey(@ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device);
+@Namespace("c10") public static native DispatchKey computeDispatchKey(
+    @ByVal ScalarTypeOptional dtype,
+    @ByVal LayoutOptional layout,
+    @ByVal DeviceOptional device);
 
 @Namespace("c10") public static native ScalarType dtype_or_default(@ByVal ScalarTypeOptional dtype);
 
-@Namespace("c10") public static native @ByVal TypeMeta dtype_or_default(@ByVal TypeMetaOptional dtype);
+@Namespace("c10") public static native @ByVal TypeMeta dtype_or_default(
+    @ByVal TypeMetaOptional dtype);
 
 @Namespace("c10") public static native Layout layout_or_default(@ByVal LayoutOptional layout);
 
@@ -4324,10 +4704,14 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // This is intended to be a centralized location by which we can determine
 // what an appropriate DispatchKey for a tensor is.
 
-// We deliberately ignore handling AutogradCPU/CUDA/XLA... keys to
-// avoid adding asymmetry in device <--> Autograd dispatch key mapping.
-@Namespace("c10") public static native DeviceType computeDeviceType(DispatchKey tid);
-@Namespace("c10") public static native @Cast("c10::DeviceType") byte computeDeviceType(@Cast("c10::DispatchKey") byte tid);
+@Namespace("c10") public static native Layout dispatchKeyToLayout(DispatchKey dispatch_key);
+@Namespace("c10") public static native @Cast("c10::Layout") byte dispatchKeyToLayout(@Cast("c10::DispatchKey") byte dispatch_key);
+
+@Namespace("c10") public static native DeviceType dispatchKeyToDeviceType(DispatchKey dispatch_key);
+@Namespace("c10") public static native @Cast("c10::DeviceType") byte dispatchKeyToDeviceType(@Cast("c10::DispatchKey") byte dispatch_key);
+
+@Namespace("c10") public static native @ByVal TensorOptions dispatchKeyToTensorOptions(DispatchKey dispatch_key);
+@Namespace("c10") public static native @ByVal TensorOptions dispatchKeyToTensorOptions(@Cast("c10::DispatchKey") byte dispatch_key);
 
  // namespace c10
 
@@ -4342,19 +4726,19 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <numeric>
 
 // #include <c10/core/Backend.h>
+// #include <c10/core/CopyBytes.h>
+// #include <c10/core/DispatchKeySet.h>
+// #include <c10/core/InferenceMode.h>
 // #include <c10/core/MemoryFormat.h>
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
-// #include <c10/core/DispatchKeySet.h>
 // #include <c10/core/impl/LocalDispatchKeySet.h>
 // #include <c10/core/impl/SizesAndStrides.h>
-// #include <c10/core/CopyBytes.h>
-
-
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/Flags.h>
 // #include <c10/util/Logging.h>
+// #include <c10/util/Optional.h>
+// #include <c10/util/accumulate.h>
 // #include <c10/util/python_stub.h>
 
 // A global boolean variable to control whether we free memory when a Tensor
@@ -4468,6 +4852,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //    weak refcount
 //    storage pointer
 //    autograd metadata pointer
+//    named tensor metadata pointer
 //    version counter pointer
 //    PyObject pointer
 //    SizesAndStrides size/pointer
@@ -4483,10 +4868,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //    SizesAndStrides strides (pre-allocated 4)
 //    storage offset
 //    numel
-//    data type
-//    (optional) device
-//    tensor type id
-//    miscellaneous bitfield
+//    data type, device, is_contiguous, storage_access_should_throw_, bitfields
+//    DispatchKeySet
 //
  // namespace c10
 
@@ -4509,10 +4892,15 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #include <c10/util/Exception.h>
 
-@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, @Cast("int64_t") long dim_post_expr, @Cast("bool") boolean wrap_scalar/*=true*/);
-@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, @Cast("int64_t") long dim_post_expr);
+@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(
+    @Cast("int64_t") long dim,
+    @Cast("int64_t") long dim_post_expr,
+    @Cast("bool") boolean wrap_scalar/*=true*/);
+@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(
+    @Cast("int64_t") long dim,
+    @Cast("int64_t") long dim_post_expr);
 
-
+ // namespace c10
 
 
 // Parsed from ATen/core/aten_interned_strings.h
@@ -4542,7 +4930,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, _addmv)
 // _(aten, _addr)
 // _(aten, _amp_foreach_non_finite_check_and_unscale_)
-// _(aten, _amp_update_scale)
+// _(aten, _amp_update_scale_)
 // _(aten, _arange)
 // _(aten, _argmax)
 // _(aten, _argmin)
@@ -4599,7 +4987,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, _fill)
 // _(aten, _floor)
 // _(aten, _fused_dropout)
-// _(aten, _indexCopy)
 // _(aten, _indices)
 // _(aten, _ldexp)
 // _(aten, _linspace)
@@ -4657,7 +5044,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, _tanh_forward)
 // _(aten, _th_get_device)
 // _(aten, _th_kthvalue)
-// _(aten, _th_mode)
 // _(aten, _th_prod)
 // _(aten, _th_sigmoid)
 // _(aten, _th_std)
@@ -4747,7 +5133,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, cauchy)
 // _(aten, ceil)
 // _(aten, celu)
-// _(aten, chain_matmul)
 // _(aten, cholesky)
 // _(aten, cholesky_inverse)
 // _(aten, cholesky_solve)
@@ -4795,6 +5180,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, cudnn_convolution_transpose_backward_bias)
 // _(aten, cudnn_convolution_transpose_backward_input)
 // _(aten, cudnn_convolution_transpose_backward_weight)
+// _(aten, cudnn_convolution_relu)
+// _(aten, cudnn_convolution_add_relu)
 // _(aten, cudnn_grid_sampler)
 // _(aten, cudnn_grid_sampler_backward)
 // _(aten, cudnn_is_acceptable)
@@ -4811,11 +5198,13 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, diagonal)
 // _(aten, fill_diagonal_)
 // _(aten, diff)
+// _(aten, frexp)
 // _(aten, digamma)
 // _(aten, dim)
 // _(aten, dist)
 // _(aten, dot)
 // _(aten, dropout)
+// _(aten, dsplit)
 // _(aten, dstack)
 // _(aten, eig)
 // _(aten, einsum)
@@ -4831,15 +5220,12 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, empty)
 // _(aten, empty_like)
 // _(aten, empty_strided)
+// _(aten, special_entr)
 // _(aten, eq)
 // _(aten, equal)
-// _(aten, erf)
-// _(aten, erfc)
-// _(aten, erfinv)
 // _(aten, exp)
 // _(aten, expand)
 // _(aten, expand_as)
-// _(aten, expm1)
 // _(aten, exponential)
 // _(aten, eye)
 // _(aten, feature_alpha_dropout)
@@ -4871,6 +5257,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, glu)
 // _(aten, glu_backward)
 // _(aten, glu_forward)
+// _(aten, gradient)
 // _(aten, grid_sampler)
 // _(aten, grid_sampler_2d)
 // _(aten, grid_sampler_2d_backward)
@@ -4892,6 +5279,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, hinge_embedding_loss)
 // _(aten, histc)
 // _(aten, hspmm)
+// _(aten, hsplit)
 // _(aten, hstack)
 // _(aten, hypot)
 // _(aten, i0)
@@ -4916,6 +5304,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, is_complex)
 // _(aten, is_contiguous)
 // _(aten, is_cuda)
+// _(aten, is_mlc)
 // _(aten, is_distributed)
 // _(aten, is_floating_point)
 // _(aten, is_nonzero)
@@ -4923,6 +5312,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, is_set_to)
 // _(aten, is_signed)
 // _(aten, is_sparse)
+// _(aten, is_sparse_csr)
 // _(aten, isclose)
 // _(aten, isreal)
 // _(aten, istft)
@@ -4941,7 +5331,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, leaky_relu_backward)
 // _(aten, leaky_relu_forward)
 // _(aten, lerp)
-// _(aten, lgamma)
 // _(aten, linear)
 // _(aten, linspace)
 // _(aten, log)
@@ -4957,10 +5346,10 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, _log_softmax_backward_data)
 // _(aten, logcumsumexp)
 // _(aten, logdet)
-// _(aten, logit)
 // _(aten, logspace)
 // _(aten, logsumexp)
 // _(aten, xlogy)
+// _(aten, special_xlog1py)
 // _(aten, lstm)
 // _(aten, lstm_cell)
 // _(aten, lstsq)
@@ -4970,7 +5359,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, masked_scatter)
 // _(aten, masked_select)
 // _(aten, matmul)
-// _(aten, matrix_power)
 // _(aten, matrix_rank)
 // _(aten, matrix_exp)
 // _(aten, max)
@@ -5014,6 +5402,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, miopen_depthwise_convolution_backward_weight)
 // _(aten, miopen_rnn)
 // _(aten, miopen_rnn_backward)
+// _(aten, mish)
 // _(aten, mkldnn_convolution)
 // _(aten, mkldnn_convolution_backward)
 // _(aten, mkldnn_convolution_backward_input)
@@ -5067,7 +5456,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, numel)
 // _(aten, ones)
 // _(aten, ones_like)
-// _(aten, orgqr)
 // _(aten, ormqr)
 // _(aten, pairwise_distance)
 // _(aten, _euclidean_dist)
@@ -5140,10 +5528,10 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, rsqrt)
 // _(aten, scatter)
 // _(aten, scatter_add)
+// _(aten, segment_reduce)
 // _(aten, select)
 // _(aten, selu)
 // _(aten, set)
-// _(aten, sigmoid)
 // _(aten, sign)
 // _(aten, signbit)
 // _(aten, silu)
@@ -5196,8 +5584,10 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, symeig)
 // _(aten, t)
 // _(aten, take)
+// _(aten, take_along_dim)
 // _(aten, tan)
 // _(aten, tanh)
+// _(aten, tanh_)
 // _(aten, tensor)
 // _(aten, tensordot)
 // _(aten, tensor_split)
@@ -5270,6 +5660,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // _(aten, var)
 // _(aten, view)
 // _(aten, view_as)
+// _(aten, vsplit)
 // _(aten, where)
 // _(aten, zero)
 // _(aten, zeros)
@@ -5602,11 +5993,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #include <c10/macros/Macros.h>
 
-// #if !defined(C10_MOBILE) || defined(FEATURE_TORCH_MOBILE)
 // #include <ATen/core/aten_interned_strings.h>
-// #endif
 
-// #if !defined(C10_MOBILE) || defined(FEATURE_TORCH_MOBILE)
 // #define FORALL_NS_SYMBOLS(_)
 //   _(namespaces, prim)
 //   _(namespaces, aten)
@@ -5624,6 +6012,13 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(prim, ReductionSizes)
 //   _(prim, Constant)
 //   _(prim, ChunkSizes)
+//   _(prim, ConstantMKLDNNTensor)
+//   _(prim, BroadcastMKLDNNTensors)
+//   _(prim, MKLDNNGroup)
+//   _(prim, MKLDNNHardSwish)
+//   _(prim, MKLDNNHardSigmoid)
+//   _(prim, MKLDNNHardTanh)
+//   _(prim, MKLDNNClamp)
 //   _(prim, Drop)
 //   _(prim, Eval)
 //   _(prim, Expand) /* onnx */
@@ -5666,7 +6061,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(prim, ListConstruct)
 //   _(prim, ListUnpack)
 //   _(prim, DictConstruct)
-//   _(prim, ModuleDictIndex)
+//   _(prim, ModuleContainerIndex)
 //   _(prim, EnumName)
 //   _(prim, EnumValue)
 //   _(prim, StringIndex)
@@ -5678,11 +6073,20 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(aten, Bool)
 //   _(aten, Int)
 //   _(aten, FloatImplicit)
+//   _(aten, ComplexImplicit)
 //   _(aten, IntImplicit)
 //   _(aten, ScalarImplicit)
 //   _(aten, Float)
+//   _(aten, Complex)
 //   _(aten, str)
+//   _(aten, is_pinned)
 //   _(aten, Delete)
+//   _(aten, relu_)
+//   _(aten, gelu_)
+//   _(aten, relu6)
+//   _(aten, relu6_)
+//   _(aten, dropout_)
+//   _(aten, sigmoid_)
 //   _(prim, device)
 //   _(prim, dtype)
 //   _(prim, layout)
@@ -5703,6 +6107,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(prim, MMTreeReduce)
 //   _(prim, MMBatchSide)
 //   _(prim, list)
+//   _(prim, dict)
 //   _(prim, min)
 //   _(prim, max)
 //   _(prim, abs)
@@ -5781,7 +6186,13 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(aten, clip_)
 //   _(aten, det)
 //   _(aten, linalg_det)
+//   _(aten, matrix_power)
+//   _(aten, linalg_matrix_power)
+//   _(aten, chain_matmul)
+//   _(aten, linalg_multi_dot)
 //   _(aten, linalg_norm)
+//   _(aten, linalg_vector_norm)
+//   _(aten, linalg_matrix_norm)
 //   _(aten, append)
 //   _(aten, item)
 //   _(aten, format)
@@ -5833,6 +6244,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(aten, _ger)
 //   _(aten, ger)
 //   _(aten, outer)
+//   _(aten, orgqr)
+//   _(aten, linalg_householder_product)
 //   _(aten, transpose)
 //   _(aten, transpose_)
 //   _(aten, unsqueeze_)
@@ -5845,6 +6258,7 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(aten, hash)
 //   _(aten, len)
 //   _(aten, list)
+//   _(aten, dict)
 //   _(aten, wait)
 //   _(aten, save)
 //   _(aten, sub)
@@ -5861,6 +6275,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(aten, trunc_)
 //   _(aten, fix)
 //   _(aten, fix_)
+//   _(aten, to_mkldnn)
+//   _(aten, positive)
 //   _(aten, neg)
 //   _(aten, neg_)
 //   _(aten, negative)
@@ -5881,13 +6297,35 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(cuda, _set_device)
 //   _(cuda, set_stream)
 //   _(cuda, _current_device)
+//   _(cuda, synchronize)
 //   _(aten, swapaxes)
 //   _(aten, swapaxes_)
 //   _(aten, swapdims)
 //   _(aten, swapdims_)
 //   _(aten, movedim)
 //   _(aten, moveaxis)
+//   _(aten, lgamma)
+//   _(aten, special_gammaln)
+//   _(aten, erf)
+//   _(aten, special_erf)
+//   _(aten, erfc)
+//   _(aten, special_erfc)
+//   _(aten, erfinv)
+//   _(aten, special_erfinv)
+//   _(aten, logit)
+//   _(aten, special_logit)
+//   _(aten, sigmoid)
+//   _(aten, special_expit)
+//   _(aten, expm1)
+//   _(aten, special_expm1)
+//   _(aten, exp2)
+//   _(aten, special_exp2)
+//   _(aten, special_i0e)
 //   _(aten, has_torch_function)
+//   _(aten, hardswish)
+//   _(aten, hardswish_)
+//   _(aten, hardsigmoid_)
+//   _(aten, hardtanh_)
 //   FORALL_ATEN_BASE_SYMBOLS(_)
 //   _(onnx, Add)
 //   _(onnx, Concat)
@@ -5940,6 +6378,11 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(onnx, Conv)
 //   _(onnx, BatchNormalization)
 //   _(onnx, ReduceProd)
+//   _(onnx, Neg)
+//   _(onnx, NonZero)
+//   _(onnx, Range)
+//   _(onnx, Tile)
+//   _(onnx, Where)
 //   FORALL_ATTR_BASE_SYMBOLS(_)
 //   _(attr, Subgraph)
 //   _(attr, ReverseSubgraph)
@@ -5978,19 +6421,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   _(attr, cache_id)
 //   _(attr, new_axis)
 //   _(attr, warn_id)
-// #else
-// #define FORALL_NS_SYMBOLS(_)
-//   _(namespaces, prim)
-//   _(namespaces, aten)
-//   _(namespaces, cuda)
-//   _(namespaces, onnx)
-//   _(namespaces, attr)
-//   _(namespaces, scope)
-//   _(namespaces, user)
-//   _(namespaces, _caffe2)
-//   _(namespaces, dimname)
-//   _(namespaces, namespaces)
-// #endif
 
 // 'prim' symbols are synthetic operators that occur only in the IR
 // and don't have corresponding implementations in ATen.
@@ -6052,1418 +6482,1476 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   prim_ReductionSizes(13),
   prim_Constant(14),
   prim_ChunkSizes(15),
-  prim_Drop(16),
-  prim_Eval(17),
-  prim_Expand(18), /* onnx */
-  prim_FusionGroup(19),
-  prim_CudaFusionGroup(20),
-  prim_CudaFusionGuard(21),
-  prim_FunctionalGraph(22),
-  prim_DifferentiableGraph(23),
-  prim_TensorExprGroup(24),
-  prim_StaticSubgraph(25),
-  prim_If(26),
-  prim_Jump(27), /* debug */
-  prim_JumpNZ(28), /* debug */
-  prim_JumpZ(29), /* debug */
-  prim_Load(30),
-  prim_Loop(31),
-  prim_Param(32),
-  prim_PackPadded(33), /* onnx */
-  prim_PadPacked(34), /* onnx */
-  prim_Placeholder(35), /* debug */
-  prim_Print(36),
-  prim_PythonOp(37),
-  prim_IgnoredPythonOp(38),
-  prim_Reverse(39),
-  prim_Return(40),
-  prim_ReturnStmt(41),
-  prim_BreakStmt(42),
-  prim_ContinueStmt(43),
-  prim_ComprehensionScope(44),
-  prim_Store(45),
-  prim_AutogradZero(46),
-  prim_AutogradAnyNonZero(47),
-  prim_AutogradAllNonZero(48),
-  prim_AutogradAllZero(49),
-  prim_Starred(50),
-  prim_TupleConstruct(51),
-  prim_TupleUnpack(52),
-  prim_TupleIndex(53),
-  prim_TupleSlice(54),
-  prim_ListConstruct(55),
-  prim_ListUnpack(56),
-  prim_DictConstruct(57),
-  prim_ModuleDictIndex(58),
-  prim_EnumName(59),
-  prim_EnumValue(60),
-  prim_StringIndex(61),
-  prim_NumToTensor(62),
-  prim_Uninitialized(63),
-  prim_With(64),
-  prim_Enter(65),
-  prim_Exit(66),
-  aten_Bool(67),
-  aten_Int(68),
-  aten_FloatImplicit(69),
-  aten_IntImplicit(70),
-  aten_ScalarImplicit(71),
-  aten_Float(72),
-  aten_str(73),
-  aten_Delete(74),
-  prim_device(75),
-  prim_dtype(76),
-  prim_layout(77),
-  prim_id(78),
-  prim_requires_grad(79),
-  prim_MakeTestTensor(80), /* test */
-  prim_AutogradAdd(81),
-  prim_GradOf(82),
-  aten_grad(83),
-  aten_backward(84),
-  prim_Guard(85),
-  prim_BailOut(86),
-  prim_TypeCheck(87),
-  prim_RequiresGradCheck(88),
-  prim_FallbackGraph(89),
-  prim_FusedConcat(90),
-  prim_ConstantChunk(91),
-  prim_MMTreeReduce(92),
-  prim_MMBatchSide(93),
-  prim_list(94),
-  prim_min(95),
-  prim_max(96),
-  prim_abs(97),
-  aten_divmod(98),
-  prim_zip(99),
-  prim_enumerate(100),
-  prim_range(101),
-  prim_rangelist(102),
-  prim_isinstance(103),
-  prim_tolist(104),
-  prim_unchecked_cast(105),
-  aten__grad_sum_to_size(106),
-  aten__size_if_not_equal(107),
-  aten__ncf_unsqueeze(108),
-  aten_warn(109),
-  aten_sorted(110),
-  aten_floordiv(111),
-  aten___range_length(112),
-  aten___derive_index(113),
-  aten___round_to_zero_floordiv(114),
-  aten_is_scripting(115),
-  aten__unwrap_optional(116),
-  prim_fork(117),
-  prim_forkClosure(118),
-  prim_RaiseException(119),
-  prim_Closure(120),
-  prim_CreateObject(121),
-  prim_SetAttr(122),
-  prim_GetAttr(123),
-  prim_HasAttr(124),
-  prim_profile(125),
-  prim_profile_ivalue(126),
-  prim_AddStatValue(127),
-  prim_TimePoint(128),
-  prim_CallFunction(129),
-  prim_CallMethod(130),
-  prim_LoopContinuation(131),
-  prim_annotate(132),
-  prim_TracedModuleForward(133),
-  prim_TracedFork(134),
-  prim_TracedAttr(135),
-  prim_rpc_async(136),
-  prim_rpc_sync(137),
-  prim_rpc_remote(138),
-  prim_is_cuda(139),
-  aten_abs_(140),
-  aten_absolute(141),
-  aten_absolute_(142),
-  aten_acos(143),
-  aten_acos_(144),
-  aten_arccos(145),
-  aten_arccos_(146),
-  aten_acosh(147),
-  aten_acosh_(148),
-  aten_arccosh(149),
-  aten_arccosh_(150),
-  aten_asin(151),
-  aten_asin_(152),
-  aten_arcsin(153),
-  aten_arcsin_(154),
-  aten_asinh(155),
-  aten_asinh_(156),
-  aten_arcsinh(157),
-  aten_arcsinh_(158),
-  aten_atan(159),
-  aten_atan_(160),
-  aten_arctan(161),
-  aten_arctan_(162),
-  aten_atanh(163),
-  aten_atanh_(164),
-  aten_arctanh(165),
-  aten_arctanh_(166),
-  aten_clamp(167),
-  aten_clamp_(168),
-  aten_clip(169),
-  aten_clip_(170),
-  aten_det(171),
-  aten_linalg_det(172),
-  aten_linalg_norm(173),
-  aten_append(174),
-  aten_item(175),
-  aten_format(176),
-  aten_percentFormat(177),
-  aten___not__(178),
-  aten___is__(179),
-  aten___isnot__(180),
-  aten_copy(181),
-  aten_copy_(182),
-  aten_div(183),
-  aten_div_(184),
-  aten_divide(185),
-  aten_divide_(186),
-  aten_true_divide(187),
-  aten_true_divide_(188),
-  aten_t_(189),
-  aten_addbmm_(190),
-  aten_addcdiv_(191),
-  aten_addcmul_(192),
-  aten_addmv_(193),
-  aten_addr_(194),
-  aten_baddbmm_(195),
-  aten_ge(196),
-  aten_ge_(197),
-  aten_greater_equal(198),
-  aten_greater_equal_(199),
-  aten_gt(200),
-  aten_gt_(201),
-  aten_greater(202),
-  aten_greater_(203),
-  aten_le(204),
-  aten_le_(205),
-  aten_less_equal(206),
-  aten_less_equal_(207),
-  aten_lerp_(208),
-  aten_lt(209),
-  aten_lt_(210),
-  aten_less(211),
-  aten_less_(212),
-  aten_isnan(213),
-  aten_mul(214),
-  aten_mul_(215),
-  aten_multiply(216),
-  aten_multiply_(217),
-  aten_ne(218),
-  aten_ne_(219),
-  aten_not_equal(220),
-  aten_not_equal_(221),
-  aten__ger(222),
-  aten_ger(223),
-  aten_outer(224),
-  aten_transpose(225),
-  aten_transpose_(226),
-  aten_unsqueeze_(227),
-  aten___getitem__(228),
-  aten__set_item(229),
-  aten_manual_seed(230),
-  aten_set_(231),
-  aten_index_put_(232),
-  aten_device(233),
-  aten_hash(234),
-  aten_len(235),
-  aten_list(236),
-  aten_wait(237),
-  aten_save(238),
-  aten_sub(239),
-  aten_sub_(240),
-  aten_subtract(241),
-  aten_subtract_(242),
-  aten_keys(243),
-  aten_ord(244),
-  aten_chr(245),
-  aten_hex(246),
-  aten_oct(247),
-  aten_clear(248),
-  aten_trunc(249),
-  aten_trunc_(250),
-  aten_fix(251),
-  aten_fix_(252),
-  aten_neg(253),
-  aten_neg_(254),
-  aten_negative(255),
-  aten_negative_(256),
-  aten_setdefault(257),
-  aten_bin(258),
-  aten_pop(259),
-  aten_insert(260),
-  aten_vstack(261),
-  aten_row_stack(262),
-  prim_unchecked_unwrap_optional(263),
-  aten___contains__(264),
-  prim_BailoutTemplate(265),
-  prim_grad(266),
-  aten_zero_(267),
-  aten_fill_(268),
-  aten_masked_fill_(269),
-  cuda__set_device(270),
-  cuda_set_stream(271),
-  cuda__current_device(272),
-  aten_swapaxes(273),
-  aten_swapaxes_(274),
-  aten_swapdims(275),
-  aten_swapdims_(276),
-  aten_movedim(277),
-  aten_moveaxis(278),
-  aten_has_torch_function(279),
-  aten___and__(280),
-aten___iand__(281),
-aten___ilshift__(282),
-aten___ior__(283),
-aten___irshift__(284),
-aten___ixor__(285),
-aten___lshift__(286),
-aten___or__(287),
-aten___rshift__(288),
-aten___xor__(289),
-aten__abs(290),
-aten__addmv(291),
-aten__addr(292),
-aten__amp_foreach_non_finite_check_and_unscale_(293),
-aten__amp_update_scale(294),
-aten__arange(295),
-aten__argmax(296),
-aten__argmin(297),
-aten__baddbmm_mkl(298),
-aten__cast_Byte(299),
-aten__cast_Char(300),
-aten__cast_Double(301),
-aten__cast_Float(302),
-aten__cast_Half(303),
-aten__cast_Int(304),
-aten__cast_Long(305),
-aten__cast_Short(306),
-aten__cat(307),
-aten__ceil(308),
-aten__clamp_max(309),
-aten__clamp_min(310),
-aten__convolution(311),
-aten__convolution_double_backward(312),
-aten_convolution_overrideable(313),
-aten_convolution_backward_overrideable(314),
-aten__convolution_nogroup(315),
-aten__copy_ignoring_overlaps(316),
-aten__cos(317),
-aten__cosh(318),
-aten__ctc_loss(319),
-aten__ctc_loss_backward(320),
-aten__cudnn_ctc_loss(321),
-aten__cudnn_init_dropout_state(322),
-aten__cudnn_rnn(323),
-aten__cudnn_rnn_backward(324),
-aten__cudnn_rnn_flatten_weight(325),
-aten__cufft_clear_plan_cache(326),
-aten__cufft_get_plan_cache_max_size(327),
-aten__cufft_get_plan_cache_size(328),
-aten__cufft_set_plan_cache_max_size(329),
-aten__cumprod(330),
-aten__cumsum(331),
-aten__denseDims(332),
-aten__dimI(333),
-aten__dimV(334),
-aten__dim_arange(335),
-aten__dirichlet_grad(336),
-aten__dot(337),
-aten__embedding_bag(338),
-aten__embedding_bag_backward(339),
-aten__embedding_bag_dense_backward(340),
-aten__embedding_bag_sparse_backward(341),
-aten__erf(342),
-aten__erfc(343),
-aten__exp(344),
-aten__exp2(345),
-aten__expm1(346),
-aten__fft_with_size(347),
-aten__fill(348),
-aten__floor(349),
-aten__fused_dropout(350),
-aten__indexCopy(351),
-aten__indices(352),
-aten__ldexp(353),
-aten__linspace(354),
-aten__local_scalar(355),
-aten__local_scalar_dense(356),
-aten__log(357),
-aten__log10(358),
-aten__log1p(359),
-aten__log2(360),
-aten__logspace(361),
-aten__lu_with_info(362),
-aten__masked_scale(363),
-aten__mm(364),
-aten__mv(365),
-aten__nnz(366),
-aten__nansum(367),
-aten__pack_padded_sequence(368),
-aten__pack_padded_sequence_backward(369),
-aten__pad_packed_sequence(370),
-aten__pdist_backward(371),
-aten__pdist_forward(372),
-aten__prod(373),
-aten__prodall(374),
-aten__range(375),
-aten__reshape_from_tensor(376),
-aten__round(377),
-aten__rsqrt(378),
-aten__s_where(379),
-aten__shape_as_tensor(380),
-aten__sigmoid(381),
-aten__sigmoid_forward(382),
-aten__sin(383),
-aten__sinh(384),
-aten__sparseDims(385),
-aten__sparse_add(386),
-aten__sparse_addmm(387),
-aten__sparse_coo_tensor_with_dims(388),
-aten__sparse_coo_tensor_with_dims_and_tensors(389),
-aten__sparse_coo_tensor_unsafe(390),
-aten__sparse_dense_add(391),
-aten__sparse_div_scalar(392),
-aten__sparse_div_zerodim(393),
-aten__sparse_mul(394),
-aten__sparse_mul_scalar(395),
-aten__sparse_mul_zerodim(396),
-aten__sparse_sum(397),
-aten__sqrt(398),
-aten__square(399),
-aten__standard_gamma(400),
-aten__standard_gamma_grad(401),
-aten__sum(402),
-aten__sum_cuda(403),
-aten__tan(404),
-aten__tanh(405),
-aten__tanh_forward(406),
-aten__th_get_device(407),
-aten__th_kthvalue(408),
-aten__th_mode(409),
-aten__th_prod(410),
-aten__th_sigmoid(411),
-aten__th_std(412),
-aten__th_sum(413),
-aten__th_tanh(414),
-aten__th_var(415),
-aten__thnn_fused_gru_cell(416),
-aten__thnn_fused_gru_cell_backward(417),
-aten__thnn_fused_lstm_cell(418),
-aten__thnn_fused_lstm_cell_backward(419),
-aten__trilinear(420),
-aten__trunc(421),
-aten__unique(422),
-aten__unique_dim(423),
-aten__unsafe_view(424),
-aten__validate_sparse_coo_tensor_args(425),
-aten__values(426),
-aten__weight_norm(427),
-aten__weight_norm_cuda_interface(428),
-aten__weight_norm_cuda_interface_backward(429),
-aten__weight_norm_differentiable_backward(430),
-aten_abs(431),
-aten_adaptive_avg_pool1d(432),
-aten_adaptive_avg_pool2d(433),
-aten_adaptive_avg_pool2d_backward(434),
-aten_adaptive_avg_pool2d_forward(435),
-aten_adaptive_avg_pool3d(436),
-aten_adaptive_avg_pool3d_backward(437),
-aten_adaptive_avg_pool3d_forward(438),
-aten_adaptive_max_pool1d(439),
-aten_adaptive_max_pool2d(440),
-aten_adaptive_max_pool2d_backward(441),
-aten_adaptive_max_pool2d_forward(442),
-aten_adaptive_max_pool3d(443),
-aten_adaptive_max_pool3d_backward(444),
-aten_adaptive_max_pool3d_forward(445),
-aten_add(446),
-aten_add_(447),
-aten_addbmm(448),
-aten_addcdiv(449),
-aten_addcmul(450),
-aten_addmm(451),
-aten_addmv(452),
-aten_addr(453),
-aten_affine_grid_generator(454),
-aten_affine_grid_generator_backward(455),
-aten_alias(456),
-aten_all(457),
-aten_allclose(458),
-aten_alpha_dropout(459),
-aten_any(460),
-aten_arange(461),
-aten_argmax(462),
-aten_argmin(463),
-aten_as_strided(464),
-aten_as_tensor(465),
-aten_atan2(466),
-aten_atleast_1d(467),
-aten_atleast_2d(468),
-aten_atleast_3d(469),
-aten_avg_pool1d(470),
-aten_avg_pool2d(471),
-aten_avg_pool2d_backward(472),
-aten_avg_pool2d_forward(473),
-aten_avg_pool3d(474),
-aten_avg_pool3d_backward(475),
-aten_avg_pool3d_forward(476),
-aten_baddbmm(477),
-aten_bartlett_window(478),
-aten_batch_norm(479),
-aten_bernoulli(480),
-aten_bilinear(481),
-aten_binary_cross_entropy(482),
-aten_binary_cross_entropy_backward(483),
-aten_binary_cross_entropy_forward(484),
-aten_binary_cross_entropy_with_logits(485),
-aten_binary_cross_entropy_with_logits_backward(486),
-aten_binary_cross_entropy_with_logits_target_backward(487),
-aten_bincount(488),
-aten_blackman_window(489),
-aten_block_diag(490),
-aten_bmm(491),
-aten_broadcast_tensors(492),
-aten_broadcast_to(493),
-aten_cartesian_prod(494),
-aten_cat(495),
-aten_cauchy(496),
-aten_ceil(497),
-aten_celu(498),
-aten_chain_matmul(499),
-aten_cholesky(500),
-aten_cholesky_inverse(501),
-aten_cholesky_solve(502),
-aten_chunk(503),
-aten_clamp_max(504),
-aten_clamp_min(505),
-aten_clone(506),
-aten_coalesce(507),
-aten_combinations(508),
-aten__conj(509),
-aten_conj(510),
-aten_complex(511),
-aten_copysign(512),
-aten_polar(513),
-aten_constant_pad_nd(514),
-aten_contiguous(515),
-aten_conv1d(516),
-aten_conv2d(517),
-aten_conv3d(518),
-aten_conv_tbc(519),
-aten_conv_tbc_backward(520),
-aten_conv_transpose1d(521),
-aten_convolution(522),
-aten_copy_sparse_to_sparse(523),
-aten_cos(524),
-aten_cosh(525),
-aten_cosine_embedding_loss(526),
-aten_cosine_similarity(527),
-aten_count_nonzero(528),
-aten_cross(529),
-aten_std_mean(530),
-aten_var_mean(531),
-aten_ctc_loss(532),
-aten_cudnn_affine_grid_generator(533),
-aten_cudnn_affine_grid_generator_backward(534),
-aten_cudnn_batch_norm(535),
-aten_cudnn_batch_norm_backward(536),
-aten_cudnn_convolution(537),
-aten_cudnn_convolution_backward(538),
-aten_cudnn_convolution_backward_bias(539),
-aten_cudnn_convolution_backward_input(540),
-aten_cudnn_convolution_backward_weight(541),
-aten_cudnn_convolution_transpose(542),
-aten_cudnn_convolution_transpose_backward(543),
-aten_cudnn_convolution_transpose_backward_bias(544),
-aten_cudnn_convolution_transpose_backward_input(545),
-aten_cudnn_convolution_transpose_backward_weight(546),
-aten_cudnn_grid_sampler(547),
-aten_cudnn_grid_sampler_backward(548),
-aten_cudnn_is_acceptable(549),
-aten_cummax(550),
-aten_cummin(551),
-aten_cumprod(552),
-aten_cumsum(553),
-aten_data_ptr(554),
-aten_deg2rad(555),
-aten_detach(556),
-aten_diag(557),
-aten_diag_embed(558),
-aten_diagflat(559),
-aten_diagonal(560),
-aten_fill_diagonal_(561),
-aten_diff(562),
-aten_digamma(563),
-aten_dim(564),
-aten_dist(565),
-aten_dot(566),
-aten_dropout(567),
-aten_dstack(568),
-aten_eig(569),
-aten_einsum(570),
-aten_elu(571),
-aten_elu_backward(572),
-aten_elu_forward(573),
-aten_embedding(574),
-aten_embedding_backward(575),
-aten_embedding_bag(576),
-aten_embedding_dense_backward(577),
-aten_embedding_renorm(578),
-aten_embedding_sparse_backward(579),
-aten_empty(580),
-aten_empty_like(581),
-aten_empty_strided(582),
-aten_eq(583),
-aten_equal(584),
-aten_erf(585),
-aten_erfc(586),
-aten_erfinv(587),
-aten_exp(588),
-aten_expand(589),
-aten_expand_as(590),
-aten_expm1(591),
-aten_exponential(592),
-aten_eye(593),
-aten_feature_alpha_dropout(594),
-aten_feature_dropout(595),
-aten_fft(596),
-aten_fill(597),
-aten_flatten(598),
-aten_flip(599),
-aten_fliplr(600),
-aten_flipud(601),
-aten_floor(602),
-aten_fmod(603),
-aten_fmod_(604),
-aten_fmax(605),
-aten_fmin(606),
-aten_frac(607),
-aten_fractional_max_pool2d(608),
-aten_fractional_max_pool2d_backward(609),
-aten_fractional_max_pool2d_forward(610),
-aten_frobenius_norm(611),
-aten_full(612),
-aten_full_like(613),
-aten_gather(614),
-aten_gcd(615),
-aten_gelu(616),
-aten_geometric(617),
-aten_geqrf(618),
-aten_get_device(619),
-aten_glu(620),
-aten_glu_backward(621),
-aten_glu_forward(622),
-aten_grid_sampler(623),
-aten_grid_sampler_2d(624),
-aten_grid_sampler_2d_backward(625),
-aten_grid_sampler_3d(626),
-aten_grid_sampler_3d_backward(627),
-aten_group_norm(628),
-aten_gru(629),
-aten_gru_cell(630),
-aten_hamming_window(631),
-aten_hann_window(632),
-aten_hardshrink(633),
-aten_hardshrink_backward(634),
-aten_hardsigmoid(635),
-aten_hardsigmoid_backward(636),
-aten_hardtanh(637),
-aten_hardtanh_backward(638),
-aten_hardtanh_forward(639),
-aten_heaviside(640),
-aten_hinge_embedding_loss(641),
-aten_histc(642),
-aten_hspmm(643),
-aten_hstack(644),
-aten_hypot(645),
-aten_i0(646),
-aten_i0_(647),
-aten_igamma(648),
-aten_igamma_(649),
-aten_igammac(650),
-aten_igammac_(651),
-aten_ifft(652),
-aten_index(653),
-aten_index_add(654),
-aten_index_copy(655),
-aten_index_fill(656),
-aten_index_put(657),
-aten_index_select(658),
-aten_indices(659),
-aten_inner(660),
-aten_instance_norm(661),
-aten_inverse(662),
-aten_irfft(663),
-aten_is_coalesced(664),
-aten_is_complex(665),
-aten_is_contiguous(666),
-aten_is_cuda(667),
-aten_is_distributed(668),
-aten_is_floating_point(669),
-aten_is_nonzero(670),
-aten_is_same_size(671),
-aten_is_set_to(672),
-aten_is_signed(673),
-aten_is_sparse(674),
-aten_isclose(675),
-aten_isreal(676),
-aten_istft(677),
-aten_isposinf(678),
-aten_isneginf(679),
-aten_kaiser_window(680),
-aten_kl_div(681),
-aten_kl_div_backward(682),
-aten_kthvalue(683),
-aten_l1_loss(684),
-aten_l1_loss_backward(685),
-aten_l1_loss_forward(686),
-aten_layer_norm(687),
-aten_lcm(688),
-aten_leaky_relu(689),
-aten_leaky_relu_backward(690),
-aten_leaky_relu_forward(691),
-aten_lerp(692),
-aten_lgamma(693),
-aten_linear(694),
-aten_linspace(695),
-aten_log(696),
-aten_log10(697),
-aten_log1p(698),
-aten_log2(699),
-aten_log_normal(700),
-aten_log_sigmoid(701),
-aten_log_sigmoid_backward(702),
-aten_log_sigmoid_forward(703),
-aten_log_softmax(704),
-aten__log_softmax(705),
-aten__log_softmax_backward_data(706),
-aten_logcumsumexp(707),
-aten_logdet(708),
-aten_logit(709),
-aten_logspace(710),
-aten_logsumexp(711),
-aten_xlogy(712),
-aten_lstm(713),
-aten_lstm_cell(714),
-aten_lstsq(715),
-aten_lu_solve(716),
-aten_margin_ranking_loss(717),
-aten_masked_fill(718),
-aten_masked_scatter(719),
-aten_masked_select(720),
-aten_matmul(721),
-aten_matrix_power(722),
-aten_matrix_rank(723),
-aten_matrix_exp(724),
-aten_max(725),
-aten_max_pool1d(726),
-aten_max_pool1d_with_indices(727),
-aten_max_pool2d(728),
-aten_max_pool2d_with_indices(729),
-aten_max_pool2d_with_indices_backward(730),
-aten_max_pool2d_with_indices_forward(731),
-aten_max_pool3d(732),
-aten_max_pool3d_with_indices(733),
-aten_max_pool3d_with_indices_backward(734),
-aten_max_pool3d_with_indices_forward(735),
-aten_max_unpool2d(736),
-aten_max_unpool2d_backward(737),
-aten_max_unpool2d_forward(738),
-aten_max_unpool3d(739),
-aten_max_unpool3d_backward(740),
-aten_max_unpool3d_forward(741),
-aten_max_values(742),
-aten_mean(743),
-aten_median(744),
-aten_nanmedian(745),
-aten_meshgrid(746),
-aten_min(747),
-aten_min_values(748),
-aten_miopen_batch_norm(749),
-aten_miopen_batch_norm_backward(750),
-aten_miopen_convolution(751),
-aten_miopen_convolution_backward(752),
-aten_miopen_convolution_backward_bias(753),
-aten_miopen_convolution_backward_input(754),
-aten_miopen_convolution_backward_weight(755),
-aten_miopen_convolution_transpose(756),
-aten_miopen_convolution_transpose_backward(757),
-aten_miopen_convolution_transpose_backward_input(758),
-aten_miopen_convolution_transpose_backward_weight(759),
-aten_miopen_depthwise_convolution(760),
-aten_miopen_depthwise_convolution_backward(761),
-aten_miopen_depthwise_convolution_backward_input(762),
-aten_miopen_depthwise_convolution_backward_weight(763),
-aten_miopen_rnn(764),
-aten_miopen_rnn_backward(765),
-aten_mkldnn_convolution(766),
-aten_mkldnn_convolution_backward(767),
-aten_mkldnn_convolution_backward_input(768),
-aten_mkldnn_convolution_backward_weights(769),
-aten_mm(770),
-aten_mode(771),
-aten_mse_loss(772),
-aten_mse_loss_backward(773),
-aten_mse_loss_forward(774),
-aten_msort(775),
-aten_multi_margin_loss(776),
-aten_multi_margin_loss_backward(777),
-aten_multi_margin_loss_forward(778),
-aten_multilabel_margin_loss(779),
-aten_multilabel_margin_loss_backward(780),
-aten_multilabel_margin_loss_forward(781),
-aten_multinomial(782),
-aten_mv(783),
-aten_mvlgamma(784),
-aten_nansum(785),
-aten_nan_to_num(786),
-aten_narrow(787),
-aten_narrow_copy(788),
-aten_native_batch_norm(789),
-aten_native_batch_norm_backward(790),
-aten_native_clone(791),
-aten_native_get_device(792),
-aten_native_norm(793),
-aten_native_pow(794),
-aten_native_resize_as(795),
-aten_native_tensor(796),
-aten_native_zero(797),
-aten_nextafter(798),
-aten_bitwise_and(799),
-aten_bitwise_not(800),
-aten_bitwise_or(801),
-aten_bitwise_xor(802),
-aten_element_size(803),
-aten_nll_loss(804),
-aten_nll_loss2d(805),
-aten_nll_loss2d_backward(806),
-aten_nll_loss2d_forward(807),
-aten_nll_loss_backward(808),
-aten_nll_loss_forward(809),
-aten_nonzero(810),
-aten_nonzero_numpy(811),
-aten_norm(812),
-aten_norm_except_dim(813),
-aten_normal(814),
-aten_nuclear_norm(815),
-aten_numel(816),
-aten_ones(817),
-aten_ones_like(818),
-aten_orgqr(819),
-aten_ormqr(820),
-aten_pairwise_distance(821),
-aten__euclidean_dist(822),
-aten_pdist(823),
-aten_cdist(824),
-aten_permute(825),
-aten_pin_memory(826),
-aten_pinverse(827),
-aten_pixel_shuffle(828),
-aten_pixel_unshuffle(829),
-aten_poisson(830),
-aten_polygamma(831),
-aten_pow(832),
-aten_float_power(833),
-aten_prelu(834),
-aten_prelu_backward(835),
-aten_prod(836),
-aten_put(837),
-aten_qr(838),
-aten_quantile(839),
-aten_nanquantile(840),
-aten_rad2deg(841),
-aten_rand(842),
-aten_rand_like(843),
-aten_randint(844),
-aten_randint_like(845),
-aten_randn(846),
-aten_randn_like(847),
-aten_random(848),
-aten_randperm(849),
-aten_range(850),
-aten_ravel(851),
-aten_reciprocal(852),
-aten_reflection_pad1d(853),
-aten_reflection_pad1d_backward(854),
-aten_reflection_pad1d_forward(855),
-aten_reflection_pad2d(856),
-aten_reflection_pad2d_backward(857),
-aten_reflection_pad2d_forward(858),
-aten_relu(859),
-aten_remainder(860),
-aten_renorm(861),
-aten_repeat(862),
-aten_replication_pad1d(863),
-aten_replication_pad1d_backward(864),
-aten_replication_pad1d_forward(865),
-aten_replication_pad2d(866),
-aten_replication_pad2d_backward(867),
-aten_replication_pad2d_forward(868),
-aten_replication_pad3d(869),
-aten_replication_pad3d_backward(870),
-aten_replication_pad3d_forward(871),
-aten_reshape(872),
-aten_reshape_as(873),
-aten_resize(874),
-aten_resize_(875),
-aten_resize_as(876),
-aten_resize_as_(877),
-aten_rfft(878),
-aten_rnn_relu(879),
-aten_rnn_relu_cell(880),
-aten_rnn_tanh(881),
-aten_rnn_tanh_cell(882),
-aten_rot90(883),
-aten_round(884),
-aten_rrelu(885),
-aten_rrelu_with_noise(886),
-aten_rrelu_with_noise_backward(887),
-aten_rrelu_with_noise_forward(888),
-aten_rsqrt(889),
-aten_scatter(890),
-aten_scatter_add(891),
-aten_select(892),
-aten_selu(893),
-aten_set(894),
-aten_sigmoid(895),
-aten_sign(896),
-aten_signbit(897),
-aten_silu(898),
-aten_sgn(899),
-aten_sin(900),
-aten_sinc(901),
-aten_sinh(902),
-aten_size(903),
-aten_sizes(904),
-aten_slice(905),
-aten_slogdet(906),
-aten_smm(907),
-aten_smooth_l1_loss(908),
-aten_smooth_l1_loss_backward(909),
-aten_smooth_l1_loss_forward(910),
-aten_soft_margin_loss(911),
-aten_soft_margin_loss_backward(912),
-aten_soft_margin_loss_forward(913),
-aten_softmax(914),
-aten__softmax(915),
-aten__softmax_backward_data(916),
-aten_softplus(917),
-aten_softplus_backward(918),
-aten_softplus_forward(919),
-aten_softshrink(920),
-aten_softshrink_backward(921),
-aten_softshrink_forward(922),
-aten_solve(923),
-aten_sort(924),
-aten_sparse_coo_tensor(925),
-aten_sparse_mask(926),
-aten_sparse_resize(927),
-aten_sparse_resize_and_clear(928),
-aten_split(929),
-aten_split_with_sizes(930),
-aten_sqrt(931),
-aten_square(932),
-aten_squeeze(933),
-aten_sspaddmm(934),
-aten_stack(935),
-aten_std(936),
-aten_stft(937),
-aten_storage_offset(938),
-aten_stride(939),
-aten_strides(940),
-aten_rsub(941),
-aten_sum(942),
-aten_sum_to_size(943),
-aten_svd(944),
-aten_symeig(945),
-aten_t(946),
-aten_take(947),
-aten_tan(948),
-aten_tanh(949),
-aten_tensor(950),
-aten_tensordot(951),
-aten_tensor_split(952),
-aten_th_clone(953),
-aten_th_norm(954),
-aten_th_pow(955),
-aten_th_resize_as(956),
-aten_th_tensor(957),
-aten_th_zero(958),
-aten_thnn_conv2d(959),
-aten_thnn_conv2d_backward(960),
-aten_thnn_conv2d_forward(961),
-aten_tile(962),
-aten_slow_conv3d(963),
-aten_slow_conv3d_backward(964),
-aten_slow_conv3d_forward(965),
-aten_thnn_conv_depthwise2d(966),
-aten_thnn_conv_depthwise2d_backward(967),
-aten_thnn_conv_depthwise2d_forward(968),
-aten_slow_conv_dilated2d(969),
-aten_slow_conv_dilated2d_backward(970),
-aten_slow_conv_dilated3d(971),
-aten_slow_conv_dilated3d_backward(972),
-aten_slow_conv_transpose2d(973),
-aten_slow_conv_transpose2d_backward(974),
-aten_slow_conv_transpose3d(975),
-aten_slow_conv_transpose3d_backward(976),
-aten_threshold(977),
-aten_threshold_backward(978),
-aten_to(979),
-aten_to_sparse(980),
-aten_to_dense(981),
-aten_topk(982),
-aten_trace(983),
-aten_triangular_solve(984),
-aten_tril(985),
-aten_triplet_margin_loss(986),
-aten_triu(987),
-aten_type_as(988),
-aten_unbind(989),
-aten_unfold(990),
-aten_uniform(991),
-aten_unsafe_chunk(992),
-aten_unsafe_split(993),
-aten_unsafe_split_with_sizes(994),
-aten_unsqueeze(995),
-aten_upsample_bilinear2d(996),
-aten_upsample_bilinear2d_backward(997),
-aten_upsample_bilinear2d_forward(998),
-aten_upsample_bicubic2d(999),
-aten_upsample_bicubic2d_backward(1000),
-aten_upsample_bicubic2d_forward(1001),
-aten_upsample_linear1d(1002),
-aten_upsample_linear1d_backward(1003),
-aten_upsample_linear1d_forward(1004),
-aten_upsample_nearest1d(1005),
-aten_upsample_nearest1d_backward(1006),
-aten_upsample_nearest1d_forward(1007),
-aten_upsample_nearest2d(1008),
-aten_upsample_nearest2d_backward(1009),
-aten_upsample_nearest2d_forward(1010),
-aten_upsample_nearest3d(1011),
-aten_upsample_nearest3d_backward(1012),
-aten_upsample_nearest3d_forward(1013),
-aten_upsample_trilinear3d(1014),
-aten_upsample_trilinear3d_backward(1015),
-aten_upsample_trilinear3d_forward(1016),
-aten_values(1017),
-aten_vander(1018),
-aten_var(1019),
-aten_view(1020),
-aten_view_as(1021),
-aten_where(1022),
-aten_zero(1023),
-aten_zeros(1024),
-aten_zeros_like(1025),
-aten_real(1026),
-aten_imag(1027),
-aten_view_as_real(1028),
-aten_view_as_complex(1029),
+  prim_ConstantMKLDNNTensor(16),
+  prim_BroadcastMKLDNNTensors(17),
+  prim_MKLDNNGroup(18),
+  prim_MKLDNNHardSwish(19),
+  prim_MKLDNNHardSigmoid(20),
+  prim_MKLDNNHardTanh(21),
+  prim_MKLDNNClamp(22),
+  prim_Drop(23),
+  prim_Eval(24),
+  prim_Expand(25), /* onnx */
+  prim_FusionGroup(26),
+  prim_CudaFusionGroup(27),
+  prim_CudaFusionGuard(28),
+  prim_FunctionalGraph(29),
+  prim_DifferentiableGraph(30),
+  prim_TensorExprGroup(31),
+  prim_StaticSubgraph(32),
+  prim_If(33),
+  prim_Jump(34), /* debug */
+  prim_JumpNZ(35), /* debug */
+  prim_JumpZ(36), /* debug */
+  prim_Load(37),
+  prim_Loop(38),
+  prim_Param(39),
+  prim_PackPadded(40), /* onnx */
+  prim_PadPacked(41), /* onnx */
+  prim_Placeholder(42), /* debug */
+  prim_Print(43),
+  prim_PythonOp(44),
+  prim_IgnoredPythonOp(45),
+  prim_Reverse(46),
+  prim_Return(47),
+  prim_ReturnStmt(48),
+  prim_BreakStmt(49),
+  prim_ContinueStmt(50),
+  prim_ComprehensionScope(51),
+  prim_Store(52),
+  prim_AutogradZero(53),
+  prim_AutogradAnyNonZero(54),
+  prim_AutogradAllNonZero(55),
+  prim_AutogradAllZero(56),
+  prim_Starred(57),
+  prim_TupleConstruct(58),
+  prim_TupleUnpack(59),
+  prim_TupleIndex(60),
+  prim_TupleSlice(61),
+  prim_ListConstruct(62),
+  prim_ListUnpack(63),
+  prim_DictConstruct(64),
+  prim_ModuleContainerIndex(65),
+  prim_EnumName(66),
+  prim_EnumValue(67),
+  prim_StringIndex(68),
+  prim_NumToTensor(69),
+  prim_Uninitialized(70),
+  prim_With(71),
+  prim_Enter(72),
+  prim_Exit(73),
+  aten_Bool(74),
+  aten_Int(75),
+  aten_FloatImplicit(76),
+  aten_ComplexImplicit(77),
+  aten_IntImplicit(78),
+  aten_ScalarImplicit(79),
+  aten_Float(80),
+  aten_Complex(81),
+  aten_str(82),
+  aten_is_pinned(83),
+  aten_Delete(84),
+  aten_relu_(85),
+  aten_gelu_(86),
+  aten_relu6(87),
+  aten_relu6_(88),
+  aten_dropout_(89),
+  aten_sigmoid_(90),
+  prim_device(91),
+  prim_dtype(92),
+  prim_layout(93),
+  prim_id(94),
+  prim_requires_grad(95),
+  prim_MakeTestTensor(96), /* test */
+  prim_AutogradAdd(97),
+  prim_GradOf(98),
+  aten_grad(99),
+  aten_backward(100),
+  prim_Guard(101),
+  prim_BailOut(102),
+  prim_TypeCheck(103),
+  prim_RequiresGradCheck(104),
+  prim_FallbackGraph(105),
+  prim_FusedConcat(106),
+  prim_ConstantChunk(107),
+  prim_MMTreeReduce(108),
+  prim_MMBatchSide(109),
+  prim_list(110),
+  prim_dict(111),
+  prim_min(112),
+  prim_max(113),
+  prim_abs(114),
+  aten_divmod(115),
+  prim_zip(116),
+  prim_enumerate(117),
+  prim_range(118),
+  prim_rangelist(119),
+  prim_isinstance(120),
+  prim_tolist(121),
+  prim_unchecked_cast(122),
+  aten__grad_sum_to_size(123),
+  aten__size_if_not_equal(124),
+  aten__ncf_unsqueeze(125),
+  aten_warn(126),
+  aten_sorted(127),
+  aten_floordiv(128),
+  aten___range_length(129),
+  aten___derive_index(130),
+  aten___round_to_zero_floordiv(131),
+  aten_is_scripting(132),
+  aten__unwrap_optional(133),
+  prim_fork(134),
+  prim_forkClosure(135),
+  prim_RaiseException(136),
+  prim_Closure(137),
+  prim_CreateObject(138),
+  prim_SetAttr(139),
+  prim_GetAttr(140),
+  prim_HasAttr(141),
+  prim_profile(142),
+  prim_profile_ivalue(143),
+  prim_AddStatValue(144),
+  prim_TimePoint(145),
+  prim_CallFunction(146),
+  prim_CallMethod(147),
+  prim_LoopContinuation(148),
+  prim_annotate(149),
+  prim_TracedModuleForward(150),
+  prim_TracedFork(151),
+  prim_TracedAttr(152),
+  prim_rpc_async(153),
+  prim_rpc_sync(154),
+  prim_rpc_remote(155),
+  prim_is_cuda(156),
+  aten_abs_(157),
+  aten_absolute(158),
+  aten_absolute_(159),
+  aten_acos(160),
+  aten_acos_(161),
+  aten_arccos(162),
+  aten_arccos_(163),
+  aten_acosh(164),
+  aten_acosh_(165),
+  aten_arccosh(166),
+  aten_arccosh_(167),
+  aten_asin(168),
+  aten_asin_(169),
+  aten_arcsin(170),
+  aten_arcsin_(171),
+  aten_asinh(172),
+  aten_asinh_(173),
+  aten_arcsinh(174),
+  aten_arcsinh_(175),
+  aten_atan(176),
+  aten_atan_(177),
+  aten_arctan(178),
+  aten_arctan_(179),
+  aten_atanh(180),
+  aten_atanh_(181),
+  aten_arctanh(182),
+  aten_arctanh_(183),
+  aten_clamp(184),
+  aten_clamp_(185),
+  aten_clip(186),
+  aten_clip_(187),
+  aten_det(188),
+  aten_linalg_det(189),
+  aten_matrix_power(190),
+  aten_linalg_matrix_power(191),
+  aten_chain_matmul(192),
+  aten_linalg_multi_dot(193),
+  aten_linalg_norm(194),
+  aten_linalg_vector_norm(195),
+  aten_linalg_matrix_norm(196),
+  aten_append(197),
+  aten_item(198),
+  aten_format(199),
+  aten_percentFormat(200),
+  aten___not__(201),
+  aten___is__(202),
+  aten___isnot__(203),
+  aten_copy(204),
+  aten_copy_(205),
+  aten_div(206),
+  aten_div_(207),
+  aten_divide(208),
+  aten_divide_(209),
+  aten_true_divide(210),
+  aten_true_divide_(211),
+  aten_t_(212),
+  aten_addbmm_(213),
+  aten_addcdiv_(214),
+  aten_addcmul_(215),
+  aten_addmv_(216),
+  aten_addr_(217),
+  aten_baddbmm_(218),
+  aten_ge(219),
+  aten_ge_(220),
+  aten_greater_equal(221),
+  aten_greater_equal_(222),
+  aten_gt(223),
+  aten_gt_(224),
+  aten_greater(225),
+  aten_greater_(226),
+  aten_le(227),
+  aten_le_(228),
+  aten_less_equal(229),
+  aten_less_equal_(230),
+  aten_lerp_(231),
+  aten_lt(232),
+  aten_lt_(233),
+  aten_less(234),
+  aten_less_(235),
+  aten_isnan(236),
+  aten_mul(237),
+  aten_mul_(238),
+  aten_multiply(239),
+  aten_multiply_(240),
+  aten_ne(241),
+  aten_ne_(242),
+  aten_not_equal(243),
+  aten_not_equal_(244),
+  aten__ger(245),
+  aten_ger(246),
+  aten_outer(247),
+  aten_orgqr(248),
+  aten_linalg_householder_product(249),
+  aten_transpose(250),
+  aten_transpose_(251),
+  aten_unsqueeze_(252),
+  aten___getitem__(253),
+  aten__set_item(254),
+  aten_manual_seed(255),
+  aten_set_(256),
+  aten_index_put_(257),
+  aten_device(258),
+  aten_hash(259),
+  aten_len(260),
+  aten_list(261),
+  aten_dict(262),
+  aten_wait(263),
+  aten_save(264),
+  aten_sub(265),
+  aten_sub_(266),
+  aten_subtract(267),
+  aten_subtract_(268),
+  aten_keys(269),
+  aten_ord(270),
+  aten_chr(271),
+  aten_hex(272),
+  aten_oct(273),
+  aten_clear(274),
+  aten_trunc(275),
+  aten_trunc_(276),
+  aten_fix(277),
+  aten_fix_(278),
+  aten_to_mkldnn(279),
+  aten_positive(280),
+  aten_neg(281),
+  aten_neg_(282),
+  aten_negative(283),
+  aten_negative_(284),
+  aten_setdefault(285),
+  aten_bin(286),
+  aten_pop(287),
+  aten_insert(288),
+  aten_vstack(289),
+  aten_row_stack(290),
+  prim_unchecked_unwrap_optional(291),
+  aten___contains__(292),
+  prim_BailoutTemplate(293),
+  prim_grad(294),
+  aten_zero_(295),
+  aten_fill_(296),
+  aten_masked_fill_(297),
+  cuda__set_device(298),
+  cuda_set_stream(299),
+  cuda__current_device(300),
+  cuda_synchronize(301),
+  aten_swapaxes(302),
+  aten_swapaxes_(303),
+  aten_swapdims(304),
+  aten_swapdims_(305),
+  aten_movedim(306),
+  aten_moveaxis(307),
+  aten_lgamma(308),
+  aten_special_gammaln(309),
+  aten_erf(310),
+  aten_special_erf(311),
+  aten_erfc(312),
+  aten_special_erfc(313),
+  aten_erfinv(314),
+  aten_special_erfinv(315),
+  aten_logit(316),
+  aten_special_logit(317),
+  aten_sigmoid(318),
+  aten_special_expit(319),
+  aten_expm1(320),
+  aten_special_expm1(321),
+  aten_exp2(322),
+  aten_special_exp2(323),
+  aten_special_i0e(324),
+  aten_has_torch_function(325),
+  aten_hardswish(326),
+  aten_hardswish_(327),
+  aten_hardsigmoid_(328),
+  aten_hardtanh_(329),
+  aten___and__(330),
+aten___iand__(331),
+aten___ilshift__(332),
+aten___ior__(333),
+aten___irshift__(334),
+aten___ixor__(335),
+aten___lshift__(336),
+aten___or__(337),
+aten___rshift__(338),
+aten___xor__(339),
+aten__abs(340),
+aten__addmv(341),
+aten__addr(342),
+aten__amp_foreach_non_finite_check_and_unscale_(343),
+aten__amp_update_scale_(344),
+aten__arange(345),
+aten__argmax(346),
+aten__argmin(347),
+aten__baddbmm_mkl(348),
+aten__cast_Byte(349),
+aten__cast_Char(350),
+aten__cast_Double(351),
+aten__cast_Float(352),
+aten__cast_Half(353),
+aten__cast_Int(354),
+aten__cast_Long(355),
+aten__cast_Short(356),
+aten__cat(357),
+aten__ceil(358),
+aten__clamp_max(359),
+aten__clamp_min(360),
+aten__convolution(361),
+aten__convolution_double_backward(362),
+aten_convolution_overrideable(363),
+aten_convolution_backward_overrideable(364),
+aten__convolution_nogroup(365),
+aten__copy_ignoring_overlaps(366),
+aten__cos(367),
+aten__cosh(368),
+aten__ctc_loss(369),
+aten__ctc_loss_backward(370),
+aten__cudnn_ctc_loss(371),
+aten__cudnn_init_dropout_state(372),
+aten__cudnn_rnn(373),
+aten__cudnn_rnn_backward(374),
+aten__cudnn_rnn_flatten_weight(375),
+aten__cufft_clear_plan_cache(376),
+aten__cufft_get_plan_cache_max_size(377),
+aten__cufft_get_plan_cache_size(378),
+aten__cufft_set_plan_cache_max_size(379),
+aten__cumprod(380),
+aten__cumsum(381),
+aten__denseDims(382),
+aten__dimI(383),
+aten__dimV(384),
+aten__dim_arange(385),
+aten__dirichlet_grad(386),
+aten__dot(387),
+aten__embedding_bag(388),
+aten__embedding_bag_backward(389),
+aten__embedding_bag_dense_backward(390),
+aten__embedding_bag_sparse_backward(391),
+aten__erf(392),
+aten__erfc(393),
+aten__exp(394),
+aten__exp2(395),
+aten__expm1(396),
+aten__fft_with_size(397),
+aten__fill(398),
+aten__floor(399),
+aten__fused_dropout(400),
+aten__indices(401),
+aten__ldexp(402),
+aten__linspace(403),
+aten__local_scalar(404),
+aten__local_scalar_dense(405),
+aten__log(406),
+aten__log10(407),
+aten__log1p(408),
+aten__log2(409),
+aten__logspace(410),
+aten__lu_with_info(411),
+aten__masked_scale(412),
+aten__mm(413),
+aten__mv(414),
+aten__nnz(415),
+aten__nansum(416),
+aten__pack_padded_sequence(417),
+aten__pack_padded_sequence_backward(418),
+aten__pad_packed_sequence(419),
+aten__pdist_backward(420),
+aten__pdist_forward(421),
+aten__prod(422),
+aten__prodall(423),
+aten__range(424),
+aten__reshape_from_tensor(425),
+aten__round(426),
+aten__rsqrt(427),
+aten__s_where(428),
+aten__shape_as_tensor(429),
+aten__sigmoid(430),
+aten__sigmoid_forward(431),
+aten__sin(432),
+aten__sinh(433),
+aten__sparseDims(434),
+aten__sparse_add(435),
+aten__sparse_addmm(436),
+aten__sparse_coo_tensor_with_dims(437),
+aten__sparse_coo_tensor_with_dims_and_tensors(438),
+aten__sparse_coo_tensor_unsafe(439),
+aten__sparse_dense_add(440),
+aten__sparse_div_scalar(441),
+aten__sparse_div_zerodim(442),
+aten__sparse_mul(443),
+aten__sparse_mul_scalar(444),
+aten__sparse_mul_zerodim(445),
+aten__sparse_sum(446),
+aten__sqrt(447),
+aten__square(448),
+aten__standard_gamma(449),
+aten__standard_gamma_grad(450),
+aten__sum(451),
+aten__sum_cuda(452),
+aten__tan(453),
+aten__tanh(454),
+aten__tanh_forward(455),
+aten__th_get_device(456),
+aten__th_kthvalue(457),
+aten__th_prod(458),
+aten__th_sigmoid(459),
+aten__th_std(460),
+aten__th_sum(461),
+aten__th_tanh(462),
+aten__th_var(463),
+aten__thnn_fused_gru_cell(464),
+aten__thnn_fused_gru_cell_backward(465),
+aten__thnn_fused_lstm_cell(466),
+aten__thnn_fused_lstm_cell_backward(467),
+aten__trilinear(468),
+aten__trunc(469),
+aten__unique(470),
+aten__unique_dim(471),
+aten__unsafe_view(472),
+aten__validate_sparse_coo_tensor_args(473),
+aten__values(474),
+aten__weight_norm(475),
+aten__weight_norm_cuda_interface(476),
+aten__weight_norm_cuda_interface_backward(477),
+aten__weight_norm_differentiable_backward(478),
+aten_abs(479),
+aten_adaptive_avg_pool1d(480),
+aten_adaptive_avg_pool2d(481),
+aten_adaptive_avg_pool2d_backward(482),
+aten_adaptive_avg_pool2d_forward(483),
+aten_adaptive_avg_pool3d(484),
+aten_adaptive_avg_pool3d_backward(485),
+aten_adaptive_avg_pool3d_forward(486),
+aten_adaptive_max_pool1d(487),
+aten_adaptive_max_pool2d(488),
+aten_adaptive_max_pool2d_backward(489),
+aten_adaptive_max_pool2d_forward(490),
+aten_adaptive_max_pool3d(491),
+aten_adaptive_max_pool3d_backward(492),
+aten_adaptive_max_pool3d_forward(493),
+aten_add(494),
+aten_add_(495),
+aten_addbmm(496),
+aten_addcdiv(497),
+aten_addcmul(498),
+aten_addmm(499),
+aten_addmv(500),
+aten_addr(501),
+aten_affine_grid_generator(502),
+aten_affine_grid_generator_backward(503),
+aten_alias(504),
+aten_all(505),
+aten_allclose(506),
+aten_alpha_dropout(507),
+aten_any(508),
+aten_arange(509),
+aten_argmax(510),
+aten_argmin(511),
+aten_as_strided(512),
+aten_as_tensor(513),
+aten_atan2(514),
+aten_atleast_1d(515),
+aten_atleast_2d(516),
+aten_atleast_3d(517),
+aten_avg_pool1d(518),
+aten_avg_pool2d(519),
+aten_avg_pool2d_backward(520),
+aten_avg_pool2d_forward(521),
+aten_avg_pool3d(522),
+aten_avg_pool3d_backward(523),
+aten_avg_pool3d_forward(524),
+aten_baddbmm(525),
+aten_bartlett_window(526),
+aten_batch_norm(527),
+aten_bernoulli(528),
+aten_bilinear(529),
+aten_binary_cross_entropy(530),
+aten_binary_cross_entropy_backward(531),
+aten_binary_cross_entropy_forward(532),
+aten_binary_cross_entropy_with_logits(533),
+aten_binary_cross_entropy_with_logits_backward(534),
+aten_binary_cross_entropy_with_logits_target_backward(535),
+aten_bincount(536),
+aten_blackman_window(537),
+aten_block_diag(538),
+aten_bmm(539),
+aten_broadcast_tensors(540),
+aten_broadcast_to(541),
+aten_cartesian_prod(542),
+aten_cat(543),
+aten_cauchy(544),
+aten_ceil(545),
+aten_celu(546),
+aten_cholesky(547),
+aten_cholesky_inverse(548),
+aten_cholesky_solve(549),
+aten_chunk(550),
+aten_clamp_max(551),
+aten_clamp_min(552),
+aten_clone(553),
+aten_coalesce(554),
+aten_combinations(555),
+aten__conj(556),
+aten_conj(557),
+aten_complex(558),
+aten_copysign(559),
+aten_polar(560),
+aten_constant_pad_nd(561),
+aten_contiguous(562),
+aten_conv1d(563),
+aten_conv2d(564),
+aten_conv3d(565),
+aten_conv_tbc(566),
+aten_conv_tbc_backward(567),
+aten_conv_transpose1d(568),
+aten_convolution(569),
+aten_copy_sparse_to_sparse(570),
+aten_cos(571),
+aten_cosh(572),
+aten_cosine_embedding_loss(573),
+aten_cosine_similarity(574),
+aten_count_nonzero(575),
+aten_cross(576),
+aten_std_mean(577),
+aten_var_mean(578),
+aten_ctc_loss(579),
+aten_cudnn_affine_grid_generator(580),
+aten_cudnn_affine_grid_generator_backward(581),
+aten_cudnn_batch_norm(582),
+aten_cudnn_batch_norm_backward(583),
+aten_cudnn_convolution(584),
+aten_cudnn_convolution_backward(585),
+aten_cudnn_convolution_backward_bias(586),
+aten_cudnn_convolution_backward_input(587),
+aten_cudnn_convolution_backward_weight(588),
+aten_cudnn_convolution_transpose(589),
+aten_cudnn_convolution_transpose_backward(590),
+aten_cudnn_convolution_transpose_backward_bias(591),
+aten_cudnn_convolution_transpose_backward_input(592),
+aten_cudnn_convolution_transpose_backward_weight(593),
+aten_cudnn_convolution_relu(594),
+aten_cudnn_convolution_add_relu(595),
+aten_cudnn_grid_sampler(596),
+aten_cudnn_grid_sampler_backward(597),
+aten_cudnn_is_acceptable(598),
+aten_cummax(599),
+aten_cummin(600),
+aten_cumprod(601),
+aten_cumsum(602),
+aten_data_ptr(603),
+aten_deg2rad(604),
+aten_detach(605),
+aten_diag(606),
+aten_diag_embed(607),
+aten_diagflat(608),
+aten_diagonal(609),
+aten_fill_diagonal_(610),
+aten_diff(611),
+aten_frexp(612),
+aten_digamma(613),
+aten_dim(614),
+aten_dist(615),
+aten_dot(616),
+aten_dropout(617),
+aten_dsplit(618),
+aten_dstack(619),
+aten_eig(620),
+aten_einsum(621),
+aten_elu(622),
+aten_elu_backward(623),
+aten_elu_forward(624),
+aten_embedding(625),
+aten_embedding_backward(626),
+aten_embedding_bag(627),
+aten_embedding_dense_backward(628),
+aten_embedding_renorm(629),
+aten_embedding_sparse_backward(630),
+aten_empty(631),
+aten_empty_like(632),
+aten_empty_strided(633),
+aten_special_entr(634),
+aten_eq(635),
+aten_equal(636),
+aten_exp(637),
+aten_expand(638),
+aten_expand_as(639),
+aten_exponential(640),
+aten_eye(641),
+aten_feature_alpha_dropout(642),
+aten_feature_dropout(643),
+aten_fft(644),
+aten_fill(645),
+aten_flatten(646),
+aten_flip(647),
+aten_fliplr(648),
+aten_flipud(649),
+aten_floor(650),
+aten_fmod(651),
+aten_fmod_(652),
+aten_fmax(653),
+aten_fmin(654),
+aten_frac(655),
+aten_fractional_max_pool2d(656),
+aten_fractional_max_pool2d_backward(657),
+aten_fractional_max_pool2d_forward(658),
+aten_frobenius_norm(659),
+aten_full(660),
+aten_full_like(661),
+aten_gather(662),
+aten_gcd(663),
+aten_gelu(664),
+aten_geometric(665),
+aten_geqrf(666),
+aten_get_device(667),
+aten_glu(668),
+aten_glu_backward(669),
+aten_glu_forward(670),
+aten_gradient(671),
+aten_grid_sampler(672),
+aten_grid_sampler_2d(673),
+aten_grid_sampler_2d_backward(674),
+aten_grid_sampler_3d(675),
+aten_grid_sampler_3d_backward(676),
+aten_group_norm(677),
+aten_gru(678),
+aten_gru_cell(679),
+aten_hamming_window(680),
+aten_hann_window(681),
+aten_hardshrink(682),
+aten_hardshrink_backward(683),
+aten_hardsigmoid(684),
+aten_hardsigmoid_backward(685),
+aten_hardtanh(686),
+aten_hardtanh_backward(687),
+aten_hardtanh_forward(688),
+aten_heaviside(689),
+aten_hinge_embedding_loss(690),
+aten_histc(691),
+aten_hspmm(692),
+aten_hsplit(693),
+aten_hstack(694),
+aten_hypot(695),
+aten_i0(696),
+aten_i0_(697),
+aten_igamma(698),
+aten_igamma_(699),
+aten_igammac(700),
+aten_igammac_(701),
+aten_ifft(702),
+aten_index(703),
+aten_index_add(704),
+aten_index_copy(705),
+aten_index_fill(706),
+aten_index_put(707),
+aten_index_select(708),
+aten_indices(709),
+aten_inner(710),
+aten_instance_norm(711),
+aten_inverse(712),
+aten_irfft(713),
+aten_is_coalesced(714),
+aten_is_complex(715),
+aten_is_contiguous(716),
+aten_is_cuda(717),
+aten_is_mlc(718),
+aten_is_distributed(719),
+aten_is_floating_point(720),
+aten_is_nonzero(721),
+aten_is_same_size(722),
+aten_is_set_to(723),
+aten_is_signed(724),
+aten_is_sparse(725),
+aten_is_sparse_csr(726),
+aten_isclose(727),
+aten_isreal(728),
+aten_istft(729),
+aten_isposinf(730),
+aten_isneginf(731),
+aten_kaiser_window(732),
+aten_kl_div(733),
+aten_kl_div_backward(734),
+aten_kthvalue(735),
+aten_l1_loss(736),
+aten_l1_loss_backward(737),
+aten_l1_loss_forward(738),
+aten_layer_norm(739),
+aten_lcm(740),
+aten_leaky_relu(741),
+aten_leaky_relu_backward(742),
+aten_leaky_relu_forward(743),
+aten_lerp(744),
+aten_linear(745),
+aten_linspace(746),
+aten_log(747),
+aten_log10(748),
+aten_log1p(749),
+aten_log2(750),
+aten_log_normal(751),
+aten_log_sigmoid(752),
+aten_log_sigmoid_backward(753),
+aten_log_sigmoid_forward(754),
+aten_log_softmax(755),
+aten__log_softmax(756),
+aten__log_softmax_backward_data(757),
+aten_logcumsumexp(758),
+aten_logdet(759),
+aten_logspace(760),
+aten_logsumexp(761),
+aten_xlogy(762),
+aten_special_xlog1py(763),
+aten_lstm(764),
+aten_lstm_cell(765),
+aten_lstsq(766),
+aten_lu_solve(767),
+aten_margin_ranking_loss(768),
+aten_masked_fill(769),
+aten_masked_scatter(770),
+aten_masked_select(771),
+aten_matmul(772),
+aten_matrix_rank(773),
+aten_matrix_exp(774),
+aten_max(775),
+aten_max_pool1d(776),
+aten_max_pool1d_with_indices(777),
+aten_max_pool2d(778),
+aten_max_pool2d_with_indices(779),
+aten_max_pool2d_with_indices_backward(780),
+aten_max_pool2d_with_indices_forward(781),
+aten_max_pool3d(782),
+aten_max_pool3d_with_indices(783),
+aten_max_pool3d_with_indices_backward(784),
+aten_max_pool3d_with_indices_forward(785),
+aten_max_unpool2d(786),
+aten_max_unpool2d_backward(787),
+aten_max_unpool2d_forward(788),
+aten_max_unpool3d(789),
+aten_max_unpool3d_backward(790),
+aten_max_unpool3d_forward(791),
+aten_max_values(792),
+aten_mean(793),
+aten_median(794),
+aten_nanmedian(795),
+aten_meshgrid(796),
+aten_min(797),
+aten_min_values(798),
+aten_miopen_batch_norm(799),
+aten_miopen_batch_norm_backward(800),
+aten_miopen_convolution(801),
+aten_miopen_convolution_backward(802),
+aten_miopen_convolution_backward_bias(803),
+aten_miopen_convolution_backward_input(804),
+aten_miopen_convolution_backward_weight(805),
+aten_miopen_convolution_transpose(806),
+aten_miopen_convolution_transpose_backward(807),
+aten_miopen_convolution_transpose_backward_input(808),
+aten_miopen_convolution_transpose_backward_weight(809),
+aten_miopen_depthwise_convolution(810),
+aten_miopen_depthwise_convolution_backward(811),
+aten_miopen_depthwise_convolution_backward_input(812),
+aten_miopen_depthwise_convolution_backward_weight(813),
+aten_miopen_rnn(814),
+aten_miopen_rnn_backward(815),
+aten_mish(816),
+aten_mkldnn_convolution(817),
+aten_mkldnn_convolution_backward(818),
+aten_mkldnn_convolution_backward_input(819),
+aten_mkldnn_convolution_backward_weights(820),
+aten_mm(821),
+aten_mode(822),
+aten_mse_loss(823),
+aten_mse_loss_backward(824),
+aten_mse_loss_forward(825),
+aten_msort(826),
+aten_multi_margin_loss(827),
+aten_multi_margin_loss_backward(828),
+aten_multi_margin_loss_forward(829),
+aten_multilabel_margin_loss(830),
+aten_multilabel_margin_loss_backward(831),
+aten_multilabel_margin_loss_forward(832),
+aten_multinomial(833),
+aten_mv(834),
+aten_mvlgamma(835),
+aten_nansum(836),
+aten_nan_to_num(837),
+aten_narrow(838),
+aten_narrow_copy(839),
+aten_native_batch_norm(840),
+aten_native_batch_norm_backward(841),
+aten_native_clone(842),
+aten_native_get_device(843),
+aten_native_norm(844),
+aten_native_pow(845),
+aten_native_resize_as(846),
+aten_native_tensor(847),
+aten_native_zero(848),
+aten_nextafter(849),
+aten_bitwise_and(850),
+aten_bitwise_not(851),
+aten_bitwise_or(852),
+aten_bitwise_xor(853),
+aten_element_size(854),
+aten_nll_loss(855),
+aten_nll_loss2d(856),
+aten_nll_loss2d_backward(857),
+aten_nll_loss2d_forward(858),
+aten_nll_loss_backward(859),
+aten_nll_loss_forward(860),
+aten_nonzero(861),
+aten_nonzero_numpy(862),
+aten_norm(863),
+aten_norm_except_dim(864),
+aten_normal(865),
+aten_nuclear_norm(866),
+aten_numel(867),
+aten_ones(868),
+aten_ones_like(869),
+aten_ormqr(870),
+aten_pairwise_distance(871),
+aten__euclidean_dist(872),
+aten_pdist(873),
+aten_cdist(874),
+aten_permute(875),
+aten_pin_memory(876),
+aten_pinverse(877),
+aten_pixel_shuffle(878),
+aten_pixel_unshuffle(879),
+aten_poisson(880),
+aten_polygamma(881),
+aten_pow(882),
+aten_float_power(883),
+aten_prelu(884),
+aten_prelu_backward(885),
+aten_prod(886),
+aten_put(887),
+aten_qr(888),
+aten_quantile(889),
+aten_nanquantile(890),
+aten_rad2deg(891),
+aten_rand(892),
+aten_rand_like(893),
+aten_randint(894),
+aten_randint_like(895),
+aten_randn(896),
+aten_randn_like(897),
+aten_random(898),
+aten_randperm(899),
+aten_range(900),
+aten_ravel(901),
+aten_reciprocal(902),
+aten_reflection_pad1d(903),
+aten_reflection_pad1d_backward(904),
+aten_reflection_pad1d_forward(905),
+aten_reflection_pad2d(906),
+aten_reflection_pad2d_backward(907),
+aten_reflection_pad2d_forward(908),
+aten_relu(909),
+aten_remainder(910),
+aten_renorm(911),
+aten_repeat(912),
+aten_replication_pad1d(913),
+aten_replication_pad1d_backward(914),
+aten_replication_pad1d_forward(915),
+aten_replication_pad2d(916),
+aten_replication_pad2d_backward(917),
+aten_replication_pad2d_forward(918),
+aten_replication_pad3d(919),
+aten_replication_pad3d_backward(920),
+aten_replication_pad3d_forward(921),
+aten_reshape(922),
+aten_reshape_as(923),
+aten_resize(924),
+aten_resize_(925),
+aten_resize_as(926),
+aten_resize_as_(927),
+aten_rfft(928),
+aten_rnn_relu(929),
+aten_rnn_relu_cell(930),
+aten_rnn_tanh(931),
+aten_rnn_tanh_cell(932),
+aten_rot90(933),
+aten_round(934),
+aten_rrelu(935),
+aten_rrelu_with_noise(936),
+aten_rrelu_with_noise_backward(937),
+aten_rrelu_with_noise_forward(938),
+aten_rsqrt(939),
+aten_scatter(940),
+aten_scatter_add(941),
+aten_segment_reduce(942),
+aten_select(943),
+aten_selu(944),
+aten_set(945),
+aten_sign(946),
+aten_signbit(947),
+aten_silu(948),
+aten_sgn(949),
+aten_sin(950),
+aten_sinc(951),
+aten_sinh(952),
+aten_size(953),
+aten_sizes(954),
+aten_slice(955),
+aten_slogdet(956),
+aten_smm(957),
+aten_smooth_l1_loss(958),
+aten_smooth_l1_loss_backward(959),
+aten_smooth_l1_loss_forward(960),
+aten_soft_margin_loss(961),
+aten_soft_margin_loss_backward(962),
+aten_soft_margin_loss_forward(963),
+aten_softmax(964),
+aten__softmax(965),
+aten__softmax_backward_data(966),
+aten_softplus(967),
+aten_softplus_backward(968),
+aten_softplus_forward(969),
+aten_softshrink(970),
+aten_softshrink_backward(971),
+aten_softshrink_forward(972),
+aten_solve(973),
+aten_sort(974),
+aten_sparse_coo_tensor(975),
+aten_sparse_mask(976),
+aten_sparse_resize(977),
+aten_sparse_resize_and_clear(978),
+aten_split(979),
+aten_split_with_sizes(980),
+aten_sqrt(981),
+aten_square(982),
+aten_squeeze(983),
+aten_sspaddmm(984),
+aten_stack(985),
+aten_std(986),
+aten_stft(987),
+aten_storage_offset(988),
+aten_stride(989),
+aten_strides(990),
+aten_rsub(991),
+aten_sum(992),
+aten_sum_to_size(993),
+aten_svd(994),
+aten_symeig(995),
+aten_t(996),
+aten_take(997),
+aten_take_along_dim(998),
+aten_tan(999),
+aten_tanh(1000),
+aten_tanh_(1001),
+aten_tensor(1002),
+aten_tensordot(1003),
+aten_tensor_split(1004),
+aten_th_clone(1005),
+aten_th_norm(1006),
+aten_th_pow(1007),
+aten_th_resize_as(1008),
+aten_th_tensor(1009),
+aten_th_zero(1010),
+aten_thnn_conv2d(1011),
+aten_thnn_conv2d_backward(1012),
+aten_thnn_conv2d_forward(1013),
+aten_tile(1014),
+aten_slow_conv3d(1015),
+aten_slow_conv3d_backward(1016),
+aten_slow_conv3d_forward(1017),
+aten_thnn_conv_depthwise2d(1018),
+aten_thnn_conv_depthwise2d_backward(1019),
+aten_thnn_conv_depthwise2d_forward(1020),
+aten_slow_conv_dilated2d(1021),
+aten_slow_conv_dilated2d_backward(1022),
+aten_slow_conv_dilated3d(1023),
+aten_slow_conv_dilated3d_backward(1024),
+aten_slow_conv_transpose2d(1025),
+aten_slow_conv_transpose2d_backward(1026),
+aten_slow_conv_transpose3d(1027),
+aten_slow_conv_transpose3d_backward(1028),
+aten_threshold(1029),
+aten_threshold_backward(1030),
+aten_to(1031),
+aten_to_sparse(1032),
+aten_to_dense(1033),
+aten_topk(1034),
+aten_trace(1035),
+aten_triangular_solve(1036),
+aten_tril(1037),
+aten_triplet_margin_loss(1038),
+aten_triu(1039),
+aten_type_as(1040),
+aten_unbind(1041),
+aten_unfold(1042),
+aten_uniform(1043),
+aten_unsafe_chunk(1044),
+aten_unsafe_split(1045),
+aten_unsafe_split_with_sizes(1046),
+aten_unsqueeze(1047),
+aten_upsample_bilinear2d(1048),
+aten_upsample_bilinear2d_backward(1049),
+aten_upsample_bilinear2d_forward(1050),
+aten_upsample_bicubic2d(1051),
+aten_upsample_bicubic2d_backward(1052),
+aten_upsample_bicubic2d_forward(1053),
+aten_upsample_linear1d(1054),
+aten_upsample_linear1d_backward(1055),
+aten_upsample_linear1d_forward(1056),
+aten_upsample_nearest1d(1057),
+aten_upsample_nearest1d_backward(1058),
+aten_upsample_nearest1d_forward(1059),
+aten_upsample_nearest2d(1060),
+aten_upsample_nearest2d_backward(1061),
+aten_upsample_nearest2d_forward(1062),
+aten_upsample_nearest3d(1063),
+aten_upsample_nearest3d_backward(1064),
+aten_upsample_nearest3d_forward(1065),
+aten_upsample_trilinear3d(1066),
+aten_upsample_trilinear3d_backward(1067),
+aten_upsample_trilinear3d_forward(1068),
+aten_values(1069),
+aten_vander(1070),
+aten_var(1071),
+aten_view(1072),
+aten_view_as(1073),
+aten_vsplit(1074),
+aten_where(1075),
+aten_zero(1076),
+aten_zeros(1077),
+aten_zeros_like(1078),
+aten_real(1079),
+aten_imag(1080),
+aten_view_as_real(1081),
+aten_view_as_complex(1082),
 /* nothing */
-  onnx_Add(1030),
-  onnx_Concat(1031),
-  onnx_Constant(1032),
-  onnx_ConstantFill(1033),
-  onnx_Div(1034),
-  onnx_GRU(1035),
-  onnx_Gather(1036),
-  onnx_Gemm(1037),
-  onnx_LSTM(1038),
-  onnx_Mul(1039),
-  onnx_Pow(1040),
-  onnx_RNN(1041),
-  onnx_Shape(1042),
-  onnx_Size(1043),
-  onnx_Slice(1044),
-  onnx_Squeeze(1045),
-  onnx_Sub(1046),
-  onnx_Transpose(1047),
-  onnx_Unsqueeze(1048),
-  onnx_Loop(1049),
-  onnx_If(1050),
-  onnx_Reshape(1051),
-  onnx_Expand(1052),
-  onnx_Equal(1053),
-  onnx_Greater(1054),
-  onnx_GreaterOrEqual(1055),
-  onnx_Less(1056),
-  onnx_LessOrEqual(1057),
-  onnx_Not(1058),
-  onnx_ATen(1059),
-  onnx_Split(1060),
-  onnx_ConstantOfShape(1061),
-  onnx_Cast(1062),
-  onnx_Mod(1063),
-  onnx_Sqrt(1064),
-  onnx_SplitToSequence(1065),
-  onnx_SequenceAt(1066),
-  onnx_SequenceConstruct(1067),
-  onnx_SequenceEmpty(1068),
-  onnx_SequenceInsert(1069),
-  onnx_SequenceErase(1070),
-  onnx_ConcatFromSequence(1071),
-  onnx_Identity(1072),
-  onnx_SoftmaxCrossEntropyLoss(1073),
-  onnx_NegativeLogLikelihoodLoss(1074),
-  onnx_LogSoftmax(1075),
-  onnx_ReduceL1(1076),
-  onnx_ReduceL2(1077),
-  onnx_Conv(1078),
-  onnx_BatchNormalization(1079),
-  onnx_ReduceProd(1080),
-  attr_A(1081),
-attr_C(1082),
-attr_H(1083),
-attr_LU_data(1084),
-attr_LU_pivots(1085),
-attr_N(1086),
-attr_W(1087),
-attr_accumulate(1088),
-attr_align_corners(1089),
-attr_alpha(1090),
-attr_anchor(1091),
-attr_argmaxes(1092),
-attr_atol(1093),
-attr_b_hh(1094),
-attr_b_ih(1095),
-attr_bag_size(1096),
-attr_base(1097),
-attr_batch1(1098),
-attr_batch2(1099),
-attr_batch_first(1100),
-attr_batch_sizes(1101),
-attr_benchmark(1102),
-attr_beta(1103),
-attr_bias(1104),
-attr_bias_defined(1105),
-attr_bidirectional(1106),
-attr_bins(1107),
-attr_blank(1108),
-attr_buffer(1109),
-attr_ceil_mode(1110),
-attr_checked_signal_sizes(1111),
-attr_chunks(1112),
-attr_columns(1113),
-attr_column_stack(1114),
-attr_complex_input(1115),
-attr_complex_output(1116),
-attr_condition(1117),
-attr_count_include_pad(1118),
-attr_cudnn_enable(1119),
-attr_cudnn_enabled(1120),
-attr_cx(1121),
-attr_cy(1122),
-attr_data(1123),
-attr_dense_dim(1124),
-attr_descending(1125),
-attr_deterministic(1126),
-attr_device(1127),
-attr_diagonal(1128),
-attr_dilation(1129),
-attr_dim(1130),
-attr_dim0(1131),
-attr_dim1(1132),
-attr_dim2(1133),
-attr_dimension(1134),
-attr_dims(1135),
-attr_dims_other(1136),
-attr_dims_self(1137),
-attr_divisor_override(1138),
-attr_dropout(1139),
-attr_dropout_seed(1140),
-attr_dropout_state(1141),
-attr_dtype(1142),
-attr_eigenvectors(1143),
-attr_end(1144),
-attr_end_dim(1145),
-attr_eps(1146),
-attr_epsilon(1147),
-attr_equal_nan(1148),
-attr_equation(1149),
-attr_expand1(1150),
-attr_expand2(1151),
-attr_expand3(1152),
-attr_exponent(1153),
-attr_exponential_average_factor(1154),
-attr_fgrad_input(1155),
-attr_fill_value(1156),
-attr_finput(1157),
-attr_from(1158),
-attr_g(1159),
-attr_gO(1160),
-attr_generator(1161),
-attr_ggI(1162),
-attr_ggW(1163),
-attr_ggb(1164),
-attr_grad(1165),
-attr_gradOutput(1166),
-attr_grad_bias(1167),
-attr_grad_cy(1168),
-attr_grad_hy(1169),
-attr_grad_input(1170),
-attr_grad_out(1171),
-attr_grad_output(1172),
-attr_grad_w(1173),
-attr_grad_weight(1174),
-attr_grid(1175),
-attr_groups(1176),
-attr_has_bias(1177),
-attr_has_biases(1178),
-attr_hidden_bias(1179),
-attr_hidden_gates(1180),
-attr_hidden_size(1181),
-attr_high(1182),
-attr_hop_length(1183),
-attr_hx(1184),
-attr_i1(1185),
-attr_i2(1186),
-attr_i3(1187),
-attr_ignore_index(1188),
-attr_implicit(1189),
-attr_index(1190),
-attr_indices(1191),
-attr_info(1192),
-attr_input(1193),
-attr_input1(1194),
-attr_input2(1195),
-attr_input3(1196),
-attr_input_bias(1197),
-attr_input_gates(1198),
-attr_input_lengths(1199),
-attr_input_scale(1200),
-attr_input_size(1201),
-attr_interpolation_mode(1202),
-attr_inverse(1203),
-attr_is_target(1204),
-attr_k(1205),
-attr_keepdim(1206),
-attr_kernel_size(1207),
-attr_lambd(1208),
-attr_largest(1209),
-attr_layout(1210),
-attr_left(1211),
-attr_length(1212),
-attr_lengths(1213),
-attr_like(1214),
-attr_log_alpha(1215),
-attr_log_probs(1216),
-attr_low(1217),
-attr_lower(1218),
-attr_lu(1219),
-attr_m(1220),
-attr_margin(1221),
-attr_mask(1222),
-attr_mat(1223),
-attr_mat1(1224),
-attr_mat2(1225),
-attr_max(1226),
-attr_max_indices(1227),
-attr_max_norm(1228),
-attr_max_size(1229),
-attr_max_val(1230),
-attr_max_values(1231),
-attr_maximum_indices(1232),
-attr_maxnorm(1233),
-attr_maximum(1234),
-attr_mean(1235),
-attr_median(1236),
-attr_nanmedian(1237),
-attr_min(1238),
-attr_min_indices(1239),
-attr_min_val(1240),
-attr_minlength(1241),
-attr_minimum(1242),
-attr_mode(1243),
-attr_momentum(1244),
-attr_n(1245),
-attr_n_fft(1246),
-attr_neg_log_likelihood(1247),
-attr_negative(1248),
-attr_negative_slope(1249),
-attr_noise(1250),
-attr_non_blocking(1251),
-attr_norm_type(1252),
-attr_normalized(1253),
-attr_normalized_shape(1254),
-attr_num_groups(1255),
-attr_num_layers(1256),
-attr_num_samples(1257),
-attr_num_weights(1258),
-attr_offset(1259),
-attr_offset2bag(1260),
-attr_offsets(1261),
-attr_ones(1262),
-attr_onesided(1263),
-attr_options(1264),
-attr_other(1265),
-attr_output(1266),
-attr_output_mask(1267),
-attr_output_padding(1268),
-attr_output_size(1269),
-attr_output_sizes(1270),
-attr_p(1271),
-attr_pad(1272),
-attr_padding(1273),
-attr_padding_idx(1274),
-attr_padding_mode(1275),
-attr_padding_value(1276),
-attr_params(1277),
-attr_pdist(1278),
-attr_cdist(1279),
-attr_std_mean(1280),
-attr_var_mean(1281),
-attr_periodic(1282),
-attr_pivot(1283),
-attr_pivots(1284),
-attr_pooledHeight(1285),
-attr_pooledWidth(1286),
-attr_positive(1287),
-attr_pow(1288),
-attr_random_samples(1289),
-attr_rcond(1290),
-attr_reduction(1291),
-attr_repeats(1292),
-attr_replacement(1293),
-attr_res1(1294),
-attr_res2(1295),
-attr_res3(1296),
-attr_reserve(1297),
-attr_result(1298),
-attr_return_inverse(1299),
-attr_rois(1300),
-attr_rtol(1301),
-attr_running_mean(1302),
-attr_running_var(1303),
-attr_save_mean(1304),
-attr_save_std(1305),
-attr_save_var(1306),
-attr_saved_g(1307),
-attr_saved_norms(1308),
-attr_saved_v(1309),
-attr_scale(1310),
-attr_scale_grad_by_freq(1311),
-attr_self(1312),
-attr_self_size(1313),
-attr_self_ty(1314),
-attr_shape(1315),
-attr_sigma(1316),
-attr_signal_ndim(1317),
-attr_signal_sizes(1318),
-attr_size(1319),
-attr_solution(1320),
-attr_some(1321),
-attr_sorted(1322),
-attr_source(1323),
-attr_sparse(1324),
-attr_sparse_dim(1325),
-attr_sparse_dtype(1326),
-attr_spatialScale(1327),
-attr_split_size(1328),
-attr_split_sizes(1329),
-attr_src(1330),
-attr_start(1331),
-attr_start_dim(1332),
-attr_std(1333),
-attr_step(1334),
-attr_steps(1335),
-attr_storage(1336),
-attr_storageOffset(1337),
-attr_storage_offset(1338),
-attr_stride(1339),
-attr_sumdim(1340),
-attr_swap(1341),
-attr_symmetric(1342),
-attr_target(1343),
-attr_target_lengths(1344),
-attr_targets(1345),
-attr_tensor(1346),
-attr_tensor1(1347),
-attr_tensor2(1348),
-attr_tensors(1349),
-attr_the_template(1350),
-attr_theta(1351),
-attr_threshold(1352),
-attr_to(1353),
-attr_tol(1354),
-attr_total(1355),
-attr_total_length(1356),
-attr_total_weight(1357),
-attr_train(1358),
-attr_training(1359),
-attr_transpose(1360),
-attr_transposed(1361),
-attr_unbiased(1362),
-attr_unitriangular(1363),
-attr_unroll_dim(1364),
-attr_upper(1365),
-attr_upscale_factor(1366),
-attr_use_input_stats(1367),
-attr_v(1368),
-attr_value(1369),
-attr_values(1370),
-attr_vec(1371),
-attr_vec1(1372),
-attr_vec2(1373),
-attr_w_hh(1374),
-attr_w_ih(1375),
-attr_weight(1376),
-attr_weight_arr(1377),
-attr_weight_buf(1378),
-attr_weight_size(1379),
-attr_weight_stride0(1380),
-attr_weights(1381),
-attr_win_length(1382),
-attr_window(1383),
-attr_window_length(1384),
-attr_workspace(1385),
-attr_x(1386),
-attr_x1(1387),
-attr_x2(1388),
-  attr_Subgraph(1389),
-  attr_ReverseSubgraph(1390),
-  attr_f_real_outputs(1391),
-  attr_df_input_vjps(1392),
-  attr_df_input_captured_inputs(1393),
-  attr_df_input_captured_outputs(1394),
-  attr_df_output_vjps(1395),
-  attr_axes(1396),
-  attr_axis(1397),
-  attr_broadcast(1398),
-  attr_direction(1399),
-  attr_ends(1400),
-  attr_inplace(1401),
-  attr_input_as_shape(1402),
-  attr_is_zero(1403),
-  attr_num_none(1404),
-  attr_num_present(1405),
-  attr_perm(1406),
-  attr_sizes(1407),
-  attr_starts(1408),
-  attr_profiled_type(1409),
-  attr_transA(1410),
-  attr_transB(1411),
-  attr_name(1412),
-  attr_a(1413),
-  attr_b(1414),
-  attr_beg(1415),
-  attr_idx(1416),
-  attr_split(1417),
-  attr_slot(1418),
-  attr_kinds(1419),
-  attr_types(1420),
-  attr_scope(1421),
-  attr_keepdims(1422),
-  attr_cache_id(1423),
-  attr_new_axis(1424),
-  attr_warn_id(1425),
-    num_symbols(1426);
+  onnx_Add(1083),
+  onnx_Concat(1084),
+  onnx_Constant(1085),
+  onnx_ConstantFill(1086),
+  onnx_Div(1087),
+  onnx_GRU(1088),
+  onnx_Gather(1089),
+  onnx_Gemm(1090),
+  onnx_LSTM(1091),
+  onnx_Mul(1092),
+  onnx_Pow(1093),
+  onnx_RNN(1094),
+  onnx_Shape(1095),
+  onnx_Size(1096),
+  onnx_Slice(1097),
+  onnx_Squeeze(1098),
+  onnx_Sub(1099),
+  onnx_Transpose(1100),
+  onnx_Unsqueeze(1101),
+  onnx_Loop(1102),
+  onnx_If(1103),
+  onnx_Reshape(1104),
+  onnx_Expand(1105),
+  onnx_Equal(1106),
+  onnx_Greater(1107),
+  onnx_GreaterOrEqual(1108),
+  onnx_Less(1109),
+  onnx_LessOrEqual(1110),
+  onnx_Not(1111),
+  onnx_ATen(1112),
+  onnx_Split(1113),
+  onnx_ConstantOfShape(1114),
+  onnx_Cast(1115),
+  onnx_Mod(1116),
+  onnx_Sqrt(1117),
+  onnx_SplitToSequence(1118),
+  onnx_SequenceAt(1119),
+  onnx_SequenceConstruct(1120),
+  onnx_SequenceEmpty(1121),
+  onnx_SequenceInsert(1122),
+  onnx_SequenceErase(1123),
+  onnx_ConcatFromSequence(1124),
+  onnx_Identity(1125),
+  onnx_SoftmaxCrossEntropyLoss(1126),
+  onnx_NegativeLogLikelihoodLoss(1127),
+  onnx_LogSoftmax(1128),
+  onnx_ReduceL1(1129),
+  onnx_ReduceL2(1130),
+  onnx_Conv(1131),
+  onnx_BatchNormalization(1132),
+  onnx_ReduceProd(1133),
+  onnx_Neg(1134),
+  onnx_NonZero(1135),
+  onnx_Range(1136),
+  onnx_Tile(1137),
+  onnx_Where(1138),
+  attr_A(1139),
+attr_C(1140),
+attr_H(1141),
+attr_LU_data(1142),
+attr_LU_pivots(1143),
+attr_N(1144),
+attr_W(1145),
+attr_accumulate(1146),
+attr_align_corners(1147),
+attr_alpha(1148),
+attr_anchor(1149),
+attr_argmaxes(1150),
+attr_atol(1151),
+attr_b_hh(1152),
+attr_b_ih(1153),
+attr_bag_size(1154),
+attr_base(1155),
+attr_batch1(1156),
+attr_batch2(1157),
+attr_batch_first(1158),
+attr_batch_sizes(1159),
+attr_benchmark(1160),
+attr_beta(1161),
+attr_bias(1162),
+attr_bias_defined(1163),
+attr_bidirectional(1164),
+attr_bins(1165),
+attr_blank(1166),
+attr_buffer(1167),
+attr_ceil_mode(1168),
+attr_checked_signal_sizes(1169),
+attr_chunks(1170),
+attr_columns(1171),
+attr_column_stack(1172),
+attr_complex_input(1173),
+attr_complex_output(1174),
+attr_condition(1175),
+attr_count_include_pad(1176),
+attr_cudnn_enable(1177),
+attr_cudnn_enabled(1178),
+attr_cx(1179),
+attr_cy(1180),
+attr_data(1181),
+attr_dense_dim(1182),
+attr_descending(1183),
+attr_deterministic(1184),
+attr_device(1185),
+attr_diagonal(1186),
+attr_dilation(1187),
+attr_dim(1188),
+attr_dim0(1189),
+attr_dim1(1190),
+attr_dim2(1191),
+attr_dimension(1192),
+attr_dims(1193),
+attr_dims_other(1194),
+attr_dims_self(1195),
+attr_divisor_override(1196),
+attr_dropout(1197),
+attr_dropout_seed(1198),
+attr_dropout_state(1199),
+attr_dtype(1200),
+attr_eigenvectors(1201),
+attr_end(1202),
+attr_end_dim(1203),
+attr_eps(1204),
+attr_epsilon(1205),
+attr_equal_nan(1206),
+attr_equation(1207),
+attr_expand1(1208),
+attr_expand2(1209),
+attr_expand3(1210),
+attr_exponent(1211),
+attr_exponential_average_factor(1212),
+attr_fgrad_input(1213),
+attr_fill_value(1214),
+attr_finput(1215),
+attr_from(1216),
+attr_g(1217),
+attr_gO(1218),
+attr_generator(1219),
+attr_ggI(1220),
+attr_ggW(1221),
+attr_ggb(1222),
+attr_grad(1223),
+attr_gradOutput(1224),
+attr_grad_bias(1225),
+attr_grad_cy(1226),
+attr_grad_hy(1227),
+attr_grad_input(1228),
+attr_grad_out(1229),
+attr_grad_output(1230),
+attr_grad_w(1231),
+attr_grad_weight(1232),
+attr_grid(1233),
+attr_groups(1234),
+attr_has_bias(1235),
+attr_has_biases(1236),
+attr_hidden_bias(1237),
+attr_hidden_gates(1238),
+attr_hidden_size(1239),
+attr_high(1240),
+attr_hop_length(1241),
+attr_hx(1242),
+attr_i1(1243),
+attr_i2(1244),
+attr_i3(1245),
+attr_ignore_index(1246),
+attr_implicit(1247),
+attr_index(1248),
+attr_indices(1249),
+attr_info(1250),
+attr_input(1251),
+attr_input1(1252),
+attr_input2(1253),
+attr_input3(1254),
+attr_input_bias(1255),
+attr_input_gates(1256),
+attr_input_lengths(1257),
+attr_input_scale(1258),
+attr_input_size(1259),
+attr_interpolation_mode(1260),
+attr_inverse(1261),
+attr_is_target(1262),
+attr_k(1263),
+attr_keepdim(1264),
+attr_kernel_size(1265),
+attr_lambd(1266),
+attr_largest(1267),
+attr_layout(1268),
+attr_left(1269),
+attr_length(1270),
+attr_lengths(1271),
+attr_like(1272),
+attr_log_alpha(1273),
+attr_log_probs(1274),
+attr_low(1275),
+attr_lower(1276),
+attr_lu(1277),
+attr_m(1278),
+attr_margin(1279),
+attr_mask(1280),
+attr_mat(1281),
+attr_mat1(1282),
+attr_mat2(1283),
+attr_max(1284),
+attr_max_indices(1285),
+attr_max_norm(1286),
+attr_max_size(1287),
+attr_max_val(1288),
+attr_max_values(1289),
+attr_maximum_indices(1290),
+attr_maxnorm(1291),
+attr_maximum(1292),
+attr_mean(1293),
+attr_median(1294),
+attr_nanmedian(1295),
+attr_min(1296),
+attr_min_indices(1297),
+attr_min_val(1298),
+attr_minlength(1299),
+attr_minimum(1300),
+attr_mode(1301),
+attr_momentum(1302),
+attr_n(1303),
+attr_n_fft(1304),
+attr_neg_log_likelihood(1305),
+attr_negative(1306),
+attr_negative_slope(1307),
+attr_noise(1308),
+attr_non_blocking(1309),
+attr_norm_type(1310),
+attr_normalized(1311),
+attr_normalized_shape(1312),
+attr_num_groups(1313),
+attr_num_layers(1314),
+attr_num_samples(1315),
+attr_num_weights(1316),
+attr_offset(1317),
+attr_offset2bag(1318),
+attr_offsets(1319),
+attr_ones(1320),
+attr_onesided(1321),
+attr_options(1322),
+attr_other(1323),
+attr_output(1324),
+attr_output_mask(1325),
+attr_output_padding(1326),
+attr_output_size(1327),
+attr_output_sizes(1328),
+attr_p(1329),
+attr_pad(1330),
+attr_padding(1331),
+attr_padding_idx(1332),
+attr_padding_mode(1333),
+attr_padding_value(1334),
+attr_params(1335),
+attr_pdist(1336),
+attr_cdist(1337),
+attr_std_mean(1338),
+attr_var_mean(1339),
+attr_periodic(1340),
+attr_pivot(1341),
+attr_pivots(1342),
+attr_pooledHeight(1343),
+attr_pooledWidth(1344),
+attr_positive(1345),
+attr_pow(1346),
+attr_random_samples(1347),
+attr_rcond(1348),
+attr_reduction(1349),
+attr_repeats(1350),
+attr_replacement(1351),
+attr_res1(1352),
+attr_res2(1353),
+attr_res3(1354),
+attr_reserve(1355),
+attr_result(1356),
+attr_return_inverse(1357),
+attr_rois(1358),
+attr_rtol(1359),
+attr_running_mean(1360),
+attr_running_var(1361),
+attr_save_mean(1362),
+attr_save_std(1363),
+attr_save_var(1364),
+attr_saved_g(1365),
+attr_saved_norms(1366),
+attr_saved_v(1367),
+attr_scale(1368),
+attr_scale_grad_by_freq(1369),
+attr_self(1370),
+attr_self_size(1371),
+attr_self_ty(1372),
+attr_shape(1373),
+attr_sigma(1374),
+attr_signal_ndim(1375),
+attr_signal_sizes(1376),
+attr_size(1377),
+attr_solution(1378),
+attr_some(1379),
+attr_sorted(1380),
+attr_source(1381),
+attr_sparse(1382),
+attr_sparse_dim(1383),
+attr_sparse_dtype(1384),
+attr_spatialScale(1385),
+attr_split_size(1386),
+attr_split_sizes(1387),
+attr_src(1388),
+attr_start(1389),
+attr_start_dim(1390),
+attr_std(1391),
+attr_step(1392),
+attr_steps(1393),
+attr_storage(1394),
+attr_storageOffset(1395),
+attr_storage_offset(1396),
+attr_stride(1397),
+attr_sumdim(1398),
+attr_swap(1399),
+attr_symmetric(1400),
+attr_target(1401),
+attr_target_lengths(1402),
+attr_targets(1403),
+attr_tensor(1404),
+attr_tensor1(1405),
+attr_tensor2(1406),
+attr_tensors(1407),
+attr_the_template(1408),
+attr_theta(1409),
+attr_threshold(1410),
+attr_to(1411),
+attr_tol(1412),
+attr_total(1413),
+attr_total_length(1414),
+attr_total_weight(1415),
+attr_train(1416),
+attr_training(1417),
+attr_transpose(1418),
+attr_transposed(1419),
+attr_unbiased(1420),
+attr_unitriangular(1421),
+attr_unroll_dim(1422),
+attr_upper(1423),
+attr_upscale_factor(1424),
+attr_use_input_stats(1425),
+attr_v(1426),
+attr_value(1427),
+attr_values(1428),
+attr_vec(1429),
+attr_vec1(1430),
+attr_vec2(1431),
+attr_w_hh(1432),
+attr_w_ih(1433),
+attr_weight(1434),
+attr_weight_arr(1435),
+attr_weight_buf(1436),
+attr_weight_size(1437),
+attr_weight_stride0(1438),
+attr_weights(1439),
+attr_win_length(1440),
+attr_window(1441),
+attr_window_length(1442),
+attr_workspace(1443),
+attr_x(1444),
+attr_x1(1445),
+attr_x2(1446),
+  attr_Subgraph(1447),
+  attr_ReverseSubgraph(1448),
+  attr_f_real_outputs(1449),
+  attr_df_input_vjps(1450),
+  attr_df_input_captured_inputs(1451),
+  attr_df_input_captured_outputs(1452),
+  attr_df_output_vjps(1453),
+  attr_axes(1454),
+  attr_axis(1455),
+  attr_broadcast(1456),
+  attr_direction(1457),
+  attr_ends(1458),
+  attr_inplace(1459),
+  attr_input_as_shape(1460),
+  attr_is_zero(1461),
+  attr_num_none(1462),
+  attr_num_present(1463),
+  attr_perm(1464),
+  attr_sizes(1465),
+  attr_starts(1466),
+  attr_profiled_type(1467),
+  attr_transA(1468),
+  attr_transB(1469),
+  attr_name(1470),
+  attr_a(1471),
+  attr_b(1472),
+  attr_beg(1473),
+  attr_idx(1474),
+  attr_split(1475),
+  attr_slot(1476),
+  attr_kinds(1477),
+  attr_types(1478),
+  attr_scope(1479),
+  attr_keepdims(1480),
+  attr_cache_id(1481),
+  attr_new_axis(1482),
+  attr_warn_id(1483),
+    num_symbols(1484);
 
     public final int value;
     private _keys(int v) { this.value = v; }
@@ -7495,6 +7983,13 @@ attr_x2(1388),
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol ReductionSizes(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol Constant(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol ChunkSizes(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol ConstantMKLDNNTensor(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol BroadcastMKLDNNTensors(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol MKLDNNGroup(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol MKLDNNHardSwish(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol MKLDNNHardSigmoid(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol MKLDNNHardTanh(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol MKLDNNClamp(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol Drop(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol Eval(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol Expand();  /* onnx */
@@ -7537,7 +8032,7 @@ attr_x2(1388),
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol ListConstruct(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol ListUnpack(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol DictConstruct(); 
-  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol ModuleDictIndex(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol ModuleContainerIndex(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol EnumName(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol EnumValue(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol StringIndex(); 
@@ -7549,11 +8044,20 @@ attr_x2(1388),
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol Bool(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol Int(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol FloatImplicit(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol ComplexImplicit(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol IntImplicit(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol ScalarImplicit(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol Float(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol Complex(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol str(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_pinned(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol Delete(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol relu_(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol gelu_(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol relu6(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol relu6_(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol dropout_(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol sigmoid_(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol device(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol dtype(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol layout(); 
@@ -7574,6 +8078,7 @@ attr_x2(1388),
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol MMTreeReduce(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol MMBatchSide(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol list(); 
+  @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol dict(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol min(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol max(); 
   @Namespace("c10::prim") @MemberGetter public static native @Const @ByRef Symbol abs(); 
@@ -7652,7 +8157,13 @@ attr_x2(1388),
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol clip_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol det(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linalg_det(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol matrix_power(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linalg_matrix_power(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol chain_matmul(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linalg_multi_dot(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linalg_norm(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linalg_vector_norm(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linalg_matrix_norm(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol append(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol item(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol format(); 
@@ -7704,6 +8215,8 @@ attr_x2(1388),
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _ger(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol ger(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol outer(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol orgqr(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linalg_householder_product(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol transpose(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol transpose_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol unsqueeze_(); 
@@ -7713,7 +8226,7 @@ attr_x2(1388),
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol set_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol index_put_();  
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hash(); 
-  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol len();  
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol len();   
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef @Name("wait") Symbol _wait(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol save(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol sub(); 
@@ -7730,6 +8243,8 @@ attr_x2(1388),
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol trunc_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol fix(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol fix_(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol to_mkldnn(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol positive(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol neg(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol neg_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol negative(); 
@@ -7749,13 +8264,35 @@ attr_x2(1388),
   @Namespace("c10::cuda") @MemberGetter public static native @Const @ByRef Symbol _set_device(); 
   @Namespace("c10::cuda") @MemberGetter public static native @Const @ByRef Symbol set_stream(); 
   @Namespace("c10::cuda") @MemberGetter public static native @Const @ByRef Symbol _current_device(); 
+  @Namespace("c10::cuda") @MemberGetter public static native @Const @ByRef Symbol synchronize(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol swapaxes(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol swapaxes_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol swapdims(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol swapdims_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol movedim(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol moveaxis(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol lgamma(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_gammaln(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol erf(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_erf(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol erfc(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_erfc(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol erfinv(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_erfinv(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol logit(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_logit(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol sigmoid(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_expit(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol expm1(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_expm1(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol exp2(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_exp2(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_i0e(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol has_torch_function(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hardswish(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hardswish_(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hardsigmoid_(); 
+  @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hardtanh_(); 
   @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol __and__(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol __iand__(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol __ilshift__(); 
@@ -7770,7 +8307,7 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _addmv(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _addr(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _amp_foreach_non_finite_check_and_unscale_(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _amp_update_scale(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _amp_update_scale_(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _arange(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _argmax(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _argmin(); 
@@ -7827,7 +8364,6 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _fill(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _floor(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _fused_dropout(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _indexCopy(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _indices(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _ldexp(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _linspace(); 
@@ -7885,7 +8421,6 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _tanh_forward(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _th_get_device(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _th_kthvalue(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _th_mode(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _th_prod(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _th_sigmoid(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _th_std(); 
@@ -7974,7 +8509,6 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cauchy(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol ceil(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol celu(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol chain_matmul(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cholesky(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cholesky_inverse(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cholesky_solve(); 
@@ -8022,6 +8556,8 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_convolution_transpose_backward_bias(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_convolution_transpose_backward_input(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_convolution_transpose_backward_weight(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_convolution_relu(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_convolution_add_relu(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_grid_sampler(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_grid_sampler_backward(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol cudnn_is_acceptable(); 
@@ -8038,11 +8574,13 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol diagonal(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol fill_diagonal_(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol diff(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol frexp(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol digamma(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol dim(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol dist(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol dot(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol dropout(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol dsplit(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol dstack(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol eig(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol einsum(); 
@@ -8058,15 +8596,12 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol empty(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol empty_like(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol empty_strided(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_entr(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol eq(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol equal(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol erf(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol erfc(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol erfinv(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol exp(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol expand(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol expand_as(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol expm1(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol exponential(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol eye(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol feature_alpha_dropout(); 
@@ -8097,6 +8632,7 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol glu(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol glu_backward(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol glu_forward(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol gradient(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol grid_sampler(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol grid_sampler_2d(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol grid_sampler_2d_backward(); 
@@ -8118,6 +8654,7 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hinge_embedding_loss(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol histc(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hspmm(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hsplit(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hstack(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol hypot(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol i0(); 
@@ -8141,6 +8678,7 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_coalesced(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_complex(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_contiguous();  
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_mlc(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_distributed(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_floating_point(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_nonzero(); 
@@ -8148,6 +8686,7 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_set_to(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_signed(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_sparse(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol is_sparse_csr(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol isclose(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol isreal(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol istft(); 
@@ -8166,7 +8705,6 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol leaky_relu_backward(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol leaky_relu_forward(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol lerp(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol lgamma(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linear(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol linspace(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol log(); 
@@ -8182,10 +8720,10 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _log_softmax_backward_data(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol logcumsumexp(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol logdet(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol logit(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol logspace(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol logsumexp(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol xlogy(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol special_xlog1py(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol lstm(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol lstm_cell(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol lstsq(); 
@@ -8195,7 +8733,6 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol masked_scatter(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol masked_select(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol matmul(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol matrix_power(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol matrix_rank(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol matrix_exp();  
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol max_pool1d(); 
@@ -8237,6 +8774,7 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol miopen_depthwise_convolution_backward_weight(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol miopen_rnn(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol miopen_rnn_backward(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol mish(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol mkldnn_convolution(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol mkldnn_convolution_backward(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol mkldnn_convolution_backward_input(); 
@@ -8290,7 +8828,6 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol numel(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol ones(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol ones_like(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol orgqr(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol ormqr(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol pairwise_distance(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol _euclidean_dist(); 
@@ -8362,10 +8899,10 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol rsqrt(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol scatter(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol scatter_add(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol segment_reduce(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol select(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol selu(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol set(); 
-@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol sigmoid(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol sign(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol signbit(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol silu(); 
@@ -8418,8 +8955,10 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol symeig(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol t(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol take(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol take_along_dim(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol tan(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol tanh(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol tanh_(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol tensor(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol tensordot(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol tensor_split(); 
@@ -8492,6 +9031,7 @@ attr_x2(1388),
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol var(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol view(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol view_as(); 
+@Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol vsplit(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol where(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef @Name("zero") Symbol _zero(); 
 @Namespace("c10::aten") @MemberGetter public static native @Const @ByRef Symbol zeros(); 
@@ -8548,6 +9088,11 @@ attr_x2(1388),
   @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol Conv(); 
   @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol BatchNormalization(); 
   @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol ReduceProd(); 
+  @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol Neg(); 
+  @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol NonZero(); 
+  @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol Range(); 
+  @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol Tile(); 
+  @Namespace("c10::onnx") @MemberGetter public static native @Const @ByRef Symbol Where(); 
   @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol A(); 
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol C(); 
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol H(); 
@@ -8730,8 +9275,7 @@ attr_x2(1388),
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol pivot(); 
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol pivots(); 
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol pooledHeight(); 
-@Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol pooledWidth(); 
-@Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol positive();  
+@Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol pooledWidth();   
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol random_samples(); 
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol rcond(); 
 @Namespace("c10::attr") @MemberGetter public static native @Const @ByRef Symbol reduction(); 
@@ -8888,16 +9432,7 @@ attr_x2(1388),
 // #pragma once
 
 // #include <c10/macros/Macros.h>
-// Targeting ../GradMode.java
-
-
-// Targeting ../AutoGradMode.java
-
-
-// Targeting ../NoGradGuard.java
-
-
-
+// #include <c10/core/GradMode.h>
 
 
 
@@ -8983,7 +9518,7 @@ attr_x2(1388),
 /**
  * Helper function for checking the validity of new random generator
  * state. Right now following conditions are checked:
- * 
+ *
  * - The new state tensor must be a torch.ByteTensor
  * - Data of the new state tensor must be contiguous
  */
@@ -8998,6 +9533,7 @@ attr_x2(1388),
 
 // #pragma once
 
+// #include <ATen/core/ivalue_to.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/TypeTraits.h>
 // #include <c10/util/TypeList.h>
@@ -9047,8 +9583,8 @@ attr_x2(1388),
 
 
 // Sets the names of `tensor` to be `names`.
-@Namespace("at") public static native @ByRef Tensor internal_set_names_inplace(@ByRef Tensor tensor, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor internal_set_names_inplace(@ByRef Tensor tensor, @StdMove DimnameVector names, @Cast("bool") boolean validate_names);
+@Namespace("at") public static native @Const @ByRef Tensor internal_set_names_inplace(@Const @ByRef Tensor tensor, @ByVal DimnameListOptional names);
+@Namespace("at") public static native @Const @ByRef Tensor internal_set_names_inplace(@Const @ByRef Tensor tensor, @StdMove DimnameVector names, @Cast("bool") boolean validate_names);
 
 @Namespace("at") @MemberGetter public static native @Cast("const size_t") long kMaxNamedTensorDim();
 
@@ -9078,7 +9614,6 @@ attr_x2(1388),
 // instead if the haven't been. The names of a tensor are not allocated if a
 // tensor is constructed with names=None.
 @Namespace("at::impl") public static native @ByVal DimnameListOptional get_opt_names(@Const TensorImpl impl);
-
 
  // namespace impl
 
@@ -9178,6 +9713,7 @@ attr_x2(1388),
 // #include <c10/core/WrapDimMinimal.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Deprecated.h>
+// #include <c10/util/MaybeOwned.h>
 // #include <c10/util/Optional.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <ATen/core/DeprecatedTypePropertiesRegistry.h>
@@ -9222,6 +9758,16 @@ attr_x2(1388),
  // namespace detail
 
 @Namespace("at") public static native DispatchKey legacyExtractDispatchKey(@Const @ByRef Tensor t);
+
+
+// Targeting ../MaybeOwnedTraits.java
+
+
+ // namespace c10
+
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned borrow_from_optional_tensor(
+    @Const @ByRef TensorOptional opt);
+
 
  // namespace at
 
@@ -9321,6 +9867,7 @@ attr_x2(1388),
 
 // #include <ATen/core/TensorBody.h>
 // #include <ATen/core/blob.h>
+// #include <ATen/core/ivalue_to.h>
 // #include <c10/util/C++17.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <torch/csrc/WindowsTorchApiMacro.h>
@@ -9441,6 +9988,20 @@ attr_x2(1388),
 // #include <ATen/core/ivalue_inl.h>
 
 
+// Parsed from ATen/core/ivalue_to.h
+
+// #pragma once
+
+// #include <string>
+ // namespace at
+// Targeting ../ivalue_to_const_ref_overload_return.java
+
+
+
+ // namespace detail
+ // namespace c10
+
+
 // Parsed from ATen/core/operator_name.h
 
 // #pragma once
@@ -9530,6 +10091,8 @@ public static final int AT_PARALLEL_NATIVE_TBB = 0;
 /** Return the Device of a Tensor, if the Tensor is defined. */
 @Namespace("at") public static native @ByVal DeviceOptional device_of(@Const @ByRef Tensor t);
 
+@Namespace("at") public static native @ByVal DeviceOptional device_of(@Const @ByRef TensorOptional t);
+
 /** Return the Device of a TensorList, if the list is non-empty and
  *  the first Tensor is defined.  (This function implicitly assumes
  *  that all tensors in the list have the same device.) */
@@ -9558,7 +10121,7 @@ public static final int AT_PARALLEL_NATIVE_TBB = 0;
 // #include <c10/util/complex.h>
 // #include <c10/util/string_view.h>
 
-// #ifdef XPLAT_MOBILE_BUILD
+// #ifdef TEMPLATE_SELECTIVE_BUILD
 // #include <ATen/selected_mobile_ops.h>
 // #else
 /**
@@ -9594,16 +10157,28 @@ public static final int AT_PARALLEL_NATIVE_TBB = 0;
 // #define RECORD_KERNEL_FUNCTION_DTYPE(NAME, enum_type)
 // #endif
 
+// #if defined __cpp_if_constexpr
+// #define AT_PRIVATE_CASE_TYPE_USING_HINT(NAME, enum_type, type, HINT, ...)
+//   case enum_type: {
+//     if constexpr (!at::should_include_kernel_dtype(NAME, enum_type)) {
+//       AT_ERROR("dtype '", toString(enum_type), "' not selected for kernel tag ", #NAME);
+//     }
+//     using HINT = type;
+//     return __VA_ARGS__();
+//   }
+// #else
 // #define AT_PRIVATE_CASE_TYPE_USING_HINT(NAME, enum_type, type, HINT, ...)
 //   case enum_type: {
 //     at::guts::if_constexpr<(!at::should_include_kernel_dtype(NAME, enum_type))>(
-//       [&] {
-//         AT_ERROR("dtype '", toString(enum_type), "' not selected for kernel tag ", #NAME);
+//       [] {
+//         AT_ERROR("dtype '" #enum_type "' not selected for kernel tag " #NAME);
 //       }
 //     );
 //     using HINT = type;
 //     return __VA_ARGS__();
 //   }
+// #endif
+// 
 
 // #define AT_PRIVATE_CASE_TYPE(NAME, enum_type, type, ...)
 //   AT_PRIVATE_CASE_TYPE_USING_HINT(NAME, enum_type, type, scalar_t, __VA_ARGS__)
@@ -10394,13 +10969,14 @@ body of your function, only data pointers.
 
 // #include <ATen/core/ATenGeneral.h>
 // #include <ATen/core/Generator.h>
+// #include <ATen/Formatting.h>
+// #include <c10/core/ScalarType.h>
 // #include <c10/core/StorageImpl.h>
 // #include <c10/core/UndefinedTensorImpl.h>
-
-// #include <c10/core/ScalarType.h>
-// #include <ATen/Formatting.h>
+// #include <c10/util/accumulate.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
+// #include <c10/util/irange.h>
 
 // #include <algorithm>
 // #include <sstream>
@@ -10425,11 +11001,6 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal TensorImplVector checked_dense_tensor_list_unwrap(@ByVal TensorArrayRef tensors, @Cast("const char*") BytePointer name, int pos, DeviceType device_type, ScalarType scalar_type);
 @Namespace("at") public static native @ByVal TensorImplVector checked_dense_tensor_list_unwrap(@ByVal TensorArrayRef tensors, String name, int pos, @Cast("c10::DeviceType") byte device_type, ScalarType scalar_type);
 
-@Namespace("at") public static native @Cast("int64_t") long sum_intlist(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef list);
-@Namespace("at") public static native @Cast("int64_t") long sum_intlist(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... list);
-
-//std::accumulate infers return type from `init` type, so if `init` type is not enough to hold the result, computation can overflow
-//the next 2 functions set `init` type to int64_t to avoid overflow.
 /**
  * Utility function to static cast input Generator* to
  * the backend generator type (CPU/CUDAGeneratorImpl etc.)
@@ -10448,6 +11019,23 @@ body of your function, only data pointers.
                  @ByVal DeviceOptional device_opt, @ByVal BoolOptional pin_memory_opt, @ByVal MemoryFormatOptional memory_format_opt);
 @Namespace("at::detail") public static native @ByVal Tensor empty_cpu(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype_opt, @ByVal LayoutOptional layout_opt,
                  @ByVal DeviceOptional device_opt, @ByVal BoolOptional pin_memory_opt, @ByVal MemoryFormatOptional memory_format_opt);
+
+@Namespace("at::detail") public static native @ByVal Tensor empty_generic(
+  @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size,
+  Allocator allocator,
+  DispatchKey dispatch_key,
+  ScalarType dtype,
+  @ByVal Device device,
+  @ByVal MemoryFormatOptional memory_format
+);
+@Namespace("at::detail") public static native @ByVal Tensor empty_generic(
+  @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size,
+  Allocator allocator,
+  @Cast("c10::DispatchKey") byte dispatch_key,
+  ScalarType dtype,
+  @ByVal Device device,
+  @ByVal MemoryFormatOptional memory_format
+);
  // namespace detail
 
 
@@ -10466,12 +11054,12 @@ body of your function, only data pointers.
 //
 // Historically, tracing function was controlled by two switches:
 //
-// - `AutoNonVariableTypeMode` guard
+// - `AutoDispatchBelowADInplaceOrView` guard
 //
 //    Tracing function used to be script-generated inside `VariableType_*.cpp`
 //    kernels, sharing the same `Autograd` dispatch key with autograd function.
 //    Therefore, before tracing function was moved out of VariableType,
-//    `AutoNonVariableTypeMode` guard can also disable tracing as a side effect
+//    `AutoDispatchBelowADInplaceOrView` guard can also disable tracing as a side effect
 //    of disabling `Autograd` dispatching.
 //
 // - `setTracingState()` API in `torch/csrc/jit/frontend/tracer.h`
@@ -10500,7 +11088,7 @@ body of your function, only data pointers.
 //
 // - `tracer::impl::NoTracerDispatchMode` guard
 //
-//    It's used to cover the old semantics of `AutoNonVariableTypeMode` after
+//    It's used to cover the old semantics of `AutoDispatchBelowADInplaceOrView` after
 //    tracing was moved out of VariableType.
 //
 // Before tracing function was moved out of VariableType, tracing was enabled
@@ -10509,7 +11097,7 @@ body of your function, only data pointers.
 //    1) `TracingState` object in TLS != null;
 //       - Either inside the execution scope of `tracer::trace()`, or
 //       - Eagerly called `setTracingState()` with non-null object.
-//    2) Not inside `AutoNonVariableTypeMode` scope;
+//    2) Not inside `AutoDispatchBelowADInplaceOrView` scope;
 //
 // After:
 //
@@ -10527,10 +11115,10 @@ body of your function, only data pointers.
 //   `setTracingState()` Python/C++ APIs (and other APIs calling it) so that
 //   these two can be unified.
 //
-// - `AutoNonVariableTypeMode` v.s. `tracer::impl::NoTracerDispatchMode`
+// - `AutoDispatchBelowADInplaceOrView` v.s. `tracer::impl::NoTracerDispatchMode`
 //
 //   We don't need to always set both guards together to keep semantics
-//   unchanged. For the follow use cases of `AutoNonVariableTypeMode` we don't
+//   unchanged. For the follow use cases of `AutoDispatchBelowADInplaceOrView` we don't
 //   need set the new tracer guard:
 //
 //   * Script-generated VariableType kernels. The guard is not necessary as
@@ -10557,7 +11145,7 @@ body of your function, only data pointers.
 //   * Some manually maintained functions, e.g.:
 //     `torch/csrc/autograd/VariableTypeManual.cpp`.
 //     Set the new guard if it's not obvious whether `setTracingState(null)`
-//     has been called before it reaches the `AutoNonVariableTypeMode` guard.
+//     has been called before it reaches the `AutoDispatchBelowADInplaceOrView` guard.
 //
 //   We might need tweak the usage of the new guard to optimize/fix things.
 //   It should only affect the correctness of tracing function, because the
@@ -10655,6 +11243,7 @@ body of your function, only data pointers.
 
 // #pragma once
 
+// #include <ATen/DimVector.h>
 // #include <ATen/Tensor.h>
 // #include <ATen/TensorGeometry.h>
 // #include <ATen/Utils.h>
@@ -10850,6 +11439,7 @@ body of your function, only data pointers.
 @Namespace("at::detail") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector defaultStrides(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
 @Namespace("at::detail") public static native @Cast("size_t") long computeStorageNbytes(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides, @Cast("size_t") long itemsize);
 @Namespace("at::detail") public static native @Cast("size_t") long computeStorageNbytes(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] strides, @Cast("size_t") long itemsize);
+
 @Namespace("at::detail") public static native @ByVal LongVectorOptional computeStride(
     @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef oldshape,
     @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef oldstride,
@@ -10858,6 +11448,16 @@ body of your function, only data pointers.
     @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] oldshape,
     @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] oldstride,
     @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... newshape);
+
+@Namespace("at::detail") public static native @ByVal DimVectorOptional computeStride(
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef oldshape,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef oldstride,
+    @Const @ByRef DimVector newshape);
+@Namespace("at::detail") public static native @ByVal DimVectorOptional computeStride(
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] oldshape,
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] oldstride,
+    @Const @ByRef DimVector newshape);
+
  // namespace detail
  // namespace at
 
@@ -10907,6 +11507,8 @@ body of your function, only data pointers.
 
 @Namespace("at") public static native @Cast("bool") boolean hasXLA();
 
+@Namespace("at") public static native @Cast("bool") boolean hasMLC();
+
 // Despite its name, this function returns the number of *CUDA* GPUs.
 @Namespace("at") public static native @Cast("size_t") long getNumGPUs();
 
@@ -10932,8 +11534,10 @@ body of your function, only data pointers.
 
 // #pragma once
 
+// #include <ATen/core/DimVector.h>
 // #include <ATen/Tensor.h>
 // #include <c10/util/Exception.h>
+// #include <c10/util/MaybeOwned.h>
 
 // #include <functional>
 // #include <sstream>
@@ -10941,11 +11545,26 @@ body of your function, only data pointers.
 
 @Namespace("at") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector infer_size(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef a, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef b);
 @Namespace("at") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector infer_size(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] a, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... b);
+@Namespace("at") public static native @ByVal DimVector infer_size_dimvector(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef a, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef b);
+@Namespace("at") public static native @ByVal DimVector infer_size_dimvector(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] a, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... b);
+// Targeting ../DimVectorInferExpandGeometryResult.java
+
+
+
 @Namespace("at") public static native @ByVal @Cast("std::tuple<std::vector<int64_t>,std::vector<int64_t> >*") LongVector inferExpandGeometry(
     @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef tensor_sizes,
     @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef tensor_strides,
     @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<std::vector<int64_t>,std::vector<int64_t> >*") LongVector inferExpandGeometry(
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] tensor_sizes,
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] tensor_strides,
+    @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
+
+@Namespace("at") public static native @ByVal DimVectorInferExpandGeometryResult inferExpandGeometry_dimvector(
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef tensor_sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef tensor_strides,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
+@Namespace("at") public static native @ByVal DimVectorInferExpandGeometryResult inferExpandGeometry_dimvector(
     @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] tensor_sizes,
     @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] tensor_strides,
     @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
@@ -10964,41 +11583,97 @@ body of your function, only data pointers.
 
 // avoid copy-construction of Tensor by using a reference_wrapper.
 
-@Namespace("at") public static native @ByVal TensorTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand);
+// NOTE [ ExpandUtils Borrowing ]
+//
+// Functions in ExpandUtils return `c10::MaybeOwned<Tensor>` because
+// expansion may not actually be needed, in which case we can improve
+// efficiency by returning
+// `c10::MaybeOwned<Tensor>::borrowed(to_expand)`. However, this means
+// that you need to be careful: the returned `c10::MaybeOwned<Tensor>`
+// must not outlive the original `Tensor` object that `to_expand`
+// referred to! The deleted rvalue reference overloads of these
+// functions help with this by preventing trivial use of a temporary
+// resulting from a function call, but it is still possible to make a
+// mistake.
 
-@Namespace("at") public static native @ByVal TensorTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand, @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @ByVal TensorTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand, String api_name);
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand);
 
-@Namespace("at") public static native @ByVal TensorTensorTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2);
 
-@Namespace("at") public static native @ByVal TensorTensorTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2,
+
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand, @Cast("const char*") BytePointer api_name);
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand, String api_name);
+
+
+
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2);
+
+
+
+
+
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2,
                                                  @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @ByVal TensorTensorTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2,
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTuple expand_inplace(@Const @ByRef Tensor tensor, @Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2,
                                                  String api_name);
 
-@Namespace("at") public static native @ByVal TensorTensorTuple expand_outplace(@Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2);
 
-@Namespace("at") public static native @ByVal TensorTensorTuple expand_outplace(@Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2, @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @ByVal TensorTensorTuple expand_outplace(@Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2, String api_name);
 
-@Namespace("at") public static native @ByVal TensorTensorTensorTuple expand_outplace(@Const @ByRef Tensor to_expand1,
-                                                          @Const @ByRef Tensor to_expand2,
-                                                          @Const @ByRef Tensor to_expand3);
 
-@Namespace("at") public static native @ByVal TensorTensorTensorTuple expand_outplace(@Const @ByRef Tensor to_expand1,
-                                                          @Const @ByRef Tensor to_expand2,
-                                                          @Const @ByRef Tensor to_expand3,
-                                                          @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @ByVal TensorTensorTensorTuple expand_outplace(@Const @ByRef Tensor to_expand1,
-                                                          @Const @ByRef Tensor to_expand2,
-                                                          @Const @ByRef Tensor to_expand3,
-                                                          String api_name);
 
-@Namespace("at") public static native @ByVal TensorTuple expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
-@Namespace("at") public static native @ByVal TensorTuple expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
+// See NOTE [ ExpandUtils Borrowing ] above for `MaybeOwned` explanation.
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTuple expand_outplace(@Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2);
 
-@Namespace("at") public static native @ByVal TensorTuple expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @ByVal TensorTuple expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, String api_name);
+
+
+
+
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTuple expand_outplace(@Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2, @Cast("const char*") BytePointer api_name);
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTuple expand_outplace(@Const @ByRef Tensor to_expand1, @Const @ByRef Tensor to_expand2, String api_name);
+
+
+
+
+
+
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTensorMaybeOwnedTuple expand_outplace(@Const @ByRef Tensor to_expand1,
+                @Const @ByRef Tensor to_expand2,
+                @Const @ByRef Tensor to_expand3);
+
+
+
+
+
+
+
+
+
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTensorMaybeOwnedTuple expand_outplace(@Const @ByRef Tensor to_expand1,
+                @Const @ByRef Tensor to_expand2,
+                @Const @ByRef Tensor to_expand3,
+                @Cast("const char*") BytePointer api_name);
+@Namespace("at") public static native @ByVal TensorMaybeOwnedTensorMaybeOwnedTensorMaybeOwnedTuple expand_outplace(@Const @ByRef Tensor to_expand1,
+                @Const @ByRef Tensor to_expand2,
+                @Const @ByRef Tensor to_expand3,
+                String api_name);
+
+
+
+
+
+
+
+
+
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
+
+
+
+
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @Cast("const char*") BytePointer api_name);
+@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(@Const @ByRef Tensor to_expand, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, String api_name);
+
+
 
 @Namespace("at") public static native @StdMove TensorVector expand_outplace(@ByVal TensorArrayRef to_expand);
 
@@ -11032,7 +11707,6 @@ body of your function, only data pointers.
 // #include <ATen/TensorUtils.h>
 // #include <ATen/Context.h>
 // #include <ATen/TracerMode.h>
-// #include <ATen/core/op_registration/hacky_wrapper_for_legacy_signatures.h>
 
 // These functions are defined in ATen/Utils.cpp.
 // #define TENSOR(T, S)
@@ -11116,6 +11790,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _make_dual(@Const @ByRef Tensor primal, @Const @ByRef Tensor tangent, @Cast("int64_t") long level);
 @Namespace("at") public static native @ByVal TensorTensorTuple _unpack_dual(@Const @ByRef Tensor dual, @Cast("int64_t") long level);
 @Namespace("at") public static native @StdMove TensorVector align_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native void _assert_async(@Const @ByRef Tensor self);
 @Namespace("at") public static native @Cast("bool") boolean _use_cudnn_ctc_loss(@Const @ByRef Tensor log_probs, @Const @ByRef Tensor targets, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_lengths, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef target_lengths, @Cast("int64_t") long blank);
 @Namespace("at") public static native @Cast("bool") boolean _use_cudnn_ctc_loss(@Const @ByRef Tensor log_probs, @Const @ByRef Tensor targets, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] input_lengths, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] target_lengths, @Cast("int64_t") long blank);
 @Namespace("at") public static native @ByVal TensorTensorTuple _cudnn_ctc_loss(@Const @ByRef Tensor log_probs, @Const @ByRef Tensor targets, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_lengths, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef target_lengths, @Cast("int64_t") long blank, @Cast("bool") boolean deterministic, @Cast("bool") boolean zero_infinity);
@@ -11175,42 +11850,40 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor arccos_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor arccos_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor arccos_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/);
+@Namespace("at") public static native @ByVal Tensor avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/);
 @Namespace("at") public static native @ByVal Tensor avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/);
+@Namespace("at") public static native @ByVal Tensor avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/);
 @Namespace("at") public static native @ByVal Tensor avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal Tensor adaptive_avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
 @Namespace("at") public static native @ByVal Tensor adaptive_avg_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
 @Namespace("at") public static native @ByVal TensorTensorTuple adaptive_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
 @Namespace("at") public static native @ByVal TensorTensorTuple adaptive_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
-@Namespace("at") public static native @ByVal Tensor add(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor add(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor add(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor add_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor add_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor add_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor add_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor _add_relu(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor add_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor _add_relu(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor _add_relu(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor _add_relu_(@ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor _add_relu_(@ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor _add_relu_(@ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor _add_relu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor _add_relu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor _add_relu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor _add_relu_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor add(@Const @ByRef Tensor self, @ByVal Scalar other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
-@Namespace("at") public static native @ByVal Tensor add(@Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByVal Tensor addmv(@Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor _add_relu_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor add(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor add(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByVal Tensor addmv(@Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor addmv(@Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec);
-@Namespace("at") public static native @ByRef Tensor addmv_(@ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addmv_(@ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor addmv_(@ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec);
-@Namespace("at") public static native @ByRef Tensor addmv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addmv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor addmv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec);
-@Namespace("at") public static native @ByRef Tensor addmv_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @ByVal Scalar beta, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor _addmv_impl_(@ByRef Tensor self, @Const @ByRef Tensor self2, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
-@Namespace("at") public static native @ByRef Tensor _addmv_impl_(@ByRef Tensor self, @Const @ByRef Tensor self2, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec);
-@Namespace("at") public static native @ByVal Tensor addr(@Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addmv_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor mat, @Const @ByRef Tensor vec, @Const @ByRef Scalar beta, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor addr(@Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor addr(@Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2);
-@Namespace("at") public static native @ByRef Tensor addr_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addr_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor addr_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2);
-@Namespace("at") public static native @ByRef Tensor addr_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2, @ByVal Scalar beta, @ByVal Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor addr_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor vec1, @Const @ByRef Tensor vec2, @Const @ByRef Scalar beta, @Const @ByRef Scalar alpha, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor affine_grid_generator(@Const @ByRef Tensor theta, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Cast("bool") boolean align_corners);
 @Namespace("at") public static native @ByVal Tensor affine_grid_generator(@Const @ByRef Tensor theta, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Cast("bool") boolean align_corners);
 @Namespace("at") public static native @ByVal Tensor affine_grid_generator_backward(@Const @ByRef Tensor grad, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Cast("bool") boolean align_corners);
@@ -11237,20 +11910,20 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor any_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor any_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
 @Namespace("at") public static native @ByRef Tensor any_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar end, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar end);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar end, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar start, @ByVal Scalar end);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar start, @ByVal Scalar end, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar start, @ByVal Scalar end, @ByVal Scalar step, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar start, @ByVal Scalar end, @ByVal Scalar step);
-@Namespace("at") public static native @ByVal Tensor arange(@ByVal Scalar start, @ByVal Scalar end, @ByVal Scalar step, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByRef Tensor arange_out(@ByRef Tensor out, @ByVal Scalar end);
-@Namespace("at") public static native @ByRef Tensor arange_outf(@ByVal Scalar end, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor arange_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::Scalar(1)") Scalar step);
-@Namespace("at") public static native @ByRef Tensor arange_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end);
-@Namespace("at") public static native @ByRef Tensor arange_outf(@ByVal Scalar start, @ByVal Scalar end, @ByVal Scalar step, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar end, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar end);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar end, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar start, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef Scalar step, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef Scalar step);
+@Namespace("at") public static native @ByVal Tensor arange(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef Scalar step, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByRef Tensor arange_out(@ByRef Tensor out, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByRef Tensor arange_outf(@Const @ByRef Scalar end, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor arange_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar step);
+@Namespace("at") public static native @ByRef Tensor arange_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByRef Tensor arange_outf(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef Scalar step, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor _dim_arange(@Const @ByRef Tensor like, @Cast("int64_t") long dim);
 @Namespace("at") public static native @ByVal Tensor argmax(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor argmax(@Const @ByRef Tensor self);
@@ -11290,10 +11963,10 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor as_strided(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride);
 @Namespace("at") public static native @ByVal Tensor as_strided(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
 @Namespace("at") public static native @ByVal Tensor as_strided(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... stride);
-@Namespace("at") public static native @ByRef Tensor as_strided_(@ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
-@Namespace("at") public static native @ByRef Tensor as_strided_(@ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride);
-@Namespace("at") public static native @ByRef Tensor as_strided_(@ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
-@Namespace("at") public static native @ByRef Tensor as_strided_(@ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... stride);
+@Namespace("at") public static native @Const @ByRef Tensor as_strided_(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+@Namespace("at") public static native @Const @ByRef Tensor as_strided_(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride);
+@Namespace("at") public static native @Const @ByRef Tensor as_strided_(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+@Namespace("at") public static native @Const @ByRef Tensor as_strided_(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... stride);
 @Namespace("at") public static native @ByVal Tensor asin(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor asin_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor asin_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -11316,17 +11989,17 @@ body of your function, only data pointers.
 @Namespace("at") public static native @StdMove TensorVector atleast_2d(@ByVal TensorArrayRef tensors);
 @Namespace("at") public static native @ByVal Tensor atleast_3d(@Const @ByRef Tensor self);
 @Namespace("at") public static native @StdMove TensorVector atleast_3d(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @ByVal Tensor baddbmm(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor baddbmm(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor baddbmm(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2);
-@Namespace("at") public static native @ByRef Tensor _baddbmm_mkl_(@ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor _baddbmm_mkl_(@ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor _baddbmm_mkl_(@ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2);
-@Namespace("at") public static native @ByRef Tensor baddbmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor baddbmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor baddbmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2);
-@Namespace("at") public static native @ByRef Tensor baddbmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @ByVal Scalar beta, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByRef Tensor baddbmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @Const @ByRef Scalar beta, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length);
 @Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic);
 @Namespace("at") public static native @ByVal Tensor bartlett_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor batch_norm(@Const @ByRef Tensor input, @Const @ByRef TensorOptional weight, @Const @ByRef TensorOptional bias, @Const @ByRef TensorOptional running_mean, @Const @ByRef TensorOptional running_var, @Cast("bool") boolean training, double momentum, double eps, @Cast("bool") boolean cudnn_enabled);
@@ -11360,10 +12033,12 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor bitwise_not(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor bitwise_not_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor bitwise_not_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor copysign(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor copysign_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor copysign_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor copysign(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor copysign(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByVal Tensor copysign(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor copysign_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor copysign_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor logical_not(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor logical_not_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor logical_not_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
@@ -11376,10 +12051,10 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor logical_or(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor logical_or_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor logical_or_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length);
 @Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic);
 @Namespace("at") public static native @ByVal Tensor blackman_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor bmm(@Const @ByRef Tensor self, @Const @ByRef Tensor mat2);
@@ -11407,6 +12082,8 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor ceil_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor ceil_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor chain_matmul(@ByVal TensorArrayRef matrices);
+@Namespace("at") public static native @ByRef Tensor chain_matmul_out(@ByRef Tensor out, @ByVal TensorArrayRef matrices);
+@Namespace("at") public static native @ByRef Tensor chain_matmul_outf(@ByVal TensorArrayRef matrices, @ByRef Tensor out);
 @Namespace("at") public static native @StdMove TensorVector unsafe_chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @StdMove TensorVector unsafe_chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks);
 @Namespace("at") public static native @StdMove TensorVector chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks, @Cast("int64_t") long dim/*=0*/);
@@ -11419,28 +12096,50 @@ body of your function, only data pointers.
 @Namespace("at") public static native @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... indices);
 @Namespace("at") public static native @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor_indices_or_sections, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor_indices_or_sections);
-@Namespace("at") public static native @ByVal Tensor clamp(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional min, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByVal Tensor clamp(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByVal Tensor clamp(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional min);
+@Namespace("at") public static native @ByVal Tensor clamp(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional min, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional max);
 @Namespace("at") public static native @ByVal Tensor clamp(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor clamp_(@ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional min, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clamp_(@ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clamp_(@ByRef Tensor self, @Const @ByRef ScalarOptional min);
+@Namespace("at") public static native @ByRef Tensor clamp_(@ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional min, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional max);
 @Namespace("at") public static native @ByRef Tensor clamp_(@ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor clamp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional min, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clamp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clamp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional min);
+@Namespace("at") public static native @ByRef Tensor clamp_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef ScalarOptional max, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor clamp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional min, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional max);
 @Namespace("at") public static native @ByRef Tensor clamp_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor clamp_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional min, @ByVal ScalarOptional max, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor clamp_max(@Const @ByRef Tensor self, @ByVal Scalar max);
-@Namespace("at") public static native @ByRef Tensor clamp_max_(@ByRef Tensor self, @ByVal Scalar max);
-@Namespace("at") public static native @ByRef Tensor clamp_max_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar max);
-@Namespace("at") public static native @ByRef Tensor clamp_max_outf(@Const @ByRef Tensor self, @ByVal Scalar max, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor clamp_min(@Const @ByRef Tensor self, @ByVal Scalar min);
-@Namespace("at") public static native @ByRef Tensor clamp_min_(@ByRef Tensor self, @ByVal Scalar min);
-@Namespace("at") public static native @ByRef Tensor clamp_min_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar min);
-@Namespace("at") public static native @ByRef Tensor clamp_min_outf(@Const @ByRef Tensor self, @ByVal Scalar min, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor clip(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional min, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clamp_outf(@Const @ByRef Tensor self, @Const @ByRef TensorOptional min, @Const @ByRef TensorOptional max, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor clamp_max(@Const @ByRef Tensor self, @Const @ByRef Scalar max);
+@Namespace("at") public static native @ByVal Tensor clamp_max(@Const @ByRef Tensor self, @Const @ByRef Tensor max);
+@Namespace("at") public static native @ByRef Tensor clamp_max_(@ByRef Tensor self, @Const @ByRef Scalar max);
+@Namespace("at") public static native @ByRef Tensor clamp_max_(@ByRef Tensor self, @Const @ByRef Tensor max);
+@Namespace("at") public static native @ByRef Tensor clamp_max_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar max);
+@Namespace("at") public static native @ByRef Tensor clamp_max_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar max, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor clamp_max_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor max);
+@Namespace("at") public static native @ByRef Tensor clamp_max_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor max, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor clamp_min(@Const @ByRef Tensor self, @Const @ByRef Scalar min);
+@Namespace("at") public static native @ByVal Tensor clamp_min(@Const @ByRef Tensor self, @Const @ByRef Tensor min);
+@Namespace("at") public static native @ByRef Tensor clamp_min_(@ByRef Tensor self, @Const @ByRef Scalar min);
+@Namespace("at") public static native @ByRef Tensor clamp_min_(@ByRef Tensor self, @Const @ByRef Tensor min);
+@Namespace("at") public static native @ByRef Tensor clamp_min_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar min);
+@Namespace("at") public static native @ByRef Tensor clamp_min_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar min, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor clamp_min_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor min);
+@Namespace("at") public static native @ByRef Tensor clamp_min_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor min, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor clip(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByVal Tensor clip(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional min);
+@Namespace("at") public static native @ByVal Tensor clip(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional min, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional max);
 @Namespace("at") public static native @ByVal Tensor clip(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor clip_(@ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional min, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clip_(@ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clip_(@ByRef Tensor self, @Const @ByRef ScalarOptional min);
+@Namespace("at") public static native @ByRef Tensor clip_(@ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional min, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional max);
 @Namespace("at") public static native @ByRef Tensor clip_(@ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor clip_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional min, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clip_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional max);
+@Namespace("at") public static native @ByRef Tensor clip_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional min);
+@Namespace("at") public static native @ByRef Tensor clip_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional min, @Const @ByRef ScalarOptional max, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor clip_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional min, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional max);
 @Namespace("at") public static native @ByRef Tensor clip_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor clip_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional min, @ByVal ScalarOptional max, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor clip_outf(@Const @ByRef Tensor self, @Const @ByRef TensorOptional min, @Const @ByRef TensorOptional max, @ByRef Tensor out);
 @Namespace("at") public static native @Cast("bool") boolean cudnn_is_acceptable(@Const @ByRef Tensor self);
 
 @Namespace("at") public static native @ByRef Tensor complex_out(@ByRef Tensor out, @Const @ByRef Tensor real, @Const @ByRef Tensor imag);
@@ -11448,9 +12147,9 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor polar(@Const @ByRef Tensor abs, @Const @ByRef Tensor angle);
 @Namespace("at") public static native @ByRef Tensor polar_out(@ByRef Tensor out, @Const @ByRef Tensor abs, @Const @ByRef Tensor angle);
 @Namespace("at") public static native @ByRef Tensor polar_outf(@Const @ByRef Tensor abs, @Const @ByRef Tensor angle, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor constant_pad_nd(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef pad, @ByVal(nullValue = "c10::Scalar(0)") Scalar value);
+@Namespace("at") public static native @ByVal Tensor constant_pad_nd(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef pad, @Const @ByRef(nullValue = "at::Scalar(0)") Scalar value);
 @Namespace("at") public static native @ByVal Tensor constant_pad_nd(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef pad);
-@Namespace("at") public static native @ByVal Tensor constant_pad_nd(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] pad, @ByVal(nullValue = "c10::Scalar(0)") Scalar value);
+@Namespace("at") public static native @ByVal Tensor constant_pad_nd(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] pad, @Const @ByRef(nullValue = "at::Scalar(0)") Scalar value);
 @Namespace("at") public static native @ByVal Tensor constant_pad_nd(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... pad);
 @Namespace("at") public static native @ByVal Tensor convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups);
 @Namespace("at") public static native @ByVal Tensor convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups);
@@ -11462,31 +12161,45 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean cudnn_enabled, @Cast("bool") boolean allow_tf32);
 @Namespace("at") public static native @ByVal Tensor _convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean cudnn_enabled);
 @Namespace("at") public static native @ByVal Tensor _convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean cudnn_enabled);
+@Namespace("at") public static native @ByVal Tensor _convolution_mode(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @StdString BytePointer padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups);
+@Namespace("at") public static native @ByVal Tensor _convolution_mode(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @StdString String padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups);
 @Namespace("at") public static native @ByVal Tensor _convolution_nogroup(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding);
 @Namespace("at") public static native @ByVal Tensor _convolution_nogroup(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_padding);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple _convolution_double_backward(@Const @ByRef TensorOptional ggI, @Const @ByRef TensorOptional ggW, @Const @ByRef TensorOptional ggb, @Const @ByRef Tensor gO, @Const @ByRef Tensor weight, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean cudnn_enabled, @Cast("bool") boolean allow_tf32, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple _convolution_double_backward(@Const @ByRef TensorOptional ggI, @Const @ByRef TensorOptional ggW, @Const @ByRef TensorOptional ggb, @Const @ByRef Tensor gO, @Const @ByRef Tensor weight, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean cudnn_enabled, @Cast("bool") boolean allow_tf32, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
 @Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight);
-@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
 @Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight);
-@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
 @Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight);
-@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @StdString BytePointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @StdString BytePointer padding);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @StdString String padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @StdString String padding);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @StdString BytePointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @StdString BytePointer padding);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @StdString String padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @StdString String padding);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @StdString BytePointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @StdString BytePointer padding);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @StdString String padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @StdString String padding);
 @Namespace("at") public static native @ByVal Tensor conv_tbc(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @Const @ByRef Tensor bias, @Cast("int64_t") long pad/*=0*/);
 @Namespace("at") public static native @ByVal Tensor conv_tbc(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @Const @ByRef Tensor bias);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple conv_tbc_backward(@Const @ByRef Tensor self, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef Tensor bias, @Cast("int64_t") long pad);
-@Namespace("at") public static native @ByVal Tensor conv_transpose1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor conv_transpose1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor conv_transpose1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight);
-@Namespace("at") public static native @ByVal Tensor conv_transpose1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
-@Namespace("at") public static native @ByVal Tensor conv_transpose2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor conv_transpose1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor conv_transpose2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor conv_transpose2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight);
-@Namespace("at") public static native @ByVal Tensor conv_transpose2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
-@Namespace("at") public static native @ByVal Tensor conv_transpose3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor conv_transpose2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor conv_transpose3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor conv_transpose3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight);
-@Namespace("at") public static native @ByVal Tensor conv_transpose3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor conv_transpose3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups/*=1*/, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByVal Tensor _copy_from(@Const @ByRef Tensor self, @Const @ByRef Tensor dst, @Cast("bool") boolean non_blocking/*=false*/);
 @Namespace("at") public static native @ByVal Tensor _copy_from(@Const @ByRef Tensor self, @Const @ByRef Tensor dst);
 @Namespace("at") public static native @ByVal Tensor cos(@Const @ByRef Tensor self);
@@ -11531,6 +12244,10 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor cudnn_convolution_transpose_backward_input(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean allow_tf32);
 @Namespace("at") public static native @ByVal Tensor cudnn_convolution_transpose_backward_weight(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef weight_size, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean allow_tf32);
 @Namespace("at") public static native @ByVal Tensor cudnn_convolution_transpose_backward_weight(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] weight_size, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups, @Cast("bool") boolean benchmark, @Cast("bool") boolean deterministic, @Cast("bool") boolean allow_tf32);
+@Namespace("at") public static native @ByVal Tensor cudnn_convolution_relu(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups);
+@Namespace("at") public static native @ByVal Tensor cudnn_convolution_relu(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups);
+@Namespace("at") public static native @ByVal Tensor cudnn_convolution_add_relu(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @Const @ByRef Tensor z, @Const @ByRef ScalarOptional alpha, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups);
+@Namespace("at") public static native @ByVal Tensor cudnn_convolution_add_relu(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @Const @ByRef Tensor z, @Const @ByRef ScalarOptional alpha, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups);
 @Namespace("at") public static native @ByVal Tensor cudnn_grid_sampler(@Const @ByRef Tensor self, @Const @ByRef Tensor grid);
 @Namespace("at") public static native @ByVal TensorTensorTuple cudnn_grid_sampler_backward(@Const @ByRef Tensor self, @Const @ByRef Tensor grid, @Const @ByRef Tensor grad_output);
 @Namespace("at") public static native @ByVal TensorTensorTuple cummax(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
@@ -11558,7 +12275,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor cumprod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor cumprod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
 @Namespace("at") public static native @ByRef Tensor cumprod_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor cumprod_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor input, @Cast("int64_t") long dim);
+@Namespace("at") public static native @ByVal Tensor cumprod_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor input, @Cast("int64_t") long dim, @Const @ByRef Tensor output);
 @Namespace("at") public static native @ByVal Tensor cumsum(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor cumsum(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 @Namespace("at") public static native @ByRef Tensor cumsum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -11598,34 +12315,48 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor diff_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long n/*=1*/, @Cast("int64_t") long dim/*=-1*/, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional prepend, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional append);
 @Namespace("at") public static native @ByRef Tensor diff_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor diff_outf(@Const @ByRef Tensor self, @Cast("int64_t") long n, @Cast("int64_t") long dim, @Const @ByRef TensorOptional prepend, @Const @ByRef TensorOptional append, @ByRef Tensor out);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
 @Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString BytePointer rounding_mode);
-@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString String rounding_mode);
-@Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString BytePointer rounding_mode);
-@Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString String rounding_mode);
-@Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString BytePointer rounding_mode, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString String rounding_mode, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @ByVal Scalar other, @StdString BytePointer rounding_mode);
-@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @ByVal Scalar other, @StdString String rounding_mode);
+@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringOptional rounding_mode);
+@Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringOptional rounding_mode);
+@Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringOptional rounding_mode, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal StringOptional rounding_mode);
 @Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString BytePointer rounding_mode);
-@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString String rounding_mode);
-@Namespace("at") public static native @ByRef Tensor divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString BytePointer rounding_mode);
-@Namespace("at") public static native @ByRef Tensor divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString String rounding_mode);
-@Namespace("at") public static native @ByRef Tensor divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString BytePointer rounding_mode, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @StdString String rounding_mode, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @ByVal Scalar other, @StdString BytePointer rounding_mode);
-@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @ByVal Scalar other, @StdString String rounding_mode);
+@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringOptional rounding_mode);
+@Namespace("at") public static native @ByRef Tensor divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringOptional rounding_mode);
+@Namespace("at") public static native @ByRef Tensor divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringOptional rounding_mode, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal StringOptional rounding_mode);
 @Namespace("at") public static native @ByVal Tensor true_divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor true_divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor true_divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor true_divide(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor true_divide(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor dot(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor);
 @Namespace("at") public static native @ByRef Tensor dot_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor tensor);
 @Namespace("at") public static native @ByRef Tensor dot_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor, @ByRef Tensor out);
@@ -11640,7 +12371,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor embedding_dense_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor indices, @Cast("int64_t") long num_weights, @Cast("int64_t") long padding_idx, @Cast("bool") boolean scale_grad_by_freq);
 @Namespace("at") public static native @ByRef Tensor embedding_renorm_(@ByRef Tensor self, @Const @ByRef Tensor indices, double max_norm, double norm_type);
 @Namespace("at") public static native @ByVal Tensor embedding_sparse_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Cast("int64_t") long num_weights, @Cast("int64_t") long padding_idx, @Cast("bool") boolean scale_grad_by_freq);
-@Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple _embedding_bag_forward_only(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Cast("bool") boolean scale_grad_by_freq/*=false*/, @Cast("int64_t") long mode/*=0*/, @Cast("bool") boolean sparse/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional per_sample_weights, @Cast("bool") boolean include_last_offset/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple _embedding_bag_forward_only(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Cast("bool") boolean scale_grad_by_freq/*=false*/, @Cast("int64_t") long mode/*=0*/, @Cast("bool") boolean sparse/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional per_sample_weights, @Cast("bool") boolean include_last_offset/*=false*/, @Cast("int64_t") long padding_idx/*=-1*/);
 @Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple _embedding_bag_forward_only(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets);
 @Namespace("at") public static native @ByVal TensorTensorTuple _rowwise_prune(@Const @ByRef Tensor weight, @Const @ByRef Tensor mask, ScalarType compressed_indices_dtype);
 @Namespace("at") public static native @ByVal Tensor row_stack(@ByVal TensorArrayRef tensors);
@@ -11648,56 +12379,55 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor row_stack_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple embedding_bag(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Cast("bool") boolean scale_grad_by_freq/*=false*/, @Cast("int64_t") long mode/*=0*/, @Cast("bool") boolean sparse/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional per_sample_weights, @Cast("bool") boolean include_last_offset/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple embedding_bag(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets);
-@Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple _embedding_bag(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Cast("bool") boolean scale_grad_by_freq/*=false*/, @Cast("int64_t") long mode/*=0*/, @Cast("bool") boolean sparse/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional per_sample_weights, @Cast("bool") boolean include_last_offset/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple embedding_bag(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Cast("bool") boolean sparse, @Const @ByRef TensorOptional per_sample_weights, @Cast("bool") boolean include_last_offset, @ByVal LongOptional padding_idx);
+@Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple _embedding_bag(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Cast("bool") boolean scale_grad_by_freq/*=false*/, @Cast("int64_t") long mode/*=0*/, @Cast("bool") boolean sparse/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional per_sample_weights, @Cast("bool") boolean include_last_offset/*=false*/, @Cast("int64_t") long padding_idx/*=-1*/);
 @Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple _embedding_bag(@Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets);
+@Namespace("at") public static native @ByVal Tensor _embedding_bag_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Const @ByRef Tensor offset2bag, @Const @ByRef Tensor bag_size, @Const @ByRef Tensor maximum_indices, @Cast("int64_t") long num_weights, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Cast("bool") boolean sparse, @Const @ByRef TensorOptional per_sample_weights, @Cast("int64_t") long padding_idx/*=-1*/);
 @Namespace("at") public static native @ByVal Tensor _embedding_bag_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Const @ByRef Tensor offset2bag, @Const @ByRef Tensor bag_size, @Const @ByRef Tensor maximum_indices, @Cast("int64_t") long num_weights, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Cast("bool") boolean sparse, @Const @ByRef TensorOptional per_sample_weights);
+@Namespace("at") public static native @ByVal Tensor _embedding_bag_sparse_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Const @ByRef Tensor offset2bag, @Const @ByRef Tensor bag_size, @Cast("int64_t") long num_weights, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Const @ByRef TensorOptional per_sample_weights, @Cast("int64_t") long padding_idx/*=-1*/);
 @Namespace("at") public static native @ByVal Tensor _embedding_bag_sparse_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Const @ByRef Tensor offset2bag, @Const @ByRef Tensor bag_size, @Cast("int64_t") long num_weights, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Const @ByRef TensorOptional per_sample_weights);
-@Namespace("at") public static native @ByVal Tensor _embedding_bag_dense_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Const @ByRef Tensor offset2bag, @Const @ByRef Tensor bag_size, @Const @ByRef Tensor maximum_indices, @Cast("int64_t") long num_weights, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Const @ByRef TensorOptional per_sample_weights);
+@Namespace("at") public static native @ByVal Tensor _embedding_bag_dense_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Const @ByRef Tensor offset2bag, @Const @ByRef Tensor bag_size, @Const @ByRef Tensor maximum_indices, @Cast("int64_t") long num_weights, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Const @ByRef TensorOptional per_sample_weights, @Cast("int64_t") long padding_idx/*=-1*/);
+@Namespace("at") public static native @ByVal Tensor _embedding_bag_dense_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor indices, @Const @ByRef Tensor offset2bag, @Const @ByRef Tensor bag_size, @Const @ByRef Tensor maximum_indices, @Cast("int64_t") long num_weights, @Cast("bool") boolean scale_grad_by_freq, @Cast("int64_t") long mode, @Const @ByRef TensorOptional per_sample_weights);
+@Namespace("at") public static native @ByVal Tensor _embedding_bag_per_sample_weights_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Const @ByRef Tensor offset2bag, @Cast("int64_t") long mode, @Cast("int64_t") long padding_idx/*=-1*/);
 @Namespace("at") public static native @ByVal Tensor _embedding_bag_per_sample_weights_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor weight, @Const @ByRef Tensor indices, @Const @ByRef Tensor offsets, @Const @ByRef Tensor offset2bag, @Cast("int64_t") long mode);
-@Namespace("at") public static native @ByVal Tensor empty_meta(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty_meta(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor empty_meta(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty_meta(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
-@Namespace("at") public static native @ByVal Tensor empty_meta(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty_meta(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, double scale/*=1*/, @Cast("int64_t") long zero_point/*=0*/, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, double scale/*=1*/, @Cast("int64_t") long zero_point/*=0*/, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, double scale/*=1*/, @Cast("int64_t") long zero_point/*=0*/, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, double scale/*=1*/, @Cast("int64_t") long zero_point/*=0*/, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, double scale, @Cast("int64_t") long zero_point, @ByVal MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor _empty_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, double scale, @Cast("int64_t") long zero_point, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis);
-@Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::MemoryFormat::Contiguous)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis);
 @Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor _empty_per_channel_affine_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, @Cast("int64_t") long axis, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty_quantized(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Tensor qtensor);
 @Namespace("at") public static native @ByVal Tensor empty_quantized(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Tensor qtensor);
-@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByRef Tensor empty_outf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor empty_outf(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor empty_like(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor empty_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor empty_like(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor empty_like(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride);
-@Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... stride);
 @Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor empty_strided(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -11721,10 +12451,10 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor expm1_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor expm1_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor expm1_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n);
 @Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n, @Cast("int64_t") long m, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n, @Cast("int64_t") long m, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n, @Cast("int64_t") long m);
 @Namespace("at") public static native @ByVal Tensor eye(@Cast("int64_t") long n, @Cast("int64_t") long m, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByRef Tensor eye_out(@ByRef Tensor out, @Cast("int64_t") long n);
@@ -11736,7 +12466,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @Cast("int64_t") long start_dim, @Cast("int64_t") long end_dim, @ByVal Dimname out_dim);
 @Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @ByVal Dimname start_dim, @ByVal Dimname end_dim, @ByVal Dimname out_dim);
 @Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dims, @ByVal Dimname out_dim);
-@Namespace("at") public static native @ByRef Tensor fill_(@ByRef Tensor self, @ByVal Scalar value);
+@Namespace("at") public static native @ByRef Tensor fill_(@ByRef Tensor self, @Const @ByRef Scalar value);
 @Namespace("at") public static native @ByRef Tensor fill_(@ByRef Tensor self, @Const @ByRef Tensor value);
 @Namespace("at") public static native @ByVal Tensor floor(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor floor_(@ByRef Tensor self);
@@ -11745,33 +12475,33 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor floor_divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor floor_divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor floor_divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor floor_divide(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor floor_divide(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor frac(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor frac_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor frac_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor frac_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByRef Tensor full_out(@ByRef Tensor out, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value);
-@Namespace("at") public static native @ByRef Tensor full_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value);
-@Namespace("at") public static native @ByRef Tensor full_outf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal Scalar fill_value, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor full_outf(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal Scalar fill_value, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor full_like(@Const @ByRef Tensor self, @ByVal Scalar fill_value, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor full_like(@Const @ByRef Tensor self, @ByVal Scalar fill_value);
-@Namespace("at") public static native @ByVal Tensor full_like(@Const @ByRef Tensor self, @ByVal Scalar fill_value, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor from_file(@StdString BytePointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByRef Tensor full_out(@ByRef Tensor out, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value);
+@Namespace("at") public static native @ByRef Tensor full_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value);
+@Namespace("at") public static native @ByRef Tensor full_outf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Scalar fill_value, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor full_outf(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor full_like(@Const @ByRef Tensor self, @Const @ByRef Scalar fill_value, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor full_like(@Const @ByRef Tensor self, @Const @ByRef Scalar fill_value);
+@Namespace("at") public static native @ByVal Tensor full_like(@Const @ByRef Tensor self, @Const @ByRef Scalar fill_value, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor from_file(@StdString BytePointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor from_file(@StdString BytePointer filename);
-@Namespace("at") public static native @ByVal Tensor from_file(@StdString String filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_file(@StdString String filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor from_file(@StdString String filename);
 @Namespace("at") public static native @ByVal Tensor from_file(@StdString BytePointer filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor from_file(@StdString String filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -11790,31 +12520,31 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal TensorTensorTuple _grid_sampler_2d_cpu_fallback_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor grid, @Cast("int64_t") long interpolation_mode, @Cast("int64_t") long padding_mode, @Cast("bool") boolean align_corners);
 @Namespace("at") public static native @ByVal Tensor grid_sampler_3d(@Const @ByRef Tensor input, @Const @ByRef Tensor grid, @Cast("int64_t") long interpolation_mode, @Cast("int64_t") long padding_mode, @Cast("bool") boolean align_corners);
 @Namespace("at") public static native @ByVal TensorTensorTuple grid_sampler_3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor grid, @Cast("int64_t") long interpolation_mode, @Cast("int64_t") long padding_mode, @Cast("bool") boolean align_corners);
-@Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length);
 @Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic);
 @Namespace("at") public static native @ByVal Tensor hann_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha, double beta, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha, double beta, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha, double beta);
 @Namespace("at") public static native @ByVal Tensor hamming_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double alpha, double beta, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length);
 @Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic);
 @Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double beta, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double beta, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double beta);
 @Namespace("at") public static native @ByVal Tensor kaiser_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, double beta, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor hinge_embedding_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target, double margin/*=1.0*/, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
@@ -11856,12 +12586,12 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor isclose(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByVal Tensor isnan(@Const @ByRef Tensor self);
 @Namespace("at") public static native @Cast("bool") boolean is_distributed(@Const @ByRef Tensor self);
-@Namespace("at") public static native @Cast("bool") boolean is_floating_point(@Const @ByRef Tensor self);
-@Namespace("at") public static native @Cast("bool") boolean is_complex(@Const @ByRef Tensor self);
+@Namespace("at") public static native @Cast("bool") boolean __dispatch_is_floating_point(@Const @ByRef Tensor self);
+@Namespace("at") public static native @Cast("bool") boolean __dispatch_is_complex(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor isreal(@Const @ByRef Tensor self);
 @Namespace("at") public static native @Cast("bool") boolean is_nonzero(@Const @ByRef Tensor self);
 @Namespace("at") public static native @Cast("bool") boolean is_same_size(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @Cast("bool") boolean is_signed(@Const @ByRef Tensor self);
+@Namespace("at") public static native @Cast("bool") boolean __dispatch_is_signed(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor kl_div(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, @Cast("bool") boolean log_target/*=false*/);
 @Namespace("at") public static native @ByVal Tensor kl_div(@Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByVal Tensor kl_div_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, @Cast("bool") boolean log_target/*=false*/);
@@ -11902,8 +12632,8 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor mkldnn_linear_backward_input(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor weight);
 @Namespace("at") public static native @ByVal TensorTensorTuple mkldnn_linear_backward_weights(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Cast("bool") boolean bias_defined);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple mkldnn_linear_backward(@Const @ByRef Tensor self, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor weight, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByVal Tensor fbgemm_linear_int8_weight_fp32_activation(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef Tensor packed, @Const @ByRef Tensor col_offsets, @ByVal Scalar weight_scale, @ByVal Scalar weight_zero_point, @Const @ByRef Tensor bias);
-@Namespace("at") public static native @ByVal Tensor fbgemm_linear_int8_weight(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef Tensor packed, @Const @ByRef Tensor col_offsets, @ByVal Scalar weight_scale, @ByVal Scalar weight_zero_point, @Const @ByRef Tensor bias);
+@Namespace("at") public static native @ByVal Tensor fbgemm_linear_int8_weight_fp32_activation(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef Tensor packed, @Const @ByRef Tensor col_offsets, @Const @ByRef Scalar weight_scale, @Const @ByRef Scalar weight_zero_point, @Const @ByRef Tensor bias);
+@Namespace("at") public static native @ByVal Tensor fbgemm_linear_int8_weight(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef Tensor packed, @Const @ByRef Tensor col_offsets, @Const @ByRef Scalar weight_scale, @Const @ByRef Scalar weight_zero_point, @Const @ByRef Tensor bias);
 @Namespace("at") public static native @ByVal TensorTensorDoubleLongTuple fbgemm_linear_quantize_weight(@Const @ByRef Tensor input);
 @Namespace("at") public static native @ByVal Tensor fbgemm_pack_gemm_matrix_fp16(@Const @ByRef Tensor input);
 @Namespace("at") public static native @ByVal Tensor fbgemm_linear_fp16_weight_fp32_activation(@Const @ByRef Tensor input, @Const @ByRef Tensor packed_weight, @Const @ByRef Tensor bias);
@@ -11914,12 +12644,12 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor ldexp_(@ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor ldexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor ldexp_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor linspace(@ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor linspace(@ByVal Scalar start, @ByVal Scalar end);
-@Namespace("at") public static native @ByVal Tensor linspace(@ByVal Scalar start, @ByVal Scalar end, @ByVal LongOptional steps, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByRef Tensor linspace_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps);
-@Namespace("at") public static native @ByRef Tensor linspace_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end);
-@Namespace("at") public static native @ByRef Tensor linspace_outf(@ByVal Scalar start, @ByVal Scalar end, @ByVal LongOptional steps, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor linspace(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor linspace(@Const @ByRef Scalar start, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByVal Tensor linspace(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal LongOptional steps, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByRef Tensor linspace_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps);
+@Namespace("at") public static native @ByRef Tensor linspace_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByRef Tensor linspace_outf(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal LongOptional steps, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor log(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor log_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor log_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -11943,23 +12673,23 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor logaddexp2_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor logaddexp2(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByVal Tensor xlogy(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor xlogy(@ByVal Scalar self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor xlogy(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor xlogy(@Const @ByRef Scalar self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByVal Tensor xlogy(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor xlogy_(@ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor xlogy_(@ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor xlogy_(@ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor xlogy_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor xlogy_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor xlogy_out(@ByRef Tensor out, @ByVal Scalar self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor xlogy_outf(@ByVal Scalar self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor xlogy_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor xlogy_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor xlogy_out(@ByRef Tensor out, @Const @ByRef Scalar self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByRef Tensor xlogy_outf(@Const @ByRef Scalar self, @Const @ByRef Tensor other, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor xlogy_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor xlogy_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor logdet(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor logspace(@ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps, double base/*=10.0*/, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor logspace(@ByVal Scalar start, @ByVal Scalar end);
-@Namespace("at") public static native @ByVal Tensor logspace(@ByVal Scalar start, @ByVal Scalar end, @ByVal LongOptional steps, double base, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByRef Tensor logspace_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps, double base/*=10.0*/);
-@Namespace("at") public static native @ByRef Tensor logspace_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end);
-@Namespace("at") public static native @ByRef Tensor logspace_outf(@ByVal Scalar start, @ByVal Scalar end, @ByVal LongOptional steps, double base, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor logspace(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps, double base/*=10.0*/, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor logspace(@Const @ByRef Scalar start, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByVal Tensor logspace(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal LongOptional steps, double base, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByRef Tensor logspace_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional steps, double base/*=10.0*/);
+@Namespace("at") public static native @ByRef Tensor logspace_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByRef Tensor logspace_outf(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal LongOptional steps, double base, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor log_softmax(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor log_softmax(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 @Namespace("at") public static native @ByVal Tensor log_softmax(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -12000,6 +12730,8 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor matrix_rank(@Const @ByRef Tensor self, @Cast("bool") boolean symmetric/*=false*/);
 @Namespace("at") public static native @ByVal Tensor matrix_rank(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor matrix_power(@Const @ByRef Tensor self, @Cast("int64_t") long n);
+@Namespace("at") public static native @ByRef Tensor matrix_power_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long n);
+@Namespace("at") public static native @ByRef Tensor matrix_power_outf(@Const @ByRef Tensor self, @Cast("int64_t") long n, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor matrix_exp(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor matrix_exp_backward(@Const @ByRef Tensor self, @Const @ByRef Tensor grad);
 @Namespace("at") public static native @ByVal TensorTensorTuple _aminmax(@Const @ByRef Tensor self);
@@ -12020,45 +12752,53 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor max, @ByRef Tensor max_values);
 @Namespace("at") public static native @ByVal Tensor value_selecting_reduction_backward(@Const @ByRef Tensor grad, @Cast("int64_t") long dim, @Const @ByRef Tensor indices, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes, @Cast("bool") boolean keepdim);
 @Namespace("at") public static native @ByVal Tensor value_selecting_reduction_backward(@Const @ByRef Tensor grad, @Cast("int64_t") long dim, @Const @ByRef Tensor indices, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] sizes, @Cast("bool") boolean keepdim);
-@Namespace("at") public static native @ByVal Tensor amax(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor amax(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor amax(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor amax(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor amax_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor amax(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor amax_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor amax_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor amax_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor amax_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor amax_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor amax_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal TensorTensorTuple max_pool1d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple max_pool1d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple max_pool1d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal TensorTensorTuple max_pool1d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple max_pool1d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple max_pool1d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
-@Namespace("at") public static native @ByVal Tensor max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
-@Namespace("at") public static native @ByVal Tensor max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
-@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
-@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
-@Namespace("at") public static native @ByVal Tensor quantized_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_max_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
+@Namespace("at") public static native @ByVal Tensor quantized_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor quantized_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor quantized_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor quantized_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor quantized_max_pool1d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
-@Namespace("at") public static native @ByVal Tensor quantized_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor quantized_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor quantized_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor quantized_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor quantized_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor quantized_max_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
-@Namespace("at") public static native @ByVal Tensor max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal Tensor max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal Tensor max_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self);
@@ -12109,12 +12849,12 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> min_out(@ByRef Tensor min, @ByRef Tensor min_indices, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> min_out(@ByRef Tensor min, @ByRef Tensor min_indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> min_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor min, @ByRef Tensor min_indices);
-@Namespace("at") public static native @ByVal Tensor amin(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor amin(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor amin(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor amin(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor amin_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor amin(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor amin_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor amin_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor amin_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor amin_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor amin_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor amin_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor mkldnn_convolution(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups);
@@ -12161,7 +12901,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor mm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor mat2, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor _sparse_mm(@Const @ByRef Tensor sparse, @Const @ByRef Tensor dense);
 @Namespace("at") public static native @ByVal Tensor _sparse_sparse_matmul(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor _sparse_matrix_mask_helper(@Const @ByRef Tensor t, @Const @ByRef Tensor mask_indices);
+@Namespace("at") public static native @ByVal Tensor _sparse_mask_helper(@Const @ByRef Tensor t, @Const @ByRef Tensor mask_indices);
 @Namespace("at") public static native @ByVal TensorTensorTuple mode(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple mode(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> mode_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean keepdim/*=false*/);
@@ -12175,11 +12915,11 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor mul(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor mul_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor mul_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor mul(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor mul(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor multiply(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor multiply_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor multiply_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor multiply(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor multiply(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor mv(@Const @ByRef Tensor self, @Const @ByRef Tensor vec);
 @Namespace("at") public static native @ByRef Tensor mv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor vec);
 @Namespace("at") public static native @ByRef Tensor mv_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor vec, @ByRef Tensor out);
@@ -12200,13 +12940,13 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal TensorTensorTuple batch_norm_gather_stats_with_counts(@Const @ByRef Tensor input, @Const @ByRef Tensor mean, @Const @ByRef Tensor invstd, @Const @ByRef TensorOptional running_mean, @Const @ByRef TensorOptional running_var, double momentum, double eps, @Const @ByRef Tensor counts);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple native_batch_norm_backward(@Const @ByRef Tensor grad_out, @Const @ByRef Tensor input, @Const @ByRef TensorOptional weight, @Const @ByRef TensorOptional running_mean, @Const @ByRef TensorOptional running_var, @Const @ByRef TensorOptional save_mean, @Const @ByRef TensorOptional save_invstd, @Cast("bool") boolean train, double eps, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple batch_norm_backward_reduce(@Const @ByRef Tensor grad_out, @Const @ByRef Tensor input, @Const @ByRef Tensor mean, @Const @ByRef Tensor invstd, @Const @ByRef TensorOptional weight, @Cast("bool") boolean input_g, @Cast("bool") boolean weight_g, @Cast("bool") boolean bias_g);
-@Namespace("at") public static native @ByVal Tensor batch_norm_backward_elemt(@Const @ByRef Tensor grad_out, @Const @ByRef Tensor input, @Const @ByRef Tensor mean, @Const @ByRef Tensor invstd, @Const @ByRef TensorOptional weight, @Const @ByRef Tensor mean_dy, @Const @ByRef Tensor mean_dy_xmu);
+@Namespace("at") public static native @ByVal Tensor batch_norm_backward_elemt(@Const @ByRef Tensor grad_out, @Const @ByRef Tensor input, @Const @ByRef Tensor mean, @Const @ByRef Tensor invstd, @Const @ByRef TensorOptional weight, @Const @ByRef Tensor mean_dy, @Const @ByRef Tensor mean_dy_xmu, @Const @ByRef Tensor count);
 @Namespace("at") public static native @ByVal TensorTensorTuple batch_norm_update_stats(@Const @ByRef Tensor input, @Const @ByRef TensorOptional running_mean, @Const @ByRef TensorOptional running_var, double momentum);
 @Namespace("at") public static native @Cast("bool") boolean is_vulkan_available();
 @Namespace("at") public static native @Cast("bool") boolean _nnpack_available();
-@Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride);
+@Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride);
 @Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
-@Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... stride);
+@Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... stride);
 @Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple _nnpack_spatial_convolution_backward(@Const @ByRef Tensor input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple _nnpack_spatial_convolution_backward(@Const @ByRef Tensor input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
@@ -12214,15 +12954,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution_backward_input(@Const @ByRef Tensor input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
 @Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution_backward_weight(@Const @ByRef Tensor input, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef weightsize, @Const @ByRef Tensor grad_output, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
 @Namespace("at") public static native @ByVal Tensor _nnpack_spatial_convolution_backward_weight(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] weightsize, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -12230,7 +12970,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor ones_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByRef Tensor ones_outf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor ones_outf(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor ones_like(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor ones_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor ones_like(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor ones_like(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor pairwise_distance(@Const @ByRef Tensor x1, @Const @ByRef Tensor x2, double p/*=2*/, double eps/*=1e-06*/, @Cast("bool") boolean keepdim/*=false*/);
@@ -12247,6 +12987,8 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _pdist_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor self, double p, @Const @ByRef Tensor pdist);
 @Namespace("at") public static native @ByVal Tensor cosine_similarity(@Const @ByRef Tensor x1, @Const @ByRef Tensor x2, @Cast("int64_t") long dim/*=1*/, double eps/*=1e-08*/);
 @Namespace("at") public static native @ByVal Tensor cosine_similarity(@Const @ByRef Tensor x1, @Const @ByRef Tensor x2);
+@Namespace("at") public static native @ByVal Tensor permute(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims);
+@Namespace("at") public static native @ByVal Tensor permute(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims);
 @Namespace("at") public static native @ByVal Tensor movedim(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef source, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef destination);
 @Namespace("at") public static native @ByVal Tensor movedim(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] source, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... destination);
 @Namespace("at") public static native @ByVal Tensor movedim(@Const @ByRef Tensor self, @Cast("int64_t") long source, @Cast("int64_t") long destination);
@@ -12267,30 +13009,30 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor deg2rad_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor deg2rad_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor deg2rad_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor scalar_tensor(@ByVal Scalar s, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor scalar_tensor(@ByVal Scalar s);
-@Namespace("at") public static native @ByVal Tensor scalar_tensor(@ByVal Scalar s, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor scalar_tensor(@Const @ByRef Scalar s, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor scalar_tensor(@Const @ByRef Scalar s);
+@Namespace("at") public static native @ByVal Tensor scalar_tensor(@Const @ByRef Scalar s, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -12302,30 +13044,30 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor rand_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor rand_outf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor rand_outf(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator);
-@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -12345,33 +13087,33 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor randint_out(@ByRef Tensor out, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor randint_outf(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor randint_outf(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high);
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high);
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -12383,26 +13125,26 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor randn_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor randn_outf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor randn_outf(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n);
 @Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n, @ByVal GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor randperm(@Cast("int64_t") long n, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByRef Tensor randperm_out(@ByRef Tensor out, @Cast("int64_t") long n);
 @Namespace("at") public static native @ByRef Tensor randperm_outf(@Cast("int64_t") long n, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor randperm_out(@ByRef Tensor out, @Cast("int64_t") long n, @ByVal GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor randperm_outf(@Cast("int64_t") long n, @ByVal GeneratorOptional generator, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor range(@ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::Scalar(1)") Scalar step, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor range(@ByVal Scalar start, @ByVal Scalar end, @ByVal Scalar step, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor range(@ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor range(@ByVal Scalar start, @ByVal Scalar end, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByRef Tensor range_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end, @ByVal(nullValue = "c10::Scalar(1)") Scalar step);
-@Namespace("at") public static native @ByRef Tensor range_out(@ByRef Tensor out, @ByVal Scalar start, @ByVal Scalar end);
-@Namespace("at") public static native @ByRef Tensor range_outf(@ByVal Scalar start, @ByVal Scalar end, @ByVal Scalar step, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor range(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar step, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor range(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef Scalar step, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor range(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor range(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByRef Tensor range_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar step);
+@Namespace("at") public static native @ByRef Tensor range_out(@ByRef Tensor out, @Const @ByRef Scalar start, @Const @ByRef Scalar end);
+@Namespace("at") public static native @ByRef Tensor range_outf(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef Scalar step, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor ravel(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor reciprocal(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor reciprocal_(@ByRef Tensor self);
@@ -12429,20 +13171,22 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor round_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor round_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor round_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor rrelu(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.125)") Scalar lower, @ByVal(nullValue = "c10::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
+@Namespace("at") public static native @ByVal Tensor rrelu(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.125)") Scalar lower, @Const @ByRef(nullValue = "at::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor rrelu(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor rrelu_(@ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.125)") Scalar lower, @ByVal(nullValue = "c10::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
+@Namespace("at") public static native @ByRef Tensor rrelu_(@ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.125)") Scalar lower, @Const @ByRef(nullValue = "at::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor rrelu_(@ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor relu(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor relu_(@ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor relu6(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor relu6_(@ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor prelu(@Const @ByRef Tensor self, @Const @ByRef Tensor weight);
 @Namespace("at") public static native @ByVal TensorTensorTuple prelu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight);
 @Namespace("at") public static native @ByVal Tensor gelu(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor gelu_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor infinitely_differentiable_gelu_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor hardshrink(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.5)") Scalar lambd);
+@Namespace("at") public static native @ByVal Tensor hardshrink(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.5)") Scalar lambd);
 @Namespace("at") public static native @ByVal Tensor hardshrink(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor hardshrink_backward(@Const @ByRef Tensor grad_out, @Const @ByRef Tensor self, @ByVal Scalar lambd);
+@Namespace("at") public static native @ByVal Tensor hardshrink_backward(@Const @ByRef Tensor grad_out, @Const @ByRef Tensor self, @Const @ByRef Scalar lambd);
 @Namespace("at") public static native @ByVal Tensor rsqrt(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor rsqrt_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor rsqrt_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -12453,15 +13197,20 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor select_backward(@Const @ByRef Tensor grad, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] input_sizes, @Cast("int64_t") long dim, @Cast("int64_t") long index);
 @Namespace("at") public static native @ByVal Tensor selu(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor selu_(@ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor celu(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(1.0)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor celu(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(1.0)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor celu(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor celu_(@ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(1.0)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor celu_(@ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(1.0)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor celu_(@ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor silu(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor silu_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor silu_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor silu_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor silu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor mish(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor mish_(@ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor mish_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor mish_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor mish_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor sigmoid(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor sigmoid_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor sigmoid_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -12489,7 +13238,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor detach_(@ByRef Tensor self);
 @Namespace("at") public static native @Cast("int64_t") long __dispatch_size(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 @Namespace("at") public static native @Cast("int64_t") long size(@Const @ByRef Tensor self, @ByVal Dimname dim);
-@Namespace("at") public static native @ByVal Tensor slice(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional start, @ByVal(nullValue = "c10::optional<int64_t>(9223372036854775807L)") LongOptional end, @Cast("int64_t") long step/*=1*/);
+@Namespace("at") public static native @ByVal Tensor slice(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional start, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional end, @Cast("int64_t") long step/*=1*/);
 @Namespace("at") public static native @ByVal Tensor slice(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor slice_backward(@Const @ByRef Tensor grad, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_sizes, @Cast("int64_t") long dim, @Cast("int64_t") long start, @Cast("int64_t") long end, @Cast("int64_t") long step);
 @Namespace("at") public static native @ByVal Tensor slice_backward(@Const @ByRef Tensor grad, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] input_sizes, @Cast("int64_t") long dim, @Cast("int64_t") long start, @Cast("int64_t") long end, @Cast("int64_t") long step);
@@ -12513,14 +13262,23 @@ body of your function, only data pointers.
 @Namespace("at") public static native @StdMove TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef split_sizes);
 @Namespace("at") public static native @StdMove TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @StdMove TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... split_sizes);
+@Namespace("at") public static native @StdMove TensorVector hsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
+@Namespace("at") public static native @StdMove TensorVector hsplit(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef indices);
+@Namespace("at") public static native @StdMove TensorVector hsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... indices);
+@Namespace("at") public static native @StdMove TensorVector vsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
+@Namespace("at") public static native @StdMove TensorVector vsplit(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef indices);
+@Namespace("at") public static native @StdMove TensorVector vsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... indices);
+@Namespace("at") public static native @StdMove TensorVector dsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
+@Namespace("at") public static native @StdMove TensorVector dsplit(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef indices);
+@Namespace("at") public static native @StdMove TensorVector dsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... indices);
 @Namespace("at") public static native @ByVal Tensor squeeze(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor squeeze(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 @Namespace("at") public static native @ByVal Tensor squeeze(@Const @ByRef Tensor self, @ByVal Dimname dim);
-@Namespace("at") public static native @ByVal Tensor sspaddmm(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor sspaddmm(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor sspaddmm(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2);
-@Namespace("at") public static native @ByRef Tensor sspaddmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor sspaddmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor sspaddmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2);
-@Namespace("at") public static native @ByRef Tensor sspaddmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @ByVal Scalar beta, @ByVal Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor sspaddmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @Const @ByRef Scalar beta, @Const @ByRef Scalar alpha, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor stack(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByVal Tensor stack(@ByVal TensorArrayRef tensors);
 @Namespace("at") public static native @ByRef Tensor stack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
@@ -12581,31 +13339,47 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor sqrt_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor square(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor square_(@ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor square_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor square_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @Cast("bool") boolean unbiased/*=true*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @Cast("bool") boolean unbiased/*=true*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor prod(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor prod(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor prod(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -12633,11 +13407,13 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor tensordot_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dims_self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims_other);
 @Namespace("at") public static native @ByRef Tensor tensordot_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims_self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims_other, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor tensordot_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dims_self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dims_other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor threshold(@Const @ByRef Tensor self, @ByVal Scalar threshold, @ByVal Scalar value);
-@Namespace("at") public static native @ByRef Tensor threshold_(@ByRef Tensor self, @ByVal Scalar threshold, @ByVal Scalar value);
-@Namespace("at") public static native @ByRef Tensor threshold_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar threshold, @ByVal Scalar value);
-@Namespace("at") public static native @ByRef Tensor threshold_outf(@Const @ByRef Tensor self, @ByVal Scalar threshold, @ByVal Scalar value, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor threshold_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar threshold);
+@Namespace("at") public static native @ByVal Tensor threshold(@Const @ByRef Tensor self, @Const @ByRef Scalar threshold, @Const @ByRef Scalar value);
+@Namespace("at") public static native @ByRef Tensor threshold_(@ByRef Tensor self, @Const @ByRef Scalar threshold, @Const @ByRef Scalar value);
+@Namespace("at") public static native @ByRef Tensor threshold_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar threshold, @Const @ByRef Scalar value);
+@Namespace("at") public static native @ByRef Tensor threshold_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar threshold, @Const @ByRef Scalar value, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor threshold_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar threshold);
+@Namespace("at") public static native @ByRef Tensor threshold_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar threshold, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByVal Tensor threshold_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar threshold);
 @Namespace("at") public static native @ByVal Tensor tile(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims);
 @Namespace("at") public static native @ByVal Tensor tile(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims);
 @Namespace("at") public static native @ByVal Tensor transpose(@Const @ByRef Tensor self, @Cast("int64_t") long dim0, @Cast("int64_t") long dim1);
@@ -12650,13 +13426,13 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor flip(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims);
 @Namespace("at") public static native @ByVal Tensor fliplr(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor flipud(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor roll(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef shifts, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims);
+@Namespace("at") public static native @ByVal Tensor roll(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef shifts, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims);
 @Namespace("at") public static native @ByVal Tensor roll(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef shifts);
-@Namespace("at") public static native @ByVal Tensor roll(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] shifts, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims);
+@Namespace("at") public static native @ByVal Tensor roll(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] shifts, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims);
 @Namespace("at") public static native @ByVal Tensor roll(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... shifts);
-@Namespace("at") public static native @ByVal Tensor rot90(@Const @ByRef Tensor self, @Cast("int64_t") long k/*=1*/, @ByVal(nullValue = "c10::IntArrayRef({0,1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims);
+@Namespace("at") public static native @ByVal Tensor rot90(@Const @ByRef Tensor self, @Cast("int64_t") long k/*=1*/, @ByVal(nullValue = "at::IntArrayRef({0,1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims);
 @Namespace("at") public static native @ByVal Tensor rot90(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor rot90(@Const @ByRef Tensor self, @Cast("int64_t") long k/*=1*/, @ByVal(nullValue = "c10::IntArrayRef({0,1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims);
+@Namespace("at") public static native @ByVal Tensor rot90(@Const @ByRef Tensor self, @Cast("int64_t") long k/*=1*/, @ByVal(nullValue = "at::IntArrayRef({0,1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dims);
 @Namespace("at") public static native @ByVal Tensor trapz(@Const @ByRef Tensor y, @Const @ByRef Tensor x, @Cast("int64_t") long dim/*=-1*/);
 @Namespace("at") public static native @ByVal Tensor trapz(@Const @ByRef Tensor y, @Const @ByRef Tensor x);
 @Namespace("at") public static native @ByVal Tensor trapz(@Const @ByRef Tensor y, double dx/*=1*/, @Cast("int64_t") long dim/*=-1*/);
@@ -12697,29 +13473,43 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @Cast("bool") boolean unbiased/*=true*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @ByVal LongOptional correction);
 @Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @ByVal Scalar self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @ByVal Scalar self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Scalar self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Scalar self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @StdMove TensorVector where(@Const @ByRef Tensor condition);
 @Namespace("at") public static native @ByVal Tensor _s_where(@Const @ByRef Tensor condition, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByVal Tensor norm_except_dim(@Const @ByRef Tensor v, @Cast("int64_t") long pow/*=2*/, @Cast("int64_t") long dim/*=0*/);
@@ -12730,15 +13520,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal TensorTensorTuple _weight_norm_cuda_interface(@Const @ByRef Tensor v, @Const @ByRef Tensor g);
 @Namespace("at") public static native @ByVal TensorTensorTuple _weight_norm_cuda_interface_backward(@Const @ByRef Tensor grad_w, @Const @ByRef Tensor saved_v, @Const @ByRef Tensor saved_g, @Const @ByRef Tensor saved_norms, @Cast("int64_t") long dim);
 @Namespace("at") public static native @ByVal TensorTensorTuple _weight_norm_differentiable_backward(@Const @ByRef Tensor grad_w, @Const @ByRef Tensor saved_v, @Const @ByRef Tensor saved_g, @Const @ByRef Tensor saved_norms, @Cast("int64_t") long dim);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -12746,7 +13536,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor zeros_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByRef Tensor zeros_outf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor zeros_outf(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor zeros_like(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor zeros_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor zeros_like(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor zeros_like(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor _standard_gamma_grad(@Const @ByRef Tensor self, @Const @ByRef Tensor output);
@@ -12759,10 +13549,10 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor poisson(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor binomial(@Const @ByRef Tensor count, @Const @ByRef Tensor prob, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor binomial(@Const @ByRef Tensor count, @Const @ByRef Tensor prob);
-@Namespace("at") public static native @ByVal Tensor native_norm(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(2)") Scalar p);
+@Namespace("at") public static native @ByVal Tensor native_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar p);
 @Namespace("at") public static native @ByVal Tensor native_norm(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor native_norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor native_norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor native_norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor native_norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor _sparse_sum(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor _sparse_sum(@Const @ByRef Tensor self, ScalarType dtype);
 @Namespace("at") public static native @ByVal Tensor _sparse_sum(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
@@ -12783,33 +13573,36 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _sparse_log_softmax(@Const @ByRef Tensor self, @ByVal Dimname dim);
 @Namespace("at") public static native @ByVal Tensor _sparse_log_softmax(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean half_to_float);
 @Namespace("at") public static native @ByVal Tensor _sparse_log_softmax_backward_data(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @Cast("int64_t") long dim, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, ScalarType dtype);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(2)") Scalar p);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, ScalarType dtype);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar p);
 @Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal TensorTensorTuple frexp(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> frexp_out(@ByRef Tensor mantissa, @ByRef Tensor exponent, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> frexp_outf(@Const @ByRef Tensor self, @ByRef Tensor mantissa, @ByRef Tensor exponent);
 @Namespace("at") public static native @ByVal Tensor frobenius_norm(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor frobenius_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor frobenius_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim);
@@ -12836,55 +13629,63 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor nuclear_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dim);
 @Namespace("at") public static native @ByRef Tensor nuclear_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor nuclear_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor clone(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor clone(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor clone(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor resize_as_(@ByRef Tensor self, @Const @ByRef Tensor the_template, @ByVal(nullValue = "c10::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByRef Tensor resize_as_(@ByRef Tensor self, @Const @ByRef Tensor the_template);
+@Namespace("at") public static native @ByVal Tensor positive(@Const @ByRef Tensor self);
+@Namespace("at") public static native @Const @ByRef Tensor resize_as_(@Const @ByRef Tensor self, @Const @ByRef Tensor the_template, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @Const @ByRef Tensor resize_as_(@Const @ByRef Tensor self, @Const @ByRef Tensor the_template);
+@Namespace("at") public static native @Const @ByRef Tensor resize_as_sparse_(@Const @ByRef Tensor self, @Const @ByRef Tensor the_template);
 @Namespace("at") public static native @ByRef Tensor zero_(@ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor sub_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor sub_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor sub_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor sub_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor sub(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor sub_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor sub(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor sub(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor sub(@Const @ByRef Tensor self, @ByVal Scalar other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
-@Namespace("at") public static native @ByVal Tensor sub(@Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor subtract_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor sub(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor sub(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor subtract_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor subtract_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor subtract_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor subtract(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor subtract_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor subtract(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor subtract(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor subtract(@Const @ByRef Tensor self, @ByVal Scalar other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
-@Namespace("at") public static native @ByVal Tensor subtract(@Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByVal Tensor rsub(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor subtract(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor subtract(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByVal Tensor rsub(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor rsub(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor heaviside_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor values);
 @Namespace("at") public static native @ByRef Tensor heaviside_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor values, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor heaviside(@Const @ByRef Tensor self, @Const @ByRef Tensor values);
-@Namespace("at") public static native @ByVal Tensor rsub(@Const @ByRef Tensor self, @ByVal Scalar other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
-@Namespace("at") public static native @ByVal Tensor rsub(@Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByVal Tensor _sparse_addmm(@Const @ByRef Tensor self, @Const @ByRef Tensor sparse, @Const @ByRef Tensor dense, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor rsub(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor rsub(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByVal Tensor _sparse_addmm(@Const @ByRef Tensor self, @Const @ByRef Tensor sparse, @Const @ByRef Tensor dense, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor _sparse_addmm(@Const @ByRef Tensor self, @Const @ByRef Tensor sparse, @Const @ByRef Tensor dense);
-@Namespace("at") public static native @ByRef Tensor addmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor addmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2);
-@Namespace("at") public static native @ByRef Tensor addmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @ByVal Scalar beta, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor addmm(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @Const @ByRef Scalar beta, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor addmm(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor addmm(@Const @ByRef Tensor self, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2);
+@Namespace("at") public static native @ByVal Tensor _sparse_csr_tensor(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor _sparse_csr_tensor(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor _sparse_csr_tensor(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor _sparse_csr_tensor(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor _sparse_csr_tensor(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor _sparse_csr_tensor(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor sparse_coo_tensor(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_unsafe(@Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -12899,6 +13700,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_with_dims_and_tensors(@Cast("int64_t") long sparse_dim, @Cast("int64_t") long dense_dim, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor _sparse_coo_tensor_with_dims_and_tensors(@Cast("int64_t") long sparse_dim, @Cast("int64_t") long dense_dim, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Tensor indices, @Const @ByRef Tensor values, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor to_dense_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor input);
+@Namespace("at") public static native @ByVal Tensor _coalesce(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor hspmm_out(@ByRef Tensor out, @Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2);
 @Namespace("at") public static native @ByRef Tensor hspmm_outf(@Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor hspmm(@Const @ByRef Tensor mat1, @Const @ByRef Tensor mat2);
@@ -12907,12 +13709,12 @@ body of your function, only data pointers.
 @Namespace("at") public static native @StdMove TensorVector unbind(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @StdMove TensorVector unbind(@Const @ByRef Tensor self);
 @Namespace("at") public static native @StdMove TensorVector unbind(@Const @ByRef Tensor self, @ByVal Dimname dim);
-@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv2d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv2d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
 @Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv2d_weight(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv2d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv3d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv2d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv3d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
 @Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv3d_weight(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv3d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor mkldnn_reorder_conv3d_weight(@Const @ByRef Tensor self, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
 @Namespace("at") public static native @ByVal Tensor to_mkldnn_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor input);
 @Namespace("at") public static native @ByVal Tensor quantize_per_tensor(@Const @ByRef Tensor self, double scale, @Cast("int64_t") long zero_point, ScalarType dtype);
 @Namespace("at") public static native @StdMove TensorVector quantize_per_tensor(@ByVal TensorArrayRef tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
@@ -12950,9 +13752,9 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor combinations(@Const @ByRef Tensor self, @Cast("int64_t") long r/*=2*/, @Cast("bool") boolean with_replacement/*=false*/);
 @Namespace("at") public static native @ByVal Tensor combinations(@Const @ByRef Tensor self);
 @Namespace("at") public static native ScalarType result_type(@Const @ByRef Tensor tensor, @Const @ByRef Tensor other);
-@Namespace("at") public static native ScalarType result_type(@Const @ByRef Tensor tensor, @ByVal Scalar other);
-@Namespace("at") public static native ScalarType result_type(@ByVal Scalar scalar, @Const @ByRef Tensor tensor);
-@Namespace("at") public static native ScalarType result_type(@ByVal Scalar scalar1, @ByVal Scalar scalar2);
+@Namespace("at") public static native ScalarType result_type(@Const @ByRef Tensor tensor, @Const @ByRef Scalar other);
+@Namespace("at") public static native ScalarType result_type(@Const @ByRef Scalar scalar, @Const @ByRef Tensor tensor);
+@Namespace("at") public static native ScalarType result_type(@Const @ByRef Scalar scalar1, @Const @ByRef Scalar scalar2);
 @Namespace("at") public static native @Cast("bool") boolean can_cast(ScalarType from, ScalarType to);
 @Namespace("at") public static native ScalarType promote_types(ScalarType type1, ScalarType type2);
 @Namespace("at") public static native @ByVal Scalar _local_scalar_dense(@Const @ByRef Tensor self);
@@ -12980,61 +13782,65 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor rnn_tanh_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh);
 @Namespace("at") public static native @ByVal Tensor rnn_relu_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional b_ih, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional b_hh);
 @Namespace("at") public static native @ByVal Tensor rnn_relu_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh);
-@Namespace("at") public static native @ByVal TensorTensorTuple quantized_lstm_cell(@Const @ByRef Tensor input, @ByVal TensorArrayRef hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @ByVal Scalar scale_ih, @ByVal Scalar scale_hh, @ByVal Scalar zero_point_ih, @ByVal Scalar zero_point_hh);
-@Namespace("at") public static native @ByVal Tensor quantized_gru_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @ByVal Scalar scale_ih, @ByVal Scalar scale_hh, @ByVal Scalar zero_point_ih, @ByVal Scalar zero_point_hh);
-@Namespace("at") public static native @ByVal Tensor quantized_rnn_relu_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @ByVal Scalar scale_ih, @ByVal Scalar scale_hh, @ByVal Scalar zero_point_ih, @ByVal Scalar zero_point_hh);
-@Namespace("at") public static native @ByVal Tensor quantized_rnn_tanh_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @ByVal Scalar scale_ih, @ByVal Scalar scale_hh, @ByVal Scalar zero_point_ih, @ByVal Scalar zero_point_hh);
+@Namespace("at") public static native @ByVal TensorTensorTuple quantized_lstm_cell(@Const @ByRef Tensor input, @ByVal TensorArrayRef hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @Const @ByRef Scalar scale_ih, @Const @ByRef Scalar scale_hh, @Const @ByRef Scalar zero_point_ih, @Const @ByRef Scalar zero_point_hh);
+@Namespace("at") public static native @ByVal Tensor quantized_gru_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @Const @ByRef Scalar scale_ih, @Const @ByRef Scalar scale_hh, @Const @ByRef Scalar zero_point_ih, @Const @ByRef Scalar zero_point_hh);
+@Namespace("at") public static native @ByVal Tensor quantized_rnn_relu_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @Const @ByRef Scalar scale_ih, @Const @ByRef Scalar scale_hh, @Const @ByRef Scalar zero_point_ih, @Const @ByRef Scalar zero_point_hh);
+@Namespace("at") public static native @ByVal Tensor quantized_rnn_tanh_cell(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @Const @ByRef Scalar scale_ih, @Const @ByRef Scalar scale_hh, @Const @ByRef Scalar zero_point_ih, @Const @ByRef Scalar zero_point_hh);
 @Namespace("at") public static native @ByVal TensorTensorTuple _pack_padded_sequence(@Const @ByRef Tensor input, @Const @ByRef Tensor lengths, @Cast("bool") boolean batch_first);
 @Namespace("at") public static native @ByVal Tensor _pack_padded_sequence_backward(@Const @ByRef Tensor grad, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Const @ByRef Tensor batch_sizes, @Cast("bool") boolean batch_first);
 @Namespace("at") public static native @ByVal Tensor _pack_padded_sequence_backward(@Const @ByRef Tensor grad, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Const @ByRef Tensor batch_sizes, @Cast("bool") boolean batch_first);
-@Namespace("at") public static native @ByVal TensorTensorTuple _pad_packed_sequence(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Cast("bool") boolean batch_first, @ByVal Scalar padding_value, @Cast("int64_t") long total_length);
-@Namespace("at") public static native @ByVal Tensor masked_fill(@Const @ByRef Tensor self, @Const @ByRef Tensor mask, @ByVal Scalar value);
+@Namespace("at") public static native @ByVal TensorTensorTuple _pad_packed_sequence(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Cast("bool") boolean batch_first, @Const @ByRef Scalar padding_value, @Cast("int64_t") long total_length);
+@Namespace("at") public static native @ByVal Tensor masked_fill(@Const @ByRef Tensor self, @Const @ByRef Tensor mask, @Const @ByRef Scalar value);
 @Namespace("at") public static native @ByVal Tensor masked_fill(@Const @ByRef Tensor self, @Const @ByRef Tensor mask, @Const @ByRef Tensor value);
 @Namespace("at") public static native @ByVal Tensor masked_scatter(@Const @ByRef Tensor self, @Const @ByRef Tensor mask, @Const @ByRef Tensor source);
+@Namespace("at") public static native @ByVal Tensor put(@Const @ByRef Tensor self, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @Cast("bool") boolean accumulate/*=false*/);
+@Namespace("at") public static native @ByVal Tensor put(@Const @ByRef Tensor self, @Const @ByRef Tensor index, @Const @ByRef Tensor source);
 @Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source);
+@Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @Const @ByRef Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source);
-@Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @ByVal Scalar value);
+@Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value);
 @Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor value);
-@Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @ByVal Scalar value);
+@Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value);
 @Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor value);
 @Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src);
-@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @ByVal Scalar value);
+@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value);
 @Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src);
-@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @ByVal Scalar value);
+@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value);
 @Namespace("at") public static native @ByVal Tensor scatter_add(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src);
 @Namespace("at") public static native @ByVal Tensor scatter_add(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src);
 @Namespace("at") public static native @ByRef Tensor bitwise_and_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor bitwise_and_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor bitwise_and_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor bitwise_and_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor bitwise_and(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor bitwise_and_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor bitwise_and_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor bitwise_and(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor bitwise_and(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor __and__(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor __and__(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor __and__(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor bitwise_or_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor bitwise_or_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor bitwise_or_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor bitwise_or_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor bitwise_or(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor bitwise_or_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor bitwise_or_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor bitwise_or(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor bitwise_or(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor __or__(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor __or__(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor __or__(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor bitwise_xor_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor bitwise_xor_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor bitwise_xor_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor bitwise_xor_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor bitwise_xor(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor bitwise_xor_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor bitwise_xor_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor bitwise_xor(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor bitwise_xor(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor __xor__(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor __xor__(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor __xor__(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor __lshift__(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor __lshift__(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor __lshift__(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByVal Tensor __rshift__(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByVal Tensor __rshift__(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByVal Tensor __rshift__(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor addbmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addbmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByRef Tensor addbmm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2);
-@Namespace("at") public static native @ByRef Tensor addbmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @ByVal Scalar beta, @ByVal Scalar alpha, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor addbmm(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByRef Tensor addbmm_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @Const @ByRef Scalar beta, @Const @ByRef Scalar alpha, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor addbmm(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor addbmm(@Const @ByRef Tensor self, @Const @ByRef Tensor batch1, @Const @ByRef Tensor batch2);
 @Namespace("at") public static native @ByRef Tensor diag_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long diagonal/*=0*/);
 @Namespace("at") public static native @ByRef Tensor diag_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -13058,85 +13864,89 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor tril_outf(@Const @ByRef Tensor self, @Cast("int64_t") long diagonal, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor tril(@Const @ByRef Tensor self, @Cast("int64_t") long diagonal/*=0*/);
 @Namespace("at") public static native @ByVal Tensor tril(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor tril_indices(@Cast("int64_t") long row, @Cast("int64_t") long col, @Cast("int64_t") long offset/*=0*/, @ByVal(nullValue = "c10::TensorOptions(at::kLong)") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor tril_indices(@Cast("int64_t") long row, @Cast("int64_t") long col, @Cast("int64_t") long offset/*=0*/, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor tril_indices(@Cast("int64_t") long row, @Cast("int64_t") long col);
 @Namespace("at") public static native @ByVal Tensor tril_indices(@Cast("int64_t") long row, @Cast("int64_t") long col, @Cast("int64_t") long offset, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor triu_indices(@Cast("int64_t") long row, @Cast("int64_t") long col, @Cast("int64_t") long offset/*=0*/, @ByVal(nullValue = "c10::TensorOptions(at::kLong)") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor triu_indices(@Cast("int64_t") long row, @Cast("int64_t") long col, @Cast("int64_t") long offset/*=0*/, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor triu_indices(@Cast("int64_t") long row, @Cast("int64_t") long col);
 @Namespace("at") public static native @ByVal Tensor triu_indices(@Cast("int64_t") long row, @Cast("int64_t") long col, @Cast("int64_t") long offset, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor trace(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor trace_backward(@Const @ByRef Tensor grad, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
 @Namespace("at") public static native @ByVal Tensor trace_backward(@Const @ByRef Tensor grad, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
-@Namespace("at") public static native @ByRef Tensor ne_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor ne_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor ne(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor ne_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor ne_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor ne(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor ne_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor ne_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor ne(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor not_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor not_equal_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor not_equal(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor not_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor not_equal_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor not_equal(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor not_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor not_equal_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor not_equal(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor eq_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor eq_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor eq(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor eq_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor eq_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor eq(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor eq_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor eq_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor eq(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor ge_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor ge_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor ge(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor ge_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor ge_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor ge(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor ge_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor ge_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor ge(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor greater_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor greater_equal_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor greater_equal(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor greater_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor greater_equal_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor greater_equal(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor greater_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor greater_equal_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor greater_equal(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor le_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor le_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor le(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor le_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor le_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor le(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor le_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor le_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor le(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor less_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor less_equal_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor less_equal(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor less_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor less_equal_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor less_equal(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor less_equal_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor less_equal_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor less_equal(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor gt_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor gt_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor gt(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor gt_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor gt_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor gt(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor gt_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor gt_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor gt(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor greater_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor greater_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor greater(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor greater_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor greater_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor greater(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor greater_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor greater_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor greater(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor lt_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor lt_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor lt(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor lt_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor lt_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor lt(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor lt_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor lt_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor lt(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor less_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor less_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor less(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor less_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor less_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor less(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor less_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor less_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor less(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor take_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor index);
 @Namespace("at") public static native @ByRef Tensor take_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor index, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor take(@Const @ByRef Tensor self, @Const @ByRef Tensor index);
-@Namespace("at") public static native @ByVal Tensor take_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor input, @Const @ByRef Tensor index);
+@Namespace("at") public static native @ByRef Tensor take_along_dim_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor indices, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim);
+@Namespace("at") public static native @ByRef Tensor take_along_dim_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor indices);
+@Namespace("at") public static native @ByRef Tensor take_along_dim_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor indices, @ByVal LongOptional dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor take_along_dim(@Const @ByRef Tensor self, @Const @ByRef Tensor indices, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim);
+@Namespace("at") public static native @ByVal Tensor take_along_dim(@Const @ByRef Tensor self, @Const @ByRef Tensor indices);
 @Namespace("at") public static native @ByRef Tensor index_select_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index);
 @Namespace("at") public static native @ByRef Tensor index_select_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor index_select(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index);
@@ -13165,16 +13975,18 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor gather(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Cast("bool") boolean sparse_grad/*=false*/);
 @Namespace("at") public static native @ByVal Tensor gather(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index);
 @Namespace("at") public static native @ByVal Tensor _gather_sparse_backward(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor grad);
-@Namespace("at") public static native @ByRef Tensor addcmul_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native @ByRef Tensor addcmul_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native @ByRef Tensor addcmul_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2);
-@Namespace("at") public static native @ByRef Tensor addcmul_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @ByVal Scalar value, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor addcmul(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native @ByRef Tensor addcmul_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @Const @ByRef Scalar value, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor addcmul(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native @ByVal Tensor addcmul(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2);
-@Namespace("at") public static native @ByRef Tensor addcdiv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native @ByRef Tensor addcdiv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native @ByRef Tensor addcdiv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2);
-@Namespace("at") public static native @ByRef Tensor addcdiv_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @ByVal Scalar value, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor addcdiv(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native @ByRef Tensor addcdiv_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @Const @ByRef Scalar value, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor addcdiv(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native @ByVal Tensor addcdiv(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor1, @Const @ByRef Tensor tensor2);
+@Namespace("at") public static native @ByVal Tensor cross_entropy_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, @Cast("int64_t") long ignore_index/*=-100*/);
+@Namespace("at") public static native @ByVal Tensor cross_entropy_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> lstsq_out(@ByRef Tensor X, @ByRef Tensor qr, @Const @ByRef Tensor self, @Const @ByRef Tensor A);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> lstsq_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor A, @ByRef Tensor X, @ByRef Tensor qr);
 @Namespace("at") public static native @ByVal TensorTensorTuple lstsq(@Const @ByRef Tensor self, @Const @ByRef Tensor A);
@@ -13183,7 +13995,6 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> triangular_solve_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor A, @Cast("bool") boolean upper, @Cast("bool") boolean transpose, @Cast("bool") boolean unitriangular, @ByRef Tensor X, @ByRef Tensor M);
 @Namespace("at") public static native @ByVal TensorTensorTuple triangular_solve(@Const @ByRef Tensor self, @Const @ByRef Tensor A, @Cast("bool") boolean upper/*=true*/, @Cast("bool") boolean transpose/*=false*/, @Cast("bool") boolean unitriangular/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple triangular_solve(@Const @ByRef Tensor self, @Const @ByRef Tensor A);
-@Namespace("at") public static native @ByVal TensorTensorTuple _triangular_solve_helper(@Const @ByRef Tensor self, @Const @ByRef Tensor A, @Cast("bool") boolean upper, @Cast("bool") boolean transpose, @Cast("bool") boolean unitriangular);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> symeig_out(@ByRef Tensor e, @ByRef Tensor V, @Const @ByRef Tensor self, @Cast("bool") boolean eigenvectors/*=false*/, @Cast("bool") boolean upper/*=true*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> symeig_out(@ByRef Tensor e, @ByRef Tensor V, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> symeig_outf(@Const @ByRef Tensor self, @Cast("bool") boolean eigenvectors, @Cast("bool") boolean upper, @ByRef Tensor e, @ByRef Tensor V);
@@ -13208,7 +14019,6 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor cholesky_outf(@Const @ByRef Tensor self, @Cast("bool") boolean upper, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor cholesky(@Const @ByRef Tensor self, @Cast("bool") boolean upper/*=false*/);
 @Namespace("at") public static native @ByVal Tensor cholesky(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor _cholesky_helper(@Const @ByRef Tensor self, @Cast("bool") boolean upper);
 @Namespace("at") public static native @ByRef Tensor cholesky_solve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor input2, @Cast("bool") boolean upper/*=false*/);
 @Namespace("at") public static native @ByRef Tensor cholesky_solve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor input2);
 @Namespace("at") public static native @ByRef Tensor cholesky_solve_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor input2, @Cast("bool") boolean upper, @ByRef Tensor out);
@@ -13232,9 +14042,9 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> geqrf_out(@ByRef Tensor a, @ByRef Tensor tau, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> geqrf_outf(@Const @ByRef Tensor self, @ByRef Tensor a, @ByRef Tensor tau);
 @Namespace("at") public static native @ByVal TensorTensorTuple geqrf(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor orgqr(@Const @ByRef Tensor self, @Const @ByRef Tensor input2);
 @Namespace("at") public static native @ByRef Tensor orgqr_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor input2);
 @Namespace("at") public static native @ByRef Tensor orgqr_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor input2, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor orgqr(@Const @ByRef Tensor self, @Const @ByRef Tensor input2);
 @Namespace("at") public static native @ByRef Tensor ormqr_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Cast("bool") boolean left/*=true*/, @Cast("bool") boolean transpose/*=false*/);
 @Namespace("at") public static native @ByRef Tensor ormqr_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
 @Namespace("at") public static native @ByRef Tensor ormqr_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Cast("bool") boolean left, @Cast("bool") boolean transpose, @ByRef Tensor out);
@@ -13245,7 +14055,11 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor lu_solve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots);
 @Namespace("at") public static native @ByRef Tensor lu_solve_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor lu_solve(@Const @ByRef Tensor self, @Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots);
-@Namespace("at") public static native @ByVal Tensor _lu_solve_helper(@Const @ByRef Tensor self, @Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots);
+@Namespace("at") public static native @ByVal TensorTensorTensorTuple lu_unpack(@Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots, @Cast("bool") boolean unpack_data/*=true*/, @Cast("bool") boolean unpack_pivots/*=true*/);
+@Namespace("at") public static native @ByVal TensorTensorTensorTuple lu_unpack(@Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> lu_unpack_out(@ByRef Tensor P, @ByRef Tensor L, @ByRef Tensor U, @Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots, @Cast("bool") boolean unpack_data/*=true*/, @Cast("bool") boolean unpack_pivots/*=true*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> lu_unpack_out(@ByRef Tensor P, @ByRef Tensor L, @ByRef Tensor U, @Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> lu_unpack_outf(@Const @ByRef Tensor LU_data, @Const @ByRef Tensor LU_pivots, @Cast("bool") boolean unpack_data, @Cast("bool") boolean unpack_pivots, @ByRef Tensor P, @ByRef Tensor L, @ByRef Tensor U);
 @Namespace("at") public static native @ByRef Tensor multinomial_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long num_samples, @Cast("bool") boolean replacement/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor multinomial_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long num_samples);
 @Namespace("at") public static native @ByRef Tensor multinomial_outf(@Const @ByRef Tensor self, @Cast("int64_t") long num_samples, @Cast("bool") boolean replacement, @ByVal GeneratorOptional generator, @ByRef Tensor out);
@@ -13273,25 +14087,25 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor signbit(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor signbit_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor signbit_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor dist(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(2)") Scalar p);
+@Namespace("at") public static native @ByVal Tensor dist(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar p);
 @Namespace("at") public static native @ByVal Tensor dist(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor atan2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor atan2_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor atan2(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor lerp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor end, @ByVal Scalar weight);
-@Namespace("at") public static native @ByRef Tensor lerp_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor end, @ByVal Scalar weight, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor lerp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor end, @Const @ByRef Scalar weight);
+@Namespace("at") public static native @ByRef Tensor lerp_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor end, @Const @ByRef Scalar weight, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor lerp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor end, @Const @ByRef Tensor weight);
 @Namespace("at") public static native @ByRef Tensor lerp_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor end, @Const @ByRef Tensor weight, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor lerp(@Const @ByRef Tensor self, @Const @ByRef Tensor end, @ByVal Scalar weight);
+@Namespace("at") public static native @ByVal Tensor lerp(@Const @ByRef Tensor self, @Const @ByRef Tensor end, @Const @ByRef Scalar weight);
 @Namespace("at") public static native @ByVal Tensor lerp(@Const @ByRef Tensor self, @Const @ByRef Tensor end, @Const @ByRef Tensor weight);
-@Namespace("at") public static native @ByRef Tensor histc_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long bins/*=100*/, @ByVal(nullValue = "c10::Scalar(0)") Scalar min, @ByVal(nullValue = "c10::Scalar(0)") Scalar max);
+@Namespace("at") public static native @ByRef Tensor histc_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long bins/*=100*/, @Const @ByRef(nullValue = "at::Scalar(0)") Scalar min, @Const @ByRef(nullValue = "at::Scalar(0)") Scalar max);
 @Namespace("at") public static native @ByRef Tensor histc_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor histc_outf(@Const @ByRef Tensor self, @Cast("int64_t") long bins, @ByVal Scalar min, @ByVal Scalar max, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor histc(@Const @ByRef Tensor self, @Cast("int64_t") long bins/*=100*/, @ByVal(nullValue = "c10::Scalar(0)") Scalar min, @ByVal(nullValue = "c10::Scalar(0)") Scalar max);
+@Namespace("at") public static native @ByRef Tensor histc_outf(@Const @ByRef Tensor self, @Cast("int64_t") long bins, @Const @ByRef Scalar min, @Const @ByRef Scalar max, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor histc(@Const @ByRef Tensor self, @Cast("int64_t") long bins/*=100*/, @Const @ByRef(nullValue = "at::Scalar(0)") Scalar min, @Const @ByRef(nullValue = "at::Scalar(0)") Scalar max);
 @Namespace("at") public static native @ByVal Tensor histc(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fmod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor fmod_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fmod(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor fmod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor fmod_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor fmod(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor fmod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor fmod_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor fmod(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
@@ -13307,9 +14121,9 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor nextafter_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor nextafter_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor nextafter(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor remainder_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar other);
-@Namespace("at") public static native @ByRef Tensor remainder_outf(@Const @ByRef Tensor self, @ByVal Scalar other, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor remainder(@Const @ByRef Tensor self, @ByVal Scalar other);
+@Namespace("at") public static native @ByRef Tensor remainder_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor remainder_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor remainder(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 @Namespace("at") public static native @ByRef Tensor remainder_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor remainder_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor remainder(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
@@ -13353,16 +14167,50 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString BytePointer interpolation);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StdString String interpolation);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean descending/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean descending, @ByRef Tensor values, @ByRef Tensor indices);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal BoolOptional stable, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean descending/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal BoolOptional stable);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_outf(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @Cast("int64_t") long dim, @Cast("bool") boolean descending, @ByRef Tensor values, @ByRef Tensor indices);
 @Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean descending/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean descending/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending, @ByRef Tensor values, @ByRef Tensor indices);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> sort_outf(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim, @Cast("bool") boolean descending, @ByRef Tensor values, @ByRef Tensor indices);
 @Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self, @ByVal Dimname dim);
+@Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim);
 @Namespace("at") public static native @ByRef Tensor msort_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor msort_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor msort(@Const @ByRef Tensor self);
@@ -13377,30 +14225,30 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal TensorTensorTuple topk(@Const @ByRef Tensor self, @Cast("int64_t") long k);
 @Namespace("at") public static native @ByVal Tensor all(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor any(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor renorm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar p, @Cast("int64_t") long dim, @ByVal Scalar maxnorm);
-@Namespace("at") public static native @ByRef Tensor renorm_outf(@Const @ByRef Tensor self, @ByVal Scalar p, @Cast("int64_t") long dim, @ByVal Scalar maxnorm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor renorm(@Const @ByRef Tensor self, @ByVal Scalar p, @Cast("int64_t") long dim, @ByVal Scalar maxnorm);
+@Namespace("at") public static native @ByRef Tensor renorm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar p, @Cast("int64_t") long dim, @Const @ByRef Scalar maxnorm);
+@Namespace("at") public static native @ByRef Tensor renorm_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar p, @Cast("int64_t") long dim, @Const @ByRef Scalar maxnorm, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor renorm(@Const @ByRef Tensor self, @Const @ByRef Scalar p, @Cast("int64_t") long dim, @Const @ByRef Scalar maxnorm);
 @Namespace("at") public static native @ByVal Tensor unfold_backward(@Const @ByRef Tensor grad_in, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_sizes, @Cast("int64_t") long dim, @Cast("int64_t") long size, @Cast("int64_t") long step);
 @Namespace("at") public static native @ByVal Tensor unfold_backward(@Const @ByRef Tensor grad_in, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] input_sizes, @Cast("int64_t") long dim, @Cast("int64_t") long size, @Cast("int64_t") long step);
 @Namespace("at") public static native @Cast("bool") boolean equal(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor pow_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor exponent);
 @Namespace("at") public static native @ByRef Tensor pow_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor exponent, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor pow(@Const @ByRef Tensor self, @Const @ByRef Tensor exponent);
-@Namespace("at") public static native @ByRef Tensor pow_out(@ByRef Tensor out, @ByVal Scalar self, @Const @ByRef Tensor exponent);
-@Namespace("at") public static native @ByRef Tensor pow_outf(@ByVal Scalar self, @Const @ByRef Tensor exponent, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor pow(@ByVal Scalar self, @Const @ByRef Tensor exponent);
-@Namespace("at") public static native @ByRef Tensor pow_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar exponent);
-@Namespace("at") public static native @ByRef Tensor pow_outf(@Const @ByRef Tensor self, @ByVal Scalar exponent, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor pow(@Const @ByRef Tensor self, @ByVal Scalar exponent);
+@Namespace("at") public static native @ByRef Tensor pow_out(@ByRef Tensor out, @Const @ByRef Scalar self, @Const @ByRef Tensor exponent);
+@Namespace("at") public static native @ByRef Tensor pow_outf(@Const @ByRef Scalar self, @Const @ByRef Tensor exponent, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor pow(@Const @ByRef Scalar self, @Const @ByRef Tensor exponent);
+@Namespace("at") public static native @ByRef Tensor pow_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar exponent);
+@Namespace("at") public static native @ByRef Tensor pow_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar exponent, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor pow(@Const @ByRef Tensor self, @Const @ByRef Scalar exponent);
 @Namespace("at") public static native @ByRef Tensor float_power_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor exponent);
 @Namespace("at") public static native @ByRef Tensor float_power_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor exponent, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor float_power(@Const @ByRef Tensor self, @Const @ByRef Tensor exponent);
-@Namespace("at") public static native @ByRef Tensor float_power_out(@ByRef Tensor out, @ByVal Scalar self, @Const @ByRef Tensor exponent);
-@Namespace("at") public static native @ByRef Tensor float_power_outf(@ByVal Scalar self, @Const @ByRef Tensor exponent, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor float_power(@ByVal Scalar self, @Const @ByRef Tensor exponent);
-@Namespace("at") public static native @ByRef Tensor float_power_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Scalar exponent);
-@Namespace("at") public static native @ByRef Tensor float_power_outf(@Const @ByRef Tensor self, @ByVal Scalar exponent, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor float_power(@Const @ByRef Tensor self, @ByVal Scalar exponent);
+@Namespace("at") public static native @ByRef Tensor float_power_out(@ByRef Tensor out, @Const @ByRef Scalar self, @Const @ByRef Tensor exponent);
+@Namespace("at") public static native @ByRef Tensor float_power_outf(@Const @ByRef Scalar self, @Const @ByRef Tensor exponent, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor float_power(@Const @ByRef Scalar self, @Const @ByRef Tensor exponent);
+@Namespace("at") public static native @ByRef Tensor float_power_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar exponent);
+@Namespace("at") public static native @ByRef Tensor float_power_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar exponent, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor float_power(@Const @ByRef Tensor self, @Const @ByRef Scalar exponent);
 @Namespace("at") public static native @ByRef Tensor normal_out(@ByRef Tensor out, @Const @ByRef Tensor mean, double std/*=1*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor normal_out(@ByRef Tensor out, @Const @ByRef Tensor mean);
 @Namespace("at") public static native @ByRef Tensor normal_outf(@Const @ByRef Tensor mean, double std, @ByVal GeneratorOptional generator, @ByRef Tensor out);
@@ -13416,9 +14264,9 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor normal_outf(@Const @ByRef Tensor mean, @Const @ByRef Tensor std, @ByVal GeneratorOptional generator, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor normal(@Const @ByRef Tensor mean, @Const @ByRef Tensor std, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor normal(@Const @ByRef Tensor mean, @Const @ByRef Tensor std);
-@Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... size);
 @Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor normal(double mean, double std, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
@@ -13436,45 +14284,41 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _cumprod(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 @Namespace("at") public static native @ByRef Tensor _cumprod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim);
 @Namespace("at") public static native @ByRef Tensor _cumprod_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor _var(@Const @ByRef Tensor self, @Cast("bool") boolean unbiased/*=true*/);
-@Namespace("at") public static native @ByVal Tensor _var(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor _std(@Const @ByRef Tensor self, @Cast("bool") boolean unbiased/*=true*/);
-@Namespace("at") public static native @ByVal Tensor _std(@Const @ByRef Tensor self);
 @Namespace("at") public static native void _amp_foreach_non_finite_check_and_unscale_(@ByVal TensorArrayRef self, @ByRef Tensor found_inf, @Const @ByRef Tensor inv_scale);
-@Namespace("at") public static native @ByVal Tensor _amp_update_scale(@ByRef Tensor growth_tracker, @Const @ByRef Tensor current_scale, @Const @ByRef Tensor found_inf, double scale_growth_factor, double scale_backoff_factor, @Cast("int64_t") long growth_interval);
+@Namespace("at") public static native @ByRef Tensor _amp_update_scale_(@ByRef Tensor self, @ByRef Tensor growth_tracker, @Const @ByRef Tensor found_inf, double scale_growth_factor, double scale_backoff_factor, @Cast("int64_t") long growth_interval);
 @Namespace("at") public static native @ByVal Tensor _cat(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByVal Tensor _cat(@ByVal TensorArrayRef tensors);
 @Namespace("at") public static native @ByRef Tensor _cat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByRef Tensor _cat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
 @Namespace("at") public static native @ByRef Tensor _cat_outf(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
-@Namespace("at") public static native @StdMove TensorVector _foreach_add(@ByVal TensorArrayRef tensors, @ByVal Scalar scalar);
-@Namespace("at") public static native void _foreach_add_(@ByVal TensorArrayRef self, @ByVal Scalar scalar);
-@Namespace("at") public static native @StdMove TensorVector _foreach_sub(@ByVal TensorArrayRef tensors, @ByVal Scalar scalar);
-@Namespace("at") public static native void _foreach_sub_(@ByVal TensorArrayRef self, @ByVal Scalar scalar);
-@Namespace("at") public static native @StdMove TensorVector _foreach_mul(@ByVal TensorArrayRef tensors, @ByVal Scalar scalar);
-@Namespace("at") public static native void _foreach_mul_(@ByVal TensorArrayRef self, @ByVal Scalar scalar);
-@Namespace("at") public static native @StdMove TensorVector _foreach_div(@ByVal TensorArrayRef tensors, @ByVal Scalar scalar);
-@Namespace("at") public static native void _foreach_div_(@ByVal TensorArrayRef self, @ByVal Scalar scalar);
-@Namespace("at") public static native @StdMove TensorVector _foreach_add(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @StdMove TensorVector _foreach_add(@ByVal TensorArrayRef tensors, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native void _foreach_add_(@ByVal TensorArrayRef self, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native @StdMove TensorVector _foreach_sub(@ByVal TensorArrayRef tensors, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native void _foreach_sub_(@ByVal TensorArrayRef self, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native @StdMove TensorVector _foreach_mul(@ByVal TensorArrayRef tensors, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native void _foreach_mul_(@ByVal TensorArrayRef self, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native @StdMove TensorVector _foreach_div(@ByVal TensorArrayRef tensors, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native void _foreach_div_(@ByVal TensorArrayRef self, @Const @ByRef Scalar scalar);
+@Namespace("at") public static native @StdMove TensorVector _foreach_add(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @StdMove TensorVector _foreach_add(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2);
-@Namespace("at") public static native void _foreach_add_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native void _foreach_add_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native void _foreach_add_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other);
-@Namespace("at") public static native @StdMove TensorVector _foreach_sub(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @StdMove TensorVector _foreach_sub(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @StdMove TensorVector _foreach_sub(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2);
-@Namespace("at") public static native void _foreach_sub_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native void _foreach_sub_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native void _foreach_sub_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other);
 @Namespace("at") public static native @StdMove TensorVector _foreach_mul(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2);
 @Namespace("at") public static native void _foreach_mul_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other);
 @Namespace("at") public static native @StdMove TensorVector _foreach_div(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2);
 @Namespace("at") public static native void _foreach_div_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef other);
-@Namespace("at") public static native @StdMove TensorVector _foreach_add(@ByVal TensorArrayRef tensors, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native void _foreach_add_(@ByVal TensorArrayRef self, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native @StdMove TensorVector _foreach_sub(@ByVal TensorArrayRef tensors, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native void _foreach_sub_(@ByVal TensorArrayRef self, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native @StdMove TensorVector _foreach_div(@ByVal TensorArrayRef tensors, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native void _foreach_div_(@ByVal TensorArrayRef self, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native @StdMove TensorVector _foreach_mul(@ByVal TensorArrayRef tensors, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native void _foreach_mul_(@ByVal TensorArrayRef self, @ByVal DoubleArrayRef scalars);
+@Namespace("at") public static native @StdMove TensorVector _foreach_add(@ByVal TensorArrayRef tensors, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native void _foreach_add_(@ByVal TensorArrayRef self, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native @StdMove TensorVector _foreach_sub(@ByVal TensorArrayRef tensors, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native void _foreach_sub_(@ByVal TensorArrayRef self, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native @StdMove TensorVector _foreach_div(@ByVal TensorArrayRef tensors, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native void _foreach_div_(@ByVal TensorArrayRef self, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native @StdMove TensorVector _foreach_mul(@ByVal TensorArrayRef tensors, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native void _foreach_mul_(@ByVal TensorArrayRef self, @ByVal ScalarArrayRef scalars);
 @Namespace("at") public static native @StdMove TensorVector _foreach_exp(@ByVal TensorArrayRef tensors);
 @Namespace("at") public static native void _foreach_zero_(@ByVal TensorArrayRef self);
 @Namespace("at") public static native void _foreach_exp_(@ByVal TensorArrayRef self);
@@ -13532,39 +14376,34 @@ body of your function, only data pointers.
 @Namespace("at") public static native void _foreach_sigmoid_(@ByVal TensorArrayRef self);
 @Namespace("at") public static native @StdMove TensorVector _foreach_trunc(@ByVal TensorArrayRef tensors);
 @Namespace("at") public static native void _foreach_trunc_(@ByVal TensorArrayRef self);
-@Namespace("at") public static native void _foreach_addcdiv_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native void _foreach_addcdiv_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native void _foreach_addcdiv_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2);
-@Namespace("at") public static native void _foreach_addcmul_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native void _foreach_addcmul_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native void _foreach_addcmul_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2);
-@Namespace("at") public static native void _foreach_addcdiv_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native void _foreach_addcmul_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native @StdMove TensorVector _foreach_addcdiv(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native void _foreach_addcdiv_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native void _foreach_addcmul_(@ByVal TensorArrayRef self, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native @StdMove TensorVector _foreach_addcdiv(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native @StdMove TensorVector _foreach_addcdiv(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2);
-@Namespace("at") public static native @StdMove TensorVector _foreach_addcmul(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal(nullValue = "c10::Scalar(1)") Scalar value);
+@Namespace("at") public static native @StdMove TensorVector _foreach_addcmul(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar value);
 @Namespace("at") public static native @StdMove TensorVector _foreach_addcmul(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2);
-@Namespace("at") public static native @StdMove TensorVector _foreach_addcdiv(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal DoubleArrayRef scalars);
-@Namespace("at") public static native @StdMove TensorVector _foreach_addcmul(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal DoubleArrayRef scalars);
+@Namespace("at") public static native @StdMove TensorVector _foreach_addcdiv(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal ScalarArrayRef scalars);
+@Namespace("at") public static native @StdMove TensorVector _foreach_addcmul(@ByVal TensorArrayRef input, @ByVal TensorArrayRef tensor1, @ByVal TensorArrayRef tensor2, @ByVal ScalarArrayRef scalars);
 @Namespace("at") public static native @StdMove TensorVector _foreach_maximum(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2);
 @Namespace("at") public static native @StdMove TensorVector _foreach_minimum(@ByVal TensorArrayRef tensors1, @ByVal TensorArrayRef tensors2);
-@Namespace("at") public static native @ByVal TensorTensorTuple _mode(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal TensorTensorTuple _mode(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> _mode_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> _mode_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> _mode_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
 @Namespace("at") public static native @ByVal Tensor bucketize(@Const @ByRef Tensor self, @Const @ByRef Tensor boundaries, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
 @Namespace("at") public static native @ByVal Tensor bucketize(@Const @ByRef Tensor self, @Const @ByRef Tensor boundaries);
 @Namespace("at") public static native @ByRef Tensor bucketize_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor boundaries, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
 @Namespace("at") public static native @ByRef Tensor bucketize_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor boundaries);
 @Namespace("at") public static native @ByRef Tensor bucketize_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor boundaries, @Cast("bool") boolean out_int32, @Cast("bool") boolean right, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor bucketize(@ByVal Scalar self, @Const @ByRef Tensor boundaries, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
-@Namespace("at") public static native @ByVal Tensor bucketize(@ByVal Scalar self, @Const @ByRef Tensor boundaries);
+@Namespace("at") public static native @ByVal Tensor bucketize(@Const @ByRef Scalar self, @Const @ByRef Tensor boundaries, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
+@Namespace("at") public static native @ByVal Tensor bucketize(@Const @ByRef Scalar self, @Const @ByRef Tensor boundaries);
 @Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
 @Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
 @Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor searchsorted_outf(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32, @Cast("bool") boolean right, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @ByVal Scalar self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
-@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @ByVal Scalar self);
+@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/);
+@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self);
 @Namespace("at") public static native @ByRef Tensor mse_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
 @Namespace("at") public static native @ByRef Tensor mse_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByRef Tensor mse_loss_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, @ByRef Tensor out);
@@ -13581,16 +14420,16 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor l1_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction);
 @Namespace("at") public static native @ByRef Tensor l1_loss_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor l1_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction);
-@Namespace("at") public static native @ByRef Tensor multi_margin_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal(nullValue = "c10::Scalar(1)") Scalar p, @ByVal(nullValue = "c10::Scalar(1)") Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
+@Namespace("at") public static native @ByRef Tensor multi_margin_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar p, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
 @Namespace("at") public static native @ByRef Tensor multi_margin_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target);
-@Namespace("at") public static native @ByRef Tensor multi_margin_loss_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal Scalar p, @ByVal Scalar margin, @Const @ByRef TensorOptional weight, @Cast("int64_t") long reduction, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor multi_margin_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal(nullValue = "c10::Scalar(1)") Scalar p, @ByVal(nullValue = "c10::Scalar(1)") Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
+@Namespace("at") public static native @ByRef Tensor multi_margin_loss_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef Scalar p, @Const @ByRef Scalar margin, @Const @ByRef TensorOptional weight, @Cast("int64_t") long reduction, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor multi_margin_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar p, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
 @Namespace("at") public static native @ByVal Tensor multi_margin_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target);
-@Namespace("at") public static native @ByRef Tensor multi_margin_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal Scalar p, @ByVal Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
-@Namespace("at") public static native @ByRef Tensor multi_margin_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal Scalar p, @ByVal Scalar margin);
-@Namespace("at") public static native @ByRef Tensor multi_margin_loss_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal Scalar p, @ByVal Scalar margin, @Const @ByRef TensorOptional weight, @Cast("int64_t") long reduction, @ByRef Tensor grad_input);
-@Namespace("at") public static native @ByVal Tensor multi_margin_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal Scalar p, @ByVal Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
-@Namespace("at") public static native @ByVal Tensor multi_margin_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @ByVal Scalar p, @ByVal Scalar margin);
+@Namespace("at") public static native @ByRef Tensor multi_margin_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef Scalar p, @Const @ByRef Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
+@Namespace("at") public static native @ByRef Tensor multi_margin_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef Scalar p, @Const @ByRef Scalar margin);
+@Namespace("at") public static native @ByRef Tensor multi_margin_loss_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef Scalar p, @Const @ByRef Scalar margin, @Const @ByRef TensorOptional weight, @Cast("int64_t") long reduction, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByVal Tensor multi_margin_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef Scalar p, @Const @ByRef Scalar margin, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
+@Namespace("at") public static native @ByVal Tensor multi_margin_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef Scalar p, @Const @ByRef Scalar margin);
 @Namespace("at") public static native @ByRef Tensor multilabel_margin_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
 @Namespace("at") public static native @ByRef Tensor multilabel_margin_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByRef Tensor multilabel_margin_loss_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, @ByRef Tensor out);
@@ -13605,6 +14444,8 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor nll_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, @Cast("int64_t") long ignore_index/*=-100*/);
 @Namespace("at") public static native @ByRef Tensor nll_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByRef Tensor nll_loss_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef TensorOptional weight, @Cast("int64_t") long reduction, @Cast("int64_t") long ignore_index, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor nll_loss_nd(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, @Cast("int64_t") long ignore_index/*=-100*/);
+@Namespace("at") public static native @ByVal Tensor nll_loss_nd(@Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByVal Tensor nll_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, @Cast("int64_t") long ignore_index/*=-100*/);
 @Namespace("at") public static native @ByVal Tensor nll_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> nll_loss_forward_out(@ByRef Tensor output, @ByRef Tensor total_weight, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Const @ByRef TensorOptional weight, @Cast("int64_t") long reduction, @Cast("int64_t") long ignore_index);
@@ -13632,6 +14473,14 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor smooth_l1_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, double beta);
 @Namespace("at") public static native @ByRef Tensor smooth_l1_loss_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, double beta, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor smooth_l1_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, double beta);
+@Namespace("at") public static native @ByRef Tensor huber_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, double delta/*=1.0*/);
+@Namespace("at") public static native @ByRef Tensor huber_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target);
+@Namespace("at") public static native @ByRef Tensor huber_loss_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, double delta, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor huber_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/, double delta/*=1.0*/);
+@Namespace("at") public static native @ByVal Tensor huber_loss(@Const @ByRef Tensor self, @Const @ByRef Tensor target);
+@Namespace("at") public static native @ByRef Tensor huber_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, double delta);
+@Namespace("at") public static native @ByRef Tensor huber_loss_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, double delta, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByVal Tensor huber_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, double delta);
 @Namespace("at") public static native @ByRef Tensor soft_margin_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction/*=at::Reduction::Mean*/);
 @Namespace("at") public static native @ByRef Tensor soft_margin_loss_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor target);
 @Namespace("at") public static native @ByRef Tensor soft_margin_loss_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, @ByRef Tensor out);
@@ -13640,13 +14489,13 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor soft_margin_loss_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction);
 @Namespace("at") public static native @ByRef Tensor soft_margin_loss_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor soft_margin_loss_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor target, @Cast("int64_t") long reduction);
-@Namespace("at") public static native @ByRef Tensor elu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha, @ByVal(nullValue = "c10::Scalar(1)") Scalar scale, @ByVal(nullValue = "c10::Scalar(1)") Scalar input_scale);
+@Namespace("at") public static native @ByRef Tensor elu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar scale, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar input_scale);
 @Namespace("at") public static native @ByRef Tensor elu_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor elu_outf(@Const @ByRef Tensor self, @ByVal Scalar alpha, @ByVal Scalar scale, @ByVal Scalar input_scale, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor elu(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha, @ByVal(nullValue = "c10::Scalar(1)") Scalar scale, @ByVal(nullValue = "c10::Scalar(1)") Scalar input_scale);
+@Namespace("at") public static native @ByRef Tensor elu_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar alpha, @Const @ByRef Scalar scale, @Const @ByRef Scalar input_scale, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor elu(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar scale, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar input_scale);
 @Namespace("at") public static native @ByVal Tensor elu(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor elu_backward(@Const @ByRef Tensor grad_output, @ByVal Scalar alpha, @ByVal Scalar scale, @ByVal Scalar input_scale, @Cast("bool") boolean is_result, @Const @ByRef Tensor self_or_result);
-@Namespace("at") public static native @ByRef Tensor elu_(@ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha, @ByVal(nullValue = "c10::Scalar(1)") Scalar scale, @ByVal(nullValue = "c10::Scalar(1)") Scalar input_scale);
+@Namespace("at") public static native @ByVal Tensor elu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Scalar alpha, @Const @ByRef Scalar scale, @Const @ByRef Scalar input_scale, @Cast("bool") boolean is_result, @Const @ByRef Tensor self_or_result);
+@Namespace("at") public static native @ByRef Tensor elu_(@ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar scale, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar input_scale);
 @Namespace("at") public static native @ByRef Tensor elu_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor glu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim/*=-1*/);
 @Namespace("at") public static native @ByRef Tensor glu_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -13661,28 +14510,28 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor hardsigmoid(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor hardsigmoid_(@ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor hardsigmoid_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor hardtanh_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(-1)") Scalar min_val, @ByVal(nullValue = "c10::Scalar(1)") Scalar max_val);
+@Namespace("at") public static native @ByRef Tensor hardtanh_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(-1)") Scalar min_val, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar max_val);
 @Namespace("at") public static native @ByRef Tensor hardtanh_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor hardtanh_outf(@Const @ByRef Tensor self, @ByVal Scalar min_val, @ByVal Scalar max_val, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor hardtanh(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(-1)") Scalar min_val, @ByVal(nullValue = "c10::Scalar(1)") Scalar max_val);
+@Namespace("at") public static native @ByRef Tensor hardtanh_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar min_val, @Const @ByRef Scalar max_val, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor hardtanh(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(-1)") Scalar min_val, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar max_val);
 @Namespace("at") public static native @ByVal Tensor hardtanh(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor hardtanh_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar min_val, @ByVal Scalar max_val);
-@Namespace("at") public static native @ByRef Tensor hardtanh_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar min_val, @ByVal Scalar max_val, @ByRef Tensor grad_input);
-@Namespace("at") public static native @ByVal Tensor hardtanh_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar min_val, @ByVal Scalar max_val);
-@Namespace("at") public static native @ByRef Tensor hardtanh_(@ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(-1)") Scalar min_val, @ByVal(nullValue = "c10::Scalar(1)") Scalar max_val);
+@Namespace("at") public static native @ByRef Tensor hardtanh_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar min_val, @Const @ByRef Scalar max_val);
+@Namespace("at") public static native @ByRef Tensor hardtanh_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar min_val, @Const @ByRef Scalar max_val, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByVal Tensor hardtanh_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar min_val, @Const @ByRef Scalar max_val);
+@Namespace("at") public static native @ByRef Tensor hardtanh_(@ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(-1)") Scalar min_val, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar max_val);
 @Namespace("at") public static native @ByRef Tensor hardtanh_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor hardswish_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor hardswish_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor hardswish(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor hardswish_(@ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor hardswish_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor leaky_relu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.01)") Scalar negative_slope);
+@Namespace("at") public static native @ByRef Tensor leaky_relu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.01)") Scalar negative_slope);
 @Namespace("at") public static native @ByRef Tensor leaky_relu_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor leaky_relu_outf(@Const @ByRef Tensor self, @ByVal Scalar negative_slope, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor leaky_relu(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.01)") Scalar negative_slope);
+@Namespace("at") public static native @ByRef Tensor leaky_relu_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar negative_slope, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor leaky_relu(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.01)") Scalar negative_slope);
 @Namespace("at") public static native @ByVal Tensor leaky_relu(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor leaky_relu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar negative_slope, @Cast("bool") boolean self_is_result);
-@Namespace("at") public static native @ByRef Tensor leaky_relu_(@ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.01)") Scalar negative_slope);
+@Namespace("at") public static native @ByVal Tensor leaky_relu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar negative_slope, @Cast("bool") boolean self_is_result);
+@Namespace("at") public static native @ByRef Tensor leaky_relu_(@ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.01)") Scalar negative_slope);
 @Namespace("at") public static native @ByRef Tensor leaky_relu_(@ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor log_sigmoid_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor log_sigmoid_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
@@ -13693,30 +14542,30 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor log_sigmoid_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor buffer);
 @Namespace("at") public static native @ByRef Tensor log_sigmoid_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor buffer, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor log_sigmoid_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor buffer);
-@Namespace("at") public static native @ByRef Tensor rrelu_with_noise_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor noise, @ByVal(nullValue = "c10::Scalar(0.125)") Scalar lower, @ByVal(nullValue = "c10::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
+@Namespace("at") public static native @ByRef Tensor rrelu_with_noise_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor noise, @Const @ByRef(nullValue = "at::Scalar(0.125)") Scalar lower, @Const @ByRef(nullValue = "at::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor rrelu_with_noise_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor noise);
-@Namespace("at") public static native @ByRef Tensor rrelu_with_noise_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor noise, @ByVal Scalar lower, @ByVal Scalar upper, @Cast("bool") boolean training, @ByVal GeneratorOptional generator, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor rrelu_with_noise(@Const @ByRef Tensor self, @Const @ByRef Tensor noise, @ByVal(nullValue = "c10::Scalar(0.125)") Scalar lower, @ByVal(nullValue = "c10::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
+@Namespace("at") public static native @ByRef Tensor rrelu_with_noise_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor noise, @Const @ByRef Scalar lower, @Const @ByRef Scalar upper, @Cast("bool") boolean training, @ByVal GeneratorOptional generator, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor rrelu_with_noise(@Const @ByRef Tensor self, @Const @ByRef Tensor noise, @Const @ByRef(nullValue = "at::Scalar(0.125)") Scalar lower, @Const @ByRef(nullValue = "at::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByVal Tensor rrelu_with_noise(@Const @ByRef Tensor self, @Const @ByRef Tensor noise);
-@Namespace("at") public static native @ByVal Tensor rrelu_with_noise_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor noise, @ByVal Scalar lower, @ByVal Scalar upper, @Cast("bool") boolean training, @Cast("bool") boolean self_is_result);
-@Namespace("at") public static native @ByRef Tensor rrelu_with_noise_(@ByRef Tensor self, @Const @ByRef Tensor noise, @ByVal(nullValue = "c10::Scalar(0.125)") Scalar lower, @ByVal(nullValue = "c10::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
+@Namespace("at") public static native @ByVal Tensor rrelu_with_noise_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor noise, @Const @ByRef Scalar lower, @Const @ByRef Scalar upper, @Cast("bool") boolean training, @Cast("bool") boolean self_is_result);
+@Namespace("at") public static native @ByRef Tensor rrelu_with_noise_(@ByRef Tensor self, @Const @ByRef Tensor noise, @Const @ByRef(nullValue = "at::Scalar(0.125)") Scalar lower, @Const @ByRef(nullValue = "at::Scalar(0.3333333333333333)") Scalar upper, @Cast("bool") boolean training/*=false*/, @ByVal(nullValue = "c10::optional<at::Generator>(c10::nullopt)") GeneratorOptional generator);
 @Namespace("at") public static native @ByRef Tensor rrelu_with_noise_(@ByRef Tensor self, @Const @ByRef Tensor noise);
-@Namespace("at") public static native @ByRef Tensor softplus_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(20)") Scalar threshold);
+@Namespace("at") public static native @ByRef Tensor softplus_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(20)") Scalar threshold);
 @Namespace("at") public static native @ByRef Tensor softplus_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor softplus_outf(@Const @ByRef Tensor self, @ByVal Scalar beta, @ByVal Scalar threshold, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor softplus(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(1)") Scalar beta, @ByVal(nullValue = "c10::Scalar(20)") Scalar threshold);
+@Namespace("at") public static native @ByRef Tensor softplus_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar beta, @Const @ByRef Scalar threshold, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor softplus(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar beta, @Const @ByRef(nullValue = "at::Scalar(20)") Scalar threshold);
 @Namespace("at") public static native @ByVal Tensor softplus(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor softplus_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar beta, @ByVal Scalar threshold, @Const @ByRef Tensor output);
-@Namespace("at") public static native @ByRef Tensor softplus_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar beta, @ByVal Scalar threshold, @Const @ByRef Tensor output, @ByRef Tensor grad_input);
-@Namespace("at") public static native @ByVal Tensor softplus_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar beta, @ByVal Scalar threshold, @Const @ByRef Tensor output);
-@Namespace("at") public static native @ByRef Tensor softshrink_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.5)") Scalar lambd);
+@Namespace("at") public static native @ByRef Tensor softplus_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar beta, @Const @ByRef Scalar threshold, @Const @ByRef Tensor output);
+@Namespace("at") public static native @ByRef Tensor softplus_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar beta, @Const @ByRef Scalar threshold, @Const @ByRef Tensor output, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByVal Tensor softplus_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar beta, @Const @ByRef Scalar threshold, @Const @ByRef Tensor output);
+@Namespace("at") public static native @ByRef Tensor softshrink_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.5)") Scalar lambd);
 @Namespace("at") public static native @ByRef Tensor softshrink_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor softshrink_outf(@Const @ByRef Tensor self, @ByVal Scalar lambd, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor softshrink(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::Scalar(0.5)") Scalar lambd);
+@Namespace("at") public static native @ByRef Tensor softshrink_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar lambd, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor softshrink(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(0.5)") Scalar lambd);
 @Namespace("at") public static native @ByVal Tensor softshrink(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor softshrink_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar lambd);
-@Namespace("at") public static native @ByRef Tensor softshrink_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar lambd, @ByRef Tensor grad_input);
-@Namespace("at") public static native @ByVal Tensor softshrink_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal Scalar lambd);
+@Namespace("at") public static native @ByRef Tensor softshrink_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar lambd);
+@Namespace("at") public static native @ByRef Tensor softshrink_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar lambd, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByVal Tensor softshrink_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Scalar lambd);
 @Namespace("at") public static native @ByRef Tensor adaptive_avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
 @Namespace("at") public static native @ByRef Tensor adaptive_avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
 @Namespace("at") public static native @ByRef Tensor adaptive_avg_pool2d_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size, @ByRef Tensor out);
@@ -13725,6 +14574,7 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor adaptive_avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
 @Namespace("at") public static native @ByVal Tensor mkldnn_adaptive_avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
 @Namespace("at") public static native @ByVal Tensor mkldnn_adaptive_avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
+@Namespace("at") public static native @ByVal Tensor mkldnn_adaptive_avg_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal Tensor _adaptive_avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
 @Namespace("at") public static native @ByVal Tensor _adaptive_avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
 @Namespace("at") public static native @ByVal Tensor _adaptive_avg_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
@@ -13734,9 +14584,11 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor adaptive_avg_pool3d_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor adaptive_avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
 @Namespace("at") public static native @ByVal Tensor adaptive_avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
+@Namespace("at") public static native @ByVal Tensor _adaptive_avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
+@Namespace("at") public static native @ByVal Tensor _adaptive_avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
 @Namespace("at") public static native @ByRef Tensor adaptive_avg_pool3d_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor adaptive_avg_pool3d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByRef Tensor grad_input);
-@Namespace("at") public static native @ByVal Tensor adaptive_avg_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor _adaptive_avg_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> adaptive_max_pool2d_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> adaptive_max_pool2d_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... output_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> adaptive_max_pool2d_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size, @ByRef Tensor out, @ByRef Tensor indices);
@@ -13755,15 +14607,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor adaptive_max_pool3d_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor indices);
 @Namespace("at") public static native @ByRef Tensor adaptive_max_pool3d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor indices, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor adaptive_max_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor indices);
-@Namespace("at") public static native @ByRef Tensor avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByRef Tensor avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByRef Tensor avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByRef Tensor avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByRef Tensor avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByRef Tensor avg_pool2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor avg_pool2d_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor avg_pool2d_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByVal Tensor avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByVal Tensor avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByVal Tensor avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByVal Tensor avg_pool2d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor avg_pool2d_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override);
 @Namespace("at") public static native @ByRef Tensor avg_pool2d_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override);
@@ -13771,15 +14623,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor avg_pool2d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor avg_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override);
 @Namespace("at") public static native @ByVal Tensor avg_pool2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override);
-@Namespace("at") public static native @ByRef Tensor avg_pool3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByRef Tensor avg_pool3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByRef Tensor avg_pool3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByRef Tensor avg_pool3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByRef Tensor avg_pool3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByRef Tensor avg_pool3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor avg_pool3d_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor avg_pool3d_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByVal Tensor avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByVal Tensor avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
+@Namespace("at") public static native @ByVal Tensor avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode/*=false*/, @Cast("bool") boolean count_include_pad/*=true*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional divisor_override);
 @Namespace("at") public static native @ByVal Tensor avg_pool3d(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor avg_pool3d_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override);
 @Namespace("at") public static native @ByRef Tensor avg_pool3d_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Cast("bool") boolean ceil_mode, @Cast("bool") boolean count_include_pad, @ByVal LongOptional divisor_override);
@@ -13811,15 +14663,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor fractional_max_pool3d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Const @ByRef Tensor indices, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor fractional_max_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_size, @Const @ByRef Tensor indices);
 @Namespace("at") public static native @ByVal Tensor fractional_max_pool3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Const @ByRef Tensor indices);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode, @ByRef Tensor out, @ByRef Tensor indices);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool2d_with_indices_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode, @ByRef Tensor out, @ByRef Tensor indices);
-@Namespace("at") public static native @ByVal TensorTensorTuple max_pool2d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple max_pool2d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple max_pool2d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal TensorTensorTuple max_pool2d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple max_pool2d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple max_pool2d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor max_pool2d_with_indices_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode, @Const @ByRef Tensor indices);
 @Namespace("at") public static native @ByRef Tensor max_pool2d_with_indices_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode, @Const @ByRef Tensor indices);
@@ -13827,15 +14679,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor max_pool2d_with_indices_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode, @Const @ByRef Tensor indices, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor max_pool2d_with_indices_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode, @Const @ByRef Tensor indices);
 @Namespace("at") public static native @ByVal Tensor max_pool2d_with_indices_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode, @Const @ByRef Tensor indices);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_out(@ByRef Tensor out, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode, @ByRef Tensor out, @ByRef Tensor indices);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> max_pool3d_with_indices_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode, @ByRef Tensor out, @ByRef Tensor indices);
-@Namespace("at") public static native @ByVal TensorTensorTuple max_pool3d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple max_pool3d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple max_pool3d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal TensorTensorTuple max_pool3d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "c10::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple max_pool3d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple max_pool3d_with_indices(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor max_pool3d_with_indices_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean ceil_mode, @Const @ByRef Tensor indices);
 @Namespace("at") public static native @ByRef Tensor max_pool3d_with_indices_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean ceil_mode, @Const @ByRef Tensor indices);
@@ -14099,15 +14951,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor tanh_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor output);
 @Namespace("at") public static native @ByRef Tensor tanh_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output, @ByRef Tensor grad_input);
 @Namespace("at") public static native @ByVal Tensor tanh_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor output);
-@Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose2d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor slow_conv_transpose2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_transpose2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_transpose2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor slow_conv_transpose2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_transpose2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_transpose2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv_transpose2d_backward_out(@ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Const @ByRef Tensor columns, @Const @ByRef Tensor ones);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv_transpose2d_backward_out(@ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Const @ByRef Tensor columns, @Const @ByRef Tensor ones);
@@ -14115,15 +14967,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv_transpose2d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Const @ByRef Tensor columns, @Const @ByRef Tensor ones, @ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_transpose2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Const @ByRef Tensor columns, @Const @ByRef Tensor ones, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_transpose2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Const @ByRef Tensor columns, @Const @ByRef Tensor ones, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor slow_conv_transpose3d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor slow_conv_transpose3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_transpose3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_transpose3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor slow_conv_transpose3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_transpose3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_transpose3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv_transpose3d_backward_out(@ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv_transpose3d_backward_out(@ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input);
@@ -14131,15 +14983,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv_transpose3d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_transpose3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_transpose3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByRef Tensor thnn_conv2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
+@Namespace("at") public static native @ByRef Tensor thnn_conv2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
 @Namespace("at") public static native @ByRef Tensor thnn_conv2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByRef Tensor thnn_conv2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
+@Namespace("at") public static native @ByRef Tensor thnn_conv2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
 @Namespace("at") public static native @ByRef Tensor thnn_conv2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor thnn_conv2d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor thnn_conv2d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor thnn_conv2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
+@Namespace("at") public static native @ByVal Tensor thnn_conv2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
 @Namespace("at") public static native @ByVal Tensor thnn_conv2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor thnn_conv2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
+@Namespace("at") public static native @ByVal Tensor thnn_conv2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
 @Namespace("at") public static native @ByVal Tensor thnn_conv2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> thnn_conv2d_forward_out(@ByRef Tensor output, @ByRef Tensor finput, @ByRef Tensor fgrad_input, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> thnn_conv2d_forward_out(@ByRef Tensor output, @ByRef Tensor finput, @ByRef Tensor fgrad_input, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
@@ -14153,15 +15005,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> thnn_conv2d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple thnn_conv2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple thnn_conv2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor thnn_conv_depthwise2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor thnn_conv_depthwise2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor thnn_conv_depthwise2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor thnn_conv_depthwise2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor thnn_conv_depthwise2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByVal Tensor thnn_conv_depthwise2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_forward_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByRef Tensor thnn_conv_depthwise2d_forward_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
@@ -14175,15 +15027,23 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> thnn_conv_depthwise2d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByRef Tensor grad_input, @ByRef Tensor grad_weight);
 @Namespace("at") public static native @ByVal TensorTensorTuple thnn_conv_depthwise2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByVal @Cast("std::array<bool,2>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTuple thnn_conv_depthwise2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByVal @Cast("std::array<bool,2>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByRef Tensor slow_conv3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
+@Namespace("at") public static native @ByVal Tensor conv_depthwise3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor conv_depthwise3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> conv_depthwise3d_backward_out(@ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> conv_depthwise3d_backward_out(@ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> conv_depthwise3d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> conv_depthwise3d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias);
+@Namespace("at") public static native @ByVal TensorTensorTensorTuple conv_depthwise3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
+@Namespace("at") public static native @ByVal TensorTensorTensorTuple conv_depthwise3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
+@Namespace("at") public static native @ByRef Tensor slow_conv3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
 @Namespace("at") public static native @ByRef Tensor slow_conv3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByRef Tensor slow_conv3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
+@Namespace("at") public static native @ByRef Tensor slow_conv3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
 @Namespace("at") public static native @ByRef Tensor slow_conv3d_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByRef Tensor slow_conv3d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor slow_conv3d_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor slow_conv3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
+@Namespace("at") public static native @ByVal Tensor slow_conv3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
 @Namespace("at") public static native @ByVal Tensor slow_conv3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor slow_conv3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
+@Namespace("at") public static native @ByVal Tensor slow_conv3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
 @Namespace("at") public static native @ByVal Tensor slow_conv3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv3d_forward_out(@ByRef Tensor output, @ByRef Tensor finput, @ByRef Tensor fgrad_input, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv3d_forward_out(@ByRef Tensor output, @ByRef Tensor finput, @ByRef Tensor fgrad_input, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... padding);
@@ -14197,15 +15057,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> slow_conv3d_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByRef Tensor grad_input, @ByRef Tensor grad_weight, @ByRef Tensor grad_bias);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @Const @ByRef Tensor finput, @Const @ByRef Tensor fgrad_input, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByVal Tensor slow_conv_dilated2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_dilated2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_dilated2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor slow_conv_dilated2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_dilated2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_dilated2d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_dilated2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_dilated2d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByVal Tensor slow_conv_dilated3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_dilated3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_dilated3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size);
-@Namespace("at") public static native @ByVal Tensor slow_conv_dilated3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "c10::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
+@Namespace("at") public static native @ByVal Tensor slow_conv_dilated3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... dilation);
 @Namespace("at") public static native @ByVal Tensor slow_conv_dilated3d(@Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... kernel_size);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_dilated3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef kernel_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple slow_conv_dilated3d_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] kernel_size, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dilation, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
@@ -14246,6 +15106,47 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor isneginf_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor _add_batch_dim(@Const @ByRef Tensor self, @Cast("int64_t") long batch_dim, @Cast("int64_t") long level);
 @Namespace("at") public static native @ByVal Tensor _remove_batch_dim(@Const @ByRef Tensor self, @Cast("int64_t") long level, @Cast("int64_t") long batch_size, @Cast("int64_t") long out_dim);
+@Namespace("at") public static native @ByVal Tensor special_entr(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_entr_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_entr_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_expm1(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_expm1_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_expm1_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_exp2(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_exp2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_exp2_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_gammaln(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_gammaln_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_gammaln_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_erf(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_erf_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_erf_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_erfc(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_erfc_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_erfc_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_erfinv(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_erfinv_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_erfinv_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_xlog1py(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByVal Tensor special_xlog1py(@Const @ByRef Scalar self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByVal Tensor special_xlog1py(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor special_xlog1py_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByRef Tensor special_xlog1py_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor special_xlog1py_out(@ByRef Tensor out, @Const @ByRef Scalar self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByRef Tensor special_xlog1py_outf(@Const @ByRef Scalar self, @Const @ByRef Tensor other, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor special_xlog1py_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
+@Namespace("at") public static native @ByRef Tensor special_xlog1py_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_i0e(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_i0e_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_i0e_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_logit(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional eps);
+@Namespace("at") public static native @ByVal Tensor special_logit(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_logit_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional eps);
+@Namespace("at") public static native @ByRef Tensor special_logit_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_logit_outf(@Const @ByRef Tensor self, @ByVal DoubleOptional eps, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor special_expit(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_expit_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor special_expit_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor fft_fft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_fft(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor fft_fft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
@@ -14276,84 +15177,100 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor fft_ihfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ihfft_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor fft_ihfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
-@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal StringOptional norm, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal StringOptional norm, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal StringOptional norm, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal StringOptional norm, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor fft_fftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor fft_ifftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor fft_rfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor fft_irfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringOptional norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_fftfreq(@Cast("int64_t") long n, double d/*=1.0*/, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor fft_fftfreq(@Cast("int64_t") long n, double d/*=1.0*/, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor fft_fftfreq(@Cast("int64_t") long n);
 @Namespace("at") public static native @ByVal Tensor fft_fftfreq(@Cast("int64_t") long n, double d, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByRef Tensor fft_fftfreq_out(@ByRef Tensor out, @Cast("int64_t") long n, double d/*=1.0*/);
 @Namespace("at") public static native @ByRef Tensor fft_fftfreq_out(@ByRef Tensor out, @Cast("int64_t") long n);
 @Namespace("at") public static native @ByRef Tensor fft_fftfreq_outf(@Cast("int64_t") long n, double d, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_rfftfreq(@Cast("int64_t") long n, double d/*=1.0*/, @ByVal(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor fft_rfftfreq(@Cast("int64_t") long n, double d/*=1.0*/, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor fft_rfftfreq(@Cast("int64_t") long n);
 @Namespace("at") public static native @ByVal Tensor fft_rfftfreq(@Cast("int64_t") long n, double d, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByRef Tensor fft_rfftfreq_out(@ByRef Tensor out, @Cast("int64_t") long n, double d/*=1.0*/);
 @Namespace("at") public static native @ByRef Tensor fft_rfftfreq_out(@ByRef Tensor out, @Cast("int64_t") long n);
 @Namespace("at") public static native @ByRef Tensor fft_rfftfreq_outf(@Cast("int64_t") long n, double d, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor fft_fftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal Tensor fft_fftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim);
 @Namespace("at") public static native @ByVal Tensor fft_fftshift(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ifftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal Tensor fft_ifftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim);
 @Namespace("at") public static native @ByVal Tensor fft_ifftshift(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal TensorTensorTuple linalg_cholesky_ex(@Const @ByRef Tensor self, @Cast("bool") boolean check_errors/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple linalg_cholesky_ex(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_cholesky_ex_out(@ByRef Tensor L, @ByRef Tensor info, @Const @ByRef Tensor self, @Cast("bool") boolean check_errors/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_cholesky_ex_out(@ByRef Tensor L, @ByRef Tensor info, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_cholesky_ex_outf(@Const @ByRef Tensor self, @Cast("bool") boolean check_errors, @ByRef Tensor L, @ByRef Tensor info);
 @Namespace("at") public static native @ByVal Tensor linalg_cholesky(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor linalg_cholesky_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor linalg_cholesky_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor linalg_det(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_det_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_det_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor det(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple linalg_lstsq(@Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional rcond, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional driver);
+@Namespace("at") public static native @ByVal TensorTensorTensorTensorTuple linalg_lstsq(@Const @ByRef Tensor self, @Const @ByRef Tensor b);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_lstsq_out(@ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values, @Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional rcond, @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional driver);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_lstsq_out(@ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values, @Const @ByRef Tensor self, @Const @ByRef Tensor b);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_lstsq_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal DoubleOptional rcond, @ByVal StringOptional driver, @ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values);
 @Namespace("at") public static native @ByVal TensorTensorTuple linalg_slogdet(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_slogdet_out(@ByRef Tensor sign, @ByRef Tensor logabsdet, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_slogdet_outf(@Const @ByRef Tensor self, @ByRef Tensor sign, @ByRef Tensor logabsdet);
-@Namespace("at") public static native @ByVal TensorTensorTuple _syevd_helper(@Const @ByRef Tensor self, @Cast("bool") boolean compute_eigenvectors, @StdString BytePointer uplo);
-@Namespace("at") public static native @ByVal TensorTensorTuple _syevd_helper(@Const @ByRef Tensor self, @Cast("bool") boolean compute_eigenvectors, @StdString String uplo);
+@Namespace("at") public static native @ByVal TensorTensorTuple linalg_eig(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_eig_out(@ByRef Tensor eigenvalues, @ByRef Tensor eigenvectors, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_eig_outf(@Const @ByRef Tensor self, @ByRef Tensor eigenvalues, @ByRef Tensor eigenvectors);
+@Namespace("at") public static native @ByVal Tensor linalg_eigvals(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_eigvals_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_eigvals_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal TensorTensorTuple linalg_eigh(@Const @ByRef Tensor self, @StdString BytePointer UPLO/*="L"*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple linalg_eigh(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal TensorTensorTuple linalg_eigh(@Const @ByRef Tensor self, @StdString String UPLO/*="L"*/);
@@ -14370,7 +15287,15 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString String UPLO/*="L"*/);
 @Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_outf(@Const @ByRef Tensor self, @StdString BytePointer UPLO, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_outf(@Const @ByRef Tensor self, @StdString String UPLO, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor linalg_householder_product(@Const @ByRef Tensor input, @Const @ByRef Tensor tau);
+@Namespace("at") public static native @ByRef Tensor linalg_householder_product_out(@ByRef Tensor out, @Const @ByRef Tensor input, @Const @ByRef Tensor tau);
+@Namespace("at") public static native @ByRef Tensor linalg_householder_product_outf(@Const @ByRef Tensor input, @Const @ByRef Tensor tau, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor _linalg_inv_out_helper_(@ByRef Tensor self, @ByRef Tensor infos_lu, @ByRef Tensor infos_getri);
+@Namespace("at") public static native @ByVal TensorTensorTuple linalg_inv_ex(@Const @ByRef Tensor self, @Cast("bool") boolean check_errors/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple linalg_inv_ex(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_inv_ex_out(@ByRef Tensor inverse, @ByRef Tensor info, @Const @ByRef Tensor self, @Cast("bool") boolean check_errors/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_inv_ex_out(@ByRef Tensor inverse, @ByRef Tensor info, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_inv_ex_outf(@Const @ByRef Tensor self, @Cast("bool") boolean check_errors, @ByRef Tensor inverse, @ByRef Tensor info);
 @Namespace("at") public static native @ByVal Tensor linalg_inv(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor linalg_inv_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor linalg_inv_outf(@Const @ByRef Tensor self, @ByRef Tensor out);
@@ -14383,31 +15308,55 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor ger(@Const @ByRef Tensor self, @Const @ByRef Tensor vec2);
 @Namespace("at") public static native @ByRef Tensor ger_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor vec2);
 @Namespace("at") public static native @ByRef Tensor ger_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor vec2, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StdString BytePointer ord, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StdString BytePointer ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StdString BytePointer ord);
-@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StdString String ord, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StdString String ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StdString String ord);
-@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString BytePointer ord, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString BytePointer ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString BytePointer ord);
-@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString String ord, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString String ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString String ord);
 @Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @StdString BytePointer ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @StdString String ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_svd_out(@ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor V, @Const @ByRef Tensor self, @Cast("bool") boolean full_matrices/*=true*/, @Cast("bool") boolean compute_uv/*=true*/);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_svd_out(@ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor V, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_svd_outf(@Const @ByRef Tensor self, @Cast("bool") boolean full_matrices, @Cast("bool") boolean compute_uv, @ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor V);
-@Namespace("at") public static native @ByVal TensorTensorTensorTuple linalg_svd(@Const @ByRef Tensor self, @Cast("bool") boolean full_matrices/*=true*/, @Cast("bool") boolean compute_uv/*=true*/);
+@Namespace("at") public static native @ByVal Tensor linalg_vector_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_vector_norm(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_vector_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar ord, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_vector_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_vector_norm_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @Const @ByRef Scalar ord);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar ord);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @StdString BytePointer ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @StdString String ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString BytePointer ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString String ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @StdString BytePointer ord, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @StdString String ord, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_svd_out(@ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh, @Const @ByRef Tensor self, @Cast("bool") boolean full_matrices/*=true*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_svd_out(@ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_svd_outf(@Const @ByRef Tensor self, @Cast("bool") boolean full_matrices, @ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh);
+@Namespace("at") public static native @ByVal TensorTensorTensorTuple linalg_svd(@Const @ByRef Tensor self, @Cast("bool") boolean full_matrices/*=true*/);
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple linalg_svd(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional p);
+@Namespace("at") public static native @ByVal Tensor linalg_svdvals(@Const @ByRef Tensor input);
+@Namespace("at") public static native @ByRef Tensor linalg_svdvals_out(@ByRef Tensor out, @Const @ByRef Tensor input);
+@Namespace("at") public static native @ByRef Tensor linalg_svdvals_outf(@Const @ByRef Tensor input, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional p);
 @Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor linalg_cond_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<c10::Scalar>(c10::nullopt)") ScalarOptional p);
+@Namespace("at") public static native @ByRef Tensor linalg_cond_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional p);
 @Namespace("at") public static native @ByRef Tensor linalg_cond_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor linalg_cond_outf(@Const @ByRef Tensor self, @ByVal ScalarOptional p, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_cond_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self, @StdString BytePointer p);
 @Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self, @StdString String p);
 @Namespace("at") public static native @ByRef Tensor linalg_cond_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StdString BytePointer p);
@@ -14433,9 +15382,9 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByRef Tensor linalg_tensorinv_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long ind/*=2*/);
 @Namespace("at") public static native @ByRef Tensor linalg_tensorinv_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor linalg_tensorinv_outf(@Const @ByRef Tensor self, @Cast("int64_t") long ind, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor linalg_tensorsolve(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dims);
+@Namespace("at") public static native @ByVal Tensor linalg_tensorsolve(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dims);
 @Namespace("at") public static native @ByVal Tensor linalg_tensorsolve(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
-@Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::optional<c10::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dims);
+@Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional dims);
 @Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal LongArrayRefOptional dims, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal TensorTensorTuple linalg_qr(@Const @ByRef Tensor self, @StdString BytePointer mode/*="reduced"*/);
@@ -14448,12 +15397,23 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> linalg_qr_outf(@Const @ByRef Tensor self, @StdString String mode, @ByRef Tensor Q, @ByRef Tensor R);
 @Namespace("at") public static native @ByVal TensorTensorTuple _linalg_qr_helper(@Const @ByRef Tensor self, @StdString BytePointer mode);
 @Namespace("at") public static native @ByVal TensorTensorTuple _linalg_qr_helper(@Const @ByRef Tensor self, @StdString String mode);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_power(@Const @ByRef Tensor self, @Cast("int64_t") long n);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_power_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long n);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_power_outf(@Const @ByRef Tensor self, @Cast("int64_t") long n, @ByRef Tensor out);
 @Namespace("at") public static native @ByVal Tensor linalg_matrix_rank(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional tol, @Cast("bool") boolean hermitian/*=false*/);
 @Namespace("at") public static native @ByVal Tensor linalg_matrix_rank(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor linalg_matrix_rank_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional tol, @Cast("bool") boolean hermitian/*=false*/);
 @Namespace("at") public static native @ByRef Tensor linalg_matrix_rank_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 @Namespace("at") public static native @ByRef Tensor linalg_matrix_rank_outf(@Const @ByRef Tensor self, @ByVal DoubleOptional tol, @Cast("bool") boolean hermitian, @ByRef Tensor out);
-@Namespace("at") public static native @ByVal Tensor _test_serialization_subcmul(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "c10::Scalar(1)") Scalar alpha);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_rank(@Const @ByRef Tensor input, @Const @ByRef Tensor tol, @Cast("bool") boolean hermitian/*=false*/);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_rank(@Const @ByRef Tensor input, @Const @ByRef Tensor tol);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_rank_out(@ByRef Tensor out, @Const @ByRef Tensor input, @Const @ByRef Tensor tol, @Cast("bool") boolean hermitian/*=false*/);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_rank_out(@ByRef Tensor out, @Const @ByRef Tensor input, @Const @ByRef Tensor tol);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_rank_outf(@Const @ByRef Tensor input, @Const @ByRef Tensor tol, @Cast("bool") boolean hermitian, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor linalg_multi_dot(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor linalg_multi_dot_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor linalg_multi_dot_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByVal Tensor _test_serialization_subcmul(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor _test_serialization_subcmul(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
 @Namespace("at") public static native @ByVal Tensor _test_optional_intlist(@Const @ByRef Tensor values, @ByVal LongArrayRefOptional addends);
 @Namespace("at") public static native @ByVal Tensor _test_optional_filled_intlist(@Const @ByRef Tensor values, @ByVal LongArrayRefOptional addends);
@@ -14465,6 +15425,16 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor _test_ambiguous_defaults(@Const @ByRef Tensor dummy);
 @Namespace("at") public static native @ByVal Tensor _test_ambiguous_defaults(@Const @ByRef Tensor dummy, @Cast("int64_t") long a, @StdString BytePointer b);
 @Namespace("at") public static native @ByVal Tensor _test_ambiguous_defaults(@Const @ByRef Tensor dummy, @Cast("int64_t") long a, @StdString String b);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StdString BytePointer reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StdString BytePointer reduce);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StdString String reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StdString String reduce);
+@Namespace("at") public static native @ByVal Tensor segment_reduce_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor output, @Const @ByRef Tensor data, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths);
+@Namespace("at") public static native @ByVal Tensor segment_reduce_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor output, @Const @ByRef Tensor data);
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/);
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences);
+@Namespace("at") public static native @ByVal Tensor flatten_dense_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @StdMove TensorVector unflatten_dense_tensors(@Const @ByRef Tensor flat, @ByVal TensorArrayRef tensors);
 
 // Special C++ only overloads for std()-like functions (See gh-40287)
 // These are needed because int -> bool conversion takes precedence over int -> IntArrayRef
@@ -14473,8 +15443,20 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, int dim);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, int dim);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, int dim);
-  @Namespace("at") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector zero_sizes(@Const @ByRef TensorOptions options);
 
+
+// Special C++ only overloads for convnd functions (See gh-45667)
+// These are needed because {1, 2} is ambiguous between string and IntArrayRef overloads
+
+@Namespace("at::detail") public static native void noopDelete(Pointer arg0);
+
+
+// Targeting ../TensorMaker.java
+
+
+
+@Namespace("at") public static native @ByVal @NoException TensorMaker for_blob(Pointer data, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
+@Namespace("at") public static native @ByVal @NoException TensorMaker for_blob(Pointer data, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... sizes);
 
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
@@ -14560,6 +15542,12 @@ body of your function, only data pointers.
 
 @Namespace("at") public static native @Cast("int64_t") long stride(@Const @ByRef Tensor tensor, @Cast("int64_t") long dim);
 
+@Namespace("at") public static native @Cast("bool") boolean is_complex(@Const @ByRef Tensor tensor);
+
+@Namespace("at") public static native @Cast("bool") boolean is_floating_point(@Const @ByRef Tensor tensor);
+
+@Namespace("at") public static native @Cast("bool") boolean is_signed(@Const @ByRef Tensor tensor);
+
 
 
 
@@ -14634,36 +15622,36 @@ body of your function, only data pointers.
 // `names` can be empty; see [NOTE] Writing name inference rules
 // If `names` is not empty, `names.size()` should equal `result.dim()`.
 // When in doubt, use this overload instead of the others.
-@Namespace("at::namedinference") public static native @ByRef Tensor propagate_names_if_nonempty(
-    @ByRef Tensor result,
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
+    @Const @ByRef Tensor result,
     @ByVal DimnameArrayRef maybe_names,
     @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native @ByRef Tensor propagate_names_if_nonempty(
-    @ByRef Tensor result,
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
+    @Const @ByRef Tensor result,
     @ByVal DimnameArrayRef maybe_names);
 
 // Propagates `names` to `result`. Only use this if we are certain that there are
 // names to propagate (that names is not empty).
-@Namespace("at::namedinference") public static native @ByRef Tensor propagate_names(
-    @ByRef Tensor result,
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
+    @Const @ByRef Tensor result,
     @ByVal DimnameArrayRef names,
     @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native @ByRef Tensor propagate_names(
-    @ByRef Tensor result,
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
+    @Const @ByRef Tensor result,
     @ByVal DimnameArrayRef names);
 
 // Propagates all names from src to result.
-@Namespace("at::namedinference") public static native void propagate_names(@ByRef Tensor result, @Const @ByRef Tensor src);
+@Namespace("at::namedinference") public static native void propagate_names(@Const @ByRef Tensor result, @Const @ByRef Tensor src);
 
 // Propagates all names except for those at the excluded_idxs.
-@Namespace("at::namedinference") public static native void propagate_names_except(@ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef excluded_idxs);
-@Namespace("at::namedinference") public static native void propagate_names_except(@ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... excluded_idxs);
+@Namespace("at::namedinference") public static native void propagate_names_except(@Const @ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef excluded_idxs);
+@Namespace("at::namedinference") public static native void propagate_names_except(@Const @ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long... excluded_idxs);
 
 // Used for reduction ops that have a `keepdim` arg.
-@Namespace("at::namedinference") public static native void propagate_names_for_reduction(@ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef excluded_idxs, @Cast("bool") boolean keepdim);
-@Namespace("at::namedinference") public static native void propagate_names_for_reduction(@ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] excluded_idxs, @Cast("bool") boolean keepdim);
+@Namespace("at::namedinference") public static native void propagate_names_for_reduction(@Const @ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef excluded_idxs, @Cast("bool") boolean keepdim);
+@Namespace("at::namedinference") public static native void propagate_names_for_reduction(@Const @ByRef Tensor result, @Const @ByRef Tensor src, @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] excluded_idxs, @Cast("bool") boolean keepdim);
 
-@Namespace("at::namedinference") public static native void propagate_names_for_expand(@ByRef Tensor result, @Const @ByRef Tensor self);
+@Namespace("at::namedinference") public static native void propagate_names_for_expand(@Const @ByRef Tensor result, @Const @ByRef Tensor self);
 
 @Namespace("at::namedinference") public static native @StdMove DimnameVector compute_cat_outnames(@ByVal TensorArrayRef tensors);
 
@@ -14714,14 +15702,12 @@ body of your function, only data pointers.
 @Namespace("at::namedinference") public static native void propagate_names(TensorImpl result,TensorImpl src);
 
 // result = m1 @ m2 + bias
-@Namespace("at::namedinference") public static native void propagate_names_for_addmm(
-    @ByRef Tensor result,
+@Namespace("at::namedinference") public static native @StdMove DimnameVector propagate_names_for_addmm(
     @Const @ByRef Tensor m1,
     @Const @ByRef Tensor m2,
     @Const @ByRef Tensor bias);
 
-@Namespace("at::namedinference") public static native void propagate_names_for_addmv(
-    @ByRef Tensor result,
+@Namespace("at::namedinference") public static native @StdMove DimnameVector propagate_names_for_addmv(
     @Const @ByRef Tensor mat,
     @Const @ByRef Tensor vec,
     @Const @ByRef Tensor bias);
@@ -14754,7 +15740,7 @@ body of your function, only data pointers.
 // but we also want to skip compute_types which in not avoidable
 // in TensorIterator for now.
 
-@Namespace("at::detail") public static native @ByVal Tensor scalar_tensor_static(@ByVal Scalar s, @ByVal ScalarTypeOptional dtype_opt, @ByVal DeviceOptional device_opt);
+@Namespace("at::detail") public static native @ByVal Tensor scalar_tensor_static(@Const @ByRef Scalar s, @ByVal ScalarTypeOptional dtype_opt, @ByVal DeviceOptional device_opt);
  // namespace detail
  // namespace at
 
@@ -14762,10 +15748,16 @@ body of your function, only data pointers.
 
 // FIXME: this should be (and was) Scalar::toTensor, but there is currently no way
 // to implement this without going through Derived Types (which are not part of core).
-@Namespace("c10") public static native @ByVal Tensor scalar_to_tensor(@ByVal Scalar s, @Const @ByVal(nullValue = "c10::Device(at::kCPU)") Device device);
-@Namespace("c10") public static native @ByVal Tensor scalar_to_tensor(@ByVal Scalar s);
+@Namespace("c10") public static native @ByVal Tensor scalar_to_tensor(@Const @ByRef Scalar s, @Const @ByVal(nullValue = "c10::Device(at::kCPU)") Device device);
+@Namespace("c10") public static native @ByVal Tensor scalar_to_tensor(@Const @ByRef Scalar s);
 
+ // namespace c10
 
+@Namespace("at::native") public static native @ByVal Tensor wrapped_scalar_tensor(@Const @ByRef Scalar scalar, @Const @ByVal(nullValue = "c10::Device(at::kCPU)") Device device);
+@Namespace("at::native") public static native @ByVal Tensor wrapped_scalar_tensor(@Const @ByRef Scalar scalar);
+
+ // namespace native
+ // namsepace at
 
 
 // Parsed from ATen/TensorIndexing.h
@@ -14852,7 +15844,7 @@ body of your function, only data pointers.
 
 @Namespace("at::indexing::impl") public static native @ByVal Tensor boolToIndexingTensor(@Const @ByRef Tensor self, @Cast("bool") boolean value, @Const @ByRef Device self_device);
 
-@Namespace("at::indexing::impl") public static native @ByVal Tensor scalarToTensorNonNativeDeviceType(@ByVal Scalar v, @Const @ByRef TensorOptions options);
+@Namespace("at::indexing::impl") public static native @ByVal Tensor scalarToTensorNonNativeDeviceType(@Const @ByRef Scalar v, @Const @ByRef TensorOptions options);
 
 @Namespace("at::indexing::impl") public static native void recordTensorIndex(@Const @ByRef Tensor tensor, @ByRef TensorVector outIndices, @Cast("int64_t*") LongPointer dim_ptr);
 @Namespace("at::indexing::impl") public static native void recordTensorIndex(@Const @ByRef Tensor tensor, @ByRef TensorVector outIndices, @Cast("int64_t*") LongBuffer dim_ptr);
@@ -14884,7 +15876,7 @@ body of your function, only data pointers.
 //
 // The rest of the functions are in `at::indexing::impl` namespace, signifying
 // that they shouldn't be used from Python indexing implementation.
-@Namespace("at::indexing") public static native @ByVal Tensor scalarToTensor(@ByVal Scalar v, @Const @ByRef TensorOptions options, @Const @ByRef Device self_device);
+@Namespace("at::indexing") public static native @ByVal Tensor scalarToTensor(@Const @ByRef Scalar v, @Const @ByRef TensorOptions options, @Const @ByRef Device self_device);
 
 // To match numpy semantics:
 // As a special case for backwards compatibility,
@@ -15014,8 +16006,8 @@ body of your function, only data pointers.
 // This mirrors `THPVariable_setitem` in torch/csrc/autograd/python_variable_indexing.cpp
 // for "the assigned value is a Tensor" case
 // See NOTE [ Setting `disable_slice_optimization` when calling C++ tensor indexing functions from Python ]
-@Namespace("at::indexing") public static native void set_item(@ByRef Tensor self, @Const @ByRef TensorIndexArrayRef indices, @Const @ByRef Tensor value, @Cast("bool") boolean disable_slice_optimization/*=false*/);
-@Namespace("at::indexing") public static native void set_item(@ByRef Tensor self, @Const @ByRef TensorIndexArrayRef indices, @Const @ByRef Tensor value);
+@Namespace("at::indexing") public static native void set_item(@Const @ByRef Tensor self, @Const @ByRef TensorIndexArrayRef indices, @Const @ByRef Tensor value, @Cast("bool") boolean disable_slice_optimization/*=false*/);
+@Namespace("at::indexing") public static native void set_item(@Const @ByRef Tensor self, @Const @ByRef TensorIndexArrayRef indices, @Const @ByRef Tensor value);
 
  // namespace indexing
  // namespace at
@@ -15071,46 +16063,46 @@ body of your function, only data pointers.
 // static inline Tensor operator op(const Tensor & x, const Tensor & y) {
 //   return body;
 // }
-// static inline Tensor operator op(const Tensor & x, Scalar y) {
+// static inline Tensor operator op(const Tensor & x, const Scalar& y) {
 //   return body;
 // }
-// static inline Tensor operator op(Scalar x, const Tensor & y) {
+// static inline Tensor operator op(const Scalar& x, const Tensor & y) {
 //   return reverse_scalar_body;
 // }
-@Namespace("at") public static native @ByVal @Name("operator +") Tensor add(@ByVal Scalar x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator *") Tensor multiply(@ByVal Scalar x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator -") Tensor subtract(@ByVal Scalar x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator /") Tensor divide(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator +") Tensor add(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator *") Tensor multiply(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator -") Tensor subtract(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator /") Tensor divide(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator %") Tensor mod(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator %") Tensor mod(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator %") Tensor mod(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator %") Tensor mod(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator %") Tensor mod(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator &") Tensor and(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator &") Tensor and(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator &") Tensor and(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator &") Tensor and(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator &") Tensor and(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator |") Tensor or(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator |") Tensor or(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator |") Tensor or(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator |") Tensor or(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator |") Tensor or(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator ^") Tensor xor(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator ^") Tensor xor(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator ^") Tensor xor(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator ^") Tensor xor(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator ^") Tensor xor(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator <") Tensor lessThan(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator <") Tensor lessThan(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator <") Tensor lessThan(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator <") Tensor lessThan(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator <") Tensor lessThan(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator <=") Tensor lessThanEquals(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator <=") Tensor lessThanEquals(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator <=") Tensor lessThanEquals(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator <=") Tensor lessThanEquals(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator <=") Tensor lessThanEquals(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator >") Tensor greaterThan(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator >") Tensor greaterThan(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator >") Tensor greaterThan(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator >") Tensor greaterThan(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator >") Tensor greaterThan(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator >=") Tensor greaterThanEquals(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator >=") Tensor greaterThanEquals(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator >=") Tensor greaterThanEquals(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator >=") Tensor greaterThanEquals(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator >=") Tensor greaterThanEquals(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator ==") Tensor equals(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator ==") Tensor equals(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator ==") Tensor equals(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator ==") Tensor equals(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator ==") Tensor equals(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 @Namespace("at") public static native @ByVal @Name("operator !=") Tensor notEquals(@Const @ByRef Tensor x, @Const @ByRef Tensor y);
-@Namespace("at") public static native @ByVal @Name("operator !=") Tensor notEquals(@Const @ByRef Tensor x, @ByVal Scalar y);
-@Namespace("at") public static native @ByVal @Name("operator !=") Tensor notEquals(@ByVal Scalar x, @Const @ByRef Tensor y);
+@Namespace("at") public static native @ByVal @Name("operator !=") Tensor notEquals(@Const @ByRef Tensor x, @Const @ByRef Scalar y);
+@Namespace("at") public static native @ByVal @Name("operator !=") Tensor notEquals(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
 // #undef DEFINE_OPERATOR
 // #undef AT_FORALL_BINARY_OPS
 
@@ -15327,11 +16319,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 
 
-// Temporary functions to disable forward AD
-// TODO(alband) remove these when perf issues are solved
-@Namespace("torch::autograd") public static native @Cast("bool") boolean isForwardADEnabled();
-@Namespace("torch::autograd") public static native void setForwardADEnabled(@Cast("bool") boolean value);
-
  // namespace torch::autograd
 
 
@@ -15435,6 +16422,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
   // a materialized structure, use materialize_autograd_meta instead.
   @Namespace("torch::autograd::impl") public static native AutogradMeta get_autograd_meta(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
 
+  // WARNING: This will return a nullptr if the Tensor is not a view.
+  @Namespace("torch::autograd::impl") public static native DifferentiableViewMeta get_view_autograd_meta(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
+
   // Returns the current autograd meta, materializing it if it was previously
   // none.  This counts as a *mutating* operation, so do not call it on
   // "read-only" operators; in particular, this is NOT thread safe
@@ -15492,9 +16482,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
   /** Retrieves this {@code Variable}s version counter. */
   @Namespace("torch::autograd::impl") public static native @Const @ByRef VariableVersion version_counter(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-
-  @Namespace("torch::autograd::impl") public static native @Cast("PyObject*") Pointer pyobj(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-  @Namespace("torch::autograd::impl") public static native void set_pyobj(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0, @Cast("PyObject*") Pointer pyobj);
 
   @Namespace("torch::autograd::impl") public static native void set_name(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0, @StdString BytePointer name);
   @Namespace("torch::autograd::impl") public static native void set_name(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0, @StdString String name);
@@ -15684,9 +16671,10 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *    exists. These are note considered as views for now for the view+inplace
  *    logic! The graph won't be rewritten when an inplace is done, only a
  *    warning will be thrown.
+ *  - Inference_MODE should be set when a view of normal tensor is created in InferenceMode.
  *  - DEFAULT is for all other cases */
 @Namespace("torch::autograd") public enum CreationMeta { DEFAULT((byte)(0)), IN_CUSTOM_FUNCTION((byte)(1)), MULTI_OUTPUT_NODE((byte)(2)),
-                                   NO_GRAD_MODE((byte)(3)), MULTI_OUTPUT_SAFE((byte)(4));
+                                   NO_GRAD_MODE((byte)(3)), MULTI_OUTPUT_SAFE((byte)(4)), INFERENCE_MODE((byte)(5));
 
     public final byte value;
     private CreationMeta(byte v) { this.value = v; }
@@ -15697,8 +16685,11 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 /** Handles correctly propagating CreationMeta when a new view is created from a previous view.
  *  In general, we don't want the new view to be _less_ restrictive than the previous view
- *  (it's okay to be _more_ restrictive). A CreationMeta value of DEFAULT is currently the least
- *  restrictive, as the behavior for all other CreationMeta values is to error out for in-place ops.
+ *  (it's okay to be _more_ restrictive).
+ *  A CreationMeta value of DEFAULT is currently the least restrictive, as the behavior for
+ *  all other CreationMeta values is to error out for in-place ops.
+ *  A CreationMeta value of INFERENCE_MODE is currently the most restrictive, so it takes
+ *  precedence in propagation.
  *  If this changes, the logic here will need to be updated to properly handle the new semantics. */
 @Namespace("torch::autograd") public static native CreationMeta propagate_creation_meta(CreationMeta prev_view_creation_meta, CreationMeta new_view_creation_meta);
 @Namespace("torch::autograd") public static native @Cast("torch::autograd::CreationMeta") byte propagate_creation_meta(@Cast("torch::autograd::CreationMeta") byte prev_view_creation_meta, @Cast("torch::autograd::CreationMeta") byte new_view_creation_meta);
@@ -15738,23 +16729,27 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor data,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
+    @Cast("bool") boolean shared_view_info,
     CreationMeta creation_meta,
     @Cast("bool") boolean allow_tensor_metadata_change/*=true*/);
 @Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_differentiable_view(
     @Const @ByRef Tensor data,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
+    @Cast("bool") boolean shared_view_info,
     CreationMeta creation_meta);
 @Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_differentiable_view(
     @Const @ByRef Tensor data,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
+    @Cast("bool") boolean shared_view_info,
     @Cast("torch::autograd::CreationMeta") byte creation_meta,
     @Cast("bool") boolean allow_tensor_metadata_change/*=true*/);
 @Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_differentiable_view(
     @Const @ByRef Tensor data,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
     @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
+    @Cast("bool") boolean shared_view_info,
     @Cast("torch::autograd::CreationMeta") byte creation_meta);
 
 // See NOTE [ Autograd View Variables ] for details.
@@ -16061,6 +17056,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../kSiLU.java
 
   
+// Targeting ../kMish.java
+
+  
 // Targeting ../kLeakyReLU.java
 
   
@@ -16133,6 +17131,12 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../kGRU.java
 
   
+// Targeting ../kValid.java
+
+  
+// Targeting ../kSame.java
+
+  
 // Targeting ../_compute_enum_name.java
 
 
@@ -16186,6 +17190,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <ATen/record_function.h>
 // #include <torch/csrc/autograd/grad_mode.h>
 // #include <torch/csrc/api/include/torch/types.h>
+// #include <torch/csrc/utils/crash_handler.h>
 // #include <cstdint>
 
 /** A RAII, thread-local guard that disabled gradient calculation.
@@ -17096,6 +18101,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../SmoothL1LossImplCloneable.java
 
 
+// Targeting ../HuberLossImplCloneable.java
+
+
 // Targeting ../MultiLabelMarginLossImplCloneable.java
 
 
@@ -17292,6 +18300,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 
 // Targeting ../SiLUImplCloneable.java
+
+
+// Targeting ../MishImplCloneable.java
 
 
 // Targeting ../SigmoidImplCloneable.java
@@ -17610,6 +18621,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../SmoothL1LossImplModuleHolder.java
 
 
+// Targeting ../HuberLossImplModuleHolder.java
+
+
 // Targeting ../MultiLabelMarginLossImplModuleHolder.java
 
 
@@ -17808,6 +18822,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../SiLUImplModuleHolder.java
 
 
+// Targeting ../MishImplModuleHolder.java
+
+
 // Targeting ../SigmoidImplModuleHolder.java
 
 
@@ -17906,7 +18923,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::utils") public static native double clip_grad_norm_(
     @StdMove TensorVector parameters,
     double max_norm,
-    double norm_type/*=2.0*/);
+    double norm_type/*=2.0*/,
+    @Cast("bool") boolean error_if_nonfinite/*=false*/);
 @Namespace("torch::nn::utils") public static native double clip_grad_norm_(
     @StdMove TensorVector parameters,
     double max_norm);
@@ -17919,7 +18937,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::utils") public static native double clip_grad_norm_(
     @ByVal Tensor parameter,
     double max_norm,
-    double norm_type/*=2.0*/);
+    double norm_type/*=2.0*/,
+    @Cast("bool") boolean error_if_nonfinite/*=false*/);
 @Namespace("torch::nn::utils") public static native double clip_grad_norm_(
     @ByVal Tensor parameter,
     double max_norm);
@@ -17974,29 +18993,37 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 // #include <torch/types.h>
 
+
+///
+///
+///
+///
+///
+///
+///
 @Namespace("torch::nn::utils::rnn") public static native @ByVal Tensor invert_permutation(@Const @ByRef Tensor permutation);
 // Targeting ../PackedSequence.java
 
 
 
 /** Packs a Tensor containing padded sequences of variable length.
- *  
+ * 
  *  {@code input} can be of size {@code }T x B x *{@code } where {@code T} is the length of the
  *  longest sequence (equal to {@code }lengths[0]{@code }), {@code }B{@code } is the batch size, and
  *  {@code }*{@code } is any number of dimensions (including 0). If {@code }batch_first{@code } is
  *  {@code }true{@code }, {@code }B x T x *{@code } {@code input} is expected.
- *  
+ * 
  *  For unsorted sequences, use {@code enforce_sorted = false}. If {@code enforce_sorted} is
  *  {@code }true{@code }, the sequences should be sorted by length in a decreasing order, i.e.
  *  {@code }input[:,0]{@code } should be the longest sequence, and {@code }input[:,B-1]{@code } the shortest
  *  one.
- *  
+ * 
  *  Note:
  *      This function accepts any input that has at least two dimensions. You
  *      can apply it to pack the labels, and use the output of the RNN with
  *      them to compute the loss directly. A Tensor can be retrieved from
  *      a {@code PackedSequence} object by calling its {@code }.data(){@code } function.
- *  
+ * 
  *  Arguments:
  *      input (Tensor): padded batch of variable length sequences.
  *      lengths (Tensor): list of sequences lengths of each batch element.
@@ -18005,9 +19032,15 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *      enforce_sorted (bool, optional): if {@code }true{@code }, the input is expected to
  *          contain sequences sorted by length in a decreasing order. If
  *          {@code }false{@code }, this condition is not checked. Default: {@code }true{@code }.
- *  
+ * 
  *  Returns:
  *      a {@code PackedSequence} object */
+
+///
+///
+///
+///
+///
 @Namespace("torch::nn::utils::rnn") public static native @ByVal PackedSequence pack_padded_sequence(
     @ByVal Tensor input,
     @ByVal Tensor lengths,
@@ -18018,15 +19051,15 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @ByVal Tensor lengths);
 
 /** Pads a packed batch of variable length sequences.
- *  
+ * 
  *  It is an inverse operation to {@code pack_padded_sequence}.
- *  
+ * 
  *  The returned Tensor's data will be of size {@code }T x B x *{@code }, where {@code T} is the length
  *  of the longest sequence and {@code B} is the batch size. If {@code }batch_first{@code } is true,
  *  the data will be transposed into {@code }B x T x *{@code } format.
- *  
+ * 
  *  Batch elements will be ordered decreasingly by their length.
- *  
+ * 
  *  Arguments:
  *      sequence (PackedSequence): batch to pad
  *      batch_first (bool, optional): if {@code }true{@code }, the output will be in {@code }B x T x *{@code }
@@ -18036,7 +19069,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *          have length {@code total_length}. This method will throw error
  *          if {@code total_length} is less than the max sequence length in
  *          {@code sequence}.
- *  
+ * 
  *  Returns:
  *      Tuple of Tensor containing the padded sequence, and a Tensor
  *      containing the list of lengths of each sequence in the batch. */
@@ -18080,29 +19113,23 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *  Returns:
  *      Tensor of size {@code }T x B x *{@code } if {@code batch_first} is {@code }false{@code }.
  *      Tensor of size {@code }B x T x *{@code } otherwise */
-@Namespace("torch::nn::utils::rnn") public static native @ByVal Tensor pad_sequence(
-    @ByVal TensorArrayRef sequences,
-    @Cast("bool") boolean batch_first/*=false*/,
-    double padding_value/*=0*/);
-@Namespace("torch::nn::utils::rnn") public static native @ByVal Tensor pad_sequence(
-    @ByVal TensorArrayRef sequences);
 
 /** Packs a list of variable length Tensors
- *  
+ * 
  *  {@code }sequences{@code } should be a list of Tensors of size {@code }L x *{@code }, where {@code L} is
  *  the length of a sequence and {@code *} is any number of trailing dimensions,
  *  including zero.
- *  
+ * 
  *  For unsorted sequences, use {@code enforce_sorted = false}. If {@code }enforce_sorted{@code }
  *  is {@code }true{@code }, the sequences should be sorted in the order of decreasing length.
- *  
- *  
+ * 
+ * 
  *  Arguments:
  *      sequences (torch::ArrayRef<Tensor>): A list of sequences of decreasing length.
  *      enforce_sorted (bool, optional): if {@code }true{@code }, checks that the input
  *          contains sequences sorted by length in a decreasing order. If
  *          {@code }false{@code }, this condition is not checked. Default: {@code }true{@code }.
- *  
+ * 
  *  Returns:
  *      a {@code PackedSequence} object */
 @Namespace("torch::nn::utils::rnn") public static native @ByVal PackedSequence pack_sequence(@ByVal TensorArrayRef sequences, @Cast("bool") boolean enforce_sorted/*=true*/);
@@ -19045,6 +20072,20 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  *  <pre>{@code
  *  namespace F = torch::nn::functional;
  *  F::smooth_l1_loss(input, target, F::SmoothL1LossFuncOptions(torch::kNone));
+ *  }</pre> */
+
+// Targeting ../HuberLossOptions.java
+
+
+/** Options for {@code torch::nn::functional::huber_loss}.
+ * 
+ *  See the documentation for {@code torch::nn::HuberLossOptions} class to learn what
+ *  arguments are supported.
+ * 
+ *  Example:
+ *  <pre>{@code
+ *  namespace F = torch::nn::functional;
+ *  F::huber_loss(input, target, F::HuberLossFuncOptions(torch::kNone));
  *  }</pre> */
 
 // Targeting ../PoissonNLLLossOptions.java
@@ -20208,6 +21249,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 // ============================================================================
 
+// ============================================================================
+
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor relu(@ByVal Tensor input, @Cast("bool") boolean inplace);
  // namespace detail
@@ -20245,7 +21288,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 /** F::relu6(x, F::ReLU6FuncOptions().inplace(true));
 /** }</pre> */
 @Namespace("torch::nn::functional") public static native @ByVal Tensor relu6(@ByVal Tensor input, @Cast("const torch::nn::functional::ReLU6FuncOptions*") @ByRef(nullValue = "torch::nn::functional::ReLU6FuncOptions{}") ReLU6Options options);
-@Namespace("torch::nn::functional") public static native @ByVal Tensor relu6(@ByVal Tensor input);
 
 // ============================================================================
 
@@ -20471,12 +21513,18 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <torch/types.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+@Namespace("torch::nn::functional::detail") public static native @StdString BytePointer padding_unwrap(@ByVal kValid arg0);
+
+@Namespace("torch::nn::functional::detail") public static native @StdString BytePointer padding_unwrap(@ByVal kSame arg0);
+
+
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv1d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer padding,
+    @Cast("const torch::nn::functional::Conv1dFuncOptions::padding_t*") @ByRef Pointer padding,
     @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -20504,7 +21552,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer padding,
+    @Cast("const torch::nn::functional::Conv2dFuncOptions::padding_t*") @ByRef Pointer padding,
     @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -20532,7 +21580,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer padding,
+    @Cast("const torch::nn::functional::Conv3dFuncOptions::padding_t*") @ByRef Pointer padding,
     @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -20867,7 +21915,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @ByVal @Cast("torch::nn::EmbeddingBagMode*") Pointer mode,
     @Cast("bool") boolean sparse,
     @Const @ByRef Tensor per_sample_weights,
-    @Cast("bool") boolean include_last_offset);
+    @Cast("bool") boolean include_last_offset,
+    @ByVal LongOptional padding_idx);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -21202,6 +22251,37 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor target,
     @Cast("const torch::nn::functional::SmoothL1LossFuncOptions*") @ByRef(nullValue = "torch::nn::functional::SmoothL1LossFuncOptions{}") SmoothL1LossOptions options,
     double beta/*=1.*/);
+
+// ============================================================================
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor target,
+    @ByVal @Cast("torch::nn::functional::HuberLossFuncOptions::reduction_t*") Pointer reduction,
+    double delta/*=1.*/);
+@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor target,
+    @ByVal @Cast("torch::nn::functional::HuberLossFuncOptions::reduction_t*") Pointer reduction);
+ // namespace detail
+// #endif /* DOXYGEN_SHOULD_SKIP_THIS */
+
+/** See https://pytorch.org/docs/master/nn.functional.html#torch.nn.functional.huber_loss
+/** about the exact behavior of this functional.
+/**
+/** See the documentation for {@code torch::nn::functional::HuberLossFuncOptions} class to learn what
+/** optional arguments are supported for this functional.
+/**
+/** Example:
+/** <pre>{@code
+/** namespace F = torch::nn::functional;
+/** F::huber_loss(input, target, F::HuberLossFuncOptions().reduction(torch::kNone).delta(0.5));
+/** }</pre> */
+@Namespace("torch::nn::functional") public static native @ByVal Tensor huber_loss(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor target,
+    @Cast("const torch::nn::functional::HuberLossFuncOptions*") @ByRef(nullValue = "torch::nn::functional::HuberLossFuncOptions{}") HuberLossOptions options);
 
 // ============================================================================
 
@@ -22871,7 +23951,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <torch/nn/modules/linear.h>
 // #include <torch/nn/modules/container/modulelist.h>
 // #include <torch/nn/modules/container/sequential.h>
-// #include <torch/nn/functional/activation.h> 
+// #include <torch/nn/functional/activation.h>
 // #include <torch/nn/options/adaptive.h>
 // Targeting ../ASMoutput.java
 
@@ -22990,6 +24070,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Parsed from torch/nn/modules/conv.h
 
 // #pragma once
+
+// #include <c10/util/overloaded.h>
 
 // #include <torch/expanding_array.h>
 // #include <torch/nn/cloneable.h>
@@ -23329,6 +24411,12 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 
 // Targeting ../SmoothL1Loss.java
+
+
+// Targeting ../HuberLossImpl.java
+
+
+// Targeting ../HuberLoss.java
 
 
 // Targeting ../MultiLabelMarginLossImpl.java
@@ -23927,6 +25015,12 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../SiLU.java
 
 
+// Targeting ../MishImpl.java
+
+
+// Targeting ../Mish.java
+
+
 // Targeting ../SigmoidImpl.java
 
 
@@ -24124,6 +25218,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <torch/optim/rmsprop.h>
 // #include <torch/optim/sgd.h>
 
+// #include <torch/optim/schedulers/lr_scheduler.h>
+// #include <torch/optim/schedulers/step_lr.h>
+
 
 // Parsed from torch/optim/optimizer.h
 
@@ -24134,6 +25231,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <c10/util/Exception.h>
 
 // #include <torch/csrc/WindowsTorchApiMacro.h>
+// #include <torch/arg.h>
 
 // #include <algorithm>
 // #include <functional>
@@ -24365,7 +25463,6 @@ b) For c10::nullopt value: in param state, c10::nullopt value in C++ impl is equ
 
 // #pragma once
 
-// #include <torch/arg.h>
 // #include <torch/nn/module.h>
 // #include <torch/optim/optimizer.h>
 // #include <torch/optim/serialize.h>
@@ -24391,7 +25488,6 @@ b) For c10::nullopt value: in param state, c10::nullopt value in C++ impl is equ
 
 // #pragma once
 
-// #include <torch/arg.h>
 // #include <torch/nn/module.h>
 // #include <torch/optim/optimizer.h>
 // #include <torch/optim/serialize.h>
@@ -24417,7 +25513,6 @@ b) For c10::nullopt value: in param state, c10::nullopt value in C++ impl is equ
 
 // #pragma once
 
-// #include <torch/arg.h>
 // #include <torch/nn/module.h>
 // #include <torch/optim/optimizer.h>
 // #include <torch/optim/serialize.h>
@@ -24444,7 +25539,6 @@ b) For c10::nullopt value: in param state, c10::nullopt value in C++ impl is equ
 
 // #pragma once
 
-// #include <torch/arg.h>
 // #include <torch/nn/module.h>
 // #include <torch/optim/optimizer.h>
 // #include <torch/optim/serialize.h>
@@ -24474,7 +25568,6 @@ b) For c10::nullopt value: in param state, c10::nullopt value in C++ impl is equ
 
 // #pragma once
 
-// #include <torch/arg.h>
 // #include <torch/nn/module.h>
 // #include <torch/optim/optimizer.h>
 // #include <torch/optim/serialize.h>
@@ -24493,6 +25586,32 @@ b) For c10::nullopt value: in param state, c10::nullopt value in C++ impl is equ
 
 
 // Targeting ../SGD.java
+
+
+ // namespace optim
+ // namespace torch
+
+
+// Parsed from torch/optim/schedulers/lr_scheduler.h
+
+// #pragma once
+
+// #include <torch/optim/optimizer.h>
+
+// #include <torch/csrc/WindowsTorchApiMacro.h>
+// Targeting ../LRScheduler.java
+
+
+ // namespace optim
+ // namspace torch
+
+
+// Parsed from torch/optim/schedulers/step_lr.h
+
+// #pragma once
+
+// #include <torch/optim/schedulers/lr_scheduler.h>
+// Targeting ../StepLR.java
 
 
  // namespace optim

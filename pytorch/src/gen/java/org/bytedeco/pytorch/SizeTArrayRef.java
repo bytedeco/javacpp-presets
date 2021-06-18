@@ -46,8 +46,9 @@ private native void allocate();
    *  copy-construct an ArrayRef. */
 
   /** Construct an ArrayRef from a std::vector. */
-  // The enable_if stuff here makes sure that this isn't used for std::vector<bool>,
-  // because ArrayRef can't work on a std::vector<bool> bitfield.
+  // The enable_if stuff here makes sure that this isn't used for
+  // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
+  // bitfield.
 
   /** Construct an ArrayRef from a std::array */
 

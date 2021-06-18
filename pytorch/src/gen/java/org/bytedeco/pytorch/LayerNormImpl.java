@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  LayerNorm model(LayerNormOptions({2, 2}).elementwise_affine(false).eps(2e-5));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LayerNormImpl extends LayerNormImplCloneable {
     static { Loader.load(); }

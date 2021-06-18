@@ -77,6 +77,9 @@ private native void allocate(@StdString String device_string);
   /** Return true if the device is of CUDA type. */
   public native @Cast("bool") @NoException boolean is_cuda();
 
+  /** Return true if the device is of HIP type. */
+  public native @Cast("bool") @NoException boolean is_hip();
+
   /** Return true if the device is of XPU type. */
   public native @Cast("bool") @NoException boolean is_xpu();
 

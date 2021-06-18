@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  * 
  *  Example:
  *  <pre>{@code
- *  SmoothL1Loss model(SmoothL1LossOptions(torch::kNone));
+ *  SmoothL1Loss model(SmoothL1LossOptions().reduction(torch::kNone).beta(0.5));
  *  }</pre> */
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SmoothL1LossOptions extends Pointer {
@@ -49,4 +49,5 @@ private native void allocate(@ByVal kMean reduction);
 public SmoothL1LossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
 private native void allocate(@ByVal kSum reduction);
   public native @Cast("torch::nn::SmoothL1LossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException DoublePointer beta();
 }

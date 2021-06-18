@@ -41,4 +41,5 @@ public class RMSpropParamState extends OptimizerCloneableRMSpropParamState {
   
   
   
+  // NOLINTNEXTLINE(modernize-use-override)
 }

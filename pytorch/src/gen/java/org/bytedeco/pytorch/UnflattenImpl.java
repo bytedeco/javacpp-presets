@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  Unflatten model(UnflattenOptions(0, {2, 2}));
  *  Unflatten model(UnflattenOptions("B", {{"B1", 2}, {"B2", 2}}));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class UnflattenImpl extends UnflattenImplCloneable {
     static { Loader.load(); }

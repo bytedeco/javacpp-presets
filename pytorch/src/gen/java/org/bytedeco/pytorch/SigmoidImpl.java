@@ -21,6 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Applies sigmoid over a given input.
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.Sigmoid to learn
  *  about the exact behavior of this module. */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SigmoidImpl extends SigmoidImplCloneable {
     static { Loader.load(); }

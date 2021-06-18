@@ -32,11 +32,14 @@ public class ConvTranspose1dImplBaseBase extends ConvTranspose1dImplCloneable {
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
   /** The options with which this {@code Module} was constructed. */
+  // NOLINTNEXTLINE(cppcoreguidelines-non-private-member-variables-in-classes)
   public native @ByRef DetailConv1dOptions options(); public native ConvTranspose1dImplBaseBase options(DetailConv1dOptions setter);
 
   /** The learned kernel (or "weight"). */
+  // NOLINTNEXTLINE(cppcoreguidelines-non-private-member-variables-in-classes)
   public native @ByRef Tensor weight(); public native ConvTranspose1dImplBaseBase weight(Tensor setter);
 
   /** The learned bias. Only defined if the {@code bias} option was true. */
+  // NOLINTNEXTLINE(cppcoreguidelines-non-private-member-variables-in-classes)
   public native @ByRef Tensor bias(); public native ConvTranspose1dImplBaseBase bias(Tensor setter);
 }

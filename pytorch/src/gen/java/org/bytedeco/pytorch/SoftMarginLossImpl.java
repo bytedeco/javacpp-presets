@@ -31,6 +31,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  SoftMarginLoss model(SoftMarginLossOptions(torch::kNone));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SoftMarginLossImpl extends SoftMarginLossImplCloneable {
     static { Loader.load(); }

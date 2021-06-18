@@ -32,6 +32,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  BCEWithLogitsLoss model(BCEWithLogitsLossOptions().reduction(torch::kNone).weight(weight));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class BCEWithLogitsLossImpl extends BCEWithLogitsLossImplCloneable {
     static { Loader.load(); }

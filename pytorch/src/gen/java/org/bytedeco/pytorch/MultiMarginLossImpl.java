@@ -32,6 +32,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  MultiMarginLoss model(MultiMarginLossOptions().margin(2).weight(weight));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MultiMarginLossImpl extends MultiMarginLossImplCloneable {
     static { Loader.load(); }

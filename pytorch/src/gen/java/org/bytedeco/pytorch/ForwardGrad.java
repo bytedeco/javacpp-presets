@@ -32,6 +32,7 @@ public class ForwardGrad extends Pointer {
     }
 
 
+    // NOLINTNEXTLINE(modernize-use-equals-default)
     public ForwardGrad() { super((Pointer)null); allocate(); }
     private native void allocate();
 

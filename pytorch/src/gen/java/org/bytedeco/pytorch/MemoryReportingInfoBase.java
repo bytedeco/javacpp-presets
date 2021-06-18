@@ -26,7 +26,10 @@ public class MemoryReportingInfoBase extends DebugInfoBase {
 
 
   // Negative alloc_size corresponds to freeing of the memory
-  public native void reportMemoryUsage(Pointer ptr, @Cast("int64_t") long alloc_size, @ByVal Device device);
+  public native void reportMemoryUsage(
+        Pointer ptr,
+        @Cast("int64_t") long alloc_size,
+        @ByVal Device device);
 
   public native @Cast("bool") boolean memoryProfilingEnabled();
 }

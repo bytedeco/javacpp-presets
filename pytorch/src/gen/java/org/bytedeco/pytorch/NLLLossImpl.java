@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  NLLLoss model(NLLLossOptions().ignore_index(-100).reduction(torch::kMean));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class NLLLossImpl extends NLLLossImplCloneable {
     static { Loader.load(); }

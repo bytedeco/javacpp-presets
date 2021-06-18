@@ -15,6 +15,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ParameterListImpl extends ParameterListImplCloneable {
     static { Loader.load(); }
@@ -44,13 +45,13 @@ public class ParameterListImpl extends ParameterListImplCloneable {
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
   /** push the a given parameter at the end of the list */
-  public native void append(@ByVal Tensor param);
+  public native void append(@ByRef(true) Tensor param);
 
   /** push the a given parameter at the end of the list */
 
   /** push the a given parameter at the end of the list
    *  And the key of the pair will be discarded, only the value
-   *  will be added into the {@code ParameterList}   */
+   *  will be added into the {@code ParameterList} */
   public native void append(@Cast("const torch::OrderedDict<std::string,torch::Tensor>::Item*") @ByRef StringTensorPair pair);
 
   /** extend parameters from a container to the end of the list */

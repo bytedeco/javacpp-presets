@@ -41,4 +41,5 @@ public class AdamParamState extends OptimizerCloneableAdamParamState {
   
   
   
+  // NOLINTNEXTLINE(modernize-use-override)
 }

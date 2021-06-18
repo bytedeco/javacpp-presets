@@ -57,7 +57,7 @@ public class AutogradMeta extends AutogradMetaInterface {
   public native @SharedPtr ForwardGrad fw_grad_(); public native AutogradMeta fw_grad_(ForwardGrad setter);
 
   public native @ByRef FunctionPreVector hooks_(); public native AutogradMeta hooks_(FunctionPreVector setter);
-  public native @Cast("torch::autograd::hooks_list*") @StdVector @SharedPtr PointerPointer cpp_hooks_list(); public native AutogradMeta cpp_hooks_list(PointerPointer setter);
+  public native @Cast("torch::autograd::hooks_list*") @StdVector @SharedPtr PointerPointer cpp_hooks_list_(); public native AutogradMeta cpp_hooks_list_(PointerPointer setter);
 
   // Only meaningful on leaf variables (must be false otherwise)
   public native @Cast("bool") boolean requires_grad_(); public native AutogradMeta requires_grad_(boolean setter);

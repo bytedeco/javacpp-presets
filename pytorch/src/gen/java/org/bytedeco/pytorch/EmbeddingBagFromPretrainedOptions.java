@@ -44,4 +44,5 @@ public class EmbeddingBagFromPretrainedOptions extends Pointer {
   public native @Cast("torch::nn::EmbeddingBagMode*") @ByRef @NoException Pointer mode();
   public native @Cast("bool*") @ByRef @NoException BoolPointer sparse();
   public native @Cast("bool*") @ByRef @NoException BoolPointer include_last_offset();
+  public native @ByRef @NoException LongOptional padding_idx();
 }

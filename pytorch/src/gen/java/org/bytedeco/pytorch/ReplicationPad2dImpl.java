@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  ReplicationPad2d model(ReplicationPad2dOptions({1, 1, 2, 0}));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ReplicationPad2dImpl extends ReplicationPad2dImplBase {
     static { Loader.load(); }

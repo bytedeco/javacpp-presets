@@ -34,6 +34,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  TransformerDecoderLayer model(TransformerDecoderLayerOptions(512, 8).dropout(0.2));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TransformerDecoderLayerImpl extends TransformerDecoderLayerImplCloneable {
     static { Loader.load(); }

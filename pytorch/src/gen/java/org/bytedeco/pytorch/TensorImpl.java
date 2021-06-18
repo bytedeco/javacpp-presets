@@ -95,6 +95,20 @@ public class TensorImpl extends Pointer {
     public TensorImpl(Pointer p) { super(p); }
 
   
+  // Note [Enum ImplType]
+  // This enum is temporary. In the followup refactor we should
+  // think about how to specialize TensorImpl creation for view
+  // tensors. Currently we only special case its key_set_ but
+  // there's also potential to share version_counter_ directly
+  // without creating first and then override in as_view.
+  public enum ImplType { VIEW(0);
+
+      public final int value;
+      private ImplType(int v) { this.value = v; }
+      private ImplType(ImplType e) { this.value = e.value; }
+      public ImplType intern() { for (ImplType e : values()) if (e.value == value) return e; return this; }
+      @Override public String toString() { return intern().name(); }
+  }
 
   /**
    * Construct a 1-dim 0-size tensor backed by the given storage.
@@ -108,11 +122,39 @@ public class TensorImpl extends Pointer {
         @ByVal DispatchKeySet arg1,
         @Const @ByVal TypeMeta data_type);
 
+  // See Note [Enum ImplType]
+  public TensorImpl(
+        ImplType arg0,
+        @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
+        @ByVal DispatchKeySet arg2,
+        @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(arg0, storage, arg2, data_type); }
+  private native void allocate(
+        ImplType arg0,
+        @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
+        @ByVal DispatchKeySet arg2,
+        @Const @ByVal TypeMeta data_type);
+  public TensorImpl(
+        @Cast("c10::TensorImpl::ImplType") int arg0,
+        @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
+        @ByVal DispatchKeySet arg2,
+        @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(arg0, storage, arg2, data_type); }
+  private native void allocate(
+        @Cast("c10::TensorImpl::ImplType") int arg0,
+        @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
+        @ByVal DispatchKeySet arg2,
+        @Const @ByVal TypeMeta data_type);
+
   /**
    * Construct a 1-dim 0 size tensor that doesn't have a storage.
    */
-  public TensorImpl(@ByVal DispatchKeySet arg0, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(arg0, data_type, device_opt); }
-  private native void allocate(@ByVal DispatchKeySet arg0, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt);
+  public TensorImpl(
+        @ByVal DispatchKeySet arg0,
+        @Const @ByVal TypeMeta data_type,
+        @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(arg0, data_type, device_opt); }
+  private native void allocate(
+        @ByVal DispatchKeySet arg0,
+        @Const @ByVal TypeMeta data_type,
+        @ByVal DeviceOptional device_opt);
 
   // Legacy constructors so I don't have to go update call sites.
   // TODO: When Variable is added, delete these constructors
@@ -132,10 +174,22 @@ public class TensorImpl extends Pointer {
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @Cast("c10::DispatchKey") byte dispatch_key,
         @Const @ByVal TypeMeta data_type);
-  public TensorImpl(DispatchKey dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
-  private native void allocate(DispatchKey dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt);
-  public TensorImpl(@Cast("c10::DispatchKey") byte dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
-  private native void allocate(@Cast("c10::DispatchKey") byte dispatch_key, @Const @ByVal TypeMeta data_type, @ByVal DeviceOptional device_opt);
+  public TensorImpl(
+        DispatchKey dispatch_key,
+        @Const @ByVal TypeMeta data_type,
+        @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
+  private native void allocate(
+        DispatchKey dispatch_key,
+        @Const @ByVal TypeMeta data_type,
+        @ByVal DeviceOptional device_opt);
+  public TensorImpl(
+        @Cast("c10::DispatchKey") byte dispatch_key,
+        @Const @ByVal TypeMeta data_type,
+        @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
+  private native void allocate(
+        @Cast("c10::DispatchKey") byte dispatch_key,
+        @Const @ByVal TypeMeta data_type,
+        @ByVal DeviceOptional device_opt);
   
   
   
@@ -179,7 +233,8 @@ public class TensorImpl extends Pointer {
    * True if this tensor has storage. See storage() for details.
    */
 // #ifdef DEBUG
-// Allow subclasses to check that their storage_ is never getting set in debug builds.
+  // Allow subclasses to check that their storage_ is never getting set in debug
+  // builds.
   public native @Cast("bool") boolean has_storage();
 // #endif
 
@@ -211,15 +266,25 @@ public class TensorImpl extends Pointer {
    * Tensors with non-trivial strides are not contiguous.  See
    * compute_contiguous() for the exact definition of whether or not
    * a tensor is contiguous or not.
+   *
+   * NOTE: is_contiguous is only {@code TENSORIMPL_MAYBE_VIRTUAL} for
+   * backward compatibility. See {@code set_has_contiguity_policy} and
+   * {@code is_contiguous_custom} for the encouraged customization point.
    */
-  public native @Cast("bool") boolean is_contiguous(@ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
+  public native @Cast("bool") boolean is_contiguous(
+        @ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
   public native @Cast("bool") boolean is_contiguous();
-
   public native @Cast("bool") boolean is_sparse();
+
+  // Whether a tensor is sparse COO or not. Use is_sparse_csr for checking CSR
+  // format.
+  public native @Cast("bool") boolean is_sparse_csr();
 
   public native @Cast("bool") boolean is_quantized();
 
   public native @Cast("bool") boolean is_meta();
+
+  public native @Cast("bool") boolean is_cpu();
 
   public native @Cast("bool") boolean is_cuda();
 
@@ -235,11 +300,19 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_metal();
 
-  // TODO: remove this once we don't automatically enabled Autograd dispatch keys
+  public native @Cast("bool") boolean is_mlc();
+
+  // TODO: remove this once we don't automatically enabled Autograd dispatch
+  // keys
   //       in TensorImpl constructor.
   // DON'T USE THIS API!! It's only created for testing purpose in
   // file aten/src/ATen/core/boxing/impl/test_helpers.h
   public native void remove_autograd_key();
+
+  // Inference tensor doesn't have autograd or ADInplaceOrView key.
+  // Invariant:
+  //   Inference tensor has version_counter_.enabled() == false
+  public native @Cast("bool") boolean is_inference_tensor();
 
   public native @Cast("int64_t") long get_device();
 
@@ -328,11 +401,12 @@ public class TensorImpl extends Pointer {
    *   - "level" allows to specify the level of forward AD nesting for which the
    *     gradient should be returned. Note that since levels are not fully
    *     supported yet, this argument should be 0. See documentation for
-   *     torch::autograd::enter_dual_level for more details about forward AD nesting.
-   *   - "self" should represent the Tensor whose forward grad is accessed. It is
-   *     required when dealing with view.
+   *     torch::autograd::enter_dual_level for more details about forward AD
+   * nesting.
+   *   - "self" should represent the Tensor whose forward grad is accessed. It
+   * is required when dealing with view.
    */
-  public native @Const @ByRef Tensor fw_grad(@Cast("uint64_t") long level, @Const @ByRef Tensor self);
+  public native @Const @ByRef Tensor _fw_grad(@Cast("uint64_t") long level, @Const @ByRef Tensor self);
 
   /**
    * Sets the forward gradient for this Tensor.
@@ -341,18 +415,24 @@ public class TensorImpl extends Pointer {
    * This is an internal API that should never be used by end users.
    *
    * The API is as follows:
-   *   - "new_grad" is a Tensor containing the new value of the gradient that should
-   *     be set
-   *   - "self" should represent the Tensor whose forward grad is accessed. It is
-   *     required when dealing with view.
+   *   - "new_grad" is a Tensor containing the new value of the gradient that
+   * should be set
+   *   - "self" should represent the Tensor whose forward grad is accessed. It
+   * is required when dealing with view.
    *   - "level" allows to specify the level of forward AD nesting for which the
    *     gradient should be set. Note that since levels are not fully supported
-   *     yet, this argument should be 0. See documentation for torch::autograd::enter_dual_level
-   *     for more details about forward AD nesting.
-   *   - "is_inplace_op" is a boolean flag that tells if this gradient was generated
-   *     by an inplace operation or an out of place one. This allows better error checking.
+   *     yet, this argument should be 0. See documentation for
+   * torch::autograd::enter_dual_level for more details about forward AD
+   * nesting.
+   *   - "is_inplace_op" is a boolean flag that tells if this gradient was
+   * generated by an inplace operation or an out of place one. This allows
+   * better error checking.
    */
-  public native void set_fw_grad(@Const @ByRef Tensor new_grad, @Const @ByRef Tensor self, @Cast("uint64_t") long level, @Cast("bool") boolean is_inplace_op);
+  public native void _set_fw_grad(
+        @Const @ByRef Tensor new_grad,
+        @Const @ByRef Tensor self,
+        @Cast("uint64_t") long level,
+        @Cast("bool") boolean is_inplace_op);
 
   /**
    * Return a typed data pointer to the actual data which this tensor refers to.
@@ -366,6 +446,12 @@ public class TensorImpl extends Pointer {
    * performing index calculations to determine the location of elements in
    * the tensor.  We recommend using 'TensorAccessor' to handle this computation
    * for you; this class is available from 'Tensor'.
+   */
+
+  /**
+   * More efficient helper for Tensor::data_ptr(). Like data<T>(), but
+   * does not do a type check. Unlike the untemplated data(), does
+   * check has_storage() and storage_initialized().
    */
 
   /**
@@ -404,7 +490,6 @@ public class TensorImpl extends Pointer {
    * WARNING: This is NOT computed in bytes.
    */
   public native @Cast("int64_t") long storage_offset();
-
   /**
    * True if a tensor has no elements (e.g., numel() == 0).
    */
@@ -468,21 +553,24 @@ public class TensorImpl extends Pointer {
   public native @Cast("int64_t") long stride(@Cast("int64_t") long d);
 
   /**
-   * Set whether a tensor allows changes to its metadata (e.g. sizes / strides / storage / storage_offset).
-   * See NOTE [ Metadata Change for a Detached Tensor ] for details.
+   * Set whether a tensor allows changes to its metadata (e.g. sizes / strides /
+   * storage / storage_offset). See NOTE [ Metadata Change for a Detached Tensor
+   * ] for details.
    */
   public native void set_allow_tensor_metadata_change(@Cast("bool") boolean value);
 
   /**
-   * True if a tensor allows changes to its metadata (e.g. sizes / strides / storage / storage_offset).
-   * See NOTE [ Metadata Change for a Detached Tensor ] for details.
+   * True if a tensor allows changes to its metadata (e.g. sizes / strides /
+   * storage / storage_offset). See NOTE [ Metadata Change for a Detached Tensor
+   * ] for details.
    */
   public native @Cast("bool") boolean allow_tensor_metadata_change();
 
   /**
    * Set the pointer to autograd metadata.
    */
-  public native void set_autograd_meta(@UniquePtr AutogradMetaInterface autograd_meta);
+  public native void set_autograd_meta(
+        @UniquePtr AutogradMetaInterface autograd_meta);
 
   /**
    * Return the pointer to autograd metadata.  May return nullptr if the
@@ -493,7 +581,8 @@ public class TensorImpl extends Pointer {
   /**
    * Set the pointer to named tensor metadata.
    */
-  public native void set_named_tensor_meta(@UniquePtr NamedTensorMetaInterface named_tensor_meta);
+  public native void set_named_tensor_meta(
+        @UniquePtr NamedTensorMetaInterface named_tensor_meta);
 
   /**
    * Return the pointer to named tensor metadata.
@@ -503,34 +592,44 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean has_named_tensor_meta();
 
-
   // NOTE [ TensorImpl Shallow-Copying ]
   //
-  // TensorImpl shallow-copying is used when we want to have two Variables share the same tensor metadata
-  // (e.g. sizes / strides / storage pointer / storage_offset), but each with a different autograd history.
-  // Example call sites:
+  // TensorImpl shallow-copying is used when we want to have two Variables share
+  // the same tensor metadata (e.g. sizes / strides / storage pointer /
+  // storage_offset), but each with a different autograd history. Example call
+  // sites:
   //
-  // 1. `var_detached = var.detach()` uses `shallow_copy_and_detach()` to create `var_detached` that shares
-  // the same tensor metadata with `var`, but with a completely new autograd history.
-  // 2. `var.set_data(tensor)` uses `shallow_copy_from()` to copy tensor metadata from
-  // `tensor` into `var`, while keeping `var`'s original AutogradMeta.
+  // 1. `var_detached = var.detach()` uses `shallow_copy_and_detach()` to create
+  // `var_detached` that shares the same tensor metadata with `var`, but with a
+  // completely new autograd history.
+  // 2. `var.set_data(tensor)` uses `shallow_copy_from()` to copy tensor
+  // metadata from `tensor` into `var`, while keeping `var`'s original
+  // AutogradMeta.
   //
-  // Functions that shallow-copy a TensorImpl (such as `shallow_copy_and_detach()` / `shallow_copy_from()` /
-  // `copy_tensor_metadata()`) copy the tensor metadata fields (e.g. sizes / strides / storage pointer /
-  // storage_offset) by value. However, the following fields are not copied:
+  // Functions that shallow-copy a TensorImpl (such as
+  // `shallow_copy_and_detach()` / `shallow_copy_from()` /
+  // `copy_tensor_metadata()`) copy the tensor metadata fields (e.g. sizes /
+  // strides / storage pointer / storage_offset) by value. However, the
+  // following fields are not copied:
   //
   // 1. the AutogradMeta pointer, because it is unique for each Variable.
-  // 2. the version counter, because the destination TensorImpl's version counter is either set to the
-  // passed-in `version_counter` (in `shallow_copy_and_detach()` and `copy_tensor_metadata()`), or it is kept
-  // intact (in `shallow_copy_from()`). See NOTE [ Version Counter Sharing ] for details.
+  // 2. the version counter, because the destination TensorImpl's version
+  // counter is either set to the passed-in `version_counter` (in
+  // `shallow_copy_and_detach()` and `copy_tensor_metadata()`), or it is kept
+  // intact (in `shallow_copy_from()`). See NOTE [ Version Counter Sharing ] for
+  // details.
   //
-  // In `shallow_copy_and_detach()` and `copy_tensor_metadata()`, the passed-in `allow_tensor_metadata_change`
-  // determines whether the TensorImpl shallow-copy allows changes to its metadata (e.g. sizes / strides /
-  // storage / storage_offset). See NOTE [ Metadata Change for a Detached Tensor ] for details.
+  // In `shallow_copy_and_detach()` and `copy_tensor_metadata()`, the passed-in
+  // `allow_tensor_metadata_change` determines whether the TensorImpl
+  // shallow-copy allows changes to its metadata (e.g. sizes / strides / storage
+  // / storage_offset). See NOTE [ Metadata Change for a Detached Tensor ] for
+  // details.
   //
-  // In `shallow_copy_from()`, we don't check the destination TensorImpl's `allow_tensor_metadata_change_`,
-  // because `shallow_copy_from()` is used for implementing functions such as `var.set_data(tensor)`, which
-  // changes `var`'s tensor metadata and expects its `allow_tensor_metadata_change_` to be ignored.
+  // In `shallow_copy_from()`, we don't check the destination TensorImpl's
+  // `allow_tensor_metadata_change_`, because `shallow_copy_from()` is used for
+  // implementing functions such as `var.set_data(tensor)`, which changes
+  // `var`'s tensor metadata and expects its `allow_tensor_metadata_change_` to
+  // be ignored.
 
   /**
    * One TensorImpl can be copied to another TensorImpl if they have the same
@@ -557,21 +656,21 @@ public class TensorImpl extends Pointer {
   /**
    * Shallow-copies data from another TensorImpl into this TensorImpl.
    *
-   * For why this function doesn't check this TensorImpl's {@code allow_tensor_metadata_change_},
-   * see NOTE [ TensorImpl Shallow-Copying ].
+   * For why this function doesn't check this TensorImpl's
+   * {@code allow_tensor_metadata_change_}, see NOTE [ TensorImpl Shallow-Copying ].
    */
 
-  public native @NoException void set_version_counter(
-      @Const @ByRef VariableVersion version_counter);
+  // Inference tensor doesn't have version counter,
+  // set_version_counter is no-op for them.
+  public native void set_version_counter(@Const @ByRef VariableVersion version_counter);
 
   public native @Const @ByRef @NoException VariableVersion version_counter();
 
-  public native @NoException void bump_version();
+  public native void bump_version();
 
   public native @NoException void set_pyobj(@Cast("PyObject*") Pointer pyobj);
 
   public native @Cast("PyObject*") @NoException Pointer pyobj();
-
   /**
    * The device type of a Tensor, e.g., DeviceType::CPU or DeviceType::CUDA.
    */
@@ -627,7 +726,7 @@ public class TensorImpl extends Pointer {
    */
   public native void FreeMemory();
 
-   /**
+  /**
    * \brief Shares the data with another tensor.
    *
    * To share data between two tensors, the sizes of the two tensors must be
@@ -689,8 +788,8 @@ public class TensorImpl extends Pointer {
   /**
    * Set the strides of the tensor to match memory_format
    *
-   * WARNING: This function doesn't rearrange data and assumes tensor is a memory
-   * contiguous
+   * WARNING: This function doesn't rearrange data and assumes tensor is a
+   * memory contiguous
    */
   public native void empty_tensor_restride(MemoryFormat memory_format);
   public native void empty_tensor_restride(@Cast("c10::MemoryFormat") byte memory_format);
@@ -700,4 +799,5 @@ public class TensorImpl extends Pointer {
   public native @Cast("bool") boolean is_strides_like_channels_last_3d();
 
   public native @Cast("bool") boolean is_non_overlapping_and_dense();
+  public native void set_storage_access_should_throw();
 }

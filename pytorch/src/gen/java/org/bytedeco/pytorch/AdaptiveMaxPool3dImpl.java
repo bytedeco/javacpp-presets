@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  AdaptiveMaxPool3d model(AdaptiveMaxPool3dOptions(3));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AdaptiveMaxPool3dImpl extends AdaptiveMaxPool3dImplBase {
     static { Loader.load(); }

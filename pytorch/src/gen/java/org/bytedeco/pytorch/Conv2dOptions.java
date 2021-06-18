@@ -34,7 +34,7 @@ public class Conv2dOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException LongPointer out_channels();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException LongPointer kernel_size();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException LongPointer stride();
-  public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException LongPointer padding();
+  public native @Cast("torch::nn::ConvOptions<2>::padding_t*") @ByRef @NoException Pointer padding();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException LongPointer dilation();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer groups();
   public native @Cast("bool*") @ByRef @NoException BoolPointer bias();

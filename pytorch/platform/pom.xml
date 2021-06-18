@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch-platform</artifactId>
-  <version>1.8.1-${project.parent.version}</version>
+  <version>1.9.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for PyTorch</name>
 
   <properties>

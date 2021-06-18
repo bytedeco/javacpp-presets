@@ -103,8 +103,8 @@ public class TypeMeta extends Pointer {
    */
 
   /**
-  * convert ScalarType enum values to TypeMeta handles
-  */
+   * convert ScalarType enum values to TypeMeta handles
+   */
   public static native @ByVal TypeMeta fromScalarType(ScalarType scalar_type);
 
   /**

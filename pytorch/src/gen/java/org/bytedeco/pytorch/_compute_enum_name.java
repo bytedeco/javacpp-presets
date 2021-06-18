@@ -46,6 +46,7 @@ public class _compute_enum_name extends Pointer {
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kReLU v);
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kGELU v);
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kSiLU v);
+  public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kMish v);
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kLeakyReLU v);
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kFanIn v);
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kFanOut v);
@@ -70,4 +71,6 @@ public class _compute_enum_name extends Pointer {
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kRNN_RELU v);
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kLSTM v);
   public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kGRU v);
+  public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kValid v);
+  public native @StdString @Name("operator ()") BytePointer apply(@Const @ByRef kSame v);
 }

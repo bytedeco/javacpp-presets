@@ -57,5 +57,6 @@ public class RNNImplBase extends RNNImplCloneable {
   public native @StdMove TensorVector all_weights();
 
   /** The RNN's options. */
+  // NOLINTNEXTLINE(cppcoreguidelines-non-private-member-variables-in-classes)
   public native @ByRef RNNOptionsBase options_base(); public native RNNImplBase options_base(RNNOptionsBase setter);
 }

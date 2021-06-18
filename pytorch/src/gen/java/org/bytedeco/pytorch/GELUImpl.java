@@ -21,6 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Applies gelu over a given input.
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.GELU to learn
  *  about the exact behavior of this module. */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GELUImpl extends GELUImplCloneable {
     static { Loader.load(); }

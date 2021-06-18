@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  RNNCell model(RNNCellOptions(20, 10).bias(false).nonlinearity(torch::kReLU));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class RNNCellImpl extends RNNCellImplBase {
     static { Loader.load(); }

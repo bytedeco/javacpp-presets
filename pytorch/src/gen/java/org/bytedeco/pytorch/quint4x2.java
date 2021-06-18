@@ -17,7 +17,8 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 /**
- * quint4x2 is for un-signed 4 bit quantized Tensors that are packed to byte boundary.
+ * quint4x2 is for un-signed 4 bit quantized Tensors that are packed to byte
+ * boundary.
  */
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class quint4x2 extends Pointer {

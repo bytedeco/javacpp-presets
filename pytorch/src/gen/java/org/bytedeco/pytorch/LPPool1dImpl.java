@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  LPPool1d model(LPPool1dOptions(1, 2).stride(5).ceil_mode(true));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LPPool1dImpl extends LPPool1dImplBase {
     static { Loader.load(); }
