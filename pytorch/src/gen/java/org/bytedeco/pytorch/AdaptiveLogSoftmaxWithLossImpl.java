@@ -31,6 +31,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  AdaptiveLogSoftmaxWithLoss model(AdaptiveLogSoftmaxWithLossOptions(8, 10, {4, 8}).div_value(2.).head_bias(true));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AdaptiveLogSoftmaxWithLossImpl extends AdaptiveLogSoftmaxWithLossImplCloneable {
     static { Loader.load(); }
@@ -39,7 +40,7 @@ public class AdaptiveLogSoftmaxWithLossImpl extends AdaptiveLogSoftmaxWithLossIm
 
    public AdaptiveLogSoftmaxWithLossImpl(@Cast("int64_t") long in_features, @Cast("int64_t") long n_classes, @ByVal @Cast("std::vector<int64_t>*") LongVector cutoffs) { super((Pointer)null); allocate(in_features, n_classes, cutoffs); }
    @NoDeallocator private native void allocate(@Cast("int64_t") long in_features, @Cast("int64_t") long n_classes, @ByVal @Cast("std::vector<int64_t>*") LongVector cutoffs);
-     
+
   public AdaptiveLogSoftmaxWithLossImpl(@ByVal AdaptiveLogSoftmaxWithLossOptions options_) { super((Pointer)null); allocate(options_); }
   @NoDeallocator private native void allocate(@ByVal AdaptiveLogSoftmaxWithLossOptions options_);
 
@@ -64,12 +65,12 @@ public class AdaptiveLogSoftmaxWithLossImpl extends AdaptiveLogSoftmaxWithLossIm
   /** The options with which this {@code Module} was constructed */
   public native @ByRef AdaptiveLogSoftmaxWithLossOptions options(); public native AdaptiveLogSoftmaxWithLossImpl options(AdaptiveLogSoftmaxWithLossOptions setter);
 
-  /** Cutoffs used to assign targets to their buckets. It should be an ordered Sequence 
+  /** Cutoffs used to assign targets to their buckets. It should be an ordered Sequence
    *  of integers sorted in the increasing order */
   public native @ByRef @Cast("std::vector<int64_t>*") LongVector cutoffs(); public native AdaptiveLogSoftmaxWithLossImpl cutoffs(LongVector setter);
 
   public native @Cast("int64_t") long shortlist_size(); public native AdaptiveLogSoftmaxWithLossImpl shortlist_size(long setter);
-  
+
   /** Number of clusters */
   public native @Cast("int64_t") long n_clusters(); public native AdaptiveLogSoftmaxWithLossImpl n_clusters(long setter);
 

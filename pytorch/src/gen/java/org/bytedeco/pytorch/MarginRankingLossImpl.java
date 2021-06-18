@@ -31,6 +31,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  MarginRankingLoss model(MarginRankingLossOptions().margin(0.5).reduction(torch::kSum));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MarginRankingLossImpl extends MarginRankingLossImplCloneable {
     static { Loader.load(); }

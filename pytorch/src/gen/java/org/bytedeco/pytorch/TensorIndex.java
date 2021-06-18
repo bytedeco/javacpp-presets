@@ -46,6 +46,7 @@ public class TensorIndex extends Pointer {
     static { Loader.load(); }
 
   // Case 1: `at::indexing::None`
+  // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
   public TensorIndex() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -53,6 +54,7 @@ public class TensorIndex extends Pointer {
   private native void allocate(@ByVal @Cast("c10::nullopt_t*") Pointer arg0);
 
   // Case 2: "..." / `at::indexing::Ellipsis`
+  // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
   public TensorIndex(@ByVal EllipsisIndexType arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@ByVal EllipsisIndexType arg0);
   public TensorIndex(@Cast("const char*") BytePointer str) { super((Pointer)null); allocate(str); }
@@ -61,18 +63,22 @@ public class TensorIndex extends Pointer {
   private native void allocate(String str);
 
   // Case 3: Integer value
+  // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
   public TensorIndex(@Cast("int64_t") long integer) { super((Pointer)null); allocate(integer); }
   private native void allocate(@Cast("int64_t") long integer);
+  // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
   public TensorIndex(int integer) { super((Pointer)null); allocate(integer); }
   private native void allocate(int integer);
 
   // Case 4: Boolean value
 
   // Case 5: Slice represented in `at::indexing::Slice` form
+  // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
   public TensorIndex(@ByVal Slice slice) { super((Pointer)null); allocate(slice); }
   private native void allocate(@ByVal Slice slice);
 
   // Case 6: Tensor value
+  // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
   public TensorIndex(@ByVal Tensor tensor) { super((Pointer)null); allocate(tensor); }
   private native void allocate(@ByVal Tensor tensor);
 

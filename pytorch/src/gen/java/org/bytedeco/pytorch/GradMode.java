@@ -16,7 +16,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("c10") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GradMode extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

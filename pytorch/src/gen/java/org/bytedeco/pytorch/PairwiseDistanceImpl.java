@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  PairwiseDistance model(PairwiseDistanceOptions().p(3).eps(0.5).keepdim(true));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class PairwiseDistanceImpl extends PairwiseDistanceImplCloneable {
     static { Loader.load(); }

@@ -34,7 +34,7 @@ public class Scalar extends Pointer {
   private native void allocate();
 
 // #define DEFINE_IMPLICIT_CTOR(type, name)
-//   Scalar(type vv) : Scalar(vv, true) { }
+//   Scalar(type vv) : Scalar(vv, true) {}
 
   public Scalar(@Cast("uint8_t") byte vv) { super((Pointer)null); allocate(vv); }
   private native void allocate(@Cast("uint8_t") byte vv); 
@@ -64,9 +64,9 @@ public class Scalar extends Pointer {
 //     if (Tag::HAS_d == tag) {
 //       return checked_convert<type, double>(v.d, #type);
 //     } else if (Tag::HAS_z == tag) {
-//       return checked_convert<type, c10::complex<double>>(
-//           v.z, #type);
-//     } if (Tag::HAS_b == tag) {
+//       return checked_convert<type, c10::complex<double>>(v.z, #type);
+//     }
+//     if (Tag::HAS_b == tag) {
 //       return checked_convert<type, bool>(v.i, #type);
 //     } else {
 //       return checked_convert<type, int64_t>(v.i, #type);

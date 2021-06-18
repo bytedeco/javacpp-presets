@@ -26,6 +26,8 @@ public class DifferentiableViewMeta extends AutogradMeta {
    *  for backward differentiable views */
   public native @Cast("bool") boolean requires_grad();
 
+  public native @Cast("bool") boolean shared_view_info();
+
   public native @Cast("bool") boolean has_bw_view();
 
   public native @Cast("const torch::autograd::ViewInfo*") @ByRef Pointer get_backward_view();

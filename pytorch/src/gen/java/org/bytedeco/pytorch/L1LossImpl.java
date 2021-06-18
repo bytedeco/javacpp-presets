@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  L1Loss model(L1LossOptions(torch::kNone));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class L1LossImpl extends L1LossImplCloneable {
     static { Loader.load(); }

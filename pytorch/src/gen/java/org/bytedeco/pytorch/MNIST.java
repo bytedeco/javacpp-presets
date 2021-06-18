@@ -52,6 +52,7 @@ public class MNIST extends MNISTDataSet {
   public native @ByVal SizeTOptional size();
 
   /** Returns true if this is the training subset of MNIST. */
+  // NOLINTNEXTLINE(bugprone-exception-escape)
   public native @Cast("bool") @NoException boolean is_train();
 
   /** Returns all images stacked into a single tensor. */

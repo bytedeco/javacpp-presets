@@ -18,7 +18,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // A RAII, thread local (!) guard that enables or disables grad mode upon
 // construction, and sets it back to the original value upon destruction.
-@Namespace("at") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AutoGradMode extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

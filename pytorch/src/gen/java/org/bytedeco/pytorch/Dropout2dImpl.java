@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Dropout2d model(Dropout2dOptions().p(0.42).inplace(true));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Dropout2dImpl extends Dropout2dImplBase {
     static { Loader.load(); }

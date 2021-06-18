@@ -21,6 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Applies Tanhshrink over a given input.
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.Tanhshrink to learn
  *  about the exact behavior of this module. */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TanhshrinkImpl extends TanhshrinkImplCloneable {
     static { Loader.load(); }

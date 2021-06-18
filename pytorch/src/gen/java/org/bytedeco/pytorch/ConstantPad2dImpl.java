@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  ConstantPad2d model(ConstantPad2dOptions({3, 0, 2, 1}, 3.5));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ConstantPad2dImpl extends ConstantPad2dImplBase {
     static { Loader.load(); }

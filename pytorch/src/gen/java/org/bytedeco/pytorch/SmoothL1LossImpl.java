@@ -19,10 +19,9 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SmoothL1Loss ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Creates a criterion that uses a squared term if the absolute
- *  element-wise error falls below 1 and an L1 term otherwise.
+ *  element-wise error falls below beta and an L1 term otherwise.
  *  It is less sensitive to outliers than the {@code MSELoss} and in some cases
- *  prevents exploding gradients (e.g. see {@code Fast R-CNN} paper by Ross Girshick).
- *  Also known as the Huber loss.
+ *  prevents exploding gradients (e.g. see the paper {@code Fast R-CNN} by Ross Girshick).
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.SmoothL1Loss to learn
  *  about the exact behavior of this module.
  * 
@@ -31,8 +30,9 @@ import static org.bytedeco.pytorch.global.torch.*;
  * 
  *  Example:
  *  <pre>{@code
- *  SmoothL1Loss model(SmoothL1LossOptions(torch::kNone));
+ *  SmoothL1Loss model(SmoothL1LossOptions().reduction(torch::kNone).beta(0.5));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SmoothL1LossImpl extends SmoothL1LossImplCloneable {
     static { Loader.load(); }

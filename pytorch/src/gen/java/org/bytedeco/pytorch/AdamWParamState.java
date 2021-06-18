@@ -41,4 +41,5 @@ public class AdamWParamState extends OptimizerCloneableAdamWParamState {
   
   
   
+  // NOLINTNEXTLINE(modernize-use-override)
 }

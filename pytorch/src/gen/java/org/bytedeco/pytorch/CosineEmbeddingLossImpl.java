@@ -33,6 +33,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  CosineEmbeddingLoss model(CosineEmbeddingLossOptions().margin(0.5));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class CosineEmbeddingLossImpl extends CosineEmbeddingLossImplCloneable {
     static { Loader.load(); }

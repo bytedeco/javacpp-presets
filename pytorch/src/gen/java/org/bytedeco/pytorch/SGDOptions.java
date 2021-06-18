@@ -32,4 +32,7 @@ public class SGDOptions extends OptimizerCloneableSGDOptions {
   
   
   
+  // NOLINTNEXTLINE(modernize-use-override)
+  public native double get_lr();
+  public native void set_lr(double lr);
 }
