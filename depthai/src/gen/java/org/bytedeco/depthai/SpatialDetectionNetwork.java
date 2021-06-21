@@ -7,6 +7,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.opencv.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
 
@@ -21,9 +27,9 @@ public class SpatialDetectionNetwork extends DetectionNetwork {
     public SpatialDetectionNetwork(Pointer p) { super(p); }
 
 
-    public native @StdString BytePointer getName();
-    public native @StdVector Input getInputs();
-    public native @StdVector Output getOutputs();
+    public native @StdString @Override BytePointer getName();
+    public native @StdVector @Override Input getInputs();
+    public native @StdVector @Override Output getOutputs();
     /**
      * Input message with data to be infered upon
      * Default queue is blocking with size 5

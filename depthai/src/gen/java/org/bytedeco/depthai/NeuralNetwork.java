@@ -7,6 +7,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.opencv.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
 
@@ -21,9 +27,9 @@ public class NeuralNetwork extends Node {
     public NeuralNetwork(Pointer p) { super(p); }
 
 
-    public native @StdString BytePointer getName();
-    public native @StdVector Output getOutputs();
-    public native @StdVector Input getInputs();
+    public native @StdString @Override BytePointer getName();
+    public native @StdVector @Override Output getOutputs();
+    public native @StdVector @Override Input getInputs();
     public NeuralNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
 
