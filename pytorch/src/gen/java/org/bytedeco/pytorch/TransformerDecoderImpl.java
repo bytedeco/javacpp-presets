@@ -33,6 +33,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  const auto tgt = torch::rand({20, 32, 512});
  *  auto out = transformer_decoder(tgt, memory);
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TransformerDecoderImpl extends TransformerDecoderImplCloneable {
     static { Loader.load(); }

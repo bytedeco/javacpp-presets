@@ -17,19 +17,19 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 /** Holds the data and list of {@code batch_sizes} of a packed sequence.
- *  
+ * 
  *  All RNN modules accept packed sequences as inputs.
- *  
+ * 
  *  Note:
  *      Instances of this class should never be created manually. They are meant
  *      to be instantiated by functions like {@code pack_padded_sequence}.
- *  
+ * 
  *      Batch sizes represent the number elements at each sequence step in
  *      the batch, not the varying sequence lengths passed to
  *      {@code pack_padded_sequence}.  For instance, given data {@code }abc{@code } and {@code }x{@code }
  *      the :class:{@code PackedSequence} would contain data {@code }axbc{@code } with
  *      {@code }batch_sizes=[2,1,1]{@code }.
- *  
+ * 
  *  Attributes:
  *      data (Tensor): Tensor containing packed sequence
  *      batch_sizes (Tensor): Tensor of integers holding
@@ -38,14 +38,14 @@ import static org.bytedeco.pytorch.global.torch.*;
  *          :class:{@code PackedSequence} is constructed from sequences.
  *      unsorted_indices (Tensor, optional): Tensor of integers holding how this
  *          to recover the original sequences with correct order.
- *  
+ * 
  *  .. note::
  *      {@code data} can be on arbitrary device and of arbitrary dtype.
  *      {@code sorted_indices} and {@code unsorted_indices} must be {@code }torch::kInt64{@code }
  *      tensors on the same device as {@code data}.
- *  
+ * 
  *      However, {@code batch_sizes} should always be a CPU {@code }torch::kInt64{@code } tensor.
- *  
+ * 
  *      This invariant is maintained throughout {@code PackedSequence} class,
  *      and all functions that construct a {@code PackedSequence} in libtorch
  *      (i.e., they only pass in tensors conforming to this constraint). */

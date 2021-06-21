@@ -39,7 +39,8 @@ public class InputArchive extends Pointer {
   private native void allocate();
 
   // Move is allowed.
-  
+  public InputArchive(@ByRef(true) InputArchive arg0) { super((Pointer)null); allocate(arg0); }
+  private native void allocate(@ByRef(true) InputArchive arg0);
   
 
   // Copy is disallowed.

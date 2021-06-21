@@ -7,6 +7,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.opencv.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
 
@@ -22,7 +28,8 @@ public class XLinkStream extends Pointer {
     public XLinkStream(@Const @ByRef XLinkConnection conn, @StdString String name, @Cast("std::size_t") long maxWriteSize) { super((Pointer)null); allocate(conn, name, maxWriteSize); }
     private native void allocate(@Const @ByRef XLinkConnection conn, @StdString String name, @Cast("std::size_t") long maxWriteSize);
     
-    
+    public XLinkStream(@ByRef(true) XLinkStream stream) { super((Pointer)null); allocate(stream); }
+    private native void allocate(@ByRef(true) XLinkStream stream);
 
     // Blocking
     public native void write(@Const Pointer data, @Cast("std::size_t") long size);

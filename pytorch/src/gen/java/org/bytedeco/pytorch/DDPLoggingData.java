@@ -21,9 +21,6 @@ import static org.bytedeco.pytorch.global.torch.*;
 // for analysis and debugging. Data structure is defined in
 // c10 directory so that it can be easily imported by both c10
 // and torch files.
-// TODO -- right now starting with logging a small set of straightforward
-// fields, will add more fields as follow ups such as performance stats,
-// internal states and env variables and etc.
 @Namespace("c10") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class DDPLoggingData extends Pointer {
     static { Loader.load(); }
@@ -42,15 +39,8 @@ public class DDPLoggingData extends Pointer {
         return new DDPLoggingData((Pointer)this).offsetAddress(i);
     }
 
-  // Data that can be got during DistributedDataParallel construction time
-  public native int world_size(); public native DDPLoggingData world_size(int setter);
-  public native int rank(); public native DDPLoggingData rank(int setter);
-  public native @StdString BytePointer module_name(); public native DDPLoggingData module_name(BytePointer setter);
-  public native @StdVector IntPointer device_ids(); public native DDPLoggingData device_ids(IntPointer setter);
-  public native int output_device(); public native DDPLoggingData output_device(int setter);
-  public native @Cast("bool") boolean broadcast_buffers(); public native DDPLoggingData broadcast_buffers(boolean setter);
-  public native int bucket_cap_mb(); public native DDPLoggingData bucket_cap_mb(int setter);
-  public native @Cast("bool") boolean find_unused_parameters(); public native DDPLoggingData find_unused_parameters(boolean setter);
-  public native @Cast("bool") boolean gradient_as_bucket_view(); public native DDPLoggingData gradient_as_bucket_view(boolean setter);
-  public native @StdString BytePointer backend_name(); public native DDPLoggingData backend_name(BytePointer setter);
+  // logging fields that are string types.
+  public native @ByRef StringStringMap strs_map(); public native DDPLoggingData strs_map(StringStringMap setter);
+  // logging fields that are int64_t types.
+  public native @ByRef StringLongMap ints_map(); public native DDPLoggingData ints_map(StringLongMap setter);
 }

@@ -128,9 +128,9 @@ public class AnyModule extends Pointer {
 
   /** Move construction and assignment is allowed, and follows the default
    *  behavior of move for {@code std::unique_ptr}. */
-  public AnyModule(@ByVal AnyModule arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@ByVal AnyModule arg0);
-  public native @ByRef @Name("operator =") AnyModule put(@ByVal AnyModule arg0);
+  public AnyModule(@ByRef(true) AnyModule arg0) { super((Pointer)null); allocate(arg0); }
+  private native void allocate(@ByRef(true) AnyModule arg0);
+  public native @ByRef @Name("operator =") AnyModule put(@ByRef(true) AnyModule arg0);
 
   /** Creates a shallow copy of an {@code AnyModule}. */
 

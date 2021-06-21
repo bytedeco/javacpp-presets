@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  GLU model(GLUOptions(1));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GLUImpl extends GLUImplCloneable {
     static { Loader.load(); }

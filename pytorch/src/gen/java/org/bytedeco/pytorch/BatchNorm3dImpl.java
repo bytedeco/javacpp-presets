@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  BatchNorm3d model(BatchNorm3dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class BatchNorm3dImpl extends BatchNorm3dImplBase {
     static { Loader.load(); }

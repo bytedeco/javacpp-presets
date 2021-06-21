@@ -16,7 +16,8 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Name("c10::impl::ListElementConstReferenceTraits<std::string>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+// There is no to() overload for c10::optional<std::string>.
+@Name("c10::impl::ListElementConstReferenceTraits<c10::optional<std::string> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ListElementConstReferenceTraits extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

@@ -28,8 +28,9 @@ import static org.bytedeco.pytorch.global.torch.*;
  * 
  *  Example:
  *  <pre>{@code
- *  EmbeddingBag model(EmbeddingBagOptions(10, 2).max_norm(2).norm_type(2.5).scale_grad_by_freq(true).sparse(true).mode(torch::kSum));
+ *  EmbeddingBag model(EmbeddingBagOptions(10, 2).max_norm(2).norm_type(2.5).scale_grad_by_freq(true).sparse(true).mode(torch::kSum).padding_idx(1));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class EmbeddingBagImpl extends EmbeddingBagImplCloneable {
     static { Loader.load(); }

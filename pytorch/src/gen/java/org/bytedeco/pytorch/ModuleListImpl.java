@@ -60,6 +60,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  iteration over submodules, positional access, adding a new module after
  *  construction via {@code push_back}, as well as joining two {@code ModuleList}s via
  *  {@code extend}. */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ModuleListImpl extends ModuleListImplCloneable {
     static { Loader.load(); }

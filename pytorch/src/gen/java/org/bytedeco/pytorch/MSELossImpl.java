@@ -30,6 +30,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  MSELoss model(MSELossOptions(torch::kNone));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MSELossImpl extends MSELossImplCloneable {
     static { Loader.load(); }

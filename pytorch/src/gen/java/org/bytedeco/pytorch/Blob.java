@@ -44,7 +44,8 @@ public class Blob extends Pointer {
   public Blob() { super((Pointer)null); allocate(); }
   @NoException private native void allocate();
 
-  
+  public Blob(@ByRef(true) Blob other) { super((Pointer)null); allocate(other); }
+  @NoException private native void allocate(@ByRef(true) Blob other);
 
   
 

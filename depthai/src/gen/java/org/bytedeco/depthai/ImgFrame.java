@@ -7,6 +7,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.opencv.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
 
@@ -125,6 +131,37 @@ public class ImgFrame extends Buffer {
 
 // Optional - OpenCV support
 // #ifdef DEPTHAI_HAVE_OPENCV_SUPPORT
+    /**
+     * \note This API only available if OpenCV support is enabled
+     *
+     * Copies cv::Mat data to ImgFrame buffer
+     *
+     * @param frame Input cv::Mat frame from which to copy the data
+     */
+    public native void setFrame(@ByVal Mat frame);
+
+    /**
+     * \note This API only available if OpenCV support is enabled
+     *
+     * Retrieves data as cv::Mat with specified width, height and type
+     *
+     * @param copy If false only a reference to data is made, otherwise a copy
+     * @return cv::Mat with corresponding to ImgFrame parameters
+     */
+    public native @ByVal Mat getFrame(@Cast("bool") boolean copy/*=false*/);
+    public native @ByVal Mat getFrame();
+
+    /**
+     * \note This API only available if OpenCV support is enabled
+     *
+     * Retrieves cv::Mat suitable for use in common opencv functions.
+     * ImgFrame is converted to color BGR interleaved or grayscale depending on type.
+     *
+     * A copy is always made
+     *
+     * @return cv::Mat for use in opencv functions
+     */
+    public native @ByVal Mat getCvFrame();
 
 // #else
 

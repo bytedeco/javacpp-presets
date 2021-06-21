@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  ZeroPad2d model(ZeroPad2dOptions({1, 1, 2, 0}));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ZeroPad2dImpl extends ZeroPad2dImplCloneable {
     static { Loader.load(); }

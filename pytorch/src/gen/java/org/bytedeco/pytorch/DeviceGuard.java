@@ -42,8 +42,12 @@ public class DeviceGuard extends Pointer {
   private native void allocate(@ByVal Device device);
 
   /** This constructor is for testing only. */
-  public DeviceGuard(@ByVal Device device, @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl) { super((Pointer)null); allocate(device, impl); }
-  private native void allocate(@ByVal Device device, @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
+  public DeviceGuard(
+        @ByVal Device device,
+        @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl) { super((Pointer)null); allocate(device, impl); }
+  private native void allocate(
+        @ByVal Device device,
+        @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
 
   /** Copy is disallowed */
   
@@ -64,7 +68,9 @@ public class DeviceGuard extends Pointer {
   public native void reset_device(@ByVal Device device);
 
   /** This method is for testing only. */
-  public native void reset_device(@ByVal Device device, @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
+  public native void reset_device(
+        @ByVal Device device,
+        @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
 
   /** Sets the device index to the given one.  The device type is inferred
    *  from the original device type the guard was constructed with. */

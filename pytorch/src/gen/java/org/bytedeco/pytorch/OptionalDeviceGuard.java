@@ -22,8 +22,8 @@ import static org.bytedeco.pytorch.global.torch.*;
  * Morally, a OptionalDeviceGuard is equivalent to optional<DeviceGuard>, but
  * with extra constructors and methods as appropriate.
  *
- * Besides its obvious use (optionally applying a DeviceGuard), OptionalDeviceGuard
- * is often also used for the following idiom:
+ * Besides its obvious use (optionally applying a DeviceGuard),
+ * OptionalDeviceGuard is often also used for the following idiom:
  *
  *    OptionalDeviceGuard g;
  *    for (const auto& t : tensors) {
@@ -88,8 +88,12 @@ public class OptionalDeviceGuard extends Pointer {
   private native void allocate(@ByVal DeviceOptional device);
 
   /** Constructor for testing only. */
-  public OptionalDeviceGuard(@ByVal Device device, @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl) { super((Pointer)null); allocate(device, impl); }
-  private native void allocate(@ByVal Device device, @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
+  public OptionalDeviceGuard(
+        @ByVal Device device,
+        @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl) { super((Pointer)null); allocate(device, impl); }
+  private native void allocate(
+        @ByVal Device device,
+        @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
 
   /** Copy is disallowed */
   
@@ -107,7 +111,9 @@ public class OptionalDeviceGuard extends Pointer {
   public native void reset_device(@ByVal Device device);
 
   /** For testing only */
-  public native void reset_device(@ByVal Device device, @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
+  public native void reset_device(
+        @ByVal Device device,
+        @Cast("const c10::impl::DeviceGuardImplInterface*") Pointer impl);
 
   /** Returns the device that was set at the time the guard was constructed. */
   public native @ByVal DeviceOptional original_device();

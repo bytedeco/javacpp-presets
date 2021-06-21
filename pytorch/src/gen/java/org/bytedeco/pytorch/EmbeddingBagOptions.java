@@ -39,4 +39,5 @@ public class EmbeddingBagOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException BoolPointer sparse();
   public native @ByRef @NoException Tensor _weight();
   public native @Cast("bool*") @ByRef @NoException BoolPointer include_last_offset();
+  public native @ByRef @NoException LongOptional padding_idx();
 }

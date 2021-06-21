@@ -9,6 +9,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.opencv.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 public class depthai extends org.bytedeco.depthai.presets.depthai {
     static { Loader.load(); }
@@ -251,7 +257,7 @@ public static final int
 // #pragma once
 
 // This build supports OpenCV integration?
-/* #undef DEPTHAI_HAVE_OPENCV_SUPPORT */
+// #define DEPTHAI_HAVE_OPENCV_SUPPORT
 
 // Build specific settings overwrite
 // #ifdef DEPTHAI_TARGET_CORE
@@ -601,38 +607,6 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
   // namespace dai
 
 
-// Parsed from depthai-shared/datatype/RawIMUData.hpp
-
-// #pragma once
-
-// #include "RawBuffer.hpp"
-// #include "depthai-shared/common/Point3f.hpp"
-// #include "depthai-shared/common/Timestamp.hpp"
-// Targeting ../IMUReport.java
-
-
-// Targeting ../IMUReportAccelerometer.java
-
-
-// Targeting ../IMUReportGyroscope.java
-
-
-// Targeting ../IMUReportMagneticField.java
-
-
-// Targeting ../IMUReportRotationVectorWAcc.java
-
-
-// Targeting ../IMUPacket.java
-
-
-// Targeting ../RawIMUData.java
-
-
-
-  // namespace dai
-
-
 // Parsed from depthai-shared/datatype/DatatypeEnum.hpp
 
 // #pragma once
@@ -678,6 +652,38 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 
   // namespace dai
+
+// Parsed from depthai-shared/datatype/RawIMUData.hpp
+
+// #pragma once
+
+// #include "RawBuffer.hpp"
+// #include "depthai-shared/common/Point3f.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
+// Targeting ../IMUReport.java
+
+
+// Targeting ../IMUReportAccelerometer.java
+
+
+// Targeting ../IMUReportGyroscope.java
+
+
+// Targeting ../IMUReportMagneticField.java
+
+
+// Targeting ../IMUReportRotationVectorWAcc.java
+
+
+// Targeting ../IMUPacket.java
+
+
+// Targeting ../RawIMUData.java
+
+
+
+  // namespace dai
+
 
 // Parsed from depthai-shared/datatype/RawCameraControl.hpp
 
@@ -1548,6 +1554,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // optional
 // #ifdef DEPTHAI_HAVE_OPENCV_SUPPORT
+//     #include <opencv2/opencv.hpp>
 // #endif
 // Targeting ../ImgFrame.java
 

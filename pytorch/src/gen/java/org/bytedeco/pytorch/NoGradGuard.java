@@ -18,7 +18,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // A RAII, thread local (!) guard that stops future operations from building
 // gradients.
-@Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("c10") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class NoGradGuard extends AutoGradMode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

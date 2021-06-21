@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  PReLU model(PReLUOptions().num_parameters(42));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class PReLUImpl extends PReLUImplCloneable {
     static { Loader.load(); }

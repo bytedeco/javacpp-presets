@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Hardtanh model(HardtanhOptions().min_val(-42.42).max_val(0.42).inplace(true));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class HardtanhImpl extends HardtanhImplCloneable {
     static { Loader.load(); }

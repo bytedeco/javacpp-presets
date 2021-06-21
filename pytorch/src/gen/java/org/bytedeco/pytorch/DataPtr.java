@@ -91,7 +91,9 @@ public class DataPtr extends Pointer {
    * be; be sure to read the source code of the Allocator
    * in question to confirm this.
    */
-  public native @Cast("bool") boolean compare_exchange_deleter(Deleter expected_deleter, Deleter new_deleter);
+  public native @Cast("bool") boolean compare_exchange_deleter(
+        Deleter expected_deleter,
+        Deleter new_deleter);
   public native @ByVal Device device();
   // Unsafely mutates the device on a DataPtr.  Under normal use,
   // you should never actually need to call this function.

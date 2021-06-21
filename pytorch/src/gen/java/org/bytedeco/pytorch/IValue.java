@@ -45,12 +45,12 @@ import static org.bytedeco.pytorch.global.torch.*;
  *    std::cout << my_ivalue << "\n";
  * 
  *    // Unwrap the IValue
- *    int64_t my_int = my_ivalue.toInt()
+ *    int64_t my_int = my_ivalue.toInt();
  *    std::cout << my_int << "\n";
  * 
  *    // This will throw an error!
  *    // {@code my_ivalue} is tagged as an int and cannot be used as another type
- *    torch::Tensor my_tensor = my_ivalue.toTensor()
+ *    torch::Tensor my_tensor = my_ivalue.toTensor();
  *  \endrst */
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class IValue extends Pointer {
@@ -61,7 +61,7 @@ public class IValue extends Pointer {
 
   /** \private [doxygen private] */
 
-  public native @ByRef @Name("operator =") @NoException IValue put(@ByVal IValue rhs);
+  public native @ByRef @Name("operator =") @NoException IValue put(@ByRef(true) IValue rhs);
 
   public native void dump();
 
@@ -296,8 +296,8 @@ public class IValue extends Pointer {
   public static native @ByVal IValue uninitialized();
 
   // Scalar, which gets encoded as either an Int, a Double or a ComplexDouble
-  public IValue(@ByVal Scalar s) { super((Pointer)null); allocate(s); }
-  private native void allocate(@ByVal Scalar s);
+  public IValue(@Const @ByRef Scalar s) { super((Pointer)null); allocate(s); }
+  private native void allocate(@Const @ByRef Scalar s);
 
   public native @Cast("bool") boolean isScalar();
 

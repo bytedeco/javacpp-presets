@@ -38,7 +38,7 @@ public class WeakIValue extends Pointer {
   private native void allocate(@Const @ByRef WeakIValue rhs);
   public WeakIValue(@Const @ByRef IValue rhs) { super((Pointer)null); allocate(rhs); }
   private native void allocate(@Const @ByRef IValue rhs);
-  public native @ByRef @Name("operator =") @NoException WeakIValue put(@ByVal WeakIValue rhs);
+  public native @ByRef @Name("operator =") @NoException WeakIValue put(@ByRef(true) WeakIValue rhs);
   public native @NoException void swap(@ByRef WeakIValue rhs);
 
   public native @Cast("bool") boolean isSameIdentity(@Const @ByRef WeakIValue rhs);

@@ -7,6 +7,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.opencv.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
 
@@ -34,7 +40,7 @@ public class RawNNData extends RawBuffer {
     public native @StdVector TensorInfo tensors(); public native RawNNData tensors(TensorInfo setter);
     public native @Cast("unsigned int") int batchSize(); public native RawNNData batchSize(int setter);
 
-    public native void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
-    public native void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);
-    public native void serialize(@Cast("std::uint8_t*") @StdVector byte[] metadata, @ByRef @Cast("dai::DatatypeEnum*") int[] datatype);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] metadata, @ByRef @Cast("dai::DatatypeEnum*") int[] datatype);
 }

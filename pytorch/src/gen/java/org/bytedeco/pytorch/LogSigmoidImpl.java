@@ -21,6 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Applies the LogSigmoid function element-wise.
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.LogSigmoid to learn
  *  about the exact behavior of this module. */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LogSigmoidImpl extends LogSigmoidImplCloneable {
     static { Loader.load(); }

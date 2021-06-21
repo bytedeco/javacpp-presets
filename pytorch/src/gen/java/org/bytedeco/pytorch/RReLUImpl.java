@@ -29,6 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  RReLU model(RReLUOptions().lower(0.24).upper(0.42).inplace(true));
  *  }</pre> */
+// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class RReLUImpl extends RReLUImplCloneable {
     static { Loader.load(); }
