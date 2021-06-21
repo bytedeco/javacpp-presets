@@ -20,10 +20,10 @@ public class leapmotion implements InfoMapper {
     public void map(InfoMap infoMap) {
 
         infoMap.put(new Info("LEAP_EXPORT","LEAP_CALL","LEAP_STATIC_ASSERT","static_assert").cppTypes().annotations())
-                
+            
                 .put(new Info("_LEAP_CONNECTION").pointerTypes("LEAP_CONNECTION"))
                 .put(new Info("LEAP_CONNECTION").valueTypes("LEAP_CONNECTION").pointerTypes("@Cast(\"LEAP_CONNECTION*\") _LEAP_CONNECTION", "@ByPtrPtr LEAP_CONNECTION"))
-                
+
                 .put(new Info("_LEAP_DEVICE").pointerTypes("LEAP_DEVICE"))
                 .put(new Info("LEAP_DEVICE").valueTypes("LEAP_DEVICE").pointerTypes("@Cast(\"LEAP_DEVICE*\") _LEAP_DEVICE", "@ByPtrPtr LEAP_DEVICE"))
 
@@ -35,7 +35,7 @@ public class leapmotion implements InfoMapper {
 
                 .put(new Info("_LEAP_CALIBRATION").pointerTypes("LEAP_CALIBRATION"))
                 .put(new Info("LEAP_CALIBRATION").valueTypes("LEAP_CALIBRATION").pointerTypes("@Cast(\"LEAP_CALIBRATION*\") _LEAP_CALIBRATION", "@ByPtrPtr LEAP_CALIBRATION"));
-            
+
                 // .put(new Info("_LEAP_DISTORTION_MATRIX").pointerTypes("LEAP_DISTORTION_MATRIX"));
                 // .put(new Info("LEAP_DISTORTION_MATRIX").valueTypes("distortion_matrix").pointerTypes("@Cast(\"LEAP_DISTORTION_MATRIX*\") PointerPointer", "@ByPtrPtr distortion_matrix"));
     }
