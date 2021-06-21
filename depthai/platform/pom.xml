@@ -22,6 +22,11 @@
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>opencv-platform</artifactId>
+      <version>4.5.2-${project.parent.version}</version>
+    </dependency>
+     <dependency>
+       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp-platform</artifactId>
       <version>${project.parent.version}</version>
     </dependency>

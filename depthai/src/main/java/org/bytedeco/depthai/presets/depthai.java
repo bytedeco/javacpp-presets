@@ -34,12 +34,14 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import org.bytedeco.opencv.presets.opencv_imgproc;
+
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = javacpp.class,
+    inherit = opencv_imgproc.class,
     value = {
         @Platform(
             value = {"linux-arm", "linux-x86", "macosx-x86"},
@@ -70,9 +72,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai-shared/common/EepromData.hpp",
                 "depthai-shared/common/Timestamp.hpp",
                 "depthai-shared/common/UsbSpeed.hpp",
-                "depthai-shared/datatype/RawIMUData.hpp",
                 "depthai-shared/datatype/DatatypeEnum.hpp",
                 "depthai-shared/datatype/RawBuffer.hpp",
+                "depthai-shared/datatype/RawIMUData.hpp",
                 "depthai-shared/datatype/RawCameraControl.hpp",
                 "depthai-shared/datatype/RawImgFrame.hpp",
                 "depthai-shared/datatype/RawImgDetections.hpp",
@@ -149,7 +151,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "depthai/device/Device.hpp",
                 "depthai/device/DeviceBootloader.hpp",
             },
-            link = "depthai-core"
+            link = {"depthai-core", "depthai-opencv"}
         ),
         @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/")
     },
@@ -161,7 +163,7 @@ public class depthai implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
-               .put(new Info("DEPTHAI_HAVE_OPENCV_SUPPORT").define(false))
+               .put(new Info("DEPTHAI_HAVE_OPENCV_SUPPORT").define(true))
                .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE").cppTypes().annotations())
 
                .put(new Info("std::uint8_t").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
@@ -169,8 +171,6 @@ public class depthai implements InfoMapper {
                .put(new Info("std::int32_t", "std::uint32_t", "dai::OpenVINO::Version").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::int64_t", "dai::Node::Id").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
-
-               .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("basic/containers").cppTypes("tl::optional"))
                .put(new Info("dai::XLinkStream::read").annotations("@Function"))

@@ -25,6 +25,21 @@ patch -Np1 < ../../../depthai.patch
 sedinplace '/find_package(Git/d' CMakeLists.txt cmake/GitCommitHash.cmake shared/depthai-bootloader-shared.cmake shared/depthai-shared.cmake
 sedinplace '/protected:/d' include/depthai/pipeline/Node.hpp
 
+OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -d "$P/include/opencv2" ]]; then
+            OPENCV_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
+export OpenCV_ROOT="$OPENCV_PATH"
+
 case $PLATFORM in
     linux-armhf)
         cd ../libusb-$LIBUSB_VERSION
@@ -37,7 +52,7 @@ case $PLATFORM in
         echo 'set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")' >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_FLAGS "-std=c++11")'                 >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -52,7 +67,7 @@ case $PLATFORM in
         echo 'set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")' >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_FLAGS "-std=c++11")'               >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -67,7 +82,7 @@ case $PLATFORM in
         echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_FLAGS "-m32 -std=c++11")' >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -82,12 +97,12 @@ case $PLATFORM in
         echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_FLAGS "-m64 -std=c++11")' >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-x86_64)
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_MACOSX_RPATH=ON -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_MACOSX_RPATH=ON -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libdepthai-core.dylib
