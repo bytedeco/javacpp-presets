@@ -48,5 +48,5 @@ public MultiLabelMarginLossOptions(@ByVal kMean reduction) { super((Pointer)null
 private native void allocate(@ByVal kMean reduction);
 public MultiLabelMarginLossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
 private native void allocate(@ByVal kSum reduction);
-  public native @Cast("torch::nn::MultiLabelMarginLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

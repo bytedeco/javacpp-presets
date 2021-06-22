@@ -454,9 +454,9 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info().javaText("import org.bytedeco.pytorch.Function;"))
                .put(new Info().javaText("import org.bytedeco.pytorch.Module;"))
 
-               .put(new Info("basic/containers").cppTypes("c10::optional", "c10::Dict", "torch::optional", "torch::OrderedDict"))
+               .put(new Info("basic/containers").cppTypes("c10::optional", "c10::Dict", "torch::optional", "torch::OrderedDict", "c10::variant"))
                .put(new Info("std::nullptr_t").cast().pointerTypes("PointerPointer"))
-               .put(new Info("auto", "c10::reverse_iterator", "c10::variant", "ska::flat_hash_map", "std::conditional",
+               .put(new Info("auto", "c10::reverse_iterator", "ska::flat_hash_map", "std::conditional",
                              "std::initializer_list", "std::integral_constant", "std::mutex", "std::reverse_iterator", "std::weak_ptr").skip())
                .put(new Info("at::CheckedFrom").cast().valueTypes("BytePointer", "String").pointerTypes("PointerPointer"))
                .put(new Info("c10::ScalarType", "at::ScalarType", "torch::Dtype").enumerate().valueTypes("ScalarType").pointerTypes("@Cast(\"c10::ScalarType*\") BytePointer"))
@@ -500,6 +500,86 @@ public class torch implements LoadEnabled, InfoMapper {
                              "c10::optional<torch::nn::FractionalMaxPoolOptions<2>::ExpandingArrayDouble>",
                              "c10::optional<torch::nn::FractionalMaxPoolOptions<3>::ExpandingArrayDouble>").cast().pointerTypes("DoubleExpandingArrayOptional").define())
                .put(new Info("torch::optional<std::tuple<at::Tensor,at::Tensor> >").pointerTypes("TensorTensorOptional").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kLinear,torch::enumtype::kConv1D,torch::enumtype::kConv2D,torch::enumtype::kConv3D,"
+                                        + "torch::enumtype::kConvTranspose1D,torch::enumtype::kConvTranspose2D,torch::enumtype::kConvTranspose3D,"
+                                        + "torch::enumtype::kSigmoid,torch::enumtype::kTanh,torch::enumtype::kReLU,torch::enumtype::kLeakyReLU>",
+                             "torch::nn::init::NonlinearityType").pointerTypes("NonlinearityType").define())
+               .put(new Info("c10::variant<torch::enumtype::kFanIn,torch::enumtype::kFanOut>",
+                             "torch::nn::init::FanModeType").pointerTypes("FanModeType").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kZeros,torch::enumtype::kReflect,torch::enumtype::kReplicate,torch::enumtype::kCircular>",
+                             "torch::nn::ConvOptions<1>::padding_mode_t",
+                             "torch::nn::ConvOptions<2>::padding_mode_t",
+                             "torch::nn::ConvOptions<3>::padding_mode_t",
+                             "torch::nn::ConvTransposeOptions<1>::padding_mode_t",
+                             "torch::nn::ConvTransposeOptions<2>::padding_mode_t",
+                             "torch::nn::ConvTransposeOptions<3>::padding_mode_t",
+                             "torch::nn::detail::conv_padding_mode_t").pointerTypes("conv_padding_mode_t").define())
+               .put(new Info("c10::variant<torch::ExpandingArray<1>,torch::enumtype::kValid,torch::enumtype::kSame>",
+                             "torch::nn::ConvOptions<1>::padding_t",
+                             "torch::nn::detail::ConvNdOptions<1>::padding_t",
+                             "torch::nn::functional::ConvFuncOptions<1>::padding_t",
+                             "torch::nn::functional::Conv1dFuncOptions::padding_t").purify().pointerTypes("conv_padding_t1").define())
+               .put(new Info("c10::variant<torch::ExpandingArray<2>,torch::enumtype::kValid,torch::enumtype::kSame>",
+                             "torch::nn::ConvOptions<2>::padding_t",
+                             "torch::nn::detail::ConvNdOptions<2>::padding_t",
+                             "torch::nn::functional::ConvFuncOptions<2>::padding_t",
+                             "torch::nn::functional::Conv2dFuncOptions::padding_t").purify().pointerTypes("conv_padding_t2").define())
+               .put(new Info("c10::variant<torch::ExpandingArray<3>,torch::enumtype::kValid,torch::enumtype::kSame>",
+                             "torch::nn::ConvOptions<3>::padding_t",
+                             "torch::nn::detail::ConvNdOptions<3>::padding_t",
+                             "torch::nn::functional::ConvFuncOptions<3>::padding_t",
+                             "torch::nn::functional::Conv3dFuncOptions::padding_t").purify().pointerTypes("conv_padding_t3").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kSum,torch::enumtype::kMean,torch::enumtype::kMax>",
+                             "torch::nn::EmbeddingBagMode").pointerTypes("EmbeddingBagMode").define())
+               .put(new Info("c10::variant<torch::enumtype::kConstant,torch::enumtype::kReflect,torch::enumtype::kReplicate,torch::enumtype::kCircular>",
+                             "torch::nn::functional::PadFuncOptions::mode_t").pointerTypes("pad_mode_t").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kNone,torch::enumtype::kMean,torch::enumtype::kSum>",
+                             "torch::nn::L1LossOptions::reduction_t", "torch::nn::functional::L1LossFuncOptions::reduction_t",
+                             "torch::nn::MSELossOptions::reduction_t", "torch::nn::functional::MSELossFuncOptions::reduction_t",
+                             "torch::nn::BCELossOptions::reduction_t", "torch::nn::functional::BinaryCrossEntropyFuncOptions::reduction_t",
+                             "torch::nn::HingeEmbeddingLossOptions::reduction_t", "torch::nn::functional::HingeEmbeddingLossFuncOptions::reduction_t",
+                             "torch::nn::MultiMarginLossOptions::reduction_t", "torch::nn::functional::MultiMarginLossFuncOptions::reduction_t",
+                             "torch::nn::CosineEmbeddingLossOptions::reduction_t", "torch::nn::functional::CosineEmbeddingLossFuncOptions::reduction_t",
+                             "torch::nn::MultiLabelMarginLossOptions::reduction_t", "torch::nn::functional::MultilabelMarginLossFuncOptions::reduction_t",
+                             "torch::nn::SoftMarginLossOptions::reduction_t", "torch::nn::functional::SoftMarginLossFuncOptions::reduction_t",
+                             "torch::nn::MultiLabelSoftMarginLossOptions::reduction_t", "torch::nn::functional::MultilabelSoftMarginLossFuncOptions::reduction_t",
+                             "torch::nn::TripletMarginLossOptions::reduction_t", "torch::nn::functional::TripletMarginLossFuncOptions::reduction_t",
+                             "torch::nn::TripletMarginWithDistanceLossOptions::reduction_t", "torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::reduction_t",
+                             "torch::nn::CTCLossOptions::reduction_t", "torch::nn::functional::CTCLossFuncOptions::reduction_t",
+                             "torch::nn::SmoothL1LossOptions::reduction_t", "torch::nn::functional::SmoothL1LossFuncOptions::reduction_t",
+                             "torch::nn::HuberLossOptions::reduction_t", "torch::nn::functional::HuberLossFuncOptions::reduction_t",
+                             "torch::nn::PoissonNLLLossOptions::reduction_t", "torch::nn::functional::PoissonNLLLossFuncOptions::reduction_t",
+                             "torch::nn::MarginRankingLossOptions::reduction_t", "torch::nn::functional::MarginRankingLossFuncOptions::reduction_t",
+                             "torch::nn::NLLLossOptions::reduction_t", "torch::nn::functional::NLLLossFuncOptions::reduction_t",
+                             "torch::nn::CrossEntropyLossOptions::reduction_t", "torch::nn::functional::CrossEntropyFuncOptions::reduction_t",
+                             "torch::nn::BCEWithLogitsLossOptions::reduction_t", "torch::nn::functional::BinaryCrossEntropyWithLogitsFuncOptions::reduction_t").pointerTypes("loss_reduction_t").define())
+               .put(new Info("c10::variant<torch::enumtype::kNone,torch::enumtype::kBatchMean,torch::enumtype::kSum,torch::enumtype::kMean>",
+                             "torch::nn::KLDivLossOptions::reduction_t", "torch::nn::functional::KLDivFuncOptions::reduction_t").pointerTypes("kldiv_loss_reduction_t").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kBilinear,torch::enumtype::kNearest>",
+                             "torch::nn::functional::GridSampleFuncOptions::mode_t").pointerTypes("grid_sample_mode_t").define())
+               .put(new Info("c10::variant<torch::enumtype::kZeros,torch::enumtype::kBorder,torch::enumtype::kReflection>",
+                             "torch::nn::functional::GridSampleFuncOptions::padding_mode_t").pointerTypes("grid_sample_padding_mode_t").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kLSTM,torch::enumtype::kGRU,torch::enumtype::kRNN_TANH,torch::enumtype::kRNN_RELU>",
+                             "torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t").pointerTypes("rnn_options_base_mode_t").define())
+               .put(new Info("c10::variant<torch::enumtype::kTanh,torch::enumtype::kReLU>",
+                             "torch::nn::RNNOptions::nonlinearity_t", "torch::nn::RNNCellOptions::nonlinearity_t").pointerTypes("rnn_nonlinearity_t").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kNearest,torch::enumtype::kLinear,torch::enumtype::kBilinear,torch::enumtype::kBicubic,torch::enumtype::kTrilinear>",
+                             "torch::nn::UpsampleOptions::mode_t").pointerTypes("upsample_mode_t").define())
+               .put(new Info("c10::variant<torch::enumtype::kNearest,torch::enumtype::kLinear,torch::enumtype::kBilinear,torch::enumtype::kBicubic,torch::enumtype::kTrilinear,torch::enumtype::kArea>",
+                             "torch::nn::functional::InterpolateFuncOptions::mode_t").pointerTypes("interpolate_mode_t").define())
+
+               .put(new Info("c10::variant<torch::enumtype::kReLU,torch::enumtype::kGELU>",
+                             "torch::nn::TransformerEncoderLayerOptions::activation_t",
+                             "torch::nn::TransformerDecoderLayerOptions::activation_t",
+                             "torch::nn::TransformerOptions::activation_t").pointerTypes("transformer_activation_t").define())
+
                .put(new Info("std::vector<std::array<bool,2> >").pointerTypes("Bool2Vector").define())
                .put(new Info("std::vector<int64_t>", "std::tuple<std::vector<int64_t>,std::vector<int64_t> >").cast().pointerTypes("LongVector").define())
                .put(new Info("std::vector<double>").cast().pointerTypes("DoubleVector").define())
@@ -972,49 +1052,6 @@ public class torch implements LoadEnabled, InfoMapper {
                              "PyObject", "std::function<PyObject*(void*)>", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
 //                             "std::enable_shared_from_this<c10::Type>", "c10::SingleElementType<c10::TypeKind::ListType,c10::ListType>",
                              "at::cuda::NVRTC", "THCState", "THHState", "std::enable_shared_from_this<torch::autograd::ForwardGrad>", "torch::autograd::ViewInfo",
-                             "torch::nn::init::NonlinearityType", "torch::nn::init::FanModeType", "torch::nn::detail::conv_padding_mode_t",
-                             "torch::nn::ConvOptions<1>::padding_t", "torch::nn::detail::ConvNdOptions<1>::padding_t",
-                             "torch::nn::ConvOptions<2>::padding_t", "torch::nn::detail::ConvNdOptions<2>::padding_t",
-                             "torch::nn::ConvOptions<3>::padding_t", "torch::nn::detail::ConvNdOptions<3>::padding_t",
-                             "torch::nn::ConvOptions<1>::padding_mode_t", "torch::nn::ConvTransposeOptions<1>::padding_mode_t",
-                             "torch::nn::ConvOptions<2>::padding_mode_t", "torch::nn::ConvTransposeOptions<2>::padding_mode_t",
-                             "torch::nn::ConvOptions<3>::padding_mode_t", "torch::nn::ConvTransposeOptions<3>::padding_mode_t",
-                             "torch::nn::functional::ConvFuncOptions<1>::padding_t", "torch::nn::functional::Conv1dFuncOptions::padding_t",
-                             "torch::nn::functional::ConvFuncOptions<2>::padding_t", "torch::nn::functional::Conv2dFuncOptions::padding_t",
-                             "torch::nn::functional::ConvFuncOptions<3>::padding_t", "torch::nn::functional::Conv3dFuncOptions::padding_t",
-                             "torch::nn::EmbeddingBagMode", "torch::nn::functional::PadFuncOptions::mode_t",
-
-                             "torch::nn::L1LossOptions::reduction_t", "torch::nn::functional::L1LossFuncOptions::reduction_t",
-                             "torch::nn::KLDivLossOptions::reduction_t", "torch::nn::functional::KLDivFuncOptions::reduction_t",
-                             "torch::nn::MSELossOptions::reduction_t", "torch::nn::functional::MSELossFuncOptions::reduction_t",
-                             "torch::nn::BCELossOptions::reduction_t", "torch::nn::functional::BinaryCrossEntropyFuncOptions::reduction_t",
-                             "torch::nn::HingeEmbeddingLossOptions::reduction_t", "torch::nn::functional::HingeEmbeddingLossFuncOptions::reduction_t",
-                             "torch::nn::MultiMarginLossOptions::reduction_t", "torch::nn::functional::MultiMarginLossFuncOptions::reduction_t",
-                             "torch::nn::CosineEmbeddingLossOptions::reduction_t", "torch::nn::functional::CosineEmbeddingLossFuncOptions::reduction_t",
-                             "torch::nn::MultiLabelMarginLossOptions::reduction_t", "torch::nn::functional::MultilabelMarginLossFuncOptions::reduction_t",
-                             "torch::nn::SoftMarginLossOptions::reduction_t", "torch::nn::functional::SoftMarginLossFuncOptions::reduction_t",
-                             "torch::nn::MultiLabelSoftMarginLossOptions::reduction_t", "torch::nn::functional::MultilabelSoftMarginLossFuncOptions::reduction_t",
-                             "torch::nn::TripletMarginLossOptions::reduction_t", "torch::nn::functional::TripletMarginLossFuncOptions::reduction_t",
-                             "torch::nn::TripletMarginWithDistanceLossOptions::reduction_t", "torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::reduction_t",
-                             "torch::nn::CTCLossOptions::reduction_t", "torch::nn::functional::CTCLossFuncOptions::reduction_t",
-                             "torch::nn::SmoothL1LossOptions::reduction_t", "torch::nn::functional::SmoothL1LossFuncOptions::reduction_t",
-                             "torch::nn::HuberLossOptions::reduction_t", "torch::nn::functional::HuberLossFuncOptions::reduction_t",
-                             "torch::nn::PoissonNLLLossOptions::reduction_t", "torch::nn::functional::PoissonNLLLossFuncOptions::reduction_t",
-                             "torch::nn::MarginRankingLossOptions::reduction_t", "torch::nn::functional::MarginRankingLossFuncOptions::reduction_t",
-                             "torch::nn::NLLLossOptions::reduction_t", "torch::nn::functional::NLLLossFuncOptions::reduction_t",
-                             "torch::nn::CrossEntropyLossOptions::reduction_t", "torch::nn::functional::CrossEntropyFuncOptions::reduction_t",
-                             "torch::nn::BCEWithLogitsLossOptions::reduction_t", "torch::nn::functional::BinaryCrossEntropyWithLogitsFuncOptions::reduction_t",
-
-                             "torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t", "torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t",
-                             "torch::nn::RNNOptions::nonlinearity_t", "torch::nn::RNNOptions::nonlinearity_t",
-                             "torch::nn::RNNCellOptions::nonlinearity_t", "torch::nn::RNNCellOptions::nonlinearity_t",
-                             "torch::nn::UpsampleOptions::mode_t", "torch::nn::UpsampleOptions::mode_t",
-                             "torch::nn::functional::InterpolateFuncOptions::mode_t", "torch::nn::functional::InterpolateFuncOptions::mode_t",
-                             "torch::nn::functional::GridSampleFuncOptions::mode_t", "torch::nn::functional::GridSampleFuncOptions::mode_t",
-                             "torch::nn::functional::GridSampleFuncOptions::padding_mode_t", "torch::nn::functional::GridSampleFuncOptions::padding_mode_t",
-                             "torch::nn::TransformerEncoderLayerOptions::activation_t", "torch::nn::TransformerEncoderLayerOptions::activation_t",
-                             "torch::nn::TransformerDecoderLayerOptions::activation_t", "torch::nn::TransformerDecoderLayerOptions::activation_t",
-                             "torch::nn::TransformerOptions::activation_t", "torch::nn::TransformerOptions::activation_t",
 
                              "c10::optional<c10::string_view>", "c10::optional<std::chrono::milliseconds>",
                              "c10::optional<torch::autograd::ViewInfo>", "c10::optional<std::reference_wrapper<const std::string> >",

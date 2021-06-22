@@ -24,9 +24,9 @@ public class RNNOptionsBase extends Pointer {
     public RNNOptionsBase(Pointer p) { super(p); }
 
 
-  public RNNOptionsBase(@ByVal @Cast("torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t*") Pointer mode, @Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(mode, input_size, hidden_size); }
-  private native void allocate(@ByVal @Cast("torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t*") Pointer mode, @Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
-  public native @Cast("torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t*") @ByRef @NoException Pointer mode();
+  public RNNOptionsBase(@ByVal rnn_options_base_mode_t mode, @Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(mode, input_size, hidden_size); }
+  private native void allocate(@ByVal rnn_options_base_mode_t mode, @Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
+  public native @ByRef @NoException rnn_options_base_mode_t mode();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer input_size();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer hidden_size();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer num_layers();

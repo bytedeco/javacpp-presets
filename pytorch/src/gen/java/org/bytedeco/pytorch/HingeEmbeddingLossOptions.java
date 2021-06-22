@@ -43,5 +43,5 @@ public class HingeEmbeddingLossOptions extends Pointer {
     }
 
   public native @ByRef @NoException DoublePointer margin();
-  public native @Cast("torch::nn::HingeEmbeddingLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

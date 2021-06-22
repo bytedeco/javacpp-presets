@@ -46,5 +46,5 @@ public L1LossOptions(@ByVal kMean reduction) { super((Pointer)null); allocate(re
 private native void allocate(@ByVal kMean reduction);
 public L1LossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
 private native void allocate(@ByVal kSum reduction);
-  public native @Cast("torch::nn::L1LossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

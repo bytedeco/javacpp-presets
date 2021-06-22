@@ -40,5 +40,5 @@ public class ConvTranspose3dOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException LongPointer groups();
   public native @Cast("bool*") @ByRef @NoException BoolPointer bias();
   public native @Cast("torch::ExpandingArray<3>*") @ByRef @NoException LongPointer dilation();
-  public native @Cast("torch::nn::ConvTransposeOptions<3>::padding_mode_t*") @ByRef @NoException Pointer padding_mode();
+  public native @ByRef @NoException conv_padding_mode_t padding_mode();
 }

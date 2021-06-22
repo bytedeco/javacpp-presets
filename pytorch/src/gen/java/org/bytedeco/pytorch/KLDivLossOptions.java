@@ -50,6 +50,6 @@ public KLDivLossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(
 private native void allocate(@ByVal kSum reduction);
 public KLDivLossOptions(@ByVal kMean reduction) { super((Pointer)null); allocate(reduction); }
 private native void allocate(@ByVal kMean reduction);
-  public native @Cast("torch::nn::KLDivLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException kldiv_loss_reduction_t reduction();
   public native @Cast("bool*") @ByRef @NoException BoolPointer log_target();
 }

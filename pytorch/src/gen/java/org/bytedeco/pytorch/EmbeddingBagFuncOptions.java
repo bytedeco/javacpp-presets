@@ -45,7 +45,7 @@ public class EmbeddingBagFuncOptions extends Pointer {
   public native @ByRef @NoException DoubleOptional max_norm();
   public native @ByRef @NoException DoublePointer norm_type();
   public native @Cast("bool*") @ByRef @NoException BoolPointer scale_grad_by_freq();
-  public native @Cast("torch::nn::EmbeddingBagMode*") @ByRef @NoException Pointer mode();
+  public native @ByRef @NoException EmbeddingBagMode mode();
   public native @Cast("bool*") @ByRef @NoException BoolPointer sparse();
   public native @ByRef @NoException Tensor per_sample_weights();
   public native @Cast("bool*") @ByRef @NoException BoolPointer include_last_offset();

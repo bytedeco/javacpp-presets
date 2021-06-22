@@ -34,7 +34,7 @@ public class RNNOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException LongPointer input_size();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer hidden_size();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer num_layers();
-  public native @Cast("torch::nn::RNNOptions::nonlinearity_t*") @ByRef @NoException Pointer nonlinearity();
+  public native @ByRef @NoException rnn_nonlinearity_t nonlinearity();
   public native @Cast("bool*") @ByRef @NoException BoolPointer bias();
   public native @Cast("bool*") @ByRef @NoException BoolPointer batch_first();
   public native @ByRef @NoException DoublePointer dropout();

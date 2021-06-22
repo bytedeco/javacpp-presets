@@ -43,5 +43,5 @@ public class MultiLabelSoftMarginLossOptions extends Pointer {
     }
 
   public native @ByRef @NoException Tensor weight();
-  public native @Cast("torch::nn::MultiLabelSoftMarginLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

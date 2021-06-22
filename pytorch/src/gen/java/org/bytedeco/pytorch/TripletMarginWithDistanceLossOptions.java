@@ -45,5 +45,5 @@ public class TripletMarginWithDistanceLossOptions extends Pointer {
   public native @Cast("c10::optional<torch::nn::TripletMarginWithDistanceLossOptions::distance_function_t>*") @ByRef @NoException Pointer distance_function();
   public native @ByRef @NoException DoublePointer margin();
   public native @Cast("bool*") @ByRef @NoException BoolPointer swap();
-  public native @Cast("torch::nn::TripletMarginWithDistanceLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

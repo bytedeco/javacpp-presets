@@ -43,7 +43,7 @@ public class InterpolateFuncOptions extends Pointer {
 
   public native @ByRef @NoException LongVectorOptional size();
   public native @ByRef @NoException DoubleVectorOptional scale_factor();
-  public native @Cast("torch::nn::functional::InterpolateFuncOptions::mode_t*") @ByRef @NoException Pointer mode();
+  public native @ByRef @NoException interpolate_mode_t mode();
   public native @ByRef @NoException BoolOptional align_corners();
   public native @ByRef @NoException BoolOptional recompute_scale_factor();
 }

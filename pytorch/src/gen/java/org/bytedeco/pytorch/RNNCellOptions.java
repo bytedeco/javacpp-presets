@@ -34,5 +34,5 @@ public class RNNCellOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException LongPointer input_size();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer hidden_size();
   public native @Cast("bool*") @ByRef @NoException BoolPointer bias();
-  public native @Cast("torch::nn::RNNCellOptions::nonlinearity_t*") @ByRef @NoException Pointer nonlinearity();
+  public native @ByRef @NoException rnn_nonlinearity_t nonlinearity();
 }
