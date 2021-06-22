@@ -42,6 +42,6 @@ public class UpsampleOptions extends Pointer {
 
   public native @ByRef @NoException LongVectorOptional size();
   public native @ByRef @NoException DoubleVectorOptional scale_factor();
-  public native @Cast("torch::nn::UpsampleOptions::mode_t*") @ByRef @NoException Pointer mode();
+  public native @ByRef @NoException upsample_mode_t mode();
   public native @ByRef @NoException BoolOptional align_corners();
 }

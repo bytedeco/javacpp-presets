@@ -48,6 +48,6 @@ public HuberLossOptions(@ByVal kMean reduction) { super((Pointer)null); allocate
 private native void allocate(@ByVal kMean reduction);
 public HuberLossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
 private native void allocate(@ByVal kSum reduction);
-  public native @Cast("torch::nn::HuberLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
   public native @ByRef @NoException DoublePointer delta();
 }

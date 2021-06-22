@@ -43,5 +43,5 @@ public class BCELossOptions extends Pointer {
     }
 
   public native @ByRef @NoException Tensor weight();
-  public native @Cast("torch::nn::BCELossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

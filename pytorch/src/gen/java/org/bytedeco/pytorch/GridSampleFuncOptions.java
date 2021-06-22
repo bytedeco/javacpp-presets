@@ -41,7 +41,7 @@ public class GridSampleFuncOptions extends Pointer {
         return new GridSampleFuncOptions((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("torch::nn::functional::GridSampleFuncOptions::mode_t*") @ByRef @NoException Pointer mode();
-  public native @Cast("torch::nn::functional::GridSampleFuncOptions::padding_mode_t*") @ByRef @NoException Pointer padding_mode();
+  public native @ByRef @NoException grid_sample_mode_t mode();
+  public native @ByRef @NoException grid_sample_padding_mode_t padding_mode();
   public native @ByRef @NoException BoolOptional align_corners();
 }

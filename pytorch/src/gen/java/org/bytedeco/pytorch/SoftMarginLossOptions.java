@@ -48,5 +48,5 @@ public SoftMarginLossOptions(@ByVal kMean reduction) { super((Pointer)null); all
 private native void allocate(@ByVal kMean reduction);
 public SoftMarginLossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
 private native void allocate(@ByVal kSum reduction);
-  public native @Cast("torch::nn::SoftMarginLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

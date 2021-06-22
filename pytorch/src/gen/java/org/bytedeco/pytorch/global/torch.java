@@ -111,6 +111,57 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringSharedModuleDict.java
 
 
+// Targeting ../NonlinearityType.java
+
+
+// Targeting ../FanModeType.java
+
+
+// Targeting ../conv_padding_mode_t.java
+
+
+// Targeting ../conv_padding_t1.java
+
+
+// Targeting ../conv_padding_t2.java
+
+
+// Targeting ../conv_padding_t3.java
+
+
+// Targeting ../EmbeddingBagMode.java
+
+
+// Targeting ../pad_mode_t.java
+
+
+// Targeting ../loss_reduction_t.java
+
+
+// Targeting ../kldiv_loss_reduction_t.java
+
+
+// Targeting ../grid_sample_mode_t.java
+
+
+// Targeting ../grid_sample_padding_mode_t.java
+
+
+// Targeting ../rnn_options_base_mode_t.java
+
+
+// Targeting ../rnn_nonlinearity_t.java
+
+
+// Targeting ../upsample_mode_t.java
+
+
+// Targeting ../interpolate_mode_t.java
+
+
+// Targeting ../transformer_activation_t.java
+
+
 // Targeting ../TensorDeque.java
 
 
@@ -18373,8 +18424,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  // nn
 
 /** Return the recommended gain value for the given nonlinearity function. */
-@Namespace("torch::nn::init") public static native double calculate_gain(@ByVal @Cast("torch::nn::init::NonlinearityType*") Pointer nonlinearity, double param/*=0.01*/);
-@Namespace("torch::nn::init") public static native double calculate_gain(@ByVal @Cast("torch::nn::init::NonlinearityType*") Pointer nonlinearity);
+@Namespace("torch::nn::init") public static native double calculate_gain(@ByVal NonlinearityType nonlinearity, double param/*=0.01*/);
+@Namespace("torch::nn::init") public static native double calculate_gain(@ByVal NonlinearityType nonlinearity);
 
 /** Fills the given {@code tensor} with the provided {@code value} in-place, and returns it.
  *  No gradient will be recorded for this operation. */
@@ -18431,8 +18482,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::init") public static native @ByVal Tensor kaiming_normal_(
     @ByVal Tensor tensor,
     double a/*=0*/,
-    @ByVal(nullValue = "torch::nn::init::FanModeType(torch::kFanIn)") @Cast("torch::nn::init::FanModeType*") Pointer mode,
-    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") @Cast("torch::nn::init::NonlinearityType*") Pointer nonlinearity);
+    @ByVal(nullValue = "torch::nn::init::FanModeType(torch::kFanIn)") FanModeType mode,
+    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") NonlinearityType nonlinearity);
 @Namespace("torch::nn::init") public static native @ByVal Tensor kaiming_normal_(
     @ByVal Tensor tensor);
 
@@ -18444,8 +18495,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::init") public static native @ByVal Tensor kaiming_uniform_(
     @ByVal Tensor tensor,
     double a/*=0*/,
-    @ByVal(nullValue = "torch::nn::init::FanModeType(torch::kFanIn)") @Cast("torch::nn::init::FanModeType*") Pointer mode,
-    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") @Cast("torch::nn::init::NonlinearityType*") Pointer nonlinearity);
+    @ByVal(nullValue = "torch::nn::init::FanModeType(torch::kFanIn)") FanModeType mode,
+    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") NonlinearityType nonlinearity);
 @Namespace("torch::nn::init") public static native @ByVal Tensor kaiming_uniform_(
     @ByVal Tensor tensor);
 
@@ -21524,7 +21575,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @Cast("const torch::nn::functional::Conv1dFuncOptions::padding_t*") @ByRef Pointer padding,
+    @Const @ByRef conv_padding_t1 padding,
     @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -21552,7 +21603,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @Cast("const torch::nn::functional::Conv2dFuncOptions::padding_t*") @ByRef Pointer padding,
+    @Const @ByRef conv_padding_t2 padding,
     @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -21580,7 +21631,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @Cast("const torch::nn::functional::Conv3dFuncOptions::padding_t*") @ByRef Pointer padding,
+    @Const @ByRef conv_padding_t3 padding,
     @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -21912,7 +21963,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @ByVal DoubleOptional max_norm,
     double norm_type,
     @Cast("bool") boolean scale_grad_by_freq,
-    @ByVal @Cast("torch::nn::EmbeddingBagMode*") Pointer mode,
+    @ByVal EmbeddingBagMode mode,
     @Cast("bool") boolean sparse,
     @Const @ByRef Tensor per_sample_weights,
     @Cast("bool") boolean include_last_offset,
@@ -22028,7 +22079,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::L1LossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22054,12 +22105,12 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor kl_div(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::KLDivFuncOptions::reduction_t*") Pointer reduction,
+    @ByVal kldiv_loss_reduction_t reduction,
     @Cast("bool") boolean log_target/*=false*/);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor kl_div(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::KLDivFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal kldiv_loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22085,7 +22136,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor mse_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::MSELossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22112,7 +22163,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
-    @ByVal @Cast("torch::nn::functional::BinaryCrossEntropyFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22139,7 +22190,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
     double margin,
-    @ByVal @Cast("torch::nn::functional::HingeEmbeddingLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22168,7 +22219,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Cast("int64_t") long p,
     double margin,
     @Const @ByRef Tensor weight,
-    @ByVal @Cast("torch::nn::functional::MultiMarginLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22196,7 +22247,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor input2,
     @Const @ByRef Tensor target,
     double margin,
-    @ByVal @Cast("torch::nn::functional::CosineEmbeddingLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22226,12 +22277,12 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor smooth_l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::SmoothL1LossFuncOptions::reduction_t*") Pointer reduction,
+    @ByVal loss_reduction_t reduction,
     double beta/*=1.*/);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor smooth_l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::SmoothL1LossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22258,12 +22309,12 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::HuberLossFuncOptions::reduction_t*") Pointer reduction,
+    @ByVal loss_reduction_t reduction,
     double delta/*=1.*/);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::HuberLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22289,7 +22340,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor multilabel_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::MultilabelMarginLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22315,7 +22366,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor soft_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal @Cast("torch::nn::functional::SoftMarginLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22342,7 +22393,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
-    @ByVal @Cast("torch::nn::functional::MultilabelSoftMarginLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22376,7 +22427,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     double p,
     double eps,
     @Cast("bool") boolean swap,
-    @ByVal @Cast("torch::nn::functional::TripletMarginLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22407,7 +22458,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @ByVal @Cast("c10::optional<torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::distance_function_t>*") Pointer distance_function,
     double margin,
     @Cast("bool") boolean swap,
-    @ByVal @Cast("torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22440,7 +22491,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
                        @Const @ByRef Tensor input_lengths,
                        @Const @ByRef Tensor target_lengths,
                        @Cast("int64_t") long blank,
-                       @ByVal @Cast("torch::nn::functional::CTCLossFuncOptions::reduction_t*") Pointer reduction,
+                       @ByVal loss_reduction_t reduction,
                        @Cast("bool") boolean zero_infinity);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -22470,7 +22521,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
                                @Cast("bool") boolean log_input,
                                @Cast("bool") boolean full,
                                double eps,
-                               @ByVal @Cast("torch::nn::functional::PoissonNLLLossFuncOptions::reduction_t*") Pointer reduction);
+                               @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22496,7 +22547,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
                                   @Const @ByRef Tensor input2,
                                   @Const @ByRef Tensor target,
                                   double margin,
-                                  @ByVal @Cast("torch::nn::functional::MarginRankingLossFuncOptions::reduction_t*") Pointer reduction);
+                                  @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22522,7 +22573,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
     @Cast("int64_t") long ignore_index,
-    @ByVal @Cast("const torch::nn::functional::NLLLossFuncOptions::reduction_t*") Pointer reduction);
+    @Const @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22550,7 +22601,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
     @Cast("int64_t") long ignore_index,
-    @ByVal @Cast("torch::nn::functional::CrossEntropyFuncOptions::reduction_t*") Pointer reduction);
+    @ByVal loss_reduction_t reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22578,7 +22629,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor binary_cross_entropy_with_logits(
   @Const @ByRef Tensor input, @Const @ByRef Tensor target, @Const @ByRef Tensor weight,
-  @ByVal @Cast("torch::nn::functional::BinaryCrossEntropyWithLogitsFuncOptions::reduction_t*") Pointer reduction, @Const @ByRef Tensor pos_weight);
+  @ByVal loss_reduction_t reduction, @Const @ByRef Tensor pos_weight);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -22736,11 +22787,11 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor pad(@Const @ByRef Tensor input,
                   @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef pad,
-                  @ByVal @Cast("torch::nn::functional::PadFuncOptions::mode_t*") Pointer mode,
+                  @ByVal pad_mode_t mode,
                   double value);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor pad(@Const @ByRef Tensor input,
                   @ByVal @Cast({"int64_t*", "std::vector<int64_t>&"}) @StdVector long[] pad,
-                  @ByVal @Cast("torch::nn::functional::PadFuncOptions::mode_t*") Pointer mode,
+                  @ByVal pad_mode_t mode,
                   double value);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -23417,7 +23468,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
   @Const @ByRef Tensor input,
   @Const @ByRef LongVectorOptional size,
   @Const @ByRef DoubleVectorOptional scale_factor,
-  @ByVal @Cast("torch::nn::functional::InterpolateFuncOptions::mode_t*") Pointer mode,
+  @ByVal interpolate_mode_t mode,
   @ByVal BoolOptional align_corners,
   @ByVal BoolOptional recompute_scale_factor);
  // namespace detail
@@ -23470,8 +23521,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor grid_sample(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor grid,
-    @ByVal @Cast("torch::nn::functional::GridSampleFuncOptions::mode_t*") Pointer mode,
-    @ByVal @Cast("torch::nn::functional::GridSampleFuncOptions::padding_mode_t*") Pointer padding_mode,
+    @ByVal grid_sample_mode_t mode,
+    @ByVal grid_sample_padding_mode_t padding_mode,
     @ByVal BoolOptional align_corners);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */

@@ -45,5 +45,5 @@ public class PoissonNLLLossOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException BoolPointer log_input();
   public native @Cast("bool*") @ByRef @NoException BoolPointer full();
   public native @ByRef @NoException DoublePointer eps();
-  public native @Cast("torch::nn::PoissonNLLLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

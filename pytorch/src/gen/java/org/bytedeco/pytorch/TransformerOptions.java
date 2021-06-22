@@ -54,7 +54,7 @@ public class TransformerOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException LongPointer num_decoder_layers();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer dim_feedforward();
   public native @ByRef @NoException DoublePointer dropout();
-  public native @Cast("torch::nn::TransformerOptions::activation_t*") @ByRef @NoException Pointer activation();
+  public native @ByRef @NoException transformer_activation_t activation();
   public native @ByRef @NoException AnyModule custom_encoder();
   public native @ByRef @NoException AnyModule custom_decoder();
 }

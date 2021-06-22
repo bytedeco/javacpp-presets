@@ -43,6 +43,6 @@ public class BCEWithLogitsLossOptions extends Pointer {
     }
 
   public native @ByRef @NoException Tensor weight();
-  public native @Cast("torch::nn::BCEWithLogitsLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
   public native @ByRef @NoException Tensor pos_weight();
 }

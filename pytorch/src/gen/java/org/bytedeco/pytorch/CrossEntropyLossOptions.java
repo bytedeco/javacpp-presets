@@ -44,5 +44,5 @@ public class CrossEntropyLossOptions extends Pointer {
 
   public native @ByRef @NoException Tensor weight();
   public native @Cast("int64_t*") @ByRef @NoException LongPointer ignore_index();
-  public native @Cast("torch::nn::CrossEntropyLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

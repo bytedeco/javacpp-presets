@@ -46,5 +46,5 @@ public class TripletMarginLossOptions extends Pointer {
   public native @ByRef @NoException DoublePointer p();
   public native @ByRef @NoException DoublePointer eps();
   public native @Cast("bool*") @ByRef @NoException BoolPointer swap();
-  public native @Cast("torch::nn::TripletMarginLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
 }

@@ -43,6 +43,6 @@ public class CTCLossOptions extends Pointer {
     }
 
   public native @Cast("int64_t*") @ByRef @NoException LongPointer blank();
-  public native @Cast("torch::nn::CTCLossOptions::reduction_t*") @ByRef @NoException Pointer reduction();
+  public native @ByRef @NoException loss_reduction_t reduction();
   public native @Cast("bool*") @ByRef @NoException BoolPointer zero_infinity();
 }
