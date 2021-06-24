@@ -118,7 +118,10 @@ public class PyUFuncObject extends Pointer {
          * but this was never implemented. (This is also why the above
          * selector is called the "legacy" selector.)
          */
-        public native Pointer reserved2(); public native PyUFuncObject reserved2(Pointer setter);
+//     #if PY_VERSION_HEX >= 0x03080000
+        public native vectorcallfunc vectorcall(); public native PyUFuncObject vectorcall(vectorcallfunc setter);
+//     #else
+//     #endif
         /*
          * A function which returns a masked inner loop for the ufunc.
          */

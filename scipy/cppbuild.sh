@@ -7,7 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SCIPY_VERSION=1.6.3
+BOOST=1_75_0
+SCIPY_VERSION=1.7.0
+download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -45,7 +47,9 @@ OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 echo "Decompressing archives..."
+tar --totals -xzf ../boost_$BOOST.tar.gz
 tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
+cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost/
 cd scipy-$SCIPY_VERSION
 
 echo "[openblas]"                                  > site.cfg
@@ -74,16 +78,17 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; then
+if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython==0.29.22 pybind11==2.6.2 pythran==0.9.11; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.9"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.9" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.9/" crossenv==1.0 cython==0.29.22 numpy==1.20.2 pybind11==2.6.2
+    "$CPYTHON_HOST_PATH/bin/python3.9" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.9/" crossenv==1.0 cython==0.29.22 numpy==1.21.0 pybind11==2.6.2 pythran==0.9.11
     "$CPYTHON_HOST_PATH/bin/python3.9" -m crossenv "$PYTHON_BIN_PATH" crossenv
+    cp "$NUMPY_PATH/python/numpy/random/lib/libnpyrandom.a" "$CPYTHON_HOST_PATH/lib/python3.9/numpy/random/lib/libnpyrandom.a"
     cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.9/numpy/core/lib/libnpymath.a"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.9/include" "$PYTHON_LIB_PATH"
     source crossenv/bin/activate
-    cross-expose cython numpy pybind11
+    cross-expose cython numpy pybind11 pythran
     PYTHON_BIN_PATH="python"
     export NUMPY_MADVISE_HUGEPAGE=1
 
@@ -103,15 +108,15 @@ fi
 case $PLATFORM in
     linux-armhf)
         FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard"
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F90="arm-linux-gnueabihf-gfortran" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
-        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F90="aarch64-linux-gnu-gfortran" FFLAGS="-mabi=lp64 -fPIC" LDFLAGS="-mabi=lp64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
+        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F77="aarch64-linux-gnu-gfortran" F90="$F77" FFLAGS="-mabi=lp64 -fPIC" LDFLAGS="-mabi=lp64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-ppc64le)
-        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F90="powerpc64le-linux-gnu-gfortran" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
+        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F77="powerpc64le-linux-gnu-gfortran" F90="$F77" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
         powerpc64le-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-x86)
@@ -123,7 +128,9 @@ case $PLATFORM in
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
-        export F90="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
+        export F77="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
+        export F90="$F77"
+        export LDFLAGS="-L/usr/lib/"
         ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ -add_rpath @loader_path/../../../../ $f || true; done

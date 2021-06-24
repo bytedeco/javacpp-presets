@@ -3942,7 +3942,7 @@ public static final int
 
 public static final int LIBLEPT_MAJOR_VERSION =   1;
 public static final int LIBLEPT_MINOR_VERSION =   81;
-public static final int LIBLEPT_PATCH_VERSION =   0;
+public static final int LIBLEPT_PATCH_VERSION =   1;
 
 // #include "alltypes.h"
 
@@ -5719,7 +5719,7 @@ public static native PIX pixReadJp2k( String filename, @Cast("l_uint32") int red
 public static native PIX pixReadStreamJp2k( @Cast("FILE*") Pointer fp, @Cast("l_uint32") int reduction, BOX box, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
 public static native @Cast("l_ok") int pixWriteJp2k( @Cast("const char*") BytePointer filename, PIX pix, @Cast("l_int32") int quality, @Cast("l_int32") int nlevels, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
 public static native @Cast("l_ok") int pixWriteJp2k( String filename, PIX pix, @Cast("l_int32") int quality, @Cast("l_int32") int nlevels, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
-public static native @Cast("l_ok") int pixWriteStreamJp2k( @Cast("FILE*") Pointer fp, PIX pix, @Cast("l_int32") int quality, @Cast("l_int32") int nlevels, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
+public static native @Cast("l_ok") int pixWriteStreamJp2k( @Cast("FILE*") Pointer fp, PIX pix, @Cast("l_int32") int quality, @Cast("l_int32") int nlevels, @Cast("l_int32") int codec, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
 public static native PIX pixReadMemJp2k( @Cast("const l_uint8*") BytePointer data, @Cast("size_t") long size, @Cast("l_uint32") int reduction, BOX box, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
 public static native PIX pixReadMemJp2k( @Cast("const l_uint8*") ByteBuffer data, @Cast("size_t") long size, @Cast("l_uint32") int reduction, BOX box, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
 public static native PIX pixReadMemJp2k( @Cast("const l_uint8*") byte[] data, @Cast("size_t") long size, @Cast("l_uint32") int reduction, BOX box, @Cast("l_int32") int hint, @Cast("l_int32") int debug );
@@ -8553,6 +8553,9 @@ public static native @Cast("l_ok") int l_hashStringToUint64Fast( String str, @Ca
 public static native @Cast("l_ok") int l_hashPtToUint64( @Cast("l_int32") int x, @Cast("l_int32") int y, @Cast("l_uint64*") IntPointer phash );
 public static native @Cast("l_ok") int l_hashPtToUint64( @Cast("l_int32") int x, @Cast("l_int32") int y, @Cast("l_uint64*") IntBuffer phash );
 public static native @Cast("l_ok") int l_hashPtToUint64( @Cast("l_int32") int x, @Cast("l_int32") int y, @Cast("l_uint64*") int[] phash );
+public static native @Cast("l_ok") int l_hashFloat64ToUint64( @Cast("l_float64") double val, @Cast("l_uint64*") IntPointer phash );
+public static native @Cast("l_ok") int l_hashFloat64ToUint64( @Cast("l_float64") double val, @Cast("l_uint64*") IntBuffer phash );
+public static native @Cast("l_ok") int l_hashFloat64ToUint64( @Cast("l_float64") double val, @Cast("l_uint64*") int[] phash );
 public static native @Cast("l_ok") int findNextLargerPrime( @Cast("l_int32") int start, @Cast("l_uint32*") IntPointer pprime );
 public static native @Cast("l_ok") int findNextLargerPrime( @Cast("l_int32") int start, @Cast("l_uint32*") IntBuffer pprime );
 public static native @Cast("l_ok") int findNextLargerPrime( @Cast("l_int32") int start, @Cast("l_uint32*") int[] pprime );

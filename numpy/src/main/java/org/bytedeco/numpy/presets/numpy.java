@@ -152,7 +152,8 @@ public class numpy implements InfoMapper {
                              "defined(PY_ARRAY_UNIQUE_SYMBOL)", "defined(PY_UFUNC_UNIQUE_SYMBOL)").define(false))
 
                .put(new Info("NPY_BITSOF_LONG == 64", "NPY_BITSOF_LONGLONG == 64",
-                             "NPY_BITSOF_INT == 32", "NPY_BITSOF_SHORT == 16").define(true))
+                             "NPY_BITSOF_INT == 32", "NPY_BITSOF_SHORT == 16",
+                             "PY_VERSION_HEX >= 0x03080000").define(true))
 
                .put(new Info("NPY_MAX_INT", "INT_MIN", "NPY_MIN_INT", "NPY_MAX_UINT", "NPY_MAX_LONG", "NPY_MIN_LONG", "NPY_MAX_ULONG",
                              "NPY_INTP", "NPY_UINTP", "NPY_MAX_INTP", "NPY_MIN_INTP", "NPY_MAX_UINTP").translate(false).cppTypes("long"))
