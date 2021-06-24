@@ -578,7 +578,9 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
                .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("absl::optional", "absl::Span", "absl::LogSink", "TFLogSink", "std::initializer_list", "std::iterator").skip())
-               .put(new Info("absl::string_view", "string", "std::string", "tensorflow::string", "tensorflow::tstring").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("absl::string_view", "string", "std::string", "tensorflow::string", "tensorflow::tstring").annotations("@StdString")
+                       .valueTypes("@Cast({\"char*\", \"std::string&&\"}) BytePointer", "@Cast({\"char*\", \"std::string&&\"}) String")
+                       .pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::set<tensorflow::string>").pointerTypes("StringSet").define())
                .put(new Info("std::list<tensorflow::string>").pointerTypes("StringList").define())
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::int32>").pointerTypes("StringIntUnorderedMap").define())
@@ -871,9 +873,9 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "tensorflow::getTF_OutputDebugString",
                              "tensorflow::AttrValueMap::const_iterator",
                              "google::protobuf::Map<std::string,tensorflow::AttrValue>::const_iterator").skip())
-               .put(new Info("protobuf::Map<tensorflow::string,tensorflow::AttrValue>",
-                             "google::protobuf::Map<std::string,tensorflow::AttrValue>",
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>",
                              "google::protobuf::Map<std::string,::tensorflow::AttrValue>",
+                             "protobuf::Map<tensorflow::string,tensorflow::AttrValue>",
                              "tensorflow::protobuf::Map<tensorflow::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::FunctionDefHelper::AttrValueWrapper").pointerTypes("FunctionDefHelper.AttrValueWrapper"))
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::FunctionDefHelper::AttrValueWrapper> >",

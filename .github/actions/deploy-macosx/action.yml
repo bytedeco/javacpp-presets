@@ -16,7 +16,7 @@ runs:
         brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
-          brew uninstall gcc@8 gcc@9 gcc@10
+          brew uninstall --force gcc
           brew install gcc@7
           brew link --overwrite gcc@7
 
