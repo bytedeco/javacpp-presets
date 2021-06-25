@@ -25,7 +25,7 @@ patch -Np1 < ../../../depthai.patch
 sedinplace '/find_package(Git/d' CMakeLists.txt cmake/GitCommitHash.cmake shared/depthai-bootloader-shared.cmake shared/depthai-shared.cmake
 sedinplace '/protected:/d' include/depthai/pipeline/Node.hpp
 
-OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/cmake/opencv4
+OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
@@ -38,7 +38,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-export OpenCV_DIR="$OPENCV_PATH"
+export OpenCV_DIR="$OPENCV_PATH/lib/cmake/opencv4"
 
 case $PLATFORM in
     linux-armhf)
