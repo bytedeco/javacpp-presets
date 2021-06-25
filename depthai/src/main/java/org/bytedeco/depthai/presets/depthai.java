@@ -224,7 +224,8 @@ public class depthai implements InfoMapper {
                              "dai::DataInputQueue::send(const std::shared_ptr<dai::ADatatype>&, std::chrono::milliseconds)").javaNames("sendSharedPtr"))
 
                .put(new Info("dai::Pipeline::create").javaText(
-                       "public native @Name(\"create<dai::node::ColorCamera>\") @SharedPtr ColorCamera createColorCamera();\n"
+                       "public native @Name(\"create<dai::node::IMU>\") @SharedPtr IMU createIMU();\n"
+                     + "public native @Name(\"create<dai::node::ColorCamera>\") @SharedPtr ColorCamera createColorCamera();\n"
                      + "public native @Name(\"create<dai::node::ImageManip>\") @SharedPtr ImageManip createImageManip();\n"
                      + "public native @Name(\"create<dai::node::MonoCamera>\") @SharedPtr MonoCamera createMonoCamera();\n"
                      + "public native @Name(\"create<dai::node::NeuralNetwork>\") @SharedPtr NeuralNetwork createNeuralNetwork();\n"
