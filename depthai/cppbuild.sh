@@ -38,7 +38,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-export OpenCV_ROOT="$OPENCV_PATH"
+export OpenCV_DIR="$OPENCV_PATH/lib/cmake/opencv4"
 
 case $PLATFORM in
     linux-armhf)
