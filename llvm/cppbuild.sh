@@ -7,8 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=12.0.0
-download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz
+LLVM_VERSION=12.0.1rc3
+# TODO: replace with $LLVM_VERSION in url builder
+download https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1-rc3/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
