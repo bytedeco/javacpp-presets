@@ -8,7 +8,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
-import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.opencv.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 import org.bytedeco.opencv.opencv_imgproc.*;
@@ -111,6 +110,7 @@ public class DataOutputQueue extends Pointer {
     public native @Cast("bool") boolean has();
     public native @Name("has<dai::ImgFrame>") @Cast("bool") boolean hasImgFrame();
     public native @Name("has<dai::IMUData>") @Cast("bool") boolean hasIMUData();
+    public native @Name("has<dai::SpatialLocationCalculatorConfig>") @Cast("bool") boolean hasSpatialLocationCalculatorConfig();
     public native @Name("has<dai::ImgDetections>") @Cast("bool") boolean hasImgDetections();
     public native @Name("has<dai::NNData>") @Cast("bool") boolean hasNNData();
     public native @Name("has<dai::Tracklets>") @Cast("bool") boolean hasTracklets();
@@ -132,6 +132,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("tryGet<dai::ADatatype>") void tryGetVoid();
     public native @Name("tryGet<dai::ImgFrame>") @SharedPtr ImgFrame tryGetImgFrame();
     public native @Name("tryGet<dai::IMUData>") @SharedPtr IMUData tryGetIMUData();
+    public native @Name("tryGet<dai::SpatialLocationCalculatorConfig>") @SharedPtr SpatialLocationCalculatorConfig tryGetSpatialLocationCalculatorConfig();
     public native @Name("tryGet<dai::ImgDetections>") @SharedPtr ImgDetections tryGetImgDetections();
     public native @Name("tryGet<dai::NNData>") @SharedPtr NNData tryGetNNData();
     public native @Name("tryGet<dai::Tracklets>") @SharedPtr Tracklets tryGetTracklets();
@@ -154,6 +155,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("get<dai::ADatatype>") void getVoid();
     public native @Name("get<dai::ImgFrame>") @SharedPtr ImgFrame getImgFrame();
     public native @Name("get<dai::IMUData>") @SharedPtr IMUData getIMUData();
+    public native @Name("get<dai::SpatialLocationCalculatorConfig>") @SharedPtr SpatialLocationCalculatorConfig getSpatialLocationCalculatorConfig();
     public native @Name("get<dai::ImgDetections>") @SharedPtr ImgDetections getImgDetections();
     public native @Name("get<dai::NNData>") @SharedPtr NNData getNNData();
     public native @Name("get<dai::Tracklets>") @SharedPtr Tracklets getTracklets();
@@ -176,6 +178,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("front<dai::ADatatype>") void frontVoid();
     public native @Name("front<dai::ImgFrame>") @SharedPtr ImgFrame frontImgFrame();
     public native @Name("front<dai::IMUData>") @SharedPtr IMUData frontIMUData();
+    public native @Name("front<dai::SpatialLocationCalculatorConfig>") @SharedPtr SpatialLocationCalculatorConfig frontSpatialLocationCalculatorConfig();
     public native @Name("front<dai::ImgDetections>") @SharedPtr ImgDetections frontImgDetections();
     public native @Name("front<dai::NNData>") @SharedPtr NNData frontNNData();
     public native @Name("front<dai::Tracklets>") @SharedPtr Tracklets frontTracklets();
