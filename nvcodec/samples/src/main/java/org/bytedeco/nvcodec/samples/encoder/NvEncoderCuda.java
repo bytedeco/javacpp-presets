@@ -3,7 +3,7 @@ package org.bytedeco.nvcodec.samples.encoder;
 import org.bytedeco.nvcodec.samples.util.NvCodecUtil;
 import org.bytedeco.nvcodec.samples.exceptions.CudaException;
 import org.bytedeco.nvcodec.samples.exceptions.NvCodecException;
-import org.bytedeco.cuda.cudart.CUDA_MEMCPY2D;
+import org.bytedeco.cuda.cudart.CUDA_MEMCPY2D_v2;
 import org.bytedeco.cuda.cudart.CUctx_st;
 import org.bytedeco.cuda.cudart.CUstream_st;
 import org.bytedeco.javacpp.LongPointer;
@@ -43,7 +43,7 @@ public class NvEncoderCuda extends NvEncoder {
 
         srcPitch = srcPitch != 0 ? srcPitch : getWidthInBytes(pixelFormat, width);
 
-        CUDA_MEMCPY2D mem = new CUDA_MEMCPY2D();
+        CUDA_MEMCPY2D_v2 mem = new CUDA_MEMCPY2D_v2();
         mem.srcXInBytes(0);
         mem.srcMemoryType(srcMemoryType);
         if (srcMemoryType == CU_MEMORYTYPE_HOST) {
@@ -133,7 +133,7 @@ public class NvEncoderCuda extends NvEncoder {
             e.printStackTrace();
         }
 
-        CUDA_MEMCPY2D mem = new CUDA_MEMCPY2D();
+        CUDA_MEMCPY2D_v2 mem = new CUDA_MEMCPY2D_v2();
         mem.srcXInBytes(0);
         mem.srcMemoryType(srcMemoryType);
 

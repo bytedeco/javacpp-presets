@@ -351,6 +351,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             link = {"c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch"},
+            preloadpath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             extension = "-gpu"
         ),
     },
@@ -381,7 +382,7 @@ public class torch implements LoadEnabled, InfoMapper {
                      : lib.equals("nvinfer") ? "@.7"
                      : lib.equals("cufft") || lib.equals("curand") ? "@.10"
                      : lib.equals("cudart") ? "@.11.0"
-                     : lib.equals("nvrtc") ? "@.11.3"
+                     : lib.equals("nvrtc") ? "@.11.2"
                      : "@.11";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8"
@@ -390,7 +391,7 @@ public class torch implements LoadEnabled, InfoMapper {
                      : lib.equals("nvinfer") ? "64_7"
                      : lib.equals("cufft") || lib.equals("curand") ? "64_10"
                      : lib.equals("cudart") ? "64_110"
-                     : lib.equals("nvrtc") ? "64_113_0"
+                     : lib.equals("nvrtc") ? "64_112_0"
                      : "64_11";
             } else {
                 continue; // no CUDA
@@ -399,6 +400,8 @@ public class torch implements LoadEnabled, InfoMapper {
                 preloads.add(i++, lib);
             }
         }
+        preloads.add("nvToolsExt@.1");
+        preloads.add("nvToolsExt64_1");
         if (i > 0) {
             resources.add("/org/bytedeco/cuda/");
             resources.add("/org/bytedeco/tensorrt/");

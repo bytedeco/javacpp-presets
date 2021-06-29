@@ -515,7 +515,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                      : lib.equals("nvinfer") ? "@.7"
                      : lib.equals("cufft") || lib.equals("curand") ? "@.10"
                      : lib.equals("cudart") ? "@.11.0"
-                     : lib.equals("nvrtc") ? "@.11.3"
+                     : lib.equals("nvrtc") ? "@.11.2"
                      : "@.11";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8"
@@ -524,7 +524,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                      : lib.equals("nvinfer") ? "64_7"
                      : lib.equals("cufft") || lib.equals("curand") ? "64_10"
                      : lib.equals("cudart") ? "64_110"
-                     : lib.equals("nvrtc") ? "64_113_0"
+                     : lib.equals("nvrtc") ? "64_112_0"
                      : "64_11";
             } else {
                 continue; // no CUDA
