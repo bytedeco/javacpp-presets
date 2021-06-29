@@ -9,7 +9,7 @@ import org.bytedeco.nvcodec.samples.exceptions.CudaException;
 import org.bytedeco.nvcodec.samples.exceptions.NvCodecException;
 import org.bytedeco.nvcodec.samples.util.Dimension;
 import org.bytedeco.nvcodec.samples.util.Rectangle;
-import org.bytedeco.cuda.cudart.CUDA_MEMCPY2D;
+import org.bytedeco.cuda.cudart.CUDA_MEMCPY2D_v2;
 import org.bytedeco.cuda.cudart.CUctx_st;
 import org.bytedeco.cuda.cudart.CUstream_st;
 import org.bytedeco.javacpp.*;
@@ -774,7 +774,7 @@ public class NvDecoder extends Pointer implements Disposable {
 
             checkCudaApiCall(cuCtxPushCurrent(this.cuContext));
 
-            CUDA_MEMCPY2D memcpy2D = new CUDA_MEMCPY2D();
+            CUDA_MEMCPY2D_v2 memcpy2D = new CUDA_MEMCPY2D_v2();
             memcpy2D.srcXInBytes(0);
             memcpy2D.srcMemoryType(CU_MEMORYTYPE_DEVICE);
             memcpy2D.srcDevice(srcFrame.get());
