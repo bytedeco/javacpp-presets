@@ -90,8 +90,8 @@ public class FlushResultResult extends Pointer {
   
   ///
   ///
-  public FlushResultResult(@ByVal Compressor.FlushResult value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Compressor.FlushResult value);
+  public FlushResultResult(@ByRef(true) Compressor.FlushResult value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Compressor.FlushResult value);
 
   /** Copy constructor.
    * 

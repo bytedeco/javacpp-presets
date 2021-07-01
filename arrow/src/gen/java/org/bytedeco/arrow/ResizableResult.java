@@ -90,8 +90,8 @@ public class ResizableResult extends Pointer {
   
   ///
   ///
-  public ResizableResult(@SharedPtr @ByVal ResizableBuffer value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal ResizableBuffer value);
+  public ResizableResult(@SharedPtr @ByRef(true) ResizableBuffer value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) ResizableBuffer value);
 
   /** Copy constructor.
    * 

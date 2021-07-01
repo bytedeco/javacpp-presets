@@ -93,8 +93,8 @@ public class EnumeratedRecordBatchIteratorResult extends Pointer {
   
   ///
   ///
-  public EnumeratedRecordBatchIteratorResult(@ByVal EnumeratedRecordBatchIterator value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal EnumeratedRecordBatchIterator value);
+  public EnumeratedRecordBatchIteratorResult(@ByRef(true) EnumeratedRecordBatchIterator value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) EnumeratedRecordBatchIterator value);
 
   /** Copy constructor.
    * 

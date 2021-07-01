@@ -10,6 +10,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.libffi.global.ffi.*;
 
+// #endif
 
 @Properties(inherit = org.bytedeco.libffi.presets.ffi.class)
 public class Fun_ffi_cif_Pointer_PointerPointer_Pointer extends FunctionPointer {

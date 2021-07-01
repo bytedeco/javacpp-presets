@@ -13,7 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/** 
+/**
  * Static S-class unit info.
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

@@ -116,11 +116,26 @@ public static final int FFI_TYPE_MS_STRUCT = FFI_TYPE_MS_STRUCT();
 
 // #if defined (X86_64) || defined(X86_WIN64)
 //     || (defined (__x86_64__) && defined (X86_DARWIN))
+/* 4 bytes of ENDBR64 + 7 bytes of LEA + 6 bytes of JMP + 7 bytes of NOP
+   + 8 bytes of pointer.  */
 public static native @MemberGetter int FFI_TRAMPOLINE_SIZE();
 public static final int FFI_TRAMPOLINE_SIZE = FFI_TRAMPOLINE_SIZE();
 // # define FFI_NATIVE_RAW_API 0
 // #else
+/* 4 bytes of ENDBR32 + 5 bytes of MOV + 5 bytes of JMP + 2 unused
+   bytes.  */
 // # define FFI_NATIVE_RAW_API 1  /* x86 has native raw api support */
+// #endif
+
+// #if !defined(GENERATE_LIBFFI_MAP) && defined(__CET__)
+// # include <cet.h>
+// # if (__CET__ & 1) != 0
+// #   define ENDBR_PRESENT
+// # endif
+// # define _CET_NOTRACK notrack
+// #else
+// # define _CET_ENDBR
+// # define _CET_NOTRACK
 // #endif
 
 // #endif
@@ -130,8 +145,9 @@ public static final int FFI_TRAMPOLINE_SIZE = FFI_TRAMPOLINE_SIZE();
 // Parsed from ffi.h
 
 /* -----------------------------------------------------------------*-C-*-
-   libffi 3.3 - Copyright (c) 2011, 2014, 2019 Anthony Green
-                    - Copyright (c) 1996-2003, 2007, 2008 Red Hat, Inc.
+   libffi 3.4.2
+     - Copyright (c) 2011, 2014, 2019, 2021 Anthony Green
+     - Copyright (c) 1996-2003, 2007, 2008 Red Hat, Inc.
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
@@ -310,7 +326,8 @@ public static native @ByRef ffi_type ffi_type_longdouble(); public static native
 public static final int
   FFI_OK = 0,
   FFI_BAD_TYPEDEF = 1,
-  FFI_BAD_ABI = 2;
+  FFI_BAD_ABI = 2,
+  FFI_BAD_ARGTYPE = 3;
 // Targeting ../ffi_cif.java
 
 
@@ -380,6 +397,13 @@ public static native @Cast("size_t") @Deprecated long ffi_java_raw_size(ffi_cif 
 public static native Pointer ffi_closure_alloc(@Cast("size_t") long size, @Cast("void**") PointerPointer code);
 public static native Pointer ffi_closure_alloc(@Cast("size_t") long size, @Cast("void**") @ByPtrPtr Pointer code);
 public static native void ffi_closure_free(Pointer arg0);
+
+// #if defined(PA_LINUX) || defined(PA_HPUX)
+// #define FFI_CLOSURE_PTR(X) ((void *)((unsigned int)(X) | 2))
+// #define FFI_RESTORE_PTR(X) ((void *)((unsigned int)(X) & ~3))
+// #else
+// #define FFI_CLOSURE_PTR(X) (X)
+// #define FFI_RESTORE_PTR(X) (X)
 // Targeting ../Fun_ffi_cif_Pointer_PointerPointer_Pointer.java
 
 
@@ -489,17 +513,17 @@ public static native @Cast("ffi_status") int ffi_get_struct_offsets(@Cast("ffi_a
 // #endif
 
 /* If these change, update src/mips/ffitarget.h. */
-public static final int FFI_TYPE_VOID =       0;    
+public static final int FFI_TYPE_VOID =       0;
 public static final int FFI_TYPE_INT =        1;
-public static final int FFI_TYPE_FLOAT =      2;    
+public static final int FFI_TYPE_FLOAT =      2;
 public static final int FFI_TYPE_DOUBLE =     3;
 // #if 1
 public static final int FFI_TYPE_LONGDOUBLE = 4;
 // #else
 // #endif
-public static final int FFI_TYPE_UINT8 =      5;   
+public static final int FFI_TYPE_UINT8 =      5;
 public static final int FFI_TYPE_SINT8 =      6;
-public static final int FFI_TYPE_UINT16 =     7; 
+public static final int FFI_TYPE_UINT16 =     7;
 public static final int FFI_TYPE_SINT16 =     8;
 public static final int FFI_TYPE_UINT32 =     9;
 public static final int FFI_TYPE_SINT32 =     10;

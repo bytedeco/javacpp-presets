@@ -144,8 +144,8 @@ public class FlightInfoResult extends Pointer {
   
   ///
   ///
-  public FlightInfoResult(@ByVal FlightInfo value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal FlightInfo value);
+  public FlightInfoResult(@ByRef(true) FlightInfo value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) FlightInfo value);
 
   /** Copy constructor.
    * 

@@ -80,12 +80,20 @@ public class eltwise_forward extends primitive {
         private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
                         @Const @ByRef memory.desc data_desc, float alpha/*=0*/,
                         float beta/*=0*/);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc data_desc) { super((Pointer)null); allocate(aprop_kind, aalgorithm, data_desc); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc data_desc);
         public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc data_desc, float alpha/*=0*/,
                         float beta/*=0*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, data_desc, alpha, beta); }
         private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc data_desc, float alpha/*=0*/,
                         float beta/*=0*/);
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef memory.desc data_desc) { super((Pointer)null); allocate(aprop_kind, aalgorithm, data_desc); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef memory.desc data_desc);
     }
 
     /** Primitive descriptor for an elementwise forward propagation primitive. */

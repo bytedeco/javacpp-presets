@@ -81,8 +81,8 @@ public class SizeTResult extends Pointer {
   
   ///
   ///
-  public SizeTResult(@Cast("size_t") long value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@Cast("size_t") long value);
+  public SizeTResult(@Cast("size_t&&") long value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@Cast("size_t&&") long value);
 
   /** Copy constructor.
    * 

@@ -13,7 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/** 
+/**
  * Utilization information for a device.
  * Each sample period may be between 1 second and 1/6 second, depending on the product being queried.
  */

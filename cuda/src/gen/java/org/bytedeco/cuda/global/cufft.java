@@ -15,8 +15,7 @@ public class cufft extends org.bytedeco.cuda.presets.cufft {
 
 // Parsed from <cufft.h>
 
-
- /* Copyright 2005-2014 NVIDIA Corporation.  All rights reserved.
+ /* Copyright 2005-2021 NVIDIA Corporation.  All rights reserved.
   *
   * NOTICE TO LICENSEE:
   *
@@ -91,16 +90,16 @@ public class cufft extends org.bytedeco.cuda.presets.cufft {
 // #endif
 
 public static final int CUFFT_VER_MAJOR = 10;
-public static final int CUFFT_VER_MINOR = 4;
-public static final int CUFFT_VER_PATCH = 2;
-public static final int CUFFT_VER_BUILD = 109;
+public static final int CUFFT_VER_MINOR = 5;
+public static final int CUFFT_VER_PATCH = 0;
+public static final int CUFFT_VER_BUILD = 43;
 
 // cuFFT library version
 //
 // CUFFT_VERSION / 1000 - major version
 // CUFFT_VERSION / 100 % 100 - minor version
 // CUFFT_VERSION % 100 - patch level
-public static final int CUFFT_VERSION = 10402;
+public static final int CUFFT_VERSION = 10500;
 
 // CUFFT API function return values
 /** enum cufftResult */

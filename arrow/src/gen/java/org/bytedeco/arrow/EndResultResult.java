@@ -90,8 +90,8 @@ public class EndResultResult extends Pointer {
   
   ///
   ///
-  public EndResultResult(@ByVal Compressor.EndResult value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Compressor.EndResult value);
+  public EndResultResult(@ByRef(true) Compressor.EndResult value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Compressor.EndResult value);
 
   /** Copy constructor.
    * 

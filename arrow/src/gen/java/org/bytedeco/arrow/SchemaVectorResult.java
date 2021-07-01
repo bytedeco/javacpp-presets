@@ -90,8 +90,8 @@ public class SchemaVectorResult extends Pointer {
   
   ///
   ///
-  public SchemaVectorResult(@ByVal SchemaVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal SchemaVector value);
+  public SchemaVectorResult(@ByRef(true) SchemaVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) SchemaVector value);
 
   /** Copy constructor.
    * 

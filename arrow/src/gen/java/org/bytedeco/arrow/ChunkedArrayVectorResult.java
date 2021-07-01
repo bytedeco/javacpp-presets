@@ -90,8 +90,8 @@ public class ChunkedArrayVectorResult extends Pointer {
   
   ///
   ///
-  public ChunkedArrayVectorResult(@ByVal ChunkedArrayVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal ChunkedArrayVector value);
+  public ChunkedArrayVectorResult(@ByRef(true) ChunkedArrayVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) ChunkedArrayVector value);
 
   /** Copy constructor.
    * 

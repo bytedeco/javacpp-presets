@@ -19583,7 +19583,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGetBufferSize(@ByVal Np
  * @param oSizeROI \ref roi_specification. 
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19618,7 +19618,7 @@ public static native @Cast("NppStatus") int nppiFloodFill_8u_C1IR(@Cast("Npp8u*"
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19653,7 +19653,7 @@ public static native @Cast("NppStatus") int nppiFloodFill_8u_C3IR(@Cast("Npp8u*"
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19688,7 +19688,7 @@ public static native @Cast("NppStatus") int nppiFloodFill_16u_C1IR(@Cast("Npp16u
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19723,7 +19723,7 @@ public static native @Cast("NppStatus") int nppiFloodFill_16u_C3IR(@Cast("Npp16u
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19758,7 +19758,7 @@ public static native @Cast("NppStatus") int nppiFloodFill_32u_C1IR(@Cast("Npp32u
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19808,7 +19808,7 @@ public static native @Cast("NppStatus") int nppiFloodFill_32u_C3IR(@Cast("Npp32u
  * @param oSizeROI \ref roi_specification. 
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19850,7 +19850,7 @@ public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C1IR(@Cast(
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19880,7 +19880,7 @@ public static native @Cast("NppStatus") int nppiFloodFillBoundary_8u_C3IR_Ctx(@C
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19922,7 +19922,7 @@ public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C1IR(@Cast
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19953,7 +19953,7 @@ public static native @Cast("NppStatus") int nppiFloodFillBoundary_16u_C3IR_Ctx(@
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -19995,7 +19995,7 @@ public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C1IR(@Cast
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20058,7 +20058,7 @@ public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR(@Cast
  * @param oSizeROI \ref roi_specification. 
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20101,7 +20101,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR(@Cast("Np
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20144,7 +20144,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR(@Cast("Np
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20187,7 +20187,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR(@Cast("N
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20230,7 +20230,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR(@Cast("N
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20273,7 +20273,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR(@Cast("N
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20338,7 +20338,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR(@Cast("N
  * @param oSizeROI \ref roi_specification. 
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20382,7 +20382,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR(@
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20426,7 +20426,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR(@
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20470,7 +20470,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR(
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20514,7 +20514,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR(
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20558,7 +20558,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR(
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20623,7 +20623,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR(
  * @param oSizeROI \ref roi_specification. 
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20654,7 +20654,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR(@Cast(
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20685,7 +20685,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR(@Cast(
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20716,7 +20716,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR(@Cast
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20747,7 +20747,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR(@Cast
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20778,7 +20778,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR(@Cast
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20833,7 +20833,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR(@Cast
  * @param oSizeROI \ref roi_specification. 
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20877,7 +20877,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1I
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20921,7 +20921,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3I
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -20965,7 +20965,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -21009,7 +21009,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -21053,7 +21053,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1
  * @param oSizeROI \ref roi_specification.
  * @param pConnectedRegion Optional host memory pointer to an NppiConnectedRegion object which returns information about the 
  *        filled region. Set to NULL if not needed.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersUFGetBufferSize call.
+ * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding FloodFillGetBufferSize call.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
@@ -21089,167 +21089,22 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C3
 
 
 /** \defgroup image_filter_label_markers LabelMarkers
- * Generate image connected region label markers to be used for later image segmentation.
+ * Generate image connected region label markers to be used for later image segmentation. 
+ *  
+ * These functions have been deprecated.  Use LabelMarkersUF functions instead. 
  *
  * \{
  *
  */
-
-/** \name LabelMarkersGetBufferSize
- *
- * Before calling any of the LabelMarkers functions the application first needs to call the corresponding
- * LabelMarkersGetBufferSize function to determine the amount of device memory to allocate as a working buffer.  The application allocated device memory
- * is then passed as the pBuffer parameter to the corresponding LabelMarkers function. 
- *  
- * \{
- *
- */
-
-/**
- * Calculate scratch buffer size needed for 1 channel 8-bit unsigned integer LabelMarkers function based on destination image oSizeROI width and height.
- *
- * @param oSizeROI \ref roi_specification.
- * @param hpBufferSize Required buffer size in bytes.
- *  
- */
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_8u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_8u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_8u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
-
-/**
- * Calculate scratch buffer size needed for 1 channel 8-bit to 1 channel 32-bit unsigned integer LabelMarkers function based on destination image oSizeROI width and height.
- *
- * @param oSizeROI \ref roi_specification.
- * @param hpBufferSize Required buffer size in bytes.
- *  
- */
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_8u32u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_8u32u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_8u32u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
-
-/**
- * Calculate scratch buffer size needed for 1 channel 16-bit unsigned integer LabelMarkers function based on destination image oSizeROI width and height.
- *
- * @param oSizeROI \ref roi_specification.
- * @param hpBufferSize Required buffer size in bytes.
- *  
- */
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_16u_C1R(@ByVal NppiSize oSizeROI, IntPointer hpBufferSize);
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_16u_C1R(@ByVal NppiSize oSizeROI, IntBuffer hpBufferSize);
-public static native @Cast("NppStatus") int nppiLabelMarkersGetBufferSize_16u_C1R(@ByVal NppiSize oSizeROI, int[] hpBufferSize);
-
-/** \} label_markers_get_buffer_size */
 
 /** \name LabelMarkers
  *
- * Generate image connected region label markers to be used for later image segmentation. A connected region is any 
- * non-zero pixel region bounded by pixel values less than or equal to nMinVal. 
- * Pixels outside the ROI are always treated as having values of 0 thus resulting in a connected region segmentation boundary in that direction. 
- * Note that while marker label IDs start at ID number 1, they are not generated in any particular order and there may 
- * be numeric gaps between sequential marker IDs. The pNumber parameter returns the value of the maximum label ID 
- * generated in the first pass.  However during convergence passes higher label ID numbers in connected regions containing
- * multiple label ID numbers will be replaced with the lowest label ID number in the region. However, connected region label IDs 
- * will be unique unless the value returned by pNumber exceeds the data type range of a destination pixel in which
- * case ID values will roll over causing some to be used on multiple connected regions.  If this occurs for 8 bit data 
- * it is recommended that you use the 8u32u version of the function for 8 bit data. Pixels not connected
- * to any connected region like those with values less than or equal to nMinVal will be assigned a marker label ID value of 0. 
- *
- * Before calling any of the LabelMarkers functions the application first needs to call the corresponding
- * LabelMarkersGetBufferSize to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
- * is then passed as the pBuffer parameter to the corresponding LabelMarkers function. 
- *  
- * Note that these functions will be deprecated in future NPP releases.  Use the nppiLabelMarkerUF, nppiCompressMarkerLabelsUF, and 
+ * These functions have been deprecated.  Use the nppiLabelMarkerUF, nppiCompressMarkerLabelsUF, and 
  * nppiCompressedMarkerLabelsUFInfo functions to generate connected pixel region boundaries (contours). 
  *
  * \{
  *
  */
-
-/**
- * 1 channel 8-bit unsigned integer in place label markers image generation.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nMinVal Pixel values less than or equal to nMinVal will be excluded as members of any connected region and given a label ID of 0.
- * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
- * @param pNumber Pointer to host memory integer value where the maximum generated marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntPointer pNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntBuffer pNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, int[] pNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                         @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntPointer pNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                         @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntBuffer pNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                         @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, int[] pNumber, @Cast("Npp8u*") byte[] pBuffer);
-
-/**
- * 1 channel 8-bit to 32-bit unsigned integer label markers image generation.
- * 
- * @param pSrc  \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst  \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nMinVal Pixel values less than or equal to nMinVal will be excluded as members of any connected region and given a label ID of 0.
- * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
- * @param pNumber Pointer to host memory integer value where the maximum generated marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u32u_C1R_Ctx(@Cast("Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp32u*") IntPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
-                               @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntPointer pNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u32u_C1R_Ctx(@Cast("Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp32u*") IntBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
-                               @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntBuffer pNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u32u_C1R_Ctx(@Cast("Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp32u*") int[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
-                               @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, int[] pNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u32u_C1R(@Cast("Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp32u*") IntPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntPointer pNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u32u_C1R(@Cast("Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp32u*") IntBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, IntBuffer pNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiLabelMarkers_8u32u_C1R(@Cast("Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp32u*") int[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("Npp8u") byte nMinVal, @Cast("NppiNorm") int eNorm, int[] pNumber, @Cast("Npp8u*") byte[] pBuffer);
-
-/**
- * 1 channel 16-bit unsigned integer in place label markers image generation.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nMinVal Pixel values less than or equal to nMinVal will be excluded as members of any connected region and given a label ID of 0.
- * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
- * @param pNumber Pointer to host memory integer value where the maximum generated marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding LabelMarkersGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiLabelMarkers_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                              @Cast("Npp16u") short nMinVal, @Cast("NppiNorm") int eNorm, IntPointer pNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiLabelMarkers_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                              @Cast("Npp16u") short nMinVal, @Cast("NppiNorm") int eNorm, IntBuffer pNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiLabelMarkers_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                              @Cast("Npp16u") short nMinVal, @Cast("NppiNorm") int eNorm, int[] pNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiLabelMarkers_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                          @Cast("Npp16u") short nMinVal, @Cast("NppiNorm") int eNorm, IntPointer pNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiLabelMarkers_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                          @Cast("Npp16u") short nMinVal, @Cast("NppiNorm") int eNorm, IntBuffer pNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiLabelMarkers_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
-                          @Cast("Npp16u") short nMinVal, @Cast("NppiNorm") int eNorm, int[] pNumber, @Cast("Npp8u*") byte[] pBuffer);
 
 /** \} label_markers */
 
@@ -21346,7 +21201,7 @@ public static native @Cast("NppStatus") int nppiLabelMarkersUF_16u32u_C1R(@Cast(
  * 1 channel 32-bit to 32-bit unsigned integer label markers image generation.
  * 
  * @param pSrc  \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
+ * @param nSrcStep \ref source_image_line_step. 
  * @param pDst  \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -21536,50 +21391,6 @@ public static native @Cast("NppStatus") int nppiLabelMarkersUFBatch_32u_C1R_Adva
  */
 
 /**
- * Calculate scratch buffer size needed for 1 channel 8-bit unsigned integer CompressMarkerLabels function based on the number returned in pNumber from a previous nppiLabelMarkers call.
- *
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_8u function.
- * @param hpBufferSize Required buffer size in bytes.
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_8u_C1R(int nStartingNumber, IntPointer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_8u_C1R(int nStartingNumber, IntBuffer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_8u_C1R(int nStartingNumber, int[] hpBufferSize);
-
-/**
- * Calculate scratch buffer size needed for 1 channel 32-bit unsigned integer to 8-bit unsigned integer CompressMarkerLabels function based on the number returned in pNumber from a previous nppiLabelMarkers call.
- *
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_8u32u function or ROI width * ROI height for images generated by the nppiLabelMarkersUF funcions.
- * @param hpBufferSize Required buffer size in bytes.
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u8u_C1R(int nStartingNumber, IntPointer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u8u_C1R(int nStartingNumber, IntBuffer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u8u_C1R(int nStartingNumber, int[] hpBufferSize);
-
-/**
- * Calculate scratch buffer size needed for 1 channel 16-bit unsigned integer CompressMarkerLabels function based on the number returned in pNumber from a previous nppiLabelMarkers call.
- *
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_16u function.
- * @param hpBufferSize Required buffer size in bytes.
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_16u_C1R(int nStartingNumber, IntPointer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_16u_C1R(int nStartingNumber, IntBuffer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_16u_C1R(int nStartingNumber, int[] hpBufferSize);
-
-/**
- * Calculate scratch buffer size needed for 1 channel 32-bit unsigned integer to 16-bit unsigned integer CompressMarkerLabels function based on the number returned in pNumber from a previous nppiLabelMarkers call.
- *
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_8u32u function or ROI width * ROI height for images generated by the nppiLabelMarkersUF funcions.
- * @param hpBufferSize Required buffer size in bytes.
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u16u_C1R(int nStartingNumber, IntPointer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u16u_C1R(int nStartingNumber, IntBuffer hpBufferSize);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSize_32u16u_C1R(int nStartingNumber, int[] hpBufferSize);
-
-/**
  * Calculate scratch buffer size needed for 1 channel 32-bit unsigned integer CompressMarkerLabels function based on the number returned in pNumber from a previous nppiLabelMarkers call.
  * Note that this is the only function that supports the nppiCompressMarkerLabelsUF_32u function and that nStartingNumber MUST be ROI width * ROI height when used with that function.
  *  
@@ -21596,133 +21407,13 @@ public static native @Cast("NppStatus") int nppiCompressMarkerLabelsGetBufferSiz
 
 /** \name CompressMarkerLabels
  *
- * Renumber connected region marker label IDs from a previous call to nppiLabelMarkers to eliminate label numbering sparseness.
- * Note that while marker label IDs still start at ID number 1, the value of pNewNumber returned by this function will represent
- * the minimum number of label IDs to give each connected region in the image a unique label ID. However, if you initially used
- * nppiLabelMarkers_8u and the pNumber value returned by that function was over 255 then you will still have one or more disjoint
- * connected regions with the same label ID in the final output from this function. Also, the output of nppiCompressMarkerLabels_32u8u
- * will only produce correct results if the pNewNumber value returned by this function is less than 256.
- *
- * Before calling any of the CompressMarkerLabels functions the application first needs to call the corresponding
- * CompressMarkerLabelsGetBufferSize to determine the amount of device memory to allocate as a working buffer.  The allocated device memory
- * is then passed as the pBuffer parameter to the corresponding CompressMarkerLabels function.
- *    
- * NOTE: These functions are only supported for output from the nppiLabelMarkers functions and NOT for output from nppiLabelMarkersUF functions. 
+ * NOTE: The previous versions of these functions have been deprecated. 
  * Only nppiCompressMarkerLabelsUF_32u works with output from nppiLabelMarkersUF functions. 
  *        
  *  
  * \{
  *
  */
-
-/**
- * 1 channel 8-bit unsigned integer in place connected region marker label renumbering with numbering sparseness elimination.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_8u function.
- * @param pNewNumber Pointer to host memory integer value where the maximum renumbered marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding CompressMarkerLabelsGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer);
-
-/**
- * 1 channel 32-bit unsigned integer to 8-bit unsigned integer connected region marker label renumbering with numbering sparseness elimination.
- * 
- * @param pSrc  \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst  \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_8u32u function or ROI width * ROI height for images generated by the nppiLabelMarkersUF funcions.
- * @param pNewNumber Pointer to host memory integer value where the maximum renumbered marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding CompressMarkerLabelsGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u8u_C1R_Ctx(@Cast("Npp32u*") IntPointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u8u_C1R_Ctx(@Cast("Npp32u*") IntBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u8u_C1R_Ctx(@Cast("Npp32u*") int[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u8u_C1R(@Cast("Npp32u*") IntPointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u8u_C1R(@Cast("Npp32u*") IntBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u8u_C1R(@Cast("Npp32u*") int[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer);
-
-/**
- * 1 channel 16-bit unsigned integer in place connected region marker label renumbering with numbering sparseness elimination.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_16u function.
- * @param pNewNumber Pointer to host memory integer value where the maximum renumbered marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding CompressMarkerLabelsGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer);
-
-/**
- * 1 channel 32-bit unsigned integer to 16-bit unsigned integer connected region marker label renumbering with numbering sparseness elimination.
- * 
- * @param pSrc  \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst  \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_32u function or ROI width * ROI height for images generated by the nppiLabelMarkersUF funcions.
- * @param pNewNumber Pointer to host memory integer value where the maximum renumbered marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding CompressMarkerLabelsGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u16u_C1R_Ctx(@Cast("Npp32u*") IntPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u16u_C1R_Ctx(@Cast("Npp32u*") IntBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u16u_C1R_Ctx(@Cast("Npp32u*") int[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u16u_C1R(@Cast("Npp32u*") IntPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u16u_C1R(@Cast("Npp32u*") IntBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u16u_C1R(@Cast("Npp32u*") int[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer);
-
-/**
- * 1 channel 32-bit unsigned integer in place connected region marker label renumbering with numbering sparseness elimination.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nStartingNumber The value returned from a previous call to the nppiLabelMarkers_8u32u function or ROI width * ROI height for images generated by the nppiLabelMarkersUF funcions.
- * @param pNewNumber Pointer to host memory integer value where the maximum renumbered marker label ID will be returned.
- * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding CompressMarkerLabelsGetBufferSize call.
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *    
- */
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntPointer pNewNumber, @Cast("Npp8u*") BytePointer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, IntBuffer pNewNumber, @Cast("Npp8u*") ByteBuffer pBuffer);
-public static native @Cast("NppStatus") int nppiCompressMarkerLabels_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nStartingNumber, int[] pNewNumber, @Cast("Npp8u*") byte[] pBuffer);
 
 /**
  * 1 channel 32-bit unsigned integer in place connected region marker label renumbering for output from nppiLabelMarkersUF functions only with numbering sparseness elimination.
@@ -21838,6 +21529,15 @@ public static native @Cast("NppStatus") int nppiCompressMarkerLabelsUFBatch_32u_
 
 /** \} compress_marker_labels_uf_batch */
 
+/** \} image_filter_compress_marker_labels */
+
+/** \defgroup image_filter_compresssed_marker_labels_info CompressedMarkerLabelsInfo
+ * Various methods for extracting information from compressed marker labels.
+ *    
+ * \{
+ *
+ */
+
 /** \name CompressedMarkerLabelsUFInfo
  *
  * Generate marker labels info from input image previously generated by call to CompressMarkerLabelsUF or CompressMarkerLabelsUFBatch 
@@ -21883,8 +21583,10 @@ public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFGetInfoL
  * @param nContoursImageStep image_line_step for contours image. 
  * @param pContoursDirectionImage optional output image containing per contour pixel direction info around each uniquely labeled connected pixel region, set to NULL if not needed. 
  * @param nContoursDirectionImageStep image_line_step for contours image. 
- * @param pContoursTotalsInfoHost unique per call optional memory pointer to NppiContourTotalsInfo structure in host memory, MUST be set if pContoursDirectionImage is set. 
- * @param pContoursPixelCountsListHost unique per call optional memory pointer to array of nMaxMarkerLabelID unsigned integers in host memory, MUST be set if pContoursDirectionImage is set. 
+ * @param pContoursTotalsInfoHost unique per call optional host memory pointer to NppiContourTotalsInfo structure in host memory, MUST be set if pContoursDirectionImage is set. 
+ * @param pContoursPixelCountsListDev unique per call optional device memory pointer to array of nMaxMarkerLabelID unsigned integers in host memory, MUST be set if pContoursDirectionImage is set. 
+ * @param pContoursPixelCountsListHost unique per call optional host memory pointer to array of nMaxMarkerLabelID unsigned integers in host memory, MUST be set if pContoursDirectionImage is set. 
+ * @param pContoursPixelStartingOffsetHost unique per call optional host memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation 
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes. 
  *  
@@ -21898,94 +21600,224 @@ public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFInfo_32u
                                              @Cast("Npp8u*") BytePointer pContoursImage, @Cast("Npp32s") int nContoursImageStep,
                                              NppiContourPixelDirectionInfo pContoursDirectionImage, @Cast("Npp32s") int nContoursDirectionImageStep,
                                              NppiContourTotalsInfo pContoursTotalsInfoHost,
+                                             @Cast("Npp32u*") IntPointer pContoursPixelCountsListDev,
                                              @Cast("Npp32u*") IntPointer pContoursPixelCountsListHost,
+                                             @Cast("Npp32u*") IntPointer pContoursPixelStartingOffsetHost,
                                              @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFInfo_32u_C1R_Ctx(@Cast("Npp32u*") IntBuffer pCompressedMarkerLabels, @Cast("Npp32s") int nCompressedMarkerLabelsStep, @ByVal NppiSize oSizeROI,
                                              @Cast("unsigned int") int nMaxMarkerLabelID, NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoList,
                                              @Cast("Npp8u*") ByteBuffer pContoursImage, @Cast("Npp32s") int nContoursImageStep,
                                              NppiContourPixelDirectionInfo pContoursDirectionImage, @Cast("Npp32s") int nContoursDirectionImageStep,
                                              NppiContourTotalsInfo pContoursTotalsInfoHost,
+                                             @Cast("Npp32u*") IntBuffer pContoursPixelCountsListDev,
                                              @Cast("Npp32u*") IntBuffer pContoursPixelCountsListHost,
+                                             @Cast("Npp32u*") IntBuffer pContoursPixelStartingOffsetHost,
                                              @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFInfo_32u_C1R_Ctx(@Cast("Npp32u*") int[] pCompressedMarkerLabels, @Cast("Npp32s") int nCompressedMarkerLabelsStep, @ByVal NppiSize oSizeROI,
                                              @Cast("unsigned int") int nMaxMarkerLabelID, NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoList,
                                              @Cast("Npp8u*") byte[] pContoursImage, @Cast("Npp32s") int nContoursImageStep,
                                              NppiContourPixelDirectionInfo pContoursDirectionImage, @Cast("Npp32s") int nContoursDirectionImageStep,
                                              NppiContourTotalsInfo pContoursTotalsInfoHost,
+                                             @Cast("Npp32u*") int[] pContoursPixelCountsListDev,
                                              @Cast("Npp32u*") int[] pContoursPixelCountsListHost,
+                                             @Cast("Npp32u*") int[] pContoursPixelStartingOffsetHost,
                                              @ByVal NppStreamContext nppStreamCtx);
 /** \} compressed_marker_labels_UF_info  */
-// #if 0
-// #endif
-/** \} image_filter_compress_marker_labels */
 
-/** \defgroup image_filter_bound_segments BoundSegments
- * Adds boundary borders around connected regions using a border value of nBorderVal.
+/** \name CompressedMarkerLabelsUFContourGeometryLists
  *
- * While this function is intended
- * to be used on images output from nppiLabelMarkers function calls it will work on any image which contains regions
- * surrounded by pixel values of 0.  This function always uses an 8-way connectivity search. 
+ * Generate pixel geometry lists for connected region contours output by nppiCompressedMarkerLabelsUFInfo function in device memory. 
+ *
+ * Before calling any of the nppiCompressedMarkerLabelsUFContoursGenerateGeometryLists function the application first needs to call the corresponding
+ * CompressedMarkerLabelsUFGetGeometryListsSize to determine the amount of host memory to allocate to receive the contour 
+ * geometry lists for nMaxMarkerLabelID contours in the image. 
  *  
- * Note that these functions will be deprecated in future NPP releases.  Use the nppiLabelMarkerUF, nppiCompressMarkerLabelsUF, and 
- * nppiCompressedMarkerLabelsUFInfo functions to generate connected pixel region boundaries (contours). 
+ * Note that these functions are only supported for output from the UF versions of LabelMarkers functions. Also the pointer to 
+ * the beginning of the compressed marker labels image and ROI that was used when generating the compressed marker labels image MUST be used.
+ *    
+ * Also note that the input images and output list memory for this function must have been allocated in either device (Dev) 
+ * or host (Host) memory respectively depending on the parameter name.
  *  
  * \{
  *
  */
 
 /**
- * 1 channel 8-bit unsigned integer in place region boundary border image generation.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nBorderVal Pixel value to be used at connected region boundary borders
- * @param nppStreamCtx \ref application_managed_stream_context. 
+ * Calculate the size of device memory needed for the CompressedMarkerLabelsUFContourGeometryLists function based on the final 
+ * value in the pContoursPixelStartingOffsetHost list 
+ * returned by previous call nppiCompressedMarkerLabelsUFInfo function. 
+ *
+ * @param nMaxContourPixelGeometryInfoCount the final value in the pContoursPixelStartingOffsetHost list.  
+ * @param hpBufferSize Required buffer size. Important: hpBufferSize is a 
+ *        <em>host pointer.</em> \ref general_scratch_buffer.
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
-public static native @Cast("NppStatus") int nppiBoundSegments_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nBorderVal, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiBoundSegments_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nBorderVal, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiBoundSegments_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nBorderVal, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiBoundSegments_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nBorderVal);
-public static native @Cast("NppStatus") int nppiBoundSegments_8u_C1IR(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nBorderVal);
-public static native @Cast("NppStatus") int nppiBoundSegments_8u_C1IR(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nBorderVal);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFGetGeometryListsSize_C1R(@Cast("unsigned int") int nMaxContourPixelGeometryInfoCount, @Cast("unsigned int*") IntPointer hpBufferSize);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFGetGeometryListsSize_C1R(@Cast("unsigned int") int nMaxContourPixelGeometryInfoCount, @Cast("unsigned int*") IntBuffer hpBufferSize);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFGetGeometryListsSize_C1R(@Cast("unsigned int") int nMaxContourPixelGeometryInfoCount, @Cast("unsigned int*") int[] hpBufferSize);
 
 /**
- * 1 channel 16-bit unsigned integer in place region boundary border image generation.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nBorderVal Pixel value to be used at connected region boundary borders
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-public static native @Cast("NppStatus") int nppiBoundSegments_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nBorderVal, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiBoundSegments_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nBorderVal, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiBoundSegments_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nBorderVal, @ByVal NppStreamContext nppStreamCtx);
+ * 1 channel connected region contours image to generate contours geometry info list in host memory. 
+ *  
+ * Note that ALL input and output data for the function MUST be in device memory except where noted otherwise. 
+ * Also nFirstContourID and nLastContourID allow only a portion of the contour geometry lists in the image to be output. 
+ *  
+ * Note that the geometry list for each contour will begin at pContoursGeometryListsHost[pContoursPixelStartingOffsetHost[nContourID] * sizeof(NppiContourPixelGeometryInfo). 
+ *  
+ * Note that due to the nature of some imput images contour ID 0 can sometimes contain ALL contours in the image which 
+ * can significantly increase the time taken to output the geometry lists.  In these cases setting nFirstContourGeometryListID to >= 1 
+ * significantly speed up geometry list output performance and all individual contours will still be output. 
+ *  
+ * @param pMarkerLabelsInfoListDev pointer to device memory buffer which contains the output returned by the corresponding nppiCompressedMarkerLabelsUFInfo_32u_C1R_Ctx call.
+ * @param pMarkerLabelsInfoListHost pointer to host memory buffer which will be output by this function with additional information added.
+ * @param pContoursDirectionImageDev \ref source_image_pointer to output image in device memory containing per contour pixel direction info around each uniquely labeled connected pixel region returned by corresponding nppiCompressedMarkerLabelsUFInfo call. 
+ * @param nContoursDirectionImageStep image_line_step for contours image. 
+ * @param pContoursPixelGeometryListsHost pointer to host memory buffer allocated to be at least as big as size returned by corresponding nppiCompressedMarkerLabelsUFGetGeometryListsSize call. 
+ * @param pContoursPixelCountsListHost host memory pointer to array of nMaxMarkerLabelID unsigned integers returned by previous call to nppiCompressedMarkerLabelsUFContoursPixelGeometryLists_C1R_Ctx. 
+ * @param pContoursPixelsFoundListHost host memory pointer to array of nMaxMarkerLabelID unsigned integers returned by this call representing the number of contour pixels found during geometry list generation. 
+ * @param pContoursPixelsStartingOffsetHost host memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation. 
+ * @param nMaxMarkerLabelID the value of the maximum marker label ID returned by corresponding compress marker labels UF call. 
+ * @param nFirstContourGeometryListID the ID of the first contour geometry list to output. 
+ * @param nLastContourGeometryListID the ID of the last contour geometry list to output.  
+ * @param oSizeROI \ref roi_specification for the images, must be the same as used in previous calls. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes. 
+ */ 
 
-public static native @Cast("NppStatus") int nppiBoundSegments_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nBorderVal);
-public static native @Cast("NppStatus") int nppiBoundSegments_16u_C1IR(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nBorderVal);
-public static native @Cast("NppStatus") int nppiBoundSegments_16u_C1IR(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nBorderVal);
-
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFContoursGenerateGeometryLists_C1R_Ctx(NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListDev,
+                                                                  NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListHost,
+                                                                  NppiContourPixelDirectionInfo pContoursDirectionImageDev, @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                                  NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                                  @Cast("Npp32u*") IntPointer pContoursPixelCountsListHost,
+                                                                  @Cast("Npp32u*") IntPointer pContoursPixelsFoundListHost,
+                                                                  @Cast("Npp32u*") IntPointer pContoursPixelsStartingOffsetHost,
+                                                                  @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                                  @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                                  @Cast("Npp32u") int nLastContourGeometryListID,
+                                                                  @ByVal NppiSize oSizeROI,
+                                                                  @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFContoursGenerateGeometryLists_C1R_Ctx(NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListDev,
+                                                                  NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListHost,
+                                                                  NppiContourPixelDirectionInfo pContoursDirectionImageDev, @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                                  NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                                  @Cast("Npp32u*") IntBuffer pContoursPixelCountsListHost,
+                                                                  @Cast("Npp32u*") IntBuffer pContoursPixelsFoundListHost,
+                                                                  @Cast("Npp32u*") IntBuffer pContoursPixelsStartingOffsetHost,
+                                                                  @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                                  @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                                  @Cast("Npp32u") int nLastContourGeometryListID,
+                                                                  @ByVal NppiSize oSizeROI,
+                                                                  @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFContoursGenerateGeometryLists_C1R_Ctx(NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListDev,
+                                                                  NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListHost,
+                                                                  NppiContourPixelDirectionInfo pContoursDirectionImageDev, @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                                  NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                                  @Cast("Npp32u*") int[] pContoursPixelCountsListHost,
+                                                                  @Cast("Npp32u*") int[] pContoursPixelsFoundListHost,
+                                                                  @Cast("Npp32u*") int[] pContoursPixelsStartingOffsetHost,
+                                                                  @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                                  @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                                  @Cast("Npp32u") int nLastContourGeometryListID,
+                                                                  @ByVal NppiSize oSizeROI,
+                                                                  @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 32-bit unsigned integer in place region boundary border image generation.
- * 
- * @param pSrcDst  \ref in_place_image_pointer.
- * @param nSrcDstStep \ref source_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nBorderVal Pixel value to be used at connected region boundary borders
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-public static native @Cast("NppStatus") int nppiBoundSegments_32u_C1IR_Ctx(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32u") int nBorderVal, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiBoundSegments_32u_C1IR_Ctx(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32u") int nBorderVal, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiBoundSegments_32u_C1IR_Ctx(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32u") int nBorderVal, @ByVal NppStreamContext nppStreamCtx);
+ * 1 channel connected region contours image to output contours geometry list in host memory. 
+ *  
+ * Note that ALL input and output data for the function MUST be in host memory. 
+ * Also nFirstContourID and nLastContourID allow only a portion of the contour geometry lists in the image to be output. 
+ *  
+ * Note that the geometry list for each contour will begin at pContoursGeometryListsHost[pContoursPixelStartingOffsetHost[nContourID] * sizeof(NppiContourPixelGeometryInfo). 
+ *  
+ * Also note that the ordered contour geometry list is contained in the oContourOrderedGeometryLocation object within the NppiContourPixelGeometryInfo 
+ * object for each contour pixel and that this location information is the only valid information in the object relevent to that ordered pixel. 
+ *  
+ * Note that for a particular contour geometry pixel list the bounding box for that contour will be contained in the following
+ * elements of first pixel (pixel 0) of the corresponding contour pixel list.
+ *  
+ * <pre>{@code 
+ * pixel[0].oContourPrevPixelLocation.x will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.x      upper left x
+ * pixel[0].oContourPrevPixelLocation.y will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.y      upper left y
+ * pixel[0].oContourNextPixelLocation.x will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.width  lower right x
+ * pixel[0].oContourNextPixelLocation.y will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.height lower right y
+ * }</pre>
+ *  
+ * Note that while the bounding box is relatively accurate occasionally a few contour pixels may extend beyond the bounding box limits. 
+ *  
+ * Due to the nature of some imput images contour ID 0 can sometimes contain ALL contours in the image which 
+ * can significantly increase the time taken to output the geometry lists.  In these cases setting nFirstContourGeometryListID to >= 1 
+ * significantly speed up geometry list output performance and all individual contours will still be output. 
+ *  
+ * Once nppiCompressedMarkerLabelsUFContoursGenerateGeometryLists_C1R_Ctx() has been called with a particular 
+ * range of contour IDs nppiCompressedMarkerLabelsUFContoursOutputGeometryLists_C1R() can be recalled any number of times 
+ * with any range of contour IDs that were included in the preceeding corresponding 
+ * nppiCompressedMarkerLabelsUFContoursGenerateGeometryLists_C1R_Ctx() call. 
+ *  
+ * In general a few contour pixels can escape insertion into the ordered geometry list.  When geometry output is in clockwise order the 
+ * extra pixels will be at the end of the geometry list otherwise they will be at the start of the list.
+ *  
+ * @param pContoursGeometryListsHost pointer to host memory buffer allocated to be at least as big as size returned by corresponding nppiCompressedMarkerLabelsUFGetGeometryListsSize call. 
+ * @param pMarkerLabelsInfoListHost pointer to host memory buffer containing pMarkerLabelsInfoListHost output from nppiCompressedMarkerLabelsUFContoursGenerateGeometryLists_C1R_Ctx.
+ * @param pContoursGeometryImageHost optional pointer to host memory image of at least oSizeROI.width * sizeof(Npp8u) * oSizeROI.height bytes, NULL if not needed.
+ * @param nContoursGeometryImageStep geometry image line step. 
+ * @param pContoursPixelCountsListHost host memory pointer to array of nMaxMarkerLabelID unsigned integers returned by previous call to nppiCompressedMarkerLabelsUFContoursPixelGeometryLists_C1R_Ctx 
+ * @param pContoursPixelFoundListHost host memory pointer to array of nMaxMarkerLabelID unsigned integers returned by this call representing the number of contour pixels found during geometry list generation 
+ * @param pContoursPixelsStartingOffsetHost host memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation 
+ * @param nMaxMarkerLabelID the value of the maximum marker label ID returned by corresponding compress marker labels UF call. 
+ * @param nFirstContourGeometryListID the ID of the first contour geometry list to output. 
+ * @param nLastContourGeometryListID the ID of the last contour geometry list to output. 
+ * @param bOutputInCounterclockwiseOrder if nonzero then output geometry list for each contour in counterclockwise order, otherwise clockwise. 
+ * @param oSizeROI \ref roi_specification for the images, must be the same as used in previous calls. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes. 
+ */ 
 
-public static native @Cast("NppStatus") int nppiBoundSegments_32u_C1IR(@Cast("Npp32u*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32u") int nBorderVal);
-public static native @Cast("NppStatus") int nppiBoundSegments_32u_C1IR(@Cast("Npp32u*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32u") int nBorderVal);
-public static native @Cast("NppStatus") int nppiBoundSegments_32u_C1IR(@Cast("Npp32u*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32u") int nBorderVal);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFContoursOutputGeometryLists_C1R(NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                            NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListHost,
+                                                            @Cast("Npp8u*") BytePointer pContoursGeometryImageHost,
+                                                            @Cast("Npp32s") int nContoursGeometryImageStep,
+                                                            @Cast("Npp32u*") IntPointer pContoursPixelCountsListHost,
+                                                            @Cast("Npp32u*") IntPointer pContoursPixelsFoundListHost,
+                                                            @Cast("Npp32u*") IntPointer pContoursPixelsStartingOffsetHost,
+                                                            @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                            @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                            @Cast("Npp32u") int nLastContourGeometryListID,
+                                                            @Cast("Npp32u") int bOutputInCounterclockwiseOrder,
+                                                            @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFContoursOutputGeometryLists_C1R(NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                            NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListHost,
+                                                            @Cast("Npp8u*") ByteBuffer pContoursGeometryImageHost,
+                                                            @Cast("Npp32s") int nContoursGeometryImageStep,
+                                                            @Cast("Npp32u*") IntBuffer pContoursPixelCountsListHost,
+                                                            @Cast("Npp32u*") IntBuffer pContoursPixelsFoundListHost,
+                                                            @Cast("Npp32u*") IntBuffer pContoursPixelsStartingOffsetHost,
+                                                            @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                            @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                            @Cast("Npp32u") int nLastContourGeometryListID,
+                                                            @Cast("Npp32u") int bOutputInCounterclockwiseOrder,
+                                                            @ByVal NppiSize oSizeROI);
+public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFContoursOutputGeometryLists_C1R(NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                            NppiCompressedMarkerLabelsInfo pMarkerLabelsInfoListHost,
+                                                            @Cast("Npp8u*") byte[] pContoursGeometryImageHost,
+                                                            @Cast("Npp32s") int nContoursGeometryImageStep,
+                                                            @Cast("Npp32u*") int[] pContoursPixelCountsListHost,
+                                                            @Cast("Npp32u*") int[] pContoursPixelsFoundListHost,
+                                                            @Cast("Npp32u*") int[] pContoursPixelsStartingOffsetHost,
+                                                            @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                            @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                            @Cast("Npp32u") int nLastContourGeometryListID,
+                                                            @Cast("Npp32u") int bOutputInCounterclockwiseOrder,
+                                                            @ByVal NppiSize oSizeROI);
+
+/** \} compressed_marker_labels_UF_contour_geometry_lists  */
+
+/** \} image_filter_compressed_marker_labels_info */
+
+/** \defgroup image_filter_bound_segments BoundSegments
+ *  
+ * Note that these functions have been deprecated.  Use the nppiLabelMarkerUF, nppiCompressMarkerLabelsUF, and 
+ * nppiCompressedMarkerLabelsUFInfo functions to generate connected pixel region boundaries (contours). 
+ *  
+ * \{
+ *
+ */
 
 /** \} image_filter_bound_segments */
 

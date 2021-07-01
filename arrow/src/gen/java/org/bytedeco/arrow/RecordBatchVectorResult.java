@@ -90,8 +90,8 @@ public class RecordBatchVectorResult extends Pointer {
   
   ///
   ///
-  public RecordBatchVectorResult(@ByVal RecordBatchVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal RecordBatchVector value);
+  public RecordBatchVectorResult(@ByRef(true) RecordBatchVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) RecordBatchVector value);
 
   /** Copy constructor.
    * 

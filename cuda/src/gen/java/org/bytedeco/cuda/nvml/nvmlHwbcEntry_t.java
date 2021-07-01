@@ -13,8 +13,8 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/** 
- * Description of HWBC entry 
+/**
+ * Description of HWBC entry
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlHwbcEntry_t extends Pointer {

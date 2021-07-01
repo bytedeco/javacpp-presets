@@ -81,8 +81,8 @@ public class IntResult extends Pointer {
   
   ///
   ///
-  public IntResult(int value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(int value);
+  public IntResult(@Cast("int&&") int value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@Cast("int&&") int value);
 
   /** Copy constructor.
    * 

@@ -16,12 +16,12 @@ import static org.bytedeco.cuda.global.nvml.*;
 /** \} */
 
 /***************************************************************************************************/
-/** \addtogroup nvmlEvents 
+/** \addtogroup nvmlEvents
  *  \{
  */
 /***************************************************************************************************/
 
-/** 
+/**
  * Handle to an event set
  */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

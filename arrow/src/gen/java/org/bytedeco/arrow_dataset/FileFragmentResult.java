@@ -93,8 +93,8 @@ public class FileFragmentResult extends Pointer {
   
   ///
   ///
-  public FileFragmentResult(@SharedPtr @ByVal FileFragment value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal FileFragment value);
+  public FileFragmentResult(@SharedPtr @ByRef(true) FileFragment value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) FileFragment value);
 
   /** Copy constructor.
    * 

@@ -93,8 +93,8 @@ public class PartitionedBatchesResult extends Pointer {
   
   ///
   ///
-  public PartitionedBatchesResult(@ByVal Partitioning.PartitionedBatches value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Partitioning.PartitionedBatches value);
+  public PartitionedBatchesResult(@ByRef(true) Partitioning.PartitionedBatches value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Partitioning.PartitionedBatches value);
 
   /** Copy constructor.
    * 

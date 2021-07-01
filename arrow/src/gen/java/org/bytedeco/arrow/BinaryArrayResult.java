@@ -90,8 +90,8 @@ public class BinaryArrayResult extends Pointer {
   
   ///
   ///
-  public BinaryArrayResult(@SharedPtr @ByVal BinaryArray value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal BinaryArray value);
+  public BinaryArrayResult(@SharedPtr @ByRef(true) BinaryArray value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) BinaryArray value);
 
   /** Copy constructor.
    * 

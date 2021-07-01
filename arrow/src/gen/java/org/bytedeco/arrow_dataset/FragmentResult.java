@@ -93,8 +93,8 @@ public class FragmentResult extends Pointer {
   
   ///
   ///
-  public FragmentResult(@SharedPtr @ByVal Fragment value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal Fragment value);
+  public FragmentResult(@SharedPtr @ByRef(true) Fragment value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) Fragment value);
 
   /** Copy constructor.
    * 

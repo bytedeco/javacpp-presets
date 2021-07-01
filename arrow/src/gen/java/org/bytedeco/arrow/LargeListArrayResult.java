@@ -90,8 +90,8 @@ public class LargeListArrayResult extends Pointer {
   
   ///
   ///
-  public LargeListArrayResult(@SharedPtr @ByVal LargeListArray value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal LargeListArray value);
+  public LargeListArrayResult(@SharedPtr @ByRef(true) LargeListArray value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) LargeListArray value);
 
   /** Copy constructor.
    * 

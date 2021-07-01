@@ -38,11 +38,11 @@ public class NppiCompressedMarkerLabelsInfo extends Pointer {
     }
 
     /** total number of pixels in this connected pixel region */
-    public native @Cast("unsigned int") int nMarkerLabelPixelCount(); public native NppiCompressedMarkerLabelsInfo nMarkerLabelPixelCount(int setter);
+    public native @Cast("Npp32u") int nMarkerLabelPixelCount(); public native NppiCompressedMarkerLabelsInfo nMarkerLabelPixelCount(int setter);
     /** total number of pixels in this connected pixel region contour */
-    public native @Cast("unsigned int") int nContourPixelCount(); public native NppiCompressedMarkerLabelsInfo nContourPixelCount(int setter);
-    /** current index of pixel being added to geometry info list */
-    public native @Cast("unsigned int") int nCurContourPixelIndex(); public native NppiCompressedMarkerLabelsInfo nCurContourPixelIndex(int setter);
+    public native @Cast("Npp32u") int nContourPixelCount(); public native NppiCompressedMarkerLabelsInfo nContourPixelCount(int setter);
+    /** total number of pixels in this connected pixel region contour found during geometry search */
+    public native @Cast("Npp32u") int nContourPixelsFound(); public native NppiCompressedMarkerLabelsInfo nContourPixelsFound(int setter);
     /** image geometric x and y location of the first pixel in the contour */
     public native @ByRef NppiPoint oContourFirstPixelLocation(); public native NppiCompressedMarkerLabelsInfo oContourFirstPixelLocation(NppiPoint setter);
     /** bounding box of this connected pixel region */

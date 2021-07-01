@@ -90,8 +90,8 @@ public class StructArrayResult extends Pointer {
   
   ///
   ///
-  public StructArrayResult(@SharedPtr @ByVal StructArray value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal StructArray value);
+  public StructArrayResult(@SharedPtr @ByRef(true) StructArray value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) StructArray value);
 
   /** Copy constructor.
    * 

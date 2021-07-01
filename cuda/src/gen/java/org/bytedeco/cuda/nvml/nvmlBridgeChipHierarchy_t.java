@@ -14,7 +14,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 
 
 /**
- * This structure stores the complete Hierarchy of the Bridge Chip within the board. The immediate 
+ * This structure stores the complete Hierarchy of the Bridge Chip within the board. The immediate
  * bridge is stored at index 0 of bridgeInfoList, parent to immediate bridge is at index 1 and so forth.
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

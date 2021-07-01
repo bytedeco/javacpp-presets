@@ -90,8 +90,8 @@ public class FileInfoVectorResult extends Pointer {
   
   ///
   ///
-  public FileInfoVectorResult(@ByVal FileInfoVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal FileInfoVector value);
+  public FileInfoVectorResult(@ByRef(true) FileInfoVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) FileInfoVector value);
 
   /** Copy constructor.
    * 

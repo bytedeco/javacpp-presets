@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBFFI_VERSION=3.3
+LIBFFI_VERSION=3.4.2
 download https://github.com/libffi/libffi/releases/download/v$LIBFFI_VERSION/libffi-$LIBFFI_VERSION.tar.gz libffi-$LIBFFI_VERSION.tar.gz
 
 mkdir -p $PLATFORM

@@ -93,8 +93,8 @@ public class RecordBatchGeneratorResult extends Pointer {
   
   ///
   ///
-  public RecordBatchGeneratorResult(@ByVal RecordBatchGenerator value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal RecordBatchGenerator value);
+  public RecordBatchGeneratorResult(@ByRef(true) RecordBatchGenerator value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) RecordBatchGenerator value);
 
   /** Copy constructor.
    * 

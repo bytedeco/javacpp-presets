@@ -90,8 +90,8 @@ public class CompressionTypeResult extends Pointer {
   
   ///
   ///
-  public CompressionTypeResult(Compression.type value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(Compression.type value);
+  public CompressionTypeResult(@Cast("arrow::Compression::type&&") Compression.type value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@Cast("arrow::Compression::type&&") Compression.type value);
   public CompressionTypeResult(@Cast("arrow::Compression::type") int value) { super((Pointer)null); allocate(value); }
   @NoException private native void allocate(@Cast("arrow::Compression::type") int value);
 

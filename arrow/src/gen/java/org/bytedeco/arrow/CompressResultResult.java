@@ -90,8 +90,8 @@ public class CompressResultResult extends Pointer {
   
   ///
   ///
-  public CompressResultResult(@ByVal Compressor.CompressResult value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Compressor.CompressResult value);
+  public CompressResultResult(@ByRef(true) Compressor.CompressResult value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Compressor.CompressResult value);
 
   /** Copy constructor.
    * 

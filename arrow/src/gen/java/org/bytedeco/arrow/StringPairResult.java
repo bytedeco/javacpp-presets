@@ -90,8 +90,8 @@ public class StringPairResult extends Pointer {
   
   ///
   ///
-  public StringPairResult(@ByVal StringPair value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal StringPair value);
+  public StringPairResult(@ByRef(true) StringPair value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) StringPair value);
 
   /** Copy constructor.
    * 

@@ -90,8 +90,8 @@ public class DictionaryVectorResult extends Pointer {
   
   ///
   ///
-  public DictionaryVectorResult(@ByVal DictionaryVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal DictionaryVector value);
+  public DictionaryVectorResult(@ByRef(true) DictionaryVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) DictionaryVector value);
 
   /** Copy constructor.
    * 

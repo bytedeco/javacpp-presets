@@ -93,8 +93,8 @@ public class ScanTaskVectorResult extends Pointer {
   
   ///
   ///
-  public ScanTaskVectorResult(@ByVal ScanTaskVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal ScanTaskVector value);
+  public ScanTaskVectorResult(@ByRef(true) ScanTaskVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) ScanTaskVector value);
 
   /** Copy constructor.
    * 

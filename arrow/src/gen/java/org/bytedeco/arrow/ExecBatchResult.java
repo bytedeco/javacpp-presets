@@ -90,8 +90,8 @@ public class ExecBatchResult extends Pointer {
   
   ///
   ///
-  public ExecBatchResult(@ByVal ExecBatch value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal ExecBatch value);
+  public ExecBatchResult(@ByRef(true) ExecBatch value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) ExecBatch value);
 
   /** Copy constructor.
    * 

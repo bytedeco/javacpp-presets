@@ -90,8 +90,8 @@ public class BufferVectorResult extends Pointer {
   
   ///
   ///
-  public BufferVectorResult(@ByVal BufferVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal BufferVector value);
+  public BufferVectorResult(@ByRef(true) BufferVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) BufferVector value);
 
   /** Copy constructor.
    * 

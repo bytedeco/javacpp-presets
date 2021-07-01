@@ -14,7 +14,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 
 /** \} */
 
-/** 
+/**
  * Information about occurred event
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

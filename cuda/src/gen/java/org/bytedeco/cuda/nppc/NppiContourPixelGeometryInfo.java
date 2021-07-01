@@ -13,10 +13,9 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nppc.*;
 
 
-
 /**
- * Provides contour (boundary) direction and geometry info of uniquely labeled pixel regions returned 
- * by nppiCompressedMarkerLabelsUFInfo function in host memory. 
+ * Provides contour (boundary) geometry info of uniquely labeled pixel regions returned 
+ * by nppiCompressedMarkerLabelsUFInfo function in host memory in counterclockwise order relative to contour interiors. 
  */
 
 @Properties(inherit = org.bytedeco.cuda.presets.nppc.class)
@@ -37,8 +36,32 @@ public class NppiContourPixelGeometryInfo extends Pointer {
         return new NppiContourPixelGeometryInfo((Pointer)this).offsetAddress(i);
     }
 
-    /** image geometry X and Y location of current contour pixel */
-    public native @ByRef NppiPoint oContourPixelLocation(); public native NppiContourPixelGeometryInfo oContourPixelLocation(NppiPoint setter);
-    /** information about region interior and connected contour pixels directions */
-    public native @ByRef NppiContourPixelDirectionInfo oContourPixelDirectionInfo(); public native NppiContourPixelGeometryInfo oContourPixelDirectionInfo(NppiContourPixelDirectionInfo setter);
+    /** image geometry X and Y location in requested output order */
+    public native @ByRef NppiPoint oContourOrderedGeometryLocation(); public native NppiContourPixelGeometryInfo oContourOrderedGeometryLocation(NppiPoint setter);
+    /** image geometry X and Y location of previous contour pixel */
+    public native @ByRef NppiPoint oContourPrevPixelLocation(); public native NppiContourPixelGeometryInfo oContourPrevPixelLocation(NppiPoint setter);
+    /** image geometry X and Y location of center contour pixel */
+    public native @ByRef NppiPoint oContourCenterPixelLocation(); public native NppiContourPixelGeometryInfo oContourCenterPixelLocation(NppiPoint setter);
+    /** image geometry X and Y location of next contour pixel */
+    public native @ByRef NppiPoint oContourNextPixelLocation(); public native NppiContourPixelGeometryInfo oContourNextPixelLocation(NppiPoint setter);
+    /** contour pixel counterclockwise order index in geometry list */
+    public native @Cast("Npp32s") int nOrderIndex(); public native NppiContourPixelGeometryInfo nOrderIndex(int setter);
+    /** contour pixel clockwise order index in geometry list */
+    public native @Cast("Npp32s") int nReverseOrderIndex(); public native NppiContourPixelGeometryInfo nReverseOrderIndex(int setter);
+    /** index of first ordered contour pixel in this subgroup */
+    public native @Cast("Npp32u") int nFirstIndex(); public native NppiContourPixelGeometryInfo nFirstIndex(int setter);
+    /** index of last ordered contour pixel in this subgroup */
+    public native @Cast("Npp32u") int nLastIndex(); public native NppiContourPixelGeometryInfo nLastIndex(int setter);
+    /** index of next ordered contour pixel in NppiContourPixelGeometryInfo list */
+    public native @Cast("Npp32u") int nNextContourPixelIndex(); public native NppiContourPixelGeometryInfo nNextContourPixelIndex(int setter);
+    /** index of previous ordered contour pixel in NppiContourPixelGeometryInfo list */
+    public native @Cast("Npp32u") int nPrevContourPixelIndex(); public native NppiContourPixelGeometryInfo nPrevContourPixelIndex(int setter);
+    /** this test pixel is has already been used */
+    public native @Cast("Npp8u") byte nPixelAlreadyUsed(); public native NppiContourPixelGeometryInfo nPixelAlreadyUsed(byte setter);
+    /** this test pixel is already linked to center pixel */
+    public native @Cast("Npp8u") byte nAlreadyLinked(); public native NppiContourPixelGeometryInfo nAlreadyLinked(byte setter);
+    /** this pixel has already been output in geometry list */
+    public native @Cast("Npp8u") byte nAlreadyOutput(); public native NppiContourPixelGeometryInfo nAlreadyOutput(byte setter);
+    /** direction of contour region interior */
+    public native @Cast("Npp8u") byte nContourInteriorDirection(); public native NppiContourPixelGeometryInfo nContourInteriorDirection(byte setter);
 }

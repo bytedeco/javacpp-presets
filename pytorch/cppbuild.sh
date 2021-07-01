@@ -123,6 +123,9 @@ sedinplace 's/std::ceil/ceilf/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/round(/roundf(/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/floor(/floorf(/g' aten/src/ATen/native/cuda/*.cu
 sedinplace 's/ceil(/ceilf(/g' aten/src/ATen/native/cuda/*.cu
+sedinplace '/#include <thrust\/device_vector.h>/a\
+#include <thrust\/host_vector.h>\
+' caffe2/utils/math_gpu.cu
 
 # allow setting the build directory and passing CUDA options
 sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py

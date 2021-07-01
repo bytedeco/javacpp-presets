@@ -90,8 +90,8 @@ public class FieldRefDatumMapResult extends Pointer {
   
   ///
   ///
-  public FieldRefDatumMapResult(@ByVal FieldRefDatumMap value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal FieldRefDatumMap value);
+  public FieldRefDatumMapResult(@ByRef(true) FieldRefDatumMap value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) FieldRefDatumMap value);
 
   /** Copy constructor.
    * 

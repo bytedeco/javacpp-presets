@@ -90,8 +90,8 @@ public class ThreadPoolResult extends Pointer {
   
   ///
   ///
-  public ThreadPoolResult(@SharedPtr @ByVal ThreadPool value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal ThreadPool value);
+  public ThreadPoolResult(@SharedPtr @ByRef(true) ThreadPool value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) ThreadPool value);
 
   /** Copy constructor.
    * 

@@ -93,8 +93,8 @@ public class TaggedRecordBatchResult extends Pointer {
   
   ///
   ///
-  public TaggedRecordBatchResult(@ByVal TaggedRecordBatch value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal TaggedRecordBatch value);
+  public TaggedRecordBatchResult(@ByRef(true) TaggedRecordBatch value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) TaggedRecordBatch value);
 
   /** Copy constructor.
    * 

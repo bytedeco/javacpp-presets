@@ -93,8 +93,8 @@ public class DatasetFactoryResult extends Pointer {
   
   ///
   ///
-  public DatasetFactoryResult(@SharedPtr @ByVal DatasetFactory value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal DatasetFactory value);
+  public DatasetFactoryResult(@SharedPtr @ByRef(true) DatasetFactory value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) DatasetFactory value);
 
   /** Copy constructor.
    * 

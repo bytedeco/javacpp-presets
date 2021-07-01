@@ -90,8 +90,8 @@ public class HDFSOptionsResult extends Pointer {
   
   ///
   ///
-  public HDFSOptionsResult(@ByVal HdfsOptions value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal HdfsOptions value);
+  public HDFSOptionsResult(@ByRef(true) HdfsOptions value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) HdfsOptions value);
 
   /** Copy constructor.
    * 

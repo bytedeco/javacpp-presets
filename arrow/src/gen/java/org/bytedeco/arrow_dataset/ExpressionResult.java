@@ -93,8 +93,8 @@ public class ExpressionResult extends Pointer {
   
   ///
   ///
-  public ExpressionResult(@ByVal Expression value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Expression value);
+  public ExpressionResult(@ByRef(true) Expression value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Expression value);
 
   /** Copy constructor.
    * 

@@ -93,8 +93,8 @@ public class FragmentIteratorResult extends Pointer {
   
   ///
   ///
-  public FragmentIteratorResult(@ByVal FragmentIterator value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal FragmentIterator value);
+  public FragmentIteratorResult(@ByRef(true) FragmentIterator value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) FragmentIterator value);
 
   /** Copy constructor.
    * 

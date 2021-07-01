@@ -77,12 +77,21 @@ public class python extends org.bytedeco.cpython.helper.python {
 // #include "pyport.h"
 // #include "pymacro.h"
 
-/* A convenient way for code to know if clang's memory sanitizer is enabled. */
+/* A convenient way for code to know if sanitizers are enabled. */
 // #if defined(__has_feature)
 // #  if __has_feature(memory_sanitizer)
 // #    if !defined(_Py_MEMORY_SANITIZER)
 // #      define _Py_MEMORY_SANITIZER
 // #    endif
+// #  endif
+// #  if __has_feature(address_sanitizer)
+// #    if !defined(_Py_ADDRESS_SANITIZER)
+// #      define _Py_ADDRESS_SANITIZER
+// #    endif
+// #  endif
+// #elif defined(__GNUC__)
+// #  if defined(__SANITIZE_ADDRESS__)
+// #    define _Py_ADDRESS_SANITIZER
 // #  endif
 // #endif
 
@@ -199,12 +208,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        9;
-public static final int PY_MICRO_VERSION =        5;
+public static final int PY_MICRO_VERSION =        6;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.9.5";
+public static final String PY_VERSION =              "3.9.6";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -953,6 +962,10 @@ public static final int HAVE_NET_IF_H = 1;
 
 /* Define to 1 if you have the `nice' function. */
 public static final int HAVE_NICE = 1;
+
+/* Define if the internal form of wchar_t in non-Unicode locales is not
+   Unicode. */
+/* #undef HAVE_NON_UNICODE_WCHAR_T_REPRESENTATION */
 
 /* Define to 1 if you have the `openat' function. */
 public static final int HAVE_OPENAT = 1;
@@ -14022,21 +14035,21 @@ public static native @ByRef PyTypeObject PyZip_Type(); public static native void
 
 // #undef Yield   /* undefine macro conflicting with <winbase.h> */
 
-/** enum _expr_context */
+/** enum expr_context_ty */
 public static final int Load = 1, Store = 2, Del = 3;
 
-/** enum _boolop */
+/** enum boolop_ty */
 public static final int And = 1, Or = 2;
 
-/** enum _operator */
+/** enum operator_ty */
 public static final int Add = 1, Sub = 2, Mult = 3, MatMult = 4, Div = 5, Mod = 6, Pow = 7,
                          LShift = 8, RShift = 9, BitOr = 10, BitXor = 11, BitAnd = 12,
                          FloorDiv = 13;
 
-/** enum _unaryop */
+/** enum unaryop_ty */
 public static final int Invert = 1, Not = 2, UAdd = 3, USub = 4;
 
-/** enum _cmpop */
+/** enum cmpop_ty */
 public static final int Eq = 1, NotEq = 2, Lt = 3, LtE = 4, Gt = 5, GtE = 6, Is = 7, IsNot = 8,
                       In = 9, NotIn = 10;
 
@@ -14424,7 +14437,7 @@ public static final int Py_fstring_input = 800;
  *                names.
  */
 
-/** enum _block_type */
+/** enum _Py_block_ty */
 public static final int FunctionBlock = 0, ClassBlock = 1, ModuleBlock = 2;
 // Targeting ../_symtable_entry.java
 

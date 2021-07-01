@@ -88,6 +88,10 @@ public class BufferIteratorResult extends Pointer {
   // NOTE `Result(U&& value)` above should be sufficient, but some compilers
   // fail matching it.
   
+  ///
+  ///
+  public BufferIteratorResult(@ByRef(true) BufferIterator value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) BufferIterator value);
 
   /** Copy constructor.
    * 

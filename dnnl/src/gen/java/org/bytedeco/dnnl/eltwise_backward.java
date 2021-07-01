@@ -56,12 +56,20 @@ public class eltwise_backward extends primitive {
         private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc diff_data_desc,
                         @Const @ByRef memory.desc data_desc, float alpha/*=0*/,
                         float beta/*=0*/);
+        public desc(algorithm aalgorithm, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc) { super((Pointer)null); allocate(aalgorithm, diff_data_desc, data_desc); }
+        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc);
         public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_data_desc,
                         @Const @ByRef memory.desc data_desc, float alpha/*=0*/,
                         float beta/*=0*/) { super((Pointer)null); allocate(aalgorithm, diff_data_desc, data_desc, alpha, beta); }
         private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_data_desc,
                         @Const @ByRef memory.desc data_desc, float alpha/*=0*/,
                         float beta/*=0*/);
+        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc) { super((Pointer)null); allocate(aalgorithm, diff_data_desc, data_desc); }
+        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc);
     }
 
     /** Primitive descriptor for eltwise backward propagation. */
