@@ -146,8 +146,8 @@ public class DatasetResult extends Pointer {
   
   ///
   ///
-  public DatasetResult(@SharedPtr @ByVal Dataset value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal Dataset value);
+  public DatasetResult(@SharedPtr @ByRef(true) Dataset value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) Dataset value);
 
   /** Copy constructor.
    * 

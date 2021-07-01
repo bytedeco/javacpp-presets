@@ -143,8 +143,8 @@ public class BoolResult extends Pointer {
   
   ///
   ///
-  public BoolResult(@Cast("bool") boolean value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@Cast("bool") boolean value);
+  public BoolResult(@Cast("bool&&") boolean value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@Cast("bool&&") boolean value);
 
   /** Copy constructor.
    * 

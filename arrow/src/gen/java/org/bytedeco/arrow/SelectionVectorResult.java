@@ -90,8 +90,8 @@ public class SelectionVectorResult extends Pointer {
   
   ///
   ///
-  public SelectionVectorResult(@SharedPtr @ByVal SelectionVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal SelectionVector value);
+  public SelectionVectorResult(@SharedPtr @ByRef(true) SelectionVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) SelectionVector value);
 
   /** Copy constructor.
    * 

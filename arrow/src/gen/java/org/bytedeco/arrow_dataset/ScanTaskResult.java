@@ -93,8 +93,8 @@ public class ScanTaskResult extends Pointer {
   
   ///
   ///
-  public ScanTaskResult(@UniquePtr @ByVal ScanTask value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@UniquePtr @ByVal ScanTask value);
+  public ScanTaskResult(@UniquePtr @ByRef(true) ScanTask value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@UniquePtr @ByRef(true) ScanTask value);
 
   /** Copy constructor.
    * 

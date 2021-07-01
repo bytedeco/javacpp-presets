@@ -64,7 +64,7 @@ public class RandomAccessFileFuture extends Pointer {
    *  also point to the same result.  You must make sure that no other copies
    *  of the future exist.  Attempts to add callbacks after you move the result
    *  will result in undefined behavior. */
-  public native @ByVal RandomAccessFileResult MoveResult();
+  public native @ByRef(true) RandomAccessFileResult MoveResult();
 
   /** \brief Wait for the Future to complete and return its Status */
   public native @Const @ByRef Status status();

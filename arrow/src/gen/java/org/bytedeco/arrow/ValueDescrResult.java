@@ -90,8 +90,8 @@ public class ValueDescrResult extends Pointer {
   
   ///
   ///
-  public ValueDescrResult(@ByVal ValueDescr value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal ValueDescr value);
+  public ValueDescrResult(@ByRef(true) ValueDescr value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) ValueDescr value);
 
   /** Copy constructor.
    * 

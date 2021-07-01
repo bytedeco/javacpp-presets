@@ -90,8 +90,8 @@ public class DecompressResultResult extends Pointer {
   
   ///
   ///
-  public DecompressResultResult(@ByVal Decompressor.DecompressResult value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Decompressor.DecompressResult value);
+  public DecompressResultResult(@ByRef(true) Decompressor.DecompressResult value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Decompressor.DecompressResult value);
 
   /** Copy constructor.
    * 

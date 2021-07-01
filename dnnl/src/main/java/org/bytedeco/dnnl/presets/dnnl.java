@@ -123,7 +123,7 @@ public class dnnl implements InfoMapper {
                .put(new Info("dnnl::eltwise_forward::desc<float>",
                              "dnnl::eltwise_backward::desc<float>",
                              "dnnl::batch_normalization_forward::desc<float>",
-                             "dnnl::batch_normalization_backward::desc<float>").javaNames("desc").skipDefaults())
+                             "dnnl::batch_normalization_backward::desc<float>").javaNames("desc"))
 
                .put(new Info("dnnl::rnn_cell::desc::operator const dnnl_rnn_cell_desc_t*()").javaText(
                          "public native @Name(\"operator const dnnl_rnn_cell_desc_t*\") @Const dnnl_rnn_cell_desc_t as_dnnl_rnn_cell_desc_t();\n"))

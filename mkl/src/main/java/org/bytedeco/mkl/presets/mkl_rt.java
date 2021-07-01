@@ -66,6 +66,8 @@ public class mkl_rt implements InfoMapper {
 
                              "mkl_simatcopy", "mkl_dimatcopy", "mkl_cimatcopy", "mkl_zimatcopy", "mkl_somatcopy", "mkl_domatcopy", "mkl_comatcopy", "mkl_zomatcopy",
                              "mkl_somatcopy2", "mkl_domatcopy2", "mkl_comatcopy2", "mkl_zomatcopy2", "mkl_somatadd", "mkl_domatadd", "mkl_comatadd", "mkl_zomatadd",
+                             "mkl_simatcopy_batch_strided", "mkl_dimatcopy_batch_strided", "mkl_cimatcopy_batch_strided", "mkl_zimatcopy_batch_strided",
+                             "mkl_somatcopy_batch_strided", "mkl_domatcopy_batch_strided", "mkl_comatcopy_batch_strided", "mkl_zomatcopy_batch_strided",
 
                              "CBLAS_INDEX", "lapack_int", "lapack_logical", "lapack_complex_float", "lapack_complex_double", "_INTEGER_t", "_DoubleComplexType",
 

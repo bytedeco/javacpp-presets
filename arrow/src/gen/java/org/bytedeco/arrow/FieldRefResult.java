@@ -90,8 +90,8 @@ public class FieldRefResult extends Pointer {
   
   ///
   ///
-  public FieldRefResult(@ByVal FieldRef value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal FieldRef value);
+  public FieldRefResult(@ByRef(true) FieldRef value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) FieldRef value);
 
   /** Copy constructor.
    * 

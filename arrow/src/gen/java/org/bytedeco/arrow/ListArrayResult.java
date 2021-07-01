@@ -90,8 +90,8 @@ public class ListArrayResult extends Pointer {
   
   ///
   ///
-  public ListArrayResult(@SharedPtr @ByVal ListArray value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal ListArray value);
+  public ListArrayResult(@SharedPtr @ByRef(true) ListArray value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) ListArray value);
 
   /** Copy constructor.
    * 

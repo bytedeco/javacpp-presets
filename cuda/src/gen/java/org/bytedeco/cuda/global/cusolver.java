@@ -91,9 +91,9 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
 
 
 public static final int CUSOLVER_VER_MAJOR = 11;
-public static final int CUSOLVER_VER_MINOR = 1;
-public static final int CUSOLVER_VER_PATCH = 2;
-public static final int CUSOLVER_VER_BUILD = 109;
+public static final int CUSOLVER_VER_MINOR = 2;
+public static final int CUSOLVER_VER_PATCH = 0;
+public static final int CUSOLVER_VER_BUILD = 43;
 public static final int CUSOLVER_VERSION = (CUSOLVER_VER_MAJOR * 1000 + 
                         CUSOLVER_VER_MINOR *  100 + 
                         CUSOLVER_VER_PATCH);
@@ -3448,6 +3448,57 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZpotri(
     int lda,
     @Cast("cuDoubleComplex*") double2 work,
     int lwork,
+    int[] devInfo);
+
+public static native @Cast("cusolverStatus_t") int cusolverDnXtrtri_bufferSize(
+    cusolverDnContext handle,
+    @Cast("cublasFillMode_t") int uplo,
+    @Cast("cublasDiagType_t") int diag,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    Pointer A,
+    @Cast("int64_t") long lda,
+    @Cast("size_t*") SizeTPointer workspaceInBytesOnDevice,
+    @Cast("size_t*") SizeTPointer workspaceInBytesOnHost);
+
+public static native @Cast("cusolverStatus_t") int cusolverDnXtrtri(
+    cusolverDnContext handle,
+    @Cast("cublasFillMode_t") int uplo,
+    @Cast("cublasDiagType_t") int diag,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    Pointer A,
+    @Cast("int64_t") long lda,
+    Pointer bufferOnDevice,
+    @Cast("size_t") long workspaceInBytesOnDevice,
+    Pointer bufferOnHost,
+    @Cast("size_t") long workspaceInBytesOnHost,
+    IntPointer devInfo);
+public static native @Cast("cusolverStatus_t") int cusolverDnXtrtri(
+    cusolverDnContext handle,
+    @Cast("cublasFillMode_t") int uplo,
+    @Cast("cublasDiagType_t") int diag,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    Pointer A,
+    @Cast("int64_t") long lda,
+    Pointer bufferOnDevice,
+    @Cast("size_t") long workspaceInBytesOnDevice,
+    Pointer bufferOnHost,
+    @Cast("size_t") long workspaceInBytesOnHost,
+    IntBuffer devInfo);
+public static native @Cast("cusolverStatus_t") int cusolverDnXtrtri(
+    cusolverDnContext handle,
+    @Cast("cublasFillMode_t") int uplo,
+    @Cast("cublasDiagType_t") int diag,
+    @Cast("int64_t") long n,
+    @Cast("cudaDataType") int dataTypeA,
+    Pointer A,
+    @Cast("int64_t") long lda,
+    Pointer bufferOnDevice,
+    @Cast("size_t") long workspaceInBytesOnDevice,
+    Pointer bufferOnHost,
+    @Cast("size_t") long workspaceInBytesOnHost,
     int[] devInfo);
 
 /* lauum, auxiliar routine for s.p.d matrix inversion */

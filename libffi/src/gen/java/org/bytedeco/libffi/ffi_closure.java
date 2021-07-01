@@ -32,8 +32,9 @@ public class ffi_closure extends Pointer {
 
 // #if 0
 // #else
-  public native @Cast("char") byte tramp(int i); public native ffi_closure tramp(int i, byte setter);
-  @MemberGetter public native @Cast("char*") BytePointer tramp();
+    public native @Cast("char") byte tramp(int i); public native ffi_closure tramp(int i, byte setter);
+    @MemberGetter public native @Cast("char*") BytePointer tramp();
+    public native Pointer ftramp(); public native ffi_closure ftramp(Pointer setter);
 // #endif
   public native ffi_cif cif(); public native ffi_closure cif(ffi_cif setter);
   public static class Fun_ffi_cif_Pointer_PointerPointer_Pointer extends FunctionPointer {

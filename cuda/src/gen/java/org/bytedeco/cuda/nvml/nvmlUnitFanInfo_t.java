@@ -13,7 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/** 
+/**
  * Fan speed reading for a single fan in an S-class unit.
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

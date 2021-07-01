@@ -90,8 +90,8 @@ public class SchemaResult extends Pointer {
   
   ///
   ///
-  public SchemaResult(@SharedPtr @ByVal Schema value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal Schema value);
+  public SchemaResult(@SharedPtr @ByRef(true) Schema value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) Schema value);
 
   /** Copy constructor.
    * 

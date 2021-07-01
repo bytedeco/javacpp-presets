@@ -32,7 +32,7 @@ public class NppiContourTotalsInfo extends Pointer {
     }
 
     /** total number of contour pixels in image */
-    public native @Cast("unsigned int") int nTotalImagePixelContourCount(); public native NppiContourTotalsInfo nTotalImagePixelContourCount(int setter);
+    public native @Cast("Npp32u") int nTotalImagePixelContourCount(); public native NppiContourTotalsInfo nTotalImagePixelContourCount(int setter);
     /** longest per contour pixel count in image */
-    public native @Cast("unsigned int") int nLongestImageContourPixelCount(); public native NppiContourTotalsInfo nLongestImageContourPixelCount(int setter);
+    public native @Cast("Npp32u") int nLongestImageContourPixelCount(); public native NppiContourTotalsInfo nLongestImageContourPixelCount(int setter);
 }

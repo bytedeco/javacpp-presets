@@ -187,7 +187,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.2.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 2.3.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.15  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
@@ -198,13 +198,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * SciPy 1.7.x  https://github.com/scipy/scipy
  * Gym 0.18.x  https://github.com/openai/gym
  * LLVM 12.x.x  http://llvm.org/releases/download.html
- * libffi 3.3  https://github.com/libffi/libffi
+ * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.81.x  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.3.x  https://developer.nvidia.com/cuda-downloads
+ * CUDA 11.4.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.2.x  https://developer.nvidia.com/cudnn
    * NCCL 2.9.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk

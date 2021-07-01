@@ -13,11 +13,11 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/** 
+/**
  * Power usage information for an S-class unit.
  * The power supply state is a human readable string that equals "Normal" or contains
  * a combination of "Abnormal" plus one or more of the following:
- *    
+ *
  *    - High voltage
  *    - Fan failure
  *    - Heatsink temperature
@@ -26,7 +26,7 @@ import static org.bytedeco.cuda.global.nvml.*;
  *    - Low-voltage
  *    - SI2C remote off command
  *    - MOD_DISABLE input
- *    - Short pin transition 
+ *    - Short pin transition
 */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlPSUInfo_t extends Pointer {

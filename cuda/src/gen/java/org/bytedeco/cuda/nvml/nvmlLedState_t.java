@@ -14,7 +14,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 
 
 
-/** 
+/**
  * LED states for an S-class unit.
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

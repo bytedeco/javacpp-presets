@@ -90,8 +90,8 @@ public class ArrayVectorResult extends Pointer {
   
   ///
   ///
-  public ArrayVectorResult(@ByVal ArrayVector value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal ArrayVector value);
+  public ArrayVectorResult(@ByRef(true) ArrayVector value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) ArrayVector value);
 
   /** Copy constructor.
    * 

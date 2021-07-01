@@ -90,8 +90,8 @@ public class DatumResult extends Pointer {
   
   ///
   ///
-  public DatumResult(@ByVal Datum value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Datum value);
+  public DatumResult(@ByRef(true) Datum value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Datum value);
 
   /** Copy constructor.
    * 

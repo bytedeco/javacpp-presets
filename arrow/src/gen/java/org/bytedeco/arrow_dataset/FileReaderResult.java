@@ -93,8 +93,8 @@ public class FileReaderResult extends Pointer {
   
   ///
   ///
-  public FileReaderResult(@UniquePtr @ByVal FileReader value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@UniquePtr @ByVal FileReader value);
+  public FileReaderResult(@UniquePtr @ByRef(true) FileReader value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@UniquePtr @ByRef(true) FileReader value);
 
   /** Copy constructor.
    * 

@@ -13,7 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/** 
+/**
  * Memory allocation information for a device.
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

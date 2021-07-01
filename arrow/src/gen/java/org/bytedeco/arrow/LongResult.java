@@ -81,8 +81,8 @@ public class LongResult extends Pointer {
   
   ///
   ///
-  public LongResult(@Cast("int64_t") long value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@Cast("int64_t") long value);
+  public LongResult(@Cast("int64_t&&") long value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@Cast("int64_t&&") long value);
 
   /** Copy constructor.
    * 

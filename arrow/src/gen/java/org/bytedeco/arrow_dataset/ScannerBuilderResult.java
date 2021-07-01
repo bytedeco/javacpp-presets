@@ -93,8 +93,8 @@ public class ScannerBuilderResult extends Pointer {
   
   ///
   ///
-  public ScannerBuilderResult(@SharedPtr @ByVal ScannerBuilder value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal ScannerBuilder value);
+  public ScannerBuilderResult(@SharedPtr @ByRef(true) ScannerBuilder value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) ScannerBuilder value);
 
   /** Copy constructor.
    * 

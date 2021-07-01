@@ -93,8 +93,8 @@ public class UnionDatasetResult extends Pointer {
   
   ///
   ///
-  public UnionDatasetResult(@SharedPtr @ByVal UnionDataset value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@SharedPtr @ByVal UnionDataset value);
+  public UnionDatasetResult(@SharedPtr @ByRef(true) UnionDataset value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@SharedPtr @ByRef(true) UnionDataset value);
 
   /** Copy constructor.
    * 

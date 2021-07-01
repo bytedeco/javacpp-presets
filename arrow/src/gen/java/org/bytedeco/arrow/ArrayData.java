@@ -136,13 +136,13 @@ public class ArrayData extends Pointer {
                                            @Cast("int64_t") long length);
 
   // Move constructor
-  public ArrayData(@ByVal ArrayData other) { super((Pointer)null); allocate(other); }
-  @NoException private native void allocate(@ByVal ArrayData other);
+  public ArrayData(@ByRef(true) ArrayData other) { super((Pointer)null); allocate(other); }
+  @NoException private native void allocate(@ByRef(true) ArrayData other);
 
   // Copy constructor
 
   // Move assignment
-  public native @ByRef @Name("operator =") ArrayData put(@ByVal ArrayData other);
+  public native @ByRef @Name("operator =") ArrayData put(@ByRef(true) ArrayData other);
 
   // Copy assignment
 

@@ -88,6 +88,10 @@ public class RecordBatchIteratorResult extends Pointer {
   // NOTE `Result(U&& value)` above should be sufficient, but some compilers
   // fail matching it.
   
+  ///
+  ///
+  public RecordBatchIteratorResult(@ByRef(true) RecordBatchIterator value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) RecordBatchIterator value);
 
   /** Copy constructor.
    * 

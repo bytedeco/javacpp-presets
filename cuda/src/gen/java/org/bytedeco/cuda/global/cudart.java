@@ -120,7 +120,7 @@ public class cudart extends org.bytedeco.cuda.presets.cudart {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 11030;
+public static final int CUDA_VERSION = 11040;
 
 // #ifdef __cplusplus
 // #endif
@@ -431,7 +431,6 @@ public static final int
     CU_AD_FORMAT_HALF           = 0x10,
     /** 32-bit floating point */
     CU_AD_FORMAT_FLOAT          = 0x20,
-    /** 8-bit YUV planar format, with 4:2:0 sampling */
     CU_AD_FORMAT_NV12           = 0xb0;
 
 /**
@@ -1100,7 +1099,52 @@ public static final int
      */
     CU_JIT_GLOBAL_SYMBOL_COUNT = 19,
 
-    CU_JIT_NUM_OPTIONS = 20;
+    /**
+     * Enable link-time optimization (-dlto) for device code (0: false, default)\n
+     * Option type: int\n
+     * Applies to: compiler and linker
+     */
+    CU_JIT_LTO = 20,
+
+    /**
+     * Control single-precision denormals (-ftz) support (0: false, default).
+     * 1 : flushes denormal values to zero
+     * 0 : preserves denormal values
+     * Option type: int\n
+     * Applies to: link-time optimization specified with CU_JIT_LTO
+     */
+    CU_JIT_FTZ = 21,
+
+    /**
+     * Control single-precision floating-point division and reciprocals
+     * (-prec-div) support (1: true, default).
+     * 1 : Enables the IEEE round-to-nearest mode
+     * 0 : Enables the fast approximation mode
+     * Option type: int\n
+     * Applies to: link-time optimization specified with CU_JIT_LTO
+     */
+    CU_JIT_PREC_DIV = 22,
+
+    /**
+     * Control single-precision floating-point square root
+     * (-prec-sqrt) support (1: true, default).
+     * 1 : Enables the IEEE round-to-nearest mode
+     * 0 : Enables the fast approximation mode
+     * Option type: int\n
+     * Applies to: link-time optimization specified with CU_JIT_LTO
+     */
+    CU_JIT_PREC_SQRT = 23,
+
+    /**
+     * Enable/Disable the contraction of floating-point multiplies
+     * and adds/subtracts into floating-point multiply-add (-fma)
+     * operations (1: Enable, default; 0: Disable).
+     * Option type: int\n
+     * Applies to: link-time optimization specified with CU_JIT_LTO
+     */
+    CU_JIT_FMA = 24,
+
+    CU_JIT_NUM_OPTIONS = 25;
 
 /**
  * Online compilation targets
@@ -1200,7 +1244,13 @@ public static final int
      */
     CU_JIT_INPUT_LIBRARY = 4,
 
-    CU_JIT_NUM_INPUT_TYPES = 5;
+    /**
+     * High-level intermediate code for link-time optimization\n
+     * Applicable options: NVVM compiler options, PTX compiler options
+     */
+    CU_JIT_INPUT_NVVM = 5,
+
+    CU_JIT_NUM_INPUT_TYPES = 6;
 // Targeting ../cudart/CUlinkState_st.java
 
 
@@ -1334,7 +1384,11 @@ public static final int
     /** External semaphore signal node */
     CU_GRAPH_NODE_TYPE_EXT_SEMAS_SIGNAL = 8,
     /** External semaphore wait node */
-    CU_GRAPH_NODE_TYPE_EXT_SEMAS_WAIT   = 9;
+    CU_GRAPH_NODE_TYPE_EXT_SEMAS_WAIT   = 9,
+    /** Memory Allocation Node */
+    CU_GRAPH_NODE_TYPE_MEM_ALLOC        = 10,
+    /** Memory Free Node */
+    CU_GRAPH_NODE_TYPE_MEM_FREE         = 11;
 
 /** enum CUsynchronizationPolicy */
 public static final int
@@ -1403,6 +1457,21 @@ public static final int
     CU_GET_PROC_ADDRESS_LEGACY_STREAM = 1 << 0,
     /** Search for per-thread versions of driver symbols. */
     CU_GET_PROC_ADDRESS_PER_THREAD_DEFAULT_STREAM = 1 << 1;
+
+/**
+ * Execution Affinity Types 
+ */
+/** enum CUexecAffinityType */
+public static final int
+    /** Create a context with limited SMs. */
+    CU_EXEC_AFFINITY_TYPE_SM_COUNT = 0,
+    CU_EXEC_AFFINITY_TYPE_MAX = 1;
+// Targeting ../cudart/CUexecAffinitySmCount_v1.java
+
+
+// Targeting ../cudart/CUexecAffinityParam_v1.java
+
+
 
 /**
  * Error codes
@@ -1483,7 +1552,8 @@ public static final int
 
     /**
      * This indicates that the device ordinal supplied by the user does not
-     * correspond to a valid CUDA device.
+     * correspond to a valid CUDA device or that the action requested is
+     * invalid for the specified device.
      */
     CUDA_ERROR_INVALID_DEVICE                 = 101,
 
@@ -1624,6 +1694,12 @@ public static final int
      * This indicates that the PTX JIT compilation was disabled.
      */
     CUDA_ERROR_JIT_COMPILATION_DISABLED       = 223,
+
+    /**
+     * This indicates that the ::CUexecAffinityType passed to the API call is not
+     * supported by the active device.
+     */ 
+    CUDA_ERROR_UNSUPPORTED_EXEC_AFFINITY      = 224,
 
     /**
      * This indicates that the device kernel source is invalid.
@@ -1867,6 +1943,32 @@ public static final int
      * environment variable.
      */
     CUDA_ERROR_COMPAT_NOT_SUPPORTED_ON_DEVICE = 804,
+
+    /**
+     * This error indicates that the MPS client failed to connect to the MPS control daemon or the MPS server.
+     */
+    CUDA_ERROR_MPS_CONNECTION_FAILED          = 805,
+
+    /**
+     * This error indicates that the remote procedural call between the MPS server and the MPS client failed.
+     */
+    CUDA_ERROR_MPS_RPC_FAILURE                = 806,
+
+    /**
+     * This error indicates that the MPS server is not ready to accept new MPS client requests.
+     * This error can be returned when the MPS server is in the process of recovering from a fatal failure.
+     */
+    CUDA_ERROR_MPS_SERVER_NOT_READY           = 807,
+
+    /**
+     * This error indicates that the hardware resources required to create MPS client have been exhausted.
+     */
+    CUDA_ERROR_MPS_MAX_CLIENTS_REACHED        = 808,
+
+    /**
+     * This error indicates the the hardware resources required to support device connections have been exhausted.
+     */
+    CUDA_ERROR_MPS_MAX_CONNECTIONS_REACHED    = 809,
 
     /**
      * This error indicates that the operation is not permitted when
@@ -2423,15 +2525,70 @@ public static final int
     /** The update failed because the function of a kernel node changed in an unsupported way */
     CU_GRAPH_EXEC_UPDATE_ERROR_UNSUPPORTED_FUNCTION_CHANGE = 0x7;
 
+/**
+ * CUDA memory pool attributes
+ */
 /** enum CUmemPool_attribute */
 public static final int
+    /**
+     * (value type = int)
+     * Allow cuMemAllocAsync to use memory asynchronously freed
+     * in another streams as long as a stream ordering dependency
+     * of the allocating stream on the free action exists.
+     * Cuda events and null stream interactions can create the required
+     * stream ordered dependencies. (default enabled)
+     */
     CU_MEMPOOL_ATTR_REUSE_FOLLOW_EVENT_DEPENDENCIES = 1,
+
+    /**
+     * (value type = int)
+     * Allow reuse of already completed frees when there is no dependency
+     * between the free and allocation. (default enabled)
+     */
     CU_MEMPOOL_ATTR_REUSE_ALLOW_OPPORTUNISTIC = 2,
+
+    /**
+     * (value type = int)
+     * Allow cuMemAllocAsync to insert new stream dependencies
+     * in order to establish the stream ordering required to reuse
+     * a piece of memory released by cuFreeAsync (default enabled).
+     */
     CU_MEMPOOL_ATTR_REUSE_ALLOW_INTERNAL_DEPENDENCIES = 3,
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of reserved memory in bytes to hold onto before trying
+     * to release memory back to the OS. When more than the release
+     * threshold bytes of memory are held by the memory pool, the
+     * allocator will try to release memory back to the OS on the
+     * next call to stream, event or context synchronize. (default 0)
+     */
     CU_MEMPOOL_ATTR_RELEASE_THRESHOLD = 4,
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of backing memory currently allocated for the mempool.
+     */
     CU_MEMPOOL_ATTR_RESERVED_MEM_CURRENT = 5,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of backing memory allocated for the mempool since the
+     * last time it was reset. High watermark can only be reset to zero.
+     */
     CU_MEMPOOL_ATTR_RESERVED_MEM_HIGH = 6,
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of memory from the pool that is currently in use by the application.
+     */
     CU_MEMPOOL_ATTR_USED_MEM_CURRENT = 7,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of the amount of memory from the pool that was in use by the application since
+     * the last time it was reset. High watermark can only be reset to zero.
+     */
     CU_MEMPOOL_ATTR_USED_MEM_HIGH = 8;
 // Targeting ../cudart/CUmemPoolProps_v1.java
 
@@ -2439,6 +2596,38 @@ public static final int
 // Targeting ../cudart/CUmemPoolPtrExportData_v1.java
 
 
+// Targeting ../cudart/CUDA_MEM_ALLOC_NODE_PARAMS.java
+
+
+
+/** enum CUgraphMem_attribute */
+public static final int
+    /**
+     * (value type = cuuint64_t)
+     * Amount of memory, in bytes, currently associated with graphs
+     */
+    CU_GRAPH_MEM_ATTR_USED_MEM_CURRENT = 0,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of memory, in bytes, associated with graphs since the
+     * last time it was reset.  High watermark can only be reset to zero.
+     */
+    CU_GRAPH_MEM_ATTR_USED_MEM_HIGH = 1,
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of memory, in bytes, currently allocated for use by
+     * the CUDA graphs asynchronous allocator.
+     */
+    CU_GRAPH_MEM_ATTR_RESERVED_MEM_CURRENT = 2,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of memory, in bytes, currently allocated for use by
+     * the CUDA graphs asynchronous allocator.
+     */
+    CU_GRAPH_MEM_ATTR_RESERVED_MEM_HIGH = 3;
 
 /**
  * If set, each kernel launched as part of ::cuLaunchCooperativeKernelMultiDevice only
@@ -2638,7 +2827,9 @@ public static final int
     CU_GRAPH_DEBUG_DOT_FLAGS_EXT_SEMAS_SIGNAL_NODE_PARAMS   = 1<<7,  /** Adds CUDA_EXT_SEM_SIGNAL_NODE_PARAMS values to output */
     CU_GRAPH_DEBUG_DOT_FLAGS_EXT_SEMAS_WAIT_NODE_PARAMS     = 1<<8,  /** Adds CUDA_EXT_SEM_WAIT_NODE_PARAMS values to output */
     CU_GRAPH_DEBUG_DOT_FLAGS_KERNEL_NODE_ATTRIBUTES         = 1<<9,  /** Adds CUkernelNodeAttrValue values to output */
-    CU_GRAPH_DEBUG_DOT_FLAGS_HANDLES                        = 1<<10;  /** Adds node handles and every kernel function handle to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_HANDLES                        = 1<<10, /** Adds node handles and every kernel function handle to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_MEM_ALLOC_NODE_PARAMS          = 1<<11, /** Adds memory alloc node parameters to output */
+    CU_GRAPH_DEBUG_DOT_FLAGS_MEM_FREE_NODE_PARAMS           = 1<<12;  /** Adds memory free node parameters to output */
 
 /**
  * Flags for user objects for graphs
@@ -2655,6 +2846,14 @@ public static final int
 public static final int
     /** Transfer references from the caller rather than creating new references. */
     CU_GRAPH_USER_OBJECT_MOVE = 1;
+
+/**
+ * Flags for instantiating a graph
+ */
+/** enum CUgraphInstantiate_flags */
+public static final int
+    /** Automatically free memory allocated in a graph before relaunching. */
+    CUDA_GRAPH_INSTANTIATE_FLAG_AUTO_FREE_ON_LAUNCH  = 1;
 
 /** \} */ /* END CUDA_TYPES */
 
@@ -2842,7 +3041,8 @@ public static native @Cast("CUresult") int cuDriverGetVersion(int[] driverVersio
  * ::cuDeviceGetName,
  * ::cuDeviceGetUuid,
  * ::cuDeviceGetLuid,
- * ::cuDeviceTotalMem
+ * ::cuDeviceTotalMem,
+ * ::cuDeviceGetExecAffinitySupport
  */
 public static native @Cast("CUresult") int cuDeviceGet(@Cast("CUdevice*") IntPointer device, int ordinal);
 public static native @Cast("CUresult") int cuDeviceGet(@Cast("CUdevice*") IntBuffer device, int ordinal);
@@ -2872,6 +3072,7 @@ public static native @Cast("CUresult") int cuDeviceGet(@Cast("CUdevice*") int[] 
  * ::cuDeviceGetLuid,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem,
+ * ::cuDeviceGetExecAffinitySupport,
  * ::cudaGetDeviceCount
  */
 public static native @Cast("CUresult") int cuDeviceGetCount(IntPointer count);
@@ -2905,6 +3106,7 @@ public static native @Cast("CUresult") int cuDeviceGetCount(int[] count);
  * ::cuDeviceGetCount,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem,
+ * ::cuDeviceGetExecAffinitySupport,
  * ::cudaGetDeviceProperties
  */
 public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") BytePointer name, int len, @Cast("CUdevice") int dev);
@@ -2914,8 +3116,42 @@ public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") byte[]
 /**
  * \brief Return an UUID for the device
  *
+ * Note there is a later version of this API, ::cuDeviceGetUuid_v2. It will
+ * supplant this version in 12.0, which is retained for minor version compatibility.
+ *
  * Returns 16-octets identifing the device \p dev in the structure
  * pointed by the \p uuid.
+ *
+ * @param uuid - Returned UUID
+ * @param dev  - Device to get identifier string for
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ * \notefnerr
+ *
+ * @see
+ * ::cuDeviceGetUuid_v2
+ * ::cuDeviceGetAttribute,
+ * ::cuDeviceGetCount,
+ * ::cuDeviceGetName,
+ * ::cuDeviceGetLuid,
+ * ::cuDeviceGet,
+ * ::cuDeviceTotalMem,
+ * ::cuDeviceGetExecAffinitySupport,
+ * ::cudaGetDeviceProperties
+ */
+public static native @Cast("CUresult") int cuDeviceGetUuid(CUuuid uuid, @Cast("CUdevice") int dev);
+
+/**
+ * \brief Return an UUID for the device (11.4+)
+ *
+ * Returns 16-octets identifing the device \p dev in the structure
+ * pointed by the \p uuid. If the device is in MIG mode, returns its
+ * MIG UUID which uniquely identifies the subscribed MIG compute instance.
  *
  * @param uuid - Returned UUID
  * @param dev  - Device to get identifier string for
@@ -2937,7 +3173,7 @@ public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") byte[]
  * ::cuDeviceTotalMem,
  * ::cudaGetDeviceProperties
  */
-public static native @Cast("CUresult") int cuDeviceGetUuid(CUuuid uuid, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") int cuDeviceGetUuid_v2(CUuuid uuid, @Cast("CUdevice") int dev);
 
 /**
  * \brief Return an LUID and device node mask for the device
@@ -2963,6 +3199,7 @@ public static native @Cast("CUresult") int cuDeviceGetUuid(CUuuid uuid, @Cast("C
  * ::cuDeviceGetName,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem,
+ * ::cuDeviceGetExecAffinitySupport,
  * ::cudaGetDeviceProperties
  */
 
@@ -2991,6 +3228,7 @@ public static native @Cast("CUresult") int cuDeviceGetUuid(CUuuid uuid, @Cast("C
  * ::cuDeviceGetName,
  * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
+ * ::cuDeviceGetExecAffinitySupport,
  * ::cudaMemGetInfo
  */
 public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") SizeTPointer bytes, @Cast("CUdevice") int dev);
@@ -3236,6 +3474,7 @@ public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@C
  * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem,
+ * ::cuDeviceGetExecAffinitySupport,
  * ::cudaDeviceGetAttribute,
  * ::cudaGetDeviceProperties
  */
@@ -3701,6 +3940,38 @@ public static native @Cast("CUresult") int cuDevicePrimaryCtxReset(@Cast("CUdevi
 
 /** \} */ /* END CUDA_PRIMARY_CTX */
 
+/**
+ * \brief Returns information about the execution affinity support of the device.
+ *
+ * Returns in \p *pi whether execution affinity type \p type is supported by device \p dev.
+ * The supported types are:
+ * - ::CU_EXEC_AFFINITY_TYPE_SM_COUNT: 1 if context with limited SMs is supported by the device,
+ *   or 0 if not;
+ *
+ * @param pi   - 1 if the execution affinity type \p type is supported by the device, or 0 if not
+ * @param type - Execution affinity type to query
+ * @param dev  - Device handle
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ * \notefnerr
+ *
+ * @see
+ * ::cuDeviceGetAttribute,
+ * ::cuDeviceGetCount,
+ * ::cuDeviceGetName,
+ * ::cuDeviceGetUuid,
+ * ::cuDeviceGet,
+ * ::cuDeviceTotalMem
+ */
+public static native @Cast("CUresult") int cuDeviceGetExecAffinitySupport(IntPointer pi, @Cast("CUexecAffinityType") int type, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") int cuDeviceGetExecAffinitySupport(IntBuffer pi, @Cast("CUexecAffinityType") int type, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") int cuDeviceGetExecAffinitySupport(int[] pi, @Cast("CUexecAffinityType") int type, @Cast("CUdevice") int dev);
 
 /**
  * \defgroup CUDA_CTX Context Management
@@ -3810,6 +4081,113 @@ public static native @Cast("CUresult") int cuDevicePrimaryCtxReset(@Cast("CUdevi
  * ::cuCtxSynchronize
  */
 public static native @Cast("CUresult") int cuCtxCreate(@ByPtrPtr CUctx_st pctx, @Cast("unsigned int") int flags, @Cast("CUdevice") int dev);
+
+/**
+ * \brief Create a CUDA context with execution affinity
+ *
+ * Creates a new CUDA context with execution affinity and associates it with
+ * the calling thread. The \p paramsArray and \p flags parameter are described below.
+ * The context is created with a usage count of 1 and the caller of ::cuCtxCreate() must
+ * call ::cuCtxDestroy() or when done using the context. If a context is already
+ * current to the thread, it is supplanted by the newly created context and may
+ * be restored by a subsequent call to ::cuCtxPopCurrent().
+ *
+ * The type and the amount of execution resource the context can use is limited by \p paramsArray
+ * and \p numParams. The \p paramsArray is an array of \p CUexecAffinityParam and the \p numParams
+ * describes the size of the array. If two \p CUexecAffinityParam in the array have the same type,
+ * the latter execution affinity parameter overrides the former execution affinity parameter.
+ * The supported execution affinity types are:
+ * - ::CU_EXEC_AFFINITY_TYPE_SM_COUNT limits the portion of SMs that the context can use. The portion
+ *   of SMs is specified as the number of SMs via \p CUexecAffinitySmCount. This limit will be internally
+ *   rounded up to the next hardware-supported amount. Hence, it is imperative to query the actual execution
+ *   affinity of the context via \p cuCtxGetExecAffinity after context creation. Currently, this attribute
+ *   is only supported under Volta+ MPS.
+ *
+ * The three LSBs of the \p flags parameter can be used to control how the OS
+ * thread, which owns the CUDA context at the time of an API call, interacts
+ * with the OS scheduler when waiting for results from the GPU. Only one of
+ * the scheduling flags can be set when creating a context.
+ *
+ * - ::CU_CTX_SCHED_SPIN: Instruct CUDA to actively spin when waiting for
+ * results from the GPU. This can decrease latency when waiting for the GPU,
+ * but may lower the performance of CPU threads if they are performing work in
+ * parallel with the CUDA thread.
+ *
+ * - ::CU_CTX_SCHED_YIELD: Instruct CUDA to yield its thread when waiting for
+ * results from the GPU. This can increase latency when waiting for the GPU,
+ * but can increase the performance of CPU threads performing work in parallel
+ * with the GPU.
+ *
+ * - ::CU_CTX_SCHED_BLOCKING_SYNC: Instruct CUDA to block the CPU thread on a
+ * synchronization primitive when waiting for the GPU to finish work.
+ *
+ * - ::CU_CTX_BLOCKING_SYNC: Instruct CUDA to block the CPU thread on a
+ * synchronization primitive when waiting for the GPU to finish work. <br>
+ * <b>Deprecated:</b> This flag was deprecated as of CUDA 4.0 and was
+ * replaced with ::CU_CTX_SCHED_BLOCKING_SYNC.
+ *
+ * - ::CU_CTX_SCHED_AUTO: The default value if the \p flags parameter is zero,
+ * uses a heuristic based on the number of active CUDA contexts in the
+ * process \e C and the number of logical processors in the system \e P. If
+ * \e C > \e P, then CUDA will yield to other OS threads when waiting for
+ * the GPU (::CU_CTX_SCHED_YIELD), otherwise CUDA will not yield while
+ * waiting for results and actively spin on the processor (::CU_CTX_SCHED_SPIN).
+ * Additionally, on Tegra devices, ::CU_CTX_SCHED_AUTO uses a heuristic based on
+ * the power profile of the platform and may choose ::CU_CTX_SCHED_BLOCKING_SYNC
+ * for low-powered devices.
+ *
+ * - ::CU_CTX_MAP_HOST: Instruct CUDA to support mapped pinned allocations.
+ * This flag must be set in order to allocate pinned host memory that is
+ * accessible to the GPU.
+ *
+ * - ::CU_CTX_LMEM_RESIZE_TO_MAX: Instruct CUDA to not reduce local memory
+ * after resizing local memory for a kernel. This can prevent thrashing by
+ * local memory allocations when launching many kernels with high local
+ * memory usage at the cost of potentially increased memory usage. <br>
+ * <b>Deprecated:</b> This flag is deprecated and the behavior enabled
+ * by this flag is now the default and cannot be disabled.
+ * Instead, the per-thread stack size can be controlled with ::cuCtxSetLimit().
+ *
+ * Context creation will fail with ::CUDA_ERROR_UNKNOWN if the compute mode of
+ * the device is ::CU_COMPUTEMODE_PROHIBITED. The function ::cuDeviceGetAttribute()
+ * can be used with ::CU_DEVICE_ATTRIBUTE_COMPUTE_MODE to determine the
+ * compute mode of the device. The <i>nvidia-smi</i> tool can be used to set
+ * the compute mode for * devices.
+ * Documentation for <i>nvidia-smi</i> can be obtained by passing a
+ * -h option to it.
+ *
+ * @param pctx        - Returned context handle of the new context
+ * @param paramsArray - Execution affinity parameters
+ * @param numParams   - Number of execution affinity parameters
+ * @param flags       - Context creation flags
+ * @param dev         - Device to create context on
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_UNSUPPORTED_EXEC_AFFINITY,
+ * ::CUDA_ERROR_UNKNOWN
+ * \notefnerr
+ *
+ * @see ::cuCtxDestroy,
+ * ::cuCtxGetApiVersion,
+ * ::cuCtxGetCacheConfig,
+ * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
+ * ::cuCtxGetLimit,
+ * ::cuCtxPopCurrent,
+ * ::cuCtxPushCurrent,
+ * ::cuCtxSetCacheConfig,
+ * ::cuCtxSetLimit,
+ * ::cuCtxSynchronize,
+ * ::CUexecAffinityParam
+ */
+public static native @Cast("CUresult") int cuCtxCreate_v3(@ByPtrPtr CUctx_st pctx, @Cast("CUexecAffinityParam*") CUexecAffinityParam_v1 paramsArray, int numParams, @Cast("unsigned int") int flags, @Cast("CUdevice") int dev);
 
 /**
  * \brief Destroy a CUDA context
@@ -4494,6 +4872,31 @@ public static native @Cast("CUresult") int cuCtxGetStreamPriorityRange(int[] lea
  * ::CUaccessPolicyWindow
  */
 public static native @Cast("CUresult") int cuCtxResetPersistingL2Cache();
+
+/**
+ * \brief Returns the execution affinity setting for the current context.
+ *
+ * Returns in \p *pExecAffinity the current value of \p type. The supported
+ * ::CUexecAffinityType values are:
+ * - ::CU_EXEC_AFFINITY_TYPE_SM_COUNT: number of SMs the context is limited to use.
+ *
+ * @param type          - Execution affinity type to query
+ * @param pExecAffinity - Returned execution affinity
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_UNSUPPORTED_EXEC_AFFINITY
+ * \notefnerr
+ *
+ * @see
+ * ::CUexecAffinityParam
+ */
+public static native @Cast("CUresult") int cuCtxGetExecAffinity(@Cast("CUexecAffinityParam*") CUexecAffinityParam_v1 pExecAffinity, @Cast("CUexecAffinityType") int type);
+
 
 /** \} */ /* END CUDA_CTX */
 
@@ -9305,6 +9708,9 @@ public static native @Cast("CUresult") int cuMemGetAllocationPropertiesFromHandl
  * The allocation must not be accessed after stream execution reaches the free.
  * After this API returns, accessing the memory from any subsequent work launched on the GPU
  * or querying its pointer attributes results in undefined behavior.
+ *
+ * \note During stream capture, this function results in the creation of a free node and
+ *       must therefore be passed the address of a graph allocation.
  * 
  * @param dptr - memory to free
  * @param hStream - The stream establishing the stream ordering contract. 
@@ -9329,6 +9735,9 @@ public static native @Cast("CUresult") int cuMemFreeAsync(@Cast("CUdeviceptr") l
  * \note Basic stream ordering allows future work submitted into the same stream to use the allocation.
  *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
  *       operation completes before work submitted in a separate stream runs. 
+ * \note During stream capture, this function results in the creation of an allocation node.  In this case,
+ *       the allocation is owned by the graph instead of the memory pool. The memory pool's properties
+ *       are used to set the node's creation parameters.
  *
  * @param dptr [out]    - Returned device pointer
  * @param bytesize [in] - Number of bytes to allocate
@@ -9557,6 +9966,10 @@ public static native @Cast("CUresult") int cuMemPoolDestroy(CUmemPoolHandle_st p
  *    -  Basic stream ordering allows future work submitted into the same stream to use the allocation.
  *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
  *       operation completes before work submitted in a separate stream runs. 
+ *
+ * \note During stream capture, this function results in the creation of an allocation node.  In this case,
+ *       the allocation is owned by the graph instead of the memory pool. The memory pool's properties
+ *       are used to set the node's creation parameters.
  *
  * @param dptr [out]    - Returned device pointer
  * @param bytesize [in] - Number of bytes to allocate
@@ -13886,6 +14299,8 @@ public static native @Cast("CUresult") int cuGraphHostNodeSetParams(CUgraphNode_
  * at the root of the graph. \p dependencies may not have any duplicate entries.
  * A handle to the new node will be returned in \p phGraphNode.
  *
+ * If \p hGraph contains allocation or free nodes, this call will return an error.
+ *
  * The node executes an embedded child graph. The child graph is cloned in this call.
  *
  * @param phGraphNode     - Returns newly created node
@@ -13921,6 +14336,9 @@ public static native @Cast("CUresult") int cuGraphAddChildGraphNode(@ByPtrPtr CU
  * Gets a handle to the embedded graph in a child graph node. This call
  * does not clone the graph. Changes to the graph will be reflected in
  * the node, and the node retains ownership of the graph.
+ *
+ * Allocation and free nodes cannot be added to the returned graph.
+ * Attempting to do so will return an error.
  *
  * @param hNode   - Node to get the embedded graph for
  * @param phGraph - Location to store a handle to the graph
@@ -14369,6 +14787,255 @@ public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeGetP
 public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeSetParams(CUgraphNode_st hNode, @Cast("const CUDA_EXT_SEM_WAIT_NODE_PARAMS*") CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1 nodeParams);
 
 /**
+ * \brief Creates an allocation node and adds it to a graph
+ *
+ * Creates a new allocation node and adds it to \p hGraph with \p numDependencies
+ * dependencies specified via \p dependencies and arguments specified in \p nodeParams.
+ * It is possible for \p numDependencies to be 0, in which case the node will be placed
+ * at the root of the graph. \p dependencies may not have any duplicate entries. A handle
+ * to the new node will be returned in \p phGraphNode.
+ *
+ * @param phGraphNode     - Returns newly created node
+ * @param hGraph          - Graph to which to add the node
+ * @param dependencies    - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param nodeParams      - Parameters for the node
+ *
+ * When ::cuGraphAddMemAllocNode creates an allocation node, it returns the address of the allocation in
+ * @param nodeParams.dptr.  The allocation's address remains fixed across instantiations and launches.
+ *
+ * If the allocation is freed in the same graph, by creating a free node using ::cuGraphAddMemFreeNode,
+ * the allocation can be accessed by nodes ordered after the allocation node but before the free node.
+ * These allocations cannot be freed outside the owning graph, and they can only be freed once in the
+ * owning graph.
+ *
+ * If the allocation is not freed in the same graph, then it can be accessed not only by nodes in the
+ * graph which are ordered after the allocation node, but also by stream operations ordered after the
+ * graph's execution but before the allocation is freed.
+ *
+ * Allocations which are not freed in the same graph can be freed by:
+ * - passing the allocation to ::cuMemFreeAsync or ::cuMemFree;
+ * - launching a graph with a free node for that allocation; or
+ * - specifying ::CUDA_GRAPH_INSTANTIATE_FLAG_AUTO_FREE_ON_LAUNCH during instantiation, which makes
+ * each launch behave as though it called ::cuMemFreeAsync for every unfreed allocation.
+ * 
+ * It is not possible to free an allocation in both the owning graph and another graph.  If the allocation
+ * is freed in the same graph, a free node cannot be added to another graph.  If the allocation is freed
+ * in another graph, a free node can no longer be added to the owning graph.
+ *
+ * The following restrictions apply to graphs which contain allocation and/or memory free nodes:
+ * - Nodes and edges of the graph cannot be deleted.
+ * - The graph cannot be used in a child node.
+ * - Only one instantiation of the graph may exist at any point in time.
+ * - The graph cannot be cloned.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddMemFreeNode,
+ * ::cuGraphMemAllocNodeGetParams,
+ * ::cuDeviceGraphMemTrim,
+ * ::cuDeviceGetGraphMemAttribute,
+ * ::cuDeviceSetGraphMemAttribute,
+ * ::cuMemAllocAsync,
+ * ::cuMemFreeAsync,
+ * ::cuGraphCreate,
+ * ::cuGraphDestroyNode,
+ * ::cuGraphAddChildGraphNode,
+ * ::cuGraphAddEmptyNode,
+ * ::cuGraphAddEventRecordNode,
+ * ::cuGraphAddEventWaitNode,
+ * ::cuGraphAddExternalSemaphoresSignalNode,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuGraphAddKernelNode,
+ * ::cuGraphAddMemcpyNode,
+ * ::cuGraphAddMemsetNode
+ */
+public static native @Cast("CUresult") int cuGraphAddMemAllocNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, CUDA_MEM_ALLOC_NODE_PARAMS nodeParams);
+
+/**
+ * \brief Returns a memory alloc node's parameters
+ *
+ * Returns the parameters of a memory alloc node \p hNode in \p params_out.
+ * The \p poolProps and \p accessDescs returned in \p params_out, are owned by the
+ * node.  This memory remains valid until the node is destroyed.  The returned
+ * parameters must not be modified.
+ *
+ * @param hNode      - Node to get the parameters for
+ * @param params_out - Pointer to return the parameters
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddMemAllocNode,
+ * ::cuGraphMemFreeNodeGetParams
+ */
+public static native @Cast("CUresult") int cuGraphMemAllocNodeGetParams(CUgraphNode_st hNode, CUDA_MEM_ALLOC_NODE_PARAMS params_out);
+
+/**
+ * \brief Creates a memory free node and adds it to a graph
+ *
+ * Creates a new memory free node and adds it to \p hGraph with \p numDependencies
+ * dependencies specified via \p dependencies and arguments specified in \p nodeParams.
+ * It is possible for \p numDependencies to be 0, in which case the node will be placed
+ * at the root of the graph. \p dependencies may not have any duplicate entries. A handle
+ * to the new node will be returned in \p phGraphNode.
+ *
+ * @param phGraphNode     - Returns newly created node
+ * @param hGraph          - Graph to which to add the node
+ * @param dependencies    - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param dptr            - Address of memory to free
+ *
+ * ::cuGraphAddMemFreeNode will return ::CUDA_ERROR_INVALID_VALUE if the user attempts to free:
+ * - an allocation twice in the same graph.
+ * - an address that was not returned by an allocation node.
+ * - an invalid address.
+ *
+ * The following restrictions apply to graphs which contain allocation and/or memory free nodes:
+ * - Nodes and edges of the graph cannot be deleted.
+ * - The graph cannot be used in a child node.
+ * - Only one instantiation of the graph may exist at any point in time.
+ * - The graph cannot be cloned.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddMemAllocNode,
+ * ::cuGraphMemFreeNodeGetParams,
+ * ::cuDeviceGraphMemTrim,
+ * ::cuDeviceGetGraphMemAttribute,
+ * ::cuDeviceSetGraphMemAttribute,
+ * ::cuMemAllocAsync,
+ * ::cuMemFreeAsync,
+ * ::cuGraphCreate,
+ * ::cuGraphDestroyNode,
+ * ::cuGraphAddChildGraphNode,
+ * ::cuGraphAddEmptyNode,
+ * ::cuGraphAddEventRecordNode,
+ * ::cuGraphAddEventWaitNode,
+ * ::cuGraphAddExternalSemaphoresSignalNode,
+ * ::cuGraphAddExternalSemaphoresWaitNode,
+ * ::cuGraphAddKernelNode,
+ * ::cuGraphAddMemcpyNode,
+ * ::cuGraphAddMemsetNode
+ */
+public static native @Cast("CUresult") int cuGraphAddMemFreeNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("CUdeviceptr") long dptr);
+
+/**
+ * \brief Returns a memory free node's parameters
+ *
+ * Returns the address of a memory free node \p hNode in \p dptr_out.
+ *
+ * @param hNode    - Node to get the parameters for
+ * @param dptr_out - Pointer to return the device address
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddMemFreeNode,
+ * ::cuGraphMemAllocNodeGetParams
+ */
+public static native @Cast("CUresult") int cuGraphMemFreeNodeGetParams(CUgraphNode_st hNode, @Cast("CUdeviceptr*") LongPointer dptr_out);
+public static native @Cast("CUresult") int cuGraphMemFreeNodeGetParams(CUgraphNode_st hNode, @Cast("CUdeviceptr*") LongBuffer dptr_out);
+public static native @Cast("CUresult") int cuGraphMemFreeNodeGetParams(CUgraphNode_st hNode, @Cast("CUdeviceptr*") long[] dptr_out);
+
+/**
+ * \brief Free unused memory that was cached on the specified device for use with graphs back to the OS.
+ *
+ * Blocks which are not in use by a graph that is either currently executing or scheduled to execute are
+ * freed back to the operating system.
+ *
+ * @param device - The device for which cached memory should be freed.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ *
+ * @see
+ * ::cuGraphAddMemAllocNode,
+ * ::cuGraphAddMemFreeNode
+ */
+public static native @Cast("CUresult") int cuDeviceGraphMemTrim(@Cast("CUdevice") int device);
+
+/**
+ * \brief Query asynchronous allocation attributes related to graphs
+ *
+ * Valid attributes are:
+ *
+ * - ::CU_GRAPH_MEM_ATTR_USED_MEM_CURRENT: Amount of memory, in bytes, currently associated with graphs
+ * - ::CU_GRAPH_MEM_ATTR_USED_MEM_HIGH: High watermark of memory, in bytes, associated with graphs since the
+ *   last time it was reset.  High watermark can only be reset to zero.
+ * - ::CU_GRAPH_MEM_ATTR_RESERVED_MEM_CURRENT: Amount of memory, in bytes, currently allocated for use by
+ *   the CUDA graphs asynchronous allocator.
+ * - ::CU_GRAPH_MEM_ATTR_RESERVED_MEM_HIGH: High watermark of memory, in bytes, currently allocated for use by
+ *   the CUDA graphs asynchronous allocator.
+ *
+ * @param device - Specifies the scope of the query
+ * @param attr - attribute to get
+ * @param value - retrieved value
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ *
+ * @see
+ * ::cuGraphAddMemAllocNode,
+ * ::cuGraphAddMemFreeNode
+ */
+public static native @Cast("CUresult") int cuDeviceGetGraphMemAttribute(@Cast("CUdevice") int device, @Cast("CUgraphMem_attribute") int attr, Pointer value);
+
+/**
+ * \brief Set asynchronous allocation attributes related to graphs
+ *
+ * Valid attributes are:
+ *
+ * - ::CU_GRAPH_MEM_ATTR_USED_MEM_HIGH: High watermark of memory, in bytes, associated with graphs since the
+ *   last time it was reset.  High watermark can only be reset to zero.
+ * - ::CU_GRAPH_MEM_ATTR_RESERVED_MEM_HIGH: High watermark of memory, in bytes, currently allocated for use by
+ *   the CUDA graphs asynchronous allocator.
+ *
+ * @param device - Specifies the scope of the query
+ * @param attr - attribute to get
+ * @param value - pointer to value to set
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ *
+ * @see
+ * ::cuGraphAddMemAllocNode,
+ * ::cuGraphAddMemFreeNode
+ */
+public static native @Cast("CUresult") int cuDeviceSetGraphMemAttribute(@Cast("CUdevice") int device, @Cast("CUgraphMem_attribute") int attr, Pointer value);
+
+/**
  * \brief Clones a graph
  *
  * This function creates a copy of \p originalGraph and returns it in \p phGraphClone.
@@ -14650,6 +15317,9 @@ public static native @Cast("CUresult") int cuGraphAddDependencies(CUgraph_st hGr
  * If \p numDependencies is 0, elements in \p from and \p to will be ignored.
  * Specifying a non-existing dependency will return an error.
  *
+ * Dependencies cannot be removed from graphs which contain allocation or free nodes.
+ * Any attempt to do so will return an error.
+ *
  * @param hGraph - Graph from which to remove dependencies
  * @param from - Array of nodes that provide the dependencies
  * @param to - Array of dependent nodes
@@ -14675,6 +15345,9 @@ public static native @Cast("CUresult") int cuGraphRemoveDependencies(CUgraph_st 
  * Removes \p hNode from its graph. This operation also severs any dependencies of other nodes
  * on \p hNode and vice versa.
  *
+ * Nodes which belong to a graph which contains allocation or free nodes cannot be destroyed.
+ * Any attempt to do so will return an error.
+ *
  * @param hNode  - Node to remove
  *
  * @return
@@ -14699,7 +15372,7 @@ public static native @Cast("CUresult") int cuGraphDestroyNode(CUgraphNode_st hNo
  * Instantiates \p hGraph as an executable graph. The graph is validated for any
  * structural constraints or intra-node constraints which were not previously
  * validated. If instantiation is successful, a handle to the instantiated graph
- * is returned in \p graphExec.
+ * is returned in \p phGraphExec.
  *
  * If there are any errors, diagnostic information may be returned in \p errorNode and
  * \p logBuffer. This is the primary way to inspect instantiation errors. The output
@@ -14723,6 +15396,7 @@ public static native @Cast("CUresult") int cuGraphDestroyNode(CUgraphNode_st hNo
  * \notefnerr
  *
  * @see
+ * ::cuGraphInstantiateWithFlags,
  * ::cuGraphCreate,
  * ::cuGraphUpload,
  * ::cuGraphLaunch,
@@ -14731,6 +15405,48 @@ public static native @Cast("CUresult") int cuGraphDestroyNode(CUgraphNode_st hNo
 public static native @Cast("CUresult") int cuGraphInstantiate(@ByPtrPtr CUgraphExec_st phGraphExec, CUgraph_st hGraph, @ByPtrPtr CUgraphNode_st phErrorNode, @Cast("char*") BytePointer logBuffer, @Cast("size_t") long bufferSize);
 public static native @Cast("CUresult") int cuGraphInstantiate(@ByPtrPtr CUgraphExec_st phGraphExec, CUgraph_st hGraph, @ByPtrPtr CUgraphNode_st phErrorNode, @Cast("char*") ByteBuffer logBuffer, @Cast("size_t") long bufferSize);
 public static native @Cast("CUresult") int cuGraphInstantiate(@ByPtrPtr CUgraphExec_st phGraphExec, CUgraph_st hGraph, @ByPtrPtr CUgraphNode_st phErrorNode, @Cast("char*") byte[] logBuffer, @Cast("size_t") long bufferSize);
+
+/**
+ * \brief Creates an executable graph from a graph
+ *
+ * Instantiates \p hGraph as an executable graph. The graph is validated for any
+ * structural constraints or intra-node constraints which were not previously
+ * validated. If instantiation is successful, a handle to the instantiated graph
+ * is returned in \p phGraphExec.
+ *
+ * The \p flags parameter controls the behavior of instantiation and subsequent
+ * graph launches.  Valid flags are:
+ *
+ * - ::CUDA_GRAPH_INSTANTIATE_FLAG_AUTO_FREE_ON_LAUNCH, which configures a
+ * graph containing memory allocation nodes to automatically free any
+ * unfreed memory allocations before the graph is relaunched.
+ *
+ * If \p hGraph contains any allocation or free nodes, there can be at most one
+ * executable graph in existence for that graph at a time.
+ *
+ * An attempt to instantiate a second executable graph before destroying the first
+ * with ::cuGraphExecDestroy will result in an error.
+ *
+ * @param phGraphExec - Returns instantiated graph
+ * @param hGraph      - Graph to instantiate
+ * @param flags       - Flags to control instantiation.  See ::CUgraphInstantiate_flags.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphInstantiate,
+ * ::cuGraphCreate,
+ * ::cuGraphUpload,
+ * ::cuGraphLaunch,
+ * ::cuGraphExecDestroy
+ */
+public static native @Cast("CUresult") int cuGraphInstantiateWithFlags(@ByPtrPtr CUgraphExec_st phGraphExec, CUgraph_st hGraph, @Cast("unsigned long long") long flags);
 
 /**
  * \brief Sets the parameters for a kernel node in the given graphExec
@@ -15117,6 +15833,7 @@ public static native @Cast("CUresult") int cuGraphExecExternalSemaphoresWaitNode
  * Uploads \p hGraphExec to the device in \p hStream without executing it. Uploads of
  * the same \p hGraphExec will be serialized. Each upload is ordered behind both any
  * previous work in \p hStream and any previous launches of \p hGraphExec.
+ * Uses memory cached by \p stream to back the allocations owned by \p hGraphExec.
  *
  * @param hGraphExec - Executable graph to upload
  * @param hStream    - Stream in which to upload the graph
@@ -15143,6 +15860,10 @@ public static native @Cast("CUresult") int cuGraphUpload(CUgraphExec_st hGraphEx
  * at a time. Each launch is ordered behind both any previous work in \p hStream
  * and any previous launches of \p hGraphExec. To execute a graph concurrently, it must be
  * instantiated multiple times into multiple executable graphs.
+ *
+ * If any allocations created by \p hGraphExec remain unfreed (from a previous launch) and
+ * \p hGraphExec was not instantiated with ::CUDA_GRAPH_INSTANTIATE_FLAG_AUTO_FREE_ON_LAUNCH,
+ * the launch will fail with ::CUDA_ERROR_INVALID_VALUE.
  *
  * @param hGraphExec - Executable graph to launch
  * @param hStream    - Stream in which to launch the graph
@@ -17945,7 +18666,9 @@ public static native @Cast("CUresult") int cuFlushGPUDirectRDMAWrites(@Cast("CUf
 // #define __UNDEF_CUDA_INCLUDE_COMPILER_INTERNAL_HEADERS_DEVICE_TYPES_H__
 // #endif
 
+// #ifndef __DOXYGEN_ONLY__
 // #include "crt/host_defines.h"
+// #endif
 
 /*******************************************************************************
 *                                                                              *
@@ -18027,7 +18750,9 @@ public static final int
 // #define __UNDEF_CUDA_INCLUDE_COMPILER_INTERNAL_HEADERS_DRIVER_TYPES_H__
 // #endif
 
+// #ifndef __DOXYGEN_ONLY__
 // #include "crt/host_defines.h"
+// #endif
 // #include "vector_types.h"
 
 /**
@@ -18558,7 +19283,8 @@ public static final int
   
     /**
      * This indicates that the device ordinal supplied by the user does not
-     * correspond to a valid CUDA device.
+     * correspond to a valid CUDA device or that the action requested is
+     * invalid for the specified device.
      */
     cudaErrorInvalidDevice                = 101,
 
@@ -18708,6 +19434,11 @@ public static final int
      * a suitable binary for the current device.
      */
     cudaErrorJitCompilationDisabled       = 223,
+
+    /**
+     * This indicates that the provided execution affinity is not supported by the device.
+     */
+    cudaErrorUnsupportedExecAffinity      = 224,
 
     /**
      * This indicates that the device kernel source is invalid.
@@ -18958,6 +19689,32 @@ public static final int
     cudaErrorCompatNotSupportedOnDevice   = 804,
 
     /**
+     * This error indicates that the MPS client failed to connect to the MPS control daemon or the MPS server.
+     */
+    cudaErrorMpsConnectionFailed          = 805,
+
+    /**
+     * This error indicates that the remote procedural call between the MPS server and the MPS client failed.
+     */
+    cudaErrorMpsRpcFailure                = 806,
+
+    /**
+     * This error indicates that the MPS server is not ready to accept new MPS client requests.
+     * This error can be returned when the MPS server is in the process of recovering from a fatal failure.
+     */
+    cudaErrorMpsServerNotReady            = 807,
+
+    /**
+     * This error indicates that the hardware resources required to create MPS client have been exhausted.
+     */
+    cudaErrorMpsMaxClientsReached         = 808,
+
+    /**
+     * This error indicates the the hardware resources required to device connections have been exhausted.
+     */
+    cudaErrorMpsMaxConnectionsReached     = 809,
+
+    /**
      * The operation is not permitted when the stream is capturing.
      */
     cudaErrorStreamCaptureUnsupported     = 900,
@@ -19041,15 +19798,14 @@ public static final int
 /** enum cudaChannelFormatKind */
 public static final int
     /** Signed channel format */
-    cudaChannelFormatKindSigned           = 0,
+    cudaChannelFormatKindSigned                 = 0,
     /** Unsigned channel format */
-    cudaChannelFormatKindUnsigned         = 1,
+    cudaChannelFormatKindUnsigned               = 1,
     /** Float channel format */
-    cudaChannelFormatKindFloat            = 2,
+    cudaChannelFormatKindFloat                  = 2,
     /** No channel format */
-    cudaChannelFormatKindNone             = 3,
-    /** Unsigned 8-bit integers, planar 4:2:0 YUV format */
-    cudaChannelFormatKindNV12             = 4;
+    cudaChannelFormatKindNone                   = 3,
+    cudaChannelFormatKindNV12                   = 4;
 // Targeting ../cudart/cudaChannelFormatDesc.java
 
 
@@ -19737,7 +20493,7 @@ public static final int
     cudaDevAttrReserved94                     = 94,
     /** Device supports launching cooperative kernels via ::cudaLaunchCooperativeKernel*/
     cudaDevAttrCooperativeLaunch              = 95,
-    /** Device can participate in cooperative kernels launched via ::cudaLaunchCooperativeKernelMultiDevice */
+    /** Deprecated, cudaLaunchCooperativeKernelMultiDevice is deprecated. */
     cudaDevAttrCooperativeMultiDeviceLaunch   = 96,
     /** The maximum optin shared memory per block. This value may vary by chip. See ::cudaFuncSetAttribute */
     cudaDevAttrMaxSharedMemoryPerBlockOptin   = 97,
@@ -19772,7 +20528,8 @@ public static final int
     /** GPUDirect RDMA writes to the device do not need to be flushed for consumers within the scope indicated by the returned attribute. See ::cudaGPUDirectRDMAWritesOrdering for the numerical values returned here. */
     cudaDevAttrGPUDirectRDMAWritesOrdering    = 118,
     /** Handle types supported with mempool based IPC */
-    cudaDevAttrMemoryPoolSupportedHandleTypes = 119;
+    cudaDevAttrMemoryPoolSupportedHandleTypes = 119,
+    cudaDevAttrMax = 120;
 
 /**
  * CUDA memory pool attributes
@@ -19899,6 +20656,41 @@ public static final int
 // Targeting ../cudart/cudaMemPoolPtrExportData.java
 
 
+// Targeting ../cudart/cudaMemAllocNodeParams.java
+
+
+
+/**
+ * Graph memory attributes
+ */
+/** enum cudaGraphMemAttributeType */
+public static final int
+    /**
+     * (value type = cuuint64_t)
+     * Amount of memory, in bytes, currently associated with graphs.
+     */
+    cudaGraphMemAttrUsedMemCurrent = 0x1,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of memory, in bytes, associated with graphs since the
+     * last time it was reset.  High watermark can only be reset to zero.
+     */
+    cudaGraphMemAttrUsedMemHigh = 0x2,
+
+    /**
+     * (value type = cuuint64_t)
+     * Amount of memory, in bytes, currently allocated for use by
+     * the CUDA graphs asynchronous allocator.
+     */
+    cudaGraphMemAttrReservedMemCurrent = 0x3,
+
+    /**
+     * (value type = cuuint64_t)
+     * High watermark of memory, in bytes, currently allocated for use by
+     * the CUDA graphs asynchronous allocator.
+     */
+    cudaGraphMemAttrReservedMemHigh = 0x4;
 
 /**
  * CUDA device P2P attributes
@@ -20262,7 +21054,15 @@ public static final int
     cudaGraphNodeTypeWaitEvent   = 0x06,
     /** External event record node */
     cudaGraphNodeTypeEventRecord = 0x07,
-    cudaGraphNodeTypeCount = 0x07 + 1;
+    /** External semaphore signal node */
+    cudaGraphNodeTypeExtSemaphoreSignal = 0x08,
+    /** External semaphore wait node */
+    cudaGraphNodeTypeExtSemaphoreWait = 0x09,
+    /** Memory allocation node */
+    cudaGraphNodeTypeMemAlloc    = 0x0a,
+    /** Memory free node */
+    cudaGraphNodeTypeMemFree     = 0x0b,
+    cudaGraphNodeTypeCount = 0x0b + 1;
 
 /**
  * CUDA executable (launchable) graph
@@ -20318,6 +21118,14 @@ public static final int
     cudaGraphDebugDotFlagsExtSemasWaitNodeParams   = 1<<8,  /** Adds cudaExternalSemaphoreWaitNodeParams to output */
     cudaGraphDebugDotFlagsKernelNodeAttributes     = 1<<9,  /** Adds cudaKernelNodeAttrID values to output */
     cudaGraphDebugDotFlagsHandles                  = 1<<10;  /** Adds node handles and every kernel function handle to output */
+
+/**
+ * Flags for instantiating a graph
+ */
+/** enum cudaGraphInstantiateFlags */
+public static final int
+    /** Automatically free memory allocated in a graph before relaunching. */
+    cudaGraphInstantiateFlagAutoFreeOnLaunch = 1;
 
 /** \} */
 /** \} */ /* END CUDART_TYPES */
@@ -20646,7 +21454,9 @@ public static final int
 *                                                                              *
 *******************************************************************************/
 
+// #ifndef __DOXYGEN_ONLY__
 // #include "crt/host_defines.h"
+// #endif
 
 /*******************************************************************************
 *                                                                              *
@@ -21054,7 +21864,7 @@ public static final int
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  11030;
+public static final int CUDART_VERSION =  11040;
 
 // #if defined(__CUDA_API_VER_MAJOR__) && defined(__CUDA_API_VER_MINOR__)
 public static native @MemberGetter int __CUDART_API_VERSION();
@@ -21062,7 +21872,9 @@ public static final int __CUDART_API_VERSION = __CUDART_API_VERSION();
 // #else
 // #endif
 
+// #ifndef __DOXYGEN_ONLY__
 // #include "crt/host_defines.h"
+// #endif
 // #include "builtin_types.h"
 
 // #include "cuda_device_runtime_api.h"
@@ -23002,19 +23814,14 @@ public static native @Cast("cudaError_t") int cudaSetValidDevices(int[] device_a
 
 /**
  * \brief Sets flags to be used for device executions
- *
- * Records \p flags as the flags to use when initializing the current 
- * device.  If no device has been made current to the calling thread,
- * then \p flags will be applied to the initialization of any device
- * initialized by the calling host thread, unless that device has had
- * its initialization flags set explicitly by this or any host thread.
  * 
- * If the current device has been set and that device has already been 
- * initialized then this call will fail with the error 
- * ::cudaErrorSetOnActiveProcess.  In this case it is necessary 
- * to reset \p device using ::cudaDeviceReset() before the device's
- * initialization flags may be set.
- *
+ * Records \p flags as the flags for the current device. If the current device
+ * has been set and that device has already been initialized, the previous flags
+ * are overwritten. If the current device has not been initialized, it is
+ * initialized with the provided flags. If no device has been made current to
+ * the calling thread, a default device is selected and initialized with the
+ * provided flags.
+ * 
  * The two LSBs of the \p flags parameter can be used to control how the CPU
  * thread interacts with the OS scheduler when waiting for results from the
  * device.
@@ -23050,14 +23857,15 @@ public static native @Cast("cudaError_t") int cudaSetValidDevices(int[] device_a
  * - ::cudaDeviceLmemResizeToMax: Instruct CUDA to not reduce local memory
  * after resizing local memory for a kernel. This can prevent thrashing by
  * local memory allocations when launching many kernels with high local
- * memory usage at the cost of potentially increased memory usage.
+ * memory usage at the cost of potentially increased memory usage. <br>
+ * \ref deprecated "Deprecated:" This flag is deprecated and the behavior enabled          
+ * by this flag is now the default and cannot be disabled.
  *
  * @param flags - Parameters for device operation
  *
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
- * ::cudaErrorSetOnActiveProcess
  * \notefnerr
  * \note_init_rt
  * \note_callback
@@ -23072,14 +23880,12 @@ public static native @Cast("cudaError_t") int cudaSetDeviceFlags( @Cast("unsigne
 /**
  * \brief Gets the flags for the current device
  *
- * Returns in \p flags the flags for the current device.  If there is a
- * current device for the calling thread, and the device has been initialized
- * or flags have been set on that device specifically, the flags for the
- * device are returned.  If there is no current device, but flags have been
- * set for the thread with ::cudaSetDeviceFlags, the thread flags are returned.
- * Finally, if there is no current device and no thread flags, the flags for
- * the first device are returned, which may be the default flags.  Compare
- * to the behavior of ::cudaSetDeviceFlags.
+ * 
+ * Returns in \p flags the flags for the current device. If there is a current
+ * device for the calling thread, the flags for the device are returned. If
+ * there is no current device, the flags for the first device are returned,
+ * which may be the default flags.  Compare to the behavior of
+ * ::cudaSetDeviceFlags.
  *
  * Typically, the flags returned should match the behavior that will be seen
  * if the calling thread uses a device after this call, without any change to
@@ -28557,6 +29363,9 @@ public static native @Cast("cudaError_t") @Deprecated int cudaMemcpyFromArrayAsy
  * \note Basic stream ordering allows future work submitted into the same stream to use the allocation.
  *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
  *       operation completes before work submitted in a separate stream runs.
+ * \note During stream capture, this function results in the creation of an allocation node.  In this case,
+ *       the allocation is owned by the graph instead of the memory pool. The memory pool's properties
+ *       are used to set the node's creation parameters.
  *
  * @param devPtr [out]  - Returned device pointer
  * @param size [in]     - Number of bytes to allocate
@@ -28586,6 +29395,9 @@ public static native @Cast("cudaError_t") int cudaMallocAsync(@Cast("void**") @B
  * The allocation must not be accessed after stream execution reaches the free.
  * After this API returns, accessing the memory from any subsequent work launched on the GPU
  * or querying its pointer attributes results in undefined behavior.
+ *
+ * \note During stream capture, this function results in the creation of a free node and
+ *       must therefore be passed the address of a graph allocation.
  *
  * @param dptr - memory to free
  * @param hStream - The stream establishing the stream ordering promise
@@ -28789,6 +29601,10 @@ public static native @Cast("cudaError_t") int cudaMemPoolDestroy(CUmemPoolHandle
  *    -  Basic stream ordering allows future work submitted into the same stream to use the allocation.
  *       Stream query, stream synchronize, and CUDA events can be used to guarantee that the allocation
  *       operation completes before work submitted in a separate stream runs.
+ *
+ * \note During stream capture, this function results in the creation of an allocation node.  In this case,
+ *       the allocation is owned by the graph instead of the memory pool. The memory pool's properties
+ *       are used to set the node's creation parameters.
  *
  * @param ptr [out]     - Returned device pointer
  * @param bytesize [in] - Number of bytes to allocate
@@ -31221,6 +32037,8 @@ public static native @Cast("cudaError_t") int cudaGraphHostNodeSetParams(CUgraph
  * at the root of the graph. \p pDependencies may not have any duplicate entries.
  * A handle to the new node will be returned in \p pGraphNode.
  *
+ * If \p hGraph contains allocation or free nodes, this call will return an error.
+ *
  * The node executes an embedded child graph. The child graph is cloned in this call.
  *
  * @param pGraphNode     - Returns newly created node
@@ -31256,6 +32074,9 @@ public static native @Cast("cudaError_t") int cudaGraphAddChildGraphNode(@ByPtrP
  * Gets a handle to the embedded graph in a child graph node. This call
  * does not clone the graph. Changes to the graph will be reflected in
  * the node, and the node retains ownership of the graph.
+ *
+ * Allocation and free nodes cannot be added to the returned graph.
+ * Attempting to do so will return an error.
  *
  * @param node   - Node to get the embedded graph for
  * @param pGraph - Location to store a handle to the graph
@@ -31332,13 +32153,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * @param event           - Event for the node
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_NOT_SUPPORTED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventWaitNode,
@@ -31365,12 +32185,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * @param event_out - Pointer to return the event
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventRecordNode,
@@ -31392,12 +32212,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * @param event - Event to use
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_OUT_OF_MEMORY
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventRecordNode,
@@ -31433,13 +32253,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * @param event           - Event for the node
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_NOT_SUPPORTED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventRecordNode,
@@ -31466,12 +32285,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * @param event_out - Pointer to return the event
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventWaitNode,
@@ -31493,12 +32312,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * @param event - Event to use
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_OUT_OF_MEMORY
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventWaitNode,
@@ -31531,13 +32350,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddEmptyNode(@ByPtrPtr CU
  * @param nodeParams      - Parameters for the node
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_NOT_SUPPORTED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphExternalSemaphoresSignalNodeGetParams,
@@ -31575,12 +32393,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddExternalSemaphoresSign
  * @param params_out - Pointer to return the parameters
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaLaunchKernel,
@@ -31603,12 +32421,12 @@ public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresSignalN
  * @param nodeParams - Parameters to copy
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_OUT_OF_MEMORY
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddExternalSemaphoresSignalNode,
@@ -31641,13 +32459,12 @@ public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresSignalN
  * @param nodeParams      - Parameters for the node
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_NOT_SUPPORTED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphExternalSemaphoresWaitNodeGetParams,
@@ -31685,12 +32502,12 @@ public static native @Cast("cudaError_t") int cudaGraphAddExternalSemaphoresWait
  * @param params_out - Pointer to return the parameters
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaLaunchKernel,
@@ -31713,12 +32530,12 @@ public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresWaitNod
  * @param nodeParams - Parameters to copy
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_OUT_OF_MEMORY
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddExternalSemaphoresWaitNode,
@@ -31729,6 +32546,293 @@ public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresWaitNod
  */
 // #if __CUDART_API_VERSION >= 11020
 public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresWaitNodeSetParams(CUgraphNode_st hNode, @Const cudaExternalSemaphoreWaitNodeParams nodeParams);
+// #endif
+
+/**
+ * \brief Creates an allocation node and adds it to a graph
+ *
+ * Creates a new allocation node and adds it to \p graph with \p numDependencies
+ * dependencies specified via \p pDependencies and arguments specified in \p nodeParams.
+ * It is possible for \p numDependencies to be 0, in which case the node will be placed
+ * at the root of the graph. \p pDependencies may not have any duplicate entries. A handle
+ * to the new node will be returned in \p pGraphNode.
+ *
+ * @param pGraphNode      - Returns newly created node
+ * @param graph           - Graph to which to add the node
+ * @param pDependencies   - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param nodeParams      - Parameters for the node
+ *
+ * When ::cudaGraphAddMemAllocNode creates an allocation node, it returns the address of the allocation in
+ * @param nodeParams.dptr.  The allocation's address remains fixed across instantiations and launches.
+ *
+ * If the allocation is freed in the same graph, by creating a free node using ::cudaGraphAddMemFreeNode,
+ * the allocation can be accessed by nodes ordered after the allocation node but before the free node.
+ * These allocations cannot be freed outside the owning graph, and they can only be freed once in the
+ * owning graph.
+ *
+ * If the allocation is not freed in the same graph, then it can be accessed not only by nodes in the
+ * graph which are ordered after the allocation node, but also by stream operations ordered after the
+ * graph's execution but before the allocation is freed.
+ *
+ * Allocations which are not freed in the same graph can be freed by:
+ * - passing the allocation to ::cudaMemFreeAsync or ::cudaMemFree;
+ * - launching a graph with a free node for that allocation; or
+ * - specifying ::cudaGraphInstantiateFlagAutoFreeOnLaunch during instantiation, which makes
+ *   each launch behave as though it called ::cudaMemFreeAsync for every unfreed allocation.
+ *
+ * It is not possible to free an allocation in both the owning graph and another graph.  If the allocation
+ * is freed in the same graph, a free node cannot be added to another graph.  If the allocation is freed
+ * in another graph, a free node can no longer be added to the owning graph.
+ *
+ * The following restrictions apply to graphs which contain allocation and/or memory free nodes:
+ * - Nodes and edges of the graph cannot be deleted.
+ * - The graph cannot be used in a child node.
+ * - Only one instantiation of the graph may exist at any point in time.
+ * - The graph cannot be cloned.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorOutOfMemory
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphAddMemFreeNode,
+ * ::cudaGraphMemAllocNodeGetParams,
+ * ::cudaDeviceGraphMemTrim,
+ * ::cudaDeviceGetGraphMemAttribute,
+ * ::cudaDeviceSetGraphMemAttribute,
+ * ::cudaMallocAsync,
+ * ::cudaFreeAsync,
+ * ::cudaGraphCreate,
+ * ::cudaGraphDestroyNode,
+ * ::cudaGraphAddChildGraphNode,
+ * ::cudaGraphAddEmptyNode,
+ * ::cudaGraphAddEventRecordNode,
+ * ::cudaGraphAddEventWaitNode,
+ * ::cudaGraphAddExternalSemaphoresSignalNode,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaGraphAddKernelNode,
+ * ::cudaGraphAddMemcpyNode,
+ * ::cudaGraphAddMemsetNode
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaGraphAddMemAllocNode(@ByPtrPtr CUgraphNode_st pGraphNode, CUgraph_st graph, @Cast("const cudaGraphNode_t*") @ByPtrPtr CUgraphNode_st pDependencies, @Cast("size_t") long numDependencies, cudaMemAllocNodeParams nodeParams);
+// #endif
+
+/**
+ * \brief Returns a memory alloc node's parameters
+ *
+ * Returns the parameters of a memory alloc node \p hNode in \p params_out.
+ * The \p poolProps and \p accessDescs returned in \p params_out, are owned by the
+ * node.  This memory remains valid until the node is destroyed.  The returned
+ * parameters must not be modified.
+ *
+ * @param node       - Node to get the parameters for
+ * @param params_out - Pointer to return the parameters
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * \note_graph_thread_safety
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cudaGraphAddMemAllocNode,
+ * ::cudaGraphMemFreeNodeGetParams
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaGraphMemAllocNodeGetParams(CUgraphNode_st node, cudaMemAllocNodeParams params_out);
+// #endif
+
+/**
+ * \brief Creates a memory free node and adds it to a graph
+ *
+ * Creates a new memory free node and adds it to \p graph with \p numDependencies
+ * dependencies specified via \p pDependencies and address specified in \p dptr.
+ * It is possible for \p numDependencies to be 0, in which case the node will be placed
+ * at the root of the graph. \p pDependencies may not have any duplicate entries. A handle
+ * to the new node will be returned in \p pGraphNode.
+ *
+ * @param pGraphNode      - Returns newly created node
+ * @param graph           - Graph to which to add the node
+ * @param pDependencies   - Dependencies of the node
+ * @param numDependencies - Number of dependencies
+ * @param dptr            - Address of memory to free
+ *
+ * ::cudaGraphAddMemFreeNode will return ::cudaErrorInvalidValue if the user attempts to free:
+ * - an allocation twice in the same graph.
+ * - an address that was not returned by an allocation node.
+ * - an invalid address.
+ *
+ * The following restrictions apply to graphs which contain allocation and/or memory free nodes:
+ * - Nodes and edges of the graph cannot be deleted.
+ * - The graph cannot be used in a child node.
+ * - Only one instantiation of the graph may exist at any point in time.
+ * - The graph cannot be cloned.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorOutOfMemory
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cudaGraphAddMemAllocNode,
+ * ::cudaGraphMemFreeNodeGetParams,
+ * ::cudaDeviceGraphMemTrim,
+ * ::cudaDeviceGetGraphMemAttribute,
+ * ::cudaDeviceSetGraphMemAttribute,
+ * ::cudaMallocAsync,
+ * ::cudaFreeAsync,
+ * ::cudaGraphCreate,
+ * ::cudaGraphDestroyNode,
+ * ::cudaGraphAddChildGraphNode,
+ * ::cudaGraphAddEmptyNode,
+ * ::cudaGraphAddEventRecordNode,
+ * ::cudaGraphAddEventWaitNode,
+ * ::cudaGraphAddExternalSemaphoresSignalNode,
+ * ::cudaGraphAddExternalSemaphoresWaitNode,
+ * ::cudaGraphAddKernelNode,
+ * ::cudaGraphAddMemcpyNode,
+ * ::cudaGraphAddMemsetNode
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaGraphAddMemFreeNode(@ByPtrPtr CUgraphNode_st pGraphNode, CUgraph_st graph, @Cast("const cudaGraphNode_t*") @ByPtrPtr CUgraphNode_st pDependencies, @Cast("size_t") long numDependencies, Pointer dptr);
+// #endif
+
+/**
+ * \brief Returns a memory free node's parameters
+ *
+ * Returns the address of a memory free node \p hNode in \p dptr_out.
+ *
+ * @param node     - Node to get the parameters for
+ * @param dptr_out - Pointer to return the device address
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * \note_graph_thread_safety
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cudaGraphAddMemFreeNode,
+ * ::cudaGraphMemFreeNodeGetParams
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaGraphMemFreeNodeGetParams(CUgraphNode_st node, Pointer dptr_out);
+// #endif
+
+/**
+ * \brief Free unused memory that was cached on the specified device for use with graphs back to the OS.
+ *
+ * Blocks which are not in use by a graph that is either currently executing or scheduled to execute are
+ * freed back to the operating system.
+ *
+ * @param device - The device for which cached memory should be freed.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * \note_graph_thread_safety
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cudaGraphAddMemAllocNode,
+ * ::cudaGraphAddMemFreeNode,
+ * ::cudaDeviceGetGraphMemAttribute,
+ * ::cudaDeviceSetGraphMemAttribute,
+ * ::cudaMallocAsync,
+ * ::cudaFreeAsync,
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaDeviceGraphMemTrim(int device);
+// #endif
+
+/**
+ * \brief Query asynchronous allocation attributes related to graphs
+ *
+ * Valid attributes are:
+ *
+ * - ::cudaGraphMemAttrUsedMemCurrent: Amount of memory, in bytes, currently associated with graphs
+ * - ::cudaGraphMemAttrUsedMemHigh: High watermark of memory, in bytes, associated with graphs since the
+ *   last time it was reset.  High watermark can only be reset to zero.
+ * - ::cudaGraphMemAttrReservedMemCurrent: Amount of memory, in bytes, currently allocated for use by
+ *   the CUDA graphs asynchronous allocator.
+ * - ::cudaGraphMemAttrReservedMemHigh: High watermark of memory, in bytes, currently allocated for use by
+ *   the CUDA graphs asynchronous allocator.
+ *
+ * @param device - Specifies the scope of the query
+ * @param attr - attribute to get
+ * @param value - retrieved value
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidDevice
+ * \note_graph_thread_safety
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cudaGraphAddMemAllocNode,
+ * ::cudaGraphAddMemFreeNode,
+ * ::cudaDeviceGraphMemTrim,
+ * ::cudaDeviceSetGraphMemAttribute,
+ * ::cudaMallocAsync,
+ * ::cudaFreeAsync,
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaDeviceGetGraphMemAttribute(int device, @Cast("cudaGraphMemAttributeType") int attr, Pointer value);
+// #endif
+
+/**
+ * \brief Set asynchronous allocation attributes related to graphs
+ *
+ * Valid attributes are:
+ *
+ * - ::cudaGraphMemAttrUsedMemHigh: High watermark of memory, in bytes, associated with graphs since the
+ *   last time it was reset.  High watermark can only be reset to zero.
+ * - ::cudaGraphMemAttrReservedMemHigh: High watermark of memory, in bytes, currently allocated for use by
+ *   the CUDA graphs asynchronous allocator.
+ *
+ * @param device - Specifies the scope of the query
+ * @param attr - attribute to get
+ * @param value - pointer to value to set
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidDevice
+ * \note_graph_thread_safety
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cudaGraphAddMemAllocNode,
+ * ::cudaGraphAddMemFreeNode,
+ * ::cudaDeviceGraphMemTrim,
+ * ::cudaDeviceGetGraphMemAttribute,
+ * ::cudaMallocAsync,
+ * ::cudaFreeAsync,
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaDeviceSetGraphMemAttribute(int device, @Cast("cudaGraphMemAttributeType") int attr, Pointer value);
 // #endif
 
 /**
@@ -32046,6 +33150,9 @@ public static native @Cast("cudaError_t") int cudaGraphRemoveDependencies(CUgrap
  * Removes \p node from its graph. This operation also severs any dependencies of other nodes 
  * on \p node and vice versa.
  *
+ * Dependencies cannot be removed from graphs which contain allocation or free nodes.
+ * Any attempt to do so will return an error.
+ *
  * @param node  - Node to remove
  *
  * @return
@@ -32097,6 +33204,7 @@ public static native @Cast("cudaError_t") int cudaGraphDestroyNode(CUgraphNode_s
  * \note_callback
  *
  * @see
+ * ::cudaGraphInstantiateWithFlags,
  * ::cudaGraphCreate,
  * ::cudaGraphUpload,
  * ::cudaGraphLaunch,
@@ -32105,6 +33213,50 @@ public static native @Cast("cudaError_t") int cudaGraphDestroyNode(CUgraphNode_s
 public static native @Cast("cudaError_t") int cudaGraphInstantiate(@ByPtrPtr CUgraphExec_st pGraphExec, CUgraph_st graph, @ByPtrPtr CUgraphNode_st pErrorNode, @Cast("char*") BytePointer pLogBuffer, @Cast("size_t") long bufferSize);
 public static native @Cast("cudaError_t") int cudaGraphInstantiate(@ByPtrPtr CUgraphExec_st pGraphExec, CUgraph_st graph, @ByPtrPtr CUgraphNode_st pErrorNode, @Cast("char*") ByteBuffer pLogBuffer, @Cast("size_t") long bufferSize);
 public static native @Cast("cudaError_t") int cudaGraphInstantiate(@ByPtrPtr CUgraphExec_st pGraphExec, CUgraph_st graph, @ByPtrPtr CUgraphNode_st pErrorNode, @Cast("char*") byte[] pLogBuffer, @Cast("size_t") long bufferSize);
+
+/**
+ * \brief Creates an executable graph from a graph
+ *
+ * Instantiates \p graph as an executable graph. The graph is validated for any
+ * structural constraints or intra-node constraints which were not previously
+ * validated. If instantiation is successful, a handle to the instantiated graph
+ * is returned in \p pGraphExec.
+ *
+ * The \p flags parameter controls the behavior of instantiation and subsequent
+ * graph launches.  Valid flags are:
+ *
+ * - ::cudaGraphInstantiateFlagAutoFreeOnLaunch, which configures a
+ * graph containing memory allocation nodes to automatically free any
+ * unfreed memory allocations before the graph is relaunched.
+ *
+ * If \p graph contains any allocation or free nodes, there can be at most one
+ * executable graph in existence for that graph at a time.
+ *
+ * An attempt to instantiate a second executable graph before destroying the first
+ * with ::cudaGraphExecDestroy will result in an error.
+ *
+ * @param pGraphExec - Returns instantiated graph
+ * @param graph      - Graph to instantiate
+ * @param flags      - Flags to control instantiation.  See ::CUgraphInstantiate_flags.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ * \note_graph_thread_safety
+ * \notefnerr
+ * \note_init_rt
+ * \note_callback
+ *
+ * @see
+ * ::cudaGraphInstantiate,
+ * ::cudaGraphCreate,
+ * ::cudaGraphUpload,
+ * ::cudaGraphLaunch,
+ * ::cudaGraphExecDestroy
+ */
+// #if __CUDART_API_VERSION >= 11040
+public static native @Cast("cudaError_t") int cudaGraphInstantiateWithFlags(@ByPtrPtr CUgraphExec_st pGraphExec, CUgraph_st graph, @Cast("unsigned long long") long flags);
+// #endif
 
 /**
  * \brief Sets the parameters for a kernel node in the given graphExec
@@ -32534,10 +33686,12 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * @param event      - Updated event to use
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventRecordNode,
@@ -32576,10 +33730,12 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * @param event      - Updated event to use
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddEventWaitNode,
@@ -32622,10 +33778,12 @@ public static native @Cast("cudaError_t") int cudaGraphExecHostNodeSetParams(CUg
  * @param nodeParams - Updated Parameters to set
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddExternalSemaphoresSignalNode,
@@ -32667,10 +33825,12 @@ public static native @Cast("cudaError_t") int cudaGraphExecExternalSemaphoresSig
  * @param nodeParams - Updated Parameters to set
  *
  * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
  * \note_graph_thread_safety
  * \notefnerr
+ * \note_init_rt
+ * \note_callback
  *
  * @see
  * ::cudaGraphAddExternalSemaphoresWaitNode,
@@ -32774,6 +33934,7 @@ public static native @Cast("cudaError_t") int cudaGraphExecUpdate(CUgraphExec_st
  * Uploads \p hGraphExec to the device in \p hStream without executing it. Uploads of
  * the same \p hGraphExec will be serialized. Each upload is ordered behind both any
  * previous work in \p hStream and any previous launches of \p hGraphExec.
+ * Uses memory cached by \p stream to back the allocations owned by \p graphExec.
  *
  * @param hGraphExec - Executable graph to upload
  * @param hStream    - Stream in which to upload the graph
@@ -32800,6 +33961,10 @@ public static native @Cast("cudaError_t") int cudaGraphExecUpdate(CUgraphExec_st
  * at a time. Each launch is ordered behind both any previous work in \p stream
  * and any previous launches of \p graphExec. To execute a graph concurrently, it must be
  * instantiated multiple times into multiple executable graphs.
+ *
+ * If any allocations created by \p graphExec remain unfreed (from a previous launch) and
+ * \p graphExec was not instantiated with ::cudaGraphInstantiateFlagAutoFreeOnLaunch,
+ * the launch will fail with ::cudaErrorInvalidValue.
  *
  * @param graphExec - Executable graph to launch
  * @param stream    - Stream in which to launch the graph
@@ -33882,6 +35047,9 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 // #ifndef __CUDA_FP16_H__
 // #define __CUDA_FP16_H__
 
+// #define ___CUDA_FP16_STRINGIFY_INNERMOST(x) #x
+// #define __CUDA_FP16_STRINGIFY(x) ___CUDA_FP16_STRINGIFY_INNERMOST(x)
+
 // #if defined(__cplusplus)
 // #if defined(__CUDACC__)
 // #else
@@ -34112,6 +35280,8 @@ public static native float __high2float(@Const @ByVal __half2 a);
 
 /* Note the .hpp file is included even for host-side compilation, to capture the "half" & "half2" definitions */
 // #include "cuda_fp16.hpp"
+// #undef ___CUDA_FP16_STRINGIFY_INNERMOST
+// #undef __CUDA_FP16_STRINGIFY
 
 // #endif /* end of include guard: __CUDA_FP16_H__ */
 
@@ -34119,7 +35289,7 @@ public static native float __high2float(@Const @ByVal __half2 a);
 // Parsed from cuda_fp16.hpp
 
 /*
-* Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+* Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
 *
 * NOTICE TO LICENSEE:
 *
@@ -34233,25 +35403,25 @@ public static native float __high2float(@Const @ByVal __half2 a);
 /* Macros for half & half2 binary arithmetic */
 // #define __BINARY_OP_HALF_MACRO(name) /* do */ {
 //    __half val;
-//    asm( "{"#name".f16 %0,%1,%2;\n}"
+//    asm( "{" __CUDA_FP16_STRINGIFY(name) ".f16 %0,%1,%2;\n}"
 //         :"=h"(__HALF_TO_US(val)) : "h"(__HALF_TO_CUS(a)),"h"(__HALF_TO_CUS(b)));
 //    return val;
 // } /* while(0) */
 // #define __BINARY_OP_HALF2_MACRO(name) /* do */ {
 //    __half2 val;
-//    asm( "{"#name".f16x2 %0,%1,%2;\n}"
+//    asm( "{" __CUDA_FP16_STRINGIFY(name) ".f16x2 %0,%1,%2;\n}"
 //         :"=r"(__HALF2_TO_UI(val)) : "r"(__HALF2_TO_CUI(a)),"r"(__HALF2_TO_CUI(b)));
 //    return val;
 // } /* while(0) */
 // #define __TERNARY_OP_HALF_MACRO(name) /* do */ {
 //    __half val;
-//    asm( "{"#name".f16 %0,%1,%2,%3;\n}"
+//    asm( "{" __CUDA_FP16_STRINGIFY(name) ".f16 %0,%1,%2,%3;\n}"
 //         :"=h"(__HALF_TO_US(val)) : "h"(__HALF_TO_CUS(a)),"h"(__HALF_TO_CUS(b)),"h"(__HALF_TO_CUS(c)));
 //    return val;
 // } /* while(0) */
 // #define __TERNARY_OP_HALF2_MACRO(name) /* do */ {
 //    __half2 val;
-//    asm( "{"#name".f16x2 %0,%1,%2,%3;\n}"
+//    asm( "{" __CUDA_FP16_STRINGIFY(name) ".f16x2 %0,%1,%2,%3;\n}"
 //         :"=r"(__HALF2_TO_UI(val)) : "r"(__HALF2_TO_CUI(a)),"r"(__HALF2_TO_CUI(b)),"r"(__HALF2_TO_CUI(c)));
 //    return val;
 // }
@@ -34327,7 +35497,12 @@ public static native float __internal_half2float(@Cast("const unsigned short") s
 
 // #undef __CUDA_HOSTDEVICE_FP16_DECL__
 // #undef __CUDA_FP16_DECL__
- 
+
+// #undef __HALF_TO_US
+// #undef __HALF_TO_CUS
+// #undef __HALF2_TO_UI
+// #undef __HALF2_TO_CUI
+
 /* Define first-class types "half" and "half2", unless user specifies otherwise via "#define CUDA_NO_HALF" */
 /* C cannot ever have these types defined here, because __half and __half2 are C++ classes */
 // #if defined(__cplusplus) && !defined(CUDA_NO_HALF)

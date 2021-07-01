@@ -102,8 +102,8 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 
 public static final int CUBLAS_VER_MAJOR = 11;
 public static final int CUBLAS_VER_MINOR = 5;
-public static final int CUBLAS_VER_PATCH = 1;
-public static final int CUBLAS_VER_BUILD = 109;
+public static final int CUBLAS_VER_PATCH = 2;
+public static final int CUBLAS_VER_BUILD = 43;
 public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
                          CUBLAS_VER_MINOR *  100 + 
                          CUBLAS_VER_PATCH);
@@ -122,6 +122,7 @@ public static final int
     CUBLAS_STATUS_NOT_SUPPORTED   = 15,
     CUBLAS_STATUS_LICENSE_ERROR   = 16;
 
+
 /** enum cublasFillMode_t */
 public static final int
     CUBLAS_FILL_MODE_LOWER = 0, 
@@ -138,6 +139,7 @@ public static final int
     CUBLAS_SIDE_LEFT = 0, 
     CUBLAS_SIDE_RIGHT = 1; 
 
+
 /** enum cublasOperation_t */
 public static final int
     CUBLAS_OP_N = 0,  
@@ -145,6 +147,7 @@ public static final int
     CUBLAS_OP_C = 2,
     CUBLAS_OP_HERMITAN = 2, /* synonym if CUBLAS_OP_C */
     CUBLAS_OP_CONJG = 3;     /* conjugate, placeholder - not supported in the current release */
+
 
 /** enum cublasPointerMode_t */
 public static final int 

@@ -90,8 +90,8 @@ public class Decimal256Result extends Pointer {
   
   ///
   ///
-  public Decimal256Result(@ByVal Decimal256 value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal Decimal256 value);
+  public Decimal256Result(@ByRef(true) Decimal256 value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) Decimal256 value);
 
   /** Copy constructor.
    * 

@@ -34,7 +34,7 @@ public class nvmlBridgeChipInfo_t extends Pointer {
         return new nvmlBridgeChipInfo_t((Pointer)this).offsetAddress(i);
     }
 
-    /** Type of Bridge Chip  */
+    /** Type of Bridge Chip */
     public native @Cast("nvmlBridgeChipType_t") int type(); public native nvmlBridgeChipInfo_t type(int setter);
     /** Firmware Version. 0=Version is unavailable */
     public native @Cast("unsigned int") int fwVersion(); public native nvmlBridgeChipInfo_t fwVersion(int setter);

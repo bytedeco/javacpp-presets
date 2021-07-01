@@ -633,10 +633,32 @@ public static final int
     dnnl_ABcde16b32a2b = 360,
     dnnl_ABcde16b48a2b = 361,
     dnnl_ABcde16b64a2b = 362,
+    dnnl_ABc32a16b = 363,
+    dnnl_ABcd32a16b = 364,
+    dnnl_ABcde32a16b = 365,
+    dnnl_AB48a16b = 366,
+    dnnl_AB48a32b = 367,
+    dnnl_ABc40a16b = 368,
+    dnnl_ABc40a32b = 369,
+    dnnl_aBC48b16c = 370,
+    dnnl_aBC48b32c = 371,
+    dnnl_ABcd40a16b = 372,
+    dnnl_ABcd40a32b = 373,
+    dnnl_abCd32c = 374,
+    dnnl_abdCe32c = 375,
+    dnnl_abdCE32c2e = 376,
+    dnnl_BA16a16b2a = 377,
+    dnnl_BA16a32b2a = 378,
+    dnnl_BA16a48b2a = 379,
+    dnnl_BA16a64b2a = 380,
+    dnnl_BA16a16b4a = 381,
+    dnnl_BA16a32b4a = 382,
+    dnnl_BA16a48b4a = 383,
+    dnnl_BA16a64b4a = 384,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 363,
+    dnnl_format_tag_last = 385,
 
     // Aliases
 
@@ -768,10 +790,13 @@ public static final int
     /** 5D LSTM projection tensor */
     dnnl_ldOi32o = dnnl_abDc32d,
     dnnl_ldOI32o4i = dnnl_abDC32d4c,
+    dnnl_ldIo32i = dnnl_abCd32c,
     /** 6D RNN weights tensor */
     dnnl_ldgOi32o = dnnl_abdEc32e,
     dnnl_ldgOI32o2i = dnnl_abdEC32e2c,
     dnnl_ldgOI32o4i = dnnl_abdEC32e4c,
+    dnnl_ldgIo32i = dnnl_abdCe32c,
+    dnnl_ldgIO32i2o = dnnl_abdCE32c2e,
 
     // Opaque data types, are not to be used explicitly
 
@@ -815,6 +840,9 @@ public static final int
     dnnl_NCw16n16c = dnnl_ABc16a16b,
     dnnl_NCdhw16n16c = dnnl_ABcde16a16b,
     dnnl_NChw16n16c = dnnl_ABcd16a16b,
+    dnnl_NCw32n16c = dnnl_ABc32a16b,
+    dnnl_NChw32n16c = dnnl_ABcd32a16b,
+    dnnl_NCdhw32n16c = dnnl_ABcde32a16b,
     dnnl_NCw32n32c = dnnl_ABc32a32b,
     dnnl_NChw32n32c = dnnl_ABcd32a32b,
     dnnl_NCdhw32n32c = dnnl_ABcde32a32b,
@@ -1442,7 +1470,28 @@ public static final int
      *     fused with ReLU using post ops API with zero negative slope.
      *   - on training primitive requires workspace (required to be able to
      *     perform backward pass) */
-    dnnl_fuse_norm_relu = 0x4;
+    
+///
+    dnnl_fuse_norm_relu = 0x4,
+
+    /** Use scale parameter
+     * 
+     *  If specified:
+     *   - on forward propagation use scale for the batch normalization results
+     *   - on backward propagation (for prop_kind == #dnnl_backward) compute
+     *     diff wrt scale (hence one extra output used) */
+    
+///
+    dnnl_use_scale = 0x8,
+
+    /** Use shift parameter
+     * 
+     *  If specified:
+     *   - on forward propagation use shift (aka bias) for the batch
+     *     normalization results
+     *   - on backward propagation (for prop_kind == #dnnl_backward) compute
+     *     diff wrt shift (hence one extra output used) */
+    dnnl_use_shift = 0x10;
 
 /** \} dnnl_api_primitives_common
  *  \} dnnl_api_primitives
@@ -1546,7 +1595,8 @@ public static final int
     dnnl_memory_extra_flag_rnn_u8s8_compensation = 0x4,
     dnnl_memory_extra_flag_gpu_rnn_u8s8_compensation
      = dnnl_memory_extra_flag_rnn_u8s8_compensation,
-    dnnl_memory_extra_flag_compensation_conv_asymmetric_src = 0x8;
+    dnnl_memory_extra_flag_compensation_conv_asymmetric_src = 0x8,
+    dnnl_memory_extra_flag_rnn_s8s8_compensation = 0x16;
 // Targeting ../dnnl_memory_extra_desc_t.java
 
 
@@ -1836,6 +1886,11 @@ public static final int DNNL_ARG_MEAN = 49;
 /** Variance values tensor argument. */
 public static final int DNNL_ARG_VARIANCE = 50;
 
+/** A special mnemonic for scale argument of normalization primitives. */
+public static final int DNNL_ARG_SCALE = 51;
+/** A special mnemonic for shift argument of normalization primitives. */
+public static final int DNNL_ARG_SHIFT = 52;
+
 /** Workspace tensor argument. Workspace is used to pass information
  *  from forward propagation to backward propagation computations. */
 public static final int DNNL_ARG_WORKSPACE = 64;
@@ -1917,6 +1972,11 @@ public static final int DNNL_ARG_DIFF_WEIGHTS_PROJECTION = DNNL_ARG_DIFF_WEIGHTS
 /** Gradient (diff) of the bias tensor argument. */
 public static final int DNNL_ARG_DIFF_BIAS = 169;
 
+/** A special mnemonic for scale argument of normalization primitives. */
+public static final int DNNL_ARG_DIFF_SCALE = 255;
+/** A special mnemonic for shift argument of normalization primitives. */
+public static final int DNNL_ARG_DIFF_SHIFT = 256;
+
 /** Output scaling factors provided at execution time. */
 public static final int DNNL_ARG_ATTR_OUTPUT_SCALES = 513;
 
@@ -1941,6 +2001,9 @@ public static final int DNNL_ARG_ATTR_MULTIPLE_POST_OP_BASE = 16384;
  *  See \ref dev_guide_attributes_post_ops_binary_fusion */
 // #define DNNL_ARG_ATTR_MULTIPLE_POST_OP(idx)
 //     (DNNL_ARG_ATTR_MULTIPLE_POST_OP_BASE * ((idx) + 1))
+
+/** Input scaling factors provided at execution time. */
+public static final int DNNL_ARG_ATTR_INPUT_SCALES = 1048576;
 // Targeting ../dnnl_exec_arg_t.java
 
 
@@ -2227,7 +2290,7 @@ public static final int
 // Parsed from oneapi/dnnl/dnnl_config.h
 
 /*******************************************************************************
-* Copyright 2019-2020 Intel Corporation
+* Copyright 2019-2021 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -2297,14 +2360,17 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // clang-format on
 
 // #if defined(DNNL_CPU_RUNTIME) && defined(DNNL_GPU_RUNTIME)
-// #if (DNNL_CPU_RUNTIME == DNNL_RUNTIME_NONE)
-//         || (DNNL_CPU_RUNTIME == DNNL_RUNTIME_OCL)
+// #if (DNNL_CPU_RUNTIME == DNNL_RUNTIME_OCL)
 // #error "Unexpected DNNL_CPU_RUNTIME"
 // #endif
 // #if (DNNL_GPU_RUNTIME != DNNL_RUNTIME_NONE)
 //         && (DNNL_GPU_RUNTIME != DNNL_RUNTIME_OCL)
 //         && (DNNL_GPU_RUNTIME != DNNL_RUNTIME_SYCL)
 // #error "Unexpected DNNL_GPU_RUNTIME"
+// #endif
+// #if (DNNL_CPU_RUNTIME == DNNL_RUNTIME_NONE
+//         && DNNL_GPU_RUNTIME == DNNL_RUNTIME_NONE)
+// #error "At least one runtime must be specified"
 // #endif
 // #else
 // #error "BOTH DNNL_CPU_RUNTIME and DNNL_GPU_RUNTIME must be defined"
@@ -2318,6 +2384,9 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // #define DNNL_ENABLE_CONCURRENT_EXEC
 // #endif
 // #endif
+
+// When defined, primitive cache stores runtime objects.
+/* #undef DNNL_USE_RT_OBJECTS_IN_PRIMITIVE_CACHE */
 
 // When defined, DPCPP is supported.
 /* #undef DNNL_WITH_SYCL */
@@ -2358,10 +2427,10 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 public static final int DNNL_VERSION_MAJOR = 2;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 2;
+public static final int DNNL_VERSION_MINOR = 3;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 3;
+public static final int DNNL_VERSION_PATCH = 0;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -6833,8 +6902,9 @@ public static native @Cast("dnnl_status_t") int dnnl_set_jit_profiling_jitdumpdi
  *  #dnnl_cpu_isa_t and #dnnl::cpu_isa for the list of the values accepted by
  *  the C and C++ API functions respectively.
  * 
- *  This function has effect only before the first JIT kernel is generated and
- *  will return an error afterwards.
+ *  This function has effect only once, and returns an error on subsequent
+ *  calls. It should also be invoked before any other oneDNN API call, otherwise
+ *  it may return an error.
  * 
  *  This function overrides the DNNL_MAX_CPU_ISA environment variable. The
  *  environment variable can be set to the desired maximal ISA name in upper
@@ -6883,8 +6953,9 @@ public static native @Cast("dnnl_cpu_isa_t") int dnnl_get_effective_cpu_isa();
  *  #dnnl::cpu_isa_hints for the list of the values accepted by the C and C++
  *  API functions respectively.
  * 
- *  This function has effect only before the first JIT kernel is generated and
- *  will return an error afterwards.
+ *  This function has effect only once, and returns an error on subsequent
+ *  calls. It should also be invoked before any other oneDNN API call, otherwise
+ *  it may return an error.
  * 
  *  This function overrides the DNNL_CPU_ISA_HINTS environment variable.
  *  @see \ref dev_guide_cpu_isa_hints for more details
@@ -7444,7 +7515,7 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     /** Max pooling */
     pooling_max(dnnl_pooling_max),
     /** Average pooling exclude padding,
-     *  alias for #dnnl::algorithm::pooling_avg_include_padding */
+     *  alias for #dnnl::algorithm::pooling_avg_exclude_padding */
     pooling_avg(dnnl_pooling_avg),
     /** Average pooling include padding */
     pooling_avg_include_padding(dnnl_pooling_avg_include_padding),
@@ -7554,7 +7625,17 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
      *  the workspace to implement backward propagation. On inference, the
      *  workspace is not required and behavior is the same as when normalization
      *  is fused with ReLU using the post-ops API. */
-    fuse_norm_relu(dnnl_fuse_norm_relu);
+    fuse_norm_relu(dnnl_fuse_norm_relu),
+
+    /** Use scale parameter. If specified, the user is expected to pass scale as
+     *  input on forward propagation. On backward propagation of type
+     *  #dnnl::prop_kind::backward, the library computes its derivative. */
+    use_scale(dnnl_use_scale),
+
+    /** Use shift parameter. If specified, the user is expected to pass shift as
+     *  input on forward propagation. On backward propagation of type
+     *  #dnnl::prop_kind::backward, the library computes its derivative. */
+    use_shift(dnnl_use_shift);
 
     public final int value;
     private normalization_flags(int v) { this.value = v; }

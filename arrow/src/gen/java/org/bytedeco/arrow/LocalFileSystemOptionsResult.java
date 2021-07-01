@@ -90,8 +90,8 @@ public class LocalFileSystemOptionsResult extends Pointer {
   
   ///
   ///
-  public LocalFileSystemOptionsResult(@ByVal LocalFileSystemOptions value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal LocalFileSystemOptions value);
+  public LocalFileSystemOptionsResult(@ByRef(true) LocalFileSystemOptions value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) LocalFileSystemOptions value);
 
   /** Copy constructor.
    * 

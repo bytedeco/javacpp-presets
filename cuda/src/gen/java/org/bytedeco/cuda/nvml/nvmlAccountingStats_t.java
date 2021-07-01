@@ -20,7 +20,7 @@ import static org.bytedeco.cuda.global.nvml.*;
  *
  *  Set of APIs designed to provide per process information about usage of GPU.
  *
- *  \note All accounting statistics and accounting mode live in nvidia driver and reset 
+ *  \note All accounting statistics and accounting mode live in nvidia driver and reset
  *        to default (Disabled) when driver unloads.
  *        It is advised to run with persistence mode enabled.
  *
@@ -54,23 +54,23 @@ public class nvmlAccountingStats_t extends Pointer {
                                                 /** Utilization stats just like returned by \ref nvmlDeviceGetUtilizationRates but for the life time of a
                                                  *  process (not just the last sample period).
                                                  *  Set to NVML_VALUE_NOT_AVAILABLE if nvmlDeviceGetUtilizationRates is not supported */
-    
+
     /** Percent of time over the process's lifetime during which global (device) memory was being read or written. */
     public native @Cast("unsigned int") int memoryUtilization(); public native nvmlAccountingStats_t memoryUtilization(int setter);
                                                 /** Set to NVML_VALUE_NOT_AVAILABLE if nvmlDeviceGetUtilizationRates is not supported */
-    
+
     /** Maximum total memory in bytes that was ever allocated by the process. */
     public native @Cast("unsigned long long") long maxMemoryUsage(); public native nvmlAccountingStats_t maxMemoryUsage(long setter);
                                                 /** Set to NVML_VALUE_NOT_AVAILABLE if nvmlProcessInfo_t->usedGpuMemory is not supported */
-    
 
-    /** Amount of time in ms during which the compute context was active. The time is reported as 0 if 
+
+    /** Amount of time in ms during which the compute context was active. The time is reported as 0 if
      *  the process is not terminated */
     public native @Cast("unsigned long long") long time(); public native nvmlAccountingStats_t time(long setter);
-    
+
     /** CPU Timestamp in usec representing start time for the process */
     public native @Cast("unsigned long long") long startTime(); public native nvmlAccountingStats_t startTime(long setter);
-    
+
     /** Flag to represent if the process is running (1 for running, 0 for terminated) */
     public native @Cast("unsigned int") int isRunning(); public native nvmlAccountingStats_t isRunning(int setter);
 

@@ -13,7 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/** 
+/**
  * Struct to define the NVLINK counter controls
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

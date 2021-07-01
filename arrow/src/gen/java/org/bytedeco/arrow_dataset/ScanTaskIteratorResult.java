@@ -93,8 +93,8 @@ public class ScanTaskIteratorResult extends Pointer {
   
   ///
   ///
-  public ScanTaskIteratorResult(@ByVal ScanTaskIterator value) { super((Pointer)null); allocate(value); }
-  @NoException private native void allocate(@ByVal ScanTaskIterator value);
+  public ScanTaskIteratorResult(@ByRef(true) ScanTaskIterator value) { super((Pointer)null); allocate(value); }
+  @NoException private native void allocate(@ByRef(true) ScanTaskIterator value);
 
   /** Copy constructor.
    * 

@@ -2128,7 +2128,8 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../MemoryManager.java
 
 
-
+/** enum class arrow::Endianness */
+;
 // Targeting ../BooleanType.java
 
 
@@ -2525,10 +2526,15 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  @param metadata any custom key-value metadata, default null
  *  @return schema shared_ptr to Schema */
 @Namespace("arrow") public static native @SharedPtr @ByVal Schema schema(
-    @ByVal FieldVector fields, @ByVal Endianness endianness,
+    @ByVal FieldVector fields, Endianness endianness,
     @SharedPtr @Cast({"const arrow::KeyValueMetadata*", "std::shared_ptr<const arrow::KeyValueMetadata>"}) KeyValueMetadata metadata/*=nullptr*/);
 @Namespace("arrow") public static native @SharedPtr @ByVal Schema schema(
-    @ByVal FieldVector fields, @ByVal Endianness endianness);
+    @ByVal FieldVector fields, Endianness endianness);
+@Namespace("arrow") public static native @SharedPtr @ByVal Schema schema(
+    @ByVal FieldVector fields, @Cast("arrow::Endianness") int endianness,
+    @SharedPtr @Cast({"const arrow::KeyValueMetadata*", "std::shared_ptr<const arrow::KeyValueMetadata>"}) KeyValueMetadata metadata/*=nullptr*/);
+@Namespace("arrow") public static native @SharedPtr @ByVal Schema schema(
+    @ByVal FieldVector fields, @Cast("arrow::Endianness") int endianness);
 
 /** \}
  <p>

@@ -42,12 +42,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             include = {"ffitarget.h", "ffi.h"},
             exclude = "ffitarget.h",
-            link = "ffi@.7",
+            link = "ffi@.8",
             resource = {"include", "lib"}
         ),
         @Platform(
             value = "windows",
-            link = "libffi-7"
+            link = "libffi-8"
         ),
     },
     target = "org.bytedeco.libffi",
@@ -58,14 +58,15 @@ public class ffi implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "libffi"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("FFI_EXTRA_CIF_FIELDS", "FFI_NATIVE_RAW_API",
+        infoMap.put(new Info("FFI_EXTRA_CIF_FIELDS", "FFI_NATIVE_RAW_API", "_CET_NOTRACK",
                              "FFI_LONG_LONG_MAX", "FFI_API", "FFI_EXTERN").cppTypes().annotations())
                .put(new Info("defined (POWERPC64)", "LONG_LONG_MAX", "1").define(true))
                .put(new Info("!FFI_NATIVE_RAW_API", "FFI_TARGET_HAS_COMPLEX_TYPE",
-                             "defined(X86_WIN32)", "defined(X86_WIN64)", "X86_WIN64",
+                             "defined(_WIN32)", "defined(X86_WIN32)", "defined(X86_WIN64)", "X86_WIN64",
                              "defined __x86_64__ && defined __ILP32__",
                              "defined(X86_64) || (defined (__x86_64__) && defined (X86_DARWIN))",
                              "defined(__ARM_PCS_VFP) || defined(_M_ARM)",
+                             "defined(__ARM_PCS_VFP) || defined(_WIN32)",
                              "defined(POWERPC_DARWIN) || defined(POWERPC_AIX)",
                              "defined (POWERPC_AIX)", "defined (POWERPC_DARWIN)").define(false))
                .put(new Info("FFI_TYPE_SMALL_STRUCT_1B", "FFI_TYPE_SMALL_STRUCT_2B",

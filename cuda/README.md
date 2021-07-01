@@ -23,9 +23,9 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 11.3.1  https://developer.nvidia.com/cuda-zone
+ * CUDA 11.4.0  https://developer.nvidia.com/cuda-zone
  * cuDNN 8.2.1  https://developer.nvidia.com/cudnn
- * NCCL 2.9.8  https://developer.nvidia.com/nccl
+ * NCCL 2.9.9  https://developer.nvidia.com/nccl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -64,14 +64,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>11.3-8.2-1.5.6-SNAPSHOT</version>
+            <version>11.4-8.2-1.5.6-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.3-8.2-1.5.6-SNAPSHOT</version>
+            <version>11.4-8.2-1.5.6-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
