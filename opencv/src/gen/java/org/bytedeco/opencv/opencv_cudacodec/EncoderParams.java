@@ -34,7 +34,7 @@ public class EncoderParams extends Pointer {
         return (EncoderParams)super.position(position);
     }
     @Override public EncoderParams getPointer(long i) {
-        return new EncoderParams((Pointer)this).position(position + i);
+        return new EncoderParams((Pointer)this).offsetAddress(i);
     }
 
     /** NVVE_P_INTERVAL, */

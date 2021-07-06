@@ -30,6 +30,17 @@ public class StereoDepth extends Node {
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
 
     /**
+     * Initial config to use for StereoDepth.
+     */
+    @MemberGetter public native @ByRef StereoDepthConfig initialConfig();
+
+    /**
+     * Input StereoDepthConfig message with ability to modify parameters in runtime.
+     * Default queue is non-blocking with size 4.
+     */
+    @MemberGetter public native @ByRef Input inputConfig();
+
+    /**
      * Input for left ImgFrame of left-right pair
      *
      * Default queue is non-blocking with size 8
@@ -97,7 +108,36 @@ public class StereoDepth extends Node {
      * Specify that a passthrough/dummy calibration should be used,
      * when input frames are already rectified (e.g. sourced from recordings on the host)
      */
-    public native void setEmptyCalibration();
+    public native @Deprecated void setEmptyCalibration();
+
+    /**
+     * Specify local filesystem paths to the mesh calibration files for 'left' and 'right' inputs.
+     *
+     * When a mesh calibration is set, it overrides the camera intrinsics/extrinsics matrices.
+     * Mesh format: a sequence of (y,x) points as 'float' with coordinates from the input image
+     * to be mapped in the output. The mesh can be subsampled, configured by {@code setMeshStep}.
+     *
+     * With a 1280x800 resolution and the default (16,16) step, the required mesh size is:
+     *
+     * width: 1280 / 16 + 1 = 81
+     *
+     * height: 800 / 16 + 1 = 51
+     */
+    public native void loadMeshFiles(@StdString BytePointer pathLeft, @StdString BytePointer pathRight);
+    public native void loadMeshFiles(@StdString String pathLeft, @StdString String pathRight);
+
+    /**
+     * Specify mesh calibration data for 'left' and 'right' inputs, as vectors of bytes.
+     * See {@code loadMeshFiles} for the expected data format
+     */
+    public native void loadMeshData(@Cast("std::uint8_t*") @StdVector BytePointer dataLeft, @Cast("std::uint8_t*") @StdVector BytePointer dataRight);
+    public native void loadMeshData(@Cast("std::uint8_t*") @StdVector ByteBuffer dataLeft, @Cast("std::uint8_t*") @StdVector ByteBuffer dataRight);
+    public native void loadMeshData(@Cast("std::uint8_t*") @StdVector byte[] dataLeft, @Cast("std::uint8_t*") @StdVector byte[] dataRight);
+
+    /**
+     * Set the distance between mesh points. Default: (16, 16)
+     */
+    public native void setMeshStep(int width, int height);
 
     /**
      * Specify input resolution size
@@ -107,9 +147,23 @@ public class StereoDepth extends Node {
     public native void setInputResolution(int width, int height);
 
     /**
+     * Specify disparity/depth output resolution size, implemented by scaling.
+     *
+     * Currently only applicable when aligning to RGB camera
+     */
+    public native void setOutputSize(int width, int height);
+
+    /**
+     * Specifies whether the frames resized by {@code setOutputSize} should preserve aspect ratio,
+     * with potential cropping when enabled. Default {@code true}
+     */
+    public native void setOutputKeepAspectRatio(@Cast("bool") boolean keep);
+
+    /**
      * @param median Set kernel size for disparity/depth median filtering, or disable
      */
-    public native void setMedianFilter(@ByVal StereoDepthProperties.MedianFilter median);
+    public native @Deprecated void setMedianFilter(MedianFilter median);
+    public native @Deprecated void setMedianFilter(@Cast("dai::MedianFilter") int median);
 
     /**
      * @param align Set the disparity/depth alignment: centered (between the 'left' and 'right' inputs),
@@ -127,7 +181,12 @@ public class StereoDepth extends Node {
      * Confidence threshold for disparity calculation
      * @param confThr Confidence threshold value 0..255
      */
-    public native void setConfidenceThreshold(int confThr);
+    public native @Deprecated void setConfidenceThreshold(int confThr);
+
+    /**
+     * Rectify input images or not.
+     */
+    public native void setRectification(@Cast("bool") boolean enable);
 
     /**
      * Computes and combines disparities in both L-R and R-L directions, and combine them.

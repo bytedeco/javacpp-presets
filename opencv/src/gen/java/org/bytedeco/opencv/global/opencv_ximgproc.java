@@ -118,6 +118,17 @@ i.e. algorithms which somehow takes into account pixel affinities in natural ima
     \defgroup ximgproc_fast_line_detector Fast line detector
     <p>
     \defgroup ximgproc_edge_drawing EdgeDrawing
+<p>
+EDGE DRAWING LIBRARY FOR GEOMETRIC FEATURE EXTRACTION AND VALIDATION
+<p>
+Edge Drawing (ED) algorithm is an proactive approach on edge detection problem. In contrast to many other existing edge detection algorithms which follow a subtractive
+approach (i.e. after applying gradient filters onto an image eliminating pixels w.r.t. several rules, e.g. non-maximal suppression and hysteresis in Canny), ED algorithm
+works via an additive strategy, i.e. it picks edge pixels one by one, hence the name Edge Drawing. Then we process those random shaped edge segments to extract higher level
+edge features, i.e. lines, circles, ellipses, etc. The popular method of extraction edge pixels from the thresholded gradient magnitudes is non-maximal supression that tests
+every pixel whether it has the maximum gradient response along its gradient direction and eliminates if it does not. However, this method does not check status of the
+neighboring pixels, and therefore might result low quality (in terms of edge continuity, smoothness, thinness, localization) edge segments. Instead of non-maximal supression,
+ED points a set of edge pixels and join them by maximizing the total gradient response of edge segments. Therefore it can extract high quality edge segments without need for
+an additional hysteresis step.
     <p>
     \defgroup ximgproc_fourier Fourier descriptors
     <p>
@@ -2005,24 +2016,19 @@ with a small 3 x 3 kernel and additional conversion into CieLAB color space.
 
 /** \brief Creates a smart pointer to a FastLineDetector object and initializes it
 <p>
-@param _length_threshold    10         - Segment shorter than this will be discarded
-@param _distance_threshold  1.41421356 - A point placed from a hypothesis line
-                                         segment farther than this will be
-                                         regarded as an outlier
-@param _canny_th1           50         - First threshold for
-                                         hysteresis procedure in Canny()
-@param _canny_th2           50         - Second threshold for
-                                         hysteresis procedure in Canny()
-@param _canny_aperture_size 3          - Aperturesize for the sobel operator in Canny().
-                                         If zero, Canny() is not applied and the input
-                                         image is taken as an edge image.
-@param _do_merge            false      - If true, incremental merging of segments
-                                         will be performed
+@param length_threshold    Segment shorter than this will be discarded
+@param distance_threshold  A point placed from a hypothesis line
+                           segment farther than this will be regarded as an outlier
+@param canny_th1           First threshold for hysteresis procedure in Canny()
+@param canny_th2           Second threshold for hysteresis procedure in Canny()
+@param canny_aperture_size Aperturesize for the sobel operator in Canny().
+                           If zero, Canny() is not applied and the input image is taken as an edge image.
+@param do_merge            If true, incremental merging of segments will be performed
 */
 @Namespace("cv::ximgproc") public static native @Ptr FastLineDetector createFastLineDetector(
-        int _length_threshold/*=10*/, float _distance_threshold/*=1.414213562f*/,
-        double _canny_th1/*=50.0*/, double _canny_th2/*=50.0*/, int _canny_aperture_size/*=3*/,
-        @Cast("bool") boolean _do_merge/*=false*/);
+        int length_threshold/*=10*/, float distance_threshold/*=1.414213562f*/,
+        double canny_th1/*=50.0*/, double canny_th2/*=50.0*/, int canny_aperture_size/*=3*/,
+        @Cast("bool") boolean do_merge/*=false*/);
 @Namespace("cv::ximgproc") public static native @Ptr FastLineDetector createFastLineDetector();
 
 /** \} ximgproc_fast_line_detector */
@@ -2416,12 +2422,12 @@ Adapted from Niki Estner's explanation of RidgeFilter.
 * @param   size   image size (to be used if an "on" boundary should be used in erosion, using the default
 *                  means that the size is computed from the extension of the input)
 */
-@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal Mat res, @ByVal(nullValue = "cv::Size(0, 0)") Size size);
-@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal Mat res);
-@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal UMat res, @ByVal(nullValue = "cv::Size(0, 0)") Size size);
-@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal UMat res);
-@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal GpuMat res, @ByVal(nullValue = "cv::Size(0, 0)") Size size);
-@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal GpuMat res);
+@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("const std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal Mat res, @ByVal(nullValue = "cv::Size(0, 0)") Size size);
+@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("const std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal Mat res);
+@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("const std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal UMat res, @ByVal(nullValue = "cv::Size(0, 0)") Size size);
+@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("const std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal UMat res);
+@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("const std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal GpuMat res, @ByVal(nullValue = "cv::Size(0, 0)") Size size);
+@Namespace("cv::ximgproc::rl") public static native void createRLEImage(@Cast("const std::vector<cv::Point3i>*") @ByRef Point3iVector runs, @ByVal GpuMat res);
 
 /**
 * \brief   Applies a morphological operation to a run-length encoded binary image.

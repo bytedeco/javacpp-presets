@@ -2,6 +2,8 @@
 
 package org.bytedeco.opencv.global;
 
+import org.bytedeco.opencv.opencv_rapid.*;
+
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -214,51 +216,18 @@ implements "RAPID-a video rate object tracker" \cite harris1990rapid with the dy
                          @ByVal GpuMat rvec, @ByVal GpuMat tvec, DoubleBuffer rmsd/*=0*/);
 @Namespace("cv::rapid") public static native float rapid(@ByVal GpuMat img, int num, int len, @ByVal GpuMat pts3d, @ByVal GpuMat tris, @ByVal GpuMat K,
                          @ByVal GpuMat rvec, @ByVal GpuMat tvec, double[] rmsd/*=0*/);
+// Targeting ../opencv_rapid/Tracker.java
 
-/** Abstract base class for stateful silhouette trackers */
-@Namespace("cv::rapid") public static class Tracker extends Algorithm {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Tracker(Pointer p) { super(p); }
 
-    public native float compute(@ByVal Mat img, int num, int len, @ByVal Mat K, @ByVal Mat rvec, @ByVal Mat tvec,
-                @Const @ByRef(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 5, 1.5)") TermCriteria termcrit);
-    public native float compute(@ByVal Mat img, int num, int len, @ByVal Mat K, @ByVal Mat rvec, @ByVal Mat tvec);
-    public native float compute(@ByVal UMat img, int num, int len, @ByVal UMat K, @ByVal UMat rvec, @ByVal UMat tvec,
-                @Const @ByRef(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 5, 1.5)") TermCriteria termcrit);
-    public native float compute(@ByVal UMat img, int num, int len, @ByVal UMat K, @ByVal UMat rvec, @ByVal UMat tvec);
-    public native float compute(@ByVal GpuMat img, int num, int len, @ByVal GpuMat K, @ByVal GpuMat rvec, @ByVal GpuMat tvec,
-                @Const @ByRef(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 5, 1.5)") TermCriteria termcrit);
-    public native float compute(@ByVal GpuMat img, int num, int len, @ByVal GpuMat K, @ByVal GpuMat rvec, @ByVal GpuMat tvec);
-    public native void clearState();
-}
+// Targeting ../opencv_rapid/Rapid.java
 
-/** wrapper around \ref rapid function for uniform access */
-@Namespace("cv::rapid") public static class Rapid extends Tracker {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Rapid(Pointer p) { super(p); }
 
-    public static native @Ptr Rapid create(@ByVal Mat pts3d, @ByVal Mat tris);
-    public static native @Ptr Rapid create(@ByVal UMat pts3d, @ByVal UMat tris);
-    public static native @Ptr Rapid create(@ByVal GpuMat pts3d, @ByVal GpuMat tris);
-}
+// Targeting ../opencv_rapid/OLSTracker.java
 
-/** implements "Optimal local searching for fast and robust textureless 3D object tracking in highly
- * cluttered backgrounds" \cite seo2013optimal
- */
-@Namespace("cv::rapid") public static class OLSTracker extends Tracker {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OLSTracker(Pointer p) { super(p); }
 
-    public static native @Ptr OLSTracker create(@ByVal Mat pts3d, @ByVal Mat tris, int histBins/*=8*/, @Cast("uchar") byte sobelThesh/*=10*/);
-    public static native @Ptr OLSTracker create(@ByVal Mat pts3d, @ByVal Mat tris);
-    public static native @Ptr OLSTracker create(@ByVal UMat pts3d, @ByVal UMat tris, int histBins/*=8*/, @Cast("uchar") byte sobelThesh/*=10*/);
-    public static native @Ptr OLSTracker create(@ByVal UMat pts3d, @ByVal UMat tris);
-    public static native @Ptr OLSTracker create(@ByVal GpuMat pts3d, @ByVal GpuMat tris, int histBins/*=8*/, @Cast("uchar") byte sobelThesh/*=10*/);
-    public static native @Ptr OLSTracker create(@ByVal GpuMat pts3d, @ByVal GpuMat tris);
-}
+// Targeting ../opencv_rapid/GOSTracker.java
+
+
 /** \} */
  /* namespace rapid */
  /* namespace cv */

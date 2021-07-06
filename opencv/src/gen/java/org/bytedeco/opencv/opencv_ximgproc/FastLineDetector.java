@@ -56,31 +56,33 @@ public class FastLineDetector extends Algorithm {
       <p>
       ![image](pics/corridor_fld.jpg)
       <p>
-      @param _image A grayscale (CV_8UC1) input image. If only a roi needs to be
+      @param image A grayscale (CV_8UC1) input image. If only a roi needs to be
       selected, use: {@code fld_ptr-\>detect(image(roi), lines, ...);
       lines += Scalar(roi.x, roi.y, roi.x, roi.y);}
-      @param _lines A vector of Vec4f elements specifying the beginning
+      @param lines A vector of Vec4f elements specifying the beginning
       and ending point of a line.  Where Vec4f is (x1, y1, x2, y2), point
       1 is the start, point 2 - end. Returned lines are directed so that the
       brighter side is on their left.
       */
-    public native void detect(@ByVal Mat _image, @ByVal Mat _lines);
-    public native void detect(@ByVal UMat _image, @ByVal UMat _lines);
-    public native void detect(@ByVal GpuMat _image, @ByVal GpuMat _lines);
+    public native void detect(@ByVal Mat image, @ByVal Mat lines);
+    public native void detect(@ByVal UMat image, @ByVal UMat lines);
+    public native void detect(@ByVal GpuMat image, @ByVal GpuMat lines);
 
     /** \brief Draws the line segments on a given image.
-      @param _image The image, where the lines will be drawn. Should be bigger
+      @param image The image, where the lines will be drawn. Should be bigger
       or equal to the image, where the lines were found.
       @param lines A vector of the lines that needed to be drawn.
       @param draw_arrow If true, arrow heads will be drawn.
-    */
-    public native void drawSegments(@ByVal Mat _image, @ByVal Mat lines,
-                @Cast("bool") boolean draw_arrow/*=false*/);
-    public native void drawSegments(@ByVal Mat _image, @ByVal Mat lines);
-    public native void drawSegments(@ByVal UMat _image, @ByVal UMat lines,
-                @Cast("bool") boolean draw_arrow/*=false*/);
-    public native void drawSegments(@ByVal UMat _image, @ByVal UMat lines);
-    public native void drawSegments(@ByVal GpuMat _image, @ByVal GpuMat lines,
-                @Cast("bool") boolean draw_arrow/*=false*/);
-    public native void drawSegments(@ByVal GpuMat _image, @ByVal GpuMat lines);
+      @param linecolor Line color.
+      @param linethickness Line thickness.
+      */
+    public native void drawSegments(@ByVal Mat image, @ByVal Mat lines,
+                @Cast("bool") boolean draw_arrow/*=false*/, @ByVal(nullValue = "cv::Scalar(0, 0, 255)") Scalar linecolor, int linethickness/*=1*/);
+    public native void drawSegments(@ByVal Mat image, @ByVal Mat lines);
+    public native void drawSegments(@ByVal UMat image, @ByVal UMat lines,
+                @Cast("bool") boolean draw_arrow/*=false*/, @ByVal(nullValue = "cv::Scalar(0, 0, 255)") Scalar linecolor, int linethickness/*=1*/);
+    public native void drawSegments(@ByVal UMat image, @ByVal UMat lines);
+    public native void drawSegments(@ByVal GpuMat image, @ByVal GpuMat lines,
+                @Cast("bool") boolean draw_arrow/*=false*/, @ByVal(nullValue = "cv::Scalar(0, 0, 255)") Scalar linecolor, int linethickness/*=1*/);
+    public native void drawSegments(@ByVal GpuMat image, @ByVal GpuMat lines);
 }

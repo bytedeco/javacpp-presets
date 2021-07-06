@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.4.5"),
         @Platform(value = "ios", preload = "libopencv_calib3d"),
-        @Platform(value = "windows", link = "opencv_calib3d452")
+        @Platform(value = "windows", link = "opencv_calib3d453")
     },
     target = "org.bytedeco.opencv.opencv_calib3d",
     global = "org.bytedeco.opencv.global.opencv_calib3d"

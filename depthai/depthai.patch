@@ -1,6 +1,47 @@
-diff -ruN depthai-core-v2.5.0/src/device/CalibrationHandler.cpp depthai-core-v2.5.0-patch/src/device/CalibrationHandler.cpp
---- depthai-core-v2.5.0/src/device/CalibrationHandler.cpp	2021-06-08 13:17:39.996954200 +0900
-+++ depthai-core-v2.5.0-patch/src/device/CalibrationHandler.cpp	2021-06-12 08:47:41.634446214 +0900
+diff -ruN depthai-core-v2.6.0/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp depthai-core-v2.6.0-patch/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp
+--- depthai-core-v2.6.0/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp	2021-07-06 10:50:00.256344000 +0900
++++ depthai-core-v2.6.0-patch/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp	2021-07-06 18:09:06.646174717 +0900
+@@ -11,3 +11,14 @@
+ enum class CameraBoardSocket : int32_t { AUTO = -1, RGB, LEFT, RIGHT };
+ 
+ }  // namespace dai
++
++namespace std {
++
++template <>
++struct hash<dai::CameraBoardSocket> {
++    std::size_t operator()(const dai::CameraBoardSocket& s) const {
++        using Type = typename underlying_type<dai::CameraBoardSocket>::type;
++        return std::hash<Type>{}(static_cast<Type>(s));
++    }
++};
++}  // namespace std
+diff -ruN depthai-core-v2.6.0/shared/depthai-shared/src/datatype/DatatypeEnum.cpp depthai-core-v2.6.0-patch/shared/depthai-shared/src/datatype/DatatypeEnum.cpp
+--- depthai-core-v2.6.0/shared/depthai-shared/src/datatype/DatatypeEnum.cpp	2021-07-06 10:50:00.256344000 +0900
++++ depthai-core-v2.6.0-patch/shared/depthai-shared/src/datatype/DatatypeEnum.cpp	2021-07-06 17:30:10.508654175 +0900
+@@ -5,6 +5,19 @@
+ #include <unordered_map>
+ #include <vector>
+ 
++// DatatypeEnum hash specialization
++namespace std {
++
++template <>
++struct hash<dai::DatatypeEnum> {
++    std::size_t operator()(const dai::DatatypeEnum& s) const {
++        using Type = typename underlying_type<dai::DatatypeEnum>::type;
++        return std::hash<Type>{}(static_cast<Type>(s));
++    }
++};
++
++}  // namespace std
++
+ namespace dai {
+ 
+ const std::unordered_map<DatatypeEnum, std::vector<DatatypeEnum>> hierarchy = {{DatatypeEnum::Buffer,
+diff -ruN depthai-core-v2.6.0/src/device/CalibrationHandler.cpp depthai-core-v2.6.0-patch/src/device/CalibrationHandler.cpp
+--- depthai-core-v2.6.0/src/device/CalibrationHandler.cpp	2021-07-06 10:49:59.228342000 +0900
++++ depthai-core-v2.6.0-patch/src/device/CalibrationHandler.cpp	2021-07-06 17:29:45.178507041 +0900
 @@ -236,7 +236,7 @@
      if(eepromData.cameraData[cameraId].intrinsicMatrix.size() == 0 || eepromData.cameraData[cameraId].intrinsicMatrix[0][0] == 0)
          throw std::runtime_error("There is no Intrinsic matrix available for the the requested cameraID");
@@ -10,9 +51,9 @@ diff -ruN depthai-core-v2.5.0/src/device/CalibrationHandler.cpp depthai-core-v2.
  }
  
  std::vector<float> CalibrationHandler::getDistortionCoefficients(CameraBoardSocket cameraId) {
-diff -ruN depthai-core-v2.5.0/src/device/DeviceBootloader.cpp depthai-core-v2.5.0-patch/src/device/DeviceBootloader.cpp
---- depthai-core-v2.5.0/src/device/DeviceBootloader.cpp	2021-06-08 13:17:39.996954200 +0900
-+++ depthai-core-v2.5.0-patch/src/device/DeviceBootloader.cpp	2021-06-12 08:47:25.104474443 +0900
+diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.0-patch/src/device/DeviceBootloader.cpp
+--- depthai-core-v2.6.0/src/device/DeviceBootloader.cpp	2021-07-06 10:49:59.228342000 +0900
++++ depthai-core-v2.6.0-patch/src/device/DeviceBootloader.cpp	2021-07-06 17:29:45.179507046 +0900
 @@ -38,7 +38,7 @@
      if(!found) {
          std::tie(found, dev) = XLinkConnection::getFirstDevice(X_LINK_BOOTLOADER);
@@ -90,9 +131,9 @@ diff -ruN depthai-core-v2.5.0/src/device/DeviceBootloader.cpp depthai-core-v2.5.
  }
  
  bool DeviceBootloader::isEmbeddedVersion() {
-diff -ruN depthai-core-v2.5.0/src/device/Device.cpp depthai-core-v2.5.0-patch/src/device/Device.cpp
---- depthai-core-v2.5.0/src/device/Device.cpp	2021-06-08 13:17:39.996954200 +0900
-+++ depthai-core-v2.5.0-patch/src/device/Device.cpp	2021-06-12 08:47:25.106474439 +0900
+diff -ruN depthai-core-v2.6.0/src/device/Device.cpp depthai-core-v2.6.0-patch/src/device/Device.cpp
+--- depthai-core-v2.6.0/src/device/Device.cpp	2021-07-06 10:49:59.228342000 +0900
++++ depthai-core-v2.6.0-patch/src/device/Device.cpp	2021-07-06 17:29:45.180507052 +0900
 @@ -114,7 +114,7 @@
      // If none were found, try BOOTED
      if(!found) std::tie(found, deviceInfo) = XLinkConnection::getFirstDevice(X_LINK_BOOTED);
@@ -123,9 +164,9 @@ diff -ruN depthai-core-v2.5.0/src/device/Device.cpp depthai-core-v2.5.0-patch/sr
  }
  
  std::vector<std::uint8_t> Device::getEmbeddedDeviceBinary(bool usb2Mode, OpenVINO::Version version) {
-diff -ruN depthai-core-v2.5.0/src/pipeline/node/ColorCamera.cpp depthai-core-v2.5.0-patch/src/pipeline/node/ColorCamera.cpp
---- depthai-core-v2.5.0/src/pipeline/node/ColorCamera.cpp	2021-06-08 13:17:40.000954200 +0900
-+++ depthai-core-v2.5.0-patch/src/pipeline/node/ColorCamera.cpp	2021-06-12 08:47:25.106474439 +0900
+diff -ruN depthai-core-v2.6.0/src/pipeline/node/ColorCamera.cpp depthai-core-v2.6.0-patch/src/pipeline/node/ColorCamera.cpp
+--- depthai-core-v2.6.0/src/pipeline/node/ColorCamera.cpp	2021-07-06 10:49:59.232342200 +0900
++++ depthai-core-v2.6.0-patch/src/pipeline/node/ColorCamera.cpp	2021-07-06 17:29:45.180507052 +0900
 @@ -190,7 +190,7 @@
  
  // Returns preview size
@@ -207,9 +248,9 @@ diff -ruN depthai-core-v2.5.0/src/pipeline/node/ColorCamera.cpp depthai-core-v2.
  }
  
  float ColorCamera::getSensorCropX() const {
-diff -ruN depthai-core-v2.5.0/src/pipeline/node/MonoCamera.cpp depthai-core-v2.5.0-patch/src/pipeline/node/MonoCamera.cpp
---- depthai-core-v2.5.0/src/pipeline/node/MonoCamera.cpp	2021-06-08 13:17:40.000954200 +0900
-+++ depthai-core-v2.5.0-patch/src/pipeline/node/MonoCamera.cpp	2021-06-12 08:47:25.107474438 +0900
+diff -ruN depthai-core-v2.6.0/src/pipeline/node/MonoCamera.cpp depthai-core-v2.6.0-patch/src/pipeline/node/MonoCamera.cpp
+--- depthai-core-v2.6.0/src/pipeline/node/MonoCamera.cpp	2021-07-06 10:49:59.232342200 +0900
++++ depthai-core-v2.6.0-patch/src/pipeline/node/MonoCamera.cpp	2021-07-06 17:29:45.181507058 +0900
 @@ -105,18 +105,18 @@
  std::tuple<int, int> MonoCamera::getResolutionSize() const {
      switch(properties.resolution) {
@@ -233,9 +274,9 @@ diff -ruN depthai-core-v2.5.0/src/pipeline/node/MonoCamera.cpp depthai-core-v2.5
  }
  
  int MonoCamera::getResolutionWidth() const {
-diff -ruN depthai-core-v2.5.0/src/pipeline/node/VideoEncoder.cpp depthai-core-v2.5.0-patch/src/pipeline/node/VideoEncoder.cpp
---- depthai-core-v2.5.0/src/pipeline/node/VideoEncoder.cpp	2021-06-08 13:17:40.000954200 +0900
-+++ depthai-core-v2.5.0-patch/src/pipeline/node/VideoEncoder.cpp	2021-06-12 08:47:25.107474438 +0900
+diff -ruN depthai-core-v2.6.0/src/pipeline/node/VideoEncoder.cpp depthai-core-v2.6.0-patch/src/pipeline/node/VideoEncoder.cpp
+--- depthai-core-v2.6.0/src/pipeline/node/VideoEncoder.cpp	2021-07-06 10:49:59.232342200 +0900
++++ depthai-core-v2.6.0-patch/src/pipeline/node/VideoEncoder.cpp	2021-07-06 17:29:45.181507058 +0900
 @@ -134,7 +134,7 @@
  }
  
@@ -245,9 +286,9 @@ diff -ruN depthai-core-v2.5.0/src/pipeline/node/VideoEncoder.cpp depthai-core-v2
  }
  
  int VideoEncoder::getWidth() const {
-diff -ruN depthai-core-v2.5.0/src/xlink/XLinkConnection.cpp depthai-core-v2.5.0-patch/src/xlink/XLinkConnection.cpp
---- depthai-core-v2.5.0/src/xlink/XLinkConnection.cpp	2021-06-08 13:17:40.000954200 +0900
-+++ depthai-core-v2.5.0-patch/src/xlink/XLinkConnection.cpp	2021-06-12 08:47:25.108474436 +0900
+diff -ruN depthai-core-v2.6.0/src/xlink/XLinkConnection.cpp depthai-core-v2.6.0-patch/src/xlink/XLinkConnection.cpp
+--- depthai-core-v2.6.0/src/xlink/XLinkConnection.cpp	2021-07-06 10:49:59.232342200 +0900
++++ depthai-core-v2.6.0-patch/src/xlink/XLinkConnection.cpp	2021-07-06 17:29:45.182507064 +0900
 @@ -106,9 +106,9 @@
  std::tuple<bool, DeviceInfo> XLinkConnection::getFirstDevice(XLinkDeviceState_t state) {
      auto devices = getAllConnectedDevices();

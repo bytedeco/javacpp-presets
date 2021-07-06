@@ -43,8 +43,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_stitching@.4.5", preload = {"opencv_cuda@.4.5", "opencv_cudaarithm@.4.5", "opencv_cudafilters@.4.5",
             "opencv_cudaimgproc@.4.5", "opencv_cudawarping@.4.5", "opencv_cudafeatures2d@.4.5", "opencv_cudalegacy@.4.5"}),
         @Platform(value = "ios", preload = "libopencv_stitching"),
-        @Platform(value = "windows", link = "opencv_stitching452", preload = {"opencv_cuda452", "opencv_cudaarithm452", "opencv_cudafilters452",
-            "opencv_cudaimgproc452", "opencv_cudawarping452", "opencv_cudafeatures2d452", "opencv_cudalegacy452"})},
+        @Platform(value = "windows", link = "opencv_stitching453", preload = {"opencv_cuda453", "opencv_cudaarithm453", "opencv_cudafilters453",
+            "opencv_cudaimgproc453", "opencv_cudawarping453", "opencv_cudafeatures2d453", "opencv_cudalegacy453"})},
     target = "org.bytedeco.opencv.opencv_stitching",
     global = "org.bytedeco.opencv.global.opencv_stitching"
 )

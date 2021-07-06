@@ -33,13 +33,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = "<opencv2/rapid.hpp>", link = "opencv_rapid@.4.5"),
         @Platform(value = "ios", preload = "libopencv_rapid"),
-        @Platform(value = "windows", link = "opencv_rapid452")
+        @Platform(value = "windows", link = "opencv_rapid453")
     },
+    target = "org.bytedeco.opencv.opencv_rapid",
     global = "org.bytedeco.opencv.global.opencv_rapid"
 )
 public class opencv_rapid implements InfoMapper {
     @Override public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::rapid::Rapid", "cv::rapid::OLSTracker").purify());
+        infoMap.put(new Info("cv::rapid::Rapid", "cv::rapid::OLSTracker", "cv::rapid::GOSTracker").purify());
     }
 }
 

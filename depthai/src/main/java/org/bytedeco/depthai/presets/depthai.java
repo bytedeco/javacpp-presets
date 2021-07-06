@@ -45,7 +45,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
     value = {
         @Platform(
             value = {"linux-arm", "linux-x86", "macosx-x86"},
-            compiler = "cpp11",
+            compiler = "cpp14",
             define = {"SHARED_PTR_NAMESPACE std", "XLINK_USE_MX_ID_NAME ON"},
             include = {
                 "XLink/XLinkPublicDefines.h",
@@ -83,6 +83,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/datatype/RawSpatialImgDetections.hpp",
                 "depthai-shared/datatype/RawSpatialLocationCalculatorConfig.hpp",
                 "depthai-shared/datatype/RawSpatialLocations.hpp",
+                "depthai-shared/datatype/RawStereoDepthConfig.hpp",
                 "depthai-shared/datatype/RawSystemInformation.hpp",
                 "depthai-shared/datatype/RawTracklets.hpp",
                 "depthai-shared/log/LogLevel.hpp",
@@ -123,11 +124,14 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/datatype/SpatialImgDetections.hpp",
                 "depthai/pipeline/datatype/SpatialLocationCalculatorData.hpp",
                 "depthai/pipeline/datatype/SpatialLocationCalculatorConfig.hpp",
+                "depthai/pipeline/datatype/StereoDepthConfig.hpp",
                 "depthai/pipeline/datatype/SystemInformation.hpp",
                 "depthai/pipeline/datatype/Tracklets.hpp",
                 "depthai/pipeline/AssetManager.hpp",
                 "depthai/pipeline/Node.hpp",
                 "depthai/pipeline/Pipeline.hpp",
+                "depthai/pipeline/nodes.hpp",
+                "depthai/pipeline/datatypes.hpp",
                 "depthai/pipeline/node/IMU.hpp",
                 "depthai/pipeline/node/ColorCamera.hpp",
                 "depthai/pipeline/node/ImageManip.hpp",
@@ -167,7 +171,7 @@ public class depthai implements InfoMapper {
                .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE").cppTypes().annotations())
 
                .put(new Info("std::uint8_t").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
-               .put(new Info("std::uint16_t").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
+               .put(new Info("std::int16_t", "std::uint16_t").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("std::int32_t", "std::uint32_t", "dai::OpenVINO::Version").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::int64_t", "dai::Node::Id").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
@@ -253,6 +257,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"has<dai::Tracklets>\") @Cast(\"bool\") boolean hasTracklets();\n"
                      + "public native @Name(\"has<dai::SpatialImgDetections>\") @Cast(\"bool\") boolean hasSpatialImgDetections();\n"
                      + "public native @Name(\"has<dai::SpatialLocationCalculatorData>\") @Cast(\"bool\") boolean hasSpatialLocationCalculatorData();\n"
+                     + "public native @Name(\"has<dai::StereoDepthConfig>\") @Cast(\"bool\") boolean hasStereoDepthConfig();\n"
                      + "public native @Name(\"has<dai::SystemInformation>\") @Cast(\"bool\") boolean hasSystemInformation();\n"))
                .put(new Info("dai::DataOutputQueue::tryGet").javaText(
                        "public native @SharedPtr @ByVal ADatatype tryGet();\n"
@@ -265,6 +270,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"tryGet<dai::Tracklets>\") @SharedPtr Tracklets tryGetTracklets();\n"
                      + "public native @Name(\"tryGet<dai::SpatialImgDetections>\") @SharedPtr SpatialImgDetections tryGetSpatialImgDetections();\n"
                      + "public native @Name(\"tryGet<dai::SpatialLocationCalculatorData>\") @SharedPtr SpatialLocationCalculatorData tryGetSpatialLocationCalculatorData();\n"
+                     + "public native @Name(\"tryGet<dai::StereoDepthConfig>\") @SharedPtr StereoDepthConfig tryGetStereoDepthConfig();\n"
                      + "public native @Name(\"tryGet<dai::SystemInformation>\") @SharedPtr SystemInformation tryGetSystemInformation();\n"))
                .put(new Info("dai::DataOutputQueue::get").javaText(
                        "public native @SharedPtr @ByVal ADatatype get();\n"
@@ -277,6 +283,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"get<dai::Tracklets>\") @SharedPtr Tracklets getTracklets();\n"
                      + "public native @Name(\"get<dai::SpatialImgDetections>\") @SharedPtr SpatialImgDetections getSpatialImgDetections();\n"
                      + "public native @Name(\"get<dai::SpatialLocationCalculatorData>\") @SharedPtr SpatialLocationCalculatorData getSpatialLocationCalculatorData();\n"
+                     + "public native @Name(\"get<dai::StereoDepthConfig>\") @SharedPtr StereoDepthConfig getStereoDepthConfig();\n"
                      + "public native @Name(\"get<dai::SystemInformation>\") @SharedPtr SystemInformation getSystemInformation();\n"))
                .put(new Info("dai::DataOutputQueue::front").javaText(
                        "public native @SharedPtr @ByVal ADatatype front();\n"
@@ -289,6 +296,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"front<dai::Tracklets>\") @SharedPtr Tracklets frontTracklets();\n"
                      + "public native @Name(\"front<dai::SpatialImgDetections>\") @SharedPtr SpatialImgDetections frontSpatialImgDetections();\n"
                      + "public native @Name(\"front<dai::SpatialLocationCalculatorData>\") @SharedPtr SpatialLocationCalculatorData frontSpatialLocationCalculatorData();\n"
+                     + "public native @Name(\"front<dai::StereoDepthConfig>\") @SharedPtr StereoDepthConfig frontStereoDepthConfig();\n"
                      + "public native @Name(\"front<dai::SystemInformation>\") @SharedPtr SystemInformation frontSystemInformation();\n"))
                .put(new Info("dai::DeviceBootloader::Version::toString").javaText("public native @StdString String toString();"))
 

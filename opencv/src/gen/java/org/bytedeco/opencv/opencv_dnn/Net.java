@@ -447,9 +447,11 @@ public class Net extends Pointer {
         public native void enableFusion(@Cast("bool") boolean fusion);
 
         /** \brief Returns overall time for inference and timings (in ticks) for layers.
+         *
          * Indexes in returned vector correspond to layers ids. Some layers can be fused with others,
-         * in this case zero ticks count will be return for that skipped layers.
-         * @param timings vector for tick timings for all layers.
+         * in this case zero ticks count will be return for that skipped layers. Supported by DNN_BACKEND_OPENCV on DNN_TARGET_CPU only.
+         *
+         * @param timings [out] vector for tick timings for all layers.
          * @return overall ticks for model inference.
          */
         public native @Cast("int64") long getPerfProfile(@StdVector DoublePointer timings);

@@ -1,4 +1,5 @@
 
+ * Add presets for the new `barcode` and `wechat_qrcode` modules of OpenCV
  * Work around loading issues with execution providers in presets for ONNX Runtime
  * Annotate the presets for LLVM with `@NoException` to reduce unneeded C++ overhead ([pull #1052](https://github.com/bytedeco/javacpp-presets/pull/1052))
  * Update samples for LLVM 12 including new `samples/llvm/OrcJit.java` using libffi ([pull #1050](https://github.com/bytedeco/javacpp-presets/pull/1050))
@@ -9,11 +10,11 @@
  * Build FFmpeg with libxml2, enabling support for DASH demuxing ([pull #1033](https://github.com/bytedeco/javacpp-presets/pull/1033)), and libsrt for SRT protocol support ([pull #1036](https://github.com/bytedeco/javacpp-presets/pull/1036))
  * Add `@MemberGetter` for `av_log_default_callback()` in presets for FFmpeg ([issue #812](https://github.com/bytedeco/javacpp-presets/issues/812))
  * Include `cudaGL.h` and `cuda_gl_interop.h` header files in presets for CUDA ([pull #1027](https://github.com/bytedeco/javacpp-presets/pull/1027))
- * Add presets for libffi 3.4.2 ([issue #833](https://github.com/bytedeco/javacpp-presets/issues/833)), NVIDIA Video Codec SDK 11.0.10 ([pull #1020](https://github.com/bytedeco/javacpp-presets/pull/1020)), PyTorch 1.9.0 ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623)), TensorFlow Lite 2.5.0, DepthAI 2.5.0, ModSecurity ([pull #1012](https://github.com/bytedeco/javacpp-presets/pull/1012))
+ * Add presets for libffi 3.4.2 ([issue #833](https://github.com/bytedeco/javacpp-presets/issues/833)), NVIDIA Video Codec SDK 11.0.10 ([pull #1020](https://github.com/bytedeco/javacpp-presets/pull/1020)), PyTorch 1.9.0 ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623)), TensorFlow Lite 2.5.0, DepthAI 2.6.0, ModSecurity ([pull #1012](https://github.com/bytedeco/javacpp-presets/pull/1012))
  * Map `std::vector<cv::Range>` to `RangeVector` in `opencv_core.Mat` for convenience ([issue bytedeco/javacv#1607](https://github.com/bytedeco/javacv/issues/1607))
  * Include `genericaliasobject.h`, `context.h`, `tracemalloc.h`, and `datetime.h` for CPython ([issue #1017](https://github.com/bytedeco/javacpp-presets/issues/1017))
  * Add samples using LLVM modules to deal with bitcode and object files ([pull #1016](https://github.com/bytedeco/javacpp-presets/pull/1016))
- * Upgrade presets for OpenCV 4.5.2, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), Spinnaker 2.4.0.143 ([pull #1040](https://github.com/bytedeco/javacpp-presets/pull/1040)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), Arrow 4.0.1, MKL 2021.3, DNNL 2.3, OpenBLAS 0.3.15, GSL 2.7, CPython 3.9.6, NumPy 1.21.0, SciPy 1.7.0, Gym 0.18.3, LLVM 12.0.0 ([pull #1029](https://github.com/bytedeco/javacpp-presets/pull/1029)), Leptonica 1.81.1, CUDA 11.4.0, cuDNN 8.2.1, NCCL 2.9.9, ONNX 1.9.0, ONNX Runtime 1.8.0, and their dependencies
+ * Upgrade presets for OpenCV 4.5.3, FFmpeg 4.4 ([pull #1030](https://github.com/bytedeco/javacpp-presets/pull/1030)), Spinnaker 2.4.0.143 ([pull #1040](https://github.com/bytedeco/javacpp-presets/pull/1040)), librealsense2 2.44.0 ([pull #1031](https://github.com/bytedeco/javacpp-presets/pull/1031)), Arrow 4.0.1, MKL 2021.3, DNNL 2.3, OpenBLAS 0.3.15, GSL 2.7, CPython 3.9.6, NumPy 1.21.0, SciPy 1.7.0, Gym 0.18.3, LLVM 12.0.0 ([pull #1029](https://github.com/bytedeco/javacpp-presets/pull/1029)), Leptonica 1.81.1, CUDA 11.4.0, cuDNN 8.2.1, NCCL 2.9.9, ONNX 1.9.0, ONNX Runtime 1.8.0, and their dependencies
 
 ### March 8, 2021 version 1.5.5
  * Bundle LLD executable in presets for LLVM as required by TVM on Windows

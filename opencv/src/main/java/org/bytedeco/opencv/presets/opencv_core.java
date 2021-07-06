@@ -68,7 +68,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core452", "opencv_imgproc452"}, preload = {"opencv_cudev452"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core453", "opencv_imgproc453"}, preload = {"opencv_cudev453"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -273,7 +273,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                              "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser",
                              "cv::cvStartWriteRawData_Base64", "cv::cvWriteRawData_Base64", "cv::cvEndWriteRawData_Base64",
                              "cv::cvWriteMat_Base64", "cv::cvWriteMatND_Base64", "cv::FileStorage::Impl").skip())
-               .put(new Info("cv::AutoBuffer<double>", "std::shared_ptr<void>").cast().pointerTypes("Pointer"))
+               .put(new Info("cv::AutoBuffer<double>", "std::shared_ptr<void>", "std::type_index").cast().pointerTypes("Pointer"))
 
                .put(new Info("cv::Mat").base("AbstractMat"))
                .put(new Info("cv::noArray()").javaText("public static Mat noArray() { return null; }"))

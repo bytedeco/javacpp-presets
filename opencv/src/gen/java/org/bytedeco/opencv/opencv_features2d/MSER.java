@@ -47,20 +47,20 @@ public class MSER extends Feature2D {
 
     /** \brief Full constructor for %MSER detector
     <p>
-    @param _delta it compares {@code (size_{i}-size_{i-delta})/size_{i-delta}}
-    @param _min_area prune the area which smaller than minArea
-    @param _max_area prune the area which bigger than maxArea
-    @param _max_variation prune the area have similar size to its children
-    @param _min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
-    @param _max_evolution  for color image, the evolution steps
-    @param _area_threshold for color image, the area threshold to cause re-initialize
-    @param _min_margin for color image, ignore too small margin
-    @param _edge_blur_size for color image, the aperture size for edge blur
+    @param delta it compares {@code (size_{i}-size_{i-delta})/size_{i-delta}}
+    @param min_area prune the area which smaller than minArea
+    @param max_area prune the area which bigger than maxArea
+    @param max_variation prune the area have similar size to its children
+    @param min_diversity for color image, trace back to cut off mser with diversity less than min_diversity
+    @param max_evolution  for color image, the evolution steps
+    @param area_threshold for color image, the area threshold to cause re-initialize
+    @param min_margin for color image, ignore too small margin
+    @param edge_blur_size for color image, the aperture size for edge blur
      */
-    public static native @Ptr MSER create( int _delta/*=5*/, int _min_area/*=60*/, int _max_area/*=14400*/,
-              double _max_variation/*=0.25*/, double _min_diversity/*=.2*/,
-              int _max_evolution/*=200*/, double _area_threshold/*=1.01*/,
-              double _min_margin/*=0.003*/, int _edge_blur_size/*=5*/ );
+    public static native @Ptr MSER create( int delta/*=5*/, int min_area/*=60*/, int max_area/*=14400*/,
+              double max_variation/*=0.25*/, double min_diversity/*=.2*/,
+              int max_evolution/*=200*/, double area_threshold/*=1.01*/,
+              double min_margin/*=0.003*/, int edge_blur_size/*=5*/ );
     public static native @Ptr MSER create( );
 
     /** \brief Detect %MSER regions

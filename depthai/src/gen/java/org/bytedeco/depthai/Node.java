@@ -164,11 +164,12 @@ public class Node extends Pointer {
     public native @ByVal @Cast("nlohmann::json*") Pointer getProperties();
     public native @ByVal VersionOptional getRequiredOpenVINOVersion();
     public native @SharedPtr @ByVal Node clone();
+    /** Id of node */
+    @MemberGetter public native @Cast("const dai::Node::Id") long id();
 
     // access
     public native @ByVal Pipeline getParentPipeline();
-    /** Id of node */
-    @MemberGetter public native @Cast("const dai::Node::Id") long id();
+
     /** Retrieves nodes name */
     public native @StdString BytePointer getName();
     /** Retrieves all nodes outputs */

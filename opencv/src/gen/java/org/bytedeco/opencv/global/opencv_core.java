@@ -538,6 +538,8 @@ public static final int CV_CPU_NEON =             100;
 
 public static final int CV_CPU_MSA =              150;
 
+public static final int CV_CPU_RISCVV =           170;
+
 public static final int CV_CPU_VSX =              200;
 public static final int CV_CPU_VSX3 =             201;
 
@@ -592,6 +594,8 @@ public static final int
     CPU_NEON            = 100,
 
     CPU_MSA             = 150,
+
+    CPU_RISCVV          = 170,
 
     CPU_VSX             = 200,
     CPU_VSX3            = 201,
@@ -914,7 +918,9 @@ public static final int CV_STATIC_ANALYSIS = 1;
 // #elif defined _MSC_VER && !defined RC_INVOKED
 // #else
 //   #ifdef OPENCV_FORCE_UNSAFE_XADD
-    
+    public static native int CV_XADD(IntPointer addr, int delta);
+    public static native int CV_XADD(IntBuffer addr, int delta);
+    public static native int CV_XADD(int[] addr, int delta);
 //   #else
 //     #error "OpenCV: can't define safe CV_XADD macro for current platform (unsupported). Define CV_XADD macro through custom port header (see OPENCV_INCLUDE_PORT_FILE)"
 //   #endif
@@ -1956,7 +1962,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    5;
-public static final int CV_VERSION_REVISION = 2;
+public static final int CV_VERSION_REVISION = 3;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -10576,6 +10582,8 @@ public static final int
 // #define OPENCV_OPENCL_HPP
 
 // #include "opencv2/core.hpp"
+// #include <typeinfo>
+// #include <typeindex>
 
 /** \addtogroup core_opencl
  *  \{ */

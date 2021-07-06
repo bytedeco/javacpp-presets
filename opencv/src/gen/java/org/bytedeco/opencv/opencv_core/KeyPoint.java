@@ -46,30 +46,30 @@ public class KeyPoint extends Pointer {
     public KeyPoint() { super((Pointer)null); allocate(); }
     private native void allocate();
     /**
-    @param _pt x & y coordinates of the keypoint
-    @param _size keypoint diameter
-    @param _angle keypoint orientation
-    @param _response keypoint detector response on the keypoint (that is, strength of the keypoint)
-    @param _octave pyramid octave in which the keypoint has been detected
-    @param _class_id object id
+    @param pt x & y coordinates of the keypoint
+    @param size keypoint diameter
+    @param angle keypoint orientation
+    @param response keypoint detector response on the keypoint (that is, strength of the keypoint)
+    @param octave pyramid octave in which the keypoint has been detected
+    @param class_id object id
      */
-    public KeyPoint(@ByVal Point2f _pt, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { super((Pointer)null); allocate(_pt, _size, _angle, _response, _octave, _class_id); }
-    private native void allocate(@ByVal Point2f _pt, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/);
-    public KeyPoint(@ByVal Point2f _pt, float _size) { super((Pointer)null); allocate(_pt, _size); }
-    private native void allocate(@ByVal Point2f _pt, float _size);
+    public KeyPoint(@ByVal Point2f pt, float size, float angle/*=-1*/, float response/*=0*/, int octave/*=0*/, int class_id/*=-1*/) { super((Pointer)null); allocate(pt, size, angle, response, octave, class_id); }
+    private native void allocate(@ByVal Point2f pt, float size, float angle/*=-1*/, float response/*=0*/, int octave/*=0*/, int class_id/*=-1*/);
+    public KeyPoint(@ByVal Point2f pt, float size) { super((Pointer)null); allocate(pt, size); }
+    private native void allocate(@ByVal Point2f pt, float size);
     /**
     @param x x-coordinate of the keypoint
     @param y y-coordinate of the keypoint
-    @param _size keypoint diameter
-    @param _angle keypoint orientation
-    @param _response keypoint detector response on the keypoint (that is, strength of the keypoint)
-    @param _octave pyramid octave in which the keypoint has been detected
-    @param _class_id object id
+    @param size keypoint diameter
+    @param angle keypoint orientation
+    @param response keypoint detector response on the keypoint (that is, strength of the keypoint)
+    @param octave pyramid octave in which the keypoint has been detected
+    @param class_id object id
      */
-    public KeyPoint(float x, float y, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { super((Pointer)null); allocate(x, y, _size, _angle, _response, _octave, _class_id); }
-    private native void allocate(float x, float y, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/);
-    public KeyPoint(float x, float y, float _size) { super((Pointer)null); allocate(x, y, _size); }
-    private native void allocate(float x, float y, float _size);
+    public KeyPoint(float x, float y, float size, float angle/*=-1*/, float response/*=0*/, int octave/*=0*/, int class_id/*=-1*/) { super((Pointer)null); allocate(x, y, size, angle, response, octave, class_id); }
+    private native void allocate(float x, float y, float size, float angle/*=-1*/, float response/*=0*/, int octave/*=0*/, int class_id/*=-1*/);
+    public KeyPoint(float x, float y, float size) { super((Pointer)null); allocate(x, y, size); }
+    private native void allocate(float x, float y, float size);
 
     public native @Cast("size_t") long hash();
 

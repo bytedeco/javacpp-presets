@@ -38,17 +38,50 @@ public class StereoDepthProperties extends Pointer {
         return new StereoDepthProperties((Pointer)this).offsetAddress(i);
     }
 
-    /**
-     * Median filter config for disparity post-processing
-     */
-    public enum MedianFilter { MEDIAN_OFF(0), KERNEL_3x3(3), KERNEL_5x5(5), KERNEL_7x7(7);
-
-        public final int value;
-        private MedianFilter(int v) { this.value = v; }
-        private MedianFilter(MedianFilter e) { this.value = e.value; }
-        public MedianFilter intern() { for (MedianFilter e : values()) if (e.value == value) return e; return this; }
-        @Override public String toString() { return intern().name(); }
+    public static class RectificationMesh extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public RectificationMesh() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public RectificationMesh(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public RectificationMesh(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public RectificationMesh position(long position) {
+            return (RectificationMesh)super.position(position);
+        }
+        @Override public RectificationMesh getPointer(long i) {
+            return new RectificationMesh((Pointer)this).offsetAddress(i);
+        }
+    
+        /**
+         * Uri which points to the mesh array for 'left' input rectification
+         */
+        public native @StdString BytePointer meshLeftUri(); public native RectificationMesh meshLeftUri(BytePointer setter);
+        /**
+         * Uri which points to the mesh array for 'right' input rectification
+         */
+        public native @StdString BytePointer meshRightUri(); public native RectificationMesh meshRightUri(BytePointer setter);
+        /**
+         * Mesh array size in bytes, for each of 'left' and 'right' (need to match)
+         */
+        public native @ByRef @Cast("tl::optional<std::uint32_t>*") IntOptional meshSize(); public native RectificationMesh meshSize(IntOptional setter);
+        /**
+         * Distance between mesh points, in the horizontal direction
+         */
+        public native @Cast("uint16_t") short stepWidth(); public native RectificationMesh stepWidth(short setter);
+        /**
+         * Distance between mesh points, in the vertical direction
+         */
+        public native @Cast("uint16_t") short stepHeight(); public native RectificationMesh stepHeight(short setter);
     }
+
+    /** Initial stereo config */
+    public native @ByRef RawStereoDepthConfig initialConfig(); public native StereoDepthProperties initialConfig(RawStereoDepthConfig setter);
+
+    /** Whether to wait for config at 'inputConfig' IO */
+    public native @Cast("bool") boolean inputConfigSync(); public native StereoDepthProperties inputConfigSync(boolean setter);
 
     /**
      * Align the disparity/depth to the perspective of a rectified output, or center it
@@ -70,10 +103,6 @@ public class StereoDepthProperties extends Pointer {
     public native @ByRef EepromData calibrationData(); public native StereoDepthProperties calibrationData(EepromData setter);
 
     /**
-     * Set kernel size for disparity/depth median filtering, or disable
-     */
-    public native MedianFilter median(); public native StereoDepthProperties median(MedianFilter setter);
-    /**
      * Set the disparity/depth alignment to the perspective of a rectified output, or center it
      */
     public native DepthAlign depthAlign(); public native StereoDepthProperties depthAlign(DepthAlign setter);
@@ -82,10 +111,6 @@ public class StereoDepthProperties extends Pointer {
      * When configured (not AUTO), takes precedence over 'depthAlign'
      */
     public native CameraBoardSocket depthAlignCamera(); public native StereoDepthProperties depthAlignCamera(CameraBoardSocket setter);
-    /**
-     * Confidence threshold for disparity calculation, 0..255
-     */
-    public native @Cast("std::int32_t") int confidenceThreshold(); public native StereoDepthProperties confidenceThreshold(int setter);
 
     public native @Cast("bool") boolean enableRectification(); public native StereoDepthProperties enableRectification(boolean setter);
     /**
@@ -118,6 +143,22 @@ public class StereoDepthProperties extends Pointer {
      * Input frame height. Optional (taken from MonoCamera nodes if they exist)
      */
     public native @ByRef @Cast("tl::optional<std::int32_t>*") IntOptional height(); public native StereoDepthProperties height(IntOptional setter);
+    /**
+     * Output disparity/depth width. Currently only used when aligning to RGB
+     */
+    public native @ByRef @Cast("tl::optional<std::int32_t>*") IntOptional outWidth(); public native StereoDepthProperties outWidth(IntOptional setter);
+    /**
+     * Output disparity/depth height. Currently only used when aligning to RGB
+     */
+    public native @ByRef @Cast("tl::optional<std::int32_t>*") IntOptional outHeight(); public native StereoDepthProperties outHeight(IntOptional setter);
+    /**
+     * Whether to keep aspect ratio of the input (rectified) or not
+     */
+    public native @Cast("bool") boolean outKeepAspectRatio(); public native StereoDepthProperties outKeepAspectRatio(boolean setter);
 
-    // TODO: rectification mesh option for fisheye camera use-cases
+    /**
+     * Specify a direct warp mesh to be used for rectification,
+     * instead of intrinsics + extrinsic matrices
+     */
+    public native @ByRef RectificationMesh mesh(); public native StereoDepthProperties mesh(RectificationMesh setter);
 }

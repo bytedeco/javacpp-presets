@@ -75,6 +75,20 @@ public class Board extends Pointer {
     public static native @Ptr Board create(@ByVal MatVector objPoints, @Ptr Dictionary dictionary, @ByVal GpuMat ids);
     public static native @Ptr Board create(@ByVal UMatVector objPoints, @Ptr Dictionary dictionary, @ByVal GpuMat ids);
     public static native @Ptr Board create(@ByVal GpuMatVector objPoints, @Ptr Dictionary dictionary, @ByVal GpuMat ids);
+
+    /**
+    * \brief Set ids vector
+    *
+    * @param ids vector of the identifiers of the markers in the board (should be the same size
+    * as objPoints)
+    *
+    * Recommended way to set ids vector, which will fail if the size of ids does not match size
+     * of objPoints.
+    */
+    public native void setIds(@ByVal Mat ids);
+    public native void setIds(@ByVal UMat ids);
+    public native void setIds(@ByVal GpuMat ids);
+
     /** array of object points of all the marker corners in the board
      *  each marker include its 4 corners in CCW order. For M markers, the size is Mx4. */
     public native @ByRef Point3fVectorVector objPoints(); public native Board objPoints(Point3fVectorVector setter);

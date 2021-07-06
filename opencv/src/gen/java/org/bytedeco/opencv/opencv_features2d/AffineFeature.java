@@ -24,10 +24,7 @@ import static org.bytedeco.opencv.global.opencv_flann.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 
 
-/** \addtogroup features2d_main
- *  \{
-<p>
-<p>
+
 /** \brief Class for implementing the wrapper which makes detectors and extractors to be affine invariant,
 described as ASIFT in \cite YM11 .
 */

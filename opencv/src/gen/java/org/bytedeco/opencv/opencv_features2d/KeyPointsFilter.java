@@ -24,7 +24,7 @@ import static org.bytedeco.opencv.global.opencv_flann.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 
 
-/** \addtogroup features2d
+/** \addtogroup features2d_main
  *  \{ */
 
 // //! writes vector of keypoints to the file storage
