@@ -75,7 +75,7 @@ public class DataInputQueue extends Pointer {
      *
      * @return Maximum queue size
      */
-    public native @Cast("unsigned int") int getMaxSize(@Cast("unsigned int") int maxSize);
+    public native @Cast("unsigned int") int getMaxSize();
 
     /**
      * Gets queues name

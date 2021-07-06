@@ -2,6 +2,8 @@
 
 package org.bytedeco.opencv.global;
 
+import org.bytedeco.opencv.opencv_mcc.*;
+
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -144,88 +146,12 @@ public static final int
     SG140 = 1,
     /** DKK color chart with 12 squares and 6 rectangle */
     VINYL18 = 2;
+// Targeting ../opencv_mcc/CChecker.java
 
-/** CChecker
- *
- * \brief checker object
- *
- *     This class contains the information about the detected checkers,i.e, their
- *     type, the corners of the chart, the color profile, the cost, centers chart,
- *     etc.
- *
- */
 
-@Namespace("cv::mcc") public static class CChecker extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CChecker(Pointer p) { super(p); }
+// Targeting ../opencv_mcc/CCheckerDraw.java
 
-    /** \brief Create a new CChecker object.
-    * @return A pointer to the implementation of the CChecker
-    */
 
-    public static native @Ptr CChecker create();
-    // CV_PROP_RW TYPECHART target;             ///< type of checkercolor
-    // CV_PROP_RW std::vector<cv::Point2f> box; ///< positions of the corners
-    // CV_PROP_RW cv::Mat charts_rgb;             ///< charts profile in rgb color space
-    // CV_PROP_RW cv::Mat charts_ycbcr;         ///< charts profile in YCbCr color space
-    // CV_PROP_RW float cost;                     ///< cost to aproximate
-    // CV_PROP_RW cv::Point2f center;             ///< center of the chart.
-
-    public native void setTarget(@Cast("cv::mcc::TYPECHART") int _target);
-    public native void setBox(@ByVal Point2fVector _box);
-    public native void setChartsRGB(@ByVal Mat _chartsRGB);
-    public native void setChartsYCbCr(@ByVal Mat _chartsYCbCr);
-    public native void setCost(float _cost);
-    public native void setCenter(@ByVal Point2f _center);
-
-    public native @Cast("cv::mcc::TYPECHART") int getTarget();
-    public native @ByVal Point2fVector getBox();
-    public native @ByVal Mat getChartsRGB();
-    public native @ByVal Mat getChartsYCbCr();
-    public native float getCost();
-    public native @ByVal Point2f getCenter();
-}
-
-/** \brief checker draw
- *
- *  This class contains the functions for drawing a detected chart.  This class
- *  expects a pointer to the checker which will be drawn by this object in the
- *  constructor and then later on whenever the draw function is called the
- *  checker will be drawn. Remember that it is not possible to change the
- *  checkers which will be draw by a given object, as it is decided in the
- *  constructor itself. If you want to draw some other object you can create a
- *  new CCheckerDraw instance.
- *
- *  The reason for this type of design is that in some videos we can assume that
- *  the checker is always in the same position, even if the image changes, so
- *  the drawing will always take place at the same position.
-*/
-@Namespace("cv::mcc") public static class CCheckerDraw extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CCheckerDraw(Pointer p) { super(p); }
-
-    /** \brief Draws the checker to the given image.
-    * @param img image in color space BGR
-    * @return void
-    */
-    public native void draw(@ByVal Mat img);
-    public native void draw(@ByVal UMat img);
-    public native void draw(@ByVal GpuMat img);
-    /** \brief Create a new CCheckerDraw object.
-    * @param pChecker The checker which will be drawn by this object.
-    * @param color The color by with which the squares of the checker
-    *              will be drawn
-    * @param thickness The thickness with which the sqaures will be
-    *                  drawn
-    * @return A pointer to the implementation of the CCheckerDraw
-    */
-    public static native @Ptr CCheckerDraw create(@Ptr CChecker pChecker,
-                                                @ByVal(nullValue = "cv::Scalar(( 0), ( 250), (0), 0)") Scalar color,
-                                                int thickness/*=2*/);
-    public static native @Ptr CCheckerDraw create(@Ptr CChecker pChecker);
-}
 
 /** \} mcc */
  // namespace mcc
@@ -277,210 +203,12 @@ public static final int
 //---------------------------------------------------------------
 // #define MCC_DEBUG
 //---------------------------------------------------------------
-/** \addtogroup mcc
- *  \{
-<p>
-/**
- * \brief Parameters for the detectMarker process:
- * - int adaptiveThreshWinSizeMin : minimum window size for adaptive
- *                                  thresholding before finding contours
- *                                  (default 23).
- * - int adaptiveThreshWinSizeMax : maximum window size for adaptive
- *                                  thresholding before finding contours
- *                                  (default 153).
- * - int adaptiveThreshWinSizeStep : increments from adaptiveThreshWinSizeMin to
- *                                   adaptiveThreshWinSizeMax during the
- *                                   thresholding (default 16).
- * - double adaptiveThreshConstant : constant for adaptive thresholding before
- *                                   finding contours (default 7)
- * - double minContoursAreaRate : determine minimum area for marker contour to
- *                                be detected. This is defined as a rate respect
- *                                to the area of the input image. Used only if
- *                                neural network is used (default 0.003).
- * - double minContoursArea : determine minimum area for marker contour to be
- *                            detected. This is defined as the actual area. Used
- *                            only if neural network is not used (default 100).
- * - double confidenceThreshold : minimum confidence for a bounding box detected
- *                                by neural network to classify as
- *                                detection.(default 0.5)
- *                                (0<=confidenceThreshold<=1)
- * - double minContourSolidity : minimum solidity of a contour for it be
- *                               detected as a square in the chart. (default
- *                               0.9).
- * - double findCandidatesApproxPolyDPEpsMultiplier : multipler to be used in
- *                                                    cv::ApproxPolyDP function
- *                                                    (default 0.05)
- * - int borderWidth : width of the padding used to pass the inital neural
- *                     network detection in the succeeding system.(default 0)
- * - float B0factor : distance between two neighbours squares of the same chart.
- *                    Defined as the ratio between distance and large dimension
- *                    of square (default 1.25)
- * - float maxError : maximum allowed error in the detection of a chart.
- *                    default(0.1)
- * - int minContourPointsAllowed : minium points in a detected contour.
- *                                 default(4)
- * - int minContourLengthAllowed : minimum length of a countour. default(100)
- * - int minInterContourDistance : minimum distance between two contours.
- *                                 default(100)
- * - int minInterCheckerDistance : minimum distance between two checkers.
- *                                 default(10000)
- * - int minImageSize : minimum size of the smaller dimension of the image.
- *                      default(1000)
- * - unsigned minGroupSize : minimum number of a squared of a chart that must be
- *                           detected. default(4)
- */
-@Namespace("cv::mcc") @NoOffset public static class DetectorParameters extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DetectorParameters(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DetectorParameters(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DetectorParameters position(long position) {
-        return (DetectorParameters)super.position(position);
-    }
-    @Override public DetectorParameters getPointer(long i) {
-        return new DetectorParameters((Pointer)this).offsetAddress(i);
-    }
+// Targeting ../opencv_mcc/DetectorParameters.java
 
 
-    public DetectorParameters() { super((Pointer)null); allocate(); }
-    private native void allocate();
-
-    public static native @Ptr DetectorParameters create();
-
-    public native int adaptiveThreshWinSizeMin(); public native DetectorParameters adaptiveThreshWinSizeMin(int setter);
-    public native int adaptiveThreshWinSizeMax(); public native DetectorParameters adaptiveThreshWinSizeMax(int setter);
-    public native int adaptiveThreshWinSizeStep(); public native DetectorParameters adaptiveThreshWinSizeStep(int setter);
-    public native double adaptiveThreshConstant(); public native DetectorParameters adaptiveThreshConstant(double setter);
-    public native double minContoursAreaRate(); public native DetectorParameters minContoursAreaRate(double setter);
-    public native double minContoursArea(); public native DetectorParameters minContoursArea(double setter);
-    public native double confidenceThreshold(); public native DetectorParameters confidenceThreshold(double setter);
-    public native double minContourSolidity(); public native DetectorParameters minContourSolidity(double setter);
-    public native double findCandidatesApproxPolyDPEpsMultiplier(); public native DetectorParameters findCandidatesApproxPolyDPEpsMultiplier(double setter);
-    public native int borderWidth(); public native DetectorParameters borderWidth(int setter);
-    public native float B0factor(); public native DetectorParameters B0factor(float setter);
-    public native float maxError(); public native DetectorParameters maxError(float setter);
-    public native int minContourPointsAllowed(); public native DetectorParameters minContourPointsAllowed(int setter);
-    public native int minContourLengthAllowed(); public native DetectorParameters minContourLengthAllowed(int setter);
-    public native int minInterContourDistance(); public native DetectorParameters minInterContourDistance(int setter);
-    public native int minInterCheckerDistance(); public native DetectorParameters minInterCheckerDistance(int setter);
-    public native int minImageSize(); public native DetectorParameters minImageSize(int setter);
-    public native @Cast("unsigned") int minGroupSize(); public native DetectorParameters minGroupSize(int setter);
-}
-
-/** \brief A class to find the positions of the ColorCharts in the image.
- */
-
-@Namespace("cv::mcc") public static class CCheckerDetector extends Algorithm {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CCheckerDetector(Pointer p) { super(p); }
-
-    /** \brief Set the net which will be used to find the approximate
-    *         bounding boxes for the color charts.
-    *
-    * It is not necessary to use this, but this usually results in
-    * better detection rate.
-    *
-    * @param net the neural network, if the network in empty, then
-    *            the function will return false.
-    * @return true if it was able to set the detector's network,
-    *         false otherwise.
-    */
-
-    public native @Cast("bool") boolean setNet(@ByVal Net net);
-
-    /** \brief Find the ColorCharts in the given image.
-    *
-    * The found charts are not returned but instead stored in the
-    * detector, these can be accessed later on using getBestColorChecker()
-    * and getListColorChecker()
-    * @param image image in color space BGR
-    * @param chartType type of the chart to detect
-    * @param regionsOfInterest regions of image to look for the chart, if
-    *                          it is empty, charts are looked for in the
-    *                          entire image
-    * @param nc number of charts in the image, if you don't know the exact
-    *           then keeping this number high helps.
-    * @param useNet if it is true the network provided using the setNet()
-    *               is used for preliminary search for regions where chart
-    *               could be present, inside the regionsOfInterest provied.
-    * @param params parameters of the detection system. More information
-    *               about them can be found in the struct DetectorParameters.
-    * @return true if atleast one chart is detected otherwise false
-    */
-
-    public native @Cast("bool") @Name("process") boolean processWithROI(@ByVal Mat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                @Const @ByRef RectVector regionsOfInterest,
-                int nc/*=1*/, @Cast("bool") boolean useNet/*=false*/,
-                @Ptr DetectorParameters params/*=cv::mcc::DetectorParameters::create()*/);
-    public native @Cast("bool") @Name("process") boolean processWithROI(@ByVal Mat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                @Const @ByRef RectVector regionsOfInterest);
-    public native @Cast("bool") @Name("process") boolean processWithROI(@ByVal UMat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                @Const @ByRef RectVector regionsOfInterest,
-                int nc/*=1*/, @Cast("bool") boolean useNet/*=false*/,
-                @Ptr DetectorParameters params/*=cv::mcc::DetectorParameters::create()*/);
-    public native @Cast("bool") @Name("process") boolean processWithROI(@ByVal UMat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                @Const @ByRef RectVector regionsOfInterest);
-    public native @Cast("bool") @Name("process") boolean processWithROI(@ByVal GpuMat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                @Const @ByRef RectVector regionsOfInterest,
-                int nc/*=1*/, @Cast("bool") boolean useNet/*=false*/,
-                @Ptr DetectorParameters params/*=cv::mcc::DetectorParameters::create()*/);
-    public native @Cast("bool") @Name("process") boolean processWithROI(@ByVal GpuMat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                @Const @ByRef RectVector regionsOfInterest);
+// Targeting ../opencv_mcc/CCheckerDetector.java
 
 
-    /** \brief Find the ColorCharts in the given image.
-    *
-    * Differs from the above one only in the arguments.
-    *
-    * This version searches for the chart in the full image.
-    *
-    * The found charts are not returned but instead stored in the
-    * detector, these can be accessed later on using getBestColorChecker()
-    * and getListColorChecker()
-    * @param image image in color space BGR
-    * @param chartType type of the chart to detect
-    * @param nc number of charts in the image, if you don't know the exact
-    *           then keeping this number high helps.
-    * @param useNet if it is true the network provided using the setNet()
-    *               is used for preliminary search for regions where chart
-    *               could be present, inside the regionsOfInterest provied.
-    * @param params parameters of the detection system. More information
-    *               about them can be found in the struct DetectorParameters.
-    * @return true if atleast one chart is detected otherwise false
-    */
-
-    public native @Cast("bool") boolean process(@ByVal Mat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                int nc/*=1*/, @Cast("bool") boolean useNet/*=false*/,
-                @Ptr DetectorParameters params/*=cv::mcc::DetectorParameters::create()*/);
-    public native @Cast("bool") boolean process(@ByVal Mat image, @Cast("const cv::mcc::TYPECHART") int chartType);
-    public native @Cast("bool") boolean process(@ByVal UMat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                int nc/*=1*/, @Cast("bool") boolean useNet/*=false*/,
-                @Ptr DetectorParameters params/*=cv::mcc::DetectorParameters::create()*/);
-    public native @Cast("bool") boolean process(@ByVal UMat image, @Cast("const cv::mcc::TYPECHART") int chartType);
-    public native @Cast("bool") boolean process(@ByVal GpuMat image, @Cast("const cv::mcc::TYPECHART") int chartType,
-                int nc/*=1*/, @Cast("bool") boolean useNet/*=false*/,
-                @Ptr DetectorParameters params/*=cv::mcc::DetectorParameters::create()*/);
-    public native @Cast("bool") boolean process(@ByVal GpuMat image, @Cast("const cv::mcc::TYPECHART") int chartType);
-
-    /** \brief Get the best color checker. By the best it means the one
-    *         detected with the highest confidence.
-    * @return checker A single colorchecker, if atleast one colorchecker
-    *                 was detected, 'nullptr' otherwise.
-    */
-    public native @Ptr CChecker getBestColorChecker();
-
-    /** \brief Get the list of all detected colorcheckers
-    * @return checkers vector of colorcheckers
-    */
-
-    /** \brief Returns the implementation of the CCheckerDetector.
-    *
-    */
-    public static native @Ptr CCheckerDetector create();
-}
 
 /** \} mcc */
 

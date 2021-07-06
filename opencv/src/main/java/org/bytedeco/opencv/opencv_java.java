@@ -48,12 +48,13 @@ import org.bytedeco.opencv.presets.*;
         opencv_xfeatures2d.class,
         opencv_ximgproc.class,
         opencv_xphoto.class,
+        opencv_barcode.class,
         opencv_wechat_qrcode.class,
     },
     value = {
         @Platform(preload = {"opencv_cuda@.4.5", "opencv_cudaarithm@.4.5", "opencv_cudafilters@.4.5", "opencv_cudaimgproc@.4.5", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
-        @Platform(value = "windows", preload = {"opencv_cuda452", "opencv_cudaarithm452", "opencv_cudafilters452", "opencv_cudaimgproc452", "opencv_java"}),
+        @Platform(value = "windows", preload = {"opencv_cuda453", "opencv_cudaarithm453", "opencv_cudafilters453", "opencv_cudaimgproc453", "opencv_java"}),
     }
 )
 public class opencv_java {

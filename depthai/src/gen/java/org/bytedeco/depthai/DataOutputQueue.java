@@ -63,7 +63,7 @@ public class DataOutputQueue extends Pointer {
      *
      * @return Maximum queue size
      */
-    public native @Cast("unsigned int") int getMaxSize(@Cast("unsigned int") int maxSize);
+    public native @Cast("unsigned int") int getMaxSize();
 
     /**
      * Gets queues name
@@ -117,6 +117,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("has<dai::Tracklets>") @Cast("bool") boolean hasTracklets();
     public native @Name("has<dai::SpatialImgDetections>") @Cast("bool") boolean hasSpatialImgDetections();
     public native @Name("has<dai::SpatialLocationCalculatorData>") @Cast("bool") boolean hasSpatialLocationCalculatorData();
+    public native @Name("has<dai::StereoDepthConfig>") @Cast("bool") boolean hasStereoDepthConfig();
     public native @Name("has<dai::SystemInformation>") @Cast("bool") boolean hasSystemInformation();
 
     /**
@@ -139,6 +140,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("tryGet<dai::Tracklets>") @SharedPtr Tracklets tryGetTracklets();
     public native @Name("tryGet<dai::SpatialImgDetections>") @SharedPtr SpatialImgDetections tryGetSpatialImgDetections();
     public native @Name("tryGet<dai::SpatialLocationCalculatorData>") @SharedPtr SpatialLocationCalculatorData tryGetSpatialLocationCalculatorData();
+    public native @Name("tryGet<dai::StereoDepthConfig>") @SharedPtr StereoDepthConfig tryGetStereoDepthConfig();
     public native @Name("tryGet<dai::SystemInformation>") @SharedPtr SystemInformation tryGetSystemInformation();
 
     /**
@@ -162,6 +164,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("get<dai::Tracklets>") @SharedPtr Tracklets getTracklets();
     public native @Name("get<dai::SpatialImgDetections>") @SharedPtr SpatialImgDetections getSpatialImgDetections();
     public native @Name("get<dai::SpatialLocationCalculatorData>") @SharedPtr SpatialLocationCalculatorData getSpatialLocationCalculatorData();
+    public native @Name("get<dai::StereoDepthConfig>") @SharedPtr StereoDepthConfig getStereoDepthConfig();
     public native @Name("get<dai::SystemInformation>") @SharedPtr SystemInformation getSystemInformation();
 
     /**
@@ -185,6 +188,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("front<dai::Tracklets>") @SharedPtr Tracklets frontTracklets();
     public native @Name("front<dai::SpatialImgDetections>") @SharedPtr SpatialImgDetections frontSpatialImgDetections();
     public native @Name("front<dai::SpatialLocationCalculatorData>") @SharedPtr SpatialLocationCalculatorData frontSpatialLocationCalculatorData();
+    public native @Name("front<dai::StereoDepthConfig>") @SharedPtr StereoDepthConfig frontStereoDepthConfig();
     public native @Name("front<dai::SystemInformation>") @SharedPtr SystemInformation frontSystemInformation();
 
     /**

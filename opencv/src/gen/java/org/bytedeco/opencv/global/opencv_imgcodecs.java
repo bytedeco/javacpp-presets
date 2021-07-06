@@ -182,9 +182,9 @@ public static final int
        IMWRITE_EXR_COMPRESSION_B44   = 6,
        /** lossy 4-by-4 pixel block compression, flat fields are compressed more */
        IMWRITE_EXR_COMPRESSION_B44A  = 7,
-       /** lossy DCT based compression, in blocks of 32 scanlines. More efficient for partial buffer access. */
+       /** lossy DCT based compression, in blocks of 32 scanlines. More efficient for partial buffer access. Supported since OpenEXR 2.2.0. */
        IMWRITE_EXR_COMPRESSION_DWAA  = 8,
-       /** lossy DCT based compression, in blocks of 256 scanlines. More efficient space wise and faster to decode full frames than DWAA_COMPRESSION. */
+       /** lossy DCT based compression, in blocks of 256 scanlines. More efficient space wise and faster to decode full frames than DWAA_COMPRESSION. Supported since OpenEXR 2.2.0. */
        IMWRITE_EXR_COMPRESSION_DWAB  = 9;
 
 /** Imwrite PNG specific flags used to tune the compression algorithm.
@@ -289,6 +289,32 @@ The function imreadmulti loads a multi-page image from the specified file into a
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats, int flags/*=cv::IMREAD_ANYCOLOR*/);
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats);
 
+/** \brief Loads a of images of a multi-page image from a file.
+<p>
+The function imreadmulti loads a specified range from a multi-page image from the specified file into a vector of Mat objects.
+@param filename Name of file to be loaded.
+@param start Start index of the image to load
+@param count Count number of images to load
+@param flags Flag that can take values of cv::ImreadModes, default with cv::IMREAD_ANYCOLOR.
+@param mats A vector of Mat objects holding each page, if more than one.
+@see cv::imread
+*/
+@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats, int start, int count, int flags/*=cv::IMREAD_ANYCOLOR*/);
+@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats, int start, int count);
+@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats, int start, int count, int flags/*=cv::IMREAD_ANYCOLOR*/);
+@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats, int start, int count);
+
+/** \brief Returns the number of images inside the give file
+<p>
+The function imcount will return the number of pages in a multi-page image, or 1 for single-page images
+@param filename Name of file to be loaded.
+@param flags Flag that can take values of cv::ImreadModes, default with cv::IMREAD_ANYCOLOR.
+*/
+@Namespace("cv") public static native @Cast("size_t") long imcount(@Str BytePointer filename, int flags/*=cv::IMREAD_ANYCOLOR*/);
+@Namespace("cv") public static native @Cast("size_t") long imcount(@Str BytePointer filename);
+@Namespace("cv") public static native @Cast("size_t") long imcount(@Str String filename, int flags/*=cv::IMREAD_ANYCOLOR*/);
+@Namespace("cv") public static native @Cast("size_t") long imcount(@Str String filename);
+
 /** \brief Saves an image to a specified file.
 <p>
 The function imwrite saves the image to the specified file. The image format is chosen based on the
@@ -304,6 +330,8 @@ can be saved using this function, with these exceptions:
 8-bit (or 16-bit) 4-channel image BGRA, where the alpha channel goes last. Fully transparent pixels
 should have alpha set to 0, fully opaque pixels should have alpha set to 255/65535 (see the code sample below).
 - Multiple images (vector of Mat) can be saved in TIFF format (see the code sample below).
+<p>
+If the image format is not supported, the image will be converted to 8-bit unsigned (CV_8U) and saved that way.
 <p>
 If the format, depth or channel order is different, use
 Mat::convertTo and cv::cvtColor to convert it before saving. Or, use the universal FileStorage I/O

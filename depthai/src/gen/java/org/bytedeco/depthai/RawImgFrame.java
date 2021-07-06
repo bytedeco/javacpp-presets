@@ -37,38 +37,38 @@ public class RawImgFrame extends RawBuffer {
     }
 
     public enum Type {
-        YUV422i(0),        // interleaved 8 bit
-        YUV444p(1),        // planar 4:4:4 format
-        YUV420p(2),        // planar 4:2:0 format
-        YUV422p(3),        // planar 8 bit
-        YUV400p(4),        // 8-bit greyscale
-        RGBA8888(5),       // RGBA interleaved stored in 32 bit word
-        RGB161616(6),      // Planar 16 bit RGB data
-        RGB888p(7),        // Planar 8 bit RGB data
-        BGR888p(8),        // Planar 8 bit BGR data
-        RGB888i(9),        // Interleaved 8 bit RGB data
-        BGR888i(10),        // Interleaved 8 bit BGR data
-        RGBF16F16F16p(11),  // Planar FP16 RGB data
-        BGRF16F16F16p(12),  // Planar FP16 BGR data
-        RGBF16F16F16i(13),  // Interleaved FP16 RGB data
-        BGRF16F16F16i(14),  // Interleaved FP16 BGR data
-        GRAY8(15),          // 8 bit grayscale (1 plane)
-        GRAYF16(16),        // FP16 grayscale (normalized)
-        LUT2(17),           // 1 bit  per pixel, Lookup table
-        LUT4(18),           // 2 bits per pixel, Lookup table
-        LUT16(19),          // 4 bits per pixel, Lookup table
-        RAW16(20),          // save any raw type (8, 10, 12bit) on 16 bits
-        RAW14(21),          // 14bit value in 16bit storage
-        RAW12(22),          // 12bit value in 16bit storage
-        RAW10(23),          // 10bit value in 16bit storage
-        RAW8(24),
-        PACK10(25),  // 10bit packed format
-        PACK12(26),  // 12bit packed format
-        YUV444i(27),
-        NV12(28),
-        NV21(29),
-        BITSTREAM(30),  // used for video encoder bitstream
-        HDR(31),
+        YUV422i(0),    // interleaved 8 bit
+        YUV444p(1),    // planar 4:4:4 format
+        YUV420p(2),    // planar 4:2:0 format
+        YUV422p(3),    // planar 8 bit
+        YUV400p(4),    // 8-bit greyscale
+        RGBA8888(5),   // RGBA interleaved stored in 32 bit word
+        RGB161616(6),  // Planar 16 bit RGB data
+        RGB888p(7),    // Planar 8 bit RGB data
+        BGR888p(8),    // Planar 8 bit BGR data
+        RGB888i(9),    // Interleaved 8 bit RGB data
+        BGR888i(10),    // Interleaved 8 bit BGR data
+        LUT2(11),       // 1 bit  per pixel, Lookup table (used for graphics layers)
+        LUT4(12),       // 2 bits per pixel, Lookup table (used for graphics layers)
+        LUT16(13),      // 4 bits per pixel, Lookup table (used for graphics layers)
+        RAW16(14),      // save any raw type (8, 10, 12bit) on 16 bits
+        RAW14(15),      // 14bit value in 16bit storage
+        RAW12(16),      // 12bit value in 16bit storage
+        RAW10(17),      // 10bit value in 16bit storage
+        RAW8(18),
+        PACK10(19),  // 10bit packed format
+        PACK12(20),  // 12bit packed format
+        YUV444i(21),
+        NV12(22),
+        NV21(23),
+        BITSTREAM(24),  // used for video encoder bitstream
+        HDR(25),
+        RGBF16F16F16p(26),  // Planar FP16 RGB data
+        BGRF16F16F16p(27),  // Planar FP16 BGR data
+        RGBF16F16F16i(28),  // Interleaved FP16 RGB data
+        BGRF16F16F16i(29),  // Interleaved FP16 BGR data
+        GRAY8(30),          // 8 bit grayscale (1 plane)
+        GRAYF16(31),        // FP16 grayscale (normalized)
         NONE(32);
 
         public final int value;
@@ -110,7 +110,7 @@ public class RawImgFrame extends RawBuffer {
     public native int sequenceNum(); public native RawImgFrame sequenceNum(int setter);       // increments for each frame
     public native @ByRef Timestamp ts(); public native RawImgFrame ts(Timestamp setter);          // generation timestamp
 
-    public native void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
-    public native void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);
-    public native void serialize(@Cast("std::uint8_t*") @StdVector byte[] metadata, @ByRef @Cast("dai::DatatypeEnum*") int[] datatype);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] metadata, @ByRef @Cast("dai::DatatypeEnum*") int[] datatype);
 }

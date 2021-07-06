@@ -169,7 +169,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.2  https://opencv.org/releases.html
+ * OpenCV 4.5.3  https://opencv.org/releases.html
  * FFmpeg 4.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 2.4.x https://www.flir.com/products/spinnaker-sdk
@@ -215,7 +215,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow Lite 2.5.x  https://github.com/tensorflow/tensorflow
  * TensorRT 7.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.5.0  https://github.com/luxonis/depthai-core
+ * DepthAI 2.6.0  https://github.com/luxonis/depthai-core
  * ONNX 1.9.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.8.x  https://github.com/microsoft/onnxruntime

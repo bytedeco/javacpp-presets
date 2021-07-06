@@ -78,7 +78,7 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 
 // Parsed from XLink/XLinkPublicDefines.h
 
-// Copyright (C) 2018-2020 Intel Corporation
+// Copyright (C) 2018-2021 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 //
 
@@ -213,34 +213,10 @@ public static final int
 // #include "pipeline/Pipeline.hpp"
 
 // Include common nodes
-// #include "pipeline/node/ColorCamera.hpp"
-// #include "pipeline/node/DetectionNetwork.hpp"
-// #include "pipeline/node/IMU.hpp"
-// #include "pipeline/node/ImageManip.hpp"
-// #include "pipeline/node/MonoCamera.hpp"
-// #include "pipeline/node/NeuralNetwork.hpp"
-// #include "pipeline/node/ObjectTracker.hpp"
-// #include "pipeline/node/SPIOut.hpp"
-// #include "pipeline/node/SpatialDetectionNetwork.hpp"
-// #include "pipeline/node/SpatialLocationCalculator.hpp"
-// #include "pipeline/node/StereoDepth.hpp"
-// #include "pipeline/node/SystemLogger.hpp"
-// #include "pipeline/node/VideoEncoder.hpp"
-// #include "pipeline/node/XLinkIn.hpp"
-// #include "pipeline/node/XLinkOut.hpp"
+// #include "pipeline/nodes.hpp"
 
 // Include common datatypes
-// #include "pipeline/datatype/Buffer.hpp"
-// #include "pipeline/datatype/CameraControl.hpp"
-// #include "pipeline/datatype/IMUData.hpp"
-// #include "pipeline/datatype/ImageManipConfig.hpp"
-// #include "pipeline/datatype/ImgDetections.hpp"
-// #include "pipeline/datatype/ImgFrame.hpp"
-// #include "pipeline/datatype/NNData.hpp"
-// #include "pipeline/datatype/SpatialImgDetections.hpp"
-// #include "pipeline/datatype/SpatialLocationCalculatorData.hpp"
-// #include "pipeline/datatype/SystemInformation.hpp"
-// #include "pipeline/datatype/Tracklets.hpp"
+// #include "pipeline/datatypes.hpp"
 
 // namespace dai {
 // namespace{
@@ -624,8 +600,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
     SystemInformation(7),
     SpatialLocationCalculatorConfig(8),
     SpatialLocationCalculatorData(9),
-    Tracklets(10),
-    IMUData(11);
+    EdgeDetectorConfig(10),
+    Tracklets(11),
+    IMUData(12),
+    StereoDepthConfig(13);
 
     public final int value;
     private DatatypeEnum(int v) { this.value = v; }
@@ -652,6 +630,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 
   // namespace dai
+
 
 // Parsed from depthai-shared/datatype/RawIMUData.hpp
 
@@ -700,6 +679,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
   // namespace dai
 
+
 // Parsed from depthai-shared/datatype/RawImgFrame.hpp
 
 // #pragma once
@@ -711,6 +691,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 
   // namespace dai
+
 
 // Parsed from depthai-shared/datatype/RawImgDetections.hpp
 
@@ -748,6 +729,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 
   // namespace dai
+
 
 // Parsed from depthai-shared/datatype/RawNNData.hpp
 
@@ -804,6 +786,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
   // namespace dai
 
+
 // Parsed from depthai-shared/datatype/RawSpatialLocations.hpp
 
 // #pragma once
@@ -825,6 +808,38 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
   // namespace dai
 
+
+// Parsed from depthai-shared/datatype/RawStereoDepthConfig.hpp
+
+// #pragma once
+// #include <cstdint>
+// #include <nlohmann/json.hpp>
+// #include <vector>
+
+// #include "DatatypeEnum.hpp"
+// #include "RawBuffer.hpp"
+
+/**
+ * Median filter config for disparity post-processing
+ */
+@Namespace("dai") public enum MedianFilter { MEDIAN_OFF(0), KERNEL_3x3(3), KERNEL_5x5(5), KERNEL_7x7(7);
+
+    public final int value;
+    private MedianFilter(int v) { this.value = v; }
+    private MedianFilter(MedianFilter e) { this.value = e.value; }
+    public MedianFilter intern() { for (MedianFilter e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../StereoDepthConfigData.java
+
+
+// Targeting ../RawStereoDepthConfig.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai-shared/datatype/RawSystemInformation.hpp
 
 // #pragma once
@@ -842,6 +857,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 
   // namespace dai
+
 
 // Parsed from depthai-shared/datatype/RawTracklets.hpp
 
@@ -1288,6 +1304,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include <nlohmann/json.hpp>
 
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
+// #include "depthai-shared/datatype/RawStereoDepthConfig.hpp"
 // Targeting ../StereoDepthProperties.java
 
 
@@ -1455,6 +1472,8 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
+// #include <ostream>
+
 // #include "depthai-shared/common/UsbSpeed.hpp"
 
 @Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, UsbSpeed speed);
@@ -1466,6 +1485,8 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // Parsed from depthai/common/CameraBoardSocket.hpp
 
 // #pragma once
+
+// #include <ostream>
 
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 
@@ -1663,6 +1684,22 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
   // namespace dai
 
 
+// Parsed from depthai/pipeline/datatype/StereoDepthConfig.hpp
+
+// #pragma once
+
+// #include <unordered_map>
+// #include <vector>
+
+// #include "depthai-shared/datatype/RawStereoDepthConfig.hpp"
+// #include "depthai/pipeline/datatype/Buffer.hpp"
+// Targeting ../StereoDepthConfig.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai/pipeline/datatype/SystemInformation.hpp
 
 // #pragma once
@@ -1684,6 +1721,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
+// #include <ostream>
 // #include <unordered_map>
 // #include <vector>
 
@@ -1750,6 +1788,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
   // namespace std
 
+
 // Parsed from depthai/pipeline/Pipeline.hpp
 
 // #pragma once
@@ -1777,6 +1816,50 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 
   // namespace dai
+
+
+// Parsed from depthai/pipeline/nodes.hpp
+
+// #pragma once
+
+// all the nodes
+// #include "node/ColorCamera.hpp"
+// #include "node/DetectionNetwork.hpp"
+// #include "node/EdgeDetector.hpp"
+// #include "node/IMU.hpp"
+// #include "node/ImageManip.hpp"
+// #include "node/MonoCamera.hpp"
+// #include "node/MyProducer.hpp"
+// #include "node/NeuralNetwork.hpp"
+// #include "node/ObjectTracker.hpp"
+// #include "node/SPIOut.hpp"
+// #include "node/SpatialDetectionNetwork.hpp"
+// #include "node/SpatialLocationCalculator.hpp"
+// #include "node/StereoDepth.hpp"
+// #include "node/SystemLogger.hpp"
+// #include "node/VideoEncoder.hpp"
+// #include "node/XLinkIn.hpp"
+// #include "node/XLinkOut.hpp"
+
+
+// Parsed from depthai/pipeline/datatypes.hpp
+
+// #pragma once
+
+// all the data types
+// #include "datatype/ADatatype.hpp"
+// #include "datatype/Buffer.hpp"
+// #include "datatype/CameraControl.hpp"
+// #include "datatype/IMUData.hpp"
+// #include "datatype/ImageManipConfig.hpp"
+// #include "datatype/ImgDetections.hpp"
+// #include "datatype/ImgFrame.hpp"
+// #include "datatype/NNData.hpp"
+// #include "datatype/SpatialImgDetections.hpp"
+// #include "datatype/SpatialLocationCalculatorConfig.hpp"
+// #include "datatype/SpatialLocationCalculatorData.hpp"
+// #include "datatype/SystemInformation.hpp"
+// #include "datatype/Tracklets.hpp"
 
 
 // Parsed from depthai/pipeline/node/IMU.hpp
@@ -1991,6 +2074,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // shared
 // #include "depthai-shared/properties/StereoDepthProperties.hpp"
+// #include "depthai/pipeline/datatype/StereoDepthConfig.hpp"
 // Targeting ../StereoDepth.java
 
 

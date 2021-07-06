@@ -37,7 +37,7 @@ public class FormatInfo extends Pointer {
         return (FormatInfo)super.position(position);
     }
     @Override public FormatInfo getPointer(long i) {
-        return new FormatInfo((Pointer)this).position(position + i);
+        return new FormatInfo((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("cv::cudacodec::Codec") int codec(); public native FormatInfo codec(int setter);

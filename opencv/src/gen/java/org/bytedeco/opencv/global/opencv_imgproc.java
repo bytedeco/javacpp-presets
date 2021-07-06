@@ -3211,22 +3211,21 @@ public static final int
 The LineSegmentDetector algorithm is defined using the standard values. Only advanced users may want
 to edit those, as to tailor it for their own application.
 <p>
-@param _refine The way found lines will be refined, see #LineSegmentDetectorModes
-@param _scale The scale of the image that will be used to find the lines. Range (0..1].
-@param _sigma_scale Sigma for Gaussian filter. It is computed as sigma = _sigma_scale/_scale.
-@param _quant Bound to the quantization error on the gradient norm.
-@param _ang_th Gradient angle tolerance in degrees.
-@param _log_eps Detection threshold: -log10(NFA) \> log_eps. Used only when advance refinement
-is chosen.
-@param _density_th Minimal density of aligned region points in the enclosing rectangle.
-@param _n_bins Number of bins in pseudo-ordering of gradient modulus.
+@param refine The way found lines will be refined, see #LineSegmentDetectorModes
+@param scale The scale of the image that will be used to find the lines. Range (0..1].
+@param sigma_scale Sigma for Gaussian filter. It is computed as sigma = sigma_scale/scale.
+@param quant Bound to the quantization error on the gradient norm.
+@param ang_th Gradient angle tolerance in degrees.
+@param log_eps Detection threshold: -log10(NFA) \> log_eps. Used only when advance refinement is chosen.
+@param density_th Minimal density of aligned region points in the enclosing rectangle.
+@param n_bins Number of bins in pseudo-ordering of gradient modulus.
 <p>
 \note Implementation has been removed due original code license conflict
  */
 @Namespace("cv") public static native @Ptr LineSegmentDetector createLineSegmentDetector(
-    int _refine/*=cv::LSD_REFINE_STD*/, double _scale/*=0.8*/,
-    double _sigma_scale/*=0.6*/, double _quant/*=2.0*/, double _ang_th/*=22.5*/,
-    double _log_eps/*=0*/, double _density_th/*=0.7*/, int _n_bins/*=1024*/);
+    int refine/*=cv::LSD_REFINE_STD*/, double scale/*=0.8*/,
+    double sigma_scale/*=0.6*/, double quant/*=2.0*/, double ang_th/*=22.5*/,
+    double log_eps/*=0*/, double density_th/*=0.7*/, int n_bins/*=1024*/);
 @Namespace("cv") public static native @Ptr LineSegmentDetector createLineSegmentDetector();
 
 /** \} imgproc_feature
@@ -3482,7 +3481,7 @@ The unnormalized square box filter can be useful in computing local image statis
 variance and standard deviation around the neighborhood of a pixel.
 <p>
 @param src input image
-@param dst output image of the same size and type as _src
+@param dst output image of the same size and type as src
 @param ddepth the output image depth (-1 to use src.depth())
 @param ksize kernel size
 @param anchor kernel anchor point. The default value of Point(-1, -1) denotes that the anchor is at the kernel
@@ -4295,8 +4294,8 @@ votes ( {@code >\texttt{threshold}} ).
 <p>
 The function finds lines in a set of points using a modification of the Hough transform.
 \include snippets/imgproc_HoughLinesPointSet.cpp
-@param _point Input vector of points. Each vector must be encoded as a Point vector {@code (x,y)}. Type must be CV_32FC2 or CV_32SC2.
-@param _lines Output vector of found lines. Each vector is encoded as a vector<Vec3d> {@code (votes, rho, theta)}.
+@param point Input vector of points. Each vector must be encoded as a Point vector {@code (x,y)}. Type must be CV_32FC2 or CV_32SC2.
+@param lines Output vector of found lines. Each vector is encoded as a vector<Vec3d> {@code (votes, rho, theta)}.
 The larger the value of 'votes', the higher the reliability of the Hough line.
 @param lines_max Max count of hough lines.
 @param threshold Accumulator threshold parameter. Only those lines are returned that get enough
@@ -4308,13 +4307,13 @@ votes ( {@code >\texttt{threshold}} )
 @param max_theta Maximum angle value of the accumulator in radians.
 @param theta_step Angle resolution of the accumulator in radians.
  */
-@Namespace("cv") public static native void HoughLinesPointSet( @ByVal Mat _point, @ByVal Mat _lines, int lines_max, int threshold,
+@Namespace("cv") public static native void HoughLinesPointSet( @ByVal Mat point, @ByVal Mat lines, int lines_max, int threshold,
                                       double min_rho, double max_rho, double rho_step,
                                       double min_theta, double max_theta, double theta_step );
-@Namespace("cv") public static native void HoughLinesPointSet( @ByVal UMat _point, @ByVal UMat _lines, int lines_max, int threshold,
+@Namespace("cv") public static native void HoughLinesPointSet( @ByVal UMat point, @ByVal UMat lines, int lines_max, int threshold,
                                       double min_rho, double max_rho, double rho_step,
                                       double min_theta, double max_theta, double theta_step );
-@Namespace("cv") public static native void HoughLinesPointSet( @ByVal GpuMat _point, @ByVal GpuMat _lines, int lines_max, int threshold,
+@Namespace("cv") public static native void HoughLinesPointSet( @ByVal GpuMat point, @ByVal GpuMat lines, int lines_max, int threshold,
                                       double min_rho, double max_rho, double rho_step,
                                       double min_theta, double max_theta, double theta_step );
 
@@ -5346,6 +5345,32 @@ An example is shown below:
 @Namespace("cv") public static native void createHanningWindow(@ByVal Mat dst, @ByVal Size winSize, int type);
 @Namespace("cv") public static native void createHanningWindow(@ByVal UMat dst, @ByVal Size winSize, int type);
 @Namespace("cv") public static native void createHanningWindow(@ByVal GpuMat dst, @ByVal Size winSize, int type);
+
+/** \brief Performs the per-element division of the first Fourier spectrum by the second Fourier spectrum.
+<p>
+The function cv::divSpectrums performs the per-element division of the first array by the second array.
+The arrays are CCS-packed or complex matrices that are results of a real or complex Fourier transform.
+<p>
+@param a first input array.
+@param b second input array of the same size and type as src1 .
+@param c output array of the same size and type as src1 .
+@param flags operation flags; currently, the only supported flag is cv::DFT_ROWS, which indicates that
+each row of src1 and src2 is an independent 1D Fourier spectrum. If you do not want to use this flag, then simply add a {@code 0} as value.
+@param conjB optional flag that conjugates the second input array before the multiplication (true)
+or not (false).
+*/
+@Namespace("cv") public static native void divSpectrums(@ByVal Mat a, @ByVal Mat b, @ByVal Mat c,
+                               int flags, @Cast("bool") boolean conjB/*=false*/);
+@Namespace("cv") public static native void divSpectrums(@ByVal Mat a, @ByVal Mat b, @ByVal Mat c,
+                               int flags);
+@Namespace("cv") public static native void divSpectrums(@ByVal UMat a, @ByVal UMat b, @ByVal UMat c,
+                               int flags, @Cast("bool") boolean conjB/*=false*/);
+@Namespace("cv") public static native void divSpectrums(@ByVal UMat a, @ByVal UMat b, @ByVal UMat c,
+                               int flags);
+@Namespace("cv") public static native void divSpectrums(@ByVal GpuMat a, @ByVal GpuMat b, @ByVal GpuMat c,
+                               int flags, @Cast("bool") boolean conjB/*=false*/);
+@Namespace("cv") public static native void divSpectrums(@ByVal GpuMat a, @ByVal GpuMat b, @ByVal GpuMat c,
+                               int flags);
 
 /** \} imgproc_motion
  <p>
@@ -7306,9 +7331,9 @@ Examples of how intersectConvexConvex works
 
 /** \brief Finds intersection of two convex polygons
 <p>
-@param _p1 First polygon
-@param _p2 Second polygon
-@param _p12 Output polygon describing the intersecting area
+@param p1 First polygon
+@param p2 Second polygon
+@param p12 Output polygon describing the intersecting area
 @param handleNested When true, an intersection is found if one of the polygons is fully enclosed in the other.
 When false, no intersection is found. If the polygons share a side or the vertex of one polygon lies on an edge
 of the other, they are not considered nested and an intersection will be found regardless of the value of handleNested.
@@ -7317,18 +7342,18 @@ of the other, they are not considered nested and an intersection will be found r
 <p>
 \note intersectConvexConvex doesn't confirm that both polygons are convex and will return invalid results if they aren't.
  */
-@Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat _p1, @ByVal Mat _p2,
-                                          @ByVal Mat _p12, @Cast("bool") boolean handleNested/*=true*/ );
-@Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat _p1, @ByVal Mat _p2,
-                                          @ByVal Mat _p12 );
-@Namespace("cv") public static native float intersectConvexConvex( @ByVal UMat _p1, @ByVal UMat _p2,
-                                          @ByVal UMat _p12, @Cast("bool") boolean handleNested/*=true*/ );
-@Namespace("cv") public static native float intersectConvexConvex( @ByVal UMat _p1, @ByVal UMat _p2,
-                                          @ByVal UMat _p12 );
-@Namespace("cv") public static native float intersectConvexConvex( @ByVal GpuMat _p1, @ByVal GpuMat _p2,
-                                          @ByVal GpuMat _p12, @Cast("bool") boolean handleNested/*=true*/ );
-@Namespace("cv") public static native float intersectConvexConvex( @ByVal GpuMat _p1, @ByVal GpuMat _p2,
-                                          @ByVal GpuMat _p12 );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat p1, @ByVal Mat p2,
+                                          @ByVal Mat p12, @Cast("bool") boolean handleNested/*=true*/ );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat p1, @ByVal Mat p2,
+                                          @ByVal Mat p12 );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal UMat p1, @ByVal UMat p2,
+                                          @ByVal UMat p12, @Cast("bool") boolean handleNested/*=true*/ );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal UMat p1, @ByVal UMat p2,
+                                          @ByVal UMat p12 );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal GpuMat p1, @ByVal GpuMat p2,
+                                          @ByVal GpuMat p12, @Cast("bool") boolean handleNested/*=true*/ );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal GpuMat p1, @ByVal GpuMat p2,
+                                          @ByVal GpuMat p12 );
 
 /** \example samples/cpp/fitellipse.cpp
 An example using the fitEllipse technique

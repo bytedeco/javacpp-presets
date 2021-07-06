@@ -1530,11 +1530,18 @@ public class Mat extends AbstractMat {
     }</pre>
      */
 
+    /** \brief Same as begin() but for inverse traversal
+     */
+
     /** \brief Returns the matrix iterator and sets it to the after-last matrix element.
     <p>
     The methods return the matrix read-only or read-write iterators, set to the point following the last
     matrix element.
      */
+
+    /** \brief Same as end() but for inverse traversal
+     */
+
 
     /** \brief Runs the given functor over all matrix elements in parallel.
     <p>
