@@ -99,6 +99,7 @@ if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
     export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
     export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
     export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -110,6 +111,7 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
     export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
     export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/:$SCIPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
