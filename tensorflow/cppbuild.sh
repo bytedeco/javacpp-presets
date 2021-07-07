@@ -66,6 +66,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
             export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
             export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
+            export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
             chmod +x "$PYTHON_BIN_PATH"
         elif [[ -f "$P/include/Python.h" ]]; then
@@ -73,6 +74,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             export PYTHON_BIN_PATH="$CPYTHON_PATH/python.exe"
             export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
             export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
+            export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
         elif [[ -f "$P/include/mkldnn.h" ]]; then
             MKLDNN_PATH="$P"

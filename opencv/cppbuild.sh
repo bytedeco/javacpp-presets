@@ -50,6 +50,7 @@ if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.9/"
     export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.9/"
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON3_EXECUTABLE"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -60,6 +61,7 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
     export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python39.lib"
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
 export PYTHONPATH="$NUMPY_PATH/python/:${PYTHONPATH:-}"
 
