@@ -46,7 +46,10 @@ import org.bytedeco.javacpp.tools.Logger;
                "WinBase.h", "timezoneapi.h", "Psapi.h", "TlHelp32.h"},
     includepath = {"C:/Program Files (x86)/Windows Kits/8.1/Include/shared/",
                    "C:/Program Files (x86)/Windows Kits/8.1/Include/um/"},
-    link = {"ntdll", "AdvAPI32", "mincore", "synchronization", "User32", "Psapi"})},
+    link = {"ntdll", "AdvAPI32", "mincore", "synchronization", "User32", "Psapi"},
+    linkpath = "C:/Program Files (x86)/Windows Kits/8.1/Lib/winv6.3/um/x86/"),
+@Platform(value = "windows-x86_64",
+    linkpath = "C:/Program Files (x86)/Windows Kits/8.1/Lib/winv6.3/um/x64/")},
         target = "org.bytedeco.systems.windows", global = "org.bytedeco.systems.global.windows")
 @NoException
 public class windows implements BuildEnabled, InfoMapper {
