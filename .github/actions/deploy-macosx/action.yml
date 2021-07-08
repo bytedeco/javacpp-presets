@@ -10,8 +10,10 @@ runs:
         export MACOSX_DEPLOYMENT_TARGET=10.13
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
-        echo Removing old SDKs without ARM support
-        sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
+        if [[ "$CI_DEPLOY_PLATFORM" == "macosx-arm64" ]]; then
+          echo Removing old SDKs without ARM support
+          sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
+        fi
 
         brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
