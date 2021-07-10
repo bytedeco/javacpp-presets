@@ -578,9 +578,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
                .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("absl::optional", "absl::Span", "absl::LogSink", "TFLogSink", "std::initializer_list", "std::iterator").skip())
-               .put(new Info("absl::string_view", "string", "std::string", "tensorflow::string", "tensorflow::tstring").annotations("@StdString")
-                       .valueTypes("@Cast({\"char*\", \"std::string&&\"}) BytePointer", "@Cast({\"char*\", \"std::string&&\"}) String")
-                       .pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("absl::string_view", "string", "std::string", "tensorflow::string", "tensorflow::tstring").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::set<tensorflow::string>").pointerTypes("StringSet").define())
                .put(new Info("std::list<tensorflow::string>").pointerTypes("StringList").define())
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::int32>").pointerTypes("StringIntUnorderedMap").define())
@@ -983,7 +981,13 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                           "tensorflow::Tensor", "tensorflow::TensorProto", "tensorflow::TensorShape",
                           "tensorflow::NameAttrList", "tensorflow::StringPiece"};
         for (int i = 0; i < attrs.length; i++) {
-            infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<" + attrs[i] + ">").javaNames("WithAttr"));
+            if ("std::string".equals(attrs[i])) {
+                infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<" + attrs[i] + ">").javaText(
+                        "public native @ByVal @Name(\"WithAttr<std::string>\") Options WithAttr(@StringPiece BytePointer attr_name, @StdString @Cast({\"char*\", \"std::string&&\"}) BytePointer value);\n"
+                      + "public native @ByVal @Name(\"WithAttr<std::string>\") Options WithAttr(@StringPiece String attr_name, @StdString @Cast({\"char*\", \"std::string&&\"}) String value);"));
+            } else if (!"tensorflow::StringPiece".equals(attrs[i])) {
+                infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<" + attrs[i] + ">").javaNames("WithAttr"));
+            }
             if (i < attrs.length - 2) {
                 infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<tensorflow::gtl::ArraySlice<" + attrs[i] + "> >").javaNames("WithAttr"));
             }
