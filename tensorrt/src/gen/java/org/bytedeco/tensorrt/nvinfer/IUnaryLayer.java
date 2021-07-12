@@ -26,7 +26,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IUnaryLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -42,13 +42,13 @@ public class IUnaryLayer extends ILayer {
     //!
     //!
     //!
-    public native void setOperation(UnaryOperation op);
-    public native void setOperation(@Cast("nvinfer1::UnaryOperation") int op);
+    public native @NoException(true) void setOperation(UnaryOperation op);
+    public native @NoException(true) void setOperation(@Cast("nvinfer1::UnaryOperation") int op);
 
     /**
      *  \brief Get the unary operation for the layer.
      * 
      *  @see setOperation(), UnaryOperation
      *  */
-    public native UnaryOperation getOperation();
+    public native @NoException(true) UnaryOperation getOperation();
 }

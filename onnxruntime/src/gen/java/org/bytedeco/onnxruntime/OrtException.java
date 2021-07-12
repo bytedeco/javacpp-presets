@@ -28,5 +28,5 @@ public class OrtException extends Pointer {
   private native void allocate(@Cast({"char*", "std::string&&"}) @StdString String string, @Cast("OrtErrorCode") int code);
 
   public native @Cast("OrtErrorCode") int GetOrtErrorCode();
-  public native @NoException @Cast("const char*") BytePointer what();
+  public native @NoException(true) @Cast("const char*") BytePointer what();
 }

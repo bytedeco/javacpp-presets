@@ -24,7 +24,7 @@ public class UnicodeMapHolder extends Pointer {
         return (UnicodeMapHolder)super.position(position);
     }
     @Override public UnicodeMapHolder getPointer(long i) {
-        return new UnicodeMapHolder((Pointer)this).position(position + i);
+        return new UnicodeMapHolder((Pointer)this).offsetAddress(i);
     }
 
     public UnicodeMapHolder() { super((Pointer)null); allocate(); }

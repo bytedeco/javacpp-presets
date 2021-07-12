@@ -36,7 +36,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  j == 0 if getLoopOutput() is kLAST_VALUE
  *  j == 1 if getLoopOutput() is kCONCATENATE or kREVERSE.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ILoopOutputLayer extends ILoopBoundaryLayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -47,7 +47,7 @@ public class ILoopOutputLayer extends ILoopBoundaryLayer {
     //!
     //!
     //!
-    public native @NoException LoopOutput getLoopOutput();
+    public native @NoException(true) LoopOutput getLoopOutput();
 
     /**
      *  \brief Set where to insert the contenation axis. Ignored if getLoopOutput() is kLAST_VALUE.
@@ -61,7 +61,7 @@ public class ILoopOutputLayer extends ILoopBoundaryLayer {
      *  setAxis(3) causes the output to have dimensions [b,c,d,a].
      *  Default is axis is 0.
      *  */
-    public native @NoException void setAxis(int axis);
+    public native @NoException(true) void setAxis(int axis);
 
     /** Get axis being concatenated over. */
     
@@ -72,7 +72,7 @@ public class ILoopOutputLayer extends ILoopBoundaryLayer {
     //!
     //!
     //!
-    public native @NoException int getAxis();
+    public native @NoException(true) int getAxis();
 
     /**
      *  \brief Append or replace an input of this layer with a specific tensor
@@ -94,5 +94,4 @@ public class ILoopOutputLayer extends ILoopBoundaryLayer {
     /** If this function is called with a value 1, then the function getNbInputs() changes
     /** from returning 1 to 2.
     /** */
-    public native void setInput(int index, @ByRef ITensor tensor);
 }

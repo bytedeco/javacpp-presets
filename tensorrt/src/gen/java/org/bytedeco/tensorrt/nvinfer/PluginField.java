@@ -68,10 +68,14 @@ public class PluginField extends Pointer {
      *  */
     public native int length(); public native PluginField length(int setter);
 
-    public PluginField(String name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/, PluginFieldType type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/) { super((Pointer)null); allocate(name_, data_, type_, length_); }
-    private native void allocate(String name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/, PluginFieldType type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/);
+    public PluginField(String name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/,
+            PluginFieldType type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/) { super((Pointer)null); allocate(name_, data_, type_, length_); }
+    @NoException(true) private native void allocate(String name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/,
+            PluginFieldType type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/);
     public PluginField() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public PluginField(@Cast("const char*") BytePointer name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/, @Cast("nvinfer1::PluginFieldType") int type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/) { super((Pointer)null); allocate(name_, data_, type_, length_); }
-    private native void allocate(@Cast("const char*") BytePointer name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/, @Cast("nvinfer1::PluginFieldType") int type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/);
+    @NoException(true) private native void allocate();
+    public PluginField(@Cast("const char*") BytePointer name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/,
+            @Cast("nvinfer1::PluginFieldType") int type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/) { super((Pointer)null); allocate(name_, data_, type_, length_); }
+    @NoException(true) private native void allocate(@Cast("const char*") BytePointer name_/*=nullptr*/, @Const Pointer data_/*=nullptr*/,
+            @Cast("nvinfer1::PluginFieldType") int type_/*=nvinfer1::PluginFieldType::kUNKNOWN*/, int length_/*=0*/);
 }

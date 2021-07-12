@@ -59,7 +59,7 @@ public class IPluginV2IOExt extends IPluginV2Ext {
     //!
     //!
     //!
-    public native void configurePlugin(
+    public native @NoException(true) void configurePlugin(
             @Const PluginTensorDesc in, int nbInput, @Const PluginTensorDesc out, int nbOutput);
 
     /**
@@ -84,8 +84,8 @@ public class IPluginV2IOExt extends IPluginV2Ext {
      *  * A definition for a plugin that supports only FP16 NCHW for its two inputs,
      *    and FP32 NCHW for its single output:
      * 
-     *          return inOut.format[pos] == TensorFormat::kLINEAR && (inOut.type[pos] == pos < 2 ?  DataType::kHALF :
-     *          DataType::kFLOAT);
+     *          return inOut.format[pos] == TensorFormat::kLINEAR &&
+     *                 (inOut.type[pos] == pos < 2 ?  DataType::kHALF : DataType::kFLOAT);
      * 
      *  * A definition for a "polymorphic" plugin with two inputs and one output that supports
      *    any format or type, but the inputs and output must have the same format and type:
@@ -94,6 +94,6 @@ public class IPluginV2IOExt extends IPluginV2Ext {
      * 
      *  Warning: TensorRT will stop asking for formats once it finds kFORMAT_COMBINATION_LIMIT on combinations.
      *  */
-    public native @Cast("bool") boolean supportsFormatCombination(
+    public native @Cast("bool") @NoException(true) boolean supportsFormatCombination(
             int pos, @Const PluginTensorDesc inOut, int nbInputs, int nbOutputs);
 }

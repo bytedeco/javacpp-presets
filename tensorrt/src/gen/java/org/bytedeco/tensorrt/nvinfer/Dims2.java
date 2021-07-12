@@ -18,13 +18,12 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
-
 /**
  *  \class Dims2
  *  \brief Descriptor for two-dimensional data.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class Dims2 extends Dims {
+public class Dims2 extends Dims32 {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dims2(Pointer p) { super(p); }

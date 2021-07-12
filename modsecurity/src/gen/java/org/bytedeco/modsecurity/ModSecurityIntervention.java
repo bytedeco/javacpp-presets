@@ -27,7 +27,7 @@ public class ModSecurityIntervention extends Pointer {
         return (ModSecurityIntervention)super.position(position);
     }
     @Override public ModSecurityIntervention getPointer(long i) {
-        return new ModSecurityIntervention((Pointer)this).position(position + i);
+        return new ModSecurityIntervention((Pointer)this).offsetAddress(i);
     }
 
     public native int status(); public native ModSecurityIntervention status(int setter);

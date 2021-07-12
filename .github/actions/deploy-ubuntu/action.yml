@@ -14,14 +14,14 @@ runs:
           export ARCH=arm64
           export PREFIX=aarch64-linux-gnu
           export CUDA=cuda-repo-rhel8-11-4-local-11.4.0_470.42.01-1.aarch64.rpm
-          export CUDNN=cudnn-11.3-linux-aarch64sbsa-v8.2.1.32.tgz
-          export NCCL=nccl_2.9.9-1+cuda11.3_aarch64.txz
+          export CUDNN=cudnn-11.4-linux-aarch64sbsa-v8.2.2.26.tgz
+          export NCCL=nccl_2.10.3-1+cuda11.4_aarch64.txz
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export PREFIX=powerpc64le-linux-gnu
           export CUDA=cuda-repo-rhel8-11-4-local-11.4.0_470.42.01-1.ppc64le.rpm
-          export CUDNN=cudnn-11.3-linux-ppc64le-v8.2.1.32.tgz
-          export NCCL=nccl_2.9.9-1+cuda11.3_ppc64le.txz
+          export CUDNN=cudnn-11.4-linux-ppc64le-v8.2.2.26.tgz
+          export NCCL=nccl_2.10.3-1+cuda11.4_ppc64le.txz
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -92,8 +92,8 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/$CUDA
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.1/$CUDNN
-          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.9/$NCCL
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.2/$CUDNN
+          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.10/$NCCL
 
           rpm -i --force --ignorearch --nodeps $CUDA
           pushd /var/cuda-repo-rhel8-11-4-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
@@ -131,8 +131,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1uwb4nISZT0-FcpTQ4dnWaD47fLQu69IP
-          tar -hxvf TensorRT-7.2.1.6.Ubuntu-18.04.aarch64-gnu.cuda-11.1.cudnn8.0.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1RpILZixMHfqXJqq9331lj-zj3kb58FWc
+          tar -hxvf TensorRT-8.0.1.6.Ubuntu-20.04.aarch64-gnu.cuda-11.3.cudnn8.2.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

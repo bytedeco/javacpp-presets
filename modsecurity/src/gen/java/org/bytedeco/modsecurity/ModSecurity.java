@@ -26,7 +26,7 @@ public class ModSecurity extends Pointer {
         return (ModSecurity)super.position(position);
     }
     @Override public ModSecurity getPointer(long i) {
-        return new ModSecurity((Pointer)this).position(position + i);
+        return new ModSecurity((Pointer)this).offsetAddress(i);
     }
 
     public ModSecurity() { super((Pointer)null); allocate(); }

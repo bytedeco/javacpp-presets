@@ -36,17 +36,19 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  @see IDimensionExpr
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IExprBuilder extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class IExprBuilder extends INoCopy {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IExprBuilder(Pointer p) { super(p); }
 
     /** Return pointer to IDimensionExp for given value. */
-    public native @Const IDimensionExpr constant(int value);
+    public native @Const @NoException(true) IDimensionExpr constant(int value);
 
     /** Return pointer to IDimensionExp that represents the given operation applied to first and second.
      *  Returns nullptr if op is not a valid DimensionOperation. */
-    public native @Const IDimensionExpr operation(DimensionOperation op, @Const @ByRef IDimensionExpr first, @Const @ByRef IDimensionExpr second);
-    public native @Const IDimensionExpr operation(@Cast("nvinfer1::DimensionOperation") int op, @Const @ByRef IDimensionExpr first, @Const @ByRef IDimensionExpr second);
+    public native @Const @NoException(true) IDimensionExpr operation(
+            DimensionOperation op, @Const @ByRef IDimensionExpr first, @Const @ByRef IDimensionExpr second);
+    public native @Const @NoException(true) IDimensionExpr operation(
+            @Cast("nvinfer1::DimensionOperation") int op, @Const @ByRef IDimensionExpr first, @Const @ByRef IDimensionExpr second);
 }

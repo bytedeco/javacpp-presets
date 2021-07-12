@@ -28,7 +28,7 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
  *  @param minSize Minimum box size in pixels. Can not be nullptr.
  *  @param maxSize Maximum box size in pixels. Can be nullptr.
  *  @param aspectRatios Aspect ratios of the boxes. Can be nullptr.
- *  @param numMinSize Number of element in minSize. Must be larger than 0.
+ *  @param numMinSize Number of elements in minSize. Must be larger than 0.
  *  @param numMaxSize Number of elements in maxSize. Can be 0 or same as numMinSize.
  *  @param numAspectRatios Number of elements in aspectRatios. Can be 0.
  *  @param flip If true, will flip each aspect ratio. For example, if there is an aspect ratio "r", the aspect ratio

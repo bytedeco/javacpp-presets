@@ -30,8 +30,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IAlgorithmVariant extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class IAlgorithmVariant extends INoCopy {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IAlgorithmVariant(Pointer p) { super(p); }
@@ -43,10 +43,10 @@ public class IAlgorithmVariant extends Pointer {
     
     //!
     //!
-    public native @Cast("int64_t") long getImplementation();
+    public native @Cast("int64_t") @NoException(true) long getImplementation();
 
     /**
      *  \brief Return tactic of the algorithm.
      *  */
-    public native @Cast("int64_t") long getTactic();
+    public native @Cast("int64_t") @NoException(true) long getTactic();
 }

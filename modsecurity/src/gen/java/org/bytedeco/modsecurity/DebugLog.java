@@ -25,7 +25,7 @@ public class DebugLog extends Pointer {
         return (DebugLog)super.position(position);
     }
     @Override public DebugLog getPointer(long i) {
-        return new DebugLog((Pointer)this).position(position + i);
+        return new DebugLog((Pointer)this).offsetAddress(i);
     }
 
     public DebugLog() { super((Pointer)null); allocate(); }

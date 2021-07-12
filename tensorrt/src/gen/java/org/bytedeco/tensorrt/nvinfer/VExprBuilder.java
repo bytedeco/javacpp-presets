@@ -18,11 +18,16 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
-/** Forward declaration of cudaEvent_t. */
-@Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class CUevent_st extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CUevent_st() { super((Pointer)null); }
+
+@Namespace("nvinfer1::apiv") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class VExprBuilder extends VRoot {
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CUevent_st(Pointer p) { super(p); }
+    public VExprBuilder(Pointer p) { super(p); }
+
+    public native @Const IDimensionExpr constant(int value);
+    public native @Const IDimensionExpr operation(
+            DimensionOperation op, @Const @ByRef IDimensionExpr first, @Const @ByRef IDimensionExpr second);
+    public native @Const IDimensionExpr operation(
+            @Cast("nvinfer1::DimensionOperation") int op, @Const @ByRef IDimensionExpr first, @Const @ByRef IDimensionExpr second);
 }

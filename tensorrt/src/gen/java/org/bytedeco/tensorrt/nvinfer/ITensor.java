@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // namespace impl
 
 /**
  *  \class ITensor
@@ -32,8 +32,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class ITensor extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class ITensor extends INoCopy {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ITensor(Pointer p) { super(p); }
@@ -56,8 +56,8 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native void setName(String name);
-    public native void setName(@Cast("const char*") BytePointer name);
+    public native @NoException(true) void setName(String name);
+    public native @NoException(true) void setName(@Cast("const char*") BytePointer name);
 
     /**
      *  \brief Get the tensor name.
@@ -74,14 +74,14 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native String getName();
+    public native @NoException(true) String getName();
 
     /**
      *  \brief Set the dimensions of a tensor.
      * 
-     *  For a network input the name is assigned by the application. For a network output it is computed based on
-     *  the layer parameters and the inputs to the layer. If a tensor size or a parameter is modified in the network,
-     *  the dimensions of all dependent tensors will be recomputed.
+     *  For a network input, the dimensions are assigned by the application. For a network output, the dimensions are
+     *  computed based on the layer parameters and the inputs to the layer. If a tensor size or a parameter is modified
+     *  in the network, the dimensions of all dependent tensors will be recomputed.
      * 
      *  This call is only legal for network input tensors, since the dimensions of layer output tensors are inferred
      *  based on layer inputs and parameters.
@@ -96,7 +96,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native void setDimensions(@ByVal Dims dimensions); // only valid for input tensors
+    public native @NoException(true) void setDimensions(@ByVal @Cast("nvinfer1::Dims*") Dims32 dimensions);
 
     /**
      *  \brief Get the dimensions of a tensor.
@@ -113,7 +113,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native @ByVal Dims getDimensions();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getDimensions();
 
     /**
      *  \brief Set the data type of a tensor.
@@ -131,8 +131,8 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native void setType(DataType type);
-    public native void setType(@Cast("nvinfer1::DataType") int type);
+    public native @NoException(true) void setType(DataType type);
+    public native @NoException(true) void setType(@Cast("nvinfer1::DataType") int type);
 
     /**
      *  \brief Get the data type of a tensor.
@@ -148,7 +148,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native DataType getType();
+    public native @NoException(true) DataType getType();
 
     /**
      *  \brief Set dynamic range for the tensor
@@ -164,23 +164,7 @@ public class ITensor extends Pointer {
     
     //!
     //!
-    //!
-    //!
-    public native @Cast("bool") boolean setDynamicRange(float min, float max);
-
-    /**
-     *  \brief Get dynamic range for the tensor
-     * 
-     *  @return maximal absolute value of the dynamic range, -1.0f if no dynamic range is set.
-     * 
-     *  @deprecated This interface is superseded by getDynamicRangeMin and getDynamicRangeMax and will be removed in
-     *  TensorRT 8.0.
-     *  */
-    
-    
-    //!
-    //!
-    public native @Deprecated float getDynamicRange();
+    public native @Cast("bool") @NoException(true) boolean setDynamicRange(float min, float max);
 
     /**
      *  \brief Whether the tensor is a network input.
@@ -189,12 +173,22 @@ public class ITensor extends Pointer {
     
     //!
     //!
-    public native @Cast("bool") boolean isNetworkInput();
+    public native @Cast("bool") @NoException(true) boolean isNetworkInput();
 
     /**
      *  \brief Whether the tensor is a network output.
      *  */
-    public native @Cast("bool") boolean isNetworkOutput();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean isNetworkOutput();
+
     /**
      *  \brief Set whether to enable broadcast of tensor across the batch.
      * 
@@ -219,7 +213,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native void setBroadcastAcrossBatch(@Cast("bool") boolean broadcastAcrossBatch);
+    public native @NoException(true) void setBroadcastAcrossBatch(@Cast("bool") boolean broadcastAcrossBatch);
 
     /**
      *  \brief Check if tensor is broadcast across the batch.
@@ -236,7 +230,7 @@ public class ITensor extends Pointer {
     
     //!
     //!
-    public native @Cast("bool") boolean getBroadcastAcrossBatch();
+    public native @Cast("bool") @NoException(true) boolean getBroadcastAcrossBatch();
 
     /**
      *  \brief Get the storage location of a tensor.
@@ -249,7 +243,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native TensorLocation getLocation();
+    public native @NoException(true) TensorLocation getLocation();
 
     /**
      *  \brief Set the storage location of a tensor
@@ -266,8 +260,8 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native void setLocation(TensorLocation location);
-    public native void setLocation(@Cast("nvinfer1::TensorLocation") int location);
+    public native @NoException(true) void setLocation(TensorLocation location);
+    public native @NoException(true) void setLocation(@Cast("nvinfer1::TensorLocation") int location);
 
     /**
      *  \brief Query whether dynamic range is set.
@@ -278,7 +272,7 @@ public class ITensor extends Pointer {
     
     //!
     //!
-    public native @Cast("bool") boolean dynamicRangeIsSet();
+    public native @Cast("bool") @NoException(true) boolean dynamicRangeIsSet();
 
     /**
      *  \brief Undo effect of setDynamicRange.
@@ -288,7 +282,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native void resetDynamicRange();
+    public native @NoException(true) void resetDynamicRange();
 
     /**
      *  \brief Get minimum of dynamic range.
@@ -300,7 +294,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native float getDynamicRangeMin();
+    public native @NoException(true) float getDynamicRangeMin();
 
     /**
      *  \brief Get maximum of dynamic range.
@@ -314,7 +308,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native float getDynamicRangeMax();
+    public native @NoException(true) float getDynamicRangeMax();
 
     /**
      *  \brief Set allowed formats for this tensor. By default all formats are allowed.
@@ -336,7 +330,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native void setAllowedFormats(@Cast("nvinfer1::TensorFormats") int formats);
+    public native @NoException(true) void setAllowedFormats(@Cast("nvinfer1::TensorFormats") int formats);
 
     /**
      *  \brief Get a bitmask of TensorFormat values that the tensor supports.
@@ -357,7 +351,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native @Cast("nvinfer1::TensorFormats") int getAllowedFormats();
+    public native @Cast("nvinfer1::TensorFormats") @NoException(true) int getAllowedFormats();
 
     /**
      *  \brief Whether the tensor is a shape tensor.
@@ -396,7 +390,7 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean isShapeTensor();
+    public native @Cast("bool") @NoException(true) boolean isShapeTensor();
 
     /**
      *  \brief Whether the tensor is an execution tensor.
@@ -416,5 +410,5 @@ public class ITensor extends Pointer {
      *  In that case, only its dimensions need to be set at runtime and a nullptr
      *  can be passed instead of a pointer to its contents.
      *  */
-    public native @Cast("bool") boolean isExecutionTensor();
+    public native @Cast("bool") @NoException(true) boolean isExecutionTensor();
 }

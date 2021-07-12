@@ -19,6 +19,7 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
+/** Plugin field collection struct. */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class PluginFieldCollection extends Pointer {
     static { Loader.load(); }
@@ -37,8 +38,8 @@ public class PluginFieldCollection extends Pointer {
         return new PluginFieldCollection((Pointer)this).offsetAddress(i);
     }
 
-    /** Number of PluginField entries */
+    /** Number of PluginField entries. */
     public native int nbFields(); public native PluginFieldCollection nbFields(int setter);
-    /** Pointer to PluginField entries */
+    /** Pointer to PluginField entries. */
     public native @Const PluginField fields(); public native PluginFieldCollection fields(PluginField setter);
 }

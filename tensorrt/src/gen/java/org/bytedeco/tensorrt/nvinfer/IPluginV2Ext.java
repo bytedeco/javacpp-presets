@@ -37,8 +37,9 @@ public class IPluginV2Ext extends IPluginV2 {
 
     /**
      *  \brief Return the DataType of the plugin output at the requested index.
-     *  The default behavior should be to return the type of the first input, or DataType::kFLOAT if the layer has no
-     *  inputs. The returned data type must have a format that is supported by the plugin. @see supportsFormat()
+     *  The default behavior should be to return the type of the first input, or DataType::kFLOAT if the layer has no inputs.
+     *  The returned data type must have a format that is supported by the plugin.
+     *  @see supportsFormat()
      * 
      *  \warning DataType:kBOOL not supported.
      *  */
@@ -46,11 +47,11 @@ public class IPluginV2Ext extends IPluginV2 {
     //!
     //!
     //!
-    public native DataType getOutputDataType(
+    public native @NoException(true) DataType getOutputDataType(
             int index, @Cast("nvinfer1::DataType*") IntPointer inputTypes, int nbInputs);
-    public native @Cast("nvinfer1::DataType") int getOutputDataType(
+    public native @NoException(true) @Cast("nvinfer1::DataType") int getOutputDataType(
             int index, @Cast("nvinfer1::DataType*") IntBuffer inputTypes, int nbInputs);
-    public native DataType getOutputDataType(
+    public native @NoException(true) DataType getOutputDataType(
             int index, @Cast("nvinfer1::DataType*") int[] inputTypes, int nbInputs);
 
     /** \brief Return true if output tensor is broadcast across a batch.
@@ -68,9 +69,9 @@ public class IPluginV2Ext extends IPluginV2 {
     //!
     //!
     //!
-    public native @Cast("bool") boolean isOutputBroadcastAcrossBatch(
+    public native @Cast("bool") @NoException(true) boolean isOutputBroadcastAcrossBatch(
             int outputIndex, @Cast("const bool*") BoolPointer inputIsBroadcasted, int nbInputs);
-    public native @Cast("bool") boolean isOutputBroadcastAcrossBatch(
+    public native @Cast("bool") @NoException(true) boolean isOutputBroadcastAcrossBatch(
             int outputIndex, @Cast("const bool*") boolean[] inputIsBroadcasted, int nbInputs);
 
     /** \brief Return true if plugin can use input that is broadcast across batch without replication.
@@ -94,7 +95,7 @@ public class IPluginV2Ext extends IPluginV2 {
     //!
     //!
     //!
-    public native @Cast("bool") boolean canBroadcastInputAcrossBatch(int inputIndex);
+    public native @Cast("bool") @NoException(true) boolean canBroadcastInputAcrossBatch(int inputIndex);
 
     /**
      *  \brief Configure the layer with input and output data types.
@@ -115,68 +116,78 @@ public class IPluginV2Ext extends IPluginV2 {
      * 
      *  The dimensions passed here do not include the outermost batch size (i.e. for 2-D image networks, they will be
      *  3-dimensional CHW dimensions). When inputIsBroadcast or outputIsBroadcast is true, the outermost batch size for
-     *  that input or output should be treated as if it is one. \ref inputIsBroadcast[i] is true only if the input is
-     *  semantically broadcast across the batch and \ref canBroadcastInputAcrossBatch(i) returned true. \ref
-     *  outputIsBroadcast[i] is true only if \ref isOutputBroadcastAcrossBatch(i) returned true.
+     *  that input or output should be treated as if it is one.
+     *  \ref inputIsBroadcast[i] is true only if the input is semantically broadcast across the batch and
+     *  \ref canBroadcastInputAcrossBatch(i) returned true.
+     *  \ref outputIsBroadcast[i] is true only if \ref isOutputBroadcastAcrossBatch(i) returns true.
      * 
      *  \warning for the floatFormat field, the values PluginFormat::kCHW4, PluginFormat::kCHW16, and
      *  PluginFormat::kCHW32 will not be passed in, this is to keep backward compatibility with TensorRT 5.x series. Use
      *  PluginV2IOExt or PluginV2DynamicExt for other PluginFormats.
      *  */
 
-    public native void configurePlugin(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configurePlugin(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             @Cast("nvinfer1::DataType*") IntPointer inputTypes, @Cast("nvinfer1::DataType*") IntPointer outputTypes, @Cast("const bool*") BoolPointer inputIsBroadcast,
             @Cast("const bool*") BoolPointer outputIsBroadcast, @Cast("nvinfer1::PluginFormat") TensorFormat floatFormat, int maxBatchSize);
-    public native void configurePlugin(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configurePlugin(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             @Cast("nvinfer1::DataType*") IntBuffer inputTypes, @Cast("nvinfer1::DataType*") IntBuffer outputTypes, @Cast("const bool*") boolean[] inputIsBroadcast,
             @Cast("const bool*") boolean[] outputIsBroadcast, @Cast("nvinfer1::PluginFormat") int floatFormat, int maxBatchSize);
-    public native void configurePlugin(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configurePlugin(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             @Cast("nvinfer1::DataType*") int[] inputTypes, @Cast("nvinfer1::DataType*") int[] outputTypes, @Cast("const bool*") BoolPointer inputIsBroadcast,
             @Cast("const bool*") BoolPointer outputIsBroadcast, @Cast("nvinfer1::PluginFormat") TensorFormat floatFormat, int maxBatchSize);
-    public native void configurePlugin(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configurePlugin(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             @Cast("nvinfer1::DataType*") IntPointer inputTypes, @Cast("nvinfer1::DataType*") IntPointer outputTypes, @Cast("const bool*") boolean[] inputIsBroadcast,
             @Cast("const bool*") boolean[] outputIsBroadcast, @Cast("nvinfer1::PluginFormat") int floatFormat, int maxBatchSize);
-    public native void configurePlugin(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configurePlugin(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             @Cast("nvinfer1::DataType*") IntBuffer inputTypes, @Cast("nvinfer1::DataType*") IntBuffer outputTypes, @Cast("const bool*") BoolPointer inputIsBroadcast,
             @Cast("const bool*") BoolPointer outputIsBroadcast, @Cast("nvinfer1::PluginFormat") TensorFormat floatFormat, int maxBatchSize);
-    public native void configurePlugin(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configurePlugin(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             @Cast("nvinfer1::DataType*") int[] inputTypes, @Cast("nvinfer1::DataType*") int[] outputTypes, @Cast("const bool*") boolean[] inputIsBroadcast,
             @Cast("const bool*") boolean[] outputIsBroadcast, @Cast("nvinfer1::PluginFormat") int floatFormat, int maxBatchSize);
 
     /**
      *  \brief Attach the plugin object to an execution context and grant the plugin the access to some context resource.
      * 
-     *  @param cudnn The cudnn context handle of the execution context
+     *  @param cudnn The CUDNN context handle of the execution context
      *  @param cublas The cublas context handle of the execution context
      *  @param allocator The allocator used by the execution context
      * 
-     *  This function is called automatically for each plugin when a new execution context is created.
+     *  This function is called automatically for each plugin when a new execution context is created. If the context
+     *  was created without resources, this method is not called until the resources are assigned. It is also called if
+     *  new resources are assigned to the context.
+     * 
      *  If the plugin needs per-context resource, it can be allocated here.
      *  The plugin can also get context-owned CUDNN and CUBLAS context here.
+     * 
+     *  \note In the automotive safety context, the CUDNN and CUBLAS parameters will be nullptr because CUDNN and CUBLAS
+     *        is not used by the safe runtime.
      *  */
     
     
     //!
     //!
     //!
-    public native void attachToContext(cudnnContext arg0, cublasContext arg1, IGpuAllocator arg2);
+    //!
+    public native @NoException(true) void attachToContext(cudnnContext arg0, cublasContext arg1, IGpuAllocator arg2);
 
     /**
      *  \brief Detach the plugin object from its execution context.
      * 
-     *  This function is called automatically for each plugin when a execution context is destroyed.
+     *  This function is called automatically for each plugin when a execution context is destroyed or the context
+     *  resources are unassigned from the context.
+     * 
      *  If the plugin owns per-context resource, it can be released here.
      *  */
     
     
     //!
     //!
-    public native void detachFromContext();
+    public native @NoException(true) void detachFromContext();
 
     /**
      *  \brief Clone the plugin object. This copies over internal plugin parameters as well and returns a new plugin object with these parameters.
      *  If the source plugin is pre-configured with configurePlugin(), the returned object should also be pre-configured. The returned object should allow attachToContext() with a new execution context.
      *  Cloned plugin objects can share the same per-engine immutable resource (e.g. weights) with the source object (e.g. via ref-counting) to avoid duplication.
      *  */
-    public native IPluginV2Ext clone();
+    public native @NoException(true) IPluginV2Ext clone();
 }

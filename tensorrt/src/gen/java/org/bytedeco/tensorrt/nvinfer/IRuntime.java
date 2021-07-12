@@ -26,27 +26,47 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IRuntime extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class IRuntime extends INoCopy {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IRuntime() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IRuntime(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IRuntime(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public IRuntime position(long position) {
+        return (IRuntime)super.position(position);
+    }
+    @Override public IRuntime getPointer(long i) {
+        return new IRuntime((Pointer)this).offsetAddress(i);
+    }
+
 
     /**
      *  \brief Deserialize an engine from a stream.
      * 
+     *  If an error recorder has been set for the runtime, it will also be passed to the engine.
+     * 
      *  @param blob The memory that holds the serialized engine.
-     *  @param size The size of the memory.
+     *  @param size The size of the memory in bytes.
      *  @param pluginFactory The plugin factory, if any plugins are used by the network, otherwise nullptr.
      * 
      *  @return The engine, or nullptr if it could not be deserialized.
+     * 
+     *  @deprecated Deprecated interface will be removed in TensorRT 10.0.
+     * 
+     *  \warning IPluginFactory is no longer supported, therefore pluginFactory must be a nullptr.
      *  */
     
     
     //!
     //!
     //!
-    public native @NoException ICudaEngine deserializeCudaEngine(@Const Pointer blob, @Cast("std::size_t") long size, IPluginFactory pluginFactory);
+    public native @Deprecated @NoException(true) ICudaEngine deserializeCudaEngine(
+            @Const Pointer blob, @Cast("std::size_t") long size, IPluginFactory pluginFactory);
 
     /**
      *  \brief Set the DLA core that the deserialized engine must execute on.
@@ -60,7 +80,7 @@ public class IRuntime extends Pointer {
     //!
     //!
     //!
-    public native @NoException void setDLACore(int dlaCore);
+    public native @NoException(true) void setDLACore(int dlaCore);
 
     /**
      *  \brief Get the DLA core that the engine executes on.
@@ -72,7 +92,7 @@ public class IRuntime extends Pointer {
     
     //!
     //!
-    public native @NoException int getDLACore();
+    public native @NoException(true) int getDLACore();
 
     /**
      *  \brief Returns number of DLA hardware cores accessible.
@@ -81,15 +101,29 @@ public class IRuntime extends Pointer {
     
     //!
     //!
-    public native @NoException int getNbDLACores();
+    //!
+    //!
+    public native @NoException(true) int getNbDLACores();
 
     /**
      *  \brief Destroy this object.
+     * 
+     *  @deprecated Deprecated interface will be removed in TensorRT 10.0.
+     * 
+     *  \warning Calling destroy on a managed pointer will result in a double-free error.
      *  */
-    public native @NoException void destroy();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Deprecated @NoException(true) void destroy();
+
     /**
      *  \brief Set the GPU allocator.
-     *  @param allocator Set the GPU allocator to be used by the runtime. All GPU memory acquired will use this allocator. If NULL is passed, the default allocator will be used.
+     *  @param allocator Set the GPU allocator to be used by the runtime. All GPU memory acquired will use this
+     *  allocator. If NULL is passed, the default allocator will be used.
      * 
      *  Default: uses cudaMalloc/cudaFree.
      * 
@@ -101,7 +135,8 @@ public class IRuntime extends Pointer {
     //!
     //!
     //!
-    public native @NoException void setGpuAllocator(IGpuAllocator allocator);
+    //!
+    public native @NoException(true) void setGpuAllocator(IGpuAllocator allocator);
 
     /**
      *  \brief Set the ErrorRecorder for this interface
@@ -111,9 +146,11 @@ public class IRuntime extends Pointer {
      *  recorder to nullptr unregisters the recorder with the interface, resulting in a call to decRefCount if
      *  a recorder has been registered.
      * 
+     *  If an error recorder is not set, messages will be sent to the global log stream.
+     * 
      *  @param recorder The error recorder to register with this interface. */
     //
-    /** @see getErrorRecorder
+    /** @see getErrorRecorder()
     /** */
     
     
@@ -122,17 +159,17 @@ public class IRuntime extends Pointer {
     //!
     //!
     //!
-    public native @NoException void setErrorRecorder(IErrorRecorder recorder);
+    public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
 
     /**
      *  \brief get the ErrorRecorder assigned to this interface.
      * 
-     *  Retrieves the assigned error recorder object for the given class. A default error recorder does not exist,
-     *  so a nullptr will be returned if setErrorRecorder has not been called.
+     *  Retrieves the assigned error recorder object for the given class. A nullptr will be returned if
+     *  an error handler has not been set.
      * 
      *  @return A pointer to the IErrorRecorder object that has been registered.
      * 
-     *  @see setErrorRecorder
+     *  @see setErrorRecorder()
      *  */
     
     
@@ -140,15 +177,15 @@ public class IRuntime extends Pointer {
     //!
     //!
     //!
-    public native @NoException IErrorRecorder getErrorRecorder();
+    public native @NoException(true) IErrorRecorder getErrorRecorder();
 
     /**
-     *  \brief Deserialize an engine from a stream when plugin factory is not used.
+     *  \brief Deserialize an engine from a stream.
      * 
      *  @param blob The memory that holds the serialized engine.
      *  @param size The size of the memory.
      * 
      *  @return The engine, or nullptr if it could not be deserialized.
      *  */
-    public native @NoException ICudaEngine deserializeCudaEngine(@Const Pointer blob, @Cast("std::size_t") long size);
+    public native @NoException(true) ICudaEngine deserializeCudaEngine(@Const Pointer blob, @Cast("std::size_t") long size);
 }

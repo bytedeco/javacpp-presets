@@ -82,20 +82,20 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #define NV_INFER_VERSION_H
 
 /** TensorRT major version. */
-public static final int NV_TENSORRT_MAJOR = 7;
+public static final int NV_TENSORRT_MAJOR = 8;
 /** TensorRT minor version. */
-public static final int NV_TENSORRT_MINOR = 2;
+public static final int NV_TENSORRT_MINOR = 0;
 /** TensorRT patch version. */
-public static final int NV_TENSORRT_PATCH = 3;
+public static final int NV_TENSORRT_PATCH = 1;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 4;
+public static final int NV_TENSORRT_BUILD = 6;
 
 /** Shared object library major version number. */
-public static final int NV_TENSORRT_SONAME_MAJOR = 7;
+public static final int NV_TENSORRT_SONAME_MAJOR = 8;
 /** Shared object library minor version number. */
-public static final int NV_TENSORRT_SONAME_MINOR = 2;
+public static final int NV_TENSORRT_SONAME_MINOR = 0;
 /** Shared object library patch version number. */
-public static final int NV_TENSORRT_SONAME_PATCH = 3;
+public static final int NV_TENSORRT_SONAME_PATCH = 1;
 
 // #endif // NV_INFER_VERSION_H
 
@@ -103,7 +103,7 @@ public static final int NV_TENSORRT_SONAME_PATCH = 3;
 // Parsed from NvInferRuntimeCommon.h
 
 /*
- * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
+ * Copyright (c) 1993-2021 NVIDIA Corporation. All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -154,20 +154,12 @@ public static final int NV_TENSORRT_SONAME_PATCH = 3;
 // #ifndef NV_INFER_RUNTIME_COMMON_H
 // #define NV_INFER_RUNTIME_COMMON_H
 
-// #include <cstddef>
-// #include <cstdint>
 // #include "NvInferVersion.h"
-
-// #if __cplusplus >= 201103L
-// #define _TENSORRT_FINAL final
-// #define _TENSORRT_OVERRIDE override
-// #else
-// #define _TENSORRT_FINAL
+// #include <cstddef>
 
 
 /** Items that are marked as deprecated will be removed in a future release. */
-// #define _TENSORRT_OVERRIDE
-// #endif
+// #include <cstdint>
 // #if __cplusplus >= 201402L
 // #define TRT_DEPRECATED [[deprecated]]
 // #if __GNUC__ < 6
@@ -204,87 +196,56 @@ public static final int NV_TENSORRT_SONAME_PATCH = 3;
 // #define TENSORRTAPI
 // #endif
 
-/** Defined for use with legacy APIs that have not been updated to noexcept yet.
- *  Do not use with new APIs, use noexcept instead. */
-
 //!
 //!
 //!
 // #define TRTNOEXCEPT
+/**
+ *  \file NvInferRuntimeCommon.h
+ * 
+ *  This is the top-level API file for TensorRT core runtime library.
+ *  */
+
+// forward declare some CUDA types to avoid an include dependency
 // Targeting ../nvinfer/cublasContext.java
 
 
 // Targeting ../nvinfer/cudnnContext.java
 
 
-// Targeting ../nvinfer/CUstream_st.java
 
+    /** Forward declaration of cudaStream_t. */
 
-// Targeting ../nvinfer/CUevent_st.java
-
-
-
+    /** Forward declaration of cudaEvent_t. */
 
 
 //!
 //!
 //!
-@MemberGetter public static native int NV_TENSORRT_VERSION();
-public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, minor, patch
-
+public static native @MemberGetter int NV_TENSORRT_VERSION();
+public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 /**
  *  \namespace nvinfer1
  * 
  *  \brief The TensorRT API version 1 namespace.
  *  */
 
+@Namespace("nvinfer1") @MemberGetter public static native int kNV_TENSORRT_VERSION_IMPL();
+public static final int kNV_TENSORRT_VERSION_IMPL = kNV_TENSORRT_VERSION_IMPL(); // major, minor, patch
+
+/** char_t is the type used by TensorRT to represent all valid characters. */
+/** AsciiChar is the type used by TensorRT to represent valid ASCII characters. */
+
+/** Forward declare IErrorRecorder for use in other interfaces. */
+/** Forward declare IGpuAllocator for use in other interfaces. */
+/** Declaration of EnumMaxImpl struct to store maximum number of elements in an enumeration type. */
+ // namespace impl
+
 /** Maximum number of elements in an enumeration type. */
 
 
 /**
- *  \enum ActivationType
- * 
- *  \brief Enumerates the types of activation to perform in an activation layer.
- *  */
-@Namespace("nvinfer1") public enum ActivationType {
-    /** Rectified linear activation. */
-    kRELU(0),
-    /** Sigmoid activation. */
-    kSIGMOID(1),
-    /** TanH activation. */
-    kTANH(2),
-    /** LeakyRelu activation: x>=0 ? x : alpha * x. */
-    kLEAKY_RELU(3),
-    /** Elu activation: x>=0 ? x : alpha * (exp(x) - 1). */
-    kELU(4),
-    /** Selu activation: x>0 ? beta * x : beta * (alpha*exp(x) - alpha) */
-    kSELU(5),
-    /** Softsign activation: x / (1+|x|) */
-    kSOFTSIGN(6),
-    /** Parametric softplus activation: alpha*log(exp(beta*x)+1) */
-    kSOFTPLUS(7),
-    /** Clip activation: max(alpha, min(beta, x)) */
-    kCLIP(8),
-    /** Hard sigmoid activation: max(0, min(1, alpha*x+beta)) */
-    kHARD_SIGMOID(9),
-    /** Scaled tanh activation: alpha*tanh(beta*x) */
-    kSCALED_TANH(10),
-    /** Thresholded ReLU activation: x>alpha ? x : 0 */
-    kTHRESHOLDED_RELU(11);
-
-    public final int value;
-    private ActivationType(int v) { this.value = v; }
-    private ActivationType(ActivationType e) { this.value = e.value; }
-    public ActivationType intern() { for (ActivationType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/** Maximum number of elements in ActivationType enum. @see ActivationType */
-
-
-/**
  *  \enum DataType
- * 
  *  \brief The type of weights and tensors.
  *  */
 @Namespace("nvinfer1") public enum DataType {
@@ -309,42 +270,18 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public DataType intern() { for (DataType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+// Targeting ../nvinfer/EnumMaxImpl.java
 
-/** Maximum number of elements in DataType enum. @see DataType */
 
 
-/**
- *  \enum DimensionType
- *  \brief The type of data encoded across this dimension.
- *  */
-@Namespace("nvinfer1") public enum DimensionType {
-    /** Elements correspond to different spatial data. */
-    kSPATIAL(0),
-    /** Elements correspond to different channels. */
-    kCHANNEL(1),
-    /** Elements correspond to different batch index. */
-    kINDEX(2),
-    /** Elements correspond to different sequence values. */
-    kSEQUENCE(3);
-
-    public final int value;
-    private DimensionType(int v) { this.value = v; }
-    private DimensionType(DimensionType e) { this.value = e.value; }
-    public DimensionType intern() { for (DimensionType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/** Maximum number of elements in DimensionType enum. @see DimensionType */
-
-// Targeting ../nvinfer/Dims.java
+// Targeting ../nvinfer/Dims32.java
 
 
 
 /**
- *  \brief It is capable of representing one or more TensorFormat by binary OR
- *  operations, e.g., 1U << TensorFormats::kCHW4 | 1U << TensorFormats::kCHW32.
+ *  Alias for Dims32.
  * 
- *  @see ITensor::getAllowedFormats(), ITensor::setAllowedFormats(),
+ *  \warning: This alias might change in the future.
  *  */
 
 
@@ -363,21 +300,20 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *  This enum is extended to be used by both plugins and reformat-free network
  *  I/O tensors.
  * 
- *  @see IPluginExt::getPluginFormats(), safe::ICudaEngine::getBindingFormat()
+ *  @see IPluginV2::supportsFormat(), safe::ICudaEngine::getBindingFormat()
  * 
  *  For more information about data formats, see the topic "Data Format Description" located in the
- *  TensorRT Developer Guide (https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html).
+ *  TensorRT Developer Guide.
  *  */
 @Namespace("nvinfer1") public enum TensorFormat {
     /** Row major linear format.
-     *  For a tensor with dimensions {N, C, H, W}, the W axis always has
-     *  unit stride, and the stride of every other axis is at least the the
-     *  product of of the next dimension times the next stride. the strides
-     *  are the same as for a C array with dimensions [N][C][H][W]. */
+     *  For a tensor with dimensions {N, C, H, W} or {numbers, channels,
+     *  columns, rows}, the dimensional index corresponds to {3, 2, 1, 0}
+     *  and thus the order is W minor.
+     * 
+     *  For DLA usage, the tensor sizes are limited to C,H,W in the range [1,8192].
+     *  */
     kLINEAR(0),
-    /** Deprecated name of kLINEAR, provided for backwards compatibility and will
-     *  be removed in TensorRT 8.0. */
-    kNCHW(kLINEAR.value),
 
     /** Two wide channel vectorized row major format. This format is bound to
      *  FP16. It is only available for dimensions >= 3.
@@ -386,9 +322,6 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
      *  [N][(C+1)/2][H][W][2], with the tensor coordinates (n, c, h, w)
      *  mapping to array subscript [n][c/2][h][w][c%2]. */
     kCHW2(1),
-    /** Deprecated name of kCHW2, provided for backwards compatibility and will
-     *  be removed in TensorRT 8.0. */
-    kNC2HW2(kCHW2.value),
 
     /** Eight channel format where C is padded to a multiple of 8. This format
      *  is bound to FP16. It is only available for dimensions >= 3.
@@ -396,13 +329,10 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
      *  the memory layout is equivalent to the array with dimensions
      *  [N][H][W][(C+7)/8*8], with the tensor coordinates (n, c, h, w)
      *  mapping to array subscript [n][h][w][c]. */
-    kHWC8(2),
-    /** Deprecated name of kHWC8, provided for backwards compatibility and will
-     *  be removed in TensorRT 8.0. */
     
 //!
 //!
-    kNHWC8(kHWC8.value),
+    kHWC8(2),
 
     /** Four wide channel vectorized row major format. This format is bound to
      *  INT8 or FP16. It is only available for dimensions >= 3.
@@ -421,6 +351,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
      *  be multiple of 32. */
     
 //!
+//!
     kCHW4(3),
 
     /** Sixteen wide channel vectorized row major format. This format is bound
@@ -430,8 +361,9 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
      *  [N][(C+15)/16][H][W][16], with the tensor coordinates (n, c, h, w)
      *  mapping to array subscript [n][c/16][h][w][c%16].
      * 
-     *  For DLA usage, this format maps to the native format for FP16,
-     *  and the tensor sizes are limited to C,H,W in the range [1,8192]. */
+     *  For DLA usage, this format maps to the native image format for FP16,
+     *  and the tensor sizes are limited to C,H,W in the range [1,8192].
+     *  */
     
 //!
     kCHW16(4),
@@ -443,7 +375,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
      *  [N][(C+31)/32][H][W][32], with the tensor coordinates (n, c, h, w)
      *  mapping to array subscript [n][c/32][h][w][c%32].
      * 
-     *  For DLA usage, this format maps to the native format for INT8,
+     *  For DLA usage, this format maps to the native image format for INT8,
      *  and the tensor sizes are limited to C,H,W in the range [1,8192]. */
     kCHW32(5),
 
@@ -469,7 +401,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 //!
     kHWC(8),
 
-    /** DLA planar format. For a tensor with dimension {N, C, H, W}, the W axis 
+    /** DLA planar format. For a tensor with dimension {N, C, H, W}, the W axis
      *  always has unit stride. The stride for stepping along the H axis is
      *  rounded up to 64 bytes.
      * 
@@ -481,7 +413,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 //!
     kDLA_LINEAR(9),
 
-    /** DLA image format. For a tensor with dimension {N, C, H, W} the C axis 
+    /** DLA image format. For a tensor with dimension {N, C, H, W} the C axis
      *  always has unit stride. The stride for stepping along the H axis is rounded up
      *  to 32 bytes. C can only be 1, 3 or 4.
      *  If C == 1, it will map to grayscale format.
@@ -493,7 +425,15 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
      *  [N][H][roundUp(W, 32/C'/elementSize)][C'] where elementSize is 2 for FP16
      *  and 1 for Int8. The tensor coordinates (n, c, h, w) mapping to array
      *  subscript [n][h][w][c]. */
-    kDLA_HWC4(10);
+    kDLA_HWC4(10),
+
+    /** Sixteen channel format where C is padded to a multiple of 16. This format
+     *  is bound to FP16. It is only available for dimensions >= 3.
+     *  For a tensor with dimensions {N, C, H, W},
+     *  the memory layout is equivalent to the array with dimensions
+     *  [N][H][W][(C+15)/16*16], with the tensor coordinates (n, c, h, w)
+     *  mapping to array subscript [n][h][w][c]. */
+    kHWC16(11);
 
     public final int value;
     private TensorFormat(int v) { this.value = v; }
@@ -505,9 +445,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 /**
  *  \brief PluginFormat is reserved for backward compatibility.
  * 
- *  @see IPluginExt::getPluginFormats()
+ *  @see IPluginV2::supportsFormat()
  *  */
-
 /** Maximum number of elements in TensorFormat enum. @see TensorFormat */
 
 // Targeting ../nvinfer/PluginTensorDesc.java
@@ -521,10 +460,14 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *  Tag for plug-in versions.  Used in upper byte of getTensorRTVersion().
  *  */
 @Namespace("nvinfer1") public enum PluginVersion {
-    kV2((byte)(0)),            /** IPluginV2 */
-    kV2_EXT((byte)(1)),        /** IPluginV2Ext */
-    kV2_IOEXT((byte)(2)),      /** IPluginV2IOExt */
-    kV2_DYNAMICEXT((byte)(3));/** IPluginV2DynamicExt */
+    /** IPluginV2 */
+    kV2((byte)(0)),
+    /** IPluginV2Ext */
+    kV2_EXT((byte)(1)),
+    /** IPluginV2IOExt */
+    kV2_IOEXT((byte)(2)),
+    /** IPluginV2DynamicExt */
+    kV2_DYNAMICEXT((byte)(3));
 
     public final byte value;
     private PluginVersion(byte v) { this.value = v; }
@@ -564,6 +507,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     kCHAR(6),
     /** nvinfer1::Dims field type. */
     kDIMS(7),
+    /** Unknown field type. */
     kUNKNOWN(8);
 
     public final int value;
@@ -585,34 +529,32 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 
 
 
-/**
- *  \enum TensorLocation
- *  \brief The location for tensor data storage, device or host.
- *  */
-@Namespace("nvinfer1") public enum TensorLocation {
-    /** Data stored on device. */
-    kDEVICE(0),
-    /** Data stored on host. */
-    kHOST(1);
+@Namespace("nvinfer1") public enum AllocatorFlag {
+    /** TensorRT may call realloc() on this allocation */
+    kRESIZABLE(0);
 
     public final int value;
-    private TensorLocation(int v) { this.value = v; }
-    private TensorLocation(TensorLocation e) { this.value = e.value; }
-    public TensorLocation intern() { for (TensorLocation e : values()) if (e.value == value) return e; return this; }
+    private AllocatorFlag(int v) { this.value = v; }
+    private AllocatorFlag(AllocatorFlag e) { this.value = e.value; }
+    public AllocatorFlag intern() { for (AllocatorFlag e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+/** Maximum number of elements in AllocatorFlag enum. @see AllocatorFlag */
+ // namespace impl
 
-/** Maximum number of elements in TensorLocation enum. @see TensorLocation */
 
+
+//!
+//!
+//!
 // Targeting ../nvinfer/IGpuAllocator.java
 
 
 // Targeting ../nvinfer/ILogger.java
 
 
-
 /** Maximum number of elements in ILogger::Severity enum. @see ILogger::Severity */
-
+ // namespace impl
 
 /**
  *  \enum ErrorCode
@@ -630,7 +572,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     kSUCCESS(0),
 
     /**
-     *  An error that does not fall into any other category. This error is included for forward compatibility
+     *  An error that does not fall into any other category. This error is included for forward compatibility.
      *  */
     
 
@@ -639,7 +581,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     kUNSPECIFIED_ERROR(1),
 
     /**
-     *  A non-recoverable TensorRT error occurred.
+     *  A non-recoverable TensorRT error occurred. TensorRT is in an invalid internal state when this error is
+     *  emitted and any further calls to TensorRT will result in undefined behavior.
      *  */
     
 
@@ -649,7 +592,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 
     /**
      *  An argument passed to the function is invalid in isolation.
-     *  This is a violation of the API contract
+     *  This is a violation of the API contract.
      *  */
     
 
@@ -708,6 +651,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
      *  of this error are NaN squashing or integer overflow. In a dynamic system, the data can be thrown away and the
      *  next frame can be processed or execution can be retried.
      *  This is either a data corruption error, an input error, or a range error.
+     *  This is not used in safety but may be used in standard.
      *  */
     
 
@@ -752,7 +696,6 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public ErrorCode intern() { for (ErrorCode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
 /** Maximum number of elements in ErrorCode enum. @see ErrorCode */
 
 // Targeting ../nvinfer/IErrorRecorder.java
@@ -762,54 +705,108 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  // namespace nvinfer1
 
 /**
- *  Internal C entry point for creating safe::IRuntime.
- *  \private
- *  */
-
-
-//!
-//!
-public static native Pointer createSafeInferRuntime_INTERNAL(Pointer logger, int version);
-
-/**
- *  \brief Return the logger object.
- *  */
-
-
-//!
-//!
-//!
-public static native ILogger getLogger();
-
-/**
  *  \brief Return the library version number.
  * 
  *  The format is as for TENSORRT_VERSION: (TENSORRT_MAJOR * 1000) + (TENSORRT_MINOR * 100) + TENSOR_PATCH.
  *  */
+public static native @NoException(true) int getInferLibVersion();
+
+// #endif // NV_INFER_RUNTIME_COMMON_H
+
+
+// Parsed from NvInferLegacyDims.h
+
+/*
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
+ *
+ * NOTICE TO LICENSEE:
+ *
+ * This source code and/or documentation ("Licensed Deliverables") are
+ * subject to NVIDIA intellectual property rights under U.S. and
+ * international Copyright laws.
+ *
+ * These Licensed Deliverables contained herein is PROPRIETARY and
+ * CONFIDENTIAL to NVIDIA and is being provided under the terms and
+ * conditions of a form of NVIDIA software license agreement by and
+ * between NVIDIA and Licensee ("License Agreement") or electronically
+ * accepted by Licensee.  Notwithstanding any terms or conditions to
+ * the contrary in the License Agreement, reproduction or disclosure
+ * of the Licensed Deliverables to any third party without the express
+ * written consent of NVIDIA is prohibited.
+ *
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
+ * SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
+ * PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
+ * NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
+ * DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
+ * NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
+ * SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
+ * DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+ * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * OF THESE LICENSED DELIVERABLES.
+ *
+ * U.S. Government End Users.  These Licensed Deliverables are a
+ * "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
+ * 1995), consisting of "commercial computer software" and "commercial
+ * computer software documentation" as such terms are used in 48
+ * C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
+ * only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
+ * 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
+ * U.S. Government End Users acquire the Licensed Deliverables with
+ * only those rights set forth herein.
+ *
+ * Any use of the Licensed Deliverables in individual and commercial
+ * software must include, in the user documentation and internal
+ * comments to the code, the above Disclaimer and U.S. Government End
+ * Users Notice.
+ */
+
+// #ifndef NV_INFER_LEGACY_DIMS_H
+// #define NV_INFER_LEGACY_DIMS_H
+
 
 
 //!
 //!
-public static native int getInferLibVersion();
+//!
+
+//!
+//!
+//!
+// #include "NvInferRuntimeCommon.h"
 
 /**
- *  \brief Return the plugin registry
+ *  \file NvInferLegacyDims.h
+ * 
+ *  This file contains declarations of legacy dimensions types which use channel
+ *  semantics in their names, and declarations on which those types rely.
+ * 
+ <p>
+ * 
+ *  \namespace nvinfer1
+ * 
+ *  \brief The TensorRT API version 1 namespace.
  *  */
-public static native IPluginRegistry getPluginRegistry();
+// Targeting ../nvinfer/Dims2.java
 
-/**
- *  \brief Register the plugin creator to the registry
- *  The static registry object will be instantiated when the plugin library is
- *  loaded. This static object will register all creators available in the
- *  library to the registry.
- *  */
 
-// #define REGISTER_TENSORRT_PLUGIN(name)
-//     static nvinfer1::PluginRegistrar<name> pluginRegistrar##name {}
+// Targeting ../nvinfer/DimsHW.java
+
+
+// Targeting ../nvinfer/Dims3.java
+
+
+// Targeting ../nvinfer/Dims4.java
+
+
 
  // namespace nvinfer1
 
-// #endif // NV_INFER_RUNTIME_COMMON_H
+// #endif // NV_INFER_LEGCY_DIMS_H
 
 
 // Parsed from NvInferRuntime.h
@@ -877,31 +874,61 @@ public static native IPluginRegistry getPluginRegistry();
  *  This is the top-level API file for TensorRT extended runtime library.
  *  */
 
+// #include "NvInferImpl.h"
 // #include "NvInferRuntimeCommon.h"
+// Targeting ../nvinfer/IPluginFactory.java
+
+
+// Targeting ../nvinfer/INoCopy.java
+
+
 
 /**
  *  \enum EngineCapability
  * 
  *  \brief List of supported engine capability flows.
  * 
- *  The EngineCapability determines the restrictions of a network during build time for what can be executed
- *  at runtime. EngineCapability::kDEFAULT does not provide any restrictions on functionality and the
- *  resulting serialized engine can be executed with TensorRT's standard runtime APIs in the nvinfer1 namespace.
- *  EngineCapabiltiy::kSAFE_GPU provides a restricted subset of network operations that are safety certified and
- *  the resulting serialized engine can be executed with TensorRT's safe runtime APIs in the nvinfer1::safe namespace.
- *  EngineCapability::kSAFE_DLA provides a restricted subset of network operations that are DLA compatible and
- *  the resulting serialized engine can be executed using NvMediaDLA's runtime APIs. See sampleNvmedia for an
- *  example of integrating NvMediaDLA APIs with TensorRT APIs.
+ *  \details The EngineCapability determines the restrictions of a network during build time and what runtime
+ *  it targets. When BuilderFlag::kSAFETY_SCOPE is not set (by default), EngineCapability::kSTANDARD does not provide
+ *  any restrictions on functionality and the resulting serialized engine can be executed with TensorRT's standard
+ *  runtime APIs in the nvinfer1 namespace. EngineCapability::kSAFETY provides a restricted subset of network
+ *  operations that are safety certified and the resulting serialized engine can be executed with TensorRT's safe
+ *  runtime APIs in the nvinfer1::safe namespace. EngineCapability::kDLA_STANDALONE provides a restricted subset of
+ *  network operations that are DLA compatible and the resulting serialized engine can be executed using standalone
+ *  DLA runtime APIs. See sampleNvmedia for an example of integrating NvMediaDLA APIs with TensorRT APIs.
  *  */
+
 @Namespace("nvinfer1") public enum EngineCapability {
-    /** Full capability, TensorRT mode without any restrictions using TensorRT nvinfer1 APIs. */
-    kDEFAULT(0),
-    /** Safety restricted capability, TensorRT flow that can only run on GPU devices via TensorRT
- *  nvinfer1::safe APIs. */
-    kSAFE_GPU(1),
-    /** Safety restricted capability, TensorRT flow that can only run on DLA devices via
- *  NvMediaDLA APIs. */
-    kSAFE_DLA(2);
+    /**
+     *  Standard: TensorRT flow without targeting the safety runtime.
+     *  This flow supports both DeviceType::kGPU and DeviceType::kDLA.
+     *  */
+    kSTANDARD(0),
+    
+
+//!
+//!
+    kDEFAULT(kSTANDARD.value),
+
+    /**
+     *  Safety: TensorRT flow with restrictions targeting the safety runtime.
+     *  See safety documentation for list of supported layers and formats.
+     *  This flow supports only DeviceType::kGPU.
+     *  */
+    kSAFETY(1),
+    
+
+//!
+//!
+    kSAFE_GPU(kSAFETY.value),
+
+    /**
+     *  DLA Standalone: TensorRT flow with restrictions targeting external, to TensorRT, DLA runtimes.
+     *  See DLA documentation for list of supported layers and formats.
+     *  This flow supports only DeviceType::kDLA.
+     *  */
+    kDLA_STANDALONE(2),
+    kSAFE_DLA(kDLA_STANDALONE.value);
 
     public final int value;
     private EngineCapability(int v) { this.value = v; }
@@ -909,19 +936,12 @@ public static native IPluginRegistry getPluginRegistry();
     public EngineCapability intern() { for (EngineCapability e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
 /** Maximum number of elements in EngineCapability enum. @see EngineCapability */
 
 // Targeting ../nvinfer/Weights.java
 
 
 // Targeting ../nvinfer/IHostMemory.java
-
-
-// Targeting ../nvinfer/IPlugin.java
-
-
-// Targeting ../nvinfer/IPluginExt.java
 
 
 
@@ -964,6 +984,25 @@ public static native IPluginRegistry getPluginRegistry();
 
 /** Maximum number of elements in DimensionOperation enum. @see DimensionOperation */
 
+
+/**
+ *  \enum TensorLocation
+ *  \brief The location for tensor data storage, device or host.
+ *  */
+@Namespace("nvinfer1") public enum TensorLocation {
+    /** Data stored on device. */
+    kDEVICE(0),
+    /** Data stored on host. */
+    kHOST(1);
+
+    public final int value;
+    private TensorLocation(int v) { this.value = v; }
+    private TensorLocation(TensorLocation e) { this.value = e.value; }
+    public TensorLocation intern() { for (TensorLocation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/** Maximum number of elements in TensorLocation enum. @see TensorLocation */
+
 // Targeting ../nvinfer/IDimensionExpr.java
 
 
@@ -999,7 +1038,9 @@ public static native IPluginRegistry getPluginRegistry();
     /** scale part of IScaleLayer */
     kSCALE(3),
     /** weights for IConstantLayer */
-    kCONSTANT(4);
+    kCONSTANT(4),
+    /** Any other weights role */
+    kANY(5);
 
     public final int value;
     private WeightsRole(int v) { this.value = v; }
@@ -1037,9 +1078,6 @@ public static native IPluginRegistry getPluginRegistry();
 // Targeting ../nvinfer/IRefitter.java
 
 
-// Targeting ../nvinfer/IPluginFactory.java
-
-
 
 /**
  *  \enum OptProfileSelector
@@ -1069,6 +1107,44 @@ public static native IPluginRegistry getPluginRegistry();
 // Targeting ../nvinfer/IOptimizationProfile.java
 
 
+
+/**
+ *  \enum TacticSource
+ * 
+ *  \brief List of tactic sources for TensorRT.
+ * 
+ *  @see TacticSources, IBuilderConfig::setTacticSources(), IBuilderConfig::getTacticSources()
+ *  */
+@Namespace("nvinfer1") public enum TacticSource {
+    /** \note Disabling kCUBLAS will cause the cublas handle passed to plugins in attachToContext to be null. */
+    /** cuBLAS tactics. */
+    kCUBLAS(0),
+    /** cuBLAS LT tactics */
+    kCUBLAS_LT(1),
+    /** cuDNN tactics */
+    kCUDNN(2);
+
+    public final int value;
+    private TacticSource(int v) { this.value = v; }
+    private TacticSource(TacticSource e) { this.value = e.value; }
+    public TacticSource intern() { for (TacticSource e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+
+
+/**
+ *  \brief Represents a collection of one or more TacticSource values
+ *  combine using bitwise-OR operations.
+ * 
+ *  @see IBuilderConfig::setTacticSources(), IBuilderConfig::getTacticSources()
+ *  */
+
+
+//!
+//!
+//!
+//!
 // Targeting ../nvinfer/ICudaEngine.java
 
 
@@ -1085,13 +1161,31 @@ public static native IPluginRegistry getPluginRegistry();
 
 //!
 //!
-public static native Pointer createInferRuntime_INTERNAL(Pointer logger, int version);
+public static native @NoException(true) Pointer createInferRuntime_INTERNAL(Pointer logger, int version);
 
 /**
  *  Internal C entry point for creating IRefitter.
  *  \private
  *  */
-public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointer logger, int version);
+
+
+//!
+//!
+public static native @NoException(true) Pointer createInferRefitter_INTERNAL(Pointer engine, Pointer logger, int version);
+
+/**
+ *  \brief Return the plugin registry
+ *  */
+
+
+//!
+//!
+public static native @NoException(true) IPluginRegistry getPluginRegistry();
+
+/**
+ *  \brief Return the logger object.
+ *  */
+public static native @NoException(true) ILogger getLogger();
 /**
  *  \brief Create an instance of an IRuntime class.
  * 
@@ -1102,17 +1196,33 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 //!
 //!
 //!
-@Namespace("nvinfer1") public static native IRuntime createInferRuntime(@ByRef ILogger logger);
+@Namespace("nvinfer1") public static native @NoException(true) IRuntime createInferRuntime(@ByRef ILogger logger);
 
 /**
  *  \brief Create an instance of an IRefitter class.
  * 
- *  This class is the logging class for the refitter.
+ *  This is the logging class for the refitter.
  *  */
-@Namespace("nvinfer1") public static native IRefitter createInferRefitter(@ByRef ICudaEngine engine, @ByRef ILogger logger);
+@Namespace("nvinfer1") public static native @NoException(true) IRefitter createInferRefitter(@ByRef ICudaEngine engine, @ByRef ILogger logger);
 
+ // namespace
 
+/**
+ *  \brief Register the plugin creator to the registry
+ *  The static registry object will be instantiated when the plugin library is
+ *  loaded. This static object will register all creators available in the
+ *  library to the registry.
+ * 
+ *  \warning Statically registering plugins should be avoided in the automotive
+ *   safety context as the application developer should first register an error recorder
+ *   with the plugin registry via IPluginRegistry::setErrorRecorder() before using
+ *   IPluginRegistry::registerCreator() or other methods.
+ *  */
 
+ // namespace nvinfer1
+
+// #define REGISTER_TENSORRT_PLUGIN(name)
+//     static nvinfer1::PluginRegistrar<name> pluginRegistrar##name {}
 // #endif // NV_INFER_RUNTIME_H
 
 
@@ -1170,6 +1280,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 // #ifndef NV_INFER_H
 // #define NV_INFER_H
 
+// #include "NvInferLegacyDims.h"
 
 
 //!
@@ -1209,24 +1320,6 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 /**
 /** \brief The TensorRT API version 1 namespace.
 /** */
-// Targeting ../nvinfer/Dims2.java
-
-
-// Targeting ../nvinfer/DimsHW.java
-
-
-// Targeting ../nvinfer/Dims3.java
-
-
-// Targeting ../nvinfer/DimsCHW.java
-
-
-// Targeting ../nvinfer/Dims4.java
-
-
-// Targeting ../nvinfer/DimsNCHW.java
-
-
 
 /**
  *  \enum LayerType
@@ -1258,52 +1351,54 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
     kELEMENTWISE(9),
     /** Plugin layer. */
     kPLUGIN(10),
-    /** RNN layer. */
-    kRNN(11),
     /** UnaryOp operation Layer. */
-    kUNARY(12),
+    kUNARY(11),
     /** Padding layer. */
-    kPADDING(13),
+    kPADDING(12),
     /** Shuffle layer. */
-    kSHUFFLE(14),
+    kSHUFFLE(13),
     /** Reduce layer. */
-    kREDUCE(15),
+    kREDUCE(14),
     /** TopK layer. */
-    kTOPK(16),
+    kTOPK(15),
     /** Gather layer. */
-    kGATHER(17),
+    kGATHER(16),
     /** Matrix multiply layer. */
-    kMATRIX_MULTIPLY(18),
+    kMATRIX_MULTIPLY(17),
     /** Ragged softmax layer. */
-    kRAGGED_SOFTMAX(19),
+    kRAGGED_SOFTMAX(18),
     /** Constant layer. */
-    kCONSTANT(20),
+    kCONSTANT(19),
     /** RNNv2 layer. */
-    kRNN_V2(21),
+    kRNN_V2(20),
     /** Identity layer. */
-    kIDENTITY(22),
+    kIDENTITY(21),
     /** PluginV2 layer. */
-    kPLUGIN_V2(23),
+    kPLUGIN_V2(22),
     /** Slice layer. */
-    kSLICE(24),
+    kSLICE(23),
     /** Shape layer. */
-    kSHAPE(25),
+    kSHAPE(24),
     /** Parametric ReLU layer. */
-    kPARAMETRIC_RELU(26),
+    kPARAMETRIC_RELU(25),
     /** Resize Layer. */
-    kRESIZE(27),
+    kRESIZE(26),
     /** Loop Trip limit layer */
-    kTRIP_LIMIT(28),
+    kTRIP_LIMIT(27),
     /** Loop Recurrence layer */
-    kRECURRENCE(29),
+    kRECURRENCE(28),
     /** Loop Iterator layer */
-    kITERATOR(30),
+    kITERATOR(29),
     /** Loop output layer */
-    kLOOP_OUTPUT(31),
+    kLOOP_OUTPUT(30),
     /** Select layer. */
-    kSELECT(32),
+    kSELECT(31),
     /** Fill layer */
-    kFILL(33);
+    kFILL(32),
+    /** Quantize layer */
+    kQUANTIZE(33),
+    /** Dequantize layer */
+    kDEQUANTIZE(34);
 
     public final int value;
     private LayerType(int v) { this.value = v; }
@@ -1313,6 +1408,58 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 }
 
 /** Maximum number of elements in LayerType enum. @see LayerType */
+
+
+/**
+ *  \brief It is capable of representing one or more TensorFormat by binary OR
+ *  operations, e.g., 1U << TensorFormat::kCHW4 | 1U << TensorFormat::kCHW32.
+ * 
+ *  @see ITensor::getAllowedFormats(), ITensor::setAllowedFormats(),
+ *  */
+
+
+//!
+//!
+//!
+
+/**
+ *  \enum ActivationType
+ * 
+ *  \brief Enumerates the types of activation to perform in an activation layer.
+ *  */
+@Namespace("nvinfer1") public enum ActivationType {
+    /** Rectified linear activation. */
+    kRELU(0),
+    /** Sigmoid activation. */
+    kSIGMOID(1),
+    /** TanH activation. */
+    kTANH(2),
+    /** LeakyRelu activation: x>=0 ? x : alpha * x. */
+    kLEAKY_RELU(3),
+    /** Elu activation: x>=0 ? x : alpha * (exp(x) - 1). */
+    kELU(4),
+    /** Selu activation: x>0 ? beta * x : beta * (alpha*exp(x) - alpha) */
+    kSELU(5),
+    /** Softsign activation: x / (1+|x|) */
+    kSOFTSIGN(6),
+    /** Parametric softplus activation: alpha*log(exp(beta*x)+1) */
+    kSOFTPLUS(7),
+    /** Clip activation: max(alpha, min(beta, x)) */
+    kCLIP(8),
+    /** Hard sigmoid activation: max(0, min(1, alpha*x+beta)) */
+    kHARD_SIGMOID(9),
+    /** Scaled tanh activation: alpha*tanh(beta*x) */
+    kSCALED_TANH(10),
+    /** Thresholded ReLU activation: x>alpha ? x : 0 */
+    kTHRESHOLDED_RELU(11);
+
+    public final int value;
+    private ActivationType(int v) { this.value = v; }
+    private ActivationType(ActivationType e) { this.value = e.value; }
+    public ActivationType intern() { for (ActivationType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/** Maximum number of elements in ActivationType enum. @see ActivationType */
 
 // Targeting ../nvinfer/ITensor.java
 
@@ -1563,7 +1710,6 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
     public PaddingMode intern() { for (PaddingMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
 /** Maximum number of elements in PaddingMode enum. @see PaddingMode */
 
 // Targeting ../nvinfer/IConvolutionLayer.java
@@ -1592,7 +1738,6 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
     public PoolingType intern() { for (PoolingType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
 /** Maximum number of elements in PoolingType enum. @see PoolingType */
 
 // Targeting ../nvinfer/IPoolingLayer.java
@@ -1680,7 +1825,6 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
     public ElementWiseOperation intern() { for (ElementWiseOperation e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
 /** Maximum number of elements in ElementWiseOperation enum. @see ElementWiseOperation */
 
 // Targeting ../nvinfer/IElementWiseLayer.java
@@ -1767,7 +1911,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
  *    H[t] := (1 - z[t])*h[t] + z[t]*H[t-1]
  *  ~~~
  * 
- *  @see IRNNLayer, IRNNv2Layer
+ *  @see IRNNv2Layer
  *  */
 @Namespace("nvinfer1") public enum RNNOperation {
     /** Single gate RNN w/ ReLU activation function. */
@@ -1794,7 +1938,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
  * 
  *  \brief Enumerates the RNN direction that may be performed by an RNN layer.
  * 
- *  @see IRNNLayer, IRNNv2Layer
+ *  @see IRNNv2Layer
  *  */
 @Namespace("nvinfer1") public enum RNNDirection {
     /** Network iterations from first input to last input. */
@@ -1825,7 +1969,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
  *  and {@code W[g]} is conceptually an identity matrix.  In this case, the input vector {@code X[t]} must have length {@code H}
  *  (the size of the hidden state).
  * 
- *  @see IRNNLayer, IRNNv2Layer
+ *  @see IRNNv2Layer
  *  */
 @Namespace("nvinfer1") public enum RNNInputMode {
     /** Perform the normal matrix multiplication in the first recurrent layer. */
@@ -1841,9 +1985,6 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 }
 
 /** Maximum number of elements in RNNInputMode enum. @see RNNInputMode */
-
-// Targeting ../nvinfer/IRNNLayer.java
-
 
 
 /**
@@ -1876,15 +2017,8 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
     @Override public String toString() { return intern().name(); }
 }
 
-/** Maximum number of elements in RNNGateType enum. @see RNNGateType */
 
 // Targeting ../nvinfer/IRNNv2Layer.java
-
-
-// Targeting ../nvinfer/IOutputDimensionsFormula.java
-
-
-// Targeting ../nvinfer/IPluginLayer.java
 
 
 // Targeting ../nvinfer/IPluginV2Layer.java
@@ -2123,8 +2257,113 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
     public ResizeMode intern() { for (ResizeMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
 /** Maximum number of elements in ResizeMode enum. @see ResizeMode */
+ // namespace impl
+
+/**
+ *  \enum ResizeCoordinateTransformation
+ * 
+ *  \brief The resize coordinate transformation function.
+ * 
+ *  @see IResizeLayer::setCoordinateTransformation()
+ *  */
+@Namespace("nvinfer1") public enum ResizeCoordinateTransformation {
+    /** We can think each value in tensor has a volume, and the coordinate is a point inside this volume.
+     *  The coordinate point is drawn as star(*) in below diagram, and multiple values range has a length.
+     *  Let's use x_origin as the coordinate of axis x in the input tensor, x_resized as the coordinate of axis x in the
+     *  output tensor, length_origin as length of the input tensor in axis x, and length_resize as length of the output
+     *  tensor in axis x.
+     * 
+     *  |<--------------length---------->|
+     *  |    0     |    1     |    2     |    3     |
+     *  *          *          *          *
+     * 
+     *  x_origin = x_resized * (length_origin - 1) / (length_resize - 1)
+     *  */
+    
+//!
+//!
+    kALIGN_CORNERS(0),
+
+    /** |<--------------length--------------------->|
+     *  |    0     |    1     |    2     |    3     |
+     *  *          *          *          *
+     * 
+     *  x_origin = x_resized * (length_origin / length_resize)
+     *  */
+    
+//!
+//!
+    kASYMMETRIC(1),
+
+    /** |<--------------length--------------------->|
+     *  |    0     |    1     |    2     |    3     |
+     *       *          *          *          *
+     * 
+     *  x_origin = (x_resized + 0.5) * (length_origin / length_resize) - 0.5
+     *  */
+    kHALF_PIXEL(2);
+
+    public final int value;
+    private ResizeCoordinateTransformation(int v) { this.value = v; }
+    private ResizeCoordinateTransformation(ResizeCoordinateTransformation e) { this.value = e.value; }
+    public ResizeCoordinateTransformation intern() { for (ResizeCoordinateTransformation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/** Maximum number of elements in ResizeCoordinateTransformation enum. @see ResizeCoordinateTransformation */
+ // namespace impl
+
+/**
+ *  \enum ResizeSelector
+ * 
+ *  \brief The coordinate selector when resize to single pixel output.
+ * 
+ *  @see IResizeLayer::setSelectorForSinglePixel()
+ *  */
+@Namespace("nvinfer1") public enum ResizeSelector {
+    /** Use formula to map the original index. */
+    kFORMULA(0),
+
+    /** Select the upper left pixel. */
+    kUPPER(1);
+
+    public final int value;
+    private ResizeSelector(int v) { this.value = v; }
+    private ResizeSelector(ResizeSelector e) { this.value = e.value; }
+    public ResizeSelector intern() { for (ResizeSelector e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/** Maximum number of elements in ResizeSelector enum. @see ResizeSelector */
+ // namespace impl
+
+/**
+ *  \enum ResizeRoundMode
+ * 
+ *  \brief The rounding mode for nearest neighbor resize.
+ * 
+ * 
+ *  @see IResizeLayer::setNearestRounding()
+ *  */
+@Namespace("nvinfer1") public enum ResizeRoundMode {
+    /** Round half up. */
+    kHALF_UP(0),
+
+    /** Round half down. */
+    kHALF_DOWN(1),
+
+    /** Round to floor. */
+    kFLOOR(2),
+
+    /** Round to ceil. */
+    kCEIL(3);
+
+    public final int value;
+    private ResizeRoundMode(int v) { this.value = v; }
+    private ResizeRoundMode(ResizeRoundMode e) { this.value = e.value; }
+    public ResizeRoundMode intern() { for (ResizeRoundMode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/** Maximum number of elements in ResizeRoundMode enum. @see ResizeRoundMode */
 
 // Targeting ../nvinfer/IResizeLayer.java
 
@@ -2215,6 +2454,12 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 // Targeting ../nvinfer/IFillLayer.java
 
 
+// Targeting ../nvinfer/IQuantizeLayer.java
+
+
+// Targeting ../nvinfer/IDequantizeLayer.java
+
+
 // Targeting ../nvinfer/INetworkDefinition.java
 
 
@@ -2271,7 +2516,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 
 
 /**
- *  \brief Represents a collection of one or more QuantizationFlag values using binary OR
+ *  \brief Represents one or more QuantizationFlag values using binary OR
  *  operations.
  * 
  *  @see IBuilderConfig::getQuantizationFlags(), IBuilderConfig::setQuantizationFlags()
@@ -2306,7 +2551,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 
 
 /**
- *  \brief Represents a collection of one or more QuantizationFlag values using binary OR
+ *  \brief Represents one or more QuantizationFlag values using binary OR
  *  operations, e.g., 1U << BuilderFlag::kFP16 | 1U << BuilderFlag::kDEBUG.
  * 
  *  @see IBuilderConfig::getFlags(), ITensor::setFlags(),
@@ -2344,7 +2589,19 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
     /** Allow (but not require) computations on tensors of type DataType::kFLOAT to use TF32.
      *  TF32 computes inner products by rounding the inputs to 10-bit mantissas before
      *  multiplying, but accumulates the sum using 23-bit mantissas. Enabled by default. */
-    kTF32(7);
+    kTF32(7),
+
+    /** Allow the builder to examine weights and use optimized functions when weights have suitable sparsity. */
+    
+//!
+    kSPARSE_WEIGHTS(8),
+
+    /** Change the allowed parameters in the EngineCapability::kSTANDARD flow to
+     *  match the restrictions that EngineCapability::kSAFETY check against for DeviceType::kGPU
+     *  and EngineCapability::kDLA_STANDALONE check against the DeviceType::kDLA case. This flag
+     *  is forced to true if EngineCapability::kSAFETY at build time if it is unset.
+     *  */
+    kSAFETY_SCOPE(9);
 
     public final int value;
     private BuilderFlag(int v) { this.value = v; }
@@ -2381,51 +2638,15 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
 
 /** Maximum number of profile verbosity levels in ProfilingVerbosity enum. @see ProfilingVerbosity */
 
+// Targeting ../nvinfer/ITimingCache.java
 
 
-/**
- *  \enum TacticSource
- * 
- *  \brief List of tactic sources for TensorRT.
- * 
- *  @see TacticSources, IBuilderConfig::setTacticSources(), IBuilderConfig::getTacticSources()
- *  */
-@Namespace("nvinfer1") public enum TacticSource {
-    /** \note Disabling kCUBLAS will cause the cublas handle passed to plugins in attachToContext to be null. */
-    /** cuBLAS tactics. */
-    kCUBLAS(0),
-    /** cuBLAS LT tactics */
-    kCUBLAS_LT(1);
-
-    public final int value;
-    private TacticSource(int v) { this.value = v; }
-    private TacticSource(TacticSource e) { this.value = e.value; }
-    public TacticSource intern() { for (TacticSource e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/** Maximum number of tactic sources in TacticSource enum. @see TacticSource */
-
-
-/**
- *  \brief Represents a collection of one or more TacticSource values
- *  combine using bitwise-OR operations.
- * 
- *  @see IBuilderConfig::setTacticSources(), IBuilderConfig::getTacticSources()
- *  */
-
-
-//!
-//!
-//!
 // Targeting ../nvinfer/IBuilderConfig.java
 
 
 
-/** \typedef NetworkDefinitionCreationFlags
- * 
- *  \brief This bitset is capable of representing one or more NetworkDefinitionCreationFlag flags
- *  constructed with binary OR operations.
+/** \brief Represents one or more NetworkDefinitionCreationFlag flags
+ *  using binary OR operations.
  *   e.g., 1U << NetworkDefinitionCreationFlag::kEXPLICIT_BATCH
  * 
  *  @see IBuilder::createNetworkV2
@@ -2464,8 +2685,7 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
      *  precision network is [-127,127].
      *  5) Quantizing and dequantizing activation values between higher (FP32) and lower (INT8) precision
      *  will be performed using explicit Scale layers with input/output precision set appropriately. */
-    /** Mark the network to be an explicit precision network */
-    kEXPLICIT_PRECISION(1);
+    kEXPLICIT_PRECISION(1);/** <-- Deprecated, used for backward compatibility */
 
     public final int value;
     private NetworkDefinitionCreationFlag(int v) { this.value = v; }
@@ -2486,19 +2706,333 @@ public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointe
  *  Internal C entry point for creating IBuilder.
  *  \private
  *  */
-public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int version);
+public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Pointer logger, int version);
+
 /**
  *  \brief Create an instance of an IBuilder class.
  * 
- *  This class is the logging class for the builder.
+ *  This is the logging class for the builder.
  * 
  *  unnamed namespace avoids linkage surprises when linking objects built with different versions of this header.
  *  */
-@Namespace("nvinfer1") public static native IBuilder createInferBuilder(@ByRef ILogger logger);
+@Namespace("nvinfer1") public static native @NoException(true) IBuilder createInferBuilder(@ByRef ILogger logger);
+
+ // namespace
+ // namespace nvinfer1
+
+// #endif // NV_INFER_H
+
+
+// Parsed from NvInferImpl.h
+
+/*
+ * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
+ *
+ * NOTICE TO LICENSEE:
+ *
+ * This source code and/or documentation ("Licensed Deliverables") are
+ * subject to NVIDIA intellectual property rights under U.S. and
+ * international Copyright laws.
+ *
+ * These Licensed Deliverables contained herein is PROPRIETARY and
+ * CONFIDENTIAL to NVIDIA and is being provided under the terms and
+ * conditions of a form of NVIDIA software license agreement by and
+ * between NVIDIA and Licensee ("License Agreement") or electronically
+ * accepted by Licensee.  Notwithstanding any terms or conditions to
+ * the contrary in the License Agreement, reproduction or disclosure
+ * of the Licensed Deliverables to any third party without the express
+ * written consent of NVIDIA is prohibited.
+ *
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
+ * SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
+ * PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
+ * NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
+ * DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
+ * NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
+ * SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
+ * DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+ * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * OF THESE LICENSED DELIVERABLES.
+ *
+ * U.S. Government End Users.  These Licensed Deliverables are a
+ * "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
+ * 1995), consisting of "commercial computer software" and "commercial
+ * computer software documentation" as such terms are used in 48
+ * C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
+ * only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
+ * 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
+ * U.S. Government End Users acquire the Licensed Deliverables with
+ * only those rights set forth herein.
+ *
+ * Any use of the Licensed Deliverables in individual and commercial
+ * software must include, in the user documentation and internal
+ * comments to the code, the above Disclaimer and U.S. Government End
+ * Users Notice.
+ */
+
+// #ifndef NV_INFER_IMPL_H
+// #define NV_INFER_IMPL_H
+
+// #include "NvInferLegacyDims.h"
+// #include "NvInferRuntimeCommon.h"
+// Targeting ../nvinfer/IPlugin.java
+
+
+// Targeting ../nvinfer/IPluginExt.java
+
+
+// Targeting ../nvinfer/IPluginLayer.java
 
 
 
-// #endif
+/** enum class nvinfer1::ActivationType */
+;
+/** enum class nvinfer1::BuilderFlag */
+;
+/** enum class nvinfer1::CalibrationAlgoType */
+;
+/** enum class nvinfer1::DeviceType */
+;
+/** enum class nvinfer1::DimensionOperation */
+;
+/** enum class nvinfer1::ElementWiseOperation */
+;
+/** enum class nvinfer1::EngineCapability */
+;
+/** enum class nvinfer1::FillOperation */
+;
+/** enum class nvinfer1::LayerType */
+;
+/** enum class nvinfer1::LoopOutput */
+;
+/** enum class nvinfer1::MatrixOperation */
+;
+/** enum class nvinfer1::NetworkDefinitionCreationFlag */
+;
+/** enum class nvinfer1::OptProfileSelector */
+;
+/** enum class nvinfer1::PaddingMode */
+;
+/** enum class nvinfer1::PoolingType */
+;
+/** enum class nvinfer1::ProfilingVerbosity */
+;
+/** enum class nvinfer1::QuantizationFlag */
+;
+/** enum class nvinfer1::ReduceOperation */
+;
+/** enum class nvinfer1::ResizeCoordinateTransformation */
+;
+/** enum class nvinfer1::ResizeMode */
+;
+/** enum class nvinfer1::ResizeRoundMode */
+;
+/** enum class nvinfer1::ResizeSelector */
+;
+/** enum class nvinfer1::RNNDirection */
+;
+/** enum class nvinfer1::RNNGateType */
+;
+/** enum class nvinfer1::RNNInputMode */
+;
+/** enum class nvinfer1::RNNOperation */
+;
+/** enum class nvinfer1::ScaleMode */
+;
+/** enum class nvinfer1::SliceMode */
+;
+/** enum class nvinfer1::TensorLocation */
+;
+/** enum class nvinfer1::TopKOperation */
+;
+/** enum class nvinfer1::TripLimit */
+;
+/** enum class nvinfer1::UnaryOperation */
+;
+/** enum class nvinfer1::WeightsRole */
+;
+
+
+//!
+//!
+//!
+// Targeting ../nvinfer/VRoot.java
+
+
+// Targeting ../nvinfer/VHostMemory.java
+
+
+// Targeting ../nvinfer/VDimensionExpr.java
+
+
+// Targeting ../nvinfer/VExprBuilder.java
+
+
+// Targeting ../nvinfer/VRuntime.java
+
+
+// Targeting ../nvinfer/VRefitter.java
+
+
+// Targeting ../nvinfer/VOptimizationProfile.java
+
+
+// Targeting ../nvinfer/VCudaEngine.java
+
+
+// Targeting ../nvinfer/VExecutionContext.java
+
+
+// Targeting ../nvinfer/VTensor.java
+
+
+// Targeting ../nvinfer/VLayer.java
+
+
+// Targeting ../nvinfer/VConvolutionLayer.java
+
+
+// Targeting ../nvinfer/VFullyConnectedLayer.java
+
+
+// Targeting ../nvinfer/VActivationLayer.java
+
+
+// Targeting ../nvinfer/VPoolingLayer.java
+
+
+// Targeting ../nvinfer/VLRNLayer.java
+
+
+// Targeting ../nvinfer/VScaleLayer.java
+
+
+// Targeting ../nvinfer/VSoftMaxLayer.java
+
+
+// Targeting ../nvinfer/VConcatenationLayer.java
+
+
+// Targeting ../nvinfer/VDeconvolutionLayer.java
+
+
+// Targeting ../nvinfer/VElementWiseLayer.java
+
+
+// Targeting ../nvinfer/VGatherLayer.java
+
+
+// Targeting ../nvinfer/VRNNv2Layer.java
+
+
+// Targeting ../nvinfer/VPluginLayer.java
+
+
+// Targeting ../nvinfer/VPluginV2Layer.java
+
+
+// Targeting ../nvinfer/VUnaryLayer.java
+
+
+// Targeting ../nvinfer/VReduceLayer.java
+
+
+// Targeting ../nvinfer/VPaddingLayer.java
+
+
+// Targeting ../nvinfer/VShuffleLayer.java
+
+
+// Targeting ../nvinfer/VSliceLayer.java
+
+
+// Targeting ../nvinfer/VShapeLayer.java
+
+
+// Targeting ../nvinfer/VTopKLayer.java
+
+
+// Targeting ../nvinfer/VMatrixMultiplyLayer.java
+
+
+// Targeting ../nvinfer/VRaggedSoftMaxLayer.java
+
+
+// Targeting ../nvinfer/VIdentityLayer.java
+
+
+// Targeting ../nvinfer/VConstantLayer.java
+
+
+// Targeting ../nvinfer/VParametricReLULayer.java
+
+
+// Targeting ../nvinfer/VResizeLayer.java
+
+
+// Targeting ../nvinfer/VLoopBoundaryLayer.java
+
+
+// Targeting ../nvinfer/VRecurrenceLayer.java
+
+
+// Targeting ../nvinfer/VLoopOutputLayer.java
+
+
+// Targeting ../nvinfer/VTripLimitLayer.java
+
+
+// Targeting ../nvinfer/VIteratorLayer.java
+
+
+// Targeting ../nvinfer/VLoop.java
+
+
+// Targeting ../nvinfer/VSelectLayer.java
+
+
+// Targeting ../nvinfer/VFillLayer.java
+
+
+// Targeting ../nvinfer/VQuantizeLayer.java
+
+
+// Targeting ../nvinfer/VDequantizeLayer.java
+
+
+// Targeting ../nvinfer/VNetworkDefinition.java
+
+
+// Targeting ../nvinfer/VAlgorithmIOInfo.java
+
+
+// Targeting ../nvinfer/VAlgorithmVariant.java
+
+
+// Targeting ../nvinfer/VAlgorithmContext.java
+
+
+// Targeting ../nvinfer/VAlgorithm.java
+
+
+// Targeting ../nvinfer/VTimingCache.java
+
+
+// Targeting ../nvinfer/VBuilderConfig.java
+
+
+// Targeting ../nvinfer/VBuilder.java
+
+
+
+ // namespace apiv
+ // namespace nvinfer1
+
+// #endif // NV_INFER_RUNTIME_IMPL_H
 
 
 // Parsed from NvUtils.h
@@ -2609,6 +3143,8 @@ public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int ver
  *  {30 32 34}, {31 33 35} <-- {1, 2, *, *}
  * 
  *  @return True on success, false on failure.
+ * 
+ *  \warning This file will be removed in TensorRT 10.0.
  *  */
 
 
@@ -2621,11 +3157,12 @@ public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int ver
 //!
 //!
 //!
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean reshapeWeights(
+//!
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean reshapeWeights(
     @Const @ByRef Weights input, @Const IntPointer shape, @Const IntPointer shapeOrder, Pointer data, int nbDims);
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean reshapeWeights(
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean reshapeWeights(
     @Const @ByRef Weights input, @Const IntBuffer shape, @Const IntBuffer shapeOrder, Pointer data, int nbDims);
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean reshapeWeights(
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean reshapeWeights(
     @Const @ByRef Weights input, @Const int[] shape, @Const int[] shapeOrder, Pointer data, int nbDims);
 
 /**
@@ -2668,6 +3205,8 @@ public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int ver
  *  @return True on success, false on failure.
  * 
  *  @see reshapeWeights()
+ * 
+ *  \warning This file will be removed in TensorRT 10.0.
  *  */
 
 
@@ -2675,9 +3214,13 @@ public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int ver
 //!
 //!
 //!
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean reorderSubBuffers(Pointer input, @Const IntPointer order, int num, int size);
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean reorderSubBuffers(Pointer input, @Const IntBuffer order, int num, int size);
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean reorderSubBuffers(Pointer input, @Const int[] order, int num, int size);
+//!
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean reorderSubBuffers(
+    Pointer input, @Const IntPointer order, int num, int size);
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean reorderSubBuffers(
+    Pointer input, @Const IntBuffer order, int num, int size);
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean reorderSubBuffers(
+    Pointer input, @Const int[] order, int num, int size);
 
 /**
  *  @param input The input data to transpose.
@@ -2689,9 +3232,13 @@ public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int ver
  *  \brief Transpose \p num sub-buffers of \p height * \p width.
  * 
  *  @return True on success, false on failure.
+ * 
+ *  \warning This file will be removed in TensorRT 10.0.
  *  */
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean transposeSubBuffers(Pointer input, DataType type, int num, int height, int width);
-@Namespace("nvinfer1::utils") public static native @Cast("bool") boolean transposeSubBuffers(Pointer input, @Cast("nvinfer1::DataType") int type, int num, int height, int width);
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean transposeSubBuffers(
+    Pointer input, DataType type, int num, int height, int width);
+@Namespace("nvinfer1::utils") public static native @Cast("bool") @Deprecated @NoException(true) boolean transposeSubBuffers(
+    Pointer input, @Cast("nvinfer1::DataType") int type, int num, int height, int width);
 
  // namespace utils
  // namespace nvinfer1

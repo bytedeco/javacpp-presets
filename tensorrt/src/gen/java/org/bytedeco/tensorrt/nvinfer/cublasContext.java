@@ -18,18 +18,11 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
-/**
- *  \file NvInferRuntimeCommon.h
- * 
- *  This is the top-level API file for TensorRT core runtime library.
- *  */
-
-// forward declare some CUDA types to avoid an include dependency
-
-@Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+    /** Forward declaration of cublasContext to use in other interfaces */
+    @Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class cublasContext extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cublasContext() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cublasContext(Pointer p) { super(p); }
-}
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public cublasContext() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public cublasContext(Pointer p) { super(p); }
+    }

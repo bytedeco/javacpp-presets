@@ -20,8 +20,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
 /**
- *  MinMax Calibrator. This is the preferred calibrator for NLP tasks. It supports per
- *  activation tensor scaling.
+ *  MinMax Calibrator. It supports per activation tensor scaling.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IInt8MinMaxCalibrator extends IInt8Calibrator {
@@ -44,5 +43,5 @@ public class IInt8MinMaxCalibrator extends IInt8Calibrator {
     /**
      *  Signal that this is the MinMax Calibrator.
      *  */
-    @Virtual public native CalibrationAlgoType getAlgorithm();
+    @Virtual public native @NoException(true) CalibrationAlgoType getAlgorithm();
 }

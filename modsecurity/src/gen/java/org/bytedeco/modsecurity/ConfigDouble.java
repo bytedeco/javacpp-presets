@@ -24,7 +24,7 @@ public class ConfigDouble extends Pointer {
         return (ConfigDouble)super.position(position);
     }
     @Override public ConfigDouble getPointer(long i) {
-        return new ConfigDouble((Pointer)this).position(position + i);
+        return new ConfigDouble((Pointer)this).offsetAddress(i);
     }
 
     public ConfigDouble() { super((Pointer)null); allocate(); }

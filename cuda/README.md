@@ -24,8 +24,8 @@ Introduction
 This directory contains the JavaCPP Presets module for:
 
  * CUDA 11.4.0  https://developer.nvidia.com/cuda-zone
- * cuDNN 8.2.1  https://developer.nvidia.com/cudnn
- * NCCL 2.9.9  https://developer.nvidia.com/nccl
+ * cuDNN 8.2.2  https://developer.nvidia.com/cudnn
+ * NCCL 2.10.3  https://developer.nvidia.com/nccl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

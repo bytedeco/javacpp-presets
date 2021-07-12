@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // namespace impl
 
 /**
  *  \class IErrorRecorder
@@ -40,7 +40,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  pushed to the interface implementation and TensorRT does not hold any synchronization primitives when accessing
  *  the interface functions.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IErrorRecorder extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -55,10 +55,20 @@ public class IErrorRecorder extends Pointer {
     //!
 
     /**
+     *  The length limit for an error description, excluding the '\0' string terminator.
+     *  */
+    
+    
+    //!
+    //!
+    @MemberGetter public static native @Cast("const size_t") long kMAX_DESC_LENGTH();
+    public static final long kMAX_DESC_LENGTH = kMAX_DESC_LENGTH();
+
+    /**
      *  A typedef of a 32bit integer for reference counting.
      *  */
 
-    // Public API’s used to retrieve information from the error recorder.
+    // Public API used to retrieve information from the error recorder.
 
     /**
      *  \brief Return the number of errors
@@ -81,7 +91,7 @@ public class IErrorRecorder extends Pointer {
     //!
     //!
     //!
-    public native @NoException int getNbErrors();
+    public native @NoException(true) int getNbErrors();
 
     /**
      *  \brief Returns the ErrorCode enumeration.
@@ -103,7 +113,7 @@ public class IErrorRecorder extends Pointer {
     //!
     //!
     //!
-    public native @NoException ErrorCode getErrorCode(int errorIdx);
+    public native @NoException(true) ErrorCode getErrorCode(int errorIdx);
 
     /**
      *  \brief Returns the c-style string description of the error.
@@ -125,7 +135,7 @@ public class IErrorRecorder extends Pointer {
     //!
     //!
     //!
-    public native @NoException String getErrorDesc(int errorIdx);
+    public native @NoException(true) String getErrorDesc(int errorIdx);
 
     /**
      *  \brief Determine if the error stack has overflowed.
@@ -142,7 +152,7 @@ public class IErrorRecorder extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException boolean hasOverflowed();
+    public native @Cast("bool") @NoException(true) boolean hasOverflowed();
 
     /**
      *  \brief Clear the error stack on the error recorder.
@@ -160,12 +170,12 @@ public class IErrorRecorder extends Pointer {
     //!
     //!
     //!
-    public native @NoException void clear();
+    public native @NoException(true) void clear();
 
-    // API’s used by TensorRT to report Error information to the application.
+    // API used by TensorRT to report Error information to the application.
 
     /**
-     *  \brief report an error to the error recorder with the corresponding enum and description.
+     *  \brief Report an error to the error recorder with the corresponding enum and description.
      * 
      *  @param val The error code enum that is being reported.
      *  @param desc The string description of the error.
@@ -182,8 +192,8 @@ public class IErrorRecorder extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException boolean reportError(ErrorCode val, String desc);
-    public native @Cast("bool") @NoException boolean reportError(@Cast("nvinfer1::ErrorCode") int val, @Cast("const char*") BytePointer desc);
+    public native @Cast("bool") @NoException(true) boolean reportError(ErrorCode val, String desc);
+    public native @Cast("bool") @NoException(true) boolean reportError(@Cast("nvinfer1::ErrorCode") int val, @Cast("const char*") BytePointer desc);
 
     /**
      *  \brief Increments the refcount for the current ErrorRecorder.
@@ -203,7 +213,7 @@ public class IErrorRecorder extends Pointer {
     //!
     //!
     //!
-    public native @Cast("nvinfer1::IErrorRecorder::RefCount") @NoException int incRefCount();
+    public native @Cast("nvinfer1::IErrorRecorder::RefCount") @NoException(true) int incRefCount();
 
     /**
      *  \brief Decrements the refcount for the current ErrorRecorder.
@@ -216,6 +226,6 @@ public class IErrorRecorder extends Pointer {
      * 
      *  @return The current reference counted value.
      *  */
-    public native @Cast("nvinfer1::IErrorRecorder::RefCount") @NoException int decRefCount();
+    public native @Cast("nvinfer1::IErrorRecorder::RefCount") @NoException(true) int decRefCount();
 
 }

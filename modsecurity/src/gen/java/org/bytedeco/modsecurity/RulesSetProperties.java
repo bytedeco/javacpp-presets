@@ -24,7 +24,7 @@ public class RulesSetProperties extends Pointer {
         return (RulesSetProperties)super.position(position);
     }
     @Override public RulesSetProperties getPointer(long i) {
-        return new RulesSetProperties((Pointer)this).position(position + i);
+        return new RulesSetProperties((Pointer)this).offsetAddress(i);
     }
 
     public RulesSetProperties() { super((Pointer)null); allocate(); }

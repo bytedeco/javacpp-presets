@@ -26,8 +26,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class ILayer extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class ILayer extends INoCopy {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILayer(Pointer p) { super(p); }
@@ -43,7 +43,7 @@ public class ILayer extends Pointer {
     //!
     //!
     //!
-    public native LayerType getType();
+    public native @NoException(true) LayerType getType();
 
     /**
      *  \brief Set the name of a layer.
@@ -57,8 +57,8 @@ public class ILayer extends Pointer {
     //!
     //!
     //!
-    public native void setName(String name);
-    public native void setName(@Cast("const char*") BytePointer name);
+    public native @NoException(true) void setName(String name);
+    public native @NoException(true) void setName(@Cast("const char*") BytePointer name);
 
     /**
      *  \brief Return the name of a layer.
@@ -70,7 +70,7 @@ public class ILayer extends Pointer {
     
     //!
     //!
-    public native String getName();
+    public native @NoException(true) String getName();
 
     /**
      *  \brief Get the number of inputs of a layer.
@@ -81,7 +81,7 @@ public class ILayer extends Pointer {
     //!
     //!
     //!
-    public native int getNbInputs();
+    public native @NoException(true) int getNbInputs();
 
     /**
      *  \brief Get the layer input corresponding to the given index.
@@ -89,13 +89,13 @@ public class ILayer extends Pointer {
      *  @param index The index of the input tensor.
      * 
      *  @return The input tensor, or nullptr if the index is out of range or the tensor is optional
-     *  (\ref ISliceLayer, \ref IRNNLayer and \ref IRNNv2Layer).
+     *  (\ref ISliceLayer and \ref IRNNv2Layer).
      *  */
     
     
     //!
     //!
-    public native ITensor getInput(int index);
+    public native @NoException(true) ITensor getInput(int index);
 
     /**
      *  \brief Get the number of outputs of a layer.
@@ -105,13 +105,13 @@ public class ILayer extends Pointer {
     //!
     //!
     //!
-    public native int getNbOutputs();
+    public native @NoException(true) int getNbOutputs();
 
     /**
      *  \brief Get the layer output corresponding to the given index.
      * 
      *  @return The indexed output tensor, or nullptr if the index is out of range or the tensor is optional
-     *  (\ref IRNNLayer and \ref IRNNv2Layer).
+     *  (\ref IRNNv2Layer).
      *  */
     
     
@@ -120,29 +120,28 @@ public class ILayer extends Pointer {
     //!
     //!
     //!
-    public native ITensor getOutput(int index);
+    public native @NoException(true) ITensor getOutput(int index);
 
     /**
-     *  \brief Replace an input of this layer with a specific tensor
+     *  \brief Replace an input of this layer with a specific tensor.
      * 
      *  @param index the index of the input to modify.
-     *  @param tensor the new input tensor */
-    //
-    /** Except for IShuffleLayer, ISliceLayer, IResizeLayer and ILoopOutputLayer, this method cannot change the number
-    /** of inputs to a layer. The index argument must be less than the value of getNbInputs().
-    /**
-    /** See overloaded setInput() comments for the layers special behavior.
-    /**
-    /** @param index the index of the input to modify.
-    /** @param tensor the new input tensor
-    /** */
+     *  @param tensor the new input tensor
+     * 
+     *  Except for IFillLayer, ILoopOutputLayer, IResizeLayer, IShuffleLayer, and ISliceLayer,
+     *  this method cannot change the number of inputs to a layer. The index argument must be
+     *  less than the value of getNbInputs().
+     * 
+     *  See comments for overloads of setInput() for layers with special behavior.
+     *  */
     
     
     //!
     //!
     //!
     //!
-    public native void setInput(int index, @ByRef ITensor tensor);
+    //!
+    public native @NoException(true) void setInput(int index, @ByRef ITensor tensor);
 
     /**
      *  \brief Set the computational precision of this layer
@@ -155,50 +154,53 @@ public class ILayer extends Pointer {
      *  computational precision and layer input type based on performance considerations and the flags specified to the
      *  builder.
      * 
-     *  @param precision the computational precision.
+     *  @param dataType the computational precision.
      * 
-     *  @see getPrecision() precisionIsSet() resetPrecision() */
-
+     *  @see getPrecision() precisionIsSet() resetPrecision()
+     *  */
     
     
     //!
     //!
     //!
-    public native void setPrecision(DataType dataType);
-    public native void setPrecision(@Cast("nvinfer1::DataType") int dataType);
+    //!
+    public native @NoException(true) void setPrecision(DataType dataType);
+    public native @NoException(true) void setPrecision(@Cast("nvinfer1::DataType") int dataType);
 
     /**
      *  \brief get the computational precision of this layer
      * 
      *  @return the computational precision
      * 
-     *  @see setPrecision() precisionIsSet() resetPrecision() */
-
+     *  @see setPrecision() precisionIsSet() resetPrecision()
+     *  */
     
     
     //!
     //!
     //!
-    public native DataType getPrecision();
+    //!
+    public native @NoException(true) DataType getPrecision();
 
     /**
      *  \brief whether the computational precision has been set for this layer
      * 
      *  @return whether the computational precision has been explicitly set
      * 
-     *  @see setPrecision() getPrecision() resetPrecision() */
-
+     *  @see setPrecision() getPrecision() resetPrecision()
+     *  */
     
     
     //!
     //!
-    public native @Cast("bool") boolean precisionIsSet();
+    //!
+    public native @Cast("bool") @NoException(true) boolean precisionIsSet();
 
     /**
      *  \brief reset the computational precision for this layer
      * 
-     *  @see setPrecision() getPrecision() precisionIsSet() */
-
+     *  @see setPrecision() getPrecision() precisionIsSet()
+     *  */
     
     
     //!
@@ -207,7 +209,8 @@ public class ILayer extends Pointer {
     //!
     //!
     //!
-    public native void resetPrecision();
+    //!
+    public native @NoException(true) void resetPrecision();
 
     /**
      *  \brief Set the output type of this layer
@@ -233,15 +236,16 @@ public class ILayer extends Pointer {
      *  @param index the index of the output to set
      *  @param dataType the type of the output
      * 
-     *  @see getOutputType() outputTypeIsSet() resetOutputType() */
-
+     *  @see getOutputType() outputTypeIsSet() resetOutputType()
+     *  */
     
     
     //!
     //!
     //!
-    public native void setOutputType(int index, DataType dataType);
-    public native void setOutputType(int index, @Cast("nvinfer1::DataType") int dataType);
+    //!
+    public native @NoException(true) void setOutputType(int index, DataType dataType);
+    public native @NoException(true) void setOutputType(int index, @Cast("nvinfer1::DataType") int dataType);
 
     /**
      *  \brief get the output type of this layer
@@ -250,14 +254,15 @@ public class ILayer extends Pointer {
      *  @return the output precision. If no precision has been set, DataType::kFLOAT will be returned,
      *          unless the output type is inherently DataType::kINT32.
      * 
-     *  @see getOutputType() outputTypeIsSet() resetOutputType() */
-
+     *  @see getOutputType() outputTypeIsSet() resetOutputType()
+     *  */
     
     
     //!
     //!
     //!
-    public native DataType getOutputType(int index);
+    //!
+    public native @NoException(true) DataType getOutputType(int index);
 
     /**
      *  \brief whether the output type has been set for this layer
@@ -265,21 +270,22 @@ public class ILayer extends Pointer {
      *  @param index the index of the output
      *  @return whether the output type has been explicitly set
      * 
-     *  @see setOutputType() getOutputType() resetOutputType() */
-
+     *  @see setOutputType() getOutputType() resetOutputType()
+     *  */
     
     
     //!
     //!
     //!
-    public native @Cast("bool") boolean outputTypeIsSet(int index);
+    //!
+    public native @Cast("bool") @NoException(true) boolean outputTypeIsSet(int index);
 
     /**
      *  \brief reset the output type for this layer
      * 
      *  @param index the index of the output
      * 
-     *  @see setOutputType() getOutputType() outputTypeIsSet() */
-
-    public native void resetOutputType(int index);
+     *  @see setOutputType() getOutputType() outputTypeIsSet()
+     *  */
+    public native @NoException(true) void resetOutputType(int index);
 }

@@ -18,10 +18,11 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
-@Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+    /** Forward declaration of cudnnContext to use in other interfaces */
+    @Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class cudnnContext extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cudnnContext() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudnnContext(Pointer p) { super(p); }
-}
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public cudnnContext() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public cudnnContext(Pointer p) { super(p); }
+    }

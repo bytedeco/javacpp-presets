@@ -17,6 +17,8 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 import org.bytedeco.tensorrt.nvinfer.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
+import org.bytedeco.tensorrt.nvinfer_plugin.*;
+import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 import static org.bytedeco.tensorrt.global.nvparsers.*;
 
@@ -44,6 +46,6 @@ public class IBlobNameToTensor extends Pointer {
      * 
      *  @return ITensor* corresponding to the queried name. If no such ITensor exists, then nullptr is returned.
      *  */
-    public native ITensor find(String name);
-    public native ITensor find(@Cast("const char*") BytePointer name);
+    public native @NoException(true) ITensor find(String name);
+    public native @NoException(true) ITensor find(@Cast("const char*") BytePointer name);
 }

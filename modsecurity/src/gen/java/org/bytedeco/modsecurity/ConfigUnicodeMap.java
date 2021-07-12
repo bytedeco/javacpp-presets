@@ -22,7 +22,7 @@ public class ConfigUnicodeMap extends Pointer {
         return (ConfigUnicodeMap)super.position(position);
     }
     @Override public ConfigUnicodeMap getPointer(long i) {
-        return new ConfigUnicodeMap((Pointer)this).position(position + i);
+        return new ConfigUnicodeMap((Pointer)this).offsetAddress(i);
     }
 
     public ConfigUnicodeMap() { super((Pointer)null); allocate(); }

@@ -24,7 +24,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief Descriptor for four-dimensional data.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class Dims4 extends Dims {
+public class Dims4 extends Dims32 {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dims4(Pointer p) { super(p); }
@@ -39,7 +39,7 @@ public class Dims4 extends Dims {
     }
 
     /**
-     *  \brief Construct an empty Dims2 object.
+     *  \brief Construct an empty Dims4 object.
      *  */
     
     

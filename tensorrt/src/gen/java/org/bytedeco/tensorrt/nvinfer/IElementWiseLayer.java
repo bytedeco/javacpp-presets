@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // namespace impl
 
 /**
  *  \class IElementWiseLayer
@@ -26,14 +26,19 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  This layer applies a per-element binary operation between corresponding elements of two tensors.
  * 
- *  The input dimensions of the two input tensors must be equal, and the output tensor is the same size as each input. */
+ *  The input tensors must have the same number of dimensions. For each dimension, their lengths must
+ *  match, or one of them must be one. In the latter case, the tensor is broadcast along that axis.
+ * 
+ *  The output tensor has the same number of dimensions as the inputs. For each output dimension,
+ *  its length is equal to the lengths of the corresponding input dimensions if they match,
+ *  otherwise it is equal to the length that is not one. */
 //！
 /** \warning When running this layer on the DLA with Int8 data type, the dynamic ranges of two input tensors shall be
 /** equal. If the dynamic ranges are generated using calibrator, the largest value shall be used.
 /**
 /** \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
 /** */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IElementWiseLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -54,8 +59,8 @@ public class IElementWiseLayer extends ILayer {
     //!
     //!
     //!
-    public native void setOperation(ElementWiseOperation op);
-    public native void setOperation(@Cast("nvinfer1::ElementWiseOperation") int op);
+    public native @NoException(true) void setOperation(ElementWiseOperation op);
+    public native @NoException(true) void setOperation(@Cast("nvinfer1::ElementWiseOperation") int op);
 
     /**
      *  \brief Get the binary operation for the layer.
@@ -64,5 +69,5 @@ public class IElementWiseLayer extends ILayer {
      * 
      *  @see setBiasWeights()
      *  */
-    public native ElementWiseOperation getOperation();
+    public native @NoException(true) ElementWiseOperation getOperation();
 }

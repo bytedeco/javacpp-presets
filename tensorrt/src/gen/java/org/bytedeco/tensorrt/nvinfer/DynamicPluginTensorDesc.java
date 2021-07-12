@@ -46,8 +46,8 @@ public class DynamicPluginTensorDesc extends Pointer {
     public native @ByRef PluginTensorDesc desc(); public native DynamicPluginTensorDesc desc(PluginTensorDesc setter);
 
     /** Lower bounds on tensor’s dimensions */
-    public native @ByRef Dims min(); public native DynamicPluginTensorDesc min(Dims setter);
+    public native @ByRef @Cast("nvinfer1::Dims*") Dims32 min(); public native DynamicPluginTensorDesc min(Dims32 setter);
 
     /** Upper bounds on tensor’s dimensions */
-    public native @ByRef Dims max(); public native DynamicPluginTensorDesc max(Dims setter);
+    public native @ByRef @Cast("nvinfer1::Dims*") Dims32 max(); public native DynamicPluginTensorDesc max(Dims32 setter);
 }

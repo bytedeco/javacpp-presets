@@ -35,8 +35,10 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  copies elements to the output tensor using the specified stride across the input tensor.
  *  Start, size, and stride tensors must be 1D Int32 shape tensors if not specified via Dims.
  * 
- *  Furthermore, if the slice layer must produce a shape tensor, then start, size, and stride must be
- *  build time constants, i.e. as static Dims, or be computable by constant folding.
+ *  A slice layer can produce a shape tensor if the following conditions are met:
+ * 
+ *  * start, size, and stride are build time constants, either as static Dims, or computable by constant folding.
+ *  * The number of elements in the output tensor does not exceed 2*Dims::MAX_DIMS.
  * 
  *  For example using slice on a tensor:
  *  input = {{0, 2, 4}, {1, 3, 5}}
@@ -47,7 +49,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ISliceLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -58,7 +60,7 @@ public class ISliceLayer extends ILayer {
      * 
      *  @param start The start offset to read data from the input tensor.
      * 
-     *  If the second input is set, it is reset to null.
+     *  If a second input had been used to create this layer, that input is reset to null by this method.
      * 
      *  @see getStart
      *  */
@@ -69,7 +71,7 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native void setStart(@ByVal Dims start);
+    public native @NoException(true) void setStart(@ByVal @Cast("nvinfer1::Dims*") Dims32 start);
 
     /**
      *  \brief Get the start offset for the slice layer.
@@ -88,14 +90,14 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getStart();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getStart();
 
     /**
      *  \brief Set the dimensions of the output slice.
      * 
      *  @param size The dimensions of the output slice.
      * 
-     *  If the third input is set, it is reset to null.
+     *  If a third input had been used to create this layer, that input is reset to null by this method.
      * 
      *  @see getSize
      *  */
@@ -106,7 +108,7 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native void setSize(@ByVal Dims size);
+    public native @NoException(true) void setSize(@ByVal @Cast("nvinfer1::Dims*") Dims32 size);
 
     /**
      *  \brief Get dimensions of the output slice.
@@ -125,14 +127,14 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getSize();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getSize();
 
     /**
      *  \brief Set the stride for computing the output slice data.
      * 
      *  @param stride The dimensions of the stride to compute the values to store in the output slice.
      * 
-     *  If the fourth input is set, it is reset to null.
+     *  If a fourth input had been used to create this layer, that input is reset to null by this method.
      * 
      *  @see getStride
      *  */
@@ -143,7 +145,7 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native void setStride(@ByVal Dims stride);
+    public native @NoException(true) void setStride(@ByVal @Cast("nvinfer1::Dims*") Dims32 stride);
 
     /**
      *  \brief Get the stride for the output slice.
@@ -160,7 +162,7 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getStride();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getStride();
 
     /**
      *  \brief Set the slice mode.
@@ -172,8 +174,8 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native void setMode(SliceMode mode);
-    public native void setMode(@Cast("nvinfer1::SliceMode") int mode);
+    public native @NoException(true) void setMode(SliceMode mode);
+    public native @NoException(true) void setMode(@Cast("nvinfer1::SliceMode") int mode);
 
     /**
      *  \brief Get the slice mode.
@@ -188,7 +190,7 @@ public class ISliceLayer extends ILayer {
     //!
     //!
     //!
-    public native SliceMode getMode();
+    public native @NoException(true) SliceMode getMode();
 
     /**
      *  \brief Append or replace an input of this layer with a specific tensor
@@ -208,5 +210,4 @@ public class ISliceLayer extends ILayer {
      *  If this function is called with a value greater than 0, then the function getNbInputs() changes
      *  from returning 1 to index + 1.
      *  */
-    public native void setInput(int index, @ByRef ITensor tensor);
 }

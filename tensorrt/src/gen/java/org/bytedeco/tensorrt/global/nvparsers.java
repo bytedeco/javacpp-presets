@@ -19,6 +19,8 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 import org.bytedeco.tensorrt.nvinfer.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
+import org.bytedeco.tensorrt.nvinfer_plugin.*;
+import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
     static { Loader.load(); }
@@ -105,12 +107,6 @@ public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
 // Targeting ../nvparsers/IBinaryProtoBlob.java
 
 
-// Targeting ../nvparsers/IPluginFactory.java
-
-
-// Targeting ../nvparsers/IPluginFactoryExt.java
-
-
 // Targeting ../nvparsers/IPluginFactoryV2.java
 
 
@@ -124,27 +120,30 @@ public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
  *  @return A pointer to the ICaffeParser object is returned.
  * 
  *  @see nvcaffeparser1::ICaffeParser
+ * 
+ *  @deprecated ICaffeParser will be removed in TensorRT 9.0. Plan to migrate your workflow to
+ *  use nvonnxparser::IParser for deployment.
  *  */
 
 
 //!
 //!
 //!
-@Namespace("nvcaffeparser1") public static native ICaffeParser createCaffeParser();
+@Namespace("nvcaffeparser1") public static native @NoException(true) ICaffeParser createCaffeParser();
 
 /**
  *  \brief Shuts down protocol buffers library.
  * 
  *  \note No part of the protocol buffers library can be used after this function is called.
  *  */
-@Namespace("nvcaffeparser1") public static native void shutdownProtobufLibrary();
+@Namespace("nvcaffeparser1") public static native @NoException(true) void shutdownProtobufLibrary();
  // namespace nvcaffeparser1
 
 /**
  *  Internal C entry point for creating ICaffeParser.
  *  \private
  *  */
-public static native Pointer createNvCaffeParser_INTERNAL();
+public static native @NoException(true) Pointer createNvCaffeParser_INTERNAL();
 // #endif
 
 
@@ -280,12 +279,6 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 9;
 // Targeting ../nvparsers/FieldCollection.java
 
 
-// Targeting ../nvparsers/IUffPluginFactory.java
-
-
-// Targeting ../nvparsers/IUffPluginFactoryExt.java
-
-
 // Targeting ../nvparsers/IUffParser.java
 
 
@@ -296,13 +289,16 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 9;
  *  @return A pointer to the IUffParser object is returned.
  * 
  *  @see nvuffparser::IUffParser
+ * 
+ *  @deprecated IUffParser will be removed in TensorRT 9.0. Plan to migrate your workflow to
+ *  use nvonnxparser::IParser for deployment.
  *  */
 
 
 //!
 //!
 //!
-@Namespace("nvuffparser") public static native IUffParser createUffParser();
+@Namespace("nvuffparser") public static native @NoException(true) IUffParser createUffParser();
 
 /**
  *  \brief Shuts down protocol buffers library.
@@ -312,12 +308,11 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 9;
 
  // namespace nvuffparser
 
-
 /**
  *  Internal C entry point for creating IUffParser
  *  \private
  *  */
-public static native Pointer createNvUffParser_INTERNAL();
+public static native @NoException(true) Pointer createNvUffParser_INTERNAL();
 
 // #endif /* !NV_UFF_PARSER_H */
 

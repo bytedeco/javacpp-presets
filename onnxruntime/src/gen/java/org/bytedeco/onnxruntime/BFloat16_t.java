@@ -41,10 +41,10 @@ public class BFloat16_t extends Pointer {
 
   public native @Cast("uint16_t") short value(); public native BFloat16_t value(short setter);
   public BFloat16_t() { super((Pointer)null); allocate(); }
-  @NoException private native void allocate();
+  @NoException(true) private native void allocate();
   public BFloat16_t(@Cast("uint16_t") short v) { super((Pointer)null); allocate(v); }
-  @NoException private native void allocate(@Cast("uint16_t") short v);
-  public native @Cast("uint16_t") @Name("operator uint16_t") @NoException short asShort();
-  public native @Cast("const bool") @Name("operator ==") @NoException boolean equals(@Const @ByRef BFloat16_t rhs);
-  public native @Cast("const bool") @Name("operator !=") @NoException boolean notEquals(@Const @ByRef BFloat16_t rhs);
+  @NoException(true) private native void allocate(@Cast("uint16_t") short v);
+  public native @Cast("uint16_t") @Name("operator uint16_t") @NoException(true) short asShort();
+  public native @Cast("const bool") @Name("operator ==") @NoException(true) boolean equals(@Const @ByRef BFloat16_t rhs);
+  public native @Cast("const bool") @Name("operator !=") @NoException(true) boolean notEquals(@Const @ByRef BFloat16_t rhs);
 }

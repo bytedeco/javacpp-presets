@@ -60,7 +60,7 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    @Virtual(true) public native @Const({false, false, true}) int getBatchSize();
+    @Virtual(true) public native @NoException(true) @Const({false, false, true}) int getBatchSize();
 
     /**
      *  \brief Get a batch of input for calibration.
@@ -82,7 +82,7 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    @Virtual(true) public native @Cast("bool") boolean getBatch(@Cast("void**") PointerPointer bindings, @Cast("const char**") PointerPointer names, int nbBindings);
+    @Virtual(true) public native @Cast("bool") @NoException(true) boolean getBatch(@Cast("void**") PointerPointer bindings, @Cast("const char**") PointerPointer names, int nbBindings);
 
     /**
      *  \brief Load a calibration cache.
@@ -104,7 +104,7 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    @Virtual(true) public native @Const Pointer readCalibrationCache(@Cast("std::size_t*") @ByRef LongPointer length);
+    @Virtual(true) public native @Const @NoException(true) Pointer readCalibrationCache(@Cast("std::size_t*") @ByRef LongPointer length);
 
     /**
      *  \brief Save a calibration cache.
@@ -119,12 +119,12 @@ public class IInt8Calibrator extends Pointer {
     //!
     //!
     //!
-    @Virtual(true) public native void writeCalibrationCache(@Const Pointer ptr, @Cast("std::size_t") long length);
+    @Virtual(true) public native @NoException(true) void writeCalibrationCache(@Const Pointer ptr, @Cast("std::size_t") long length);
 
     /**
      *  \brief Get the algorithm used by this calibrator.
      * 
      *  @return The algorithm used by the calibrator.
      *  */
-    @Virtual(true) public native CalibrationAlgoType getAlgorithm();
+    @Virtual(true) public native @NoException(true) CalibrationAlgoType getAlgorithm();
 }

@@ -39,14 +39,13 @@ public class IPluginV2 extends Pointer {
     /**
      *  \brief Return the API version with which this plugin was built.
      * 
-     *  Do not override this method as it is used by the TensorRT library to maintain backwards-compatibility with
-     *  plugins.
+     *  Do not override this method as it is used by the TensorRT library to maintain backwards-compatibility with plugins.
      *  */
     
     
     //!
     //!
-    public native int getTensorRTVersion();
+    public native @NoException(true) int getTensorRTVersion();
 
     /**
      *  \brief Return the plugin type. Should match the plugin name returned by the corresponding plugin creator
@@ -56,7 +55,7 @@ public class IPluginV2 extends Pointer {
     
     //!
     //!
-    public native String getPluginType();
+    public native @NoException(true) String getPluginType();
 
     /**
      *  \brief Return the plugin version. Should match the plugin version returned by the corresponding plugin creator
@@ -68,7 +67,7 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native String getPluginVersion();
+    public native @NoException(true) String getPluginVersion();
 
     /**
      *  \brief Get the number of outputs from the layer.
@@ -84,7 +83,7 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native int getNbOutputs();
+    public native @NoException(true) int getNbOutputs();
 
     /**
      *  \brief Get the dimension of an output tensor.
@@ -104,7 +103,7 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native @ByVal Dims getOutputDimensions(int index, @Const Dims inputs, int nbInputDims);
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getOutputDimensions(int index, @Cast("const nvinfer1::Dims*") Dims32 inputs, int nbInputDims);
 
     /**
      *  \brief Check format support.
@@ -132,8 +131,8 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean supportsFormat(DataType type, @Cast("nvinfer1::PluginFormat") TensorFormat format);
-    public native @Cast("bool") boolean supportsFormat(@Cast("nvinfer1::DataType") int type, @Cast("nvinfer1::PluginFormat") int format);
+    public native @Cast("bool") @NoException(true) boolean supportsFormat(DataType type, @Cast("nvinfer1::PluginFormat") TensorFormat format);
+    public native @Cast("bool") @NoException(true) boolean supportsFormat(@Cast("nvinfer1::DataType") int type, @Cast("nvinfer1::PluginFormat") int format);
 
     /**
      *  \brief Configure the layer.
@@ -163,9 +162,9 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native void configureWithFormat(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configureWithFormat(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             DataType type, @Cast("nvinfer1::PluginFormat") TensorFormat format, int maxBatchSize);
-    public native void configureWithFormat(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs,
+    public native @NoException(true) void configureWithFormat(@Cast("const nvinfer1::Dims*") Dims32 inputDims, int nbInputs, @Cast("const nvinfer1::Dims*") Dims32 outputDims, int nbOutputs,
             @Cast("nvinfer1::DataType") int type, @Cast("nvinfer1::PluginFormat") int format, int maxBatchSize);
 
     /**
@@ -177,11 +176,12 @@ public class IPluginV2 extends Pointer {
     
     //!
     //!
-    public native int initialize();
+    public native @NoException(true) int initialize();
 
     /**
      *  \brief Release resources acquired during plugin layer initialization. This is called when the engine is
-     *  destroyed. @see initialize()
+     *  destroyed.
+     *  @see initialize()
      *  */
     
     
@@ -189,7 +189,7 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native void terminate();
+    public native @NoException(true) void terminate();
 
     /**
      *  \brief Find the workspace size required by the layer.
@@ -205,7 +205,7 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native @Cast("size_t") long getWorkspaceSize(int maxBatchSize);
+    public native @Cast("size_t") @NoException(true) long getWorkspaceSize(int maxBatchSize);
 
     /**
      *  \brief Execute the layer.
@@ -223,9 +223,9 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native int enqueue(int batchSize, @Cast("const void*const*") PointerPointer inputs, @Cast("void**") PointerPointer outputs, Pointer workspace,
+    public native @NoException(true) int enqueue(int batchSize, @Cast("const void*const*") PointerPointer inputs, @Cast("void*const*") PointerPointer outputs, Pointer workspace,
             CUstream_st stream);
-    public native int enqueue(int batchSize, @Cast("const void*const*") @ByPtrPtr Pointer inputs, @Cast("void**") @ByPtrPtr Pointer outputs, Pointer workspace,
+    public native @NoException(true) int enqueue(int batchSize, @Cast("const void*const*") @ByPtrPtr Pointer inputs, @Cast("void*const*") @ByPtrPtr Pointer outputs, Pointer workspace,
             CUstream_st stream);
 
     /**
@@ -239,12 +239,13 @@ public class IPluginV2 extends Pointer {
     //!
     //!
     //!
-    public native @Cast("size_t") long getSerializationSize();
+    public native @Cast("size_t") @NoException(true) long getSerializationSize();
 
     /**
      *  \brief Serialize the layer.
      * 
-     *  @param buffer A pointer to a buffer to serialize data. Size of buffer must be equal to value returned by getSerializationSize.
+     *  @param buffer A pointer to a buffer to serialize data. Size of buffer must be equal to value returned by
+     *  getSerializationSize.
      * 
      *  @see getSerializationSize()
      *  */
@@ -252,7 +253,7 @@ public class IPluginV2 extends Pointer {
     
     //!
     //!
-    public native void serialize(Pointer buffer);
+    public native @NoException(true) void serialize(Pointer buffer);
 
     /**
      *  \brief Destroy the plugin object. This will be called when the network, builder or engine is destroyed.
@@ -261,16 +262,22 @@ public class IPluginV2 extends Pointer {
     
     //!
     //!
-    public native void destroy();
+    //!
+    public native @NoException(true) void destroy();
 
     /**
-     *  \brief Clone the plugin object. This copies over internal plugin parameters and returns a new plugin object with these parameters.
+     *  \brief Clone the plugin object. This copies over internal plugin parameters and returns a new plugin object with
+     *  these parameters.
+     * 
+     *  The TensorRT runtime calls clone() to clone the plugin when an execution context is created for an engine,
+     *  after the engine has been created.  The runtime does not call initialize() on the cloned plugin,
+     *  so the cloned plugin should be created in an initialized state.
      *  */
     
     
     //!
     //!
-    public native IPluginV2 clone();
+    public native @NoException(true) IPluginV2 clone();
 
     /**
      *  \brief Set the namespace that this plugin object belongs to. Ideally, all plugin
@@ -280,11 +287,11 @@ public class IPluginV2 extends Pointer {
     
     //!
     //!
-    public native void setPluginNamespace(String pluginNamespace);
-    public native void setPluginNamespace(@Cast("const char*") BytePointer pluginNamespace);
+    public native @NoException(true) void setPluginNamespace(String pluginNamespace);
+    public native @NoException(true) void setPluginNamespace(@Cast("const char*") BytePointer pluginNamespace);
 
     /**
      *  \brief Return the namespace of the plugin object.
      *  */
-    public native String getPluginNamespace();
+    public native @NoException(true) String getPluginNamespace();
 }

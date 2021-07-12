@@ -26,7 +26,7 @@ public class TransactionSecMarkerManagement extends Pointer {
         return (TransactionSecMarkerManagement)super.position(position);
     }
     @Override public TransactionSecMarkerManagement getPointer(long i) {
-        return new TransactionSecMarkerManagement((Pointer)this).position(position + i);
+        return new TransactionSecMarkerManagement((Pointer)this).offsetAddress(i);
     }
 
     public native @Cast("bool") boolean isInsideAMarker();

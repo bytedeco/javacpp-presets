@@ -17,6 +17,8 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 import org.bytedeco.tensorrt.nvinfer.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
+import org.bytedeco.tensorrt.nvinfer_plugin.*;
+import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 import static org.bytedeco.tensorrt.global.nvparsers.*;
 
@@ -36,8 +38,17 @@ public class IBinaryProtoBlob extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IBinaryProtoBlob(Pointer p) { super(p); }
 
-    public native @Const Pointer getData();
-    public native @ByVal DimsNCHW getDimensions();
-    public native DataType getDataType();
-    public native void destroy();
+    public native @Const @NoException(true) Pointer getData();
+    public native @ByVal @NoException(true) Dims4 getDimensions();
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) DataType getDataType();
+    /**
+     *  @deprecated Deprecated interface will be removed in TensorRT 10.0.
+     * 
+     *  \warning Calling destroy on a managed pointer will result in a double-free error.
+     *  */
+    public native @Deprecated @NoException(true) void destroy();
 }

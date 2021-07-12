@@ -26,30 +26,24 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IBuilder extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class IBuilder extends INoCopy {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IBuilder() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IBuilder(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IBuilder(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public IBuilder position(long position) {
+        return (IBuilder)super.position(position);
+    }
+    @Override public IBuilder getPointer(long i) {
+        return new IBuilder((Pointer)this).offsetAddress(i);
+    }
 
-    /**
-     *  \brief Create a network definition object where all tensors have an implicit batch dimension.
-     * 
-     *  This method is equivalent to createNetworkV2(0U), and retained for
-     *  compatibility
-     *  with earlier version of TensorRT.  The network does not support dynamic shapes or explicit batch sizes.
-     * 
-     *  @see INetworkDefinition, createNetworkV2
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilder::createNetworkV2 instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated INetworkDefinition createNetwork();
 
     /**
      *  \brief Set the maximum batch size.
@@ -65,7 +59,7 @@ public class IBuilder extends Pointer {
     //!
     //!
     //!
-    public native void setMaxBatchSize(int batchSize);
+    public native @NoException(true) void setMaxBatchSize(int batchSize);
 
     /**
      *  \brief Get the maximum batch size.
@@ -79,195 +73,7 @@ public class IBuilder extends Pointer {
     
     //!
     //!
-    //!
-    //!
-    //!
-    public native int getMaxBatchSize();
-
-    /**
-     *  \brief Set the maximum workspace size.
-     * 
-     *  @param workspaceSize The maximum GPU temporary memory which the engine can use at execution time.
-     * 
-     *  @see getMaxWorkspaceSize()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setMaxWorkspaceSize instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setMaxWorkspaceSize(@Cast("std::size_t") long workspaceSize);
-
-    /**
-     *  \brief Get the maximum workspace size.
-     * 
-     *  @return The maximum workspace size.
-     * 
-     *  @see setMaxWorkspaceSize()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getMaxWorkspaceSize instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("std::size_t") @Deprecated long getMaxWorkspaceSize();
-
-    /**
-     *  \brief Set whether half2 mode is used.
-     * 
-     *  half2 mode is a paired-image mode that is significantly faster for batch sizes greater than one on platforms
-     *  with fp16 support.
-     * 
-     *  @param mode Whether half2 mode is used.
-     * 
-     *  @see getHalf2Mode()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setHalf2Mode(@Cast("bool") boolean mode);
-
-    /**
-     *  \brief Query whether half2 mode is used.
-     * 
-     *  @see setHalf2Mode()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean getHalf2Mode();
-
-    /**
-     *  \brief Set whether the builder should use debug synchronization.
-     * 
-     *  If this flag is true, the builder will synchronize after timing each layer, and report the layer name. It can
-     *  be useful when diagnosing issues at build time.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setDebugSync(@Cast("bool") boolean sync);
-
-    /**
-     *  \brief Query whether the builder will use debug synchronization.
-     * 
-     *  @see setDebugSync()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean getDebugSync();
-
-    /**
-     *  \brief Set the number of minimization iterations used when timing layers.
-     * 
-     *  When timing layers, the builder minimizes over a set of average times for layer execution. This parameter
-     *  controls the number of iterations used in minimization.
-     * 
-     *  @see getMinFindIterations()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setMinTimingIterations instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setMinFindIterations(int minFind);
-
-    /**
-     *  \brief Query the number of minimization iterations.
-     * 
-     *  @see setMinFindIterations()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getMinTimingIterations instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated int getMinFindIterations();
-
-    /**
-     *  \brief Set the number of averaging iterations used when timing layers.
-     * 
-     *  When timing layers, the builder minimizes over a set of average times for layer execution. This parameter
-     *  controls the number of iterations used in averaging.
-     * 
-     *  @see getAverageFindIterations()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setAvgTimingIterations instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setAverageFindIterations(int avgFind);
-
-    /**
-     *  \brief Query the number of averaging iterations.
-     * 
-     *  @see setAverageFindIterations()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getAvgTimingIterations instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated int getAverageFindIterations();
-
-    /**
-     *  \brief Build a CUDA engine from a network definition.
-     * 
-     *  @see INetworkDefinition ICudaEngine
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilder::buildEngineWithConfig instead.
-     *  */
-    
-    
-    //!
-    //!
-    public native @Deprecated ICudaEngine buildCudaEngine(
-            @ByRef INetworkDefinition network);
+    public native @NoException(true) int getMaxBatchSize();
 
     /**
      *  \brief Determine whether the platform has fast native fp16.
@@ -276,7 +82,7 @@ public class IBuilder extends Pointer {
     
     //!
     //!
-    public native @Cast("bool") boolean platformHasFastFp16();
+    public native @Cast("bool") @NoException(true) boolean platformHasFastFp16();
 
     /**
      *  \brief Determine whether the platform has fast native int8.
@@ -285,169 +91,23 @@ public class IBuilder extends Pointer {
     
     //!
     //!
-    public native @Cast("bool") boolean platformHasFastInt8();
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean platformHasFastInt8();
 
     /**
      *  \brief Destroy this object.
+     * 
+     *  @deprecated Deprecated interface will be removed in TensorRT 10.0.
+     * 
+     *  \warning Calling destroy on a managed pointer will result in a double-free error.
      *  */
     
     
     //!
     //!
     //!
-    //!
-    //!
-    //!
-    public native void destroy();
-
-    /**
-     *  \brief Set whether or not quantized 8-bit kernels are permitted.
-     * 
-     *  During engine build int8 kernels will also be tried when this mode is enabled.
-     * 
-     *  @param mode Whether quantized 8-bit kernels are permitted.
-     * 
-     *  @see getInt8Mode()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setInt8Mode(@Cast("bool") boolean mode);
-
-    /**
-     *  \brief Query whether Int8 mode is used.
-     * 
-     *  @see setInt8Mode()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean getInt8Mode();
-
-    /**
-     *  \brief Set Int8 Calibration interface.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setInt8Calibrator instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setInt8Calibrator(IInt8Calibrator calibrator);
-
-    /**
-     *  \brief Set the device that this layer must execute on.
-     *  @param DeviceType that this layer must execute on.
-     *  If DeviceType is not set or is reset, TensorRT will use the default DeviceType set in the builder.
-     * 
-     *  \note The device type for a layer must be compatible with the safety flow (if specified).
-     *  For example a layer cannot be marked for DLA execution while the builder is configured for kSAFE_GPU.
-     * 
-     *  @see getDeviceType()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setDeviceType instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated void setDeviceType(ILayer layer, DeviceType deviceType);
-    public native @Deprecated void setDeviceType(ILayer layer, @Cast("nvinfer1::DeviceType") int deviceType);
-
-    /**
-     *  \brief Get the device that this layer executes on.
-     *  @return Returns DeviceType of the layer.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getDeviceType instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated DeviceType getDeviceType(@Const ILayer layer);
-
-    /**
-     *  \brief whether the DeviceType has been explicitly set for this layer
-     *  @return whether the DeviceType has been explicitly set
-     *  @see setDeviceType() getDeviceType() resetDeviceType()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::isDeviceTypeSet instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean isDeviceTypeSet(@Const ILayer layer);
-
-    /**
-     *  \brief reset the DeviceType for this layer
-     * 
-     *  @see setDeviceType() getDeviceType() isDeviceTypeSet()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::resetDeviceType instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated void resetDeviceType(ILayer layer);
-
-    /**
-     *  \brief Checks if a layer can run on DLA.
-     *  @return status true if the layer can on DLA else returns false.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::canRunOnDLA instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean canRunOnDLA(@Const ILayer layer);
-
-    /**
-     *  \brief Sets the default DeviceType to be used by the builder. It ensures that all the layers that can run on
-     *  this device will run on it, unless setDeviceType is used to override the default DeviceType for a layer.
-     *  @see getDefaultDeviceType()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setDefaultDeviceType instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated void setDefaultDeviceType(DeviceType deviceType);
-    public native @Deprecated void setDefaultDeviceType(@Cast("nvinfer1::DeviceType") int deviceType);
-
-    /**
-     *  \brief Get the default DeviceType which was set by setDefaultDeviceType.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getDefaultDeviceType instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated DeviceType getDefaultDeviceType();
+    public native @Deprecated @NoException(true) void destroy();
 
     /**
      *  \brief Get the maximum batch size DLA can support.
@@ -460,24 +120,7 @@ public class IBuilder extends Pointer {
     
     //!
     //!
-    //!
-    //!
-    public native int getMaxDLABatchSize();
-
-    /**
-     *  \brief Sets the builder to use GPU if a layer that was supposed to run on DLA can not run on DLA.
-     *  @param Allows fallback if setFallBackMode is true else disables fallback option.
-     * 
-     *  \note GPU fallback may only be specified for non-safety modes. @see EngineCapability
-     *  Simultaneously enabling GPU fallback and safety-restricted modes is disallowed.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    public native @Deprecated void allowGPUFallback(@Cast("bool") boolean setFallBackMode);
+    public native @NoException(true) int getMaxDLABatchSize();
 
     /**
      *  \brief Return the number of DLA engines available to this builder.
@@ -487,44 +130,9 @@ public class IBuilder extends Pointer {
     //!
     //!
     //!
-    public native int getNbDLACores();
+    //!
+    public native @NoException(true) int getNbDLACores();
 
-    /**
-     *  \brief Set the DLA core that the engine must execute on.
-     *  @param dlaCore The DLA core to execute the engine on (0 to N-1, where N is the maximum number of DLA cores
-     *  present on the device). Default value is 0.
-     *  DLA Core is not a property of the engine that is preserved by serialization: when the engine is deserialized
-     *  it will be associated with the DLA core which is configured for the runtime.
-     *  @see IRuntime::setDLACore() getDLACore()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setDLACore instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated void setDLACore(int dlaCore);
-
-    /**
-     *  \brief Get the DLA core that the engine executes on.
-     *  @return If setDLACore is called, returns DLA core from 0 to N-1, else returns 0.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getDLACore instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated int getDLACore();
-
-    /**
-     *  \brief Resets the builder state
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilder::reset instead.
-     *  */
-    public native @Deprecated void reset(@ByRef INetworkDefinition network);
     /**
      *  \brief Set the GPU allocator.
      *  @param allocator Set the GPU allocator to be used by the builder. All GPU memory acquired will use this
@@ -541,143 +149,7 @@ public class IBuilder extends Pointer {
     //!
     //!
     //!
-    //!
-    //!
-    //!
-    public native void setGpuAllocator(IGpuAllocator allocator);
-
-    /**
-     *  \brief Set whether or not 16-bit kernels are permitted.
-     * 
-     *  During engine build fp16 kernels will also be tried when this mode is enabled.
-     * 
-     *  @param mode Whether 16-bit kernels are permitted.
-     * 
-     *  @see getFp16Mode()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setFp16Mode(@Cast("bool") boolean mode);
-
-    /**
-     *  \brief Query whether 16-bit kernels are permitted.
-     * 
-     *  @see setFp16Mode()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean getFp16Mode();
-
-    /**
-     *  \brief Set whether or not type constraints are strict.
-     * 
-     *  When strict type constraints are in use, TensorRT will always choose a layer implementation that conforms to the
-     *  type constraints specified, if one exists. If this flag is not set, a higher-precision implementation may be
-     *  chosen if it results in higher performance.
-     * 
-     *  If no conformant layer exists, TensorRT will choose a non-conformant layer if available regardless of the
-     *  setting of this flag.
-     * 
-     *  See the developer guide for the definition of strictness.
-     * 
-     *  @param mode Whether type constraints are strict
-     * 
-     *  @see getStrictTypeConstraints()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setStrictTypeConstraints(@Cast("bool") boolean mode);
-
-    /**
-     *  \brief Query whether or not type constraints are strict.
-     * 
-     *  @see setStrictTypeConstraints()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean getStrictTypeConstraints();
-
-    /**
-     *  Set whether engines will be refittable.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setRefittable(@Cast("bool") boolean canRefit);
-
-    /**
-     *  \brief Query whether or not engines will be refittable.
-     * 
-     *  @see getRefittable()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getFlag instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated boolean getRefittable();
-
-    /**
-     *  \brief Configure the builder to target specified EngineCapability flow.
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::setEngineCapability instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setEngineCapability(EngineCapability capability);
-    public native @Deprecated void setEngineCapability(@Cast("nvinfer1::EngineCapability") int capability);
-
-    /**
-     *  \brief Query EngineCapability flow configured for the builder.
-     * 
-     *  @see setEngineCapability()
-     * 
-     *  @deprecated API will be removed in TensorRT 8.0, use IBuilderConfig::getEngineCapability instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated EngineCapability getEngineCapability();
+    public native @NoException(true) void setGpuAllocator(IGpuAllocator allocator);
 
     /**
      *  \brief Create a builder configuration object.
@@ -689,22 +161,27 @@ public class IBuilder extends Pointer {
     //!
     //!
     //!
-    public native IBuilderConfig createBuilderConfig();
+    //!
+    //!
+    public native @NoException(true) IBuilderConfig createBuilderConfig();
 
     /**
      *  \brief Builds an engine for the given INetworkDefinition and given IBuilderConfig.
      * 
      *  It enables the builder to build multiple engines based on the same network definition, but with different
      *  builder configurations.
+     * 
+     *  \note This function will synchronize the cuda stream returned by \p config.getProfileStream() before returning.
+     * 
+     *  @deprecated API will be removed in TensorRT 10.0, use IBuilder::buildSerializedNetwork instead.
      *  */
     
     //!
     //!
     //!
     //!
-    public native ICudaEngine buildEngineWithConfig(
+    public native @Deprecated @NoException(true) ICudaEngine buildEngineWithConfig(
             @ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
-
 
     /** \brief Create a network definition object
      * 
@@ -721,8 +198,7 @@ public class IBuilder extends Pointer {
     //!
     //!
     //!
-    public native INetworkDefinition createNetworkV2(@Cast("nvinfer1::NetworkDefinitionCreationFlags") int flags);
-
+    public native @NoException(true) INetworkDefinition createNetworkV2(@Cast("nvinfer1::NetworkDefinitionCreationFlags") int flags);
 
     /** \brief Create a new optimization profile.
      * 
@@ -739,7 +215,8 @@ public class IBuilder extends Pointer {
     //!
     //!
     //!
-    public native @NoException IOptimizationProfile createOptimizationProfile();
+    //!
+    public native @NoException(true) IOptimizationProfile createOptimizationProfile();
 
     /**
      *  \brief Set the ErrorRecorder for this interface
@@ -749,9 +226,11 @@ public class IBuilder extends Pointer {
      *  recorder to nullptr unregisters the recorder with the interface, resulting in a call to decRefCount if
      *  a recorder has been registered.
      * 
+     *  If an error recorder is not set, messages will be sent to the global log stream.
+     * 
      *  @param recorder The error recorder to register with this interface. */
     //
-    /** @see getErrorRecorder
+    /** @see getErrorRecorder()
     /** */
     
     
@@ -760,23 +239,23 @@ public class IBuilder extends Pointer {
     //!
     //!
     //!
-    public native void setErrorRecorder(IErrorRecorder recorder);
+    public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
 
     /**
      *  \brief get the ErrorRecorder assigned to this interface.
      * 
-     *  Retrieves the assigned error recorder object for the given class. A default error recorder does not exist,
-     *  so a nullptr will be returned if setErrorRecorder has not been called.
+     *  Retrieves the assigned error recorder object for the given class.
+     *  A nullptr will be returned if setErrorRecorder has not been called.
      * 
      *  @return A pointer to the IErrorRecorder object that has been registered.
      * 
-     *  @see setErrorRecorder
+     *  @see setErrorRecorder()
      *  */
     
     
     //!
     //!
-    public native IErrorRecorder getErrorRecorder();
+    public native @NoException(true) IErrorRecorder getErrorRecorder();
 
     /**
      *  \brief Resets the builder state to default values.
@@ -785,10 +264,62 @@ public class IBuilder extends Pointer {
     
     //!
     //!
-    public native void reset();
+    public native @NoException(true) void reset();
 
     /**
      *  \brief Determine whether the platform has TF32 support.
      *  */
-    public native @Cast("bool") boolean platformHasTf32();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean platformHasTf32();
+
+    /**
+     *  \brief Builds and serializes a network for the given INetworkDefinition and IBuilderConfig.
+     * 
+     *  This function allows building and serialization of a network without creating an engine.
+     * 
+     *  @param network Network definition.
+     *  @param config Builder configuration.
+     * 
+     *  @return A pointer to a IHostMemory object that contains a serialized network.
+     * 
+     *  \note This function will synchronize the cuda stream returned by \p config.getProfileStream() before returning.
+     * 
+     *  @see INetworkDefinition, IBuilderConfig, IHostMemory
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IHostMemory buildSerializedNetwork(@ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
+
+    /**
+     *  \brief Checks that a network is within the scope of the IBuilderConfig settings.
+     * 
+     *  @param network The network definition to check for configuration compliance.
+     *  @param config The configuration of the builder to use when checking \p network.
+     * 
+     *  Given an INetworkDefinition, \p network, and an IBuilderConfig, \p config, check if
+     *  the network falls within the constraints of the builder configuration based on the
+     *  EngineCapability, BuilderFlag, and DeviceType. If the network is within the constraints,
+     *  then the function returns true, and false if a violation occurs. This function reports
+     *  the conditions that are violated to the registered ErrorRecorder.
+     * 
+     *  @return True if network is within the scope of the restrictions specified by the builder config,
+     *  false otherwise.
+     * 
+     *  \note This function will synchronize the cuda stream returned by \p config.getProfileStream() before returning.
+     *  */
+    public native @Cast("bool") @NoException(true) boolean isNetworkSupported(@Const @ByRef INetworkDefinition network, @Const @ByRef IBuilderConfig config);
 }

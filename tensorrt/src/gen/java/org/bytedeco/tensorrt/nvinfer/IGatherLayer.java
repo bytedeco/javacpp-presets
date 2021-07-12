@@ -22,7 +22,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 /**
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IGatherLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -39,7 +39,7 @@ public class IGatherLayer extends ILayer {
     //!
     //!
     //!
-    public native void setGatherAxis(int axis);
+    public native @NoException(true) void setGatherAxis(int axis);
 
     /**
      *  \brief Get the axis to gather on.
@@ -51,7 +51,7 @@ public class IGatherLayer extends ILayer {
     //!
     //!
     //!
-    public native int getGatherAxis();
+    public native @NoException(true) int getGatherAxis();
 
     /**
      *  \brief Set the number of leading dimensions of indices tensor to be handled elementwise.
@@ -65,12 +65,12 @@ public class IGatherLayer extends ILayer {
     //!
     //!
     //!
-    public native void setNbElementWiseDims(int k);
+    public native @NoException(true) void setNbElementWiseDims(int k);
 
     /**
      *  \brief Get the number of leading dimensions of indices tensor to be handled elementwise.
      * 
      *  @see setNbElementWiseDims()
      *  */
-    public native int getNbElementWiseDims();
+    public native @NoException(true) int getNbElementWiseDims();
 }

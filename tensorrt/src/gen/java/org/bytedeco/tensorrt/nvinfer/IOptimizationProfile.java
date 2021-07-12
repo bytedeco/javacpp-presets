@@ -41,8 +41,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  @see IBuilderConfig::addOptimizationProfile()
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IOptimizationProfile extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class IOptimizationProfile extends INoCopy {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IOptimizationProfile(Pointer p) { super(p); }
@@ -77,8 +77,8 @@ public class IOptimizationProfile extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException boolean setDimensions(String inputName, OptProfileSelector select, @ByVal Dims dims);
-    public native @Cast("bool") @NoException boolean setDimensions(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @ByVal Dims dims);
+    public native @Cast("bool") @NoException(true) boolean setDimensions(String inputName, OptProfileSelector select, @ByVal @Cast("nvinfer1::Dims*") Dims32 dims);
+    public native @Cast("bool") @NoException(true) boolean setDimensions(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @ByVal @Cast("nvinfer1::Dims*") Dims32 dims);
 
     /**
      *  \brief Get the minimum / optimum / maximum dimensions for a dynamic input tensor.
@@ -93,8 +93,14 @@ public class IOptimizationProfile extends Pointer {
     //!
     //!
     //!
-    public native @ByVal @NoException Dims getDimensions(String inputName, OptProfileSelector select);
-    public native @ByVal @NoException Dims getDimensions(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getDimensions(String inputName, OptProfileSelector select);
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getDimensions(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
 
     /**
      *  \brief Set the minimum / optimum / maximum values for an input shape tensor.
@@ -103,10 +109,25 @@ public class IOptimizationProfile extends Pointer {
      *  This implies that the datatype of t is DataType::kINT32, the rank is either 0 or 1, and the dimensions of t
      *  are fixed at network definition time. This function must not be called for any input tensor that is not a
      *  shape tensor.
+     * 
      *  Each time this function is called for the same input tensor, the same nbValues must be supplied (either 1
      *  if the tensor rank is 0, or dims.d[0] if the rank is 1). Furthermore, if minVals, optVals, maxVals are the
      *  minimum, optimum, and maximum values, it must be true that minVals[i] <= optVals[i] <= maxVals[i] for
-     *  i = 0, ..., nbValues - 1.
+     *  i = 0, ..., nbValues - 1. Execution of the network must be valid for the optVals.
+     * 
+     *  Shape tensors are tensors that contribute to shape calculations in some way, and can contain
+     *  any int32_t values appropriate for the network. Examples:
+     * 
+     *  * A shape tensor used as the second input to IShuffleLayer can contain a -1 wildcard.
+     *    The corresponding minVal[i] should be -1.
+     * 
+     *  * A shape tensor used as the stride input to ISliceLayer can contain any valid strides.
+     *    The values could be positive, negative, or zero.
+     * 
+     *  * A shape tensor subtracted from zero to compute the size input of an ISliceLayer can
+     *    contain any non-positive values that yield a valid slice operation.
+     * 
+     *  Tightening the minVals and maxVals bounds to cover only values that are necessary may help optimization.
      * 
      *  @param inputName The input tensor name
      *  @param select Whether to set the minimum, optimum, or maximum input values.
@@ -124,17 +145,17 @@ public class IOptimizationProfile extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException boolean setShapeValues(
+    public native @Cast("bool") @NoException(true) boolean setShapeValues(
             String inputName, OptProfileSelector select, @Const IntPointer values, int nbValues);
-    public native @Cast("bool") @NoException boolean setShapeValues(
+    public native @Cast("bool") @NoException(true) boolean setShapeValues(
             @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const IntBuffer values, int nbValues);
-    public native @Cast("bool") @NoException boolean setShapeValues(
+    public native @Cast("bool") @NoException(true) boolean setShapeValues(
             String inputName, OptProfileSelector select, @Const int[] values, int nbValues);
-    public native @Cast("bool") @NoException boolean setShapeValues(
+    public native @Cast("bool") @NoException(true) boolean setShapeValues(
             @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const IntPointer values, int nbValues);
-    public native @Cast("bool") @NoException boolean setShapeValues(
+    public native @Cast("bool") @NoException(true) boolean setShapeValues(
             String inputName, OptProfileSelector select, @Const IntBuffer values, int nbValues);
-    public native @Cast("bool") @NoException boolean setShapeValues(
+    public native @Cast("bool") @NoException(true) boolean setShapeValues(
             @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const int[] values, int nbValues);
 
     /**
@@ -148,8 +169,8 @@ public class IOptimizationProfile extends Pointer {
     //!
     //!
     //!
-    public native @NoException int getNbShapeValues(String inputName);
-    public native @NoException int getNbShapeValues(@Cast("const char*") BytePointer inputName);
+    public native @NoException(true) int getNbShapeValues(String inputName);
+    public native @NoException(true) int getNbShapeValues(@Cast("const char*") BytePointer inputName);
 
     /**
      *  \brief Get the minimum / optimum / maximum values for an input shape tensor.
@@ -162,8 +183,8 @@ public class IOptimizationProfile extends Pointer {
     //!
     //!
     //!
-    public native @Const @NoException IntPointer getShapeValues(String inputName, OptProfileSelector select);
-    public native @Const @NoException IntBuffer getShapeValues(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
+    public native @Const @NoException(true) IntPointer getShapeValues(String inputName, OptProfileSelector select);
+    public native @Const @NoException(true) IntBuffer getShapeValues(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
 
     /**
      *  \brief Set a target for extra GPU memory that may be used by this profile.
@@ -182,7 +203,7 @@ public class IOptimizationProfile extends Pointer {
     
     //!
     //!
-    public native @Cast("bool") @NoException boolean setExtraMemoryTarget(float target);
+    public native @Cast("bool") @NoException(true) boolean setExtraMemoryTarget(float target);
 
     /**
      *  \brief Get the extra memory target that has been defined for this profile.
@@ -193,7 +214,7 @@ public class IOptimizationProfile extends Pointer {
     //!
     //!
     //!
-    public native @NoException float getExtraMemoryTarget();
+    public native @NoException(true) float getExtraMemoryTarget();
 
     /**
      *  \brief Check whether the optimization profile can be passed to an IBuilderConfig object.
@@ -206,5 +227,5 @@ public class IOptimizationProfile extends Pointer {
      * 
      *  @return true if the optimization profile is valid and may be passed to an IBuilderConfig, else false
      *  */
-    public native @Cast("bool") @NoException boolean isValid();
+    public native @Cast("bool") @NoException(true) boolean isValid();
 }

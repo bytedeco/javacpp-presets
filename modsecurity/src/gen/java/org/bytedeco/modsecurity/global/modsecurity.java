@@ -674,7 +674,7 @@ public static final String CODEPAGE_SEPARATORS =  " \t\n\r";
 
 public static final String MODSECURITY_MAJOR = "3";
 public static final String MODSECURITY_MINOR = "0";
-public static final String MODSECURITY_PATCHLEVEL = "4";
+public static final String MODSECURITY_PATCHLEVEL = "5";
 public static final String MODSECURITY_TAG = "";
 public static final String MODSECURITY_TAG_NUM = "100";
 
