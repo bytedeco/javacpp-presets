@@ -29,7 +29,7 @@ public class LLVMOrcCLookupSetElement extends Pointer {
         return (LLVMOrcCLookupSetElement)super.position(position);
     }
     @Override public LLVMOrcCLookupSetElement getPointer(long i) {
-        return new LLVMOrcCLookupSetElement((Pointer)this).position(position + i);
+        return new LLVMOrcCLookupSetElement((Pointer)this).offsetAddress(i);
     }
 
   public native LLVMOrcSymbolStringPoolEntryRef Name(); public native LLVMOrcCLookupSetElement Name(LLVMOrcSymbolStringPoolEntryRef setter);

@@ -29,7 +29,7 @@ public class LLVMJITCSymbolMapPair extends Pointer {
         return (LLVMJITCSymbolMapPair)super.position(position);
     }
     @Override public LLVMJITCSymbolMapPair getPointer(long i) {
-        return new LLVMJITCSymbolMapPair((Pointer)this).position(position + i);
+        return new LLVMJITCSymbolMapPair((Pointer)this).offsetAddress(i);
     }
 
   public native LLVMOrcSymbolStringPoolEntryRef Name(); public native LLVMJITCSymbolMapPair Name(LLVMOrcSymbolStringPoolEntryRef setter);

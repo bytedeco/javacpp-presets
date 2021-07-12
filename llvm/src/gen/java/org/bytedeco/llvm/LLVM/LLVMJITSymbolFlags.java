@@ -29,7 +29,7 @@ public class LLVMJITSymbolFlags extends Pointer {
         return (LLVMJITSymbolFlags)super.position(position);
     }
     @Override public LLVMJITSymbolFlags getPointer(long i) {
-        return new LLVMJITSymbolFlags((Pointer)this).position(position + i);
+        return new LLVMJITSymbolFlags((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("uint8_t") byte GenericFlags(); public native LLVMJITSymbolFlags GenericFlags(byte setter);

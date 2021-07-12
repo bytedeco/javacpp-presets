@@ -29,7 +29,7 @@ public class LLVMJITEvaluatedSymbol extends Pointer {
         return (LLVMJITEvaluatedSymbol)super.position(position);
     }
     @Override public LLVMJITEvaluatedSymbol getPointer(long i) {
-        return new LLVMJITEvaluatedSymbol((Pointer)this).position(position + i);
+        return new LLVMJITEvaluatedSymbol((Pointer)this).offsetAddress(i);
     }
 
   public native @Cast("LLVMOrcJITTargetAddress") long Address(); public native LLVMJITEvaluatedSymbol Address(long setter);

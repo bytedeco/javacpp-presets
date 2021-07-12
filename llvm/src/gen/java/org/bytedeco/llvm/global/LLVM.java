@@ -964,6 +964,17 @@ public static native @Cast("unsigned") int LLVMGetEnumAttributeKind(LLVMAttribut
 public static native @Cast("uint64_t") long LLVMGetEnumAttributeValue(LLVMAttributeRef A);
 
 /**
+ * Create a type attribute
+ */
+public static native LLVMAttributeRef LLVMCreateTypeAttribute(LLVMContextRef C, @Cast("unsigned") int KindID,
+                                         LLVMTypeRef type_ref);
+
+/**
+ * Get the type attribute's value.
+ */
+public static native LLVMTypeRef LLVMGetTypeAttributeValue(LLVMAttributeRef A);
+
+/**
  * Create a string attribute.
  */
 public static native LLVMAttributeRef LLVMCreateStringAttribute(LLVMContextRef C,
@@ -992,6 +1003,7 @@ public static native @Cast("const char*") BytePointer LLVMGetStringAttributeValu
  */
 public static native @Cast("LLVMBool") int LLVMIsEnumAttribute(LLVMAttributeRef A);
 public static native @Cast("LLVMBool") int LLVMIsStringAttribute(LLVMAttributeRef A);
+public static native @Cast("LLVMBool") int LLVMIsTypeAttribute(LLVMAttributeRef A);
 
 /**
  * Obtain a Type from a context by its registered name.
