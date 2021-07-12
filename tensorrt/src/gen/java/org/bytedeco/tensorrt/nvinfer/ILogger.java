@@ -24,19 +24,17 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \brief Application-implemented logging interface for the builder, engine and runtime.
  * 
- *  Note that although a logger is passed on creation to each instance of a IBuilder or safe::IRuntime interface, the logger is internally considered a singleton, and thus
- *  multiple instances of safe::IRuntime and/or IBuilder must all use the same logger.
+ *  Note that although a logger is passed on creation to each instance of a IBuilder or IRuntime interfaces, the logger
+ *  is internally considered a singleton, and thus multiple instances of IRuntime and/or IBuilder must all use the same
+ *  logger.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ILogger extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public ILogger() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ILogger(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILogger(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ILogger(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public ILogger position(long position) {
         return (ILogger)super.position(position);
@@ -51,15 +49,15 @@ public class ILogger extends Pointer {
      *  The severity corresponding to a log message.
      *  */
     public enum Severity {
-        /** Internal error has occurred. Execution is unrecoverable. */
+        /** An internal error has occurred. Execution is unrecoverable. */
         kINTERNAL_ERROR(0),
-        /** Application error has occurred. */
+        /** An application error has occurred. */
         kERROR(1),
-        /** Application error has been discovered. TensorRT has recovered or fallen back to a default. */
+        /** An application error has been discovered, but TensorRT has recovered or fallen back to a default. */
         kWARNING(2),
-        /** Informational messages with instructional information. */
+        /**  Informational messages with instructional information. */
         kINFO(3),
-        /** Verbose messages with debugging information. */
+        /**  Verbose messages with debugging information. */
         kVERBOSE(4);
 
         public final int value;
@@ -75,5 +73,8 @@ public class ILogger extends Pointer {
      *  @param severity The severity of the message.
      *  @param msg The log message, null terminated.
      *  */
-    @Virtual(true) public native void log(Severity severity, String msg);
+    @Virtual(true) public native @NoException(true) void log(Severity severity, String msg);
+
+    public ILogger() { super((Pointer)null); allocate(); }
+    private native void allocate();
 }

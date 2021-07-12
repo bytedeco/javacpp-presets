@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>modsecurity-platform</artifactId>
-            <version>master-1.5.6-SNAPSHOT</version>
+            <version>3.0.5-1.5.6-SNAPSHOT</version>
        </dependency>
     </dependencies>
     <build>

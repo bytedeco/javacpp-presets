@@ -69,9 +69,9 @@ runs:
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_471.11_win10.exe
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.1/cudnn-11.3-windows-x64-v8.2.1.32.zip
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.2/cudnn-11.4-windows-x64-v8.2.2.26.zip
           cuda_11.4.0_471.11_win10.exe -s
-          unzip cudnn-11.3-windows-x64-v8.2.1.32.zip
+          unzip cudnn-11.4-windows-x64-v8.2.2.26.zip
           move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin"
           move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.4\include"
           move cuda\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.4\lib\x64"
@@ -90,9 +90,9 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          python -m gdown.cli https://drive.google.com/uc?id=12r8CgDD66hIYB3WIX5JQix9zVeYVeHDR
-          unzip TensorRT-7.2.3.4.Windows10.x86_64.cuda-11.2.cudnn8.1.zip
-          move TensorRT-7.2.3.4 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          python -m gdown.cli https://drive.google.com/uc?id=1WrVgjnsorHRWvbqhtl5cXsGUKN_N0kBs
+          unzip TensorRT-8.0.1.6.Windows10.x86_64.cuda-11.3.cudnn8.2.zip
+          move TensorRT-8.0.1.6 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (

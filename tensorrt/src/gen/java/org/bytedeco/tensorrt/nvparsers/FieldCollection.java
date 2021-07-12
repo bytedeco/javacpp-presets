@@ -17,6 +17,8 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 import org.bytedeco.tensorrt.nvinfer.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
+import org.bytedeco.tensorrt.nvinfer_plugin.*;
+import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 import static org.bytedeco.tensorrt.global.nvparsers.*;
 

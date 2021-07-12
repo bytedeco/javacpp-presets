@@ -28,8 +28,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IAlgorithm extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class IAlgorithm extends INoCopy {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IAlgorithm(Pointer p) { super(p); }
@@ -39,12 +39,16 @@ public class IAlgorithm extends Pointer {
      *         followed by algorithm outputs.
      *  @param index Index of the input or output of the algorithm. Incremental numbers assigned to indices of inputs
      *               and the outputs.
+     * 
+     *  @return a reference to IAlgorithmIOInfo specified by index or the first algorithm if index is out of range.
+     * 
+     *  @deprecated API will be removed in TensorRT 10.0, use IAlgorithm::getAlgorithmIOInfoByIndex instead.
      *  */
     
     
     //!
     //!
-    public native @Const @ByRef IAlgorithmIOInfo getAlgorithmIOInfo(int index);
+    public native @Const @Deprecated @ByRef @NoException(true) IAlgorithmIOInfo getAlgorithmIOInfo(int index);
 
     /**
      *  \brief Returns the algorithm variant.
@@ -53,7 +57,7 @@ public class IAlgorithm extends Pointer {
     
     //!
     //!
-    public native @Const @ByRef IAlgorithmVariant getAlgorithmVariant();
+    public native @Const @ByRef @NoException(true) IAlgorithmVariant getAlgorithmVariant();
 
     /**
      *  \brief The time in milliseconds to execute the algorithm.
@@ -62,10 +66,25 @@ public class IAlgorithm extends Pointer {
     
     //!
     //!
-    public native float getTimingMSec();
+    public native @NoException(true) float getTimingMSec();
 
     /**
      *  \brief The size of the GPU temporary memory in bytes which the algorithm uses at execution time.
      *  */
-    public native @Cast("std::size_t") long getWorkspaceSize();
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("std::size_t") @NoException(true) long getWorkspaceSize();
+
+    /**
+     *  \brief Returns the format of an Algorithm input or output. Algorithm inputs are incrementally numbered first,
+     *         followed by algorithm outputs.
+     *  @param index Index of the input or output of the algorithm. Incremental numbers assigned to indices of inputs
+     *               and the outputs.
+     * 
+     *  @return a pointer to a IAlgorithmIOInfo interface or nullptr if index is out of range.
+     *  */
+    public native @Const @NoException(true) IAlgorithmIOInfo getAlgorithmIOInfoByIndex(int index);
 }

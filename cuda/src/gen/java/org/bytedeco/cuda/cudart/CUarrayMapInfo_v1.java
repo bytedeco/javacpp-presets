@@ -41,6 +41,28 @@ public class CUarrayMapInfo_v1 extends Pointer {
     /** Sparse subresource type */
     public native @Cast("CUarraySparseSubresourceType") int subresourceType(); public native CUarrayMapInfo_v1 subresourceType(int setter);
 
+            /** For CUDA mipmapped arrays must a valid mipmap level. For CUDA arrays must be zero */
+            @Name("subresource.sparseLevel.level") public native @Cast("unsigned int") int subresource_sparseLevel_level(); public native CUarrayMapInfo_v1 subresource_sparseLevel_level(int setter);            
+            /** For CUDA layered arrays must be a valid layer index. Otherwise, must be zero */
+            @Name("subresource.sparseLevel.layer") public native @Cast("unsigned int") int subresource_sparseLevel_layer(); public native CUarrayMapInfo_v1 subresource_sparseLevel_layer(int setter);
+            /** Starting X offset in elements */
+            @Name("subresource.sparseLevel.offsetX") public native @Cast("unsigned int") int subresource_sparseLevel_offsetX(); public native CUarrayMapInfo_v1 subresource_sparseLevel_offsetX(int setter);
+            /** Starting Y offset in elements */
+            @Name("subresource.sparseLevel.offsetY") public native @Cast("unsigned int") int subresource_sparseLevel_offsetY(); public native CUarrayMapInfo_v1 subresource_sparseLevel_offsetY(int setter);
+            /** Starting Z offset in elements */
+            @Name("subresource.sparseLevel.offsetZ") public native @Cast("unsigned int") int subresource_sparseLevel_offsetZ(); public native CUarrayMapInfo_v1 subresource_sparseLevel_offsetZ(int setter);            
+            /** Width in elements */
+            @Name("subresource.sparseLevel.extentWidth") public native @Cast("unsigned int") int subresource_sparseLevel_extentWidth(); public native CUarrayMapInfo_v1 subresource_sparseLevel_extentWidth(int setter);
+            /** Height in elements */
+            @Name("subresource.sparseLevel.extentHeight") public native @Cast("unsigned int") int subresource_sparseLevel_extentHeight(); public native CUarrayMapInfo_v1 subresource_sparseLevel_extentHeight(int setter);
+            /** Depth in elements */
+            @Name("subresource.sparseLevel.extentDepth") public native @Cast("unsigned int") int subresource_sparseLevel_extentDepth(); public native CUarrayMapInfo_v1 subresource_sparseLevel_extentDepth(int setter);
+            /** For CUDA layered arrays must be a valid layer index. Otherwise, must be zero */
+            @Name("subresource.miptail.layer") public native @Cast("unsigned int") int subresource_miptail_layer(); public native CUarrayMapInfo_v1 subresource_miptail_layer(int setter);
+            /** Offset within mip tail */
+            @Name("subresource.miptail.offset") public native @Cast("unsigned long long") long subresource_miptail_offset(); public native CUarrayMapInfo_v1 subresource_miptail_offset(long setter);
+            /** Extent in bytes */
+            @Name("subresource.miptail.size") public native @Cast("unsigned long long") long subresource_miptail_size(); public native CUarrayMapInfo_v1 subresource_miptail_size(long setter);
     
     /** Memory operation type */
     public native @Cast("CUmemOperationType") int memOperationType(); public native CUarrayMapInfo_v1 memOperationType(int setter);

@@ -28,7 +28,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPluginV2Layer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -39,5 +39,5 @@ public class IPluginV2Layer extends ILayer {
      * 
      *  @see IPluginV2
      *  */
-    public native @ByRef IPluginV2 getPlugin();
+    public native @ByRef @NoException(true) IPluginV2 getPlugin();
 }

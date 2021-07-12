@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // IAlgorithm
 
 /**
  *  \class IAlgorithmSelector
@@ -42,23 +42,23 @@ public class IAlgorithmSelector extends Pointer {
      *  @param nbChoices Number of algorithm choices.
      *  @param selection The user writes indices of selected choices in to selection buffer which is of size nbChoices.
      * 
-     *  \note TRT uses its default algorithm selection to choose from the list provided.
-     *        If return value is 0, TRT’s default algorithm selection is used unless strict type constraints are set.
-     *        The list of choices is valid only for this specific algorithm context.
+     *  \note TensorRT uses its default algorithm selection to choose from the list provided.
+     *        If return value is 0, TensorRT’s default algorithm selection is used unless strict type constraints are
+     *        set. The list of choices is valid only for this specific algorithm context.
      *  */
     
     //!
     //!
     //!
     //!
-    public native int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Cast("const nvinfer1::IAlgorithm*const*") PointerPointer choices,
-                                         int nbChoices, IntPointer selection);
-    public native int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Const @ByPtrPtr IAlgorithm choices,
-                                         int nbChoices, IntPointer selection);
-    public native int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Const @ByPtrPtr IAlgorithm choices,
-                                         int nbChoices, IntBuffer selection);
-    public native int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Const @ByPtrPtr IAlgorithm choices,
-                                         int nbChoices, int[] selection);
+    public native @NoException(true) int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Cast("const nvinfer1::IAlgorithm*const*") PointerPointer choices,
+            int nbChoices, IntPointer selection);
+    public native @NoException(true) int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Const @ByPtrPtr IAlgorithm choices,
+            int nbChoices, IntPointer selection);
+    public native @NoException(true) int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Const @ByPtrPtr IAlgorithm choices,
+            int nbChoices, IntBuffer selection);
+    public native @NoException(true) int selectAlgorithms(@Const @ByRef IAlgorithmContext context, @Const @ByPtrPtr IAlgorithm choices,
+            int nbChoices, int[] selection);
     /**
      *  \brief Called by TensorRT to report choices it made.
      * 
@@ -69,8 +69,8 @@ public class IAlgorithmSelector extends Pointer {
      *  @param algoChoices The list of algorithm choices made by TensorRT
      *  @param nbAlgorithms The size of algoContexts as well as algoChoices.
      *  */
-    public native void reportAlgorithms(@Cast("const nvinfer1::IAlgorithmContext*const*") PointerPointer algoContexts, @Cast("const nvinfer1::IAlgorithm*const*") PointerPointer algoChoices,
+    public native @NoException(true) void reportAlgorithms(@Cast("const nvinfer1::IAlgorithmContext*const*") PointerPointer algoContexts, @Cast("const nvinfer1::IAlgorithm*const*") PointerPointer algoChoices,
             int nbAlgorithms);
-    public native void reportAlgorithms(@Const @ByPtrPtr IAlgorithmContext algoContexts, @Const @ByPtrPtr IAlgorithm algoChoices,
+    public native @NoException(true) void reportAlgorithms(@Const @ByPtrPtr IAlgorithmContext algoContexts, @Const @ByPtrPtr IAlgorithm algoChoices,
             int nbAlgorithms);
 }

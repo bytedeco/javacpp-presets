@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // namespace impl
 
 /**
  *  \class Weights

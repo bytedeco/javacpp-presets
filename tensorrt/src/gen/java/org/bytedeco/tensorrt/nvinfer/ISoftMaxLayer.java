@@ -30,7 +30,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ISoftMaxLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -63,19 +63,20 @@ public class ISoftMaxLayer extends ILayer {
      *  set bit 3 with explicit batch mode.
      * 
      *  @param axes The axis along which softmax is computed.
-     *         Here axes is a bitmap. For example, when doing softmax along axis 0, bit 0 is set to 1, axes = 1 << axis = 1.
+     *         Here axes is a bitmap. For example, when doing softmax along axis 0, bit 0 is set to 1, axes = 1 << axis
+     *         = 1.
      *  */
     
     
     //!
     //!
     //!
-    public native void setAxes(@Cast("uint32_t") int axes);
+    public native @NoException(true) void setAxes(@Cast("uint32_t") int axes);
 
     /**
      *  \brief Get the axis along which softmax occurs.
      * 
      *  @see setAxes()
      *  */
-    public native @Cast("uint32_t") int getAxes();
+    public native @Cast("uint32_t") @NoException(true) int getAxes();
 }

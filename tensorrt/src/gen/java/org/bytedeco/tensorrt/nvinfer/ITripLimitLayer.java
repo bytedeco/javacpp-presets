@@ -19,11 +19,11 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ITripLimitLayer extends ILoopBoundaryLayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ITripLimitLayer(Pointer p) { super(p); }
 
-    public native @NoException TripLimit getTripLimit();
+    public native @NoException(true) TripLimit getTripLimit();
 }

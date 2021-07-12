@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // namespace impl
 
 /** \class IPoolingLayer
  * 
@@ -30,7 +30,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPoolingLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -48,8 +48,8 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPoolingType(PoolingType type);
-    public native void setPoolingType(@Cast("nvinfer1::PoolingType") int type);
+    public native @NoException(true) void setPoolingType(PoolingType type);
+    public native @NoException(true) void setPoolingType(@Cast("nvinfer1::PoolingType") int type);
 
     /**
      *  \brief Get the type of activation to be performed.
@@ -63,7 +63,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native PoolingType getPoolingType();
+    public native @NoException(true) PoolingType getPoolingType();
 
     /**
      *  \brief Set the window size for pooling.
@@ -80,7 +80,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated void setWindowSize(@ByVal DimsHW windowSize);
+    public native @Deprecated @NoException(true) void setWindowSize(@ByVal DimsHW windowSize);
 
     /**
      *  \brief Get the window size for pooling.
@@ -97,7 +97,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated @ByVal DimsHW getWindowSize();
+    public native @Deprecated @ByVal @NoException(true) DimsHW getWindowSize();
 
     /**
      *  \brief Set the stride for pooling.
@@ -116,7 +116,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated void setStride(@ByVal DimsHW stride);
+    public native @Deprecated @NoException(true) void setStride(@ByVal DimsHW stride);
 
     /**
      *  \brief Get the stride for pooling.
@@ -133,7 +133,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated @ByVal DimsHW getStride();
+    public native @Deprecated @ByVal @NoException(true) DimsHW getStride();
 
     /**
      *  \brief Set the padding for pooling.
@@ -153,7 +153,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated void setPadding(@ByVal DimsHW padding);
+    public native @Deprecated @NoException(true) void setPadding(@ByVal DimsHW padding);
 
     /**
      *  \brief Get the padding for pooling.
@@ -170,7 +170,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated @ByVal DimsHW getPadding();
+    public native @Deprecated @ByVal @NoException(true) DimsHW getPadding();
 
     /**
      *  \brief Set the blending factor for the max_average_blend mode:
@@ -187,7 +187,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setBlendFactor(float blendFactor);
+    public native @NoException(true) void setBlendFactor(float blendFactor);
 
     /**
      *  \brief Get the blending factor for the max_average_blend mode:
@@ -204,19 +204,17 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    //!
-    public native float getBlendFactor();
+    public native @NoException(true) float getBlendFactor();
 
     /**
      *  \brief Set whether average pooling uses as a denominator the overlap area between the window
      *  and the unpadded input.
      *  If this is not set, the denominator is the overlap between the pooling window and the padded input.
      * 
-     *  If executing this layer on the DLA, only inclusive padding is supported.
-     * 
      *  Default: true
      * 
-     *  If executing this layer on the DLA, this is ignored as the DLA does not support exclusive padding.
+     *  \note DLA supports only inclusive padding, and thus when executing this layer on DLA, this must be explicitly
+     *  set to false.
      * 
      *  @see getAverageCountExcludesPadding()
      *  */
@@ -225,15 +223,24 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setAverageCountExcludesPadding(@Cast("bool") boolean exclusive);
+    public native @NoException(true) void setAverageCountExcludesPadding(@Cast("bool") boolean exclusive);
 
     /**
-     *  \brief Get whether exclusive pooling uses as a denominator the overlap area betwen the window
+     *  \brief Get whether average pooling uses as a denominator the overlap area between the window
      *  and the unpadded input.
      * 
      *  @see setAverageCountExcludesPadding()
      *  */
-    public native @Cast("bool") boolean getAverageCountExcludesPadding();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean getAverageCountExcludesPadding();
+
     /**
      *  \brief Set the multi-dimension pre-padding for pooling.
      * 
@@ -242,7 +249,8 @@ public class IPoolingLayer extends ILayer {
      * 
      *  Default: (0, 0, ..., 0)
      * 
-     *  If executing this layer on DLA, only support 2D padding, both height and width of padding must be in the range [0,7].
+     *  If executing this layer on DLA, only support 2D padding, both height and width of padding must be in the range
+     *  [0,7].
      * 
      *  @see getPrePadding()
      *  */
@@ -251,7 +259,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPrePadding(@ByVal Dims padding);
+    public native @NoException(true) void setPrePadding(@ByVal @Cast("nvinfer1::Dims*") Dims32 padding);
 
     /**
      *  \brief Get the pre-padding.
@@ -266,7 +274,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getPrePadding();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getPrePadding();
 
     /**
      *  \brief Set the multi-dimension post-padding for pooling.
@@ -276,7 +284,8 @@ public class IPoolingLayer extends ILayer {
      * 
      *  Default: (0, 0, ..., 0)
      * 
-     *  If executing this layer on DLA, only support 2D padding, both height and width of padding must be in the range [0,7].
+     *  If executing this layer on DLA, only support 2D padding, both height and width of padding must be in the range
+     *  [0,7].
      * 
      *  @see getPostPadding()
      *  */
@@ -285,12 +294,12 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPostPadding(@ByVal Dims padding);
+    public native @NoException(true) void setPostPadding(@ByVal @Cast("nvinfer1::Dims*") Dims32 padding);
 
     /**
      *  \brief Get the padding.
      * 
-     *  @see setPadding()
+     *  @see setPostPadding()
      *  */
     
     
@@ -298,7 +307,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getPostPadding();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getPostPadding();
 
     /**
      *  \brief Set the padding mode.
@@ -313,8 +322,8 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPaddingMode(PaddingMode paddingMode);
-    public native void setPaddingMode(@Cast("nvinfer1::PaddingMode") int paddingMode);
+    public native @NoException(true) void setPaddingMode(PaddingMode paddingMode);
+    public native @NoException(true) void setPaddingMode(@Cast("nvinfer1::PaddingMode") int paddingMode);
 
     /**
      *  \brief Get the padding mode.
@@ -328,12 +337,13 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native PaddingMode getPaddingMode();
+    public native @NoException(true) PaddingMode getPaddingMode();
 
     /**
      *  \brief Set the multi-dimension window size for pooling.
      * 
-     *  If executing this layer on DLA, only support 2D window size, both height and width of window size must be in the range [1,8].
+     *  If executing this layer on DLA, only support 2D window size, both height and width of window size must be in the
+     *  range [1,8].
      * 
      *  @see getWindowSizeNd() setWindowSize() getWindowSize()
      *  */
@@ -342,7 +352,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setWindowSizeNd(@ByVal Dims windowSize);
+    public native @NoException(true) void setWindowSizeNd(@ByVal @Cast("nvinfer1::Dims*") Dims32 windowSize);
 
     /**
      *  \brief Get the multi-dimension window size for pooling.
@@ -356,14 +366,15 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getWindowSizeNd();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getWindowSizeNd();
 
     /**
      *  \brief Set the multi-dimension stride for pooling.
      * 
      *  Default: (1, 1, ..., 1)
      * 
-     *  If executing this layer on DLA, only support 2D stride, both height and width of stride must be in the range [1,16].
+     *  If executing this layer on DLA, only support 2D stride, both height and width of stride must be in the range
+     *  [1,16].
      * 
      *  @see getStrideNd() setStride() getStride()
      *  */
@@ -372,7 +383,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setStrideNd(@ByVal Dims stride);
+    public native @NoException(true) void setStrideNd(@ByVal @Cast("nvinfer1::Dims*") Dims32 stride);
 
     /**
      *  \brief Get the multi-dimension stride for pooling.
@@ -387,7 +398,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getStrideNd();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getStrideNd();
 
     /**
      *  \brief Set the multi-dimension padding for pooling.
@@ -398,7 +409,8 @@ public class IPoolingLayer extends ILayer {
      * 
      *  Default: (0, 0, ..., 0)
      * 
-     *  If executing this layer on DLA, only support 2D padding, both height and width of padding must be in the range [0,7].
+     *  If executing this layer on DLA, only support 2D padding, both height and width of padding must be in the range
+     *  [0,7].
      * 
      *  @see getPaddingNd() setPadding() getPadding()
      *  */
@@ -408,7 +420,7 @@ public class IPoolingLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPaddingNd(@ByVal Dims padding);
+    public native @NoException(true) void setPaddingNd(@ByVal @Cast("nvinfer1::Dims*") Dims32 padding);
 
     /**
      *  \brief Get the multi-dimension padding for pooling.
@@ -417,5 +429,5 @@ public class IPoolingLayer extends ILayer {
      * 
      *  @see setPaddingNd()
      *  */
-    public native @ByVal Dims getPaddingNd();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getPaddingNd();
 }

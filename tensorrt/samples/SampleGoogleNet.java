@@ -26,8 +26,8 @@ public class SampleGoogleNet {
         {
             severity = severity.intern();
 
-            // suppress info-level messages
-            if (severity == Severity.kINFO) return;
+            // suppress verbose-level messages
+            if (severity == Severity.kVERBOSE) return;
 
             switch (severity)
             {
@@ -35,6 +35,7 @@ public class SampleGoogleNet {
                 case kERROR: System.err.print("ERROR: "); break;
                 case kWARNING: System.err.print("WARNING: "); break;
                 case kINFO: System.err.print("INFO: "); break;
+                case kVERBOSE: System.err.print("VERBOSE: "); break;
                 default: System.err.print("UNKNOWN: "); break;
             }
             System.err.println(msg);
@@ -113,7 +114,8 @@ public class SampleGoogleNet {
     {
         // create API root class - must span the lifetime of the engine usage
         IBuilder builder = createInferBuilder(gLogger);
-        INetworkDefinition network = builder.createNetwork();
+        INetworkDefinition network = builder.createNetworkV2(0);
+        IBuilderConfig config = builder.createBuilderConfig();
 
         // parse the caffe model to populate the network, then set the outputs
         ICaffeParser parser = createCaffeParser();
@@ -134,13 +136,13 @@ public class SampleGoogleNet {
 
         // Build the engine
         builder.setMaxBatchSize(maxBatchSize);
-        builder.setMaxWorkspaceSize(16 << 20);
+        config.setMaxWorkspaceSize(16 << 20);
 
         // set up the network for paired-fp16 format if available
         if(useFp16)
-            builder.setHalf2Mode(true);
+            config.setFlag(BuilderFlag.kFP16);
 
-        ICudaEngine engine = builder.buildCudaEngine(network);
+        ICudaEngine engine = builder.buildEngineWithConfig(network, config);
         assert engine != null;
 
         // we don't need the network any more, and we can destroy the parser
@@ -166,9 +168,9 @@ public class SampleGoogleNet {
         int inputIndex = engine.getBindingIndex(INPUT_BLOB_NAME), outputIndex = engine.getBindingIndex(OUTPUT_BLOB_NAME);
 
         // allocate GPU buffers
-        DimsCHW inputDims = new DimsCHW(engine.getBindingDimensions(inputIndex)), outputDims = new DimsCHW(engine.getBindingDimensions(outputIndex));
-        long inputSize = batchSize * inputDims.c().get() * inputDims.h().get() * inputDims.w().get() * Float.SIZE / 8;
-        long outputSize = batchSize * outputDims.c().get() * outputDims.h().get() * outputDims.w().get() * Float.SIZE / 8;
+        Dims3 inputDims = new Dims3(engine.getBindingDimensions(inputIndex)), outputDims = new Dims3(engine.getBindingDimensions(outputIndex));
+        long inputSize = batchSize * inputDims.d(0) * inputDims.d(1) * inputDims.d(2) * Float.SIZE / 8;
+        long outputSize = batchSize * outputDims.d(0) * outputDims.d(1) * outputDims.d(2) * Float.SIZE / 8;
 
         CHECK(cudaMalloc(buffers.position(inputIndex), inputSize));
         CHECK(cudaMalloc(buffers.position(outputIndex), outputSize));

@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.8.0
+ONNXRUNTIME=1.8.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -69,7 +69,7 @@ sedinplace 's/if (args.arm or args.arm64):/if (False):/g' tools/ci_build/build.p
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
-patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
+#patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace "s/default='Visual Studio 15 2017'/default='Ninja'/g" tools/ci_build/build.py
 sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers.cmake
 sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/onnxruntime_providers.cmake

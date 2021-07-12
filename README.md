@@ -206,14 +206,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.4.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.2.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.9.x  https://developer.nvidia.com/nccl
+   * NCCL 2.10.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
  * PyTorch 1.9.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.5.x  https://github.com/tensorflow/tensorflow
- * TensorRT 7.x  https://developer.nvidia.com/tensorrt
+ * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.6.0  https://github.com/luxonis/depthai-core
  * ONNX 1.9.x  https://github.com/onnx/onnx
@@ -224,7 +224,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia
  * cpu_features 0.6.0  https://github.com/google/cpu_features
- * ModSecurity  https://github.com/SpiderLabs/ModSecurity
+ * ModSecurity 3.0.5  https://github.com/SpiderLabs/ModSecurity
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/

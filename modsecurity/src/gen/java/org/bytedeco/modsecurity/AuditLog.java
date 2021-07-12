@@ -24,7 +24,7 @@ public class AuditLog extends Pointer {
         return (AuditLog)super.position(position);
     }
     @Override public AuditLog getPointer(long i) {
-        return new AuditLog((Pointer)this).position(position + i);
+        return new AuditLog((Pointer)this).offsetAddress(i);
     }
 
     public AuditLog() { super((Pointer)null); allocate(); }

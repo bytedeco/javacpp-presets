@@ -23,13 +23,14 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \brief A layer that represents the identity function.
  * 
- *  If tensor precision is being explicitly specified, it can be used to transform from one precision to another.
- *  Other than transforming between the same precision (kFLOAT -> kFLOAT for example), the only valid
- *  tranformations supported are: (kFLOAT -> kHALF), (kFLOAT -> kINT8), (kHALF -> kFLOAT) and (kINT8 -> kFLOAT).
+ *  If tensor precision is being explicitly specified, it can be used to convert from one precision to another.
+ *  Other than conversion between the same precision (kFLOAT -> kFLOAT for example), the only valid
+ *  tranformations supported are: (kHALF -> kINT32), (kHALF -> kFLOAT), (kFLOAT -> kINT32), (kINT32 -> kHALF),
+ *  (kINT32 -> kFLOAT), (kBOOL -> kBOOL), (kBOOL -> kHALF), (kBOOL -> kFLOAT).
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IIdentityLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -19,8 +19,18 @@ import org.bytedeco.tensorrt.nvinfer.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
- // softmax tree
 
+
+/**
+ *  \brief The Region plugin layer performs region proposal calculation: generate 5 bounding boxes per cell (for yolo9000, generate 3 bounding boxes per cell).
+ *  For each box, calculating its probablities of objects detections from 80 pre-defined classifications (yolo9000 has 9418 pre-defined classifications,
+ *  and these 9418 items are organized as work-tree structure).
+ *  RegionParameters defines a set of parameters for creating the Region plugin layer.
+ *  @param num Number of predicted bounding box for each grid cell.
+ *  @param coords Number of coordinates for a bounding box.
+ *  @param classes Number of classifications to be predicted.
+ *  @param smTree Helping structure to do softmax on confidence scores.
+ *  */
 @Namespace("nvinfer1::plugin") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer_plugin.class)
 public class RegionParameters extends Pointer {
     static { Loader.load(); }

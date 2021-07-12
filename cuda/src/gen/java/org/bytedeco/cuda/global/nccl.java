@@ -28,13 +28,16 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 
 // #include <cuda_runtime.h>
 // #include <cuda_fp16.h>
+// #if CUDART_VERSION >= 11000
+// #include <cuda_bf16.h>
+// #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 9;
-public static final int NCCL_PATCH = 9;
+public static final int NCCL_MINOR = 10;
+public static final int NCCL_PATCH = 3;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 20909;
+public static final int NCCL_VERSION_CODE = 21003;
 // #define NCCL_VERSION(X,Y,Z) (((X) >= 2 && (Y) >= 9) ? (X) * 10000 + (Y) * 100 + (Z) : (X) * 1000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -156,7 +159,8 @@ public static final int ncclSum        = 0,
                ncclProd       = 1,
                ncclMax        = 2,
                ncclMin        = 3,
-               ncclNumOps     = 4;
+               ncclAvg        = 4,
+               ncclNumOps     = 5;
 
 /* Data types */
 /** enum ncclDataType_t */
@@ -169,7 +173,11 @@ public static final int ncclInt8       = 0, ncclChar       = 0,
                ncclFloat16    = 6, ncclHalf       = 6,
                ncclFloat32    = 7, ncclFloat      = 7,
                ncclFloat64    = 8, ncclDouble     = 8,
-               ncclNumTypes   = 9;
+// #if defined(__CUDA_BF16_TYPES_EXIST__)
+               ncclBfloat16   = 9,
+               ncclNumTypes   = 10;
+// #else
+// #endif
 
 /*
  * Collective communication operations

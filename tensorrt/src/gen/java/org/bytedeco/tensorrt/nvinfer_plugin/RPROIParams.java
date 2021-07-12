@@ -27,8 +27,10 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
  *  @param poolingH Height of the output in pixels after ROI pooling on feature map.
  *  @param poolingW Width of the output in pixels after ROI pooling on feature map.
  *  @param featureStride Feature stride; ratio of input image size to feature map size. Assuming that max pooling layers
- *  in neural network use square filters. @param preNmsTop Number of proposals to keep before applying NMS. @param
- *  nmsMaxOut Number of remaining proposals after applying NMS. @param anchorsRatioCount Number of anchor box ratios.
+ *  in the neural network use square filters.
+ *  @param preNmsTop Number of proposals to keep before applying NMS.
+ *  @param nmsMaxOut Number of remaining proposals after applying NMS.
+ *  @param anchorsRatioCount Number of anchor box ratios.
  *  @param anchorsScaleCount Number of anchor box scales.
  *  @param iouThreshold IoU (Intersection over Union) threshold used for the NMS step.
  *  @param minBoxSize Minimum allowed bounding box size before scaling, used for anchor box calculation.

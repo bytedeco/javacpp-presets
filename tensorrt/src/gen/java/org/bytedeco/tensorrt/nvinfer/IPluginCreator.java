@@ -40,7 +40,7 @@ public class IPluginCreator extends Pointer {
     
     //!
     //!
-    public native int getTensorRTVersion();
+    public native @NoException(true) int getTensorRTVersion();
 
     /**
      *  \brief Return the plugin name.
@@ -49,7 +49,7 @@ public class IPluginCreator extends Pointer {
     
     //!
     //!
-    public native String getPluginName();
+    public native @NoException(true) String getPluginName();
 
     /**
      *  \brief Return the plugin version.
@@ -58,7 +58,7 @@ public class IPluginCreator extends Pointer {
     
     //!
     //!
-    public native String getPluginVersion();
+    public native @NoException(true) String getPluginVersion();
 
     /**
      *  \brief Return a list of fields that needs to be passed to createPlugin.
@@ -68,7 +68,7 @@ public class IPluginCreator extends Pointer {
     
     //!
     //!
-    public native @Const PluginFieldCollection getFieldNames();
+    public native @Const @NoException(true) PluginFieldCollection getFieldNames();
 
     /**
      *  \brief Return a plugin object. Return nullptr in case of error.
@@ -77,8 +77,8 @@ public class IPluginCreator extends Pointer {
     
     //!
     //!
-    public native IPluginV2 createPlugin(String name, @Const PluginFieldCollection fc);
-    public native IPluginV2 createPlugin(@Cast("const char*") BytePointer name, @Const PluginFieldCollection fc);
+    public native @NoException(true) IPluginV2 createPlugin(String name, @Const PluginFieldCollection fc);
+    public native @NoException(true) IPluginV2 createPlugin(@Cast("const char*") BytePointer name, @Const PluginFieldCollection fc);
 
     /**
      *  \brief Called during deserialization of plugin layer. Return a plugin object.
@@ -88,8 +88,8 @@ public class IPluginCreator extends Pointer {
     //!
     //!
     //!
-    public native IPluginV2 deserializePlugin(String name, @Const Pointer serialData, @Cast("size_t") long serialLength);
-    public native IPluginV2 deserializePlugin(@Cast("const char*") BytePointer name, @Const Pointer serialData, @Cast("size_t") long serialLength);
+    public native @NoException(true) IPluginV2 deserializePlugin(String name, @Const Pointer serialData, @Cast("size_t") long serialLength);
+    public native @NoException(true) IPluginV2 deserializePlugin(@Cast("const char*") BytePointer name, @Const Pointer serialData, @Cast("size_t") long serialLength);
 
     /**
      *  \brief Set the namespace of the plugin creator based on the plugin
@@ -101,11 +101,11 @@ public class IPluginCreator extends Pointer {
     
     //!
     //!
-    public native void setPluginNamespace(String pluginNamespace);
-    public native void setPluginNamespace(@Cast("const char*") BytePointer pluginNamespace);
+    public native @NoException(true) void setPluginNamespace(String pluginNamespace);
+    public native @NoException(true) void setPluginNamespace(@Cast("const char*") BytePointer pluginNamespace);
 
     /**
      *  \brief Return the namespace of the plugin creator object.
      *  */
-    public native String getPluginNamespace();
+    public native @NoException(true) String getPluginNamespace();
 }

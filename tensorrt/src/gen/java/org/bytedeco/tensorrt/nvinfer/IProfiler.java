@@ -53,5 +53,5 @@ public class IProfiler extends Pointer {
      *  @param layerName The name of the layer, set when constructing the network definition.
      *  @param ms The time in milliseconds to execute the layer.
      *  */
-    @Virtual(true) public native void reportLayerTime(String layerName, float ms);
+    @Virtual(true) public native @NoException(true) void reportLayerTime(String layerName, float ms);
 }

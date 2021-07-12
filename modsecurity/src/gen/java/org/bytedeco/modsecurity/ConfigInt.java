@@ -24,7 +24,7 @@ public class ConfigInt extends Pointer {
         return (ConfigInt)super.position(position);
     }
     @Override public ConfigInt getPointer(long i) {
-        return new ConfigInt((Pointer)this).position(position + i);
+        return new ConfigInt((Pointer)this).offsetAddress(i);
     }
 
     public ConfigInt() { super((Pointer)null); allocate(); }

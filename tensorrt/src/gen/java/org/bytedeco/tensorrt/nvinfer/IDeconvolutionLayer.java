@@ -24,11 +24,9 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \brief A deconvolution layer in a network definition.
  * 
- *  The output size is defined using the formula set by INetworkDefinition::setDeconvolutionOutputDimensionsFormula().
- * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IDeconvolutionLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -51,7 +49,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated void setKernelSize(@ByVal DimsHW kernelSize);
+    public native @Deprecated @NoException(true) void setKernelSize(@ByVal DimsHW kernelSize);
 
     /**
      *  \brief Get the HW kernel size of the deconvolution.
@@ -66,7 +64,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated @ByVal DimsHW getKernelSize();
+    public native @Deprecated @ByVal @NoException(true) DimsHW getKernelSize();
 
     /**
      *  \brief Set the number of output feature maps for the deconvolution.
@@ -80,7 +78,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setNbOutputMaps(int nbOutputMaps);
+    public native @NoException(true) void setNbOutputMaps(int nbOutputMaps);
 
     /**
      *  \brief Get the number of output feature maps for the deconvolution.
@@ -94,7 +92,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native int getNbOutputMaps();
+    public native @NoException(true) int getNbOutputMaps();
 
     /**
      *  \brief Get the stride of the deconvolution.
@@ -113,7 +111,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated void setStride(@ByVal DimsHW stride);
+    public native @Deprecated @NoException(true) void setStride(@ByVal DimsHW stride);
 
     /**
      *  \brief Get the stride of the deconvolution.
@@ -131,7 +129,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated @ByVal DimsHW getStride();
+    public native @Deprecated @ByVal @NoException(true) DimsHW getStride();
 
     /**
      *  \brief Set the padding of the deconvolution.
@@ -155,7 +153,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated void setPadding(@ByVal DimsHW padding);
+    public native @Deprecated @NoException(true) void setPadding(@ByVal DimsHW padding);
 
     /**
      *  \brief Get the padding of the deconvolution.
@@ -175,7 +173,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @Deprecated @ByVal DimsHW getPadding();
+    public native @Deprecated @ByVal @NoException(true) DimsHW getPadding();
 
     /**
      *  \brief Set the number of groups for a deconvolution.
@@ -197,7 +195,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setNbGroups(int nbGroups);
+    public native @NoException(true) void setNbGroups(int nbGroups);
 
     /**
      *  \brief Get the number of groups for a deconvolution.
@@ -210,7 +208,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native int getNbGroups();
+    public native @NoException(true) int getNbGroups();
 
     /**
      *  \brief Set the kernel weights for the deconvolution.
@@ -226,7 +224,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setKernelWeights(@ByVal Weights weights);
+    public native @NoException(true) void setKernelWeights(@ByVal Weights weights);
 
     /**
      *  \brief Get the kernel weights for the deconvolution.
@@ -240,7 +238,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Weights getKernelWeights();
+    public native @ByVal @NoException(true) Weights getKernelWeights();
 
     /**
      *  \brief Set the bias weights for the deconvolution.
@@ -257,14 +255,23 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setBiasWeights(@ByVal Weights weights);
+    public native @NoException(true) void setBiasWeights(@ByVal Weights weights);
 
     /**
      *  \brief Get the bias weights for the deconvolution.
      * 
      *  @see getBiasWeights()
      *  */
-    public native @ByVal Weights getBiasWeights();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal @NoException(true) Weights getBiasWeights();
+
     /**
      *  \brief Set the multi-dimension pre-padding of the deconvolution.
      * 
@@ -283,7 +290,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPrePadding(@ByVal Dims padding);
+    public native @NoException(true) void setPrePadding(@ByVal @Cast("nvinfer1::Dims*") Dims32 padding);
 
     /**
      *  \brief Get the pre-padding.
@@ -298,7 +305,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getPrePadding();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getPrePadding();
 
     /**
      *  \brief Set the multi-dimension post-padding of the deconvolution.
@@ -318,12 +325,12 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPostPadding(@ByVal Dims padding);
+    public native @NoException(true) void setPostPadding(@ByVal @Cast("nvinfer1::Dims*") Dims32 padding);
 
     /**
      *  \brief Get the padding.
      * 
-     *  @see setPadding()
+     *  @see setPostPadding()
      *  */
     
     
@@ -332,7 +339,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getPostPadding();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getPostPadding();
 
     /**
      *  \brief Set the padding mode.
@@ -349,8 +356,8 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPaddingMode(PaddingMode paddingMode);
-    public native void setPaddingMode(@Cast("nvinfer1::PaddingMode") int paddingMode);
+    public native @NoException(true) void setPaddingMode(PaddingMode paddingMode);
+    public native @NoException(true) void setPaddingMode(@Cast("nvinfer1::PaddingMode") int paddingMode);
 
     /**
      *  \brief Get the padding mode.
@@ -365,7 +372,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native PaddingMode getPaddingMode();
+    public native @NoException(true) PaddingMode getPaddingMode();
 
     /**
      *  \brief Set the multi-dimension kernel size of the deconvolution.
@@ -380,7 +387,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setKernelSizeNd(@ByVal Dims kernelSize);
+    public native @NoException(true) void setKernelSizeNd(@ByVal @Cast("nvinfer1::Dims*") Dims32 kernelSize);
 
     /**
      *  \brief Get the multi-dimension kernel size of the deconvolution.
@@ -394,7 +401,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getKernelSizeNd();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getKernelSizeNd();
 
     /**
      *  \brief Set the multi-dimension stride of the deconvolution.
@@ -411,7 +418,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setStrideNd(@ByVal Dims stride);
+    public native @NoException(true) void setStrideNd(@ByVal @Cast("nvinfer1::Dims*") Dims32 stride);
 
     /**
      *  \brief Get the multi-dimension stride of the deconvolution.
@@ -426,7 +433,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getStrideNd();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getStrideNd();
 
     /**
      *  \brief Set the multi-dimension padding of the deconvolution.
@@ -447,7 +454,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setPaddingNd(@ByVal Dims padding);
+    public native @NoException(true) void setPaddingNd(@ByVal @Cast("nvinfer1::Dims*") Dims32 padding);
 
     /**
      *  \brief Get the multi-dimension padding of the deconvolution.
@@ -464,7 +471,7 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getPaddingNd();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getPaddingNd();
 
     /**
      *  \brief Append or replace an input of this layer with a specific tensor
@@ -487,7 +494,6 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setInput(int index, @ByRef ITensor tensor);
 
     /** \brief Set the multi-dimension dilation of the deconvolution.
      * 
@@ -500,12 +506,12 @@ public class IDeconvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native void setDilationNd(@ByVal Dims dilation);
+    public native @NoException(true) void setDilationNd(@ByVal @Cast("nvinfer1::Dims*") Dims32 dilation);
 
     /**
      *  \brief Get the multi-dimension dilation of the deconvolution.
      * 
      *  @see setDilationNd()
      *  */
-    public native @ByVal Dims getDilationNd();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getDilationNd();
 }

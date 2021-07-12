@@ -48,7 +48,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IFullyConnectedLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -66,7 +66,7 @@ public class IFullyConnectedLayer extends ILayer {
     //!
     //!
     //!
-    public native void setNbOutputChannels(int nbOutputs);
+    public native @NoException(true) void setNbOutputChannels(int nbOutputs);
 
     /**
      *  \brief Get the number of output channels {@code K} from the fully connected layer.
@@ -78,7 +78,7 @@ public class IFullyConnectedLayer extends ILayer {
     //!
     //!
     //!
-    public native int getNbOutputChannels();
+    public native @NoException(true) int getNbOutputChannels();
 
     /**
      *  \brief Set the kernel weights, given as a {@code KxC} matrix in row-major order.
@@ -90,7 +90,7 @@ public class IFullyConnectedLayer extends ILayer {
     //!
     //!
     //!
-    public native void setKernelWeights(@ByVal Weights weights);
+    public native @NoException(true) void setKernelWeights(@ByVal Weights weights);
 
     /**
      *  \brief Get the kernel weights.
@@ -103,7 +103,7 @@ public class IFullyConnectedLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Weights getKernelWeights();
+    public native @ByVal @NoException(true) Weights getKernelWeights();
 
     /**
      *  \brief Set the bias weights.
@@ -117,14 +117,22 @@ public class IFullyConnectedLayer extends ILayer {
     //!
     //!
     //!
-    public native void setBiasWeights(@ByVal Weights weights);
+    public native @NoException(true) void setBiasWeights(@ByVal Weights weights);
 
     /**
      *  \brief Get the bias weights.
      * 
      *  @see setBiasWeightsWeights()
      *  */
-    public native @ByVal Weights getBiasWeights();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal @NoException(true) Weights getBiasWeights();
+
     /**
      *  \brief Append or replace an input of this layer with a specific tensor
      * 
@@ -141,5 +149,4 @@ public class IFullyConnectedLayer extends ILayer {
      *  - 1: The kernel weights tensor (a constant tensor).
      * 
      *  If this function is called with a value greater than 0, then the function getNbInputs() changes */
-    public native void setInput(int index, @ByRef ITensor tensor);
 }

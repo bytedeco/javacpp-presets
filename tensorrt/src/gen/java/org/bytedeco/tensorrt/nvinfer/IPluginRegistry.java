@@ -32,6 +32,9 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  @see IPluginV2 and IPluginCreator
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
+ * 
+ *  \warning In the automotive safety context, be sure to call IPluginRegistry::setErrorRecorder() to register
+ *  an error recorder with the registry before using other methods in the registry.
  *  */
 
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
@@ -48,8 +51,8 @@ public class IPluginRegistry extends Pointer {
     
     //!
     //!
-    public native @Cast("bool") @NoException boolean registerCreator(@ByRef IPluginCreator creator, String pluginNamespace);
-    public native @Cast("bool") @NoException boolean registerCreator(@ByRef IPluginCreator creator, @Cast("const char*") BytePointer pluginNamespace);
+    public native @Cast("bool") @NoException(true) boolean registerCreator(@ByRef IPluginCreator creator, String pluginNamespace);
+    public native @Cast("bool") @NoException(true) boolean registerCreator(@ByRef IPluginCreator creator, @Cast("const char*") BytePointer pluginNamespace);
 
     /**
      *  \brief Return all the registered plugin creators and the number of
@@ -62,13 +65,21 @@ public class IPluginRegistry extends Pointer {
     public native @Cast("nvinfer1::IPluginCreator*const*") PointerPointer getPluginCreatorList(IntPointer numCreators);
 
     /**
-     *  \brief Return plugin creator based on plugin type, version and
+     *  \brief Return plugin creator based on plugin name, version, and
      *  namespace associated with plugin during network creation.
      *  */
-    public native @NoException IPluginCreator getPluginCreator(String pluginType, String pluginVersion, String pluginNamespace/*=""*/);
-    public native @NoException IPluginCreator getPluginCreator(String pluginType, String pluginVersion);
-    public native @NoException IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginType, @Cast("const char*") BytePointer pluginVersion, @Cast("const char*") BytePointer pluginNamespace/*=""*/);
-    public native @NoException IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginType, @Cast("const char*") BytePointer pluginVersion);
+    public native @NoException(true) IPluginCreator getPluginCreator(
+            String pluginName, String pluginVersion, String pluginNamespace/*=""*/);
+    public native @NoException(true) IPluginCreator getPluginCreator(
+            String pluginName, String pluginVersion);
+    public native @NoException(true) IPluginCreator getPluginCreator(
+            @Cast("const char*") BytePointer pluginName, @Cast("const char*") BytePointer pluginVersion, @Cast("const char*") BytePointer pluginNamespace/*=""*/);
+    public native @NoException(true) IPluginCreator getPluginCreator(
+            @Cast("const char*") BytePointer pluginName, @Cast("const char*") BytePointer pluginVersion);
+    
+    
+    
+    
     /**
      *  \brief Set the ErrorRecorder for this interface
      * 
@@ -79,7 +90,7 @@ public class IPluginRegistry extends Pointer {
      * 
      *  @param recorder The error recorder to register with this interface. */
     //
-    /** @see getErrorRecorder
+    /** @see getErrorRecorder()
     /** */
     
     
@@ -88,10 +99,10 @@ public class IPluginRegistry extends Pointer {
     //!
     //!
     //!
-    public native @NoException void setErrorRecorder(IErrorRecorder recorder);
+    public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
 
     /**
-     *  \brief set the ErrorRecorder assigned to this interface.
+     *  \brief Set the ErrorRecorder assigned to this interface.
      * 
      *  Retrieves the assigned error recorder object for the given class. A default error recorder does not exist,
      *  so a nullptr will be returned if setErrorRecorder has not been called, or an ErrorRecorder has not been
@@ -99,7 +110,26 @@ public class IPluginRegistry extends Pointer {
      * 
      *  @return A pointer to the IErrorRecorder object that has been registered.
      * 
-     *  @see setErrorRecorder
+     *  @see setErrorRecorder()
      *  */
-    public native @NoException IErrorRecorder getErrorRecorder();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IErrorRecorder getErrorRecorder();
+
+    /**
+     *  \brief Deregister a previously registered plugin creator.
+     * 
+     *  Since there may be a desire to limit the number of plugins,
+     *  this function provides a mechanism for removing plugin creators registered in TensorRT.
+     *  The plugin creator that is specified by \p creator is removed from TensorRT and no longer tracked.
+     * 
+     *  @return True if the plugin creator was deregistered, false if it was not found in the registry or otherwise
+     *  could
+     *      not be deregistered.
+     *  */
+    public native @Cast("bool") @NoException(true) boolean deregisterCreator(@Const @ByRef IPluginCreator creator);
 }

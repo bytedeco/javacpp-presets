@@ -44,5 +44,5 @@ public class IInt8EntropyCalibrator2 extends IInt8Calibrator {
     /**
      *  Signal that this is the entropy calibrator 2.
      *  */
-    @Virtual public native CalibrationAlgoType getAlgorithm();
+    @Virtual public native @NoException(true) CalibrationAlgoType getAlgorithm();
 }

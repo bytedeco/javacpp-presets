@@ -17,6 +17,8 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 import org.bytedeco.tensorrt.nvinfer.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
+import org.bytedeco.tensorrt.nvinfer_plugin.*;
+import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 import static org.bytedeco.tensorrt.global.nvparsers.*;
 
@@ -42,8 +44,8 @@ public class IPluginFactoryV2 extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean isPluginV2(String layerName);
-    public native @Cast("bool") boolean isPluginV2(@Cast("const char*") BytePointer layerName);
+    public native @Cast("bool") @NoException(true) boolean isPluginV2(String layerName);
+    public native @Cast("bool") @NoException(true) boolean isPluginV2(@Cast("const char*") BytePointer layerName);
 
     /**
      *  \brief Creates a plugin.
@@ -53,12 +55,12 @@ public class IPluginFactoryV2 extends Pointer {
      *  @param nbWeights Number of weights.
      *  @param libNamespace Library Namespace associated with the plugin object
      *  */
-    public native IPluginV2 createPlugin(String layerName, @Const Weights weights,
+    public native @NoException(true) IPluginV2 createPlugin(String layerName, @Const Weights weights,
             int nbWeights, String libNamespace/*=""*/);
-    public native IPluginV2 createPlugin(String layerName, @Const Weights weights,
+    public native @NoException(true) IPluginV2 createPlugin(String layerName, @Const Weights weights,
             int nbWeights);
-    public native IPluginV2 createPlugin(@Cast("const char*") BytePointer layerName, @Const Weights weights,
+    public native @NoException(true) IPluginV2 createPlugin(@Cast("const char*") BytePointer layerName, @Const Weights weights,
             int nbWeights, @Cast("const char*") BytePointer libNamespace/*=""*/);
-    public native IPluginV2 createPlugin(@Cast("const char*") BytePointer layerName, @Const Weights weights,
+    public native @NoException(true) IPluginV2 createPlugin(@Cast("const char*") BytePointer layerName, @Const Weights weights,
             int nbWeights);
 }

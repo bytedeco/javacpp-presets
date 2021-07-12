@@ -34,7 +34,7 @@ public class IParser extends Pointer {
     public IParser(Pointer p) { super(p); }
 
     /** \brief Parse a serialized ONNX model into the TensorRT network.
-     *         This method has very limited diagnostic. If parsing the serialized model
+     *         This method has very limited diagnostics. If parsing the serialized model
      *         fails for any reason (e.g. unsupported IR version, unsupported opset, etc.)
      *         it the user responsibility to intercept and report the error.
      *         To obtain a better diagnostic, use the parseFromFile method below.
@@ -42,13 +42,20 @@ public class IParser extends Pointer {
      * @param serialized_onnx_model Pointer to the serialized ONNX model
      * @param serialized_onnx_model_size Size of the serialized ONNX model
      *        in bytes
+     * @param model_path Absolute path to the model file for loading external weights if required
      * @return true if the model was parsed successfully
      * @see getNbErrors() getError()
      */
     public native @Cast("bool") boolean parse(@Const Pointer serialized_onnx_model,
+                           @Cast("size_t") long serialized_onnx_model_size,
+                           String model_path/*=nullptr*/);
+    public native @Cast("bool") boolean parse(@Const Pointer serialized_onnx_model,
                            @Cast("size_t") long serialized_onnx_model_size);
+    public native @Cast("bool") boolean parse(@Const Pointer serialized_onnx_model,
+                           @Cast("size_t") long serialized_onnx_model_size,
+                           @Cast("const char*") BytePointer model_path/*=nullptr*/);
 
-    /** \brief Parse an onnx model file, can be a binary protobuf or a text onnx model
+    /** \brief Parse an onnx model file, which can be a binary protobuf or a text onnx model
      *         calls parse method inside.
      *
      * @param File name
@@ -66,11 +73,20 @@ public class IParser extends Pointer {
      * @param serialized_onnx_model_size Size of the serialized ONNX model
      *        in bytes
      * @param sub_graph_collection Container to hold supported subgraphs
+     * @param model_path Absolute path to the model file for loading external weights if required
      * @return true if the model is supported
      */
     public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model,
                                    @Cast("size_t") long serialized_onnx_model_size,
+                                   @ByRef SubGraphCollection_t sub_graph_collection,
+                                   String model_path/*=nullptr*/);
+    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model,
+                                   @Cast("size_t") long serialized_onnx_model_size,
                                    @ByRef SubGraphCollection_t sub_graph_collection);
+    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model,
+                                   @Cast("size_t") long serialized_onnx_model_size,
+                                   @ByRef SubGraphCollection_t sub_graph_collection,
+                                   @Cast("const char*") BytePointer model_path/*=nullptr*/);
 
     /** \brief Parse a serialized ONNX model into the TensorRT network
      * with consideration of user provided weights
@@ -78,15 +94,11 @@ public class IParser extends Pointer {
      * @param serialized_onnx_model Pointer to the serialized ONNX model
      * @param serialized_onnx_model_size Size of the serialized ONNX model
      *        in bytes
-     * @param weight_count number of user provided weights
-     * @param weight_descriptors pointer to user provided weight array
      * @return true if the model was parsed successfully
      * @see getNbErrors() getError()
      */
     public native @Cast("bool") boolean parseWithWeightDescriptors(
-            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
-            @Cast("uint32_t") int weight_count,
-            @Const onnxTensorDescriptorV1 weight_descriptors);
+            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
 
     /** \brief Returns whether the specified operator may be supported by the
      *         parser.
@@ -99,8 +111,10 @@ public class IParser extends Pointer {
     public native @Cast("bool") boolean supportsOperator(String op_name);
     public native @Cast("bool") boolean supportsOperator(@Cast("const char*") BytePointer op_name);
     /** \brief destroy this object
+     *
+     * \warning deprecated and planned on being removed in TensorRT 10.0
      */
-    public native void destroy();
+    public native @Deprecated void destroy();
     /** \brief Get the number of errors that occurred during prior calls to
      *         \p parse
      *
@@ -117,24 +131,4 @@ public class IParser extends Pointer {
      * @see getNbErrors() getError() IParserError
      */
     public native void clearErrors();
-
-    /** \brief Get description of all ONNX weights that can be refitted.
-     * 
-     * @param weightsNames Where to write the weight names to
-     * @param layerNames Where to write the layer names to
-     * @param roles Where to write the roles to
-     *
-     * @return The number of weights from the ONNX model that can be refitted
-     *
-     * If weightNames or layerNames != nullptr, each written pointer points to a string owned by
-     * the parser, and becomes invalid when the parser is destroyed
-     *
-     * If the same weight is used in multiple TRT layers it will be represented as a new
-     * entry in weightNames with name <weightName>_x, with x being the number of times the weight
-     * has been used before the current layer
-     */
-    public native int getRefitMap(@Cast("const char**") PointerPointer weightNames, @Cast("const char**") PointerPointer layerNames, @Cast("nvinfer1::WeightsRole*") IntPointer roles);
-    public native int getRefitMap(@Cast("const char**") @ByPtrPtr BytePointer weightNames, @Cast("const char**") @ByPtrPtr BytePointer layerNames, @Cast("nvinfer1::WeightsRole*") IntPointer roles);
-    public native int getRefitMap(@Cast("const char**") @ByPtrPtr ByteBuffer weightNames, @Cast("const char**") @ByPtrPtr ByteBuffer layerNames, @Cast("nvinfer1::WeightsRole*") IntBuffer roles);
-    public native int getRefitMap(@Cast("const char**") @ByPtrPtr byte[] weightNames, @Cast("const char**") @ByPtrPtr byte[] layerNames, @Cast("nvinfer1::WeightsRole*") int[] roles);
 }

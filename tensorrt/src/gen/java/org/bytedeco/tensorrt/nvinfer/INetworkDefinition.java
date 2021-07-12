@@ -27,7 +27,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  A network definition defines the structure of the network, and combined with a IBuilderConfig, is built
  *  into an engine using an IBuilder. An INetworkDefinition can either have an implicit batch dimensions, specified
  *  at runtime, or all dimensions explicit, full dims mode, in the network definition. When a network has been
- *  created using createNetwork(), only implicit batch size mode is supported. The function hasImplicitBatchSize()
+ *  created using createNetwork(), only implicit batch size mode is supported. The function hasImplicitBatchDimension()
  *  is used to query the mode of the network.
  * 
  *  A network with implicit batch dimensions returns the dimensions of a layer without the implicit dimension,
@@ -38,18 +38,31 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class INetworkDefinition extends Pointer {
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class INetworkDefinition extends INoCopy {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public INetworkDefinition() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public INetworkDefinition(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public INetworkDefinition(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public INetworkDefinition position(long position) {
+        return (INetworkDefinition)super.position(position);
+    }
+    @Override public INetworkDefinition getPointer(long i) {
+        return new INetworkDefinition((Pointer)this).offsetAddress(i);
+    }
+
 
     /**
      *  \brief Add an input tensor to the network.
      * 
      *  The name of the input tensor is used to find the index into the buffer array for an engine built from
      *  the network. The volume of the dimensions must be less than 2^30 elements.
-     <p>
+     * 
      *  For networks with an implicit batch dimension, this volume includes the batch dimension with its length set
      *  to the maximum batch size. For networks with all explicit dimensions and with wildcard dimensions, the volume
      *  is based on the maxima specified by an IOptimizationProfile.Dimensions are normally non-negative integers. The
@@ -57,7 +70,7 @@ public class INetworkDefinition extends Pointer {
      *  be specified at runtime. Input tensors with such a wildcard must have a corresponding entry in the
      *  IOptimizationProfiles indicating the permitted extrema, and the input dimensions must be set by
      *  IExecutionContext::setBindingDimensions. Different IExecutionContext instances can have different dimensions.
-     *  Wildcard dimensions are only supported for EngineCapability::kDEFAULT. They are not
+     *  Wildcard dimensions are only supported for EngineCapability::kSTANDARD. They are not
      *  supported in safety contexts. DLA does not support Wildcard dimensions.
      * 
      *  Tensor dimensions are specified independent of format.  For example, if a
@@ -85,8 +98,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ITensor addInput(String name, DataType type, @ByVal Dims dimensions);
-    public native ITensor addInput(@Cast("const char*") BytePointer name, @Cast("nvinfer1::DataType") int type, @ByVal Dims dimensions);
+    public native @NoException(true) ITensor addInput(String name, DataType type, @ByVal @Cast("nvinfer1::Dims*") Dims32 dimensions);
+    public native @NoException(true) ITensor addInput(@Cast("const char*") BytePointer name, @Cast("nvinfer1::DataType") int type, @ByVal @Cast("nvinfer1::Dims*") Dims32 dimensions);
 
     /**
      *  \brief Mark a tensor as a network output.
@@ -104,7 +117,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native void markOutput(@ByRef ITensor tensor);
+    public native @NoException(true) void markOutput(@ByRef ITensor tensor);
 
     /**
      *  \brief Add a convolution layer to the network.
@@ -132,8 +145,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Deprecated IConvolutionLayer addConvolution(@ByRef ITensor input, int nbOutputMaps, @ByVal DimsHW kernelSize,
-            @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
+    public native @Deprecated @NoException(true) IConvolutionLayer addConvolution(
+            @ByRef ITensor input, int nbOutputMaps, @ByVal DimsHW kernelSize, @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
 
     /**
      *  \brief Add a fully connected layer to the network.
@@ -158,7 +171,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IFullyConnectedLayer addFullyConnected(
+    public native @NoException(true) IFullyConnectedLayer addFullyConnected(
             @ByRef ITensor input, int nbOutputs, @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
 
     /**
@@ -183,8 +196,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IActivationLayer addActivation(@ByRef ITensor input, ActivationType type);
-    public native IActivationLayer addActivation(@ByRef ITensor input, @Cast("nvinfer1::ActivationType") int type);
+    public native @NoException(true) IActivationLayer addActivation(@ByRef ITensor input, ActivationType type);
+    public native @NoException(true) IActivationLayer addActivation(@ByRef ITensor input, @Cast("nvinfer1::ActivationType") int type);
 
     /**
      *  \brief Add a pooling layer to the network.
@@ -207,10 +220,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Deprecated IPoolingLayer addPooling(
-            @ByRef ITensor input, PoolingType type, @ByVal DimsHW windowSize);
-    public native @Deprecated IPoolingLayer addPooling(
-            @ByRef ITensor input, @Cast("nvinfer1::PoolingType") int type, @ByVal DimsHW windowSize);
+    public native @Deprecated @NoException(true) IPoolingLayer addPooling(@ByRef ITensor input, PoolingType type, @ByVal DimsHW windowSize);
+    public native @Deprecated @NoException(true) IPoolingLayer addPooling(@ByRef ITensor input, @Cast("nvinfer1::PoolingType") int type, @ByVal DimsHW windowSize);
 
     /**
      *  \brief Add a LRN layer to the network.
@@ -234,12 +245,14 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ILRNLayer addLRN(@ByRef ITensor input, int window, float alpha, float beta, float k);
+    public native @NoException(true) ILRNLayer addLRN(@ByRef ITensor input, int window, float alpha, float beta, float k);
 
     /**
      *  \brief Add a Scale layer to the network.
      * 
-     *  @param input The input tensor to the layer. This tensor is required to have a minimum of 3 dimensions.
+     *  @param input The input tensor to the layer.
+     *               This tensor is required to have a minimum of 3 dimensions in implicit batch mode
+     *               and a minimum of 4 dimensions in explicit batch mode.
      *  @param mode The scaling mode.
      *  @param shift The shift value.
      *  @param scale The scale value.
@@ -262,8 +275,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IScaleLayer addScale(@ByRef ITensor input, ScaleMode mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power);
-    public native IScaleLayer addScale(@ByRef ITensor input, @Cast("nvinfer1::ScaleMode") int mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power);
+    public native @NoException(true) IScaleLayer addScale(@ByRef ITensor input, ScaleMode mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power);
+    public native @NoException(true) IScaleLayer addScale(@ByRef ITensor input, @Cast("nvinfer1::ScaleMode") int mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power);
 
     /**
      *  \brief Add a SoftMax layer to the network.
@@ -281,7 +294,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ISoftMaxLayer addSoftMax(@ByRef ITensor input);
+    public native @NoException(true) ISoftMaxLayer addSoftMax(@ByRef ITensor input);
 
     /**
      *  \brief Add a concatenation layer to the network.
@@ -293,7 +306,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @return The new concatenation layer, or nullptr if it could not be created.
      * 
-     *  \warning All tensors must have the same dimensions for all dimensions except for channel.
+     *  \warning All tensors must have the same dimensions except along the concatenation axis.
      *  */
     
     
@@ -304,8 +317,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IConcatenationLayer addConcatenation(@Cast("nvinfer1::ITensor*const*") PointerPointer inputs, int nbInputs);
-    public native IConcatenationLayer addConcatenation(@ByPtrPtr ITensor inputs, int nbInputs);
+    public native @NoException(true) IConcatenationLayer addConcatenation(@Cast("nvinfer1::ITensor*const*") PointerPointer inputs, int nbInputs);
+    public native @NoException(true) IConcatenationLayer addConcatenation(@ByPtrPtr ITensor inputs, int nbInputs);
 
     /**
      *  \brief Add a deconvolution layer to the network.
@@ -334,8 +347,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Deprecated IDeconvolutionLayer addDeconvolution(@ByRef ITensor input, int nbOutputMaps,
-            @ByVal DimsHW kernelSize, @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
+    public native @Deprecated @NoException(true) IDeconvolutionLayer addDeconvolution(
+            @ByRef ITensor input, int nbOutputMaps, @ByVal DimsHW kernelSize, @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
 
     /**
      *  \brief Add an elementwise layer to the network.
@@ -366,121 +379,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native IElementWiseLayer addElementWise(@ByRef ITensor input1, @ByRef ITensor input2, ElementWiseOperation op);
-    public native IElementWiseLayer addElementWise(@ByRef ITensor input1, @ByRef ITensor input2, @Cast("nvinfer1::ElementWiseOperation") int op);
-
-    /**
-     *  \brief Add an \p layerCount deep RNN layer to the network with a
-     *  sequence length of \p maxSeqLen and \p hiddenSize internal state per
-     *  layer.
-     * 
-     *  @param inputs The input tensor to the layer.
-     *  @param layerCount The number of layers in the RNN.
-     *  @param hiddenSize The size of the internal hidden state for each layer.
-     *  @param maxSeqLen The maximum length of the time sequence.
-     *  @param op The type of RNN to execute.
-     *  @param mode The input mode for the RNN.
-     *  @param dir The direction to run the RNN.
-     *  @param weights The weights for the weight matrix parameters of the RNN.
-     *  @param bias The weights for the bias vectors parameters of the RNN.
-     * 
-     *  The inputs tensor must be of the type DataType::kFLOAT or DataType::kHALF,
-     *  and have non-zero volume.
-     * 
-     *  See IRNNLayer::setWeights() and IRNNLayer::setBias() for details on the required input
-     *  format for \p weights and \p bias.
-     * 
-     *  The layout for the \p input tensor should be {@code {1, S_max, N, E}}, where:
-     *    - {@code S_max} is the maximum allowed sequence length (number of RNN iterations)
-     *    - {@code N} is the batch size
-     *    - {@code E} specifies the embedding length (unless ::kSKIP is set, in which case it should match
-     *      getHiddenSize()).
-     * 
-     *  The first output tensor is the output of the final RNN layer across all timesteps, with dimensions
-     *  {@code {S_max, N, H}}:
-     * 
-     *    - {@code S_max} is the maximum allowed sequence length (number of RNN iterations)
-     *    - {@code N} is the batch size
-     *    - {@code H} is an output hidden state (equal to getHiddenSize() or 2x getHiddenSize())
-     * 
-     *  The second tensor is the final hidden state of the RNN across all layers, and if the RNN
-     *  is an LSTM (i.e. getOperation() is ::kLSTM), then the third tensor is the final cell
-     *  state of the RNN across all layers.  Both the second and third output tensors have dimensions
-     *  {@code {L, N, H}}:
-     * 
-     *   - {@code L} is equal to getLayerCount() if getDirection is ::kUNIDIRECTION,
-     *      and 2*getLayerCount() if getDirection is ::kBIDIRECTION.  In the bi-directional
-     *      case, layer {@code l}'s final forward hidden state is stored in {@code L = 2*l}, and
-     *      final backward hidden state is stored in {@code L = 2*l + 1}.
-     *   - {@code N} is the batch size
-     *   - {@code H} is getHiddenSize().
-     * 
-     *  Note that in bidirectional RNNs, the full "hidden state" for a layer {@code l}
-     *  is the concatenation of its forward hidden state and its backward hidden
-     *  state, and its size is 2*H.
-     * 
-     *  @deprecated Superseded by addRNNv2 and will be removed in TensorRT 8.0.
-     * 
-     *  @see IRNNLayer
-     * 
-     *  \warning This layer does not support wildcard dimensions or explicit batch size networks.
-     *  \warning Int32 tensors are not valid input tensors.
-     * 
-     *  @return The new RNN layer, or nullptr if it could not be created.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated IRNNLayer addRNN(@ByRef ITensor inputs, int layerCount, @Cast("std::size_t") long hiddenSize,
-            int maxSeqLen, RNNOperation op, RNNInputMode mode, RNNDirection dir, @ByVal Weights weights,
-            @ByVal Weights bias);
-    public native @Deprecated IRNNLayer addRNN(@ByRef ITensor inputs, int layerCount, @Cast("std::size_t") long hiddenSize,
-            int maxSeqLen, @Cast("nvinfer1::RNNOperation") int op, @Cast("nvinfer1::RNNInputMode") int mode, @Cast("nvinfer1::RNNDirection") int dir, @ByVal Weights weights,
-            @ByVal Weights bias);
-
-    /**
-     *  \brief Add a plugin layer to the network.
-     * 
-     *  @param inputs The input tensors to the layer.
-     *  @param nbInputs The number of input tensors.
-     *  @param plugin The layer plugin.
-     * 
-     *  @see IPluginLayer
-     * 
-     *  @deprecated Superseded by addPluginV2 and will be removed in TensorRT 8.0.
-     * 
-     *  \warning Plugin inputs do not support wildcard dimensions or explicit batch size networks.
-     *  \warning Int32 tensors are not valid input tensors.
-     * 
-     *  @return the new plugin layer, or nullptr if it could not be created.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated IPluginLayer addPlugin(
-            @Cast("nvinfer1::ITensor*const*") PointerPointer inputs, int nbInputs, @ByRef IPlugin plugin);
-    public native @Deprecated IPluginLayer addPlugin(
-            @ByPtrPtr ITensor inputs, int nbInputs, @ByRef IPlugin plugin);
+    public native @NoException(true) IElementWiseLayer addElementWise(@ByRef ITensor input1, @ByRef ITensor input2, ElementWiseOperation op);
+    public native @NoException(true) IElementWiseLayer addElementWise(@ByRef ITensor input1, @ByRef ITensor input2, @Cast("nvinfer1::ElementWiseOperation") int op);
 
     /**
      *  \brief Add a unary layer to the network.
@@ -502,8 +402,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IUnaryLayer addUnary(@ByRef ITensor input, UnaryOperation operation);
-    public native IUnaryLayer addUnary(@ByRef ITensor input, @Cast("nvinfer1::UnaryOperation") int operation);
+    public native @NoException(true) IUnaryLayer addUnary(@ByRef ITensor input, UnaryOperation operation);
+    public native @NoException(true) IUnaryLayer addUnary(@ByRef ITensor input, @Cast("nvinfer1::UnaryOperation") int operation);
 
     /** \brief Add a padding layer to the network.
      * 
@@ -524,8 +424,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Deprecated IPaddingLayer addPadding(
-            @ByRef ITensor input, @ByVal DimsHW prePadding, @ByVal DimsHW postPadding);
+    public native @Deprecated @NoException(true) IPaddingLayer addPadding(@ByRef ITensor input, @ByVal DimsHW prePadding, @ByVal DimsHW postPadding);
 
     /**
      *  \brief Add a shuffle layer to the network.
@@ -542,147 +441,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    //!
-    //!
-    //!
-    public native IShuffleLayer addShuffle(@ByRef ITensor input);
-
-    /**
-     *  \brief Set the pooling output dimensions formula.
-     * 
-     *  @deprecated This method does not currently work reliably and will be removed in TensorRT 8.0.
-     * 
-     *  @param formula The formula from computing the pooling output dimensions. If null is passed, the default
-     *  formula is used.
-     * 
-     *  The default formula in each dimension is (inputDim + padding * 2 - kernelSize) / stride + 1.
-     * 
-     *  \warning Custom output dimensions formulas are not supported with wildcard dimensions.
-     * 
-     *  @see IOutputDimensionsFormula getPoolingOutputDimensionsFormula()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setPoolingOutputDimensionsFormula(IOutputDimensionsFormula formula);
-
-    /**
-     *  \brief Get the pooling output dimensions formula.
-     * 
-     *  @deprecated This method does not currently work reliably and will be removed in TensorRT 8.0.
-     * 
-     *  @return The formula from computing the pooling output dimensions.
-     * 
-     *  \warning Custom output dimensions formulas are not supported with wildcard dimensions.
-     * 
-     *  @see IOutputDimensionsFormula setPoolingOutputDimensionsFormula()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @ByRef IOutputDimensionsFormula getPoolingOutputDimensionsFormula();
-
-    /**
-     *  \brief Set the convolution output dimensions formula.
-     * 
-     *  @deprecated This method does not currently work reliably and will be removed in TensorRT 8.0.
-     * 
-     *  @param formula The formula from computing the convolution output dimensions. If null is passed, the default
-     *  formula is used.
-     * 
-     *  The default formula in each dimension is (inputDim + padding * 2 - kernelSize) / stride + 1.
-     * 
-     *  \warning Custom output dimensions formulas are not supported with wildcard dimensions.
-     * 
-     *  @see IOutputDimensionsFormula getConvolutionOutputDimensionsFormula()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setConvolutionOutputDimensionsFormula(
-            IOutputDimensionsFormula formula);
-
-    /**
-     *  \brief Get the convolution output dimensions formula.
-     * 
-     *  @deprecated This method does not currently work reliably and will be removed in TensorRT 8.0.
-     * 
-     *  @return The formula from computing the convolution output dimensions.
-     * 
-     *  \warning Custom output dimensions formulas are not supported with wildcard dimensions.
-     * 
-     *  @see IOutputDimensionsFormula setConvolutionOutputDimensionsFormula()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @ByRef IOutputDimensionsFormula getConvolutionOutputDimensionsFormula();
-
-    /**
-     *  \brief Set the deconvolution output dimensions formula.
-     * 
-     *  @deprecated This method does not currently work reliably and will be removed in TensorRT 8.0.
-     * 
-     *  @param formula The formula from computing the deconvolution output dimensions. If null is passed, the default!
-     *  formula is used.
-     * 
-     *  The default formula in each dimension is (inputDim - 1) * stride + kernelSize - 2 * padding.
-     * 
-     *  \warning Custom output dimensions formulas are not supported with wildcard dimensions.
-     * 
-     *  @see IOutputDimensionsFormula getDevonvolutionOutputDimensionsFormula()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated void setDeconvolutionOutputDimensionsFormula(
-            IOutputDimensionsFormula formula);
-
-    /**
-     *  \brief Get the deconvolution output dimensions formula.
-     * 
-     *  @return The formula from computing the deconvolution output dimensions.
-     * 
-     *  @deprecated This method does not currently work reliably and will be removed in TensorRT 8.0.
-     * 
-     *  \warning Custom output dimensions formulas are not supported with wildcard dimensions.
-     * 
-     *  @see IOutputDimensionsFormula setDeconvolutionOutputDimensionsFormula()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @ByRef IOutputDimensionsFormula getDeconvolutionOutputDimensionsFormula();
+    public native @NoException(true) IShuffleLayer addShuffle(@ByRef ITensor input);
 
     /**
      *  \brief Get the number of layers in the network.
@@ -698,7 +457,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native int getNbLayers();
+    public native @NoException(true) int getNbLayers();
 
     /**
      *  \brief Get the layer specified by the given index.
@@ -715,7 +474,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ILayer getLayer(int index);
+    public native @NoException(true) ILayer getLayer(int index);
 
     /**
      *  \brief Get the number of inputs in the network.
@@ -731,7 +490,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native int getNbInputs();
+    //!
+    public native @NoException(true) int getNbInputs();
 
     /**
      *  \brief Get the input tensor specified by the given index.
@@ -739,6 +499,8 @@ public class INetworkDefinition extends Pointer {
      *  @param index The index of the input tensor.
      * 
      *  @return The input tensor, or nullptr if the index is out of range.
+     * 
+     *  \note adding inputs invalidates indexing here
      * 
      *  @see getNbInputs()
      *  */
@@ -749,7 +511,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ITensor getInput(int index); // adding inputs invalidates indexing here
+    public native @NoException(true) ITensor getInput(int index);
 
     /**
      *  \brief Get the number of outputs in the network.
@@ -767,7 +529,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native int getNbOutputs();
+    //!
+    public native @NoException(true) int getNbOutputs();
 
     /**
      *  \brief Get the output tensor specified by the given index.
@@ -776,18 +539,37 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @return The output tensor, or nullptr if the index is out of range.
      * 
+     *  \note adding inputs invalidates indexing here
+     * 
      *  @see getNbOutputs()
      *  */
     
     
     //!
     //!
-    public native ITensor getOutput(int index); // adding outputs invalidates indexing here
+    //!
+    //!
+    public native @NoException(true) ITensor getOutput(int index);
 
     /**
      *  \brief Destroy this INetworkDefinition object.
+     * 
+     *  @deprecated Deprecated interface will be removed in TensorRT 10.0.
+     * 
+     *  \warning Calling destroy on a managed pointer will result in a double-free error.
      *  */
-    public native void destroy();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Deprecated @NoException(true) void destroy();
+
     /**
      *  \brief Add a reduce layer to the network.
      * 
@@ -825,8 +607,10 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IReduceLayer addReduce(@ByRef ITensor input, ReduceOperation operation, @Cast("uint32_t") int reduceAxes, @Cast("bool") boolean keepDimensions);
-    public native IReduceLayer addReduce(@ByRef ITensor input, @Cast("nvinfer1::ReduceOperation") int operation, @Cast("uint32_t") int reduceAxes, @Cast("bool") boolean keepDimensions);
+    public native @NoException(true) IReduceLayer addReduce(
+            @ByRef ITensor input, ReduceOperation operation, @Cast("uint32_t") int reduceAxes, @Cast("bool") boolean keepDimensions);
+    public native @NoException(true) IReduceLayer addReduce(
+            @ByRef ITensor input, @Cast("nvinfer1::ReduceOperation") int operation, @Cast("uint32_t") int reduceAxes, @Cast("bool") boolean keepDimensions);
 
     /**
      *  \brief Add a TopK layer to the network.
@@ -863,8 +647,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ITopKLayer addTopK(@ByRef ITensor input, TopKOperation op, int k, @Cast("uint32_t") int reduceAxes);
-    public native ITopKLayer addTopK(@ByRef ITensor input, @Cast("nvinfer1::TopKOperation") int op, int k, @Cast("uint32_t") int reduceAxes);
+    public native @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, TopKOperation op, int k, @Cast("uint32_t") int reduceAxes);
+    public native @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, @Cast("nvinfer1::TopKOperation") int op, int k, @Cast("uint32_t") int reduceAxes);
 
     /**
      *  \brief Add a gather layer to the network.
@@ -885,7 +669,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IGatherLayer addGather(@ByRef ITensor data, @ByRef ITensor indices, int axis);
+    public native @NoException(true) IGatherLayer addGather(@ByRef ITensor data, @ByRef ITensor indices, int axis);
 
     /**
      *  \brief Add a RaggedSoftMax layer to the network.
@@ -908,7 +692,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IRaggedSoftMaxLayer addRaggedSoftMax(@ByRef ITensor input, @ByRef ITensor bounds);
+    public native @NoException(true) IRaggedSoftMaxLayer addRaggedSoftMax(@ByRef ITensor input, @ByRef ITensor bounds);
 
     /**
      *  \brief Add a MatrixMultiply layer to the network.
@@ -933,40 +717,11 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IMatrixMultiplyLayer addMatrixMultiply(
+    //!
+    public native @NoException(true) IMatrixMultiplyLayer addMatrixMultiply(
             @ByRef ITensor input0, MatrixOperation op0, @ByRef ITensor input1, MatrixOperation op1);
-    public native IMatrixMultiplyLayer addMatrixMultiply(
+    public native @NoException(true) IMatrixMultiplyLayer addMatrixMultiply(
             @ByRef ITensor input0, @Cast("nvinfer1::MatrixOperation") int op0, @ByRef ITensor input1, @Cast("nvinfer1::MatrixOperation") int op1);
-
-    /**
-     *  \brief Add a MatrixMultiply layer to the network.
-     * 
-     *  @param input0 The first input tensor (commonly A).
-     *  @param transpose0 If true, op(input0)=transpose(input0), else op(input0)=input0.
-     *  @param input1 The second input tensor (commonly B).
-     *  @param transpose1 If true, op(input1)=transpose(input1), else op(input1)=input1.
-     * 
-     *  @see IMatrixMultiplyLayer
-     * 
-     *  @return The new matrix multiply layer, or nullptr if it could not be created.
-     * 
-     *  \warning Int32 tensors are not valid input tensors.
-     * 
-     *  @deprecated This interface is superseded by the overload that replaces bool with MatrixOperation and will be
-     *  removed in TensorRT 8.0.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated IMatrixMultiplyLayer addMatrixMultiply(
-            @ByRef ITensor input0, @Cast("bool") boolean transpose0, @ByRef ITensor input1, @Cast("bool") boolean transpose1);
 
     /**
      *  \brief Add a constant layer to the network.
@@ -1008,7 +763,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IConstantLayer addConstant(@ByVal Dims dimensions, @ByVal Weights weights);
+    public native @NoException(true) IConstantLayer addConstant(@ByVal @Cast("nvinfer1::Dims*") Dims32 dimensions, @ByVal Weights weights);
 
     /**
      *  \brief Add an \p layerCount deep RNN layer to the network with \p hiddenSize internal states that can
@@ -1066,7 +821,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IRNNv2Layer
      * 
-     *  @deprecated Superseded by ILoop::addLoop and will be removed in TensorRT 9.0.
+     *  @deprecated Superseded by INetworkDefinition::addLoop and will be removed in TensorRT 9.0.
      * 
      *  \warning RNN inputs do not support wildcard dimensions or explicit batch size networks.
      *  \warning Int32 tensors are not valid input tensors, only for sequence lengths.
@@ -1081,40 +836,10 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    //!
-    public native @Deprecated IRNNv2Layer addRNNv2(
+    public native @Deprecated @NoException(true) IRNNv2Layer addRNNv2(
             @ByRef ITensor input, int layerCount, int hiddenSize, int maxSeqLen, RNNOperation op);
-    public native @Deprecated IRNNv2Layer addRNNv2(
+    public native @Deprecated @NoException(true) IRNNv2Layer addRNNv2(
             @ByRef ITensor input, int layerCount, int hiddenSize, int maxSeqLen, @Cast("nvinfer1::RNNOperation") int op);
-
-    /**
-     *  \brief Add a plugin layer to the network using an IPluginExt interface.
-     * 
-     *  @param inputs The input tensors to the layer.
-     *  @param nbInputs The number of input tensors.
-     *  @param plugin The layer plugin.
-     * 
-     *  @see IPluginLayer
-     * 
-     *  @deprecated Superseded by addPluginV2 and will be removed in TensorRT 8.0.
-     * 
-     *  \warning Plugin inputs do not support wildcard dimensions or explicit batch size networks.
-     *  \warning Int32 tensors are not valid input tensors.
-     * 
-     *  @return The new plugin layer, or nullptr if it could not be created.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated IPluginLayer addPluginExt(
-            @Cast("nvinfer1::ITensor*const*") PointerPointer inputs, int nbInputs, @ByRef IPluginExt plugin);
-    public native @Deprecated IPluginLayer addPluginExt(
-            @ByPtrPtr ITensor inputs, int nbInputs, @ByRef IPluginExt plugin);
 
     /**
      *  \brief Add an identity layer.
@@ -1133,7 +858,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IIdentityLayer addIdentity(@ByRef ITensor input);
+    public native @NoException(true) IIdentityLayer addIdentity(@ByRef ITensor input);
 
     /**
      *  \brief remove a tensor from the network definition.
@@ -1151,7 +876,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native void removeTensor(@ByRef ITensor tensor);
+    public native @NoException(true) void removeTensor(@ByRef ITensor tensor);
 
     /**
      *  \brief unmark a tensor as a network output.
@@ -1168,7 +893,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native void unmarkOutput(@ByRef ITensor tensor);
+    public native @NoException(true) void unmarkOutput(@ByRef ITensor tensor);
 
     /**
      *  \brief Add a plugin layer to the network using the IPluginV2 interface.
@@ -1192,8 +917,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IPluginV2Layer addPluginV2(@Cast("nvinfer1::ITensor*const*") PointerPointer inputs, int nbInputs, @ByRef IPluginV2 plugin);
-    public native IPluginV2Layer addPluginV2(@ByPtrPtr ITensor inputs, int nbInputs, @ByRef IPluginV2 plugin);
+    public native @NoException(true) IPluginV2Layer addPluginV2(@Cast("nvinfer1::ITensor*const*") PointerPointer inputs, int nbInputs, @ByRef IPluginV2 plugin);
+    public native @NoException(true) IPluginV2Layer addPluginV2(@ByPtrPtr ITensor inputs, int nbInputs, @ByRef IPluginV2 plugin);
 
     /**
      *  \brief Add a slice layer to the network.
@@ -1218,7 +943,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ISliceLayer addSlice(@ByRef ITensor input, @ByVal Dims start, @ByVal Dims size, @ByVal Dims stride);
+    public native @NoException(true) ISliceLayer addSlice(@ByRef ITensor input, @ByVal @Cast("nvinfer1::Dims*") Dims32 start, @ByVal @Cast("nvinfer1::Dims*") Dims32 size, @ByVal @Cast("nvinfer1::Dims*") Dims32 stride);
 
     /**
      *  \brief Sets the name of the network.
@@ -1244,8 +969,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native void setName(String name);
-    public native void setName(@Cast("const char*") BytePointer name);
+    public native @NoException(true) void setName(String name);
+    public native @NoException(true) void setName(@Cast("const char*") BytePointer name);
 
     /**
      *  \brief Returns the name associated with the network.
@@ -1265,7 +990,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native String getName();
+    public native @NoException(true) String getName();
 
     /**
      *  \brief Add a shape layer to the network.
@@ -1288,7 +1013,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IShapeLayer addShape(@ByRef ITensor input);
+    public native @NoException(true) IShapeLayer addShape(@ByRef ITensor input);
 
     /**
      *  \brief Query whether the network was created with an implicit batch dimension.
@@ -1313,7 +1038,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean hasImplicitBatchDimension();
+    public native @Cast("bool") @NoException(true) boolean hasImplicitBatchDimension();
 
     /**
      *  \brief Enable tensor's value to be computed by IExecutionContext::getShapeBinding.
@@ -1334,7 +1059,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean markOutputForShapes(@ByRef ITensor tensor);
+    public native @Cast("bool") @NoException(true) boolean markOutputForShapes(@ByRef ITensor tensor);
 
     /**
      *  \brief Undo markOutputForShapes.
@@ -1351,7 +1076,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean unmarkOutputForShapes(@ByRef ITensor tensor);
+    public native @Cast("bool") @NoException(true) boolean unmarkOutputForShapes(@ByRef ITensor tensor);
 
     /**
      *  \brief Add a parametric ReLU layer to the network.
@@ -1374,7 +1099,7 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @NoException IParametricReLULayer addParametricReLU(@ByRef ITensor input, @ByRef ITensor slope);
+    public native @NoException(true) IParametricReLULayer addParametricReLU(@ByRef ITensor input, @ByRef ITensor slope);
 
     /**
      *  \brief Add a multi-dimension convolution layer to the network.
@@ -1401,8 +1126,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IConvolutionLayer addConvolutionNd(@ByRef ITensor input, int nbOutputMaps, @ByVal Dims kernelSize,
-            @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
+    public native @NoException(true) IConvolutionLayer addConvolutionNd(
+            @ByRef ITensor input, int nbOutputMaps, @ByVal @Cast("nvinfer1::Dims*") Dims32 kernelSize, @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
 
     /**
      *  \brief Add a multi-dimension pooling layer to the network.
@@ -1425,8 +1150,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IPoolingLayer addPoolingNd(@ByRef ITensor input, PoolingType type, @ByVal Dims windowSize);
-    public native IPoolingLayer addPoolingNd(@ByRef ITensor input, @Cast("nvinfer1::PoolingType") int type, @ByVal Dims windowSize);
+    public native @NoException(true) IPoolingLayer addPoolingNd(@ByRef ITensor input, PoolingType type, @ByVal @Cast("nvinfer1::Dims*") Dims32 windowSize);
+    public native @NoException(true) IPoolingLayer addPoolingNd(@ByRef ITensor input, @Cast("nvinfer1::PoolingType") int type, @ByVal @Cast("nvinfer1::Dims*") Dims32 windowSize);
 
     /**
      *  \brief Add a multi-dimension deconvolution layer to the network.
@@ -1454,8 +1179,10 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IDeconvolutionLayer addDeconvolutionNd(@ByRef ITensor input, int nbOutputMaps, @ByVal Dims kernelSize,
-            @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
+    //!
+    //!
+    public native @NoException(true) IDeconvolutionLayer addDeconvolutionNd(
+            @ByRef ITensor input, int nbOutputMaps, @ByVal @Cast("nvinfer1::Dims*") Dims32 kernelSize, @ByVal Weights kernelWeights, @ByVal Weights biasWeights);
 
     /**
      *  \brief Add a multi-dimension scale layer to the network.
@@ -1477,7 +1204,11 @@ public class INetworkDefinition extends Pointer {
      *  For ::kCHANNEL, the number of weights is C.
      *  For ::kELEMENTWISE, the number of weights is C*D*E*F.
      * 
+     *  channelAxis can also be set explicitly using setChannelAxis().
+     * 
      *  @see IScaleLayer
+     *  @see setChannelAxis()
+     * 
      *  \warning Int32 tensors are not valid input tensors.
      *  \warning Only 2D or 3D scale is supported.
      * 
@@ -1489,10 +1220,10 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IScaleLayer addScaleNd(@ByRef ITensor input, ScaleMode mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power,
-            int channelAxis);
-    public native IScaleLayer addScaleNd(@ByRef ITensor input, @Cast("nvinfer1::ScaleMode") int mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power,
-            int channelAxis);
+    public native @NoException(true) IScaleLayer addScaleNd(
+            @ByRef ITensor input, ScaleMode mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power, int channelAxis);
+    public native @NoException(true) IScaleLayer addScaleNd(
+            @ByRef ITensor input, @Cast("nvinfer1::ScaleMode") int mode, @ByVal Weights shift, @ByVal Weights scale, @ByVal Weights power, int channelAxis);
 
     /** \brief Add a resize layer to the network.
      * 
@@ -1511,10 +1242,13 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native IResizeLayer addResize(@ByRef ITensor input);
+    //!
+    public native @NoException(true) IResizeLayer addResize(@ByRef ITensor input);
 
     /**
      *  \brief True if network is an explicit precision network
+     * 
+     *  @deprecated Will be removed in TensorRT 10.0.
      * 
      *  hasExplicitPrecision() is true if and only if this INetworkDefinition
      *  was created with createNetworkV2() with NetworkDefinitionCreationFlag::kEXPLICIT_PRECISION set.
@@ -1529,7 +1263,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean hasExplicitPrecision();
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean hasExplicitPrecision();
 
     /**
      *  \brief Add a loop to the network.
@@ -1539,6 +1274,8 @@ public class INetworkDefinition extends Pointer {
      *  @return Pointer to ILoop that can be used to add loop boundary layers for the loop,
      *          or nullptr if network has an implicit batch dimension or this version
      *          of TensorRT does not support loops.
+     * 
+     *  The network must not have an implicit batch dimension.
      *  */
     
     //!
@@ -1551,7 +1288,8 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native @NoException ILoop addLoop();
+    //!
+    public native @NoException(true) ILoop addLoop();
 
     /** \brief Add a select layer to the network.
      * 
@@ -1581,6 +1319,8 @@ public class INetworkDefinition extends Pointer {
      * 
      *  then the output dimensions are [1,3,0,9].
      * 
+     *  The network must not have an implicit batch dimension.
+     * 
      *  @see ISelectLayer
      * 
      *  @return The new select layer, or nullptr if it could not be created. */
@@ -1589,25 +1329,30 @@ public class INetworkDefinition extends Pointer {
     //!
     //!
     //!
-    public native ISelectLayer addSelect(@ByRef ITensor condition, @ByRef ITensor thenInput, @ByRef ITensor elseInput);
+    //!
+    //!
+    public native @NoException(true) ISelectLayer addSelect(@ByRef ITensor condition, @ByRef ITensor thenInput, @ByRef ITensor elseInput);
 
     /** \brief Add a fill layer to the network.
      * 
      *  @param dimensions The output tensor dimensions.
      *  @param op The fill operation that the layer applies.
      * 
-     *  \warning The dimensions's nbDims must be 1.
+     *  \warning For FillOperation::kLINSPACE, dimensions.nbDims must be 1.
+     * 
+     *  The network must not have an implicit batch dimension.
      * 
      *  @see IFillLayer
      * 
-     *  @return The new fill layer, or nullptr if it could not be created. */
+     *  @return The new fill layer, or nullptr if it could not be created.
+     *  */
     
     //!
     //!
     //!
     //!
-    public native @NoException IFillLayer addFill(@ByVal Dims dimensions, FillOperation op);
-    public native @NoException IFillLayer addFill(@ByVal Dims dimensions, @Cast("nvinfer1::FillOperation") int op);
+    public native @NoException(true) IFillLayer addFill(@ByVal @Cast("nvinfer1::Dims*") Dims32 dimensions, FillOperation op);
+    public native @NoException(true) IFillLayer addFill(@ByVal @Cast("nvinfer1::Dims*") Dims32 dimensions, @Cast("nvinfer1::FillOperation") int op);
 
     /** \brief Add a padding layer to the network. Only 2D padding is currently supported.
      * 
@@ -1619,6 +1364,117 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @return The new padding layer, or nullptr if it could not be created.
      *  */
-    public native IPaddingLayer addPaddingNd(
-            @ByRef ITensor input, @ByVal Dims prePadding, @ByVal Dims postPadding);
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) IPaddingLayer addPaddingNd(@ByRef ITensor input, @ByVal @Cast("nvinfer1::Dims*") Dims32 prePadding, @ByVal @Cast("nvinfer1::Dims*") Dims32 postPadding);
+
+    /** \brief Associate a name with all current uses of the given weights.
+     * 
+     *  The name must be set after the Weights are used in the network.
+     *  Lookup is associative. The name applies to all Weights with matching
+     *  type, value pointer, and count. If Weights with a matching value
+     *  pointer, but different type or count exists in the network, an
+     *  error message is issued, the name is rejected, and return false.
+     *  If the name has already been used for other weights,
+     *  return false. A nullptr causes the weights to become unnamed,
+     *  i.e. clears any previous name.
+     * 
+     *  @param weights The weights to be named.
+     *  @param name The name to associate with the weights.
+     * 
+     *  @return true on success. */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setWeightsName(@ByVal Weights weights, String name);
+    public native @Cast("bool") @NoException(true) boolean setWeightsName(@ByVal Weights weights, @Cast("const char*") BytePointer name);
+
+    /**
+     *  \brief Set the ErrorRecorder for this interface
+     * 
+     *  Assigns the ErrorRecorder to this interface. The ErrorRecorder will track all errors during execution.
+     *  This function will call incRefCount of the registered ErrorRecorder at least once. Setting
+     *  recorder to nullptr unregisters the recorder with the interface, resulting in a call to decRefCount if
+     *  a recorder has been registered.
+     * 
+     *  If an error recorder is not set, messages will be sent to the global log stream.
+     * 
+     *  @param recorder The error recorder to register with this interface. */
+    //
+    /** @see getErrorRecorder()
+    /** */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
+
+    /**
+     *  \brief get the ErrorRecorder assigned to this interface.
+     * 
+     *  Retrieves the assigned error recorder object for the given class.
+     *  A nullptr will be returned if setErrorRecorder has not been called.
+     * 
+     *  @return A pointer to the IErrorRecorder object that has been registered.
+     * 
+     *  @see setErrorRecorder()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IErrorRecorder getErrorRecorder();
+
+    /**
+     *  \brief Add a dequantization layer to the network.
+     * 
+     *  @param input The input tensor to be quantized.
+     *  @param scale A tensor with the scale value.
+     * 
+     *  @see IDequantizeLayer
+     * 
+     *  \p input tensor data type must be DataType::kFLOAT.
+     *  \p scale tensor data type must be DataType::kFLOAT. The subgraph which terminates with the \p scale tensor must
+     *  be a build-time constant.
+     * 
+     *  @return The new quantization layer, or nullptr if it could not be created.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IDequantizeLayer addDequantize(@ByRef ITensor input, @ByRef ITensor scale);
+
+    /**
+     *  \brief Add a quantization layer to the network.
+     * 
+     *  @param input The input tensor to be quantized.
+     *  @param scale A tensor with the scale value.
+     * 
+     *  @see IQuantizeLayer
+     * 
+     *  \p input tensor data type must be DataType::kFLOAT.
+     *  \p scale tensor data type must be DataType::kFLOAT. The subgraph which terminates with the \p scale tensor must
+     *  be a build-time constant.
+     * 
+     *  @return The new quantization layer, or nullptr if it could not be created.
+     *  */
+    public native @NoException(true) IQuantizeLayer addQuantize(@ByRef ITensor input, @ByRef ITensor scale);
 }

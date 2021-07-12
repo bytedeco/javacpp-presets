@@ -19,7 +19,7 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IRecurrenceLayer extends ILoopBoundaryLayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -43,5 +43,4 @@ public class IRecurrenceLayer extends ILoopBoundaryLayer {
     /** If this function is called with a value 1, then the function getNbInputs() changes
     /** from returning 1 to 2.
     /** */
-    public native void setInput(int index, @ByRef ITensor tensor);
 }

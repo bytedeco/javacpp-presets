@@ -17,6 +17,8 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 import org.bytedeco.tensorrt.nvinfer.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
+import org.bytedeco.tensorrt.nvinfer_plugin.*;
+import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 import static org.bytedeco.tensorrt.global.nvparsers.*;
 
@@ -46,8 +48,8 @@ public class IUffParser extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean registerInput(String inputName, @ByVal Dims inputDims, UffInputOrder inputOrder);
-    public native @Cast("bool") boolean registerInput(@Cast("const char*") BytePointer inputName, @ByVal Dims inputDims, @Cast("nvuffparser::UffInputOrder") int inputOrder);
+    public native @Cast("bool") @NoException(true) boolean registerInput(String inputName, @ByVal @Cast("nvinfer1::Dims*") Dims32 inputDims, UffInputOrder inputOrder);
+    public native @Cast("bool") @NoException(true) boolean registerInput(@Cast("const char*") BytePointer inputName, @ByVal @Cast("nvinfer1::Dims*") Dims32 inputDims, @Cast("nvuffparser::UffInputOrder") int inputOrder);
 
     /**
      *  \brief Register an output name of a UFF network.
@@ -59,8 +61,8 @@ public class IUffParser extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean registerOutput(String outputName);
-    public native @Cast("bool") boolean registerOutput(@Cast("const char*") BytePointer outputName);
+    public native @Cast("bool") @NoException(true) boolean registerOutput(String outputName);
+    public native @Cast("bool") @NoException(true) boolean registerOutput(@Cast("const char*") BytePointer outputName);
 
     /**
      *  \brief Parse a UFF file.
@@ -74,16 +76,12 @@ public class IUffParser extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean parse(String file,
-                           @ByRef INetworkDefinition network,
-                           DataType weightsType/*=nvinfer1::DataType::kFLOAT*/);
-    public native @Cast("bool") boolean parse(String file,
-                           @ByRef INetworkDefinition network);
-    public native @Cast("bool") boolean parse(@Cast("const char*") BytePointer file,
-                           @ByRef INetworkDefinition network,
-                           @Cast("nvinfer1::DataType") int weightsType/*=nvinfer1::DataType::kFLOAT*/);
-    public native @Cast("bool") boolean parse(@Cast("const char*") BytePointer file,
-                           @ByRef INetworkDefinition network);
+    public native @Cast("bool") @NoException(true) boolean parse(String file, @ByRef INetworkDefinition network,
+            DataType weightsType/*=nvinfer1::DataType::kFLOAT*/);
+    public native @Cast("bool") @NoException(true) boolean parse(String file, @ByRef INetworkDefinition network);
+    public native @Cast("bool") @NoException(true) boolean parse(@Cast("const char*") BytePointer file, @ByRef INetworkDefinition network,
+            @Cast("nvinfer1::DataType") int weightsType/*=nvinfer1::DataType::kFLOAT*/);
+    public native @Cast("bool") @NoException(true) boolean parse(@Cast("const char*") BytePointer file, @ByRef INetworkDefinition network);
 
     /**
      *  \brief Parse a UFF buffer, useful if the file already live in memory.
@@ -93,22 +91,25 @@ public class IUffParser extends Pointer {
      *  @param network Network in which the UFFParser will fill the layers.
      *  @param weightsType The type on which the weights will transformed in.
      *  */
-    public native @Cast("bool") boolean parseBuffer(String buffer, @Cast("std::size_t") long size,
-                                 @ByRef INetworkDefinition network,
-                                 DataType weightsType/*=nvinfer1::DataType::kFLOAT*/);
-    public native @Cast("bool") boolean parseBuffer(String buffer, @Cast("std::size_t") long size,
-                                 @ByRef INetworkDefinition network);
-    public native @Cast("bool") boolean parseBuffer(@Cast("const char*") BytePointer buffer, @Cast("std::size_t") long size,
-                                 @ByRef INetworkDefinition network,
-                                 @Cast("nvinfer1::DataType") int weightsType/*=nvinfer1::DataType::kFLOAT*/);
-    public native @Cast("bool") boolean parseBuffer(@Cast("const char*") BytePointer buffer, @Cast("std::size_t") long size,
-                                 @ByRef INetworkDefinition network);
+    
+    
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean parseBuffer(String buffer, @Cast("std::size_t") long size, @ByRef INetworkDefinition network,
+            DataType weightsType/*=nvinfer1::DataType::kFLOAT*/);
+    public native @Cast("bool") @NoException(true) boolean parseBuffer(String buffer, @Cast("std::size_t") long size, @ByRef INetworkDefinition network);
+    public native @Cast("bool") @NoException(true) boolean parseBuffer(@Cast("const char*") BytePointer buffer, @Cast("std::size_t") long size, @ByRef INetworkDefinition network,
+            @Cast("nvinfer1::DataType") int weightsType/*=nvinfer1::DataType::kFLOAT*/);
+    public native @Cast("bool") @NoException(true) boolean parseBuffer(@Cast("const char*") BytePointer buffer, @Cast("std::size_t") long size, @ByRef INetworkDefinition network);
 
+    /**
+     *  @deprecated Deprecated interface will be removed in TensorRT 10.0.
+     *  */
     
     
     //!
     //!
-    public native void destroy();
+    public native @Deprecated @NoException(true) void destroy();
 
     /**
      *  \brief Return Version Major of the UFF.
@@ -117,7 +118,7 @@ public class IUffParser extends Pointer {
     
     //!
     //!
-    public native int getUffRequiredVersionMajor();
+    public native @NoException(true) int getUffRequiredVersionMajor();
 
     /**
      *  \brief Return Version Minor of the UFF.
@@ -126,7 +127,7 @@ public class IUffParser extends Pointer {
     
     //!
     //!
-    public native int getUffRequiredVersionMinor();
+    public native @NoException(true) int getUffRequiredVersionMinor();
 
     /**
      *  \brief Return Patch Version of the UFF.
@@ -135,37 +136,13 @@ public class IUffParser extends Pointer {
     
     //!
     //!
-    //!
-    public native int getUffRequiredVersionPatch();
-
-    /**
-     *  \brief Set the IPluginFactory used to create the user defined plugins.
-     * 
-     *  @param factory Pointer to an instance of the user implmentation of IPluginFactory.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native void setPluginFactory(IUffPluginFactory factory);
-
-    /**
-     *  \brief Set the IPluginFactoryExt used to create the user defined pluginExts.
-     * 
-     *  @param factory Pointer to an instance of the user implmentation of IPluginFactoryExt.
-     *  */
-    
-    
-    //!
-    //!
-    public native void setPluginFactoryExt(IUffPluginFactoryExt factory);
+    public native @NoException(true) int getUffRequiredVersionPatch();
 
     /**
      *  \brief Set the namespace used to lookup and create plugins in the network.
      *  */
-    public native void setPluginNamespace(String libNamespace);
-    public native void setPluginNamespace(@Cast("const char*") BytePointer libNamespace);
+    public native @NoException(true) void setPluginNamespace(String libNamespace);
+    public native @NoException(true) void setPluginNamespace(@Cast("const char*") BytePointer libNamespace);
     /**
      *  \brief Set the ErrorRecorder for this interface
      * 
@@ -174,9 +151,11 @@ public class IUffParser extends Pointer {
      *  recorder to nullptr unregisters the recorder with the interface, resulting in a call to decRefCount if
      *  a recorder has been registered.
      * 
+     *  If an error recorder is not set, messages will be sent to the global log stream.
+     * 
      *  @param recorder The error recorder to register with this interface. */
     //
-    /** @see getErrorRecorder
+    /** @see getErrorRecorder()
     /** */
     
     
@@ -185,17 +164,17 @@ public class IUffParser extends Pointer {
     //!
     //!
     //!
-    public native void setErrorRecorder(IErrorRecorder recorder);
+    public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
 
     /**
      *  \brief get the ErrorRecorder assigned to this interface.
      * 
-     *  Retrieves the assigned error recorder object for the given class. A default error recorder does not exist,
-     *  so a nullptr will be returned if setErrorRecorder has not been called.
+     *  Retrieves the assigned error recorder object for the given class. A
+     *  nullptr will be returned if setErrorRecorder has not been called.
      * 
      *  @return A pointer to the IErrorRecorder object that has been registered.
      * 
-     *  @see setErrorRecorder
+     *  @see setErrorRecorder()
      *  */
-    public native IErrorRecorder getErrorRecorder();
+    public native @NoException(true) IErrorRecorder getErrorRecorder();
 }

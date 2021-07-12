@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Samuel Audet
+ * Copyright (C) 2018-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -45,15 +45,21 @@ import org.bytedeco.cuda.presets.nvrtc;
     inherit = {cublas.class, cudnn.class, nvrtc.class},
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-x86_64", "windows-x86_64"},
+            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
-            include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
-            link = "nvinfer@.7"
+            include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
+            link = "nvinfer@.8"
         ),
         @Platform(
             value = "linux-arm64",
             includepath = {"/usr/include/aarch64-linux-gnu/", "/usr/local/tensorrt/include/"},
             linkpath = {"/usr/lib/aarch64-linux-gnu/", "/usr/local/tensorrt/lib/"},
+            preload = "myelin@.1"
+        ),
+        @Platform(
+            value = "linux-ppc64le",
+            includepath = {"/usr/include/powerpc64le-linux-gnu/", "/usr/local/tensorrt/include/"},
+            linkpath = {"/usr/lib/powerpc64le-linux-gnu/", "/usr/local/tensorrt/lib/"},
             preload = "myelin@.1"
         ),
         @Platform(
@@ -108,19 +114,28 @@ public class nvinfer implements LoadEnabled, InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
                .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "_TENSORRT_OVERRIDE", "TENSORRTAPI").cppTypes().annotations())
+               .put(new Info("NV_TENSORRT_VERSION").translate(false))
 
                .put(new Info("TRT_DEPRECATED").cppText("#define TRT_DEPRECATED deprecated").cppTypes())
                .put(new Info("TRT_DEPRECATED_API").cppText("#define TRT_DEPRECATED_API deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("const char", "nvinfer1::AsciiChar").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::IErrorRecorder::ErrorDesc").valueTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::PluginFormat").cast().valueTypes("TensorFormat", "int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("nvinfer1::EnumMax").skip())
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
-               .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
-                             "nvinfer1::IConcatenationLayer", "nvinfer1::IParametricReLULayer", "nvinfer1::IShapeLayer", "nvinfer1::ISelectLayer").purify())
+               .put(new Info("nvinfer1::IDimensionExpr", "nvinfer1::IExprBuilder", "nvinfer1::IOptimizationProfile", "nvinfer1::ITensor", "nvinfer1::ILayer",
+                             "nvinfer1::IConvolutionLayer", "nvinfer1::IFullyConnectedLayer", "nvinfer1::IActivationLayer", "nvinfer1::IPoolingLayer",
+                             "nvinfer1::ILRNLayer", "nvinfer1::IScaleLayer", "nvinfer1::IPluginV2Layer", "nvinfer1::IUnaryLayer", "nvinfer1::IReduceLayer",
+                             "nvinfer1::IPaddingLayer", "nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
+                             "nvinfer1::IConcatenationLayer", "nvinfer1::IDeconvolutionLayer", "nvinfer1::IElementWiseLayer", "nvinfer1::IGatherLayer",
+                             "nvinfer1::IRNNv2Layer", "nvinfer1::IIteratorLayer", "nvinfer1::IParametricReLULayer", "nvinfer1::IShuffleLayer",
+                             "nvinfer1::ISliceLayer", "nvinfer1::IShapeLayer", "nvinfer1::ITopKLayer", "nvinfer1::IMatrixMultiplyLayer", "nvinfer1::ISelectLayer",
+                             "nvinfer1::IConstantLayer", "nvinfer1::IResizeLayer", "nvinfer1::ILoop", "nvinfer1::ILoopBoundaryLayer", "nvinfer1::ILoopOutputLayer",
+                             "nvinfer1::IRecurrenceLayer", "nvinfer1::ITripLimitLayer", "nvinfer1::IFillLayer", "nvinfer1::IQuantizeLayer", "nvinfer1::IDequantizeLayer",
+                             "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
                              "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator").virtualize())

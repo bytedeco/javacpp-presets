@@ -17,19 +17,20 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // namespace impl
 
 /** \class IResizeLayer
  * 
  *  \brief A resize layer in a network definition.
  * 
- *  Resize layer can be used for resizing a ND tensor.
+ *  Resize layer can be used for resizing a N-D tensor.
  * 
  *  Resize layer currently supports the following configurations:
- *      -   ResizeMode::kNEAREST - resizes innermost {@code m} dimensions of ND, where 0 < m <= min(8, N) and N > 0
- *      -   ResizeMode::kLINEAR - resizes innermost {@code m} dimensions of ND, where 0 < m <= min(3, N) and N > 0
+ *      -   ResizeMode::kNEAREST - resizes innermost {@code m} dimensions of N-D, where 0 < m <= min(8, N) and N > 0
+ *      -   ResizeMode::kLINEAR - resizes innermost {@code m} dimensions of N-D, where 0 < m <= min(3, N) and N > 0
  * 
  *  Default resize mode is ResizeMode::kNEAREST.
+ * 
  *  Resize layer provides two ways to resize tensor dimensions.
  *      -   Set output dimensions directly. It can be done for static as well as dynamic resize layer.
  *          Static resize layer requires output dimensions to be known at build-time.
@@ -39,7 +40,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IResizeLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -48,7 +49,8 @@ public class IResizeLayer extends ILayer {
     /**
      *  \brief Set the output dimensions.
      * 
-     *  @param dimensions The output dimensions. Number of output dimensions must be the same as the number of input dimensions.
+     *  @param dimensions The output dimensions. Number of output dimensions must be the same as the number of input
+     *  dimensions.
      * 
      *  If there is a second input, i.e. resize layer is dynamic,
      *  calling setOutputDimensions() is an error and does not update the
@@ -65,7 +67,7 @@ public class IResizeLayer extends ILayer {
     //!
     //!
     //!
-    public native void setOutputDimensions(@ByVal Dims dimensions);
+    public native @NoException(true) void setOutputDimensions(@ByVal @Cast("nvinfer1::Dims*") Dims32 dimensions);
 
     /**
      *  \brief Get the output dimensions.
@@ -81,7 +83,7 @@ public class IResizeLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal Dims getOutputDimensions();
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims32 getOutputDimensions();
 
     /**
      *  \brief Set the resize scales.
@@ -109,9 +111,9 @@ public class IResizeLayer extends ILayer {
     //!
     //!
     //!
-    public native void setScales(@Const FloatPointer scales, int nbScales);
-    public native void setScales(@Const FloatBuffer scales, int nbScales);
-    public native void setScales(@Const float[] scales, int nbScales);
+    public native @NoException(true) void setScales(@Const FloatPointer scales, int nbScales);
+    public native @NoException(true) void setScales(@Const FloatBuffer scales, int nbScales);
+    public native @NoException(true) void setScales(@Const float[] scales, int nbScales);
 
     /**
      *  \brief Copies resize scales to scales[0, ..., nbScales-1], where nbScales is the number of scales that were set.
@@ -133,9 +135,9 @@ public class IResizeLayer extends ILayer {
     //!
     //!
     //!
-    public native int getScales(int size, FloatPointer scales);
-    public native int getScales(int size, FloatBuffer scales);
-    public native int getScales(int size, float[] scales);
+    public native @NoException(true) int getScales(int size, FloatPointer scales);
+    public native @NoException(true) int getScales(int size, FloatBuffer scales);
+    public native @NoException(true) int getScales(int size, float[] scales);
 
     /**
      *  \brief Set resize mode for an input tensor.
@@ -149,8 +151,8 @@ public class IResizeLayer extends ILayer {
     //!
     //!
     //!
-    public native void setResizeMode(ResizeMode resizeMode);
-    public native void setResizeMode(@Cast("nvinfer1::ResizeMode") int resizeMode);
+    public native @NoException(true) void setResizeMode(ResizeMode resizeMode);
+    public native @NoException(true) void setResizeMode(@Cast("nvinfer1::ResizeMode") int resizeMode);
 
     /**
      *  \brief Get resize mode for an input tensor.
@@ -163,7 +165,8 @@ public class IResizeLayer extends ILayer {
     //!
     //!
     //!
-    public native ResizeMode getResizeMode();
+    //!
+    public native @NoException(true) ResizeMode getResizeMode();
 
     /**
      *  \brief Set whether to align corners while resizing.
@@ -173,18 +176,25 @@ public class IResizeLayer extends ILayer {
      *  pixels.
      * 
      *  Default: false.
+     * 
+     *  @deprecated Superseded by IResizeLayer::setCoordinateTransformation() and
+     *  will be removed in TensorRT 10.0.
      *  */
     
     
     //!
     //!
     //!
-    public native void setAlignCorners(@Cast("bool") boolean alignCorners);
+    //!
+    public native @Deprecated @NoException(true) void setAlignCorners(@Cast("bool") boolean alignCorners);
 
     /**
      *  \brief True if align corners has been set.
      * 
      *  @return True if align corners has been set, false otherwise.
+     * 
+     *  @deprecated Superseded by IResizeLayer::getCoordinateTransformation() and
+     *  will be removed in TensorRT 10.0.
      *  */
     
     
@@ -195,13 +205,13 @@ public class IResizeLayer extends ILayer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean getAlignCorners();
+    public native @Cast("bool") @Deprecated @NoException(true) boolean getAlignCorners();
 
     /**
      *  \brief Append or replace an input of this layer with a specific tensor
      * 
      *  @param index the index of the input to modify.
-     *  @param tensor the new input tensor
+     *  @param tensor the new input tensor.
      * 
      *  Sets the input tensor for the given index. The index must be 0 for a static resize layer.
      *  A static resize layer is converted to a dynamic resize layer by calling setInput with an index 1.
@@ -216,5 +226,98 @@ public class IResizeLayer extends ILayer {
      *  If this function is called with a value 1, then the function getNbInputs() changes
      *  from returning 1 to 2.
      *  */
-    public native void setInput(int index, @ByRef ITensor tensor);
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+
+    /**
+     *  \brief Set coordinate transformation function.
+     * 
+     *  We have different functions mapping the coordinate in output tensor to the coordinate in input tensor.
+     * 
+     *  Default is ResizeCoordinateTransformation::kASYMMETRIC.
+     * 
+     *  @see ResizeCoordinateTransformation
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) void setCoordinateTransformation(ResizeCoordinateTransformation coordTransform);
+    public native @NoException(true) void setCoordinateTransformation(@Cast("nvinfer1::ResizeCoordinateTransformation") int coordTransform);
+
+    /**
+     *  \brief Get coordinate transformation function.
+     * 
+     *  @return The coordinate transformation function.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) ResizeCoordinateTransformation getCoordinateTransformation();
+
+    /**
+     *  \brief Set coordinate selector function when resized to single pixel.
+     * 
+     *  When resize to single pixel image, use this function to decide how to map the coordinate in the original
+     *  image.
+     * 
+     *  Default is ResizeSelector::kFORMULA.
+     * 
+     *  @see ResizeSelector
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) void setSelectorForSinglePixel(ResizeSelector selector);
+    public native @NoException(true) void setSelectorForSinglePixel(@Cast("nvinfer1::ResizeSelector") int selector);
+
+    /**
+     *  \brief Get the coordinate selector function when resized to single pixel.
+     * 
+     *  @return The selector function.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) ResizeSelector getSelectorForSinglePixel();
+
+    /**
+     *  \brief Set rounding mode for nearest neighbor resize.
+     * 
+     *  This value is used for nearest neighbor interpolation rounding. It is applied after coordinate transformation.
+     * 
+     *  Default is kFLOOR.
+     * 
+     *  @see ResizeRoundMode
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) void setNearestRounding(ResizeRoundMode value);
+    public native @NoException(true) void setNearestRounding(@Cast("nvinfer1::ResizeRoundMode") int value);
+
+    /**
+     *  \brief Get rounding mode for nearest neighbor resize.
+     * 
+     *  @return The rounding mode.
+     *  */
+    public native @NoException(true) ResizeRoundMode getNearestRounding();
 }

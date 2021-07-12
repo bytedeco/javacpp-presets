@@ -52,8 +52,8 @@ public class DimsHW extends Dims2 {
     /**
      *  \brief Construct a DimsHW given height and width.
      * 
-     *  @param Height the height of the data
-     *  @param Width the width of the data
+     *  @param height the height of the data
+     *  @param width the width of the data
      *  */
     
     

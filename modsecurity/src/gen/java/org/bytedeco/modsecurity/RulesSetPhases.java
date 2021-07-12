@@ -27,7 +27,7 @@ public class RulesSetPhases extends Pointer {
         return (RulesSetPhases)super.position(position);
     }
     @Override public RulesSetPhases getPointer(long i) {
-        return new RulesSetPhases((Pointer)this).position(position + i);
+        return new RulesSetPhases((Pointer)this).offsetAddress(i);
     }
 
     public native void dump();

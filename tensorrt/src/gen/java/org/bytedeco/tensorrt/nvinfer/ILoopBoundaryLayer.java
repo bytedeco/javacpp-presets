@@ -19,12 +19,12 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+@Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ILoopBoundaryLayer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILoopBoundaryLayer(Pointer p) { super(p); }
 
     /** Return pointer to ILoop associated with this boundary layer. */
-    public native @NoException ILoop getLoop();
+    public native @NoException(true) ILoop getLoop();
 }

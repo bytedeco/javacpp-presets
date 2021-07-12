@@ -19,11 +19,13 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
-/** Forward declaration of cudaStream_t. */
-@Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class CUstream_st extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CUstream_st() { super((Pointer)null); }
+@Namespace("nvinfer1::apiv") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class VUnaryLayer extends VRoot {
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CUstream_st(Pointer p) { super(p); }
+    public VUnaryLayer(Pointer p) { super(p); }
+
+    public native @NoException(true) void setOperation(UnaryOperation op);
+    public native @NoException(true) void setOperation(@Cast("nvinfer1::UnaryOperation") int op);
+    public native @NoException(true) UnaryOperation getOperation();
 }
