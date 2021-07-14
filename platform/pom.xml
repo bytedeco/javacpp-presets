@@ -151,7 +151,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.12.0-${project.version}</version>
+      <version>1.12.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -176,7 +176,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.15-${project.version}</version>
+      <version>0.3.16-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -331,7 +331,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>skia-platform</artifactId>
-      <version>2.80.2-${project.version}</version>
+      <version>2.80.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

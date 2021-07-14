@@ -75,7 +75,7 @@ public class Skia implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap
-            .put(new Info("SK_API", "SK_C_API", "VKAPI_CALL", "VKAPI_PTR").cppTypes().annotations())
+            .put(new Info("SK_API", "SK_C_API", "VKAPI_CALL", "VKAPI_PTR", "gr_mtl_handle_t").cppTypes().annotations())
             .put(new Info("SK_C_PLUS_PLUS_BEGIN_GUARD").cppText("#define SK_C_PLUS_PLUS_BEGIN_GUARD"))
             .put(new Info("SK_C_PLUS_PLUS_END_GUARD").cppText("#define SK_C_PLUS_PLUS_END_GUARD"))
             // TODO: There's probably a better way to skip these declarations,

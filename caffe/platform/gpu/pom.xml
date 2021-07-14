@@ -29,12 +29,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.12.0-${project.parent.version}</version>
+      <version>1.12.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.15-${project.parent.version}</version>
+      <version>0.3.16-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
