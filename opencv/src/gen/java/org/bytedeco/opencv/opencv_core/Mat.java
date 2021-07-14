@@ -367,8 +367,8 @@ public class Mat extends AbstractMat {
     public Mat(int rows, int cols, int type, Pointer data, boolean copyData) { super((Pointer)null);
         if (copyData) { allocate(rows, cols, type); data().put(data); } else { allocate(rows, cols, type, data, AUTO_STEP); this.pointer = data; }
     }
-    /** Calls {@link #Mat(int, int, int, Pointer, boolean) Mat(1, (int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), type, data, copyData)}. */
-    public Mat(int type, Pointer data, boolean copyData) { this(1, (int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), type, data, copyData); }
+    /** Calls {@link #Mat(int, int, int, Pointer, boolean) Mat((int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), 1, type, data, copyData)}. */
+    public Mat(int type, Pointer data, boolean copyData) { this((int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), 1, type, data, copyData); }
     /** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32SC2, points, copyData)}. */ public Mat(Point points, boolean copyData) { this(CV_32SC2, points, copyData); }
     /** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32FC2, points, copyData)}. */ public Mat(Point2f points, boolean copyData) { this(CV_32FC2, points, copyData); }
     /** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_64FC2, points, copyData)}. */ public Mat(Point2d points, boolean copyData) { this(CV_64FC2, points, copyData); }
@@ -387,11 +387,11 @@ public class Mat extends AbstractMat {
     /** Calls {@link #Mat(Scalar4i, boolean) Mat(scalar, false)}. */ public Mat(Scalar4i scalar) { this(scalar, false); }
     public Mat(byte ... b) { this(b, false); }
     public Mat(short ... s) { this(s, false); }
-    public Mat(byte[] b, boolean signed) { this(1, b.length, signed ? CV_8SC1 : CV_8UC1); data().put(b); }
-    public Mat(short[] s, boolean signed) { this(1, s.length, signed ? CV_16SC1 : CV_16UC1); new ShortPointer(data()).put(s); }
-    public Mat(int ... n) { this(1, n.length, CV_32SC1); new IntPointer(data()).put(n); }
-    public Mat(double ... d) { this(1, d.length, CV_64FC1); new DoublePointer(data()).put(d); }
-    public Mat(float ... f) { this(1, f.length, CV_32FC1); new FloatPointer(data()).put(f); }
+    public Mat(byte[] b, boolean signed) { this(b.length, 1, signed ? CV_8SC1 : CV_8UC1); data().put(b); }
+    public Mat(short[] s, boolean signed) { this(s.length, 1, signed ? CV_16SC1 : CV_16UC1); new ShortPointer(data()).put(s); }
+    public Mat(int ... n) { this(n.length, 1, CV_32SC1); new IntPointer(data()).put(n); }
+    public Mat(double ... d) { this(d.length, 1, CV_64FC1); new DoublePointer(data()).put(d); }
+    public Mat(float ... f) { this(f.length, 1, CV_32FC1); new FloatPointer(data()).put(f); }
     /** Calls {@link #Mat(BytePointer, boolean) Mat(p, false)}. */   public Mat(BytePointer p) { this(p, false); }
     /** Calls {@link #Mat(ShortPointer, boolean) Mat(p, false)}. */  public Mat(ShortPointer p) { this(p, false); }
     /** Calls {@link #Mat(BytePointer, boolean, boolean) Mat(p, signed, false)}. */  public Mat(BytePointer p, boolean signed) { this(p, signed, false); }
