@@ -131,8 +131,9 @@ public static final int
     X_LINK_USB_CDC = 1,
     X_LINK_PCIE = 2,
     X_LINK_IPC = 3,
-    X_LINK_NMB_OF_PROTOCOLS = 4,
-    X_LINK_ANY_PROTOCOL = 5;
+    X_LINK_TCP_IP = 4,
+    X_LINK_NMB_OF_PROTOCOLS = 5,
+    X_LINK_ANY_PROTOCOL = 6;
 
 /** enum XLinkPlatform_t */
 public static final int
@@ -172,8 +173,6 @@ public static final int MAX_STREAM_NAME_LENGTH = 64;
 // Targeting ../XLinkHandler_t.java
 
 
-
-public static native @Cast("const char*") BytePointer XLinkErrorToStr(@Cast("XLinkError_t") int rc);
 
 //Deprecated defines. Begin.
 
@@ -2203,6 +2202,70 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
   // namespace dai
 
 
+// Parsed from depthai-bootloader-shared/Memory.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+
+@Namespace("dai::bootloader") public enum Memory {
+    FLASH(0), EMMC(1);
+
+    public final int value;
+    private Memory(int v) { this.value = v; }
+    private Memory(Memory e) { this.value = e.value; }
+    public Memory intern() { for (Memory e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+ // namespace bootloader
+ // namespace dai
+
+
+// Parsed from depthai-bootloader-shared/Section.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+
+@Namespace("dai::bootloader") public enum Section {
+    HEADER(0), BOOTLOADER(1), BOOTLOADER_CONFIG(2), APPLICATION(3);
+
+    public final int value;
+    private Section(int v) { this.value = v; }
+    private Section(Section e) { this.value = e.value; }
+    public Section intern() { for (Section e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+ // namespace bootloader
+ // namespace dai
+
+
+
+// Parsed from depthai-bootloader-shared/Type.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+
+@Namespace("dai::bootloader") public enum Type {
+    USB(0), NETWORK(1);
+
+    public final int value;
+    private Type(int v) { this.value = v; }
+    private Type(Type e) { this.value = e.value; }
+    public Type intern() { for (Type e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+ // namespace bootloader
+ // namespace dai
+
+
 // Parsed from depthai/device/DataQueue.hpp
 
 // #pragma once
@@ -2325,6 +2388,11 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // libraries
 // #include "nanorpc/core/client.h"
 // #include "nanorpc/packer/nlohmann_msgpack.h"
+
+// shared
+// #include "depthai-bootloader-shared/Memory.hpp"
+// #include "depthai-bootloader-shared/Section.hpp"
+// #include "depthai-bootloader-shared/Type.hpp"
 // Targeting ../DeviceBootloader.java
 
 

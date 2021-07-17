@@ -28,6 +28,8 @@ public class DeviceBootloader extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeviceBootloader(Pointer p) { super(p); }
 
+    // Alias
+
     /** Bootloader version structure */
     @NoOffset public static class Version extends Pointer {
         static { Loader.load(); }
@@ -43,11 +45,19 @@ public class DeviceBootloader extends Pointer {
         public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch) { super((Pointer)null); allocate(major, minor, patch); }
         private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch);
         public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Version other);
-        public native @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef Version other);
         public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Version other);
+        public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Version rhs);
+        public native @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef Version rhs);
+        public native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef Version rhs);
+        public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef Version rhs);
         /** Convert Version to string */
         public native @StdString String toString();
     }
+
+    // constants
+
+    /** Default Bootloader type */
+    @MemberGetter public static native Type DEFAULT_TYPE();
 
     // Static API
     /**
@@ -91,8 +101,9 @@ public class DeviceBootloader extends Pointer {
     /**
      * @return Embedded bootloader binary
      */
+    public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedBootloaderBinary(Type type/*=dai::DeviceBootloader::DEFAULT_TYPE*/);
     public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedBootloaderBinary();
-    //
+    public static native @Cast("std::uint8_t*") @StdVector ByteBuffer getEmbeddedBootloaderBinary(@Cast("dai::bootloader::Type") int type/*=dai::DeviceBootloader::DEFAULT_TYPE*/);
 
     
 
@@ -102,6 +113,17 @@ public class DeviceBootloader extends Pointer {
      */
     public DeviceBootloader(@Const @ByRef DeviceInfo devInfo) { super((Pointer)null); allocate(devInfo); }
     private native void allocate(@Const @ByRef DeviceInfo devInfo);
+
+    /**
+     * Connects to device in bootloader of specified type. Throws if it wasn't possible.
+     * This constructor will automatically boot into specified bootloader type if not already running
+     * @param devInfo DeviceInfo of which to boot or connect to
+     * @param type Type of bootloader to boot/connect to.
+     */
+    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, Type type) { super((Pointer)null); allocate(devInfo, type); }
+    private native void allocate(@Const @ByRef DeviceInfo devInfo, Type type);
+    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @Cast("dai::bootloader::Type") int type) { super((Pointer)null); allocate(devInfo, type); }
+    private native void allocate(@Const @ByRef DeviceInfo devInfo, @Cast("dai::bootloader::Type") int type);
 
     /**
      * Connects to or boots device in bootloader mode depending on devInfo state with a custom bootloader firmware.
@@ -141,6 +163,27 @@ public class DeviceBootloader extends Pointer {
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback, @StdString BytePointer path/*=""*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback, @StdString String path/*=""*/);
+
+    /**
+     * Flash selected bootloader to the current board
+     * @param memory Memory to flash
+     * @param type Bootloader type to flash
+     * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
+     * @param path Optional parameter to custom bootloader to flash
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(Memory memory, Type type, ProgressCallback progressCallback, @StdString BytePointer path/*=""*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(Memory memory, Type type, ProgressCallback progressCallback);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback, @StdString String path/*=""*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback);
+
+    /**
+     * Flash arbitrary data at custom offset in specified memory
+     * @param memory Memory to flash
+     * @param offset Offset at which to flash the given data in bytes
+     * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
+     * @param data Data to flash
+     */
+    // std::tuple<bool, std::string> flashCustom(Memory memory, uint32_t offset, std::function<void(float)> progressCb, std::vector<uint8_t> data);
 
     /**
      * @return Version of current running bootloader

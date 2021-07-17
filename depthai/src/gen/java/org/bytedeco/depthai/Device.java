@@ -434,6 +434,13 @@ public class Device extends Pointer {
     public native @StdString BytePointer getQueueEvent();
 
     /**
+     * Get MxId of device
+     *
+     * @return MxId of connected device
+     */
+    public native @StdString BytePointer getMxId();
+
+    /**
      * Get cameras that are connected to the device
      *
      * @return Vector of connected cameras
