@@ -1,6 +1,6 @@
-diff -ruN depthai-core-v2.6.0/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp depthai-core-v2.6.0-patch/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp
---- depthai-core-v2.6.0/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp	2021-07-06 10:50:00.256344000 +0900
-+++ depthai-core-v2.6.0-patch/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp	2021-07-06 18:09:06.646174717 +0900
+diff -ruN depthai-core-v2.7.1/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp depthai-core-v2.7.1-patch/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp
+--- depthai-core-v2.7.1/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp	2021-07-16 18:16:15.271179700 +0900
++++ depthai-core-v2.7.1-patch/shared/depthai-shared/include/depthai-shared/common/CameraBoardSocket.hpp	2021-07-17 08:57:31.735985075 +0900
 @@ -11,3 +11,14 @@
  enum class CameraBoardSocket : int32_t { AUTO = -1, RGB, LEFT, RIGHT };
  
@@ -16,9 +16,9 @@ diff -ruN depthai-core-v2.6.0/shared/depthai-shared/include/depthai-shared/commo
 +    }
 +};
 +}  // namespace std
-diff -ruN depthai-core-v2.6.0/shared/depthai-shared/src/datatype/DatatypeEnum.cpp depthai-core-v2.6.0-patch/shared/depthai-shared/src/datatype/DatatypeEnum.cpp
---- depthai-core-v2.6.0/shared/depthai-shared/src/datatype/DatatypeEnum.cpp	2021-07-06 10:50:00.256344000 +0900
-+++ depthai-core-v2.6.0-patch/shared/depthai-shared/src/datatype/DatatypeEnum.cpp	2021-07-06 17:30:10.508654175 +0900
+diff -ruN depthai-core-v2.7.1/shared/depthai-shared/src/datatype/DatatypeEnum.cpp depthai-core-v2.7.1-patch/shared/depthai-shared/src/datatype/DatatypeEnum.cpp
+--- depthai-core-v2.7.1/shared/depthai-shared/src/datatype/DatatypeEnum.cpp	2021-07-16 18:16:15.271179700 +0900
++++ depthai-core-v2.7.1-patch/shared/depthai-shared/src/datatype/DatatypeEnum.cpp	2021-07-17 08:57:31.742985090 +0900
 @@ -5,6 +5,19 @@
  #include <unordered_map>
  #include <vector>
@@ -39,9 +39,9 @@ diff -ruN depthai-core-v2.6.0/shared/depthai-shared/src/datatype/DatatypeEnum.cp
  namespace dai {
  
  const std::unordered_map<DatatypeEnum, std::vector<DatatypeEnum>> hierarchy = {{DatatypeEnum::Buffer,
-diff -ruN depthai-core-v2.6.0/src/device/CalibrationHandler.cpp depthai-core-v2.6.0-patch/src/device/CalibrationHandler.cpp
---- depthai-core-v2.6.0/src/device/CalibrationHandler.cpp	2021-07-06 10:49:59.228342000 +0900
-+++ depthai-core-v2.6.0-patch/src/device/CalibrationHandler.cpp	2021-07-06 17:29:45.178507041 +0900
+diff -ruN depthai-core-v2.7.1/src/device/CalibrationHandler.cpp depthai-core-v2.7.1-patch/src/device/CalibrationHandler.cpp
+--- depthai-core-v2.7.1/src/device/CalibrationHandler.cpp	2021-07-16 18:16:14.555166000 +0900
++++ depthai-core-v2.7.1-patch/src/device/CalibrationHandler.cpp	2021-07-17 08:57:31.743985092 +0900
 @@ -236,7 +236,7 @@
      if(eepromData.cameraData[cameraId].intrinsicMatrix.size() == 0 || eepromData.cameraData[cameraId].intrinsicMatrix[0][0] == 0)
          throw std::runtime_error("There is no Intrinsic matrix available for the the requested cameraID");
@@ -51,10 +51,10 @@ diff -ruN depthai-core-v2.6.0/src/device/CalibrationHandler.cpp depthai-core-v2.
  }
  
  std::vector<float> CalibrationHandler::getDistortionCoefficients(CameraBoardSocket cameraId) {
-diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.0-patch/src/device/DeviceBootloader.cpp
---- depthai-core-v2.6.0/src/device/DeviceBootloader.cpp	2021-07-06 10:49:59.228342000 +0900
-+++ depthai-core-v2.6.0-patch/src/device/DeviceBootloader.cpp	2021-07-06 17:29:45.179507046 +0900
-@@ -38,7 +38,7 @@
+diff -ruN depthai-core-v2.7.1/src/device/DeviceBootloader.cpp depthai-core-v2.7.1-patch/src/device/DeviceBootloader.cpp
+--- depthai-core-v2.7.1/src/device/DeviceBootloader.cpp	2021-07-16 18:16:14.559166200 +0900
++++ depthai-core-v2.7.1-patch/src/device/DeviceBootloader.cpp	2021-07-17 08:58:25.872101396 +0900
+@@ -41,7 +41,7 @@
      if(!found) {
          std::tie(found, dev) = XLinkConnection::getFirstDevice(X_LINK_BOOTLOADER);
      }
@@ -63,7 +63,7 @@ diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.
  }
  
  // Returns all devices which aren't already booted
-@@ -286,7 +286,7 @@
+@@ -403,7 +403,7 @@
      updateFlash.storage = dai::bootloader::request::UpdateFlash::SBR;
      updateFlash.totalSize = static_cast<uint32_t>(package.size());
      updateFlash.numPackets = ((static_cast<uint32_t>(package.size()) - 1) / bootloader::XLINK_STREAM_MAX_SIZE) + 1;
@@ -72,7 +72,7 @@ diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.
  
      // After that send numPackets of data
      stream->writeSplit(package.data(), package.size(), bootloader::XLINK_STREAM_MAX_SIZE);
-@@ -296,7 +296,7 @@
+@@ -413,7 +413,7 @@
      dai::bootloader::response::FlashComplete result;
      do {
          std::vector<uint8_t> data;
@@ -81,7 +81,7 @@ diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.
  
          dai::bootloader::response::FlashStatusUpdate update;
          if(parseBootloaderResponse(data, update)) {
-@@ -308,13 +308,13 @@
+@@ -425,13 +425,13 @@
              break;
          } else {
              // Unknown response, shouldn't happen
@@ -97,16 +97,25 @@ diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.
  }
  
  std::tuple<bool, std::string> DeviceBootloader::flashBootloader(std::function<void(float)> progressCb, std::string path) {
-@@ -335,7 +335,7 @@
-     updateFlash.storage = dai::bootloader::request::UpdateFlash::BOOTLOADER;
-     updateFlash.totalSize = static_cast<uint32_t>(package.size());
-     updateFlash.numPackets = ((static_cast<uint32_t>(package.size()) - 1) / bootloader::XLINK_STREAM_MAX_SIZE) + 1;
--    if(!sendBootloaderRequest(streamId, updateFlash)) return {false, "Couldn't send bootloader flash request"};
-+    if(!sendBootloaderRequest(streamId, updateFlash)) return std::tuple<bool, std::string>{false, "Couldn't send bootloader flash request"};
+@@ -469,7 +469,7 @@
+         updateFlash.storage = dai::bootloader::request::UpdateFlash::BOOTLOADER;
+         updateFlash.totalSize = static_cast<uint32_t>(package.size());
+         updateFlash.numPackets = ((static_cast<uint32_t>(package.size()) - 1) / bootloader::XLINK_STREAM_MAX_SIZE) + 1;
+-        if(!sendBootloaderRequest(streamId, updateFlash)) return {false, "Couldn't send bootloader flash request"};
++        if(!sendBootloaderRequest(streamId, updateFlash)) return std::tuple<bool, std::string>{false, "Couldn't send bootloader flash request"};
+ 
+     } else {
+         // send request to FLASH BOOTLOADER
+@@ -478,7 +478,7 @@
+         updateFlashEx2.offset = dai::bootloader::getStructure(type).offset.at(Section::BOOTLOADER);
+         updateFlashEx2.totalSize = static_cast<uint32_t>(package.size());
+         updateFlashEx2.numPackets = ((static_cast<uint32_t>(package.size()) - 1) / bootloader::XLINK_STREAM_MAX_SIZE) + 1;
+-        if(!sendBootloaderRequest(streamId, updateFlashEx2)) return {false, "Couldn't send bootloader flash request"};
++        if(!sendBootloaderRequest(streamId, updateFlashEx2)) return std::tuple<bool, std::string>{false, "Couldn't send bootloader flash request"};
+     }
  
      // After that send numPackets of data
-     stream->writeSplit(package.data(), package.size(), bootloader::XLINK_STREAM_MAX_SIZE);
-@@ -345,7 +345,7 @@
+@@ -489,7 +489,7 @@
      dai::bootloader::response::FlashComplete result;
      do {
          std::vector<uint8_t> data;
@@ -115,7 +124,7 @@ diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.
  
          dai::bootloader::response::FlashStatusUpdate update;
          if(parseBootloaderResponse(data, update)) {
-@@ -358,13 +358,13 @@
+@@ -502,13 +502,13 @@
              break;
          } else {
              // Unknown response, shouldn't happen
@@ -130,11 +139,11 @@ diff -ruN depthai-core-v2.6.0/src/device/DeviceBootloader.cpp depthai-core-v2.6.
 +    return std::tuple<bool, std::string>{result.success, result.errorMsg};
  }
  
- bool DeviceBootloader::isEmbeddedVersion() {
-diff -ruN depthai-core-v2.6.0/src/device/Device.cpp depthai-core-v2.6.0-patch/src/device/Device.cpp
---- depthai-core-v2.6.0/src/device/Device.cpp	2021-07-06 10:49:59.228342000 +0900
-+++ depthai-core-v2.6.0-patch/src/device/Device.cpp	2021-07-06 17:29:45.180507052 +0900
-@@ -114,7 +114,7 @@
+ /* TODO(themarpe)
+diff -ruN depthai-core-v2.7.1/src/device/Device.cpp depthai-core-v2.7.1-patch/src/device/Device.cpp
+--- depthai-core-v2.7.1/src/device/Device.cpp	2021-07-16 18:16:14.559166200 +0900
++++ depthai-core-v2.7.1-patch/src/device/Device.cpp	2021-07-17 08:57:31.745985097 +0900
+@@ -116,7 +116,7 @@
      // If none were found, try BOOTED
      if(!found) std::tie(found, deviceInfo) = XLinkConnection::getFirstDevice(X_LINK_BOOTED);
  
@@ -143,7 +152,7 @@ diff -ruN depthai-core-v2.6.0/src/device/Device.cpp depthai-core-v2.6.0-patch/sr
  }
  
  // Default overload ('DEFAULT_SEARCH_TIME' timeout)
-@@ -132,7 +132,7 @@
+@@ -134,7 +134,7 @@
      if(!found) {
          std::tie(found, dev) = XLinkConnection::getFirstDevice(X_LINK_BOOTLOADER);
      }
@@ -152,7 +161,7 @@ diff -ruN depthai-core-v2.6.0/src/device/Device.cpp depthai-core-v2.6.0-patch/sr
  }
  
  // Returns all devices which aren't already booted
-@@ -153,9 +153,9 @@
+@@ -155,9 +155,9 @@
      DeviceInfo dev;
      for(const auto& state : states) {
          std::tie(found, dev) = XLinkConnection::getDeviceByMxId(mxId, state);
@@ -164,9 +173,9 @@ diff -ruN depthai-core-v2.6.0/src/device/Device.cpp depthai-core-v2.6.0-patch/sr
  }
  
  std::vector<std::uint8_t> Device::getEmbeddedDeviceBinary(bool usb2Mode, OpenVINO::Version version) {
-diff -ruN depthai-core-v2.6.0/src/pipeline/node/ColorCamera.cpp depthai-core-v2.6.0-patch/src/pipeline/node/ColorCamera.cpp
---- depthai-core-v2.6.0/src/pipeline/node/ColorCamera.cpp	2021-07-06 10:49:59.232342200 +0900
-+++ depthai-core-v2.6.0-patch/src/pipeline/node/ColorCamera.cpp	2021-07-06 17:29:45.180507052 +0900
+diff -ruN depthai-core-v2.7.1/src/pipeline/node/ColorCamera.cpp depthai-core-v2.7.1-patch/src/pipeline/node/ColorCamera.cpp
+--- depthai-core-v2.7.1/src/pipeline/node/ColorCamera.cpp	2021-07-16 18:16:14.559166200 +0900
++++ depthai-core-v2.7.1-patch/src/pipeline/node/ColorCamera.cpp	2021-07-17 08:57:31.746985099 +0900
 @@ -190,7 +190,7 @@
  
  // Returns preview size
@@ -248,9 +257,9 @@ diff -ruN depthai-core-v2.6.0/src/pipeline/node/ColorCamera.cpp depthai-core-v2.
  }
  
  float ColorCamera::getSensorCropX() const {
-diff -ruN depthai-core-v2.6.0/src/pipeline/node/MonoCamera.cpp depthai-core-v2.6.0-patch/src/pipeline/node/MonoCamera.cpp
---- depthai-core-v2.6.0/src/pipeline/node/MonoCamera.cpp	2021-07-06 10:49:59.232342200 +0900
-+++ depthai-core-v2.6.0-patch/src/pipeline/node/MonoCamera.cpp	2021-07-06 17:29:45.181507058 +0900
+diff -ruN depthai-core-v2.7.1/src/pipeline/node/MonoCamera.cpp depthai-core-v2.7.1-patch/src/pipeline/node/MonoCamera.cpp
+--- depthai-core-v2.7.1/src/pipeline/node/MonoCamera.cpp	2021-07-16 18:16:14.559166200 +0900
++++ depthai-core-v2.7.1-patch/src/pipeline/node/MonoCamera.cpp	2021-07-17 08:57:31.746985099 +0900
 @@ -105,18 +105,18 @@
  std::tuple<int, int> MonoCamera::getResolutionSize() const {
      switch(properties.resolution) {
@@ -274,9 +283,9 @@ diff -ruN depthai-core-v2.6.0/src/pipeline/node/MonoCamera.cpp depthai-core-v2.6
  }
  
  int MonoCamera::getResolutionWidth() const {
-diff -ruN depthai-core-v2.6.0/src/pipeline/node/VideoEncoder.cpp depthai-core-v2.6.0-patch/src/pipeline/node/VideoEncoder.cpp
---- depthai-core-v2.6.0/src/pipeline/node/VideoEncoder.cpp	2021-07-06 10:49:59.232342200 +0900
-+++ depthai-core-v2.6.0-patch/src/pipeline/node/VideoEncoder.cpp	2021-07-06 17:29:45.181507058 +0900
+diff -ruN depthai-core-v2.7.1/src/pipeline/node/VideoEncoder.cpp depthai-core-v2.7.1-patch/src/pipeline/node/VideoEncoder.cpp
+--- depthai-core-v2.7.1/src/pipeline/node/VideoEncoder.cpp	2021-07-16 18:16:14.559166200 +0900
++++ depthai-core-v2.7.1-patch/src/pipeline/node/VideoEncoder.cpp	2021-07-17 08:57:31.747985101 +0900
 @@ -134,7 +134,7 @@
  }
  
@@ -286,9 +295,9 @@ diff -ruN depthai-core-v2.6.0/src/pipeline/node/VideoEncoder.cpp depthai-core-v2
  }
  
  int VideoEncoder::getWidth() const {
-diff -ruN depthai-core-v2.6.0/src/xlink/XLinkConnection.cpp depthai-core-v2.6.0-patch/src/xlink/XLinkConnection.cpp
---- depthai-core-v2.6.0/src/xlink/XLinkConnection.cpp	2021-07-06 10:49:59.232342200 +0900
-+++ depthai-core-v2.6.0-patch/src/xlink/XLinkConnection.cpp	2021-07-06 17:29:45.182507064 +0900
+diff -ruN depthai-core-v2.7.1/src/xlink/XLinkConnection.cpp depthai-core-v2.7.1-patch/src/xlink/XLinkConnection.cpp
+--- depthai-core-v2.7.1/src/xlink/XLinkConnection.cpp	2021-07-16 18:16:14.559166200 +0900
++++ depthai-core-v2.7.1-patch/src/xlink/XLinkConnection.cpp	2021-07-17 08:57:31.748985103 +0900
 @@ -106,9 +106,9 @@
  std::tuple<bool, DeviceInfo> XLinkConnection::getFirstDevice(XLinkDeviceState_t state) {
      auto devices = getAllConnectedDevices();
