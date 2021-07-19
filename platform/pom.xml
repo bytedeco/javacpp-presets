@@ -176,7 +176,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.16-${project.version}</version>
+      <version>0.3.17-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -206,7 +206,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.21.0-${project.version}</version>
+      <version>1.21.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
