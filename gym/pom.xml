@@ -64,7 +64,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.16-${project.parent.version}</version>
+            <version>0.3.17-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -79,7 +79,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy</artifactId>
-            <version>1.21.0-${project.parent.version}</version>
+            <version>1.21.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -89,7 +89,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.16-${project.parent.version}</version>
+            <version>0.3.17-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
@@ -101,7 +101,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy</artifactId>
-            <version>1.21.0-${project.parent.version}</version>
+            <version>1.21.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
