@@ -26,6 +26,10 @@ public class ColorCamera extends Node {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorCamera(Pointer p) { super(p); }
 
+    public native @StdString @Override BytePointer getName();
+
+    public native int getScaledSize(int input, int num, int denom);
+
     /**
      * Constructs ColorCamera node.
      */

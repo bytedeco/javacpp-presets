@@ -26,6 +26,8 @@ public class ImageManip extends Node {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageManip(Pointer p) { super(p); }
 
+    public native @StdString @Override BytePointer getName();
+
     public ImageManip(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
 

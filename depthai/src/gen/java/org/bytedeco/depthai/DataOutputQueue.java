@@ -38,6 +38,16 @@ public class DataOutputQueue extends Pointer {
     private native void allocate(@SharedPtr XLinkConnection conn, @StdString String streamName);
 
     /**
+     * Check whether queue is closed
+     */
+    public native @Cast("bool") boolean isClosed();
+
+    /**
+     * Closes the queue and the underlying thread
+     */
+    public native @Name("close") void _close();
+
+    /**
      * Sets queue behavior when full (maxSize)
      *
      * @param blocking Specifies if block or overwrite the oldest message in the queue

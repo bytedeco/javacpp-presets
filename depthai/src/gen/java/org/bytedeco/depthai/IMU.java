@@ -26,6 +26,8 @@ public class IMU extends Node {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMU(Pointer p) { super(p); }
 
+    public native @StdString @Override BytePointer getName();
+
     /**
      * Constructs IMU node.
      */

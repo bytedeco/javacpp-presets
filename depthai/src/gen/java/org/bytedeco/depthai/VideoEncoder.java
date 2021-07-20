@@ -26,6 +26,8 @@ public class VideoEncoder extends Node {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoEncoder(Pointer p) { super(p); }
 
+    public native @StdString @Override BytePointer getName();
+
     public VideoEncoder(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
 

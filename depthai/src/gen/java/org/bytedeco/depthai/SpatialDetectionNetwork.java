@@ -28,8 +28,9 @@ public class SpatialDetectionNetwork extends DetectionNetwork {
 
 
     public native @StdString @Override BytePointer getName();
-    public native @StdVector @Override Input getInputs();
-    public native @StdVector @Override Output getOutputs();
+    public SpatialDetectionNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+
     /**
      * Input message with data to be infered upon
      * Default queue is blocking with size 5

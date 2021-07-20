@@ -26,6 +26,8 @@ public class StereoDepth extends Node {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoDepth(Pointer p) { super(p); }
 
+    public native @StdString @Override BytePointer getName();
+
     public StereoDepth(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
 
