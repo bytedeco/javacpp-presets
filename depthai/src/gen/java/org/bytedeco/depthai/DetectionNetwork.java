@@ -28,8 +28,6 @@ public class DetectionNetwork extends NeuralNetwork {
 
 
     public native @StdString @Override BytePointer getName();
-    public native @StdVector @Override Output getOutputs();
-    public native @StdVector @Override Input getInputs();
     /**
      * Input message with data to be infered upon
      * Default queue is blocking with size 5

@@ -28,8 +28,6 @@ public class NeuralNetwork extends Node {
 
 
     public native @StdString @Override BytePointer getName();
-    public native @StdVector @Override Output getOutputs();
-    public native @StdVector @Override Input getInputs();
     public NeuralNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
 

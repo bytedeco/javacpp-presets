@@ -36,6 +36,16 @@ public class DataInputQueue extends Pointer {
     private native void allocate(@SharedPtr XLinkConnection conn, @StdString String streamName);
 
     /**
+     * Check whether queue is closed
+     */
+    public native @Cast("bool") boolean isClosed();
+
+    /**
+     * Closes the queue and the underlying thread
+     */
+    public native @Name("close") void _close();
+
+    /**
      * Sets maximum message size. If message is larger than specified, then an exception is issued.
      *
      * @param maxSize Maximum message size to add to queue

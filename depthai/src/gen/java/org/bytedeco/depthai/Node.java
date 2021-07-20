@@ -28,6 +28,11 @@ public class Node extends Pointer {
 
     /** Node identificator. Unique for every node on a single Pipeline */
 
+    // fwd declare classes
+
+    @MemberGetter public native @Cast("dai::Node::Output**") @StdVector PointerPointer outputs();
+    @MemberGetter public native @Cast("dai::Node::Input**") @StdVector PointerPointer inputs();
+
     @NoOffset public static class DatatypeHierarchy extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -40,8 +45,6 @@ public class Node extends Pointer {
         @MemberGetter public native DatatypeEnum datatype();
         @MemberGetter public native @Cast("bool") boolean descendants();
     }
-
-    // fwd declare Input class
 
     @NoOffset public static class Output extends Pointer {
         static { Loader.load(); }
@@ -56,7 +59,6 @@ public class Node extends Pointer {
             public Type intern() { for (Type e : values()) if (e.value == value) return e; return this; }
             @Override public String toString() { return intern().name(); }
         }
-        @MemberGetter public native @ByRef Node parent();
         @MemberGetter public native @StdString BytePointer name();
         @MemberGetter public native Type type();
         // Which types and do descendants count as well?
@@ -66,6 +68,9 @@ public class Node extends Pointer {
         public Output(@ByRef Node par, @StdString String n, @Cast("dai::Node::Output::Type") int t, @StdVector DatatypeHierarchy types) { super((Pointer)null); allocate(par, n, t, types); }
         private native void allocate(@ByRef Node par, @StdString String n, @Cast("dai::Node::Output::Type") int t, @StdVector DatatypeHierarchy types);
         public native @Cast("bool") boolean isSamePipeline(@Const @ByRef Input in);
+
+        public native @ByRef Node getParent();
+
         /**
          * Check if connection is possible
          * @param in Input to connect to
@@ -112,7 +117,6 @@ public class Node extends Pointer {
             public Type intern() { for (Type e : values()) if (e.value == value) return e; return this; }
             @Override public String toString() { return intern().name(); }
         }
-        @MemberGetter public native @ByRef Node parent();
         @MemberGetter public native @StdString BytePointer name();
         @MemberGetter public native Type type();
         @MemberGetter public native @Cast("bool") boolean defaultBlocking();
@@ -132,6 +136,9 @@ public class Node extends Pointer {
         private native void allocate(@ByRef Node par, @StdString BytePointer n, Type t, @Cast("bool") boolean blocking, int queueSize, @StdVector DatatypeHierarchy types);
         public Input(@ByRef Node par, @StdString String n, @Cast("dai::Node::Input::Type") int t, @Cast("bool") boolean blocking, int queueSize, @StdVector DatatypeHierarchy types) { super((Pointer)null); allocate(par, n, t, blocking, queueSize, types); }
         private native void allocate(@ByRef Node par, @StdString String n, @Cast("dai::Node::Input::Type") int t, @Cast("bool") boolean blocking, int queueSize, @StdVector DatatypeHierarchy types);
+
+        public native @ByRef Node getParent();
+
         /**
          * Overrides default input queue behavior.
          * @param blocking True blocking, false overwriting
@@ -178,6 +185,13 @@ public class Node extends Pointer {
     public native @StdVector Input getInputs();
     /** Retrieves all nodes assets */
     public native @ByVal AssetVector getAssets();
+
+    /** Retrieves reference to node outputs */
+    public native @Cast("dai::Node::Output**") @StdVector PointerPointer getOutputRefs();
+    /** Retrieves reference to node outputs */
+    /** Retrieves reference to node inputs */
+    public native @Cast("dai::Node::Input**") @StdVector PointerPointer getInputRefs();
+    /** Retrieves reference to node inputs */
 
     /** Connection between an Input and Output */
     @NoOffset public static class Connection extends Pointer {
