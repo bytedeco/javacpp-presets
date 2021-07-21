@@ -74,7 +74,12 @@
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_intel_lp64.lib</exclude>
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_intel_thread.lib</exclude>
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_sequential.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_sycl.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_sycld.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_pgi_thread.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_pgi_threadd.lib</exclude>
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_tbb_thread.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_tbb_threadd.lib</exclude>
               </excludes>
             </configuration>
           </execution>
