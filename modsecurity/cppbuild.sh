@@ -30,6 +30,7 @@ case $PLATFORM in
         ;;
     macosx-x86_64)
         sh build.sh
+        sedinplace 's/\\\$rpath/@rpath/g' configure
         ./configure --prefix=$INSTALL_PATH
         make
         make install
