@@ -35,16 +35,16 @@ public class IMUReport extends Pointer {
         return new IMUReport((Pointer)this).offsetAddress(i);
     }
 
-    public enum IMUReportAccuracy {
+    public enum Accuracy {
         UNRELIABLE((byte)(0)),
         LOW((byte)(1)),
         MEDIUM((byte)(2)),
         HIGH((byte)(3));
 
         public final byte value;
-        private IMUReportAccuracy(byte v) { this.value = v; }
-        private IMUReportAccuracy(IMUReportAccuracy e) { this.value = e.value; }
-        public IMUReportAccuracy intern() { for (IMUReportAccuracy e : values()) if (e.value == value) return e; return this; }
+        private Accuracy(byte v) { this.value = v; }
+        private Accuracy(Accuracy e) { this.value = e.value; }
+        public Accuracy intern() { for (Accuracy e : values()) if (e.value == value) return e; return this; }
         @Override public String toString() { return intern().name(); }
     }
     /**
@@ -55,7 +55,7 @@ public class IMUReport extends Pointer {
     public native int sequence(); public native IMUReport sequence(int setter);
 
     /** Accuracy of sensor */
-    public native @Name("accuracy") IMUReportAccuracy reportAccuracy(); public native IMUReport reportAccuracy(IMUReportAccuracy setter);
+    public native @Name("accuracy") Accuracy reportAccuracy(); public native IMUReport reportAccuracy(Accuracy setter);
 
     public native @ByRef Timestamp timestamp(); public native IMUReport timestamp(Timestamp setter);
 }

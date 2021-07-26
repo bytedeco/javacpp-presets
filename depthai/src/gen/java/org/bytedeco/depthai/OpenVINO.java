@@ -38,7 +38,7 @@ public class OpenVINO extends Pointer {
 
     /** OpenVINO Version supported version information */
     /** enum dai::OpenVINO::Version */
-    public static final int VERSION_2020_1 = 0, VERSION_2020_2 = 1, VERSION_2020_3 = 2, VERSION_2020_4 = 3, VERSION_2021_1 = 4, VERSION_2021_2 = 5, VERSION_2021_3 = 6;
+    public static final int VERSION_2020_3 = 0, VERSION_2020_4 = 1, VERSION_2021_1 = 2, VERSION_2021_2 = 3, VERSION_2021_3 = 4, VERSION_2021_4 = 5;
 
     /**
      * @return Supported versions

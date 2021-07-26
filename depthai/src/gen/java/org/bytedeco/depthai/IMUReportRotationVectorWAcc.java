@@ -49,5 +49,5 @@ public class IMUReportRotationVectorWAcc extends IMUReport {
     /** \brief Quaternion component, real */
     public native float real(); public native IMUReportRotationVectorWAcc real(float setter);
     /** \brief Accuracy estimate [radians], 0 means no estimate */
-    public native float accuracy(); public native IMUReportRotationVectorWAcc accuracy(float setter);
+    public native float rotationVectorAccuracy(); public native IMUReportRotationVectorWAcc rotationVectorAccuracy(float setter);
 }

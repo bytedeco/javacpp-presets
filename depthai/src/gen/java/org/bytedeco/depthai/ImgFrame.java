@@ -48,32 +48,38 @@ public class ImgFrame extends Buffer {
 
     // getters
     /**
-     * Retrievies image timestamp related to steady_clock / time.monotonic
+     * Retrieves image timestamp related to steady_clock / time.monotonic
      */
     public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestamp();
 
     /**
-     * Retrievies instance number
+     * Retrieves image timestamp directly captured from device's monotonic clock,
+     * not synchronized to host time. Used mostly for debugging
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestampDevice();
+
+    /**
+     * Retrieves instance number
      */
     public native @Cast("unsigned int") int getInstanceNum();
 
     /**
-     * Retrievies image category
+     * Retrieves image category
      */
     public native @Cast("unsigned int") int getCategory();
 
     /**
-     * Retrievies image sequence number
+     * Retrieves image sequence number
      */
     public native @Cast("unsigned int") int getSequenceNum();
 
     /**
-     * Retrievies image width in pixels
+     * Retrieves image width in pixels
      */
     public native @Cast("unsigned int") int getWidth();
 
     /**
-     * Retrievies image height in pixels
+     * Retrieves image height in pixels
      */
     public native @Cast("unsigned int") int getHeight();
 
