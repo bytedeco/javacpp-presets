@@ -2358,10 +2358,6 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai-shared/common/MemoryInfo.hpp"
 // #include "depthai-shared/log/LogLevel.hpp"
 // #include "depthai-shared/log/LogMessage.hpp"
-
-// libraries
-// #include "nanorpc/core/client.h"
-// #include "nanorpc/packer/nlohmann_msgpack.h"
 // Targeting ../Device.java
 
 
@@ -2384,10 +2380,6 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai/pipeline/Pipeline.hpp"
 // #include "depthai/xlink/XLinkConnection.hpp"
 // #include "depthai/xlink/XLinkStream.hpp"
-
-// libraries
-// #include "nanorpc/core/client.h"
-// #include "nanorpc/packer/nlohmann_msgpack.h"
 
 // shared
 // #include "depthai-bootloader-shared/Memory.hpp"
