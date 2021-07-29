@@ -81,7 +81,9 @@ public class NV_ENC_LOCK_BITSTREAM extends Pointer {
     public native @Cast("uint32_t") int ltrFrameIdx(); public native NV_ENC_LOCK_BITSTREAM ltrFrameIdx(int setter);
     /** [out]: Bitmap of LTR frames indices which were used for encoding this frame. Value of 0 if no LTR frames were used. */
     public native @Cast("uint32_t") int ltrFrameBitmap(); public native NV_ENC_LOCK_BITSTREAM ltrFrameBitmap(int setter);
-    /** [in]: Reserved and must be set to 0 */
+    /** [out]: TemporalId value of the frame when using temporalSVC encoding */
+    public native @Cast("uint32_t") int temporalId(); public native NV_ENC_LOCK_BITSTREAM temporalId(int setter);
+    /** [in]:  Reserved and must be set to 0 */
     public native @Cast("uint32_t") int reserved(int i); public native NV_ENC_LOCK_BITSTREAM reserved(int i, int setter);
     @MemberGetter public native @Cast("uint32_t*") IntPointer reserved();
     /** [out]: For H264, Number of Intra MBs in the encoded frame. For HEVC, Number of Intra CTBs in the encoded frame. Supported only if _NV_ENC_LOCK_BITSTREAM::getRCStats set to 1. */

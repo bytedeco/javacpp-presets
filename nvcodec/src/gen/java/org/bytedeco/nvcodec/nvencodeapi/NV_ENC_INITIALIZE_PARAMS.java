@@ -99,6 +99,8 @@ public class NV_ENC_INITIALIZE_PARAMS extends Pointer {
     @MemberGetter public native NVENC_EXTERNAL_ME_HINT_COUNTS_PER_BLOCKTYPE maxMEHintCountsPerBlock();
     /** [in]: Tuning Info of NVENC encoding(TuningInfo is not applicable to H264 and HEVC meonly mode). */
     public native @Cast("NV_ENC_TUNING_INFO") int tuningInfo(); public native NV_ENC_INITIALIZE_PARAMS tuningInfo(int setter);
+    /** [in]: Specifies input buffer format. Client should set input buffer format only when D3D12 interface type is used. */
+    public native @Cast("NV_ENC_BUFFER_FORMAT") int bufferFormat(); public native NV_ENC_INITIALIZE_PARAMS bufferFormat(int setter);
     /** [in]: Reserved and must be set to 0 */
     public native @Cast("uint32_t") int reserved(int i); public native NV_ENC_INITIALIZE_PARAMS reserved(int i, int setter);
     @MemberGetter public native @Cast("uint32_t*") IntPointer reserved();

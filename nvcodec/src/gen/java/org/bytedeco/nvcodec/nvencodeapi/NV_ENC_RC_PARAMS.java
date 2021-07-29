@@ -126,6 +126,11 @@ public class NV_ENC_RC_PARAMS extends Pointer {
     /** [in]: Specifies the ratio in which bitrate should be split between base and alpha layer. A value 'x' for this field will split the target bitrate in a ratio of x : 1 between base and alpha layer. 
                                                                                                  The default split ratio is 15.*/
     public native @Cast("uint32_t") int alphaLayerBitrateRatio(); public native NV_ENC_RC_PARAMS alphaLayerBitrateRatio(int setter);
+    /** [in]: Specifies the value of 'chroma_qp_index_offset' in H264 / 'pps_cb_qp_offset' in HEVC.*/
+    public native @Cast("int8_t") byte cbQPIndexOffset(); public native NV_ENC_RC_PARAMS cbQPIndexOffset(byte setter);
+    /** [in]: Specifies the value of 'second_chroma_qp_index_offset' in H264 / 'pps_cr_qp_offset' in HEVC.*/
+    public native @Cast("int8_t") byte crQPIndexOffset(); public native NV_ENC_RC_PARAMS crQPIndexOffset(byte setter);
+    public native @Cast("uint16_t") short reserved2(); public native NV_ENC_RC_PARAMS reserved2(short setter);
     public native @Cast("uint32_t") int reserved(int i); public native NV_ENC_RC_PARAMS reserved(int i, int setter);
     @MemberGetter public native @Cast("uint32_t*") IntPointer reserved();
  }

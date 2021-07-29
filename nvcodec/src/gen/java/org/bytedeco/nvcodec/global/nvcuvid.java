@@ -20,7 +20,7 @@ public class nvcuvid extends org.bytedeco.nvcodec.presets.nvcuvid {
 /*
  * This copyright notice applies to this header file only:
  *
- * Copyright (c) 2010-2020 NVIDIA Corporation
+ * Copyright (c) 2010-2021 NVIDIA Corporation
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -76,7 +76,7 @@ public class nvcuvid extends org.bytedeco.nvcodec.presets.nvcuvid {
 /** Video codec enums
 /** These enums are used in CUVIDDECODECREATEINFO and CUVIDDECODECAPS structures
 /*********************************************************************************/
-/** enum cudaVideoCodec_enum */
+/** enum cudaVideoCodec */
 public static final int
     /**  MPEG1             */
     cudaVideoCodec_MPEG1 = 0,
@@ -121,7 +121,7 @@ public static final int
 /** Video surface format enums used for output format of decoded output
 /** These enums are used in CUVIDDECODECREATEINFO structure
 /*********************************************************************************/
-/** enum cudaVideoSurfaceFormat_enum */
+/** enum cudaVideoSurfaceFormat */
 public static final int
     /** Semi-Planar YUV [Y plane followed by interleaved UV plane]     */
     cudaVideoSurfaceFormat_NV12 = 0,
@@ -141,7 +141,7 @@ public static final int
 /** Use cudaVideoDeinterlaceMode_Weave for progressive content and for content that doesn't need deinterlacing
 /** cudaVideoDeinterlaceMode_Adaptive needs more video memory than other DImodes
 /******************************************************************************************************************/
-/** enum cudaVideoDeinterlaceMode_enum */
+/** enum cudaVideoDeinterlaceMode */
 public static final int
     /** Weave both fields (no deinterlacing) */
     cudaVideoDeinterlaceMode_Weave = 0,
@@ -155,7 +155,7 @@ public static final int
 /** Chroma format enums
 /** These enums are used in CUVIDDECODECREATEINFO and CUVIDDECODECAPS structures
 /**************************************************************************************************************/
-/** enum cudaVideoChromaFormat_enum */
+/** enum cudaVideoChromaFormat */
 public static final int
     /** MonoChrome */
     cudaVideoChromaFormat_Monochrome = 0,
@@ -171,7 +171,7 @@ public static final int
 /** Decoder flag enums to select preferred decode path
 /** cudaVideoCreate_Default and cudaVideoCreate_PreferCUVID are most optimized, use these whenever possible
 /*************************************************************************************************************/
-/** enum cudaVideoCreateFlags_enum */
+/** enum cudaVideoCreateFlags */
 public static final int
     /** Default operation mode: use dedicated video engines                        */
     cudaVideoCreate_Default     = 0x00,
@@ -188,7 +188,7 @@ public static final int
 /** Decode status enums
 /** These enums are used in CUVIDGETDECODESTATUS structure
 /*************************************************************************/
-/** enum cuvidDecodeStatus_enum */
+/** enum cuvidDecodeStatus */
 public static final int
     cuvidDecodeStatus_Invalid         = 0,   // Decode status is not valid
     cuvidDecodeStatus_InProgress      = 1,   // Decode is in progress
@@ -426,7 +426,7 @@ public static native @Cast("CUresult") int cuvidCtxUnlock(_CUcontextlock_st lck,
 /*
  * This copyright notice applies to this header file only:
  *
- * Copyright (c) 2010-2020 NVIDIA Corporation
+ * Copyright (c) 2010-2021 NVIDIA Corporation
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
