@@ -22,7 +22,7 @@ public class nvencodeapi extends org.bytedeco.nvcodec.presets.nvencodeapi {
 /*
  * This copyright notice applies to this header file only:
  *
- * Copyright (c) 2010-2020 NVIDIA Corporation
+ * Copyright (c) 2010-2021 NVIDIA Corporation
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -103,7 +103,7 @@ public class nvencodeapi extends org.bytedeco.nvcodec.presets.nvencodeapi {
 
 
 public static final int NVENCAPI_MAJOR_VERSION = 11;
-public static final int NVENCAPI_MINOR_VERSION = 0;
+public static final int NVENCAPI_MINOR_VERSION = 1;
 
 public static final int NVENCAPI_VERSION = (NVENCAPI_MAJOR_VERSION | (NVENCAPI_MINOR_VERSION << 24));
 
@@ -235,7 +235,7 @@ public static final int NV_MAX_SEQ_HDR_LEN =  (512);
 /**
  * Input frame encode modes
  */
-/** enum _NV_ENC_PARAMS_FRAME_FIELD_MODE */
+/** enum NV_ENC_PARAMS_FRAME_FIELD_MODE */
 public static final int
     /** Frame mode */
     NV_ENC_PARAMS_FRAME_FIELD_MODE_FRAME = 0x01,
@@ -247,7 +247,7 @@ public static final int
 /**
  * Rate Control Modes
  */
-/** enum _NV_ENC_PARAMS_RC_MODE */
+/** enum NV_ENC_PARAMS_RC_MODE */
 public static final int
     /** Constant QP mode */
     NV_ENC_PARAMS_RC_CONSTQP                = 0x0,
@@ -266,7 +266,7 @@ public static final int
 /**
  * Multi Pass encoding
  */
-/** enum _NV_ENC_MULTI_PASS */
+/** enum NV_ENC_MULTI_PASS */
 public static final int
     /** Single Pass */
     NV_ENC_MULTI_PASS_DISABLED              = 0x0,
@@ -278,7 +278,7 @@ public static final int
 /**
  * Emphasis Levels
  */
-/** enum _NV_ENC_EMPHASIS_MAP_LEVEL */
+/** enum NV_ENC_EMPHASIS_MAP_LEVEL */
 public static final int
     /** Emphasis Map Level 0, for zero Delta QP value */
     NV_ENC_EMPHASIS_MAP_LEVEL_0               = 0x0,
@@ -296,7 +296,7 @@ public static final int
 /**
  * QP MAP MODE
  */
-/** enum _NV_ENC_QP_MAP_MODE */
+/** enum NV_ENC_QP_MAP_MODE */
 public static final int
     /** Value in NV_ENC_PIC_PARAMS::qpDeltaMap have no effect. */
     NV_ENC_QP_MAP_DISABLED               = 0x0,
@@ -311,7 +311,7 @@ public static final int
 /**
  * Input picture structure
  */
-/** enum _NV_ENC_PIC_STRUCT */
+/** enum NV_ENC_PIC_STRUCT */
 public static final int
     /** Progressive frame */
     NV_ENC_PIC_STRUCT_FRAME             = 0x01,
@@ -323,7 +323,7 @@ public static final int
 /**
  * Input picture type
  */
-/** enum _NV_ENC_PIC_TYPE */
+/** enum NV_ENC_PIC_TYPE */
 public static final int
     /** Forward predicted */
     NV_ENC_PIC_TYPE_P               = 0x0,
@@ -347,7 +347,7 @@ public static final int
 /**
  * Motion vector precisions
  */
-/** enum _NV_ENC_MV_PRECISION */
+/** enum NV_ENC_MV_PRECISION */
 public static final int
     /** Driver selects Quarter-Pel motion vector precision by default */
     NV_ENC_MV_PRECISION_DEFAULT     = 0x0,
@@ -362,7 +362,7 @@ public static final int
 /**
  * Input buffer formats
  */
-/** enum _NV_ENC_BUFFER_FORMAT */
+/** enum NV_ENC_BUFFER_FORMAT */
 public static final int
     /** Undefined buffer format */
     NV_ENC_BUFFER_FORMAT_UNDEFINED                       = 0x00000000,
@@ -414,7 +414,7 @@ public static final int
 /**
  * Encoding levels
  */
-/** enum _NV_ENC_LEVEL */
+/** enum NV_ENC_LEVEL */
 public static final int
     NV_ENC_LEVEL_AUTOSELECT         = 0,
     
@@ -459,7 +459,7 @@ public static final int
 /**
  * Error Codes
  */
-/** enum _NVENCSTATUS */
+/** enum NVENCSTATUS */
 public static final int
     /**
      * This indicates that API call returned with no errors.
@@ -629,7 +629,7 @@ public static final int
 /**
  * Encode Picture encode flags.
  */
-/** enum _NV_ENC_PIC_FLAGS */
+/** enum NV_ENC_PIC_FLAGS */
 public static final int
     /** Encode the current picture as an Intra picture */
     NV_ENC_PIC_FLAG_FORCEINTRA         = 0x1,
@@ -645,7 +645,7 @@ public static final int
 /**
  * Memory heap to allocate input and output buffers.
  */
-/** enum _NV_ENC_MEMORY_HEAP */
+/** enum NV_ENC_MEMORY_HEAP */
 public static final int
     /** Memory heap to be decided by the encoder driver based on the usage */
     NV_ENC_MEMORY_HEAP_AUTOSELECT      = 0,
@@ -659,7 +659,7 @@ public static final int
 /**
  * B-frame used as reference modes
  */
-/** enum _NV_ENC_BFRAME_REF_MODE */
+/** enum NV_ENC_BFRAME_REF_MODE */
 public static final int
     /** B frame is not used for reference */
     NV_ENC_BFRAME_REF_MODE_DISABLED = 0x0,
@@ -671,7 +671,7 @@ public static final int
 /**
  * H.264 entropy coding modes.
  */
-/** enum _NV_ENC_H264_ENTROPY_CODING_MODE */
+/** enum NV_ENC_H264_ENTROPY_CODING_MODE */
 public static final int
     /** Entropy coding mode is auto selected by the encoder driver */
     NV_ENC_H264_ENTROPY_CODING_MODE_AUTOSELECT = 0x0,
@@ -683,7 +683,7 @@ public static final int
 /**
  * H.264 specific BDirect modes
  */
-/** enum _NV_ENC_H264_BDIRECT_MODE */
+/** enum NV_ENC_H264_BDIRECT_MODE */
 public static final int
     /** BDirect mode is auto selected by the encoder driver */
     NV_ENC_H264_BDIRECT_MODE_AUTOSELECT = 0x0,
@@ -697,7 +697,7 @@ public static final int
 /**
  * H.264 specific FMO usage
  */
-/** enum _NV_ENC_H264_FMO_MODE */
+/** enum NV_ENC_H264_FMO_MODE */
 public static final int
     /** FMO usage is auto selected by the encoder driver */
     NV_ENC_H264_FMO_AUTOSELECT          = 0x0,
@@ -709,7 +709,7 @@ public static final int
 /**
  * H.264 specific Adaptive Transform modes
  */
-/** enum _NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE */
+/** enum NV_ENC_H264_ADAPTIVE_TRANSFORM_MODE */
 public static final int
     /** Adaptive Transform 8x8 mode is auto selected by the encoder driver*/
     NV_ENC_H264_ADAPTIVE_TRANSFORM_AUTOSELECT = 0x0,
@@ -721,7 +721,7 @@ public static final int
 /**
  * Stereo frame packing modes.
  */
-/** enum _NV_ENC_STEREO_PACKING_MODE */
+/** enum NV_ENC_STEREO_PACKING_MODE */
 public static final int
     /** No Stereo packing required */
     NV_ENC_STEREO_PACKING_MODE_NONE             = 0x0,
@@ -741,7 +741,7 @@ public static final int
 /**
  *  Input Resource type
  */
-/** enum _NV_ENC_INPUT_RESOURCE_TYPE */
+/** enum NV_ENC_INPUT_RESOURCE_TYPE */
 public static final int
     /** input resource type is a directx9 surface*/
     NV_ENC_INPUT_RESOURCE_TYPE_DIRECTX          = 0x0,
@@ -757,7 +757,7 @@ public static final int
 /**
  *  Buffer usage
  */
-/** enum _NV_ENC_BUFFER_USAGE */
+/** enum NV_ENC_BUFFER_USAGE */
 public static final int
     /** Registered surface will be used for input image */
     NV_ENC_INPUT_IMAGE              = 0x0,
@@ -770,7 +770,7 @@ public static final int
 /**
  *  Encoder Device type
  */
-/** enum _NV_ENC_DEVICE_TYPE */
+/** enum NV_ENC_DEVICE_TYPE */
 public static final int
     /** encode device type is a directx9 device */
     NV_ENC_DEVICE_TYPE_DIRECTX          = 0x0,
@@ -783,7 +783,7 @@ public static final int
 /**
  * Number of reference frames
  */
-/** enum _NV_ENC_NUM_REF_FRAMES */
+/** enum NV_ENC_NUM_REF_FRAMES */
 public static final int
     /** Number of reference frames is auto selected by the encoder driver */
     NV_ENC_NUM_REF_FRAMES_AUTOSELECT       = 0x0,
@@ -805,7 +805,7 @@ public static final int
 /**
  * Encoder capabilities enumeration.
  */
-/** enum _NV_ENC_CAPS */
+/** enum NV_ENC_CAPS */
 public static final int
     /**
      * Maximum number of B-Frames supported.
@@ -1144,20 +1144,25 @@ public static final int
      */
     NV_ENC_CAPS_SUPPORT_ALPHA_LAYER_ENCODING = 48,
 
-    /**
+     /**
      * Indicates number of Encoding engines present on GPU.
      */
     NV_ENC_CAPS_NUM_ENCODER_ENGINES = 49,
 
+    /**
+     * Indicates single slice intra refresh support.
+     */
+    NV_ENC_CAPS_SINGLE_SLICE_INTRA_REFRESH = 50,
+
      /**
      * Reserved - Not to be used by clients.
      */
-    NV_ENC_CAPS_EXPOSED_COUNT = 50;
+    NV_ENC_CAPS_EXPOSED_COUNT = 51;
 
 /**
  *  HEVC CU SIZE
  */
-/** enum _NV_ENC_HEVC_CUSIZE */
+/** enum NV_ENC_HEVC_CUSIZE */
 public static final int
     NV_ENC_HEVC_CUSIZE_AUTOSELECT = 0,
     NV_ENC_HEVC_CUSIZE_8x8        = 1,
@@ -1348,6 +1353,15 @@ public static final int NV_ENC_LOCK_INPUT_BUFFER_VER = NV_ENC_LOCK_INPUT_BUFFER_
 public static native @MemberGetter int NV_ENC_MAP_INPUT_RESOURCE_VER();
 public static final int NV_ENC_MAP_INPUT_RESOURCE_VER = NV_ENC_MAP_INPUT_RESOURCE_VER();
 // Targeting ../nvencodeapi/NV_ENC_INPUT_RESOURCE_OPENGL_TEX.java
+
+
+// Targeting ../nvencodeapi/NV_ENC_FENCE_POINT_D3D12.java
+
+
+// Targeting ../nvencodeapi/NV_ENC_INPUT_RESOURCE_D3D12.java
+
+
+// Targeting ../nvencodeapi/NV_ENC_OUTPUT_RESOURCE_D3D12.java
 
 
 // Targeting ../nvencodeapi/NV_ENC_REGISTER_RESOURCE.java
@@ -2533,6 +2547,7 @@ public static final int NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER = NV_ENC_OPEN_E
  * also true for compute (i.e. CUDA) work, provided that the previous workload using
  * the input resource was submitted to the default stream.
  * The client should not access any input buffer while they are mapped by the encoder.
+ * For D3D12 interface type, this function does not provide synchronization guarantee.
  *
  * @param encoder [in]
  *   Pointer to the NvEncodeAPI interface.

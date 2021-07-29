@@ -18,7 +18,7 @@ import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 
 /**
  * \struct _NVENC_EXTERNAL_ME_HINT
- * External Motion Vector hint structure.
+ * External Motion Vector hint structure for H264 and HEVC.
  */
 @Properties(inherit = org.bytedeco.nvcodec.presets.nvencodeapi.class)
 public class NVENC_EXTERNAL_ME_HINT extends Pointer {

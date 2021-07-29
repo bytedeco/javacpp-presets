@@ -100,6 +100,10 @@ public class NV_ENC_CONFIG_H264 extends Pointer {
     /** [in]: Set to 1 to enable writing of Scalability Information SEI message preceding each IDR picture in bitstream 
                                                                                    Applicable only when temporal SVC is enabled (NV_ENC_CONFIG_H264::enableTemporalSVC = 1). */
     public native @Cast("uint32_t") @NoOffset int enableScalabilityInfoSEI(); public native NV_ENC_CONFIG_H264 enableScalabilityInfoSEI(int setter);
+    /** [in]: Set to 1 to maintain single slice in frames during intra refresh.
+                                                                                   Check support for single slice intra refresh using ::NV_ENC_CAPS_SINGLE_SLICE_INTRA_REFRESH caps.
+                                                                                   This flag will be ignored if the value returned for ::NV_ENC_CAPS_SINGLE_SLICE_INTRA_REFRESH caps is false. */
+    public native @Cast("uint32_t") @NoOffset int singleSliceIntraRefresh(); public native NV_ENC_CONFIG_H264 singleSliceIntraRefresh(int setter);
     /** [in]: Reserved bitfields and must be set to 0 */
     public native @Cast("uint32_t") @NoOffset int reservedBitFields(); public native NV_ENC_CONFIG_H264 reservedBitFields(int setter);
     /** [in]: Specifies the encoding level. Client is recommended to set this to NV_ENC_LEVEL_AUTOSELECT in order to enable the NvEncodeAPI interface to select the correct level. */
