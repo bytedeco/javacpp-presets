@@ -108,7 +108,7 @@ import org.bytedeco.openblas.presets.openblas;
         "gsl/gsl_statistics.h", /*"gsl/gsl_statistics_long_double.h",*/ "gsl/gsl_statistics_double.h", "gsl/gsl_statistics_float.h",
         "gsl/gsl_statistics_ulong.h", "gsl/gsl_statistics_long.h", "gsl/gsl_statistics_uint.h", "gsl/gsl_statistics_int.h",
         "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"},
-     define = "__GSL_CBLAS_H__", link = "gsl@.25"),
+     define = {"__GSL_CBLAS_H__", "GSL_COMPLEX_LEGACY"}, link = "gsl@.25"),
     @Platform(value = "android", link = "gsl"),
     @Platform(value = "windows", preload = "libgsl-25") })
 @NoException
@@ -118,7 +118,13 @@ public class gsl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())
                .put(new Info("FILE").pointerTypes("FILE"))
-               .put(new Info("INFINITY", "defined(HUGE_VAL)", "NAN", "defined(INFINITY)").define(false))
+               .put(new Info("INFINITY", "defined(HUGE_VAL)", "NAN", "defined(INFINITY)",
+                       " !defined(GSL_COMPLEX_LEGACY) &&"
+                     + "     defined(_Complex_I) &&"
+                     + "     defined(complex) &&"
+                     + "     defined(I) &&"
+                     + "     defined(__STDC__) && (__STDC__ == 1) &&"
+                     + "     defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)").define(false))
                .put(new Info("GSL_VAR", "__BEGIN_DECLS", "__END_DECLS", "INLINE_DECL", "INLINE_FUN", "GSL_RANGE_CHECK", "CBLAS_INDEX").cppTypes().annotations())
                .put(new Info("gsl_complex_packed_array", "gsl_complex_packed_ptr").cast().valueTypes("DoublePointer", "DoubleBuffer", "double[]"))
                .put(new Info("gsl_complex_packed_array_float").cast().valueTypes("FloatPointer", "FloatBuffer", "float[]"))
