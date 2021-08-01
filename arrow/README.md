@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.arrow</groupId>
     <artifactId>row-wise-conversion-example</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.6</version>
     <properties>
         <exec.mainClass>RowWiseConversionExample</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>arrow-platform</artifactId>
-            <version>4.0.1-1.5.6-SNAPSHOT</version>
+            <version>4.0.1-1.5.6</version>
         </dependency>
     </dependencies>
     <build>

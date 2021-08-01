@@ -1,4 +1,5 @@
 
+### August 2, 2021 version 1.5.6
  * Change `opencv_core.Mat` constructors to create column vectors out of arrays for consistency ([issue #1064](https://github.com/bytedeco/javacpp-presets/issues/1064))
  * Add presets for the new `barcode` and `wechat_qrcode` modules of OpenCV
  * Work around loading issues with execution providers in presets for ONNX Runtime
