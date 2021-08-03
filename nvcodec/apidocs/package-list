@@ -1,0 +1,4 @@
+org.bytedeco.nvcodec.global
+org.bytedeco.nvcodec.nvcuvid
+org.bytedeco.nvcodec.nvencodeapi
+org.bytedeco.nvcodec.presets

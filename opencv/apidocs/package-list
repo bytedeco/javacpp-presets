@@ -2,6 +2,7 @@ org.bytedeco.opencv
 org.bytedeco.opencv.global
 org.bytedeco.opencv.helper
 org.bytedeco.opencv.opencv_aruco
+org.bytedeco.opencv.opencv_barcode
 org.bytedeco.opencv.opencv_bgsegm
 org.bytedeco.opencv.opencv_bioinspired
 org.bytedeco.opencv.opencv_calib3d
@@ -23,6 +24,7 @@ org.bytedeco.opencv.opencv_flann
 org.bytedeco.opencv.opencv_highgui
 org.bytedeco.opencv.opencv_img_hash
 org.bytedeco.opencv.opencv_imgproc
+org.bytedeco.opencv.opencv_mcc
 org.bytedeco.opencv.opencv_ml
 org.bytedeco.opencv.opencv_objdetect
 org.bytedeco.opencv.opencv_optflow
@@ -30,6 +32,7 @@ org.bytedeco.opencv.opencv_phase_unwrapping
 org.bytedeco.opencv.opencv_photo
 org.bytedeco.opencv.opencv_plot
 org.bytedeco.opencv.opencv_quality
+org.bytedeco.opencv.opencv_rapid
 org.bytedeco.opencv.opencv_saliency
 org.bytedeco.opencv.opencv_shape
 org.bytedeco.opencv.opencv_stitching
@@ -40,12 +43,14 @@ org.bytedeco.opencv.opencv_tracking
 org.bytedeco.opencv.opencv_video
 org.bytedeco.opencv.opencv_videoio
 org.bytedeco.opencv.opencv_videostab
+org.bytedeco.opencv.opencv_wechat_qrcode
 org.bytedeco.opencv.opencv_xfeatures2d
 org.bytedeco.opencv.opencv_ximgproc
 org.bytedeco.opencv.opencv_xphoto
 org.bytedeco.opencv.presets
 org.opencv.android
 org.opencv.aruco
+org.opencv.barcode
 org.opencv.bgsegm
 org.opencv.bioinspired
 org.opencv.calib3d
@@ -69,6 +74,7 @@ org.opencv.tracking
 org.opencv.utils
 org.opencv.video
 org.opencv.videoio
+org.opencv.wechat_qrcode
 org.opencv.xfeatures2d
 org.opencv.ximgproc
 org.opencv.xphoto
