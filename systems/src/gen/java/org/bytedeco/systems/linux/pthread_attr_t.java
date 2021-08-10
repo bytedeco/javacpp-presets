@@ -10,13 +10,15 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.systems.global.linux.*;
 
+// # else
+// # endif
 
-
-/* Message catalog descriptor type.  */
-@Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.systems.presets.linux.class)
-public class nl_catd extends Pointer {
+/* Forward declaration.  */
+// # ifndef __have_pthread_attr_t
+@Opaque @Properties(inherit = org.bytedeco.systems.presets.linux.class)
+public class pthread_attr_t extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public nl_catd() { super((Pointer)null); }
+    public pthread_attr_t() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public nl_catd(Pointer p) { super(p); }
+    public pthread_attr_t(Pointer p) { super(p); }
 }

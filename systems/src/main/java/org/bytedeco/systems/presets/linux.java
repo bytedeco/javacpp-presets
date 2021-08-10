@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Samuel Audet
+ * Copyright (C) 2017-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -42,15 +42,21 @@ import org.bytedeco.javacpp.tools.Logger;
  * @author Samuel Audet
  */
 @Properties(inherit = javacpp.class, value = {@Platform(value = "linux",
-    exclude = {"bits/locale.h", "bits/socket.h", "bits/siginfo.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h",
-               "bits/sched.h", "bits/confname.h", "bits/resource.h"},
-    include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "bits/locale.h", "langinfo.h", "locale.h",
-               "bits/uio.h", "sys/uio.h", "bits/sockaddr.h", "bits/socket.h", "sys/socket.h", /*"sys/types.h", "bits/timex.h",*/
-               "asm-generic/errno-base.h", "asm-generic/errno.h", "bits/errno.h", "errno.h", "string.h", "stdlib.h",
+    exclude = {"xlocale.h", "bits/types/__locale_t.h", "bits/types/locale_t.h", "bits/locale.h", "bits/types/struct_iovec.h",
+               "bits/types/struct_tm.h", "bits/types/struct_timeval.h", "bits/types/struct_timespec.h", "bits/types/struct_itimerspec.h", "bits/types/timer_t.h",
+               "bits/uio.h", "bits/socket_type.h", "bits/socket.h", "bits/errno.h", "bits/types/siginfo_t.h", "bits/types/__sigset_t.h", "bits/types/sigset_t.h",
+               "bits/types/__sigval_t.h", "bits/types/sigval_t.h", "bits/types/stack_t.h", "bits/siginfo.h", "bits/sigset.h", "bits/signum.h",
+               "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "bits/cpu-set.h", "bits/types/struct_sched_param.h", "bits/sched.h",
+               "bits/confname.h", "bits/resource.h"},
+    include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "bits/types/__locale_t.h", "bits/types/locale_t.h", "bits/locale.h", "langinfo.h", "locale.h",
+               "bits/types/struct_tm.h", "bits/types/struct_timeval.h", "bits/types/struct_timespec.h", "bits/types/struct_itimerspec.h", "bits/types/timer_t.h",
+               "bits/types/struct_iovec.h", "bits/uio.h", "sys/uio.h", "bits/sockaddr.h", "bits/socket_type.h", "bits/socket.h", "sys/socket.h",
+               "asm-generic/errno-base.h", "asm-generic/errno.h", "bits/errno.h", "errno.h", "string.h", "stdlib.h", /*"sys/types.h", "bits/timex.h",*/
                "bits/time.h", "sys/time.h", "time.h", "utime.h", "bits/stat.h", "sys/stat.h", "fcntl.h", "sys/file.h", "grp.h", "pwd.h",
+               "bits/types/siginfo_t.h", "bits/types/__sigset_t.h", "bits/types/sigset_t.h", "bits/types/__sigval_t.h", "bits/types/sigval_t.h", "bits/types/stack_t.h",
                "bits/siginfo.h", "bits/sigset.h", "bits/signum.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h",
-               "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h", "bits/confname.h", "unistd.h",
-               "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
+               "bits/cpu-set.h", "bits/types/struct_sched_param.h", "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h",
+               "bits/confname.h", "unistd.h", "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
     link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
@@ -88,10 +94,11 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
 
         infoMap.put(new Info("stat.h").linePatterns("# *define st_.*").skip())
                .put(new Info("siginfo.h").linePatterns("# define si_.*").skip())
-               .put(new Info("sigaction.h").linePatterns("# define sa_.*").skip())
+               .put(new Info("sigaction.h").linePatterns("    union", "      \\{", "      \\}", ".*sa_sigaction").skip())
                .put(new Info("signal.h").linePatterns("#ifndef\t_SIGNAL_H", "#endif").skip())
                .put(new Info("ptrace.h").linePatterns("#define .*regs\\[.*").skip())
                .put(new Info("sysinfo.h").linePatterns(".*char _f.*").skip())
+               .put(new Info("siginfo_t.h").linePatterns(".*X/Open.*", "#endif").skip())
 
                .put(new Info("__BEGIN_DECLS").cppText("#define __BEGIN_DECLS"))
                .put(new Info("__END_DECLS").cppText("#define __END_DECLS"))
@@ -112,19 +119,29 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                              "defined __USE_MISC || defined __USE_XOPEN2K8",
                              "!defined __GNUC__ || __GNUC__ < 2 || defined __cplusplus",
                              "__CORRECT_ISO_CPP_STRING_H_PROTO", "__GNUC__", "__USE_BSD",
+                             "__USE_POSIX199309", "defined __USE_POSIX199309 || defined __USE_XOPEN_EXTENDED",
                              "__USE_ISOC99", "__USE_MISC", "__USE_XOPEN2K", "__USE_XOPEN2K8").define(true))
 
-               .put(new Info("defined __USE_ISOC11 || defined __USE_ISOCXX11", "__USE_POSIX199309",
+               .put(new Info("defined __USE_ISOC11 || defined __USE_ISOCXX11",
                              "defined __x86_64__ && __WORDSIZE == 32",
                              "defined __USE_XOPEN2K && !defined __USE_GNU",
                              "defined __GNUC__ && __GNUC__ >= 2 && defined __USE_EXTERN_INLINES",
-                             "__USE_EXTERN_INLINES", "__USE_FILE_OFFSET64", "_LINUX_KERNEL_H").define(false).cppTypes())
+                             "defined __USE_XOPEN_EXTENDED && !defined __USE_XOPEN2K8",
+                             "__GNUC_PREREQ (3, 0)",  "__SI_CLOCK_T",
+                             "__USE_EXTERN_INLINES", "__USE_FILE_OFFSET64", "_LINUX_KERNEL_H",
+                             "__HAVE_FLOAT16", "__HAVE_FLOAT16 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
+                             "__HAVE_FLOAT32", "__HAVE_FLOAT32 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
+                             "__HAVE_FLOAT64", "__HAVE_FLOAT64 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
+                             "__HAVE_FLOAT128", "__HAVE_FLOAT128 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
+                             "__HAVE_FLOAT32X", "__HAVE_FLOAT32X && __GLIBC_USE (IEC_60559_TYPES_EXT)",
+                             "__HAVE_FLOAT64X", "__HAVE_FLOAT64X && __GLIBC_USE (IEC_60559_TYPES_EXT)",
+                             "__HAVE_FLOAT128X", "__HAVE_FLOAT128X && __GLIBC_USE (IEC_60559_TYPES_EXT)").define(false).cppTypes())
 
-               .put(new Info("__SOCKADDR_ARG", "__CONST_SOCKADDR_ARG", "__SOCKADDR_ALLTYPES", "CLK_TCK",
+               .put(new Info("__SOCKADDR_ARG", "__CONST_SOCKADDR_ARG", "__SOCKADDR_ALLTYPES", "CLK_TCK", "__SI_BAND_TYPE",
                              "error_t", "__extern_always_inline", "__extern_inline", "_EXTERN_INLINE", "__inline",
                              "__ext", "__extension__", "__mode__", "__nonnull", "__ss_aligntype", "__sysconf",
-                             "__REDIRECT_NTH", "__REDIRECT", "__THROW", "__restrict", "__wur",
-                             "__WAIT_STATUS", "__WAIT_STATUS_DEFN", "sched_priority", "sigcontext_struct",
+                             "__REDIRECT_NTH", "__REDIRECT", "__THROW", "__restrict", "__wur", "UIO_MAXIOV",
+                             "__WAIT_STATUS", "__WAIT_STATUS_DEFN", "sched_priority", "__sched_priority", "sigcontext_struct",
                              "sigev_notify_function", "sigev_notify_attributes", "sv_onstack", "__FUNCTION__").annotations().cppTypes())
 
                .put(new Info("_POSIX2_VERSION", "_POSIX2_C_BIND",
@@ -162,10 +179,12 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("struct sigaction").pointerTypes("sigaction"))
                .put(new Info("struct sigvec").pointerTypes("sigvec").skip())
                .put(new Info("__sigset_t").pointerTypes("sigset_t"))
-               .put(new Info("sigval_t").pointerTypes("sigval"))
+               .put(new Info("sigval_t", "__sigval_t").pointerTypes("sigval"))
+               .put(new Info("struct sigevent").pointerTypes("sigevent_t"))
                .put(new Info("struct sigstack").pointerTypes("sigstack"))
                .put(new Info("sigaltstack").pointerTypes("stack_t"))
                .put(new Info("ucontext").valueTypes("ucontext_t"))
+               .put(new Info("__sighandler_t").valueTypes("__sighandler_t"))
 
                .put(new Info("siginfo_t").javaText("\n"
                      + "public static class siginfo_t extends Pointer {\n"
@@ -192,6 +211,8 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                      + "      public native int si_timerid(); public native siginfo_t si_timerid(int si_timerid);		/* Timer ID.  */\n"
                      + "      public native int si_overrun(); public native siginfo_t si_overrun(int si_overrun);	/* Overrun count.  */\n"
                      + "      public native @ByRef sigval si_value(); public native siginfo_t si_value(sigval si_value);	/* Signal value.  */\n"
+                     + "      public native int si_int(); public native siginfo_t si_int(int si_int);	/* Signal value.  */\n"
+                     + "      public native Pointer si_ptr(); public native siginfo_t si_ptr(Pointer si_ptr);	/* Signal value.  */\n"
                      + "      public native int si_status(); public native siginfo_t si_status(int si_status);	/* Exit value or signal.  */\n"
                      + "      public native @Cast(\"__clock_t\") long si_utime(); public native siginfo_t si_utime(long si_utime);\n"
                      + "      public native @Cast(\"__clock_t\") long si_stime(); public native siginfo_t si_stime(long si_stime);\n"
@@ -201,24 +222,10 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
 //                     + "      public native Pointer si_upper(); public native siginfo_t si_upper(Pointer si_upper);\n"
                      + "      public native long si_band(); public native siginfo_t si_band(long si_band);	/* Band event for SIGPOLL.  */\n"
                      + "      public native int si_fd(); public native siginfo_t si_fd(int si_fd);\n"
-//                     + "      public native Pointer si_call_addr(); public native siginfo_t si_call_addr(Pointer si_call_addr);	/* Calling user insn.  */\n"
-//                     + "      public native int si_syscall(); public native siginfo_t si_syscall(int si_syscall);	/* Triggering system call number.  */\n"
-//                     + "      public native @Cast(\"unsigned int\") int si_arch(); public native siginfo_t si_arch(int si_arch); /* AUDIT_ARCH_* of syscall.  */\n"
+                     + "      public native Pointer si_call_addr(); public native siginfo_t si_call_addr(Pointer si_call_addr);	/* Calling user insn.  */\n"
+                     + "      public native int si_syscall(); public native siginfo_t si_syscall(int si_syscall);	/* Triggering system call number.  */\n"
+                     + "      public native @Cast(\"unsigned int\") int si_arch(); public native siginfo_t si_arch(int si_arch); /* AUDIT_ARCH_* of syscall.  */\n"
                      + "  }\n"))
-
-               .put(new Info("sigaction::sa_handler").javaText("\n"
-                     + "    /* Used if SA_SIGINFO is not set.  */\n"
-                     + "    public native __sighandler_t sa_handler(); public native sigaction sa_handler(__sighandler_t sa_handler);\n"
-                     + "    /* Used if SA_SIGINFO is set.  */\n"
-                     + "    public static class Sa_sigaction_int_siginfo_t_Pointer extends FunctionPointer {\n"
-                     + "        static { Loader.load(); }\n"
-                     + "        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n"
-                     + "        public    Sa_sigaction_int_siginfo_t_Pointer(Pointer p) { super(p); }\n"
-                     + "        protected Sa_sigaction_int_siginfo_t_Pointer() { allocate(); }\n"
-                     + "        private native void allocate();\n"
-                     + "        public native void call(int arg0, siginfo_t arg1, Pointer arg2);\n"
-                     + "    }\n"
-                     + "    public native Sa_sigaction_int_siginfo_t_Pointer sa_sigaction(); public native sigaction sa_sigaction(Sa_sigaction_int_siginfo_t_Pointer sa_sigaction);\n"))
 
                .put(new Info("sysinfo::_f").javaText("@MemberGetter public native @Cast(\"char*\") BytePointer _f();    /* Padding: libc5 uses this.. */"))
 
@@ -235,6 +242,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
 
                .put(new Info("cmsghdr").purify())
                .put(new Info("cmsghdr::__flexarr", "getwd", "getpw", "lchmod", "mktemp", "revoke", "setlogin",
-                             "sigblock", "siggetmask", "sigsetmask", "sigreturn", "sigstack(sigstack*, sigstack*)").skip());
+                             "sigblock", "siggetmask", "sigsetmask", "sigreturn", "sigstack(sigstack*, sigstack*)",
+                             "__sched_param", "_fpx_sw_bytes", "_xsave_hdr", "_xstate", "_ymmh_state").skip());
     }
 }
