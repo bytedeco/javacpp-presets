@@ -713,7 +713,7 @@ EOF
         if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
             cd ../mfx_dispatch-$MFX_VERSION
             autoreconf -fiv
-            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
+            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=i686-linux CFLAGS="-m32 -D__ILP32__" CXXFLAGS="-m32 -D__ILP32__ -std=c++11"
             make -j $MAKEJ
             make install
             ENABLE="$ENABLE --enable-libmfx"
@@ -722,7 +722,7 @@ EOF
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32 -D__ILP32__" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
         make -j $MAKEJ
         make install
         ;;

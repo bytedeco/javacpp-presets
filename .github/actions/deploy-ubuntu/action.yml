@@ -32,24 +32,29 @@ runs:
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
 
+        apt-get update
+        apt-get -y install gnupg
+        source /etc/os-release
+        export CODENAME=$UBUNTU_CODENAME
+
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ -z ${CI_DEPLOY_NEED_NOTOOLS:-} ]]; then
           echo Setting up tools for linux-armhf build
           dpkg --add-architecture i386
           if [[ ! "$ARCH" == "amd64" ]]; then
             dpkg --add-architecture $ARCH
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse >> /etc/apt/sources.list
           fi
-          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main >> /etc/apt/sources.list
-          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu xenial main >> /etc/apt/sources.list
+          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
+          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
           sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
           apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
           apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
           apt-get update
           apt-get -y install python python2.7 python-minimal python2.7-minimal libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-          apt-get -y install pkg-config ccache clang default-jre-headless openjdk-8-jdk-headless ant python python3.6-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
+          apt-get -y install pkg-config ccache clang openjdk-8-jdk-headless ant python python3.6-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
           curl -LOJ https://github.com/raspberrypi/tools/archive/master.tar.gz
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
           mkdir -p tools userland
@@ -69,20 +74,20 @@ runs:
         else
           if [[ ! "$ARCH" == "amd64" ]]; then
             dpkg --add-architecture $ARCH
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse >> /etc/apt/sources.list
+            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse >> /etc/apt/sources.list
             TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch"
           fi
-          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main >> /etc/apt/sources.list
-          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu xenial main >> /etc/apt/sources.list
+          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
+          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
           sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
           apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
           apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
           apt-get update
           apt-get -y install python python2.7 python-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-          apt-get -y install pkg-config ccache clang $TOOLCHAIN default-jre-headless openjdk-8-jdk-headless ant python python3.6-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
+          apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3.6-dev python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/"
         fi
 
@@ -180,6 +185,8 @@ runs:
     - name: Build project
       shell: bash
       run: |
+        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+
         git --version
         $PREFIX-gcc --version
         cmake --version
