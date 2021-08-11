@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 Samuel Audet
+ * Copyright (C) 2013-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -63,6 +63,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/tx.h>", "log_callback.h"},
             includepath = {"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
             link = "avutil@.56", compiler = {"default", "nodeprecated"}),
+        @Platform(value = "linux-x86", preload = {"va@.1", "drm@.2", "va-drm@.1"}, preloadpath = {"/usr/lib32/", "/usr/lib/"}),
+        @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-56"),
         @Platform(extension = "-gpl")
     }
