@@ -63,7 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "parquet/arrow/reader.h",
                 "parquet/arrow/writer.h",
             },
-            link = "parquet@.400"
+            link = "parquet@.500"
         ),
     },
     target = "org.bytedeco.parquet",
@@ -89,12 +89,16 @@ public class parquet implements InfoMapper {
                .put(new Info("std::shared_ptr<parquet::ColumnDecryptionProperties>").annotations("@SharedPtr").pointerTypes("ColumnDecryptionProperties"))
                .put(new Info("std::shared_ptr<const parquet::LogicalType>").annotations("@Cast(\"const parquet::LogicalType*\") @SharedPtr").pointerTypes("LogicalType"))
                .put(new Info("std::shared_ptr<parquet::schema::Node>").annotations("@SharedPtr").pointerTypes("Node"))
+               .put(new Info("std::unique_ptr<parquet::ParquetFileReader>").annotations("@UniquePtr").pointerTypes("ParquetFileReader").define())
+               .put(new Info("std::unique_ptr<parquet::ParquetFileReader::Contents>").annotations("@UniquePtr").pointerTypes("ParquetFileReader.Contents").define())
                .put(new Info("std::vector<std::shared_ptr<parquet::schema::Node> >").pointerTypes("NodeVector").define())
                .put(new Info("std::map<parquet::Encoding::type,int32_t>").pointerTypes("EncodingIntMap").define())
                .put(new Info("std::map<std::string,std::shared_ptr<parquet::ColumnDecryptionProperties> >").pointerTypes("ColumnDecryptionPropertiesStringMap").define())
                .put(new Info("arrow::Result<std::shared_ptr<parquet::Buffer> >").pointerTypes("BufferResult"))
                .put(new Info("parquet::Encryptor", "parquet::FooterSigningEncryptor", "parquet::OutputStream",
-                             "parquet::internal::GetReadCodec", "parquet::internal::GetWriteCodec", "parquet::internal::FindMinMax").skip())
+                             "parquet::internal::GetReadCodec", "parquet::internal::GetWriteCodec", "parquet::internal::FindMinMax",
+                             "parquet::ParquetFileReader::OpenAsync", "parquet::ParquetFileReader::Contents::OpenAsync",
+                             "parquet::arrow::FileReader::GetRecordBatchGenerator").skip())
         ;
     }
 }

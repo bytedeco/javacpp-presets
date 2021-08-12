@@ -1,5 +1,6 @@
 
  * Build FFmpeg with VA-API enabled and bundle its libraries to avoid loading issues ([issue bytedeco/javacv#1188](https://github.com/bytedeco/javacv/issues/1188))
+ * Upgrade presets for Arrow 5.0.0, DNNL 2.3.2, SciPy 1.7.1, TensorFlow Lite 2.6.0, DepthAI 2.9.0, ONNX 1.10.1, ONNX Runtime 1.8.2, and their dependencies
 
 ### August 2, 2021 version 1.5.6
  * Change `opencv_core.Mat` constructors to create column vectors out of arrays for consistency ([issue #1064](https://github.com/bytedeco/javacpp-presets/issues/1064))

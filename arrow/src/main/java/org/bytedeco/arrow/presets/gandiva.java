@@ -54,7 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "gandiva/decimal_scalar.h",
                 "gandiva/tree_expr_builder.h",
             },
-            link = "gandiva@.400"
+            link = "gandiva@.500"
         ),
     },
     target = "org.bytedeco.gandiva",
@@ -71,6 +71,8 @@ public class gandiva implements InfoMapper {
                .put(new Info("std::vector<std::shared_ptr<gandiva::FunctionSignature> >").pointerTypes("FunctionSignatureVector").define())
                .put(new Info("std::unordered_set<int32_t>").pointerTypes("IntSet").define())
                .put(new Info("std::unordered_set<int64_t>").pointerTypes("LongSet").define())
+               .put(new Info("std::unordered_set<float>").pointerTypes("FloatSet").define())
+               .put(new Info("std::unordered_set<double>").pointerTypes("DoubleSet").define())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("StringSet").define())
         ;
     }

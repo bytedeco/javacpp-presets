@@ -182,7 +182,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  https://github.com/uricamic/flandmark
- * Arrow 4.0.x  https://arrow.apache.org/install/
+ * Arrow 5.0.x  https://arrow.apache.org/install/
  * HDF5 1.12.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/mkl
@@ -212,11 +212,11 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
  * PyTorch 1.9.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.5.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.6.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.8.x  https://github.com/luxonis/depthai-core
- * ONNX 1.9.x  https://github.com/onnx/onnx
+ * DepthAI 2.9.x  https://github.com/luxonis/depthai-core
+ * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.8.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/tvm
