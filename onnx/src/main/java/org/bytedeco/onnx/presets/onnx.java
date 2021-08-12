@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.Pointer;
 @Properties(inherit = javacpp.class, target = "org.bytedeco.onnx", global = "org.bytedeco.onnx.global.onnx", value = {
 @Platform(
     value = {"linux", "macosx", "windows"},
-    define = {"ONNX_NAMESPACE onnx", "ONNX_USE_LITE_PROTO", "ONNX_ML 1", "SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
+    define = {"ONNX_NAMESPACE onnx", "ONNX_USE_LITE_PROTO", "ONNX_ML 1", "SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "NO_WINDOWS_H"},
     compiler = "cpp11",
     exclude = "google/protobuf/port_def.inc",
     include = {
@@ -94,8 +94,9 @@ public class onnx implements InfoMapper {
                .put(new Info("PROTOBUF_RUNTIME_DEPRECATED").cppText("#define PROTOBUF_RUNTIME_DEPRECATED() DEPRECATED").cppTypes())
                .put(new Info("DEPRECATED").annotations("@Deprecated"))
 
-               .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType", "onnx::SequenceProto::DataType",
-                             "onnx::OpSchema::UseType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType",
+                             "onnx::SequenceProto::DataType", "onnx::OptionalProto::DataType", "onnx::TypeProto::ValueCase",
+                             "onnx::OpSchema::UseType", "onnx::OperatorStatus").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("onnx::OpSchema::SinceVersion").annotations("@Function"))
                .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::TensorShapeProto_Dimension", "onnx::TensorShapeProto::Dimension", "TensorShapeProto_Dimension").pointerTypes("Dimension"))
@@ -148,7 +149,7 @@ public class onnx implements InfoMapper {
                              "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_", "onnx::RegisterOneFunctionBuilder", "BuildFunction",
                              "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
                              "onnx::_AttributeProto_default_instance_", "onnx::_TensorAnnotation_default_instance_", "onnx::_MapProto_default_instance_",
-                             "onnx::_SequenceProto_default_instance_").skip())
+                             "onnx::_SequenceProto_default_instance_", "onnx::_OptionalProto_default_instance_", "onnx::_TypeProto_Optional_default_instance_").skip())
 
                .put(new Info("onnx::DataType").annotations("@StdString").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
@@ -157,15 +158,13 @@ public class onnx implements InfoMapper {
 
                .put(new Info("std::pair<int,int>", "std::pair<onnx::OpSchema::UseType,int>").pointerTypes("UseTypeIntPair").define())
                .put(new Info("const std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
+               .put(new Info("std::unordered_map<size_t,std::string>").pointerTypes("SizeTStringMap").define())
                .put(new Info("std::unordered_map<std::string,int>").pointerTypes("StringIntMap").define())
-               .put(new Info("std::unordered_map<std::string,const onnx::TypeProto*>",
-                             "std::unordered_map<std::string,onnx::TypeProto*>").pointerTypes("StringTypeProtoMap").define())
-               .put(new Info("std::unordered_map<std::string,const onnx::TensorProto*>",
-                             "std::unordered_map<std::string,onnx::TensorProto*>").pointerTypes("StringTensorProtoMap").define())
+               .put(new Info("std::unordered_map<std::string,onnx::TypeProto*>").pointerTypes("StringTypeProtoMap").define())
+               .put(new Info("std::unordered_map<std::string,onnx::TensorShapeProto>").pointerTypes("StringTensorShapeProtoMap").define())
+               .put(new Info("std::unordered_map<std::string,const onnx::TensorProto*>").pointerTypes("StringTensorProtoMap").define())
                .put(new Info("std::unordered_map<std::string,const onnx::AttributeProto*>",
-                             "std::unordered_map<std::string,AttributeProto*>",
-                             "std::unordered_map<std::string,const AttributeProto*>",
-                             "std::unordered_map<std::string,onnx::AttributeProto*>").pointerTypes("StringAttributeProtoMap").define())
+                             "std::unordered_map<std::string,const AttributeProto*>").pointerTypes("StringAttributeProtoMap").define())
                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("StringIntIntPairMap").define())
                .put(new Info("std::unordered_map<int,int>").pointerTypes("IntIntMap").define())
                .put(new Info("std::unordered_set<onnx::DataType>").pointerTypes("DataTypeSet").define())
@@ -178,7 +177,7 @@ public class onnx implements InfoMapper {
                .put(new Info("std::vector<const onnx::TensorShapeProto*>").pointerTypes("TensorShapeProtoVector").define())
 
                .put(new Info("onnx::OpSchema::GetTypeAndShapeInferenceFunction", "onnx::OpSchema::SetContextDependentFunctionBodyBuilder",
-                             "onnx::RegisterSchema", "onnx::ReplaceAll", "onnx::DbgOperatorSetTracker::Instance",
+                             "onnx::OpSchema::GetDataPropagationFunction", "onnx::RegisterSchema", "onnx::ReplaceAll", "onnx::DbgOperatorSetTracker::Instance",
                              "onnx::shape_inference::checkShapesAndTypes(const onnx::TypeProto_Sequence&, const onnx::TypeProto_Sequence&)",
                              "onnx::shape_inference::mergeShapesAndTypes(const onnx::TypeProto_Sequence&, onnx::TypeProto_Tensor*)").skip())
 
@@ -191,6 +190,7 @@ public class onnx implements InfoMapper {
                .put(new Info("std::function<bool(int)>").pointerTypes("BoolIntFn"))
                .put(new Info("std::function<bool(int,int)>").pointerTypes("BoolIntIntFn"))
                .put(new Info("std::function<int(int)>").pointerTypes("IntIntFn"))
+               .put(new Info("std::function<void(DataPropagationContext&)>").pointerTypes("DataPropagationFunction"))
                .put(new Info("std::function<void(InferenceContext&)>").pointerTypes("InferenceFunction"))
                .put(new Info("std::function<void(OpSchema&)>").pointerTypes("VoidOpSchemaFn"))
                .put(new Info("std::function<std::pair<bool,int>(int)>").pointerTypes("PairBoolIntIntFn"));
@@ -221,6 +221,15 @@ public class onnx implements InfoMapper {
         protected IntIntFn() { allocate(); }
         private native void allocate();
         public native int call(int a);
+    }
+
+    public static class DataPropagationFunction extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    DataPropagationFunction(Pointer p) { super(p); }
+        protected DataPropagationFunction() { allocate(); }
+        private native void allocate();
+        public native void call(@ByRef @Cast("onnx::DataPropagationContext*") Pointer a);
     }
 
     public static class InferenceFunction extends FunctionPointer {

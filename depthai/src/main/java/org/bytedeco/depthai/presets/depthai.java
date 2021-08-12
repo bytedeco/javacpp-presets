@@ -205,6 +205,10 @@ public class depthai implements InfoMapper {
                .put(new Info("std::unordered_map<dai::Node::Id,std::shared_ptr<dai::Node> >").pointerTypes("NodeIdNodeMap").define())
                .put(new Info("std::unordered_map<int64_t,dai::NodeObjInfo>").pointerTypes("LongNodeObjInfoMap").define())
                .put(new Info("std::unordered_map<std::string,dai::NodeIoInfo>").pointerTypes("StringNodeIoInfoMap").define())
+               .put(new Info("const std::unordered_map<std::string,dai::Node::Input>",
+                                   "std::unordered_map<std::string,dai::Node::Input>").pointerTypes("StringNodeInputMap").define())
+               .put(new Info("const std::unordered_map<std::string,dai::Node::Output>",
+                                   "std::unordered_map<std::string,dai::Node::Output>").pointerTypes("StringNodeOutputMap").define())
                .put(new Info("std::map<std::string,std::vector<int> >").pointerTypes("StringIntVectorMap").define())
                .put(new Info("tl::optional<bool>").pointerTypes("BoolOptional").define())
                .put(new Info("tl::optional<int>", "tl::optional<std::int32_t>", "tl::optional<std::uint32_t>").cast().pointerTypes("IntOptional").define())
@@ -215,6 +219,8 @@ public class depthai implements InfoMapper {
 
                .put(new Info("dai::Node").immutable().purify())
                .put(new Info("dai::Node::Connection").pointerTypes("Node.Connection"))
+               .put(new Info("dai::Node::Input").pointerTypes("Node.Input"))
+               .put(new Info("dai::Node::Output").pointerTypes("Node.Output"))
                .put(new Info("dai::node::IMU", "dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
                              "dai::node::NeuralNetwork", "dai::node::DetectionNetwork", "dai::node::ObjectTracker", "dai::node::SPIOut",
                              "dai::node::SpatialDetectionNetwork", "dai::node::SpatialLocationCalculator", "dai::node::StereoDepth",

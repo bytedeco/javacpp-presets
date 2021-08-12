@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.arrow</groupId>
     <artifactId>row-wise-conversion-example</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7-SNAPSHOT</version>
     <properties>
         <exec.mainClass>RowWiseConversionExample</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>arrow-platform</artifactId>
-            <version>4.0.1-1.5.6</version>
+            <version>5.0.0-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

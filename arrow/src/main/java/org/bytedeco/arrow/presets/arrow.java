@@ -139,6 +139,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/compute/api_vector.h",
                 "arrow/compute/kernel.h",
                 "arrow/compute/type_fwd.h",
+                "arrow/compute/exec/expression.h",
                 "arrow/compute/exec.h",
                 "arrow/compute/function.h",
                 "arrow/compute/cast.h",
@@ -153,7 +154,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/ipc/reader.h",
                 "arrow/ipc/writer.h",
             },
-            link = "arrow@.400"
+            link = "arrow@.500"
         ),
     },
     target = "org.bytedeco.arrow",
@@ -183,7 +184,9 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::detail::CTypeImpl", "arrow::detail::IntegerTypeImpl", "arrow::internal::IsOneOf", "arrow::util::internal::non_null_filler", "arrow::TypeTraits",
                              "arrow::detail::CTypeImpl<DERIVED,BASE,TYPE_ID,C_TYPE>::type_id", "arrow::detail::Empty", "arrow::detail::is_future", "arrow::util::detail::all",
                              "arrow::util::detail::delete_copy_constructor", "arrow::internal::max_size_traits", "arrow::internal::max_size", "arrow::GetPhysicalType",
-                             "arrow::Decimal128::ToRealConversion", "arrow::Decimal256::ToRealConversion", "arrow::internal::FnOnce", "arrow::compute::internal::Grouper").skip())
+                             "arrow::Decimal128::ToRealConversion", "arrow::Decimal256::ToRealConversion", "arrow::internal::FnOnce", "arrow::compute::internal::Grouper",
+                             "arrow::internal::Empty", "arrow::FutureToSync", "arrow::AsyncGenerator", "arrow::ipc::RecordBatchFileReader::GetRecordBatchGenerator",
+                             "arrow::compute::Kernel::InitAll", "arrow::compute::Expression::Call::ComputeHash").skip())
 
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
                .put(new Info("const char").valueTypes("byte").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
@@ -371,6 +374,9 @@ public class arrow implements InfoMapper {
                .put(new Info("std::shared_ptr<arrow::compute::KernelSignature>").annotations("@SharedPtr").valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::compute::KernelSignature>\"}) KernelSignature")
                                                                                 .pointerTypes("KernelSignature"))
                .put(new Info("std::shared_ptr<arrow::compute::SelectionVector>").annotations("@SharedPtr").pointerTypes("SelectionVector"))
+               .put(new Info("std::unique_ptr<arrow::compute::KernelState>").annotations("@UniquePtr")
+                                                                            .valueTypes("@Cast({\"\", \"std::unique_ptr<arrow::compute::KernelState>&&\"}) KernelState")
+                                                                            .pointerTypes("KernelState"))
                .put(new Info("std::shared_ptr<arrow::internal::ThreadPool>").annotations("@SharedPtr").pointerTypes("ThreadPool"))
                .put(new Info("std::shared_ptr<arrow::io::InputStream>",
                              "arrow::Future<std::shared_ptr<arrow::io::InputStream> >::ValueType>").annotations("@SharedPtr")
@@ -384,6 +390,15 @@ public class arrow implements InfoMapper {
                              "arrow::Future<std::shared_ptr<arrow::io::RandomAccessFile> >::ValueType>").annotations("@SharedPtr")
                                                                             .valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::io::RandomAccessFile>\"}) RandomAccessFile")
                                                                             .pointerTypes("RandomAccessFile"))
+               .put(new Info("std::shared_ptr<arrow::csv::StreamingReader>").annotations("@SharedPtr")
+                                                                            .valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::csv::StreamingReader>\"}) StreamingReader")
+                                                                            .pointerTypes("StreamingReader"))
+               .put(new Info("std::shared_ptr<arrow::ipc::Message>").annotations("@SharedPtr")
+                                                                    .valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::ipc::Message>\"}) Message")
+                                                                    .pointerTypes("Message"))
+               .put(new Info("std::shared_ptr<arrow::ipc::RecordBatchFileReader>").annotations("@SharedPtr")
+                                                                                  .valueTypes("@Cast({\"\", \"std::shared_ptr<arrow::ipc::RecordBatchFileReader>\"}) RecordBatchFileReader")
+                                                                                  .pointerTypes("RecordBatchFileReader"))
 
                .put(new Info("std::vector<std::shared_ptr<arrow::DataType> >").pointerTypes("DataTypeVector").define())
                .put(new Info("std::vector<std::shared_ptr<const arrow::KeyValueMetadata> >").pointerTypes("KeyValueMetadataVector").define())
@@ -398,6 +413,8 @@ public class arrow implements InfoMapper {
                .put(new Info("std::vector<std::shared_ptr<arrow::Schema> >").pointerTypes("SchemaVector").define())
                .put(new Info("std::vector<std::shared_ptr<arrow::Table> >").pointerTypes("TableVector").define())
 //               .put(new Info("std::vector<std::shared_ptr<arrow::TimestampParser> >").pointerTypes("TimestampParserVector").define())
+               .put(new Info("const std::vector<std::unique_ptr<arrow::compute::KernelState> >",
+                                   "std::vector<std::unique_ptr<arrow::compute::KernelState> >").pointerTypes("KernelStateVector").define())
                .put(new Info("std::vector<std::vector<std::shared_ptr<arrow::Array> > >", "std::vector<arrow::ArrayVector>").pointerTypes("ArrayVectorVector").define())
                .put(new Info("std::vector<std::pair<int64_t,std::shared_ptr<arrow::Array> > >").pointerTypes("DictionaryVector").define())
                .put(new Info("std::vector<arrow::Datum>").pointerTypes("DatumVector").define())
@@ -413,10 +430,33 @@ public class arrow implements InfoMapper {
 
                .put(new Info("arrow::Enumerated<std::shared_ptr<arrow::RecordBatch> >").pointerTypes("RecordBatchEnumerated").define())
                .put(new Info("arrow::Future<>").pointerTypes("Future").define().purify())
-               .put(new Info("arrow::Future<>::result", "arrow::Future<>::MoveResult", "arrow::Future<>::MarkFinished", "arrow::Future<>::MakeFinished").skip())
+               .put(new Info("arrow::Future<>::result", "arrow::Future<>::MoveResult", "arrow::Future<>::MarkFinished", "arrow::Future<>::MakeFinished",
+                             "arrow::Future<>::internal::Empty",
+                             "arrow::Future<>::WrapResultyOnComplete",
+                             "arrow::Future<>::WrapStatusyOnComplete",
+                             "arrow::Future<>::ThenOnComplete",
+                             "arrow::Future<>::PassthruOnFailure").skip())
                .put(new Info("arrow::Result<bool>").pointerTypes("BoolResult").define())
                .put(new Info("arrow::Result<int>").pointerTypes("IntResult").define())
-               .put(new Info("arrow::Result<int64_t>").pointerTypes("LongResult").define())
+               .put(new Info("arrow::Future<int64_t>",
+                             "arrow::Future<arrow::Future<int64_t>::ValueType>").pointerTypes("LongFuture").define())
+               .put(new Info("arrow::Future<int64_t>::internal::Empty",
+                             "arrow::Future<int64_t>::WrapResultyOnComplete",
+                             "arrow::Future<int64_t>::WrapStatusyOnComplete",
+                             "arrow::Future<int64_t>::ThenOnComplete",
+                             "arrow::Future<int64_t>::PassthruOnFailure").skip())
+               .put(new Info("arrow::Result<int64_t>",
+                             "arrow::Result<arrow::Future<int64_t>::ValueType>").pointerTypes("LongResult").define())
+               .put(new Info("arrow::util::optional<int64_t>").pointerTypes("LongOptional").define())
+               .put(new Info("arrow::Future<arrow::util::optional<int64_t> >",
+                             "arrow::Future<arrow::Future<arrow::util::optional<int64_t> >::ValueType>").pointerTypes("LongOptionalFuture").define())
+               .put(new Info("arrow::Future<arrow::util::optional<int64_t> >::internal::Empty",
+                             "arrow::Future<arrow::util::optional<int64_t> >::WrapResultyOnComplete",
+                             "arrow::Future<arrow::util::optional<int64_t> >::WrapStatusyOnComplete",
+                             "arrow::Future<arrow::util::optional<int64_t> >::ThenOnComplete",
+                             "arrow::Future<arrow::util::optional<int64_t> >::PassthruOnFailure").skip())
+               .put(new Info("arrow::Result<arrow::util::optional<int64_t> >",
+                             "arrow::Result<arrow::Future<arrow::util::optional<int64_t> >::ValueType>").pointerTypes("LongOptionalResult").define())
                .put(new Info("arrow::Result<size_t>").pointerTypes("SizeTResult").define())
                .put(new Info("arrow::Result<std::string>").pointerTypes("StringResult").define())
                .put(new Info("arrow::Result<arrow::ValueDescr>").pointerTypes("ValueDescrResult").define())
@@ -448,21 +488,49 @@ public class arrow implements InfoMapper {
                              "arrow::Result<std::unique_ptr<arrow::ResizableBuffer> >::operator =").skip())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::DataType> >").pointerTypes("DataTypeResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::Field> >").pointerTypes("FieldResult").define())
+               .put(new Info("arrow::Future<std::shared_ptr<const arrow::KeyValueMetadata> >").pointerTypes("KeyValueMetadataFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<const arrow::KeyValueMetadata> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<const arrow::KeyValueMetadata> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<const arrow::KeyValueMetadata> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<const arrow::KeyValueMetadata> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<const arrow::KeyValueMetadata> >::PassthruOnFailure").skip())
+               .put(new Info("arrow::Result<std::shared_ptr<const arrow::KeyValueMetadata> >").pointerTypes("KeyValueMetadataResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::ListArray> >").pointerTypes("ListArrayResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::LargeListArray> >").pointerTypes("LargeListArrayResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::BinaryArray> >").pointerTypes("BinaryArrayResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::StructArray> >").pointerTypes("StructArrayResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::StructScalar> >").pointerTypes("StructScalarResult").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::RecordBatch> >").pointerTypes("RecordBatchFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::RecordBatch> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<arrow::RecordBatch> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::RecordBatch> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::RecordBatch> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::RecordBatch> >::PassthruOnFailure").skip())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::RecordBatch> >").pointerTypes("RecordBatchResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::Scalar> >").pointerTypes("ScalarResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::ChunkedArray> >").pointerTypes("ChunkedArrayResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::Schema> >").pointerTypes("SchemaResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::SparseTensor> >").pointerTypes("SparseTensorResult").define().purify())
                .put(new Info("arrow::Future<std::shared_ptr<arrow::Table> >").pointerTypes("TableFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::Table> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<arrow::Table> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::Table> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::Table> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::Table> >::PassthruOnFailure").skip())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::Table> >").pointerTypes("TableResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::Tensor> >").pointerTypes("TensorResult").define())
                .put(new Info("arrow::Future<std::shared_ptr<arrow::io::InputStream> >").pointerTypes("InputStreamFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::io::InputStream> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<arrow::io::InputStream> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::io::InputStream> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::io::InputStream> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::io::InputStream> >::PassthruOnFailure").skip())
                .put(new Info("arrow::Future<std::shared_ptr<arrow::io::RandomAccessFile> >").pointerTypes("RandomAccessFileFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::io::RandomAccessFile> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<arrow::io::RandomAccessFile> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::io::RandomAccessFile> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::io::RandomAccessFile> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::io::RandomAccessFile> >::PassthruOnFailure").skip())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::io::InputStream> >").pointerTypes("InputStreamResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::io::OutputStream> >", "arrow::Result<std::shared_ptr<io::OutputStream> >").pointerTypes("OutputStreamResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::io::MemoryMappedFile> >").pointerTypes("MemoryMappedFileResult").define())
@@ -475,32 +543,63 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::Result<std::shared_ptr<arrow::io::CompressedInputStream> >").pointerTypes("CompressedInputStreamResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::io::CompressedOutputStream> >").pointerTypes("CompressedOutputStreamResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::io::RandomAccessFile> >", "arrow::Result<std::shared_ptr<io::RandomAccessFile> >").pointerTypes("RandomAccessFileResult").define())
-               .put(new Info("arrow::Result<std::shared_ptr<arrow::csv::StreamingReader> >").pointerTypes("StreamingReaderResult").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >",
+                             "arrow::Future<arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >::ValueType>").pointerTypes("StreamingReaderFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >::PassthruOnFailure").skip())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::csv::StreamingReader> >",
+                             "arrow::Result<arrow::Future<std::shared_ptr<arrow::csv::StreamingReader> >::ValueType>").pointerTypes("StreamingReaderResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::csv::TableReader> >").pointerTypes("TableReaderResult").define())
 //               .put(new Info("arrow::Result<std::shared_ptr<arrow::compute::CastFunction> >").pointerTypes("CastFunctionResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::compute::Function> >").pointerTypes("FunctionResult").define())
                .put(new Info("arrow::Result<arrow::Datum>").pointerTypes("DatumResult").define())
                .put(new Info("arrow::Result<arrow::Datum>::Equals").skip())
                .put(new Info("arrow::Result<arrow::StopSource*>").pointerTypes("StopSourceResult").define())
-               .put(new Info("arrow::Result<arrow::compute::ExecBatch>").cast().pointerTypes("ExecBatchResult").define())
+               .put(new Info("arrow::Result<arrow::compute::Expression>").pointerTypes("ExpressionResult").define())
+               .put(new Info("arrow::Result<arrow::compute::ExecBatch>").pointerTypes("ExecBatchResult").define())
                .put(new Info("arrow::Result<arrow::compute::ExecBatch>::Equals").skip())
+               .put(new Info("arrow::Result<arrow::compute::ExecNode*>").pointerTypes("ExecNodeResult").define())
+               .put(new Info("arrow::Result<arrow::compute::FunctionOptionsType*>", "arrow::Result<const arrow::compute::FunctionOptionsType*>").cast().pointerTypes("FunctionOptionsTypeResult").define())
                .put(new Info("arrow::Result<arrow::compute::Kernel*>", "arrow::Result<const arrow::compute::Kernel*>").cast().pointerTypes("KernelResult").define())
                .put(new Info("arrow::Result<arrow::compute::ScalarKernel*>", "arrow::Result<const arrow::compute::ScalarKernel*>").cast().pointerTypes("ScalarKernelResult").define())
                .put(new Info("arrow::Result<arrow::compute::ScalarAggregateKernel*>", "arrow::Result<const arrow::compute::ScalarAggregateKernel*>").cast().pointerTypes("ScalarAggregateKernelResult").define())
                .put(new Info("arrow::Result<arrow::compute::VectorKernel*>", "arrow::Result<const arrow::compute::VectorKernel*>").cast().pointerTypes("VectorKernelResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::compute::SelectionVector> >").pointerTypes("SelectionVectorResult").define())
+               .put(new Info("arrow::Result<std::unique_ptr<arrow::compute::FunctionOptions> >").pointerTypes("FunctionOptionsResult").define())
+               .put(new Info("arrow::Result<std::unique_ptr<arrow::compute::FunctionOptions> >(const arrow::Result<std::unique_ptr<arrow::compute::FunctionOptions> >&)",
+                             "arrow::Result<std::unique_ptr<arrow::compute::FunctionOptions> >::operator =").skip())
+               .put(new Info("arrow::Result<std::unique_ptr<arrow::compute::KernelState> >").pointerTypes("KernelStateResult").define())
+               .put(new Info("arrow::Result<std::unique_ptr<arrow::compute::KernelState> >(const arrow::Result<std::unique_ptr<arrow::compute::KernelState> >&)",
+                             "arrow::Result<std::unique_ptr<arrow::compute::KernelState> >::operator =").skip())
                .put(new Info("arrow::Result<arrow::fs::FileInfo>").pointerTypes("FileInfoResult").define())
 //               .put(new Info("arrow::Result<arrow::fs::FileStats>").pointerTypes("FileStatsResult").define())
 //               .put(new Info("arrow::Result<arrow::fs::PathForest>").pointerTypes("PathForestResult").define())
                .put(new Info("arrow::Result<arrow::ipc::DictionaryVector>").pointerTypes("DictionaryVectorResult").define())
                .put(new Info("arrow::Result<std::vector<arrow::Datum> >").pointerTypes("DatumVectorResult").define())
-               .put(new Info("arrow::Future<std::vector<arrow::fs::FileInfo> >", "arrow::Future<arrow::fs::FileInfoVector>").pointerTypes("FileInfoVectorFuture").define())
+               .put(new Info("arrow::Future<std::vector<arrow::fs::FileInfo> >", "arrow::Future<arrow::fs::FileInfoVector>",
+                             "arrow::Future<arrow::Future<std::vector<arrow::fs::FileInfo> >::ValueType>").pointerTypes("FileInfoVectorFuture").define())
+               .put(new Info("arrow::Future<std::vector<arrow::fs::FileInfo> >::internal::Empty",
+                             "arrow::Future<std::vector<arrow::fs::FileInfo> >::WrapResultyOnComplete",
+                             "arrow::Future<std::vector<arrow::fs::FileInfo> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::vector<arrow::fs::FileInfo> >::ThenOnComplete",
+                             "arrow::Future<std::vector<arrow::fs::FileInfo> >::PassthruOnFailure").skip())
                .put(new Info("arrow::Result<std::vector<arrow::fs::FileInfo> >", "arrow::Result<arrow::fs::FileInfoVector>",
                              "arrow::Result<arrow::Future<std::vector<arrow::fs::FileInfo> >::ValueType>").pointerTypes("FileInfoVectorResult").define())
 //               .put(new Info("arrow::Result<std::vector<arrow::fs::FileStats> >").pointerTypes("FileStatsVectorResult").define())
                .put(new Info("arrow::Result<std::vector<std::shared_ptr<arrow::Buffer> > >").pointerTypes("BufferVectorResult").define())
                .put(new Info("arrow::Result<std::vector<std::shared_ptr<arrow::ChunkedArray> > >").pointerTypes("ChunkedArrayVectorResult").define())
-               .put(new Info("arrow::Result<std::vector<std::shared_ptr<arrow::RecordBatch> > >", "arrow::Result<arrow::RecordBatchVector>").pointerTypes("RecordBatchVectorResult").define())
+               .put(new Info("arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >", "arrow::Future<arrow::RecordBatchVector>",
+                             "arrow::Future<arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >::ValueType>").pointerTypes("RecordBatchVectorFuture").define())
+               .put(new Info("arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >::internal::Empty",
+                             "arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >::WrapResultyOnComplete",
+                             "arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >::WrapStatusyOnComplete",
+                             "arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >::ThenOnComplete",
+                             "arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >::PassthruOnFailure").skip())
+               .put(new Info("arrow::Result<std::vector<std::shared_ptr<arrow::RecordBatch> > >", "arrow::Result<arrow::RecordBatchVector>",
+                             "arrow::Result<arrow::Future<std::vector<std::shared_ptr<arrow::RecordBatch> > >::ValueType>").pointerTypes("RecordBatchVectorResult").define())
                .put(new Info("arrow::Result<std::vector<std::shared_ptr<arrow::Schema> > >").pointerTypes("SchemaVectorResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::fs::FileSystem> >").pointerTypes("FileSystemResult").define())
 //               .put(new Info("arrow::Result<std::shared_ptr<arrow::fs::S3FileSystem> >").pointerTypes("S3FileSystemResult").define())
@@ -517,13 +616,29 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >").pointerTypes("IpcPayloadWriterResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >(const arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >&)",
                              "arrow::Result<std::unique_ptr<arrow::ipc::internal::IpcPayloadWriter> >::operator =").skip())
-               .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::Message> >").pointerTypes("MessageSharedResult").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::ipc::Message> >",
+                             "arrow::Future<arrow::Future<std::shared_ptr<arrow::ipc::Message> >::ValueType>").pointerTypes("MessageFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::ipc::Message> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::Message> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::Message> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::Message> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::Message> >::PassthruOnFailure").skip())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::Message> >",
+                             "arrow::Result<arrow::Future<std::shared_ptr<arrow::ipc::Message> >::ValueType>").pointerTypes("MessageSharedResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::Message> >").pointerTypes("MessageUniqueResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::Message> >(const arrow::Result<std::unique_ptr<arrow::ipc::Message> >&)",
                              "arrow::Result<std::unique_ptr<arrow::ipc::Message> >::operator =").skip())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::feather::Reader> >").pointerTypes("FeatherReaderResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchStreamReader> >").pointerTypes("RecordBatchStreamReaderResult").define())
-               .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >").pointerTypes("RecordBatchFileReaderResult").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >",
+                             "arrow::Future<arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >::ValueType>").pointerTypes("RecordBatchFileReaderFuture").define())
+               .put(new Info("arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >::internal::Empty",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >::WrapResultyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >::WrapStatusyOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >::ThenOnComplete",
+                             "arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >::PassthruOnFailure").skip())
+               .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >",
+                             "arrow::Result<arrow::Future<std::shared_ptr<arrow::ipc::RecordBatchFileReader> >::ValueType>").pointerTypes("RecordBatchFileReaderResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchReader> >", "arrow::Result<std::shared_ptr<arrow::RecordBatchReader> >").pointerTypes("RecordBatchReaderSharedResult").define())
                .put(new Info("arrow::Result<std::shared_ptr<arrow::ipc::RecordBatchWriter> >").pointerTypes("RecordBatchWriterSharedResult").define())
                .put(new Info("arrow::Result<std::unique_ptr<arrow::ipc::RecordBatchWriter> >").pointerTypes("RecordBatchWriterUniqueResult").define())
@@ -568,6 +683,8 @@ public class arrow implements InfoMapper {
                              "arrow::CTypeTraits<const char*>", "arrow::CTypeTraits<std::string>", "arrow::DictionaryScalar::ValueType", "arrow::fs::TimePoint",
                              "std::enable_shared_from_this<arrow::fs::FileSystem>", "std::enable_shared_from_this<FileSystem>",
                              "std::enable_shared_from_this<arrow::io::RandomAccessFile>", "std::enable_shared_from_this<RandomAccessFile>",
+                             "std::enable_shared_from_this<arrow::io::InputStream>",
+                             "std::enable_shared_from_this<arrow::ipc::RecordBatchFileReader>",
                              "std::enable_shared_from_this<arrow::internal::TaskGroup>",
                              "std::function<std::unique_ptr<arrow::detail::ReadaheadPromise>()>",
                              "arrow::BooleanArray::IteratorType",
@@ -594,12 +711,15 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Scalar>",
                              "arrow::util::EqualityComparable<arrow::Schema>",
                              "arrow::util::EqualityComparable<arrow::Status>", "arrow::util::EqualityComparable<Status>",
+                             "arrow::util::EqualityComparable<arrow::compute::FunctionOptions>",
+                             "arrow::util::EqualityComparable<arrow::compute::SortKey>", "arrow::util::EqualityComparable<SortKey>",
                              "arrow::util::EqualityComparable<arrow::fs::FileInfo>", "arrow::util::EqualityComparable<FileInfo>",
 //                             "arrow::util::EqualityComparable<arrow::fs::FileStats>", "arrow::util::EqualityComparable<FileStats>",
 //                             "arrow::util::EqualityComparable<arrow::fs::PathForest>", "arrow::util::EqualityComparable<PathForest>",
                              "arrow::util::EqualityComparable<arrow::Result<bool> >",
                              "arrow::util::EqualityComparable<arrow::Result<int> >",
                              "arrow::util::EqualityComparable<arrow::Result<int64_t> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::util::optional<int64_t> > >",
                              "arrow::util::EqualityComparable<arrow::Result<size_t> >",
                              "arrow::util::EqualityComparable<arrow::Result<std::string> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::ValueDescr> >",
@@ -623,7 +743,10 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<arrow::Datum> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::StopSource*> >",
                              "arrow::util::EqualityComparable<arrow::Result<std::unordered_map<arrow::FieldRef,arrow::Datum,arrow::FieldRef::Hash> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::compute::Expression> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::compute::ExecBatch> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::compute::ExecNode*> >",
+                             "arrow::util::EqualityComparable<arrow::Result<arrow::compute::FunctionOptionsType*> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::compute::Kernel*> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::compute::ScalarKernel*> >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::compute::ScalarAggregateKernel*> >",
@@ -631,6 +754,8 @@ public class arrow implements InfoMapper {
 //                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::compute::CastFunction> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::compute::Function> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::compute::SelectionVector> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::compute::FunctionOptions> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::compute::KernelState> > >",
                              "arrow::util::EqualityComparable<arrow::Result<arrow::fs::FileInfo> >",
 //                             "arrow::util::EqualityComparable<arrow::Result<arrow::fs::FileStats> >",
 //                             "arrow::util::EqualityComparable<arrow::Result<arrow::fs::PathForest> >",
@@ -684,6 +809,7 @@ public class arrow implements InfoMapper {
                              "arrow::util::EqualityComparable<arrow::Result<std::unique_ptr<arrow::ResizableBuffer> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::DataType> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::Field> > >",
+                             "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<const arrow::KeyValueMetadata> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::ListArray> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::LargeListArray> > >",
                              "arrow::util::EqualityComparable<arrow::Result<std::shared_ptr<arrow::BinaryArray> > >",
@@ -730,7 +856,9 @@ public class arrow implements InfoMapper {
                              "arrow::ipc::WriteMessage", "arrow::json::Convert", "arrow::csv::ConvertOptions::timestamp_parsers",
                              "arrow::ChunkedArray(arrow::ChunkedArray)", "arrow::ChunkedArray::operator =", "arrow::FutureImpl", "arrow::StopSourceImpl",
                              "arrow::AllocateBitmap", "arrow::ConcatenateBuffers", "arrow::FieldPath::Get", "arrow::GetCastFunction",
-                             "arrow::compute::CastFunction", "arrow::compute::MinMax", "arrow::ipc::internal::CheckCompressionSupported").skip())
+                             "arrow::compute::CastFunction", "arrow::compute::MinMax", "arrow::ipc::internal::CheckCompressionSupported",
+                             "arrow::compute::KnownFieldValues", "arrow::Result<arrow::compute::KnownFieldValues>",
+                             "arrow::compute::ScalarAggregateKernel::MergeAll").skip())
                .put(new Info("arrow::Datum::type").enumerate(false).valueTypes("int"))
                .put(new Info("arrow::Endianness").enumerate().valueTypes("Endianness", "@Cast(\"arrow::Endianness\") int"))
 
