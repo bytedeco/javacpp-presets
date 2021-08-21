@@ -61,7 +61,6 @@ public class gym {
         }
         packageFile = Loader.cacheResource("/org/bytedeco/gym/python/");
         return packageFile;
-
     }
 
     /** Returns {@code {opencv_python3.cachePackages(), scipy.cachePackages(), gym.cachePackage()}}. */
