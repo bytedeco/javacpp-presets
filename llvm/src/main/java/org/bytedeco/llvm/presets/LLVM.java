@@ -45,9 +45,15 @@ import org.bytedeco.javacpp.tools.*;
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform())}. */
-    public static File cachePackage() throws IOException {
-        return Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform());
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
+        packageFile = Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform());
+        return packageFile;
     }
 
     public void map(InfoMap infoMap) {

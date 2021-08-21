@@ -52,9 +52,16 @@ import org.bytedeco.scipy.presets.*;
 public class gym {
     static { Loader.checkVersion("org.bytedeco", "gym"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/gym/python/")}. */
-    public static File cachePackage() throws IOException {
-        return Loader.cacheResource("/org/bytedeco/gym/python/");
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
+        packageFile = Loader.cacheResource("/org/bytedeco/gym/python/");
+        return packageFile;
+
     }
 
     /** Returns {@code {opencv_python3.cachePackages(), scipy.cachePackages(), gym.cachePackage()}}. */

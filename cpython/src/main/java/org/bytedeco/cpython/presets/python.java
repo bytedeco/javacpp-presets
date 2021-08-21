@@ -208,10 +208,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class python implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "cpython"); }
 
-    private static volatile File packageFile = null;
+    private static File packageFile = null;
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform())} and monkey patches files accordingly. */
-    public static File cachePackage() throws IOException {
+    public static synchronized File cachePackage() throws IOException {
         if (packageFile != null) {
             return packageFile;
         }
@@ -251,7 +251,8 @@ public class python implements InfoMapper {
                 }
             }
         }
-        return packageFile = pythonFile;
+        packageFile = pythonFile;
+        return pythonFile;
     }
 
     /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.9"), new File(f, "python3.9/lib-dynload"), new File(f, "python3.9/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */

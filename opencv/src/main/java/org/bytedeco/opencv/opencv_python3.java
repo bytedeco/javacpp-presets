@@ -76,17 +76,22 @@ import org.bytedeco.opencv.presets.*;
 public class opencv_python3 {
     static { Loader.load(); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/opencv/" + Loader.getPlatform() + extension + "/python/")}. */
-    public static File cachePackage() throws IOException {
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
         Loader.load(org.bytedeco.cpython.global.python.class);
         String path = Loader.load(opencv_core.class);
         if (path != null) {
             path = path.replace(File.separatorChar, '/');
             int i = path.indexOf("/org/bytedeco/opencv/" + Loader.getPlatform());
             int j = path.lastIndexOf("/");
-            return Loader.cacheResource(path.substring(i, j) + "/python/");
+            packageFile = Loader.cacheResource(path.substring(i, j) + "/python/");
         }
-        return null;
+        return packageFile;
     }
 
     /** Returns {@code {numpy.cachePackages(), opencv.cachePackage()}}. */
