@@ -430,17 +430,22 @@ import java.util.List;
 public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tensorflow"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/tensorflow/" + Loader.getPlatform() + extension + "/python/")}. */
-    public static File cachePackage() throws IOException {
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
         Loader.load(org.bytedeco.cpython.global.python.class);
         String path = Loader.load(tensorflow.class);
         if (path != null) {
             path = path.replace(File.separatorChar, '/');
             int i = path.indexOf("/org/bytedeco/tensorflow/" + Loader.getPlatform());
             int j = path.lastIndexOf("/");
-            return Loader.cacheResource(path.substring(i, j) + "/python/");
+            packageFile = Loader.cacheResource(path.substring(i, j) + "/python/");
         }
-        return null;
+        return packageFile;
     }
 
     /** Returns {@code {numpy.cachePackages(), tensorflow.cachePackage()}}. */

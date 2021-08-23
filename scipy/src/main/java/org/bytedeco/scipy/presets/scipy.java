@@ -53,10 +53,16 @@ import org.bytedeco.numpy.presets.*;
 public class scipy {
     static { Loader.checkVersion("org.bytedeco", "scipy"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/scipy/" + Loader.getPlatform() + "/python/")}. */
-    public static File cachePackage() throws IOException {
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
         Loader.load(scipy.class);
-        return Loader.cacheResource("/org/bytedeco/scipy/" + Loader.getPlatform() + "/python/");
+        packageFile = Loader.cacheResource("/org/bytedeco/scipy/" + Loader.getPlatform() + "/python/");
+        return packageFile;
     }
 
     /** Returns {@code {numpy.cachePackages(), scipy.cachePackage()}}. */
