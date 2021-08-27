@@ -304,11 +304,7 @@ public static final int
     @Override public String toString() { return intern().name(); }
 }
 
-
-// Targeting ../ConnectionHash.java
-
-
-  // namespace std
+  // namespace dai
 
 
 // Parsed from depthai-shared/common/CameraImageOrientation.hpp
@@ -609,7 +605,9 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
     EdgeDetectorConfig(10),
     Tracklets(11),
     IMUData(12),
-    StereoDepthConfig(13);
+    StereoDepthConfig(13),
+    FeatureTrackerConfig(14),
+    TrackedFeatures(15);
 
     public final int value;
     private DatatypeEnum(int v) { this.value = v; }
@@ -1779,9 +1777,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 
 
-  // namespace dai
 
-// Specialization of std::hash for Node::Connection
+// Targeting ../ConnectionHash.java
+
+
 
   // namespace std
 
@@ -1823,6 +1822,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "node/ColorCamera.hpp"
 // #include "node/DetectionNetwork.hpp"
 // #include "node/EdgeDetector.hpp"
+// #include "node/FeatureTracker.hpp"
 // #include "node/IMU.hpp"
 // #include "node/ImageManip.hpp"
 // #include "node/MonoCamera.hpp"
@@ -1848,6 +1848,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "datatype/ADatatype.hpp"
 // #include "datatype/Buffer.hpp"
 // #include "datatype/CameraControl.hpp"
+// #include "datatype/FeatureTrackerConfig.hpp"
 // #include "datatype/IMUData.hpp"
 // #include "datatype/ImageManipConfig.hpp"
 // #include "datatype/ImgDetections.hpp"
@@ -1857,8 +1858,8 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "datatype/SpatialLocationCalculatorConfig.hpp"
 // #include "datatype/SpatialLocationCalculatorData.hpp"
 // #include "datatype/SystemInformation.hpp"
+// #include "datatype/TrackedFeatures.hpp"
 // #include "datatype/Tracklets.hpp"
-
 
 // Parsed from depthai/pipeline/node/IMU.hpp
 
@@ -2291,6 +2292,44 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
   // namespace dai
 
 
+// Parsed from depthai/device/DeviceBase.hpp
+
+// #pragma once
+
+// std
+// #include <atomic>
+// #include <chrono>
+// #include <condition_variable>
+// #include <functional>
+// #include <memory>
+// #include <mutex>
+// #include <string>
+// #include <thread>
+// #include <tuple>
+// #include <unordered_map>
+// #include <vector>
+
+// project
+// #include "depthai/common/CameraBoardSocket.hpp"
+// #include "depthai/common/UsbSpeed.hpp"
+// #include "depthai/device/CalibrationHandler.hpp"
+// #include "depthai/pipeline/Pipeline.hpp"
+// #include "depthai/utility/Pimpl.hpp"
+// #include "depthai/xlink/XLinkConnection.hpp"
+// #include "depthai/xlink/XLinkStream.hpp"
+
+// shared
+// #include "depthai-shared/common/ChipTemperature.hpp"
+// #include "depthai-shared/common/CpuUsage.hpp"
+// #include "depthai-shared/common/MemoryInfo.hpp"
+// #include "depthai-shared/log/LogLevel.hpp"
+// #include "depthai-shared/log/LogMessage.hpp"
+// Targeting ../DeviceBase.java
+
+
+  // namespace dai
+
+
 // Parsed from depthai/device/CalibrationHandler.hpp
 
 // #pragma once
@@ -2334,29 +2373,18 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #pragma once
 
 // std
+// #include <chrono>
 // #include <condition_variable>
+// #include <deque>
+// #include <memory>
 // #include <mutex>
 // #include <string>
-// #include <thread>
-// #include <type_traits>
+// #include <unordered_map>
 
 // project
-// #include "CallbackHandler.hpp"
 // #include "DataQueue.hpp"
-// #include "depthai/common/CameraBoardSocket.hpp"
-// #include "depthai/common/UsbSpeed.hpp"
-// #include "depthai/device/CalibrationHandler.hpp"
+// #include "depthai/device/DeviceBase.hpp"
 // #include "depthai/pipeline/Pipeline.hpp"
-// #include "depthai/utility/Pimpl.hpp"
-// #include "depthai/xlink/XLinkConnection.hpp"
-// #include "depthai/xlink/XLinkStream.hpp"
-
-// shared
-// #include "depthai-shared/common/ChipTemperature.hpp"
-// #include "depthai-shared/common/CpuUsage.hpp"
-// #include "depthai-shared/common/MemoryInfo.hpp"
-// #include "depthai-shared/log/LogLevel.hpp"
-// #include "depthai-shared/log/LogMessage.hpp"
 // Targeting ../Device.java
 
 

@@ -196,7 +196,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.9.x  https://www.python.org/downloads/
  * NumPy 1.21.x  https://github.com/numpy/numpy
  * SciPy 1.7.x  https://github.com/scipy/scipy
- * Gym 0.18.x  https://github.com/openai/gym
+ * Gym 0.19.x  https://github.com/openai/gym
  * LLVM 12.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
@@ -215,7 +215,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow Lite 2.6.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.9.x  https://github.com/luxonis/depthai-core
+ * DepthAI 2.10.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.8.x  https://github.com/microsoft/onnxruntime

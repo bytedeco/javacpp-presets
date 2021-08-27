@@ -80,11 +80,11 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython==0.29.22 pybind11==2.6.2 pythran==0.9.11; then
+if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython==0.29.24 pybind11==2.6.2 pythran==0.9.11; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.9"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.9" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.9/" crossenv==1.0 cython==0.29.22 numpy==1.21.1 pybind11==2.6.2 pythran==0.9.11
+    "$CPYTHON_HOST_PATH/bin/python3.9" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.9/" crossenv==1.0 cython==0.29.24 numpy==1.21.2 pybind11==2.6.2 pythran==0.9.11
     "$CPYTHON_HOST_PATH/bin/python3.9" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp "$NUMPY_PATH/python/numpy/random/lib/libnpyrandom.a" "$CPYTHON_HOST_PATH/lib/python3.9/numpy/random/lib/libnpyrandom.a"
     cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.9/numpy/core/lib/libnpymath.a"

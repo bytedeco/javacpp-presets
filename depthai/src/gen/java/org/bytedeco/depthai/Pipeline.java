@@ -152,4 +152,11 @@ public class Pipeline extends Pointer {
     /** Set a camera IQ (Image Quality) tuning blob, used for all cameras */
     public native void setCameraTuningBlobPath(@StdString BytePointer path);
     public native void setCameraTuningBlobPath(@StdString String path);
+
+    /**
+     * Set chunk size for splitting device-sent XLink packets, in bytes. A larger value could
+     * increase performance, with 0 disabling chunking. A negative value won't modify the
+     * device defaults - configured per protocol, currently 64*1024 for both USB and Ethernet.
+     */
+    public native void setXLinkChunkSize(int sizeBytes);
 }

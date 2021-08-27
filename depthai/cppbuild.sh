@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DEPTHAI_VERSION=2.9.0
+DEPTHAI_VERSION=2.10.0
 LIBUSB_VERSION=1.0.22
 download https://github.com/luxonis/depthai-core/releases/download/v$DEPTHAI_VERSION/depthai-core-v$DEPTHAI_VERSION.tar.gz depthai-core-v$DEPTHAI_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
@@ -21,7 +21,7 @@ tar --totals -xzf ../depthai-core-v$DEPTHAI_VERSION.tar.gz
 tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 
 cd depthai-core-v$DEPTHAI_VERSION
-patch -Np1 < ../../../depthai.patch
+#patch -Np1 < ../../../depthai.patch
 sedinplace '/find_package(Git/d' CMakeLists.txt cmake/GitCommitHash.cmake shared/depthai-bootloader-shared.cmake shared/depthai-shared.cmake
 sedinplace '/protected:/d' include/depthai/pipeline/Node.hpp
 

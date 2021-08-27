@@ -24,5 +24,6 @@ public class ADatatype extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ADatatype(Pointer p) { super(p); }
 
+    public native @SharedPtr RawBuffer serialize();
     public native @SharedPtr RawBuffer getRaw();
 }

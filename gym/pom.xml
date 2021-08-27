@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>gym</artifactId>
-  <version>0.18.3-${project.parent.version}</version>
+  <version>0.19.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Gym</name>
 
   <dependencies>
@@ -79,7 +79,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy</artifactId>
-            <version>1.21.1-${project.parent.version}</version>
+            <version>1.21.2-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -101,7 +101,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy</artifactId>
-            <version>1.21.1-${project.parent.version}</version>
+            <version>1.21.2-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
