@@ -153,6 +153,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-bootloader-shared/Section.hpp",
                 "depthai-bootloader-shared/Type.hpp",
                 "depthai/device/DataQueue.hpp",
+                "depthai/device/DeviceBase.hpp",
                 "depthai/device/CalibrationHandler.hpp",
                 "depthai/device/CallbackHandler.hpp",
                 "depthai/device/Device.hpp",

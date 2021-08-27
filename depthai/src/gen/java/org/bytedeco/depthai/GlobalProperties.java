@@ -64,4 +64,11 @@ public class GlobalProperties extends Pointer {
      * Uri which points to camera tuning blob
      */
     public native @StdString BytePointer cameraTuningBlobUri(); public native GlobalProperties cameraTuningBlobUri(BytePointer setter);
+
+    /**
+     * Chunk size for splitting device-sent XLink packets, in bytes. A larger value could
+     * increase performance, with 0 disabling chunking. A negative value won't modify the
+     * device defaults - configured per protocol, currently 64*1024 for both USB and Ethernet.
+     */
+    public native int xlinkChunkSize(); public native GlobalProperties xlinkChunkSize(int setter);
 }
