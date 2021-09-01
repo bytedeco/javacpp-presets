@@ -437,7 +437,7 @@
             </goals>
             <configuration>
               <minmemory>256m</minmemory>
-              <maxmemory>2048m</maxmemory>
+              <maxmemory>4096m</maxmemory>
               <links>
                 <link>http://bytedeco.org/javacpp/apidocs</link>
               </links>
