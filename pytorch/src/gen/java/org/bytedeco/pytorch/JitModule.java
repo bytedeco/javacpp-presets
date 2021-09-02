@@ -98,11 +98,29 @@ public class JitModule extends JitObject {
   public native void register_module(@StdString BytePointer name, @Const @ByRef JitModule module);
   public native void register_module(@StdString String name, @Const @ByRef JitModule module);
 
-  public native void apply(@Const @ByRef ModuleFunction fn); // direct modules // all modules, including this one, recursively
+  public native void apply(@Const @ByRef ModuleFunction fn);
+
+  public native @ByVal buffer_list buffers(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal buffer_list buffers();
+  public native @ByVal named_buffer_list named_buffers(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal named_buffer_list named_buffers();
+
+  public native @ByVal module_list children(); // direct modules
+  public native @ByVal named_module_list named_children();
+  public native @ByVal module_list modules(); // all modules, including this one, recursively
+  public native @ByVal named_module_list named_modules();
 
   // all tensors involved in gradient optimization
+  public native @ByVal parameter_list parameters(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal parameter_list parameters();
+  public native @ByVal named_parameter_list named_parameters(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal named_parameter_list named_parameters();
 
   // all members of the object, similar to iterating over dir(obj) in python
+  public native @ByVal attribute_list attributes(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal attribute_list attributes();
+  public native @ByVal named_attribute_list named_attributes(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal named_attribute_list named_attributes();
 
   public native void dump(
         @Cast("bool") boolean print_method_bodies,
