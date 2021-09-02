@@ -17712,10 +17712,9 @@ body of your function, only data pointers.
 // we pin IR version to version 6 (12/11/2019) instead of using
 // onnx::IR_VERSION. with this change, the test_operators.py will be more
 // stable. only bump it when it's necessary
-@Namespace("torch::onnx") @MemberGetter public static native @Cast("const size_t") long IR_VERSION();
-public static final long IR_VERSION = IR_VERSION();
+
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-@Namespace("torch::onnx") public static native @Cast("const char*") BytePointer PRODUCER_VERSION(); public static native void PRODUCER_VERSION(BytePointer setter);
+
  // namespace torch::onnx
 
 
@@ -20959,6 +20958,15 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // modules and their methods into flattened graphs which don't have any
 // function calls.
 // Map which stores filename to content.
+// Targeting ../NamedJitModule.java
+
+
+// Targeting ../NamedTensor.java
+
+
+// Targeting ../NamedIValue.java
+
+
  // namespace detail
 // Targeting ../JitModule.java
 
@@ -20980,20 +20988,55 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
 
 
- // namespace detail
 
-// This iterator allows the (optionally recursive) enumeration of
-// the  members of a Module. It performs a depth-first pre-order
-// traversal of the module. The Policy template parameter determines
-// which slots of the object should be included. For instance,
-// when iterating parameters, we return the parameter tensors,
-// but skip modules, buffers, and other attributes.
-// See ModulePolicy for comments about Policy object's API.
+// Targeting ../module_iterator.java
 
-// This type represents lists of parameters, attributes, and
-// submodules contained in the module. It is abstract because
-// they are not stored directly in std::vectors but inside the
-// module's IValue object itself.
+
+// Targeting ../named_module_iterator.java
+
+
+// Targeting ../parameter_iterator.java
+
+
+// Targeting ../named_parameter_iterator.java
+
+
+// Targeting ../attribute_iterator.java
+
+
+// Targeting ../named_attribute_iterator.java
+
+
+// Targeting ../buffer_iterator.java
+
+
+// Targeting ../named_buffer_iterator.java
+
+
+// Targeting ../module_list.java
+
+
+// Targeting ../named_module_list.java
+
+
+// Targeting ../parameter_list.java
+
+
+// Targeting ../named_parameter_list.java
+
+
+// Targeting ../attribute_list.java
+
+
+// Targeting ../named_attribute_list.java
+
+
+// Targeting ../buffer_list.java
+
+
+// Targeting ../named_buffer_list.java
+
+
 // Targeting ../ModulePolicy.java
 
 
@@ -21006,10 +21049,18 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // Targeting ../AttributePolicy.java
 
 
+// Targeting ../NamedModulePolicy.java
 
-// take a Policy object, and make a version of it that returns the slot.
-// along with the fully qualified name of that slot. This is used for the named_
-// variants like named_parameters().
+
+// Targeting ../NamedParameterPolicy.java
+
+
+// Targeting ../NamedAttributePolicy.java
+
+
+// Targeting ../NamedBufferPolicy.java
+
+
 
  // namespace detail
 
