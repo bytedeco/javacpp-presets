@@ -858,9 +858,6 @@ public class torch implements LoadEnabled, InfoMapper {
                              "torch::jit::trace", "torch::jit::tracer::TracingState::lookup_var_name_fn", "torch::jit::tracer::ArgumentStash",
                              "torch::jit::constant_not_supported_error", "torch::jit::ObjectAttributeError",
 
-                             "torch::jit::attribute_list", "torch::jit::buffer_list",  "torch::jit::parameter_list", "torch::jit::module_list", "torch::jit::slot_list_impl",
-                             "torch::jit::named_attribute_list", "torch::jit::named_buffer_list", "torch::jit::named_parameter_list", "torch::jit::named_module_list",
-
                              "torch::jit::checkHasValidSetGetState", "torch::jit::getTypeTags", "torch::jit::setTypeTags", "torch::jit::getStorageKey",
                              "torch::jit::getUnresolvedClassAttributes", "torch::jit::isOpSupportedInMobile", "torch::jit::restoreAccurateTypeTags",
                              "torch::jit::detail::getDifferentiableGraphOpExecutor","torch::jit::detail::getGradExecutor", "torch::jit::Graph::createPythonOp",
@@ -869,7 +866,7 @@ public class torch implements LoadEnabled, InfoMapper {
                              "torch::jit::Object(c10::QualifiedName, torch::jit::CompilationUnit*, bool)", "torch::jit::Source::findSourceRangeThatGenerated",
                              "torch::jit::SourceRangeDeserializer::deserialize", "torch::jit::SourceRangePickler::pickle", "torch::jit::Pickler::pushEmptyDict",
                              "torch::jit::PrintDepsTable::add", "torch::jit::printerHasSpecialCaseFor", "ONNX_NAMESPACE::ModelProto", "torch::jit::export_onnx",
-                             "torch::jit::serialize_model_proto_to_string").skip())
+                             "torch::jit::serialize_model_proto_to_string", "torch::onnx::IR_VERSION", "torch::onnx::PRODUCER_VERSION").skip())
 
                .put(new Info("c10::requires_grad", "at::range").skipDefaults())
                .put(new Info("c10::prim::requires_grad").javaNames("requires_grad"))
@@ -1071,6 +1068,43 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::jit::String").pointerTypes("JitString"))
                .put(new Info("torch::jit::generic_graph_node_list<torch::jit::Node>").pointerTypes("graph_node_list"))
                .put(new Info("torch::jit::generic_graph_node_list_iterator<torch::jit::Node>").pointerTypes("graph_node_list_iterator"))
+
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::ModulePolicy>", "torch::jit::module_list").pointerTypes("module_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::ModulePolicy>").pointerTypes("module_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::ModulePolicy>::value_type").pointerTypes("JitModule"))
+               .put(new Info("torch::jit::Named<torch::jit::Module>").pointerTypes("NamedJitModule"))
+               .put(new Info("torch::jit::detail::NamedPolicy<torch::jit::detail::ModulePolicy>").pointerTypes("NamedModulePolicy"))
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::ModulePolicy> >", "torch::jit::named_module_list").pointerTypes("named_module_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::ModulePolicy> >").pointerTypes("named_module_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::ModulePolicy> >::value_type").pointerTypes("NamedJitModule"))
+
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::ParameterPolicy>", "torch::jit::parameter_list").pointerTypes("parameter_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::ParameterPolicy>").pointerTypes("parameter_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::ParameterPolicy>::value_type").pointerTypes("Tensor"))
+               .put(new Info("torch::jit::Named<at::Tensor>").pointerTypes("NamedTensor"))
+               .put(new Info("torch::jit::detail::NamedPolicy<torch::jit::detail::ParameterPolicy>").pointerTypes("NamedParameterPolicy"))
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::ParameterPolicy> >", "torch::jit::named_parameter_list").pointerTypes("named_parameter_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::ParameterPolicy> >").pointerTypes("named_parameter_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::ParameterPolicy> >::value_type").pointerTypes("NamedTensor"))
+
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::AttributePolicy>", "torch::jit::attribute_list").pointerTypes("attribute_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::AttributePolicy>").pointerTypes("attribute_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::AttributePolicy>::value_type").pointerTypes("IValue"))
+               .put(new Info("torch::jit::Named<c10::IValue>").pointerTypes("NamedIValue"))
+               .put(new Info("torch::jit::detail::NamedPolicy<torch::jit::detail::AttributePolicy>").pointerTypes("NamedAttributePolicy"))
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::AttributePolicy> >", "torch::jit::named_attribute_list").pointerTypes("named_attribute_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::AttributePolicy> >").pointerTypes("named_attribute_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::AttributePolicy> >::value_type").pointerTypes("NamedIValue"))
+
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::BufferPolicy>", "torch::jit::buffer_list").pointerTypes("buffer_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::BufferPolicy>").pointerTypes("buffer_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::BufferPolicy>::value_type").pointerTypes("Tensor"))
+               .put(new Info("torch::jit::Named<at::Tensor>").pointerTypes("NamedTensor"))
+               .put(new Info("torch::jit::detail::NamedPolicy<torch::jit::detail::BufferPolicy>").pointerTypes("NamedBufferPolicy"))
+               .put(new Info("torch::jit::slot_list_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::BufferPolicy> >", "torch::jit::named_buffer_list").pointerTypes("named_buffer_list"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::BufferPolicy> >").pointerTypes("named_buffer_iterator"))
+               .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::BufferPolicy> >::value_type").pointerTypes("NamedTensor"))
+
                .put(new Info("torch::jit::tracer::warn_fn_type", "warn_fn_type").cast().pointerTypes("warn_fn_type"))
                .put(new Info("torch::jit::Maybe<torch::jit::Def>").pointerTypes("DefMaybe"))
                .put(new Info("torch::jit::Maybe<torch::jit::Expr>").pointerTypes("ExprMaybe"))
