@@ -30,7 +30,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.*;
+import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.Const;
+import org.bytedeco.javacpp.annotation.Name;
+import org.bytedeco.javacpp.annotation.Opaque;
 import org.bytedeco.qt.Qt5Core.*;
 import org.bytedeco.qt.Qt5Widgets.*;
 
