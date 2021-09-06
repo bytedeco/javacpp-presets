@@ -1,4 +1,5 @@
 
+ * Increase the amount of function pointers available for callbacks in presets for Qt ([pull #1080](https://github.com/bytedeco/javacpp-presets/pull/1080))
  * Map C++ JIT classes and functions of TorchScript in presets for PyTorch ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Synchronize `cachePackage()` and prevent repeated package caching in all presets ([pull #1071](https://github.com/bytedeco/javacpp-presets/pull/1071))
  * Build FFmpeg with VA-API enabled and bundle its libraries to avoid loading issues ([issue bytedeco/javacv#1188](https://github.com/bytedeco/javacv/issues/1188))
