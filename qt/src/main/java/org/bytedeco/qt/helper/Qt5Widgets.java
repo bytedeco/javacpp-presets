@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Allocator;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Const;
 import org.bytedeco.javacpp.annotation.Name;
@@ -49,6 +50,7 @@ public class Qt5Widgets extends org.bytedeco.qt.presets.Qt5Widgets {
   @Name("[=](const QAbstractButton *sender, const QObject *context, void (*functor)(int, bool), int target){QObject::connect(sender, &QAbstractButton::clicked, context, [functor,target](bool checked){functor(target, checked);});}")
   public native static void QAbstractButton_clicked(@Const QAbstractButton sender, @Const QObject context, ClickedCallback functor, int target);
 
+  @Allocator(max = 100)
   public static class ClickedCallback extends FunctionPointer {
     static { Loader.load(); }
     private static List<ClickedCallback> cbs = Collections.synchronizedList(new ArrayList<ClickedCallback>());
@@ -73,6 +75,7 @@ public class Qt5Widgets extends org.bytedeco.qt.presets.Qt5Widgets {
   @Name("[=](const QAbstractButton *sender, const QObject *context, void (*functor)(int, bool), int target){QObject::connect(sender, &QAbstractButton::toggled, context, [functor,target](bool checked){functor(target, checked);});}")
   public native static void QAbstractButton_toggled(@Const QAbstractButton sender, @Const QObject context, ToggledCallback functor, int target);
 
+  @Allocator(max = 100)
   public static class ToggledCallback extends FunctionPointer {
     static { Loader.load(); }
     private static List<ToggledCallback> cbs = Collections.synchronizedList(new ArrayList<ToggledCallback>());
@@ -92,6 +95,7 @@ public class Qt5Widgets extends org.bytedeco.qt.presets.Qt5Widgets {
   @Name("[=](const QAction *sender, const QObject *context, void (*functor)(int, bool), int target){QObject::connect(sender, &QAction::triggered, context, [functor,target](bool checked){functor(target, checked);});}")
   public native static void QAction_triggered(@Const QAction sender, @Const QObject context, TriggeredCallback functor, int target);
 
+  @Allocator(max = 100)
   public static class TriggeredCallback extends FunctionPointer {
     static { Loader.load(); }
     private static List<TriggeredCallback> cbs = Collections.synchronizedList(new ArrayList<TriggeredCallback>());
@@ -140,6 +144,7 @@ public class Qt5Widgets extends org.bytedeco.qt.presets.Qt5Widgets {
   @Name("[=](const QSystemTrayIcon *sender, const QObject *context, void (*functor)(int, QSystemTrayIcon::ActivationReason), int target){QObject::connect(sender, &QSystemTrayIcon::activated, context, [functor,target](QSystemTrayIcon::ActivationReason reason){functor(target, reason);});}")
   public native static void QSystemTrayIcon_activated(@Const QSystemTrayIcon sender, @Const QObject context, ActivatedCallback functor, int target);
 
+  @Allocator(max = 100)
   public static class ActivatedCallback extends FunctionPointer {
     static { Loader.load(); }
     private static List<ActivatedCallback> cbs = Collections.synchronizedList(new ArrayList<ActivatedCallback>());
@@ -164,6 +169,7 @@ public class Qt5Widgets extends org.bytedeco.qt.presets.Qt5Widgets {
   @Name("[=](const QSystemTrayIcon *sender, const QObject *context, void (*functor)(int), int target){QObject::connect(sender, &QSystemTrayIcon::messageClicked, context, [functor,target](){functor(target);});}")
   public native static void QSystemTrayIcon_messageClicked(@Const QSystemTrayIcon sender, @Const QObject context, MessageClickedCallback functor, int target);
 
+  @Allocator(max = 100)
   public static class MessageClickedCallback extends FunctionPointer {
     static { Loader.load(); }
     private static List<MessageClickedCallback> cbs = Collections.synchronizedList(new ArrayList<MessageClickedCallback>());
