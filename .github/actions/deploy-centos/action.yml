@@ -62,16 +62,16 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda-repo-rhel7-11-4-local-11.4.0_470.42.01-1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.2/cudnn-11.4-linux-x64-v8.2.2.26.tgz
-          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.10/nccl_2.10.3-1+cuda11.4_x86_64.txz
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/cuda-repo-rhel7-11-4-local-11.4.2_470.57.02-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.4/cudnn-11.4-linux-x64-v8.2.4.15.tgz
+          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.11/nccl_2.11.4-1+cuda11.4_x86_64.txz
 
-          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-4-local-11.4.0_470.42.01-1.x86_64.rpm
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-4-local-11.4.2_470.57.02-1.x86_64.rpm
           pushd /var/cuda-repo-rhel7-11-4-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
-          tar -hxvf cudnn-11.4-linux-x64-v8.2.2.26.tgz -C /usr/local/
-          tar -hxvf nccl_2.10.3-1+cuda11.4_x86_64.txz --strip-components=1 -C /usr/local/cuda/
+          tar -hxvf cudnn-11.4-linux-x64-v8.2.4.15.tgz -C /usr/local/
+          tar -hxvf nccl_2.11.4-1+cuda11.4_x86_64.txz --strip-components=1 -C /usr/local/cuda/
           mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
 
           # Work around issues with CUDA 10.2/11.x
