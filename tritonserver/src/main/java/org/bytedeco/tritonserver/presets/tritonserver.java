@@ -44,7 +44,7 @@ import org.bytedeco.tensorrt.presets.*;
 
 /**
  *
- * @author Samuel Audet
+ * @author Jack He
  */
 @Properties(
     inherit = {cublas.class, cudnn.class, nvrtc.class, nvinfer.class, nvinfer_plugin.class, nvonnxparser.class, nvparsers.class},
