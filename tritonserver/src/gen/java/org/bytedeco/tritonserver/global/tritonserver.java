@@ -67,10 +67,10 @@ public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver
 
 // #ifdef _COMPILING_TRITONBACKEND
 // #if defined(_MSC_VER)
-public static native @MemberGetter int TRITONBACKEND_DECLSPEC();
-public static final int TRITONBACKEND_DECLSPEC = TRITONBACKEND_DECLSPEC();
+// #define TRITONBACKEND_DECLSPEC __declspec(dllexport)
 // #define TRITONBACKEND_ISPEC __declspec(dllimport)
 // #elif defined(__GNUC__)
+// #define TRITONBACKEND_DECLSPEC __attribute__((__visibility__("default")))
 // #define TRITONBACKEND_ISPEC
 // #else
 // #define TRITONBACKEND_DECLSPEC
@@ -78,6 +78,7 @@ public static final int TRITONBACKEND_DECLSPEC = TRITONBACKEND_DECLSPEC();
 // #endif
 // #else
 // #if defined(_MSC_VER)
+// #define TRITONBACKEND_DECLSPEC __declspec(dllimport)
 // #define TRITONBACKEND_ISPEC __declspec(dllexport)
 // #else
 // #define TRITONBACKEND_DECLSPEC
@@ -154,11 +155,11 @@ public static final int TRITONBACKEND_API_VERSION_MINOR = 4;
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ApiVersion(
+public static native TRITONSERVER_Error TRITONBACKEND_ApiVersion(
     @Cast("uint32_t*") IntPointer major, @Cast("uint32_t*") IntPointer minor);
-public static native IntBuffer TRITONBACKEND_ApiVersion(
+public static native TRITONSERVER_Error TRITONBACKEND_ApiVersion(
     @Cast("uint32_t*") IntBuffer major, @Cast("uint32_t*") IntBuffer minor);
-public static native int[] TRITONBACKEND_ApiVersion(
+public static native TRITONSERVER_Error TRITONBACKEND_ApiVersion(
     @Cast("uint32_t*") int[] major, @Cast("uint32_t*") int[] minor);
 
 /** TRITONBACKEND_ArtifactType
@@ -216,11 +217,11 @@ public enum TRITONBACKEND_ArtifactType {
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_MemoryManagerAllocate(
+public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerAllocate(
     TRITONBACKEND_MemoryManager manager, @Cast("void**") PointerPointer buffer,
     @Const @ByVal TRITONSERVER_MemoryType memory_type, @Cast("const int64_t") long memory_type_id,
     @Cast("const uint64_t") long byte_size);
-public static native IntPointer TRITONBACKEND_MemoryManagerAllocate(
+public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerAllocate(
     TRITONBACKEND_MemoryManager manager, @Cast("void**") @ByPtrPtr Pointer buffer,
     @Const @ByVal TRITONSERVER_MemoryType memory_type, @Cast("const int64_t") long memory_type_id,
     @Cast("const uint64_t") long byte_size);
@@ -242,7 +243,7 @@ public static native IntPointer TRITONBACKEND_MemoryManagerAllocate(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_MemoryManagerFree(
+public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerFree(
     TRITONBACKEND_MemoryManager manager, Pointer buffer,
     @Const @ByVal TRITONSERVER_MemoryType memory_type, @Cast("const int64_t") long memory_type_id);
 
@@ -274,19 +275,19 @@ public static native IntPointer TRITONBACKEND_MemoryManagerFree(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_InputProperties(
+public static native TRITONSERVER_Error TRITONBACKEND_InputProperties(
     TRITONBACKEND_Input input, @Cast("const char**") PointerPointer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") PointerPointer shape,
     @Cast("uint32_t*") IntPointer dims_count, @Cast("uint64_t*") LongPointer byte_size, @Cast("uint32_t*") IntPointer buffer_count);
-public static native IntPointer TRITONBACKEND_InputProperties(
+public static native TRITONSERVER_Error TRITONBACKEND_InputProperties(
     TRITONBACKEND_Input input, @Cast("const char**") @ByPtrPtr BytePointer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr LongPointer shape,
     @Cast("uint32_t*") IntPointer dims_count, @Cast("uint64_t*") LongPointer byte_size, @Cast("uint32_t*") IntPointer buffer_count);
-public static native IntBuffer TRITONBACKEND_InputProperties(
+public static native TRITONSERVER_Error TRITONBACKEND_InputProperties(
     TRITONBACKEND_Input input, @Cast("const char**") @ByPtrPtr ByteBuffer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr LongBuffer shape,
     @Cast("uint32_t*") IntBuffer dims_count, @Cast("uint64_t*") LongBuffer byte_size, @Cast("uint32_t*") IntBuffer buffer_count);
-public static native int[] TRITONBACKEND_InputProperties(
+public static native TRITONSERVER_Error TRITONBACKEND_InputProperties(
     TRITONBACKEND_Input input, @Cast("const char**") @ByPtrPtr byte[] name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr long[] shape,
     @Cast("uint32_t*") int[] dims_count, @Cast("uint64_t*") long[] byte_size, @Cast("uint32_t*") int[] buffer_count);
@@ -317,31 +318,31 @@ public static native int[] TRITONBACKEND_InputProperties(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_InputPropertiesForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputPropertiesForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name, @Cast("const char**") PointerPointer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") PointerPointer shape,
     @Cast("uint32_t*") IntPointer dims_count, @Cast("uint64_t*") LongPointer byte_size, @Cast("uint32_t*") IntPointer buffer_count);
-public static native IntPointer TRITONBACKEND_InputPropertiesForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputPropertiesForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name, @Cast("const char**") @ByPtrPtr BytePointer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr LongPointer shape,
     @Cast("uint32_t*") IntPointer dims_count, @Cast("uint64_t*") LongPointer byte_size, @Cast("uint32_t*") IntPointer buffer_count);
-public static native IntBuffer TRITONBACKEND_InputPropertiesForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputPropertiesForHostPolicy(
     TRITONBACKEND_Input input, @Cast("const char*") BytePointer host_policy_name, @Cast("const char**") @ByPtrPtr ByteBuffer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr LongBuffer shape,
     @Cast("uint32_t*") IntBuffer dims_count, @Cast("uint64_t*") LongBuffer byte_size, @Cast("uint32_t*") IntBuffer buffer_count);
-public static native int[] TRITONBACKEND_InputPropertiesForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputPropertiesForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name, @Cast("const char**") @ByPtrPtr byte[] name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr long[] shape,
     @Cast("uint32_t*") int[] dims_count, @Cast("uint64_t*") long[] byte_size, @Cast("uint32_t*") int[] buffer_count);
-public static native IntPointer TRITONBACKEND_InputPropertiesForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputPropertiesForHostPolicy(
     TRITONBACKEND_Input input, @Cast("const char*") BytePointer host_policy_name, @Cast("const char**") @ByPtrPtr BytePointer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr LongPointer shape,
     @Cast("uint32_t*") IntPointer dims_count, @Cast("uint64_t*") LongPointer byte_size, @Cast("uint32_t*") IntPointer buffer_count);
-public static native IntBuffer TRITONBACKEND_InputPropertiesForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputPropertiesForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name, @Cast("const char**") @ByPtrPtr ByteBuffer name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr LongBuffer shape,
     @Cast("uint32_t*") IntBuffer dims_count, @Cast("uint64_t*") LongBuffer byte_size, @Cast("uint32_t*") IntBuffer buffer_count);
-public static native int[] TRITONBACKEND_InputPropertiesForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputPropertiesForHostPolicy(
     TRITONBACKEND_Input input, @Cast("const char*") BytePointer host_policy_name, @Cast("const char**") @ByPtrPtr byte[] name,
     TRITONSERVER_DataType datatype, @Cast("const int64_t**") @ByPtrPtr long[] shape,
     @Cast("uint32_t*") int[] dims_count, @Cast("uint64_t*") long[] byte_size, @Cast("uint32_t*") int[] buffer_count);
@@ -370,19 +371,19 @@ public static native int[] TRITONBACKEND_InputPropertiesForHostPolicy(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_InputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBuffer(
     TRITONBACKEND_Input input, @Cast("const uint32_t") int index, @Cast("const void**") PointerPointer buffer,
     @Cast("uint64_t*") LongPointer buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") LongPointer memory_type_id);
-public static native IntPointer TRITONBACKEND_InputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBuffer(
     TRITONBACKEND_Input input, @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer,
     @Cast("uint64_t*") LongPointer buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") LongPointer memory_type_id);
-public static native IntBuffer TRITONBACKEND_InputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBuffer(
     TRITONBACKEND_Input input, @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer,
     @Cast("uint64_t*") LongBuffer buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") LongBuffer memory_type_id);
-public static native int[] TRITONBACKEND_InputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBuffer(
     TRITONBACKEND_Input input, @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer,
     @Cast("uint64_t*") long[] buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") long[] memory_type_id);
@@ -419,31 +420,31 @@ public static native int[] TRITONBACKEND_InputBuffer(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_InputBufferForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBufferForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name,
     @Cast("const uint32_t") int index, @Cast("const void**") PointerPointer buffer, @Cast("uint64_t*") LongPointer buffer_byte_size,
     TRITONSERVER_MemoryType memory_type, @Cast("int64_t*") LongPointer memory_type_id);
-public static native IntPointer TRITONBACKEND_InputBufferForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBufferForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name,
     @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer, @Cast("uint64_t*") LongPointer buffer_byte_size,
     TRITONSERVER_MemoryType memory_type, @Cast("int64_t*") LongPointer memory_type_id);
-public static native IntBuffer TRITONBACKEND_InputBufferForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBufferForHostPolicy(
     TRITONBACKEND_Input input, @Cast("const char*") BytePointer host_policy_name,
     @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer, @Cast("uint64_t*") LongBuffer buffer_byte_size,
     TRITONSERVER_MemoryType memory_type, @Cast("int64_t*") LongBuffer memory_type_id);
-public static native int[] TRITONBACKEND_InputBufferForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBufferForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name,
     @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer, @Cast("uint64_t*") long[] buffer_byte_size,
     TRITONSERVER_MemoryType memory_type, @Cast("int64_t*") long[] memory_type_id);
-public static native IntPointer TRITONBACKEND_InputBufferForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBufferForHostPolicy(
     TRITONBACKEND_Input input, @Cast("const char*") BytePointer host_policy_name,
     @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer, @Cast("uint64_t*") LongPointer buffer_byte_size,
     TRITONSERVER_MemoryType memory_type, @Cast("int64_t*") LongPointer memory_type_id);
-public static native IntBuffer TRITONBACKEND_InputBufferForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBufferForHostPolicy(
     TRITONBACKEND_Input input, String host_policy_name,
     @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer, @Cast("uint64_t*") LongBuffer buffer_byte_size,
     TRITONSERVER_MemoryType memory_type, @Cast("int64_t*") LongBuffer memory_type_id);
-public static native int[] TRITONBACKEND_InputBufferForHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_InputBufferForHostPolicy(
     TRITONBACKEND_Input input, @Cast("const char*") BytePointer host_policy_name,
     @Cast("const uint32_t") int index, @Cast("const void**") @ByPtrPtr Pointer buffer, @Cast("uint64_t*") long[] buffer_byte_size,
     TRITONSERVER_MemoryType memory_type, @Cast("int64_t*") long[] memory_type_id);
@@ -478,19 +479,19 @@ public static native int[] TRITONBACKEND_InputBufferForHostPolicy(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_OutputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_OutputBuffer(
     TRITONBACKEND_Output output, @Cast("void**") PointerPointer buffer,
     @Cast("const uint64_t") long buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") LongPointer memory_type_id);
-public static native IntPointer TRITONBACKEND_OutputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_OutputBuffer(
     TRITONBACKEND_Output output, @Cast("void**") @ByPtrPtr Pointer buffer,
     @Cast("const uint64_t") long buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") LongPointer memory_type_id);
-public static native IntBuffer TRITONBACKEND_OutputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_OutputBuffer(
     TRITONBACKEND_Output output, @Cast("void**") @ByPtrPtr Pointer buffer,
     @Cast("const uint64_t") long buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") LongBuffer memory_type_id);
-public static native int[] TRITONBACKEND_OutputBuffer(
+public static native TRITONSERVER_Error TRITONBACKEND_OutputBuffer(
     TRITONBACKEND_Output output, @Cast("void**") @ByPtrPtr Pointer buffer,
     @Cast("const uint64_t") long buffer_byte_size, TRITONSERVER_MemoryType memory_type,
     @Cast("int64_t*") long[] memory_type_id);
@@ -510,13 +511,13 @@ public static native int[] TRITONBACKEND_OutputBuffer(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_RequestId(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestId(
     TRITONBACKEND_Request request, @Cast("const char**") PointerPointer id);
-public static native IntPointer TRITONBACKEND_RequestId(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestId(
     TRITONBACKEND_Request request, @Cast("const char**") @ByPtrPtr BytePointer id);
-public static native IntBuffer TRITONBACKEND_RequestId(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestId(
     TRITONBACKEND_Request request, @Cast("const char**") @ByPtrPtr ByteBuffer id);
-public static native int[] TRITONBACKEND_RequestId(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestId(
     TRITONBACKEND_Request request, @Cast("const char**") @ByPtrPtr byte[] id);
 
 /** Get the correlation ID of the request. Zero indicates that the
@@ -527,11 +528,11 @@ public static native int[] TRITONBACKEND_RequestId(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_RequestCorrelationId(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestCorrelationId(
     TRITONBACKEND_Request request, @Cast("uint64_t*") LongPointer id);
-public static native IntBuffer TRITONBACKEND_RequestCorrelationId(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestCorrelationId(
     TRITONBACKEND_Request request, @Cast("uint64_t*") LongBuffer id);
-public static native int[] TRITONBACKEND_RequestCorrelationId(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestCorrelationId(
     TRITONBACKEND_Request request, @Cast("uint64_t*") long[] id);
 
 /** Get the number of input tensors specified in the request.
@@ -541,11 +542,11 @@ public static native int[] TRITONBACKEND_RequestCorrelationId(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_RequestInputCount(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputCount(
     TRITONBACKEND_Request request, @Cast("uint32_t*") IntPointer count);
-public static native IntBuffer TRITONBACKEND_RequestInputCount(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputCount(
     TRITONBACKEND_Request request, @Cast("uint32_t*") IntBuffer count);
-public static native int[] TRITONBACKEND_RequestInputCount(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputCount(
     TRITONBACKEND_Request request, @Cast("uint32_t*") int[] count);
 
 /** Get the name of an input tensor. The caller does not own
@@ -561,16 +562,16 @@ public static native int[] TRITONBACKEND_RequestInputCount(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_RequestInputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") PointerPointer input_name);
-public static native IntPointer TRITONBACKEND_RequestInputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr BytePointer input_name);
-public static native IntBuffer TRITONBACKEND_RequestInputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr ByteBuffer input_name);
-public static native int[] TRITONBACKEND_RequestInputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr byte[] input_name);
 
@@ -585,13 +586,13 @@ public static native int[] TRITONBACKEND_RequestInputName(
 
 ///
 ///
-public static native IntPointer TRITONBACKEND_RequestInput(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInput(
     TRITONBACKEND_Request request, String name,
     @Cast("TRITONBACKEND_Input**") PointerPointer input);
-public static native IntPointer TRITONBACKEND_RequestInput(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInput(
     TRITONBACKEND_Request request, String name,
     @ByPtrPtr TRITONBACKEND_Input input);
-public static native IntBuffer TRITONBACKEND_RequestInput(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInput(
     TRITONBACKEND_Request request, @Cast("const char*") BytePointer name,
     @ByPtrPtr TRITONBACKEND_Input input);
 
@@ -613,10 +614,10 @@ public static native IntBuffer TRITONBACKEND_RequestInput(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_RequestInputByIndex(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputByIndex(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("TRITONBACKEND_Input**") PointerPointer input);
-public static native IntPointer TRITONBACKEND_RequestInputByIndex(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestInputByIndex(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @ByPtrPtr TRITONBACKEND_Input input);
 
@@ -628,11 +629,11 @@ public static native IntPointer TRITONBACKEND_RequestInputByIndex(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_RequestOutputCount(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestOutputCount(
     TRITONBACKEND_Request request, @Cast("uint32_t*") IntPointer count);
-public static native IntBuffer TRITONBACKEND_RequestOutputCount(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestOutputCount(
     TRITONBACKEND_Request request, @Cast("uint32_t*") IntBuffer count);
-public static native int[] TRITONBACKEND_RequestOutputCount(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestOutputCount(
     TRITONBACKEND_Request request, @Cast("uint32_t*") int[] count);
 
 /** Get the name of a requested output tensor. The caller does not own
@@ -648,16 +649,16 @@ public static native int[] TRITONBACKEND_RequestOutputCount(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_RequestOutputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestOutputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") PointerPointer output_name);
-public static native IntPointer TRITONBACKEND_RequestOutputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestOutputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr BytePointer output_name);
-public static native IntBuffer TRITONBACKEND_RequestOutputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestOutputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr ByteBuffer output_name);
-public static native int[] TRITONBACKEND_RequestOutputName(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestOutputName(
     TRITONBACKEND_Request request, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr byte[] output_name);
 
@@ -681,7 +682,7 @@ public static native int[] TRITONBACKEND_RequestOutputName(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_RequestRelease(
+public static native TRITONSERVER_Error TRITONBACKEND_RequestRelease(
     TRITONBACKEND_Request request, @Cast("uint32_t") int release_flags);
 
 /**
@@ -702,9 +703,9 @@ public static native IntPointer TRITONBACKEND_RequestRelease(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseFactoryNew(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseFactoryNew(
     @Cast("TRITONBACKEND_ResponseFactory**") PointerPointer factory, TRITONBACKEND_Request request);
-public static native IntPointer TRITONBACKEND_ResponseFactoryNew(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseFactoryNew(
     @ByPtrPtr TRITONBACKEND_ResponseFactory factory, TRITONBACKEND_Request request);
 
 /** Destroy a response factory.
@@ -713,7 +714,7 @@ public static native IntPointer TRITONBACKEND_ResponseFactoryNew(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseFactoryDelete(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseFactoryDelete(
     TRITONBACKEND_ResponseFactory factory);
 
 /** Send response flags without a corresponding response.
@@ -730,7 +731,7 @@ public static native IntPointer TRITONBACKEND_ResponseFactoryDelete(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ResponseFactorySendFlags(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseFactorySendFlags(
     TRITONBACKEND_ResponseFactory factory, @Cast("const uint32_t") int send_flags);
 
 /**
@@ -767,9 +768,9 @@ public static native IntPointer TRITONBACKEND_ResponseFactorySendFlags(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseNew(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseNew(
     @Cast("TRITONBACKEND_Response**") PointerPointer response, TRITONBACKEND_Request request);
-public static native IntPointer TRITONBACKEND_ResponseNew(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseNew(
     @ByPtrPtr TRITONBACKEND_Response response, TRITONBACKEND_Request request);
 
 /** Create a response using a factory.
@@ -779,9 +780,9 @@ public static native IntPointer TRITONBACKEND_ResponseNew(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseNewFromFactory(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseNewFromFactory(
     @Cast("TRITONBACKEND_Response**") PointerPointer response, TRITONBACKEND_ResponseFactory factory);
-public static native IntPointer TRITONBACKEND_ResponseNewFromFactory(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseNewFromFactory(
     @ByPtrPtr TRITONBACKEND_Response response, TRITONBACKEND_ResponseFactory factory);
 
 /** Destroy a response. It is not necessary to delete a response if
@@ -792,7 +793,7 @@ public static native IntPointer TRITONBACKEND_ResponseNewFromFactory(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseDelete(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseDelete(
     TRITONBACKEND_Response response);
 
 /** Set a string parameter in the response.
@@ -803,9 +804,9 @@ public static native IntPointer TRITONBACKEND_ResponseDelete(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseSetStringParameter(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseSetStringParameter(
     TRITONBACKEND_Response response, String name, String value);
-public static native IntBuffer TRITONBACKEND_ResponseSetStringParameter(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseSetStringParameter(
     TRITONBACKEND_Response response, @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer value);
 
 /** Set an integer parameter in the response.
@@ -816,9 +817,9 @@ public static native IntBuffer TRITONBACKEND_ResponseSetStringParameter(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseSetIntParameter(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseSetIntParameter(
     TRITONBACKEND_Response response, String name, @Cast("const int64_t") long value);
-public static native IntBuffer TRITONBACKEND_ResponseSetIntParameter(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseSetIntParameter(
     TRITONBACKEND_Response response, @Cast("const char*") BytePointer name, @Cast("const int64_t") long value);
 
 /** Set an boolean parameter in the response.
@@ -829,9 +830,9 @@ public static native IntBuffer TRITONBACKEND_ResponseSetIntParameter(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseSetBoolParameter(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseSetBoolParameter(
     TRITONBACKEND_Response response, String name, @Cast("const bool") boolean value);
-public static native IntBuffer TRITONBACKEND_ResponseSetBoolParameter(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseSetBoolParameter(
     TRITONBACKEND_Response response, @Cast("const char*") BytePointer name, @Cast("const bool") boolean value);
 
 /** Create an output tensor in the response. The lifetime of the
@@ -849,31 +850,31 @@ public static native IntBuffer TRITONBACKEND_ResponseSetBoolParameter(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ResponseOutput(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @Cast("TRITONBACKEND_Output**") PointerPointer output,
     String name, @Const @ByVal TRITONSERVER_DataType datatype,
     @Cast("const int64_t*") LongPointer shape, @Cast("const uint32_t") int dims_count);
-public static native IntPointer TRITONBACKEND_ResponseOutput(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
     String name, @Const @ByVal TRITONSERVER_DataType datatype,
     @Cast("const int64_t*") LongPointer shape, @Cast("const uint32_t") int dims_count);
-public static native IntBuffer TRITONBACKEND_ResponseOutput(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
     @Cast("const char*") BytePointer name, @Const @ByVal TRITONSERVER_DataType datatype,
     @Cast("const int64_t*") LongBuffer shape, @Cast("const uint32_t") int dims_count);
-public static native int[] TRITONBACKEND_ResponseOutput(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
     String name, @Const @ByVal TRITONSERVER_DataType datatype,
     @Cast("const int64_t*") long[] shape, @Cast("const uint32_t") int dims_count);
-public static native IntPointer TRITONBACKEND_ResponseOutput(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
     @Cast("const char*") BytePointer name, @Const @ByVal TRITONSERVER_DataType datatype,
     @Cast("const int64_t*") LongPointer shape, @Cast("const uint32_t") int dims_count);
-public static native IntBuffer TRITONBACKEND_ResponseOutput(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
     String name, @Const @ByVal TRITONSERVER_DataType datatype,
     @Cast("const int64_t*") LongBuffer shape, @Cast("const uint32_t") int dims_count);
-public static native int[] TRITONBACKEND_ResponseOutput(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
     @Cast("const char*") BytePointer name, @Const @ByVal TRITONSERVER_DataType datatype,
     @Cast("const int64_t*") long[] shape, @Cast("const uint32_t") int dims_count);
@@ -897,7 +898,7 @@ public static native int[] TRITONBACKEND_ResponseOutput(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ResponseSend(
+public static native TRITONSERVER_Error TRITONBACKEND_ResponseSend(
     TRITONBACKEND_Response response, @Cast("const uint32_t") int send_flags,
     TRITONSERVER_Error error);
 
@@ -943,13 +944,13 @@ public enum TRITONBACKEND_ExecutionPolicy {
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_BackendName(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendName(
     TRITONBACKEND_Backend backend, @Cast("const char**") PointerPointer name);
-public static native IntPointer TRITONBACKEND_BackendName(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendName(
     TRITONBACKEND_Backend backend, @Cast("const char**") @ByPtrPtr BytePointer name);
-public static native IntBuffer TRITONBACKEND_BackendName(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendName(
     TRITONBACKEND_Backend backend, @Cast("const char**") @ByPtrPtr ByteBuffer name);
-public static native int[] TRITONBACKEND_BackendName(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendName(
     TRITONBACKEND_Backend backend, @Cast("const char**") @ByPtrPtr byte[] name);
 
 /** Get the backend configuration.  The 'backend_config' message is
@@ -969,9 +970,9 @@ public static native int[] TRITONBACKEND_BackendName(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_BackendConfig(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendConfig(
     TRITONBACKEND_Backend backend, @Cast("TRITONSERVER_Message**") PointerPointer backend_config);
-public static native IntPointer TRITONBACKEND_BackendConfig(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendConfig(
     TRITONBACKEND_Backend backend, @ByPtrPtr TRITONSERVER_Message backend_config);
 
 /** Get the execution policy for this backend. By default the
@@ -982,11 +983,11 @@ public static native IntPointer TRITONBACKEND_BackendConfig(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_BackendExecutionPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendExecutionPolicy(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ExecutionPolicy*") IntPointer policy);
-public static native IntBuffer TRITONBACKEND_BackendExecutionPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendExecutionPolicy(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ExecutionPolicy*") IntBuffer policy);
-public static native int[] TRITONBACKEND_BackendExecutionPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendExecutionPolicy(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ExecutionPolicy*") int[] policy);
 
 /** Set the execution policy for this backend. By default the
@@ -1001,9 +1002,9 @@ public static native int[] TRITONBACKEND_BackendExecutionPolicy(
 
 ///
 ///
-public static native IntPointer TRITONBACKEND_BackendSetExecutionPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendSetExecutionPolicy(
     TRITONBACKEND_Backend backend, TRITONBACKEND_ExecutionPolicy policy);
-public static native IntBuffer TRITONBACKEND_BackendSetExecutionPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendSetExecutionPolicy(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ExecutionPolicy") int policy);
 
 /** Get the location of the files that make up the backend
@@ -1024,16 +1025,16 @@ public static native IntBuffer TRITONBACKEND_BackendSetExecutionPolicy(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_BackendArtifacts(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendArtifacts(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ArtifactType*") IntPointer artifact_type,
     @Cast("const char**") PointerPointer location);
-public static native IntPointer TRITONBACKEND_BackendArtifacts(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendArtifacts(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ArtifactType*") IntPointer artifact_type,
     @Cast("const char**") @ByPtrPtr BytePointer location);
-public static native IntBuffer TRITONBACKEND_BackendArtifacts(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendArtifacts(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ArtifactType*") IntBuffer artifact_type,
     @Cast("const char**") @ByPtrPtr ByteBuffer location);
-public static native int[] TRITONBACKEND_BackendArtifacts(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendArtifacts(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ArtifactType*") int[] artifact_type,
     @Cast("const char**") @ByPtrPtr byte[] location);
 
@@ -1044,9 +1045,9 @@ public static native int[] TRITONBACKEND_BackendArtifacts(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_BackendMemoryManager(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendMemoryManager(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_MemoryManager**") PointerPointer manager);
-public static native IntPointer TRITONBACKEND_BackendMemoryManager(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendMemoryManager(
     TRITONBACKEND_Backend backend, @ByPtrPtr TRITONBACKEND_MemoryManager manager);
 
 /** Get the user-specified state associated with the backend. The
@@ -1057,9 +1058,9 @@ public static native IntPointer TRITONBACKEND_BackendMemoryManager(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_BackendState(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendState(
     TRITONBACKEND_Backend backend, @Cast("void**") PointerPointer state);
-public static native IntPointer TRITONBACKEND_BackendState(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendState(
     TRITONBACKEND_Backend backend, @Cast("void**") @ByPtrPtr Pointer state);
 
 /** Set the user-specified state associated with the backend. The
@@ -1074,7 +1075,7 @@ public static native IntPointer TRITONBACKEND_BackendState(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_BackendSetState(
+public static native TRITONSERVER_Error TRITONBACKEND_BackendSetState(
     TRITONBACKEND_Backend backend, Pointer state);
 
 /**
@@ -1092,13 +1093,13 @@ public static native IntPointer TRITONBACKEND_BackendSetState(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelName(
     TRITONBACKEND_Model model, @Cast("const char**") PointerPointer name);
-public static native IntPointer TRITONBACKEND_ModelName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelName(
     TRITONBACKEND_Model model, @Cast("const char**") @ByPtrPtr BytePointer name);
-public static native IntBuffer TRITONBACKEND_ModelName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelName(
     TRITONBACKEND_Model model, @Cast("const char**") @ByPtrPtr ByteBuffer name);
-public static native int[] TRITONBACKEND_ModelName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelName(
     TRITONBACKEND_Model model, @Cast("const char**") @ByPtrPtr byte[] name);
 
 /** Get the version of the model.
@@ -1109,11 +1110,11 @@ public static native int[] TRITONBACKEND_ModelName(
 
 ///
 ///
-public static native IntPointer TRITONBACKEND_ModelVersion(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelVersion(
     TRITONBACKEND_Model model, @Cast("uint64_t*") LongPointer version);
-public static native IntBuffer TRITONBACKEND_ModelVersion(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelVersion(
     TRITONBACKEND_Model model, @Cast("uint64_t*") LongBuffer version);
-public static native int[] TRITONBACKEND_ModelVersion(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelVersion(
     TRITONBACKEND_Model model, @Cast("uint64_t*") long[] version);
 
 /** Get the location of the files that make up the model. The
@@ -1133,16 +1134,16 @@ public static native int[] TRITONBACKEND_ModelVersion(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelRepository(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelRepository(
     TRITONBACKEND_Model model, @Cast("TRITONBACKEND_ArtifactType*") IntPointer artifact_type,
     @Cast("const char**") PointerPointer location);
-public static native IntPointer TRITONBACKEND_ModelRepository(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelRepository(
     TRITONBACKEND_Model model, @Cast("TRITONBACKEND_ArtifactType*") IntPointer artifact_type,
     @Cast("const char**") @ByPtrPtr BytePointer location);
-public static native IntBuffer TRITONBACKEND_ModelRepository(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelRepository(
     TRITONBACKEND_Model model, @Cast("TRITONBACKEND_ArtifactType*") IntBuffer artifact_type,
     @Cast("const char**") @ByPtrPtr ByteBuffer location);
-public static native int[] TRITONBACKEND_ModelRepository(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelRepository(
     TRITONBACKEND_Model model, @Cast("TRITONBACKEND_ArtifactType*") int[] artifact_type,
     @Cast("const char**") @ByPtrPtr byte[] location);
 
@@ -1163,10 +1164,10 @@ public static native int[] TRITONBACKEND_ModelRepository(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelConfig(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelConfig(
     TRITONBACKEND_Model model, @Cast("const uint32_t") int config_version,
     @Cast("TRITONSERVER_Message**") PointerPointer model_config);
-public static native IntPointer TRITONBACKEND_ModelConfig(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelConfig(
     TRITONBACKEND_Model model, @Cast("const uint32_t") int config_version,
     @ByPtrPtr TRITONSERVER_Message model_config);
 
@@ -1182,9 +1183,9 @@ public static native IntPointer TRITONBACKEND_ModelConfig(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelAutoCompleteConfig(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
     TRITONBACKEND_Model model, @Cast("bool*") BoolPointer auto_complete_config);
-public static native IntBuffer TRITONBACKEND_ModelAutoCompleteConfig(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
     TRITONBACKEND_Model model, @Cast("bool*") boolean[] auto_complete_config);
 
 /** Set the model configuration in Triton server. Only the inputs, outputs,
@@ -1203,7 +1204,7 @@ public static native IntBuffer TRITONBACKEND_ModelAutoCompleteConfig(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelSetConfig(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelSetConfig(
     TRITONBACKEND_Model model, @Cast("const uint32_t") int config_version,
     TRITONSERVER_Message model_config);
 
@@ -1215,9 +1216,9 @@ public static native IntPointer TRITONBACKEND_ModelSetConfig(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelServer(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelServer(
     TRITONBACKEND_Model model, @Cast("TRITONSERVER_Server**") PointerPointer server);
-public static native IntPointer TRITONBACKEND_ModelServer(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelServer(
     TRITONBACKEND_Model model, @ByPtrPtr TRITONSERVER_Server server);
 
 /** Get the backend used by the model.
@@ -1227,9 +1228,9 @@ public static native IntPointer TRITONBACKEND_ModelServer(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelBackend(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelBackend(
     TRITONBACKEND_Model model, @Cast("TRITONBACKEND_Backend**") PointerPointer backend);
-public static native IntPointer TRITONBACKEND_ModelBackend(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelBackend(
     TRITONBACKEND_Model model, @ByPtrPtr TRITONBACKEND_Backend backend);
 
 /** Get the user-specified state associated with the model. The
@@ -1240,9 +1241,9 @@ public static native IntPointer TRITONBACKEND_ModelBackend(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelState(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelState(
     TRITONBACKEND_Model model, @Cast("void**") PointerPointer state);
-public static native IntPointer TRITONBACKEND_ModelState(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelState(
     TRITONBACKEND_Model model, @Cast("void**") @ByPtrPtr Pointer state);
 
 /** Set the user-specified state associated with the model. The
@@ -1257,7 +1258,7 @@ public static native IntPointer TRITONBACKEND_ModelState(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ModelSetState(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelSetState(
     TRITONBACKEND_Model model, Pointer state);
 
 /**
@@ -1276,13 +1277,13 @@ public static native IntPointer TRITONBACKEND_ModelSetState(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceName(
     TRITONBACKEND_ModelInstance instance, @Cast("const char**") PointerPointer name);
-public static native IntPointer TRITONBACKEND_ModelInstanceName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceName(
     TRITONBACKEND_ModelInstance instance, @Cast("const char**") @ByPtrPtr BytePointer name);
-public static native IntBuffer TRITONBACKEND_ModelInstanceName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceName(
     TRITONBACKEND_ModelInstance instance, @Cast("const char**") @ByPtrPtr ByteBuffer name);
-public static native int[] TRITONBACKEND_ModelInstanceName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceName(
     TRITONBACKEND_ModelInstance instance, @Cast("const char**") @ByPtrPtr byte[] name);
 
 /** Get the kind of the model instance.
@@ -1292,7 +1293,7 @@ public static native int[] TRITONBACKEND_ModelInstanceName(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceKind(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceKind(
     TRITONBACKEND_ModelInstance instance,
     TRITONSERVER_InstanceGroupKind kind);
 
@@ -1305,11 +1306,11 @@ public static native IntPointer TRITONBACKEND_ModelInstanceKind(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceDeviceId(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceDeviceId(
     TRITONBACKEND_ModelInstance instance, IntPointer device_id);
-public static native IntBuffer TRITONBACKEND_ModelInstanceDeviceId(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceDeviceId(
     TRITONBACKEND_ModelInstance instance, IntBuffer device_id);
-public static native int[] TRITONBACKEND_ModelInstanceDeviceId(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceDeviceId(
     TRITONBACKEND_ModelInstance instance, int[] device_id);
 
 /** Get the host policy setting.  The 'host_policy' message is
@@ -1329,9 +1330,9 @@ public static native int[] TRITONBACKEND_ModelInstanceDeviceId(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceHostPolicy(
     TRITONBACKEND_ModelInstance instance, @Cast("TRITONSERVER_Message**") PointerPointer host_policy);
-public static native IntPointer TRITONBACKEND_ModelInstanceHostPolicy(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceHostPolicy(
     TRITONBACKEND_ModelInstance instance, @ByPtrPtr TRITONSERVER_Message host_policy);
 
 /** Whether the model instance is passive.
@@ -1341,9 +1342,9 @@ public static native IntPointer TRITONBACKEND_ModelInstanceHostPolicy(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceIsPassive(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceIsPassive(
     TRITONBACKEND_ModelInstance instance, @Cast("bool*") BoolPointer is_passive);
-public static native IntBuffer TRITONBACKEND_ModelInstanceIsPassive(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceIsPassive(
     TRITONBACKEND_ModelInstance instance, @Cast("bool*") boolean[] is_passive);
 
 /** Get the number of optimization profiles to be loaded for the instance.
@@ -1353,11 +1354,11 @@ public static native IntBuffer TRITONBACKEND_ModelInstanceIsPassive(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceProfileCount(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileCount(
     TRITONBACKEND_ModelInstance instance, @Cast("uint32_t*") IntPointer count);
-public static native IntBuffer TRITONBACKEND_ModelInstanceProfileCount(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileCount(
     TRITONBACKEND_ModelInstance instance, @Cast("uint32_t*") IntBuffer count);
-public static native int[] TRITONBACKEND_ModelInstanceProfileCount(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileCount(
     TRITONBACKEND_ModelInstance instance, @Cast("uint32_t*") int[] count);
 
 /** Get the name of optimization profile. The caller does not own
@@ -1373,16 +1374,16 @@ public static native int[] TRITONBACKEND_ModelInstanceProfileCount(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceProfileName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileName(
     TRITONBACKEND_ModelInstance instance, @Cast("const uint32_t") int index,
     @Cast("const char**") PointerPointer profile_name);
-public static native IntPointer TRITONBACKEND_ModelInstanceProfileName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileName(
     TRITONBACKEND_ModelInstance instance, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr BytePointer profile_name);
-public static native IntBuffer TRITONBACKEND_ModelInstanceProfileName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileName(
     TRITONBACKEND_ModelInstance instance, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr ByteBuffer profile_name);
-public static native int[] TRITONBACKEND_ModelInstanceProfileName(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileName(
     TRITONBACKEND_ModelInstance instance, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr byte[] profile_name);
 
@@ -1393,9 +1394,9 @@ public static native int[] TRITONBACKEND_ModelInstanceProfileName(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceModel(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceModel(
     TRITONBACKEND_ModelInstance instance, @Cast("TRITONBACKEND_Model**") PointerPointer model);
-public static native IntPointer TRITONBACKEND_ModelInstanceModel(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceModel(
     TRITONBACKEND_ModelInstance instance, @ByPtrPtr TRITONBACKEND_Model model);
 
 /** Get the user-specified state associated with the model
@@ -1407,9 +1408,9 @@ public static native IntPointer TRITONBACKEND_ModelInstanceModel(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceState(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceState(
     TRITONBACKEND_ModelInstance instance, @Cast("void**") PointerPointer state);
-public static native IntPointer TRITONBACKEND_ModelInstanceState(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceState(
     TRITONBACKEND_ModelInstance instance, @Cast("void**") @ByPtrPtr Pointer state);
 
 /** Set the user-specified state associated with the model
@@ -1425,7 +1426,7 @@ public static native IntPointer TRITONBACKEND_ModelInstanceState(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceSetState(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSetState(
     TRITONBACKEND_ModelInstance instance, Pointer state);
 
 /** Record statistics for an inference request.
@@ -1477,7 +1478,7 @@ public static native IntPointer TRITONBACKEND_ModelInstanceSetState(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceReportStatistics(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportStatistics(
     TRITONBACKEND_ModelInstance instance, TRITONBACKEND_Request request,
     @Cast("const bool") boolean success, @Cast("const uint64_t") long exec_start_ns,
     @Cast("const uint64_t") long compute_start_ns, @Cast("const uint64_t") long compute_end_ns,
@@ -1515,7 +1516,7 @@ public static native IntPointer TRITONBACKEND_ModelInstanceReportStatistics(
 ///
 ///
 ///
-public static native IntPointer TRITONBACKEND_ModelInstanceReportBatchStatistics(
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportBatchStatistics(
     TRITONBACKEND_ModelInstance instance, @Cast("const uint64_t") long batch_size,
     @Cast("const uint64_t") long exec_start_ns, @Cast("const uint64_t") long compute_start_ns,
     @Cast("const uint64_t") long compute_end_ns, @Cast("const uint64_t") long exec_end_ns);

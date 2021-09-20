@@ -36,11 +36,10 @@ import org.bytedeco.cuda.presets.cudart;
 import org.bytedeco.cuda.presets.cublas;
 import org.bytedeco.cuda.presets.cudnn;
 import org.bytedeco.cuda.presets.nvrtc;
-import org.bytedeco.tensorrt.presets.*;
-//import org.bytedeco.tensorrt.presets.nvinfer;
-//import org.bytedeco.tensorrt.presets.nvinfer_plugin;
-//import org.bytedeco.tensorrt.presets.nvonnxparser;
-//import org.bytedeco.tensorrt.presets.nvparsers;
+import org.bytedeco.tensorrt.presets.nvinfer;
+import org.bytedeco.tensorrt.presets.nvinfer_plugin;
+import org.bytedeco.tensorrt.presets.nvonnxparser;
+import org.bytedeco.tensorrt.presets.nvparsers;
 
 /**
  *
@@ -57,12 +56,12 @@ import org.bytedeco.tensorrt.presets.*;
         ),
         @Platform(
             value = "linux-arm64",
-            includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/"},
+            includepath = {"/opt/tritonserver/include/triton/core/"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
         @Platform(
             value = "linux-ppc64le",
-            includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/"},
+            includepath = {"/opt/tritonserver/include/triton/core/"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
         @Platform(
@@ -120,8 +119,11 @@ public class tritonserver implements LoadEnabled, InfoMapper {
         infoMap.put(new Info().enumerate())
 			   .put(new Info("TRITONSERVER_EXPORT").cppTypes().annotations())
 			   .put(new Info("TRITONSERVER_DECLSPEC").cppTypes().annotations())
-			   .put(new Info("TTRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC").cppTypes().annotations())
-			   .put(new Info("TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())               
+			   .put(new Info("TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC").cppTypes().annotations())
+			   .put(new Info("TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
+			   //.put(new Info("TRITONSERVER_datatype_enum").pointerTypes("TRITONSERVER_DataType"))
+			   //.put(new Info("TRITONSERVER_DataType").valueTypes("TRITONSERVER_DataType").pointerTypes("@Cast(\"TRITONSERVER_DataType*\") PointerPointer", "@ByPtrPtr TRITONSERVER_DataType"))
+			   
         ;
     }
 }
