@@ -51,7 +51,7 @@ import org.bytedeco.tensorrt.presets.nvparsers;
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
-            include = {"tritonbackend.h", "tritonrepoagent.h", "tritonserver.h"},
+            include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h"},
 			link = "tritonserver"
         ),
         @Platform(
@@ -121,9 +121,6 @@ public class tritonserver implements LoadEnabled, InfoMapper {
 			   .put(new Info("TRITONSERVER_DECLSPEC").cppTypes().annotations())
 			   .put(new Info("TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC").cppTypes().annotations())
 			   .put(new Info("TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
-			   //.put(new Info("TRITONSERVER_datatype_enum").pointerTypes("TRITONSERVER_DataType"))
-			   //.put(new Info("TRITONSERVER_DataType").valueTypes("TRITONSERVER_DataType").pointerTypes("@Cast(\"TRITONSERVER_DataType*\") PointerPointer", "@ByPtrPtr TRITONSERVER_DataType"))
-			   
         ;
     }
 }
