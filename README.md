@@ -191,12 +191,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenBLAS 0.3.17  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
- * FFTW 3.3.9  http://www.fftw.org/download.html
+ * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.9.x  https://www.python.org/downloads/
  * NumPy 1.21.x  https://github.com/numpy/numpy
  * SciPy 1.7.x  https://github.com/scipy/scipy
- * Gym 0.19.x  https://github.com/openai/gym
+ * Gym 0.20.x  https://github.com/openai/gym
  * LLVM 12.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
