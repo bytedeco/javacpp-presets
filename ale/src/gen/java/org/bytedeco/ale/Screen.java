@@ -11,10 +11,13 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.ale.global.ale.*;
 
 
-@Opaque @Properties(inherit = org.bytedeco.ale.presets.ale.class)
-public class System extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public System() { super((Pointer)null); }
+@NoOffset @Properties(inherit = org.bytedeco.ale.presets.ale.class)
+public class Screen extends Pointer {
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public System(Pointer p) { super(p); }
+    public Screen(Pointer p) { super(p); }
+
+    public Screen(OSystem osystem) { super((Pointer)null); allocate(osystem); }
+    private native void allocate(OSystem osystem);
+    public native void render();
 }

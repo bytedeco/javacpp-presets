@@ -682,8 +682,10 @@ public class OrtApi extends Pointer {
   public native FillStringTensor_OrtValue_PointerPointer_long FillStringTensor(); public native OrtApi FillStringTensor(FillStringTensor_OrtValue_PointerPointer_long setter);
 
   /**
-     * @param value A tensor created from OrtCreateTensor... function.
-     * @param len total data length, not including the trailing '\0' chars.
+     * Obtain a total length of strings contained within a tensor.
+     * For sparse tensors it returns the total length of values (nnz) strings.
+     * @param value [in] A tensor created from OrtCreateTensor... function.
+     * @param len [out] total data length, not including the trailing '\0' chars.
      */
   public static class GetStringTensorDataLength_OrtValue_SizeTPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -696,9 +698,18 @@ public class OrtApi extends Pointer {
   public native GetStringTensorDataLength_OrtValue_SizeTPointer GetStringTensorDataLength(); public native OrtApi GetStringTensorDataLength(GetStringTensorDataLength_OrtValue_SizeTPointer setter);
 
   /**
-     * @param s string contents. Each string is NOT null-terminated.
-     * @param value A tensor created from OrtCreateTensor... function.
-     * @param s_len total data length, get it from OrtGetStringTensorDataLength
+     * This API returns all of of UTF-8 encoded strings that are contained within a tensor
+     * or in non-empty values of a sparse tensor in one single buffer. Use offsets to calculate
+     * the length of each string such as len[i] = offsets[i + 1] - offsets[i] except the last
+     * string for which the length is calculated as total_len - offset[i].
+     * 
+     * @param value [in] A tensor created from OrtCreateTensor... API or a sparse tensor
+     *   created with OrtCreateSparseTensor... API.
+     * @param s [in,out] string contents. Each string is NOT null-terminated.
+     * @param s_len [in] total data length, get it from OrtGetStringTensorDataLength
+     * @param offsets [in,out] pointer to a preallocated buffer where offsets for each of the string
+     *        element are returned. The number of offsets must match the number of string elements.
+     * @param offsets_len [in] number of offsets expected in the buffer.
      */
   public static class GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long extends FunctionPointer {
       static { Loader.load(); }
@@ -711,16 +722,18 @@ public class OrtApi extends Pointer {
   }
   public native GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long GetStringTensorContent(); public native OrtApi GetStringTensorContent(GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long setter);
 
-  /**
-     * Don't free the 'out' value
-     */
+  /** Retrieves OrtTensorTypeAndShapeInfo part of the OrtTypeInfo
+    * 
+    * @param type_info [in]
+    * @param out [out] a returned ptr. Don't free the 'out' value, it is owned by type_info
+    */
   public static class CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public    CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer(Pointer p) { super(p); }
       protected CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer() { allocate(); }
       private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTypeInfo arg0,
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTypeInfo type_info,
                     @Cast("const OrtTensorTypeAndShapeInfo**") PointerPointer out);
   }
   public native CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer CastTypeInfoToTensorInfo(); public native OrtApi CastTypeInfoToTensorInfo(CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer setter);
@@ -836,8 +849,12 @@ public class OrtApi extends Pointer {
   public native GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer GetTensorShapeElementCount(); public native OrtApi GetTensorShapeElementCount(GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer setter);
 
   /**
- * @param out Should be freed by ReleaseTensorTypeAndShapeInfo after use
- */
+   * Returns data type and shape iff OrtValue contains a Tensor or a SparseTensor.
+   * For sparse tensors it returns a dense shape of the tensor.
+   * 
+   * @param value [in] OrtValue that contains tensor or a sparse tensor
+   * @param out [out] Should be freed by ReleaseTensorTypeAndShapeInfo after use
+   */
   public static class GetTensorTypeAndShape_OrtValue_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -849,10 +866,11 @@ public class OrtApi extends Pointer {
   public native GetTensorTypeAndShape_OrtValue_PointerPointer GetTensorTypeAndShape(); public native OrtApi GetTensorTypeAndShape(GetTensorTypeAndShape_OrtValue_PointerPointer setter);
 
   /**
- * Get the type information of an OrtValue
- * @param value
- * @param out The returned value should be freed by ReleaseTypeInfo after use
- */
+   * Get the type information of an OrtValue. API works for tensors and sparse tensors.
+   * 
+   * @param value [in]
+   * @param out [in,out] The returned value should be freed by ReleaseTypeInfo after use
+   */
   public static class GetTypeInfo_OrtValue_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -873,20 +891,29 @@ public class OrtApi extends Pointer {
   }
   public native GetValueType_OrtValue_IntPointer GetValueType(); public native OrtApi GetValueType(GetValueType_OrtValue_IntPointer setter);
 
+  /**
+   * Creates an instance of OrtMemoryInfo. It must be freed by ReleaseMemoryInfo after use.
+   * This may describe one of the existing ORT allocator types OR a custom allocator.
+   * 
+   * @param name [in] such as "cpu", "gpu"
+   * @param type [in] one of the enum values
+   * @param device [in] ID. For GPU gpu id.
+   * @param mem_type [in] . Memory type enum value.
+   */
   public static class CreateMemoryInfo_BytePointer_int_int_int_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public    CreateMemoryInfo_BytePointer_int_int_int_PointerPointer(Pointer p) { super(p); }
       protected CreateMemoryInfo_BytePointer_int_int_int_PointerPointer() { allocate(); }
       private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*") BytePointer name1, @Cast("OrtAllocatorType") int type, int id1,
-                    @Cast("OrtMemType") int mem_type1, @Cast("OrtMemoryInfo**") PointerPointer out);
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id,
+                    @Cast("OrtMemType") int mem_type, @Cast("OrtMemoryInfo**") PointerPointer out);
   }
   public native CreateMemoryInfo_BytePointer_int_int_int_PointerPointer CreateMemoryInfo(); public native OrtApi CreateMemoryInfo(CreateMemoryInfo_BytePointer_int_int_int_PointerPointer setter);
 
   /**
- * Convenience function for special case of CreateMemoryInfo, for the CPU allocator. Uses name = "Cpu" and id = 0.
- */
+   * Convenience function for special case of CreateMemoryInfo, for the CPU allocator. Uses name = "Cpu" and id = 0.
+   */
   public static class CreateCpuMemoryInfo_int_int_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -980,9 +1007,9 @@ public class OrtApi extends Pointer {
   }
   public native AllocatorGetInfo_OrtAllocator_PointerPointer AllocatorGetInfo(); public native OrtApi AllocatorGetInfo(AllocatorGetInfo_OrtAllocator_PointerPointer setter);
 
+  // This API returns a CPU non-arena based allocator
   // The returned pointer doesn't have to be freed.
   // Always returns the same instance on every invocation.
-  // Please note that this is a non-arena based allocator.
   public static class GetAllocatorWithDefaultOptions_PointerPointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1675,9 +1702,13 @@ public class OrtApi extends Pointer {
   public native ReleaseAvailableProviders_PointerPointer_int ReleaseAvailableProviders(); public native OrtApi ReleaseAvailableProviders(ReleaseAvailableProviders_PointerPointer_int setter);
 
   /**
-     * @param value - A tensor created from OrtCreateTensor... function.
-     * @param index - index of string tensor element, length of element at index will be returned.
-     * @param out - number of UTF-8 bytes that the string contains
+     * This API returns a length of string element at [index]. For sparse tensors
+     * it will return a string element of sparse values. It is an error to request
+     * an out of bounds element.
+     * 
+     * @param value [in] - A tensor created from OrtCreateTensor... function.
+     * @param index [in] - flat index of string tensor element, length of element at index will be returned.
+     * @param out [out] - number of UTF-8 bytes that the string contains
      */
   public static class GetStringTensorElementLength_OrtValue_long_SizeTPointer extends FunctionPointer {
       static { Loader.load(); }
@@ -1690,6 +1721,10 @@ public class OrtApi extends Pointer {
   public native GetStringTensorElementLength_OrtValue_long_SizeTPointer GetStringTensorElementLength(); public native OrtApi GetStringTensorElementLength(GetStringTensorElementLength_OrtValue_long_SizeTPointer setter);
 
   /**
+     * This API will return a copy UTF-8 data contained with a string element at the specified index.
+     * For sparse tensors it would return a string element of sparse values. It is an error to request an out
+     * of bounds element.
+     * 
      * @param s string element contents in UTF-8 encoding. The string is NOT null-terminated.
      * @param value A tensor created from OrtCreateTensor... function.
      * @param s_len element length, get it from OrtGetStringTensorElementLength.
@@ -1738,11 +1773,15 @@ public class OrtApi extends Pointer {
   }
   public native AddSessionConfigEntry_OrtSessionOptions_BytePointer_BytePointer AddSessionConfigEntry(); public native OrtApi AddSessionConfigEntry(AddSessionConfigEntry_OrtSessionOptions_BytePointer_BytePointer setter);
 
-  /**
+  /** 
+   * This API returns an allocator bound to the provided OrtSession instance according 
+   * to the spec within mem_info if successful
    * @param sess valid OrtSession instance
    * @param mem_info - valid OrtMemoryInfo instance
-   * @param - out a ptr to a new instance of OrtAllocator according to the spec within mem_info
-   *         if successful
+   * @param - out a ptr to an instance of OrtAllocator which wraps the allocator 
+              bound to the OrtSession instance
+              Freeing the returned pointer only frees the OrtAllocator instance and not
+              the wrapped session owned allocator itself.
    * @return OrtStatus or nullptr if successful
    */
   public static class CreateAllocator_OrtSession_OrtMemoryInfo_PointerPointer extends FunctionPointer {
@@ -1957,7 +1996,8 @@ public class OrtApi extends Pointer {
    * sharing between multiple sessions that use the same env instance.
    * Lifetime of the created allocator will be valid for the duration of the environment.
    * Returns an error if an allocator with the same OrtMemoryInfo is already registered.
-   * @param mem_info must be non-null.
+   * @param env OrtEnv instance (must be non-null).
+   * @param mem_info (must be non-null).
    * @param arena_cfg if nullptr defaults will be used.
    * See docs/C_API.md for details.
   */
@@ -2196,7 +2236,7 @@ public class OrtApi extends Pointer {
   }
   public native ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetGraphDescription(); public native OrtApi ModelMetadataGetGraphDescription(ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer setter);
   /**
-   * Append TensorRT execution provider to the session options
+   * Append TensorRT execution provider to the session options with TensorRT provider options. 
    * If TensorRT is not available (due to a non TensorRT enabled build), this function will return failure.
    */
   public static class SessionOptionsAppendExecutionProvider_TensorRT_OrtSessionOptions_OrtTensorRTProviderOptions extends FunctionPointer {
@@ -2430,4 +2470,472 @@ public class OrtApi extends Pointer {
                     @Cast("OrtSession**") PointerPointer out);
   }
   public native CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer CreateSessionFromArrayWithPrepackedWeightsContainer(); public native OrtApi CreateSessionFromArrayWithPrepackedWeightsContainer(CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer setter);
+
+  /*   
+   * Append TensorRT execution provider to the session options with TensorRT provider options.
+   * If TensorRT is not available (due to a non TensorRT enabled build), this function will return failure.
+   * Note: this API is slightly different than SessionOptionsAppendExecutionProvider_TensorRT.
+   * SessionOptionsAppendExecutionProvider_TensorRT takes struct OrtTensorRTProviderOptions which is open to user as argument,
+   * but this API takes opaque struct OrtTensorRTProviderOptionsV2 which must be created by CreateTensorRTProviderOptions.
+   * User needs to instantiate OrtTensorRTProviderOptions as well as allocate/release buffers for some members of OrtTensorRTProviderOptions.
+   * However, for using OrtTensorRTProviderOptionsV2, CreateTensorRTProviderOptions and ReleaseTensorRTProviderOptions will do the memory allocation and release for you. 
+   *
+   * \param options - OrtSessionOptions instance 
+   * \param tensorrt_options - OrtTensorRTProviderOptionsV2 instance 
+   */
+  public static class SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2 extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2(Pointer p) { super(p); }
+      protected SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call(
+                    OrtSessionOptions options, @Const OrtTensorRTProviderOptionsV2 tensorrt_options);
+  }
+  public native SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2 SessionOptionsAppendExecutionProvider_TensorRT_V2(); public native OrtApi SessionOptionsAppendExecutionProvider_TensorRT_V2(SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2 setter);
+
+  /**
+   * Use this API to create the configuration of a TensorRT Execution Provider which is an instance of OrtTensorRTProviderOptionsV2.
+   *
+   * @param out - pointer to the pointer of TensorRT EP provider options instance.
+   */
+  public static class CreateTensorRTProviderOptions_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateTensorRTProviderOptions_PointerPointer(Pointer p) { super(p); }
+      protected CreateTensorRTProviderOptions_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtTensorRTProviderOptionsV2**") PointerPointer out);
+  }
+  public native CreateTensorRTProviderOptions_PointerPointer CreateTensorRTProviderOptions(); public native OrtApi CreateTensorRTProviderOptions(CreateTensorRTProviderOptions_PointerPointer setter);
+
+  /**
+  * Use this API to set appropriate configuration knobs of a TensorRT Execution Provider.
+  *
+  * Please reference to https://www.onnxruntime.ai/docs/reference/execution-providers/TensorRT-ExecutionProvider.html#c-api-example
+  * to know the available keys and values. Key should be in string format of the member of OrtTensorRTProviderOptions and value should be its related range.
+  * For example, key="trt_max_workspace_size" and value="2147483648"
+  *
+  * @param tensorrt_options - OrtTensorRTProviderOptionsV2 instance
+  * @param provider_options_keys - array of UTF-8 null-terminated string for provider options keys
+  * @param provider_options_values - array of UTF-8 null-terminated string for provider options values
+  * @param num_keys - number of keys
+  */
+  public static class UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long(Pointer p) { super(p); }
+      protected UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtTensorRTProviderOptionsV2 tensorrt_options,
+                    @Cast("const char*const*") PointerPointer provider_options_keys,
+                    @Cast("const char*const*") PointerPointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  }
+  public native UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long UpdateTensorRTProviderOptions(); public native OrtApi UpdateTensorRTProviderOptions(UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long setter);
+
+  /**
+  * Get serialized TensorRT provider options string.
+  *
+  * For example, "trt_max_workspace_size=2147483648;trt_max_partition_iterations=10;trt_int8_enable=1;......" 
+  *
+  * @param tensorrt_options - OrTensorRTProviderOptionsV2 instance 
+  * @param allocator - a ptr to an instance of OrtAllocator obtained with CreateAllocator() or GetAllocatorWithDefaultOptions()
+  *                      the specified allocator will be used to allocate continuous buffers for output strings and lengths.
+  * @param ptr - is a UTF-8 null terminated string allocated using 'allocator'. The caller is responsible for using the same allocator to free it.
+  */
+  public static class GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer(Pointer p) { super(p); }
+      protected GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTensorRTProviderOptionsV2 tensorrt_options, OrtAllocator allocator, @Cast("char**") PointerPointer ptr);
+  }
+  public native GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer GetTensorRTProviderOptionsAsString(); public native OrtApi GetTensorRTProviderOptionsAsString(GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer setter);
+
+  /**
+  * Use this API to release the instance of OrtTensorRTProviderV2.
+  */
+  public static class ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2 extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2(Pointer p) { super(p); }
+      protected ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2() { allocate(); }
+      private native void allocate();
+      public native void call(OrtTensorRTProviderOptionsV2 input);
+  }
+  public native ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2 ReleaseTensorRTProviderOptions(); public native OrtApi ReleaseTensorRTProviderOptions(ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2 setter);
+
+  /*
+  * Enable custom operators in onnxruntime-extensions: https://github.com/microsoft/onnxruntime-extensions.git
+  */
+  public static class EnableOrtCustomOps_OrtSessionOptions extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    EnableOrtCustomOps_OrtSessionOptions(Pointer p) { super(p); }
+      protected EnableOrtCustomOps_OrtSessionOptions() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
+  }
+  public native EnableOrtCustomOps_OrtSessionOptions EnableOrtCustomOps(); public native OrtApi EnableOrtCustomOps(EnableOrtCustomOps_OrtSessionOptions setter);
+
+  /**
+   * Registers a custom allocator instance with the env to enable
+   * sharing between multiple sessions that use the same env instance.
+   * Returns an error if an allocator with the same OrtMemoryInfo is already registered.
+   * 
+   * The behavior of this API is exactly the same as CreateAndRegisterAllocator() except
+   * instead of ORT creating an allocator based on provided info, in this case 
+   * ORT uses the user-provided custom allocator.
+   * See docs/C_API.md for details.
+   * 
+   * @param env [in,out] OrtEnv instance (must be non-null).
+   * @param allocator [in] user provided allocator (must be non-null).
+   * 
+  */
+  public static class RegisterAllocator_OrtEnv_OrtAllocator extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    RegisterAllocator_OrtEnv_OrtAllocator(Pointer p) { super(p); }
+      protected RegisterAllocator_OrtEnv_OrtAllocator() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtEnv env, OrtAllocator allocator);
+  }
+  public native RegisterAllocator_OrtEnv_OrtAllocator RegisterAllocator(); public native OrtApi RegisterAllocator(RegisterAllocator_OrtEnv_OrtAllocator setter);
+
+  /**
+   * Unregisters a registered allocator for sharing across sessions 
+   * based on provided OrtMemoryInfo.
+   * It is an error if you provide an OrtmemoryInfo not corresponding to any
+   * registered allocators for sharing.
+  */
+  public static class UnregisterAllocator_OrtEnv_OrtMemoryInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    UnregisterAllocator_OrtEnv_OrtMemoryInfo(Pointer p) { super(p); }
+      protected UnregisterAllocator_OrtEnv_OrtMemoryInfo() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtEnv env,
+                    @Const OrtMemoryInfo mem_info);
+  }
+  public native UnregisterAllocator_OrtEnv_OrtMemoryInfo UnregisterAllocator(); public native OrtApi UnregisterAllocator(UnregisterAllocator_OrtEnv_OrtMemoryInfo setter);
+
+  /**
+   * Sets *out to 1 iff an OrtValue is a SparseTensor, and 0 otherwise
+   * 
+   * @param value [in] existing OrtValue
+   * @param out [out] unless an error occurs, contains 1 iff the value contains an instance
+   *  of sparse tensor or 0 otherwise.
+   */
+  public static class IsSparseTensor_OrtValue_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    IsSparseTensor_OrtValue_IntPointer(Pointer p) { super(p); }
+      protected IsSparseTensor_OrtValue_IntPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, IntPointer out);
+  }
+  public native IsSparseTensor_OrtValue_IntPointer IsSparseTensor(); public native OrtApi IsSparseTensor(IsSparseTensor_OrtValue_IntPointer setter);
+
+  /**
+   * Create an OrtValue with a sparse tensor that is empty.
+   * Use FillSparseTensor<Format>() functions to populate sparse tensor with non-zero values and
+   * format specific indices data.
+   * Use ReleaseValue to destroy the sparse tensor, this will also release the buffer inside the output value
+   * if any was allocated.
+   * @param allocator [in,out] allocator to use when performing an allocation. Allocation will be performed
+   *   by FillSparseTensor<Format>() APIs. The lifespan of the allocator instance must eclipse the lifespan
+   *   this sparse tensor instance as the same allocator will be used to free memory.
+   * @param dense_shape [in] shape of the original dense tensor
+   * @param dense_shape_len [in] number of shape dimensions being passed
+   * @param type [in] must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
+   * @param out [out] Should be freed by calling ReleaseValue
+   * @return OrtStatus*
+   */
+  public static class CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer(Pointer p) { super(p); }
+      protected CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtAllocator allocator, @Cast("const int64_t*") LongPointer dense_shape,
+                    @Cast("size_t") long dense_shape_len, @Cast("ONNXTensorElementDataType") int type, @Cast("OrtValue**") PointerPointer out);
+  }
+  public native CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer CreateSparseTensorAsOrtValue(); public native OrtApi CreateSparseTensorAsOrtValue(CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer setter);
+
+  /**
+   * This API fills populates an empty tensor that was created using CreateSparseTensorAsOrtValue API.
+   * The API will allocate required memory and copy the supplied NNZ values and COO indices into that memory allocation.
+   * Memory allocation is performed using the allocator that was specified with CreateSparseTensorAsOrtValue.
+   * 
+   * @param ort_value [in,out] OrtValue to populate with data
+   * @param mem_info [in] serves to identify the location of the data to be copied. If the allocator specified 
+   *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
+   *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
+   * @param values_shape [in] pointer to values shape array
+   * @param values_shape_len [in] length of the values_shape
+   * @param values [in] pointer to an array of values. For strings, pass const char**.
+   * @param indices_data [in] pointer to a location of COO indices
+   * @param indices_num [in] number of COO indices
+   */
+  public static class FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long(Pointer p) { super(p); }
+      protected FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") LongPointer indices_data, @Cast("size_t") long indices_num);
+  }
+  public native FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long FillSparseTensorCoo(); public native OrtApi FillSparseTensorCoo(FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long setter);
+
+  /**
+   * This API fills populates an empty tensor that was created using CreateSparseTensorAsOrtValue API.
+   * The API will allocate required memory and copy the supplied NNZ values and CSR indices into that memory allocation.
+   * Memory allocation is performed using the allocator that was specified with CreateSparseTensorAsOrtValue.
+   * 
+   * @param ort_value [in,out] OrtValue to populate with data
+   * @param mem_info [in] serves to identify the location of the data to be copied. If the allocator specified 
+   *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
+   *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
+   * @param values_shape [in] pointer to values shape array
+   * @param values_shape_len [in] length of the values_shape
+   * @param values [in] - pointer to an array of values. For strings, pass const char**.
+   * @param inner_indices_data [in] pointer to a location of CSR inner indices
+   * @param inner_indices_num [in] number of CSR inner indices
+   * @param outer_indices_data [in] pointer to a location of CSR outer indices
+   * @param outer_indices_num [in] number of CSR outer indices
+   */
+  public static class FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long(Pointer p) { super(p); }
+      protected FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") LongPointer inner_indices_data, @Cast("size_t") long inner_indices_num,
+                    @Cast("const int64_t*") LongPointer outer_indices_data, @Cast("size_t") long outer_indices_num);
+  }
+  public native FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long FillSparseTensorCsr(); public native OrtApi FillSparseTensorCsr(FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long setter);
+
+  /**
+   * This API fills populates an empty tensor that was created using CreateSparseTensorAsOrtValue API.
+   * The API will allocate required memory and copy the supplied NNZ values and BlockSparse indices into that memory allocation.
+   * Memory allocation is performed using the allocator that was specified with CreateSparseTensorAsOrtValue.
+   * 
+   * @param ort_value [in,out] OrtValue to populate with data
+   * @param mem_info [in] serves to identify the location of the data to be copied. If the allocator specified 
+   *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
+   *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
+   * @param values [in] structure with values information
+   * @param indices_shape_data [in] pointer to a location of indices shape
+   * @param indices_shape_len [in] length of the block sparse indices shape
+   * @param indices_data [in] pointer to a location of indices data. Shape will determine the length of the indices data.
+   */
+  public static class FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer(Pointer p) { super(p); }
+      protected FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") LongPointer indices_shape_data, @Cast("size_t") long indices_shape_len,
+                    @Const IntPointer indices_data);
+  }
+  public native FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer FillSparseTensorBlockSparse(); public native OrtApi FillSparseTensorBlockSparse(FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer setter);
+
+  /**
+   * Create an OrtValue with a sparse tensor. This is the first step.
+   * Next, use Use<Format>Indices() functions to supply sparse tensor with
+   * format specific indices data and set its sparse format to a specific enum value.
+   * This API will not perform memory allocations. It will
+   * use supplied user buffer which should outlive the created sparse tensor.
+   * Use ReleaseValue to destroy the sparse tensor. It would not release the supplied values buffer.
+   * This API can not be used to map strings from the user allocated memory. Strings must always be copied
+   * and have UTF-8 encoding. Therefore, use CreateSparseTensorAsOrtValue() API above and then fill it with data
+   * using appropriate Make*() function.
+   * 
+   * @param info [in] memory info where sparse values reside.
+   * @param p_data [in,out] pointer to a user allocated buffer with values. To create a full sparse tensor with no non-zero
+   *   values, pass nullptr
+   * @param dense_shape [in] shape of the original dense tensor
+   * @param dense_shape_len [in] number of shape dimensions being passed
+   * @param values_shape [in] shape of the values data. To create a fully sparse tensor with no non-zero values,
+   *   pass {0} shape.
+   * @param values_shape_len [in] number of values shape dimensions
+   * @param type [in] must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
+   * @param out [out] Should be freed by calling ReleaseValue
+   * @return OrtStatus*
+   */
+  public static class CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer(Pointer p) { super(p); }
+      protected CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo info, Pointer p_data,
+                    @Cast("const int64_t*") LongPointer dense_shape, @Cast("size_t") long dense_shape_len,
+                    @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len,
+                    @Cast("ONNXTensorElementDataType") int type, @Cast("OrtValue**") PointerPointer out);
+  }
+  public native CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer CreateSparseTensorWithValuesAsOrtValue(); public native OrtApi CreateSparseTensorWithValuesAsOrtValue(CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer setter);
+
+  /**
+   * The API assigns Coo format indices to the SparseTensor that was created by 
+   * CreateSparseTensorWithValuesAsOrtValue API above. It also sets OrtSparseFormat to 
+   * ORT_SPARSE_COO. The API will not allocate any additional memory for data. The life span of
+   * indices_data buffer should eclipse the life span of this OrtValue.
+   * 
+   * @param ort_value [in,out] OrtValue instance constructed with CreateSparseTensorWithValuesAsOrtValue
+   * @param indices_data [in,out] pointer to a user pre-allocated buffer or nullptr for fully sparse tensors.
+   * @param indices_num [in]  number of COO indices. Should either be 0 for fully sparse tensors, be equal
+   *  to the number of nnz values specified to CreateSparseTensorWithValuesAsOrtValue for 1-D {nnz} indices or
+   *  be twice as number of nnz values for a  2-D indices {nnz, 2}
+   */
+  public static class UseCooIndices_OrtValue_LongPointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    UseCooIndices_OrtValue_LongPointer_long(Pointer p) { super(p); }
+      protected UseCooIndices_OrtValue_LongPointer_long() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Cast("int64_t*") LongPointer indices_data, @Cast("size_t") long indices_num);
+  }
+  public native UseCooIndices_OrtValue_LongPointer_long UseCooIndices(); public native OrtApi UseCooIndices(UseCooIndices_OrtValue_LongPointer_long setter);
+
+  /**
+   * The API assigns CSR format indices to the SparseTensor that was created by 
+   * CreateSparseTensorWithValuesAsOrtValue API above. It also sets OrtSparseFormat to 
+   * ORT_SPARSE_CSRC. The API will not allocate any additional memory for data. The life spans of
+   * indner_data and outer_data buffers should eclipse the life span of this OrtValue.
+   * 
+   * @param ort_value [in,out] OrtValue instance constructed with CreateSparseTensorWithValuesAsOrtValue
+   * @param inner_data [in,out] pointer to a user pre-allocated buffer or nullptr for fully sparse tensors.
+   * @param inner_num [in]  number of inner CSR indices. Should either be 0 for fully sparse tensors or be equal
+   * to the number of nnz values specified to CreateSparseTensorWithValuesAsOrtValue.
+   * @param outer_data [in,out] pointer to user pre-allocated buffer or nullptr for fully sparse tensors.
+   * @param outer_num [in] number of CSR outer indices. Should either be 0 for fully sparse tensors or
+   * equal to rows + 1 of the dense shape.
+   */
+  public static class UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long(Pointer p) { super(p); }
+      protected UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Cast("int64_t*") LongPointer inner_data, @Cast("size_t") long inner_num,
+                    @Cast("int64_t*") LongPointer outer_data, @Cast("size_t") long outer_num);
+  }
+  public native UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long UseCsrIndices(); public native OrtApi UseCsrIndices(UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long setter);
+
+  /**
+   * The API assigns BlockSparse format indices to the SparseTensor that was created by 
+   * CreateSparseTensorWithValuesAsOrtValue API above. It also sets OrtSparseFormat to 
+   * ORT_SPARSE_BLOCK_SPARSE. The API will not allocate any additional memory for data. The life span of
+   * indices_data buffer must eclipse the lifespan of this OrtValue.
+   * 
+   * @param ort_value [in,out] OrtValue instance constructed with CreateSparseTensorWithValuesAsOrtValue
+   * @param indices_shape [in] pointer to indices shape. Use {0} for fully sparse tensors
+   * @param indices_shape_len [in] length of the indices shape
+   * @param indices_data [in,out] pointer to user pre-allocated buffer or nullptr for fully sparse tensors.
+   */
+  public static class UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer(Pointer p) { super(p); }
+      protected UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Cast("const int64_t*") LongPointer indices_shape, @Cast("size_t") long indices_shape_len, IntPointer indices_data);
+  }
+  public native UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer UseBlockSparseIndices(); public native OrtApi UseBlockSparseIndices(UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer setter);
+
+  /**
+   * The API returns sparse tensor format enum iff a given ort value contains an instance of sparse tensor.
+   * 
+   * @param ort_value [in] OrtValue that contains an instance of sparse tensor
+   * @param out [out] pointer to out parameter
+   */
+  public static class GetSparseTensorFormat_OrtValue_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetSparseTensorFormat_OrtValue_IntPointer(Pointer p) { super(p); }
+      protected GetSparseTensorFormat_OrtValue_IntPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, @Cast("OrtSparseFormat*") IntPointer out);
+  }
+  public native GetSparseTensorFormat_OrtValue_IntPointer GetSparseTensorFormat(); public native OrtApi GetSparseTensorFormat(GetSparseTensorFormat_OrtValue_IntPointer setter);
+
+  /**
+   *  The API Returns data type and shape of sparse tensor values (nnz) iff OrtValue contains a SparseTensor.
+   * 
+   * @param ort_value [in] an OrtValue that contains a fully constructed sparse tensor
+   * @param out [out] Should be freed by ReleaseTensorTypeAndShapeInfo after use
+   */
+  public static class GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer(Pointer p) { super(p); }
+      protected GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
+  }
+  public native GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer GetSparseTensorValuesTypeAndShape(); public native OrtApi GetSparseTensorValuesTypeAndShape(GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer setter);
+
+  /**
+   * The API returns numeric data for sparse tensor values (nnz). For string values use GetStringTensor*() API.
+   * 
+   * @param ort_value [in] an instance of OrtValue containing sparse tensor
+   * @param out [out] returns a pointer to values data.  Do not attempt to free this ptr.
+   */
+  public static class GetSparseTensorValues_OrtValue_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetSparseTensorValues_OrtValue_PointerPointer(Pointer p) { super(p); }
+      protected GetSparseTensorValues_OrtValue_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, @Cast("const void**") PointerPointer out);
+  }
+  public native GetSparseTensorValues_OrtValue_PointerPointer GetSparseTensorValues(); public native OrtApi GetSparseTensorValues(GetSparseTensorValues_OrtValue_PointerPointer setter);
+
+  /**
+   * The API returns data type, shape for the type of indices specified by
+   * indices_format.
+   * 
+   * @param ort_value [in] OrtValue containing sparse tensor.
+   * @param indices_format [in] - one of the indices formats. It is an error to request a format that the sparse
+   * tensor does not contain.
+   * @param an [out] instance of OrtTensorTypeAndShapeInfo. Must be freed by the ReleaseTensorTypeAndShapeInfo.
+   */
+  public static class GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer(Pointer p) { super(p); }
+      protected GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
+  }
+  public native GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer GetSparseTensorIndicesTypeShape(); public native OrtApi GetSparseTensorIndicesTypeShape(GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer setter);
+
+  /**
+   * The API returns indices data for the type of the indices specified by indices_format.
+   * Do not free the returned ptr as it points directly to the internal sparse tensor buffer.
+   * 
+   * @param ort_value [in] OrtValue containing sparse tensor.
+   * @param indices_format [in] - one of the indices formats. It is an error to request a format that the sparse
+   * tensor does not contain.
+   * @param num_indices [out] ptr where the number of indices entries is returned
+   * @param indices [out] out param where the pointer to the internal buffer is returned. Do not free this buffer.
+   */
+  public static class GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer(Pointer p) { super(p); }
+      protected GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @Cast("size_t*") SizeTPointer num_indices, @Cast("const void**") PointerPointer indices);
+  }
+  public native GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer GetSparseTensorIndices(); public native OrtApi GetSparseTensorIndices(GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer setter);
 }

@@ -35,7 +35,8 @@ public class OrtAllocator extends Pointer {
         return new OrtAllocator((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("uint32_t") int version(); public native OrtAllocator version(int setter);  // Initialize to ORT_API_VERSION
+  /** Must be initialized to ORT_API_VERSION */
+  public native @Cast("uint32_t") int version(); public native OrtAllocator version(int setter);
   public static class Alloc_OrtAllocator_long extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -44,6 +45,7 @@ public class OrtAllocator extends Pointer {
       private native void allocate();
       public native Pointer call(OrtAllocator this_, @Cast("size_t") long size);
   }
+  /** Returns a pointer to an allocated block of {@code size} bytes */
   public native Alloc_OrtAllocator_long Alloc(); public native OrtAllocator Alloc(Alloc_OrtAllocator_long setter);
   public static class Free_OrtAllocator_Pointer extends FunctionPointer {
       static { Loader.load(); }
@@ -53,6 +55,7 @@ public class OrtAllocator extends Pointer {
       private native void allocate();
       public native void call(OrtAllocator this_, Pointer p);
   }
+  /** Free a block of memory previously allocated with OrtAllocator::Alloc */
   public native Free_OrtAllocator_Pointer Free(); public native OrtAllocator Free(Free_OrtAllocator_Pointer setter);
   public static class Info_OrtAllocator extends FunctionPointer {
       static { Loader.load(); }
@@ -62,5 +65,6 @@ public class OrtAllocator extends Pointer {
       private native void allocate();
       public native @Const OrtMemoryInfo call(@Const OrtAllocator this_);
   }
+  /** Return a pointer to an ::OrtMemoryInfo that describes this allocator */
   public native Info_OrtAllocator Info(); public native OrtAllocator Info(Info_OrtAllocator setter);
 }

@@ -49,6 +49,8 @@ public class SessionOptions extends BaseSessionOptions {
   public native @ByRef SessionOptions EnableProfiling(@Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
   public native @ByRef SessionOptions DisableProfiling();
 
+  public native @ByRef SessionOptions EnableOrtCustomOps();
+
   public native @ByRef SessionOptions EnableMemPattern();
   public native @ByRef SessionOptions DisableMemPattern();
 
