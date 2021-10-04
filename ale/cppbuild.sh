@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ALE_VERSION=0.7.0
+ALE_VERSION=0.7.1
 SDL_VERSION=2.0.16
 download https://github.com/mgbellemare/Arcade-Learning-Environment/archive/v$ALE_VERSION.tar.gz ale-v$ALE_VERSION.tar.gz
 download https://github.com/libsdl-org/SDL/archive/refs/tags/release-$SDL_VERSION.tar.gz SDL-release-$SDL_VERSION.tar.gz

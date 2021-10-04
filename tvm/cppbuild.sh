@@ -73,8 +73,13 @@ sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can
 sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 
 # https://github.com/apache/tvm/pull/6717
+# https://github.com/apache/tvm/pull/9138
+# https://github.com/apache/tvm/pull/8682
 sedinplace 's/(lanes, \/\*Scalable=\*\/false)/::getFixed(lanes)/g' src/target/llvm/codegen_llvm.cc
+sedinplace 's/llvm::Intrinsic::getName(id, {})/llvm::Intrinsic::getBaseName(id).str()/g' src/target/llvm/codegen_llvm.cc
+sedinplace 's/::F_None/::OF_None/g' src/target/llvm/llvm_module.cc
 
+# https://github.com/apache/tvm/pull/6738
 # https://github.com/apache/tvm/pull/6752
 patch -Np1 < ../../../tvm.patch
 
@@ -86,7 +91,7 @@ if [[ -f $f ]]; then
     chmod +x $LLVM_PATH/bin/llvm-config*
 fi
 if [[ -f "$LLVM_PATH/lib/libLLVM.dylib" ]]; then
-    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-12.dylib
+    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-13.dylib
 fi
 if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
@@ -118,7 +123,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH --upgrade setuptools
 
 case $PLATFORM in
     linux-x86_64)

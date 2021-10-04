@@ -97,8 +97,8 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17964/w_onemkl_p_2021.3.0.524_offline.exe
-          w_onemkl_p_2021.3.0.524_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18230/w_onemkl_p_2021.4.0.640_offline.exe
+          w_onemkl_p_2021.4.0.640_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (

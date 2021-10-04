@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=12.0.1
+LLVM_VERSION=13.0.0
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
@@ -19,6 +19,7 @@ cd llvm-project-$LLVM_VERSION.src
 patch -Np1 < ../../../llvm.patch
 sedinplace '/find_package(Git/d' llvm/cmake/modules/AddLLVM.cmake llvm/cmake/modules/VersionFromVCS.cmake
 sedinplace '/Generating libLLVM is not supported on MSVC/d' llvm/tools/llvm-shlib/CMakeLists.txt
+sedinplace 's/if (NOT Python3_EXECUTABLE/if (TRUE/g' clang/lib/Tooling/CMakeLists.txt
 mkdir -p build
 cd build
 
