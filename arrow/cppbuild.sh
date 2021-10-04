@@ -12,7 +12,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=12.0.1
+LLVM_VERSION=13.0.0
 OPENSSL_VERSION=1.1.1k
 ZLIB_VERSION=1.2.11
 PROTO_VERSION=3.13.0
@@ -37,7 +37,7 @@ tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$L
 cd apache-arrow-$ARROW_VERSION
 patch -Np1 < ../../../arrow.patch
 sedinplace 's/PlatformToolset=v140/PlatformToolset=v142/g' cpp/cmake_modules/ThirdpartyToolchain.cmake
-sedinplace 's/ARROW_LLVM_VERSIONS "10"/ARROW_LLVM_VERSIONS "11" "10"/g' cpp/CMakeLists.txt
+sedinplace 's/set(ARROW_LLVM_VERSIONS/set(ARROW_LLVM_VERSIONS "13.0"/g' cpp/CMakeLists.txt
 cd ../llvm-$LLVM_VERSION.src
 sedinplace '/find_package(Git/d' cmake/modules/AddLLVM.cmake cmake/modules/VersionFromVCS.cmake
 mkdir -p build tools

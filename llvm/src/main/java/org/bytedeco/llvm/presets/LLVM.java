@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
                "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp14", link = {"LLVM-12", "LTO@.12", "Remarks@.12"}, resource = {"include", "lib", "libexec", "share"}),
+    compiler = "cpp14", link = {"LLVM-13", "LTO@.13", "Remarks@.13"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
 @NoException
@@ -113,6 +113,12 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOrcOpaqueJITTargetMachineBuilder").pointerTypes("LLVMOrcJITTargetMachineBuilderRef"))
                .put(new Info("LLVMOrcOpaqueObjectLayer").pointerTypes("LLVMOrcObjectLayerRef"))
                .put(new Info("LLVMOrcOpaqueExecutionSession").pointerTypes("LLVMOrcExecutionSessionRef"))
+               .put(new Info("LLVMOrcOpaqueMaterializationResponsibility").pointerTypes("LLVMOrcMaterializationResponsibilityRef"))
+               .put(new Info("LLVMOrcOpaqueIRTransformLayer").pointerTypes("LLVMOrcIRTransformLayerRef"))
+               .put(new Info("LLVMOrcOpaqueObjectTransformLayer").pointerTypes("LLVMOrcObjectTransformLayerRef"))
+               .put(new Info("LLVMOrcOpaqueIndirectStubsManager").pointerTypes("LLVMOrcIndirectStubsManagerRef"))
+               .put(new Info("LLVMOrcOpaqueLazyCallThroughManager").pointerTypes("LLVMOrcLazyCallThroughManagerRef"))
+               .put(new Info("LLVMOrcOpaqueDumpObjects").pointerTypes("LLVMOrcDumpObjectsRef"))
 
                .put(new Info("LLVMContextRef").valueTypes("LLVMContextRef").pointerTypes("@ByPtrPtr LLVMContextRef", "@Cast(\"LLVMContextRef*\") PointerPointer"))
                .put(new Info("LLVMModuleRef").valueTypes("LLVMModuleRef").pointerTypes("@ByPtrPtr LLVMModuleRef", "@Cast(\"LLVMModuleRef*\") PointerPointer"))
@@ -170,6 +176,12 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOrcJITTargetMachineBuilderRef").valueTypes("LLVMOrcJITTargetMachineBuilderRef").pointerTypes("@ByPtrPtr LLVMOrcJITTargetMachineBuilderRef", "@Cast(\"LLVMOrcJITTargetMachineBuilderRef*\") PointerPointer"))
                .put(new Info("LLVMOrcObjectLayerRef").valueTypes("LLVMOrcObjectLayerRef").pointerTypes("@ByPtrPtr LLVMOrcObjectLayerRef", "@Cast(\"LLVMOrcObjectLayerRef*\") PointerPointer"))
                .put(new Info("LLVMOrcExecutionSessionRef").valueTypes("LLVMOrcExecutionSessionRef").pointerTypes("@ByPtrPtr LLVMOrcExecutionSessionRef", "@Cast(\"LLVMOrcExecutionSessionRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcMaterializationResponsibilityRef").valueTypes("LLVMOrcMaterializationResponsibilityRef").pointerTypes("@ByPtrPtr LLVMOrcMaterializationResponsibilityRef", "@Cast(\"LLVMOrcMaterializationResponsibilityRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcIRTransformLayerRef").valueTypes("LLVMOrcIRTransformLayerRef").pointerTypes("@ByPtrPtr LLVMOrcIRTransformLayerRef", "@Cast(\"LLVMOrcIRTransformLayerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcObjectTransformLayerRef").valueTypes("LLVMOrcObjectTransformLayerRef").pointerTypes("@ByPtrPtr LLVMOrcObjectTransformLayerRef", "@Cast(\"LLVMOrcObjectTransformLayerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcIndirectStubsManagerRef").valueTypes("LLVMOrcIndirectStubsManagerRef").pointerTypes("@ByPtrPtr LLVMOrcIndirectStubsManagerRef", "@Cast(\"LLVMOrcIndirectStubsManagerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcLazyCallThroughManagerRef").valueTypes("LLVMOrcLazyCallThroughManagerRef").pointerTypes("@ByPtrPtr LLVMOrcLazyCallThroughManagerRef", "@Cast(\"LLVMOrcLazyCallThroughManagerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcDumpObjectsRef").valueTypes("LLVMOrcDumpObjectsRef").pointerTypes("@ByPtrPtr LLVMOrcDumpObjectsRef", "@Cast(\"LLVMOrcDumpObjectsRef*\") PointerPointer"))
 
                .put(new Info("LLVM_C_EXTERN_C_BEGIN").cppText("#define LLVM_C_EXTERN_C_BEGIN").cppTypes())
                .put(new Info("LLVM_C_EXTERN_C_END").cppText("#define LLVM_C_EXTERN_C_END").cppTypes())
@@ -179,6 +191,6 @@ public class LLVM implements InfoMapper {
                .put(new Info("defined(_MSC_VER) && !defined(inline)").define(false))
                .put(new Info("GPU_CODEGEN").define(false))
                // These things were never actually implemented, see http://llvm.org/PR41362
-               .put(new Info("LLVMConstGEP2", "LLVMConstInBoundsGEP2").skip());
+               .put(new Info("LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMOrcObjectLayerAddObjectFileWithRT").skip());
     }
 }
