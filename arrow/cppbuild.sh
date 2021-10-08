@@ -27,7 +27,21 @@ cd $PLATFORM
 INSTALL_PATH=`pwd`
 
 LLVM_PATH="$INSTALL_PATH/../../../llvm/cppbuild/$PLATFORM/"
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -f "$P/include/llvm-c/Core.h" ]]; then
+            LLVM_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
 LLVM_PATH="${LLVM_PATH//\\//}"
+
+rm -Rf $LLVM_PATH/lib/cmake
 
 echo "Decompressing archives... (ignore any symlink errors)"
 tar --totals -xzf ../apache-arrow-$ARROW_VERSION.tar.gz
@@ -100,7 +114,7 @@ case $PLATFORM in
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp
-        "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DLLVM_ROOT="$LLVM_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" .
+        "$CMAKE" -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-std=c++11 -m64" -DLLVM_DIR="$LLVM_PATH" -DLLVM_TOOLS_BINARY_DIR="$LLVM_PATH" -DOPENSSL_ROOT_DIR="$INSTALL_PATH" $COMPONENTS -DARROW_RPATH_ORIGIN=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DARROW_BUILD_UTILITIES=OFF -DPython3_EXECUTABLE="$PYTHON_BIN_PATH" .
         make -j $MAKEJ
         make install/strip
         ;;
