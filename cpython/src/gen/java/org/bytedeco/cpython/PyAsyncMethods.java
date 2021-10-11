@@ -32,4 +32,5 @@ public class PyAsyncMethods extends Pointer {
     public native unaryfunc am_await(); public native PyAsyncMethods am_await(unaryfunc setter);
     public native unaryfunc am_aiter(); public native PyAsyncMethods am_aiter(unaryfunc setter);
     public native unaryfunc am_anext(); public native PyAsyncMethods am_anext(unaryfunc setter);
+    public native sendfunc am_send(); public native PyAsyncMethods am_send(sendfunc setter);
 }

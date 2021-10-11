@@ -52,7 +52,7 @@ public class PyCodeObject extends Pointer {
     public native @Cast("Py_ssize_t*") SizeTPointer co_cell2arg(); public native PyCodeObject co_cell2arg(SizeTPointer setter);    /* Maps cell vars which are arguments. */
     public native PyObject co_filename(); public native PyCodeObject co_filename(PyObject setter);      /* unicode (where it was loaded from) */
     public native PyObject co_name(); public native PyCodeObject co_name(PyObject setter);          /* unicode (name, for reference) */
-    public native PyObject co_lnotab(); public native PyCodeObject co_lnotab(PyObject setter);        /* string (encoding addr<->lineno mapping) See
+    public native PyObject co_linetable(); public native PyCodeObject co_linetable(PyObject setter);     /* string (encoding addr<->lineno mapping) See
                                    Objects/lnotab_notes.txt for details. */
     public native Pointer co_zombieframe(); public native PyCodeObject co_zombieframe(Pointer setter);       /* for optimization only (see frameobject.c) */
     public native PyObject co_weakreflist(); public native PyCodeObject co_weakreflist(PyObject setter);   /* to support weakrefs to code objects */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 Samuel Audet
+ * Copyright (C) 2019-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,10 +33,15 @@ public class python extends org.bytedeco.cpython.presets.python {
 
     public static String Py_GetPathString() {
         Py_FrozenFlag(1); // prevent Python from printing useless warnings
-        BytePointer p = Py_EncodeLocale(org.bytedeco.cpython.global.python.Py_GetPath(), null);
-        String string = p.getString();
-        PyMem_Free(p);
-        return string;
+        Pointer s = org.bytedeco.cpython.global.python.Py_GetPath();
+        if (!Pointer.isNull(s)) {
+            BytePointer p = Py_EncodeLocale(s, null);
+            String string = p.getString();
+            PyMem_Free(p);
+            return string;
+        } else {
+            return null;
+        }
     }
 
     public static void Py_SetPath(File... path) throws IOException {
@@ -71,8 +76,55 @@ public class python extends org.bytedeco.cpython.presets.python {
 
     /** Effectively calls {@code Py_SetPath(path, Py_GetPath())}, for convenience. */
     public static void Py_AddPath(String... path) throws IOException {
-        path = Arrays.copyOf(path, path.length + 1);
-        path[path.length - 1] = Py_GetPathString();
+        String s = Py_GetPathString();
+        if (s != null) {
+            path = Arrays.copyOf(path, path.length + 1);
+            path[path.length - 1] = s;
+        }
         Py_SetPath(path);
+    }
+
+    public static void PySys_SetPath(File... path) throws IOException {
+        String[] strings = new String[path.length];
+        for (int i = 0; i < path.length; i++) {
+            strings[i] = path[i].getCanonicalPath();
+        }
+        PySys_SetPath(strings);
+    }
+
+    public static void PySys_SetPath(String... path) throws IOException {
+        String separator = "";
+        String string = "";
+        for (String s : path) {
+            string += separator + s;
+            separator = File.pathSeparator;
+        }
+        Pointer p = Py_DecodeLocale(string, null);
+        org.bytedeco.cpython.global.python.PySys_SetPath(p);
+        PyMem_RawFree(p);
+    }
+
+    /** Effectively returns {@code Py_IsInitialized() != 0} after calling
+     * {@code Py_SetPythonHome(cachePackage()); Py_InitializeEx(0); PySys_SetPath(path)}, for convenience. */
+    public static boolean Py_Initialize(File... path) throws IOException {
+        String[] strings = new String[path.length];
+        for (int i = 0; i < path.length; i++) {
+            strings[i] = path[i].getCanonicalPath();
+        }
+        return Py_Initialize(strings);
+    }
+
+    /** Effectively returns {@code Py_IsInitialized() != 0} after calling
+     * {@code Py_SetPythonHome(cachePackage()); Py_InitializeEx(0); PySys_SetPath(path)}, for convenience. */
+    public static boolean Py_Initialize(String... path) throws IOException {
+        Pointer p = Py_DecodeLocale(cachePackage().getCanonicalPath(), null);
+        Py_SetPythonHome(p);
+        PyMem_RawFree(p);
+        Py_InitializeEx(0);
+        if (Py_IsInitialized() != 0) {
+            PySys_SetPath(path);
+            return true;
+        }
+        return false;
     }
 }

@@ -10,7 +10,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #endif
+
+
+/* Stuff with no proper home (yet) */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class Int_PyOS_InputHook extends FunctionPointer {
     static { Loader.load(); }

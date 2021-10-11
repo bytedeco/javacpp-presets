@@ -28,9 +28,6 @@ public class DeployBERT {
         // Install in JavaCPP's cache GluonNLP and MXNet to download and import BERT model
         new ProcessBuilder(python, "-m", "pip", "install", "gluonnlp", "mxnet", "pytest").inheritIO().start().waitFor();
 
-        // Add TVM and its dependencies to Python path using C API to embed script in Java
-        Py_AddPath(org.bytedeco.tvm.presets.tvm.cachePackages());
-
         // Initialize the embedded Python interpreter inside the same process as the JVM
         Pointer program = Py_DecodeLocale(DeployBERT.class.getSimpleName(), null);
         if (program == null) {
@@ -38,7 +35,9 @@ public class DeployBERT {
             System.exit(1);
         }
         Py_SetProgramName(program);
-        Py_Initialize();
+
+        // Add TVM and its dependencies to Python path using C API to embed script in Java
+        Py_Initialize(org.bytedeco.tvm.presets.tvm.cachePackages());
         PySys_SetArgv(1, new PointerPointer(1).put(program));
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");

@@ -10,8 +10,7 @@ public class MatMul {
         /* try to use MKL when available */
         System.setProperty("org.bytedeco.openblas.load", "mkl");
 
-        Py_AddPath(org.bytedeco.numpy.global.numpy.cachePackages());
-        Py_Initialize();
+        Py_Initialize(org.bytedeco.numpy.global.numpy.cachePackages());
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");
             PyErr_Print();

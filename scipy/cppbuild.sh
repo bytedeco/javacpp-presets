@@ -52,19 +52,23 @@ tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
 cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost/
 cd scipy-$SCIPY_VERSION
 
+# prevent setuptools from trying to build NumPy
+sedinplace '/req_np/d' setup.py
+
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
 echo "include_dirs = $OPENBLAS_PATH/include/"     >> site.cfg
 
-if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.10/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -80,29 +84,31 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython==0.29.24 pybind11==2.6.2 pythran==0.9.11; then
+TOOLS="cython==0.29.24 pybind11==2.6.2 pythran==0.9.11 decorator==5.1.0 six==1.16.0 networkx==2.6.3 ply==3.11 beniget==0.3.0 gast==0.4.0"
+if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
-    chmod +x "$CPYTHON_HOST_PATH/bin/python3.9"
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.9" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.9/" crossenv==1.0 cython==0.29.24 numpy==1.21.2 pybind11==2.6.2 pythran==0.9.11
-    "$CPYTHON_HOST_PATH/bin/python3.9" -m crossenv "$PYTHON_BIN_PATH" crossenv
-    cp "$NUMPY_PATH/python/numpy/random/lib/libnpyrandom.a" "$CPYTHON_HOST_PATH/lib/python3.9/numpy/random/lib/libnpyrandom.a"
-    cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.9/numpy/core/lib/libnpymath.a"
-#    cp -a "$CPYTHON_HOST_PATH/lib/python3.9/include" "$PYTHON_LIB_PATH"
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.21.2 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
+    cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.10/"
+#    cp -a "$CPYTHON_HOST_PATH/lib/python3.10/include" "$PYTHON_LIB_PATH"
     source crossenv/bin/activate
     cross-expose cython numpy pybind11 pythran
-    PYTHON_BIN_PATH="python"
+    chmod +x $CPYTHON_HOST_PATH/lib/python3.10/bin/*
+    export PATH="$CPYTHON_HOST_PATH/lib/python3.10/bin/:$PATH"
+    export PYTHON_BIN_PATH="python"
     export NUMPY_MADVISE_HUGEPAGE=1
 
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.9-config)
+    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.10-config)
     mkdir -p $PREFIX_HOST_PATH
     cp -a $CPYTHON_HOST_PATH/* $PREFIX_HOST_PATH
 fi
 
 if [[ $PLATFORM == linux* ]]; then
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.9-config)
+    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.10-config)
     mkdir -p $PREFIX_PATH
     cp -a $CPYTHON_PATH/* $PREFIX_PATH
 fi

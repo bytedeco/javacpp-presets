@@ -32,7 +32,7 @@ export TF_CUDA_CLANG=0
 export TF_CUDA_VERSION=11.4
 export TF_CUDNN_VERSION=8
 export TF_DOWNLOAD_CLANG=0
-export TF_NCCL_VERSION=2.10
+export TF_NCCL_VERSION=2.11
 export TF_TENSORRT_VERSION=8.0
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
@@ -61,12 +61,12 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
-        if [[ -f "$P/include/python3.9/Python.h" ]]; then
+        if [[ -f "$P/include/python3.10/Python.h" ]]; then
             CPYTHON_PATH="$P"
-            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
-            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
-            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
-            export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
+            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
+            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
+            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
+            export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
             chmod +x "$PYTHON_BIN_PATH"
         elif [[ -f "$P/include/Python.h" ]]; then

@@ -20,7 +20,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/scipy/apidocs/
 
-&lowast; Call `Py_AddPath(cachePackages())` before calling `Py_Initialize()`.
+&lowast; Call `Py_Initialize(cachePackages())` instead of just `Py_Initialize()`.
 
 
 Sample Usage
@@ -55,7 +55,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.3-1.5.7-SNAPSHOT</version>
+            <version>2021.4-1.5.7-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -78,8 +78,7 @@ public class SparseLinalg {
         /* try to use MKL when available */
         System.setProperty("org.bytedeco.openblas.load", "mkl");
 
-        Py_AddPath(org.bytedeco.scipy.presets.scipy.cachePackages());
-        Py_Initialize();
+        Py_Initialize(org.bytedeco.scipy.presets.scipy.cachePackages());
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");
             PyErr_Print();

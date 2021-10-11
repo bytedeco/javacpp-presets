@@ -10,14 +10,12 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #endif
 
 // #ifdef Py_DEBUG
 // #endif
 
 
 /* hash function definition */
-// #ifndef Py_LIMITED_API
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyHash_FuncDef extends Pointer {
     static { Loader.load(); }

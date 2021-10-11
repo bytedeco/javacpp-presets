@@ -18,7 +18,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.17-${project.parent.version}</version>
+      <version>0.3.18-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -62,7 +62,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.17-${project.parent.version}</version>
+            <version>0.3.18-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -194,5 +194,32 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>linux-x86</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>linux-x86</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>${javacpp.platform}</properties>
+              <compilerOptions>
+                <!-- Disable optimization for 32-bit builds as GCC crashes -->
+                <compilerOption>-O0</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+   </profile>
+  </profiles>
 
 </project>
