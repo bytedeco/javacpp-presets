@@ -34,8 +34,6 @@ public class PyAsyncGenObject extends Pointer {
     public native @ByRef PyObject ob_base(); public native PyAsyncGenObject ob_base(PyObject setter);
     /* Note: gi_frame can be NULL if the generator is "finished" */
     public native PyFrameObject ag_frame(); public native PyAsyncGenObject ag_frame(PyFrameObject setter);
-    /* True if generator is being executed. */
-    public native @Cast("char") byte ag_running(); public native PyAsyncGenObject ag_running(byte setter);
     /* The code object backing the generator */
     public native PyObject ag_code(); public native PyAsyncGenObject ag_code(PyObject setter);
     /* List of weak reference. */

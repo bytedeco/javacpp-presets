@@ -21,7 +21,7 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/opencv/apidocs/
 
 &lowast; Call `Loader.load(opencv_java.class)` before using the API in the `org.opencv` namespace.  
-&lowast; Call `Py_AddPath(opencv_python3.cachePackages())` before calling `Py_Initialize()`.
+&lowast; Call `Py_Initialize(opencv_python3.cachePackages())` instead of just `Py_Initialize()`.
 
 
 Sample Usage
@@ -70,7 +70,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.3-1.5.7-SNAPSHOT</version>
+            <version>2021.4-1.5.7-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional dependencies to load the Python module -->

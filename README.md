@@ -187,13 +187,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.3.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.17  http://www.openblas.net/
+ * DNNL 2.4.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.18  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.9.x  https://www.python.org/downloads/
+ * CPython 3.10.x  https://www.python.org/downloads/
  * NumPy 1.21.x  https://github.com/numpy/numpy
  * SciPy 1.7.x  https://github.com/scipy/scipy
  * Gym 0.21.x  https://github.com/openai/gym

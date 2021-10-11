@@ -4,7 +4,7 @@
  * Map C++ JIT classes and functions of TorchScript in presets for PyTorch ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Synchronize `cachePackage()` and prevent repeated package caching in all presets ([pull #1071](https://github.com/bytedeco/javacpp-presets/pull/1071))
  * Build FFmpeg with VA-API enabled and bundle its libraries to avoid loading issues ([issue bytedeco/javacv#1188](https://github.com/bytedeco/javacv/issues/1188))
- * Upgrade presets for Arrow 5.0.0, MKL 2021.4, DNNL 2.3.2, FFTW 3.3.10, CPython 3.9.7, NumPy 1.21.2, SciPy 1.7.1, Gym 0.21.0, LLVM 13.0.0, Leptonica 1.82.0, CUDA 11.4.2, cuDNN 8.2.4, NCCL 2.11.4, PyTorch 1.9.1, TensorFlow Lite 2.6.0, ALE 0.7.1, DepthAI 2.10.0, ONNX 1.10.1, ONNX Runtime 1.9.0, and their dependencies
+ * Upgrade presets for Arrow 5.0.0, MKL 2021.4, DNNL 2.4.1, OpenBLAS 0.3.18, FFTW 3.3.10, CPython 3.10.0, NumPy 1.21.2, SciPy 1.7.1, Gym 0.21.0, LLVM 13.0.0, Leptonica 1.82.0, CUDA 11.4.2, cuDNN 8.2.4, NCCL 2.11.4, PyTorch 1.9.1, TensorFlow Lite 2.6.0, ALE 0.7.2, DepthAI 2.10.0, ONNX 1.10.1, ONNX Runtime 1.9.1, and their dependencies
 
 ### August 2, 2021 version 1.5.6
  * Change `opencv_core.Mat` constructors to create column vectors out of arrays for consistency ([issue #1064](https://github.com/bytedeco/javacpp-presets/issues/1064))

@@ -21,6 +21,7 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/tvm/apidocs/
 
 &lowast; Call `Loader.load(org.bytedeco.tvm.presets.tvm_runtime.class)` before using the API in the `org.apache.tvm` package.
+&lowast; Call `Py_Initialize(org.bytedeco.tvm.presets.tvm.cachePackages())` instead of just `Py_Initialize()`.
 
 
 Sample Usage
@@ -108,6 +109,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.cpython.*;
 import org.bytedeco.numpy.*;
 import org.bytedeco.tvm.*;
+import org.bytedeco.tvm.Module;
 import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 import static org.bytedeco.tvm.global.tvm_runtime.*;
@@ -115,8 +117,10 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
 public class HowtoDeploy {
 
     static void PrepareTestLibs() throws Exception {
-        Py_AddPath(org.bytedeco.tvm.presets.tvm.cachePackages());
-        Py_Initialize();
+        String clang = Loader.load(org.bytedeco.llvm.program.clang.class).replace('\\', '/');
+        String clangPath = clang.substring(0, clang.lastIndexOf('/'));
+
+        Py_Initialize(org.bytedeco.tvm.presets.tvm.cachePackages());
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");
             PyErr_Print();
@@ -162,6 +166,7 @@ public class HowtoDeploy {
                 + "if __name__ == \"__main__\":\n"
                 + "    lib_path = os.path.join(os.getcwd(), \"lib\")\n"
                 + "    os.makedirs(lib_path, exist_ok = True)\n"
+                + "    os.environ[\"PATH\"] += os.pathsep + \"" + clangPath + "\"\n"
                 + "    prepare_test_libs(lib_path)\n"
                 + "    prepare_graph_lib(lib_path)\n",
 
