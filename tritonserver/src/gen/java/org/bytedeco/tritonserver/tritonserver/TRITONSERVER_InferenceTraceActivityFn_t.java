@@ -42,6 +42,6 @@ public class TRITONSERVER_InferenceTraceActivityFn_t extends FunctionPointer {
     private native void allocate();
     public native void call(
     TRITONSERVER_InferenceTrace trace,
-    TRITONSERVER_InferenceTraceActivity activity, @Cast("uint64_t") long timestamp_ns,
+    @Cast("TRITONSERVER_InferenceTraceActivity") int activity, @Cast("uint64_t") long timestamp_ns,
     Pointer userp);
 }

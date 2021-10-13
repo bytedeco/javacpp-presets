@@ -55,6 +55,6 @@ public class TRITONSERVER_ResponseAllocatorReleaseFn_t extends FunctionPointer {
     private native void allocate();
     public native TRITONSERVER_Error call(
     TRITONSERVER_ResponseAllocator allocator, Pointer buffer, Pointer buffer_userp,
-    @Cast("size_t") long byte_size, TRITONSERVER_MemoryType memory_type,
+    @Cast("size_t") long byte_size, @Cast("TRITONSERVER_MemoryType") int memory_type,
     @Cast("int64_t") long memory_type_id);
 }

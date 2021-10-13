@@ -52,7 +52,8 @@ import org.bytedeco.tensorrt.presets.nvparsers;
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h"},
-			link = "tritonserver"
+            exclude = {"<cudaGL.h>", "<cuda_gl_interop.h>"},
+            link = "tritonserver"
         ),
         @Platform(
             value = "linux-arm64",
@@ -66,7 +67,7 @@ import org.bytedeco.tensorrt.presets.nvparsers;
         ),
         @Platform(
             value = "linux-x86_64",
-            includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/"},
+            includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
         @Platform(
@@ -98,29 +99,30 @@ public class tritonserver implements LoadEnabled, InfoMapper {
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
                 lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.11.0" : lib.equals("nvrtc") ? "@.11.2" : "@.11";
-				lib += lib.startsWith("nvinfer") ? "@.8" : lib.equals("nvonnxparser") ? "@.8" : lib.equals("nvparsers") ? "@.8" :"@.8";
+                lib += lib.startsWith("nvinfer") ? "@.8" : lib.equals("nvonnxparser") ? "@.8" : lib.equals("nvparsers") ? "@.8" :"@.8";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_110" : lib.equals("nvrtc") ? "64_112_0" : "64_11";
-				lib += lib.startsWith("nvinfer") ? "64_8" : lib.equals("nvonnxparser") ? "64_8" : lib.equals("nvparsers") ? "64_8" :"64_8";
+                lib += lib.startsWith("nvinfer") ? "64_8" : lib.equals("nvonnxparser") ? "64_8" : lib.equals("nvparsers") ? "64_8" :"64_8";
             } else {
                 continue; // no CUDA
             }
-			if (!preloads.contains(lib)) {
+            if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);
             }
         }
         if (i > 0) {
             resources.add("/org/bytedeco/cuda/");
-			resources.add("/org/bytedeco/tensorrt/");
+            resources.add("/org/bytedeco/tensorrt/");
         }
     }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info().enumerate())
-			   .put(new Info("TRITONSERVER_EXPORT").cppTypes().annotations())
-			   .put(new Info("TRITONSERVER_DECLSPEC").cppTypes().annotations())
-			   .put(new Info("TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC").cppTypes().annotations())
-			   .put(new Info("TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
+        infoMap.putFirst(new Info().enumerate(false))
+               .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("boolean[]", "BoolPointer"))
+               .put(new Info("TRITONSERVER_EXPORT").cppTypes().annotations())
+               .put(new Info("TRITONSERVER_DECLSPEC").cppTypes().annotations())
+               .put(new Info("TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC").cppTypes().annotations())
+               .put(new Info("TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
         ;
     }
 }

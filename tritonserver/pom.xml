@@ -24,7 +24,7 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt</artifactId>
       <version>8.0-${project.parent.version}</version>
-      </dependency>
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>

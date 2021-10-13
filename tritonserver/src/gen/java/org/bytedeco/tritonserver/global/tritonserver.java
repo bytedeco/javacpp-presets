@@ -31,7 +31,7 @@ public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver
 
 // Parsed from tritonserver.h
 
-// Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+// Copyright 2020-2021, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -136,7 +136,7 @@ public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver
 public static final int TRITONSERVER_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONSERVER_API_VERSION_MINOR = 3;
+public static final int TRITONSERVER_API_VERSION_MINOR = 4;
 
 /** Get the TRITONBACKEND API version supported by the Triton shared
  *  library. This value can be compared against the
@@ -163,28 +163,22 @@ public static native TRITONSERVER_Error TRITONSERVER_ApiVersion(
  * 
  *  Tensor data types recognized by TRITONSERVER.
  *  */
-public enum TRITONSERVER_DataType {
-  TRITONSERVER_TYPE_INVALID(0),
-  TRITONSERVER_TYPE_BOOL(1),
-  TRITONSERVER_TYPE_UINT8(2),
-  TRITONSERVER_TYPE_UINT16(3),
-  TRITONSERVER_TYPE_UINT32(4),
-  TRITONSERVER_TYPE_UINT64(5),
-  TRITONSERVER_TYPE_INT8(6),
-  TRITONSERVER_TYPE_INT16(7),
-  TRITONSERVER_TYPE_INT32(8),
-  TRITONSERVER_TYPE_INT64(9),
-  TRITONSERVER_TYPE_FP16(10),
-  TRITONSERVER_TYPE_FP32(11),
-  TRITONSERVER_TYPE_FP64(12),
-  TRITONSERVER_TYPE_BYTES(13);
-
-    public final int value;
-    private TRITONSERVER_DataType(int v) { this.value = v; }
-    private TRITONSERVER_DataType(TRITONSERVER_DataType e) { this.value = e.value; }
-    public TRITONSERVER_DataType intern() { for (TRITONSERVER_DataType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_DataType */
+public static final int
+  TRITONSERVER_TYPE_INVALID = 0,
+  TRITONSERVER_TYPE_BOOL = 1,
+  TRITONSERVER_TYPE_UINT8 = 2,
+  TRITONSERVER_TYPE_UINT16 = 3,
+  TRITONSERVER_TYPE_UINT32 = 4,
+  TRITONSERVER_TYPE_UINT64 = 5,
+  TRITONSERVER_TYPE_INT8 = 6,
+  TRITONSERVER_TYPE_INT16 = 7,
+  TRITONSERVER_TYPE_INT32 = 8,
+  TRITONSERVER_TYPE_INT64 = 9,
+  TRITONSERVER_TYPE_FP16 = 10,
+  TRITONSERVER_TYPE_FP32 = 11,
+  TRITONSERVER_TYPE_FP64 = 12,
+  TRITONSERVER_TYPE_BYTES = 13;
 
 /** Get the string representation of a data type. The returned string
  *  is not owned by the caller and so should not be modified or freed.
@@ -194,8 +188,6 @@ public enum TRITONSERVER_DataType {
 
 ///
 public static native String TRITONSERVER_DataTypeString(
-    TRITONSERVER_DataType datatype);
-public static native @Cast("const char*") BytePointer TRITONSERVER_DataTypeString(
     @Cast("TRITONSERVER_DataType") int datatype);
 
 /** Get the Triton datatype corresponding to a string representation
@@ -206,7 +198,7 @@ public static native @Cast("const char*") BytePointer TRITONSERVER_DataTypeStrin
  *  string does not represent a data type. */
 
 ///
-public static native TRITONSERVER_DataType TRITONSERVER_StringToDataType(String dtype);
+public static native @Cast("TRITONSERVER_DataType") int TRITONSERVER_StringToDataType(String dtype);
 public static native @Cast("TRITONSERVER_DataType") int TRITONSERVER_StringToDataType(@Cast("const char*") BytePointer dtype);
 
 /** Get the size of a Triton datatype in bytes. Zero is returned for
@@ -218,24 +210,17 @@ public static native @Cast("TRITONSERVER_DataType") int TRITONSERVER_StringToDat
 
 ///
 ///
-public static native @Cast("uint32_t") int TRITONSERVER_DataTypeByteSize(TRITONSERVER_DataType datatype);
 public static native @Cast("uint32_t") int TRITONSERVER_DataTypeByteSize(@Cast("TRITONSERVER_DataType") int datatype);
 
 /** TRITONSERVER_MemoryType
  * 
  *  Types of memory recognized by TRITONSERVER.
  *  */
-public enum TRITONSERVER_MemoryType {
-  TRITONSERVER_MEMORY_CPU(0),
-  TRITONSERVER_MEMORY_CPU_PINNED(1),
-  TRITONSERVER_MEMORY_GPU(2);
-
-    public final int value;
-    private TRITONSERVER_MemoryType(int v) { this.value = v; }
-    private TRITONSERVER_MemoryType(TRITONSERVER_MemoryType e) { this.value = e.value; }
-    public TRITONSERVER_MemoryType intern() { for (TRITONSERVER_MemoryType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_MemoryType */
+public static final int
+  TRITONSERVER_MEMORY_CPU = 0,
+  TRITONSERVER_MEMORY_CPU_PINNED = 1,
+  TRITONSERVER_MEMORY_GPU = 2;
 
 /** Get the string representation of a memory type. The returned
  *  string is not owned by the caller and so should not be modified or
@@ -247,25 +232,17 @@ public enum TRITONSERVER_MemoryType {
 ///
 ///
 public static native String TRITONSERVER_MemoryTypeString(
-    TRITONSERVER_MemoryType memtype);
-public static native @Cast("const char*") BytePointer TRITONSERVER_MemoryTypeString(
     @Cast("TRITONSERVER_MemoryType") int memtype);
 
 /** TRITONSERVER_ParameterType
  * 
  *  Types of parameters recognized by TRITONSERVER.
  *  */
-public enum TRITONSERVER_ParameterType {
-  TRITONSERVER_PARAMETER_STRING(0),
-  TRITONSERVER_PARAMETER_INT(1),
-  TRITONSERVER_PARAMETER_BOOL(2);
-
-    public final int value;
-    private TRITONSERVER_ParameterType(int v) { this.value = v; }
-    private TRITONSERVER_ParameterType(TRITONSERVER_ParameterType e) { this.value = e.value; }
-    public TRITONSERVER_ParameterType intern() { for (TRITONSERVER_ParameterType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_ParameterType */
+public static final int
+  TRITONSERVER_PARAMETER_STRING = 0,
+  TRITONSERVER_PARAMETER_INT = 1,
+  TRITONSERVER_PARAMETER_BOOL = 2;
 
 /** Get the string representation of a parmeter type. The returned
  *  string is not owned by the caller and so should not be modified or
@@ -277,26 +254,18 @@ public enum TRITONSERVER_ParameterType {
 ///
 ///
 public static native String TRITONSERVER_ParameterTypeString(
-    TRITONSERVER_ParameterType paramtype);
-public static native @Cast("const char*") BytePointer TRITONSERVER_ParameterTypeString(
     @Cast("TRITONSERVER_ParameterType") int paramtype);
 
 /** TRITONSERVER_InstanceGroupKind
  * 
  *  Kinds of instance groups recognized by TRITONSERVER.
  *  */
-public enum TRITONSERVER_InstanceGroupKind {
-  TRITONSERVER_INSTANCEGROUPKIND_AUTO(0),
-  TRITONSERVER_INSTANCEGROUPKIND_CPU(1),
-  TRITONSERVER_INSTANCEGROUPKIND_GPU(2),
-  TRITONSERVER_INSTANCEGROUPKIND_MODEL(3);
-
-    public final int value;
-    private TRITONSERVER_InstanceGroupKind(int v) { this.value = v; }
-    private TRITONSERVER_InstanceGroupKind(TRITONSERVER_InstanceGroupKind e) { this.value = e.value; }
-    public TRITONSERVER_InstanceGroupKind intern() { for (TRITONSERVER_InstanceGroupKind e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_InstanceGroupKind */
+public static final int
+  TRITONSERVER_INSTANCEGROUPKIND_AUTO = 0,
+  TRITONSERVER_INSTANCEGROUPKIND_CPU = 1,
+  TRITONSERVER_INSTANCEGROUPKIND_GPU = 2,
+  TRITONSERVER_INSTANCEGROUPKIND_MODEL = 3;
 
 /** Get the string representation of an instance-group kind. The
  *  returned string is not owned by the caller and so should not be
@@ -308,26 +277,18 @@ public enum TRITONSERVER_InstanceGroupKind {
 ///
 ///
 public static native String TRITONSERVER_InstanceGroupKindString(
-    TRITONSERVER_InstanceGroupKind kind);
-public static native @Cast("const char*") BytePointer TRITONSERVER_InstanceGroupKindString(
     @Cast("TRITONSERVER_InstanceGroupKind") int kind);
 
 /** TRITONSERVER_Logging
  * 
  *  Types/levels of logging.
  *  */
-public enum TRITONSERVER_LogLevel {
-  TRITONSERVER_LOG_INFO(0),
-  TRITONSERVER_LOG_WARN(1),
-  TRITONSERVER_LOG_ERROR(2),
-  TRITONSERVER_LOG_VERBOSE(3);
-
-    public final int value;
-    private TRITONSERVER_LogLevel(int v) { this.value = v; }
-    private TRITONSERVER_LogLevel(TRITONSERVER_LogLevel e) { this.value = e.value; }
-    public TRITONSERVER_LogLevel intern() { for (TRITONSERVER_LogLevel e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_LogLevel */
+public static final int
+  TRITONSERVER_LOG_INFO = 0,
+  TRITONSERVER_LOG_WARN = 1,
+  TRITONSERVER_LOG_ERROR = 2,
+  TRITONSERVER_LOG_VERBOSE = 3;
 
 /** Is a log level enabled?
  * 
@@ -335,8 +296,6 @@ public enum TRITONSERVER_LogLevel {
  *  @return True if the log level is enabled, false if not enabled. */
 
 ///
-public static native @Cast("bool") boolean TRITONSERVER_LogIsEnabled(
-    TRITONSERVER_LogLevel level);
 public static native @Cast("bool") boolean TRITONSERVER_LogIsEnabled(
     @Cast("TRITONSERVER_LogLevel") int level);
 
@@ -352,7 +311,7 @@ public static native @Cast("bool") boolean TRITONSERVER_LogIsEnabled(
 ///
 ///
 public static native TRITONSERVER_Error TRITONSERVER_LogMessage(
-    TRITONSERVER_LogLevel level, String filename, int line,
+    @Cast("TRITONSERVER_LogLevel") int level, String filename, int line,
     String msg);
 public static native TRITONSERVER_Error TRITONSERVER_LogMessage(
     @Cast("TRITONSERVER_LogLevel") int level, @Cast("const char*") BytePointer filename, int line,
@@ -370,21 +329,15 @@ public static native TRITONSERVER_Error TRITONSERVER_LogMessage(
  * 
  <p>
  *  The TRITONSERVER_Error error codes */
-public enum TRITONSERVER_Error_Code {
-  TRITONSERVER_ERROR_UNKNOWN(0),
-  TRITONSERVER_ERROR_INTERNAL(1),
-  TRITONSERVER_ERROR_NOT_FOUND(2),
-  TRITONSERVER_ERROR_INVALID_ARG(3),
-  TRITONSERVER_ERROR_UNAVAILABLE(4),
-  TRITONSERVER_ERROR_UNSUPPORTED(5),
-  TRITONSERVER_ERROR_ALREADY_EXISTS(6);
-
-    public final int value;
-    private TRITONSERVER_Error_Code(int v) { this.value = v; }
-    private TRITONSERVER_Error_Code(TRITONSERVER_Error_Code e) { this.value = e.value; }
-    public TRITONSERVER_Error_Code intern() { for (TRITONSERVER_Error_Code e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_Error_Code */
+public static final int
+  TRITONSERVER_ERROR_UNKNOWN = 0,
+  TRITONSERVER_ERROR_INTERNAL = 1,
+  TRITONSERVER_ERROR_NOT_FOUND = 2,
+  TRITONSERVER_ERROR_INVALID_ARG = 3,
+  TRITONSERVER_ERROR_UNAVAILABLE = 4,
+  TRITONSERVER_ERROR_UNSUPPORTED = 5,
+  TRITONSERVER_ERROR_ALREADY_EXISTS = 6;
 
 /** Create a new error object. The caller takes ownership of the
  *  TRITONSERVER_Error object and must call TRITONSERVER_ErrorDelete to
@@ -396,7 +349,7 @@ public enum TRITONSERVER_Error_Code {
 
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ErrorNew(
-    TRITONSERVER_Error_Code code, String msg);
+    @Cast("TRITONSERVER_Error_Code") int code, String msg);
 public static native TRITONSERVER_Error TRITONSERVER_ErrorNew(
     @Cast("TRITONSERVER_Error_Code") int code, @Cast("const char*") BytePointer msg);
 
@@ -413,7 +366,7 @@ public static native void TRITONSERVER_ErrorDelete(TRITONSERVER_Error error);
  *  @return The error code. */
 
 ///
-public static native TRITONSERVER_Error_Code TRITONSERVER_ErrorCode(TRITONSERVER_Error error);
+public static native @Cast("TRITONSERVER_Error_Code") int TRITONSERVER_ErrorCode(TRITONSERVER_Error error);
 
 /** Get the string representation of an error code. The returned
  *  string is not owned by the caller and so should not be modified or
@@ -582,15 +535,9 @@ public static native TRITONSERVER_Error TRITONSERVER_MessageSerializeToJson(
  * 
  <p>
  *  Metric format types */
-public enum TRITONSERVER_MetricFormat {
-  TRITONSERVER_METRIC_PROMETHEUS(0);
-
-    public final int value;
-    private TRITONSERVER_MetricFormat(int v) { this.value = v; }
-    private TRITONSERVER_MetricFormat(TRITONSERVER_MetricFormat e) { this.value = e.value; }
-    public TRITONSERVER_MetricFormat intern() { for (TRITONSERVER_MetricFormat e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_MetricFormat */
+public static final int
+  TRITONSERVER_METRIC_PROMETHEUS = 0;
 
 /** Delete a metrics object.
  * 
@@ -627,22 +574,13 @@ public static native TRITONSERVER_Error TRITONSERVER_MetricsDelete(
 ///
 ///
 public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
-    TRITONSERVER_Metrics metrics, TRITONSERVER_MetricFormat format,
+    TRITONSERVER_Metrics metrics, @Cast("TRITONSERVER_MetricFormat") int format,
     @Cast("const char**") PointerPointer base, @Cast("size_t*") SizeTPointer byte_size);
 public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
-    TRITONSERVER_Metrics metrics, TRITONSERVER_MetricFormat format,
-    @Cast("const char**") @ByPtrPtr BytePointer base, @Cast("size_t*") SizeTPointer byte_size);
-public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
-    TRITONSERVER_Metrics metrics, @Cast("TRITONSERVER_MetricFormat") int format,
-    @Cast("const char**") @ByPtrPtr ByteBuffer base, @Cast("size_t*") SizeTPointer byte_size);
-public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
-    TRITONSERVER_Metrics metrics, TRITONSERVER_MetricFormat format,
-    @Cast("const char**") @ByPtrPtr byte[] base, @Cast("size_t*") SizeTPointer byte_size);
-public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
     TRITONSERVER_Metrics metrics, @Cast("TRITONSERVER_MetricFormat") int format,
     @Cast("const char**") @ByPtrPtr BytePointer base, @Cast("size_t*") SizeTPointer byte_size);
 public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
-    TRITONSERVER_Metrics metrics, TRITONSERVER_MetricFormat format,
+    TRITONSERVER_Metrics metrics, @Cast("TRITONSERVER_MetricFormat") int format,
     @Cast("const char**") @ByPtrPtr ByteBuffer base, @Cast("size_t*") SizeTPointer byte_size);
 public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
     TRITONSERVER_Metrics metrics, @Cast("TRITONSERVER_MetricFormat") int format,
@@ -654,17 +592,11 @@ public static native TRITONSERVER_Error TRITONSERVER_MetricsFormatted(
  * 
  <p>
  *  Trace levels */
-public enum TRITONSERVER_InferenceTraceLevel {
-  TRITONSERVER_TRACE_LEVEL_DISABLED(0),
-  TRITONSERVER_TRACE_LEVEL_MIN(1),
-  TRITONSERVER_TRACE_LEVEL_MAX(2);
-
-    public final int value;
-    private TRITONSERVER_InferenceTraceLevel(int v) { this.value = v; }
-    private TRITONSERVER_InferenceTraceLevel(TRITONSERVER_InferenceTraceLevel e) { this.value = e.value; }
-    public TRITONSERVER_InferenceTraceLevel intern() { for (TRITONSERVER_InferenceTraceLevel e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_InferenceTraceLevel */
+public static final int
+  TRITONSERVER_TRACE_LEVEL_DISABLED = 0,
+  TRITONSERVER_TRACE_LEVEL_MIN = 1,
+  TRITONSERVER_TRACE_LEVEL_MAX = 2;
 
 /** Get the string representation of a trace level. The returned
  *  string is not owned by the caller and so should not be modified or
@@ -673,26 +605,18 @@ public enum TRITONSERVER_InferenceTraceLevel {
  *  @param level The trace level.
  *  @return The string representation of the trace level. */
 public static native String TRITONSERVER_InferenceTraceLevelString(
-    TRITONSERVER_InferenceTraceLevel level);
-public static native @Cast("const char*") BytePointer TRITONSERVER_InferenceTraceLevelString(
     @Cast("TRITONSERVER_InferenceTraceLevel") int level);
 
 // Trace activities
-public enum TRITONSERVER_InferenceTraceActivity {
-  TRITONSERVER_TRACE_REQUEST_START(0),
-  TRITONSERVER_TRACE_QUEUE_START(1),
-  TRITONSERVER_TRACE_COMPUTE_START(2),
-  TRITONSERVER_TRACE_COMPUTE_INPUT_END(3),
-  TRITONSERVER_TRACE_COMPUTE_OUTPUT_START(4),
-  TRITONSERVER_TRACE_COMPUTE_END(5),
-  TRITONSERVER_TRACE_REQUEST_END(6);
-
-    public final int value;
-    private TRITONSERVER_InferenceTraceActivity(int v) { this.value = v; }
-    private TRITONSERVER_InferenceTraceActivity(TRITONSERVER_InferenceTraceActivity e) { this.value = e.value; }
-    public TRITONSERVER_InferenceTraceActivity intern() { for (TRITONSERVER_InferenceTraceActivity e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_InferenceTraceActivity */
+public static final int
+  TRITONSERVER_TRACE_REQUEST_START = 0,
+  TRITONSERVER_TRACE_QUEUE_START = 1,
+  TRITONSERVER_TRACE_COMPUTE_START = 2,
+  TRITONSERVER_TRACE_COMPUTE_INPUT_END = 3,
+  TRITONSERVER_TRACE_COMPUTE_OUTPUT_START = 4,
+  TRITONSERVER_TRACE_COMPUTE_END = 5,
+  TRITONSERVER_TRACE_REQUEST_END = 6;
 
 /** Get the string representation of a trace activity. The returned
  *  string is not owned by the caller and so should not be modified or
@@ -701,8 +625,6 @@ public enum TRITONSERVER_InferenceTraceActivity {
  *  @param activity The trace activity.
  *  @return The string representation of the trace activity. */
 public static native String TRITONSERVER_InferenceTraceActivityString(
-    TRITONSERVER_InferenceTraceActivity activity);
-public static native @Cast("const char*") BytePointer TRITONSERVER_InferenceTraceActivityString(
     @Cast("TRITONSERVER_InferenceTraceActivity") int activity);
 // Targeting ../tritonserver/TRITONSERVER_InferenceTraceActivityFn_t.java
 
@@ -737,11 +659,7 @@ public static native @Cast("const char*") BytePointer TRITONSERVER_InferenceTrac
 
 ///
 public static native TRITONSERVER_Error TRITONSERVER_InferenceTraceNew(
-    @Cast("TRITONSERVER_InferenceTrace**") PointerPointer trace, TRITONSERVER_InferenceTraceLevel level,
-    @Cast("uint64_t") long parent_id, TRITONSERVER_InferenceTraceActivityFn_t activity_fn,
-    TRITONSERVER_InferenceTraceReleaseFn_t release_fn, Pointer trace_userp);
-public static native TRITONSERVER_Error TRITONSERVER_InferenceTraceNew(
-    @ByPtrPtr TRITONSERVER_InferenceTrace trace, TRITONSERVER_InferenceTraceLevel level,
+    @Cast("TRITONSERVER_InferenceTrace**") PointerPointer trace, @Cast("TRITONSERVER_InferenceTraceLevel") int level,
     @Cast("uint64_t") long parent_id, TRITONSERVER_InferenceTraceActivityFn_t activity_fn,
     TRITONSERVER_InferenceTraceReleaseFn_t release_fn, Pointer trace_userp);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceTraceNew(
@@ -834,40 +752,22 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceTraceModelVersion(
  * 
  <p>
  *  Inference request flags. The enum values must be power-of-2 values. */
-public enum TRITONSERVER_RequestFlag {
-  TRITONSERVER_REQUEST_FLAG_SEQUENCE_START(1),
-  TRITONSERVER_REQUEST_FLAG_SEQUENCE_END(2);
-
-    public final int value;
-    private TRITONSERVER_RequestFlag(int v) { this.value = v; }
-    private TRITONSERVER_RequestFlag(TRITONSERVER_RequestFlag e) { this.value = e.value; }
-    public TRITONSERVER_RequestFlag intern() { for (TRITONSERVER_RequestFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_RequestFlag */
+public static final int
+  TRITONSERVER_REQUEST_FLAG_SEQUENCE_START = 1,
+  TRITONSERVER_REQUEST_FLAG_SEQUENCE_END = 2;
 
 /** Inference request release flags. The enum values must be
  *  power-of-2 values. */
-public enum TRITONSERVER_RequestReleaseFlag {
-  TRITONSERVER_REQUEST_RELEASE_ALL(1);
-
-    public final int value;
-    private TRITONSERVER_RequestReleaseFlag(int v) { this.value = v; }
-    private TRITONSERVER_RequestReleaseFlag(TRITONSERVER_RequestReleaseFlag e) { this.value = e.value; }
-    public TRITONSERVER_RequestReleaseFlag intern() { for (TRITONSERVER_RequestReleaseFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_RequestReleaseFlag */
+public static final int
+  TRITONSERVER_REQUEST_RELEASE_ALL = 1;
 
 /** Inference response complete flags. The enum values must be
  *  power-of-2 values. */
-public enum TRITONSERVER_ResponseCompleteFlag {
-  TRITONSERVER_RESPONSE_COMPLETE_FINAL(1);
-
-    public final int value;
-    private TRITONSERVER_ResponseCompleteFlag(int v) { this.value = v; }
-    private TRITONSERVER_ResponseCompleteFlag(TRITONSERVER_ResponseCompleteFlag e) { this.value = e.value; }
-    public TRITONSERVER_ResponseCompleteFlag intern() { for (TRITONSERVER_ResponseCompleteFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_ResponseCompleteFlag */
+public static final int
+  TRITONSERVER_RESPONSE_COMPLETE_FINAL = 1;
 // Targeting ../tritonserver/TRITONSERVER_InferenceRequestReleaseFn_t.java
 
 
@@ -1067,27 +967,27 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetTimeoutM
 ///
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAddInput(
     TRITONSERVER_InferenceRequest inference_request, String name,
-    TRITONSERVER_DataType datatype, @Cast("const int64_t*") LongPointer shape,
+    @Cast("const TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") LongPointer shape,
     @Cast("uint64_t") long dim_count);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAddInput(
     TRITONSERVER_InferenceRequest inference_request, @Cast("const char*") BytePointer name,
-    @Cast("TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") LongBuffer shape,
+    @Cast("const TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") LongBuffer shape,
     @Cast("uint64_t") long dim_count);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAddInput(
     TRITONSERVER_InferenceRequest inference_request, String name,
-    TRITONSERVER_DataType datatype, @Cast("const int64_t*") long[] shape,
+    @Cast("const TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") long[] shape,
     @Cast("uint64_t") long dim_count);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAddInput(
     TRITONSERVER_InferenceRequest inference_request, @Cast("const char*") BytePointer name,
-    @Cast("TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") LongPointer shape,
+    @Cast("const TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") LongPointer shape,
     @Cast("uint64_t") long dim_count);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAddInput(
     TRITONSERVER_InferenceRequest inference_request, String name,
-    TRITONSERVER_DataType datatype, @Cast("const int64_t*") LongBuffer shape,
+    @Cast("const TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") LongBuffer shape,
     @Cast("uint64_t") long dim_count);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAddInput(
     TRITONSERVER_InferenceRequest inference_request, @Cast("const char*") BytePointer name,
-    @Cast("TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") long[] shape,
+    @Cast("const TRITONSERVER_DataType") int datatype, @Cast("const int64_t*") long[] shape,
     @Cast("uint64_t") long dim_count);
 
 /** Remove an input from a request.
@@ -1127,7 +1027,7 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestRemoveAllIn
  *  @return a TRITONSERVER_Error indicating success or failure. */
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAppendInputData(
     TRITONSERVER_InferenceRequest inference_request, String name,
-    @Const Pointer base, @Cast("size_t") long byte_size, TRITONSERVER_MemoryType memory_type,
+    @Const Pointer base, @Cast("size_t") long byte_size, @Cast("TRITONSERVER_MemoryType") int memory_type,
     @Cast("int64_t") long memory_type_id);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAppendInputData(
     TRITONSERVER_InferenceRequest inference_request, @Cast("const char*") BytePointer name,
@@ -1155,7 +1055,7 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAppendInput
  *  @return a TRITONSERVER_Error indicating success or failure. */
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAppendInputDataWithHostPolicy(
     TRITONSERVER_InferenceRequest inference_request, String name,
-    @Const Pointer base, @Cast("size_t") long byte_size, TRITONSERVER_MemoryType memory_type,
+    @Const Pointer base, @Cast("size_t") long byte_size, @Cast("TRITONSERVER_MemoryType") int memory_type,
     @Cast("int64_t") long memory_type_id, String host_policy_name);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestAppendInputDataWithHostPolicy(
     TRITONSERVER_InferenceRequest inference_request, @Cast("const char*") BytePointer name,
@@ -1491,17 +1391,17 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceResponseOutputClas
  * 
  <p>
  *  Model control modes */
-public enum TRITONSERVER_ModelControlMode {
-  TRITONSERVER_MODEL_CONTROL_NONE(0),
-  TRITONSERVER_MODEL_CONTROL_POLL(1),
-  TRITONSERVER_MODEL_CONTROL_EXPLICIT(2);
+/** enum TRITONSERVER_ModelControlMode */
+public static final int
+  TRITONSERVER_MODEL_CONTROL_NONE = 0,
+  TRITONSERVER_MODEL_CONTROL_POLL = 1,
+  TRITONSERVER_MODEL_CONTROL_EXPLICIT = 2;
 
-    public final int value;
-    private TRITONSERVER_ModelControlMode(int v) { this.value = v; }
-    private TRITONSERVER_ModelControlMode(TRITONSERVER_ModelControlMode e) { this.value = e.value; }
-    public TRITONSERVER_ModelControlMode intern() { for (TRITONSERVER_ModelControlMode e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** Rate limit modes */
+/** enum TRITONSERVER_RateLimitMode */
+public static final int
+  TRITONSERVER_RATE_LIMIT_OFF = 0,
+  TRITONSERVER_RATE_LIMIT_EXEC_COUNT = 1;
 
 /** Create a new server options object. The caller takes ownership of
  *  the TRITONSERVER_ServerOptions object and must call
@@ -1580,8 +1480,6 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetModelReposi
 
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetModelControlMode(
-    TRITONSERVER_ServerOptions options, TRITONSERVER_ModelControlMode mode);
-public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetModelControlMode(
     TRITONSERVER_ServerOptions options, @Cast("TRITONSERVER_ModelControlMode") int mode);
 
 /** Set the model to be loaded at startup in a server options. The model must be
@@ -1609,8 +1507,51 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetStartupMode
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
+///
+///
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetStrictModelConfig(
     TRITONSERVER_ServerOptions options, @Cast("bool") boolean strict);
+
+/** Set the rate limit mode in a server options.
+ * 
+ *    TRITONSERVER_RATE_LIMIT_EXEC_COUNT: The rate limiting prioritizes the
+ *    inference execution using the number of times each instance has got a
+ *    chance to run. The execution gets to run only when its resource
+ *    constraints are satisfied.
+ * 
+ *    TRITONSERVER_RATE_LIMIT_OFF: The rate limiting is turned off and the
+ *    inference gets executed whenever an instance is available.
+ * 
+ *  @param options The server options object.
+ *  @param mode The mode to use for the rate limiting. By default, execution
+ *  count is used to determine the priorities.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetRateLimiterMode(
+    TRITONSERVER_ServerOptions options, @Cast("TRITONSERVER_RateLimitMode") int mode);
+
+/** Add resource count for rate limiting.
+ * 
+ *  @param options The server options object.
+ *  @param name The name of the resource.
+ *  @param count The count of the resource.
+ *  @param device The device identifier for the resource. A value of -1
+ *  indicates that the specified number of resources are available on every
+ *  device. The device value is ignored for a global resource. The server
+ *  will use the rate limiter configuration specified for instance groups
+ *  in model config to determine whether resource is global. In case of
+ *  conflicting resource type in different model configurations, server
+ *  will raise an appropriate error while loading model.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsAddRateLimiterResource(
+    TRITONSERVER_ServerOptions options, String resource_name,
+    @Cast("const size_t") long resource_count, int device);
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsAddRateLimiterResource(
+    TRITONSERVER_ServerOptions options, @Cast("const char*") BytePointer resource_name,
+    @Cast("const size_t") long resource_count, int device);
 
 /** Set the total pinned memory byte size that the server can allocate
  *  in a server options. The pinned memory pool will be shared across
@@ -1825,40 +1766,22 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetHostPolicy(
  * 
  <p>
  *  Model batch flags. The enum values must be power-of-2 values. */
-public enum TRITONSERVER_ModelBatchFlag {
-  TRITONSERVER_BATCH_UNKNOWN(1),
-  TRITONSERVER_BATCH_FIRST_DIM(2);
-
-    public final int value;
-    private TRITONSERVER_ModelBatchFlag(int v) { this.value = v; }
-    private TRITONSERVER_ModelBatchFlag(TRITONSERVER_ModelBatchFlag e) { this.value = e.value; }
-    public TRITONSERVER_ModelBatchFlag intern() { for (TRITONSERVER_ModelBatchFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_ModelBatchFlag */
+public static final int
+  TRITONSERVER_BATCH_UNKNOWN = 1,
+  TRITONSERVER_BATCH_FIRST_DIM = 2;
 
 /** Model index flags. The enum values must be power-of-2 values. */
-public enum TRITONSERVER_ModelIndexFlag {
-  TRITONSERVER_INDEX_FLAG_READY(1);
-
-    public final int value;
-    private TRITONSERVER_ModelIndexFlag(int v) { this.value = v; }
-    private TRITONSERVER_ModelIndexFlag(TRITONSERVER_ModelIndexFlag e) { this.value = e.value; }
-    public TRITONSERVER_ModelIndexFlag intern() { for (TRITONSERVER_ModelIndexFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_ModelIndexFlag */
+public static final int
+  TRITONSERVER_INDEX_FLAG_READY = 1;
 
 /** Model transaction policy flags. The enum values must be
  *  power-of-2 values. */
-public enum TRITONSERVER_ModelTxnPropertyFlag {
-  TRITONSERVER_TXN_ONE_TO_ONE(1),
-  TRITONSERVER_TXN_DECOUPLED(2);
-
-    public final int value;
-    private TRITONSERVER_ModelTxnPropertyFlag(int v) { this.value = v; }
-    private TRITONSERVER_ModelTxnPropertyFlag(TRITONSERVER_ModelTxnPropertyFlag e) { this.value = e.value; }
-    public TRITONSERVER_ModelTxnPropertyFlag intern() { for (TRITONSERVER_ModelTxnPropertyFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONSERVER_ModelTxnPropertyFlag */
+public static final int
+  TRITONSERVER_TXN_ONE_TO_ONE = 1,
+  TRITONSERVER_TXN_DECOUPLED = 2;
 
 /** Create a new server object. The caller takes ownership of the
  *  TRITONSERVER_Server object and must call TRITONSERVER_ServerDelete
@@ -1911,9 +1834,9 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerPollModelRepository(T
 
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ServerIsLive(
-    TRITONSERVER_Server server, @Cast("bool*") BoolPointer live);
-public static native TRITONSERVER_Error TRITONSERVER_ServerIsLive(
     TRITONSERVER_Server server, @Cast("bool*") boolean[] live);
+public static native TRITONSERVER_Error TRITONSERVER_ServerIsLive(
+    TRITONSERVER_Server server, @Cast("bool*") BoolPointer live);
 
 /** Is the server ready?
  * 
@@ -1923,9 +1846,9 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerIsLive(
 
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ServerIsReady(
-    TRITONSERVER_Server server, @Cast("bool*") BoolPointer ready);
-public static native TRITONSERVER_Error TRITONSERVER_ServerIsReady(
     TRITONSERVER_Server server, @Cast("bool*") boolean[] ready);
+public static native TRITONSERVER_Error TRITONSERVER_ServerIsReady(
+    TRITONSERVER_Server server, @Cast("bool*") BoolPointer ready);
 
 /** Is the model ready?
  * 
@@ -1942,10 +1865,10 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerIsReady(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ServerModelIsReady(
     TRITONSERVER_Server server, String model_name,
-    @Cast("const int64_t") long model_version, @Cast("bool*") BoolPointer ready);
+    @Cast("const int64_t") long model_version, @Cast("bool*") boolean[] ready);
 public static native TRITONSERVER_Error TRITONSERVER_ServerModelIsReady(
     TRITONSERVER_Server server, @Cast("const char*") BytePointer model_name,
-    @Cast("const int64_t") long model_version, @Cast("bool*") boolean[] ready);
+    @Cast("const int64_t") long model_version, @Cast("bool*") BoolPointer ready);
 
 /** Get the batch properties of the model. The properties are
  *  communicated by a flags value and an (optional) object returned by
@@ -2251,7 +2174,7 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerInferAsync(
 
 // Parsed from tritonbackend.h
 
-// Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+// Copyright 2020-2021, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -2359,7 +2282,7 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerInferAsync(
 public static final int TRITONBACKEND_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONBACKEND_API_VERSION_MINOR = 4;
+public static final int TRITONBACKEND_API_VERSION_MINOR = 5;
 
 /** Get the TRITONBACKEND API version supported by Triton. This value
  *  can be compared against the TRITONBACKEND_API_VERSION_MAJOR and
@@ -2392,15 +2315,9 @@ public static native TRITONSERVER_Error TRITONBACKEND_ApiVersion(
  *      accessible filesystem. The backend can access these files
  *      using an appropriate system API.
  *  */
-public enum TRITONBACKEND_ArtifactType {
-  TRITONBACKEND_ARTIFACT_FILESYSTEM(0);
-
-    public final int value;
-    private TRITONBACKEND_ArtifactType(int v) { this.value = v; }
-    private TRITONBACKEND_ArtifactType(TRITONBACKEND_ArtifactType e) { this.value = e.value; }
-    public TRITONBACKEND_ArtifactType intern() { for (TRITONBACKEND_ArtifactType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONBACKEND_ArtifactType */
+public static final int
+  TRITONBACKEND_ARTIFACT_FILESYSTEM = 0;
 
 
 /**
@@ -2439,15 +2356,11 @@ public enum TRITONBACKEND_ArtifactType {
 ///
 public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerAllocate(
     TRITONBACKEND_MemoryManager manager, @Cast("void**") PointerPointer buffer,
-    TRITONSERVER_MemoryType memory_type, @Cast("const int64_t") long memory_type_id,
+    @Cast("const TRITONSERVER_MemoryType") int memory_type, @Cast("const int64_t") long memory_type_id,
     @Cast("const uint64_t") long byte_size);
 public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerAllocate(
     TRITONBACKEND_MemoryManager manager, @Cast("void**") @ByPtrPtr Pointer buffer,
-    TRITONSERVER_MemoryType memory_type, @Cast("const int64_t") long memory_type_id,
-    @Cast("const uint64_t") long byte_size);
-public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerAllocate(
-    TRITONBACKEND_MemoryManager manager, @Cast("void**") @ByPtrPtr Pointer buffer,
-    @Cast("TRITONSERVER_MemoryType") int memory_type, @Cast("const int64_t") long memory_type_id,
+    @Cast("const TRITONSERVER_MemoryType") int memory_type, @Cast("const int64_t") long memory_type_id,
     @Cast("const uint64_t") long byte_size);
 
 /** Free a buffer that was previously allocated with
@@ -2469,10 +2382,7 @@ public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerAllocate(
 ///
 public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerFree(
     TRITONBACKEND_MemoryManager manager, Pointer buffer,
-    TRITONSERVER_MemoryType memory_type, @Cast("const int64_t") long memory_type_id);
-public static native TRITONSERVER_Error TRITONBACKEND_MemoryManagerFree(
-    TRITONBACKEND_MemoryManager manager, Pointer buffer,
-    @Cast("TRITONSERVER_MemoryType") int memory_type, @Cast("const int64_t") long memory_type_id);
+    @Cast("const TRITONSERVER_MemoryType") int memory_type, @Cast("const int64_t") long memory_type_id);
 
 /**
  *  TRITONBACKEND_Input
@@ -3079,31 +2989,31 @@ public static native TRITONSERVER_Error TRITONBACKEND_ResponseSetBoolParameter(
 ///
 public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @Cast("TRITONBACKEND_Output**") PointerPointer output,
-    String name, TRITONSERVER_DataType datatype,
+    String name, @Cast("const TRITONSERVER_DataType") int datatype,
     @Cast("const int64_t*") LongPointer shape, @Cast("const uint32_t") int dims_count);
 public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
-    String name, TRITONSERVER_DataType datatype,
+    String name, @Cast("const TRITONSERVER_DataType") int datatype,
     @Cast("const int64_t*") LongPointer shape, @Cast("const uint32_t") int dims_count);
 public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
-    @Cast("const char*") BytePointer name, @Cast("TRITONSERVER_DataType") int datatype,
+    @Cast("const char*") BytePointer name, @Cast("const TRITONSERVER_DataType") int datatype,
     @Cast("const int64_t*") LongBuffer shape, @Cast("const uint32_t") int dims_count);
 public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
-    String name, TRITONSERVER_DataType datatype,
+    String name, @Cast("const TRITONSERVER_DataType") int datatype,
     @Cast("const int64_t*") long[] shape, @Cast("const uint32_t") int dims_count);
 public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
-    @Cast("const char*") BytePointer name, @Cast("TRITONSERVER_DataType") int datatype,
+    @Cast("const char*") BytePointer name, @Cast("const TRITONSERVER_DataType") int datatype,
     @Cast("const int64_t*") LongPointer shape, @Cast("const uint32_t") int dims_count);
 public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
-    String name, TRITONSERVER_DataType datatype,
+    String name, @Cast("const TRITONSERVER_DataType") int datatype,
     @Cast("const int64_t*") LongBuffer shape, @Cast("const uint32_t") int dims_count);
 public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
     TRITONBACKEND_Response response, @ByPtrPtr TRITONBACKEND_Output output,
-    @Cast("const char*") BytePointer name, @Cast("TRITONSERVER_DataType") int datatype,
+    @Cast("const char*") BytePointer name, @Cast("const TRITONSERVER_DataType") int datatype,
     @Cast("const int64_t*") long[] shape, @Cast("const uint32_t") int dims_count);
 
 /** Send a response. Calling this function transfers ownership of the
@@ -3119,6 +3029,7 @@ public static native TRITONSERVER_Error TRITONBACKEND_ResponseOutput(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 
+///
 ///
 ///
 ///
@@ -3149,16 +3060,26 @@ public static native TRITONSERVER_Error TRITONBACKEND_ResponseSend(
  *      TRITONBACKEND_ModelInstanceExecute until all responses have
  *      been sent and all requests have been released. This is the
  *      default execution policy.
+ * 
+ *    TRITONBACKEND_EXECUTION_DEVICE_BLOCKING: An instance, A, of the
+ *      model blocks in TRITONBACKEND_ModelInstanceExecute if the
+ *      device associated with the instance is unable to handle
+ *      another inference. Even if another instance, B, associated
+ *      with the device, is available and ready to perform an
+ *      inference, Triton will not invoke
+ *      TRITONBACKEND_ModeInstanceExecute for B until A returns from
+ *      TRITONBACKEND_ModelInstanceExecute. Triton will not be blocked
+ *      from calling TRITONBACKEND_ModelInstanceExecute for instance
+ *      C, which is associated with a different device than A and B,
+ *      even if A or B has not returned from
+ *      TRITONBACKEND_ModelInstanceExecute. This execution policy is
+ *      typically used by a backend that can cooperatively execute
+ *      multiple model instances on the same device.
  *  */
-public enum TRITONBACKEND_ExecutionPolicy {
-  TRITONBACKEND_EXECUTION_BLOCKING(0);
-
-    public final int value;
-    private TRITONBACKEND_ExecutionPolicy(int v) { this.value = v; }
-    private TRITONBACKEND_ExecutionPolicy(TRITONBACKEND_ExecutionPolicy e) { this.value = e.value; }
-    public TRITONBACKEND_ExecutionPolicy intern() { for (TRITONBACKEND_ExecutionPolicy e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONBACKEND_ExecutionPolicy */
+public static final int
+  TRITONBACKEND_EXECUTION_BLOCKING = 0,
+  TRITONBACKEND_EXECUTION_DEVICE_BLOCKING = 1;
 
 /** Get the name of the backend. The caller does not own the returned
  *  string and must not modify or delete it. The lifetime of the
@@ -3229,8 +3150,6 @@ public static native TRITONSERVER_Error TRITONBACKEND_BackendExecutionPolicy(
 
 ///
 ///
-public static native TRITONSERVER_Error TRITONBACKEND_BackendSetExecutionPolicy(
-    TRITONBACKEND_Backend backend, TRITONBACKEND_ExecutionPolicy policy);
 public static native TRITONSERVER_Error TRITONBACKEND_BackendSetExecutionPolicy(
     TRITONBACKEND_Backend backend, @Cast("TRITONBACKEND_ExecutionPolicy") int policy);
 
@@ -3411,9 +3330,9 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelConfig(
 
 ///
 public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
-    TRITONBACKEND_Model model, @Cast("bool*") BoolPointer auto_complete_config);
-public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
     TRITONBACKEND_Model model, @Cast("bool*") boolean[] auto_complete_config);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
+    TRITONBACKEND_Model model, @Cast("bool*") BoolPointer auto_complete_config);
 
 /** Set the model configuration in Triton server. Only the inputs, outputs,
  *  and max batch size can be changed. Any other changes to the model
@@ -3576,9 +3495,9 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceHostPolicy(
 
 ///
 public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceIsPassive(
-    TRITONBACKEND_ModelInstance instance, @Cast("bool*") BoolPointer is_passive);
-public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceIsPassive(
     TRITONBACKEND_ModelInstance instance, @Cast("bool*") boolean[] is_passive);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceIsPassive(
+    TRITONBACKEND_ModelInstance instance, @Cast("bool*") BoolPointer is_passive);
 
 /** Get the number of optimization profiles to be loaded for the instance.
  * 
@@ -3619,6 +3538,47 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileName(
 public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceProfileName(
     TRITONBACKEND_ModelInstance instance, @Cast("const uint32_t") int index,
     @Cast("const char**") @ByPtrPtr byte[] profile_name);
+
+/** Get the number of secondary devices configured for the instance.
+ * 
+ *  @param instance The model instance.
+ *  @param count Returns the number of secondary devices.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSecondaryDeviceCount(
+    TRITONBACKEND_ModelInstance instance, @Cast("uint32_t*") IntPointer count);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSecondaryDeviceCount(
+    TRITONBACKEND_ModelInstance instance, @Cast("uint32_t*") IntBuffer count);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSecondaryDeviceCount(
+    TRITONBACKEND_ModelInstance instance, @Cast("uint32_t*") int[] count);
+
+/** Get the properties of indexed secondary device. The returned
+ *  strings and other properties are owned by the instance, not the
+ *  caller, and so should not be modified or freed.
+ * 
+ *  @param instance The model instance.
+ *  @param index The index of the secondary device. Must be 0
+ *  <= index < count, where count is the value returned by
+ *  TRITONBACKEND_ModelInstanceSecondaryDeviceCount.
+ *  @param kind Returns the kind of secondary device corresponding
+ *  to the index.
+ *  @param id Returns the id of secondary device corresponding to the index.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSecondaryDeviceProperties(
+    TRITONBACKEND_ModelInstance instance, @Cast("uint32_t") int index, @Cast("const char**") PointerPointer kind,
+    @Cast("int64_t*") LongPointer id);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSecondaryDeviceProperties(
+    TRITONBACKEND_ModelInstance instance, @Cast("uint32_t") int index, @Cast("const char**") @ByPtrPtr BytePointer kind,
+    @Cast("int64_t*") LongPointer id);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSecondaryDeviceProperties(
+    TRITONBACKEND_ModelInstance instance, @Cast("uint32_t") int index, @Cast("const char**") @ByPtrPtr ByteBuffer kind,
+    @Cast("int64_t*") LongBuffer id);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSecondaryDeviceProperties(
+    TRITONBACKEND_ModelInstance instance, @Cast("uint32_t") int index, @Cast("const char**") @ByPtrPtr byte[] kind,
+    @Cast("int64_t*") long[] id);
 
 /** Get the model associated with a model instance.
  * 
@@ -3856,7 +3816,13 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceFinalize(
  * 
  *  If success is returned, ownership of the request objects is
  *  transferred to the backend and it is then responsible for creating
- *  responses and releasing the request objects.
+ *  responses and releasing the request objects. Note that even though
+ *  ownership of the request objects is transferred to the backend, the
+ *  ownership of the buffer holding request pointers is returned back
+ *  to Triton upon return from TRITONBACKEND_ModelInstanceExecute. If
+ *  any request objects need to be maintained beyond
+ *  TRITONBACKEND_ModelInstanceExecute, then the pointers must be copied
+ *  out of the array within TRITONBACKEND_ModelInstanceExecute.
  * 
  *  @param instance The model instance.
  *  @param requests The requests.
@@ -4003,16 +3969,10 @@ public static native TRITONSERVER_Error TRITONREPOAGENT_ApiVersion(
  *      The remote filesystem path follows the same convention as is used for
  *      repository paths, for example, "s3://" prefix indicates an S3 path.
  *  */
-public enum TRITONREPOAGENT_ArtifactType {
-  TRITONREPOAGENT_ARTIFACT_FILESYSTEM(0),
-  TRITONREPOAGENT_ARTIFACT_REMOTE_FILESYSTEM(1);
-
-    public final int value;
-    private TRITONREPOAGENT_ArtifactType(int v) { this.value = v; }
-    private TRITONREPOAGENT_ArtifactType(TRITONREPOAGENT_ArtifactType e) { this.value = e.value; }
-    public TRITONREPOAGENT_ArtifactType intern() { for (TRITONREPOAGENT_ArtifactType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONREPOAGENT_ArtifactType */
+public static final int
+  TRITONREPOAGENT_ARTIFACT_FILESYSTEM = 0,
+  TRITONREPOAGENT_ARTIFACT_REMOTE_FILESYSTEM = 1;
 
 /** TRITONREPOAGENT_ActionType
  * 
@@ -4038,19 +3998,13 @@ public enum TRITONREPOAGENT_ArtifactType {
  * 
  *    TRITONREPOAGENT_ACTION_UNLOAD_COMPLETE: The model unload is complete.
  *  */
-public enum TRITONREPOAGENT_ActionType {
-  TRITONREPOAGENT_ACTION_LOAD(0),
-  TRITONREPOAGENT_ACTION_LOAD_COMPLETE(1),
-  TRITONREPOAGENT_ACTION_LOAD_FAIL(2),
-  TRITONREPOAGENT_ACTION_UNLOAD(3),
-  TRITONREPOAGENT_ACTION_UNLOAD_COMPLETE(4);
-
-    public final int value;
-    private TRITONREPOAGENT_ActionType(int v) { this.value = v; }
-    private TRITONREPOAGENT_ActionType(TRITONREPOAGENT_ActionType e) { this.value = e.value; }
-    public TRITONREPOAGENT_ActionType intern() { for (TRITONREPOAGENT_ActionType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+/** enum TRITONREPOAGENT_ActionType */
+public static final int
+  TRITONREPOAGENT_ACTION_LOAD = 0,
+  TRITONREPOAGENT_ACTION_LOAD_COMPLETE = 1,
+  TRITONREPOAGENT_ACTION_LOAD_FAIL = 2,
+  TRITONREPOAGENT_ACTION_UNLOAD = 3,
+  TRITONREPOAGENT_ACTION_UNLOAD_COMPLETE = 4;
 
 /** Get the location of the files that make up the model. The
  *  'location' communicated depends on how the model is being
@@ -4121,25 +4075,16 @@ public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocation(
 ///
 public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationAcquire(
     TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    TRITONREPOAGENT_ArtifactType artifact_type, @Cast("const char**") PointerPointer location);
+    @Cast("const TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char**") PointerPointer location);
 public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationAcquire(
     TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    TRITONREPOAGENT_ArtifactType artifact_type, @Cast("const char**") @ByPtrPtr BytePointer location);
+    @Cast("const TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char**") @ByPtrPtr BytePointer location);
 public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationAcquire(
     TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    @Cast("TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char**") @ByPtrPtr ByteBuffer location);
+    @Cast("const TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char**") @ByPtrPtr ByteBuffer location);
 public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationAcquire(
     TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    TRITONREPOAGENT_ArtifactType artifact_type, @Cast("const char**") @ByPtrPtr byte[] location);
-public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationAcquire(
-    TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    @Cast("TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char**") @ByPtrPtr BytePointer location);
-public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationAcquire(
-    TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    TRITONREPOAGENT_ArtifactType artifact_type, @Cast("const char**") @ByPtrPtr ByteBuffer location);
-public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationAcquire(
-    TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    @Cast("TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char**") @ByPtrPtr byte[] location);
+    @Cast("const TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char**") @ByPtrPtr byte[] location);
 
 /** Discard and release ownership of a previously acquired location
  *  and its contents. The agent must not access or modify the location
@@ -4192,10 +4137,10 @@ public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryLocationR
 ///
 public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryUpdate(
     TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    TRITONREPOAGENT_ArtifactType artifact_type, String location);
+    @Cast("const TRITONREPOAGENT_ArtifactType") int artifact_type, String location);
 public static native TRITONSERVER_Error TRITONREPOAGENT_ModelRepositoryUpdate(
     TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    @Cast("TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char*") BytePointer location);
+    @Cast("const TRITONREPOAGENT_ArtifactType") int artifact_type, @Cast("const char*") BytePointer location);
 
 /** Get the number of agent parameters defined for a model.
  * 
@@ -4402,10 +4347,7 @@ public static native TRITONSERVER_Error TRITONREPOAGENT_ModelFinalize(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 public static native TRITONSERVER_Error TRITONREPOAGENT_ModelAction(
     TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    TRITONREPOAGENT_ActionType action_type);
-public static native TRITONSERVER_Error TRITONREPOAGENT_ModelAction(
-    TRITONREPOAGENT_Agent agent, TRITONREPOAGENT_AgentModel model,
-    @Cast("TRITONREPOAGENT_ActionType") int action_type);
+    @Cast("const TRITONREPOAGENT_ActionType") int action_type);
 
 // #ifdef __cplusplus
 // #endif

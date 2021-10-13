@@ -74,7 +74,7 @@ public class TRITONSERVER_ResponseAllocatorAllocFn_t extends FunctionPointer {
     private native void allocate();
     public native TRITONSERVER_Error call(
     TRITONSERVER_ResponseAllocator allocator, String tensor_name,
-    @Cast("size_t") long byte_size, TRITONSERVER_MemoryType memory_type,
+    @Cast("size_t") long byte_size, @Cast("TRITONSERVER_MemoryType") int memory_type,
     @Cast("int64_t") long memory_type_id, Pointer userp, @Cast("void**") PointerPointer buffer, @Cast("void**") PointerPointer buffer_userp,
     @Cast("TRITONSERVER_MemoryType*") IntPointer actual_memory_type,
     @Cast("int64_t*") LongPointer actual_memory_type_id);
