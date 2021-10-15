@@ -123,9 +123,24 @@ public class ImgFrame extends Buffer {
     /**
      * Specifies frame height
      *
-     * @param width frame height
+     * @param height frame height
      */
-    public native void setHeight(@Cast("unsigned int") int arg0);
+    public native void setHeight(@Cast("unsigned int") int height);
+
+    /**
+     * Specifies frame size
+     *
+     * @param height frame height
+     * @param width frame width
+     */
+    public native void setSize(@Cast("unsigned int") int width, @Cast("unsigned int") int height);
+
+    /**
+     * Specifies frame size
+     *
+     * @param size frame size
+     */
+    public native void setSize(@ByVal @Cast("std::tuple<unsigned int,unsigned int>*") Pointer size);
 
     /**
      * Specifies frame type, RGB, BGR, ...

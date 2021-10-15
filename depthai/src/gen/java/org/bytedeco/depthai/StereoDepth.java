@@ -92,6 +92,39 @@ public class StereoDepth extends Node {
     @MemberGetter public native @ByRef Output rectifiedRight();
 
     /**
+     * Outputs StereoDepthConfig message that contains current stereo configuration.
+     */
+    @MemberGetter public native @ByRef Output outConfig();
+
+    /**
+     * Outputs ImgFrame message that carries left-right check first iteration (before combining with second iteration) disparity map.
+     * Useful for debugging/fine tuning.
+     */
+    @MemberGetter public native @ByRef Output debugDispLrCheckIt1();
+
+    /**
+     * Outputs ImgFrame message that carries left-right check second iteration (before combining with first iteration) disparity map.
+     * Useful for debugging/fine tuning.
+     */
+    @MemberGetter public native @ByRef Output debugDispLrCheckIt2();
+
+    /**
+     * Outputs ImgFrame message that carries cost dump of disparity map.
+     * Useful for debugging/fine tuning.
+     */
+    @MemberGetter public native @ByRef Output debugDispCostDump();
+
+    /**
+     * Outputs ImgFrame message that carries RAW8 confidence map.
+     * Lower values means higher confidence of the calculated disparity value.
+     * RGB aligment, left-right check or any postproccessing (e.g. median filter) is not performed on confidence map.
+     */
+    @MemberGetter public native @ByRef Output confidenceMap();
+
+// #if 0  // will be enabled when confidence map RGB aligment/LR-check support will be added
+// #endif
+
+    /**
      * Specify local filesystem path to the calibration file
      * @param path Path to calibration file. If empty use EEPROM
      */
@@ -147,6 +180,13 @@ public class StereoDepth extends Node {
      * Optional if MonoCamera exists, otherwise necessary
      */
     public native void setInputResolution(int width, int height);
+
+    /**
+     * Specify input resolution size
+     *
+     * Optional if MonoCamera exists, otherwise necessary
+     */
+    public native void setInputResolution(@ByVal @Cast("std::tuple<int,int>*") Pointer resolution);
 
     /**
      * Specify disparity/depth output resolution size, implemented by scaling.
@@ -218,6 +258,7 @@ public class StereoDepth extends Node {
     public native void setRectifyEdgeFillColor(int color);
 
     /**
+     * DEPRECATED function. It was removed, since rectified images are not flipped anymore.
      * Mirror rectified frames, only when LR-check mode is disabled. Default {@code true}.
      * The mirroring is required to have a normal non-mirrored disparity/depth output.
      *
@@ -228,7 +269,7 @@ public class StereoDepth extends Node {
      *
      * @param enable True for normal disparity/depth, otherwise mirrored
      */
-    public native void setRectifyMirrorFrame(@Cast("bool") boolean enable);
+    public native @Deprecated void setRectifyMirrorFrame(@Cast("bool") boolean enable);
 
     /**
      * Enable outputting rectified frames. Optimizes computation on device side when disabled.
@@ -244,8 +285,20 @@ public class StereoDepth extends Node {
     public native @Deprecated void setOutputDepth(@Cast("bool") boolean enable);
 
     /**
+     * Enable runtime stereo mode switch, e.g. from standard to LR-check.
+     * Note: when enabled resources allocated for worst case to enable switching to any mode.
+     */
+    public native void setRuntimeModeSwitch(@Cast("bool") boolean enable);
+
+    /**
+     * Specify number of frames in pool.
+     * @param numFramesPool How many frames should the pool have
+     */
+    public native void setNumFramesPool(int numFramesPool);
+
+    /**
      * Useful for normalization of the disparity map.
      * @return Maximum disparity value that the node can return
      */
-    public native float getMaxDisparity();
+    public native @Deprecated float getMaxDisparity();
 }

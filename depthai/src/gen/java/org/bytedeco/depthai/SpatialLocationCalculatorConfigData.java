@@ -36,6 +36,20 @@ public class SpatialLocationCalculatorConfigData extends Pointer {
         return new SpatialLocationCalculatorConfigData((Pointer)this).offsetAddress(i);
     }
 
+    /**
+     * Region of interest for spatial location calculation.
+     */
     public native @ByRef Rect roi(); public native SpatialLocationCalculatorConfigData roi(Rect setter);
+    /**
+     * Upper and lower thresholds for depth values to take into consideration.
+     */
     public native @ByRef SpatialLocationCalculatorConfigThresholds depthThresholds(); public native SpatialLocationCalculatorConfigData depthThresholds(SpatialLocationCalculatorConfigThresholds setter);
+    /**
+     * Calculation method used to obtain spatial locations.
+     * Average: the average of ROI is used for calculation.
+     * Min: the minimum value inside ROI is used for calculation.
+     * Max: the maximum value inside ROI is used for calculation.
+     * Default: average.
+     */
+    public native SpatialLocationCalculatorAlgorithm calculationAlgorithm(); public native SpatialLocationCalculatorConfigData calculationAlgorithm(SpatialLocationCalculatorAlgorithm setter);
 }

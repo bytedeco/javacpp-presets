@@ -86,6 +86,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/datatype/RawStereoDepthConfig.hpp",
                 "depthai-shared/datatype/RawSystemInformation.hpp",
                 "depthai-shared/datatype/RawTracklets.hpp",
+                "depthai-shared/device/PrebootConfig.hpp",
                 "depthai-shared/log/LogLevel.hpp",
                 "depthai-shared/log/LogMessage.hpp",
                 "depthai-shared/xlink/XLinkConstants.hpp",
@@ -149,6 +150,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/node/XLinkOut.hpp",
                 "depthai/xlink/XLinkConnection.hpp",
                 "depthai/xlink/XLinkStream.hpp",
+                "depthai-bootloader-shared/Config.hpp",
                 "depthai-bootloader-shared/Memory.hpp",
                 "depthai-bootloader-shared/Section.hpp",
                 "depthai-bootloader-shared/Type.hpp",
@@ -182,12 +184,17 @@ public class depthai implements InfoMapper {
 
                .put(new Info("basic/containers").cppTypes("tl::optional"))
                .put(new Info("dai::XLinkStream::read").annotations("@Function"))
-               .put(new Info("auto", "std::initializer_list", "std::weak_ptr", "dai::XLinkStream(dai::XLinkStream)").skip())
-               .put(new Info("std::chrono::microseconds", "std::chrono::milliseconds", "std::chrono::seconds",
+               .put(new Info("dai::bootloader::Config").pointerTypes("BootloaderConfig"))
+               .put(new Info("dai::DeviceBase::Config", "dai::Device::Config").pointerTypes("DeviceBase.Config"))
+               .put(new Info("auto", "std::initializer_list", "std::weak_ptr", "dai::XLinkStream(dai::XLinkStream)",
+                             "dai::RawStereoDepthConfig::CostAggregation::defaultHorizontalPenaltyCosts",
+                             "dai::RawStereoDepthConfig::CostAggregation::defaultVerticalPenaltyCosts").skip())
+               .put(new Info("std::chrono::microseconds", "std::chrono::milliseconds", "std::chrono::seconds", "std::runtime_error",
                              "std::chrono::duration<Rep,Period>", "std::chrono::duration<dai::ImgFrame,Period>",
                              "std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>",
                              "std::tuple<int,int>", "std::tuple<float,float>", "std::tuple<bool,dai::DeviceInfo>", "std::tuple<bool,std::string>",
-                             "nlohmann::json").cast().pointerTypes("Pointer"))
+                             "std::tuple<unsigned int,unsigned int>", "std::tuple<float,float,float,float>", "tl::optional<std::array<uint16_t,256> >",
+                             "std::array<uint32_t,4>", "std::array<uint16_t,256>", "std::array<uint8_t,6>", "nlohmann::json").cast().pointerTypes("Pointer"))
                .put(new Info("std::hash<dai::Node::Connection>").pointerTypes("ConnectionHash"))
                .put(new Info("std::shared_ptr<dai::Asset>").annotations("@SharedPtr").pointerTypes("Asset"))
                .put(new Info("std::shared_ptr<dai::ADatatype>").annotations("@SharedPtr").pointerTypes("ADatatype"))
@@ -212,7 +219,7 @@ public class depthai implements InfoMapper {
                                    "std::unordered_map<std::string,dai::Node::Output>").pointerTypes("StringNodeOutputMap").define())
                .put(new Info("std::map<std::string,std::vector<int> >").pointerTypes("StringIntVectorMap").define())
                .put(new Info("tl::optional<bool>").pointerTypes("BoolOptional").define())
-               .put(new Info("tl::optional<int>", "tl::optional<std::int32_t>", "tl::optional<std::uint32_t>").cast().pointerTypes("IntOptional").define())
+               .put(new Info("tl::optional<int>", "tl::optional<uint32_t>", "tl::optional<std::int32_t>", "tl::optional<std::uint32_t>").cast().pointerTypes("IntOptional").define())
                .put(new Info("tl::optional<dai::OpenVINO::Version>").pointerTypes("VersionOptional").define())
                .put(new Info("tl::optional<std::string>").pointerTypes("StringOptional").define())
                .put(new Info("tl::optional<dai::EepromData>").pointerTypes("EepromDataOptional").define())
