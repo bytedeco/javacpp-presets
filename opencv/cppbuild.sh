@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.5.3
+OPENCV_VERSION=4.5.4
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -373,7 +373,7 @@ case $PLATFORM in
         ;;
     macosx-*)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
-        sedinplace '/HAVE_GCD/d' CMakeLists.txt
+        sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
         # remove spurious "lib" lib
         sedinplace '/if.*(HAVE_CUDA)/a\
             list(REMOVE_ITEM CUDA_LIBRARIES lib)\

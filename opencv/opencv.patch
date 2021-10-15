@@ -1,6 +1,6 @@
-diff -ruN opencv-4.5.1/3rdparty/libpng/pngpriv.h opencv-4.5.1-patch/3rdparty/libpng/pngpriv.h
---- opencv-4.5.1/3rdparty/libpng/pngpriv.h	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/3rdparty/libpng/pngpriv.h	2020-12-29 23:58:58.599331412 +0900
+diff -ruN opencv-4.5.4/3rdparty/libpng/pngpriv.h opencv-4.5.4-patch/3rdparty/libpng/pngpriv.h
+--- opencv-4.5.4/3rdparty/libpng/pngpriv.h	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/3rdparty/libpng/pngpriv.h	2021-10-15 13:30:02.660416960 +0900
 @@ -195,13 +195,13 @@
  #  endif
  #endif
@@ -22,9 +22,9 @@ diff -ruN opencv-4.5.1/3rdparty/libpng/pngpriv.h opencv-4.5.1-patch/3rdparty/lib
  
  #ifndef PNG_INTEL_SSE_OPT
  #   ifdef PNG_INTEL_SSE
-diff -ruN opencv-4.5.1/CMakeLists.txt opencv-4.5.1-patch/CMakeLists.txt
---- opencv-4.5.1/CMakeLists.txt	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/CMakeLists.txt	2020-12-29 23:58:58.600331416 +0900
+diff -ruN opencv-4.5.4/CMakeLists.txt opencv-4.5.4-patch/CMakeLists.txt
+--- opencv-4.5.4/CMakeLists.txt	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/CMakeLists.txt	2021-10-15 13:30:02.661416961 +0900
 @@ -7,12 +7,12 @@
  # ----------------------------------------------------------------------------
  
@@ -44,10 +44,10 @@ diff -ruN opencv-4.5.1/CMakeLists.txt opencv-4.5.1-patch/CMakeLists.txt
  
  
  include(cmake/OpenCVMinDepVersions.cmake)
-diff -ruN opencv-4.5.1/modules/core/include/opencv2/core/fast_math.hpp opencv-4.5.1-patch/modules/core/include/opencv2/core/fast_math.hpp
---- opencv-4.5.1/modules/core/include/opencv2/core/fast_math.hpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/core/include/opencv2/core/fast_math.hpp	2020-12-29 23:58:58.601331420 +0900
-@@ -86,7 +86,6 @@
+diff -ruN opencv-4.5.4/modules/core/include/opencv2/core/fast_math.hpp opencv-4.5.4-patch/modules/core/include/opencv2/core/fast_math.hpp
+--- opencv-4.5.4/modules/core/include/opencv2/core/fast_math.hpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/core/include/opencv2/core/fast_math.hpp	2021-10-15 13:30:02.662416963 +0900
+@@ -89,7 +89,6 @@
      #define ARM_ROUND(_value, _asm_string) \
          int res; \
          float temp; \
@@ -55,9 +55,9 @@ diff -ruN opencv-4.5.1/modules/core/include/opencv2/core/fast_math.hpp opencv-4.
          __asm__(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
          return res
      // 2. version for double
-diff -ruN opencv-4.5.1/modules/core/include/opencv2/core/utils/instrumentation.hpp opencv-4.5.1-patch/modules/core/include/opencv2/core/utils/instrumentation.hpp
---- opencv-4.5.1/modules/core/include/opencv2/core/utils/instrumentation.hpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/core/include/opencv2/core/utils/instrumentation.hpp	2020-12-29 23:58:58.601331420 +0900
+diff -ruN opencv-4.5.4/modules/core/include/opencv2/core/utils/instrumentation.hpp opencv-4.5.4-patch/modules/core/include/opencv2/core/utils/instrumentation.hpp
+--- opencv-4.5.4/modules/core/include/opencv2/core/utils/instrumentation.hpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/core/include/opencv2/core/utils/instrumentation.hpp	2021-10-15 13:30:02.662416963 +0900
 @@ -92,7 +92,7 @@
      double getTotalMs()   const { return ((double)m_ticksTotal / cv::getTickFrequency()) * 1000; }
      double getMeanMs()    const { return (((double)m_ticksTotal/m_counter) / cv::getTickFrequency()) * 1000; }
@@ -67,10 +67,10 @@ diff -ruN opencv-4.5.1/modules/core/include/opencv2/core/utils/instrumentation.h
  
  typedef Node<NodeData> InstrNode;
  
-diff -ruN opencv-4.5.1/modules/core/src/system.cpp opencv-4.5.1-patch/modules/core/src/system.cpp
---- opencv-4.5.1/modules/core/src/system.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/core/src/system.cpp	2020-12-29 23:58:58.602331424 +0900
-@@ -2131,7 +2131,7 @@
+diff -ruN opencv-4.5.4/modules/core/src/system.cpp opencv-4.5.4-patch/modules/core/src/system.cpp
+--- opencv-4.5.4/modules/core/src/system.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/core/src/system.cpp	2021-10-15 13:30:02.663416965 +0900
+@@ -2339,7 +2339,7 @@
  NodeData::~NodeData()
  {
  }
@@ -79,10 +79,10 @@ diff -ruN opencv-4.5.1/modules/core/src/system.cpp opencv-4.5.1-patch/modules/co
  {
      if(left.m_lineNum == right.m_lineNum && left.m_funName == right.m_funName && left.m_fileName == right.m_fileName)
      {
-diff -ruN opencv-4.5.1/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-4.5.1-patch/modules/dnn/include/opencv2/dnn/dnn.hpp
---- opencv-4.5.1/modules/dnn/include/opencv2/dnn/dnn.hpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/dnn/include/opencv2/dnn/dnn.hpp	2020-12-29 23:58:58.604331432 +0900
-@@ -118,7 +118,7 @@
+diff -ruN opencv-4.5.4/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-4.5.4-patch/modules/dnn/include/opencv2/dnn/dnn.hpp
+--- opencv-4.5.4/modules/dnn/include/opencv2/dnn/dnn.hpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/include/opencv2/dnn/dnn.hpp	2021-10-15 13:30:02.665416968 +0900
+@@ -130,7 +130,7 @@
     /**
      * @brief Derivatives of this class encapsulates functions of certain backends.
      */
@@ -91,7 +91,7 @@ diff -ruN opencv-4.5.1/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-4.5.1-patc
      {
      public:
          BackendNode(int backendId);
-@@ -310,7 +310,7 @@
+@@ -331,7 +331,7 @@
          * Layer don't use own Halide::Func members because we can have applied
          * layers fusing. In this way the fused function should be scheduled.
          */
@@ -100,7 +100,7 @@ diff -ruN opencv-4.5.1/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-4.5.1-patc
                                            const std::vector<Mat*> &inputs,
                                            const std::vector<Mat> &outputs,
                                            int targetId) const;
-@@ -339,7 +339,7 @@
+@@ -360,7 +360,7 @@
           * @param[in] top Next layer to be fused.
           * @returns True if fusion was performed.
           */
@@ -109,10 +109,10 @@ diff -ruN opencv-4.5.1/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-4.5.1-patc
  
          /**
           * @brief Returns parameters of layers with channel-wise multiplication and addition.
-diff -ruN opencv-4.5.1/modules/dnn/src/dnn.cpp opencv-4.5.1-patch/modules/dnn/src/dnn.cpp
---- opencv-4.5.1/modules/dnn/src/dnn.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/dnn/src/dnn.cpp	2020-12-29 23:58:58.606331440 +0900
-@@ -5064,7 +5064,7 @@
+diff -ruN opencv-4.5.4/modules/dnn/src/dnn.cpp opencv-4.5.4-patch/modules/dnn/src/dnn.cpp
+--- opencv-4.5.4/modules/dnn/src/dnn.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/dnn.cpp	2021-10-15 13:30:02.668416974 +0900
+@@ -5421,7 +5421,7 @@
      return Ptr<BackendNode>();
  }
  
@@ -121,7 +121,7 @@ diff -ruN opencv-4.5.1/modules/dnn/src/dnn.cpp opencv-4.5.1-patch/modules/dnn/sr
                                   const std::vector<Mat> &outputs, int targetId) const
  {
  #ifdef  HAVE_HALIDE
-@@ -5141,7 +5141,7 @@
+@@ -5498,7 +5498,7 @@
  }
  
  bool Layer::setActivation(const Ptr<ActivationLayer>&) { return false; }
@@ -130,10 +130,55 @@ diff -ruN opencv-4.5.1/modules/dnn/src/dnn.cpp opencv-4.5.1-patch/modules/dnn/sr
  void Layer::getScaleShift(Mat& scale, Mat& shift) const
  {
      scale = Mat();
-diff -ruN opencv-4.5.1/modules/dnn/src/layers/batch_norm_layer.cpp opencv-4.5.1-patch/modules/dnn/src/layers/batch_norm_layer.cpp
---- opencv-4.5.1/modules/dnn/src/layers/batch_norm_layer.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/dnn/src/layers/batch_norm_layer.cpp	2020-12-29 23:58:58.607331444 +0900
-@@ -117,7 +117,7 @@
+diff -ruN opencv-4.5.4/modules/dnn/src/int8layers/batch_norm_layer.cpp opencv-4.5.4-patch/modules/dnn/src/int8layers/batch_norm_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/int8layers/batch_norm_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/int8layers/batch_norm_layer.cpp	2021-10-15 13:31:00.131514925 +0900
+@@ -56,7 +56,7 @@
+         zeropoint = output_zp;
+     }
+ 
+-    virtual bool tryFuse(Ptr<Layer>& top) CV_OVERRIDE
++    virtual bool tryFuse(const Ptr<Layer>& top) CV_OVERRIDE
+     {
+         Mat w_, b_;
+         top->getScaleShift(w_, b_);
+diff -ruN opencv-4.5.4/modules/dnn/src/int8layers/convolution_layer.cpp opencv-4.5.4-patch/modules/dnn/src/int8layers/convolution_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/int8layers/convolution_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/int8layers/convolution_layer.cpp	2021-10-15 13:31:21.341551079 +0900
+@@ -130,7 +130,7 @@
+                (dilation.height == 1 && dilation.width == 1);
+     }
+ 
+-    virtual bool tryFuse(Ptr<Layer>& top) CV_OVERRIDE
++    virtual bool tryFuse(const Ptr<Layer>& top) CV_OVERRIDE
+     {
+         Mat w, b;
+         top->getScaleShift(w, b);
+@@ -272,7 +272,7 @@
+         return false;
+     }
+ 
+-    virtual bool tryFuse(Ptr<Layer>& top) CV_OVERRIDE
++    virtual bool tryFuse(const Ptr<Layer>& top) CV_OVERRIDE
+     {
+         return BaseConvolutionLayerInt8Impl::tryFuse(top);
+     }
+diff -ruN opencv-4.5.4/modules/dnn/src/int8layers/softmax_layer.cpp opencv-4.5.4-patch/modules/dnn/src/int8layers/softmax_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/int8layers/softmax_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/int8layers/softmax_layer.cpp	2021-10-15 13:31:10.570532719 +0900
+@@ -44,7 +44,7 @@
+         return backendId == DNN_BACKEND_OPENCV;
+     }
+ 
+-    virtual bool tryFuse(Ptr<Layer>& top) CV_OVERRIDE
++    virtual bool tryFuse(const Ptr<Layer>& top) CV_OVERRIDE
+     {
+         Ptr<DequantizeLayer> dequantize_layer = top.dynamicCast<DequantizeLayer>();
+         return !dequantize_layer.empty() && preferableTarget != DNN_TARGET_OPENCL_FP16;
+diff -ruN opencv-4.5.4/modules/dnn/src/layers/batch_norm_layer.cpp opencv-4.5.4-patch/modules/dnn/src/layers/batch_norm_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/layers/batch_norm_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/layers/batch_norm_layer.cpp	2021-10-15 13:30:02.669416975 +0900
+@@ -115,7 +115,7 @@
          shift = bias_;
      }
  
@@ -142,10 +187,10 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/batch_norm_layer.cpp opencv-4.5.1-
      {
          Mat w, b;
          top->getScaleShift(w, b);
-diff -ruN opencv-4.5.1/modules/dnn/src/layers/convolution_layer.cpp opencv-4.5.1-patch/modules/dnn/src/layers/convolution_layer.cpp
---- opencv-4.5.1/modules/dnn/src/layers/convolution_layer.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/dnn/src/layers/convolution_layer.cpp	2020-12-29 23:58:58.609331452 +0900
-@@ -173,7 +173,7 @@
+diff -ruN opencv-4.5.4/modules/dnn/src/layers/convolution_layer.cpp opencv-4.5.4-patch/modules/dnn/src/layers/convolution_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/layers/convolution_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/layers/convolution_layer.cpp	2021-10-15 13:30:02.671416979 +0900
+@@ -177,7 +177,7 @@
                 (dilation.height == 1 && dilation.width == 1);
      }
  
@@ -154,7 +199,7 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/convolution_layer.cpp opencv-4.5.1
      {
          Ptr<BlankLayer> blank_layer = top.dynamicCast<BlankLayer>();
          if (blank_layer)
-@@ -193,7 +193,7 @@
+@@ -197,7 +197,7 @@
  
      virtual void fuseWeights(const Mat& w_, const Mat& b_) = 0;
  
@@ -163,7 +208,7 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/convolution_layer.cpp opencv-4.5.1
                                        const std::vector<Mat*> &inputs,
                                        const std::vector<Mat> &outputs,
                                        int targetId) const CV_OVERRIDE
-@@ -554,7 +554,7 @@
+@@ -561,7 +561,7 @@
          return !activ.empty();
      }
  
@@ -172,9 +217,9 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/convolution_layer.cpp opencv-4.5.1
      {
  #ifdef HAVE_CUDA
          if(IS_DNN_CUDA_TARGET(preferableTarget))
-diff -ruN opencv-4.5.1/modules/dnn/src/layers/elementwise_layers.cpp opencv-4.5.1-patch/modules/dnn/src/layers/elementwise_layers.cpp
---- opencv-4.5.1/modules/dnn/src/layers/elementwise_layers.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/dnn/src/layers/elementwise_layers.cpp	2020-12-29 23:58:58.610331457 +0900
+diff -ruN opencv-4.5.4/modules/dnn/src/layers/elementwise_layers.cpp opencv-4.5.4-patch/modules/dnn/src/layers/elementwise_layers.cpp
+--- opencv-4.5.4/modules/dnn/src/layers/elementwise_layers.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/layers/elementwise_layers.cpp	2021-10-15 13:30:02.673416982 +0900
 @@ -189,7 +189,7 @@
          return Ptr<BackendNode>();
      }
@@ -184,7 +229,7 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/elementwise_layers.cpp opencv-4.5.
      {
          return func.tryFuse(top);
      }
-@@ -285,7 +285,7 @@
+@@ -291,7 +291,7 @@
  {
      void finalize() {}
  
@@ -192,8 +237,8 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/elementwise_layers.cpp opencv-4.5.
 +    bool tryFuse(const Ptr<dnn::Layer>&) { return false; }
  
      void getScaleShift(Mat&, Mat&) const {}
- };
-@@ -1371,7 +1371,7 @@
+ 
+@@ -1554,7 +1554,7 @@
      }
  #endif  // HAVE_VULKAN
  
@@ -202,9 +247,9 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/elementwise_layers.cpp opencv-4.5.
      {
          if (power != 1.0f && shift != 0.0f)
              return false;
-diff -ruN opencv-4.5.1/modules/dnn/src/layers/lrn_layer.cpp opencv-4.5.1-patch/modules/dnn/src/layers/lrn_layer.cpp
---- opencv-4.5.1/modules/dnn/src/layers/lrn_layer.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/dnn/src/layers/lrn_layer.cpp	2020-12-29 23:58:58.611331461 +0900
+diff -ruN opencv-4.5.4/modules/dnn/src/layers/lrn_layer.cpp opencv-4.5.4-patch/modules/dnn/src/layers/lrn_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/layers/lrn_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/layers/lrn_layer.cpp	2021-10-15 13:30:02.674416984 +0900
 @@ -412,7 +412,7 @@
          return Ptr<BackendNode>();
      }
@@ -214,10 +259,31 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/lrn_layer.cpp opencv-4.5.1-patch/m
                                        const std::vector<Mat*> &inputs,
                                        const std::vector<Mat> &outputs,
                                        int targetId) const CV_OVERRIDE
-diff -ruN opencv-4.5.1/modules/dnn/src/layers/pooling_layer.cpp opencv-4.5.1-patch/modules/dnn/src/layers/pooling_layer.cpp
---- opencv-4.5.1/modules/dnn/src/layers/pooling_layer.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/dnn/src/layers/pooling_layer.cpp	2020-12-29 23:58:58.613331469 +0900
-@@ -1181,7 +1181,7 @@
+diff -ruN opencv-4.5.4/modules/dnn/src/layers/not_implemented_layer.cpp opencv-4.5.4-patch/modules/dnn/src/layers/not_implemented_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/layers/not_implemented_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/layers/not_implemented_layer.cpp	2021-10-15 15:17:14.143124585 +0900
+@@ -112,7 +112,7 @@
+         CV_Error(Error::StsNotImplemented, msg);
+     }
+ 
+-    virtual void applyHalideScheduler(Ptr<BackendNode>& node,
++    virtual void applyHalideScheduler(const Ptr<BackendNode>& node,
+                                       const std::vector<Mat*> &inputs,
+                                       const std::vector<Mat> &outputs,
+                                       int targetId) const CV_OVERRIDE
+@@ -130,7 +130,7 @@
+         CV_Error(Error::StsNotImplemented, msg);
+     }
+ 
+-    virtual bool tryFuse(Ptr<Layer>& top) CV_OVERRIDE
++    virtual bool tryFuse(const Ptr<Layer>& top) CV_OVERRIDE
+     {
+         CV_Error(Error::StsNotImplemented, msg);
+     }
+diff -ruN opencv-4.5.4/modules/dnn/src/layers/pooling_layer.cpp opencv-4.5.4-patch/modules/dnn/src/layers/pooling_layer.cpp
+--- opencv-4.5.4/modules/dnn/src/layers/pooling_layer.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/dnn/src/layers/pooling_layer.cpp	2021-10-15 13:30:02.675416985 +0900
+@@ -1195,7 +1195,7 @@
          return Ptr<BackendNode>();
      }
  
@@ -226,9 +292,9 @@ diff -ruN opencv-4.5.1/modules/dnn/src/layers/pooling_layer.cpp opencv-4.5.1-pat
                                        const std::vector<Mat*> &inputs,
                                        const std::vector<Mat> &outputs,
                                        int targetId) const CV_OVERRIDE
-diff -ruN opencv-4.5.1/modules/flann/include/opencv2/flann/miniflann.hpp opencv-4.5.1-patch/modules/flann/include/opencv2/flann/miniflann.hpp
---- opencv-4.5.1/modules/flann/include/opencv2/flann/miniflann.hpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/flann/include/opencv2/flann/miniflann.hpp	2020-12-29 23:58:58.614331473 +0900
+diff -ruN opencv-4.5.4/modules/flann/include/opencv2/flann/miniflann.hpp opencv-4.5.4-patch/modules/flann/include/opencv2/flann/miniflann.hpp
+--- opencv-4.5.4/modules/flann/include/opencv2/flann/miniflann.hpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/flann/include/opencv2/flann/miniflann.hpp	2021-10-15 13:30:02.676416987 +0900
 @@ -91,10 +91,6 @@
                  std::vector<double>& numValues) const;
  
@@ -240,9 +306,9 @@ diff -ruN opencv-4.5.1/modules/flann/include/opencv2/flann/miniflann.hpp opencv-
  };
  
  struct CV_EXPORTS KDTreeIndexParams : public IndexParams
-diff -ruN opencv-4.5.1/modules/imgproc/src/resize.cpp opencv-4.5.1-patch/modules/imgproc/src/resize.cpp
---- opencv-4.5.1/modules/imgproc/src/resize.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/imgproc/src/resize.cpp	2020-12-29 23:58:58.617331485 +0900
+diff -ruN opencv-4.5.4/modules/imgproc/src/resize.cpp opencv-4.5.4-patch/modules/imgproc/src/resize.cpp
+--- opencv-4.5.4/modules/imgproc/src/resize.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/imgproc/src/resize.cpp	2021-10-15 13:30:02.678416991 +0900
 @@ -858,11 +858,11 @@
      void(*hResize)(ET* src, int cn, int *ofst, fixedpoint* m, fixedpoint* dst, int dst_min, int dst_max, int dst_width);
      switch (cn)
@@ -260,9 +326,9 @@ diff -ruN opencv-4.5.1/modules/imgproc/src/resize.cpp opencv-4.5.1-patch/modules
      }
  
      interpolation interp_x(inv_scale_x, src_width, dst_width);
-diff -ruN opencv-4.5.1/modules/java/CMakeLists.txt opencv-4.5.1-patch/modules/java/CMakeLists.txt
---- opencv-4.5.1/modules/java/CMakeLists.txt	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/java/CMakeLists.txt	2020-12-29 23:58:58.618331489 +0900
+diff -ruN opencv-4.5.4/modules/java/CMakeLists.txt opencv-4.5.4-patch/modules/java/CMakeLists.txt
+--- opencv-4.5.4/modules/java/CMakeLists.txt	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/java/CMakeLists.txt	2021-10-15 13:30:02.678416991 +0900
 @@ -3,13 +3,6 @@
    add_subdirectory(generator)
  endif()
@@ -289,9 +355,9 @@ diff -ruN opencv-4.5.1/modules/java/CMakeLists.txt opencv-4.5.1-patch/modules/ja
  
  if(BUILD_TESTS)
    if(ANDROID)
-diff -ruN opencv-4.5.1/modules/java/common.cmake opencv-4.5.1-patch/modules/java/common.cmake
---- opencv-4.5.1/modules/java/common.cmake	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/java/common.cmake	2020-12-29 23:58:58.619331493 +0900
+diff -ruN opencv-4.5.4/modules/java/common.cmake opencv-4.5.4-patch/modules/java/common.cmake
+--- opencv-4.5.4/modules/java/common.cmake	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/java/common.cmake	2021-10-15 13:30:02.678416991 +0900
 @@ -1,10 +1,3 @@
 -if(ANDROID)
 -  ocv_update(OPENCV_JAVA_LIB_NAME_SUFFIX "${OPENCV_VERSION_MAJOR}")
@@ -303,9 +369,9 @@ diff -ruN opencv-4.5.1/modules/java/common.cmake opencv-4.5.1-patch/modules/java
  if(MSVC)
    ocv_warnings_disable(CMAKE_CXX_FLAGS /wd4996)
  else()
-diff -ruN opencv-4.5.1/modules/java/generator/CMakeLists.txt opencv-4.5.1-patch/modules/java/generator/CMakeLists.txt
---- opencv-4.5.1/modules/java/generator/CMakeLists.txt	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/java/generator/CMakeLists.txt	2020-12-29 23:58:58.620331497 +0900
+diff -ruN opencv-4.5.4/modules/java/generator/CMakeLists.txt opencv-4.5.4-patch/modules/java/generator/CMakeLists.txt
+--- opencv-4.5.4/modules/java/generator/CMakeLists.txt	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/java/generator/CMakeLists.txt	2021-10-15 13:30:02.679416992 +0900
 @@ -5,9 +5,6 @@
  set(OPENCV_JAVA_SIGNATURES_FILE "${CMAKE_CURRENT_BINARY_DIR}/opencv_java_signatures.json" CACHE INTERNAL "")
  set(OPENCV_JAVA_BINDINGS_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "")
@@ -324,9 +390,9 @@ diff -ruN opencv-4.5.1/modules/java/generator/CMakeLists.txt opencv-4.5.1-patch/
  endif()
  unset(__config_str)
  
-diff -ruN opencv-4.5.1/modules/java/jni/CMakeLists.txt opencv-4.5.1-patch/modules/java/jni/CMakeLists.txt
---- opencv-4.5.1/modules/java/jni/CMakeLists.txt	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/java/jni/CMakeLists.txt	2020-12-29 23:58:58.621331501 +0900
+diff -ruN opencv-4.5.4/modules/java/jni/CMakeLists.txt opencv-4.5.4-patch/modules/java/jni/CMakeLists.txt
+--- opencv-4.5.4/modules/java/jni/CMakeLists.txt	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/java/jni/CMakeLists.txt	2021-10-15 13:30:02.679416992 +0900
 @@ -25,6 +25,9 @@
  elseif(APPLE)
    set(CMAKE_SHARED_MODULE_SUFFIX ".dylib")  # Java is not able to load .so files
@@ -346,10 +412,10 @@ diff -ruN opencv-4.5.1/modules/java/jni/CMakeLists.txt opencv-4.5.1-patch/module
  # Additional target properties
  set_target_properties(${the_module} PROPERTIES
      OUTPUT_NAME "${the_module}${OPENCV_JAVA_LIB_NAME_SUFFIX}"
-diff -ruN opencv-4.5.1/modules/stitching/include/opencv2/stitching.hpp opencv-4.5.1-patch/modules/stitching/include/opencv2/stitching.hpp
---- opencv-4.5.1/modules/stitching/include/opencv2/stitching.hpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/stitching/include/opencv2/stitching.hpp	2020-12-29 23:58:58.622331505 +0900
-@@ -329,12 +329,12 @@
+diff -ruN opencv-4.5.4/modules/stitching/include/opencv2/stitching.hpp opencv-4.5.4-patch/modules/stitching/include/opencv2/stitching.hpp
+--- opencv-4.5.4/modules/stitching/include/opencv2/stitching.hpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/stitching/include/opencv2/stitching.hpp	2021-10-15 13:30:02.680416994 +0900
+@@ -343,12 +343,12 @@
  /**
   * @deprecated use Stitcher::create
   */
@@ -364,10 +430,10 @@ diff -ruN opencv-4.5.1/modules/stitching/include/opencv2/stitching.hpp opencv-4.
  
  //! @} stitching
  
-diff -ruN opencv-4.5.1/modules/stitching/src/stitcher.cpp opencv-4.5.1-patch/modules/stitching/src/stitcher.cpp
---- opencv-4.5.1/modules/stitching/src/stitcher.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/stitching/src/stitcher.cpp	2020-12-29 23:58:58.622331505 +0900
-@@ -542,14 +542,14 @@
+diff -ruN opencv-4.5.4/modules/stitching/src/stitcher.cpp opencv-4.5.4-patch/modules/stitching/src/stitcher.cpp
+--- opencv-4.5.4/modules/stitching/src/stitcher.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/stitching/src/stitcher.cpp	2021-10-15 13:30:02.681416996 +0900
+@@ -638,14 +638,14 @@
  }
  
  
@@ -384,9 +450,9 @@ diff -ruN opencv-4.5.1/modules/stitching/src/stitcher.cpp opencv-4.5.1-patch/mod
  {
      CV_INSTRUMENT_REGION();
  
-diff -ruN opencv-4.5.1/modules/video/src/tracking/detail/tracker_mil_state.hpp opencv-4.5.1-patch/modules/video/src/tracking/detail/tracker_mil_state.hpp
---- opencv-4.5.1/modules/video/src/tracking/detail/tracker_mil_state.hpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/video/src/tracking/detail/tracker_mil_state.hpp	2020-12-30 00:02:32.336581450 +0900
+diff -ruN opencv-4.5.4/modules/video/src/tracking/detail/tracker_mil_state.hpp opencv-4.5.4-patch/modules/video/src/tracking/detail/tracker_mil_state.hpp
+--- opencv-4.5.4/modules/video/src/tracking/detail/tracker_mil_state.hpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/video/src/tracking/detail/tracker_mil_state.hpp	2021-10-15 13:30:02.681416996 +0900
 @@ -20,7 +20,7 @@
      /**
      * Implementation of the target state for TrackerStateEstimatorMILBoosting
@@ -396,9 +462,9 @@ diff -ruN opencv-4.5.1/modules/video/src/tracking/detail/tracker_mil_state.hpp o
      {
  
      public:
-diff -ruN opencv-4.5.1/modules/video/src/tracking/detail/tracking_online_mil.cpp opencv-4.5.1-patch/modules/video/src/tracking/detail/tracking_online_mil.cpp
---- opencv-4.5.1/modules/video/src/tracking/detail/tracking_online_mil.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/video/src/tracking/detail/tracking_online_mil.cpp	2020-12-29 23:59:29.167455018 +0900
+diff -ruN opencv-4.5.4/modules/video/src/tracking/detail/tracking_online_mil.cpp opencv-4.5.4-patch/modules/video/src/tracking/detail/tracking_online_mil.cpp
+--- opencv-4.5.4/modules/video/src/tracking/detail/tracking_online_mil.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/video/src/tracking/detail/tracking_online_mil.cpp	2021-10-15 13:30:02.682416997 +0900
 @@ -339,7 +339,7 @@
      return float(log_p1 - log_p0);
  }
@@ -408,9 +474,9 @@ diff -ruN opencv-4.5.1/modules/video/src/tracking/detail/tracking_online_mil.cpp
  {
      std::vector<float> res(x.rows);
  
-diff -ruN opencv-4.5.1/modules/video/src/tracking/detail/tracking_online_mil.hpp opencv-4.5.1-patch/modules/video/src/tracking/detail/tracking_online_mil.hpp
---- opencv-4.5.1/modules/video/src/tracking/detail/tracking_online_mil.hpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/video/src/tracking/detail/tracking_online_mil.hpp	2020-12-29 23:58:58.624331513 +0900
+diff -ruN opencv-4.5.4/modules/video/src/tracking/detail/tracking_online_mil.hpp opencv-4.5.4-patch/modules/video/src/tracking/detail/tracking_online_mil.hpp
+--- opencv-4.5.4/modules/video/src/tracking/detail/tracking_online_mil.hpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/video/src/tracking/detail/tracking_online_mil.hpp	2021-10-15 13:30:02.682416997 +0900
 @@ -49,7 +49,7 @@
      uint _counter;
  };
@@ -420,10 +486,10 @@ diff -ruN opencv-4.5.1/modules/video/src/tracking/detail/tracking_online_mil.hpp
  {
  public:
      float _mu0, _mu1, _sig0, _sig1;
-diff -ruN opencv-4.5.1/modules/videoio/src/cap_v4l.cpp opencv-4.5.1-patch/modules/videoio/src/cap_v4l.cpp
---- opencv-4.5.1/modules/videoio/src/cap_v4l.cpp	2020-12-22 05:01:38.000000000 +0900
-+++ opencv-4.5.1-patch/modules/videoio/src/cap_v4l.cpp	2020-12-29 23:58:58.623331509 +0900
-@@ -1772,8 +1772,6 @@
+diff -ruN opencv-4.5.4/modules/videoio/src/cap_v4l.cpp opencv-4.5.4-patch/modules/videoio/src/cap_v4l.cpp
+--- opencv-4.5.4/modules/videoio/src/cap_v4l.cpp	2021-10-10 00:48:26.000000000 +0900
++++ opencv-4.5.4-patch/modules/videoio/src/cap_v4l.cpp	2021-10-15 13:30:02.683416999 +0900
+@@ -1769,8 +1769,6 @@
          return V4L2_CID_FOCUS_ABSOLUTE;
      case cv::CAP_PROP_GUID:
          return -1;
@@ -432,7 +498,7 @@ diff -ruN opencv-4.5.1/modules/videoio/src/cap_v4l.cpp opencv-4.5.1-patch/module
      case cv::CAP_PROP_BACKLIGHT:
          return V4L2_CID_BACKLIGHT_COMPENSATION;
      case cv::CAP_PROP_PAN:
-@@ -1790,10 +1788,6 @@
+@@ -1787,10 +1785,6 @@
          return -1;
      case cv::CAP_PROP_AUTOFOCUS:
          return V4L2_CID_FOCUS_AUTO;

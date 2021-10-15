@@ -152,7 +152,8 @@ public static final int
     X_LINK_ANY_STATE = 0,
     X_LINK_BOOTED = 1,
     X_LINK_UNBOOTED = 2,
-    X_LINK_BOOTLOADER = 3;
+    X_LINK_BOOTLOADER = 3,
+    X_LINK_FLASH_BOOTED = 4;
 
 /** enum XLinkPCIEBootloader */
 public static final int
@@ -254,9 +255,9 @@ public static final int
 
 // #include <string>
 
-@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo/*=""*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo/*=""*/, @Cast("bool") boolean installSignalHandler/*=true*/);
 @Namespace("dai") public static native @Cast("bool") boolean initialize();
-@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo/*=""*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo/*=""*/, @Cast("bool") boolean installSignalHandler/*=true*/);
 
   // namespace dai
 
@@ -688,6 +689,8 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 
+// #include <unordered_map>
+
 // #include "RawBuffer.hpp"
 // #include "depthai-shared/common/Timestamp.hpp"
 // Targeting ../RawImgFrame.java
@@ -781,6 +784,15 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // Targeting ../SpatialLocationCalculatorConfigThresholds.java
 
 
+
+@Namespace("dai") public enum SpatialLocationCalculatorAlgorithm { AVERAGE(0), MIN(1), MAX(2);
+
+    public final int value;
+    private SpatialLocationCalculatorAlgorithm(int v) { this.value = v; }
+    private SpatialLocationCalculatorAlgorithm(SpatialLocationCalculatorAlgorithm e) { this.value = e.value; }
+    public SpatialLocationCalculatorAlgorithm intern() { for (SpatialLocationCalculatorAlgorithm e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 // Targeting ../SpatialLocationCalculatorConfigData.java
 
 
@@ -817,6 +829,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 // #include <cstdint>
+// #include <depthai-shared/common/optional.hpp>
 // #include <nlohmann/json.hpp>
 // #include <vector>
 
@@ -834,9 +847,6 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
     public MedianFilter intern() { for (MedianFilter e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../StereoDepthConfigData.java
-
-
 // Targeting ../RawStereoDepthConfig.java
 
 
@@ -877,6 +887,29 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 
 // Targeting ../RawTracklets.java
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/device/PrebootConfig.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+
+// project
+// #include "depthai-shared/common/UsbSpeed.hpp"
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/xlink/XLinkConstants.hpp"
+
+@Namespace("dai") @MemberGetter public static native @Cast("const uint32_t") int PREBOOT_CONFIG_MAGIC1();
+public static final int PREBOOT_CONFIG_MAGIC1 = PREBOOT_CONFIG_MAGIC1();
+@Namespace("dai") @MemberGetter public static native @Cast("const uint32_t") int PREBOOT_CONFIG_MAGIC2();
+public static final int PREBOOT_CONFIG_MAGIC2 = PREBOOT_CONFIG_MAGIC2();
+// Targeting ../PrebootConfig.java
 
 
 
@@ -932,19 +965,22 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include <chrono>
 // #include <cstdint>
+
 // channel names
-@Namespace("dai") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_PIPELINE_CONFIG();
-@Namespace("dai") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_MAIN_RPC();
-@Namespace("dai") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_TIMESYNC();
-@Namespace("dai") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_LOG();
+@Namespace("dai::device") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_PIPELINE_CONFIG();
+@Namespace("dai::device") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_MAIN_RPC();
+@Namespace("dai::device") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_TIMESYNC();
+@Namespace("dai::device") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_LOG();
+@Namespace("dai::device") @MemberGetter public static native @Cast("const char*") BytePointer XLINK_CHANNEL_WATCHDOG();
 
 // usb buffer maximum size
-@Namespace("dai") @MemberGetter public static native @Cast("const std::uint32_t") int XLINK_USB_BUFFER_MAX_SIZE();
+@Namespace("dai::device") @MemberGetter public static native @Cast("const std::uint32_t") int XLINK_USB_BUFFER_MAX_SIZE();
 public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // Watchdog timeout
-@Namespace("dai") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_WATCHDOG_TIMEOUT();
+@Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_WATCHDOG_TIMEOUT();
 
+  // namespace device
   // namespace dai
 
 
@@ -1471,10 +1507,9 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #include "depthai-shared/common/UsbSpeed.hpp"
 
-@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, UsbSpeed speed);
-@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Cast("dai::UsbSpeed") int speed);
-
-  // namespace dai
+// Global namespace
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, UsbSpeed speed);
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Cast("dai::UsbSpeed") int speed);
 
 
 // Parsed from depthai/common/CameraBoardSocket.hpp
@@ -1485,9 +1520,9 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 
-@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, CameraBoardSocket socket);
+// Global namespace
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, CameraBoardSocket socket);
 
-  // namespace dai
 
 // Parsed from depthai/pipeline/datatype/ADatatype.hpp
 
@@ -1726,10 +1761,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 
 
-@Namespace("dai") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, Tracklet.TrackingStatus status);
-
   // namespace dai
 
+// Global namespace
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, Tracklet.TrackingStatus status);
 
 // Parsed from depthai/pipeline/AssetManager.hpp
 
@@ -1799,9 +1834,11 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "AssetManager.hpp"
 // #include "Node.hpp"
 // #include "depthai/device/CalibrationHandler.hpp"
+// #include "depthai/device/Device.hpp"
 // #include "depthai/openvino/OpenVINO.hpp"
 
 // shared
+// #include "depthai-shared/device/PrebootConfig.hpp"
 // #include "depthai-shared/pipeline/PipelineSchema.hpp"
 // #include "depthai-shared/properties/GlobalProperties.hpp"
 // Targeting ../PipelineImpl.java
@@ -2198,8 +2235,58 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // Targeting ../XLinkStream.java
 
 
+// Targeting ../XLinkError.java
+
+
+// Targeting ../XLinkReadError.java
+
+
+// Targeting ../XLinkWriteError.java
+
+
 
   // namespace dai
+
+
+// Parsed from depthai-bootloader-shared/Config.hpp
+
+// #pragma once
+
+// #include "Memory.hpp"
+
+// std
+// #include <array>
+// #include <chrono>
+// #include <cstdint>
+
+// libraries
+// #include "nlohmann/json.hpp"
+
+// #define DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_TO(v1) nlohmann::to_json(nlohmann_json_j[#v1], nlohmann_json_t.v1);
+// #define DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_FROM(v1) if(nlohmann_json_j.contains(#v1)) nlohmann_json_j[#v1].get_to(nlohmann_json_t.v1);
+
+// #define DEPTHAI_BOOTLOADER_NLOHMANN_DEFINE_TYPE_OPTIONAL_NON_INTRUSIVE(Type, ...)
+//     inline void to_json(nlohmann::json& nlohmann_json_j, const Type& nlohmann_json_t) { NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_TO, __VA_ARGS__)) }
+//     inline void from_json(const nlohmann::json& nlohmann_json_j, Type& nlohmann_json_t) { NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_FROM, __VA_ARGS__)) }
+// Targeting ../NetworkConfig.java
+
+
+@Namespace("dai::bootloader") public static native void to_json(@Cast("nlohmann::json*") @ByRef Pointer nlohmann_json_j, @Const @ByRef NetworkConfig nlohmann_json_t);
+    @Namespace("dai::bootloader") public static native void from_json(@Cast("const nlohmann::json*") @ByRef Pointer nlohmann_json_j, @ByRef NetworkConfig nlohmann_json_t);
+// Targeting ../UsbConfig.java
+
+
+@Namespace("dai::bootloader") public static native void to_json(@Cast("nlohmann::json*") @ByRef Pointer nlohmann_json_j, @Const @ByRef UsbConfig nlohmann_json_t);
+    @Namespace("dai::bootloader") public static native void from_json(@Cast("const nlohmann::json*") @ByRef Pointer nlohmann_json_j, @ByRef UsbConfig nlohmann_json_t);
+// Targeting ../BootloaderConfig.java
+
+
+@Namespace("dai::bootloader") public static native void to_json(@Cast("nlohmann::json*") @ByRef Pointer nlohmann_json_j, @Const @ByRef BootloaderConfig nlohmann_json_t);
+    @Namespace("dai::bootloader") public static native void from_json(@Cast("const nlohmann::json*") @ByRef Pointer nlohmann_json_j, @ByRef BootloaderConfig nlohmann_json_t);
+
+ // namespace bootloader
+ // namespace dai
+
 
 
 // Parsed from depthai-bootloader-shared/Memory.hpp
@@ -2210,7 +2297,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include <cstdint>
 
 @Namespace("dai::bootloader") public enum Memory {
-    FLASH(0), EMMC(1);
+    AUTO(-1), FLASH(0), EMMC(1);
 
     public final int value;
     private Memory(int v) { this.value = v; }
@@ -2231,7 +2318,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include <cstdint>
 
 @Namespace("dai::bootloader") public enum Section {
-    HEADER(0), BOOTLOADER(1), BOOTLOADER_CONFIG(2), APPLICATION(3);
+    AUTO(-1), HEADER(0), BOOTLOADER(1), BOOTLOADER_CONFIG(2), APPLICATION(3);
 
     public final int value;
     private Section(int v) { this.value = v; }
@@ -2253,7 +2340,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include <cstdint>
 
 @Namespace("dai::bootloader") public enum Type {
-    USB(0), NETWORK(1);
+    AUTO(-1), USB(0), NETWORK(1);
 
     public final int value;
     private Type(int v) { this.value = v; }
@@ -2313,7 +2400,7 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai/common/CameraBoardSocket.hpp"
 // #include "depthai/common/UsbSpeed.hpp"
 // #include "depthai/device/CalibrationHandler.hpp"
-// #include "depthai/pipeline/Pipeline.hpp"
+// #include "depthai/openvino/OpenVINO.hpp"
 // #include "depthai/utility/Pimpl.hpp"
 // #include "depthai/xlink/XLinkConnection.hpp"
 // #include "depthai/xlink/XLinkStream.hpp"
@@ -2322,8 +2409,11 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai-shared/common/ChipTemperature.hpp"
 // #include "depthai-shared/common/CpuUsage.hpp"
 // #include "depthai-shared/common/MemoryInfo.hpp"
+// #include "depthai-shared/device/PrebootConfig.hpp"
 // #include "depthai-shared/log/LogLevel.hpp"
 // #include "depthai-shared/log/LogMessage.hpp"
+
+// Forward declare Pipeline
 // Targeting ../DeviceBase.java
 
 
@@ -2384,7 +2474,6 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // project
 // #include "DataQueue.hpp"
 // #include "depthai/device/DeviceBase.hpp"
-// #include "depthai/pipeline/Pipeline.hpp"
 // Targeting ../Device.java
 
 
@@ -2404,11 +2493,13 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // project
 // #include "CallbackHandler.hpp"
 // #include "DataQueue.hpp"
+// #include "depthai/common/UsbSpeed.hpp"
 // #include "depthai/pipeline/Pipeline.hpp"
 // #include "depthai/xlink/XLinkConnection.hpp"
 // #include "depthai/xlink/XLinkStream.hpp"
 
 // shared
+// #include "depthai-bootloader-shared/Config.hpp"
 // #include "depthai-bootloader-shared/Memory.hpp"
 // #include "depthai-bootloader-shared/Section.hpp"
 // #include "depthai-bootloader-shared/Type.hpp"
@@ -2418,5 +2509,11 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
   // namespace dai
 
+// Global namespace
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, Type type);
+
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, Memory memory);
+
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, Section type);
 
 }

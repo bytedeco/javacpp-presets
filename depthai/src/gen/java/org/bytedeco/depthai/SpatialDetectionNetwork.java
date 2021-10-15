@@ -86,4 +86,11 @@ public class SpatialDetectionNetwork extends DetectionNetwork {
      * @param upperThreshold UpperThreshold must be in the interval (lowerThreshold,65535].
      */
     public native void setDepthUpperThreshold(@Cast("uint32_t") int upperThreshold);
+
+    /**
+     * Specifies spatial location calculator algorithm: Average/Min/Max
+     * @param calculationAlgorithm Calculation algorithm.
+     */
+    public native void setSpatialCalculationAlgorithm(SpatialLocationCalculatorAlgorithm calculationAlgorithm);
+    public native void setSpatialCalculationAlgorithm(@Cast("dai::SpatialLocationCalculatorAlgorithm") int calculationAlgorithm);
 }

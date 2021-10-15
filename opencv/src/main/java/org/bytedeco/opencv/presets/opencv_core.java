@@ -68,7 +68,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core453", "opencv_imgproc453"}, preload = {"opencv_cudev453"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core454", "opencv_imgproc454"}, preload = {"opencv_cudev454"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -122,7 +122,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func",
                              "CV__ErrorNoReturn", "CV__ErrorNoReturn_", "CV_ErrorNoReturn", "CV_ErrorNoReturn_", "CV_USRTYPE1", "CV_Assert_1").cppTypes().cppText(""))
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_ALWAYS_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN", "CV__DEBUG_NS_END",
-                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL", "CV_NODISCARD").annotations().cppTypes())
+                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL", "CV_NODISCARD", "CV_NODISCARD_STD").annotations().cppTypes())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
 
                .put(new Info("CV_DEPRECATED").cppText("#define CV_DEPRECATED deprecated").cppTypes())
@@ -222,6 +222,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("uchar").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("std::vector<std::vector<char> >", "std::vector<std::vector<uchar> >").cast().pointerTypes("ByteVectorVector").define())
                .put(new Info("std::vector<std::vector<int> >").pointerTypes("IntVectorVector").define())
+               .put(new Info("std::vector<std::vector<float> >").pointerTypes("FloatVectorVector").define())
                .put(new Info("std::vector<cv::String>", "std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<cv::Point>").pointerTypes("PointVector").define())
                .put(new Info("std::vector<cv::Point2f>").pointerTypes("Point2fVector").define())
@@ -339,7 +340,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::UMat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native long step(int i);"))
                .put(new Info("cv::DefaultDeleter<CvMat>").pointerTypes("CvMatDefaultDeleter"))
 
-               .put(new Info("std::initializer_list", "_InputArray::KindFlag").skip())
+               .put(new Info("std::initializer_list", "std::lock_guard", "std::recursive_mutex", "_InputArray::KindFlag").skip())
                .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray")
                        .skip()./*cast().*/pointerTypes("Mat", "Mat", "Mat", "UMat", "UMat", "UMat", "GpuMat", "GpuMat", "GpuMat"))
                .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays")
