@@ -46,6 +46,7 @@ JavaCPP Presets
 [![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)
 [![tensorflow-lite](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow-lite/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow-lite)
 [![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)
+[![tritonserver](https://github.com/bytedeco/javacpp-presets/workflows/tritonserver/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atritonserver)
 [![ale](https://github.com/bytedeco/javacpp-presets/workflows/ale/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aale)
 [![depthai](https://github.com/bytedeco/javacpp-presets/workflows/depthai/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adepthai)
 [![onnx](https://github.com/bytedeco/javacpp-presets/workflows/onnx/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnx)
@@ -214,6 +215,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.6.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
+ * tritonserver 2.12 https://github.com/triton-inference-server/server
  * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.10.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
