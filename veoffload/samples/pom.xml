@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.veoffload</groupId>
+    <artifactId>vehello</artifactId>
+    <version>1.5.7-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>vehello</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>veoffload-platform</artifactId>
+            <version>2.8.2-1.5.7-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
