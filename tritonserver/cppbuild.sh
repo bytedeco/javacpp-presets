@@ -21,10 +21,8 @@ case $PLATFORM in
         fi
         ;;
     windows-x86_64)
-        if [[ ! -f "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include/NvInfer.h" ]]; then
-            echo "Please install TensorRT in C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/"
-            exit 1
-        fi
+        echo "Windows are not supported yet"
+        exit 1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
