@@ -48,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 ### Steps to run this sample
 
-**1, Get the source code of Tritonserver to set the model repository up:
+**1, Get the source code of Tritonserver to set the model repository up:**
 ```bash
  $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.12.0.tar.gz
  $ tar czvf v2.12.0.tar.gz
@@ -58,7 +58,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```
 Now, this models directory will be our model repository.
 
-**2, Start the Docker container to run the sample (Note: 1, now we are under the "model_repository" dir as above):
+**2, Start the Docker container to run the sample (Note: 1, now we are under the "model_repository" dir as above):**
 ```bash
  $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:21.07-py3 bash
  $ git clone https://github.com/bytedeco/javacpp-presets.git
